@@ -39,9 +39,11 @@
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 12px; }
   figure { margin: 0; background: #221a15; }
   figure .shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
-  figure svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  figure svg, figure canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  figure canvas { image-rendering: crisp-edges; image-rendering: pixelated; }
   figure .spots rect, figure .spots circle, figure .spots polygon { fill: rgba(94, 242, 255, 0.12); stroke: #5ef2ff; stroke-width: 0.8; stroke-dasharray: 3 2; }
   figure .spots .walk { fill: none; stroke: #ff5ec8; stroke-dasharray: 2 2; }
+  figure .spots .solid { fill: rgba(255, 94, 200, 0.25); stroke: #ff5ec8; stroke-dasharray: none; }
   figcaption { padding: 8px 10px 10px; }
   figcaption small { display: block; color: #c9b48a; }
   .pal { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; align-items: center; margin-top: 12px; }
@@ -61,7 +63,7 @@
 <main>
   <h1>Storyboard</h1>
   <p class="dim">Drawn from the game's own files: <code>js/content/story.js</code>, the scene files listed in <code>js/content/scenes/index.js</code> and <code>lines.en.js</code>. Change those and reload this page.</p>
-  <nav><a href="../index.html">Play the game</a><a href="../docs/DESIGN.md">Design notes</a><a href="../fonts/specimen.html">Typeface</a></nav>
+  <nav><a href="../index.html">Play the game</a><a href="sprites.html">Sprite viewer</a><a href="../docs/DESIGN.md">Design notes</a><a href="../fonts/specimen.html">Typeface</a></nav>
   <div id="check"></div>
 
   <h2>Acts and beats</h2>
@@ -69,11 +71,11 @@
   <div id="acts"></div>
 
   <h2>Scenes</h2>
-  <p class="dim">Each scene in its era's colours. Cyan boxes are clickable areas. The magenta box is where the lead can walk.</p>
+  <p class="dim">Each scene in its era's colors, with its props and people in place, as it is when the story first gets there. Cyan boxes are clickable areas. The dashed magenta outline is where the lead can walk; solid magenta patches are footprints to walk around.</p>
   <div class="grid" id="scenes"></div>
 
   <h2>Era palettes</h2>
-  <p class="dim">Every era fills the same slots: eight sky bands, two silhouettes, three grounds, dark, light, two features. The time colours on the right never change.</p>
+  <p class="dim">Every era fills the same slots: eight sky bands, two silhouettes, three grounds, dark, light, two features. The time colors on the right never change.</p>
   <div class="pal" id="palettes"></div>
 
   <h2>The script</h2>
@@ -86,9 +88,11 @@
   import { lines } from "../js/content/lines.en.js";
   import { cast, eras } from "../js/content/world.js";
   import { sound } from "../js/content/sound.js";
-  import { checkStory } from "../js/engine/story.js";
+  import { checkStory, leadsOf } from "../js/engine/story.js";
   import * as art from "../js/art/kit.js";
   import { sceneIds, loadScene } from "../js/content/scenes/index.js";
+  import { SceneView } from "../js/engine/scene.js";
+  import { scaleAt } from "../js/engine/walk.js";
 
   const sceneList = await Promise.all(sceneIds.map(loadScene));
   const scenes = Object.fromEntries(sceneList.map((s) => [s.id, s]));
@@ -102,8 +106,8 @@
     : `<div class="ok"><b>The story checks out.</b> Every beat can be reached, every scene and hint it names exists.</div>`;
 
   // ---- acts ----
-  const who = (lead) => (lead === "both" ? ["dad", "son"] : [lead]).map((l) => `<i class="who" style="background:${cast[l].color}" title="${cast[l].name}"></i>`).join("");
-  const beat = (b) => `<div class="beat ${b.kind}"><b>${who(b.lead)}${esc(b.title)}</b>
+  const who = (b) => leadsOf(story, b).map((l) => `<i class="who" style="background:${cast[l].color}" title="${cast[l].name}"></i>`).join("");
+  const beat = (b) => `<div class="beat ${b.kind}"><b>${who(b)}${esc(b.title)}</b>
     <small>${esc(b.scene || "")}</small>
     <small>needs: ${b.needs && b.needs.length ? esc(b.needs.join(", ")) : "nothing"}</small><small>sets: ${esc(b.sets)}</small></div>`;
   $("acts").innerHTML = story.acts.map((act) => {
@@ -119,16 +123,47 @@
   }).join("");
 
   // ---- scenes ----
+  // Each picture is built the way the game builds it: backdrop as pixels, live parts on top, then the cast.
   const shape = (h) => h.rect ? `<rect x="${h.rect[0]}" y="${h.rect[1]}" width="${h.rect[2]}" height="${h.rect[3]}"/>`
     : h.circle ? `<circle cx="${h.circle[0]}" cy="${h.circle[1]}" r="${h.circle[2]}"/>` : `<polygon points="${h.poly.map((p) => p.join(",")).join(" ")}"/>`;
-  const fake = { flag: () => false, q: () => null };
-  $("scenes").innerHTML = `<figure><div class="shot" data-era="present">${art.frame(art.highway() + art.prop("wagon", 184, 182))}</div>
-      <figcaption><b>Title and intro</b><small>The present &middot; js/content/cutscenes/intro.js</small></figcaption></figure>` +
-    sceneList.map((s) => `<figure><div class="shot" data-era="${s.era}">${art.frame((s.draw ? s.draw(art, fake) : art.sketch(s)) +
-        (s.actors || []).map((a) => art.prop(a.sprite, a.at[0], a.at[1])).join("") + art.prop(cast[story.acts.find((a) => a.era === s.era)?.beats[0].lead || "dad"].sprite, ...s.spawn.default))}
-        <svg class="spots" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice"><rect class="walk" x="${s.walk.x[0]}" y="${s.walk.y[0]}" width="${s.walk.x[1] - s.walk.x[0]}" height="${s.walk.y[1] - s.walk.y[0]}"/>${s.hotspots.map(shape).join("")}</svg></div>
-      <figcaption><b>${esc(s.name)}</b><small>${esc(eras[s.era].name)}${eras[s.era].date ? " &middot; " + esc(eras[s.era].date) : ""} &middot; js/content/scenes/${s.id}.js</small>
-      <small>Clickable: ${s.hotspots.map((h) => esc(h.name)).join(", ")}</small></figcaption></figure>`).join("");
+  const outline = (pts, cls) => `<polygon class="${cls}" points="${pts.map((q) => q.join(",")).join(" ")}"/>`;
+  const fake = { flag: () => false, q: () => null, has: () => false };      // a stand-in for the game: nothing has happened yet
+  async function still(title, where, era, inner, fill, overlay = "", picture = null) {
+    const fig = document.createElement("figure");
+    fig.innerHTML = `<div class="shot" data-era="${era}">
+        <canvas class="backdrop" width="640" height="400"></canvas>
+        <svg class="live" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges"></svg>
+        <canvas class="cast" width="640" height="400"></canvas>
+        <svg class="hot spots" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice"></svg></div>
+      <figcaption><b>${esc(title)}</b>${where}</figcaption>`;
+    $("scenes").appendChild(fig);
+    const view = new SceneView(fig.querySelector(".shot"));
+    await view.draw(inner, title, picture);
+    fill(view.cast);
+    view.cast.update(0);
+    fig.querySelector(".spots").innerHTML = overlay;
+  }
+  await still("Title and intro", `<small>The present &middot; js/content/cutscenes/intro.js</small>`, "present", art.highway(), (c) => c.addThing("wagon", "wagon", 184, 182, 0.72));
+  for (const s of sceneList) {
+    const walk = s.walk.area || [[s.walk.x[0], s.walk.y[0]], [s.walk.x[1], s.walk.y[0]], [s.walk.x[1], s.walk.y[1]], [s.walk.x[0], s.walk.y[1]]];
+    // who is in the picture: the scene's party if it has one, otherwise whoever leads the first beat set here
+    const first = story.acts.flatMap((a) => a.beats).find((b) => b.scene === s.id) || story.acts.find((a) => a.era === s.era)?.beats[0];
+    const leads = s.party || [first ? leadsOf(story, first)[0] : "dad"];
+    const open = (thing) => !thing.when || thing.when(fake);
+    await still(s.name,
+      `<small>${esc(eras[s.era].name)}${eras[s.era].date ? " &middot; " + esc(eras[s.era].date) : ""} &middot; js/content/scenes/${s.id}.js</small>
+       <small>Played by: ${leads.map((l) => esc(cast[l].name)).join(", ")}</small>
+       <small>Clickable: ${s.hotspots.filter(open).map((h) => esc(h.name)).join(", ")}</small>${(s.props || []).length ? `<small>Props: ${s.props.map((q) => esc(q.id)).join(", ")}</small>` : ""}
+       <small><a href="../index.html?scene=${esc(s.id)}">Play from here</a></small>`,
+      s.era, s.draw ? s.draw(art, fake) : s.picture ? "" : art.sketch(s),
+      (c) => {
+        for (const q of (s.props || []).filter(open)) c.addThing(q.id, q.kind, q.at[0], q.at[1], q.scale ?? 1, q.options);
+        for (const a of (s.actors || []).filter(open)) c.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], a.scale ?? scaleAt(s, a.at[1])).face(a.face ?? "S");
+        leads.forEach((lead, n) => { const at = (leads.length > 1 && s.spawn[lead]) || [s.spawn.default[0] + 22 * n, s.spawn.default[1]]; c.addFigure(lead, cast[lead].sprite, at[0], at[1], scaleAt(s, at[1])).face("S"); });
+      },
+      outline(walk, "walk") + (s.props || []).filter((q) => q.solid).map((q) => outline(q.solid, "solid")).join("") + s.hotspots.filter(open).map(shape).join(""),
+      s.picture ? "../" + s.picture : null);                 // a scene's picture is named from the top of the site; this page is one folder down
+  }
 
   // ---- palettes ----
   const slots = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "", "far", "near", "", "g1", "g2", "g3", "", "line", "light", "", "feat", "feat2"];

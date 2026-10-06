@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprite viewer: From Point A to B.C.</title>
+<meta name="robots" content="noindex">
+<style>
+  /* A working page for looking at the characters: every direction, every animation,
+     at the sizes they appear in the game. It draws them with the game's own code. */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #17120f; color: #f6e3b8; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1500px; margin: 0 auto; padding: 20px 16px 80px; }
+  h1 { font: 400 40px/1.1 Georgia, serif; margin: 0 0 4px; }
+  h2 { font: 400 26px/1.2 Georgia, serif; margin: 36px 0 6px; }
+  h3 { font: 700 12px/1.4 system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #c9b48a; margin: 14px 0 4px; }
+  p { margin: 4px 0; color: #c9b48a; max-width: 80ch; }
+  a { color: #5ef2ff; }
+  .bar { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+  .bar label { display: inline-flex; gap: 8px; align-items: center; }
+  select, input { font: inherit; }
+  .strip { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px; padding: 10px; background: var(--ground, #c79b55); }
+  .strip figure { margin: 0; text-align: center; }
+  .strip figcaption { font: 11px/1.2 system-ui, sans-serif; color: rgba(0, 0, 0, 0.6); }
+  canvas { image-rendering: pixelated; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Sprite viewer</h1>
+  <p>Drawn by <code>js/art/rig.js</code> from the settings in <code>js/art/people.js</code>. Change a color, a proportion, a stance, a walk or a gesture there and reload. The first rows for each character are moving; the rest are the single pictures the movement is made of. <code>docs/CHARACTERS.md</code> says who these people are.</p>
+  <div class="bar">
+    <label>Ground <select id="ground">
+      <option value="#c79b55">Egypt sand</option><option value="#c2b497">Rome stone</option><option value="#b9855a">Floor at home</option><option value="#d9b98c">Nevada dust</option><option value="#28172f">Road at dusk</option><option value="#6f8f5a">Grass</option><option value="#808080">Gray</option>
+    </select></label>
+    <label>Zoom <input type="range" id="zoom" min="1" max="5" step="1" value="2"> <span id="zoomv">2x</span></label>
+    <label>Speed <input type="range" id="speed" min="0" max="2" step="0.1" value="1"> <span id="speedv">1x</span></label>
+  </div>
+  <div id="out"></div>
+  <nav class="bar"><a href="../index.html">Play the game</a><a href="storyboard.html">Storyboard</a></nav>
+</main>
+
+<script type="module">
+  import { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, strideOf, poses, BASE } from "../js/art/rig.js";
+  import { people } from "../js/art/people.js";
+  import { props } from "../js/art/props.js";
+  import { WALK_FRAMES, UNIT } from "../js/engine/cast.js";
+
+  const out = document.getElementById("out"), zoomEl = document.getElementById("zoom"), speedEl = document.getElementById("speed");
+  const names = ["S", "SE", "E", "NE", "N", "NW", "W", "SW"];
+  const palette = { g1: "#dbb46b", g2: "#c79b55", g3: "#a97f42", line: "#3b2616" };
+  const GESTURES = ["a nod", "making a point", "a shrug", "hand on hip", "both arms up", "hand to heart", "glasses", "muscles", "open hand", "waving", "pointing", "finger up"];
+  let zoom = 2, speed = 1, live = [];
+
+  const sized = (c) => { c.style.width = c.width * zoom + "px"; c.style.height = c.height * zoom + "px"; return c; };
+  const framed = (canvas, label) => {
+    const fig = document.createElement("figure");
+    fig.appendChild(sized(canvas));
+    if (label) { const cap = document.createElement("figcaption"); cap.textContent = label; fig.appendChild(cap); }
+    return fig;
+  };
+  const show = (surface, label) => framed(surface.toCanvas(), label);
+  const strip = (title, items) => {
+    const h = document.createElement("h3"); h.textContent = title; out.appendChild(h);
+    const div = document.createElement("div"); div.className = "strip";
+    for (const it of items) div.appendChild(it);
+    out.appendChild(div);
+  };
+
+  // ----- moving pictures: each one is a small canvas and a rule for which frame to show at time t -----
+  const drawn = new Map();
+  const picture = (key, make) => { let c = drawn.get(key); if (!c) { c = make().toCanvas(); drawn.set(key, c); } return c; };
+  function moving(label, w, h, frameAt) {
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    live.push({ ctx: c.getContext("2d"), frameAt, last: null });
+    return framed(c, label);
+  }
+  function liveFigure(id, spec, size, label, yaw, rule) {
+    const probe = drawFigure(spec, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0), yaw, size);
+    return moving(label, probe.w, probe.h, (t) => { const f = rule(t); return picture(`${id}|${yaw}|${size}|${f.key}`, () => drawFigure(spec, f.pose(), yaw, size)); });
+  }
+  // Every pose is asked for through `poses`, so each character stands, walks and talks in their own way.
+  const gesturesOf = (spec) => [...new Set(spec.gestures || [0, 1, 2, 3])];
+  const rules = {
+    walk: (spec) => {
+      const cycle = (strideOf(spec) * spec.height * (BASE / UNIT)) / (spec.pace || 62) * 1000;       // ms for two steps, at the speed used in the game
+      return (t) => { const f = Math.floor((t / cycle) * WALK_FRAMES) % WALK_FRAMES; return { key: "walk" + f, pose: () => poses.walk(spec, f / WALK_FRAMES) }; };
+    },
+    idle: (spec) => (t) => { const f = Math.floor(t / 430) % 8, blink = Math.floor(t / 110) % 39 === 0; return { key: `stand${f}.${blink ? 1 : 0}`, pose: () => ({ ...poses.stand(spec, f), blink }) }; },
+    talk: (spec) => {
+      const list = gesturesOf(spec);
+      return (t) => {
+        const g = list[Math.floor(t / 2400) % list.length], f = Math.floor(t / 170) % 6, mouth = [0, 1, 2, 1, 0, 2][Math.floor(t / 115) % 6];
+        return { key: `talk${g}.${f}.${mouth}`, pose: () => ({ ...poses.talk(spec, f, g), mouth }) };
+      };
+    },
+    reach: (spec, low) => (t) => {
+      const u = (t % 1500) / 1500, k = Math.round(Math.max(0, Math.min(1, u < 0.2 ? u / 0.2 : u < 0.45 ? 1 : u < 0.65 ? 1 - (u - 0.45) / 0.2 : 0)) * 5) / 5;
+      return { key: `act${low ? 1 : 0}.${k}`, pose: () => (k === 0 ? poses.stand(spec, 0) : poses.reach(spec, k, low)) };
+    },
+    sit: (spec) => (t) => { const f = Math.floor(t / 420) % 8; return { key: "sit" + f, pose: () => poses.sit(spec, f) }; },
+    sitTalk: (spec) => (t) => { const f = Math.floor(t / 170) % 6, mouth = [0, 1, 2, 1][Math.floor(t / 120) % 4]; return { key: `sitT${f}.${mouth}`, pose: () => ({ ...poses.sit(spec, f, { gesture: 1 }), mouth }) }; },
+  };
+
+  function build() {
+    out.innerHTML = ""; live = [];
+    for (const [id, spec] of Object.entries(people)) {
+      const h = document.createElement("h2"); h.textContent = spec.name; out.appendChild(h);
+      const size = Math.round(BASE * spec.height);
+      if (spec.seated) {
+        strip("Moving: at rest and talking", [liveFigure(id, spec, size, "at rest", 45, rules.sit(spec)), liveFigure(id, spec, size, "at rest", 90, rules.sit(spec)), liveFigure(id, spec, size, "talking", 45, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 90, rules.sitTalk(spec))]);
+        strip("Sitting, eight directions", names.map((n, i) => show(drawFigure(spec, poses.sit(spec, 0), i * 45, size), n)));
+        strip("Talking", [0, 1, 2, 3, 4, 5].map((f) => show(drawFigure(spec, { ...poses.sit(spec, f, { gesture: 1 }), mouth: f % 3 }, 90, size), "f" + f)));
+        strip("Sizes", [1, 0.8, 0.62, 0.48, 0.36].map((k) => show(drawFigure(spec, poses.sit(spec, 0), 90, Math.round(size * k)), Math.round(size * k) + " px")));
+        continue;
+      }
+      strip(`Moving: the walk in eight directions (${WALK_FRAMES} pictures to a cycle)`, names.map((n, i) => liveFigure(id, spec, size, n, i * 45, rules.walk(spec))));
+      strip("Moving: at rest, talking, reaching", [
+        liveFigure(id, spec, size, "at rest", 0, rules.idle(spec)), liveFigure(id, spec, size, "at rest", 45, rules.idle(spec)),
+        liveFigure(id, spec, size, "talking", 45, rules.talk(spec)), liveFigure(id, spec, size, "talking", 0, rules.talk(spec)), liveFigure(id, spec, size, "talking", 270, rules.talk(spec)),
+        liveFigure(id, spec, size, "reach", 90, rules.reach(spec, false)), liveFigure(id, spec, size, "pick up", 90, rules.reach(spec, true)), liveFigure(id, spec, size, "pick up", 315, rules.reach(spec, true)),
+      ]);
+      strip("Standing, eight directions", names.map((n, i) => show(drawFigure(spec, poses.stand(spec, 0), i * 45, size), n)));
+      for (const [n, yaw] of [["east", 90], ["south (toward you)", 0], ["north (away)", 180], ["south-east", 45], ["north-west", 225]])
+        strip("Walk " + n, Array.from({ length: WALK_FRAMES }, (_, f) => show(drawFigure(spec, poses.walk(spec, f / WALK_FRAMES), yaw, size), "" + f)));
+      strip("Talking: this character's own gestures", gesturesOf(spec).flatMap((g, n) => [[0, 45, 1], [2, 0, 2]].map(([f, yaw, m]) => show(drawFigure(spec, { ...poses.talk(spec, f + n, g), mouth: m }, yaw, size), GESTURES[g] || "g" + g))));
+      strip("Reaching", [0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, false), 90, size), "out " + k)).concat([0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, true), 90, size), "down " + k))).concat([show(drawFigure(spec, { ...poses.stand(spec, 0), blink: true }, 0, size), "blink")]));
+      strip("Sizes (how far away)", [1.08, 1, 0.85, 0.7, 0.55, 0.42, 0.32].map((k) => show(drawFigure(spec, poses.walk(spec, 0.125), 45, Math.round(size * k)), Math.round(size * k) + " px")));
+    }
+  }
+  function buildProps() {
+    const h = document.createElement("h2"); h.textContent = "Props"; out.appendChild(h);
+    for (const [id, prop] of Object.entries(props)) {
+      const items = [];
+      if (prop.frames > 1) {
+        const first = prop.draw(1, 0, { palette });
+        items.push(moving("moving", first.w, first.h, (t) => { const f = Math.floor((t / 1000) * (prop.fps || 4)) % prop.frames; return picture(`${id}|${f}`, () => prop.draw(1, f, { palette })); }));
+      }
+      for (let f = 0; f < (prop.frames || 1); f++) items.push(show(prop.draw(1, f, { palette }), "frame " + f));
+      items.push(show(prop.draw(0.6, 0, { palette }), "0.6"), show(prop.draw(1.6, 0, { palette }), "1.6"));
+      strip(id, items);
+    }
+  }
+  const buildAll = () => { build(); buildProps(); };
+  buildAll();
+
+  // one clock for every moving picture; the speed slider stretches it
+  let clock = 0, before = performance.now();
+  function tick(now) {
+    clock += Math.min(100, now - before) * speed; before = now;
+    for (const item of live) {
+      const pic = item.frameAt(clock);
+      if (pic === item.last) continue;
+      item.last = pic;
+      item.ctx.clearRect(0, 0, item.ctx.canvas.width, item.ctx.canvas.height);
+      item.ctx.drawImage(pic, 0, 0);
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  zoomEl.addEventListener("input", () => { zoom = Number(zoomEl.value); document.getElementById("zoomv").textContent = zoom + "x"; buildAll(); });
+  speedEl.addEventListener("input", () => { speed = Number(speedEl.value); document.getElementById("speedv").textContent = speed + "x"; });
+  document.getElementById("ground").addEventListener("change", (e) => document.documentElement.style.setProperty("--ground", e.target.value));
+  window.lab = { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, poses, standOf: poses.stand, walkOf: poses.walk, talkOf: poses.talk, people, props, show, BASE };
+</script>
+</body>
+</html>

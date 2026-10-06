@@ -30,7 +30,7 @@ export default async function intro(g) {
   await g.card("n0tk3r presents", "", { plain: true, ms: 1700 });
 
   // ---- 2. the road at dusk ----
-  g.view.draw(art.frame(art.highway({ sun: true }), "A desert highway at dusk."));
+  const drawn = g.view.draw(art.highway({ sun: true }), "A desert highway at dusk.");
   const portal = g.q("#portal"), sun = g.q("#sun"), roadGlow = g.q("#road-glow-shape");
   const strike = g.q("#sign-strike"), bc = g.q("#sign-bc");
   portal.style.opacity = 0;
@@ -38,10 +38,11 @@ export default async function intro(g) {
   roadGlow.style.opacity = 0;
   strike.style.strokeDashoffset = 1;
   bc.style.opacity = 0;
-  const wagon = g.view.addActor("wagon", "wagon", 160, 250, 2.8).flag("bounce", true);
+  const wagon = g.view.cast.addThing("wagon", "wagon", 160, 262, 2.0).flag("bounce", true);
+  await drawn;
 
   await g.fade(0, 900);
-  await g.tween(2600, (k) => wagon.place(160 + 24 * k, 250 - 68 * k, 2.8 - 1.8 * k), ease.out);
+  await g.tween(2600, (k) => wagon.place(160 + 24 * k, 262 - 80 * k, 2.0 - 1.28 * k), ease.out);
   await g.say("intro.1", "intro.2");
 
   // ---- 3. the sky opens where the sun should be ----
@@ -62,7 +63,7 @@ export default async function intro(g) {
 
   // ---- 5. into the portal ----
   wagon.flag("bounce", false);
-  await g.tween(1500, (k) => wagon.place(184 - 24 * k, 182 - 66 * k, 1 - 0.95 * k).fade(1 - k * k * k), ease.in);
+  await g.tween(1500, (k) => wagon.place(184 - 24 * k, 182 - 66 * k, 0.72 * (1 - 0.94 * k)).fade(1 - k * k * k), ease.in);
   g.sfx("flash");
   await g.fade(1, 300, "#fff");
 

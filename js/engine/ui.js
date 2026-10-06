@@ -4,6 +4,7 @@
 
 import * as saves from "./save.js";
 import { icon } from "../art/kit.js";
+import { portrait } from "./cast.js";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const minutes = (ms) => { const m = Math.round((ms || 0) / 60000); return m < 1 ? "under a minute" : m === 1 ? "1 minute" : `${m} minutes`; };
@@ -17,11 +18,13 @@ export class UI {
     this.toastEl = q("#toast"); this.gateEl = q("#gate");
     this.open = null;
     this.hovered = null;
+    this.over = null;          // the team portrait the pointer is on
+    this.faces = {};           // portraits, drawn once
 
     this.hudEl.innerHTML = `
       <p class="place" id="place"></p>
+      <div class="team" id="team" role="group" aria-label="Who you are playing"></div>
       <div class="tools" id="tools">
-        <button class="tool" id="t-lead" type="button" hidden></button>
         <button class="tool" id="t-look" type="button" aria-pressed="false" title="Look at something. Right-click does the same.">Look</button>
         <button class="tool" id="t-show" type="button" title="Show what can be clicked. Holding H does the same.">Show</button>
         <button class="tool" id="t-hint" type="button" title="Ask for a hint">Hint</button>
@@ -30,7 +33,7 @@ export class UI {
       <p class="label" id="label"></p>
       <div class="inv" id="inv" aria-label="Inventory"></div>`;
     this.placeEl = q("#place"); this.toolsEl = q("#tools"); this.labelEl = q("#label"); this.invEl = q("#inv");
-    this.leadEl = q("#t-lead"); this.lookEl = q("#t-look");
+    this.teamEl = q("#team"); this.lookEl = q("#t-look");
 
     this.lookEl.addEventListener("click", () => { g.lookMode = !g.lookMode; this.refresh(); });
     q("#t-hint").addEventListener("click", () => g.hint());
@@ -41,7 +44,15 @@ export class UI {
       this._reveal = setTimeout(() => hot.classList.remove("reveal"), 2400);
     });
     q("#t-menu").addEventListener("click", () => this.pauseMenu());
-    this.leadEl.addEventListener("click", () => g.switchLead(g.store.data.active === "dad" ? "son" : "dad"));
+    // The team: a portrait for each lead the player can switch to.
+    const faceOf = (event) => { const b = event.target.closest ? event.target.closest("[data-lead]") : null; return b ? b.dataset.lead : null; };
+    const point = (event) => { this.over = faceOf(event); this.label(); };
+    const leave = () => { this.over = null; this.label(); };
+    this.teamEl.addEventListener("click", (event) => { const to = faceOf(event); if (to) { if (event.detail && document.activeElement && document.activeElement.blur) document.activeElement.blur(); g.switchLead(to); } });
+    this.teamEl.addEventListener("pointerover", point);
+    this.teamEl.addEventListener("focusin", point);
+    this.teamEl.addEventListener("pointerleave", leave);
+    this.teamEl.addEventListener("focusout", leave);
     this.invEl.addEventListener("click", (event) => {
       const b = event.target.closest("[data-item]");
       if (b) g.useItem(b.dataset.item);
@@ -79,12 +90,19 @@ export class UI {
   showSkip(on) { this.skipEl.hidden = !on; }
   hover(spot) { this.hovered = spot; this.label(); }
 
+  /** The leads the player can switch between right now, in order. */
+  team() {
+    const d = this.g.store.data;
+    return d.team.filter((id) => d.where[id] && d.where[id].scene);
+  }
+
   label() {
     const g = this.g;
     let text = "";
     if (g.mode === "play" && !g.busy) {
       const spot = this.hovered, name = spot ? spot.name : "";
-      if (g.held) text = `Use ${g.items[g.held].name} with ${name || "…"}`;
+      if (this.over) text = this.over === g.store.data.active ? `${g.cast[this.over].name} (playing now)` : `Play as ${g.cast[this.over].name}`;
+      else if (g.held) text = spot && spot.mate ? `Give ${g.items[g.held].name} to ${name}` : `Use ${g.items[g.held].name} with ${name || "…"}`;
       else if (g.lookMode) text = `Look at ${name || "…"}`;
       else if (spot) text = `${spot.verb || (spot.use ? "Use" : "Look at")} ${name}`;
     }
@@ -98,9 +116,19 @@ export class UI {
     this.invEl.hidden = !free;
     this.placeEl.textContent = g.scene && g.mode === "play" ? g.scene.name : "";
     this.lookEl.setAttribute("aria-pressed", String(g.lookMode));
-    const other = d.active === "dad" ? "son" : "dad";
-    this.leadEl.hidden = !(d.flags["leads.switch"] && d.where[other] && d.where[other].scene);
-    this.leadEl.textContent = `Play as ${g.cast[other].name}`;
+    const team = this.team();
+    this.teamEl.hidden = !free || team.length < 2;
+    const now = team.join() + "|" + d.active;
+    if (now !== this._team) {                       // rebuilt only when it changes, so a portrait under the pointer stays put
+      this._team = now;
+      this.teamEl.innerHTML = team.map((id, n) => {
+        const name = esc(g.cast[id].name), on = id === d.active;
+        if (!this.faces[id]) { const face = portrait(g.cast[id].sprite); this.faces[id] = face ? face.toDataURL() : ""; }
+        return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"` +
+          ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}">` +
+          `<img src="${this.faces[id]}" alt="" draggable="false"></button>`;
+      }).join("");
+    }
     this.invEl.innerHTML = d.inventory[d.active].map((id) =>
       `<button class="tool item" type="button" data-item="${esc(id)}" aria-pressed="${g.held === id}">${icon(g.items[id].icon)}<span>${esc(g.items[id].name)}</span></button>`).join("");
     this.label();

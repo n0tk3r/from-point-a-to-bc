@@ -39,7 +39,17 @@ export function pack(data, meta = {}) {
 }
 
 // Upgrades from older save versions. migrations[1] turns a version 1 save into version 2.
-const migrations = {};
+const migrations = {
+  // 1 -> 2. The switch between Dad and the Son became a list, `team`, so that any number of leads
+  // can be in play, and the end of the Rome scene stopped being the end of the game.
+  // (Places and pockets for the leads who joined later are added when the save is loaded.)
+  1: (data) => {
+    const flags = data.flags || {};
+    data.team = flags["leads.switch"] ? ["dad", "son"] : [];
+    if (flags["demo.done"]) { flags["rome.tossed"] = true; delete flags["demo.done"]; }
+    return data;
+  },
+};
 
 /** Check an envelope and return it with its data upgraded to the current version. */
 export function unpack(body) {

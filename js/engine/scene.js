@@ -1,96 +1,104 @@
-// What is on the stage: the background drawing, the actors, and the clickable areas.
-// The background is drawn once per scene and then left alone. Actors are separate
-// elements moved with CSS transforms, which the browser can do without redrawing
-// the background.
+// What is on the stage. Four layers, back to front:
+//
+//   backdrop   the scene's drawing, turned into pixels once on a 640x400 grid
+//   live       the few parts that glow or move by themselves (wormholes, twinkling
+//              stars, ripples), kept as smooth drawings on top of the pixels
+//   cast       people and props, sorted by depth every frame (cast.js)
+//   hot        invisible shapes the player can click
+//
+// Putting the backdrop and the cast on the same 640x400 grid is what makes the
+// picture read as one piece of pixel art. Time travel is the exception on
+// purpose: its light stays smooth, so a wormhole never looks like part of the
+// world it has opened in.
 
-import { sprite, sprites } from "../art/kit.js";
+import { Cast } from "./cast.js";
+import { defs } from "../art/kit.js";
 
-const U = 100 / 320;   // one grid pixel in cqw
+const SVG = "http://www.w3.org/2000/svg";
+export const ART_W = 640, ART_H = 400;
 
-export class Actor {
-  constructor(id, name, host) {
-    this.id = id;
-    this.spriteName = name;
-    const s = sprites[name];
-    this.w = s.w; this.h = s.h;
-    this.el = document.createElement("div");
-    this.el.className = "actor";
-    this.el.dataset.id = id;
-    this.el.style.width = `${s.w * U}cqw`;
-    this.el.style.height = `${s.h * U}cqw`;
-    this.el.innerHTML = sprite(name);
-    host.appendChild(this.el);
-    this.x = 0; this.y = 0; this.scale = 1; this.dir = 1; this.opacity = 1;
-  }
+// class name in the drawings -> color slot in css/tokens.css
+const FILLS = { s1: "sky-1", s2: "sky-2", s3: "sky-3", s4: "sky-4", s5: "sky-5", s6: "sky-6", s7: "sky-7", s8: "sky-8",
+  far: "far", near: "near", g1: "ground-1", g2: "ground-2", g3: "ground-3", line: "line", light: "light", feat: "feature", feat2: "feature-2",
+  "t-core": "time-core", "f-cyan": "time-cyan", "f-magenta": "time-magenta" };
+const STROKES = { "stroke-line": "line", "stroke-feat2": "feature-2", "t-cyan": "time-cyan", "t-magenta": "time-magenta", "t-violet": "time-violet", "t-white": "time-core" };
 
-  /** Put the actor's feet at (x, y) on the grid. */
-  place(x, y, scale = this.scale) {
-    this.x = x; this.y = y; this.scale = scale;
-    this.el.style.transform =
-      `translate(${(x - this.w / 2) * U}cqw, ${(y - this.h) * U}cqw) scale(${scale * this.dir}, ${scale})`;
-    this.el.style.zIndex = Math.round(y);
-    return this;
-  }
-  face(dir) { this.dir = dir < 0 ? -1 : 1; return this.place(this.x, this.y); }
-  fade(opacity) { this.opacity = opacity; this.el.style.opacity = opacity; return this; }
-  flag(name, on) { this.el.classList.toggle(name, on); return this; }
-
-  /** Walk in a straight line. A new walk replaces the one in progress. */
-  walkTo(clock, x, y, scaleAt = () => this.scale, speed = 64) {
-    if (this._stop) this._stop();
-    const sx = this.x, sy = this.y;
-    const dist = Math.hypot(x - sx, (y - sy) * 2);      // going "into" the picture takes longer
-    if (clock.skipping || dist < 0.5) { this.place(x, y, scaleAt(y)); return Promise.resolve(); }
-    const ms = (dist / speed) * 1000;
-    if (Math.abs(x - sx) > 1) this.dir = x < sx ? -1 : 1;
-    return new Promise((resolve) => {
-      let t = 0;
-      const finish = () => { stop(); this._stop = null; this.flag("step", false); resolve(); };
-      const stop = clock.every((dt) => {
-        t += dt;
-        const k = clock.skipping ? 1 : Math.min(t / ms, 1);
-        const ny = sy + (y - sy) * k;
-        this.place(sx + (x - sx) * k, ny, scaleAt(ny));
-        this.flag("step", Math.floor(t / 150) % 2 === 1);
-        if (k >= 1) finish();
-      });
-      this._stop = finish;
-    });
-  }
+/** The current era's colors, read from the style sheet, as plain values a drawing can carry with it. */
+export function paletteOf(el) {
+  const style = getComputedStyle(el), read = (slot) => style.getPropertyValue("--" + slot).trim() || "#888";
+  let css = "";
+  for (const [cls, slot] of Object.entries(FILLS)) css += `.${cls}{fill:${read(slot)}}`;
+  for (const [cls, slot] of Object.entries(STROKES)) css += `.${cls}{stroke:${read(slot)}}`;
+  return { key: el.dataset.era || "", css, g1: read("ground-1"), g2: read("ground-2"), g3: read("ground-3"), line: read("line"), light: read("light"),
+    far: read("far"), near: read("near"), feat: read("feature"), feat2: read("feature-2"), sky: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => read("sky-" + i)) };
 }
 
 export class SceneView {
   constructor(stage) {
     this.stage = stage;
-    this.sceneEl = stage.querySelector("#scene");
-    this.actorsEl = stage.querySelector("#actors");
-    this.hotEl = stage.querySelector("#hot");
-    this.actors = new Map();
+    this.backdrop = stage.querySelector(".backdrop");
+    this.liveEl = stage.querySelector(".live");
+    this.hotEl = stage.querySelector(".hot");
+    this.cast = new Cast(stage.querySelector(".cast"));
+    this.actors = this.cast.items;          // everyone on stage, by id
     this.spots = [];
+    this.drawing = 0;
+    this.palette = paletteOf(stage);
+    this.cast.palette = this.palette;
   }
 
-  setEra(era) { this.stage.dataset.era = era; }
+  setEra(era) {
+    this.stage.dataset.era = era;
+    this.palette = paletteOf(this.stage);
+    this.cast.palette = this.palette;
+  }
 
-  draw(markup) { this.sceneEl.innerHTML = markup; }
-  q(selector) { return this.sceneEl.querySelector(selector); }
+  /**
+   * Show a scene drawing. `inner` is markup from the art kit (js/art/kit.js).
+   * Parts marked class="live" stay as drawings; everything else becomes pixels.
+   * `picture` is the address of a painted backdrop (a 640x400 image), if the scene has one:
+   * it goes down first and anything drawn by the kit is laid over it.
+   * The live parts are in place at once; the promise resolves when the pixels are too.
+   */
+  async draw(inner, title = "", picture = null) {
+    const turn = ++this.drawing;
+    const holder = document.createElementNS(SVG, "svg");
+    holder.setAttribute("viewBox", "0 0 320 200");
+    holder.setAttribute("width", ART_W); holder.setAttribute("height", ART_H);
+    holder.setAttribute("shape-rendering", "crispEdges");
+    holder.innerHTML = `<style>${this.palette.css}</style>${defs}${inner}`;
+    const live = [...holder.querySelectorAll(".live")].filter((node) => !node.parentNode.closest(".live"));
+    this.liveEl.innerHTML = defs;
+    for (const node of live) this.liveEl.appendChild(node);
+    this.liveEl.setAttribute("aria-label", title);
+
+    const load = (src) => new Promise((done) => { const img = new Image(); img.onload = () => done(img); img.onerror = () => done(img); img.src = src; });
+    const [image, painted] = await Promise.all([
+      load("data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(holder))),
+      picture ? load(picture) : null,
+    ]);
+    if (turn !== this.drawing) return;                     // a newer drawing has taken this one's place
+    const ctx = this.backdrop.getContext("2d");
+    ctx.clearRect(0, 0, ART_W, ART_H);
+    ctx.imageSmoothingEnabled = false;                     // a painting at another size is scaled in whole pixels, never blurred
+    if (painted && painted.naturalWidth) ctx.drawImage(painted, 0, 0, ART_W, ART_H);
+    else if (picture) console.warn(`The picture for this scene did not load: ${picture}`);
+    if (image.naturalWidth) ctx.drawImage(image, 0, 0, ART_W, ART_H);
+    else {                                                 // a browser that will not turn a drawing into pixels still gets the drawing
+      for (const node of [...holder.childNodes]) if (node.nodeName !== "style" && node.nodeName !== "defs") this.liveEl.insertBefore(node, this.liveEl.children[1] || null);
+    }
+  }
+
+  /** Find a live part of the drawing, for a script to move or fade. */
+  q(selector) { return this.liveEl.querySelector(selector); }
 
   clear() {
-    this.sceneEl.innerHTML = "";
-    this.actorsEl.innerHTML = "";
+    this.drawing++;
+    this.backdrop.getContext("2d").clearRect(0, 0, ART_W, ART_H);
+    this.liveEl.innerHTML = "";
+    this.cast.clear();
     this.hotEl.innerHTML = "";
-    this.actors.clear();
     this.spots = [];
-  }
-
-  addActor(id, spriteName, x, y, scale = 1) {
-    const actor = new Actor(id, spriteName, this.actorsEl).place(x, y, scale);
-    this.actors.set(id, actor);
-    return actor;
-  }
-
-  removeActor(id) {
-    const a = this.actors.get(id);
-    if (a) { a.el.remove(); this.actors.delete(id); }
   }
 
   /** Build the clickable areas. Each is a real, focusable button for keyboard and screen-reader players. */
@@ -120,13 +128,11 @@ export class SceneView {
   }
 }
 
-/** Keep a point inside a scene's walkable box, and work out how big an actor is there. */
-export function clampToWalk(walk, x, y) {
-  return [Math.min(Math.max(x, walk.x[0]), walk.x[1]), Math.min(Math.max(y, walk.y[0]), walk.y[1])];
-}
-export function scaleAt(scene, y) {
-  const [near, far] = [scene.walk.y[1], scene.walk.y[0]];
-  const [small, big] = scene.scale || [1, 1];
-  if (near === far) return big;
-  return small + (big - small) * ((y - far) / (near - far));
+/** Where a clickable area meets the ground: the middle of its bottom edge. The lead turns to face this. */
+export function footOf(spot) {
+  if (spot.rect) return [spot.rect[0] + spot.rect[2] / 2, spot.rect[1] + spot.rect[3]];
+  if (spot.circle) return [spot.circle[0], spot.circle[1] + spot.circle[2]];
+  let x = 0, y = -Infinity;
+  for (const p of spot.poly) { x += p[0] / spot.poly.length; y = Math.max(y, p[1]); }
+  return [x, y];
 }

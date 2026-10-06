@@ -1,10 +1,10 @@
 /* Design tokens for From Point A to B.C.
-   Two layers of colour, and they never mix:
+   Two layers of color, and they never mix:
    1. The TIME layer is the same in every era: neon cyan, magenta, violet and a white core.
       Anything touched by time travel (portals, the tunnel, interface accents) uses it.
    2. The ERA layer changes with the time period: eight sky bands from top to horizon,
-      two silhouette tones, three ground tones, an outline colour and a highlight.
-   Art never uses a raw colour. It uses the classes at the bottom of this file. */
+      two silhouette tones, three ground tones, an outline color and a highlight.
+   Art never uses a raw color. It uses the classes at the bottom of this file. */
 
 @font-face {
   font-family: "Koine Road";
@@ -27,9 +27,12 @@
   --cream: #f6e3b8;
   --letterbox: #07040d;
 
-  /* characters from the present keep their colours everywhere */
+  /* characters from the present keep their colors everywhere */
   --dad: #ffd34d;
   --son: #7fe3ff;
+  --mom: #8ff0c0;
+  --bigsis: #c3b8ff;
+  --lilsis: #ff9ec4;
   --wagon: #c85a43;
 
   --font-display: "Koine Road", Georgia, "Times New Roman", serif;
@@ -57,6 +60,23 @@
   --far: #8fa27a; --near: #6b7f56;
   --ground-1: #d9cdb4; --ground-2: #c2b497; --ground-3: #a3957a;
   --line: #2c2a3a; --light: #ffffff; --feature: #b0483a; --feature-2: #d98a5c;
+}
+/* Home, in the evening. Indoors the "sky" slots are the room: 1 to 3 the night outside the window,
+   4 to 6 the wallpaper, 7 and 8 the woodwork. far and near are furniture, and the ground is floorboards. */
+[data-era="home"] {
+  --sky-1: #0f1830; --sky-2: #172446; --sky-3: #24355f; --sky-4: #ecd9ad;
+  --sky-5: #dfc895; --sky-6: #c9ad7b; --sky-7: #a8774a; --sky-8: #7a5232;
+  --far: #563a26; --near: #86593a;
+  --ground-1: #c8935c; --ground-2: #b37f4b; --ground-3: #97683c;
+  --line: #2e1c12; --light: #fff3cf; --feature: #9c3b3b; --feature-2: #2f5d7c;
+}
+/* The Nevada desert on a bright morning. */
+[data-era="nevada"] {
+  --sky-1: #2b78c0; --sky-2: #4590ce; --sky-3: #63a6da; --sky-4: #84bce3;
+  --sky-5: #a6cfe9; --sky-6: #c8e0ec; --sky-7: #e4ecd9; --sky-8: #f6ebc4;
+  --far: #caa183; --near: #a9714f;
+  --ground-1: #ecd3a4; --ground-2: #dfc08d; --ground-3: #caa773;
+  --line: #4a2f20; --light: #fffbe8; --feature: #56504f; --feature-2: #8f8a86;
 }
 [data-era="tunnel"] {
   --sky-1: #07040d; --sky-2: #0b0616; --sky-3: #100820; --sky-4: #160b2c;

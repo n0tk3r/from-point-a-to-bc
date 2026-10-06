@@ -1,13 +1,18 @@
-// The art kit. Every drawing in the game is put together from these parts, on one
-// 320x200 grid, with flat fills and hard edges. That shared kit is what keeps
-// different time periods looking like one game.
+// The backdrop kit. Every scene's background is put together from these parts on
+// one 320x200 grid, with flat fills and hard edges, and then turned into pixels at
+// 640x400 (see js/engine/scene.js). That shared kit is what keeps different time
+// periods looking like one game.
 //
-// Colour rules (see css/tokens.css and docs/DESIGN.md):
+// People and props are not here: they are drawn by js/art/rig.js and js/art/props.js.
+//
+// Color rules (see css/tokens.css and docs/DESIGN.md):
 //   ERA parts use classes (s1..s8, far, near, g1..g3, line, light, feat, feat2), so the
 //     same drawing code takes on each period's palette.
 //   TIME parts (portals, the tunnel) use the neon classes and never change.
-//   TRAVELLERS (Dad, Son, the wagon, the road sign) carry fixed colours from the
-//     present, so they always look like visitors.
+//
+// LIVE parts. Anything wrapped in class="live" is left as a smooth drawing on top of
+// the pixels: wormholes and their glow, and the few things that move by themselves
+// (twinkling stars, ripples). Scripts can find live parts by id and animate them.
 
 export const HORIZON = 118;
 
@@ -24,12 +29,6 @@ export function rng(seed) {
 
 const rect = (cls, x, y, w, h, more = "") => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}"${more}/>`;
 
-/** Wrap scene parts in the standard frame. */
-export function frame(inner, title = "") {
-  return `<svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges" role="img">
-    ${title ? `<title>${title}</title>` : ""}${defs}${inner}</svg>`;
-}
-
 export const defs = `<defs>
   <radialGradient id="portal-glow">
     <stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="0.22" stop-color="#c9f8ff" stop-opacity="0.6"/>
@@ -41,6 +40,10 @@ export const defs = `<defs>
   <radialGradient id="tail-glow">
     <stop offset="0" stop-color="#ff4b3a" stop-opacity="0.7"/><stop offset="1" stop-color="#ff4b3a" stop-opacity="0"/>
   </radialGradient>
+  <clipPath id="above-horizon"><rect width="320" height="118"/></clipPath>
+  <pattern id="mesh" width="3" height="3" patternUnits="userSpaceOnUse">
+    <path d="M0,3 L3,0 M0,0 L3,3" stroke="#6b6866" stroke-width="0.35" fill="none"/>
+  </pattern>
 </defs>`;
 
 /** Eight flat bands from the top of the sky down to the horizon. */
@@ -56,7 +59,7 @@ export function stars(seed = 7, count = 30, maxY = 62) {
     const tw = r() < 0.35 ? ` tw${["", " d1", " d2"][Math.floor(r() * 3)]}` : "";
     out += rect(`light${tw}`, Math.floor(r() * 318) + 1, Math.floor(r() * maxY) + 3, r() < 0.08 ? 2 : 1, 1);
   }
-  return `<g class="stars">${out}</g>`;
+  return `<g class="stars live">${out}</g>`;
 }
 
 /** Three ground bands below the horizon, with a few pebbles. */
@@ -76,7 +79,7 @@ export function portal(cx = 160, cy = 92, r = 27, id = "portal") {
   const k = r / 27;
   const ring = (cls, radius, width, dash) =>
     `<circle class="ring ${cls}" cx="${cx}" cy="${cy}" r="${radius * k}" fill="none" stroke-width="${width * k}" stroke-dasharray="${dash.map((d) => d * k).join(" ")}"/>`;
-  return `<g id="${id}" class="portal" shape-rendering="geometricPrecision" style="transform-origin:${cx}px ${cy}px">
+  return `<g id="${id}" class="portal live" shape-rendering="geometricPrecision" style="transform-origin:${cx}px ${cy}px">
     <circle class="glow" cx="${cx}" cy="${cy}" r="${38 * k}" fill="url(#portal-glow)"/>
     ${ring("r1 t-cyan", 27, 2.5, [12, 7])}${ring("r2 t-magenta", 21, 2.5, [8, 6])}
     ${ring("r3 t-violet", 15, 2, [6, 5])}${ring("r4 t-white", 9, 1.5, [4, 3])}
@@ -115,7 +118,7 @@ export const mesas = `
 
 export const road = `
   <polygon class="feat" points="159,118 161,118 236,200 84,200"/>
-  <polygon id="road-glow-shape" fill="url(#road-glow)" points="159,118 161,118 236,200 84,200"/>
+  <polygon id="road-glow-shape" class="live" fill="url(#road-glow)" points="159,118 161,118 236,200 84,200"/>
   <line class="stroke-feat2" x1="159" y1="118" x2="84" y2="200" stroke-width="1"/>
   <line class="stroke-feat2" x1="161" y1="118" x2="236" y2="200" stroke-width="1"/>
   <g fill="#f2c14e">
@@ -125,27 +128,26 @@ export const road = `
     <rect x="158" y="192" width="4" height="8"/>
   </g>`;
 
-/** The road sign. The edit (strike-through and "B.C.") is a separate group so a cutscene can reveal it. */
+/** The road sign. The edit (strike-through and "B.C.") is a live part, so a cutscene can reveal it. */
 export const sign = `
   <rect x="247" y="166" width="2" height="18" fill="#7d8288"/><rect x="281" y="166" width="2" height="18" fill="#7d8288"/>
-  <rect x="236" y="142" width="58" height="26" rx="2" fill="#1e7b4b"/>
-  <rect x="238" y="144" width="54" height="22" rx="1.5" fill="none" stroke="#eaf5ee" stroke-width="1"/>
-  <g shape-rendering="geometricPrecision">
-    <text x="265" y="153.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="8" fill="#eaf5ee" textLength="40" lengthAdjust="spacingAndGlyphs">POINT B</text>
-    <g id="sign-edit">
-      <line id="sign-strike" x1="242" y1="151.5" x2="288" y2="149.5" stroke="#ff4a3d" stroke-width="1.6" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"/>
-      <g id="sign-bc">
-        <text x="256" y="164" text-anchor="middle" font-family="'Koine Road', Arial, Helvetica, sans-serif" font-size="10.5" fill="#ffd23f">B.C.</text>
-        <polygon fill="#ffd23f" points="272,159 281,159 281,156 287,160.5 281,165 281,162 272,162"/>
-      </g>
+  <rect x="236" y="142" width="58" height="26" fill="#1e7b4b"/>
+  <rect x="238.5" y="144.5" width="53" height="21" fill="none" stroke="#eaf5ee" stroke-width="1"/>
+  <text x="265" y="153.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="8" fill="#eaf5ee" textLength="40" lengthAdjust="spacingAndGlyphs">POINT B</text>
+  <g id="sign-edit" class="live" shape-rendering="geometricPrecision">
+    <line id="sign-strike" x1="242" y1="151.5" x2="288" y2="149.5" stroke="#ff4a3d" stroke-width="1.6" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"/>
+    <g id="sign-bc">
+      <text x="256" y="164" text-anchor="middle" font-family="'Koine Road', Arial, Helvetica, sans-serif" font-size="10.5" fill="#ffd23f">B.C.</text>
+      <polygon fill="#ffd23f" points="272,159 281,159 281,156 287,160.5 281,165 281,162 272,162"/>
     </g>
   </g>`;
 
-/** The dusk highway used by the intro and the title screen. */
+/** The dusk highway used by the intro and the title screen. The sun and the portal sit behind the horizon. */
 export function highway({ sun = false } = {}) {
-  return sky() + stars(11, 30) +
+  return sky() + stars(11, 30) + mesas + ground(3) + road + sign +
+    `<g class="live" clip-path="url(#above-horizon)">` +
     (sun ? `<circle id="sun" class="s8" cx="160" cy="104" r="15" shape-rendering="geometricPrecision"/>` : "") +
-    portal(160, 92, 27) + mesas + ground(3) + road + sign;
+    portal(160, 92, 27) + `</g>`;
 }
 
 // ---------- ancient Egypt: a riverbank at dawn ----------
@@ -154,23 +156,13 @@ export const pyramids = `
   <polygon class="far" points="244,118 270,92 296,118"/><polygon class="near" points="270,92 296,118 278,118"/>`;
 
 export function river() {
-  let ripples = "";
+  let still = "", moving = "";
   const r = rng(21);
   for (let i = 0; i < 12; i++) {
-    const y = 122 + Math.floor(r() * 50), x = Math.floor(r() * 70 * (1 - (y - 122) / 110)) + 4;
-    ripples += rect(`feat2${r() < 0.5 ? " ripple" : ""}`, x, y, 3 + Math.floor(r() * 5), 1);
+    const y = 122 + Math.floor(r() * 50), x = Math.floor(r() * 70 * (1 - (y - 122) / 110)) + 4, w = 3 + Math.floor(r() * 5);
+    if (r() < 0.5) moving += rect("feat2 ripple", x, y, w, 1); else still += rect("feat2", x, y, w, 1);
   }
-  return `<polygon class="feat" points="0,118 128,118 104,134 76,152 40,172 0,186"/>${ripples}`;
-}
-
-export function reeds(x = 70, y = 166, count = 9, seed = 5) {
-  const r = rng(seed);
-  let out = "";
-  for (let i = 0; i < count; i++) {
-    const rx = x + i * 4 + Math.floor(r() * 2), h = 14 + Math.floor(r() * 12);
-    out += `<g class="sway" style="animation-delay:${(-r() * 3).toFixed(2)}s">${rect("line", rx, y - h, 1, h)}${rect("near", rx - 1, y - h - 3, 3, 4)}</g>`;
-  }
-  return `<g id="reeds">${out}</g>`;
+  return `<polygon class="feat" points="0,118 128,118 104,134 76,152 40,172 0,186"/>${still}<g class="live">${moving}</g>`;
 }
 
 // ---------- Rome: a forum at noon ----------
@@ -187,77 +179,183 @@ export function temple() {
     ${rect("g3", 58, 68, 124, 3)}${columns}${rect("g2", 56, 110, 128, 4)}${rect("g1", 50, 114, 140, 4)}`;
 }
 
-export const fountain = `
-  <ellipse cx="232" cy="169" rx="32" ry="2.5" fill="#000" opacity="0.25" shape-rendering="geometricPrecision"/>
-  ${rect("g1", 229, 134, 6, 22)}${rect("line", 233, 134, 2, 22, ' opacity="0.25"')}${rect("light", 220, 132, 24, 3)}
-  ${rect("s2 ripple", 222, 135, 2, 20)}${rect("s2", 240, 135, 2, 20)}
-  ${rect("g1", 204, 156, 56, 12)}${rect("line", 204, 164, 56, 4, ' opacity="0.22"')}${rect("light", 202, 153, 60, 4)}${rect("s2", 206, 154, 52, 2)}
-  ${rect("light ripple", 212, 154, 5, 1)}${rect("light", 238, 154, 6, 1)}${rect("light ripple", 226, 155, 3, 1)}`;
+// ---------- home: the living room, in the evening ----------
+const BOOKS = ["#b5483a", "#3f6f8f", "#d9a441", "#5b7d4b", "#7b4f8f", "#c9c2ae", "#2f3a5c", "#a8552c", "#3f8c7c"];
+const FAMILY = [["#f4c043", 7], ["#2aa27a", 6.5], ["#666cd6", 6], ["#4fc0e2", 5], ["#f0607f", 4.5]];      // Dad, Mom, Big Sister, the Son, Little Sister
 
-// ---------- sprites: small drawings that move ----------
-const SKIN = "#e9b98f";
-const legs = (xa, xb, y, len, skin, sock, shoe, wide) => {
-  const one = (x) => rect("", x, y, 2, len, ` fill="${skin}"`) + (sock ? rect("", x, y + len, 2, 4, ` fill="${sock}"`) : "") +
-    rect("", x, y + len + (sock ? 4 : 0), 4, 2, ` fill="${shoe}"`);
-  return `<g class="f1">${one(xa)}${one(xb)}</g><g class="f2">${one(xa - wide)}${one(xb + wide)}</g>`;
-};
-const shadow = (cx, cy, rx) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="1.6" fill="#000" opacity="0.35" shape-rendering="geometricPrecision"/>`;
-
-export const sprites = {
-  // Dad: holiday shirt, shorts, socks and sandals. His shirt is his subtitle colour.
-  dad: { w: 16, h: 34, svg: `${shadow(8, 33.4, 7)}
-    <rect x="5" y="0" width="7" height="3" fill="#5a3b22"/><rect x="5" y="1" width="2" height="4" fill="#5a3b22"/>
-    <rect x="6" y="2" width="6" height="6" fill="${SKIN}"/><rect x="10" y="4" width="1" height="1" fill="#1f130a"/>
-    <rect x="9" y="6" width="4" height="1" fill="#5a3b22"/><rect class="mouth" x="10" y="7" width="2" height="1" fill="#7a2f22"/>
-    <rect x="4" y="8" width="9" height="11" fill="#e8b93a"/><rect x="8" y="8" width="3" height="2" fill="${SKIN}"/>
-    <rect x="5" y="11" width="1" height="1" fill="#c9562f"/><rect x="11" y="13" width="1" height="1" fill="#c9562f"/><rect x="5" y="16" width="1" height="1" fill="#c9562f"/><rect x="10" y="17" width="1" height="1" fill="#c9562f"/>
-    <rect x="7" y="10" width="3" height="7" fill="#c99a25"/><rect x="7" y="17" width="3" height="2" fill="${SKIN}"/>
-    <rect x="4" y="19" width="9" height="5" fill="#6f7f5a"/>
-    ${legs(5, 9, 24, 4, SKIN, "#f4f1e6", "#6e4b2e", 2)}` },
-  // Son: red cap, blue hoodie, backpack.
-  son: { w: 14, h: 26, svg: `${shadow(7, 25.4, 6)}
-    <rect x="3" y="0" width="7" height="3" fill="#d2452f"/><rect x="9" y="2" width="3" height="1" fill="#d2452f"/>
-    <rect x="4" y="3" width="6" height="5" fill="${SKIN}"/><rect x="3" y="3" width="2" height="3" fill="#3b2a1c"/>
-    <rect x="8" y="5" width="1" height="1" fill="#1f130a"/><rect class="mouth" x="8" y="7" width="2" height="1" fill="#7a2f22"/>
-    <rect x="3" y="8" width="8" height="8" fill="#49bfe0"/><rect x="1" y="9" width="3" height="6" fill="#7a5ad1"/>
-    <rect x="6" y="9" width="2" height="6" fill="#2f9fc2"/><rect x="6" y="15" width="2" height="1" fill="${SKIN}"/>
-    <rect x="3" y="16" width="8" height="3" fill="#39415e"/>
-    ${legs(4, 8, 19, 5, SKIN, null, "#f4f1e6", 1)}` },
-  // A scribe, sitting cross-legged with his palette. Era colours where the cloth is.
-  scribe: { w: 22, h: 22, svg: `${shadow(11, 21.4, 10)}
-    <rect x="7" y="0" width="8" height="6" fill="#1b1410"/><rect x="8" y="2" width="6" height="5" fill="#b9793f"/>
-    <rect x="9" y="4" width="1" height="1" fill="#1b1410"/><rect class="mouth" x="8" y="6" width="2" height="1" fill="#5a2418"/>
-    <rect x="7" y="7" width="8" height="7" fill="#b9793f"/><rect class="feat" x="7" y="7" width="8" height="2"/><rect class="s7" x="9" y="8" width="4" height="1"/>
-    <rect x="4" y="10" width="4" height="2" fill="#b9793f"/><rect class="g1" x="0" y="11" width="6" height="3"/>
-    <rect class="light" x="4" y="14" width="14" height="5"/><rect x="2" y="18" width="18" height="3" fill="#b9793f"/>` },
-  // The family wagon, seen from behind.
-  wagon: { w: 40, h: 34, svg: `${shadow(20, 33, 22)}<g transform="translate(-164,-149)">
-    <rect x="172" y="152" width="24" height="3" fill="#6e4b2e"/><rect x="175" y="150" width="9" height="2" fill="#9a7445"/><rect x="186" y="150" width="6" height="2" fill="#4f6b8a"/>
-    <rect x="169" y="155" width="30" height="11" fill="#b8503c"/><rect x="172" y="157" width="24" height="7" fill="#232842"/>
-    <rect x="175" y="159" width="5" height="5" fill="#0e1120"/><rect x="187" y="160" width="4" height="4" fill="#0e1120"/><rect x="193" y="158" width="2" height="1" fill="#6b7aa8"/>
-    <rect x="166" y="166" width="36" height="10" fill="#c85a43"/><rect x="166" y="170" width="36" height="2" fill="#7d5131"/>
-    <rect x="167" y="167" width="4" height="3" fill="#ff3434"/><rect x="197" y="167" width="4" height="3" fill="#ff3434"/>
-    <rect x="179" y="172" width="10" height="4" fill="#efe9da"/><rect x="181" y="173" width="6" height="1" fill="#3a3343"/>
-    <rect x="165" y="176" width="38" height="2" fill="#a3a8ad"/><rect x="168" y="178" width="6" height="3" fill="#0d0b10"/><rect x="194" y="178" width="6" height="3" fill="#0d0b10"/>
-    <g shape-rendering="geometricPrecision"><circle cx="169" cy="168.5" r="6" fill="url(#tail-glow)"/><circle cx="199" cy="168.5" r="6" fill="url(#tail-glow)"/></g></g>` },
-};
-
-/** A sprite as stand-alone SVG markup. */
-export function sprite(name) {
-  const s = sprites[name];
-  return `<svg viewBox="0 0 ${s.w} ${s.h}" shape-rendering="crispEdges" aria-hidden="true">${name === "wagon" ? defs : ""}${s.svg}</svg>`;
+/** The back wall and the floor. Furniture that can be walked round is in js/art/props.js. */
+export function livingRoom() {
+  const r = rng(5);
+  let out = "";
+  // ceiling, wallpaper, panelling
+  out += rect("s6", 0, 0, 320, 30) + rect("s8", 0, 28, 320, 3) + rect("s5", 0, 31, 320, 62);
+  for (let x = 6; x < 320; x += 12) out += rect("s4", x, 31, 3, 62);
+  out += rect("s7", 0, 93, 320, 27) + rect("s8", 0, 93, 320, 2) + rect("s8", 0, 116, 320, 4);
+  for (let x = 16; x < 320; x += 30) out += rect("s8", x, 99, 1, 14);
+  // floorboards: wider as they come nearer
+  out += rect("g2", 0, 120, 320, 80) + rect("g3", 0, 120, 320, 2);
+  const rows = [122, 128, 137, 149, 164, 183, 200];
+  for (let i = 0; i + 1 < rows.length; i++) {
+    out += rect("g3", 0, rows[i + 1], 320, 1);
+    for (let k = 0; k < 4; k++) out += rect("g3", Math.floor(r() * 316) + 2, rows[i], 1, rows[i + 1] - rows[i]);
+    if (i % 2) out += rect("g1", Math.floor(r() * 200) + 20, rows[i] + 1, 60 + Math.floor(r() * 50), 1);
+  }
+  // a rug in the middle of the floor
+  out += `<polygon class="feat" points="98,142 232,142 250,182 80,182"/><polygon class="feat2" points="105,146 225,146 239,178 91,178"/>
+    <polygon class="feat" points="112,150 218,150 229,174 101,174"/><polygon class="light" points="165,154 196,162 165,170 134,162" opacity="0.5"/>`;
+  // the front door, and the mat in front of it
+  out += rect("s8", 8, 54, 34, 66) + rect("near", 11, 57, 28, 63) + rect("far", 14, 61, 22, 20) + rect("far", 14, 86, 22, 30) +
+    rect("light", 35, 84, 2, 3) + rect("s8", 20, 100, 10, 2) + `<polygon class="g3" points="6,122 46,122 50,128 2,128"/>`;
+  // the window: night outside, a moon, the house across the road
+  out += rect("s8", 58, 44, 60, 3) + rect("s8", 62, 48, 52, 46) + rect("s1", 65, 51, 46, 14) + rect("s2", 65, 65, 46, 13) + rect("s3", 65, 78, 46, 13) +
+    `<circle class="light" cx="99" cy="60" r="4.5"/><circle class="s1" cx="101.5" cy="59" r="4"/>` +
+    rect("line", 65, 82, 24, 9) + `<polygon class="line" points="65,82 77,75 89,82"/>` + rect("light", 71, 85, 3, 3) +
+    `<g class="live">${rect("light tw", 70, 55, 1, 1)}${rect("light tw d1", 84, 62, 1, 1)}${rect("light tw d2", 106, 71, 1, 1)}${rect("light", 77, 68, 1, 1)}</g>` +
+    rect("s8", 87, 51, 2, 40) + rect("s8", 65, 70, 46, 2) + rect("s7", 60, 93, 56, 3) +
+    `<polygon class="feat2" points="62,47 73,47 70,94 62,94"/><polygon class="feat2" points="103,47 114,47 114,94 106,94"/>`;
+  // the bookcase
+  out += rect("far", 170, 54, 40, 66) + rect("near", 172, 56, 36, 62);
+  for (let shelf = 0; shelf < 5; shelf++) {
+    const y = 56 + shelf * 12.4;
+    out += rect("far", 172, y + 10.4, 36, 2);
+    for (let x = 173; x < 206; ) {
+      const w = 2 + Math.floor(r() * 3), h = 6.5 + Math.floor(r() * 4), lean = r() < 0.08;
+      if (x + w > 207) break;
+      if (!lean) out += `<rect x="${x}" y="${y + 10.4 - h}" width="${w}" height="${h}" fill="${BOOKS[Math.floor(r() * BOOKS.length)]}"/>`;
+      x += w + (r() < 0.2 ? 1 : 0);
+    }
+  }
+  // the family, framed, above the piano
+  out += rect("s8", 226, 52, 34, 22) + rect("light", 228, 54, 30, 18);
+  FAMILY.forEach(([shirt, tall], i) => {
+    const x = 231 + i * 5.2;
+    out += `<rect x="${x}" y="${70 - tall}" width="3.6" height="${tall}" fill="${shirt}"/><rect x="${x + 0.6}" y="${70 - tall - 2.6}" width="2.4" height="2.6" fill="#e8b083"/>`;
+  });
+  // the stairs, and the closet under them
+  for (let i = 0; i < 9; i++) {
+    const x = 262 + i * 7, y = 120 - 7 * (i + 1);
+    out += rect("s7", x, y, 320 - x, 7) + rect("s8", x, y, 320 - x, 1) + rect("near", x, y + 1, 1, 6);
+    out += rect("s8", x + 3, y - 20, 1, 20);                                  // a baluster on every step
+  }
+  out += `<polygon class="s8" points="258,91 262,89 320,31 320,35 262,93"/>` + rect("s8", 258, 88, 4, 32) + `<circle class="s7" cx="260" cy="87" r="3"/>`;
+  out += rect("far", 290, 94, 22, 26) + rect("near", 294, 97, 16, 21) + rect("line", 290, 94, 4, 26) + rect("light", 307, 107, 2, 2);
+  out += `<rect id="router-led" class="live flicker" x="291.2" y="111" width="1.6" height="1.6" fill="#ff4a3d"/>`;
+  // the lamp over the middle of the room
+  out += rect("line", 160, 0, 1, 12) + `<polygon class="light" points="151,21 170,21 166,12 155,12"/>`;
+  return out;
 }
 
-/** A sprite placed inside a scene drawing (for things that never move). */
-export function prop(name, x, y, { rotate = 0, scale = 1 } = {}) {
-  const s = sprites[name];
-  return `<g transform="translate(${x - (s.w * scale) / 2},${y - s.h * scale}) rotate(${rotate} ${(s.w * scale) / 2} ${s.h * scale}) scale(${scale})">${s.svg}</g>`;
+// ---------- Nevada: the last stop before nothing ----------
+/** A dirt lot in the desert: a shack that sells rocks and lemonade, a government fence, and tracks that stop. */
+export function desertStop() {
+  const text = (x, y, size, words, fill, more = "") => `<text x="${x}" y="${y}" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="${size}" fill="${fill}"${more}>${words}</text>`;
+  let out = sky() + `<circle class="light" cx="206" cy="38" r="9" shape-rendering="geometricPrecision"/>` + mesas +
+    `<polygon class="far" points="96,118 104,112 130,112 136,105 164,105 172,112 200,112 206,118"/>` + ground(23);
+  // scrub
+  const r = rng(31);
+  for (let i = 0; i < 12; i++) {
+    const x = Math.floor(r() * 300) + 8, y = 122 + Math.floor(r() * 72);
+    if (x > 60 && x < 270 && y > 128 && y < 190) continue;                  // keep the lot clear
+    out += `<rect x="${x}" y="${y}" width="5" height="2" fill="#8a9a78"/><rect x="${x + 1}" y="${y - 1}" width="3" height="1" fill="#a3b08f"/>`;
+  }
+  // the fence, and what is behind it
+  out += `<rect x="232" y="100" width="46" height="18" fill="#b9b6ad"/><rect x="232" y="100" width="46" height="2" fill="#d8d5cb"/><rect x="238" y="106" width="6" height="12" fill="#6b6866"/>
+    <rect x="286" y="96" width="20" height="22" fill="#a7a49b"/><rect x="302" y="62" width="1" height="34" fill="#6b6866"/>
+    <rect class="live tw" x="301" y="60" width="3" height="2" fill="#ff4a3d"/>`;
+  out += `<rect x="186" y="84" width="134" height="38" fill="url(#mesh)"/><rect x="186" y="84" width="134" height="1" fill="#8f8a86"/><rect x="186" y="121" width="134" height="1" fill="#8f8a86"/>`;
+  for (let x = 186; x < 320; x += 22) out += `<rect x="${x}" y="80" width="1.5" height="43" fill="#7b7672"/>`;
+  out += `<path d="M186,81 L320,81" stroke="#7b7672" stroke-width="0.5" stroke-dasharray="2 1.5" fill="none"/>`;
+  // the notice on the fence
+  out += `<rect x="244" y="92" width="30" height="21" fill="#f4efe0"/><rect x="244" y="92" width="30" height="6" fill="#c8402f"/>
+    <rect x="247" y="101" width="24" height="1.5" fill="#1f130a"/><rect x="249" y="104.5" width="20" height="1.5" fill="#1f130a"/><rect x="250" y="108" width="18" height="1.2" fill="#c8402f"/>
+    <circle cx="246" cy="94" r="0.6" fill="#555"/><circle cx="272" cy="94" r="0.6" fill="#555"/>`;
+  // the shack
+  out += rect("near", 14, 80, 70, 40) + `<polygon class="feat" points="8,82 50,66 90,82"/><polygon class="feat2" points="8,82 50,66 50,69 12,84"/>`;
+  for (let x = 20; x < 84; x += 7) out += rect("far", x, 84, 1, 36);
+  out += rect("line", 56, 92, 16, 28) + rect("s2", 24, 94, 20, 14) + rect("light", 26, 96, 5, 3) + rect("far", 22, 92, 24, 2) + rect("far", 22, 108, 24, 2) +
+    `<rect x="18" y="71" width="62" height="10" fill="#f4efe0" transform="rotate(-2 49 76)"/>` + text(49, 79, 7, "LAST STOP", "#c8402f", ` transform="rotate(-2 49 76)"`);
+  out += `<polygon class="far" points="10,120 88,120 94,124 4,124"/>`;                 // the porch step
+  // tracks that come in from the road and stop
+  out += `<path d="M120,200 C150,186 190,176 226,170" class="stroke-line" stroke-width="1.2" fill="none" opacity="0.35"/>
+    <path d="M150,200 C176,190 206,182 238,175" class="stroke-line" stroke-width="1.2" fill="none" opacity="0.35"/>`;
+  // the patch where the sand turned to glass, and the air that has not settled above it
+  out += `<ellipse cx="250" cy="170" rx="27" ry="7" fill="#9fd3dc"/><ellipse cx="249" cy="169.5" rx="23" ry="5.2" fill="#d9f0f2"/><polygon points="236,168 252,166 262,170 246,172" fill="#ffffff" opacity="0.7"/>
+    <g class="live">${rect("light tw", 232, 169, 1, 1)}${rect("light tw d1", 258, 167, 1, 1)}${rect("light tw d2", 268, 171, 1, 1)}</g>`;
+  out += `<g id="shimmer" class="live" opacity="0.42"><g class="flicker">${portal(250, 150, 6, "shimmer-rings")}</g></g>`;
+  return out;
+}
+
+// ---------- close-ups: a screen or a sign, big enough to read ----------
+const words = (x, y, size, what, fill = "#fff", weight = 700, anchor = "middle") =>
+  `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="${weight}" fill="${fill}">${what}</text>`;
+
+/** The family computer. `inner` is what is on its screen, which runs from (66, 22) to (254, 140). */
+export function monitor(inner) {
+  return `<g shape-rendering="geometricPrecision">
+    <rect x="58" y="14" width="204" height="136" rx="6" fill="#2b2a33"/><rect x="66" y="22" width="188" height="118" fill="#101822"/>
+    ${inner}
+    <rect x="146" y="150" width="28" height="7" fill="#22212a"/><rect x="124" y="156" width="72" height="5" rx="2" fill="#2b2a33"/><circle cx="160" cy="145" r="1.2" fill="#5ef2ff"/>
+  </g>`;
+}
+const page = (bg, body) => `<rect x="66" y="22" width="188" height="118" fill="${bg}"/><rect x="66" y="22" width="188" height="12" fill="#16283d"/>` +
+  `<circle cx="73" cy="27" r="2.8" fill="#ff6b5a"/><polygon points="70.7,28.6 75.3,28.6 73,32.6" fill="#ff6b5a"/><circle cx="73" cy="27" r="1" fill="#16283d"/>` + words(80, 30.5, 6, "FIND MY FAMILY", "#cfe3ff", 700, "start") + body;
+
+export const screens = {
+  /** The router is off: nothing to look at. */
+  offline: () => page("#1b2330",
+    `<rect x="141" y="58" width="14" height="10" rx="2" fill="#5d6b80"/><rect x="144" y="52" width="2" height="6" fill="#5d6b80"/><rect x="150" y="52" width="2" height="6" fill="#5d6b80"/>
+     <rect x="165" y="60" width="16" height="6" rx="3" fill="#5d6b80"/><path d="M157,57 l5,12" stroke="#ff6b5a" stroke-width="1.6"/>` +
+    words(160, 90, 11, "No internet.") + words(160, 102, 6, "The router is not answering.", "#9fb0c8", 400)),
+  /** Signing in. `typed` is how many of the four figures are in; `shake` marks a wrong try. */
+  login: (typed = 0, shake = false) => page("#20405f",
+    words(160, 62, 10, "Welcome back, Dad") + words(160, 76, 6, "Password", "#cfe3ff", 400) +
+    `<rect x="118" y="81" width="84" height="18" rx="2" fill="${shake ? "#ffd9d2" : "#ffffff"}"/>` +
+    [0, 1, 2, 3].map((i) => (i < typed ? `<circle cx="${133 + i * 18}" cy="90" r="3.2" fill="#16283d"/>` : `<rect x="${128 + i * 18}" y="94" width="10" height="1.4" fill="#8aa0b8"/>`)).join("") +
+    words(160, 114, 6, "Forgot it? Ask Dad.", "#ffe9a8", 400)),
+  /** A question only one person in the house can answer. */
+  question: () => page("#20405f",
+    words(160, 56, 6, "This computer is new to us. One question first.", "#cfe3ff", 400) +
+    words(160, 80, 9.5, "What did you promise") + words(160, 93, 9.5, "on your wedding day?") +
+    `<rect x="100" y="104" width="120" height="14" rx="2" fill="#ffffff" opacity="0.92"/><rect x="106" y="110" width="1.2" height="6" fill="#16283d" class="tw"/>`),
+  /** The map: a great deal of nothing, and one dot. */
+  map: () => {
+    let grid = "";
+    for (let x = 78; x < 254; x += 16) grid += `<rect x="${x}" y="34" width="0.5" height="106" fill="#d3c9a8"/>`;
+    for (let y = 46; y < 140; y += 16) grid += `<rect x="66" y="${y}" width="188" height="0.5" fill="#d3c9a8"/>`;
+    const hill = (x, y) => `<path d="M${x},${y} l4,-5 l4,5 M${x + 6},${y} l3,-3.5 l3,3.5" stroke="#b9aa8a" stroke-width="0.8" fill="none"/>`;
+    return page("#ece4c8", grid +
+      `<path d="M66,128 C100,120 120,104 150,96 S176,90 182,88" stroke="#b9aa8a" stroke-width="3" fill="none"/><path d="M66,128 C100,120 120,104 150,96 S176,90 182,88" stroke="#fff8e0" stroke-width="0.8" stroke-dasharray="3 2" fill="none"/>` +
+      hill(84, 60) + hill(214, 120) + hill(120, 76) + `<ellipse cx="222" cy="64" rx="15" ry="5" fill="#d9e9ea"/>` +
+      `<circle cx="96" cy="122" r="1.6" fill="#7a6f55"/>` + words(100, 132, 5, "LAST GAS", "#7a6f55", 700, "start") + words(222, 66, 5, "DRY LAKE", "#7a8f90") + words(128, 60, 5, "NOT MUCH", "#a59a7c") +
+      `<circle class="glow" cx="184" cy="87" r="9" fill="#ff6b5a" opacity="0.28"/><circle cx="184" cy="87" r="3.2" fill="#c8402f"/><circle cx="184" cy="87" r="1.2" fill="#fff"/>` +
+      `<rect x="142" y="100" width="108" height="30" rx="2" fill="#ffffff"/><rect x="142" y="100" width="108" height="30" rx="2" fill="none" stroke="#c8402f" stroke-width="0.8"/>` +
+      words(148, 110, 6.5, "DAD'S PHONE", "#c8402f", 700, "start") + words(148, 118, 5, "Last seen 5:47 p.m. today", "#3a3326", 400, "start") + words(148, 125.5, 5, "37 miles past Last Gas. No signal since.", "#3a3326", 400, "start") +
+      `<rect x="72" y="38" width="34" height="42" rx="2" fill="#ffffff" opacity="0.9"/><polygon points="78,43 100,43 100,66 97,73 78,54" fill="#e2d8b8" stroke="#a59a7c" stroke-width="0.7"/><circle cx="90" cy="56" r="1.6" fill="#c8402f"/>` +
+      words(89, 78, 4.6, "NEVADA", "#7a6f55"));
+  },
+};
+
+/** The notice on the fence, close enough to read. */
+export function notice() {
+  const blade = (a) => { const p = (deg, rad) => `${96 + Math.cos((deg * Math.PI) / 180) * rad},${88 + Math.sin((deg * Math.PI) / 180) * rad}`; return `<path d="M${p(a - 30, 4)} L${p(a - 30, 12)} A12,12 0 0 1 ${p(a + 30, 12)} L${p(a + 30, 4)} A4,4 0 0 0 ${p(a - 30, 4)} Z" fill="#1f130a"/>`; };
+  return `<g shape-rendering="geometricPrecision">
+    <rect x="62" y="16" width="196" height="138" rx="3" fill="#8f8a86"/><rect x="65" y="19" width="190" height="132" rx="2" fill="#f4efe0"/>
+    <rect x="65" y="19" width="190" height="30" fill="#c8402f"/>${words(160, 41, 19, "AREA CLOSED")}
+    ${words(160, 60, 6, "BY ORDER", "#4a2f20")}
+    <circle cx="96" cy="88" r="17" fill="#f2c230"/><circle cx="96" cy="88" r="17" fill="none" stroke="#1f130a" stroke-width="1"/><circle cx="96" cy="88" r="2.4" fill="#1f130a"/>${blade(-90)}${blade(30)}${blade(150)}
+    ${words(184, 82, 11, "ELEVATED", "#1f130a")}${words(184, 96, 11, "RADIATION LEVELS", "#1f130a")}
+    <rect x="76" y="112" width="168" height="0.8" fill="#4a2f20"/>
+    ${words(160, 125, 10, "SECTORS 44 AND 1250", "#c8402f")}${words(160, 135, 6, "SEALED UNTIL FURTHER NOTICE", "#1f130a")}
+    ${words(160, 146, 4.6, "No entry. No photographs. No questions.", "#4a2f20", 400)}
+    <circle cx="70" cy="24" r="1.4" fill="#6b6866"/><circle cx="250" cy="24" r="1.4" fill="#6b6866"/><circle cx="70" cy="146" r="1.4" fill="#6b6866"/><circle cx="250" cy="146" r="1.4" fill="#6b6866"/>
+  </g>`;
 }
 
 // ---------- inventory icons, 12x12 ----------
 export const icons = {
   map: `<rect x="1" y="2" width="10" height="8" fill="#efe9da"/><rect x="4" y="2" width="1" height="8" fill="#b9b2a0"/><rect x="8" y="2" width="1" height="8" fill="#b9b2a0"/><rect x="2" y="5" width="6" height="1" fill="#c85a43"/><rect x="7" y="6" width="3" height="1" fill="#c85a43"/>`,
   reed: `<rect x="5" y="1" width="2" height="10" fill="#7a8a3c"/><rect x="5" y="4" width="2" height="1" fill="#4d5a22"/><rect x="5" y="8" width="2" height="1" fill="#4d5a22"/><rect x="5" y="10" width="2" height="1" fill="#1f130a"/>`,
-  coin: `<rect x="3" y="2" width="6" height="8" fill="#e3b436"/><rect x="2" y="3" width="8" height="6" fill="#e3b436"/><rect x="5" y="4" width="2" height="4" fill="#a87f1c"/>`,
+  coin: `<rect x="3" y="2" width="6" height="8" fill="#d4d8de"/><rect x="2" y="3" width="8" height="6" fill="#d4d8de"/><rect x="3" y="3" width="5" height="1" fill="#f4f6f8"/><rect x="5" y="4" width="2" height="3" fill="#8e949c"/><rect x="4" y="7" width="4" height="1" fill="#8e949c"/>`,
+  note: `<rect x="2" y="2" width="8" height="8" fill="#ffe36b"/><rect x="2" y="2" width="8" height="2" fill="#f2c94a"/><rect x="3" y="5" width="6" height="1" fill="#6b5a1c"/><rect x="3" y="7" width="4" height="1" fill="#6b5a1c"/><rect x="8" y="8" width="2" height="2" fill="#d9b83c"/>`,
 };
 export const icon = (name) => `<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">${icons[name] || ""}</svg>`;

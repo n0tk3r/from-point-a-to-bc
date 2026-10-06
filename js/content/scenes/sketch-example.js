@@ -10,8 +10,7 @@ export default {
   id: "sketch-example",
   era: "rome",
   name: "A market street (not drawn yet)",
-  walk: { x: [20, 300], y: [168, 192] },
-  scale: [0.95, 1.2],
+  walk: { x: [20, 300], y: [150, 194] },
   spawn: { default: [160, 184] },
 
   hotspots: [

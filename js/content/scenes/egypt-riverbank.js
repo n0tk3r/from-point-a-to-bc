@@ -1,5 +1,5 @@
 // A scene is one file. It says how the place is drawn, where people can walk,
-// what can be clicked, and what happens when it is.
+// what stands on the ground, what can be clicked, and what happens when it is.
 //
 // PLACEHOLDER SCENE, written to prove the engine: two short puzzle chains (a pen
 // for the scribe, a sheet for him to draw on) that meet at one gate (the door).
@@ -23,6 +23,7 @@ async function talkToScribe(g) {
 
 async function giveReed(g) {
   await g.say("egypt.give.reed");
+  await g.reach();
   g.take("reed");
   await g.say("egypt.got.reed", "egypt.need.sheet");
   g.flag("egypt.metScribe", true);
@@ -32,6 +33,7 @@ async function giveReed(g) {
 async function giveMap(g) {
   await g.say("egypt.give.map");
   if (!g.flag("egypt.penGiven")) return g.say("egypt.got.map.nopen");
+  await g.reach();
   g.take("map");
   await g.say("egypt.got.map", "egypt.door.steady");
   g.flag("egypt.mapMarked", true);
@@ -61,22 +63,35 @@ export default {
   id: "egypt-riverbank",
   era: "egypt",
   name: "A riverbank at dawn",
-  walk: { x: [50, 300], y: [166, 192] },     // the box the lead can walk in
-  scale: [0.9, 1.15],                          // size at the back and at the front of that box
+
+  // DEPTH. The horizon is the line the ground runs back to. A figure is full size
+  // with its feet at `full`, and shrinks toward the horizon. (These are the defaults.)
+  horizon: 118, full: 190,
+
+  // Where the lead can walk: the sand, from far back near the pyramids to the front
+  // of the screen, with the edge following the riverbank.
+  walk: { area: [[104, 138], [312, 138], [312, 196], [8, 196], [8, 190], [48, 176], [84, 154]] },
   spawn: { default: [200, 184] },
   exits: ["rome-forum"],                       // scenes to fetch ahead of time
 
+  // The backdrop: everything that is far away or flat on the ground.
   draw(art) {
     return art.sky() +
-      `<circle class="light" cx="150" cy="112" r="11" shape-rendering="geometricPrecision"/>` +
-      art.pyramids + art.ground(8) + art.river() + art.reeds(62, 168) +
-      art.prop("wagon", 252, 174, { rotate: -7 }) +
-      `<polygon class="g1" points="224,178 236,171 262,172 280,178"/>` +
+      `<circle class="light" cx="150" cy="112" r="11"/>` +
+      art.pyramids + art.ground(8) + art.river() +
       art.portal(34, 148, 9, "hole");
   },
 
-  // People who are here but are not the lead.
-  actors: [{ id: "scribe", sprite: "scribe", at: [150, 170], face: 1 }],
+  // Props stand on the ground. The lead is drawn behind one when his feet are
+  // higher on the screen than the prop's own `at` point, and in front when lower.
+  // `solid` is the patch of ground the prop takes up: nobody can walk through it.
+  props: [
+    { id: "reeds", kind: "reeds", at: [82, 168], scale: 0.9 },
+    { id: "wagon", kind: "wagonStuck", at: [254, 176], scale: 1.12, solid: [[220, 164], [288, 164], [292, 179], [216, 179]] },
+  ],
+
+  // People who are here but are not the lead. They block the ground they sit on.
+  actors: [{ id: "scribe", kind: "scribe", at: [150, 170], face: "E" }],
 
   // Make the drawing match the story facts. Runs on arrival and after loading a save.
   setup(g) {
@@ -87,31 +102,33 @@ export default {
 
   hotspots: [
     { id: "pyramids", name: "pyramids", rect: [186, 82, 110, 36], look: "egypt.pyramids.look" },
-    { id: "river", name: "river", poly: [[0, 118], [128, 118], [104, 134], [76, 152], [40, 172], [0, 186]], walkTo: [98, 172], look: "egypt.river.look" },
+    { id: "river", name: "river", poly: [[0, 118], [128, 118], [104, 134], [76, 152], [40, 172], [0, 186]], walkTo: [98, 174], face: "W", look: "egypt.river.look" },
     {
-      id: "reeds", name: "reeds", verb: "Pick", rect: [58, 138, 44, 32], walkTo: [112, 174], look: "egypt.reeds.look",
+      id: "reeds", name: "reeds", verb: "Pick", rect: [62, 136, 42, 33], walkTo: [110, 172], face: "W", look: "egypt.reeds.look",
       use: async (g) => {
         if (g.flag("egypt.hasReed")) return g.say("egypt.reeds.again");
+        await g.reach();
         await g.say("egypt.reeds.take");
         g.give("reed");
         g.flag("egypt.hasReed", true);
       },
     },
     {
-      id: "wagon", name: "wagon", verb: "Search", rect: [228, 138, 50, 40], walkTo: [216, 186], look: "egypt.wagon.look",
+      id: "wagon", name: "wagon", verb: "Search", rect: [222, 122, 64, 56], walkTo: [254, 186], face: "N", look: "egypt.wagon.look",
       use: async (g) => {
         if (g.flag("egypt.hasMap")) return g.say("egypt.wagon.empty");
+        await g.reach();
         await g.say("egypt.wagon.use");
         g.give("map");
         g.flag("egypt.hasMap", true);
       },
     },
     {
-      id: "scribe", name: "scribe", verb: "Talk to", rect: [137, 146, 28, 26], walkTo: [184, 176], face: -1,
+      id: "scribe", name: "scribe", verb: "Talk to", rect: [133, 140, 34, 32], walkTo: [186, 174], face: "W",
       look: "egypt.scribe.look", use: talkToScribe, useWith: { reed: giveReed, map: giveMap },
     },
     {
-      id: "hole", name: "humming door", verb: "Go through", circle: [34, 148, 17], walkTo: [60, 172], face: -1,
+      id: "hole", name: "humming door", verb: "Go through", circle: [34, 148, 17], walkTo: [62, 174], face: "W",
       look: (g) => g.say(g.flag("egypt.mapMarked") ? "egypt.hole.big" : "egypt.hole.look"),
       use: useDoor,
     },

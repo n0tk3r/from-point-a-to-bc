@@ -1,5 +1,5 @@
 /* Layout and interface for From Point A to B.C.
-   Colours come from tokens.css. Sizes use cqw, which is 1% of the stage width,
+   Colors come from tokens.css. Sizes use cqw, which is 1% of the stage width,
    so everything scales with the stage. One grid pixel is 100cqw / 320. */
 
 * { box-sizing: border-box; }
@@ -44,26 +44,17 @@ body {
 .layer { position: absolute; inset: 0; isolation: isolate; }
 [hidden] { display: none !important; }
 
-#scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-#actors, #dialogue, #card, #fade, #title { pointer-events: none; }
+#scene svg, #scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* The backdrop and the cast are painted at 640x400 and shown with hard pixels, never blurred. */
+#scene canvas, #cast { width: 100%; height: 100%; image-rendering: crisp-edges; image-rendering: pixelated; }
+#cast, #dialogue, #card, #fade, #title { pointer-events: none; }
+/* A close look at something small (a screen, a notice). It covers the scene, so nothing under it can be clicked. */
+#closeup { width: 100%; height: 100%; display: block; }
+#closeup .veil { fill: rgba(7, 4, 13, 0.76); }
+#closeup text { font-family: var(--font-text); }
 #fx { width: 100%; height: 100%; display: none; image-rendering: pixelated; pointer-events: none; }
 #fx.on { display: block; }
 #fade { background: #000; opacity: 0; }
-
-/* ---------- actors ---------- */
-.actor {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform-origin: 50% 100%;
-  will-change: transform;
-}
-.actor svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.actor .f2, .actor .mouth { display: none; }
-.actor.step .f1 { display: none; }
-.actor.step .f2 { display: inline; }
-.actor.talk .mouth { display: inline; }
-.actor.bounce svg { animation: bounce 0.5s steps(1) infinite; }
 
 /* ---------- clickable areas ---------- */
 #hot { width: 100%; height: 100%; display: block; }
@@ -135,6 +126,7 @@ h1 {
   text-shadow: var(--outline);
   animation: line-in 0.2s ease-out;
 }
+.say.under { max-width: 92cqw; }      /* while a close-up is showing, lines run along the bottom */
 .choices {
   position: absolute;
   left: 3%;
@@ -181,6 +173,12 @@ h1 {
 #hud { pointer-events: none; }
 #hud > * { pointer-events: auto; }
 .tools { position: absolute; top: 1.6%; right: 1.2%; display: flex; gap: 0.8cqw; }
+/* The team: one portrait for each lead the player can switch to. The bar under it is that person's own color. */
+.team { position: absolute; top: 1.6%; left: 1.2%; display: flex; gap: 0.7cqw; }
+.tool.face { min-width: 0; width: max(6.4cqw, 30px); padding: 0.5cqw 0.6cqw 1.1cqw; box-shadow: inset 0 -0.6cqw 0 var(--who, var(--ink)); }
+.tool.face img { display: block; width: 100%; aspect-ratio: 1; image-rendering: crisp-edges; image-rendering: pixelated; pointer-events: none; }
+.tool.face[aria-pressed="false"] { filter: saturate(0.75) brightness(0.86); }
+.tool.face[aria-pressed="false"]:hover, .tool.face[aria-pressed="false"]:focus-visible { filter: none; }
 .label {
   position: absolute;
   left: 0; right: 0; bottom: 9.4%;
@@ -195,7 +193,7 @@ h1 {
 .inv .item { display: flex; align-items: center; gap: 0.6cqw; }
 .inv .item svg { width: 3.4cqw; height: 3.4cqw; }
 .inv .item[aria-pressed="true"] { background: var(--time-cyan); }
-.place { position: absolute; left: 1.4%; top: 1.6%; margin: 0; font: max(1.9cqw, 10px)/1.2 var(--font-display); letter-spacing: 0.12em; color: var(--cream); text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.75), 0 0 0.6cqw rgba(0, 0, 0, 0.6); pointer-events: none !important; }
+.place { position: absolute; left: 26%; right: 34%; top: 2%; text-align: center; margin: 0; font: max(1.9cqw, 10px)/1.2 var(--font-display); letter-spacing: 0.12em; color: var(--cream); text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.75), 0 0 0.6cqw rgba(0, 0, 0, 0.6); pointer-events: none !important; }
 
 /* On a narrow stage the place name would run under the buttons, so it goes. */
 @container (max-width: 560px) { .place { display: none; } }
@@ -279,7 +277,7 @@ body[data-mode="boot"] .copyright, body[data-mode="title"] .copyright, body:not(
    so menus are allowed to spill above and below it and use the whole height. */
 @media (orientation: portrait) {
   .stage { overflow: visible; }
-  #scene, #actors { overflow: hidden; }
+  #scene, #cast { overflow: hidden; }
   #menu:not(.title-mode) { top: 50%; bottom: auto; height: 100vh; height: 100dvh; transform: translateY(-50%); }
   .panel { width: 94cqw; max-height: 94vh; max-height: 94dvh; padding: 5cqw 6cqw 6cqw; font-size: max(3.7cqw, 14px); }
   .panel h2 { font-size: 8cqw; }
@@ -300,24 +298,20 @@ body[data-mode="boot"] .copyright, body[data-mode="title"] .copyright, body:not(
 .tw.d1 { animation-delay: -0.9s; }
 .tw.d2 { animation-delay: -1.7s; animation-duration: 3.6s; }
 .ripple { animation: twinkle 2.2s steps(1) infinite; }
-.sway { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 3.4s ease-in-out infinite alternate; }
 .flicker { animation: flicker 1.7s steps(1) infinite; }
 
 @keyframes spin    { to { transform: rotate(360deg); } }
 @keyframes pulse   { 50% { transform: scale(1.08); opacity: 0.8; } }
 @keyframes twinkle { 50% { opacity: 0.2; } }
-@keyframes bounce  { 50% { transform: translateY(-2.5%); } }
-@keyframes sway    { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
 @keyframes flicker { 0%, 100% { opacity: 1; } 40% { opacity: 0.55; } 55% { opacity: 0.9; } 70% { opacity: 0.4; } }
 @keyframes line-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* While the game is paused, the ambient loops pause too. */
-.stage.paused #scene *, .stage.paused #actors * { animation-play-state: paused !important; }
+.stage.paused #scene * { animation-play-state: paused !important; }
 
-.stage.calm .ring, .stage.calm .glow, .stage.calm .tw, .stage.calm .ripple, .stage.calm .sway,
-.stage.calm .flicker, .stage.calm .actor.bounce svg { animation: none !important; }
+.stage.calm .ring, .stage.calm .glow, .stage.calm .tw, .stage.calm .ripple, .stage.calm .flicker { animation: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ring, .glow, .tw, .ripple, .sway, .flicker, .actor.bounce svg { animation: none !important; }
+  .ring, .glow, .tw, .ripple, .flicker { animation: none !important; }
   #card, #toast { transition: none; }
 }

@@ -6,6 +6,8 @@
 export const sceneIds = [
   "egypt-riverbank",
   "rome-forum",
+  "home-living-room",
+  "nevada-roadside",
   "sketch-example",      // not part of the story: shows how to storyboard a scene before it is drawn
 ];
 

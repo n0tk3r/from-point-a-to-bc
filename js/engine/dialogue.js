@@ -35,7 +35,9 @@ export class Dialogue {
     if (g.clock.skipping) return;
 
     const person = g.cast[who] || {};
-    const actor = g.view.actors.get(who);
+    const actor = g.view.cast.get(who);
+    let seed = 0;
+    for (let i = 0; i < id.length; i++) seed = (seed * 31 + id.charCodeAt(i)) >>> 0;       // which gesture goes with this line
     const voiced = g.settings.voices ? g.audio.voice(id) : null;
     const showText = g.settings.subtitles || !voiced;
 
@@ -46,9 +48,12 @@ export class Dialogue {
       p.hidden = !showText;
       p.style.color = person.color || "#fff";
       p.textContent = text;
-      // Above the speaker's head when they are on stage, otherwise top centre.
-      const x = actor ? Math.min(Math.max(actor.x, 84), 236) : 160;
-      const y = actor ? Math.max(actor.y - actor.h * actor.scale - 4, 30) : 62;
+      // Above the speaker's head when they are on stage, otherwise top center.
+      // While a close-up is showing, along the bottom, clear of whatever is being looked at.
+      const near = g.near;
+      const x = near ? 160 : actor ? Math.min(Math.max(actor.x, 84), 236) : 160;
+      const y = near ? 196 : actor ? Math.max(actor.y - actor.h * actor.scale - 4, 30) : 62;
+      if (near) p.classList.add("under");
       p.style.left = `${(x / 320) * 100}%`;
       p.style.top = `${(y / 200) * 100}%`;
       this.el.appendChild(p);
@@ -60,18 +65,16 @@ export class Dialogue {
     // When the recording ends, move on. If it would not play, show the words for their usual time instead.
     if (voiced) voiced.then((played) => { speaking = false; if (played) left = 280; else p.hidden = false; });
 
+    if (actor && actor.talk) actor.talk(true, seed);       // mouth and hands
     await new Promise((resolve) => {
-      let t = 0;
       const stop = g.clock.every((dt) => {
-        t += dt;
         if (!speaking) left -= dt;
-        if (actor) actor.flag("talk", Math.floor(t / 130) % 2 === 0);
         if (left <= 0 || this._next || g.clock.skipping) { stop(); resolve(); }
       });
     });
 
     g.audio.stopVoice();
-    if (actor) actor.flag("talk", false);
+    if (actor && actor.talk) actor.talk(false);
     if (p) p.remove();
     this.active = false;
     if (!g.clock.skipping) await g.clock.wait(90);       // a short beat between lines
