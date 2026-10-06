@@ -1,0 +1,80 @@
+/* Design tokens for From Point A to B.C.
+   Two layers of colour, and they never mix:
+   1. The TIME layer is the same in every era: neon cyan, magenta, violet and a white core.
+      Anything touched by time travel (portals, the tunnel, interface accents) uses it.
+   2. The ERA layer changes with the time period: eight sky bands from top to horizon,
+      two silhouette tones, three ground tones, an outline colour and a highlight.
+   Art never uses a raw colour. It uses the classes at the bottom of this file. */
+
+@font-face {
+  font-family: "Koine Road";
+  src: url("../fonts/KoineRoad-Regular.woff2") format("woff2");
+  font-display: block;
+}
+
+:root {
+  /* time layer: constant */
+  --time-cyan: #5ef2ff;
+  --time-magenta: #ff5ec8;
+  --time-violet: #b58cff;
+  --time-core: #ffffff;
+
+  /* interface: papyrus and ink, constant */
+  --papyrus: #d6ae62;
+  --papyrus-hi: #e2be72;
+  --papyrus-lo: #c5964a;
+  --ink: #1f130a;
+  --cream: #f6e3b8;
+  --letterbox: #07040d;
+
+  /* characters from the present keep their colours everywhere */
+  --dad: #ffd34d;
+  --son: #7fe3ff;
+  --wagon: #c85a43;
+
+  --font-display: "Koine Road", Georgia, "Times New Roman", serif;
+  --font-text: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+/* ---- era palettes: same slots, different values ---- */
+[data-era="present"] {
+  --sky-1: #140b2b; --sky-2: #1d1040; --sky-3: #2b1650; --sky-4: #431f5e;
+  --sky-5: #642967; --sky-6: #8b3466; --sky-7: #b5435e; --sky-8: #de664f;
+  --far: #3a1d47; --near: #2a1538;
+  --ground-1: #2f1b35; --ground-2: #28172f; --ground-3: #22142a;
+  --line: #140b2b; --light: #fff2d8; --feature: #3a3343; --feature-2: #6b5f72;
+}
+[data-era="egypt"] {
+  --sky-1: #1b2a49; --sky-2: #27406a; --sky-3: #3a6187; --sky-4: #5e8fa3;
+  --sky-5: #93b9aa; --sky-6: #d6d39c; --sky-7: #f0c987; --sky-8: #f4a868;
+  --far: #c9995f; --near: #9a7142;
+  --ground-1: #dbb46b; --ground-2: #c79b55; --ground-3: #a97f42;
+  --line: #3b2616; --light: #fff6d6; --feature: #3f7f8c; --feature-2: #6fb0b4;
+}
+[data-era="rome"] {
+  --sky-1: #2f6fb0; --sky-2: #3f85c2; --sky-3: #58a0d2; --sky-4: #7bbbe0;
+  --sky-5: #a3d2ea; --sky-6: #c7e4f0; --sky-7: #e3f0ee; --sky-8: #f5f1dc;
+  --far: #8fa27a; --near: #6b7f56;
+  --ground-1: #d9cdb4; --ground-2: #c2b497; --ground-3: #a3957a;
+  --line: #2c2a3a; --light: #ffffff; --feature: #b0483a; --feature-2: #d98a5c;
+}
+[data-era="tunnel"] {
+  --sky-1: #07040d; --sky-2: #0b0616; --sky-3: #100820; --sky-4: #160b2c;
+  --sky-5: #1d0f3a; --sky-6: #251349; --sky-7: #2e1859; --sky-8: #381d6b;
+  --far: #1d0f3a; --near: #100820;
+  --ground-1: #160b2c; --ground-2: #100820; --ground-3: #07040d;
+  --line: #07040d; --light: #ffffff; --feature: #251349; --feature-2: #5ef2ff;
+}
+
+/* ---- classes the art uses ---- */
+.s1 { fill: var(--sky-1); } .s2 { fill: var(--sky-2); } .s3 { fill: var(--sky-3); } .s4 { fill: var(--sky-4); }
+.s5 { fill: var(--sky-5); } .s6 { fill: var(--sky-6); } .s7 { fill: var(--sky-7); } .s8 { fill: var(--sky-8); }
+.far { fill: var(--far); } .near { fill: var(--near); }
+.g1 { fill: var(--ground-1); } .g2 { fill: var(--ground-2); } .g3 { fill: var(--ground-3); }
+.line { fill: var(--line); } .light { fill: var(--light); }
+.feat { fill: var(--feature); } .feat2 { fill: var(--feature-2); }
+.stroke-line { stroke: var(--line); } .stroke-feat2 { stroke: var(--feature-2); }
+.t-cyan { stroke: var(--time-cyan); } .t-magenta { stroke: var(--time-magenta); }
+.t-violet { stroke: var(--time-violet); } .t-core { fill: var(--time-core); }
+.t-white { stroke: var(--time-core); }
+.f-cyan { fill: var(--time-cyan); } .f-magenta { fill: var(--time-magenta); }

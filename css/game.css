@@ -1,0 +1,323 @@
+/* Layout and interface for From Point A to B.C.
+   Colours come from tokens.css. Sizes use cqw, which is 1% of the stage width,
+   so everything scales with the stage. One grid pixel is 100cqw / 320. */
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: var(--letterbox);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--font-text);
+}
+
+.stage {
+  position: relative;
+  width: min(100vw, 160vh);
+  width: min(100vw, 160dvh);
+  aspect-ratio: 16 / 10;
+  container-type: inline-size;
+  overflow: hidden;
+  background: var(--sky-1);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  --u: calc(100cqw / 320);   /* one grid pixel */
+  --outline: 0.18cqw 0 0 #000, -0.18cqw 0 0 #000, 0 0.18cqw 0 #000, 0 -0.18cqw 0 #000,
+             0.18cqw 0.18cqw 0 #000, -0.18cqw 0.18cqw 0 #000, 0.18cqw -0.18cqw 0 #000, -0.18cqw -0.18cqw 0 #000;
+  /* papyrus: two crossed layers of fibre over a warm sheet */
+  --sheet:
+    repeating-linear-gradient(0deg, rgba(92, 56, 18, 0.26) 0 0.10cqw, rgba(255, 238, 196, 0.12) 0.10cqw 0.20cqw, transparent 0.20cqw 0.46cqw),
+    repeating-linear-gradient(90deg, rgba(92, 56, 18, 0.20) 0 0.09cqw, rgba(255, 238, 196, 0.08) 0.09cqw 0.18cqw, transparent 0.18cqw 0.62cqw),
+    linear-gradient(90deg, #cfa052 0%, #ddb768 20%, #d1a556 38%, #e2be72 60%, #d3a658 80%, #c5964a 100%);
+  /* papyrus tears along its fibres, so edges are stepped, not curved */
+  --torn: polygon(0% 8%, 3% 8%, 3% 0%, 22% 0%, 22% 5%, 41% 5%, 41% 0%, 68% 0%, 68% 6%, 90% 6%, 90% 0%, 100% 0%,
+    100% 30%, 98.8% 30%, 98.8% 62%, 100% 62%, 100% 95%, 84% 95%, 84% 100%, 55% 100%, 55% 94%, 30% 94%, 30% 100%,
+    6% 100%, 6% 93%, 0% 93%, 0% 58%, 1.2% 58%, 1.2% 34%, 0% 34%);
+}
+
+.layer { position: absolute; inset: 0; isolation: isolate; }
+[hidden] { display: none !important; }
+
+#scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#actors, #dialogue, #card, #fade, #title { pointer-events: none; }
+#fx { width: 100%; height: 100%; display: none; image-rendering: pixelated; pointer-events: none; }
+#fx.on { display: block; }
+#fade { background: #000; opacity: 0; }
+
+/* ---------- actors ---------- */
+.actor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+.actor svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.actor .f2, .actor .mouth { display: none; }
+.actor.step .f1 { display: none; }
+.actor.step .f2 { display: inline; }
+.actor.talk .mouth { display: inline; }
+.actor.bounce svg { animation: bounce 0.5s steps(1) infinite; }
+
+/* ---------- clickable areas ---------- */
+#hot { width: 100%; height: 100%; display: block; }
+#hot .floor { fill: transparent; }
+#hot .spot { fill: transparent; stroke: none; cursor: pointer; outline: none; }
+#hot.reveal .spot, #hot .spot:focus-visible {
+  fill: rgba(94, 242, 255, 0.14);
+  stroke: var(--time-cyan);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 2;
+}
+
+/* ---------- title ---------- */
+#title { top: 2.2%; bottom: auto; text-align: center; }
+.strip {
+  display: inline-block;
+  transform: rotate(-1.1deg);
+  filter: drop-shadow(0 0.5cqw 0.5cqw rgba(0, 0, 0, 0.55));
+}
+.papyrus {
+  padding: 1.9cqw 5.4cqw 2.5cqw;
+  background:
+    linear-gradient(0deg, rgba(84, 48, 12, 0.30) 0%, transparent 16%, transparent 80%, rgba(84, 48, 12, 0.22) 100%),
+    radial-gradient(ellipse 22% 60% at 31% 40%, rgba(255, 232, 170, 0.28), transparent 70%),
+    radial-gradient(ellipse 16% 70% at 72% 62%, rgba(110, 66, 20, 0.22), transparent 70%),
+    var(--sheet);
+  clip-path: polygon(3.4% 14.0%, 5.7% 14.0%, 5.7% 10.0%, 8.1% 10.0%, 8.1% 7.3%, 10.4% 7.3%, 10.4% 16.9%, 19.7% 16.9%, 19.7% 3.9%, 22.0% 3.9%, 22.0% 2.3%, 33.7% 2.3%, 33.7% 5.0%, 43.0% 5.0%, 43.0% 3.7%, 45.3% 3.7%, 45.3% 4.7%, 47.7% 4.7%, 47.7% 4.5%, 54.7% 4.5%, 54.7% 7.4%, 59.3% 7.4%, 59.3% 6.7%, 61.6% 6.7%, 61.6% 4.9%, 71.0% 4.9%, 71.0% 6.3%, 82.6% 6.3%, 82.6% 2.3%, 84.9% 2.3%, 84.9% 2.6%, 96.6% 2.6%, 96.8% 3.6%, 96.8% 6.8%, 99.4% 6.8%, 99.4% 8.2%, 96.8% 8.2%, 96.8% 12.8%, 97.4% 12.8%, 97.4% 16.5%, 98.8% 16.5%, 98.8% 18.7%, 97.4% 18.7%, 97.4% 21.9%, 97.3% 21.9%, 97.3% 25.8%, 99.0% 25.8%, 99.0% 28.0%, 97.3% 28.0%, 97.3% 31.1%, 96.8% 31.1%, 96.8% 34.3%, 99.0% 34.3%, 99.0% 35.8%, 96.8% 35.8%, 96.8% 40.2%, 97.0% 40.2%, 97.0% 49.4%, 97.1% 49.4%, 97.1% 58.5%, 97.5% 58.5%, 97.5% 63.5%, 98.9% 63.5%, 98.9% 64.9%, 97.5% 64.9%, 97.5% 67.7%, 96.8% 67.7%, 96.8% 76.8%, 97.5% 76.8%, 97.5% 86.0%, 94.3% 86.0%, 94.3% 88.0%, 89.6% 88.0%, 89.6% 97.4%, 84.9% 97.4%, 84.9% 87.9%, 82.6% 87.9%, 82.6% 84.3%, 80.3% 84.3%, 80.3% 93.9%, 73.3% 93.9%, 73.3% 89.6%, 66.3% 89.6%, 66.3% 93.7%, 61.6% 93.7%, 61.6% 98.4%, 59.3% 98.4%, 59.3% 96.7%, 57.0% 96.7%, 57.0% 93.9%, 54.7% 93.9%, 54.7% 96.7%, 43.0% 96.7%, 43.0% 87.0%, 31.4% 87.0%, 31.4% 93.0%, 26.7% 93.0%, 26.7% 96.7%, 19.7% 96.7%, 19.7% 98.8%, 17.4% 98.8%, 17.4% 88.5%, 12.7% 88.5%, 12.7% 85.9%, 10.4% 85.9%, 10.4% 89.5%, 3.4% 89.5%, 2.4% 88.5%, 2.4% 83.4%, 0.2% 83.4%, 0.2% 81.5%, 2.4% 81.5%, 2.4% 80.4%, 2.9% 80.4%, 2.9% 72.2%, 2.4% 72.2%, 2.4% 68.9%, 0.7% 68.9%, 0.7% 67.3%, 2.4% 67.3%, 2.4% 55.9%, 3.2% 55.9%, 3.2% 47.7%, 3.3% 47.7%, 3.3% 42.8%, 1.0% 42.8%, 1.0% 40.6%, 3.3% 40.6%, 3.3% 39.5%, 2.4% 39.5%, 2.4% 36.3%, 1.1% 36.3%, 1.1% 34.3%, 2.4% 34.3%, 2.4% 31.3%, 2.7% 31.3%, 2.7% 23.2%, 3.2% 23.2%, 3.2% 18.2%, 1.4% 18.2%, 1.4% 16.5%, 3.2% 16.5%, 3.2% 15.0%);
+}
+h1, h2 { margin: 0; font-family: var(--font-display); font-weight: 400; color: var(--ink); }
+h1 {
+  font-size: 6.9cqw;
+  line-height: 1.12;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;   /* the papyri are written in capitals; remove this line for a mixed-case title */
+  white-space: nowrap;
+  -webkit-mask-image: repeating-linear-gradient(0deg, #000 0 0.40cqw, rgba(0, 0, 0, 0.76) 0.40cqw 0.52cqw);
+  mask-image: repeating-linear-gradient(0deg, #000 0 0.40cqw, rgba(0, 0, 0, 0.76) 0.40cqw 0.52cqw);
+}
+.kicker {
+  margin: 0.9cqw 0 0;
+  padding-left: 0.3em;
+  font-family: var(--font-display);
+  font-size: max(2.1cqw, 10px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.7);
+}
+
+/* ---------- era and chapter cards ---------- */
+#card { display: grid; place-content: center; text-align: center; opacity: 0; transition: opacity 0.35s; }
+#card.show { opacity: 1; }
+#card .papyrus { padding: 1.4cqw 5cqw 1.9cqw; }
+#card h2 { font-size: 5.2cqw; letter-spacing: 0.03em; white-space: nowrap; }
+#card p { margin: 1.2cqw 0 0; font-family: var(--font-display); font-size: max(2.6cqw, 11px); letter-spacing: 0.22em; color: var(--cream); text-shadow: var(--outline); }
+#card.plain h2 { color: var(--cream); font-size: 4.2cqw; text-shadow: 0 0.2cqw 0 #000; }
+
+/* ---------- dialogue ---------- */
+.say {
+  position: absolute;
+  margin: 0;
+  max-width: 50cqw;
+  width: max-content;
+  transform: translate(-50%, -100%);
+  text-align: center;
+  font-size: max(2.7cqw, 12px);
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: var(--outline);
+  animation: line-in 0.2s ease-out;
+}
+.choices {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 2.5%;
+  margin: 0;
+  padding: 1.2cqw 1.6cqw;
+  list-style: none;
+  background: rgba(7, 4, 13, 0.82);
+  border-top: 0.25cqw solid var(--papyrus);
+  pointer-events: auto;
+}
+.choices button {
+  display: block;
+  width: 100%;
+  padding: 0.5cqw 0.8cqw;
+  border: 0;
+  background: none;
+  color: var(--cream);
+  font: 700 max(2.3cqw, 12px)/1.25 var(--font-text);
+  text-align: left;
+  cursor: pointer;
+}
+.choices button:hover, .choices button:focus-visible { color: var(--time-cyan); outline: none; }
+.choices { counter-reset: choice; }
+.choices button::before { counter-increment: choice; content: counter(choice) ".  "; opacity: 0.7; }
+
+/* ---------- HUD ---------- */
+.chip, .tool {
+  border: 0;
+  background: var(--sheet);
+  clip-path: var(--torn);
+  color: var(--ink);
+  font-family: var(--font-display);
+  cursor: pointer;
+}
+.chip { padding: 0.9cqw 3cqw 1.1cqw; font-size: max(3cqw, 14px); letter-spacing: 0.04em; }
+.chip:hover:not(:disabled), .chip:focus-visible, .tool:hover, .tool:focus-visible { filter: brightness(1.14); outline: none; }
+.chip:focus-visible, .tool:focus-visible { box-shadow: inset 0 0 0 0.3cqw var(--ink); }
+.chip:disabled { opacity: 0.55; cursor: default; }
+.tool { min-width: 5.4cqw; padding: 0.5cqw 1.2cqw 0.7cqw; font-size: max(2.3cqw, 12px); }
+.tool[aria-pressed="true"] { background: var(--time-cyan); }
+
+#hud { pointer-events: none; }
+#hud > * { pointer-events: auto; }
+.tools { position: absolute; top: 1.6%; right: 1.2%; display: flex; gap: 0.8cqw; }
+.label {
+  position: absolute;
+  left: 0; right: 0; bottom: 9.4%;
+  margin: 0;
+  text-align: center;
+  font: 700 max(2.2cqw, 11px)/1.2 var(--font-text);
+  color: var(--cream);
+  text-shadow: var(--outline);
+  pointer-events: none !important;
+}
+.inv { position: absolute; left: 1.2%; bottom: 1.6%; display: flex; gap: 0.8cqw; align-items: flex-end; }
+.inv .item { display: flex; align-items: center; gap: 0.6cqw; }
+.inv .item svg { width: 3.4cqw; height: 3.4cqw; }
+.inv .item[aria-pressed="true"] { background: var(--time-cyan); }
+.place { position: absolute; left: 1.4%; top: 1.6%; margin: 0; font: max(1.9cqw, 10px)/1.2 var(--font-display); letter-spacing: 0.12em; color: var(--cream); text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.75), 0 0 0.6cqw rgba(0, 0, 0, 0.6); pointer-events: none !important; }
+
+/* On a narrow stage the place name would run under the buttons, so it goes. */
+@container (max-width: 560px) { .place { display: none; } }
+
+/* ---------- menus ---------- */
+#menu { display: grid; place-items: center; background: rgba(7, 4, 13, 0.6); }
+#menu.title-mode { background: none; display: block; pointer-events: none; }
+#menu.title-mode > * { pointer-events: auto; }
+.title-menu { position: absolute; left: 4%; bottom: 5%; display: grid; gap: 1cqw; justify-items: start; }
+.title-menu .chip { min-width: 26cqw; text-align: left; }
+.panel {
+  width: 62cqw;
+  max-height: 92%;
+  overflow: auto;
+  padding: 3cqw 4cqw 3.4cqw;
+  background: var(--sheet);
+  clip-path: polygon(0% 2%, 4% 2%, 4% 0%, 30% 0%, 30% 1.4%, 62% 1.4%, 62% 0%, 100% 0%, 100% 40%, 99% 40%, 99% 71%, 100% 71%, 100% 98.6%, 80% 98.6%, 80% 100%, 44% 100%, 44% 98.4%, 12% 98.4%, 12% 100%, 0% 100%, 0% 64%, 1% 64%, 1% 30%, 0% 30%);
+  color: var(--ink);
+  font-size: max(2.1cqw, 12px);
+}
+.panel h2 { font-size: 4.4cqw; margin-bottom: 1.4cqw; }
+.panel p { margin: 0.8cqw 0; line-height: 1.35; }
+.panel .rows { display: grid; gap: 0.9cqw; }
+.row {
+  display: flex; justify-content: space-between; align-items: center; gap: 2cqw;
+  width: 100%;
+  padding: 0.9cqw 1.4cqw;
+  border: 0.22cqw solid rgba(31, 19, 10, 0.55);
+  background: rgba(255, 244, 214, 0.25);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.row:hover:not(:disabled), .row:focus-visible { background: rgba(255, 244, 214, 0.6); outline: none; }
+.row:disabled { opacity: 0.5; cursor: default; }
+.row b { font-family: var(--font-display); font-weight: 400; font-size: 1.25em; }
+.row small { opacity: 0.8; text-align: right; }
+.panel label { display: flex; justify-content: space-between; align-items: center; gap: 2cqw; padding: 0.4cqw 0; }
+.panel input[type="range"] { width: 26cqw; accent-color: var(--ink); }
+.panel input[type="checkbox"] { width: 2.6cqw; height: 2.6cqw; min-width: 16px; min-height: 16px; accent-color: var(--ink); }
+.panel select { font: inherit; padding: 0.3cqw 0.8cqw; background: rgba(255, 244, 214, 0.5); border: 0.22cqw solid rgba(31, 19, 10, 0.55); color: var(--ink); }
+.panel .foot { display: flex; gap: 1.2cqw; margin-top: 1.8cqw; flex-wrap: wrap; }
+.panel .foot .row { width: auto; flex: 1; justify-content: center; }
+
+/* ---------- small fixed pieces ---------- */
+#skip {
+  position: absolute; right: 1.6%; bottom: 2.4%;
+  padding: 0.5cqw 1.6cqw;
+  border: 0.2cqw solid rgba(246, 227, 184, 0.6);
+  background: rgba(7, 4, 13, 0.55);
+  color: var(--cream);
+  font: max(2cqw, 12px)/1.2 var(--font-display);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+#skip:hover, #skip:focus-visible { background: var(--cream); color: var(--ink); outline: none; }
+#toast {
+  position: absolute; left: 50%; top: 9%;
+  transform: translate(-50%, -1cqw);
+  padding: 0.6cqw 2cqw 0.8cqw;
+  background: var(--sheet);
+  clip-path: var(--torn);
+  color: var(--ink);
+  font: max(2.2cqw, 12px)/1.2 var(--font-display);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translate(-50%, 0); }
+#gate { display: grid; place-content: center; justify-items: center; gap: 2.4cqw; background: var(--letterbox); text-align: center; }
+#gate svg { width: 14cqw; height: 14cqw; }
+#gate p { margin: 0; max-width: 70cqw; font-size: max(1.8cqw, 12px); color: rgba(246, 227, 184, 0.75); line-height: 1.5; }
+#gate code { color: var(--time-cyan); }
+.copyright { display: none; position: fixed; right: 10px; bottom: 6px; margin: 0; font-size: 11px; color: rgba(255, 255, 255, 0.4); pointer-events: none; }
+body[data-mode="boot"] .copyright, body[data-mode="title"] .copyright, body:not([data-mode]) .copyright { display: block; }
+.notice { position: fixed; inset: auto 0 40% 0; text-align: center; color: var(--cream); }
+
+/* Phones held upright: the stage is a short strip across the middle of the screen,
+   so menus are allowed to spill above and below it and use the whole height. */
+@media (orientation: portrait) {
+  .stage { overflow: visible; }
+  #scene, #actors { overflow: hidden; }
+  #menu:not(.title-mode) { top: 50%; bottom: auto; height: 100vh; height: 100dvh; transform: translateY(-50%); }
+  .panel { width: 94cqw; max-height: 94vh; max-height: 94dvh; padding: 5cqw 6cqw 6cqw; font-size: max(3.7cqw, 14px); }
+  .panel h2 { font-size: 8cqw; }
+  .panel .rows { gap: 1.8cqw; }
+  .row { padding: 2.2cqw 2.6cqw; }
+  .panel input[type="range"] { width: 44cqw; }
+  .panel input[type="checkbox"] { width: 5.5cqw; height: 5.5cqw; }
+}
+
+/* ---------- ambient loops: CSS only, and only transform and opacity ---------- */
+.ring { transform-box: fill-box; transform-origin: center; }
+.r1 { animation: spin 10s linear infinite; }
+.r2 { animation: spin 7s linear infinite reverse; }
+.r3 { animation: spin 4.5s linear infinite; }
+.r4 { animation: spin 2.6s linear infinite reverse; }
+.glow { transform-box: fill-box; transform-origin: center; animation: pulse 3.2s ease-in-out infinite; }
+.tw { animation: twinkle 2.8s steps(1) infinite; }
+.tw.d1 { animation-delay: -0.9s; }
+.tw.d2 { animation-delay: -1.7s; animation-duration: 3.6s; }
+.ripple { animation: twinkle 2.2s steps(1) infinite; }
+.sway { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 3.4s ease-in-out infinite alternate; }
+.flicker { animation: flicker 1.7s steps(1) infinite; }
+
+@keyframes spin    { to { transform: rotate(360deg); } }
+@keyframes pulse   { 50% { transform: scale(1.08); opacity: 0.8; } }
+@keyframes twinkle { 50% { opacity: 0.2; } }
+@keyframes bounce  { 50% { transform: translateY(-2.5%); } }
+@keyframes sway    { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+@keyframes flicker { 0%, 100% { opacity: 1; } 40% { opacity: 0.55; } 55% { opacity: 0.9; } 70% { opacity: 0.4; } }
+@keyframes line-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* While the game is paused, the ambient loops pause too. */
+.stage.paused #scene *, .stage.paused #actors * { animation-play-state: paused !important; }
+
+.stage.calm .ring, .stage.calm .glow, .stage.calm .tw, .stage.calm .ripple, .stage.calm .sway,
+.stage.calm .flicker, .stage.calm .actor.bounce svg { animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ring, .glow, .tw, .ripple, .sway, .flicker, .actor.bounce svg { animation: none !important; }
+  #card, #toast { transition: none; }
+}

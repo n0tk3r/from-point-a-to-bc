@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koine Road type specimen</title>
+<meta name="color-scheme" content="light">
+<style>
+  @font-face {
+    font-family: "Koine Road";
+    src: url("KoineRoad-Regular.woff2") format("woff2");
+    font-display: block;
+  }
+
+  :root {
+    --ink: #1f130a;
+    --ink-soft: #4d3418;
+    --rule: rgba(77, 52, 24, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  /* the crossed fibre layers of a papyrus sheet */
+  html {
+    min-height: 100%;
+    background:
+      repeating-linear-gradient(0deg, rgba(92, 56, 18, 0.16) 0 1px, rgba(255, 238, 196, 0.10) 1px 2px, transparent 2px 6px),
+      repeating-linear-gradient(90deg, rgba(92, 56, 18, 0.11) 0 1px, transparent 1px 8px),
+      linear-gradient(90deg, #d2a558 0%, #ddb96c 22%, #d3a85b 45%, #e0bd73 68%, #d0a256 100%);
+  }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Koine Road", Georgia, serif;
+  }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 28px 16px 72px; }
+
+  h1 { margin: 0; font-weight: 400; font-size: clamp(44px, 11vw, 112px); line-height: 1.15; }
+
+  .plain { font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink-soft); max-width: 64ch; margin: 8px 0 0; }
+
+  h2 {
+    font: 700 12px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 40px 0 8px;
+  }
+
+  .tester {
+    font-size: 72px;
+    line-height: 1.25;
+    min-height: 1.3em;
+    padding: 4px 0 10px;
+    border-bottom: 2px solid var(--rule);
+    outline: none;
+    overflow-wrap: anywhere;
+  }
+  .tester:focus-visible { border-bottom-color: var(--ink); }
+  .tester.caps { text-transform: uppercase; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    align-items: center;
+    margin-top: 12px;
+    font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink-soft);
+  }
+  .controls label { display: inline-flex; align-items: center; gap: 8px; }
+  .controls input[type="range"] { width: 200px; accent-color: #4d3418; }
+  .controls input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4d3418; }
+
+  .glyphs { font-size: clamp(32px, 7.4vw, 88px); line-height: 1.3; overflow-wrap: anywhere; }
+
+  .sizes p { margin: 4px 0; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Koine Road</h1>
+  <p class="plain">Draft 0.2. The display face for <em>From Point A to B.C.</em> The capitals follow the handwriting of two early Greek papyri. The lowercase is new, written with the same pen. Use it for titles, chapter cards and signs. Long dialogue stays in a plain font.</p>
+
+  <h2 id="try">Try it</h2>
+  <div class="tester" id="tester" contenteditable="true" spellcheck="false" role="textbox" aria-labelledby="try">From Point A to B.C.</div>
+  <div class="controls">
+    <label>Size <input type="range" id="size" min="16" max="180" value="72"> <span id="px">72px</span></label>
+    <label><input type="checkbox" id="caps"> Capitals only</label>
+    <label><input type="checkbox" id="vary" checked> Vary repeated letters</label>
+  </div>
+
+  <h2>Capitals</h2>
+  <div class="glyphs">ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ</div>
+
+  <h2>Lowercase</h2>
+  <div class="glyphs">abcdefghijklm<br>nopqrstuvwxyz</div>
+
+  <h2>Figures and marks</h2>
+  <div class="glyphs">0123456789<br>. , ‘ ’ “ ” ! ? - — … : ; &amp; ( ) / ·</div>
+
+  <h2>Sizes</h2>
+  <div class="sizes">
+    <p style="font-size: 64px">Chapter One: Ancient Egypt</p>
+    <p style="font-size: 40px">“Are we when yet?” “No, but we’re making good time.”</p>
+    <p style="font-size: 28px">4000 B.C. · 44 B.C. · 1492 A.D. · the present</p>
+    <p style="font-size: 20px">Dad’s shortcut sends a father and son tumbling through history. Maps don’t know about shortcuts.</p>
+  </div>
+
+  <h2>What comes from the papyri</h2>
+  <p class="plain">In the capitals, A is shaped like alpha. E and C are the rounded forms scribes used. M is the rounded mu. P is shaped like rho and drops below the line. W is shaped like omega. Stems start with a small flag and end in a hook, and the ink pools where the pen lands. F, G, J, L, Q, R, S, U and V are not in the Greek alphabet, so they are drawn with the same pen.</p>
+  <p class="plain">O is written small, as the scribes wrote it. When a capital O starts a word in lowercase, as in “Oh”, it grows to full height so it still reads as a capital.</p>
+
+  <h2>The lowercase</h2>
+  <p class="plain">These manuscripts have capitals only, so the small letters are new. They are written with the same pen, held a little finer. Where a Greek letter looks like ours it lends its shape: a from alpha, e from the rounded epsilon and w from omega. The d leans back, as it does in early Latin book hands.</p>
+  <p class="plain">Every letter is written three slightly different ways, and the font cycles through them as you type.</p>
+</main>
+
+<script>
+  const tester = document.getElementById("tester");
+  const size = document.getElementById("size");
+  const px = document.getElementById("px");
+  const caps = document.getElementById("caps");
+  const vary = document.getElementById("vary");
+
+  size.addEventListener("input", () => {
+    tester.style.fontSize = size.value + "px";
+    px.textContent = size.value + "px";
+  });
+
+  caps.addEventListener("change", () => {
+    tester.classList.toggle("caps", caps.checked);
+  });
+
+  vary.addEventListener("change", () => {
+    document.body.style.fontFeatureSettings = vary.checked ? "normal" : '"calt" 0';
+  });
+</script>
+</body>
+</html>

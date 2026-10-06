@@ -2,6 +2,9 @@
 # This repo is public, so this folder stays on your machine only.
 reference/
 
+# Previews the Claude app saves into this folder. They are not part of the game.
+Claude outputs/
+
 # OS and editor clutter
 .DS_Store
 Thumbs.db

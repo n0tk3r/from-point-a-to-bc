@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storyboard: From Point A to B.C.</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../css/tokens.css">
+<style>
+  /* A working page for the people making the game. It reads the same files the game
+     does, so what you see here is what the game will do. */
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #17120f; color: #f6e3b8; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 80px; }
+  h1, h2, h3 { font-family: "Koine Road", Georgia, serif; font-weight: 400; margin: 0; color: #f6e3b8; }
+  h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.1; }
+  h2 { font-size: 32px; margin-top: 48px; }
+  h3 { font-size: 22px; }
+  p { margin: 6px 0; max-width: 78ch; }
+  .dim { color: #c9b48a; }
+  nav { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 0; }
+  a { color: #5ef2ff; }
+  .ok, .bad { margin: 16px 0 0; padding: 10px 14px; border-left: 4px solid #5ef2ff; background: #221a15; }
+  .bad { border-color: #ff5ec8; }
+  .bad li { margin: 2px 0; }
+  .act { margin-top: 20px; padding: 16px; background: #221a15; border-top: 3px solid #d6ae62; }
+  .act header { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .tag { padding: 1px 8px; background: #d6ae62; color: #1f130a; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 12px; align-items: start; }
+  .lane { display: grid; gap: 8px; }
+  .lane > b { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #c9b48a; }
+  .beat { padding: 8px 10px; background: #2e231b; border-left: 4px solid #6b5f72; }
+  .beat.cutscene { border-color: #b58cff; }
+  .beat.puzzle { border-color: #5ef2ff; }
+  .beat.gate { border-color: #ff5ec8; }
+  .beat b { display: block; color: #fff; }
+  .beat small { display: block; color: #c9b48a; overflow-wrap: anywhere; }
+  .who { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: baseline; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 12px; }
+  figure { margin: 0; background: #221a15; }
+  figure .shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+  figure svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  figure .spots rect, figure .spots circle, figure .spots polygon { fill: rgba(94, 242, 255, 0.12); stroke: #5ef2ff; stroke-width: 0.8; stroke-dasharray: 3 2; }
+  figure .spots .walk { fill: none; stroke: #ff5ec8; stroke-dasharray: 2 2; }
+  figcaption { padding: 8px 10px 10px; }
+  figcaption small { display: block; color: #c9b48a; }
+  .pal { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; align-items: center; margin-top: 12px; }
+  .sw { display: flex; height: 34px; }
+  .sw i { flex: 1; }
+  .sw i.gap { flex: 0 0 8px; background: none !important; }
+  table { border-collapse: collapse; margin-top: 12px; }
+  td, th { padding: 4px 16px 4px 0; text-align: left; }
+  th { color: #c9b48a; font-weight: 600; }
+  button { font: inherit; padding: 6px 14px; margin-top: 12px; background: #d6ae62; color: #1f130a; border: 0; cursor: pointer; }
+  button:hover, button:focus-visible { background: #5ef2ff; outline: none; }
+  /* so the drawings look as they do in the game, minus the motion */
+  .ring, .glow, .tw, .ripple, .sway, .flicker { animation: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Storyboard</h1>
+  <p class="dim">Drawn from the game's own files: <code>js/content/story.js</code>, the scene files listed in <code>js/content/scenes/index.js</code> and <code>lines.en.js</code>. Change those and reload this page.</p>
+  <nav><a href="../index.html">Play the game</a><a href="../docs/DESIGN.md">Design notes</a><a href="../fonts/specimen.html">Typeface</a></nav>
+  <div id="check"></div>
+
+  <h2>Acts and beats</h2>
+  <p class="dim">Beats in different chains can be done in any order. The gate needs all of them. <span style="color:#b58cff">Violet</span> is a cutscene, <span style="color:#5ef2ff">cyan</span> a puzzle, <span style="color:#ff5ec8">magenta</span> the gate.</p>
+  <div id="acts"></div>
+
+  <h2>Scenes</h2>
+  <p class="dim">Each scene in its era's colours. Cyan boxes are clickable areas. The magenta box is where the lead can walk.</p>
+  <div class="grid" id="scenes"></div>
+
+  <h2>Era palettes</h2>
+  <p class="dim">Every era fills the same slots: eight sky bands, two silhouettes, three grounds, dark, light, two features. The time colours on the right never change.</p>
+  <div class="pal" id="palettes"></div>
+
+  <h2>The script</h2>
+  <table id="script"></table>
+  <button id="csv" type="button">Download the script as a spreadsheet (.csv)</button>
+</main>
+
+<script type="module">
+  import { story } from "../js/content/story.js";
+  import { lines } from "../js/content/lines.en.js";
+  import { cast, eras } from "../js/content/world.js";
+  import { sound } from "../js/content/sound.js";
+  import { checkStory } from "../js/engine/story.js";
+  import * as art from "../js/art/kit.js";
+  import { sceneIds, loadScene } from "../js/content/scenes/index.js";
+
+  const sceneList = await Promise.all(sceneIds.map(loadScene));
+  const scenes = Object.fromEntries(sceneList.map((s) => [s.id, s]));
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const $ = (id) => document.getElementById(id);
+
+  // ---- checks ----
+  const problems = checkStory({ story, scenes, cutscenes: { intro: true }, lines });
+  $("check").innerHTML = problems.length
+    ? `<div class="bad"><b>${problems.length} thing${problems.length > 1 ? "s" : ""} to fix</b><ul>${problems.map((p) => `<li>${esc(p)}</li>`).join("")}</ul></div>`
+    : `<div class="ok"><b>The story checks out.</b> Every beat can be reached, every scene and hint it names exists.</div>`;
+
+  // ---- acts ----
+  const who = (lead) => (lead === "both" ? ["dad", "son"] : [lead]).map((l) => `<i class="who" style="background:${cast[l].color}" title="${cast[l].name}"></i>`).join("");
+  const beat = (b) => `<div class="beat ${b.kind}"><b>${who(b.lead)}${esc(b.title)}</b>
+    <small>${esc(b.scene || "")}</small>
+    <small>needs: ${b.needs && b.needs.length ? esc(b.needs.join(", ")) : "nothing"}</small><small>sets: ${esc(b.sets)}</small></div>`;
+  $("acts").innerHTML = story.acts.map((act) => {
+    const lanes = [];
+    const cuts = act.beats.filter((b) => b.kind === "cutscene");
+    if (cuts.length) lanes.push(["Opens with", cuts]);
+    for (const c of [...new Set(act.beats.filter((b) => b.kind === "puzzle").map((b) => b.chain || "A"))]) lanes.push([`Chain ${c}`, act.beats.filter((b) => b.kind === "puzzle" && (b.chain || "A") === c)]);
+    const gates = act.beats.filter((b) => b.kind === "gate");
+    if (gates.length) lanes.push(["Gate", gates]);
+    return `<section class="act"><header><h3>${esc(act.title)}</h3><span class="tag">${esc(eras[act.era].name)}${eras[act.era].date ? " &middot; " + esc(eras[act.era].date) : ""}</span></header>
+      <p>${esc(act.summary)}</p>
+      <div class="lanes">${lanes.map(([name, beats]) => `<div class="lane"><b>${name}</b>${beats.map(beat).join("")}</div>`).join("")}</div></section>`;
+  }).join("");
+
+  // ---- scenes ----
+  const shape = (h) => h.rect ? `<rect x="${h.rect[0]}" y="${h.rect[1]}" width="${h.rect[2]}" height="${h.rect[3]}"/>`
+    : h.circle ? `<circle cx="${h.circle[0]}" cy="${h.circle[1]}" r="${h.circle[2]}"/>` : `<polygon points="${h.poly.map((p) => p.join(",")).join(" ")}"/>`;
+  const fake = { flag: () => false, q: () => null };
+  $("scenes").innerHTML = `<figure><div class="shot" data-era="present">${art.frame(art.highway() + art.prop("wagon", 184, 182))}</div>
+      <figcaption><b>Title and intro</b><small>The present &middot; js/content/cutscenes/intro.js</small></figcaption></figure>` +
+    sceneList.map((s) => `<figure><div class="shot" data-era="${s.era}">${art.frame((s.draw ? s.draw(art, fake) : art.sketch(s)) +
+        (s.actors || []).map((a) => art.prop(a.sprite, a.at[0], a.at[1])).join("") + art.prop(cast[story.acts.find((a) => a.era === s.era)?.beats[0].lead || "dad"].sprite, ...s.spawn.default))}
+        <svg class="spots" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice"><rect class="walk" x="${s.walk.x[0]}" y="${s.walk.y[0]}" width="${s.walk.x[1] - s.walk.x[0]}" height="${s.walk.y[1] - s.walk.y[0]}"/>${s.hotspots.map(shape).join("")}</svg></div>
+      <figcaption><b>${esc(s.name)}</b><small>${esc(eras[s.era].name)}${eras[s.era].date ? " &middot; " + esc(eras[s.era].date) : ""} &middot; js/content/scenes/${s.id}.js</small>
+      <small>Clickable: ${s.hotspots.map((h) => esc(h.name)).join(", ")}</small></figcaption></figure>`).join("");
+
+  // ---- palettes ----
+  const slots = ["s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "", "far", "near", "", "g1", "g2", "g3", "", "line", "light", "", "feat", "feat2"];
+  const names = { s1: "--sky-1", s2: "--sky-2", s3: "--sky-3", s4: "--sky-4", s5: "--sky-5", s6: "--sky-6", s7: "--sky-7", s8: "--sky-8", far: "--far", near: "--near", g1: "--ground-1", g2: "--ground-2", g3: "--ground-3", line: "--line", light: "--light", feat: "--feature", feat2: "--feature-2" };
+  const time = ["--time-cyan", "--time-magenta", "--time-violet", "--time-core"];
+  $("palettes").innerHTML = Object.keys(eras).map((id) => `<b>${esc(eras[id].name)}</b><div class="sw" data-era="${id}">
+    ${slots.map((s) => s ? `<i style="background:var(${names[s]})" title="${names[s]}"></i>` : `<i class="gap"></i>`).join("")}
+    <i class="gap"></i>${time.map((t) => `<i style="background:var(${t})" title="${t}"></i>`).join("")}</div>`).join("");
+
+  // ---- script ----
+  const count = {};
+  for (const [id, [speaker, text]] of Object.entries(lines)) {
+    const c = (count[speaker] ||= { lines: 0, words: 0, voiced: 0 });
+    c.lines++; c.words += text.split(/\s+/).length; if (sound.voices.has(id)) c.voiced++;
+  }
+  $("script").innerHTML = `<tr><th>Character</th><th>Lines</th><th>Words</th><th>Recorded</th></tr>` +
+    Object.entries(count).map(([k, c]) => `<tr><td><i class="who" style="background:${cast[k]?.color || "#fff"}"></i>${esc(cast[k]?.name || k)}</td><td>${c.lines}</td><td>${c.words}</td><td>${c.voiced} of ${c.lines}</td></tr>`).join("");
+  $("csv").addEventListener("click", () => {
+    const cell = (s) => `"${String(s).replace(/"/g, '""')}"`;
+    const rows = [["character", "line id", "text", "sound file", "recorded"], ...Object.entries(lines)
+      .sort((a, b) => a[1][0].localeCompare(b[1][0]))
+      .map(([id, [speaker, text]]) => [cast[speaker]?.name || speaker, id, text, `${sound.voicePath}${id}.mp3`, sound.voices.has(id) ? "yes" : "no"])];
+    const url = URL.createObjectURL(new Blob([rows.map((r) => r.map(cell).join(",")).join("\r\n")], { type: "text/csv" }));
+    Object.assign(document.createElement("a"), { href: url, download: "point-a-to-bc-script.csv" }).click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+</script>
+</body>
+</html>

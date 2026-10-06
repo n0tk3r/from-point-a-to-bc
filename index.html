@@ -11,414 +11,51 @@
 <meta name="theme-color" content="#140b2b">
 <meta name="color-scheme" content="dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23140b2b'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%235ef2ff' stroke-width='3' stroke-dasharray='9 5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23ff5ec8' stroke-width='3' stroke-dasharray='5 4'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23fff'/%3E%3C/svg%3E">
-<style>
-  :root {
-    --letterbox: #07040d;
-    --gold-hi: #fff6c8;
-    --gold: #ffd36b;
-    --gold-lo: #e08a2c;
-    --ink: #2a0f05;
-    --son: #7fe3ff;
-    --dad: #ffd34d;
-  }
-
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
-
-  body {
-    background: var(--letterbox);
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    color: #fff;
-    font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
-  }
-
-  /* The stage keeps the classic 320x200 (16:10) adventure-game frame and scales to fit. */
-  .stage {
-    position: relative;
-    width: min(100vw, 160vh);
-    width: min(100vw, 160dvh);
-    aspect-ratio: 16 / 10;
-    container-type: inline-size;
-    overflow: hidden;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-  /* ---------- Title ---------- */
-  .title {
-    position: absolute;
-    top: 5%;
-    left: 0;
-    right: 0;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  h1 {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-weight: 700;
-    font-size: 7.4cqw;
-    line-height: 1.1;
-    white-space: nowrap;
-    color: transparent;
-    background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 46%, var(--gold-lo) 54%, #ffe39a 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-stroke: 0.22cqw var(--ink);
-    filter: drop-shadow(0 0.35cqw 0 var(--ink)) drop-shadow(0 0 1.4cqw rgba(0, 0, 0, 0.55));
-  }
-
-  /* "B.C." looks chiselled in stone. */
-  h1 .bc {
-    display: inline-block;
-    margin-left: 0.08em;
-    transform: rotate(-4deg) translateY(0.03em);
-    background: linear-gradient(180deg, #f6f2e8 0%, #cbc3b2 47%, #8b8273 53%, #ddd6c7 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-stroke-color: #211c17;
-  }
-
-  .kicker {
-    margin: 1.1cqw 0 0;
-    padding-left: 0.42em;
-    font-size: max(1.9cqw, 9px);
-    letter-spacing: 0.42em;
-    text-transform: uppercase;
-    color: #ffe7c2;
-    text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.65);
-  }
-
-  /* ---------- Dialogue (LucasArts-style coloured lines) ---------- */
-  .dialogue {
-    position: absolute;
-    left: 4%;
-    right: 4%;
-    top: 64.5%;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .line {
-    margin: 0;
-    font-size: max(2.9cqw, 12px);
-    font-weight: 700;
-    line-height: 1.2;
-    opacity: 0;
-    text-shadow:
-      0.18cqw 0 0 #000, -0.18cqw 0 0 #000, 0 0.18cqw 0 #000, 0 -0.18cqw 0 #000,
-      0.18cqw 0.18cqw 0 #000, -0.18cqw 0.18cqw 0 #000, 0.18cqw -0.18cqw 0 #000, -0.18cqw -0.18cqw 0 #000;
-  }
-  .line.son { color: var(--son); }
-  .line.dad { color: var(--dad); }
-  .line.show { animation: line-in 0.28s ease-out forwards; }
-
-  @keyframes line-in {
-    from { opacity: 0; transform: translateY(0.6cqw); }
-    to   { opacity: 1; transform: none; }
-  }
-
-  /* ---------- Footer bits ---------- */
-  .status {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 4.6%;
-    margin: 0;
-    text-align: center;
-    font-size: max(1.7cqw, 10px);
-    color: #fff3dc;
-    text-shadow: 0 0.18cqw 0 #000;
-    pointer-events: none;
-  }
-  .status .soon {
-    letter-spacing: 0.32em;
-    text-transform: uppercase;
-    animation: blink 1.4s steps(1) infinite;
-  }
-  .status .hint { opacity: 0.7; letter-spacing: 0.06em; }
-
-  .copyright {
-    position: absolute;
-    right: 1.6%;
-    bottom: 1.4%;
-    margin: 0;
-    font-size: max(1.15cqw, 8px);
-    color: rgba(255, 255, 255, 0.45);
-    pointer-events: none;
-  }
-
-  /* Phones held upright: the frame is letterboxed, so move the small print into the space below it. */
-  @media (orientation: portrait) {
-    .stage { overflow: visible; }
-    .status { bottom: auto; top: calc(100% + 18px); font-size: 13px; }
-    .copyright { left: 0; right: 0; bottom: auto; top: calc(100% + 46px); text-align: center; font-size: 11px; }
-  }
-
-  /* ---------- Scene animation ---------- */
-  .ring { transform-box: fill-box; transform-origin: center; }
-  .r1 { animation: spin 10s linear infinite; }
-  .r2 { animation: spin 7s linear infinite reverse; }
-  .r3 { animation: spin 4.5s linear infinite; }
-  .r4 { animation: spin 2.6s linear infinite reverse; }
-
-  .glow { transform-box: fill-box; transform-origin: center; animation: pulse 3.2s ease-in-out infinite; }
-
-  .tw { animation: twinkle 2.8s steps(1) infinite; }
-  .tw.d1 { animation-delay: -0.9s; }
-  .tw.d2 { animation-delay: -1.7s; animation-duration: 3.6s; }
-
-  .car-body { animation: bounce 0.5s steps(1) infinite; }
-
-  .puff {
-    transform-box: fill-box;
-    transform-origin: center;
-    opacity: 0;
-    animation: puff 2s ease-out infinite;
-  }
-  .puff.p2 { animation-delay: -1s; }
-
-  @keyframes spin    { to { transform: rotate(360deg); } }
-  @keyframes pulse   { 50% { transform: scale(1.08); opacity: 0.8; } }
-  @keyframes twinkle { 50% { opacity: 0.2; } }
-  @keyframes bounce  { 50% { transform: translateY(-1px); } }
-  @keyframes blink   { 50% { opacity: 0.35; } }
-  @keyframes puff {
-    0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
-    15%  { opacity: 0.75; }
-    100% { opacity: 0; transform: translate(-10px, -6px) scale(2); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ring, .glow, .tw, .car-body, .puff, .status .soon { animation: none !important; }
-    .puff { opacity: 0; }
-    .line.show { animation: none; opacity: 1; }
-  }
-</style>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/game.css">
 </head>
 <body>
-<main class="stage" id="stage">
-  <svg class="scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges" role="img" aria-labelledby="scene-title">
-    <title id="scene-title">Dusk on a desert highway. A family station wagon heads toward a swirling time portal on the horizon, past a road sign where "Point B" has been crossed out and "B.C." painted underneath.</title>
-    <defs>
-      <radialGradient id="portal-glow">
-        <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
-        <stop offset="0.22" stop-color="#c9f8ff" stop-opacity="0.6"/>
-        <stop offset="0.6" stop-color="#5ef2ff" stop-opacity="0.16"/>
-        <stop offset="1" stop-color="#5ef2ff" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="road-glow" cx="0.5" cy="0" r="0.85">
-        <stop offset="0" stop-color="#7ff5ff" stop-opacity="0.45"/>
-        <stop offset="1" stop-color="#7ff5ff" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="tail-glow">
-        <stop offset="0" stop-color="#ff4b3a" stop-opacity="0.7"/>
-        <stop offset="1" stop-color="#ff4b3a" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-
-    <!-- Sky, banded like a 256-colour palette -->
-    <rect width="320" height="31" fill="#140b2b"/>
-    <rect y="31" width="320" height="22" fill="#1d1040"/>
-    <rect y="53" width="320" height="17" fill="#2b1650"/>
-    <rect y="70" width="320" height="14" fill="#431f5e"/>
-    <rect y="84" width="320" height="11" fill="#642967"/>
-    <rect y="95" width="320" height="9" fill="#8b3466"/>
-    <rect y="104" width="320" height="7" fill="#b5435e"/>
-    <rect y="111" width="320" height="7" fill="#de664f"/>
-
-    <!-- Stars -->
-    <g fill="#fff2d8">
-      <rect x="12" y="8" width="1" height="1"/>
-      <rect class="tw" x="34" y="22" width="1" height="1"/>
-      <rect x="57" y="6" width="1" height="1"/>
-      <rect class="tw d1" x="78" y="30" width="1" height="1"/>
-      <rect x="96" y="14" width="1" height="1"/>
-      <rect x="118" y="40" width="1" height="1"/>
-      <rect class="tw d2" x="131" y="9" width="1" height="1"/>
-      <rect x="149" y="27" width="1" height="1"/>
-      <rect x="172" y="5" width="1" height="1"/>
-      <rect class="tw" x="190" y="33" width="1" height="1"/>
-      <rect x="207" y="12" width="1" height="1"/>
-      <rect class="tw d1" x="226" y="26" width="1" height="1"/>
-      <rect x="244" y="7" width="1" height="1"/>
-      <rect x="262" y="38" width="1" height="1"/>
-      <rect class="tw d2" x="281" y="17" width="1" height="1"/>
-      <rect x="300" y="29" width="1" height="1"/>
-      <rect x="313" y="9" width="1" height="1"/>
-      <rect x="20" y="46" width="1" height="1"/>
-      <rect class="tw" x="66" y="52" width="1" height="1"/>
-      <rect x="104" y="60" width="1" height="1"/>
-      <rect x="210" y="55" width="1" height="1"/>
-      <rect class="tw d2" x="252" y="61" width="1" height="1"/>
-      <rect x="292" y="48" width="1" height="1"/>
-      <rect x="5" y="30" width="1" height="1"/>
-      <rect class="tw d1" x="140" y="58" width="1" height="1"/>
-      <rect x="180" y="48" width="1" height="1"/>
-      <rect fill="#cfe8ff" x="44" y="36" width="2" height="1"/>
-      <rect fill="#cfe8ff" class="tw d1" x="270" y="24" width="2" height="1"/>
-    </g>
-
-    <!-- The time portal, sitting where the sun should be -->
-    <g shape-rendering="geometricPrecision">
-      <circle class="glow" cx="160" cy="92" r="38" fill="url(#portal-glow)"/>
-      <circle class="ring r1" cx="160" cy="92" r="27" fill="none" stroke="#5ef2ff" stroke-width="2.5" stroke-dasharray="12 7"/>
-      <circle class="ring r2" cx="160" cy="92" r="21" fill="none" stroke="#ff5ec8" stroke-width="2.5" stroke-dasharray="8 6"/>
-      <circle class="ring r3" cx="160" cy="92" r="15" fill="none" stroke="#b58cff" stroke-width="2" stroke-dasharray="6 5"/>
-      <circle class="ring r4" cx="160" cy="92" r="9" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <circle cx="160" cy="92" r="4" fill="#ffffff"/>
-    </g>
-
-    <!-- Mesas -->
-    <polygon fill="#3a1d47" points="0,118 0,106 14,106 18,102 44,102 50,108 66,108 72,118"/>
-    <polygon fill="#2a1538" points="0,118 0,111 30,111 34,109 52,109 58,114 80,114 86,118"/>
-    <polygon fill="#3a1d47" points="236,118 242,108 256,108 260,101 290,101 296,107 320,107 320,118"/>
-    <polygon fill="#2a1538" points="222,118 228,113 250,113 254,110 284,110 290,113 320,113 320,118"/>
-
-    <!-- Ground -->
-    <rect y="118" width="320" height="82" fill="#22142a"/>
-    <rect y="118" width="320" height="6" fill="#2f1b35"/>
-    <rect y="124" width="320" height="10" fill="#28172f"/>
-    <g fill="#3a2442">
-      <rect x="12" y="124" width="2" height="1"/>
-      <rect x="46" y="128" width="2" height="1"/>
-      <rect x="92" y="132" width="2" height="1"/>
-      <rect x="20" y="140" width="3" height="2"/>
-      <rect x="60" y="160" width="4" height="2"/>
-      <rect x="28" y="182" width="5" height="2"/>
-      <rect x="74" y="190" width="3" height="1"/>
-      <rect x="300" y="138" width="3" height="1"/>
-      <rect x="262" y="166" width="4" height="2"/>
-      <rect x="296" y="176" width="3" height="2"/>
-      <rect x="250" y="190" width="5" height="2"/>
-      <rect x="226" y="132" width="2" height="1"/>
-    </g>
-
-    <!-- Road -->
-    <polygon fill="#3a3343" points="159,118 161,118 236,200 84,200"/>
-    <polygon fill="url(#road-glow)" points="159,118 161,118 236,200 84,200"/>
-    <line x1="159" y1="118" x2="84" y2="200" stroke="#6b5f72" stroke-width="1"/>
-    <line x1="161" y1="118" x2="236" y2="200" stroke="#6b5f72" stroke-width="1"/>
-    <g fill="#f2c14e">
-      <rect x="160" y="121" width="1" height="2"/>
-      <rect x="160" y="126" width="1" height="3"/>
-      <rect x="159" y="133" width="2" height="4"/>
-      <rect x="159" y="142" width="2" height="6"/>
-      <rect x="158" y="155" width="3" height="8"/>
-      <rect x="158" y="172" width="3" height="11"/>
-      <rect x="158" y="192" width="4" height="8"/>
-    </g>
-
-    <!-- Road sign: someone has edited the destination -->
-    <rect x="247" y="166" width="2" height="18" fill="#7d8288"/>
-    <rect x="281" y="166" width="2" height="18" fill="#7d8288"/>
-    <rect x="236" y="142" width="58" height="26" rx="2" fill="#1e7b4b"/>
-    <rect x="238" y="144" width="54" height="22" rx="1.5" fill="none" stroke="#eaf5ee" stroke-width="1"/>
-    <g shape-rendering="geometricPrecision">
-      <text x="265" y="153.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="8" fill="#eaf5ee" textLength="40" lengthAdjust="spacingAndGlyphs">POINT B</text>
-      <line x1="242" y1="151.5" x2="288" y2="149.5" stroke="#ff4a3d" stroke-width="1.6" stroke-linecap="round"/>
-      <text x="257" y="163.5" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-style="italic" font-size="8" fill="#ffd23f" textLength="22" lengthAdjust="spacingAndGlyphs">B.C.</text>
-      <polygon fill="#ffd23f" points="272,159 281,159 281,156 287,160.5 281,165 281,162 272,162"/>
-    </g>
-
-    <!-- The family wagon (Dad driving, son riding shotgun) -->
-    <ellipse cx="184" cy="182" rx="23" ry="2.5" fill="#000" opacity="0.45" shape-rendering="geometricPrecision"/>
-    <g class="car-body">
-      <rect x="172" y="152" width="24" height="3" fill="#6e4b2e"/>
-      <rect x="175" y="150" width="9" height="2" fill="#9a7445"/>
-      <rect x="186" y="150" width="6" height="2" fill="#4f6b8a"/>
-      <rect x="169" y="155" width="30" height="11" fill="#b8503c"/>
-      <rect x="172" y="157" width="24" height="7" fill="#232842"/>
-      <rect x="175" y="159" width="5" height="5" fill="#0e1120"/>
-      <rect x="187" y="160" width="4" height="4" fill="#0e1120"/>
-      <rect x="193" y="158" width="2" height="1" fill="#6b7aa8"/>
-      <rect x="166" y="166" width="36" height="10" fill="#c85a43"/>
-      <rect x="166" y="170" width="36" height="2" fill="#7d5131"/>
-      <rect x="167" y="167" width="4" height="3" fill="#ff3434"/>
-      <rect x="197" y="167" width="4" height="3" fill="#ff3434"/>
-      <rect x="179" y="172" width="10" height="4" fill="#efe9da"/>
-      <rect x="181" y="173" width="6" height="1" fill="#3a3343"/>
-      <rect x="165" y="176" width="38" height="2" fill="#a3a8ad"/>
-      <rect x="168" y="178" width="6" height="3" fill="#0d0b10"/>
-      <rect x="194" y="178" width="6" height="3" fill="#0d0b10"/>
-      <g shape-rendering="geometricPrecision">
-        <circle cx="169" cy="168.5" r="6" fill="url(#tail-glow)"/>
-        <circle cx="199" cy="168.5" r="6" fill="url(#tail-glow)"/>
-      </g>
-    </g>
-    <g shape-rendering="geometricPrecision" fill="#bdb6c9">
-      <circle class="puff" cx="170" cy="180" r="1.6"/>
-      <circle class="puff p2" cx="170" cy="180" r="1.6"/>
-    </g>
-  </svg>
-
-  <header class="title">
-    <h1>From Point A to <span class="bc">B.C.</span></h1>
+<!-- The stage is a 320x200 grid (16:10) that scales to fit the window.
+     Each layer below has one job. Order here is back to front. -->
+<main class="stage" id="stage" data-era="present">
+  <div class="layer" id="scene"></div>                  <!-- the background drawing (SVG) -->
+  <div class="layer" id="actors"></div>                 <!-- people and vehicles that move -->
+  <canvas class="layer" id="fx" width="640" height="400"></canvas>  <!-- particle effects: the time tunnel -->
+  <svg class="layer" id="hot" viewBox="0 0 320 200" preserveAspectRatio="none" aria-label="Scene"></svg>  <!-- clickable areas -->
+  <header class="layer" id="title" hidden>
+    <div class="strip"><div class="papyrus"><h1>From Point A to B.C.</h1></div></div>
     <p class="kicker">A point-and-click adventure</p>
   </header>
-
-  <div class="dialogue">
-    <p class="line son show" id="line">Are we when yet?</p>
+  <div class="layer" id="dialogue" aria-live="polite"></div>
+  <div class="layer" id="hud" hidden></div>
+  <div class="layer" id="fade"></div>                   <!-- fades and flashes -->
+  <div class="layer" id="card"></div>                   <!-- era and chapter cards, readable over a fade -->
+  <div class="layer" id="menu" hidden></div>
+  <button id="skip" type="button" hidden>Skip <span aria-hidden="true">&raquo;</span></button>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div class="layer" id="gate">
+    <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+      <circle class="ring r1 t-cyan" cx="32" cy="32" r="26" fill="none" stroke-width="3" stroke-dasharray="12 7"/>
+      <circle class="ring r2 t-magenta" cx="32" cy="32" r="19" fill="none" stroke-width="3" stroke-dasharray="8 6"/>
+      <circle class="ring r3 t-violet" cx="32" cy="32" r="12" fill="none" stroke-width="2.5" stroke-dasharray="6 5"/>
+      <circle class="t-core" cx="32" cy="32" r="4"/>
+    </svg>
+    <button id="begin" type="button" class="chip" disabled>Loading&hellip;</button>
+    <p id="gate-note">Best with sound on.</p>
   </div>
-
-  <p class="status"><span class="soon">Coming soon</span> &middot; <span class="hint">click for more dad wisdom</span></p>
-  <p class="copyright">&copy; 2026 n0tk3r. All rights reserved.</p>
 </main>
+<p class="copyright">&copy; 2026 n0tk3r. All rights reserved.</p>
 
+<noscript><p class="notice">This game needs JavaScript turned on.</p></noscript>
 <script>
-  // Front-seat banter: the son asks, Dad answers. Click, tap or press a key to skip ahead.
-  const exchanges = [
-    ["Are we when yet?", "No, but we're making good time."],
-    ["Dad, the map says this road ends.", "Maps don't know about shortcuts."],
-    ["Why is the sky swirling?", "Weather. Probably."],
-    ["Should we ask for directions?", "In what language?"],
-    ["How long is this shortcut?", "About four thousand years, give or take."],
-    ["Mom said to be home by dinner.", "She didn't say which century."]
-  ];
-
-  const line = document.getElementById("line");
-  const stage = document.getElementById("stage");
-  let index = 0;
-  let timer;
-
-  function say(text, speaker) {
-    line.textContent = text;
-    line.className = "line " + speaker;
-    void line.offsetWidth; // restart the fade-in animation
-    line.classList.add("show");
+  // The game is split into module files, and browsers only load those from a web address.
+  if (location.protocol === "file:") {
+    document.getElementById("begin").hidden = true;
+    document.getElementById("gate-note").innerHTML =
+      "This page was opened straight from a folder, so the game cannot load.<br>" +
+      "In the game folder run <code>python3 -m http.server</code> and open <code>http://localhost:8000</code>.";
   }
-
-  function play() {
-    clearTimeout(timer);
-    const [son, dad] = exchanges[index];
-    say(son, "son");
-    timer = setTimeout(() => {
-      say(dad, "dad");
-      timer = setTimeout(next, 3600);
-    }, 2400);
-  }
-
-  function next() {
-    index = (index + 1) % exchanges.length;
-    play();
-  }
-
-  stage.addEventListener("click", next);
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " " || event.key === "ArrowRight") {
-      event.preventDefault();
-      next();
-    }
-  });
-
-  play();
 </script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
