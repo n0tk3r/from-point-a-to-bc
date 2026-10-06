@@ -1,0 +1,10 @@
+# Private design references: inspiration images, other studios' documents.
+# This repo is public, so this folder stays on your machine only.
+reference/
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
