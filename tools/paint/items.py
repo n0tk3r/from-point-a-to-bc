@@ -1,0 +1,746 @@
+"""The pictures of the things a player can carry: one small still-life each, 64 x 64 on a clear ground.
+
+Each is a few bold shapes in three or four tones, lit from the upper left, brushed lightly, with its
+small crisp marks put on afterwards and a darker edge all down its shadow side.
+
+    python3 items.py            paints them all into out/items/ and makes out/items-sheet.png
+    python3 items.py coin map   paints only those (and the sheet)"""
+
+import math
+import os
+import sys
+
+import numpy as np
+from PIL import Image
+
+from brush import *
+from solid import mix
+
+S = 64
+
+
+def rot(points, deg, c=(32.0, 32.0)):
+    """Turn points about a middle (degrees, clockwise as we look at the picture)."""
+    ca, sa = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    return [(c[0] + (x - c[0]) * ca - (y - c[1]) * sa, c[1] + (x - c[0]) * sa + (y - c[1]) * ca) for x, y in points]
+
+
+def loop(points, steps=6):
+    """A closed smooth outline through the points."""
+    pts = [tuple(p) for p in points]
+    return curve(pts[-1:] + pts + pts[:2], steps)[steps:steps + len(pts) * steps]
+
+
+def oval(cx, cy, rx, ry, deg=0.0, n=28):
+    return rot([(cx + math.cos(i / n * 2 * math.pi) * rx, cy + math.sin(i / n * 2 * math.pi) * ry) for i in range(n)], deg, (cx, cy))
+
+
+def rrect(cx, cy, hw, hh, r, deg=0.0, n=6):
+    """A rectangle with rounded corners, as a polygon, turned about its middle."""
+    pts = []
+    for (sx, sy, a0) in ((1, -1, -90), (1, 1, 0), (-1, 1, 90), (-1, -1, 180)):
+        for i in range(n + 1):
+            a = math.radians(a0 + 90 * i / n)
+            pts.append((cx + sx * (hw - r) + math.cos(a) * r, cy + sy * (hh - r) + math.sin(a) * r))
+    return rot(pts, deg, (cx, cy))
+
+
+# ---------------------------------------------------------------- the things
+def reed(b, l):
+    """A cut reed: a green stalk, two long leaves, a feathery brown head."""
+    green = ("#3a5a24", "#6f9638", "#b4cc62")
+    stalk = curve([(9, 60), (19, 46), (29, 32.5), (38, 21)], 8)
+    for (pts, w0, w1) in ((curve([(18, 47.5), (31, 50), (44, 46), (57, 50)], 6), 5.6, 1.0), (curve([(27, 35.5), (19.5, 26), (15.5, 15), (18, 6)], 6), 5.0, 1.0)):
+        b.taper(pts, green[0], w0, w1)                       # a leaf: dark, then its lit face
+        b.taper([(x - 0.5, y - 0.8) for x, y in pts], green[1], w0 * 0.62, w1 * 0.6)
+        l.taper([(x - 0.4, y - 1.0) for x, y in pts[1:-2]], green[2], 0.9, 0.6)
+    b.taper(stalk, green[0], 6.6, 4.4)
+    b.taper([(x - 0.8, y - 0.7) for x, y in stalk], green[1], 4.8, 3.2)
+    l.taper([(x - 1.6, y - 1.4) for x, y in stalk], green[2], 1.5, 1.0)
+    for t in (9, 17):                                        # the joints of the stalk
+        (x, y), (x2, y2) = stalk[t], stalk[t + 1]
+        nx, ny = -(y2 - y), (x2 - x)
+        n = math.hypot(nx, ny)
+        l.line([(x - nx / n * 3.1, y - ny / n * 3.1), (x + nx / n * 3.1, y + ny / n * 3.1)], green[0], 1.3, 0.9)
+    head = ("#6a4020", "#a8743a", "#e2bc7c")
+    for k, a in enumerate(np.linspace(0.0, 1.0, 11)):        # the plume: a fan of soft brown strokes
+        ang = -0.92 + (a - 0.5) * 1.25
+        length = 23 - abs(a - 0.5) * 13
+        tip = (38 + math.cos(ang) * length, 21 + math.sin(ang) * length)
+        mid = (38 + math.cos(ang) * length * 0.5 + 1.2, 21 + math.sin(ang) * length * 0.5 - 0.4)
+        b.taper(curve([(38, 21), mid, tip], 4), head[0] if k % 3 == 2 else head[1], 4.4, 1.2)
+    for a in (-1.3, -1.0, -0.72, -0.45):
+        l.line([(39.5 + math.cos(a) * 5, 19.5 + math.sin(a) * 5), (38.5 + math.cos(a) * 18, 20 + math.sin(a) * 18)], head[2], 1.0, 0.95)
+    l.poly(oval(8.6, 60.4, 3.1, 2.3, -38), green[0])        # where it was cut
+    l.poly(oval(8.4, 60.2, 2.1, 1.5, -38), "#eee6ae")
+
+
+def _map_print(l, quad, shade=0.0, seed=0):
+    """Roads, a river and a patch of green on one panel of the map (its four corners given)."""
+    (ax, ay), (bx, by), (cx, cy), (dx, dy) = quad             # top left, top right, bottom right, bottom left
+
+    def at(u, v):
+        tx, ty = lerp(ax, bx, u), lerp(ay, by, u)
+        ux, uy = lerp(dx, cx, u), lerp(dy, cy, u)
+        return (lerp(tx, ux, v), lerp(ty, uy, v))
+    dim = lambda c: mix(c, "#6a6078", shade)
+    l.poly([at(0.12, 0.52), at(0.5, 0.44), at(0.9, 0.56), at(0.84, 0.78), at(0.4, 0.86), at(0.1, 0.74)], dim("#bcd69a"), 0.9)
+    l.line([at(0.0, 0.2), at(0.3, 0.3), at(0.55, 0.22), at(1.0, 0.34)], dim("#58a0d8"), 1.6)                    # a river
+    l.line([at(0.1, 1.0), at(0.3, 0.7), at(0.62, 0.6), at(0.8, 0.3), at(0.74, 0.0)], dim("#d84a34"), 1.5)       # the highway
+    l.line([at(0.0, 0.62), at(0.3, 0.7), at(0.7, 0.92), at(1.0, 0.86)], dim("#e8a030"), 1.1)
+    for (u, v) in ((0.3, 0.7), (0.62, 0.6), (0.8, 0.3)):
+        px, py = at(u, v)
+        l.ellipse(px, py, 1.3, 1.3, dim("#2a2630"))
+
+
+def map_(b, l):
+    """A road map, folded like a fan: its blue cover, and two panels of roads behind."""
+    paper = ("#fbf4dc", "#d8ccb0", "#8a7c66")
+    c = (32, 33)
+    p0 = rot([(8, 13), (24, 9), (24, 53), (8, 57)], -9, c)
+    p1 = rot([(24, 9), (40, 14), (40, 58), (24, 53)], -9, c)
+    p2 = rot([(40, 14), (56, 9), (56, 53), (40, 58)], -9, c)
+    b.poly(p2, paper[0])
+    b.poly(p1, paper[1])
+    b.poly(p0, "#3f7fb8")                                    # the cover
+    _map_print(l, p1, shade=0.28)
+    _map_print(l, p2, seed=1)
+    band = lambda v0, v1: [(lerp(p0[0][0], p0[3][0], v0), lerp(p0[0][1], p0[3][1], v0)), (lerp(p0[1][0], p0[2][0], v0), lerp(p0[1][1], p0[2][1], v0)),
+                           (lerp(p0[1][0], p0[2][0], v1), lerp(p0[1][1], p0[2][1], v1)), (lerp(p0[0][0], p0[3][0], v1), lerp(p0[0][1], p0[3][1], v1))]
+    b.poly(band(0.0, 0.16), "#d84a34")
+    b.poly(band(0.26, 0.60), paper[0])
+    q = band(0.26, 0.60)
+    l.line([lerp_pt(q[0], q[3], 0.75), lerp_pt(lerp_pt(q[0], q[1], 0.35), lerp_pt(q[3], q[2], 0.35), 0.3), lerp_pt(lerp_pt(q[0], q[1], 0.7), lerp_pt(q[3], q[2], 0.7), 0.7), lerp_pt(q[1], q[2], 0.25)], "#d84a34", 1.7)
+    l.line([lerp_pt(q[0], q[3], 0.3), lerp_pt(q[1], q[2], 0.75)], "#3f7fb8", 1.1, 0.9)
+    q = band(0.70, 0.76)
+    l.poly(q, "#f6e7b0")
+    q = band(0.82, 0.86)
+    l.poly([q[0], lerp_pt(q[0], q[1], 0.6), lerp_pt(q[3], q[2], 0.6), q[3]], "#f6e7b0")
+    l.line([p0[1], p0[2]], "#2a5684", 1.2, 0.9)              # the folds: a dark valley, a bright ridge
+    l.line([p1[1], p1[2]], "#fffdf0", 1.1, 0.95)
+    l.line([p2[1], p2[2]], paper[2], 1.3, 0.9)
+    l.line([p0[3], p0[2], p1[2], p2[2]], paper[2], 1.1, 0.75)
+
+
+def lerp_pt(a, b, t):
+    return (lerp(a[0], b[0], t), lerp(a[1], b[1], t))
+
+
+def pass_(b, l):
+    """The same map folded small: on its blank back, a scribe's quick dark signs."""
+    paper = ("#fbf4dc", "#e2d6b6", "#8a7c66")
+    c = (32, 33)
+    T = lambda pts: rot(pts, 11, c)
+    b.poly(T([(19, 11), (51, 11), (51, 57), (19, 57)]), "#3f7fb8")                   # the cover shows along one edge
+    face = T([(13, 9), (46, 9), (46, 55), (13, 55)])
+    b.poly(face, paper[0])
+    b.poly(T([(13, 32), (46, 32), (46, 55), (13, 55)]), paper[1])                    # folded once across
+    l.line(T([(13, 32), (46, 32)]), paper[2], 0.9, 0.6)
+    l.poly(T([(46, 43), (46, 55), (35, 55)]), "#fffdf0")                             # a corner turned back shows the roads
+    l.line(T([(37.5, 54.2), (42, 49.5), (45.4, 47.6)]), "#d84a34", 1.2)
+    l.line(T([(40.6, 54.4), (45.4, 51.2)]), "#58a0d8", 1.1)
+    l.line(T([(46, 43), (35, 55)]), paper[2], 1.0, 0.8)
+    ink = "#2e1c14"
+    pen = lambda pts, w=1.8: l.line(T(pts), ink, w)
+    # above the fold: a reed leaf, water, a mouth, the sun
+    pen([(17.4, 28.4), (18.2, 13.6)], 1.9)
+    l.poly(T([(18.2, 13.6), (22.6, 16.4), (21.8, 21.6), (18.0, 19.4)]), ink)
+    pen([(24.4, 17.4), (26.8, 14.2), (29.2, 17.4), (31.6, 14.2), (34.0, 17.4), (36.4, 14.2), (38.8, 17.4)], 1.6)
+    lens = oval(31.4, 24.6, 5.6, 2.5)
+    pen(lens + lens[:1], 1.4)
+    sun = oval(41.2, 24.4, 2.9, 2.9)
+    pen(sun + sun[:1], 1.4)
+    # below it: a small bird, a loaf, three strokes for "many", a bolt
+    pen(curve([(23.6, 38.6), (21.0, 36.8), (18.6, 38.6), (17.8, 43.0), (20.6, 46.4), (25.0, 46.6)], 5), 1.7)
+    pen([(23.6, 38.6), (26.0, 39.4)], 1.5)
+    pen(curve([(21.4, 41.2), (24.4, 43.4), (25.0, 46.6)], 4), 1.5)
+    pen([(20.4, 46.6), (19.8, 50.6)], 1.4)
+    pen([(23.2, 46.8), (23.6, 50.6)], 1.4)
+    l.poly(T([(28.4, 50.2)] + [(32.4 + math.cos(a) * 4.0, 50.2 - math.sin(a) * 3.8) for a in np.linspace(math.pi, 0, 9)] + [(36.4, 50.2)]), ink)
+    for x in (30.4, 33.8, 37.2):
+        pen([(x, 36.4), (x + 0.3, 42.0)], 1.7)
+    pen([(39.6, 46.2), (43.4, 46.4)], 1.5)
+    pen([(41.6, 44.2), (41.4, 50.6)], 1.5)
+    l.line([face[1], face[2]], paper[2], 1.0, 0.8)
+    l.line([face[3], face[2]], paper[2], 1.0, 0.7)
+
+
+def flashlight(b, l):
+    """A yellow flashlight with a black grip and a wide chrome head."""
+    ax, ay, ux, uy = 9.0, 51.5, 0.762, -0.648                # its tail, and the way it points
+    nx, ny = -uy, ux                                         # across it, toward the shadow side
+
+    def at(t, w):
+        return (ax + ux * t + nx * w, ay + uy * t + ny * w)
+
+    def slab(t0, t1, w0, w1, color, w0b=None, w1b=None):
+        b.poly([at(t0, -w0), at(t1, -w1), at(t1, w1b if w1b is not None else w1), at(t0, w0b if w0b is not None else w0)], color)
+
+    b.poly(loop([at(-1.5, -4.6), at(1, -6.4), at(3, -6.4), at(3, 6.4), at(1, 6.4), at(-1.5, 4.6)], 4), "#c0881c")     # the cap on its tail
+    slab(2, 26, 6.4, 6.4, "#f8cc34")
+    slab(2, 26, 6.4, 6.4, "#ffe872", -2.2, -2.2)             # the top of the barrel, in the sun
+    slab(2, 26, -2.6, -2.6, "#c0881c", 6.4, 6.4)             # and its underside
+    slab(26, 33, 6.8, 6.8, "#2a2a32")                        # the grip
+    slab(26, 33, 6.8, 6.8, "#4a4a56", -2.6, -2.6)
+    slab(33, 40, 6.8, 11.6, "#aab4c0")                       # the head flares
+    slab(33, 40, 6.8, 11.6, "#f0f4f6", -1.4, -2.6)
+    slab(33, 40, -3.4, -6.4, "#6a7480", 6.8, 11.6)
+    slab(40, 46, 11.6, 11.6, "#aab4c0")
+    slab(40, 46, 11.6, 11.6, "#f0f4f6", -2.6, -2.6)
+    slab(40, 46, -6.4, -6.4, "#6a7480", 11.6, 11.6)
+    cx, cy = at(46, 0)
+    ang = math.degrees(math.atan2(uy, ux))
+    b.poly(oval(cx, cy, 4.2, 11.6, ang), "#7a8490")          # the rim of the lens
+    l.poly(oval(cx + ux * 0.5, cy + uy * 0.5, 3.2, 9.6, ang), "#fff4b8")
+    l.poly(oval(cx + ux * 0.6 + nx * 2.6, cy + uy * 0.6 + ny * 2.6, 2.0, 5.4, ang), "#f4d470")
+    l.poly(oval(cx + ux * 0.6 - nx * 4.2, cy + uy * 0.6 - ny * 4.2, 1.2, 2.6, ang), "#ffffff")
+    for t in (27.5, 29.5, 31.5):                             # ribs on the grip
+        l.line([at(t, -6.4), at(t, 6.4)], "#14141a", 0.8, 0.8)
+    l.line([at(4, -4.4), at(24, -4.4)], "#fffbd0", 1.3, 0.95)
+    l.poly(loop([at(11, -5.0), at(17, -5.0), at(17, -1.4), at(11, -1.4)], 3), "#d83a2c")      # the switch
+    l.line([at(11.6, -4.4), at(16.4, -4.4)], "#ff8a70", 0.9)
+    l.line([at(33, -6.8), at(33, 6.8)], "#5a6470", 0.9, 0.9)
+    l.line([at(40, -11.6), at(40, 11.6)], "#ffffff", 0.9, 0.7)
+
+
+def rootbeer(b, l):
+    """A brown bottle, cold, with a plain cream label and a gold cap."""
+    c = (32, 34)
+    glass = ("#431f0e", "#7a4220", "#b86c2c", "#f8c884")
+    body = [(22, 58.5), (21.6, 36), (22.6, 31), (26.6, 25), (28.2, 20), (28.2, 10), (35.8, 10), (35.8, 20), (37.4, 25), (41.4, 31), (42.4, 36), (42, 58.5), (39, 60.4), (25, 60.4)]
+    b.poly(rot(body, 9, c), glass[1])
+    b.poly(rot([(22, 58.5), (21.6, 36), (22.6, 31), (26.6, 25), (28.2, 20), (28.2, 10), (31, 10), (31, 20), (29.4, 26), (26, 31.6), (25.4, 37), (25.6, 60.4), (25, 60.4)], 9, c), glass[2])
+    b.poly(rot([(42, 58.5), (42.4, 36), (41.4, 31), (37.4, 25), (35.8, 20), (35.8, 10), (33.8, 10), (33.8, 20), (35.4, 26), (38.6, 31.6), (39.2, 37), (39, 60.4)], 9, c), glass[0])
+    b.poly(rot([(21.7, 38.5), (42.3, 38.5), (42.2, 52), (21.9, 52)], 9, c), "#f6ecc8")        # the label: no words on it
+    b.poly(rot([(38.4, 38.5), (42.3, 38.5), (42.2, 52), (38.6, 52)], 9, c), "#cdbf98")
+    l.poly(rot(rrect(30.6, 46.6, 3.9, 3.4, 1.0), 9, c), "#7a4220")                          # a little mug of it, with a head of foam
+    l.line(rot(curve([(34.2, 44.8), (37.4, 45.6), (37.2, 48.0), (34.2, 48.8)], 4), 9, c), "#7a4220", 1.3)
+    foam = rot(loop([(26.2, 43.4), (27.6, 41.4), (30.0, 42.0), (32.2, 41.2), (34.6, 42.2), (35.0, 43.8), (30.6, 44.4)], 4), 9, c)
+    l.poly(foam, "#fffdf2")
+    l.line(foam + foam[:1], "#a8763c", 0.8, 0.9)
+    l.line(rot([(28.4, 45.4), (28.4, 48.6)], 9, c), "#b8742c", 0.9, 0.9)
+    l.line(rot([(22.6, 40.2), (41.6, 40.2)], 9, c), "#c8402c", 1.0, 0.95)
+    l.line(rot([(22.6, 50.4), (41.6, 50.4)], 9, c), "#c8402c", 1.0, 0.95)
+    b.poly(rot([(26.8, 4.6), (37.2, 4.6), (37.8, 10.4), (26.2, 10.4)], 9, c), "#e6b838")       # the cap
+    l.poly(rot([(26.8, 4.6), (31.6, 4.6), (31.2, 10.4), (26.2, 10.4)], 9, c), "#fde27c")
+    l.line(rot([(26.4, 10.4), (37.6, 10.4)], 9, c), "#8a6418", 1.2)
+    l.line(rot([(23.6, 34.6), (24.0, 30.6), (27.6, 25.4), (29.2, 20.4), (29.2, 12)], 9, c), glass[3], 1.3, 0.95)       # the light down its shoulder
+    l.line(rot([(23.6, 54), (23.6, 58)], 9, c), glass[3], 1.2, 0.9)
+    for (x, y, r) in ((36.6, 30.4, 1.0), (34.6, 34.6, 0.8), (37.4, 56, 1.0), (30.4, 56.6, 0.8), (33.6, 16, 0.8)):      # beads of cold
+        px, py = rot([(x, y)], 9, c)[0]
+        l.ellipse(px, py, r, r * 1.25, "#e6b47a", 0.95)
+        l.ellipse(px - 0.3, py - 0.4, r * 0.45, r * 0.5, "#fff0d0")
+
+
+def shade(b, l):
+    """A silver windshield shade, folded like a fan and held with a strap."""
+    c = (32, 32)
+    silver = ("#ffffff", "#e4edf4", "#aebccc", "#6e7e94")
+    n = 6
+    xs = [lerp(7, 57, i / n) for i in range(n + 1)]
+    top = [13 if i % 2 == 0 else 17.5 for i in range(n + 1)]
+    bot = [49 if i % 2 == 0 else 53.5 for i in range(n + 1)]
+    for i in range(n):
+        quad = rot([(xs[i], top[i]), (xs[i + 1], top[i + 1]), (xs[i + 1], bot[i + 1]), (xs[i], bot[i])], -7, c)
+        b.poly(quad, silver[1] if i % 2 == 0 else silver[2])
+        if i % 2 == 0:                                       # the sky lies in the panels that face up
+            b.poly(rot([(xs[i], top[i]), (xs[i + 1], top[i + 1]), (xs[i + 1], top[i + 1] + 11), (xs[i], top[i] + 15)], -7, c), "#cfe6f8")
+    for i in range(n + 1):
+        l.line(rot([(xs[i], top[i]), (xs[i], bot[i])], -7, c), silver[0] if i % 2 == 0 else silver[3], 1.2, 0.95 if i % 2 == 0 else 0.85)
+    l.line(rot([(xs[i], bot[i]) for i in range(n + 1)], -7, c), silver[3], 1.3, 0.9)
+    l.line(rot([(xs[i], top[i]) for i in range(n + 1)], -7, c), silver[0], 1.0, 0.9)
+    strap = [(xs[i], lerp(top[i], bot[i], 0.56)) for i in range(n + 1)]
+    l.line(rot(strap, -7, c), "#1e222c", 4.4)                # the strap round it
+    l.line(rot([(x, y - 1.2) for x, y in strap], -7, c), "#4a5262", 1.0, 0.9)
+    bx, by = rot([lerp_pt(strap[2], strap[3], 0.5)], -7, c)[0]
+    l.poly(rot([(bx - 3.4, by - 3.4), (bx + 3.4, by - 3.4), (bx + 3.4, by + 3.4), (bx - 3.4, by + 3.4)], -7, (bx, by)), "#d83a2c")
+    l.line([(bx - 2.2, by - 2.0), (bx + 1.0, by - 2.0)], "#ff9a84", 0.9)
+    for (i, v0, v1) in ((0, 0.12, 0.44), (2, 0.66, 0.9), (4, 0.1, 0.36)):                     # the sun in it
+        a = (lerp(xs[i], xs[i + 1], 0.25), lerp(top[i], bot[i], v0))
+        z = (lerp(xs[i], xs[i + 1], 0.7), lerp(top[i], bot[i], v1))
+        l.line(rot([a, z], -7, c), silver[0], 1.7, 0.95)
+
+
+def carmirror(b, l):
+    """The wagon's door mirror: a chrome shell on a short arm and a foot, the sky and the sand in its glass."""
+    chrome = ("#ffffff", "#e2e8ee", "#a2acb8", "#5c6672")
+    c, deg = (37.0, 25.5), -11
+    b.poly(loop([(2.6, 50.6), (15.6, 44.6), (22.6, 55.6), (8.6, 61.6)], 4), chrome[3])        # the foot that bolts to the door
+    b.poly(loop([(2.6, 49.6), (15.4, 43.8), (21.6, 54.2), (8.2, 60.2)], 4), chrome[2])
+    b.poly(loop([(3.4, 49.6), (15.0, 44.4), (17.4, 48.4), (5.6, 53.8)], 4), chrome[1])
+    b.taper([(13.6, 50.6), (19.6, 42.6), (26.4, 37.0)], chrome[3], 10.4, 9.4)                 # the arm: short and thick
+    b.taper([(12.8, 49.6), (18.8, 41.6), (25.6, 36.2)], chrome[2], 7.6, 6.8)
+    b.taper([(11.8, 48.4), (17.8, 40.4), (24.6, 35.0)], chrome[1], 3.4, 3.0)
+    b.poly(rrect(c[0] + 1.3, c[1] + 1.4, 24.6, 17.0, 8.6, deg), chrome[3])                    # the shell: its dark edge first
+    b.poly(rrect(c[0], c[1], 24.2, 16.6, 8.4, deg), chrome[2])
+    b.poly(rrect(c[0] - 1.3, c[1] - 1.3, 22.4, 14.8, 7.6, deg), chrome[1])
+    T = lambda pts: rot(pts, deg, c)
+    gx, gy, hw, hh = c[0] + 0.4, c[1] + 0.4, 18.6, 11.2
+    b.poly(rrect(gx, gy, hw, hh, 5.4, deg), "#86bcec")                                        # the glass: sky ...
+    b.poly(T([(gx - hw + 0.6, gy - 0.6), (gx + hw - 0.6, gy - 0.6), (gx + hw - 0.6, gy + 4.4), (gx - hw + 0.6, gy + 4.4)]), "#c4e0f6")
+    b.poly(T([(gx - hw + 0.6, gy + 3.6), (gx + hw - 0.6, gy + 3.6), (gx + hw - 0.6, gy + hh - 3.6), (gx + hw - 4.0, gy + hh - 0.5), (gx - hw + 4.0, gy + hh - 0.5), (gx - hw + 0.6, gy + hh - 3.6)]), "#e4b472")   # ... and sand
+    b.poly(T([(gx + 2, gy + 3.6), (gx + 9, gy - 1.6), (gx + 13.4, gy + 3.6)]), "#f4dca4")     # a far pyramid in it
+    b.poly(T([(gx + 9, gy - 1.6), (gx + 13.4, gy + 3.6), (gx + 10.4, gy + 3.6)]), "#b9a0b4")
+    l.poly(T(loop([(gx - 13, gy - 3.6), (gx - 10, gy - 7.4), (gx - 5.4, gy - 6.4), (gx - 2, gy - 8.6), (gx + 2, gy - 5.6), (gx - 1, gy - 2.6), (gx - 8, gy - 2.0)], 4)), "#ffffff")     # a cloud
+    rim = rrect(gx, gy, hw, hh, 5.4, deg)
+    l.line(rim + rim[:1], chrome[3], 1.3, 0.9)
+    outer = rrect(c[0] - 1.3, c[1] - 1.3, 22.4, 14.8, 7.6, deg)
+    l.line(outer[14:28] + outer[:1], chrome[0], 1.6, 0.95)                                    # the sun along its top and left
+    l.line(T([(gx - 14.6, gy + 6.6), (gx - 9.6, gy - 8.6)]), "#ffffff", 1.6, 0.55)            # a streak across the glass
+    l.line(T([(gx - 11.6, gy + 7.6), (gx - 7.2, gy - 5.6)]), "#ffffff", 0.9, 0.45)
+    for (x, y) in ((7.6, 55.6), (16.0, 51.6)):                                                # two screws
+        l.ellipse(x, y, 1.5, 1.5, chrome[3])
+        l.ellipse(x - 0.4, y - 0.4, 0.6, 0.6, chrome[0])
+    l.line([(22.6, 55.6), (8.6, 61.6)], chrome[3], 1.2, 0.8)
+
+
+def sunglasses(b, l):
+    """Dad's sunglasses: gold wire, big dark-green lenses."""
+    gold = ("#fbe28a", "#d8a838", "#8a641c")
+    lens = [(-11.6, -6.4), (-3, -8.6), (7, -8.2), (12, -4.6), (12.4, 2.6), (8, 9), (0, 10.6), (-7.6, 8), (-11.6, 2)]
+    c = (32, 33)
+    for k, (cx, cy, flip) in enumerate(((19.6, 34.6, 1), (45.2, 31.8, -1))):
+        pts = rot([(cx + px * flip, cy + py) for px, py in lens], -6, c)
+        b.poly(loop(pts, 5), "#24302c")
+        inner = rot([(cx + px * flip * 0.9, cy + 1.4 + py * 0.62 + 2.6) for px, py in lens], -6, c)
+        b.poly(loop(inner, 5), "#48604e")                    # the lens is lighter toward the bottom
+        low = rot([(cx + px * flip * 0.72, cy + 5.6 + py * 0.3) for px, py in lens], -6, c)
+        b.poly(loop(low, 5), "#7c9a78")
+        ring = loop(pts, 5)
+        l.line(ring + ring[:1], gold[2], 2.3)
+        l.line(ring + ring[:1], gold[1], 1.3)
+        gx, gy = rot([(cx - 5.6, cy - 3.6)], -6, c)[0]
+        l.line([(gx - 2.4, gy + 2.6), (gx + 3.0, gy - 2.6)], "#eaf6ff", 2.0, 0.95)      # the sky in each lens
+        l.line([(gx + 1.6, gy + 4.0), (gx + 5.4, gy + 0.4)], "#bcd6e6", 1.2, 0.9)
+    l.line(rot([(28.6, 28.4), (32.4, 26.4), (36.4, 27.0)], -6, c), gold[2], 2.2)        # the bridge, and the bar over it
+    l.line(rot([(28.6, 28.4), (32.4, 26.4), (36.4, 27.0)], -6, c), gold[0], 1.1)
+    l.line(rot([(27.4, 33.6), (32.4, 31.6), (37.6, 32.4)], -6, c), gold[2], 1.9)
+    l.line(rot([(27.4, 33.6), (32.4, 31.6), (37.6, 32.4)], -6, c), gold[1], 1.0)
+    arm = rot(curve([(56.6, 27.6), (60.4, 23.4), (61.6, 18), (59.4, 13.6)], 5), -6, c)   # one arm folds away behind
+    l.line(arm, gold[2], 2.2)
+    l.line(arm, gold[1], 1.2)
+    arm2 = rot(curve([(8.2, 31.4), (4.6, 28.6), (3.4, 24)], 4), -6, c)
+    l.line(arm2, gold[2], 2.2)
+    l.line(arm2, gold[0], 1.1)
+
+
+def coppermirror(b, l):
+    """The goldsmith's hand mirror: a disc of polished copper on a short handle of blue-green faience
+    shaped like a papyrus stem."""
+    c = (32, 32)
+    T = lambda pts: rot(pts, -13, c)
+    copper = ("#fff0d2", "#f8bc88", "#e08650", "#a8522c", "#6e3018")
+    blue = ("#9ae0d2", "#3fa69c", "#1f6c6c", "#123f48")
+    stem = [(23.6, 39.6), (40.4, 39.6), (37.2, 45.6), (35.4, 48.6), (35.0, 57.0), (37.6, 59.4), (37.6, 62.6), (26.4, 62.6), (26.4, 59.4), (29.0, 57.0), (28.6, 48.6), (26.8, 45.6)]
+    b.poly(T([(x + 1.0, y + 1.0) for x, y in stem]), blue[3])
+    b.poly(T(stem), blue[1])                                 # the handle: the flower of the papyrus spreads under the disc
+    b.poly(T([(23.6, 39.6), (31.0, 39.6), (30.6, 48.6), (31.0, 57.0), (29.6, 62.6), (26.4, 62.6), (26.4, 59.4), (29.0, 57.0), (28.6, 48.6), (26.8, 45.6)]), blue[0])
+    b.poly(T([(36.0, 39.6), (40.4, 39.6), (37.2, 45.6), (35.4, 48.6), (35.0, 57.0), (37.6, 59.4), (37.6, 62.6), (34.6, 62.6), (33.6, 57.0), (33.8, 48.6)]), blue[2])
+    b.poly(T([(28.0, 47.8), (36.0, 47.8), (35.6, 51.2), (28.4, 51.2)]), "#e6bc48")              # a band of gold
+    b.poly(T(oval(32.8, 22.6, 22.6, 19.6)), copper[4])       # the disc: its dark edge first
+    b.poly(T(oval(32, 21.8, 22.2, 19.2)), copper[3])
+    b.poly(T(oval(31.2, 21.0, 20.6, 17.6)), copper[2])
+    b.poly(T(loop([(12.4, 20), (17.2, 9.4), (28, 4.2), (40.4, 5.6), (32.6, 10.4), (24, 16.4), (19, 25), (15.2, 30.6)], 5)), copper[1])        # the light sweeps across it
+    l.poly(T([(20.0, 24.6), (33.4, 8.4), (39.0, 9.4), (24.8, 27.4)]), copper[0], 0.95)
+    l.poly(T([(29.6, 30.4), (44.0, 13.4), (46.4, 15.4), (32.4, 32.4)]), copper[1], 0.9)
+    ring = T(oval(32, 21.8, 22.2, 19.2))
+    l.line(ring[1:13], copper[4], 1.6, 0.85)                 # the shadow-side edge
+    l.line(ring[15:25], copper[0], 1.2, 0.85)
+    sx, sy = T([(19.8, 11.6)])[0]
+    l.poly([(sx, sy - 5.0), (sx + 1.1, sy - 1.1), (sx + 5.0, sy), (sx + 1.1, sy + 1.1), (sx, sy + 5.0), (sx - 1.1, sy + 1.1), (sx - 5.0, sy), (sx - 1.1, sy - 1.1)], "#ffffff")
+    l.line(T([(28.4, 51.4), (35.6, 51.4)]), "#8a6418", 1.0)
+    l.line(T([(28.2, 48.0), (31.4, 48.0)]), "#fff2b0", 1.0)
+    for x in (27.6, 32.0, 36.4):                             # the petals, cut into the flare
+        l.line(T([(x, 40.4), (lerp(x, 32, 0.5), 45.8)]), blue[2], 0.9, 0.9)
+    l.line(T([(23.8, 39.9), (40.2, 39.9)]), blue[0], 0.9, 0.9)
+    for y in (54.0, 56.4):
+        l.line(T([(29.2, y), (34.8, y)]), blue[2], 0.8, 0.8)
+
+
+def _folded(b, l, a, u, v, drop, tones, layers=3):
+    """A folded cloth seen from above and in front: its top (far left corner `a`, edges `u` going right and
+    back, `v` coming right and toward us), and the two edges of the pile toward us, `drop` deep, with the folds
+    showing. -> a function giving places on the top."""
+    top = lambda s, t, d=0.0: (a[0] + u[0] * s + v[0] * t, a[1] + u[1] * s + v[1] * t + d)
+    b.poly(loop([top(0, 0), top(0, 1), top(0, 1, drop), top(0, 0.5, drop + 0.8), top(0, 0, drop)], 3), tones[1])            # the edge to the left, in half light
+    b.poly(loop([top(0, 1), top(1, 1), top(1, 1, drop), top(0.5, 1, drop + 1.2), top(0, 1, drop)], 3), tones[2])            # the edge to the right, in shade
+    b.poly(loop([top(0, 0), top(0.5, -0.03), top(1, 0), top(1.03, 0.5), top(1, 1), top(0.5, 1.03), top(0, 1), top(-0.03, 0.5)], 4), tones[0])
+    for k in range(1, layers):                               # the folds of the pile
+        d = drop * k / layers
+        l.line([top(0, 0.02, d), top(0, 0.5, d + 0.5), top(0, 1, d)], tones[3], 0.9, 0.6)
+        l.line([top(0, 1, d), top(0.5, 1, d + 0.8), top(0.98, 1, d)], tones[3], 1.0, 0.8)
+    l.line([top(0, 1, 0.4), top(0, 1, drop)], tones[3], 0.9, 0.6)
+    l.line([top(0, 0), top(0, 1), top(1, 1)], "#ffffff", 0.9, 0.55)
+    return top
+
+
+def toga(b, l):
+    """The senator's toga, folded: white wool with a purple stripe along its edge."""
+    tones = ("#fdf9ee", "#dfd9d2", "#b4adc4", "#8a84a2")
+    top = _folded(b, l, (6, 24), (26, -12), (27, 14), 15, tones)
+    purple = ("#8a44a4", "#5c2876", "#b876cc")
+    s0, s1 = 0.56, 0.78
+    b.poly([top(s0, 0), top(s1, 0), top(s1, 1), top(s0, 1)], purple[0])                    # the stripe across the top ...
+    b.poly([top(s0, 1), top(s1, 1), top(s1, 1, 15.3), top(s0, 1, 15.9)], purple[1])        # ... and down over the edge
+    l.line([top(s0, 0), top(s0, 1), top(s0, 1, 15.8)], purple[1], 0.9, 0.8)
+    l.line([top(s1, 0.02), top(s1, 1)], purple[2], 0.9, 0.9)
+    for d in (5, 10):
+        l.line([top(s0, 1, d + 0.5), top(s1, 1, d + 0.3)], "#3c1650", 0.9, 0.7)
+    b.poly(loop([top(0.06, 0.16), top(0.46, 0.1), top(0.48, 0.5), top(0.28, 0.86), top(0.05, 0.8)], 4), "#ffffff")       # the light on the top fold
+    l.line([top(0.06, 0.55), top(0.5, 0.5)], tones[1], 1.0, 0.8)                           # a soft crease
+
+
+def tunic(b, l):
+    """A small plain tunic of undyed wool, folded with its sleeves across its front and tied with its rope belt."""
+    c = (32, 33)
+    T = lambda pts: rot(pts, -8, c)
+    wool = ("#f4e4bc", "#dcc594", "#b39a6a", "#7c6440")
+    b.poly(T(rrect(33.4, 36.4, 22.6, 22.6, 4)), wool[3])                                    # the pile's shadow side
+    b.poly(T(rrect(32, 35, 22, 22, 4)), wool[1])
+    b.poly(T([(11, 15), (32, 15), (30, 34), (11, 36)]), wool[0])                           # the half toward the sun
+    b.poly(T([(10.6, 50), (53.4, 50), (53.4, 55.4), (50, 57), (14, 57), (10.6, 55.4)]), wool[2])     # the fold along the bottom
+    for (x0, x1, x2, x3, tone) in ((10.4, 21.6, 26.6, 12.4, wool[0]), (53.6, 42.4, 37.4, 51.6, wool[2])):                 # the sleeves, folded across
+        b.poly(T([(x0, 13.4), (x1, 13.4), (x2, 33.6), (x3, 36.6)]), tone)
+        l.line(T([(x1, 13.6), (x2, 33.6), (x3, 36.6)]), wool[3], 1.0, 0.8)
+    l.poly(T([(24.6, 12.8)] + [(32 + math.cos(a) * 7.4, 13.0 + math.sin(a) * 6.6) for a in np.linspace(math.pi, 0, 9)] + [(39.4, 12.8)]), "#5c4830")       # the neck
+    l.line(T([(32 + math.cos(a) * 7.4, 13.0 + math.sin(a) * 6.6) for a in np.linspace(math.pi, 0, 9)]), wool[0], 1.2, 0.95)
+    l.line(T([(32, 19.8), (32, 26.6)]), wool[3], 1.0, 0.8)
+    l.line(T([(10.6, 50), (53.4, 50)]), wool[3], 1.0, 0.75)
+    belt = [(10.2, 42.4), (20, 41.6), (32, 42.6), (44, 41.6), (53.8, 42.4)]
+    l.line(T(belt), "#4a3018", 3.4)                          # the belt: a cord, twisted
+    l.line(T(belt), "#b88a4a", 2.0)
+    for x in range(12, 53, 3):
+        l.line(T([(x, 41.2), (x + 1.4, 43.4)]), "#4a3018", 0.8, 0.9)
+    l.poly(T(oval(32, 42.4, 3.4, 2.9)), "#8a6030")           # its knot, and the two ends
+    l.line(T([(31, 44.6), (28.4, 53.6)]), "#4a3018", 2.6)
+    l.line(T([(31, 44.6), (28.4, 53.6)]), "#b88a4a", 1.4)
+    l.line(T([(33.4, 44.6), (36.4, 52.4)]), "#4a3018", 2.6)
+    l.line(T([(33.4, 44.6), (36.4, 52.4)]), "#9a7038", 1.4)
+
+
+def breakfast(b, l):
+    """The soothsayer's breakfast: a round loaf and a sausage, in a cloth twisted shut at the top."""
+    cloth = ("#f6f0e0", "#d2cabc", "#a39cae", "#74708a")
+    b.poly(loop([(5, 47), (10, 36), (22, 31), (40, 31), (54, 36), (59, 47), (53, 57), (36, 61.4), (17, 60), (8, 55)], 5), cloth[1])        # the cloth, open
+    b.poly(loop([(41, 33), (54, 36.6), (59, 47), (53, 57), (40, 60.6), (45, 48)], 5), cloth[2])
+    b.poly(loop([(8.6, 37), (15, 24.6), (30, 19.6), (41, 25), (43, 37), (34, 46), (18, 46.6), (10, 43)], 5), "#8a5420")                    # the loaf: its crust
+    b.poly(loop([(10.4, 35.6), (16, 25.4), (29.6, 21), (39.6, 25.6), (41, 34), (33, 40.6), (19, 41.4), (12, 39)], 5), "#d99a44")
+    b.poly(loop([(12.6, 33.4), (17.6, 26.4), (29, 22.6), (36.6, 25.6), (30, 29), (20, 31.4), (15, 35.4)], 5), "#f6cc7a")
+    for (x0, y0, x1, y1) in ((25.6, 31.4, 15.6, 27.6), (25.6, 31.4, 30.4, 22.4), (25.6, 31.4, 38.6, 30.6), (25.6, 31.4, 20, 39.6), (25.6, 31.4, 32, 38.6)):
+        l.line([(x0, y0), (x1, y1)], "#8a5420", 1.2, 0.8)    # scored into wedges
+    saus = curve([(33, 49.6), (40, 45), (48, 38), (55.6, 29)], 7)
+    b.taper(saus, "#5a2018", 10.4, 9.0)                      # the sausage
+    b.taper([(x - 0.7, y - 0.9) for x, y in saus], "#a84434", 7.4, 6.2)
+    l.taper([(x - 1.9, y - 2.3) for x, y in saus[2:-3]], "#e8846a", 1.9, 1.3)
+    for (px, py), (qx, qy) in ((saus[0], saus[1]), (saus[-1], saus[-2])):                  # its tied ends
+        l.line([(px, py), (px + (px - qx) * 1.3, py + (py - qy) * 1.3)], "#5a2018", 2.2)
+    b.poly(loop([(6, 49), (16, 44.6), (30, 47.6), (44, 50.6), (57, 46.4), (53, 57), (36, 61.4), (17, 60), (8, 55)], 5), cloth[0])          # the near fold of the cloth, over them
+    b.poly(loop([(34, 52.6), (46, 51.4), (57, 46.6), (53, 57), (40, 60.8)], 4), cloth[1])
+    for run in ([(10, 51), (20, 49.6), (30, 52.6)], [(14, 56.6), (26, 56), (36, 58.6)], [(42, 54.6), (50, 53.4)]):
+        l.line(curve(run, 4), cloth[2], 1.0, 0.85)
+    for x in (14, 22, 30, 46):                               # a blue stripe woven in
+        l.line([(x, 46.8 + (x - 30) * 0.02), (x + 0.8, 60)], "#5a86c4", 1.1, 0.5)
+    b.poly(loop([(46, 28), (49, 18.6), (53.6, 13.4), (56.6, 16.6), (54, 23), (55, 30), (50, 33.6)], 4), cloth[1])                          # the corners twisted together
+    b.poly(loop([(46.6, 27.6), (49, 19), (52.6, 15), (51.6, 22), (51, 30)], 4), cloth[0])
+    l.line([(47, 27.6), (54.6, 30.4)], cloth[3], 1.9, 0.9)
+    l.line([(47, 26.6), (54.6, 29.4)], "#5a86c4", 0.9, 0.9)
+
+
+def incense(b, l):
+    """A little wooden box with a lid and a bronze knob; a few tears of the resin beside it."""
+    wood = ("#e6b470", "#c08848", "#8a5a2e", "#553218")
+    a, u, v = (7, 22), (24, -10), (24, 13)
+    top = lambda s, t, d=0.0: (a[0] + u[0] * s + v[0] * t, a[1] + u[1] * s + v[1] * t + d)
+    drop = 23
+    b.poly([top(0, 0), top(0, 1), top(0, 1, drop), top(0, 0, drop)], wood[1])              # the side to the left, in half light
+    b.poly([top(0, 1), top(1, 1), top(1, 1, drop), top(0, 1, drop)], wood[2])              # the side to the right, in shade
+    e = 0.05                                                                               # the lid stands out a little all round
+    b.poly([top(-e, -e), top(-e, 1 + e), top(-e, 1 + e, 6), top(-e, -e, 6)], wood[1])
+    b.poly([top(-e, 1 + e), top(1 + e, 1 + e), top(1 + e, 1 + e, 6), top(-e, 1 + e, 6)], wood[2])
+    b.poly([top(-e, -e), top(1 + e, -e), top(1 + e, 1 + e), top(-e, 1 + e)], wood[0])
+    b.poly([top(0.1, 0.1), top(0.9, 0.1), top(0.9, 0.9), top(0.1, 0.9)], "#f2cc88")
+    l.line([top(0.1, 0.1), top(0.9, 0.1), top(0.9, 0.9), top(0.1, 0.9), top(0.1, 0.1)], wood[2], 0.9, 0.75)
+    l.line([top(-e, -e, 6.5), top(-e, 1 + e, 6.5), top(1 + e, 1 + e, 6.5)], wood[3], 1.4, 0.9)       # the dark line under the lid
+    l.line([top(-e, -e), top(-e, 1 + e), top(1 + e, 1 + e)], "#fbdca0", 0.9, 0.85)
+    for d in (12.0, 17.5):                                   # the grain of the wood
+        l.line([top(0, 0.05, d), top(0, 0.96, d + 0.3)], wood[3], 0.8, 0.4)
+        l.line([top(0.04, 1, d + 0.3), top(0.96, 1, d)], wood[3], 0.8, 0.5)
+    l.line([top(0, 1, 6.6), top(0, 1, drop)], wood[3], 1.0, 0.7)
+    l.line([top(0, 0, drop), top(0, 1, drop), top(1, 1, drop)], wood[3], 1.2, 0.8)
+    l.poly([top(0.36, 1, 12), top(0.64, 1, 12), top(0.64, 1, 17), top(0.36, 1, 17)], "#d8a43c")       # a bronze plate on the front
+    l.poly([top(0.36, 1, 12), top(0.64, 1, 12), top(0.64, 1, 13.2), top(0.36, 1, 13.2)], "#fff0b0")
+    kx, ky = top(0.5, 0.5)
+    l.ellipse(kx + 0.7, ky - 1.4, 3.9, 3.4, "#6a4a16")       # the knob
+    l.ellipse(kx, ky - 2.1, 3.3, 2.9, "#d8a43c")
+    l.ellipse(kx - 1.0, ky - 3.1, 1.2, 1.0, "#fff0b0")
+    for (x, y, r) in ((48.6, 56.6, 2.9), (55.4, 53.0, 2.3), (56.0, 59.6, 2.0), (42.6, 60.0, 1.9)):       # the incense itself: tears of amber resin
+        l.poly(loop([(x - r, y + r * 0.2), (x - r * 0.4, y - r * 0.9), (x + r * 0.7, y - r * 0.7), (x + r, y + r * 0.4), (x, y + r * 0.9)], 3), "#a8641c")
+        l.poly(loop([(x - r * 0.9, y), (x - r * 0.4, y - r * 0.8), (x + r * 0.5, y - r * 0.6), (x + r * 0.2, y + r * 0.2)], 3), "#f6c458")
+        l.ellipse(x - r * 0.35, y - r * 0.4, r * 0.3, r * 0.25, "#fff4c8")
+
+
+def coin(b, l):
+    """A new silver coin. The stern man on it is nobody: a heavy brow, a set jaw, hair cropped short."""
+    silver = ("#ffffff", "#e6ebf0", "#aab4c0", "#7c8796", "#4a5260")
+    b.poly(oval(33.4, 33.6, 26, 25.4, -8), silver[4])        # its thickness shows on the shadow side
+    b.poly(oval(32, 32, 26, 25.4, -8), silver[1])            # the raised rim
+    b.poly(oval(32, 32, 22.6, 22.0, -8), silver[2])          # the field, a tone down, so the head stands off it
+    b.poly(loop([(42, 12.6), (51, 20), (54.2, 32), (50.4, 44), (42, 52), (47.6, 41), (48.6, 30), (46, 20)], 5), silver[3])      # the field falls away from the sun
+    b.poly(loop([(12, 30), (14.6, 20), (22, 12.6), (30, 10.6), (22, 17), (17, 25), (15.6, 36)], 5), "#c6ced8")
+    head = [(24.6, 52.6), (23.4, 46.0), (20.6, 39.4), (19.8, 31.0), (21.8, 23.6), (26.6, 18.6), (33.0, 17.0), (38.6, 19.0), (41.0, 23.6), (41.4, 27.0),
+            (43.2, 27.8), (42.2, 30.0), (46.6, 35.2), (43.6, 36.6), (44.2, 38.2), (42.8, 39.2), (43.8, 40.8), (42.6, 42.4), (43.2, 45.4), (40.6, 47.8),
+            (37.0, 47.6), (36.6, 50.0), (39.8, 53.6), (32, 55.2)]
+    b.poly([(x + 1.5, y + 1.6) for x, y in head], silver[4])  # the relief throws a small shadow
+    b.poly(head, "#f6f8fa")
+    hair = [(21.8, 23.6), (26.6, 18.6), (33.0, 17.0), (38.6, 19.0), (40.2, 22.0), (36.0, 23.4), (31.4, 23.8), (28.8, 27.6), (28.2, 33.6), (25.4, 37.6), (24.0, 44.4), (20.6, 39.4), (19.8, 31.0)]
+    b.poly(hair, silver[3])                                  # the cropped hair
+    b.poly([(33.6, 46.6), (37.0, 47.6), (36.6, 50.0), (39.8, 53.6), (32, 55.2), (26.6, 54.0), (28.6, 49.6)], "#cdd5dd")       # the neck, under the jaw
+    l.line(head[9:21], silver[4], 1.1, 0.75)                 # the profile itself, cut crisp
+    l.line([(38.4, 28.2), (43.0, 28.0)], silver[4], 1.6)     # the brow, low over the eye
+    l.line([(39.4, 30.5), (41.6, 30.5)], silver[4], 1.3, 0.95)
+    l.line([(40.0, 39.8), (42.8, 39.3)], silver[4], 1.2)     # the mouth, shut tight
+    l.line([(39.0, 41.4), (40.0, 39.8)], silver[4], 0.9, 0.8)
+    l.line(curve([(31.6, 31.0), (29.6, 33.4), (31.2, 36.8), (33.4, 35.0)], 4), silver[4], 1.1, 0.9)       # the ear
+    l.line([(33.6, 46.0), (36.6, 44.4), (38.6, 41.0)], silver[3], 1.0, 0.85)                               # the line of the jaw
+    l.line([(43.6, 36.6), (41.8, 36.2)], silver[3], 0.9, 0.8)                                              # the nostril
+    for (x0, y0, x1, y1) in ((24.6, 23.6, 22.4, 29.0), (28.6, 20.4, 25.6, 26.0), (33.0, 19.2, 30.4, 22.6), (37.4, 20.2, 35.4, 22.4), (22.0, 32.6, 24.6, 37.0), (25.6, 29.0, 26.4, 33.6)):
+        l.line([(x0, y0), (x1, y1)], silver[4], 0.9, 0.75)   # hair: short strokes
+        l.line([(x0 + 1.2, y0 + 0.3), (x1 + 1.2, y1 + 0.3)], silver[1], 0.7, 0.6)
+    for i in range(26):                                      # beads round the rim
+        ang = i / 26 * 2 * math.pi
+        x, y = rot([(32 + math.cos(ang) * 24.2, 32 + math.sin(ang) * 23.6)], -8)[0]
+        lit = math.cos(ang - math.radians(225))
+        l.ellipse(x, y, 1.15, 1.15, silver[0] if lit > 0.25 else (silver[2] if lit > -0.4 else silver[3]))
+    ring = oval(32, 32, 26, 25.4, -8)
+    l.line(ring[13:24], silver[0], 1.3, 0.9)                 # the rim, bright toward the sun
+    l.line(ring[0:9], silver[4], 1.2, 0.7)
+    inner = oval(32, 32, 22.6, 22.0, -8)
+    l.line(inner[13:24], silver[3], 0.9, 0.6)
+    l.line(inner[0:9], silver[0], 0.9, 0.7)
+    sx, sy = 14.6, 13.6                                      # it is new: it glints
+    l.poly([(sx, sy - 6.4), (sx + 1.3, sy - 1.3), (sx + 6.4, sy), (sx + 1.3, sy + 1.3), (sx, sy + 6.4), (sx - 1.3, sy + 1.3), (sx - 6.4, sy), (sx - 1.3, sy - 1.3)], "#ffffff")
+
+
+def note(b, l):
+    """A yellow sticky note with a quick scribble in blue pen, one corner curling up."""
+    c = (32, 32)
+    yellow = ("#fff6a8", "#fbe45c", "#e4c63c", "#b8962a")
+    sq = [(9, 9), (55, 9), (55, 44), (44, 56), (9, 56)]
+    b.poly(rot(sq, -7, c), yellow[1])
+    b.poly(rot([(9, 9), (55, 9), (55, 17), (9, 17)], -7, c), yellow[2])                    # the gummed strip along the top
+    b.poly(rot([(9, 17), (30, 17), (22, 44), (9, 50)], -7, c), mix(yellow[1], yellow[0], 0.6))       # it bows a little: lighter toward the sun
+    b.poly(rot([(40, 44), (55, 30), (55, 44), (44, 56), (30, 56)], -7, c), mix(yellow[1], yellow[2], 0.55))   # and darker where the corner lifts
+    curl = rot([(55, 44), (44, 56), (42.6, 45.4)], -7, c)    # the curling corner: its pale underside, its shadow
+    l.poly(rot([(55, 44), (44, 56), (46.6, 57.4), (57, 46.6)], -7, c), yellow[3], 0.9)
+    l.poly(curl, "#fffbd0")
+    l.line([curl[0], curl[2], curl[1]], yellow[3], 1.0, 0.8)
+    pen = "#2a48a4"
+    rows = [(15, 25, 47, 4.4, 0.0), (15, 33, 44, 5.0, 1.3), (15, 41, 33, 4.6, 2.2)]
+    for (x0, y0, x1, wave, phase) in rows:                   # writing nobody can read
+        pts = []
+        steps = int((x1 - x0) * 1.5)
+        for i in range(steps + 1):
+            x = lerp(x0, x1, i / steps)
+            y = y0 + math.sin(x * 1.45 + phase) * 2.1 * (0.55 + 0.45 * math.sin(x * 0.37 + phase * 2)) + (x - x0) * 0.02
+            pts.append((x + math.cos(x * 1.45 + phase) * 0.9, y))
+        l.line(rot(pts, -7, c), pen, 1.5)
+    l.line(rot(curve([(14.6, 48.6), (24, 47.4), (33, 49.6), (38, 47.2)], 5), -7, c), pen, 1.3)        # and underlined
+    l.line(rot([(55, 9), (55, 44)], -7, c), yellow[3], 1.0, 0.7)
+
+
+def phone(b, l):
+    """The boy's phone, dead: a dark blank screen in a silver frame, one small crack in a corner of the glass."""
+    c, deg = (32.0, 32.0), 13
+    T = lambda pts: rot(pts, deg, c)
+    metal = ("#f2f5f8", "#b9c2cc", "#7c8794", "#3c424e")
+    b.poly(T(rrect(33.5, 33.6, 16.4, 27.6, 6.0)), metal[3])                       # its thickness, on the shadow side
+    b.poly(T(rrect(32, 32, 16.4, 27.6, 6.0)), metal[1])                           # the frame
+    b.poly(T(rrect(31.3, 31.3, 15.6, 26.8, 5.6)), metal[0])
+    b.poly(T(rrect(32, 32, 14.2, 25.4, 4.4)), "#14161d")                          # the glass, black to its edge
+    b.poly(T(rrect(32, 32.6, 12.6, 21.4, 2.2)), "#1b2434")                        # the screen: nothing on it
+    b.poly(T([(19.6, 11.4), (33.6, 11.4), (19.6, 39.6)]), "#2b3a54")              # the sky in the glass
+    b.poly(T([(19.6, 43.6), (37.6, 11.4), (41.0, 11.4), (19.6, 49.6)]), "#232f45")
+    l.line(T([(27.6, 8.4), (36.4, 8.4)]), "#05060a", 1.5)                         # the slot it speaks through
+    l.line(T([(27.8, 9.3), (36.2, 9.3)]), "#4a5262", 0.7, 0.8)
+    px, py = T([(39.6, 8.4)])[0]
+    l.ellipse(px, py, 1.1, 1.1, "#3b5078")
+    l.line(T([(48.5, 22.0), (48.5, 31.0)]), metal[2], 1.7)                        # a button on its edge
+    l.line(T([(48.0, 22.2), (48.0, 30.8)]), metal[0], 0.7, 0.9)
+    crack = "#dfe8f2"                                                             # one small crack, in from the corner
+    l.line(T([(44.4, 53.6), (41.4, 50.0), (38.4, 49.0), (36.2, 46.0)]), crack, 1.0)
+    l.line(T([(41.4, 50.0), (41.8, 46.2)]), crack, 0.8, 0.9)
+    edge = T(rrect(32, 32, 14.2, 25.4, 4.4))
+    l.line(edge + edge[:1], "#05060a", 0.8, 0.8)
+    rim = T(rrect(31.3, 31.3, 15.6, 26.8, 5.6))
+    l.line(rim[14:28] + rim[:1], "#ffffff", 1.1, 0.9)                             # the sun along its top and left
+
+
+def quarter(b, l):
+    """A quarter out of a pocket: a plain grey coin lying at a tilt, its milled edge toward us, a plain man's head
+    on it and marks round the rim that are not letters."""
+    grey = ("#e2e2dd", "#c0c0ba", "#a6a6a1", "#85857f", "#55555a")              # a duller, warmer grey than the Roman silver
+    cx, cy, rx, ry, deg, thick = 32.0, 28.6, 27.4, 21.4, -9, 5.4
+    T = lambda pts: rot(pts, deg, (cx, cy))
+    face = oval(cx, cy, rx, ry, deg, 40)
+    b.poly([(x, y + thick) for x, y in face], grey[3])                            # the edge of it
+    b.poly(face, grey[1])                                                         # the raised rim
+    b.poly(oval(cx, cy, rx - 3.4, ry - 2.8, deg, 40), grey[2])                    # the field
+    b.poly(T(loop([(cx + 6, cy - 15), (cx + 17, cy - 9), (cx + 22, cy + 1), (cx + 17, cy + 11), (cx + 6, cy + 16), (cx + 13, cy + 8), (cx + 15, cy - 1), (cx + 12, cy - 9)], 5)), grey[3])
+    k = ry / rx                                                                   # the head lies in the coin's own tilt
+    H = lambda pts: T([(cx + x, cy + y * k) for x, y in pts])
+    head = [(9.6, 19.0), (10.2, 10.0), (13.0, 2.0), (12.6, -7.0), (8.6, -14.0), (1.0, -17.0), (-6.4, -15.0), (-9.6, -10.0), (-10.4, -5.4), (-9.6, -3.6),
+            (-14.4, 2.0), (-11.4, 3.2), (-12.0, 5.0), (-10.6, 6.0), (-11.4, 7.8), (-10.6, 11.2), (-6.6, 13.4), (-3.6, 12.8), (-3.2, 16.0), (-8.0, 21.0), (1.0, 23.0)]
+    b.poly(H([(x + 1.0, y + 1.3) for x, y in head]), grey[3])                     # low relief: a thin shadow under it
+    b.poly(H(head), mix(grey[1], grey[2], 0.35))
+    b.poly(H([(12.6, -7.0), (8.6, -14.0), (1.0, -17.0), (-6.4, -15.0), (-4.0, -11.0), (0.6, -9.6), (2.6, -4.6), (6.0, -1.0), (7.0, 6.0), (10.2, 10.0), (13.0, 2.0)]), mix(grey[2], grey[3], 0.7))      # his hair, brushed back
+    l.line(H(head[4:8]), grey[0], 0.9, 0.9)                                       # the light along the crown
+    l.line(H(head[7:18]), grey[4], 1.0, 0.85)                                     # the profile itself: the one firm line on it
+    l.line(H([(-9.6, -5.2), (-6.6, -5.6)]), grey[4], 1.2, 0.9)                    # brow, eye, mouth: plain marks
+    l.line(H([(-8.2, -3.2), (-6.6, -3.2)]), grey[4], 1.0, 0.9)
+    l.line(H([(-10.6, 6.0), (-8.0, 6.4)]), grey[4], 1.0, 0.9)
+    l.line(H(curve([(2.6, -1.6), (4.6, 0.6), (3.4, 3.6), (1.6, 2.2)], 4)), grey[4], 0.9, 0.8)
+    for (x0, y0, x1, y1) in ((2.0, -14.6, 6.0, -8.6), (7.6, -11.6, 9.0, -4.0), (5.4, -5.0, 9.6, 3.0)):
+        l.line(H([(x0, y0), (x1, y1)]), grey[3], 0.8, 0.8)
+    for a in list(range(200, 341, 14)) + list(range(66, 115, 12)):                # where the words and the year would be: blank blocks
+        ca, sa = math.cos(math.radians(a)), math.sin(math.radians(a))
+        p0 = (cx + ca * (rx - 4.6), cy + sa * (ry - 3.8))
+        p1 = (cx + ca * (rx - 7.4), cy + sa * (ry - 6.2))
+        l.line(T([p0, p1]), grey[4], 1.5, 0.75)
+    for i in range(27):                                                           # the milling of the edge
+        a = math.radians(8 + i * 164 / 26)
+        x, y = T([(cx + math.cos(a) * rx, cy + math.sin(a) * ry)])[0]
+        l.line([(x, y + 0.6), (x, y + thick - 0.3)], grey[4] if i % 2 else grey[1], 0.9, 0.9)
+    l.line(face[0:21], grey[4], 1.0, 0.6)                                         # the rim's near lip
+    l.line(face[21:36], grey[0], 1.2, 0.9)                                        # and its far one, in the light
+    inner = oval(cx, cy, rx - 3.4, ry - 2.8, deg, 40)
+    l.line(inner[21:36], grey[3], 0.9, 0.7)
+    l.line(inner[1:19], grey[0], 0.8, 0.6)
+
+
+def gum(b, l):
+    """Half a pack of chewing gum: a green paper sleeve torn open, the foil inside it, two sticks pushed up out of the end."""
+    ax, ay, ux, uy = 6.0, 55.5, 0.74, -0.673                 # the closed end of the pack, and the way it points
+    nx, ny = -uy, ux                                         # across it, toward the shadow side
+    ex, ey = 0.8, 5.2                                        # how its thickness shows
+
+    def at(t, w, down=0.0):
+        return (ax + ux * t + nx * w + ex * down, ay + uy * t + ny * w + ey * down)
+
+    foil = ("#ffffff", "#e9eef3", "#bcc7d2", "#8996a6", "#5d6878")
+    green = ("#9be6b0", "#48b874", "#2e8a52", "#1f6a3e")
+    W = 8.6
+    # the far stick, then the near one: each a flat strip of foil with a pinked end
+    for (t0, t1, w0, w1, half, tone, lit) in ((22, 55.0, -3.4, -5.2, 5.2, foil[2], foil[1]), (22, 48.5, 3.2, 5.0, 5.2, foil[1], foil[0])):
+        teeth = [at(t1 + (1.6 if i % 2 else 0.0), lerp(w1 - half, w1 + half, i / 6)) for i in range(7)]
+        b.poly([at(t0, w0 - half, 0.34), at(t1, w1 - half, 0.34)] + [(x + ex * 0.34, y + ey * 0.34) for x, y in teeth] + [at(t0, w0 + half, 0.34)], foil[4])      # its thin edge
+        b.poly([at(t0, w0 - half), at(t1, w1 - half)] + teeth + [at(t0, w0 + half)], tone)
+        b.poly([at(t0, w0 - half), at(t1, w1 - half), at(t1, w1 - half + 3.4), at(t0, w0 - half + 3.4)], lit)
+        l.line([at(t0 + 14, w0 + half - 1.4), at(t1 - 1.0, w1 + half - 1.6)], foil[3], 0.9, 0.7)
+        l.line([at(t0 + 12, w0 - half + 1.2), at(t1 - 1.5, w1 - half + 1.2)], foil[0], 1.0, 0.95)
+        l.line(teeth, foil[3], 0.8, 0.8)
+        for t in (t1 - 7.0, t1 - 13.0):                                           # the creases of its wrapping
+            l.line([at(t, w1 - half + 1.0), at(t + 1.2, w1 + half - 1.0)], foil[3], 0.7, 0.55)
+    # the foil the pack is lined with, torn and crumpled at the open end
+    b.poly([at(26, -W + 0.8), at(37.0, -W + 1.4), at(35.0, -W * 0.45), at(38.4, -0.6), at(35.6, W * 0.4), at(37.6, W - 0.6), at(26, W - 0.8)], foil[2])
+    b.poly([at(26, -W + 0.8), at(37.0, -W + 1.4), at(35.0, -W * 0.45), at(36.4, -1.6), at(26, -1.6)], foil[1])
+    for (t, w) in ((33.6, -5.4), (34.6, 2.4), (33.0, 5.6)):
+        l.line([at(t, w), at(t + 2.6, w + 1.4)], foil[3], 0.8, 0.7)
+    # the paper sleeve: its end toward us, its side, its top
+    b.poly([at(0, -W), at(0, W), at(0, W, 1), at(0, -W, 1)], green[3])
+    b.poly([at(0, W), at(31.0, W), at(31.0, W, 1), at(0, W, 1)], green[2])
+    tear = [at(30.0, -W), at(32.6, -W * 0.62), at(30.6, -W * 0.24), at(33.0, W * 0.16), at(30.8, W * 0.58), at(32.4, W)]
+    b.poly([at(0, -W)] + tear + [at(0, W)], green[1])
+    b.poly([at(0, -W), at(30.0, -W), at(30.6, -W + 3.0), at(0, -W + 3.0)], green[0])                               # the top's far edge, in the sun
+    b.poly(loop([at(5.0, -3.6), at(9.0, -5.2), at(22.0, -5.2), at(26.0, -3.6), at(26.0, 3.6), at(22.0, 5.2), at(9.0, 5.2), at(5.0, 3.6)], 3), "#f6fbf2")     # a blank white patch where a name would be
+    for (t, w, turn) in ((12.6, -0.6, 1), (18.4, 0.6, -1)):                                                        # two mint leaves on it, and no word
+        leaf = [at(t - 3.4, w - 1.6 * turn), at(t, w - 2.8 * turn), at(t + 3.4, w - 0.4 * turn), at(t, w + 1.2 * turn)]
+        l.poly(loop(leaf, 3), green[1])
+        l.line([at(t - 3.0, w - 1.4 * turn), at(t + 3.0, w - 0.4 * turn)], green[3], 0.7, 0.8)
+    l.line([at(2.6, -W + 0.4), at(2.6, W - 0.4)], green[3], 1.1, 0.75)                                             # a dark band at the closed end
+    l.line(tear, "#f6fbf2", 1.0, 0.9)                                                                              # the torn edge shows the paper's white
+    l.line([at(0, W), at(31.4, W)], green[0], 0.8, 0.7)
+    l.line([at(0, W, 1), at(31.0, W, 1)], green[3], 1.0, 0.8)
+    l.line([at(0, -W), at(0, W), at(0, W, 1)], green[3], 0.9, 0.6)
+
+
+ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
+             coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
+ITEMS["pass"] = pass_
+ITEMS.update(phone=phone, quarter=quarter, gum=gum)
+ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",
+         "phone", "quarter", "gum"]
+
+
+# ---------------------------------------------------------------- painting one
+def paint(name, seed=None, brush=True):
+    """-> the picture as floats (64, 64, 4): color and coverage."""
+    seed = (sum(ord(ch) for ch in name) if seed is None else seed)
+    b, l = Sheet((S, S), ss=6), Sheet((S, S), ss=6)
+    ITEMS[name](b, l)
+    bc, ba = b.done()
+    lc, la = l.done()
+    alpha = np.maximum(ba, la)
+    inside = bc[ba > 0.9]
+    flat = np.empty((S, S, 3), dtype=F32)
+    flat[...] = inside.mean(axis=0) if len(inside) else 0.5  # (the brush must not drag a strange color in at the edges)
+    solid = bc * ba[..., None] + flat * (1 - ba[..., None])
+    for _ in range(3):                                       # spread the thing's own edge colors outward a little
+        grown = blur(solid * (ba[..., None] > 0.02), 1.2) / np.maximum(blur((ba > 0.02).astype(F32), 1.2), 1e-3)[..., None]
+        solid = np.where(ba[..., None] > 0.5, solid, grown * 0.85 + flat * 0.15)
+    pic = strokes(solid.astype(F32), sizes=(4, 2), seed=seed, density=1.7, jitter=0.028, keep=0.58) if brush else solid.copy()
+    over(pic, lc, la)
+    x, y = grid((S, S))
+    soft = blur(alpha, 0.5)
+    lee = np.clip(alpha - sample(soft, x + 1.5, y + 1.5), 0, 1)        # the edge away from the light: darker and cooler, and crisp
+    sun = np.clip(alpha - sample(soft, x - 1.3, y - 1.3), 0, 1)        # the edge toward it: a touch lighter
+    tint(pic, "#3a2a4a", np.clip(lee * 0.85, 0, 1))
+    glow(pic, "#fff4d8", np.clip(sun * 0.22, 0, 1))
+    pic = grain(np.clip(pic, 0, 1), seed + 3, 0.014)
+    return np.dstack([pic, np.clip(alpha, 0, 1)])
+
+
+def save(name, folder="out/items"):
+    rgba = paint(name)
+    Image.fromarray((np.clip(rgba, 0, 1) * 255 + 0.5).astype(np.uint8), "RGBA").save(f"{folder}/{name}.png", optimize=True)
+    return rgba
+
+
+def sheet(folder="out/items", out="out/items-sheet.png", k=4):
+    """Every picture at 4x on a dark and a light ground, and at its real size and at half size underneath."""
+    cols = 5
+    rows = (len(ORDER) + cols - 1) // cols
+    cell = S * k + 16
+    strip = 2 * (S + 14) + 2 * (32 + 12) + 8
+    im = Image.new("RGB", (cols * cell + 16, rows * (cell + 14) + strip + 16), (40, 34, 44))
+    from PIL import ImageDraw
+    dr = ImageDraw.Draw(im)
+    small_y = rows * (cell + 14) + 12
+    grounds = [(40, 34, 44), (222, 204, 164)]
+    for g, ground in enumerate(grounds):
+        dr.rectangle([0, small_y + g * (S + 14 + 32 + 12), im.size[0], small_y + (g + 1) * (S + 14 + 32 + 12)], fill=ground)
+    for i, name in enumerate(ORDER):
+        pic = Image.open(f"{folder}/{name}.png").convert("RGBA")
+        cx, cy = 16 + (i % cols) * cell, 12 + (i // cols) * (cell + 14)
+        ground = (58, 50, 62) if (i + i // cols) % 2 == 0 else (212, 196, 160)
+        dr.rectangle([cx, cy, cx + S * k - 1, cy + S * k - 1], fill=ground)
+        big = pic.resize((S * k, S * k), Image.NEAREST)
+        im.paste(big, (cx, cy), big)
+        dr.text((cx + 2, cy + S * k + 1), name, fill=(230, 224, 210))
+        for g in range(len(grounds)):
+            y0 = small_y + g * (S + 14 + 32 + 12) + 6
+            x0 = 12 + i * ((im.size[0] - 24) // len(ORDER))
+            im.paste(pic, (x0, y0), pic)
+            half = pic.resize((32, 32), Image.LANCZOS)
+            im.paste(half, (x0 + 16, y0 + S + 6), half)
+    im.save(out)
+    return out
+
+
+if __name__ == "__main__":
+    os.makedirs("out/items", exist_ok=True)
+    names = [n for n in sys.argv[1:] if n in ITEMS] or ORDER
+    for n in names:
+        save(n)
+    if all(os.path.exists(f"out/items/{n}.png") for n in ORDER):
+        print(sheet())
+    print("painted", ", ".join(names))

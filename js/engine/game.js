@@ -5,23 +5,28 @@
 //     const pick = await g.choose([...]);     offer things to say
 //     g.give("reed");  g.has("reed");  g.take("reed");
 //     g.flag("egypt.penGiven", true);         record a story fact
-//     await g.goto("rome-forum", { via: "wormhole" });
-//     await g.card("Ancient Egypt", "1250 B.C.");
+//     await g.goto("rome-steps", { via: "wormhole" });
+//     await g.card("Ancient Egypt", "about 2560 B.C.");
 //     await g.wait(500);  await g.tween(800, (k) => ...);  await g.fade(1);
 //     await g.reach();                        the lead reaches out (g.reach(true): bends down)
 //     g.team(["mom", "bigsis", "lilsis"]);    who the player can switch between
 //     g.closeup(drawing);  g.closeup();       a close look at a screen or a notice, and putting it away
+//     g.plane("trunk").show(false);           a painted cut-out of the scene: show, set(state), fade, place
 //
 // Scripts are ordinary async functions. They read top to bottom like a screenplay.
+// Every position is a pixel on the 800x600 picture (grid.js).
 
 import { Clock, ease } from "./clock.js";
 import { Store, newGame, complete } from "./state.js";
 import * as saves from "./save.js";
 import { AudioEngine } from "./audio.js";
 import { Dialogue } from "./dialogue.js";
-import { SceneView, footOf } from "./scene.js";
+import { SceneView, footOf, picturesIn } from "./scene.js";
+import { Cutout } from "./cast.js";
 import { WalkMap, scaleAt } from "./walk.js";
-import { UI } from "./ui.js";
+import { W, H, OLD, fit } from "./grid.js";
+import { hold, url, picture } from "./assets.js";
+import { UI, iconPath } from "./ui.js";
 import { tunnel } from "./fx.js";
 import { openBeats, checkStory, leadsOf, hintFor } from "./story.js";
 import * as art from "../art/kit.js";
@@ -34,6 +39,7 @@ export class Game {
     Object.assign(this, content);        // sceneIds, loadScene, cutscenes, lines, cast, eras, items, story, sound
     this.scenes = {};                    // scene files already fetched
     this.art = art;
+    this.assets = { url, picture };      // for a script that puts a painted picture on the live layer: g.assets.url("art/..."), g.assets.picture("art/...")
     this.ease = ease;
     this.stage = document.getElementById("stage");
     this.fadeEl = this.stage.querySelector("#fade");
@@ -63,7 +69,7 @@ export class Game {
     this._nope = 0;
     this._chats = {};        // how many times each pair has talked, so they do not repeat themselves at once
 
-    this.store.on(() => { this.ui.refresh(); this.view.refreshHotspots(this); });
+    this.store.on(() => { this.ui.refresh(); this.follow(); });
   }
 
   get mode() { return this._mode; }
@@ -71,6 +77,11 @@ export class Game {
 
   // =============== start-up ===============
   async boot() {
+    try { await this.start(); }
+    catch (err) { console.error("The game stopped while starting:", err); this.ui.fatal("The game could not start. Press Reload."); }
+  }
+
+  async start() {
     this.clock.start();
     this.clock.every((dt) => { if (this.mode === "play") this.store.data.playMs += dt; });
     this.clock.every((dt) => this.view.cast.update(dt));                 // animate and repaint the people and props
@@ -78,11 +89,17 @@ export class Game {
     const known = Object.fromEntries(this.sceneIds.map((id) => [id, true]));
     for (const problem of checkStory({ story: this.story, scenes: known, cutscenes: this.cutscenes, lines: this.lines })) console.warn("Story check:", problem);
     try { await document.fonts.load('16px "Koine Road"'); } catch { /* the fallback font will do */ }
+    // Fetch every scene file now, while the start-up panel is showing. After this the game asks the
+    // server for no more code, so a new version published in the middle of a session cannot get mixed
+    // into this one. (A scene that will not load now is tried again when the player gets there.)
+    await Promise.all(this.sceneIds.map((id) => this.getScene(id).catch(() => { delete this.scenes[id]; })));
+    // No pictures yet. The title fetches its own; the rest are fetched behind it, once it is up (see gather),
+    // and a scene that is entered before its turn has come fetches its own first (see enterScene).
 
     const params = new URLSearchParams(location.search);
     await this.ui.gate(() => this.audio.unlock());
 
-    // Shortcuts for building scenes:  index.html?scene=rome-forum&lead=son
+    // Shortcuts for building scenes:  index.html?scene=rome-street&lead=son
     // Every act before the scene's own counts as played. &flags=a,b makes more story facts true.
     const jump = params.get("scene");
     if (jump && this.sceneIds.includes(jump)) {
@@ -113,8 +130,9 @@ export class Game {
     this.ui.hud(false);
     this.view.clear();
     this.view.setEra("present");
-    await this.view.draw(art.highway(), "Dusk on a desert highway. A family station wagon heads for a swirling time portal, past a road sign where Point B has been crossed out and B.C. painted in.");
-    this.view.cast.addThing("wagon", "wagon", 184, 182, 0.72).flag("bounce", true);
+    // What is behind the title belongs to the story, not to the engine: the cutscene called "title"
+    // dresses the stage (js/content/cutscenes/title.js), and returns when its pictures are in.
+    if (this.cutscenes.title) await this.cutscenes.title(this);
     const strip = this.titleEl.querySelector(".strip"), kicker = this.titleEl.querySelector(".kicker");
     strip.style.clipPath = "inset(-20% 100% -20% -5%)";
     kicker.style.opacity = 0;
@@ -126,6 +144,32 @@ export class Game {
     strip.style.clipPath = "";
     await this.tween(350, (k) => { kicker.style.opacity = k; });
     this.ui.titleMenu();
+    this.gather();
+  }
+
+  /**
+   * Fetch every picture in the game, quietly, so that before long this session holds all of it (assets.js) and
+   * plays on from what it holds: a version published in the middle of somebody's game cannot then hand them new
+   * pictures to go with their old code. It starts once the title is up (or, for a game opened straight into a
+   * scene, once that scene is), so it takes nothing from the start. One file at a time, each asked for when the
+   * page has a moment to spare, and only fetched, not decoded, so play does not feel it. Nothing waits for it: a
+   * scene entered before its turn has come fetches its own pictures first, as it always did.
+   * What the player is likeliest to want comes first: the inventory icons, the scene the autosave is in, the scene
+   * a new game opens on. Then every scene in order. Calling it again does nothing more; it answers with the same promise.
+   */
+  gather() {
+    if (this.gathering) return this.gathering;
+    const spare = () => new Promise((go) => { if (window.requestIdleCallback) requestIdleCallback(() => go(), { timeout: 1500 }); else setTimeout(go, 120); });
+    const auto = saves.readSlot("auto");
+    const order = new Set([auto && auto.data.scene, this.story.start.scene, ...this.sceneIds].filter((id) => this.sceneIds.includes(id)));
+    this.gathering = (async () => {
+      const files = Object.values(this.items).map(iconPath).filter(Boolean);
+      for (const id of order) {
+        try { files.push(...picturesIn(await this.getScene(id))); } catch { /* a scene file that will not load: its pictures are fetched if the player gets there */ }
+      }
+      for (const path of new Set(files)) { await spare(); await hold(path, { quiet: true }); }
+    })();
+    return this.gathering;
   }
 
   /** The state a new game starts from: the story says who leads and what is already true. */
@@ -156,7 +200,15 @@ export class Game {
     if (this.store.has(item)) return;
     this.store.give(item);
     this.sfx("pickup");
-    if (!this.clock.skipping) this.ui.toast(`You have the ${this.items[item].name}`);
+    if (!this.clock.skipping) this.ui.toast(`You have the ${this.item(item).name}`);
+  }
+  /** What is known about a thing that can be carried (its entry in `items`). A thing that is not there, through a slip
+      in a script or a save from another version, gets its own id for a name and a note in the console, and the game carries on. */
+  item(id) {
+    if (this.items[id]) return this.items[id];
+    this._strays = this._strays || {};
+    if (!this._strays[id]) { console.warn(`No item called "${id}" in js/content/world.js.`); this._strays[id] = { name: id }; }
+    return this._strays[id];
   }
   /** Who is carrying a thing: a lead's id, or null. */
   holder(item) { return this.store.holder(item); }
@@ -165,6 +217,9 @@ export class Game {
   music(id) { this.audio.music(id); }
   sfx(id) { if (!this.clock.skipping) this.audio.sfx(id); }
   actor(id) { return this.view.cast.get(id); }
+  /** One of the scene's painted cut-outs, by the id it has under `planes`: .show(bool), .set(state), .fade(opacity), .place(x, y, scale).
+      What a script shows or sets by hand holds until the scene is built again; left alone, a cut-out follows its `when` and `state`. */
+  plane(id) { const s = this.view.cast.get(id); return s instanceof Cutout ? s : null; }
   get lead() { return this.view.cast.get(this.store.data.active); }
   q(selector) { return this.view.q(selector); }
   /** The lead reaches for something: out in front, or (low) down to the ground. */
@@ -184,14 +239,16 @@ export class Game {
     this.rememberPlace(actor.id);
   }
 
-  /** A close look at something small: a screen, a notice, a note. Pass a drawing on the 320x200 grid to show it,
-      and nothing to put it away. People carry on talking underneath it. */
-  closeup(markup = null, label = "") {
+  /** A close look at something small: a screen, a notice, a note. Pass a drawing to show it, and nothing to put
+      it away. The kit's close-ups are drawn on a 320x200 grid, which is what is expected; for a drawing made at
+      another size say so: g.closeup(markup, label, { grid: [800, 600] }). It is shown in the middle of the stage,
+      as large as will fit, over a veil that covers the whole scene. People carry on talking underneath it. */
+  closeup(markup = null, label = "", { grid = OLD } = {}) {
     const el = this.closeEl;
     if (!el) return;
     // (the layer is an SVG element, which has no `hidden` property of its own: the attribute is what counts)
     if (!markup || this.clock.skipping) { el.setAttribute("hidden", ""); el.innerHTML = ""; return; }
-    el.innerHTML = `<rect class="veil" width="320" height="200"/>${markup}`;
+    el.innerHTML = `<rect class="veil" width="${W}" height="${H}"/>${fit(markup, grid)}`;
     el.setAttribute("aria-label", label);
     el.removeAttribute("hidden");
   }
@@ -329,7 +386,12 @@ export class Game {
         return;
       }
       const marks = scene.spawn || {};         // a named way in, then this lead's own mark, then the usual one
-      await this.enterScene(scene, at || (spawn !== "default" && marks[spawn]) || marks[this.store.data.active] || marks.default);
+      try {
+        await this.enterScene(scene, at || (spawn !== "default" && marks[spawn]) || marks[this.store.data.active] || marks.default);
+      } catch (err) {                              // the scene broke while it was being built: never leave the player looking at black
+        this.stopTunnel();
+        return await this.trouble(err, `Scene "${id}"`);
+      }
       await this.fade(0, via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");
       if (!from || from.era !== scene.era) {
         const era = this.eras[scene.era];
@@ -344,7 +406,8 @@ export class Game {
     this.autosave();
   }
 
-  /** Build a scene on the stage from the saved state. No story happens here. */
+  /** Build a scene on the stage from the saved state. No story happens here.
+      It returns once every picture the scene can show has arrived, so the caller can fade in on a finished stage. */
   async enterScene(scene, pos) {
     const d = this.store.data, cast = this.view.cast;
     this.dialogue.clear();
@@ -356,8 +419,9 @@ export class Game {
     this.mode = "play";
     this.titleEl.hidden = true;
     this.view.setEra(scene.era);
-    // a painted picture, a drawing made with the kit, or both; with neither, the scene is sketched as labelled boxes
-    const drawn = this.view.draw(scene.draw ? scene.draw(art, this) : scene.picture ? "" : art.sketch(scene), scene.name, scene.picture);
+    // The backdrop, the light that stays smooth, and the painted cut-outs (`planes`), each of which reads the story
+    // to see whether it shows and in which state. A scene with no painting gets its kit drawing, or a sketch.
+    const shown = this.view.show(scene, this);
 
     // Props and people who are not the lead. Each can block the ground it stands on.
     const blocked = [...(scene.blocked || [])];
@@ -365,18 +429,19 @@ export class Game {
       if (p.when && !p.when(this)) continue;
       const thing = cast.addThing(p.id, p.kind, p.at[0], p.at[1], p.scale ?? 1, p.options);
       thing.plane = p.plane || "floor";
-      thing.base = p.base || null;
+      thing.base = p.base ?? null;
       if (p.solid) blocked.push(p.solid);
     }
     for (const a of scene.actors || []) {
       if (a.when && !a.when(this)) continue;
       const s = a.scale ?? scaleAt(scene, a.at[1]);
       cast.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], s).face(a.face ?? "S");
-      if (a.solid !== false) blocked.push(a.solid || [[a.at[0] - 13 * s, a.at[1] - 5], [a.at[0] + 13 * s, a.at[1] - 5], [a.at[0] + 13 * s, a.at[1] + 3], [a.at[0] - 13 * s, a.at[1] + 3]]);
     }
-    this.map = new WalkMap(scene, blocked);                 // where the lead may stand, and how to get around things
+    this.blocked = blocked;                     // (remap adds the ground under each cut-out and each person, because those come, go and move with the story)
+    this.remap(true);                           // where the lead may stand, and how to get around things
 
-    const want = pos || (scene.spawn && scene.spawn.default) || [160, 190];
+    const marks = scene.spawn || {};            // with no place given: this lead's own mark, then the usual one
+    const want = pos || marks[d.active] || marks.default || [W / 2, 560];
     const [x, y] = this.map.nearest(want[0], want[1]);
     const was = d.where[d.active], facing = was && was.scene === scene.id && was.face != null && pos ? was.face : scene.facing || "S";
     cast.addFigure(d.active, this.cast[d.active].sprite, x, y, scaleAt(scene, y)).face(facing);
@@ -385,30 +450,65 @@ export class Game {
 
     // A scene can name a party: leads who are here together. They arrive with whoever is leading,
     // each on their own mark, and the player can switch between them.
+    const markOf = (id, n) => marks[id] || [x + 55 * (n + 1), y];
     const party = (scene.party || []).filter((id) => this.leads.includes(id));
     if (party.includes(d.active)) {
       party.forEach((id, n) => {
         if (!d.team.includes(id)) d.team.push(id);
         const at = d.where[id];
-        if (id === d.active || (at && at.scene === scene.id)) return;
-        const mark = (scene.spawn && scene.spawn[id]) || [x + 22 * (n + 1), y];
+        if (id === d.active || (at && at.scene === scene.id && at.x != null)) return;
+        const mark = markOf(id, n);
         d.where[id] = { scene: scene.id, x: mark[0], y: mark[1] };
       });
     }
     // Anyone else on the team who is standing in this scene is on stage too.
-    for (const id of d.team) {
+    // (A save from before the picture changed size knows which scene they are in but not where: they go to their marks.)
+    d.team.forEach((id, n) => {
       const at = d.where[id];
-      if (id === d.active || !at || at.scene !== scene.id) continue;
-      const [mx, my] = this.map.nearest(at.x ?? x, at.y ?? y);
+      if (id === d.active || !at || at.scene !== scene.id) return;
+      const mark = at.x != null ? [at.x, at.y] : markOf(id, n);
+      const [mx, my] = this.map.nearest(mark[0], mark[1]);
       cast.addFigure(id, this.cast[id].sprite, mx, my, scaleAt(scene, my)).face(at.face ?? (scene.facing || "S"));
-    }
-    if (scene.setup) scene.setup(this);          // match the drawing to the story facts
+    });
+    if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts
     this.rebuildSpots();
     this.music(scene.music || this.eras[scene.era].music);
     this.ui.hud(true);
     this.ui.refresh();
-    for (const next of scene.exits || []) this.getScene(next).catch(() => {});   // warm up the places you can go from here
-    await drawn;
+    await shown;
+    // Once this scene has everything it needs: fetch the pictures of the scenes that can be reached from it
+    // (`exits`), so that walking on does not mean waiting for them.
+    for (const next of scene.exits || []) this.getScene(next).then((there) => this.view.warm(there)).catch(() => {});
+    this.gather();                               // (already under way, unless the game was opened straight into a scene)
+  }
+
+  /** Work out where people may stand: the scene's walk outline, less the ground that props, people and painted
+      cut-outs take up. A cut-out blocks its `solid` only while it is shown, so this is asked again whenever the
+      story changes; the map is built again only when the answer would be different. */
+  remap(anyway = false) {
+    if (!this.scene) return;
+    const cast = this.view.cast;
+    const solid = cast.cutouts().filter((c) => c.spec.solid && !c.hidden);
+    // People who are not leads block the ground they stand on: their own `solid` while they are on their mark,
+    // and a patch under their feet wherever a script has walked them to since.
+    const people = [];
+    for (const a of this.scene.actors || []) {
+      const f = cast.get(a.id);
+      if (!f || f.hidden || a.solid === false) continue;
+      const moved = Math.abs(f.x - a.at[0]) > 4 || Math.abs(f.y - a.at[1]) > 4, s = f.scale;
+      people.push(a.solid && !moved ? a.solid : [[f.x - 32 * s, f.y - 12], [f.x + 32 * s, f.y - 12], [f.x + 32 * s, f.y + 8], [f.x - 32 * s, f.y + 8]]);
+    }
+    const key = solid.map((c) => c.id).join("|") + "#" + people.map((p) => p.flat().map(Math.round).join(",")).join("|");
+    if (!anyway && key === this._solid) return;
+    this._solid = key;
+    this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people]);
+  }
+
+  /** The story has changed, or a script has ended: the picture follows. Clickable areas and painted cut-outs
+      read their `when` and `state` again, and the ground under a cut-out that has come or gone is blocked or freed. */
+  follow() {
+    this.view.refresh(this);
+    this.remap();
   }
 
   /** Run a piece of script with the controls locked. */
@@ -416,8 +516,25 @@ export class Game {
     this.busy++;
     this.ui.refresh();
     try { await script(); }
-    catch (err) { console.error("Script stopped:", err); }
+    catch (err) {
+      console.error("Script stopped:", err);
+      this.ui.toast("Something went wrong there. If it keeps happening, reload the page.", 5000);
+      if (this._fade > 0.5 && this.mode === "play") await this.fade(0, 300);       // it stopped half-way through a fade
+    }
     finally { this.busy--; this.closeup(); this.settle(); this.ui.refresh(); }
+  }
+
+  /** Something broke that should not have. Say so on the screen and go back to the title, which rebuilds
+      everything. If even that fails, put the start-up panel back with a Reload button. Never a black screen. */
+  async trouble(err, what = "The game") {
+    console.error(`${what} stopped:`, err);
+    try {
+      await this.title();
+      this.ui.toast("Something went wrong there. Your last save is safe.", 6000);
+    } catch (worse) {
+      console.error(worse);
+      this.ui.fatal("Something went wrong and the game had to stop. Your last save is safe.");
+    }
   }
 
   /** An action can be a line ID, a list of line IDs, a function, or one of those for each lead:
@@ -445,11 +562,11 @@ export class Game {
     for (const id of d.team) {
       const a = id === d.active ? null : this.actor(id);
       if (!a) continue;
-      const w = 20 * a.scale, h = a.h * a.scale;
+      const w = 50 * a.scale, h = a.h * a.scale;
       spots.push({ id: "mate." + id, name: this.cast[id].name, verb: "Talk to", mate: id, rect: [a.x - w / 2, a.y - h, w, h] });
     }
     this.view.setHotspots(spots);
-    this.view.refreshHotspots(this);
+    this.follow();
     this.ui.hover(null);
   }
 
@@ -464,9 +581,9 @@ export class Game {
   clearOf(at) {
     if (!at) return at;
     const d = this.store.data, others = d.team.filter((id) => id !== d.active).map((id) => this.actor(id)).filter(Boolean);
-    const taken = (x, y) => others.some((a) => Math.abs(a.x - x) < 15 && Math.abs(a.y - y) < 6);
-    for (const dx of [0, 17, -17, 34, -34]) {
-      const x = at[0] + dx, y = at[1] + (dx ? 2 : 0);
+    const taken = (x, y) => others.some((a) => Math.abs(a.x - x) < 38 && Math.abs(a.y - y) < 15);
+    for (const dx of [0, 42, -42, 84, -84]) {
+      const x = at[0] + dx, y = at[1] + (dx ? 5 : 0);
       if (!taken(x, y) && (dx === 0 || this.map.ok(x, y))) return [x, y];
     }
     return at;
@@ -474,9 +591,17 @@ export class Game {
 
   /** A place to stand for a word with a companion: beside them, on the side the lead is coming from. */
   beside(mate) {
-    const lead = this.lead, reach = 22 * mate.scale;
-    if (Math.abs(lead.x - mate.x) <= reach + 6 && Math.abs(lead.y - mate.y) <= 5) return null;      // near enough already
-    return [mate.x + (lead.x <= mate.x ? -reach : reach), mate.y + 1];
+    const lead = this.lead, reach = 55 * mate.scale;
+    if (Math.abs(lead.x - mate.x) <= reach + 15 && Math.abs(lead.y - mate.y) <= 12) return null;    // near enough already
+    // the side the lead is coming from, unless someone else is standing there: then the other side, then a step nearer or farther
+    const d = this.store.data, others = d.team.filter((id) => id !== d.active && id !== mate.id).map((id) => this.actor(id)).filter(Boolean);
+    const free = (x, y) => this.map.ok(x, y) && !others.some((a) => Math.abs(a.x - x) < 38 && Math.abs(a.y - y) < 15);
+    const side = lead.x <= mate.x ? -1 : 1;
+    for (const [sd, dy] of [[side, 2], [-side, 2], [side, 24], [-side, 24], [side, -20], [-side, -20]]) {
+      const x = mate.x + sd * reach, y = mate.y + dy;
+      if (free(x, y)) return [x, y];
+    }
+    return [mate.x + side * reach, mate.y + 2];
   }
 
   /** A few words with a companion. The scene supplies them, as talk: { mom: { bigsis: [exchange, ...] } },
@@ -501,7 +626,7 @@ export class Game {
     await this.reach();
     if (!this.store.pass(item, to)) return;
     this.sfx("pickup");
-    if (!this.clock.skipping) this.ui.toast(`${this.cast[to].name} has the ${this.items[item].name}`);
+    if (!this.clock.skipping) this.ui.toast(`${this.cast[to].name} has the ${this.item(item).name}`);
     if (this.scene.given) await this.scene.given(this, item, to, from);
   }
 
@@ -542,7 +667,7 @@ export class Game {
     if (this.busy) return;
     if (this.lookMode) {
       this.lookMode = false;
-      return this.run(() => this.act(this.items[item].look));
+      return this.run(() => this.act(this.item(item).look));
     }
     this.held = this.held === item ? null : item;
     this.ui.refresh();
@@ -616,6 +741,13 @@ export class Game {
     if (!body) return;
     const data = complete(copy(body.data), this.leads);
     if (!this.leads.includes(data.active) || !this.sceneIds.includes(data.scene)) { this.ui.toast("That save is from a part of the game this version does not have.", 4200); return; }
+    // Anyone else who was left in a scene this version does not have is nowhere, until the story puts them somewhere.
+    // And a thing in somebody's pockets that this version does not have is left behind.
+    for (const id of this.leads) {
+      if (data.where[id] && !this.sceneIds.includes(data.where[id].scene)) data.where[id] = null;
+      const lost = data.inventory[id].filter((item) => !this.items[item]);
+      if (lost.length) { console.warn(`This save has things the game does not know (${lost.join(", ")}). They were left out.`); data.inventory[id] = data.inventory[id].filter((item) => this.items[item]); }
+    }
     this.ui.close();
     this.busy++;
     try {
@@ -628,6 +760,8 @@ export class Game {
       await this.fade(0, 400);
       this.ui.toast("Game loaded");
       if (scene.enter) await scene.enter(this, null);   // finish an arrival the save interrupted
+    } catch (err) {                                     // a save that will not open must not leave a black screen
+      await this.trouble(err, "Loading a save");
     } finally {
       this.busy--;
       this.settle();
@@ -691,8 +825,10 @@ export class Game {
       this.lookMode = false;
       if (spot) this.interact(spot, verb);
       else if (this.held) { this.held = null; this.ui.refresh(); }
-      else { this.ui.refresh(); this.walk(...this.view.toGrid(event)); }
+      else { this.ui.refresh(); this.walk(...this.view.toPicture(event)); }
     });
+    // A double click hurries whoever is walking, so a long way across a scene never has to be sat through.
+    hot.addEventListener("dblclick", () => { const lead = this.lead; if (lead && lead.walking) lead.hurry = true; });
     hot.addEventListener("contextmenu", (event) => {
       event.preventDefault();
       const spot = spotOf(event);

@@ -1,0 +1,605 @@
+{
+ "id": "home-living-room",
+ "size": [
+  800,
+  600
+ ],
+ "horizon": -150,
+ "full": 585,
+ "light": "night: three lamps (pendant over the table left front, reading lamp right front, small lamp on the piano); cool from the window and the monitor",
+ "wallMeetsFloor": 385,
+ "walk": [
+  [
+   8,
+   393
+  ],
+  [
+   792,
+   393
+  ],
+  [
+   792,
+   598
+  ],
+  [
+   8,
+   598
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    291,
+    419
+   ],
+   [
+    297,
+    384
+   ],
+   [
+    399,
+    384
+   ],
+   [
+    399,
+    419
+   ]
+  ],
+  [
+   [
+    328,
+    437
+   ],
+   [
+    368,
+    423
+   ],
+   [
+    388,
+    456
+   ],
+   [
+    347,
+    472
+   ]
+  ],
+  [
+   [
+    402,
+    384
+   ],
+   [
+    492,
+    384
+   ],
+   [
+    495,
+    400
+   ],
+   [
+    403,
+    400
+   ]
+  ],
+  [
+   [
+    497,
+    384
+   ],
+   [
+    602,
+    384
+   ],
+   [
+    618,
+    428
+   ],
+   [
+    505,
+    428
+   ]
+  ],
+  [
+   [
+    538,
+    443
+   ],
+   [
+    593,
+    442
+   ],
+   [
+    599,
+    463
+   ],
+   [
+    542,
+    463
+   ]
+  ],
+  [
+   [
+    591,
+    384
+   ],
+   [
+    800,
+    384
+   ],
+   [
+    800,
+    435
+   ],
+   [
+    609,
+    435
+   ]
+  ],
+  [
+   [
+    45,
+    600
+   ],
+   [
+    132,
+    442
+   ],
+   [
+    306,
+    445
+   ],
+   [
+    268,
+    600
+   ]
+  ],
+  [
+   [
+    594,
+    523
+   ],
+   [
+    627,
+    476
+   ],
+   [
+    728,
+    503
+   ],
+   [
+    736,
+    575
+   ],
+   [
+    699,
+    576
+   ],
+   [
+    675,
+    572
+   ]
+  ],
+  [
+   [
+    111,
+    400
+   ],
+   [
+    119,
+    384
+   ],
+   [
+    146,
+    384
+   ],
+   [
+    139,
+    401
+   ]
+  ],
+  [
+   [
+    0,
+    399
+   ],
+   [
+    0,
+    383
+   ],
+   [
+    16,
+    384
+   ],
+   [
+    6,
+    399
+   ]
+  ],
+  [
+   [
+    270,
+    399
+   ],
+   [
+    273,
+    384
+   ],
+   [
+    294,
+    384
+   ],
+   [
+    291,
+    399
+   ]
+  ],
+  [
+   [
+    0,
+    600
+   ],
+   [
+    4,
+    569
+   ],
+   [
+    54,
+    569
+   ],
+   [
+    38,
+    600
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "desk",
+   "file": "desk.png",
+   "base": 419,
+   "what": "desk, chair and computer, the screen dark",
+   "baseNote": "the base is the front of the desk; the chair stands out in front of it (down to row 458) and has its own outline in blocked"
+  },
+  {
+   "id": "screen",
+   "base": 420,
+   "states": {
+    "offline": "screen-offline.png",
+    "login": "screen-login.png",
+    "map": "screen-map.png"
+   },
+   "what": "the lit screen, laid over the dark one: grey with a broken link / blue with a box for four figures / a pale map with a red dot"
+  },
+  {
+   "id": "note",
+   "file": "note.png",
+   "base": 421,
+   "what": "the yellow sticky note on the monitor's corner: shown until it is taken"
+  },
+  {
+   "id": "piano",
+   "file": "piano.png",
+   "base": 427,
+   "what": "piano, its lamp and its stool",
+   "baseNote": "the base is the piano's front legs; the stool stands out in front of it (down to row 462) and has its own outline in blocked"
+  },
+  {
+   "id": "armchair",
+   "file": "armchair.png",
+   "base": 572,
+   "what": "Dad's armchair, the reading lamp behind it, the little table, his slippers"
+  },
+  {
+   "id": "table",
+   "file": "table.png",
+   "base": 599,
+   "what": "the dining table, all five chairs, and the pendant lamp on its chain"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "the aspidistra at the bottom left corner"
+  }
+ ],
+ "things": [
+  {
+   "id": "door",
+   "what": "the front door",
+   "shape": {
+    "rect": [
+     17,
+     243,
+     75,
+     142
+    ]
+   },
+   "stand": [
+    45,
+    401
+   ],
+   "face": "N"
+  },
+  {
+   "id": "window",
+   "what": "the window on the street",
+   "shape": {
+    "rect": [
+     91,
+     207,
+     205,
+     130
+    ]
+   },
+   "stand": [
+    146,
+    405
+   ],
+   "face": "N"
+  },
+  {
+   "id": "computer",
+   "what": "the family computer on the desk",
+   "shape": {
+    "rect": [
+     294,
+     300,
+     102,
+     118
+    ]
+   },
+   "stand": [
+    315,
+    429
+   ],
+   "face": "N"
+  },
+  {
+   "id": "note",
+   "what": "the sticky note on the monitor",
+   "shape": {
+    "rect": [
+     355,
+     313,
+     17,
+     17
+    ]
+   },
+   "stand": [
+    315,
+    429
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "books",
+   "what": "the bookcase",
+   "shape": {
+    "rect": [
+     405,
+     249,
+     86,
+     151
+    ]
+   },
+   "stand": [
+    450,
+    412
+   ],
+   "face": "N"
+  },
+  {
+   "id": "piano",
+   "what": "the piano",
+   "shape": {
+    "rect": [
+     508,
+     302,
+     108,
+     125
+    ]
+   },
+   "stand": [
+    574,
+    467
+   ],
+   "face": "N"
+  },
+  {
+   "id": "photo",
+   "what": "the family photograph over the piano",
+   "shape": {
+    "rect": [
+     522,
+     235,
+     55,
+     41
+    ]
+   },
+   "stand": [
+    531,
+    467
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stairs",
+   "what": "the stairs",
+   "shape": {
+    "poly": [
+     [
+      612,
+      434
+     ],
+     [
+      612,
+      343
+     ],
+     [
+      676,
+      311
+     ],
+     [
+      800,
+      230
+     ],
+     [
+      800,
+      320
+     ],
+     [
+      703,
+      429
+     ]
+    ]
+   },
+   "stand": [
+    609,
+    445
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "closet",
+   "what": "the closet under the stairs",
+   "shape": {
+    "rect": [
+     754,
+     353,
+     43,
+     87
+    ]
+   },
+   "stand": [
+    755,
+    443
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "table",
+   "what": "the dinner table",
+   "shape": {
+    "rect": [
+     93,
+     403,
+     187,
+     104
+    ]
+   },
+   "stand": [
+    316,
+    521
+   ],
+   "face": "W"
+  },
+  {
+   "id": "armchair",
+   "what": "Dad's armchair",
+   "shape": {
+    "rect": [
+     597,
+     397,
+     105,
+     171
+    ]
+   },
+   "stand": [
+    578,
+    504
+   ],
+   "face": "E"
+  }
+ ],
+ "exits": [
+  {
+   "to": "nevada-roadside",
+   "shape": {
+    "poly": [
+     [
+      17,
+      385
+     ],
+     [
+      92,
+      385
+     ],
+     [
+      92,
+      243
+     ],
+     [
+      17,
+      243
+     ]
+    ]
+   },
+   "stand": [
+    45,
+    401
+   ]
+  }
+ ],
+ "marks": {
+  "mom": [
+   419,
+   502
+  ],
+  "bigsis": [
+   510,
+   484
+  ],
+  "lilsis": [
+   347,
+   492
+  ]
+ },
+ "extras": {
+  "scripted": {
+   "closetIn": [
+    759,
+    432
+   ],
+   "pianoStool": [
+    568,
+    453
+   ],
+   "what": "places a script may send someone that are not on the walkable floor: the foot of the closet's gap (the youngest goes in here), the middle of the piano stool"
+  },
+  "screen": {
+   "rect": [
+    326,
+    319,
+    41,
+    23
+   ]
+  },
+  "routerLed": [
+   752,
+   405
+  ],
+  "closetGap": {
+   "rect": [
+    751,
+    365,
+    13,
+    64
+   ]
+  },
+  "lamps": {
+   "pendant": [
+    191,
+    352
+   ],
+   "reading": [
+    718,
+    389
+   ],
+   "piano": [
+    592,
+    289
+   ]
+  },
+  "clock": "the wall clock shows 9:40"
+ }
+}

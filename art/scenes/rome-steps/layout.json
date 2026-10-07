@@ -1,0 +1,556 @@
+{
+ "id": "rome-steps",
+ "horizon": 260,
+ "full": 590,
+ "light": "morning sun from the upper right; shadows fall to the left",
+ "minScale": 0.4,
+ "note": "The porch is 252 cm above the pavement, so its floor is only a narrow strip of the picture (rows 291 to 305). In true perspective a grown-up is 94 px tall at the foot of the steps, 68 px at their top and 54 px at the doors: set minScale to about 0.40 (64 px) so that people hold that size from row 392 upward instead of shrinking away toward the horizon.",
+ "walk": [
+  [
+   0,
+   597
+  ],
+  [
+   797,
+   597
+  ],
+  [
+   797,
+   433
+  ],
+  [
+   797,
+   298
+  ],
+  [
+   763,
+   298
+  ],
+  [
+   648,
+   291
+  ],
+  [
+   342,
+   296
+  ],
+  [
+   396,
+   305
+  ],
+  [
+   382,
+   306
+  ],
+  [
+   461,
+   461
+  ],
+  [
+   400,
+   462
+  ],
+  [
+   340,
+   452
+  ],
+  [
+   240,
+   446
+  ],
+  [
+   120,
+   442
+  ],
+  [
+   0,
+   438
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    238,
+    521
+   ],
+   [
+    346,
+    510
+   ],
+   [
+    327,
+    487
+   ],
+   [
+    229,
+    496
+   ]
+  ],
+  [
+   [
+    366,
+    498
+   ],
+   [
+    404,
+    495
+   ],
+   [
+    393,
+    485
+   ],
+   [
+    357,
+    489
+   ]
+  ],
+  [
+   [
+    672,
+    563
+   ],
+   [
+    746,
+    553
+   ],
+   [
+    710,
+    535
+   ],
+   [
+    639,
+    544
+   ]
+  ],
+  [
+   [
+    448,
+    422
+   ],
+   [
+    505,
+    419
+   ],
+   [
+    489,
+    403
+   ],
+   [
+    434,
+    406
+   ]
+  ],
+  [
+   [
+    0,
+    500
+   ],
+   [
+    150,
+    484
+   ],
+   [
+    158,
+    600
+   ],
+   [
+    0,
+    600
+   ]
+  ],
+  [
+   [
+    340,
+    306
+   ],
+   [
+    389,
+    306
+   ],
+   [
+    375,
+    303
+   ],
+   [
+    328,
+    304
+   ]
+  ],
+  [
+   [
+    441,
+    305
+   ],
+   [
+    486,
+    304
+   ],
+   [
+    468,
+    301
+   ],
+   [
+    425,
+    302
+   ]
+  ],
+  [
+   [
+    535,
+    303
+   ],
+   [
+    577,
+    302
+   ],
+   [
+    554,
+    300
+   ],
+   [
+    514,
+    301
+   ]
+  ],
+  [
+   [
+    622,
+    301
+   ],
+   [
+    660,
+    301
+   ],
+   [
+    634,
+    298
+   ],
+   [
+    597,
+    299
+   ]
+  ],
+  [
+   [
+    702,
+    300
+   ],
+   [
+    738,
+    299
+   ],
+   [
+    709,
+    297
+   ],
+   [
+    674,
+    298
+   ]
+  ],
+  [
+   [
+    777,
+    298
+   ],
+   [
+    811,
+    298
+   ],
+   [
+    779,
+    296
+   ],
+   [
+    747,
+    297
+   ]
+  ],
+  [
+   [
+    556,
+    293
+   ],
+   [
+    595,
+    293
+   ],
+   [
+    586,
+    292
+   ],
+   [
+    547,
+    292
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "columns",
+   "file": "columns.png",
+   "base": [
+    [
+     320,
+     305.3
+    ],
+    [
+     800,
+     296.8
+    ]
+   ],
+   "what": "the six columns of the front; people on the porch pass behind them"
+  },
+  {
+   "id": "altar",
+   "file": "altar.png",
+   "base": [
+    [
+     244,
+     518
+    ],
+    [
+     338,
+     509
+    ]
+   ]
+  },
+  {
+   "id": "tripod",
+   "file": "tripod.png",
+   "base": 495
+  },
+  {
+   "id": "stone",
+   "file": "stone.png",
+   "base": [
+    [
+     673,
+     558
+    ],
+    [
+     730,
+     550
+    ]
+   ]
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  }
+ ],
+ "things": [
+  {
+   "id": "doors",
+   "what": "the bronze doors of the treasury, standing open",
+   "shape": {
+    "rect": [
+     468,
+     129,
+     70,
+     163
+    ]
+   },
+   "stand": [
+    517,
+    296
+   ],
+   "face": "N"
+  },
+  {
+   "id": "altar",
+   "what": "the altar with its garland and its smoke",
+   "shape": {
+    "rect": [
+     237,
+     416,
+     102,
+     93
+    ]
+   },
+   "stand": [
+    309,
+    529
+   ],
+   "face": "N"
+  },
+  {
+   "id": "birdcage",
+   "what": "the soothsayer's cage of sacred chickens, and their dish of grain",
+   "shape": {
+    "rect": [
+     438,
+     375,
+     56,
+     34
+    ]
+   },
+   "stand": [
+    524,
+    462
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tripod",
+   "what": "a bronze tripod",
+   "shape": {
+    "rect": [
+     361,
+     403,
+     40,
+     89
+    ]
+   },
+   "stand": [
+    431,
+    494
+   ],
+   "face": "W"
+  },
+  {
+   "id": "stone",
+   "what": "the boundary stone: S P Q R",
+   "shape": {
+    "rect": [
+     672,
+     475,
+     62,
+     74
+    ]
+   },
+   "stand": [
+    624,
+    568
+   ],
+   "face": "E"
+  },
+  {
+   "id": "notices",
+   "what": "a board of public notices on the temple's base",
+   "shape": {
+    "rect": [
+     338,
+     322,
+     34,
+     52
+    ]
+   },
+   "stand": [
+    425,
+    472
+   ],
+   "face": "N"
+  },
+  {
+   "id": "forum",
+   "what": "the Forum beyond: the speaker's platform, the statues on their columns, the hill and its great temple",
+   "shape": {
+    "rect": [
+     0,
+     120,
+     236,
+     200
+    ]
+   },
+   "stand": [
+    140,
+    470
+   ],
+   "face": "N"
+  }
+ ],
+ "exits": [
+  {
+   "to": "rome-temple",
+   "shape": {
+    "poly": [
+     [
+      477,
+      147
+     ],
+     [
+      530,
+      150
+     ],
+     [
+      530,
+      293
+     ],
+     [
+      477,
+      293
+     ]
+    ]
+   },
+   "stand": [
+    517,
+    296
+   ]
+  },
+  {
+   "to": "rome-street",
+   "shape": {
+    "poly": [
+     [
+      0,
+      438
+     ],
+     [
+      40,
+      440
+     ],
+     [
+      40,
+      500
+     ],
+     [
+      0,
+      500
+     ]
+    ]
+   },
+   "stand": [
+    34,
+    470
+   ]
+  }
+ ],
+ "marks": {
+  "soothsayer": [
+   505,
+   404
+  ],
+  "soothsayer_feet": [
+   522,
+   429
+  ],
+  "senator": [
+   200,
+   540
+  ],
+  "doorkeeper": [
+   492,
+   295
+  ],
+  "son": [
+   470,
+   508
+  ],
+  "top_of_steps": [
+   515,
+   311
+  ],
+  "foot_of_steps": [
+   616,
+   454
+  ]
+ },
+ "sizes": {
+  "adult_px_at_foot_of_steps": 93.9,
+  "adult_px_at_top_of_steps": 68.2,
+  "adult_px_at_doors": 54.3,
+  "step_px": "about 11 at the foot, 6 at the top"
+ }
+}

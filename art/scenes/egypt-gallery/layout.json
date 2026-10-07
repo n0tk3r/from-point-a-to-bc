@@ -1,0 +1,36 @@
+{
+  "id": "egypt-gallery",
+  "horizon": 50,
+  "full": 580,
+  "size": [800, 600],
+  "light": "oil lamps low on both sides (warm, from below); cool daylight from the opening in the left wall at the foot; the upper doorway faintly warm",
+  "note": "People on the ramp are exactly the size the picture is drawn for. On the level floor at the foot (rows 500 to 600) the picture's own perspective is a little steeper, so a figure at the very bottom edge is about a tenth small for the stone round it: not noticeable.",
+  "walk": [[179, 595], [227, 522], [314, 522], [318, 499], [366, 225], [433, 226], [484, 500], [491, 521], [527, 521], [562, 594]],
+  "blocked": [[[364, 500], [437, 501], [426, 374], [374, 375]]],
+  "planes": [
+    {"id": "front", "file": "front.png", "plane": "front"},
+    {"id": "mirror-foot", "file": "mirror-foot.png", "base": 471, "when": "egypt.footSet", "rect": [520, 396, 35, 39]},
+    {"id": "mirror-top", "file": "mirror-top.png", "base": 194, "when": "egypt.topSet", "rect": [392, 167, 21, 27]}
+  ],
+  "things": [
+    {"id": "low-passage", "what": "the low dark mouth at the end of the cut in the ramp's foot: a level passage to another chamber", "shape": {"rect": [373, 376, 54, 63]}, "stand": [400, 511], "face": "N"},
+    {"id": "slot-foot", "what": "the first, big slot in the right-hand bench (mirror place 1)", "shape": {"rect": [523, 411, 44, 44]}, "stand": [462, 471], "face": "E"},
+    {"id": "step-top", "what": "the top of the tall step under the upper doorway (mirror place 2)", "shape": {"rect": [361, 192, 77, 13]}, "stand": [395, 230], "face": "N"},
+    {"id": "marks", "what": "builders' marks in red ochre on the right-hand wall: a levelling line, its triangle, tallies, a gang's sign", "shape": {"rect": [568, 322, 61, 117]}, "stand": [501, 538], "face": "E"},
+    {"id": "oil-jars", "what": "oil jars, spare lamp dishes and a lit lamp, on the floor against the left-hand bench", "shape": {"rect": [216, 431, 109, 89]}, "stand": [316, 529], "face": "W"},
+    {"id": "ladder", "what": "a ladder leaning in the near left corner (front plane)", "shape": {"rect": [92, 250, 66, 350]}, "stand": [210, 569], "face": "W"},
+    {"id": "sledge-runner", "what": "an old sledge runner laid along the right-hand bench", "shape": {"rect": [472, 299, 19, 113]}, "stand": [460, 413], "face": "E"},
+    {"id": "chest", "what": "a gold-banded chest on carrying poles and two jars of white stone, set down on the right-hand bench halfway up", "shape": {"rect": [456, 227, 21, 64]}, "stand": [431, 306], "face": "E"},
+    {"id": "dinner", "what": "beer jars and a basket of bread left on the left-hand bench", "shape": {"rect": [283, 314, 47, 44]}, "stand": [355, 380], "face": "W"},
+    {"id": "rope", "what": "a coil of rope on the floor by the level bench", "shape": {"rect": [487, 500, 47, 23]}, "stand": [475, 527], "face": "E"}
+  ],
+  "exits": [
+    {"to": "egypt-site", "what": "the low passage that comes in from outside: the lit opening in the left wall", "shape": {"poly": [[164, 593], [222, 511], [221, 389], [164, 431]]}, "stand": [239, 542], "face": "W"},
+    {"to": "egypt-chamber", "id": "top-door", "what": "the small doorway above the tall step at the top of the ramp", "shape": {"rect": [377, 150, 46, 48]}, "stand": [400, 231], "face": "N"}
+  ],
+  "marks": {"lampboy": [582, 586], "dad-from-site": [263, 541], "dad-from-chamber": [400, 232]},
+  "marks-note": "lampboy: the foot point of a SITTING figure on the front edge of the level stone bench along the right wall (his seat is 40 px above it, on the reed mat; his legs hang down the face of the bench). Facing SW (toward the middle of the floor) looks right.",
+  "beam": {"gate": [193, 450], "mirror-foot": [531, 409], "mirror-top": [400, 176], "door": [400, 174]},
+  "lamps": [[283, 371, 0.61], [326, 251, 0.38], [337, 218, 0.32], [496, 297, 0.47], [467, 219, 0.32], [309, 507, 0.83], [560, 463, 0.84], [641, 546, 1.18]],
+  "lamps-note": "x, y of each flame and its size (pixels per cm there), for the game's flicker; the last is on the front plane."
+}

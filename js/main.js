@@ -9,8 +9,9 @@ import { story } from "./content/story.js";
 import { sound } from "./content/sound.js";
 import { sceneIds, loadScene } from "./content/scenes/index.js";
 import intro from "./content/cutscenes/intro.js";
+import title from "./content/cutscenes/title.js";
 
-const cutscenes = { intro };
+const cutscenes = { intro, title };      // "title" is not played: it dresses the stage behind the title screen
 
 const game = new Game({ sceneIds, loadScene, cutscenes, cast, eras, items, lines, story, sound });
 window.game = game;      // for the browser console while building the game

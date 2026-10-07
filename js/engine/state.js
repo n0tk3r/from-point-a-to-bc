@@ -2,7 +2,7 @@
 // every scene rebuilds itself from this state when it is entered.
 // Keep it plain data (no functions, no DOM), so it can be written as JSON.
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 /** A new game. `leads` are the ids of everyone the player can ever control (cast entries marked lead: true). */
 export function newGame(leads = ["dad", "son"]) {
@@ -14,7 +14,7 @@ export function newGame(leads = ["dad", "son"]) {
     scene: null,              // id of the scene the active character is in
     active: leads[0],         // which lead the player controls
     team: [],                 // the leads the player can switch between right now
-    where: {},                // each lead's scene and position: { scene, x, y, face }
+    where: {},                // each lead's scene and position: { scene, x, y, face }, x and y in picture pixels (800x600)
     inventory: {},            // each lead's pockets
     flags: {},                // story facts: flags["egypt.metScribe"] = true
     seenLines: {},            // dialogue already heard, so repeats can be shortened

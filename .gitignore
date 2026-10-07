@@ -5,6 +5,13 @@ reference/
 # Previews the Claude app saves into this folder. They are not part of the game.
 Claude outputs/
 
+# What Python leaves beside the tools when they run
+__pycache__/
+*.pyc
+
+# The painter's scratch space: what it paints is copied from here into art/ (tools/paint/install.py)
+tools/paint/out/
+
 # OS and editor clutter
 .DS_Store
 Thumbs.db

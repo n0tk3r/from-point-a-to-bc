@@ -14,11 +14,15 @@
 //   5. The wagon drives into the portal. White flash.
 //   6. The time tunnel. Years fly past.
 //   7. White flash. The title screen takes over (see Game.title).
+//
+// The road is a painting (art/scenes/highway/). highway.js puts it on the stage, with the parts of it that change.
 
-const YEARS = ["1969 A.D.", "1492 A.D.", "476 A.D.", "44 B.C.", "1250 B.C.", "2560 B.C."];
+import { highway, lane, VANISH, NEAR, REST, FAR } from "./highway.js";
+
+const YEARS = ["1969 A.D.", "1492 A.D.", "476 A.D.", "44 B.C.", "2560 B.C."];
 
 export default async function intro(g) {
-  const { art, ease } = g;
+  const { ease } = g;
 
   // ---- 1. studio card ----
   g.view.clear();
@@ -30,40 +34,33 @@ export default async function intro(g) {
   await g.card("n0tk3r presents", "", { plain: true, ms: 1700 });
 
   // ---- 2. the road at dusk ----
-  const drawn = g.view.draw(art.highway({ sun: true }), "A desert highway at dusk.");
-  const portal = g.q("#portal"), sun = g.q("#sun"), roadGlow = g.q("#road-glow-shape");
-  const strike = g.q("#sign-strike"), bc = g.q("#sign-bc");
-  portal.style.opacity = 0;
-  portal.style.transform = "scale(0.01)";
-  roadGlow.style.opacity = 0;
-  strike.style.strokeDashoffset = 1;
-  bc.style.opacity = 0;
-  const wagon = g.view.cast.addThing("wagon", "wagon", 160, 262, 2.0).flag("bounce", true);
-  await drawn;
+  const road = highway(g, "A desert highway at dusk.");
+  road.hole(0);                         // the sun is still the sun,
+  road.strike(0);                       // and the sign still says POINT B
+  road.bc(0);
+  // The wagon is right in front of us, astride the middle of an empty road. It pulls over into its lane as it goes.
+  const middle = VANISH[0], side = lane(REST);
+  road.drive(NEAR, 1, middle);
+  await road.ready;
 
   await g.fade(0, 900);
-  await g.tween(2600, (k) => wagon.place(160 + 24 * k, 262 - 80 * k, 2.0 - 1.28 * k), ease.out);
+  await g.tween(2600, (k) => road.drive(NEAR + (REST - NEAR) * k, 1, middle + (side - middle) * k), ease.out);
   await g.say("intro.1", "intro.2");
 
   // ---- 3. the sky opens where the sun should be ----
   g.sfx("portal");
-  await g.tween(1500, (k) => {
-    portal.style.opacity = k;
-    portal.style.transform = `scale(${Math.max(k, 0.01)})`;
-    sun.style.opacity = 1 - k;
-    roadGlow.style.opacity = k;
-  }, ease.out);
+  await g.tween(1500, (k) => road.hole(k), ease.out);
   await g.say("intro.3", "intro.4");
 
   // ---- 4. the sign changes its mind ----
   g.sfx("paint");
-  await g.tween(450, (k) => { strike.style.strokeDashoffset = 1 - k; });
-  await g.tween(350, (k) => { bc.style.opacity = k; });
+  await g.tween(450, (k) => road.strike(k));
+  await g.tween(350, (k) => road.bc(k));
   await g.wait(800);
 
   // ---- 5. into the portal ----
-  wagon.flag("bounce", false);
-  await g.tween(1500, (k) => wagon.place(184 - 24 * k, 182 - 66 * k, 0.72 * (1 - 0.94 * k)).fade(1 - k * k * k), ease.in);
+  road.bounce(false);
+  await g.tween(1500, (k) => road.drive(REST + (FAR - REST) * k, 1 - k * k * k), ease.in);
   g.sfx("flash");
   await g.fade(1, 300, "#fff");
 

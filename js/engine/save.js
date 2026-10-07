@@ -49,6 +49,13 @@ const migrations = {
     if (flags["demo.done"]) { flags["rome.tossed"] = true; delete flags["demo.done"]; }
     return data;
   },
+  // 2 -> 3. The stage became one 800x600 painted picture. Places saved before that are on the old 320x200
+  // grid and mean nothing on the new pictures, so they are forgotten: each lead keeps their scene, and
+  // appears on that scene's own mark for them when it is next built.
+  2: (data) => {
+    for (const place of Object.values(data.where || {})) if (place) { delete place.x; delete place.y; }
+    return data;
+  },
 };
 
 /** Check an envelope and return it with its data upgraded to the current version. */

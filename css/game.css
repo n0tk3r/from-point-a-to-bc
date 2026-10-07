@@ -1,6 +1,7 @@
 /* Layout and interface for From Point A to B.C.
    Colors come from tokens.css. Sizes use cqw, which is 1% of the stage width,
-   so everything scales with the stage. One grid pixel is 100cqw / 320. */
+   so everything scales with the stage. The stage is an 800x600 picture (4:3):
+   one picture pixel is 0.125cqw, and the stage is 75cqw high. */
 
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -16,9 +17,9 @@ body {
 
 .stage {
   position: relative;
-  width: min(100vw, 160vh);
-  width: min(100vw, 160dvh);
-  aspect-ratio: 16 / 10;
+  width: min(100vw, 133.333vh);
+  width: min(100vw, 133.333dvh);
+  aspect-ratio: 4 / 3;
   container-type: inline-size;
   overflow: hidden;
   background: var(--sky-1);
@@ -27,7 +28,7 @@ body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 
-  --u: calc(100cqw / 320);   /* one grid pixel */
+  --u: calc(100cqw / 320);   /* a size unit for the interface: 2.5 picture pixels. (Not a position: the picture is 800x600.) */
   --outline: 0.18cqw 0 0 #000, -0.18cqw 0 0 #000, 0 0.18cqw 0 #000, 0 -0.18cqw 0 #000,
              0.18cqw 0.18cqw 0 #000, -0.18cqw 0.18cqw 0 #000, 0.18cqw -0.18cqw 0 #000, -0.18cqw -0.18cqw 0 #000;
   /* papyrus: two crossed layers of fibre over a warm sheet */
@@ -44,15 +45,30 @@ body {
 .layer { position: absolute; inset: 0; isolation: isolate; }
 [hidden] { display: none !important; }
 
-#scene svg, #scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-/* The backdrop and the cast are painted at 640x400 and shown with hard pixels, never blurred. */
-#scene canvas, #cast { width: 100%; height: 100%; image-rendering: crisp-edges; image-rendering: pixelated; }
+/* (Only the layers themselves: a drawing inside the live layer can hold a smaller drawing with a size of its own.
+   The picture element is the painted backdrop: the scene view puts it there. See js/engine/scene.js.) */
+#scene > svg, #scene > canvas, #scene > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* The backdrop and the cast are 800x600 pictures, scaled to the stage. HOW they are scaled depends on how far
+   (the scene view measures it and sets the class "crisp": js/engine/scene.js, CRISP_FROM):
+     by less than two    smoothly. This is most windows on an ordinary screen: 1.8 times at 1440x1080, 1.4 at
+                         1100x825. With hard pixels at such a size some picture pixels come out one screen pixel
+                         wide and some two: a thin line turns into dashes, an eye is twice as big in one place as
+                         in the next, the speckle of the paint turns harsh, and a walker's features swim as he moves.
+     by two or more      with hard pixels, each a clean block. This is a big or a sharp screen, and at that size
+                         smoothing is simply a blur.
+   The painting and the people always get the same treatment, so they always match. So does a painted picture that
+   a cutscene puts in the live layer, whatever it asks for itself, and the time tunnel. */
+#scene > canvas, #scene > img, #cast { width: 100%; height: 100%; }
+#scene > canvas, #scene > img, #cast, #fx, #scene > .live image { image-rendering: auto !important; }
+.stage.crisp #scene > canvas, .stage.crisp #scene > img, .stage.crisp #cast, .stage.crisp #fx, .stage.crisp #scene > .live image {
+  image-rendering: crisp-edges !important; image-rendering: pixelated !important;
+}
 #cast, #dialogue, #card, #fade, #title { pointer-events: none; }
 /* A close look at something small (a screen, a notice). It covers the scene, so nothing under it can be clicked. */
 #closeup { width: 100%; height: 100%; display: block; }
 #closeup .veil { fill: rgba(7, 4, 13, 0.76); }
 #closeup text { font-family: var(--font-text); }
-#fx { width: 100%; height: 100%; display: none; image-rendering: pixelated; pointer-events: none; }
+#fx { width: 100%; height: 100%; display: none; pointer-events: none; }
 #fx.on { display: block; }
 #fade { background: #000; opacity: 0; }
 
@@ -63,8 +79,8 @@ body {
 #hot.reveal .spot, #hot .spot:focus-visible {
   fill: rgba(94, 242, 255, 0.14);
   stroke: var(--time-cyan);
-  stroke-width: 0.8;
-  stroke-dasharray: 3 2;
+  stroke-width: 2;
+  stroke-dasharray: 8 5;
 }
 
 /* ---------- title ---------- */
@@ -177,6 +193,9 @@ h1 {
 .team { position: absolute; top: 1.6%; left: 1.2%; display: flex; gap: 0.7cqw; }
 .tool.face { min-width: 0; width: max(6.4cqw, 30px); padding: 0.5cqw 0.6cqw 1.1cqw; box-shadow: inset 0 -0.6cqw 0 var(--who, var(--ink)); }
 .tool.face img { display: block; width: 100%; aspect-ratio: 1; image-rendering: crisp-edges; image-rendering: pixelated; pointer-events: none; }
+.tool.face { position: relative; }
+.tool.face[data-n]::after { content: attr(data-n); position: absolute; right: 0.5cqw; top: 0.7cqw; min-width: max(1.9cqw, 11px); height: max(1.9cqw, 11px); border-radius: 50%; background: var(--cream); color: var(--ink); font: 700 max(1.3cqw, 8px)/max(1.9cqw, 11px) var(--font-text); text-align: center; box-shadow: 0 0 0 0.15cqw var(--ink); }   /* how many things that person is carrying */
+.tool.face[aria-pressed="true"]::after { display: none; }      /* (the one you are playing has their things along the bottom) */
 .tool.face[aria-pressed="false"] { filter: saturate(0.75) brightness(0.86); }
 .tool.face[aria-pressed="false"]:hover, .tool.face[aria-pressed="false"]:focus-visible { filter: none; }
 .label {
@@ -189,9 +208,14 @@ h1 {
   text-shadow: var(--outline);
   pointer-events: none !important;
 }
-.inv { position: absolute; left: 1.2%; bottom: 1.6%; display: flex; gap: 0.8cqw; align-items: flex-end; }
-.inv .item { display: flex; align-items: center; gap: 0.6cqw; }
-.inv .item svg { width: 3.4cqw; height: 3.4cqw; }
+/* The inventory: a tag saying whose it is (with a bar in that person's color, like their portrait), then what is in it.
+   It is always there, empty or not. Only the things themselves take clicks; the tag lets them through to the scene. */
+.inv { position: absolute; left: 1.2%; bottom: 1.6%; display: flex; gap: 0.8cqw; align-items: center; pointer-events: none !important; }
+.inv .pockets { margin: 0; padding: 0.5cqw 1.1cqw 0.6cqw 1.5cqw; background: var(--sheet); clip-path: var(--torn); color: var(--ink); font: max(1.7cqw, 10px)/1.2 var(--font-display); white-space: nowrap; box-shadow: inset 0.6cqw 0 0 var(--who, var(--ink)); }
+.inv .pockets.empty { opacity: 0.78; }
+.inv .item { display: flex; align-items: center; min-width: 0; padding: 0.5cqw 0.8cqw 0.6cqw; pointer-events: auto; }      /* a thing is its picture; pointing at it says its name (ui.js) */
+.inv .item svg, .inv .item img { width: 5cqw; height: 5cqw; }      /* a drawn icon or a painted one: the same size */
+.inv .item img { display: block; object-fit: contain; pointer-events: none; }
 .inv .item[aria-pressed="true"] { background: var(--time-cyan); }
 .place { position: absolute; left: 26%; right: 34%; top: 2%; text-align: center; margin: 0; font: max(1.9cqw, 10px)/1.2 var(--font-display); letter-spacing: 0.12em; color: var(--cream); text-shadow: 0 0.2cqw 0 rgba(0, 0, 0, 0.75), 0 0 0.6cqw rgba(0, 0, 0, 0.6); pointer-events: none !important; }
 

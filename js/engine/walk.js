@@ -12,56 +12,62 @@
 //      moving "into" the picture covers more ground than moving across it.
 //
 // This file also knows where the lead may walk. A scene gives a walkable outline
-// and each prop gives a footprint; the lead cannot stand in a footprint, and when
-// something is in the way a route is found around it.
+// and each prop or painted cut-out gives a footprint; the lead cannot stand in a
+// footprint, and when something is in the way a route is found around it.
+//
+// Every number here is in picture pixels (see grid.js).
+
+import { W, H } from "./grid.js";
 
 /** Moving one pixel up or down the screen covers this many times the ground of one pixel sideways. */
 export const DEPTH = 2.2;
 
 /** How big a figure is with its feet at height y. 1 is full size. */
 export function scaleAt(scene, y) {
-  const horizon = scene.horizon ?? 118, full = scene.full ?? 190;
+  const horizon = scene.horizon ?? 260, full = scene.full ?? 590;
   const k = (y - horizon) / (full - horizon);
   return Math.min(scene.maxScale ?? 1.12, Math.max(scene.minScale ?? 0.26, k));
 }
 
-const inside = (poly, x, y) => {
-  let hit = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
-    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) hit = !hit;
-  }
-  return hit;
-};
+// Where a figure may stand is kept for every pixel. Routes are searched on a coarser grid of
+// squares STEP pixels wide (160 by 120 of them), which is fine enough and keeps a search short.
+const STEP = 5, GW = W / STEP, GH = H / STEP;
 
-const W = 320, H = 200, STEP = 2, GW = W / STEP, GH = H / STEP;
+/** Call fill(y, from, to) for each run of pixels inside an outline, row by row. Much quicker than asking about every pixel in turn. */
+function rows(poly, fill) {
+  let y0 = Infinity, y1 = -Infinity;
+  for (const [, y] of poly) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  for (let y = Math.max(0, Math.floor(y0)); y <= Math.min(H - 1, Math.ceil(y1)); y++) {
+    const py = y + 0.5, xs = [];
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+      if ((yi > py) !== (yj > py)) xs.push(xi + ((py - yi) / (yj - yi)) * (xj - xi));
+    }
+    xs.sort((a, b) => a - b);
+    for (let k = 0; k + 1 < xs.length; k += 2) {
+      const from = Math.max(0, Math.ceil(xs[k] - 0.5)), to = Math.min(W - 1, Math.ceil(xs[k + 1] - 0.5) - 1);   // a pixel counts when its middle is inside
+      if (from <= to) fill(y, from, to);
+    }
+  }
+}
 
 export class WalkMap {
   /**
    * scene.walk is { area: [[x, y], ...] } (an outline) or { x: [min, max], y: [min, max] } (a box).
-   * blocked is a list of outlines nobody can stand in: prop footprints, seated people, water.
+   * blocked is a list of outlines nobody can stand in: the footprints of props and cut-outs, seated people, water.
    */
   constructor(scene, blocked = []) {
-    const walk = scene.walk || { x: [0, 320], y: [130, 198] };
+    const walk = scene.walk || { x: [0, W], y: [290, 595] };          // with nothing said: the lower half of the picture
     const area = walk.area || [[walk.x[0], walk.y[0]], [walk.x[1], walk.y[0]], [walk.x[1], walk.y[1]], [walk.x[0], walk.y[1]]];
-    const solid = new Uint8Array(W * H);
-    for (const poly of blocked) {
-      let x0 = W, x1 = 0, y0 = H, y1 = 0;
-      for (const [x, y] of poly) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
-      for (let y = Math.max(0, Math.floor(y0)); y <= Math.min(H - 1, Math.ceil(y1)); y++)
-        for (let x = Math.max(0, Math.floor(x0)); x <= Math.min(W - 1, Math.ceil(x1)); x++)
-          if (inside(poly, x + 0.5, y + 0.5)) solid[y * W + x] = 1;
-    }
-    // A figure has some width, so keep its center a little way off every obstacle.
-    const mx = walk.margin ? walk.margin[0] : 5, my = walk.margin ? walk.margin[1] : 2;
     const ok = (this.ok_ = new Uint8Array(W * H));
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (inside(area, x + 0.5, y + 0.5)) ok[y * W + x] = 1;
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-      if (!solid[y * W + x]) continue;
-      for (let dy = -my; dy <= my; dy++) for (let dx = -mx; dx <= mx; dx++) {
-        const xx = x + dx, yy = y + dy;
-        if (xx >= 0 && yy >= 0 && xx < W && yy < H) ok[yy * W + xx] = 0;
-      }
+    rows(area, (y, from, to) => ok.fill(1, y * W + from, y * W + to + 1));
+    // A figure has some width, so keep its center a little way off every obstacle.
+    const mx = walk.margin ? walk.margin[0] : 12, my = walk.margin ? walk.margin[1] : 5;
+    for (const poly of blocked) {
+      rows(poly, (y, from, to) => {
+        const a = Math.max(0, from - mx), b = Math.min(W - 1, to + mx);
+        for (let yy = Math.max(0, y - my); yy <= Math.min(H - 1, y + my); yy++) ok.fill(0, yy * W + a, yy * W + b + 1);
+      });
     }
   }
 
@@ -71,18 +77,22 @@ export class WalkMap {
     return xi >= 0 && yi >= 0 && xi < W && yi < H && this.ok_[yi * W + xi] === 1;
   }
 
-  /** The closest place a figure may stand. */
+  /** The closest place a figure may stand. (Up and down the screen counts for more than sideways: see DEPTH.) */
   nearest(x, y) {
     if (this.ok(x, y)) return [x, y];
+    const xi = Math.round(x), yi = Math.round(y), from = Math.min(W - 1, Math.max(0, xi));
     let best = null, bestD = Infinity;
-    const xi = Math.round(x), yi = Math.round(y);
-    for (let r = 1; r < 200 && (best === null || r * r < bestD + 4); r++) {
-      for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
-        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-        const xx = xi + dx, yy = yi + dy;
-        if (!this.ok(xx, yy)) continue;
-        const d = dx * dx + dy * dy * DEPTH * DEPTH;
-        if (d < bestD) { bestD = d; best = [xx + 0.5, yy + 0.5]; }
+    // Row by row, outward from the row asked for. In each row only two places can be the nearest: the first
+    // one to the left and the first to the right. Stop once a row is too far up or down to hold anything nearer.
+    for (let dy = 0, far = 0; far < bestD; dy++, far = dy * dy * DEPTH * DEPTH) {
+      if (yi - dy < 0 && yi + dy >= H) break;                                  // off both ends of the picture
+      for (const yy of dy ? [yi - dy, yi + dy] : [yi]) {
+        if (yy < 0 || yy >= H) continue;
+        const row = this.ok_.subarray(yy * W, (yy + 1) * W);
+        for (const xx of [row.lastIndexOf(1, from), row.indexOf(1, from)]) {
+          const d = (xx - xi) * (xx - xi) + far;
+          if (xx >= 0 && d < bestD) { bestD = d; best = [xx + 0.5, yy + 0.5]; }
+        }
       }
     }
     return best || [x, y];
@@ -101,7 +111,8 @@ export class WalkMap {
     if (this.clear(a, b)) return [b];
     // A* over a coarse grid. Moving up or down the screen costs more, as it covers more ground.
     const cell = (p) => [Math.min(GW - 1, Math.max(0, Math.floor(p[0] / STEP))), Math.min(GH - 1, Math.max(0, Math.floor(p[1] / STEP)))];
-    const free = (cx, cy) => cx >= 0 && cy >= 0 && cx < GW && cy < GH && this.ok(cx * STEP + 1, cy * STEP + 1);
+    const mid = STEP / 2;                              // a square is free when its middle is
+    const free = (cx, cy) => cx >= 0 && cy >= 0 && cx < GW && cy < GH && this.ok(cx * STEP + mid, cy * STEP + mid);
     let [sx, sy] = cell(a), [tx, ty] = cell(b);
     const snap = (cx, cy) => { if (free(cx, cy)) return [cx, cy]; for (let r = 1; r < 6; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) if (free(cx + dx, cy + dy)) return [cx + dx, cy + dy]; return [cx, cy]; };
     [sx, sy] = snap(sx, sy); [tx, ty] = snap(tx, ty);
@@ -129,7 +140,7 @@ export class WalkMap {
     }
     if (came[goal] < 0 && goal !== start) return [a];   // no way through: stay put
     const cells = [];
-    for (let i = goal; i >= 0 && i !== start; i = came[i]) cells.push([(i % GW) * STEP + 1, ((i / GW) | 0) * STEP + 1]);
+    for (let i = goal; i >= 0 && i !== start; i = came[i]) cells.push([(i % GW) * STEP + mid, ((i / GW) | 0) * STEP + mid]);
     cells.reverse();
     cells.push(b);
     // Pull the route tight: from each point, head straight for the farthest point that can be seen.

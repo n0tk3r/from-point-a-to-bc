@@ -1,0 +1,482 @@
+{
+ "id": "nevada-roadside",
+ "horizon": 290,
+ "full": 590,
+ "light": "early morning sun, low from the right and a little behind us: shadows fall to the left",
+ "walk": [
+  [
+   0,
+   470
+  ],
+  [
+   40,
+   464
+  ],
+  [
+   104,
+   458
+  ],
+  [
+   150,
+   450
+  ],
+  [
+   262,
+   444
+  ],
+  [
+   270,
+   461
+  ],
+  [
+   410,
+   461
+  ],
+  [
+   414,
+   448
+  ],
+  [
+   540,
+   444
+  ],
+  [
+   600,
+   441
+  ],
+  [
+   640,
+   446
+  ],
+  [
+   760,
+   452
+  ],
+  [
+   800,
+   455
+  ],
+  [
+   800,
+   498
+  ],
+  [
+   738,
+   506
+  ],
+  [
+   722,
+   560
+  ],
+  [
+   652,
+   588
+  ],
+  [
+   600,
+   596
+  ],
+  [
+   0,
+   596
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    0,
+    535
+   ],
+   [
+    231,
+    535
+   ],
+   [
+    199,
+    596
+   ],
+   [
+    0,
+    596
+   ]
+  ],
+  [
+   [
+    410,
+    474
+   ],
+   [
+    546,
+    474
+   ],
+   [
+    548,
+    497
+   ],
+   [
+    408,
+    497
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "pump",
+   "file": "pump.png",
+   "base": 452
+  },
+  {
+   "id": "stand",
+   "file": "stand.png",
+   "base": 493
+  },
+  {
+   "id": "car",
+   "file": "car.png",
+   "base": [
+    [
+     0,
+     592
+    ],
+    [
+     225,
+     539
+    ]
+   ]
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  }
+ ],
+ "things": [
+  {
+   "id": "car",
+   "what": "Mom's car",
+   "shape": {
+    "rect": [
+     0,
+     423,
+     225,
+     162
+    ]
+   },
+   "stand": [
+    229,
+    588
+   ],
+   "face": "W"
+  },
+  {
+   "id": "shack",
+   "what": "the shack: LAST STOP",
+   "shape": {
+    "rect": [
+     131,
+     240,
+     216,
+     192
+    ]
+   },
+   "stand": [
+    254,
+    449
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pump",
+   "what": "the gas pump",
+   "shape": {
+    "rect": [
+     334,
+     348,
+     40,
+     96
+    ]
+   },
+   "stand": [
+    346,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "oldtimer",
+   "what": "the old-timer in his lawn chair (drawn by the game)",
+   "shape": {
+    "rect": [
+     362,
+     412,
+     52,
+     90
+    ]
+   },
+   "stand": [
+    432,
+    528
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "stand",
+   "what": "the lemonade stand",
+   "shape": {
+    "rect": [
+     415,
+     318,
+     137,
+     177
+    ]
+   },
+   "stand": [
+    486,
+    522
+   ],
+   "face": "N"
+  },
+  {
+   "id": "fence",
+   "what": "the fence: its far side, its corner, and the top of its near side with the barbed wire (the notice and the men are kept out of this shape)",
+   "shape": {
+    "poly": [
+     [
+      583,
+      352
+     ],
+     [
+      583,
+      305
+     ],
+     [
+      612,
+      311
+     ],
+     [
+      800,
+      312
+     ],
+     [
+      800,
+      354
+     ],
+     [
+      627,
+      354
+     ],
+     [
+      627,
+      433
+     ],
+     [
+      612,
+      432
+     ]
+    ]
+   },
+   "stand": [
+    590,
+    456
+   ],
+   "face": "N"
+  },
+  {
+   "id": "notice",
+   "what": "the notice on the fence: AREA CLOSED",
+   "shape": {
+    "poly": [
+     [
+      630,
+      402
+     ],
+     [
+      695,
+      405
+     ],
+     [
+      695,
+      361
+     ],
+     [
+      630,
+      359
+     ]
+    ]
+   },
+   "stand": [
+    646,
+    472
+   ],
+   "face": "N"
+  },
+  {
+   "id": "agent",
+   "what": "the man in gray, in front of the notice (drawn by the game)",
+   "shape": {
+    "rect": [
+     645,
+     366,
+     32,
+     96
+    ]
+   },
+   "stand": [
+    626,
+    476
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "agent2",
+   "what": "the man in gray, after he has backed off along the fence (drawn by the game)",
+   "shape": {
+    "rect": [
+     736,
+     370,
+     32,
+     102
+    ]
+   },
+   "stand": [
+    708,
+    482
+   ],
+   "face": "E"
+  },
+  {
+   "id": "tracks",
+   "what": "where the tracks stop: the ruts from the fence to the glass, and the glass",
+   "shape": {
+    "poly": [
+     [
+      604,
+      466
+     ],
+     [
+      712,
+      466
+     ],
+     [
+      732,
+      520
+     ],
+     [
+      730,
+      548
+     ],
+     [
+      650,
+      560
+     ],
+     [
+      566,
+      546
+     ],
+     [
+      564,
+      522
+     ]
+    ]
+   },
+   "stand": [
+    548,
+    548
+   ],
+   "face": "E"
+  }
+ ],
+ "exits": [],
+ "marks": {
+  "oldtimer": [
+   388,
+   498
+  ],
+  "agent": [
+   661,
+   458
+  ],
+  "agent2": [
+   752,
+   468
+  ],
+  "mom": [
+   268,
+   572
+  ],
+  "bigsis": [
+   318,
+   588
+  ],
+  "lilsis": [
+   232,
+   554
+  ],
+  "at_the_glass": {
+   "mom": [
+    548,
+    548
+   ],
+   "bigsis": [
+    574,
+    572
+   ],
+   "lilsis": [
+    524,
+    574
+   ]
+  }
+ },
+ "glass": [
+  646,
+  535,
+  80,
+  19
+ ],
+ "over_the_glass": [
+  646,
+  483
+ ],
+ "over_the_glass_is": "a place in the air above the glass, for whatever the game opens there",
+ "glass_is": "[middle x, middle y, half width, half height] of the patch of fused sand; it lies in the sun",
+ "fence_side": {
+  "poly": [
+   [
+    612,
+    432
+   ],
+   [
+    800,
+    442
+   ],
+   [
+    800,
+    326
+   ],
+   [
+    612,
+    324
+   ]
+  ],
+  "what": "the whole of the fence's near side, to the right edge"
+ },
+ "tracks_run": [
+  [
+   649,
+   521
+  ],
+  [
+   662,
+   435
+  ],
+  [
+   674,
+   358
+  ],
+  [
+   679,
+   328
+  ]
+ ],
+ "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here."
+}

@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-build="7d9519f24f">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storyboard: From Point A to B.C.</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/tokens.css?v=cb303b498b">
 <style>
   /* A working page for the people making the game. It reads the same files the game
      does, so what you see here is what the game will do. */
@@ -38,12 +38,17 @@
   .who { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: baseline; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 12px; }
   figure { margin: 0; background: #221a15; }
-  figure .shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
-  figure svg, figure canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  figure canvas { image-rendering: crisp-edges; image-rendering: pixelated; }
-  figure .spots rect, figure .spots circle, figure .spots polygon { fill: rgba(94, 242, 255, 0.12); stroke: #5ef2ff; stroke-width: 0.8; stroke-dasharray: 3 2; }
-  figure .spots .walk { fill: none; stroke: #ff5ec8; stroke-dasharray: 2 2; }
+  /* A scene is an 800x600 picture, shown here at whatever size the column allows. Smoothed, not pixelled:
+     these are small prints of the pictures, for planning; the game shows them at full size with hard pixels. */
+  figure .shot { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--sky-1); }
+  figure .shot > svg, figure .shot > canvas, figure .shot > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }      /* (the picture element is a painted backdrop: the scene view puts it there) */
+  figure .shot image { image-rendering: auto !important; }      /* (a painted part in the live layer is smoothed like the rest) */
+  figure .spots rect, figure .spots circle, figure .spots polygon { fill: rgba(94, 242, 255, 0.12); stroke: #5ef2ff; stroke-width: 2; stroke-dasharray: 8 5; }
+  figure .spots .walk { fill: none; stroke: #ff5ec8; stroke-dasharray: 5 5; }
   figure .spots .solid { fill: rgba(255, 94, 200, 0.25); stroke: #ff5ec8; stroke-dasharray: none; }
+  figure .spots .base { fill: none; stroke: #ffe36b; stroke-width: 2; }
+  figure .spots text { fill: #ffe36b; font: 700 15px system-ui, sans-serif; paint-order: stroke; stroke: #17120f; stroke-width: 3px; }
+  .grid.big { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
   figcaption { padding: 8px 10px 10px; }
   figcaption small { display: block; color: #c9b48a; }
   .pal { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; align-items: center; margin-top: 12px; }
@@ -58,6 +63,160 @@
   /* so the drawings look as they do in the game, minus the motion */
   .ring, .glow, .tw, .ripple, .sway, .flicker { animation: none; }
 </style>
+<!-- files: written by tools/stamp.py. Each address changes when its file changes, so a browser cannot mix old files with new. -->
+<script type="importmap">
+{
+  "imports": {
+    "../js/art/kit.js": "../js/art/kit.js?v=0da23a0f0e",
+    "../js/art/people.js": "../js/art/people.js?v=965ecbc423",
+    "../js/art/pix.js": "../js/art/pix.js?v=9573e1ffa7",
+    "../js/art/props.js": "../js/art/props.js?v=f1a88e489d",
+    "../js/art/rig.js": "../js/art/rig.js?v=8b3caa0a4b",
+    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=f35aae2b38",
+    "../js/content/acts/home.js": "../js/content/acts/home.js?v=2f202a1e06",
+    "../js/content/acts/nevada.js": "../js/content/acts/nevada.js?v=7c88d66811",
+    "../js/content/acts/prologue.js": "../js/content/acts/prologue.js?v=e657c02ab6",
+    "../js/content/acts/rome.js": "../js/content/acts/rome.js?v=11dc5b9891",
+    "../js/content/cutscenes/highway.js": "../js/content/cutscenes/highway.js?v=290fefb344",
+    "../js/content/cutscenes/intro.js": "../js/content/cutscenes/intro.js?v=3d11ac2cfd",
+    "../js/content/cutscenes/title.js": "../js/content/cutscenes/title.js?v=b9b59316cd",
+    "../js/content/lines.en.js": "../js/content/lines.en.js?v=3a4763dd4d",
+    "../js/content/lines/common.en.js": "../js/content/lines/common.en.js?v=4ba8a59a51",
+    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=859ba76567",
+    "../js/content/lines/home.en.js": "../js/content/lines/home.en.js?v=ed3c96d384",
+    "../js/content/lines/nevada.en.js": "../js/content/lines/nevada.en.js?v=2a863b6832",
+    "../js/content/lines/rome.en.js": "../js/content/lines/rome.en.js?v=416fe0f66f",
+    "../js/content/scenes/egypt-chamber.js": "../js/content/scenes/egypt-chamber.js?v=7e831e9810",
+    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=86ad6c75a4",
+    "../js/content/scenes/egypt-gallery.js": "../js/content/scenes/egypt-gallery.js?v=950a20ffda",
+    "../js/content/scenes/egypt-site.js": "../js/content/scenes/egypt-site.js?v=686790118c",
+    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=61a9a59e36",
+    "../js/content/scenes/home-living-room.js": "../js/content/scenes/home-living-room.js?v=69e3073ce1",
+    "../js/content/scenes/index.js": "../js/content/scenes/index.js?v=28f2bd4399",
+    "../js/content/scenes/nevada-roadside.js": "../js/content/scenes/nevada-roadside.js?v=65c3d4e3e3",
+    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=13bfdb1d5d",
+    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=48172e45ad",
+    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=d08636d352",
+    "../js/content/scenes/sketch-example.js": "../js/content/scenes/sketch-example.js?v=51e81ac160",
+    "../js/content/sound.js": "../js/content/sound.js?v=dd7d8a82f9",
+    "../js/content/story.js": "../js/content/story.js?v=c1cbbd8556",
+    "../js/content/world.js": "../js/content/world.js?v=feff4f4469",
+    "../js/engine/assets.js": "../js/engine/assets.js?v=68e63e1a73",
+    "../js/engine/audio.js": "../js/engine/audio.js?v=6159df06e2",
+    "../js/engine/cast.js": "../js/engine/cast.js?v=220a194f3a",
+    "../js/engine/clock.js": "../js/engine/clock.js?v=6108df5801",
+    "../js/engine/dialogue.js": "../js/engine/dialogue.js?v=ad86f8c5dd",
+    "../js/engine/fx.js": "../js/engine/fx.js?v=04bfeb4b61",
+    "../js/engine/game.js": "../js/engine/game.js?v=584b08b685",
+    "../js/engine/grid.js": "../js/engine/grid.js?v=701c0b36ab",
+    "../js/engine/save.js": "../js/engine/save.js?v=cb83d8447e",
+    "../js/engine/scene.js": "../js/engine/scene.js?v=007c66a01c",
+    "../js/engine/state.js": "../js/engine/state.js?v=bb5addbb13",
+    "../js/engine/story.js": "../js/engine/story.js?v=5668206d56",
+    "../js/engine/ui.js": "../js/engine/ui.js?v=453bfbda82",
+    "../js/engine/walk.js": "../js/engine/walk.js?v=a2617d8c49",
+    "../js/main.js": "../js/main.js?v=4b03af2283"
+  }
+}
+</script>
+<script type="application/json" id="art-stamps">
+{
+  "art/items/breakfast.png": "c35a87bef9",
+  "art/items/carmirror.png": "e14ea566e6",
+  "art/items/coin.png": "0a2883cdad",
+  "art/items/coppermirror.png": "e3520ec4d6",
+  "art/items/flashlight.png": "e0bed70580",
+  "art/items/gum.png": "90d1830697",
+  "art/items/incense.png": "78e349e960",
+  "art/items/map.png": "ea8bfbf629",
+  "art/items/note.png": "cba25de46a",
+  "art/items/pass.png": "f613d1abf9",
+  "art/items/phone.png": "7cffa758b5",
+  "art/items/quarter.png": "ed5c4f7c09",
+  "art/items/reed.png": "55786c3dc1",
+  "art/items/rootbeer.png": "868481f231",
+  "art/items/shade.png": "96ea75e74c",
+  "art/items/sunglasses.png": "fb20ed6164",
+  "art/items/toga.png": "c6b5a40078",
+  "art/items/tunic.png": "d582f05040",
+  "art/scenes/egypt-chamber/back.png": "9f13f6dcaa",
+  "art/scenes/egypt-chamber/bench.png": "baf9d0cda3",
+  "art/scenes/egypt-chamber/front.png": "242006b715",
+  "art/scenes/egypt-chamber/layout.json": "c2e51ce38e",
+  "art/scenes/egypt-chamber/mirror.png": "1a37b44cb5",
+  "art/scenes/egypt-crash/back.png": "bcc829b4bf",
+  "art/scenes/egypt-crash/cooler-open.png": "06d443960c",
+  "art/scenes/egypt-crash/donkey.png": "7adfa05c74",
+  "art/scenes/egypt-crash/front.png": "e4a2121792",
+  "art/scenes/egypt-crash/layout.json": "921d6281bd",
+  "art/scenes/egypt-crash/mirror.png": "12bb296008",
+  "art/scenes/egypt-crash/palm-1.png": "16ba289ecf",
+  "art/scenes/egypt-crash/palm-2.png": "d745195fdf",
+  "art/scenes/egypt-crash/palm-3.png": "f12a45dc86",
+  "art/scenes/egypt-crash/palms.png": "899c4bc828",
+  "art/scenes/egypt-crash/steam-0.png": "4a88040845",
+  "art/scenes/egypt-crash/steam-1.png": "d730bed544",
+  "art/scenes/egypt-crash/steam-2.png": "24caac9069",
+  "art/scenes/egypt-crash/steam-3.png": "94c381a920",
+  "art/scenes/egypt-crash/suitcase-open.png": "2094d677d3",
+  "art/scenes/egypt-crash/trunk-open.png": "ab02d6ceb9",
+  "art/scenes/egypt-crash/wagon.png": "39f3cc9d1d",
+  "art/scenes/egypt-gallery/back.png": "d134b4c933",
+  "art/scenes/egypt-gallery/front.png": "69a5c5890c",
+  "art/scenes/egypt-gallery/layout.json": "712ffca5bf",
+  "art/scenes/egypt-gallery/mirror-foot.png": "6aeb123cce",
+  "art/scenes/egypt-gallery/mirror-top.png": "03e400758e",
+  "art/scenes/egypt-site/awning.png": "8e863ae8db",
+  "art/scenes/egypt-site/back.png": "c795ee10eb",
+  "art/scenes/egypt-site/front.png": "12dfbc20cf",
+  "art/scenes/egypt-site/layout.json": "dbc8ae3c28",
+  "art/scenes/egypt-site/shade.png": "001ab929a9",
+  "art/scenes/egypt-site/sledge.png": "a93c13f7aa",
+  "art/scenes/highway/back.png": "8be085926a",
+  "art/scenes/highway/layout.json": "dec53b37ed",
+  "art/scenes/highway/sign-bc.png": "0e470d4449",
+  "art/scenes/highway/sign-strike.png": "e4d899c16c",
+  "art/scenes/highway/sun.png": "d72248f0a5",
+  "art/scenes/highway/wagon-rear-0.png": "78e0128c3b",
+  "art/scenes/highway/wagon-rear-1.png": "e12217debe",
+  "art/scenes/home-living-room/armchair.png": "1e4ff54e71",
+  "art/scenes/home-living-room/back.png": "5cf7ebeaa3",
+  "art/scenes/home-living-room/desk.png": "d15776feb7",
+  "art/scenes/home-living-room/front.png": "cfcf97eba0",
+  "art/scenes/home-living-room/layout.json": "ac4102b3ab",
+  "art/scenes/home-living-room/note.png": "99596781d5",
+  "art/scenes/home-living-room/piano.png": "7cf51aac67",
+  "art/scenes/home-living-room/screen-login.png": "c6bd18accd",
+  "art/scenes/home-living-room/screen-map.png": "f054f1d85f",
+  "art/scenes/home-living-room/screen-offline.png": "5e373f6052",
+  "art/scenes/home-living-room/table.png": "aaba5b72f5",
+  "art/scenes/nevada-roadside/back.png": "5914317a32",
+  "art/scenes/nevada-roadside/car.png": "a4680b6fdc",
+  "art/scenes/nevada-roadside/front.png": "544a2777d4",
+  "art/scenes/nevada-roadside/layout.json": "79a523e361",
+  "art/scenes/nevada-roadside/pump.png": "9b26e18756",
+  "art/scenes/nevada-roadside/stand.png": "cef00a0d51",
+  "art/scenes/rome-steps/altar.png": "95cfaae75e",
+  "art/scenes/rome-steps/back.png": "c2380716bb",
+  "art/scenes/rome-steps/columns.png": "ca55325253",
+  "art/scenes/rome-steps/front.png": "efe2a345d3",
+  "art/scenes/rome-steps/layout.json": "03471f1cb7",
+  "art/scenes/rome-steps/stone.png": "1f150726cc",
+  "art/scenes/rome-steps/tripod.png": "f67b861c8a",
+  "art/scenes/rome-street/awning.png": "e6843a5d20",
+  "art/scenes/rome-street/back.png": "0ce49e777d",
+  "art/scenes/rome-street/fountain.png": "2f6c71e191",
+  "art/scenes/rome-street/front.png": "c2e832e552",
+  "art/scenes/rome-street/laundry.png": "0f9cbdddf6",
+  "art/scenes/rome-street/layout.json": "9910ebcc13",
+  "art/scenes/rome-street/tunic.png": "baf473b14c",
+  "art/scenes/rome-temple/back.png": "9f4686b3ac",
+  "art/scenes/rome-temple/front.png": "cef6285362",
+  "art/scenes/rome-temple/layout.json": "2cdddd5d1f",
+  "art/scenes/rome-temple/table.png": "2d3e7c1367"
+}
+</script>
+<!-- /files -->
 </head>
 <body>
 <main>
@@ -71,8 +230,8 @@
   <div id="acts"></div>
 
   <h2>Scenes</h2>
-  <p class="dim">Each scene in its era's colors, with its props and people in place, as it is when the story first gets there. Cyan boxes are clickable areas. The dashed magenta outline is where the lead can walk; solid magenta patches are footprints to walk around.</p>
-  <div class="grid" id="scenes"></div>
+  <p class="dim">Each scene as it is when the story first gets there: its painted backdrop with its cut-outs laid over it and its people in place (a scene with no painting yet is sketched in its era's colors). Cyan shapes are clickable areas. The dashed magenta outline is where the lead can walk; solid magenta patches are ground something stands on, to walk around. A yellow line is the base of a painted cut-out: people whose feet are above it are drawn behind that cut-out. All the numbers are pixels on the 800x600 picture.</p>
+  <div class="grid big" id="scenes"></div>
 
   <h2>Era palettes</h2>
   <p class="dim">Every era fills the same slots: eight sky bands, two silhouettes, three grounds, dark, light, two features. The time colors on the right never change.</p>
@@ -91,8 +250,10 @@
   import { checkStory, leadsOf } from "../js/engine/story.js";
   import * as art from "../js/art/kit.js";
   import { sceneIds, loadScene } from "../js/content/scenes/index.js";
+  import title from "../js/content/cutscenes/title.js";
   import { SceneView } from "../js/engine/scene.js";
   import { scaleAt } from "../js/engine/walk.js";
+  import { W, H } from "../js/engine/grid.js";
 
   const sceneList = await Promise.all(sceneIds.map(loadScene));
   const scenes = Object.fromEntries(sceneList.map((s) => [s.id, s]));
@@ -100,7 +261,7 @@
   const $ = (id) => document.getElementById(id);
 
   // ---- checks ----
-  const problems = checkStory({ story, scenes, cutscenes: { intro: true }, lines });
+  const problems = checkStory({ story, scenes, cutscenes: { intro: true, title: true }, lines });
   $("check").innerHTML = problems.length
     ? `<div class="bad"><b>${problems.length} thing${problems.length > 1 ? "s" : ""} to fix</b><ul>${problems.map((p) => `<li>${esc(p)}</li>`).join("")}</ul></div>`
     : `<div class="ok"><b>The story checks out.</b> Every beat can be reached, every scene and hint it names exists.</div>`;
@@ -123,46 +284,76 @@
   }).join("");
 
   // ---- scenes ----
-  // Each picture is built the way the game builds it: backdrop as pixels, live parts on top, then the cast.
+  // Each picture is built the way the game builds it (SceneView.show): the backdrop, the live light, the painted
+  // cut-outs, then props and people. `fake` stands in for the game: nothing has happened yet.
   const shape = (h) => h.rect ? `<rect x="${h.rect[0]}" y="${h.rect[1]}" width="${h.rect[2]}" height="${h.rect[3]}"/>`
     : h.circle ? `<circle cx="${h.circle[0]}" cy="${h.circle[1]}" r="${h.circle[2]}"/>` : `<polygon points="${h.poly.map((p) => p.join(",")).join(" ")}"/>`;
   const outline = (pts, cls) => `<polygon class="${cls}" points="${pts.map((q) => q.join(",")).join(" ")}"/>`;
-  const fake = { flag: () => false, q: () => null, has: () => false };      // a stand-in for the game: nothing has happened yet
-  async function still(title, where, era, inner, fill, overlay = "", picture = null) {
+  const fakeFor = (lead) => ({ flag: () => false, has: () => false, holder: () => null, q: () => null, actor: () => null, plane: () => null,
+    store: { data: { active: lead, team: [], flags: {}, inventory: {}, where: {}, seenLines: {} } } });
+  const frame = (title, where, era) => {
     const fig = document.createElement("figure");
     fig.innerHTML = `<div class="shot" data-era="${era}">
-        <canvas class="backdrop" width="640" height="400"></canvas>
-        <svg class="live" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges"></svg>
-        <canvas class="cast" width="640" height="400"></canvas>
-        <svg class="hot spots" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice"></svg></div>
+        <canvas class="backdrop" width="${W}" height="${H}"></canvas>
+        <svg class="live" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" shape-rendering="crispEdges"></svg>
+        <canvas class="cast" width="${W}" height="${H}"></canvas>
+        <svg class="hot spots" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice"></svg></div>
       <figcaption><b>${esc(title)}</b>${where}</figcaption>`;
     $("scenes").appendChild(fig);
-    const view = new SceneView(fig.querySelector(".shot"));
-    await view.draw(inner, title, picture);
-    fill(view.cast);
-    view.cast.update(0);
-    fig.querySelector(".spots").innerHTML = overlay;
+    return fig;
+  };
+
+  // The title and the intro are not a scene file. The stage behind the title is dressed by the cutscene called
+  // "title" (the painted highway, with the hole in time open and the sign changed), and it is run here as the game runs it.
+  {
+    const fig = frame("Title and intro", `<small>The present &middot; js/content/cutscenes/title.js and intro.js, on highway.js &middot; painted</small>`, "present");
+    try {
+      const view = new SceneView(fig.querySelector(".shot"));
+      await title({ view, art, q: (selector) => view.q(selector) });
+      view.cast.update(0);
+    } catch (err) {
+      console.error("Storyboard: the title could not be drawn:", err);
+      fig.querySelector("figcaption").insertAdjacentHTML("beforeend", `<small style="color:#ff5ec8">Could not be drawn: ${esc(err.message)}</small>`);
+    }
   }
-  await still("Title and intro", `<small>The present &middot; js/content/cutscenes/intro.js</small>`, "present", art.highway(), (c) => c.addThing("wagon", "wagon", 184, 182, 0.72));
+
   for (const s of sceneList) {
-    const walk = s.walk.area || [[s.walk.x[0], s.walk.y[0]], [s.walk.x[1], s.walk.y[0]], [s.walk.x[1], s.walk.y[1]], [s.walk.x[0], s.walk.y[1]]];
     // who is in the picture: the scene's party if it has one, otherwise whoever leads the first beat set here
     const first = story.acts.flatMap((a) => a.beats).find((b) => b.scene === s.id) || story.acts.find((a) => a.era === s.era)?.beats[0];
     const leads = s.party || [first ? leadsOf(story, first)[0] : "dad"];
-    const open = (thing) => !thing.when || thing.when(fake);
-    await still(s.name,
-      `<small>${esc(eras[s.era].name)}${eras[s.era].date ? " &middot; " + esc(eras[s.era].date) : ""} &middot; js/content/scenes/${s.id}.js</small>
+    const fake = fakeFor(leads[0]);
+    const open = (thing) => { try { return !thing.when || !!thing.when(fake); } catch { return true; } };     // (a test that needs more of the game than the stand-in has counts as passing)
+    const cuts = s.planes || [], hotspots = s.hotspots || [], kind = s.picture ? "painted" : s.draw ? "drawn by the kit on the old 320x200 grid" : "sketched";
+    const fig = frame(s.name,
+      `<small>${esc(eras[s.era].name)}${eras[s.era].date ? " &middot; " + esc(eras[s.era].date) : ""} &middot; js/content/scenes/${s.id}.js &middot; ${kind}</small>
        <small>Played by: ${leads.map((l) => esc(cast[l].name)).join(", ")}</small>
-       <small>Clickable: ${s.hotspots.filter(open).map((h) => esc(h.name)).join(", ")}</small>${(s.props || []).length ? `<small>Props: ${s.props.map((q) => esc(q.id)).join(", ")}</small>` : ""}
-       <small><a href="../index.html?scene=${esc(s.id)}">Play from here</a></small>`,
-      s.era, s.draw ? s.draw(art, fake) : s.picture ? "" : art.sketch(s),
-      (c) => {
-        for (const q of (s.props || []).filter(open)) c.addThing(q.id, q.kind, q.at[0], q.at[1], q.scale ?? 1, q.options);
-        for (const a of (s.actors || []).filter(open)) c.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], a.scale ?? scaleAt(s, a.at[1])).face(a.face ?? "S");
-        leads.forEach((lead, n) => { const at = (leads.length > 1 && s.spawn[lead]) || [s.spawn.default[0] + 22 * n, s.spawn.default[1]]; c.addFigure(lead, cast[lead].sprite, at[0], at[1], scaleAt(s, at[1])).face("S"); });
-      },
-      outline(walk, "walk") + (s.props || []).filter((q) => q.solid).map((q) => outline(q.solid, "solid")).join("") + s.hotspots.filter(open).map(shape).join(""),
-      s.picture ? "../" + s.picture : null);                 // a scene's picture is named from the top of the site; this page is one folder down
+       <small>Clickable: ${hotspots.filter(open).map((h) => esc(h.name)).join(", ")}</small>` +
+       (cuts.length ? `<small>Cut-outs: ${cuts.map((q) => esc(q.id) + (q.when ? " (when)" : "") + (q.states ? " (" + Object.keys(q.states).map(esc).join(" / ") + ")" : "") + (q.frames ? " (" + q.frames.length + " frames)" : "")).join(", ")}</small>` : "") +
+       ((s.props || []).length ? `<small>Props: ${s.props.map((q) => esc(q.id)).join(", ")}</small>` : "") +
+       `<small><a href="../index.html?scene=${esc(s.id)}">Play from here</a></small>`, s.era);
+    try {
+      const view = new SceneView(fig.querySelector(".shot")), c = view.cast;
+      // (a cut-out whose test needs more of the game than the stand-in has is shown, in its first state)
+      const sure = (test, otherwise) => (g) => { try { return test(g); } catch { return otherwise; } };
+      const planes = (s.planes || []).map((q) => ({ ...q, when: q.when && sure(q.when, true), state: typeof q.state === "function" ? sure(q.state, Object.keys(q.states || {})[0]) : q.state }));
+      await view.show({ ...s, planes }, fake);
+      for (const q of (s.props || []).filter(open)) { const thing = c.addThing(q.id, q.kind, q.at[0], q.at[1], q.scale ?? 1, q.options); thing.plane = q.plane || "floor"; thing.base = q.base ?? null; }
+      for (const a of (s.actors || []).filter(open)) c.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], a.scale ?? scaleAt(s, a.at[1])).face(a.face ?? "S");
+      const spawn = s.spawn || {}, mark = spawn.default || [W / 2, 560];
+      leads.forEach((lead, n) => { const at = spawn[lead] || [mark[0] + 55 * n, mark[1]]; c.addFigure(lead, cast[lead].sprite, at[0], at[1], scaleAt(s, at[1])).face("S"); });
+      c.update(0);
+      const walk = s.walk || { x: [0, W], y: [290, 595] };
+      const ground = walk.area || [[walk.x[0], walk.y[0]], [walk.x[1], walk.y[0]], [walk.x[1], walk.y[1]], [walk.x[0], walk.y[1]]];
+      const shown = c.cutouts().filter((q) => !q.hidden);
+      const base = (q) => typeof q.base === "number" ? `<line class="base" x1="0" y1="${q.base}" x2="${W}" y2="${q.base}"/><text x="6" y="${q.base - 5}">${esc(q.id)}</text>`
+        : Array.isArray(q.base) ? `<line class="base" x1="${q.base[0][0]}" y1="${q.base[0][1]}" x2="${q.base[1][0]}" y2="${q.base[1][1]}"/><text x="${q.base[0][0]}" y="${q.base[0][1] - 5}">${esc(q.id)}</text>` : "";
+      fig.querySelector(".spots").innerHTML = outline(ground, "walk") +
+        [...(s.props || []).filter(open), ...shown.map((q) => q.spec)].filter((q) => q.solid).map((q) => outline(q.solid, "solid")).join("") +
+        hotspots.filter(open).map(shape).join("") + shown.map(base).join("");
+    } catch (err) {                                    // one scene that will not build must not take the page down
+      console.error(`Storyboard: "${s.id}" could not be drawn:`, err);
+      fig.querySelector("figcaption").insertAdjacentHTML("beforeend", `<small style="color:#ff5ec8">Could not be drawn: ${esc(err.message)}</small>`);
+    }
   }
 
   // ---- palettes ----

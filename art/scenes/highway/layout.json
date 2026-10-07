@@ -1,0 +1,18 @@
+{
+  "id": "highway",
+  "horizon": 330,
+  "full": 577,
+  "light": "the sun is dead ahead, half sunk at the end of the road (400, 330): everything is seen against it, shadows run toward us, clouds are lit from underneath",
+  "walk": [],
+  "blocked": [],
+  "planes": [{"id": "sun", "file": "sun.png", "plane": "back", "soft": true}, {"id": "sign-strike", "file": "sign-strike.png", "plane": "back", "rect": [600, 306, 147, 19], "drawn": "left to right"}, {"id": "sign-bc", "file": "sign-bc.png", "plane": "back", "rect": [611, 328, 85, 50]}, {"id": "wagon", "frames": ["wagon-rear-0.png", "wagon-rear-1.png"], "fps": 4, "foot": [251, 419], "at": [521, 548], "scale": 0.42}],
+  "things": [{"id": "sign", "what": "the road sign: POINT B, 40", "shape": {"rect": [599, 286, 153, 92]}}, {"id": "sun", "what": "the sun, going down at the end of the road", "shape": {"rect": [375, 305, 50, 25]}}],
+  "exits": [],
+  "marks": {},
+  "road": [[550, 600], [533, 570], [517, 540], [500, 510], [483, 480], [467, 450], [450, 420], [439, 400], [428, 380], [417, 360], [408, 345], [403, 336], [400, 330]],
+  "sun": [400, 330, 25],
+  "sign": {"rect": [599, 286, 153, 92], "board": [599, 286, 153, 92], "posts_foot_y": 455, "point_b": [614, 304, 123, 24]},
+  "wagon": {"files": ["wagon-rear-0.png", "wagon-rear-1.png"], "size": [499, 503], "foot": [251, 419], "foot_is": "the middle of the rear axle, on the road (the shadow lies below it, toward us)", "full_size_body_px": 384, "scale_rule": "to sit in its lane the cut-out is drawn at scale = (foot_y - 330) / 518.4, with foot_x on the 'road' line", "scale_at": {"600": 0.521, "548": 0.42, "500": 0.328, "434": 0.201, "380": 0.096, "345": 0.029}, "lane_half_width_px_at_600": 150},
+  "vanish": [400, 330],
+  "road_edges_at_600": [90, 710]
+}

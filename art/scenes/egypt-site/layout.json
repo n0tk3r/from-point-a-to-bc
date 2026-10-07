@@ -1,0 +1,717 @@
+{
+ "id": "egypt-site",
+ "horizon": 250,
+ "full": 590,
+ "minScale": 0.33,
+ "light": "low afternoon sun from the left; shadows lie to the right and a little toward us",
+ "note": "minScale 0.33 keeps a grown-up about 53 px tall on the steps and landing, which fits the doorway (44 x 67 px). 'stair' and 'landing' are feet positions for walking up, foot of the steps first; the game may walk them as a path.",
+ "walk": [
+  [
+   0,
+   578
+  ],
+  [
+   0,
+   398
+  ],
+  [
+   120,
+   392
+  ],
+  [
+   212,
+   381
+  ],
+  [
+   248,
+   378
+  ],
+  [
+   318,
+   381
+  ],
+  [
+   405,
+   376
+  ],
+  [
+   487,
+   372
+  ],
+  [
+   515,
+   372
+  ],
+  [
+   616,
+   372
+  ],
+  [
+   635,
+   381
+  ],
+  [
+   670,
+   399
+  ],
+  [
+   696,
+   396
+  ],
+  [
+   678,
+   365
+  ],
+  [
+   661,
+   337
+  ],
+  [
+   647,
+   312
+  ],
+  [
+   634,
+   290
+  ],
+  [
+   622,
+   269
+  ],
+  [
+   622,
+   274
+  ],
+  [
+   512,
+   273
+  ],
+  [
+   512,
+   261
+  ],
+  [
+   649,
+   262
+  ],
+  [
+   649,
+   269
+  ],
+  [
+   663,
+   290
+  ],
+  [
+   677,
+   312
+  ],
+  [
+   693,
+   337
+  ],
+  [
+   711,
+   365
+  ],
+  [
+   731,
+   396
+  ],
+  [
+   752,
+   409
+  ],
+  [
+   800,
+   411
+  ],
+  [
+   800,
+   506
+  ],
+  [
+   722,
+   504
+  ],
+  [
+   612,
+   516
+  ],
+  [
+   552,
+   572
+  ],
+  [
+   544,
+   596
+  ],
+  [
+   122,
+   596
+  ],
+  [
+   112,
+   587
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    54,
+    475
+   ],
+   [
+    224,
+    473
+   ],
+   [
+    245,
+    437
+   ],
+   [
+    103,
+    439
+   ]
+  ],
+  [
+   [
+    397,
+    466
+   ],
+   [
+    563,
+    481
+   ],
+   [
+    571,
+    460
+   ],
+   [
+    419,
+    448
+   ]
+  ],
+  [
+   [
+    524,
+    398
+   ],
+   [
+    604,
+    392
+   ],
+   [
+    606,
+    380
+   ],
+   [
+    526,
+    384
+   ]
+  ],
+  [
+   [
+    360,
+    472
+   ],
+   [
+    384,
+    472
+   ],
+   [
+    384,
+    462
+   ],
+   [
+    360,
+    462
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "awning",
+   "file": "awning.png",
+   "base": 474
+  },
+  {
+   "id": "sledge",
+   "file": "sledge.png",
+   "base": [
+    [
+     420,
+     467
+    ],
+    [
+     559,
+     479
+    ]
+   ]
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  },
+  {
+   "id": "shade",
+   "file": "shade.png",
+   "base": 521,
+   "note": "show only while the shade is being held up at the sunny spot"
+  }
+ ],
+ "things": [
+  {
+   "id": "entrance",
+   "what": "the doorway into the pyramid, under two great slabs",
+   "shape": {
+    "rect": [
+     515,
+     195,
+     52,
+     75
+    ]
+   },
+   "stand": [
+    552,
+    266
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stair",
+   "what": "the mud-brick steps up to the doorway",
+   "shape": {
+    "poly": [
+     [
+      686,
+      400
+     ],
+     [
+      746,
+      400
+     ],
+     [
+      659,
+      269
+     ],
+     [
+      613,
+      269
+     ]
+    ]
+   },
+   "stand": [
+    716,
+    400
+   ],
+   "face": "N"
+  },
+  {
+   "id": "scribe-desk",
+   "what": "the scribe's station under its awning",
+   "shape": {
+    "rect": [
+     52,
+     332,
+     195,
+     145
+    ]
+   },
+   "stand": [
+    243,
+    462
+   ],
+   "face": "W"
+  },
+  {
+   "id": "sledge",
+   "what": "the sledge with its block, and the wet sand before it",
+   "shape": {
+    "rect": [
+     395,
+     379,
+     177,
+     102
+    ]
+   },
+   "stand": [
+    474,
+    484
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rope",
+   "what": "the hauling rope lying up to the gang",
+   "shape": {
+    "poly": [
+     [
+      392,
+      444
+     ],
+     [
+      400,
+      460
+     ],
+     [
+      300,
+      414
+     ],
+     [
+      226,
+      388
+     ],
+     [
+      222,
+      374
+     ],
+     [
+      300,
+      396
+     ]
+    ]
+   },
+   "stand": [
+    330,
+    440
+   ],
+   "face": "N"
+  },
+  {
+   "id": "blocks",
+   "what": "casing blocks waiting, with the masons' tools on them",
+   "shape": {
+    "poly": [
+     [
+      561,
+      486
+     ],
+     [
+      636,
+      447
+     ],
+     [
+      800,
+      440
+     ],
+     [
+      800,
+      600
+     ],
+     [
+      556,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    538,
+    566
+   ],
+   "face": "E"
+  },
+  {
+   "id": "sunspot",
+   "what": "a clear patch of sand in full sun, in sight of the doorway",
+   "shape": {
+    "rect": [
+     296,
+     504,
+     70,
+     30
+    ]
+   },
+   "stand": [
+    330,
+    520
+   ],
+   "face": "E"
+  },
+  {
+   "id": "scaffold",
+   "what": "the masons' scaffold on the shaded face",
+   "shape": {
+    "rect": [
+     640,
+     60,
+     160,
+     300
+    ]
+   },
+   "stand": [
+    744,
+    414
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pyramid",
+   "what": "the Great Pyramid, close to",
+   "shape": {
+    "poly": [
+     [
+      268,
+      334
+     ],
+     [
+      341,
+      0
+     ],
+     [
+      800,
+      0
+     ],
+     [
+      800,
+      316
+     ]
+    ]
+   },
+   "stand": [
+    430,
+    420
+   ],
+   "face": "N"
+  },
+  {
+   "id": "queens",
+   "what": "the queens' three small pyramids, the builders' town and the river",
+   "shape": {
+    "rect": [
+     0,
+     228,
+     176,
+     56
+    ]
+   },
+   "stand": [
+    60,
+    410
+   ],
+   "face": "N"
+  },
+  {
+   "id": "yard",
+   "what": "the stone yard: blocks waiting beside the hauling road",
+   "shape": {
+    "rect": [
+     24,
+     280,
+     140,
+     48
+    ]
+   },
+   "stand": [
+    110,
+    404
+   ],
+   "face": "N"
+  },
+  {
+   "id": "water",
+   "what": "the site's water jars, by the road from the river",
+   "shape": {
+    "rect": [
+     0,
+     496,
+     104,
+     104
+    ]
+   },
+   "stand": [
+    130,
+    590
+   ],
+   "face": "W"
+  },
+  {
+   "id": "bricks",
+   "what": "mud bricks stacked to dry, and their mould",
+   "shape": {
+    "rect": [
+     520,
+     376,
+     96,
+     24
+    ]
+   },
+   "stand": [
+    560,
+    410
+   ],
+   "face": "N"
+  }
+ ],
+ "exits": [
+  {
+   "to": "egypt-gallery",
+   "shape": {
+    "poly": [
+     [
+      519,
+      266
+     ],
+     [
+      564,
+      266
+     ],
+     [
+      564,
+      200
+     ],
+     [
+      519,
+      199
+     ]
+    ]
+   },
+   "stand": [
+    552,
+    266
+   ]
+  },
+  {
+   "to": "egypt-crash",
+   "shape": {
+    "poly": [
+     [
+      0,
+      520
+     ],
+     [
+      150,
+      540
+     ],
+     [
+      176,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    130,
+    590
+   ]
+  }
+ ],
+ "marks": {
+  "dad": [
+   170,
+   574
+  ],
+  "scribe": [
+   150,
+   448
+  ],
+  "overseer": [
+   360,
+   430
+  ],
+  "hauler1": [
+   300,
+   400
+  ],
+  "hauler2": [
+   270,
+   390
+  ],
+  "hauler3": [
+   240,
+   382
+  ],
+  "guard": [
+   690,
+   420
+  ],
+  "shadeHolder": [
+   330,
+   520
+  ],
+  "atDoor": [
+   552,
+   266
+  ],
+  "stairFoot": [
+   716,
+   400
+  ],
+  "stairTop": [
+   636,
+   269
+  ]
+ },
+ "stair": [
+  [
+   716,
+   400
+  ],
+  [
+   692,
+   360
+  ],
+  [
+   670,
+   326
+  ],
+  [
+   652,
+   296
+  ],
+  [
+   636,
+   269
+  ]
+ ],
+ "landing": [
+  [
+   627,
+   269
+  ],
+  [
+   586,
+   267
+  ],
+  [
+   552,
+   266
+  ]
+ ],
+ "door": {
+  "rect": [
+   519,
+   199,
+   44,
+   67
+  ],
+  "middle": [
+   542,
+   233
+  ]
+ },
+ "beam": [
+  [
+   391,
+   406
+  ],
+  [
+   542,
+   229
+  ]
+ ],
+ "shade": {
+  "heldAt": [
+   330,
+   520
+  ],
+  "middle": [
+   391,
+   406
+  ]
+ }
+}

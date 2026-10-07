@@ -54,7 +54,7 @@ everything, including the things he is wrong about. He leads in the past.
 
 **Fears.** That this is his fault. (It is.) Asking for directions.
 
-**Gets wrong.** He treats 1250 B.C. like a rest stop with poor signage.
+**Gets wrong.** He treats 2560 B.C. like a rest stop with poor signage.
 
 **How he talks.**
 - Dad jokes, delivered straight. The turn comes in the last three words.
@@ -190,16 +190,18 @@ over-explains, and she corrects grown-ups.
 - She is protective of Little Sister and would deny it.
 
 **Running gags (draft).** "Fun fact." Narrating herself. The chapter titles of her
-novel change with events. She counts in fours when she is nervous. There is always a
-book in her arm. Things are not facts until she can footnote them.
+novel change with events. She counts in fours when she is nervous. She packs a second
+book in case the first one ends, and then opens neither, because what is happening is
+better. Things are not facts until she can footnote them.
 
 **In play.** She supplies the fact: the year behind a password, what a coin is, what a
 pair of numbers means. She plays any piano she meets. She notices.
 
-**How she looks and moves.** Indigo cardigan with a round white collar, gray pleated
-skirt, knee socks, glasses, long hair under a headband, and a book held against her
-chest that she never puts down. One arm swings when she walks; the other has the book.
-When she talks she raises a finger, pushes her glasses up, or points.
+**How she looks and moves.** Indigo cardigan with a white collar and cuffs, gray
+pleated skirt, white knee socks, long hair down her back under a headband. No glasses,
+and nothing in her hands: the reading shows in how she talks, not in what she carries.
+She stands holding one elbow, thinking, and walks with a small, even swing of both
+arms. When she talks she nods, raises a finger, puts a hand to her chin, or points.
 
 **How she changes (draft).** She learns to say "I don't know", and that it is where
 finding out begins.
@@ -207,7 +209,7 @@ finding out begins.
 > "Fun fact: sliced bread was first sold on the seventh of July, 1928, in Chillicothe, Missouri."
 > "We don't have a destination. A journey without a destination is just Dad."
 > "Nobody numbers sectors like that. Those aren't places, Mother. I think those are years."
-> "Sector 44. Sector 1250. Years. I am almost certain. 'Almost' is the part I don't like."
+> "Sector 44. Sector 2560. Years. I am almost certain. 'Almost' is the part I don't like."
 
 ---
 
@@ -262,7 +264,7 @@ shows her muscles, or points.
 | **Big Sister and Little Sister** | They bicker like a team. One explains the plan, the other has already done it. |
 | **Dad and the Son** | The same person at two sizes. Each is sure the other is the one who is lost. |
 | **Mom about Dad** | She is not surprised. She is coming to get him anyway. |
-| **The Son and Little Sister** | They have never compared notes, and they both think the man on the coin needs a snack. |
+| **The Son and Little Sister** | They have never compared notes, and they both think the man on the coin needs a snack. Two thousand years apart, each of them finds the sausages by smell. |
 
 In the game they say these things to each other: click a companion to talk to her, and
 look at her (right-click, or press and hold) to hear what the one you are playing thinks of her.
@@ -274,13 +276,15 @@ look at her (right-click, or press and hold) to hear what the one you are playin
 The format is the one from the puzzle document method: role; one trait or joke; what
 they want.
 
-**Ancient Egypt**
+**Ancient Egypt** and **Rome**
 
-- THE SCRIBE: keeper of records on the riverbank; has had writer's block since his pen fell in the Nile; wants to finish one sheet.
+The eight people of Egypt and the seven of Rome are written out, in this form, at the
+head of their own acts: [PUZZLES-egypt.md](PUZZLES-egypt.md) and
+[PUZZLES-rome.md](PUZZLES-rome.md).
 
 **The middle of Nevada, the present (draft)**
 
-- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing; saw the sky open and has told everyone he did not; wants to be asked nicely.
+- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
 - THE MAN IN GRAY: stands in front of a government notice in the desert; can neither confirm nor deny the fence; wants nobody to read what is behind him, and is no match for a seven-year-old.
 
 ---
@@ -292,7 +296,7 @@ carry personality, and are worth as much care as the colors:
 
 | Setting | What it is | Examples |
 | --- | --- | --- |
-| `stance` | How they stand when nothing is happening | Mom's clasped hands, Little Sister's fists on hips, Big Sister's book |
+| `stance` | How they stand when nothing is happening | Mom's clasped hands, Little Sister's fists on hips, Big Sister holding one elbow |
 | `walk` | How they move | The Son bounces, Mom glides, Little Sister stomps |
 | `gestures` | What their hands do when they talk | Dad shrugs, the Son throws both arms up, Big Sister raises a finger |
 
@@ -309,7 +313,9 @@ screen are a pale tint of the same color.
 
 Every fact she states in the game, where she says it, and how far it has been checked.
 Nothing goes on this list as "Checked" from memory. The last row is somebody else's
-line that rests on real history in the same way.
+line that rests on real history in the same way. (What the people of Egypt and Rome
+say about their own times is in the tables at the end of
+[PUZZLES-egypt.md](PUZZLES-egypt.md) and [PUZZLES-rome.md](PUZZLES-rome.md).)
 
 | The fact | Line | Status |
 | --- | --- | --- |
@@ -317,10 +323,10 @@ line that rests on real history in the same way.
 | Atomic bombs were tested in Nevada from 1951 until 1992 | `nevada.notice.big.1` | **Checked** (first test 27 January 1951; last underground test 23 September 1992) |
 | The first message sent on the network that became the internet was "LO": they were typing LOGIN and it crashed. October 1969 | `home.pc.offline.bigsis` | Headlines agree |
 | Nevada became a state on 31 October 1864 | `nevada.arrive.2` | Headlines agree |
-| Julius Caesar was killed on the Ides of March, 44 B.C. | `nevada.gate.2` | Headlines agree |
+| Julius Caesar was killed on the Ides of March, 44 B.C. | `nevada.gate.2` | Headlines agree. (Read by the writer of the Rome act: the first row of the table in [PUZZLES-rome.md](PUZZLES-rome.md)) |
 | Bartolomeo Cristofori built the first piano, in Florence, around 1700. It was called a harpsichord with soft and loud | `home.piano.look.bigsis`, `home.piano.look.bigsis2` | To check |
-| The coin is a Roman denarius. Julius Caesar was the first living Roman to put his own face on Rome's coins, starting in 44 B.C. | `nevada.coin.read.1`, `nevada.coin.read.2`, `item.coin.bigsis` | To check |
-| Ramesses the Great was on the throne of Egypt in 1250 B.C. | `nevada.gate.2` | To check |
+| The coin is a Roman denarius. In 44 B.C. coins were struck in Rome with Julius Caesar's own portrait, while he was alive | `nevada.coin.read.1`, `nevada.coin.read.2`, `item.coin.bigsis` | **Checked**, through a tool that fetches a page and quotes it (see below) |
+| The Great Pyramid was finished about 2560 B.C. | `nevada.gate.2b` | To check. Two pages were read, and they differ by some forty years (see below) |
 | Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (The old-timer says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
 
 What the three words mean:
@@ -333,16 +339,30 @@ What the three words mean:
 Confirm every one that is not Checked, or change the line, before the game is called
 finished.
 
-Two lines are worded with care on purpose. "The network that became the internet" is
-the ARPANET: there were earlier experiments in joining two computers, so "the first
-message between two computers" would claim too much. And the piano's first name is
-given as "they called it", not "he called it", because it is not certain the name was
-Cristofori's own.
+Four lines are worded with care on purpose.
 
-Sources for the two that are checked:
+- "The network that became the internet" is the ARPANET: there were earlier
+  experiments in joining two computers, so "the first message between two computers"
+  would claim too much.
+- The piano's first name is given as "they called it", not "he called it", because it
+  is not certain the name was Cristofori's own.
+- Of the coin she says only that in 44 B.C. coins were struck in Rome with Caesar's own
+  portrait, while he was alive. She used to say he was "the first living Roman" on
+  Rome's coins. That "first" is disputed (the page read for it says "living Romans had
+  appeared on coinage before", and counts his as "the third instance"), so it is gone.
+- Of 2560 B.C. she says "About when the Great Pyramid was finished." Dates that old are
+  estimates, and the books do not agree to within a few decades: "about" is the honest
+  word, and she does not name the king or the day.
+
+Sources for the three that are checked:
 
 - Wikipedia, [Otto Frederick Rohwedder](https://en.wikipedia.org/wiki/Otto_Frederick_Rohwedder): his bread-slicing machine was first used commercially by the Chillicothe Baking Company of Chillicothe, Missouri, on 7 July 1928.
 - Wikipedia, [Nevada Test Site](https://en.wikipedia.org/wiki/Nevada_Test_Site): nuclear testing there began on 27 January 1951, and the last underground test was on 23 September 1992.
+- The coin, read on 2026-10-07 through a tool that fetches a page and reports on it with quotations, which is one step short of reading the page oneself. Wikipedia, [Roman currency](https://en.wikipedia.org/wiki/Roman_currency): "Julius Caesar issued coins bearing his own portrait"; "The appearance of Caesar's portrait on Roman denarii in 44 BC"; "Caesar's coinage marked the third instance in Roman history where a living individual was depicted". Leu Numismatik, [The earliest portrait denarius of Julius Caesar](https://leunumismatik.com/en/lot/44/158): a denarius with the "wreathed head of Julius Caesar", struck at "Rome, January 44" by the moneyer M. Mettius.
+
+What was read for the one that is still to check:
+
+- The pyramid, read the same way on the same day. Two pages, which do not agree. Wikipedia as it is now, [Great Pyramid of Giza](https://en.wikipedia.org/wiki/Great_Pyramid_of_Giza): "It was built c. 2600 BC over a period of about 26 years"; "The majority of recent chronological estimates date Khufu and his pyramid between 2700 and 2500 BC"; a reanalysis of the radiocarbon dates "gave a completion date for the pyramid between 2620 and 2484 BC". Wikipedia as it was in the 2007 selection for schools, [kept by a university](https://dlab.epfl.ch/wikispeedia/wpcd/wp/g/Great_Pyramid_of_Giza.htm): "the generally accepted estimated date of its completion is c. 2560 BC". So 2560 B.C. is the long-printed figure and lies inside today's range, and today's headline figure is some forty years earlier. "About" covers that honestly. It is also the date the game's Egypt is set in (the era card reads "about 2560 B.C."). Left as "To check" until someone has decided which book the game goes by.
 
 Pages whose headlines agree with the next three:
 

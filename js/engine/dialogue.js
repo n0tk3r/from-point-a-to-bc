@@ -11,6 +11,8 @@
 // When a recording exists the line stays up until the voice finishes. When it does
 // not, the line stays up for a time based on its length. A click moves on either way.
 
+import { W, H } from "./grid.js";
+
 export class Dialogue {
   constructor(game) {
     this.g = game;
@@ -41,7 +43,7 @@ export class Dialogue {
     const voiced = g.settings.voices ? g.audio.voice(id) : null;
     const showText = g.settings.subtitles || !voiced;
 
-    let p = null;
+    let p = null, fit = () => {};
     {
       p = document.createElement("p");
       p.className = "say";
@@ -50,20 +52,38 @@ export class Dialogue {
       p.textContent = text;
       // Above the speaker's head when they are on stage, otherwise top center.
       // While a close-up is showing, along the bottom, clear of whatever is being looked at.
+      // (x, y) is where the middle of the bottom edge of the words goes, in picture pixels.
       const near = g.near;
-      const x = near ? 160 : actor ? Math.min(Math.max(actor.x, 84), 236) : 160;
-      const y = near ? 196 : actor ? Math.max(actor.y - actor.h * actor.scale - 4, 30) : 62;
+      const x = near ? W / 2 : actor ? Math.min(Math.max(actor.x, 210), W - 210) : W / 2;
+      let top = actor ? actor.y - actor.h * actor.scale : 0;
+      if (actor && !near) {
+        // Someone taller standing close by, level with the speaker or nearer: lift the words clear of that head too,
+        // so a small speaker's words are not written across a tall listener's face. (Not more than 90 pixels: the
+        // words must still belong to the speaker.)
+        for (const other of g.view.cast.items.values()) {
+          if (other === actor || !other.h || other.hidden || !(other.opacity > 0)) continue;
+          const head = other.y - other.h * other.scale;
+          if (Math.abs(other.x - x) < 150 && other.y > actor.y - 60 && head < top) top = Math.max(head, top - 90, actor.y - actor.h * actor.scale - 90);
+        }
+      }
+      const y = near ? H - 12 : actor ? Math.max(top - 10, 60) : 150;
       if (near) p.classList.add("under");
-      p.style.left = `${(x / 320) * 100}%`;
-      p.style.top = `${(y / 200) * 100}%`;
+      p.style.left = `${(x / W) * 100}%`;
+      p.style.top = `${(y / H) * 100}%`;
       this.el.appendChild(p);
+      // A long line above someone standing high in the picture would run off the top: bring it down until it all shows.
+      fit = () => {
+        const over = this.el.getBoundingClientRect().top + 4 - p.getBoundingClientRect().top;
+        if (!p.hidden && over > 0) p.style.top = `calc(${(y / H) * 100}% + ${over}px)`;
+      };
+      fit();
     }
 
     this.active = true; this._next = false; this._shownAt = performance.now();
     let left = Math.max(1500, 900 + text.length * 58) / (g.settings.textSpeed || 1);
     let speaking = !!voiced;
     // When the recording ends, move on. If it would not play, show the words for their usual time instead.
-    if (voiced) voiced.then((played) => { speaking = false; if (played) left = 280; else p.hidden = false; });
+    if (voiced) voiced.then((played) => { speaking = false; if (played) left = 280; else { p.hidden = false; fit(); } });
 
     if (actor && actor.talk) actor.talk(true, seed);       // mouth and hands
     await new Promise((resolve) => {

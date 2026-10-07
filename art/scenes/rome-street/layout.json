@@ -1,0 +1,569 @@
+{
+ "id": "rome-street",
+ "horizon": 230,
+ "full": 590,
+ "light": "morning sun from the upper right and a little behind us; the roadway and the right side are in the shade of the right-hand houses",
+ "walk": [
+  [
+   341,
+   325
+  ],
+  [
+   245,
+   476
+  ],
+  [
+   236,
+   482
+  ],
+  [
+   2,
+   482
+  ],
+  [
+   2,
+   598
+  ],
+  [
+   796,
+   598
+  ],
+  [
+   780,
+   582
+  ],
+  [
+   502,
+   325
+  ],
+  [
+   438,
+   329
+  ],
+  [
+   362,
+   329
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    560,
+    503
+   ],
+   [
+    705,
+    503
+   ],
+   [
+    656,
+    459
+   ],
+   [
+    534,
+    459
+   ]
+  ],
+  [
+   [
+    232,
+    500
+   ],
+   [
+    292,
+    500
+   ],
+   [
+    300,
+    481
+   ],
+   [
+    244,
+    481
+   ]
+  ],
+  [
+   [
+    624,
+    598
+   ],
+   [
+    636,
+    566
+   ],
+   [
+    700,
+    548
+   ],
+   [
+    796,
+    540
+   ],
+   [
+    796,
+    598
+   ]
+  ],
+  [
+   [
+    0,
+    497
+   ],
+   [
+    23,
+    497
+   ],
+   [
+    37,
+    488
+   ],
+   [
+    7,
+    488
+   ]
+  ],
+  [
+   [
+    311,
+    478
+   ],
+   [
+    350,
+    478
+   ],
+   [
+    353,
+    463
+   ],
+   [
+    317,
+    463
+   ]
+  ],
+  [
+   [
+    379,
+    478
+   ],
+   [
+    421,
+    478
+   ],
+   [
+    420,
+    463
+   ],
+   [
+    380,
+    463
+   ]
+  ],
+  [
+   [
+    449,
+    478
+   ],
+   [
+    486,
+    478
+   ],
+   [
+    481,
+    463
+   ],
+   [
+    446,
+    463
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "awning",
+   "file": "awning.png",
+   "base": 479
+  },
+  {
+   "id": "fountain",
+   "file": "fountain.png",
+   "base": 501
+  },
+  {
+   "id": "laundry",
+   "file": "laundry.png",
+   "plane": "front"
+  },
+  {
+   "id": "tunic",
+   "file": "tunic.png",
+   "plane": "front"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  }
+ ],
+ "things": [
+  {
+   "id": "tunic",
+   "what": "the small tunic on the low line",
+   "shape": {
+    "rect": [
+     253,
+     307,
+     40,
+     55
+    ]
+   },
+   "stand": [
+    310,
+    519
+   ],
+   "face": "N"
+  },
+  {
+   "id": "basket",
+   "what": "the washerwoman's basket of wet washing",
+   "shape": {
+    "rect": [
+     240,
+     446,
+     50,
+     50
+    ]
+   },
+   "stand": [
+    310,
+    519
+   ],
+   "face": "N"
+  },
+  {
+   "id": "shrine",
+   "what": "the crossroads shrine: a niche with a lamp, a painted snake",
+   "shape": {
+    "rect": [
+     198,
+     325,
+     31,
+     82
+    ]
+   },
+   "stand": [
+    206,
+    488
+   ],
+   "face": "N"
+  },
+  {
+   "id": "price-list",
+   "what": "the price list painted on the pier",
+   "shape": {
+    "rect": [
+     2,
+     333,
+     43,
+     67
+    ]
+   },
+   "stand": [
+    42,
+    488
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sign",
+   "what": "the snack bar's hanging sign: a wine jug and grapes",
+   "shape": {
+    "rect": [
+     241,
+     251,
+     40,
+     42
+    ]
+   },
+   "stand": [
+    318,
+    498
+   ],
+   "face": "N"
+  },
+  {
+   "id": "birdcage",
+   "what": "a songbird in a wicker cage on the balcony (the cat is watching it)",
+   "shape": {
+    "rect": [
+     612,
+     84,
+     24,
+     44
+    ]
+   },
+   "stand": [
+    593,
+    510
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cat",
+   "what": "a cat on a window sill",
+   "shape": {
+    "rect": [
+     728,
+     146,
+     40,
+     62
+    ]
+   },
+   "stand": [
+    609,
+    532
+   ],
+   "face": "E"
+  },
+  {
+   "id": "fountain",
+   "what": "the public fountain",
+   "shape": {
+    "rect": [
+     541,
+     359,
+     159,
+     144
+    ]
+   },
+   "stand": [
+    532,
+    494
+   ],
+   "face": "E"
+  },
+  {
+   "id": "snack-bar",
+   "what": "the snack bar: counter, stove, awning",
+   "shape": {
+    "rect": [
+     0,
+     245,
+     236,
+     235
+    ]
+   },
+   "stand": [
+    139,
+    488
+   ],
+   "face": "N"
+  },
+  {
+   "id": "notices",
+   "what": "election notices painted in red: MARCVS, VOTA",
+   "shape": {
+    "rect": [
+     4,
+     195,
+     228,
+     49
+    ]
+   },
+   "stand": [
+    166,
+    537
+   ],
+   "face": "N"
+  },
+  {
+   "id": "laundry",
+   "what": "the washing on the lines over the street",
+   "shape": {
+    "poly": [
+     [
+      256,
+      106
+     ],
+     [
+      614,
+      102
+     ],
+     [
+      614,
+      238
+     ],
+     [
+      456,
+      238
+     ],
+     [
+      456,
+      154
+     ],
+     [
+      374,
+      154
+     ],
+     [
+      374,
+      244
+     ],
+     [
+      256,
+      244
+     ]
+    ]
+   },
+   "stand": [
+    387,
+    481
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stepping-stones",
+   "what": "three stepping stones across the street",
+   "shape": {
+    "rect": [
+     315,
+     448,
+     168,
+     34
+    ]
+   },
+   "stand": [
+    400,
+    491
+   ],
+   "face": "N"
+  },
+  {
+   "id": "balcony",
+   "what": "the timber balcony the washing lines are tied to",
+   "shape": {
+    "poly": [
+     [
+      641,
+      75
+     ],
+     [
+      718,
+      37
+     ],
+     [
+      718,
+      277
+     ],
+     [
+      641,
+      277
+     ],
+     [
+      568,
+      263
+     ],
+     [
+      568,
+      122
+     ]
+    ]
+   },
+   "stand": [
+    593,
+    510
+   ],
+   "face": "N"
+  },
+  {
+   "id": "notice-right",
+   "what": "a painted notice (RVFVS) and scratched scribbles on the right-hand wall",
+   "shape": {
+    "poly": [
+     [
+      716,
+      372
+     ],
+     [
+      799,
+      345
+     ],
+     [
+      799,
+      520
+     ],
+     [
+      716,
+      478
+     ]
+    ]
+   },
+   "stand": [
+    634,
+    523
+   ],
+   "face": "E"
+  }
+ ],
+ "exits": [
+  {
+   "to": "rome-steps",
+   "id": "to-forum",
+   "shape": {
+    "poly": [
+     [
+      376,
+      178
+     ],
+     [
+      454,
+      178
+     ],
+     [
+      454,
+      240
+     ],
+     [
+      478,
+      332
+     ],
+     [
+      326,
+      332
+     ],
+     [
+      352,
+      246
+     ],
+     [
+      376,
+      246
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    338
+   ],
+   "face": "N"
+  }
+ ],
+ "marks": {
+  "keeper": [
+   151,
+   459
+  ],
+  "washer": [
+   330,
+   505
+  ],
+  "urchin": [
+   518,
+   540
+  ],
+  "son": [
+   420,
+   560
+  ]
+ },
+ "notes": "The keeper's mark is on the shop floor, which is a sidewalk's height above the road, so it is 11 px higher than the brief's. The urchin sits on the right-hand kerb with his feet in the road at his mark. The stepping stones are listed under blocked; drop them if they get in the way. Things are listed small before big: where two shapes overlap, the earlier one is meant. Only snack-bar, fountain, laundry, basket, tunic and the exit to-forum are asked for by the brief; the rest are extra things to look at."
+}

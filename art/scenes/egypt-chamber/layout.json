@@ -1,0 +1,40 @@
+{
+  "id": "egypt-chamber",
+  "horizon": -200,
+  "full": 585,
+  "light": "six oil lamps (see lamps): warm pools on the lower walls and floor, the ceiling and corners in cool dark; no daylight",
+  "walk": [[86, 470], [120, 461], [160, 467], [456, 467], [465, 440], [546, 440], [550, 509], [752, 509], [757, 529], [792, 529], [792, 594], [150, 594], [72, 584], [72, 498]],
+  "blocked": [
+    [[185, 517], [417, 512], [417, 498], [356, 494], [251, 494], [189, 505]]
+  ],
+  "planes": [
+    {"id": "bench", "file": "bench.png", "base": 512},
+    {"id": "mirror", "file": "mirror.png", "base": 513},
+    {"id": "front", "file": "front.png", "plane": "front"}
+  ],
+  "things": [
+    {"id": "treasure", "what": "the king's things along the back wall: canopy poles, rolled mats, alabaster jars, carrying-chair, bed with linen, chests, bracelet box, armchair, copper basins, baskets", "shape": {"rect": [138, 186, 322, 282]}, "stand": [392, 478], "face": "N"},
+    {"id": "bench", "what": "the goldsmith's bench: lamp, half-gilded casket, dish of gold leaf, blowpipe, burnisher, hammers, beating stone; his water jug and his dinner on the floor at its left end", "shape": {"rect": [192, 426, 162, 96]}, "stand": [300, 528], "face": "N"},
+    {"id": "mirror", "what": "the goldsmith's copper hand mirror, propped against a jar on the bench (cut-out mirror.png)", "shape": {"rect": [289, 440, 29, 40]}, "stand": [304, 528], "face": "N"},
+    {"id": "hum", "what": "the place that hums: bare wall and air; the dust on the floor before it is swept into a ring", "shape": {"rect": [462, 236, 80, 164]}, "stand": [500, 500], "face": "N"},
+    {"id": "sarcophagus", "what": "the granite sarcophagus, lidless; a dish lamp and a mallet on its rim", "shape": {"poly": [[560, 500], [746, 500], [746, 415], [731, 383], [554, 383], [560, 415]]}, "stand": [650, 532], "face": "N"},
+    {"id": "lid", "what": "the sarcophagus's lid, leaning on the back wall behind it, still roped", "shape": {"rect": [588, 328, 164, 56]}, "stand": [700, 532], "face": "N"},
+    {"id": "brazier", "what": "the goldsmith's charcoal brazier, and his basket of charcoal", "shape": {"rect": [356, 478, 54, 38]}, "stand": [434, 524], "face": "W"}
+  ],
+  "exits": [
+    {"to": "egypt-gallery", "shape": {"poly": [[135, 330], [135, 413], [67, 469], [67, 369]]}, "stand": [106, 468], "face": "W"}
+  ],
+  "marks": {"goldsmith": [330, 494], "dad": [150, 484], "talk": [434, 524]},
+  "lamps": [
+    {"id": "A", "flame": [160, 278], "on": "back.png"},
+    {"id": "B", "flame": [371, 283], "on": "back.png"},
+    {"id": "C", "flame": [256, 429], "on": "bench.png"},
+    {"id": "D", "flame": [706, 374], "on": "back.png"},
+    {"id": "E", "flame": [775, 448], "on": "front.png"},
+    {"id": "F", "flame": [58, 494], "on": "back.png"}
+  ],
+  "hum": {"wall": [500, 300], "floor": [500, 500], "ring": [47.3, 22.1]},
+  "beam": [[101, 392], [500, 300]],
+  "sarcophagus": {"rect": [554, 383, 193, 118]},
+  "notes": "The goldsmith sits BEHIND the bench (feet above its baseline). mirror.png lies exactly over bench.png; without it the jar it leaned on is whole. The beam's line from the doorway to the hum passes in front of everything painted along the back wall."
+}

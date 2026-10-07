@@ -1,0 +1,9 @@
+#!/bin/sh
+# Stamps the pages before every commit, so a commit can never go out with the wrong
+# file addresses in it (see tools/stamp.py).
+#
+# Turn it on once, from the game folder:
+#     chmod +x tools/hooks/pre-commit
+#     git config core.hooksPath tools/hooks
+python3 tools/stamp.py || exit 1
+git add index.html tools/storyboard.html tools/sprites.html

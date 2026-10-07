@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-build="0ea31b2c4a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,24 +14,181 @@
   h1 { font: 400 40px/1.1 Georgia, serif; margin: 0 0 4px; }
   h2 { font: 400 26px/1.2 Georgia, serif; margin: 36px 0 6px; }
   h3 { font: 700 12px/1.4 system-ui, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #c9b48a; margin: 14px 0 4px; }
-  p { margin: 4px 0; color: #c9b48a; max-width: 80ch; }
+  p { margin: 4px 0; color: #c9b48a; max-width: 90ch; }
   a { color: #5ef2ff; }
   .bar { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
   .bar label { display: inline-flex; gap: 8px; align-items: center; }
-  select, input { font: inherit; }
-  .strip { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px; padding: 10px; background: var(--ground, #c79b55); }
+  select, input, button { font: inherit; }
+  button { padding: 0 10px; cursor: pointer; }
+  .strip { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px; padding: 10px; background: var(--ground, #d9a35c); }
   .strip figure { margin: 0; text-align: center; }
-  .strip figcaption { font: 11px/1.2 system-ui, sans-serif; color: rgba(0, 0, 0, 0.6); }
+  .strip figcaption { font: 11px/1.2 system-ui, sans-serif; color: var(--ink, rgba(0, 0, 0, 0.6)); }
   canvas { image-rendering: pixelated; display: block; }
 </style>
+<!-- files: written by tools/stamp.py. Each address changes when its file changes, so a browser cannot mix old files with new. -->
+<script type="importmap">
+{
+  "imports": {
+    "../js/art/kit.js": "../js/art/kit.js?v=0da23a0f0e",
+    "../js/art/people.js": "../js/art/people.js?v=965ecbc423",
+    "../js/art/pix.js": "../js/art/pix.js?v=9573e1ffa7",
+    "../js/art/props.js": "../js/art/props.js?v=f1a88e489d",
+    "../js/art/rig.js": "../js/art/rig.js?v=8b3caa0a4b",
+    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=f35aae2b38",
+    "../js/content/acts/home.js": "../js/content/acts/home.js?v=2f202a1e06",
+    "../js/content/acts/nevada.js": "../js/content/acts/nevada.js?v=7c88d66811",
+    "../js/content/acts/prologue.js": "../js/content/acts/prologue.js?v=e657c02ab6",
+    "../js/content/acts/rome.js": "../js/content/acts/rome.js?v=11dc5b9891",
+    "../js/content/cutscenes/highway.js": "../js/content/cutscenes/highway.js?v=290fefb344",
+    "../js/content/cutscenes/intro.js": "../js/content/cutscenes/intro.js?v=3d11ac2cfd",
+    "../js/content/cutscenes/title.js": "../js/content/cutscenes/title.js?v=b9b59316cd",
+    "../js/content/lines.en.js": "../js/content/lines.en.js?v=3a4763dd4d",
+    "../js/content/lines/common.en.js": "../js/content/lines/common.en.js?v=4ba8a59a51",
+    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=859ba76567",
+    "../js/content/lines/home.en.js": "../js/content/lines/home.en.js?v=ed3c96d384",
+    "../js/content/lines/nevada.en.js": "../js/content/lines/nevada.en.js?v=2a863b6832",
+    "../js/content/lines/rome.en.js": "../js/content/lines/rome.en.js?v=416fe0f66f",
+    "../js/content/scenes/egypt-chamber.js": "../js/content/scenes/egypt-chamber.js?v=7e831e9810",
+    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=86ad6c75a4",
+    "../js/content/scenes/egypt-gallery.js": "../js/content/scenes/egypt-gallery.js?v=950a20ffda",
+    "../js/content/scenes/egypt-site.js": "../js/content/scenes/egypt-site.js?v=686790118c",
+    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=61a9a59e36",
+    "../js/content/scenes/home-living-room.js": "../js/content/scenes/home-living-room.js?v=69e3073ce1",
+    "../js/content/scenes/index.js": "../js/content/scenes/index.js?v=28f2bd4399",
+    "../js/content/scenes/nevada-roadside.js": "../js/content/scenes/nevada-roadside.js?v=65c3d4e3e3",
+    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=13bfdb1d5d",
+    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=48172e45ad",
+    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=d08636d352",
+    "../js/content/scenes/sketch-example.js": "../js/content/scenes/sketch-example.js?v=51e81ac160",
+    "../js/content/sound.js": "../js/content/sound.js?v=dd7d8a82f9",
+    "../js/content/story.js": "../js/content/story.js?v=c1cbbd8556",
+    "../js/content/world.js": "../js/content/world.js?v=feff4f4469",
+    "../js/engine/assets.js": "../js/engine/assets.js?v=68e63e1a73",
+    "../js/engine/audio.js": "../js/engine/audio.js?v=6159df06e2",
+    "../js/engine/cast.js": "../js/engine/cast.js?v=220a194f3a",
+    "../js/engine/clock.js": "../js/engine/clock.js?v=6108df5801",
+    "../js/engine/dialogue.js": "../js/engine/dialogue.js?v=ad86f8c5dd",
+    "../js/engine/fx.js": "../js/engine/fx.js?v=04bfeb4b61",
+    "../js/engine/game.js": "../js/engine/game.js?v=584b08b685",
+    "../js/engine/grid.js": "../js/engine/grid.js?v=701c0b36ab",
+    "../js/engine/save.js": "../js/engine/save.js?v=cb83d8447e",
+    "../js/engine/scene.js": "../js/engine/scene.js?v=007c66a01c",
+    "../js/engine/state.js": "../js/engine/state.js?v=bb5addbb13",
+    "../js/engine/story.js": "../js/engine/story.js?v=5668206d56",
+    "../js/engine/ui.js": "../js/engine/ui.js?v=453bfbda82",
+    "../js/engine/walk.js": "../js/engine/walk.js?v=a2617d8c49",
+    "../js/main.js": "../js/main.js?v=4b03af2283"
+  }
+}
+</script>
+<script type="application/json" id="art-stamps">
+{
+  "art/items/breakfast.png": "c35a87bef9",
+  "art/items/carmirror.png": "e14ea566e6",
+  "art/items/coin.png": "0a2883cdad",
+  "art/items/coppermirror.png": "e3520ec4d6",
+  "art/items/flashlight.png": "e0bed70580",
+  "art/items/gum.png": "90d1830697",
+  "art/items/incense.png": "78e349e960",
+  "art/items/map.png": "ea8bfbf629",
+  "art/items/note.png": "cba25de46a",
+  "art/items/pass.png": "f613d1abf9",
+  "art/items/phone.png": "7cffa758b5",
+  "art/items/quarter.png": "ed5c4f7c09",
+  "art/items/reed.png": "55786c3dc1",
+  "art/items/rootbeer.png": "868481f231",
+  "art/items/shade.png": "96ea75e74c",
+  "art/items/sunglasses.png": "fb20ed6164",
+  "art/items/toga.png": "c6b5a40078",
+  "art/items/tunic.png": "d582f05040",
+  "art/scenes/egypt-chamber/back.png": "9f13f6dcaa",
+  "art/scenes/egypt-chamber/bench.png": "baf9d0cda3",
+  "art/scenes/egypt-chamber/front.png": "242006b715",
+  "art/scenes/egypt-chamber/layout.json": "c2e51ce38e",
+  "art/scenes/egypt-chamber/mirror.png": "1a37b44cb5",
+  "art/scenes/egypt-crash/back.png": "bcc829b4bf",
+  "art/scenes/egypt-crash/cooler-open.png": "06d443960c",
+  "art/scenes/egypt-crash/donkey.png": "7adfa05c74",
+  "art/scenes/egypt-crash/front.png": "e4a2121792",
+  "art/scenes/egypt-crash/layout.json": "921d6281bd",
+  "art/scenes/egypt-crash/mirror.png": "12bb296008",
+  "art/scenes/egypt-crash/palm-1.png": "16ba289ecf",
+  "art/scenes/egypt-crash/palm-2.png": "d745195fdf",
+  "art/scenes/egypt-crash/palm-3.png": "f12a45dc86",
+  "art/scenes/egypt-crash/palms.png": "899c4bc828",
+  "art/scenes/egypt-crash/steam-0.png": "4a88040845",
+  "art/scenes/egypt-crash/steam-1.png": "d730bed544",
+  "art/scenes/egypt-crash/steam-2.png": "24caac9069",
+  "art/scenes/egypt-crash/steam-3.png": "94c381a920",
+  "art/scenes/egypt-crash/suitcase-open.png": "2094d677d3",
+  "art/scenes/egypt-crash/trunk-open.png": "ab02d6ceb9",
+  "art/scenes/egypt-crash/wagon.png": "39f3cc9d1d",
+  "art/scenes/egypt-gallery/back.png": "d134b4c933",
+  "art/scenes/egypt-gallery/front.png": "69a5c5890c",
+  "art/scenes/egypt-gallery/layout.json": "712ffca5bf",
+  "art/scenes/egypt-gallery/mirror-foot.png": "6aeb123cce",
+  "art/scenes/egypt-gallery/mirror-top.png": "03e400758e",
+  "art/scenes/egypt-site/awning.png": "8e863ae8db",
+  "art/scenes/egypt-site/back.png": "c795ee10eb",
+  "art/scenes/egypt-site/front.png": "12dfbc20cf",
+  "art/scenes/egypt-site/layout.json": "dbc8ae3c28",
+  "art/scenes/egypt-site/shade.png": "001ab929a9",
+  "art/scenes/egypt-site/sledge.png": "a93c13f7aa",
+  "art/scenes/highway/back.png": "8be085926a",
+  "art/scenes/highway/layout.json": "dec53b37ed",
+  "art/scenes/highway/sign-bc.png": "0e470d4449",
+  "art/scenes/highway/sign-strike.png": "e4d899c16c",
+  "art/scenes/highway/sun.png": "d72248f0a5",
+  "art/scenes/highway/wagon-rear-0.png": "78e0128c3b",
+  "art/scenes/highway/wagon-rear-1.png": "e12217debe",
+  "art/scenes/home-living-room/armchair.png": "1e4ff54e71",
+  "art/scenes/home-living-room/back.png": "5cf7ebeaa3",
+  "art/scenes/home-living-room/desk.png": "d15776feb7",
+  "art/scenes/home-living-room/front.png": "cfcf97eba0",
+  "art/scenes/home-living-room/layout.json": "ac4102b3ab",
+  "art/scenes/home-living-room/note.png": "99596781d5",
+  "art/scenes/home-living-room/piano.png": "7cf51aac67",
+  "art/scenes/home-living-room/screen-login.png": "c6bd18accd",
+  "art/scenes/home-living-room/screen-map.png": "f054f1d85f",
+  "art/scenes/home-living-room/screen-offline.png": "5e373f6052",
+  "art/scenes/home-living-room/table.png": "aaba5b72f5",
+  "art/scenes/nevada-roadside/back.png": "5914317a32",
+  "art/scenes/nevada-roadside/car.png": "a4680b6fdc",
+  "art/scenes/nevada-roadside/front.png": "544a2777d4",
+  "art/scenes/nevada-roadside/layout.json": "79a523e361",
+  "art/scenes/nevada-roadside/pump.png": "9b26e18756",
+  "art/scenes/nevada-roadside/stand.png": "cef00a0d51",
+  "art/scenes/rome-steps/altar.png": "95cfaae75e",
+  "art/scenes/rome-steps/back.png": "c2380716bb",
+  "art/scenes/rome-steps/columns.png": "ca55325253",
+  "art/scenes/rome-steps/front.png": "efe2a345d3",
+  "art/scenes/rome-steps/layout.json": "03471f1cb7",
+  "art/scenes/rome-steps/stone.png": "1f150726cc",
+  "art/scenes/rome-steps/tripod.png": "f67b861c8a",
+  "art/scenes/rome-street/awning.png": "e6843a5d20",
+  "art/scenes/rome-street/back.png": "0ce49e777d",
+  "art/scenes/rome-street/fountain.png": "2f6c71e191",
+  "art/scenes/rome-street/front.png": "c2e832e552",
+  "art/scenes/rome-street/laundry.png": "0f9cbdddf6",
+  "art/scenes/rome-street/layout.json": "9910ebcc13",
+  "art/scenes/rome-street/tunic.png": "baf473b14c",
+  "art/scenes/rome-temple/back.png": "9f4686b3ac",
+  "art/scenes/rome-temple/front.png": "cef6285362",
+  "art/scenes/rome-temple/layout.json": "2cdddd5d1f",
+  "art/scenes/rome-temple/table.png": "2d3e7c1367"
+}
+</script>
+<!-- /files -->
 </head>
 <body>
 <main>
   <h1>Sprite viewer</h1>
-  <p>Drawn by <code>js/art/rig.js</code> from the settings in <code>js/art/people.js</code>. Change a color, a proportion, a stance, a walk or a gesture there and reload. The first rows for each character are moving; the rest are the single pictures the movement is made of. <code>docs/CHARACTERS.md</code> says who these people are.</p>
+  <p>Everyone in the game, drawn by <code>js/art/rig.js</code> from the settings in <code>js/art/people.js</code>. Change a color, a proportion, a stance, a walk or a gesture there and reload. Pick a person to see every direction, the walk, every gesture, reaching and sitting, at the sizes they appear in a scene; pick a ground to see them against light and dark. <code>docs/CHARACTERS.md</code> says who the family are.</p>
   <div class="bar">
+    <label>Who <select id="who"></select></label>
+    <span><button id="prev" title="the one before">&#8249;</button> <button id="next" title="the next one">&#8250;</button></span>
     <label>Ground <select id="ground">
-      <option value="#c79b55">Egypt sand</option><option value="#c2b497">Rome stone</option><option value="#b9855a">Floor at home</option><option value="#d9b98c">Nevada dust</option><option value="#28172f">Road at dusk</option><option value="#6f8f5a">Grass</option><option value="#808080">Gray</option>
+      <option value="#d9a35c">Egypt sand</option><option value="#3a2c2a">A dark interior</option><option value="#8a8478">Roman street stone</option><option value="#e9dcc0">Sunlit marble</option><option value="#b9855a">Floor at home</option><option value="#d9b98c">Nevada dust</option><option value="#28172f">Road at dusk</option><option value="#6f8f5a">Grass</option><option value="#808080">Gray</option>
     </select></label>
     <label>Zoom <input type="range" id="zoom" min="1" max="5" step="1" value="2"> <span id="zoomv">2x</span></label>
     <label>Speed <input type="range" id="speed" min="0" max="2" step="0.1" value="1"> <span id="speedv">1x</span></label>
@@ -41,49 +198,64 @@
 </main>
 
 <script type="module">
-  import { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, strideOf, poses, BASE } from "../js/art/rig.js";
+  // This page uses only the drawing code in js/art, so it works whatever state the game itself is in.
+  import { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, strideOf, tallOf, poses, BASE } from "../js/art/rig.js";
   import { people } from "../js/art/people.js";
-  import { props } from "../js/art/props.js";
-  import { WALK_FRAMES, UNIT } from "../js/engine/cast.js";
 
-  const out = document.getElementById("out"), zoomEl = document.getElementById("zoom"), speedEl = document.getElementById("speed");
+  const WALK_FRAMES = 12;               // pictures in one walk cycle, as the game shows it (js/engine/cast.js)
+  const PACE = 155;                     // picture pixels a second at full size, unless a character has a pace of their own
+  const out = document.getElementById("out"), whoEl = document.getElementById("who"), groundEl = document.getElementById("ground");
+  const zoomEl = document.getElementById("zoom"), speedEl = document.getElementById("speed");
   const names = ["S", "SE", "E", "NE", "N", "NW", "W", "SW"];
   const palette = { g1: "#dbb46b", g2: "#c79b55", g3: "#a97f42", line: "#3b2616" };
-  const GESTURES = ["a nod", "making a point", "a shrug", "hand on hip", "both arms up", "hand to heart", "glasses", "muscles", "open hand", "waving", "pointing", "finger up"];
-  let zoom = 2, speed = 1, live = [];
+  const GESTURES = ["a nod", "making a point", "a shrug", "hand on hip", "both arms up", "hand to heart", "hand to chin", "muscles", "open hand", "waving", "pointing", "finger up",
+    "arms folded", "hand to ear", "shaken fist", "waving away", "wiping brow", "counting", "hands wide", "thumb back"];
+  const GROUPS = [["The family", ["dad", "son", "mom", "bigsis", "lilsis"]], ["Egypt", ["scribe", "carrier", "overseer", "hauler1", "hauler2", "hauler3", "guard", "guard-shade", "lampboy", "goldsmith", "goldsmith-shades"]],
+    ["Rome", ["keeper", "washer", "urchin", "soothsayer", "senator", "doorkeeper", "clerk"]], ["Nevada", ["oldtimer", "agent"]]];
+  const SWATCHES = [["sand", "#d9a35c"], ["dark", "#3a2c2a"], ["stone", "#8a8478"], ["marble", "#e9dcc0"]];
+  const ask = new URLSearchParams(location.search);
+  let zoom = 2, speed = 1, live = [], props = null;
 
   const sized = (c) => { c.style.width = c.width * zoom + "px"; c.style.height = c.height * zoom + "px"; return c; };
-  const framed = (canvas, label) => {
+  const framed = (canvas, label, ground) => {
     const fig = document.createElement("figure");
+    if (ground) { fig.style.background = ground; fig.style.padding = "4px"; }
     fig.appendChild(sized(canvas));
-    if (label) { const cap = document.createElement("figcaption"); cap.textContent = label; fig.appendChild(cap); }
+    if (label) { const cap = document.createElement("figcaption"); cap.textContent = label; if (ground) cap.style.color = ground === "#3a2c2a" ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"; fig.appendChild(cap); }
     return fig;
   };
-  const show = (surface, label) => framed(surface.toCanvas(), label);
+  /** The part of a drawn figure that has something in it, with a little room round it (and always its feet and the ground under them). */
+  const boxOf = (sf) => { const b = sf.bounds(), x0 = Math.max(0, Math.min(b.left, sf.ox - 8) - 4), y0 = Math.max(0, b.top - 4); return [x0, y0, Math.min(sf.w, Math.max(b.right, sf.ox + 8) + 5) - x0, Math.min(sf.h, Math.max(sf.oy + 6, b.bottom + 3)) - y0]; };
+  const cut = (source, [x, y, w, h]) => { const c = document.createElement("canvas"); c.width = w; c.height = h; c.getContext("2d").drawImage(source, -x, -y); return c; };
+  const show = (surface, label, ground) => framed(surface.toCanvas ? cut(surface.toCanvas(), surface.bounds ? boxOf(surface) : [0, 0, surface.w, surface.h]) : surface, label, ground);
+  const heading = (text, level = "h3") => { const h = document.createElement(level); h.textContent = text; out.appendChild(h); return h; };
   const strip = (title, items) => {
-    const h = document.createElement("h3"); h.textContent = title; out.appendChild(h);
+    heading(title);
     const div = document.createElement("div"); div.className = "strip";
     for (const it of items) div.appendChild(it);
     out.appendChild(div);
+    return div;
   };
 
   // ----- moving pictures: each one is a small canvas and a rule for which frame to show at time t -----
   const drawn = new Map();
   const picture = (key, make) => { let c = drawn.get(key); if (!c) { c = make().toCanvas(); drawn.set(key, c); } return c; };
-  function moving(label, w, h, frameAt) {
+  function moving(label, w, h, frameAt, x = 0, y = 0) {
     const c = document.createElement("canvas"); c.width = w; c.height = h;
-    live.push({ ctx: c.getContext("2d"), frameAt, last: null });
+    live.push({ ctx: c.getContext("2d"), frameAt, last: null, x, y });
     return framed(c, label);
   }
   function liveFigure(id, spec, size, label, yaw, rule) {
-    const probe = drawFigure(spec, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0), yaw, size);
-    return moving(label, probe.w, probe.h, (t) => { const f = rule(t); return picture(`${id}|${yaw}|${size}|${f.key}`, () => drawFigure(spec, f.pose(), yaw, size)); });
+    // the box is made big enough for the whole movement by trying a few moments of it first
+    let x0 = Infinity, y0 = Infinity, x1 = 0, y1 = 0;
+    for (const t of [0, 250, 500, 750, 1000, 2500, 5000, 7300, 9700]) { const [x, y, w, h] = boxOf(drawFigure(spec, rule(t).pose(), yaw, size)); x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x + w); y1 = Math.max(y1, y + h); }
+    return moving(label, x1 - x0, y1 - y0, (t) => { const f = rule(t); return picture(`${id}|${yaw}|${size}|${f.key}`, () => drawFigure(spec, f.pose(), yaw, size)); }, x0, y0);
   }
-  // Every pose is asked for through `poses`, so each character stands, walks and talks in their own way.
+  // Every pose is asked for through `poses`, so each character stands, walks, talks and sits in their own way.
   const gesturesOf = (spec) => [...new Set(spec.gestures || [0, 1, 2, 3])];
   const rules = {
     walk: (spec) => {
-      const cycle = (strideOf(spec) * spec.height * (BASE / UNIT)) / (spec.pace || 62) * 1000;       // ms for two steps, at the speed used in the game
+      const cycle = (strideOf(spec) * spec.height * BASE) / (spec.pace || PACE) * 1000;       // ms for two steps, at the speed used in the game
       return (t) => { const f = Math.floor((t / cycle) * WALK_FRAMES) % WALK_FRAMES; return { key: "walk" + f, pose: () => poses.walk(spec, f / WALK_FRAMES) }; };
     },
     idle: (spec) => (t) => { const f = Math.floor(t / 430) % 8, blink = Math.floor(t / 110) % 39 === 0; return { key: `stand${f}.${blink ? 1 : 0}`, pose: () => ({ ...poses.stand(spec, f), blink }) }; },
@@ -98,22 +270,26 @@
       const u = (t % 1500) / 1500, k = Math.round(Math.max(0, Math.min(1, u < 0.2 ? u / 0.2 : u < 0.45 ? 1 : u < 0.65 ? 1 - (u - 0.45) / 0.2 : 0)) * 5) / 5;
       return { key: `act${low ? 1 : 0}.${k}`, pose: () => (k === 0 ? poses.stand(spec, 0) : poses.reach(spec, k, low)) };
     },
-    sit: (spec) => (t) => { const f = Math.floor(t / 420) % 8; return { key: "sit" + f, pose: () => poses.sit(spec, f) }; },
+    sit: (spec) => (t) => { const f = Math.floor(t / 420) % 8, blink = Math.floor(t / 110) % 39 === 0; return { key: `sit${f}.${blink ? 1 : 0}`, pose: () => ({ ...poses.sit(spec, f), blink }) }; },
     sitTalk: (spec) => (t) => { const f = Math.floor(t / 170) % 6, mouth = [0, 1, 2, 1][Math.floor(t / 120) % 4]; return { key: `sitT${f}.${mouth}`, pose: () => ({ ...poses.sit(spec, f, { gesture: 1 }), mouth }) }; },
   };
 
-  function build() {
-    out.innerHTML = ""; live = [];
-    for (const [id, spec] of Object.entries(people)) {
-      const h = document.createElement("h2"); h.textContent = spec.name; out.appendChild(h);
-      const size = Math.round(BASE * spec.height);
-      if (spec.seated) {
-        strip("Moving: at rest and talking", [liveFigure(id, spec, size, "at rest", 45, rules.sit(spec)), liveFigure(id, spec, size, "at rest", 90, rules.sit(spec)), liveFigure(id, spec, size, "talking", 45, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 90, rules.sitTalk(spec))]);
-        strip("Sitting, eight directions", names.map((n, i) => show(drawFigure(spec, poses.sit(spec, 0), i * 45, size), n)));
-        strip("Talking", [0, 1, 2, 3, 4, 5].map((f) => show(drawFigure(spec, { ...poses.sit(spec, f, { gesture: 1 }), mouth: f % 3 }, 90, size), "f" + f)));
-        strip("Sizes", [1, 0.8, 0.62, 0.48, 0.36].map((k) => show(drawFigure(spec, poses.sit(spec, 0), 90, Math.round(size * k)), Math.round(size * k) + " px")));
-        continue;
-      }
+  function person(id) {
+    const spec = people[id], size = Math.round(BASE * spec.height);
+    const rest = (f = 0) => (spec.seated ? poses.sit(spec, f) : poses.stand(spec, f));
+    const h = heading(spec.name + (GROUPS.some(([, ids]) => ids.includes(id)) ? "" : " (not yet in a scene)"), "h2");
+    const note = document.createElement("p");
+    note.textContent = `id "${id}": ${size} pixels tall at full size` + (spec.seated ? `, found sitting (${spec.sit && spec.sit.seat ? spec.sit.seat : spec.seated}), ${Math.round(tallOf(spec) * size)} pixels to the top of the head` : `, walks at ${spec.pace || PACE} pixels a second`) + `. Gestures: ${gesturesOf(spec).map((g) => `${g} ${GESTURES[g]}`).join(", ")}.`;
+    h.after(note);
+    if (spec.seated) {
+      strip("Moving: at rest and talking", [liveFigure(id, spec, size, "at rest", 0, rules.sit(spec)), liveFigure(id, spec, size, "at rest", 45, rules.sit(spec)), liveFigure(id, spec, size, "at rest", 90, rules.sit(spec)),
+        liveFigure(id, spec, size, "talking", 0, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 45, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 270, rules.sitTalk(spec))]);
+      strip("Sitting, eight directions", names.map((n, i) => show(drawFigure(spec, poses.sit(spec, 0), i * 45, size), n)));
+      strip("Talking: this character's own gestures, sitting", gesturesOf(spec).flatMap((g) => [45, 0].map((yaw) => show(drawFigure(spec, { ...poses.sit(spec, 1, { gesture: g === 0 ? 1 : g, main: g }), mouth: 2 }, yaw, size), GESTURES[g] || "g" + g))));
+      strip("If they stood up: standing, walking, talking", [0, 45, 90, 180, 270].map((yaw) => show(drawFigure(spec, poses.stand(spec, 0), yaw, size), names[yaw / 45]))
+        .concat([0, 0.25, 0.5, 0.75].map((ph) => show(drawFigure(spec, poses.walk(spec, ph), 90, size), "walk " + ph)))
+        .concat(gesturesOf(spec).slice(0, 2).map((g) => show(drawFigure(spec, { ...poses.talk(spec, 1, g), mouth: 2 }, 45, size), GESTURES[g]))));
+    } else {
       strip(`Moving: the walk in eight directions (${WALK_FRAMES} pictures to a cycle)`, names.map((n, i) => liveFigure(id, spec, size, n, i * 45, rules.walk(spec))));
       strip("Moving: at rest, talking, reaching", [
         liveFigure(id, spec, size, "at rest", 0, rules.idle(spec)), liveFigure(id, spec, size, "at rest", 45, rules.idle(spec)),
@@ -123,26 +299,77 @@
       strip("Standing, eight directions", names.map((n, i) => show(drawFigure(spec, poses.stand(spec, 0), i * 45, size), n)));
       for (const [n, yaw] of [["east", 90], ["south (toward you)", 0], ["north (away)", 180], ["south-east", 45], ["north-west", 225]])
         strip("Walk " + n, Array.from({ length: WALK_FRAMES }, (_, f) => show(drawFigure(spec, poses.walk(spec, f / WALK_FRAMES), yaw, size), "" + f)));
-      strip("Talking: this character's own gestures", gesturesOf(spec).flatMap((g, n) => [[0, 45, 1], [2, 0, 2]].map(([f, yaw, m]) => show(drawFigure(spec, { ...poses.talk(spec, f + n, g), mouth: m }, yaw, size), GESTURES[g] || "g" + g))));
-      strip("Reaching", [0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, false), 90, size), "out " + k)).concat([0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, true), 90, size), "down " + k))).concat([show(drawFigure(spec, { ...poses.stand(spec, 0), blink: true }, 0, size), "blink")]));
-      strip("Sizes (how far away)", [1.08, 1, 0.85, 0.7, 0.55, 0.42, 0.32].map((k) => show(drawFigure(spec, poses.walk(spec, 0.125), 45, Math.round(size * k)), Math.round(size * k) + " px")));
+      strip("Talking: this character's own gestures", gesturesOf(spec).flatMap((g, n) => [[0, 45, 1], [2, 0, 2]].map(([f, yaw, m]) => show(drawFigure(spec, { ...poses.talk(spec, f + n, g), mouth: m }, yaw, size), `${g} ${GESTURES[g] || ""}`))));
+      strip("Reaching, and a blink", [0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, false), 90, size), "out " + k)).concat([0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, true), 90, size), "down " + k))).concat([show(drawFigure(spec, { ...poses.stand(spec, 0), blink: true }, 0, size), "blink")]));
+      strip("If they sat down: a chair, a stool, a step, the ground", ["chair", "stool", "step", "ground"].flatMap((seat) => [45, 270].map((yaw) => show(drawFigure(spec, poses.sit(spec, 0, { seat }), yaw, size), seat))));
     }
+    strip("Every gesture (the numbers a scene can ask for)", GESTURES.map((label, g) => show(drawFigure(spec, { ...(spec.seated ? poses.sit(spec, 1, { gesture: g === 0 ? 1 : g, main: g }) : poses.talk(spec, 1, g)), mouth: 1 }, 45, size), `${g} ${label}`)));
+    strip("Sizes (how far away)", [1.08, 1, 0.85, 0.7, 0.55, 0.42, 0.32].map((k) => show(drawFigure(spec, spec.seated ? rest() : poses.walk(spec, 0.125), 45, Math.round(size * k)), Math.round(size * k) + " px")));
+    strip("On light and on dark", SWATCHES.flatMap(([label, color]) => [0, 45].map((yaw) => show(drawFigure(spec, rest(), yaw, size), label, color)))
+      .concat(SWATCHES.map(([label, color]) => show(drawFigure(spec, rest(), 45, Math.round(size * 0.4)), label + ", small", color))));
   }
-  function buildProps() {
-    const h = document.createElement("h2"); h.textContent = "Props"; out.appendChild(h);
+
+  /** Everybody at once, standing as they are found: click one to see the rest of them. */
+  function everyone() {
+    for (const [group, ids] of GROUPS) {
+      const div = strip(group, ids.filter((id) => people[id]).flatMap((id) => {
+        const spec = people[id], size = Math.round(BASE * spec.height), pose = spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0);
+        const fig = show(drawFigure(spec, pose, 0, size), `${spec.name} (${id})`), side = show(drawFigure(spec, pose, 45, size), "");
+        for (const f of [fig, side]) { f.style.cursor = "pointer"; f.addEventListener("click", () => { whoEl.value = id; build(); }); }
+        return [fig, side];
+      }));
+      div.style.gap = "10px";
+    }
+    const rest = Object.keys(people).filter((id) => !GROUPS.some(([, ids]) => ids.includes(id)));
+    if (rest.length) strip("Others", rest.map((id) => show(drawFigure(people[id], people[id].seated ? poses.sit(people[id], 0) : poses.stand(people[id], 0), 0, Math.round(BASE * people[id].height)), id)));
+  }
+
+  async function buildProps() {
+    if (props === null) { try { props = (await import("../js/art/props.js")).props; } catch (e) { props = {}; console.warn("no props to show:", e); } }
+    if (!Object.keys(props).length) return;
+    heading("Props (things drawn by code; most things in a scene are painted pictures now)", "h2");
     for (const [id, prop] of Object.entries(props)) {
       const items = [];
-      if (prop.frames > 1) {
-        const first = prop.draw(1, 0, { palette });
-        items.push(moving("moving", first.w, first.h, (t) => { const f = Math.floor((t / 1000) * (prop.fps || 4)) % prop.frames; return picture(`${id}|${f}`, () => prop.draw(1, f, { palette })); }));
-      }
-      for (let f = 0; f < (prop.frames || 1); f++) items.push(show(prop.draw(1, f, { palette }), "frame " + f));
-      items.push(show(prop.draw(0.6, 0, { palette }), "0.6"), show(prop.draw(1.6, 0, { palette }), "1.6"));
+      try {
+        if (prop.frames > 1) {
+          const first = prop.draw(1, 0, { palette });
+          items.push(moving("moving", first.w, first.h, (t) => { const f = Math.floor((t / 1000) * (prop.fps || 4)) % prop.frames; return picture(`${id}|${f}`, () => prop.draw(1, f, { palette })); }));
+        }
+        for (let f = 0; f < (prop.frames || 1); f++) items.push(show(prop.draw(1, f, { palette }), "frame " + f));
+        items.push(show(prop.draw(0.6, 0, { palette }), "0.6"), show(prop.draw(1.6, 0, { palette }), "1.6"));
+      } catch (e) { console.warn("prop", id, e); }
       strip(id, items);
     }
   }
-  const buildAll = () => { build(); buildProps(); };
-  buildAll();
+
+  function build() {
+    out.innerHTML = ""; live = [];
+    const who = whoEl.value;
+    if (who === "nobody") return;
+    if (who === "everyone") everyone();
+    else if (who === "props") buildProps();
+    else if (people[who]) person(who);
+  }
+
+  // the list of people, in the order of the story
+  const option = (value, text, to = whoEl) => { const o = document.createElement("option"); o.value = value; o.textContent = text; to.appendChild(o); return o; };
+  option("everyone", "Everyone");
+  for (const [group, ids] of GROUPS) { const g = document.createElement("optgroup"); g.label = group; whoEl.appendChild(g); for (const id of ids) if (people[id]) option(id, `${people[id].name} (${id})`, g); }
+  for (const id of Object.keys(people)) if (!GROUPS.some(([, ids]) => ids.includes(id))) option(id, id);
+  option("props", "Props");
+  option("nobody", "Nobody (for scripts)");
+  const order = [...whoEl.options].map((o) => o.value).filter((v) => v !== "nobody");
+  const step = (by) => { whoEl.value = order[(order.indexOf(whoEl.value) + by + order.length) % order.length]; build(); };
+
+  // ?who=senator&ground=dark&zoom=3 opens the page on one person; ?bare draws nothing at all
+  const grounds = { sand: "#d9a35c", dark: "#3a2c2a", stone: "#8a8478", marble: "#e9dcc0" };
+  if (ask.has("bare")) whoEl.value = "nobody";
+  else if (ask.get("who") && order.includes(ask.get("who"))) whoEl.value = ask.get("who");
+  if (ask.get("ground")) groundEl.value = grounds[ask.get("ground")] || ask.get("ground");
+  if (ask.get("zoom")) { zoom = Math.max(1, Math.min(5, Number(ask.get("zoom")) || 2)); zoomEl.value = zoom; document.getElementById("zoomv").textContent = zoom + "x"; }
+  const setGround = () => { document.documentElement.style.setProperty("--ground", groundEl.value); document.documentElement.style.setProperty("--ink", ["#3a2c2a", "#28172f"].includes(groundEl.value) ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"); };
+  setGround();
+  build();
 
   // one clock for every moving picture; the speed slider stretches it
   let clock = 0, before = performance.now();
@@ -153,16 +380,20 @@
       if (pic === item.last) continue;
       item.last = pic;
       item.ctx.clearRect(0, 0, item.ctx.canvas.width, item.ctx.canvas.height);
-      item.ctx.drawImage(pic, 0, 0);
+      item.ctx.drawImage(pic, -item.x, -item.y);
     }
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
 
-  zoomEl.addEventListener("input", () => { zoom = Number(zoomEl.value); document.getElementById("zoomv").textContent = zoom + "x"; buildAll(); });
+  whoEl.addEventListener("change", build);
+  document.getElementById("prev").addEventListener("click", () => step(-1));
+  document.getElementById("next").addEventListener("click", () => step(1));
+  zoomEl.addEventListener("input", () => { zoom = Number(zoomEl.value); document.getElementById("zoomv").textContent = zoom + "x"; build(); });
   speedEl.addEventListener("input", () => { speed = Number(speedEl.value); document.getElementById("speedv").textContent = speed + "x"; });
-  document.getElementById("ground").addEventListener("change", (e) => document.documentElement.style.setProperty("--ground", e.target.value));
-  window.lab = { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, poses, standOf: poses.stand, walkOf: poses.walk, talkOf: poses.talk, people, props, show, BASE };
+  groundEl.addEventListener("change", setGround);
+  // for scripts that make pictures with this page (scratchpad/lineup.py, mock.py): the drawing code, and the people
+  window.lab = { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, poses, standOf: poses.stand, walkOf: poses.walk, talkOf: poses.talk, tallOf, strideOf, people, get props() { return props || {}; }, show, BASE };
 </script>
 </body>
 </html>

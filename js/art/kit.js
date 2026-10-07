@@ -1,7 +1,19 @@
-// The backdrop kit. Every scene's background is put together from these parts on
-// one 320x200 grid, with flat fills and hard edges, and then turned into pixels at
-// 640x400 (see js/engine/scene.js). That shared kit is what keeps different time
-// periods looking like one game.
+// The drawing kit: everything the game draws by code that is not a person or a prop.
+//
+// Scenes are painted pictures now (800x600 files: see js/engine/scene.js). What is
+// still drawn here, and in which units:
+//
+//   IN PICTURE PIXELS (800x600)
+//     portal()    the wormhole, for a scene's live(): the light of time travel is never
+//                 painted, so that it can glow, spin and grow
+//     sketch()    a stand-in backdrop for a scene that has no painting yet
+//   ON THE OLD 320x200 GRID
+//     the first scene backdrops (highway, the riverbank, the forum, the living room, the
+//     desert stop) and their parts. The engine shows these in a band across the middle
+//     of the stage (grid.js, `fit`). They go when their scenes are painted.
+//     the close-ups (monitor, screens, notice), which g.closeup() fits the same way
+//   12x12
+//     the drawn inventory icons
 //
 // People and props are not here: they are drawn by js/art/rig.js and js/art/props.js.
 //
@@ -10,11 +22,14 @@
 //     same drawing code takes on each period's palette.
 //   TIME parts (portals, the tunnel) use the neon classes and never change.
 //
-// LIVE parts. Anything wrapped in class="live" is left as a smooth drawing on top of
-// the pixels: wormholes and their glow, and the few things that move by themselves
-// (twinkling stars, ripples). Scripts can find live parts by id and animate them.
+// LIVE parts. In a kit drawing that is turned into pixels, anything wrapped in
+// class="live" is left as a smooth drawing on top: wormholes and their glow, and the few
+// things that move by themselves (twinkling stars, ripples). Scripts can find live parts
+// by id and animate them. (Everything a scene's live() returns is live already.)
 
-export const HORIZON = 118;
+import { W, H } from "../engine/grid.js";
+
+export const HORIZON = 118;            // on the old 320x200 grid
 
 /** Small repeatable random numbers, so a scene looks the same on every visit. */
 export function rng(seed) {
@@ -74,8 +89,11 @@ export function ground(seed = 3, top = HORIZON) {
   return rect("g3", 0, top, 320, 200 - top) + rect("g1", 0, top, 320, 6) + rect("g2", 0, top + 6, 320, 10) + pebbles;
 }
 
-/** A wormhole. The same four rings everywhere, in every era: this is the game's signature shape. */
-export function portal(cx = 160, cy = 92, r = 27, id = "portal") {
+/** A wormhole. The same four rings everywhere, in every era: this is the game's signature shape.
+    (cx, cy) is its middle and r the radius of the outer ring, in whatever units it is drawn into: picture pixels
+    in a scene's live(), the old grid inside an old drawing. Ring widths, dashes and the glow all grow with r,
+    and the glow reaches out to 1.4 r. A script scales it about its own middle: g.q("#portal").style.transform = "scale(2)". */
+export function portal(cx = 400, cy = 230, r = 68, id = "portal") {
   const k = r / 27;
   const ring = (cls, radius, width, dash) =>
     `<circle class="ring ${cls}" cx="${cx}" cy="${cy}" r="${radius * k}" fill="none" stroke-width="${width * k}" stroke-dasharray="${dash.map((d) => d * k).join(" ")}"/>`;
@@ -87,12 +105,22 @@ export function portal(cx = 160, cy = 92, r = 27, id = "portal") {
   </g>`;
 }
 
-/** A stand-in for a scene that has not been drawn yet: sky, ground, and every
-    clickable area as a labelled box. Leave `draw` out of a scene file to get this,
-    and the scene is playable the moment its puzzle is written. */
+/** A stand-in for a scene that has not been painted yet: sky, ground, and every
+    clickable area as a labelled box, in the era's colors. Leave `picture` and `draw` out
+    of a scene file to get this, and the scene is playable the moment its puzzle is written.
+    Drawn in picture pixels (800x600), like the scene file's own numbers. */
 export function sketch(scene) {
+  const top = Math.max(60, Math.min(H - 120, scene.horizon ?? 260));       // where the sky meets the ground
+  const plain = (words) => String(words).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   const label = (x, y, words, cls) =>
-    `<text class="${cls}" x="${x}" y="${y}" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" font-weight="700" font-size="6" shape-rendering="geometricPrecision">${words}</text>`;
+    `<text class="${cls}" x="${x}" y="${y}" text-anchor="middle" font-family="Trebuchet MS, Verdana, sans-serif" font-weight="700" font-size="15" shape-rendering="geometricPrecision">${plain(words)}</text>`;
+  let out = "", y = 0;
+  [31, 22, 17, 14, 11, 9, 7, 7].forEach((part, i) => {                       // eight bands of sky, deeper toward the top
+    const next = i === 7 ? top : Math.round(y + (part / 118) * top);
+    out += rect(`s${i + 1}`, 0, y, W, next - y);
+    y = next;
+  });
+  out += rect("g3", 0, top, W, H - top) + rect("g1", 0, top, W, 15) + rect("g2", 0, top + 15, W, 25);
   const boxes = (scene.hotspots || []).map((h) => {
     let x, y, w, hh;
     if (h.rect) [x, y, w, hh] = h.rect;
@@ -103,10 +131,10 @@ export function sketch(scene) {
       [w, hh] = [Math.max(...xs) - x, Math.max(...ys) - y];
     }
     return `<rect class="near" x="${x}" y="${y}" width="${w}" height="${hh}" opacity="0.6"/>` +
-      `<rect class="stroke-line" x="${x + 0.5}" y="${y + 0.5}" width="${w - 1}" height="${hh - 1}" fill="none" stroke-width="1" stroke-dasharray="3 2"/>` +
-      label(x + w / 2, y + hh / 2 + 2, h.name, "light");
+      `<rect class="stroke-line" x="${x + 1}" y="${y + 1}" width="${w - 2}" height="${hh - 2}" fill="none" stroke-width="2" stroke-dasharray="8 5"/>` +
+      label(x + w / 2, y + hh / 2 + 5, h.name, "light");
   }).join("");
-  return sky() + ground(1) + boxes + label(302, 197, "SKETCH", "line");
+  return out + boxes + label(W - 45, H - 8, "SKETCH", "line");
 }
 
 // ---------- the present: a desert highway ----------
@@ -345,7 +373,7 @@ export function notice() {
     <circle cx="96" cy="88" r="17" fill="#f2c230"/><circle cx="96" cy="88" r="17" fill="none" stroke="#1f130a" stroke-width="1"/><circle cx="96" cy="88" r="2.4" fill="#1f130a"/>${blade(-90)}${blade(30)}${blade(150)}
     ${words(184, 82, 11, "ELEVATED", "#1f130a")}${words(184, 96, 11, "RADIATION LEVELS", "#1f130a")}
     <rect x="76" y="112" width="168" height="0.8" fill="#4a2f20"/>
-    ${words(160, 125, 10, "SECTORS 44 AND 1250", "#c8402f")}${words(160, 135, 6, "SEALED UNTIL FURTHER NOTICE", "#1f130a")}
+    ${words(160, 125, 10, "SECTORS 44 AND 2560", "#c8402f")}${words(160, 135, 6, "SEALED UNTIL FURTHER NOTICE", "#1f130a")}
     ${words(160, 146, 4.6, "No entry. No photographs. No questions.", "#4a2f20", 400)}
     <circle cx="70" cy="24" r="1.4" fill="#6b6866"/><circle cx="250" cy="24" r="1.4" fill="#6b6866"/><circle cx="70" cy="146" r="1.4" fill="#6b6866"/><circle cx="250" cy="146" r="1.4" fill="#6b6866"/>
   </g>`;

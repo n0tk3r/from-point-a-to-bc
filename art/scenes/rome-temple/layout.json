@@ -1,0 +1,492 @@
+{
+ "id": "rome-temple",
+ "horizon": 120,
+ "full": 585,
+ "light": "one hard patch of morning sun on the floor from the doors behind us (a little from the left); a brazier of coals at the front left, another by the altar, the clerk's lamp; the rest is dark",
+ "walk": [
+  [
+   216,
+   598
+  ],
+  [
+   232,
+   559
+  ],
+  [
+   168,
+   554
+  ],
+  [
+   275,
+   353
+  ],
+  [
+   531,
+   353
+  ],
+  [
+   669,
+   598
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    501,
+    499
+   ],
+   [
+    612,
+    499
+   ],
+   [
+    586,
+    452
+   ],
+   [
+    489,
+    452
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "table",
+   "file": "table.png",
+   "base": 488
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  }
+ ],
+ "things": [
+  {
+   "id": "sunpatch",
+   "what": "the patch of sunlight on the floor",
+   "shape": {
+    "poly": [
+     [
+      303,
+      598
+     ],
+     [
+      368,
+      430
+     ],
+     [
+      482,
+      430
+     ],
+     [
+      478,
+      598
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    555
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "statue",
+   "what": "the seated god on his pedestal",
+   "shape": {
+    "rect": [
+     346,
+     127,
+     107,
+     208
+    ]
+   },
+   "stand": [
+    400,
+    354
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hum",
+   "what": "the bare patch of wall that hums",
+   "shape": {
+    "rect": [
+     168,
+     286,
+     44,
+     84
+    ]
+   },
+   "at": [
+    190,
+    330
+   ],
+   "stand": [
+    232,
+    480
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "chests",
+   "what": "the chests down the left wall",
+   "shape": {
+    "poly": [
+     [
+      55,
+      486
+     ],
+     [
+      95,
+      432
+     ],
+     [
+      134,
+      393
+     ],
+     [
+      167,
+      384
+     ],
+     [
+      213,
+      384
+     ],
+     [
+      213,
+      416
+     ],
+     [
+      193,
+      466
+     ],
+     [
+      126,
+      559
+     ],
+     [
+      55,
+      559
+     ]
+    ]
+   },
+   "stand": [
+    214,
+    482
+   ],
+   "face": "W"
+  },
+  {
+   "id": "chests2",
+   "what": "the chest and sacks at the far left",
+   "shape": {
+    "poly": [
+     [
+      220,
+      317
+     ],
+     [
+      240,
+      295
+     ],
+     [
+      261,
+      305
+     ],
+     [
+      287,
+      340
+     ],
+     [
+      252,
+      349
+     ],
+     [
+      220,
+      349
+     ]
+    ]
+   },
+   "stand": [
+    285,
+    355
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "chests3",
+   "what": "the chests down the right wall, one of them open",
+   "shape": {
+    "poly": [
+     [
+      554,
+      333
+     ],
+     [
+      589,
+      298
+     ],
+     [
+      628,
+      348
+     ],
+     [
+      632,
+      375
+     ],
+     [
+      632,
+      415
+     ],
+     [
+      589,
+      415
+     ],
+     [
+      566,
+      382
+     ],
+     [
+      554,
+      363
+     ]
+    ]
+   },
+   "stand": [
+    543,
+    389
+   ],
+   "face": "E"
+  },
+  {
+   "id": "chests4",
+   "what": "the chest by the door on the right, law tablets leaning on it",
+   "shape": {
+    "poly": [
+     [
+      652,
+      451
+     ],
+     [
+      714,
+      442
+     ],
+     [
+      758,
+      499
+     ],
+     [
+      758,
+      576
+     ],
+     [
+      693,
+      588
+     ],
+     [
+      652,
+      518
+     ]
+    ]
+   },
+   "stand": [
+    624,
+    555
+   ],
+   "face": "E"
+  },
+  {
+   "id": "table",
+   "what": "the clerk's table: balance, silver, wax tablets, lamp",
+   "shape": {
+    "rect": [
+     503,
+     382,
+     153,
+     109
+    ]
+   },
+   "stand": [
+    515,
+    509
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "standards",
+   "what": "old military standards leaning in the corner",
+   "shape": {
+    "rect": [
+     249,
+     188,
+     43,
+     126
+    ]
+   },
+   "stand": [
+    290,
+    354
+   ],
+   "face": "N"
+  },
+  {
+   "id": "altar",
+   "what": "the small altar table and its bowl",
+   "shape": {
+    "rect": [
+     374,
+     297,
+     51,
+     53
+    ]
+   },
+   "stand": [
+    400,
+    354
+   ],
+   "face": "N"
+  },
+  {
+   "id": "brazier",
+   "what": "the brazier of coals by the door",
+   "shape": {
+    "rect": [
+     72,
+     507,
+     124,
+     93
+    ]
+   },
+   "stand": [
+    234,
+    565
+   ],
+   "face": "W"
+  },
+  {
+   "id": "brazier2",
+   "what": "the brazier by the altar",
+   "shape": {
+    "rect": [
+     458,
+     297,
+     32,
+     53
+    ]
+   },
+   "stand": [
+    469,
+    354
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rack",
+   "what": "the clerk's rack of rolls and tablets, and the keys",
+   "shape": {
+    "rect": [
+     612,
+     292,
+     60,
+     173
+    ]
+   },
+   "stand": [
+    573,
+    446
+   ],
+   "face": "E"
+  },
+  {
+   "id": "cat",
+   "what": "a ginger cat asleep on the chest nearest the brazier (set dressing; a hotspot only if the story wants one)",
+   "shape": {
+    "rect": [
+     103,
+     434,
+     46,
+     21
+    ]
+   },
+   "stand": [
+    196,
+    517
+   ],
+   "face": "W"
+  }
+ ],
+ "exits": [
+  {
+   "to": "rome-steps",
+   "shape": {
+    "poly": [
+     [
+      290,
+      586
+     ],
+     [
+      510,
+      586
+     ],
+     [
+      510,
+      600
+     ],
+     [
+      290,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    594
+   ]
+  }
+ ],
+ "marks": {
+  "son": [
+   400,
+   570
+  ],
+  "clerk": [
+   614,
+   464
+  ]
+ },
+ "lights": {
+  "sun": [
+   [
+    303,
+    598
+   ],
+   [
+    368,
+    430
+   ],
+   [
+    482,
+    430
+   ],
+   [
+    478,
+    598
+   ]
+  ],
+  "brazier": [
+   137,
+   533
+  ],
+  "brazier2": [
+   475,
+   305
+  ],
+  "lamp": [
+   631,
+   404
+  ]
+ },
+ "notes": "Cut-outs are 800x600, laid at 0,0. `hum.at` is the exact spot on the wall. The clerk's mark is his stool behind the table (not walking floor). `lights` are where the game may draw live glow; nothing glows in the paint but the coals and the flame themselves."
+}
