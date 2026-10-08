@@ -11,6 +11,7 @@
 //              solid: true when the seat is a block painted in the scene (a step, a kerb): the shadow is then under the feet }
 //   rest       where an arm lies when a pose leaves it alone: { L: { hand: [...] } }
 //   pace       how fast they walk, in picture pixels a second at full size
+//   pray       how they stand to pray: { high: how high the folded hands are (0 the belt, 1 under the chin), bow, tight }
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -65,6 +66,7 @@ export const dad = {
   socks: { mat: WHITE, from: 0.52, stripes: [ramp("#f08a70", "#d2452f", "#a12f22", "#6e1f19"), ramp("#7fb2e6", "#3f79c2", "#2b5590", "#1b3760")] },
   shoes: { kind: "sandals", mat: ramp("#a8744a", "#7d5030", "#553521", "#332015"), sole: ramp("#6b4a30", "#4d3320", "#332015", "#1f130c") },
   gestures: [0, 1, 2, 3],                               // a nod, a point, a shrug, a hand on the hip
+  pray: { high: -0.40, bow: 0.34 },                     // his big hands folded low in front of him, his head well down
 };
 
 // ---------- the Son: red cap, blue hoodie, backpack. Zany: he bounces, and his hands never stop. ----------
@@ -85,11 +87,19 @@ export const son = {
   stance: "straps",                                     // thumbs hooked in the straps of his pack
   walk: { swing: 0.50, arm: 0.58, elbow: 0.95, pump: 0.30, lean: 0.10, lift: 1.3, bob: 0.05, wag: 0.10, sway: 0.020 },   // a bounce, fists pumping, head going from side to side
   gestures: [1, 4, 9, 2],                               // a point, both arms up, both hands waving, a shrug
-  extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, tw, J, parts }) {
+  pray: { high: 0.06, bow: 0.32, out: 0.012 },          // his cap off and held in both hands in front of him (see below), for once standing still
+  extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, tw, J, parts, pose }) {
     const hr = d.headR;
+    if ((pose.praying || 0) > 0.5) {
+      // he has taken his cap off to pray: it hangs from his folded hands, crown outward
+      const at = add(mix(J.R.palm, J.L.palm, 0.5), J.torso([0, -0.028, 0.012]));
+      ball(at, [0.050, 0.030, 0.026], CAP, { part: parts.HELD }, tw);
+      ball(add(at, J.torso([0, -0.036, 0.006])), [0.038, 0.013, 0.018], shifted(CAP, 1), { part: parts.HELD }, tw);       // its peak, hanging down
+    } else {
     // cap: a dome over the top of the head and a peak out in front
     ball(headPt([0, 0.006, 0]), [hr[0] * 1.12, hr[1] * 1.10, hr[2] * 1.12], CAP, { part: parts.HAT, fn: (ux, uy, uz) => { const o = onHead(ux, uy, uz); return o[1] > 0.36 - 0.06 * o[2] ? undefined : null; } }, hy);
     ball(hp(0, 0.52, 1.44), [0.056, 0.010, 0.046], shifted(CAP, 1), { part: parts.HAT }, hy);
+    }
     // hood bunched behind the neck
     ball(add(J.neck, J.torso([0, -0.022, -0.052])), [0.064, 0.040, 0.042], shifted(HOODIE, 1), { part: parts.TORSO }, tw);
     // the pack: a soft upright block against his back, with a pocket on it. [half width, half depth], like the trunk.
@@ -118,15 +128,17 @@ export const mom = {
   stance: "clasped",
   walk: { swing: 0.40, arm: 0.20, lean: 0.02, twist: 0.09, sway: 0.016 },     // short steps, quiet arms, a little sway
   gestures: [0, 5, 8, 0],                               // a nod, a hand to the heart, an open hand
+  pray: { high: 0.42, bow: 0.28 },                      // her hands folded at her breast
   pace: 150,
-  extras({ ball, limb, hp, d, hy, tw, J, S, parts }) {
+  extras({ ball, limb, hp, d, hy, tw, J, S, parts, pose }) {
     // pearls: one at each ear, and a string of them at the neck
     for (const sd of [1, -1]) ball(hp(sd * 1.0, -0.34, -0.06), [0.007, 0.008, 0.007], PEARL, { part: parts.EXTRA }, hy);
     ball(add(J.sh, J.torso([0, -0.016, d.trunkTop[1] * 0.50])), [0.046, 0.034, 0.042], PEARL, {
       part: parts.EXTRA, bias: S * 0.03, fn: (ux, uy) => { const q = ux * ux * 0.8 + (uy + 1.05) ** 2; return q > 0.92 && q < 1.50 ? undefined : null; },
     }, tw);
     // a handbag, hanging from her left forearm: it swings clear of her skirt
-    const w = mix(J.L.elbow, J.L.wrist, 0.60), off = [w[0] - J.hipC[0], 0, w[2] - J.hipC[2]], far = Math.hypot(off[0], off[2]) || 1, clear = Math.max(1, (d.pelvisR[0] + 0.046) / far);
+    // (when she lifts her hands to pray it slides down to the crook of her elbow)
+    const w = mix(J.L.elbow, J.L.wrist, 0.60 - 0.46 * (pose.praying || 0)), off = [w[0] - J.hipC[0], 0, w[2] - J.hipC[2]], far = Math.hypot(off[0], off[2]) || 1, clear = Math.max(1, (d.pelvisR[0] + 0.046) / far);
     const bag = [J.hipC[0] + off[0] * clear, w[1] - 0.084, J.hipC[2] + off[2] * clear];
     limb(add(w, [0, -0.004, 0]), add(bag, [0, 0.030, 0]), 0.006, 0.006, shifted(LEATHER, 1), { part: parts.EXTRA2 });
     ball(bag, [0.040, 0.034, 0.018], LEATHER, { part: parts.EXTRA2, fn: (ux, uy) => (uy < -0.55 ? shifted(LEATHER, 1) : undefined) }, tw);
@@ -150,6 +162,7 @@ export const bigsis = {
   stance: "elbow",
   walk: { swing: 0.43, arm: 0.30, lean: 0.04 },
   gestures: [0, 11, 6, 10],                             // a nod, a finger in the air, a hand to her chin, pointing ahead
+  pray: { high: 0.46, bow: 0.31 },                      // exactly as she was taught: hands together at her breast, head bowed
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, J, S, parts }) {
     const hr = d.headR;
     // long hair: down the back, and a lock in front of each shoulder
@@ -178,6 +191,7 @@ export const lilsis = {
   stance: "akimbo",
   walk: { swing: 0.50, arm: 0.72, elbow: 0.12, lean: 0.09, lift: 1.25, bob: 0.03 },     // a stomp: straight arms, like a small soldier
   gestures: [0, 4, 7, 10],                              // a nod, both arms up, showing her muscles, pointing ahead
+  pray: { high: 0.97, bow: 0.15, tight: true },         // with all her might: hands clasped tight under her chin, eyes squeezed shut
   pace: 145,
   extras({ sf, P, ball, limb, hp, d, hy, th, J, fine, parts }) {
     // pigtails: each starts at a yellow band high on the side of her head, puffs out, and hangs to a point beside her cheek
@@ -680,6 +694,60 @@ export const clerk = {
   },
 };
 
+// ---------- the date seller: a Jew from Judea, about fifty, selling the dates of Jericho in a Roman street. ----------
+// Courteous, dry, in no hurry. He stands easily with the weight on one leg and the basket on his hip, and his right hand
+// does the talking. A plain long tunic of undyed wool; over it a mantle with dark bands woven near its ends.
+const SUNNED = ramp("#f2caa2", "#dcaa7c", "#ac7a52", "#744c32");          // skin that has worked out of doors all its life
+const OAT = ramp("#faf0da", "#eadec2", "#bcae90", "#877a60");             // wool as it comes off the sheep
+const CAMEL = ramp("#e2c69e", "#c6a478", "#977852", "#665238");           // his mantle: brown wool
+const BAND = ramp("#6c6074", "#463e50", "#2e2838", "#1b1722");            // the dark bands woven into it
+const PEPPER = ramp("#66564c", "#44372e", "#2d231d", "#19120e");          // his hair: dark
+const BEARD = ramp("#7c6e62", "#584a3f", "#3c312a", "#231b17");           // his beard: a shade lighter, as beards are
+const SALT = ramp("#b6ada0", "#8f867a", "#686158", "#46403a");            // and both going grey
+const WICKER = ramp("#ecd296", "#cca862", "#9a7838", "#685022");
+const DATES = ramp("#c08850", "#9a6234", "#6c4020", "#442612");           // dates: brown,
+const AMBER = ramp("#f6c868", "#e0a03c", "#ac7220", "#744a12");           // and the amber of the best ones
+const LEAF = ramp("#aed078", "#80a84c", "#587a30", "#38501d");
+const cell = (a, b) => { let h = (a * 374761393 + b * 668265263) | 0; h = (h ^ (h >>> 13)) * 1274126177; return (h ^ (h >>> 16)) >>> 0; };
+export const dateseller = {
+  name: "Date Seller", height: 0.98, span: 1.25,
+  dim: { ...ADULT, headR: [0.056, 0.066, 0.063], shoulderW: 0.098, trunkTop: [0.104, 0.068], trunkLow: [0.098, 0.074], bellyFwd: 0.010, pelvisR: [0.096, 0.062, 0.074], armR: [0.029, 0.025, 0.018], neckR: 1.0 },
+  skin: SUNNED,
+  hair: { mat: PEPPER, bulk: 1.06, where: hairline({ front: 0.58, temple: 0.44, side: 0.10, back: -0.46, recede: 0.06 }),
+          texture: (x, y, z) => (Math.abs(x) > 0.70 && y < 0.50 && z > -0.02 ? SALT : undefined) },           // grey at the temples
+  face: { eyes: "plain", eye: "#2a1a12", brows: PEPPER.tones[1], beard: BEARD, beardLen: 0.0, beardGrey: SALT, moustache: BEARD, mouthShows: true, lip: "#96564a", smile: 1, mouthW: 0.20, lines: 1, jaw: 0.90, chin: 0.52 },
+  top: { mat: OAT, sleeves: 0.84, cuff: 0.012, belt: shifted(ROPE, 1) },
+  bottom: { kind: "skirt", mat: OAT, len: 1.62, flare: 1.08, folds: [[-0.85, 0.3, 1.62, 0.08], [0.50, 0.5, 1.62, -0.08], [-0.15, 0.9, 1.62], [2.6, 0.3], [-2.5, 0.4]] },
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  stance: "easy",
+  hold: { L: { hand: [-0.196, -0.232, 0.136], bend: [-1, -0.3, -0.75], grip: true } },      // his left arm round the basket on his hip
+  hand: "R",
+  walk: { swing: 0.36, arm: 0.26, lean: 0.03 },
+  pace: 125,
+  gestures: [8, 11, 5, 2],                              // an open hand (with a date on it), a finger raised, a hand to his chest, a small shrug
+  extras(c) {
+    const { ball, J, tw, pose, parts } = c;
+    wear.mantle(c, { mat: CAMEL, band: BAND });
+    // The basket on his left hip: wide and shallow, woven, heaped with dates. His hand has its far rim.
+    const g = J.L.palm, axis = [J.hipC[0], g[1], J.hipC[2]], inward = norm([axis[0] - g[0], 0, axis[2] - g[2]]), R0 = 0.086;
+    const at = [g[0] + inward[0] * R0 * 0.94, g[1] - 0.022, g[2] + inward[2] * R0 * 0.94];
+    ball(add(at, [0, 0.022, 0]), [R0 * 0.90, 0.022, R0 * 0.90], DATES, {
+      part: parts.HELD,                                 // the heap: brown, darker brown and amber, a date at a time
+      fn: (ux, uy) => { const h = cell(Math.floor(ux * 5.5 + 40), Math.floor(uy * 3.0 + 40)) % 9; return h < 3 ? AMBER : h < 5 ? shifted(DATES, 1) : undefined; },
+    });
+    ball(at, [R0, 0.036, R0], WICKER, {
+      part: parts.HELD,                                 // the bowl of it: the rim, then row under row of weaving
+      fn: (ux, uy) => (uy < -0.12 ? null : uy < 0.12 ? undefined : Math.floor((uy + 1) * 5.0) % 2 ? shifted(WICKER, 1) : undefined),
+    });
+    // a few of the best, set out on a leaf on top
+    const top = add(at, [inward[0] * 0.010, 0.043, inward[2] * 0.010]);
+    ball(top, [0.030, 0.006, 0.018], LEAF, { part: parts.HELD }, tw);
+    for (const dx of [-0.012, 0.004, 0.017]) ball(add(top, [dx, 0.007, 0.002]), [0.0085, 0.0065, 0.0085], dx === 0.004 ? DATES : AMBER, { part: parts.HELD });
+    // and one held out on his hand: when that is the gesture, and when a script has him reach out or hold his hand out (hold())
+    if (pose.gesture === 8 || (pose.reaching || 0) > 0.7) ball(add(mix(J.R.palm, J.R.tip, 0.35), [0, 0.012, 0]), [0.012, 0.0085, 0.012], shifted(DATES, 1), { part: parts.HELD });
+  },
+};
+
 // =====================================================================================
 // Nevada, the present
 // =====================================================================================
@@ -744,10 +812,11 @@ export const agent = {
   },
 };
 
+
 export const people = {
   dad, son, mom, bigsis, lilsis,
   scribe, carrier, overseer, hauler1, hauler2, hauler3, guard, lampboy, goldsmith,
-  keeper, washer, urchin, soothsayer, senator, doorkeeper, clerk,
+  keeper, washer, urchin, soothsayer, senator, doorkeeper, clerk, dateseller,
   oldtimer, agent,
   // the same people at another moment of the story (a scene puts one in the other's place):
   "guard-shade": guardShade, "goldsmith-shades": goldsmithShades,

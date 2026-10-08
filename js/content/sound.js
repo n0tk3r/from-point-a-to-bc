@@ -51,6 +51,13 @@ export const sound = {
       lead: [4, null, 2, 4, null, 5, 4, null, 2, 0, null, null, 2, null, 0, 2, null, 4, 3, null, 1, 0, null, null],
       bass: [7, null, null, null, null, null, 10, null, null, null, null, null, 11, null, null, null, null, null, 7, null, null, 11, null, null],
     },
+    // the Retreat, Big Sister's attic: one soft voice, very slow, in D major (five notes of it), and more silence than sound.
+    // (It comes out of her sound machine, so it stops when the batteries are taken out: scenes/home-bigsis-room.js.)
+    retreat: {
+      bpm: 48, root: 50, scale: [0, 2, 4, 7, 9], wave: "sine", hold: 3.6, volume: 0.55,
+      lead: [0, null, null, null, null, null, null, null, 2, null, null, null, null, null, null, null, 4, null, null, null, null, null, null, null, 3, null, null, null, null, null, null, null, 1, null, null, null, null, null, null, null, 3, null, null, null, null, null, null, null, 2, null, null, null, null, null, null, null, 0, null, null, null, null, null, null, null],
+      bass: [5, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 8, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    },
     // the desert in the morning: wide open, not much in it
     nevada: {
       bpm: 96, root: 52, scale: [0, 2, 4, 7, 9],
@@ -80,5 +87,26 @@ export const sound = {
     // Big Sister at the piano: a phrase in A minor. And Little Sister's song.
     piano: { notes: [[69, 0, 0.55], [72, 0.3, 0.55], [76, 0.6, 0.55], [74, 0.9, 0.5], [72, 1.2, 0.5], [71, 1.5, 0.8], [64, 1.5, 0.9], [69, 2.2, 1.5], [57, 2.2, 1.5], [60, 2.2, 1.5]], level: 0.1, wave: "triangle" },
     plonk: { notes: [[60, 0, 0.35], [61, 0, 0.35], [63, 0, 0.35]], level: 0.08, wave: "triangle" },
+
+    // ---- the house, Act Three ----
+    // The same phrase with one note missing: there is a key lying on that hammer. (The scene plays `thunk` where the note should be: 0.9 seconds in.)
+    pianodead: { notes: [[69, 0, 0.55], [72, 0.3, 0.55], [76, 0.6, 0.55], [72, 1.2, 0.5], [71, 1.5, 0.8], [64, 1.5, 0.9], [69, 2.2, 1.5], [57, 2.2, 1.5], [60, 2.2, 1.5]], level: 0.1, wave: "triangle" },
+    // Mom at the piano: the first phrase of a hymn, in F major. The tune is the game's own, written for it: it is not the tune of any real hymn.
+    hymn: { notes: [[65, 0, 0.8], [53, 0, 1.3], [69, 0.6, 0.45], [67, 0.9, 0.45], [72, 1.2, 0.8], [57, 1.2, 1.3], [74, 1.8, 0.8], [70, 2.4, 0.45], [58, 2.4, 0.9], [69, 2.7, 0.45], [67, 3.0, 0.8], [48, 3.0, 0.7], [65, 3.6, 1.6], [53, 3.6, 1.6], [57, 3.6, 1.6], [60, 3.6, 1.6]], level: 0.09, wave: "triangle" },
+    // The same, with its fourth note missing (the scene plays `thunk` there: 1.2 seconds in), and broken off where she stops to listen.
+    hymndead: { notes: [[65, 0, 0.8], [53, 0, 1.3], [69, 0.6, 0.45], [67, 0.9, 0.45], [57, 1.2, 1.0], [74, 1.8, 0.7]], level: 0.09, wave: "triangle" },
+    thunk: { noise: [240, 90], len: 0.13, q: 2, notes: [[36, 0, 0.1]], level: 0.2, wave: "sine" },                       // a hammer landing on something that is not a string
+    panel: { notes: [[50, 0, 0.06], [43, 0.1, 0.12]], level: 0.1, wave: "triangle" },                                    // the piano's lower panel, lifted off
+    click: { notes: [[92, 0, 0.02]], level: 0.05 },                                                                      // a flashlight's rubbery button
+    deadclick: { notes: [[58, 0, 0.025]], level: 0.04, wave: "triangle" },                                                // the same button, with nothing behind it
+    hush: { notes: [[74, 0, 0.5], [69, 0.16, 0.6], [62, 0.34, 1.1]], level: 0.045, wave: "sine" },                          // a sound machine winding down as its batteries come out
+    unlock: { noise: [1900, 500], len: 0.16, q: 3, notes: [[86, 0, 0.03], [52, 0.13, 0.09]], level: 0.1 },                // a key turned in a door
+    alarm: { notes: [[91, 0, 0.09], [86, 0.1, 0.09], [91, 0.2, 0.09], [86, 0.3, 0.09], [91, 0.4, 0.14]], level: 0.045 }, // a toy door alarm, pleased with itself
+    latch: { noise: [900, 280], len: 0.1, q: 2, notes: [[47, 0, 0.05]], level: 0.09 },                                   // a door pulled shut again
+    wind: { noise: [700, 2400], len: 1.4, q: 7, notes: [[74, 0.05, 0.02], [74, 0.25, 0.02], [74, 0.45, 0.02], [74, 0.65, 0.02], [74, 0.85, 0.02], [74, 1.05, 0.02], [74, 1.25, 0.02]], level: 0.06 },   // a pencil turning the hub of a cassette
+    machine: { notes: [[45, 0, 0.05], [83, 0.22, 0.45]], level: 0.07, wave: "sine" },                                    // an answering machine: the clack of its play button, and its beep
+    hiss: { noise: [5200, 2800], len: 1.4, q: 0.5, level: 0.08 },                                                        // tape, with nothing more on it
+    dial: { notes: [[82, 0, 0.02], [82, 0.09, 0.02], [82, 0.18, 0.02], [82, 0.27, 0.02], [82, 0.36, 0.02], [82, 0.45, 0.02], [78, 0.56, 0.03]], level: 0.05 },   // a combination dial
+    clunk: { noise: [520, 110], len: 0.2, q: 2, notes: [[36, 0, 0.18], [43, 0.02, 0.1]], level: 0.16, wave: "sine" },    // a cash box letting go
   },
 };

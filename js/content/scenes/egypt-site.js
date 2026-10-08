@@ -1,5 +1,5 @@
 // Act One, the second of four scenes: the foot of the Great Pyramid, the building site.
-// Egypt, about 2560 B.C. Dad plays.
+// Egypt, about 1920 B.C. (the Bible's own count of years: briefs/DATING.md). Dad plays.
 //
 // Work has stopped: a wall inside has begun to hum and the men will not go near it. The way in is up the
 // stair on the shaded face, and the guard at its foot lets nobody up who is not on the scribe's list.
@@ -13,6 +13,22 @@
 // The overseer is the running joke and the hint-giver: ask him about the schedule at any point and he says,
 // in his own way, what is holding it up. The haulers put Dad right about who builds a pyramid.
 // The stair is not walked by clicking on it: the entrance takes Dad up it, once the guard lets him.
+//
+// Things here that are no part of any puzzle:
+//   - The scribe's news (ask him for it: "Any news?"). As the grumble of a man who keeps the grain account, he tells
+//     this week's palace gossip, from outside, with no idea whom he is talking about: famine across the desert, a
+//     rich herdsman called Abram and his sister, taken into the Great House; the sickness there since; the word that
+//     she is his WIFE; the king sending him away this morning. Genesis 12:10-20. Dad understands slowly, and then all
+//     at once: he is standing in Genesis 12. He would give a lot to go and shake that man's hand, and he has a boy to
+//     find. Told once ("egypt.heardAbram"); from then on he knows when he is, and the river, the reeds and the open
+//     door say so. Nobody meets Abram or Sarai; nobody of the time says anything about Abram's God.
+//   - The mud bricks: he half remembers that Israel made bricks for Pharaoh, looks up at the stone, and is put right
+//     by the text of Exodus (not by a person; nobody of the time speaks of Israel).
+//   - The masons' stone, looked at again: seashells in it, in the desert. The Flood (Genesis 7:19-20), and Mizraim,
+//     Noah's grandson (Genesis 10:6), whose name the country has. Said once.
+//   - The doorway: the first time he reaches it, before he goes into the dark, he prays (the second of his three
+//     prayers in the act).
+//   - General Feathers: the scribe and the guard each have something to say about her, once.
 //
 // Try it: index.html?scene=egypt-site&lead=dad
 // Later states: &flags=egypt.arrived,egypt.sawSite,egypt.hasPass,egypt.inside,egypt.knowsLight
@@ -31,6 +47,15 @@ const turnTo = (g, who) => { const a = g.actor(who), me = g.lead; if (a && me) a
 const allSet = (g) => !!(g.flag("egypt.shadeSet") && g.flag("egypt.footSet") && g.flag("egypt.topSet"));
 /** Dad keeps his arm out, as at the top of a reach, until told to drop it: he is holding something up. */
 const holdOut = (g, on) => { if (g.lead) g.lead.hold(on); };
+/** Head bowed, hands folded (true), or let it go (false). A figure that has no such pose simply stands. */
+const pray = (a, on) => a && a.pray && a.pray(on);
+/** General Feathers, shown to somebody: he introduces her, and they answer, once, in their own way. After that (and
+    for anybody with no answer of their own) Dad's stock reply. `answer` is their line, and Dad's comeback if any. */
+const showGeneral = (who, ...answer) => async (g) => {
+  turnTo(g, who);
+  if (count(g, answer[0])) return g.say("egypt.chicken.stock");
+  await g.say("egypt.chicken.show", ...answer);
+};
 
 // ---------- light: the sunbeam from the shade up into the entrance ----------
 // The painter's line for it runs from the middle of the shade (391, 406) to the middle of the doorway (542, 229).
@@ -66,12 +91,33 @@ async function talkToScribe(g) {
     const pick = await g.choose([
       { id: "boy", line: "egypt.ask.boy" },
       { id: "list", line: "egypt.scribe.ask.list" },
+      { id: "news", line: "egypt.scribe.ask.news", when: (g) => !g.flag("egypt.heardAbram") },      // told once
       { id: "bye", line: "egypt.ask.bye" },
     ]);
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.scribe.boy.1", "egypt.scribe.boy.2");
     else if (pick === "list") await g.say("egypt.scribe.ask.list", g.flag("egypt.hasPass") ? "egypt.scribe.list.done" : g.flag("egypt.penGiven") ? "egypt.scribe.list.nosheet" : "egypt.scribe.list.nopen");
+    else if (pick === "news") return news(g);                 // he has heard what he needed to hear, and he goes
     else return g.say("egypt.ask.bye", "egypt.ans.bye");
   }
+}
+
+// ---------- the news: Abram is in Egypt ----------
+/** The scribe's grumble about the grain account turns into this week's gossip from the palace. He has no idea whom
+    he is talking about. Dad understands slowly, then all at once; then he looks out the way the man has gone, and
+    back up at the doorway his son went in by. Genesis 12:10-20, told from outside; nobody meets Abram or Sarai. */
+async function news(g) {
+  turnTo(g, "scribe");
+  await g.say("egypt.scribe.ask.news", "egypt.scribe.news.1", "egypt.scribe.news.2", "egypt.scribe.news.3", "egypt.scribe.news.4", "egypt.scribe.news.5");
+  await g.say("egypt.scribe.news.6", "egypt.scribe.news.7", "egypt.scribe.news.8", "egypt.scribe.news.9", "egypt.scribe.news.10");
+  g.flag("egypt.heardAbram", true);
+  await g.wait(400);
+  g.lead.look(40, 300);                           // out across the desert, the way the man has gone
+  await g.wait(500);
+  await g.say("egypt.abram.1", "egypt.abram.2", "egypt.abram.3", "egypt.abram.4");
+  await g.wait(300);
+  g.lead.look(541, 234);                          // and back up at the doorway
+  await g.wait(400);
+  await g.say("egypt.abram.5");
 }
 
 async function giveReed(g) {
@@ -114,12 +160,22 @@ async function showPass(g) {
   await upTheStair(g);
 }
 
-/** The whole climb is shown once. It is a long stair: after that, the picture changes when he is a few steps up. */
+/** The whole climb is shown once, and at the top of it he prays before he goes in. It is a long stair: after that,
+    the picture changes when he is a few steps up. */
 async function upTheStair(g) {
   const all = [...STAIR, ...LANDING], far = g.flag("egypt.climbed") ? 3 : all.length;
   await g.walkTo(...STAIR[0]);
   for (const [x, y] of all.slice(1, far)) await g.moveTo(x, y);
-  if (far === all.length) g.lead.face("N");       // at the doorway, he turns to go in
+  if (far === all.length) {                       // at the doorway, the first time: he stops at the dark, and prays
+    g.lead.face("W");
+    await g.wait(350);
+    pray(g.lead, true);
+    await g.wait(400);
+    await g.say("egypt.site.pray.1", "egypt.site.pray.2");
+    pray(g.lead, false);
+    await g.wait(350);
+    g.lead.face("N");                             // and turns to go in
+  }
   g.flag("egypt.climbed", true);
   await g.goto("egypt-gallery", { spawn: "fromSite" });
 }
@@ -206,6 +262,27 @@ async function holdShade(g) {
   if (allSet(g)) await g.say("egypt.beam.all");
   turnTo(g, "overseer");
   await g.say("egypt.overseer.bark.guard");
+}
+
+// ---------- the mud bricks ----------
+/** He lifts one, and half remembers: Israel made bricks for Pharaoh. Then he looks up at the pyramid, which is stone,
+    and does the arithmetic out loud (Exodus 1:11, 1:14, 5:7). Said once; after that the bricks are only bricks. */
+async function liftBrick(g) {
+  if (count(g, "egypt.site.bricks.use.1")) return g.say("egypt.site.bricks.look");
+  await g.reach(true);
+  await g.say("egypt.site.bricks.use.1");
+  g.lead.look(700, 180);                          // up at the pyramid
+  await g.wait(350);
+  await g.say("egypt.site.bricks.use.2", "egypt.site.bricks.use.3", "egypt.site.bricks.use.4");
+}
+
+// ---------- the masons' stone: seashells in the desert ----------
+/** The first look is at the tools. The second is at the stone they are cutting, which is full of little round shells:
+    the Flood was here first (Genesis 7:19-20), and Noah's grandson after it (Genesis 10:6). Said once; after that the
+    tools are only tools. */
+async function lookAtStone(g) {
+  if (count(g, "egypt.site.blocks.look") && !count(g, "egypt.site.shells.1")) return g.say("egypt.site.shells.1", "egypt.site.shells.2", "egypt.site.mizraim");
+  await g.say("egypt.site.blocks.look");
 }
 
 // ---------- the overseer ----------
@@ -342,11 +419,11 @@ export default {
       id: "entrance", name: "entrance", verb: "Climb to", rect: [515, 195, 52, 75], walkTo: [742, 424], face: "W",
       look: (g) => g.say(g.flag("egypt.inside") ? "egypt.site.entrance.look2" : "egypt.site.entrance.look"), use: climb, useWith: { pass: climb },
     },
-    { id: "bricks", name: "mud bricks", rect: [520, 376, 96, 24], walkTo: [560, 410], face: "N", look: "egypt.site.bricks.look" },
+    { id: "bricks", name: "mud bricks", verb: "Lift", rect: [520, 376, 96, 24], walkTo: [560, 410], face: "N", look: "egypt.site.bricks.look", use: liftBrick },
     { id: "scribe-desk", name: "scribe's station", rect: [52, 332, 195, 145], walkTo: [248, 464], face: "W", look: twice("egypt.site.desk.look", "egypt.site.desk.look2") },
     { id: "rope", name: "hauling rope", poly: [[392, 444], [400, 460], [300, 414], [226, 388], [222, 374], [300, 396]], walkTo: [352, 440], face: "NW", look: "egypt.site.rope.look" },
     { id: "sledge", name: "sledge", verb: "Pull", rect: [395, 379, 177, 102], walkTo: [420, 492], face: "NE", look: twice("egypt.site.sledge.look", "egypt.site.sledge.look2"), use: "egypt.site.sledge.use" },
-    { id: "blocks", name: "masons' tools", verb: "Borrow", poly: [[561, 486], [636, 447], [800, 440], [800, 600], [556, 600]], walkTo: [538, 566], face: "E", look: "egypt.site.blocks.look", use: "egypt.site.blocks.use" },
+    { id: "blocks", name: "masons' tools", verb: "Borrow", poly: [[561, 486], [636, 447], [800, 440], [800, 600], [556, 600]], walkTo: [538, 566], face: "E", look: lookAtStone, use: "egypt.site.blocks.use" },
     {
       id: "sunspot", name: "sunny spot", verb: "Stand in", rect: [296, 504, 70, 30], walkTo: [330, 520], face: "E", when: (g) => !g.flag("egypt.shadeSet"),
       look: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.site.sunspot.look2" : "egypt.site.sunspot.look"), use: "egypt.site.sunspot.use",
@@ -363,17 +440,18 @@ export default {
       useWith: {
         rootbeer: ["egypt.haulers.rootbeer.1", "egypt.haulers.rootbeer.2", "egypt.haulers.rootbeer.3", "egypt.haulers.rootbeer.4"],
         shade: ["egypt.haulers.shade.1", "egypt.haulers.shade.2"],
+        chicken: "egypt.chicken.stock",
       },
     },
     {
       id: "overseer", name: "overseer", verb: "Talk to", rect: [444, 386, 54, 136], walkTo: [404, 532], face: "E",
       look: "egypt.overseer.look", use: talkToOverseer,
-      useWith: { map: "egypt.overseer.map", shade: "egypt.overseer.shade", carmirror: "egypt.overseer.mirror", coppermirror: "egypt.overseer.mirror", rootbeer: "egypt.overseer.rootbeer" },
+      useWith: { map: "egypt.overseer.map", shade: "egypt.overseer.shade", carmirror: "egypt.overseer.mirror", coppermirror: "egypt.overseer.mirror", rootbeer: "egypt.overseer.rootbeer", chicken: "egypt.chicken.stock" },
     },
     {
       id: "scribe", name: "scribe", verb: "Talk to", rect: [124, 392, 52, 58], walkTo: [248, 464], face: "W",
       look: (g) => g.say(g.flag("egypt.penGiven") ? "egypt.scribe.look2" : "egypt.scribe.look"), use: talkToScribe,
-      useWith: { reed: giveReed, map: giveMap, rootbeer: "egypt.scribe.rootbeer", shade: "egypt.scribe.shade", pass: "egypt.scribe.pass" },
+      useWith: { reed: giveReed, map: giveMap, rootbeer: "egypt.scribe.rootbeer", shade: "egypt.scribe.shade", pass: "egypt.scribe.pass", chicken: showGeneral("scribe", "egypt.scribe.chicken") },
     },
     {
       id: "guard", name: "guard", verb: "Talk to", rect: [672, 326, 36, 96], walkTo: [742, 424], face: "W", when: (g) => !g.flag("egypt.shadeSet"),
@@ -381,12 +459,13 @@ export default {
       useWith: {
         pass: (g) => (g.flag("egypt.inside") ? g.say("egypt.guard.after") : showPass(g)),
         shade: askGuard, rootbeer: giveRootbeer, sunglasses: "egypt.guard.sunglasses", map: "egypt.guard.map",
+        chicken: showGeneral("guard", "egypt.guard.chicken", "egypt.guard.chicken.2"),
       },
     },
     {
       id: "guard-sun", name: "guard", verb: "Talk to", poly: [[308, 380], [352, 380], [350, 411], [439, 374], [444, 383], [424, 406], [354, 435], [352, 522], [308, 522]], walkTo: [268, 534], face: "E", when: (g) => !!g.flag("egypt.shadeSet"),
       look: "egypt.guard.look2", use: talkToGuard,
-      useWith: { rootbeer: "egypt.guard.full", sunglasses: "egypt.guard.sunglasses" },
+      useWith: { rootbeer: "egypt.guard.full", sunglasses: "egypt.guard.sunglasses", chicken: showGeneral("guard", "egypt.guard.chicken", "egypt.guard.chicken.2") },
     },
   ],
 

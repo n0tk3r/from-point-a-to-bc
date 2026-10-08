@@ -116,7 +116,7 @@ function skeleton(d, p) {
     const arm = q.arm || [0.03, 0.10], leg = q.leg || [0, 0.03];
     const sLoc = [s * d.shoulderW, -(d.shoulderDrop ?? 0.046), 0];
     const shoulder = add(J.sh, torso(sLoc));
-    let elbow, wrist, uDir, fDir;
+    let elbow, wrist, uDir, fDir, eLoc, wLoc;                           // (eLoc, wLoc: the elbow and the wrist in the torso's own space)
     if (q.hand) {
       // A place for the hand, measured in torso space from the middle of the shoulders. The elbow goes
       // wherever it must (out, down and back, unless `bend` says otherwise), so the same pose fits any build.
@@ -126,7 +126,7 @@ function skeleton(d, p) {
       const along = (a * a - b * b + len * len) / (2 * len), out = Math.sqrt(Math.max(0, a * a - along * along));
       const hint = q.bend || [s * 0.55, -0.45, -0.70];
       const side = unit(sub(hint, mul(dir, dot3(hint, dir))));
-      const eLoc = add(sLoc, add(mul(dir, along), mul(side, out))), wLoc = add(sLoc, mul(dir, len));
+      eLoc = add(sLoc, add(mul(dir, along), mul(side, out))); wLoc = add(sLoc, mul(dir, len));
       elbow = add(J.sh, torso(eLoc)); wrist = add(J.sh, torso(wLoc));
       uDir = unit(sub(elbow, shoulder)); fDir = unit(sub(wrist, elbow));
     } else {
@@ -134,6 +134,8 @@ function skeleton(d, p) {
       elbow = add(shoulder, mul(uDir, d.upperArm));
       fDir = q.fore ? unit(torso(q.fore)) : torso(dirOf(arm[0] + (q.elbow ?? 0.12), arm[1] * 0.5 - (q.tuck || 0), s));
       wrist = add(elbow, mul(fDir, d.foreArm));
+      eLoc = add(sLoc, mul(dirOf(arm[0], arm[1], s), d.upperArm));
+      wLoc = add(eLoc, mul(q.fore ? unit(q.fore) : dirOf(arm[0] + (q.elbow ?? 0.12), arm[1] * 0.5 - (q.tuck || 0), s), d.foreArm));
     }
     // The hand: a palm, then fingers that curl a little the way the elbow bends. A grip is a fist.
     const hDir = q.point ? unit(torso(q.point)) : fDir, hl = d.handR * 3.4;
@@ -162,7 +164,7 @@ function skeleton(d, p) {
     const heel = add(ankle, add(mul(nrm, -d.ankleH), mul(along, -0.27 * d.foot)));
     const ballOf = add(heel, mul(along, 0.72 * d.foot));
     const toeDir = turn([0, Math.sin(tp), Math.cos(tp)], fy), toe = add(ballOf, mul(toeDir, 0.28 * d.foot));
-    J[key] = { shoulder, elbow, wrist, palm, tip, thumb0, thumb1, uDir, fDir, hDir, hip, knee, ankle, heel, ball: ballOf, toe, along, nrm, toeDir, footYaw: fy, footPitch: fp, calfBack: turn([0, 0, -1], fy) };
+    J[key] = { shoulder, elbow, wrist, palm, tip, thumb0, thumb1, uDir, fDir, hDir, hip, knee, ankle, heel, ball: ballOf, toe, along, nrm, toeDir, footYaw: fy, footPitch: fp, calfBack: turn([0, 0, -1], fy), sLoc, eLoc, wLoc };
   }
 
   // Stand the figure on the ground: whatever is lowest touches y = 0.
@@ -211,6 +213,7 @@ const EYES = {
   kohl:   { at: 0, full: ["o#="], thin: ["#="] },                        // lined with black paint, the line drawn out toward the temple
   squint: { at: 0, full: ["=#="], thin: ["=="] },                        // screwed up against the sun, or against bad eyesight
   shut:   { at: 0, full: ["=="], thin: ["="] },
+  tight:  { at: 0, full: ["==-"], thin: ["=-"] },                        // squeezed shut, as a child shuts them: a crease at the corner
   deep:   { at: 1, full: ["---", "##."], thin: ["--", "#."] },           // set deep under the brow
 };
 
@@ -629,7 +632,10 @@ export function drawFigure(spec, pose, yawDeg, size) {
   if (face.shadow) limb(hp(0, -0.20, 0.22), hp(0, -0.34, 0.30), hr[0] * (jaw + 0.01), hr[0] * (jaw - 0.02), skin, { part: HEAD, tone: 1 });      // an unshaven jaw: the cheeks above it are clean
   if (face.beard) {
     const long = face.beardLen ?? 0;
-    limb(hp(0, -0.50, 0.30), hp(0, chinY - 0.04 - long, chinZ + 0.02), hr[0] * (jaw - 0.06), hr[0] * (chin + 0.06), face.beard, { part: HAIR });
+    limb(hp(0, -0.50, 0.30), hp(0, chinY - 0.04 - long, chinZ + 0.02), hr[0] * (jaw - 0.06), hr[0] * (chin + 0.06), face.beard, {
+      part: HAIR,                                                       // (a beard going grey: it is lighter over the chin)
+      fn: face.beardGrey && fine ? (t, across) => (t > 0.56 && Math.abs(across) < 0.52 ? face.beardGrey : undefined) : null,
+    });
   }
   if (face.jowl) ball(hp(0, -0.90, 0.26), [hr[0] * face.jowl, hr[1] * 0.26, hr[2] * 0.52], skin, { part: HEAD, tone: 1 }, hy);       // a second chin
   // the nose: a wedge from between the eyes down and out to its tip
@@ -704,10 +710,10 @@ export function drawFigure(spec, pose, yawDeg, size) {
       continue;
     }
     if (!faceFine) { put(0, 0, pose.blink ? lidTone : eyeDark); continue; }
-    const kind = EYES[pose.blink ? "shut" : face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;
+    const kind = EYES[pose.blink ? (pose.squeeze ? "tight" : "shut") : face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;
     rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) { const ch = row[i]; if (ch !== ".") put(i, j - kind.at, ch === "#" ? eyeDark : ch === "o" ? eyeWhite : ch === "=" ? lineTone : lidTone); } });
     if (browTone && (faceFull || !kind.at)) {                                             // (on a middle-sized face a lid line does for the brow as well)
-      const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, tilt = faceFull ? face.browTilt || 0 : 0;
+      const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, tilt = faceFull ? (pose.blink && pose.squeeze ? 1 : face.browTilt || 0) : 0;     // (eyes squeezed shut pull the brows down toward the nose)
       for (let i = 0; i < n; i++) put(i - (n > 3 ? 1 : 0), -up + (tilt > 0 && i === 0 ? 1 : tilt < 0 && i === n - 1 ? 1 : 0), browTone);
     }
     if (face.freckles && faceFull) { put(0, 3, lidTone); put(2, 4, lidTone); }
@@ -731,7 +737,7 @@ export function drawFigure(spec, pose, yawDeg, size) {
     if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
     else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
     const lip = pack(face.lip || "#8a4636"), inside = pack("#3a1612"), on = face.beard ? HAIR : HEAD, smile = face.smile || 0;
-    const hidden = face.beard && !open;
+    const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
     if (!hidden) for (let x = a; x <= b; x++) {
       const end = faceFine && b - a >= 2 && (x === a || x === b) && Math.abs(sideways) < 0.6;
       if (open === 0) sf.dot(x, y - (end ? smile : 0), lip, on);
@@ -869,6 +875,13 @@ const STANCES = {
     p.L = { ...p.L, leg: [-0.02, 0.05], knee: 0.16 };
     p.head = { nod: 0.11 };
   },
+  /** at ease, the weight on the left leg: the right knee loose, that foot a little forward and turned out (the arms are left as they are) */
+  easy(p) {
+    p.L = { ...p.L, leg: [-0.02, 0.0], knee: 0.0 };
+    p.R = { ...p.R, leg: [0.17, 0.10], knee: 0.30, footYaw: 0.62 };
+    p.sway = -0.010;
+    p.lean = (p.lean || 0) - 0.03;
+  },
   /** both hands resting on a stomach */
   belly(p, sp) { for (const [k, sd] of [["R", 1], ["L", -1]]) p[k] = { ...p[k], hand: [sd * 0.040, sp.waist + 0.020, sp.belly + 0.026], bend: [sd, -0.3, -0.3], curl: 0.8 }; },
 };
@@ -968,6 +981,7 @@ export function talkPose(f = 0, g = 0, o = {}) {
     p.head = { nod: 0.0, turn: sd * 0.14 };
   } else p.head = { nod: 0.035 * wob };
   void free;
+  p.gesture = g;                                                      // (for whatever a character carries that belongs to one gesture)
   return p;
 }
 
@@ -990,6 +1004,56 @@ export function reachPose(k, low = false, o = {}) {
     p.lean = 0.14 * k;
     p[H] = { leg: p[H].leg, knee: p[H].knee, arm: [1.32 * k + 0.05, 0.06], elbow: 0.18 + 0.1 * k };
     p.head = { nod: 0.04 * k };
+    p.reaching = k;                                                   // (for whatever a character holds out when their hand goes out: a date, say)
+  }
+  return p;
+}
+
+/**
+ * Standing in prayer: the head bowed, the eyes shut, the hands folded together in front. It is a still pose.
+ * o.dim is the build, o.lean the person's own way of standing. o.pray says how this person prays:
+ *   high   how high the folded hands are: 0 at the belt, 0.5 at the breastbone, 1 under the chin (0.45 if not given)
+ *   bow    how far the head is bowed (0.30)
+ *   tight  true: elbows in, hands clasped hard, eyes squeezed shut, as a small child prays
+ *   out    how much farther out in front of the body the hands are than usual
+ */
+export function prayPose(o = {}) {
+  const d = o.dim || ADULT, sp = spots(d), how = o.pray || {}, high = how.high ?? 0.45, up = Math.max(0, high), low = Math.max(0, -high);
+  const p = standPose(0, { dim: d, lean: (o.lean ?? 0.02) + (how.lean ?? 0.03) });
+  // Where the two wrists are. (Hands folded lower than the belt: the arms hang nearly straight, a little forward, round the stomach.)
+  const y = lerp(sp.waist + 0.016, sp.chinY - 0.040, high), z = lerp(sp.belly + 0.030, sp.chest + 0.030, up) + (how.out || 0);
+  const apart = how.tight ? 0.022 : 0.030;
+  for (const [k, sd] of [["R", 1], ["L", -1]]) {
+    p[k] = {
+      leg: p[k].leg, knee: p[k].knee, hand: [sd * apart, y, z], grip: true,
+      bend: [sd * (how.tight ? 0.22 : lerp(0.70, 0.40, up) + 0.6 * low), -1, lerp(-0.55, -0.10, up) + 1.1 * low],
+      point: [-sd * 0.80, lerp(-0.10, 0.62, up) - 1.4 * low, 0.16],
+    };
+  }
+  p.breath = 0;
+  p.head = { nod: how.bow ?? 0.30 };
+  p.blink = true;
+  if (how.tight) p.squeeze = true;
+  p.praying = 1;
+  return p;
+}
+
+/** Part of the way from one pose to another, for easing into a pose and out of it: e runs from 0 (the first) to 1
+    (the second). A hand travels from where it was to where it will be and the elbow follows; the rest goes in step. */
+function between(d, a, b, e) {
+  const A = skeleton(d, a), B = skeleton(d, b), num = (x, y) => lerp(x || 0, y || 0, e), late = e >= 0.5, p = { ...(late ? b : a) };
+  for (const name of ["lean", "twist", "hipTwist", "sway", "rise", "shift", "breath"]) if (a[name] != null || b[name] != null) p[name] = num(a[name], b[name]);
+  p.head = { nod: num(a.head && a.head.nod, b.head && b.head.nod), turn: num(a.head && a.head.turn, b.head && b.head.turn) };
+  for (const k of ["R", "L"]) {
+    const qa = a[k] || {}, qb = b[k] || {}, q = { ...(late ? qb : qa) };
+    for (const name of ["arm", "elbow", "fore", "tuck"]) delete q[name];
+    const w = mix(A[k].wLoc, B[k].wLoc, e);
+    q.hand = [w[0], w[1], w[2] + 0.034 * Math.sin(Math.PI * e)];        // (a little forward on the way, so that a hand coming up from the side goes round the body and not through it)
+    q.bend = sub(mix(A[k].eLoc, B[k].eLoc, e), A[k].sLoc);
+    const la = qa.leg || [0, 0.03], lb = qb.leg || [0, 0.03];
+    q.leg = [lerp(la[0], lb[0], e), lerp(la[1], lb[1], e)];
+    q.knee = lerp(qa.knee ?? 0.02, qb.knee ?? 0.02, e);
+    p[k] = q;
   }
   return p;
 }
@@ -1084,7 +1148,19 @@ export const poses = {
   /** `seed` is any whole number; the same seed always gives this character the same gesture. */
   gesture: (spec, seed) => { const list = spec.gestures || DEFAULT_GESTURES; return list[seed % list.length]; },
   talk: (spec, f, g) => { const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o))); },
-  reach: (spec, k, low) => holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
+  /** (A figure in the game is in prayer when its "act" is one called "pray", counted from 2 to 3 so that it is never
+      taken for a reach: see Figure.pray in js/engine/cast.js.) */
+  reach: (spec, k, low) => low === "pray" ? poses.pray(spec, k >= 2 ? k - 2 : k) : holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
+  /** In prayer, the way this character prays (spec.pray: see prayPose). k eases from standing (0) into the pose (1). */
+  pray: (spec, k = 1) => {
+    const full = holding(spec, prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray }));
+    if (k >= 1) return full;
+    const from = poses.stand(spec, 0);
+    if (!(k > 0)) return from;
+    const e = k * k * (3 - 2 * k), p = holding(spec, between(spec.dim, from, full, e));
+    p.blink = e > 0.5; p.squeeze = !!full.squeeze && e > 0.5; p.praying = e;
+    return p;
+  },
   /** o.gesture: 0 at rest; 1 talking, with this character's own main gesture; another number is that gesture. o.seat overrides what they sit on. */
   sit: (spec, f, o = {}) => {
     const how = { ...(spec.sit || {}), ...o, dim: spec.dim, height: spec.height, seat: o.seat || (spec.sit && spec.sit.seat) || seatOf(spec), main: o.main ?? mainGesture(spec), hand: freeHand(spec) };
@@ -1217,6 +1293,46 @@ function cloak(c, o) {
   if (fine) for (const x of [-0.040, 0.034]) fold(T(x, -0.050, -(back + 0.020)), T(x * 1.2, -len + 0.020, -(back + 0.030)), parts.DRAPE, trunkFacing(Math.PI));
 }
 
+/**
+ * A mantle: a plain oblong of wool worn over the tunic, as people of the East wore it. It lies over the left
+ * shoulder, goes round the back and under the right arm, comes across the front and is thrown back over the left
+ * shoulder, so the right arm is free. Smaller and closer than a toga; an end of it hangs in front of the left
+ * shoulder and the other behind.
+ * o: mat; band (a material: dark bands woven across the cloth near each end, and a line along its edge);
+ *    len and front (how far below the shoulders the end behind, and the end in front, hang).
+ */
+function mantle(c, o) {
+  const { J, limb, ball, fold, trunkAt, trunkFacing, wide, deep, d, tw, fine, under, cloth, parts } = c;
+  const mat = o.mat, T = (x, y, z) => add(J.sh, J.torso([x, y, z])), chest = d.trunkTop[1], sw = d.shoulderW;
+  const lie = { [parts.TORSO]: under, [parts.BELT]: under, [parts.SKIRT]: under, [parts.PELVIS]: under, [parts.COLLAR]: under };
+  // the sweep across the front, from the right hip up to the left shoulder, and the same across the back
+  for (const face of [1, -1]) {
+    const a = trunkAt(d.waistY - 0.022, face > 0 ? 1.25 : Math.PI - 1.25, 0.004), m = trunkAt(d.waistY + 0.060, face > 0 ? 0.12 : Math.PI - 0.12, 0.010), b = T(-(sw - 0.018), 0.010, face * 0.020);
+    limb(a, m, 0.036, 0.034, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });
+    limb(m, b, 0.034, 0.027, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });
+    const facing = trunkFacing(face > 0 ? 0 : Math.PI);
+    if (fine) { fold(add(a, [0, 0.014, 0]), add(m, [0, 0.006, 0]), parts.DRAPE, facing); fold(add(m, [0, 0.006, 0]), add(b, [0, -0.004, 0]), parts.DRAPE, facing); }
+    if (o.band && facing[0] * Math.sin(c.th) + facing[2] * Math.cos(c.th) > 0.30) {       // the dark line woven along its edge: drawn where that side of him is toward us (it is lost in the folds under the right arm)
+      const on = { ...lie, [parts.DRAPE]: under }, a2 = mix(a, m, 0.52);
+      limb(add(a2, [0, -0.024, 0]), add(m, [0, -0.023, 0]), 0.0048, 0.0048, o.band, { part: parts.DRAPE, over: on, bias: cloth * 3 });
+      limb(add(m, [0, -0.023, 0]), add(b, [0, -0.019, 0]), 0.0048, 0.0044, o.band, { part: parts.DRAPE, over: on, bias: cloth * 3 });
+    }
+  }
+  // where it lies on the left shoulder and over the top of that arm
+  ball(add(J.L.shoulder, J.torso([0.010, 0.012, 0])), [0.042, 0.034, 0.052], mat, { part: parts.DRAPE }, tw);
+  // (and down that side of the body, between the end that hangs in front and the end that hangs behind)
+  limb(T(-(sw - 0.016), -0.016, 0), T(-(sw - 0.010), -(d.shoulderY - d.waistY) + 0.012, 0), 0.046, 0.050, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2, depth: 0.62, squareEnd: true });
+  limb(J.L.shoulder, mix(J.L.shoulder, J.L.elbow, 0.72), d.armR[0] + 0.013, d.armR[1] + 0.015, mat, { part: parts.DRAPE2, hem: true });
+  // its two ends, hanging: each with two dark bands across it near the bottom
+  const bands = o.band ? (t) => ((t > 0.74 && t < 0.81) || (t > 0.86 && t < 0.93) ? o.band : undefined) : null;
+  for (const face of [1, -1]) {
+    const len = face > 0 ? (o.front ?? 0.21) : (o.len ?? 0.40), fall = [0.034, 0.017], foot = [0.040, 0.019], r0 = wide(fall), r1 = wide(foot);
+    const from = T(-(sw - 0.022), -0.014, face * (chest * 0.80)), to = [from[0] - 0.004, from[1] - len, from[2] + face * 0.012];
+    limb(from, to, r0, r1, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.6, depth: deep(fall) / r0, hem: true, fn: bands });
+    if (fine) fold(add(from, [0.008, -0.030, 0]), add(to, [0.010, len * 0.30, 0]), parts.DRAPE, trunkFacing(face > 0 ? -0.5 : Math.PI + 0.5));
+  }
+}
+
 /** A low stool under someone sitting. o: mat, r (half its width). */
 function stool(c, o = {}) {
   if (!c.pose.seated) return;                                           // (it stays where it is when they get up)
@@ -1226,6 +1342,6 @@ function stool(c, o = {}) {
 }
 
 /** Clothes and props that several characters share. */
-export const wear = { staff, collar, headcloth, toga, cloak, stool };
+export const wear = { staff, collar, headcloth, toga, cloak, mantle, stool };
 
 export { ramp, pack, shifted, add, sub, mul, mix, turn, unit, lerp };

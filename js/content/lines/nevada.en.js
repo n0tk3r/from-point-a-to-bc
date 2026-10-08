@@ -1,15 +1,41 @@
 // Act Four: the middle of Nevada, the next morning.
 //   "line.id": ["who", "What they say."]
-// docs/CHARACTERS.md says how each of them talks. Every fact Big Sister states is true (the table is in that file).
+// docs/CHARACTERS.md says how each of them talks. Every fact Big Sister or her mother states is true (the tables are at
+// the end of that file; the rows this act's new lines need there are written out in briefs/out/nevada-doc-changes.md).
 //
 // The door in time where the tracks stop is shut and cannot be seen until the last beat: nobody says the air
 // wobbles or shimmers. It hums. What opens it is light, and the only one who has seen that happen is the
 // old-timer, who tells it without knowing which part of his story matters (nevada.old.saw.1b and nevada.old.saw.2).
+//
+// MOM, AS SHE NOW IS, AND THE FAMILY'S FAITH (briefs/WEAVE.md; each group of lines is marked "woven" below).
+//   - Mom says "A matter of record:" where her daughter says "Fun fact:", and what follows is true. So is every
+//     other thing she states about her country: the sources are in briefs/out/facts-home.md.
+//   - Scripture is quoted twice, word for word from the King James Version, each with its reference in the same line:
+//     Matthew 22:21, its second sentence (nevada.coin.read.2d), and the first clause of Psalm 31:15 (nevada.gate.5b).
+//     The psalm's clause ends on a colon in the King James text, so the quotation marks close before the line's own
+//     colon. Do not "tidy" either of them. Franklin's seven words (nevada.flash.sun) are James Madison's, capital S and all.
+//   - A hymn is named and not quoted (nevada.talk.lilsis.mom.3b). The prayer is their own words (nevada.pray.1, .2).
+//   - "B.C." is explained at the Roman year (nevada.gate.2c and .2d come straight after nevada.gate.2), and nowhere else.
+//   - "I TOLD you! Daddy's not lost! Daddy's EARLY!" (nevada.gate.4) is the author's line: it stays word for word, and
+//     it stays Little Sister's last word. The check script (briefs/out/nevada-check.mjs) holds all of this.
+//
+// THE YEARS, AND THE CHICKENS (briefs/DATING.md: the author's two rules. The lines are marked "dating" or "chickens".)
+//   - Every year before Christ is the Bible's own count, as Archbishop Ussher counted it. The notice seals sectors 44
+//     and 1921. 1921 B.C. is on Big Sister's timeline: the year Abram went down into Egypt (Genesis 12:10), told in her
+//     own words (nevada.gate.2b), and her mother knows the chapter (.2e: named, not quoted). From 1921 B.C. to A.D. 2026
+//     is 3,946 years: "nearly four thousand" (nevada.gate.5). Nobody here uses any other count of the years.
+//   - The doors open on years that matter. Big Sister notices it once, and does not know why (nevada.gate.2f). It is a
+//     plant: nothing here pays it off.
+//   - Little Sister loves chickens above everything, and is always right about them. The old-timer's hens are told of
+//     and never seen (nevada.old.saw.3b), and she takes them as evidence (.3c). At the door it is she who hears the
+//     chickens, before anybody smells a sausage (nevada.door.2b), and her mother confirms it (nevada.door.4). And she
+//     misses General Feathers, who went with Daddy to keep an eye on him (nevada.talk.lilsis.mom.4a).
 
 export const lines = {
   // ---------- the middle of Nevada, the next morning ----------
   "nevada.arrive.1": ["mom", "Thirty-seven miles past Last Gas. This is where the map stops."],
   "nevada.arrive.2": ["bigsis", "Fun fact: Nevada became a state on the thirty-first of October, 1864. Halloween."],
+  "nevada.arrive.2b": ["mom", "Reformation Day, darling. A matter of record: Martin Luther's ninety-five theses, 1517."],      // woven: her fact caps her daughter's
   "nevada.arrive.3": ["lilsis", "It's all DIRT. Who ordered this much dirt?"],
   "nevada.arrive.4": ["mom", "Somebody here saw something. We will ask nicely. Stay where I can see you, girls."],
 
@@ -41,10 +67,13 @@ export const lines = {
   "nevada.old.saw.1b": ["oldtimer", "Sun was low. Hit the chrome on that wagon and threw a flash up ahead, like a signal mirror."],
   "nevada.old.saw.2": ["oldtimer", "Right where it landed, the sky opened up like a tin can. The road sign changed its mind. And that wagon drove straight in."],
   "nevada.old.saw.3": ["oldtimer", "Hour later the gray suits came and put up a fence. 'Radiation,' they say. Third piece of desert they've shut this year."],
+  // chickens: his hens, out behind the shack, told of and never seen. To him they are one more odd thing about the week.
+  "nevada.old.saw.3b": ["oldtimer", "Been a strange week. My hens quit laying the day the sky opened. Stand out back all day now, facing that fence."],
+  "nevada.old.saw.3c": ["lilsis", "That's EVIDENCE. Chickens KNOW."],
   "nevada.old.saw.4": ["mom", "Thank you. You have been kinder than you needed to be."],
   "nevada.old.saw.5": ["oldtimer", "One more thing. This fell out of the sky this morning. Hit my hat. Seems like it's yours more than mine."],
   "nevada.old.saw.6": ["mom", "A silver coin. With a very serious gentleman on it."],
-  "nevada.ask.flash": ["mom", "Tell me again about the flash of light."],
+  "nevada.ask.flash": ["mom", "The flash of light, if you would. From the top."],                                            // woven: a stage manager asks for it again
   "nevada.ans.flash": ["oldtimer", "Low sun on bright chrome, ma'am. One flash, up ahead. And where it fell, the sky came open. Never seen the like."],
   "nevada.ask.fence": ["mom", "What is behind the fence?"],
   "nevada.ans.fence": ["oldtimer", "Used to be nothing. Now it's nothing with a fence around it."],
@@ -67,6 +96,10 @@ export const lines = {
   "nevada.agent.mom.2": ["agent", "There is no notice, ma'am."],
   "nevada.agent.mom.3": ["mom", "I can see all four corners of it."],
   "nevada.agent.mom.4": ["agent", "I can neither confirm nor deny a corner."],
+  // woven: Mom's second try. Courtesy, for her, is General Washington's 110 rules. This gentleman has not read one.
+  "nevada.agent.mom.5": ["mom", "A matter of record: by the time he was sixteen, General Washington had copied out 110 rules of civility."],
+  "nevada.agent.mom.6": ["agent", "I can neither confirm nor deny General Washington."],
+  "nevada.agent.mom.7": ["mom", "Then you have not read one of them. Good morning."],
   "nevada.agent.bigsis.1": ["bigsis", "Under what authority is this area closed?"],
   "nevada.agent.bigsis.2": ["agent", "I can neither confirm nor deny that it is an area."],
   "nevada.agent.bigsis.3": ["bigsis", "It has a fence."],
@@ -88,17 +121,24 @@ export const lines = {
   "nevada.notice.blocked.mom": ["mom", "The gentleman is standing exactly in front of it. One admires the precision."],
   "nevada.notice.blocked.bigsis": ["bigsis", "I can read 'AREA CLOSED'. The small print is behind his jacket. That is not enough to work with."],
   "nevada.notice.blocked.lilsis": ["lilsis", "The gray man is in the WAY. I could ask him to move. I could ask him a LOT of things."],
-  "nevada.notice.mom.1": ["mom", "'Area closed. Elevated radiation levels. Sectors 44 and 2560 sealed until further notice.'"],
+  // dating: the notice reads SECTORS 44 AND 1921 (the close-up is notice() in js/art/kit.js)
+  "nevada.notice.mom.1": ["mom", "'Area closed. Elevated radiation levels. Sectors 44 and 1921 sealed until further notice.'"],
   "nevada.notice.mom.2": ["mom", "Sectors. As though the desert had been numbered. Your sister should see this."],
   "nevada.notice.lilsis": ["lilsis", "It says... A, R, E, A. And a yellow spinny flower. 'Radiator levels.' That's BAD, right?"],
   "nevada.notice.big.1": ["bigsis", "'Elevated radiation levels.' In Nevada, people will believe that. Fun fact: atomic bombs were tested out here from 1951 until 1992."],
-  "nevada.notice.big.2": ["bigsis", "Which makes it a very good excuse. But look at the sectors. Forty-four. Twenty-five sixty."],
+  "nevada.notice.big.2": ["bigsis", "Which makes it a very good excuse. But look at the sectors. Forty-four. Nineteen twenty-one."],
   "nevada.notice.big.3": ["bigsis", "Nobody numbers sectors like that. Those aren't places, Mother. I think those are years."],
-  "nevada.notice.again": ["bigsis", "Sector 44. Sector 2560. Years. I am almost certain. 'Almost' is the part I don't like."],
+  "nevada.notice.again": ["bigsis", "Sector 44. Sector 1921. Years. I am almost certain. 'Almost' is the part I don't like."],
 
   // ---------- the coin ----------
   "nevada.coin.read.1": ["bigsis", "Mother. This is a Roman denarius. And that is Julius Caesar."],
   "nevada.coin.read.2": ["bigsis", "Fun fact: in 44 B.C., coins were struck in Rome with Caesar's own portrait. While he was alive."],
+  // woven: it is the coin of the tribute money. Little Sister knows it from Sunday school, Big Sister has the fact,
+  // and Mom has the verse: Matthew 22:21, King James Version, its second sentence, exact. (In Rome, in Act Two, her
+  // son told the same story in his own words, with this same coin in his hand.)
+  "nevada.coin.read.2b": ["lilsis", "It's the Caesar money from Sunday school!"],
+  "nevada.coin.read.2c": ["bigsis", "The 'penny' they brought to Jesus was a denarius, like this one. Most likely with a later Caesar on it: Tiberius."],
+  "nevada.coin.read.2d": ["mom", "'Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's.' Matthew 22:21."],
   "nevada.coin.read.3": ["bigsis", "And it isn't two thousand years old. Look at the edges. It is NEW. It has hardly been in a pocket."],
   "nevada.coin.read.4": ["mom", "A new coin, from 44 B.C., that fell out of the sky. In Nevada."],
   "nevada.coin.lilsis": ["lilsis", "A money! With a grumpy man on it. Can I buy a lemonade with it?"],
@@ -112,30 +152,55 @@ export const lines = {
   "nevada.tracks.early.mom": ["mom", "Not yet, darlings. I would like to understand it before any of us stands on it."],
   "nevada.tracks.early.bigsis": ["bigsis", "I have a theory. A theory is not a fact until I can footnote it."],
   "nevada.tracks.early.lilsis": ["lilsis", "Can I jump on it? ...Mommy's doing the eyebrow. That's a no."],
+  // Her flashlight, from the blanket fort at home. Light opens doors in this story, and this light is too little:
+  // in full morning sun its spot cannot even be seen. (Whoever is holding it, she is the one who says so.)
+  "nevada.tracks.lilflash": ["lilsis", "CLICK. It's ON! ...Where's my spot? I can't even SEE my spot. The sun's got a WAY bigger flashlight."],
   // Going there once the coin and the notice are both read: each of them listens, and remembers the old man's flash.
-  "nevada.hum.mom.1": ["mom", "It hums, darlings. Very quietly, like your father when he is lost and will not say so."],
+  "nevada.hum.mom.1": ["mom", "It hums, darlings. Very quietly, and a little flat. Like your father when he is lost and will not say so."],      // woven: she hears pitch
   "nevada.hum.mom.2": ["mom", "The gentleman said a flash of low sun fell just here. I wonder what we have that flashes."],
   "nevada.hum.bigsis.1": ["bigsis", "It hums. Right here, over the glass, where there is nothing at all to hum."],
   "nevada.hum.bigsis.2": ["bigsis", "A flash of low sun fell here, and the sky opened. That is his whole story. So: we need a flash."],
   "nevada.hum.lilsis.1": ["lilsis", "It HUMS! Right THERE! There's nothing there and it HUMS!"],
   "nevada.hum.lilsis.2": ["lilsis", "The wizard said the car went FLASH and the sky went OPEN. I want to do a flash!"],
   // The coin, held up in the low sun, by whichever of them has it.
+  "nevada.gate.0": ["mom", "Places, girls."],                                                                               // woven: the stage manager, and they take their marks
   "nevada.gate.1": ["bigsis", "The tracks don't turn. They don't skid. They just stop."],
+  // woven: first things first. Mom bows her head and the girls with her; nobody has to be told. In their own words.
+  "nevada.pray.1": ["mom", "Father, You brought us this far. We do not understand what comes next, and You do. Keep us, and keep them. In Jesus' name."],
+  "nevada.pray.2": ["lilsis", "And thank You for the lemonade. And tell Daddy we're COMING. Amen."],
+  // woven: only when it is Mom who holds the coin up. The seven words in quotation marks are Dr. Franklin's, as James
+  // Madison wrote them down on the day the Constitution was signed (17 September 1787): capital S and full stop are his.
+  // ("Carved" is right for the chair, and is outside the quotation marks: Madison's own word for the sun was "painted".)
+  "nevada.flash.sun": ["mom", "Dr. Franklin said the sun carved on General Washington's chair was 'a rising and not a setting Sun.' So is this one."],
   "nevada.flash.mom": ["mom", "Stand back a little, darlings. I am about to do something your father would think of."],
   "nevada.flash.bigsis": ["bigsis", "A low sun. A new coin. And an old man's story. This is called an experiment."],
   "nevada.flash.lilsis": ["lilsis", "My turn! I'm gonna do a FLASH! Like the car did! Everybody WATCH!"],
   // The door is open: the size of the coin. What comes through it is small, and settles nothing.
   "nevada.door.1": ["lilsis", "A HOLE! In the AIR! And it's LITTLE! It's littler than ME!"],
   "nevada.door.2": ["bigsis", "'The air,' she noted, 'now had a hole in it. A hole exactly the size of the coin.'"],
+  // chickens: they are the first thing she would notice anywhere, before anybody smells a sausage. (Said .2, .2b, .3, .4.)
+  "nevada.door.2b": ["lilsis", "SHH! Everybody SHH! ...CHICKENS. I can hear CHICKENS in there!"],
   "nevada.door.3": ["lilsis", "It's a DIFFERENT sunny in there! And it smells like SAUSAGES!"],
-  "nevada.door.4": ["mom", "Sausages. She is quite right. And bread, and woodsmoke. And I believe I can hear chickens."],
+  "nevada.door.4": ["mom", "Chickens. She is quite right. And sausages, and bread, and woodsmoke."],
   "nevada.door.5": ["bigsis", "It is morning in there, too. I do not think it is THIS morning."],
   "nevada.door.6": ["mom", "Then which morning, darling?"],
   "nevada.gate.2": ["bigsis", "Sector 44: forty-four B.C. The year Julius Caesar was killed, on the Ides of March."],
-  "nevada.gate.2b": ["bigsis", "Sector 2560: twenty-five sixty B.C. About when the Great Pyramid was finished."],
+  // woven: what B.C. is, asked and answered at the Roman year, just before the reveal. It is what makes EARLY land.
+  // (Said in the order .2, .2c, .2d, .2b, .2e, .2f, .3: the ids were not renumbered.)
+  "nevada.gate.2c": ["lilsis", "What's B.C.?"],
+  "nevada.gate.2d": ["mom", "Before Christ, sweetheart. Before Jesus was born."],
+  // dating: the second year is on her own timeline (the Bible's count, as Ussher counted it), and her mother knows the
+  // chapter: Genesis 12, told and not quoted. Then, once, the pattern: both are years when something happened. She does
+  // not know why. (A plant: nothing pays it off yet.)
+  "nevada.gate.2b": ["bigsis", "Sector 1921: nineteen twenty-one B.C. It is on my timeline: the year Abram went down into Egypt."],
+  "nevada.gate.2e": ["mom", "Genesis 12. I have known that chapter all my life, darling. I had never once thought of it as a morning."],
+  "nevada.gate.2f": ["bigsis", "The Ides of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why."],
   "nevada.gate.3": ["bigsis", "They didn't crash, Mother. They didn't go anywhere. They went some WHEN."],
-  "nevada.gate.4": ["lilsis", "I TOLD you! Daddy's not lost! Daddy's EARLY!"],
-  "nevada.gate.5": ["bigsis", "...More than four thousand years early. She was right. I need to sit down."],
+  "nevada.gate.4": ["lilsis", "I TOLD you! Daddy's not lost! Daddy's EARLY!"],                                              // the author's line: word for word, and the top of the scene
+  // dating: from 1921 B.C. to A.D. 2026 is 3,946 years (there is no year 0)
+  "nevada.gate.5": ["bigsis", "...Nearly four thousand years early. She was right. I need to sit down."],
+  // woven: the family's answer to the whole story. Psalm 31:15, King James Version, its first clause, exact.
+  "nevada.gate.5b": ["mom", "'My times are in thy hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one."],
   "nevada.gate.6": ["mom", "Then we know where they are. And we have a door. It is only a little small."],
   "nevada.gate.7": ["mom", "Girls. We are going to go and bring them home."],
 
@@ -152,7 +217,7 @@ export const lines = {
   "nevada.stand.mom": ["mom", "'Lemonade, one dollar. Rocks, two dollars. Stories extra.' An honest price list."],
   "nevada.stand.bigsis": ["bigsis", "Quartz, sandstone, and one that is just a rock. I respect the honesty."],
   "nevada.stand.lilsis": ["lilsis", "Lemonade! Mommy! LEMONADE! ...Please."],
-  "nevada.fence.mom": ["mom", "A fence, put up in a hurry by people who were not expecting visitors."],
+  "nevada.fence.mom": ["mom", "A fence, put up in a hurry by people who were not expecting an audience."],                  // woven: one word of the theatre
   "nevada.fence.bigsis": ["bigsis", "The posts are new, and the concrete around them is still dark. This fence went up yesterday."],
   "nevada.fence.lilsis": ["lilsis", "I could fit under that. ...I'm just SAYING."],
 
@@ -164,9 +229,12 @@ export const lines = {
   "nevada.talk.mom.bigsis.2c": ["mom", "Your secret is safe, darling."],
   "nevada.talk.mom.bigsis.coin.a": ["mom", "The gentleman gave me a coin. I would like your opinion of it."],
   "nevada.talk.mom.bigsis.coin.b": ["bigsis", "Then hand it over, Mother. I can't footnote what I can't hold."],
+  // woven: once the coin has been read. Mom has the motto, and her daughter has the year: they keep score.
+  "nevada.talk.mom.bigsis.quarter.a": ["mom", "A matter of record: Caesar put his own face on his money. Ours says 'In God We Trust.'"],
+  "nevada.talk.mom.bigsis.quarter.b": ["bigsis", "Fun fact: first in 1864, on the two-cent piece. The year Nevada became a state. That half is mine."],
   "nevada.talk.mom.lilsis.1a": ["mom", "Drink your lemonade slowly, sweetheart."],
   "nevada.talk.mom.lilsis.1b": ["lilsis", "I AM drinking it slowly. I'm drinking it slowly really FAST."],
-  "nevada.talk.mom.lilsis.2a": ["lilsis", "Mommy, is Daddy in trouble?"],
+  "nevada.talk.mom.lilsis.2a": ["lilsis", "Mommy, is Daddy STILL in trouble?"],                                           // (she asked it at home too: "STILL" makes this the second time)
   "nevada.talk.mom.lilsis.2b": ["mom", "A little, sweetheart. But only with me, and only once he is home."],
   "nevada.talk.mom.lilsis.gray.a": ["mom", "That gentleman in gray will not move for me."],
   "nevada.talk.mom.lilsis.gray.b": ["lilsis", "Did you ask him enough times? You have to ask a LOT of times."],
@@ -188,6 +256,12 @@ export const lines = {
   "nevada.talk.lilsis.mom.2a": ["lilsis", "Mommy, when we find Daddy, can I tell him I fixed the internet?"],
   "nevada.talk.lilsis.mom.2b": ["mom", "You may tell him first, before anybody says anything else at all."],
   "nevada.talk.lilsis.mom.2c": ["lilsis", "Even before 'hi'?"],
+  // woven: a hymn, named and not quoted
+  "nevada.talk.lilsis.mom.3a": ["lilsis", "Mommy, you're humming. Is it the one with the loud part?"],
+  "nevada.talk.lilsis.mom.3b": ["mom", "'O God, Our Help in Ages Past,' sweetheart. Every part of it is the loud part, if one means it."],
+  // chickens: once the old-timer has told of his hens. The General went in Daddy's suitcase, to keep an eye on him.
+  "nevada.talk.lilsis.mom.4a": ["lilsis", "Mommy, I miss General Feathers. ...But Daddy needs her MORE. She's keeping an eye on him."],
+  "nevada.talk.lilsis.mom.4b": ["mom", "Then he is well looked after, sweetheart. She outranks him."],
   "nevada.talk.lilsis.bigsis.2a": ["lilsis", "Are you scared?"],
   "nevada.talk.lilsis.bigsis.2b": ["bigsis", "No. ...A little. Hold my hand. It is for your sake, obviously."],
   "nevada.talk.lilsis.bigsis.2c": ["lilsis", "I'm holding it MIGHTILY."],
@@ -197,7 +271,7 @@ export const lines = {
 
 
   // ---------- hints: one from each of them for every puzzle ----------
-  "hint.nevada.witness.mom": ["mom", "The gentleman in the lawn chair has watched this road for forty years. Nobody has asked him nicely."],
+  "hint.nevada.witness.mom": ["mom", "The gentleman in the lawn chair has had a front-row seat on this road for forty years. Nobody has asked him nicely."],      // woven: a theatre-goer's eye
   "hint.nevada.witness.bigsis": ["bigsis", "The old man is a witness, and he doesn't care for my questions. Mom could get a statue to talk."],
   "hint.nevada.witness.lilsis": ["lilsis", "The wizard man won't tell ME. He wants a dollar. Mommy has dollars AND manners."],
   "hint.nevada.coin.mom": ["mom", "I have a silver coin I cannot read. I should hand it to the one of us who can."],

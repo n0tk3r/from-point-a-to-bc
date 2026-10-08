@@ -12,6 +12,10 @@
 //             boy with the incense he cannot carry up fourteen steps himself.
 //   the gate  in the tunic, with the incense, the doorkeeper lets him in (to rome-temple).
 //
+// And the chickens (briefs/DATING.md: chickens know a door in time before any person does). This morning the sacred
+// birds will not touch their grain, which the soothsayer takes for the worst of omens, and they all stand facing the
+// temple doors. The boy notices that himself at the cage, and thinks of his little sister. Nobody explains it.
+//
 // Try it: index.html?scene=rome-steps&lead=son
 // Later states: &flags=rome.arrived,rome.knowsRule,rome.hasToga,rome.hasBreakfast   (the things themselves are
 // handed over by the people in rome-street, so start there to carry them).
@@ -119,7 +123,7 @@ async function talkToSoothsayer(g) {
     if (pick === "feed") return feedSoothsayer(g);
     if (pick === "birds") {
       if (fed) await g.say("rome.soothsayer.ask.birds", "rome.soothsayer.ans.birds.fed");
-      else await g.say("rome.soothsayer.ask.birds", "rome.soothsayer.ans.birds.1", "rome.soothsayer.ans.birds.2", "rome.soothsayer.ans.birds.3", "rome.soothsayer.ans.birds.4");
+      else await g.say("rome.soothsayer.ask.birds", "rome.soothsayer.ans.birds.1", "rome.soothsayer.ans.birds.omen", "rome.soothsayer.ans.birds.2", "rome.soothsayer.ans.birds.3", "rome.soothsayer.ans.birds.4");
     } else if (pick === "temple") {
       if (fed) await g.say("rome.soothsayer.ask.temple", "rome.soothsayer.ans.temple.fed");
       else await g.say("rome.soothsayer.ask.temple", "rome.soothsayer.ans.temple.1", "rome.soothsayer.ans.temple.2", "rome.soothsayer.ans.temple.3", "rome.soothsayer.ans.temple.4");
@@ -127,6 +131,22 @@ async function talkToSoothsayer(g) {
       await g.say("rome.soothsayer.ask.future", "rome.soothsayer.ans.future.1", "rome.soothsayer.ans.future.2", "rome.soothsayer.ans.future.3", "rome.soothsayer.ans.future.4");
     } else return g.say("rome.soothsayer.ask.bye", "rome.soothsayer.ans.bye");
   }
+}
+
+// ---------- the sacred chickens ----------
+// Whether or not they have fed, they all stand facing the temple doors, where the door in time is. The boy notices
+// it the first time he calls them, or the second time he looks (whichever comes first), and only once. He looks up
+// the steps where they are looking, and thinks of his little sister. He does not explain it, and nobody else does.
+
+/** What he says at the cage; and, once, what he notices there. */
+async function atTheCage(g, line, notice) {
+  await g.say(line);
+  if (!notice || heard(g, "rome.birdcage.doors.1")) return;
+  const me = g.lead;
+  if (me) me.look(503, 292);                                      // up the steps to the doors, the way they are all facing
+  await g.say("rome.birdcage.doors.1");
+  if (me) me.face("S");                                           // and round to us: he is thinking of home
+  await g.say("rome.birdcage.doors.2");
 }
 
 // ---------- chain A, the middle step: the senator ----------
@@ -162,12 +182,17 @@ async function talkToSenator(g) {
       { id: "give", line: "rome.senator.toga.1", when: (g) => g.has("toga") },
       { id: "late", line: "rome.senator.ask.late" },
       { id: "toga", line: "rome.senator.ask.toga" },
+      // Once he has heard whose nose is on the new money (the keeper cries it, the first time he walks into the street),
+      // he can ask about Caesar. The senator's gossip is of a great-nephew nobody thinks about: the Caesar Augustus of
+      // Luke 2:1, as the boy does not know and nobody in Rome could. It gives nothing and changes nothing.
+      { id: "caesar", line: "rome.senator.ask.caesar", when: (g) => g.flag("rome.knowsBC") },
       { id: "dad", line: "rome.senator.ask.dad" },
       { id: "bye", line: "rome.senator.ask.bye" },
     ]);
     if (pick === "give") return deliverToga(g);
     if (pick === "late") await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");
     else if (pick === "toga") await g.say("rome.senator.ask.toga", "rome.senator.ans.toga.1", "rome.senator.ans.toga.2", "rome.senator.ans.toga.3", "rome.senator.ans.toga.4");
+    else if (pick === "caesar") await g.say("rome.senator.ask.caesar", "rome.senator.ans.caesar.1", "rome.senator.ans.caesar.2", "rome.senator.ans.caesar.3", "rome.senator.ans.caesar.4", "rome.senator.ans.caesar.5");
     else if (pick === "dad") await g.say("rome.senator.ask.dad", "rome.senator.ans.dad.1", "rome.senator.ans.dad.2");
     else return g.say("rome.senator.ask.bye", "rome.senator.ans.bye");
   }
@@ -197,8 +222,6 @@ export default {
     [[366, 498], [404, 495], [393, 485], [357, 489]],             // the tripod
     [[672, 563], [746, 553], [710, 535], [639, 544]],             // the boundary stone
     [[448, 422], [505, 419], [489, 403], [434, 406]],             // the soothsayer's cage
-    // (The painter also blocks [[538,430],[581,427],[561,411],[520,413]], the ground under a folding stool. The stool and
-    // the crooked staff beside it are being taken out of the picture, so that patch is left open.)
     [[0, 500], [150, 484], [158, 600], [0, 600]],                 // the statue base at the bottom left (the front plane)
     [[340, 306], [389, 306], [375, 303], [328, 304]],             // the feet of the six columns
     [[441, 305], [486, 304], [468, 301], [425, 302]],
@@ -263,10 +286,13 @@ export default {
     { id: "stone", name: "carved stone", rect: [672, 475, 62, 74], walkTo: [618, 540], face: "E", look: "rome.stone.look" },
     { id: "pigeons", name: "pigeons", verb: "Chase", rect: [536, 488, 120, 68], look: "rome.pigeons.look", use: "rome.pigeons.use" },   // the five on the pavement by the puddle
     {
-      // The cage and its dish of grain. (The painter's shape, [438, 375, 131, 41], takes in the stool and staff that are leaving the picture.)
+      // The cage and its dish of grain. (What he notices about the birds: see `atTheCage`, above.)
       id: "birdcage", name: "sacred chickens", verb: "Call", rect: [438, 375, 56, 34], walkTo: [524, 462], face: "NW",
-      look: (g) => (g.flag("rome.hasIncense") ? g.say("rome.birdcage.fed") : twice("rome.birdcage.look", "rome.birdcage.look2")(g)),
-      use: (g) => g.say(g.flag("rome.hasIncense") ? "rome.birdcage.fed" : "rome.birdcage.use"),
+      look: (g) => {
+        const again = heard(g, "rome.birdcage.look") || heard(g, "rome.birdcage.fed");
+        return atTheCage(g, g.flag("rome.hasIncense") ? "rome.birdcage.fed" : again ? "rome.birdcage.look2" : "rome.birdcage.look", again);
+      },
+      use: (g) => atTheCage(g, g.flag("rome.hasIncense") ? "rome.birdcage.fed" : "rome.birdcage.use", true),
       useWith: { breakfast: "rome.birdcage.breakfast" },
     },
     {

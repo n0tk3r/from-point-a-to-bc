@@ -1,927 +1,650 @@
-"""The furniture that people can walk behind, each one a cut-out: the desk with the family computer, the
-piano and its stool, the dining table with its chairs and the lamp over it, Dad's armchair and his lamp.
-
-Every piece is a function (L, fine). With fine=False it lays in the big faces (to be brushed over);
-with fine=True it adds the crisp small things on top. Called with a Collector it only reports its boxes.
-A piece is made of parts, given from the farthest to the nearest, so that the small things of a part
-behind are not drawn over a part in front."""
-
-from home_living_room_plan import *
-
-SEED = 105
-DARK, GLINT = "#160e14", "#ffe2a8"
-COVER = {}
-
-
-def run(L, fine, name, parts):
-    """`parts`: (lay_in, finish) pairs, farthest first. lay_in(L) paints a part's faces; finish() returns
-    the sheets of its crisp small things. Either may be None."""
-    if isinstance(L, Collector):
-        for lay, _ in parts:
-            if lay:
-                lay(L)
-        return
-    if not fine:
-        cov = []
-        for lay, _ in parts:
-            t = Layer()
-            if lay:
-                lay(t)
-            cov.append(t.w.copy())
-            t.onto(L)
-        COVER[name] = cov
-        return
-    cov = COVER[name]
-    for i, (_, fin) in enumerate(parts):
-        if fin is None:
-            continue
-        hide = np.zeros((H, W), dtype=F32)
-        for c in cov[i + 1:]:
-            hide = np.maximum(hide, c)
-        hide = np.clip(hide * 1.6, 0, 1)
-        for s in fin():
-            L.sheet(s, hide=hide)
-
-
-def seg(s, pts, color, width=1.0, alpha=1.0):
-    s.line(pts2(pts), color, width, alpha)
-
-
-def quad(s, pts, color, alpha=1.0):
-    s.poly(pts2(pts), color, alpha)
-
-
-def ring(cx, y, cz, rx, rz, n=20, a0=0.0, a1=360.0):
-    """Points round a level circle (or part of one) in the room."""
-    return [(cx + math.cos(math.radians(lerp(a0, a1, i / n))) * rx, y, cz + math.sin(math.radians(lerp(a0, a1, i / n))) * rz) for i in range(n + 1)]
-
-
-def disc(s, cx, y, cz, rx, rz, color, alpha=1.0):
-    s.poly(pts2(ring(cx, y, cz, rx, rz)[:-1]), color, alpha)
-
-
-def shade(s, pos, y0, y1, r0, r1, glow_c, edge_c, top_c=None, ribs=0, fringe=None):
-    """A lampshade seen a little from above: a cone cut off at the top (radius r1 at height y1) and open
-    at the bottom (r0 at y0). It is lit from inside, so it is brightest down its middle."""
-    x, _, z = pos
-    lo = [(x + math.cos(math.radians(a)) * r0, y0, z - math.sin(math.radians(a)) * r0 * 0.9) for a in np.linspace(0, 180, 25)]
-    hi = [(x + math.cos(math.radians(a)) * r1, y1, z - math.sin(math.radians(a)) * r1 * 0.9) for a in np.linspace(0, 180, 25)]
-    s.poly(pts2(lo) + list(reversed(pts2(hi))), edge_c)
-    for f, c in ((0.80, lerp(col(edge_c), col(glow_c), 0.5)), (0.56, col(glow_c)), (0.26, lerp(col(glow_c), col("#ffffff"), 0.5))):
-        lo2 = [(x + (px_ - x) * f, y, pz) for px_, y, pz in lo]
-        hi2 = [(x + (px_ - x) * f, y, pz) for px_, y, pz in hi]
-        s.poly(pts2(lo2) + list(reversed(pts2(hi2))), c)
-    for k in range(ribs):
-        a = math.radians(8 + 164 * (k + 0.5) / ribs)
-        s.line(pts2([(x + math.cos(a) * r0, y0, z - math.sin(a) * r0 * 0.9), (x + math.cos(a) * r1, y1, z - math.sin(a) * r1 * 0.9)]), edge_c, 0.7, 0.38)
-    if top_c is not None:                                               # the hole at the top, and the light in it
-        s.poly(pts2(ring(x, y1, z, r1, r1 * 0.9)[:-1]), edge_c)
-        s.poly(pts2(ring(x, y1 - 0.5, z, r1 * 0.78, r1 * 0.7)[:-1]), top_c)
-    s.line(pts2(lo), lerp(col(edge_c), col("#3a2414"), 0.4), 1.1, 0.9)
-    if fringe:
-        for i in range(0, len(lo) - 1):
-            a, b = P(*lo[i]), P(*lo[i + 1])
-            for t in (0.0, 0.5):
-                fx, fy = lerp(a[0], b[0], t), lerp(a[1], b[1], t)
-                s.line([(fx, fy), (fx, fy + fringe)], glow_c if (i % 2) else edge_c, 0.8, 0.9)
-
-
-class Turned:
-    """Something standing at (cx, cz) and turned `ang` degrees: gives places and directions in its own
-    measurements (lx across it, lz from its front (-) to its back (+))."""
-
-    def __init__(self, cx, cz, ang):
-        self.cx, self.cz, self.ang = cx, cz, ang
-
-    def p(self, lx, y, lz):
-        x, z = turn(self.cx, self.cz, self.cx + lx, self.cz + lz, self.ang)
-        return (x, y, z)
-
-    def n(self, nx, ny, nz):
-        x, z = turn(0.0, 0.0, nx, nz, self.ang)
-        k = math.sqrt(x * x + ny * ny + z * z) + 1e-9
-        return (x / k, ny / k, z / k)
-
-    def local(self, X, Z):
-        xx, zz = X - self.cx, Z - self.cz
-        ca, sa = math.cos(math.radians(-self.ang)), math.sin(math.radians(-self.ang))
-        return xx * ca - zz * sa, xx * sa + zz * ca
-
-    def face(self, L, pts, albedo, n, **kw):
-        return Fc(L, [self.p(*q) for q in pts], albedo, n=self.n(*n), **kw)
-
-
-def rrect(cx, cy, w, h, r, n=4):
-    """The outline of a rectangle with rounded corners, as (u, v) points going round counter-clockwise."""
-    out = []
-    for (sx, sy, a0) in ((1, -1, -90), (1, 1, 0), (-1, 1, 90), (-1, -1, 180)):
-        ox, oy = cx + sx * (w / 2 - r), cy + sy * (h / 2 - r)
-        for i in range(n + 1):
-            a = math.radians(a0 + 90 * i / n)
-            out.append((ox + math.cos(a) * r, oy + math.sin(a) * r))
-    return out
-
-
-def _sees(t, mid, n_local):
-    wn = t.n(*n_local)
-    return np.dot(np.asarray(wn), CAM_POS - np.asarray(t.p(*mid))) > 0
-
-
-def prism_y(L, t, outline, y0, y1, side, top=None, cast=True, **kw):
-    """Something with the floor plan `outline` ((lx, lz) points) standing from y0 up to y1: the sides we
-    can see, then its top."""
-    xs, zs = [p[0] for p in outline], [p[1] for p in outline]
-    if isinstance(L, Collector):
-        if cast:
-            L.boxes.append([t.p(x, y, z) for y in (y0, y1) for (x, z) in ((min(xs), min(zs)), (max(xs), min(zs)), (max(xs), max(zs)), (min(xs), max(zs)))])
-        return
-    cx, cz = sum(xs) / len(xs), sum(zs) / len(zs)
-    n = len(outline)
-    for i in range(n):
-        (xa, za), (xb, zb) = outline[i], outline[(i + 1) % n]
-        nx, nz = (zb - za), -(xb - xa)
-        if nx * ((xa + xb) / 2 - cx) + nz * ((za + zb) / 2 - cz) < 0:
-            nx, nz = -nx, -nz
-        if _sees(t, ((xa + xb) / 2, (y0 + y1) / 2, (za + zb) / 2), (nx, 0, nz)):
-            t.face(L, [(xa, y0, za), (xb, y0, zb), (xb, y1, zb), (xa, y1, za)], side, (nx, 0, nz), **kw)
-    t.face(L, [(x, y1, z) for x, z in outline], top if top is not None else side, (0, 1, 0), **kw)
-
-
-def prism_z(L, t, outline, z0, z1, face_c, edge_c=None, **kw):
-    """Something whose front is `outline` ((lx, y) points), from z0 (toward its own front) back to z1:
-    the edges we can see, then whichever of its two faces is turned to us."""
-    if isinstance(L, Collector):
-        return
-    xs, ys = [p[0] for p in outline], [p[1] for p in outline]
-    cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
-    n = len(outline)
-    for i in range(n):
-        (xa, ya), (xb, yb) = outline[i], outline[(i + 1) % n]
-        nx, ny = (yb - ya), -(xb - xa)
-        if nx * ((xa + xb) / 2 - cx) + ny * ((ya + yb) / 2 - cy) < 0:
-            nx, ny = -nx, -ny
-        if _sees(t, ((xa + xb) / 2, (ya + yb) / 2, (z0 + z1) / 2), (nx, ny, 0)):
-            t.face(L, [(xa, ya, z0), (xb, yb, z0), (xb, yb, z1), (xa, ya, z1)], edge_c if edge_c is not None else face_c, (nx, ny, 0), **kw)
-    if _sees(t, (cx, cy, z0), (0, 0, -1)):
-        t.face(L, [(x, y, z0) for x, y in outline], face_c, (0, 0, -1), **kw)
-    else:
-        t.face(L, [(x, y, z1) for x, y in outline], face_c, (0, 0, 1), **kw)
-
-
-# ---------------------------------------------------------------- a dining chair
-WALNUT = "#7c4a2a"
-
-
-def chair_lay(L, cx, cz, ang, toward=1, seed=0):
-    """A ladder-back chair with a rush seat, standing at (cx, cz), turned `ang` degrees.
-    toward=1: its back is to us; toward=-1: it faces us."""
-    kw = dict(ang=ang, about=(cx, cz))
-    wd = grainy(WALNUT, SEED + seed, "y", 0.10, (40, 5))
-    rush = mottled("#d6b062", SEED + seed + 1, 0.10, 6)
-    zb, zf = cz - 18.5 * toward, cz + 18.5 * toward                     # back posts, front legs
-
-    def posts(z, h, cast=False):
-        for sx in (-20.5, 15.5):
-            B(L, cx + sx, cx + sx + 5, 0, h, z - 2.5, z + 2.5, wd, cast=cast, **kw)
-
-    def back():
-        posts(zb, 95, cast=True)
-        for y0, y1 in ((55, 62), (69, 76), (83, 92)):
-            B(L, cx - 16, cx + 16, y0, y1, zb - 1.3, zb + 1.3, wd, **kw)
-
-    def front():
-        posts(zf, 44)
-        B(L, cx - 17, cx + 17, 17, 20.5, zf - 1.2, zf + 1.2, wd, cast=False, **kw)
-
-    def seat():
-        B(L, cx - 21.5, cx + 21.5, 43, 47, cz - 21, cz + 21, wd, top=rush, **kw)
-    for part in ((front, seat, back) if toward > 0 else (back, seat, front)):
-        part()
-
-
-def chair_fine(s, cx, cz, ang, toward=1):
-    t = Turned(cx, cz, ang)
-    hi = lambda pos, a=1.0: lit("#d89a62", pos, (0, 1, 0), a)
-    e = 21.5
-    cnr = [t.p(-e, 47.2, -21), t.p(e, 47.2, -21), t.p(e, 47.2, 21), t.p(-e, 47.2, 21)]
-    mid = t.p(0, 47.2, 0)
-    for c in cnr:                                                        # the rush is woven in four triangles
-        seg(s, [c, mid], "#6a4a1c", 0.8, 0.5)
-    for f in (0.36, 0.68):
-        rr = [tuple(lerp(mid[i], c[i], f) for i in range(3)) for c in cnr]
-        seg(s, rr + [rr[0]], "#6a4a1c", 0.6, 0.32)
-    seg(s, cnr + [cnr[0]], hi(mid), 0.9, 0.6)
-    seg(s, [t.p(-e, 43, -21.2), t.p(e, 43, -21.2)], DARK, 1.0, 0.5)
-    zl = -18.5 * toward
-    for y0, y1 in ((55, 62), (69, 76), (83, 92)):                        # the slats: light on top, dark beneath
-        seg(s, [t.p(-16, y1, zl - 1.3), t.p(16, y1, zl - 1.3)], hi(t.p(0, y1, zl)), 0.9, 0.8)
-        seg(s, [t.p(-16, y0, zl - 1.3), t.p(16, y0, zl - 1.3)], DARK, 0.8, 0.5)
-    for sx in (-20.5, 20.5):                                             # the posts: a lit edge, a turned knob on top
-        seg(s, [t.p(sx, 2, zl - 2.5), t.p(sx, 95, zl - 2.5)], hi(t.p(sx, 60, zl), 0.9), 0.7, 0.45)
-        c = P(*t.p(sx * 0.88, 97.5, zl))
-        s.ellipse(c[0], c[1], 2.3, 2.1, lit("#a8693c", t.p(sx, 98, zl)))
-        s.ellipse(c[0] - 0.6, c[1] - 0.6, 0.9, 0.8, hi(t.p(sx, 98, zl)))
-
-
-# ---------------------------------------------------------------- the dining table, set for five
-def table(L, fine=False):
-    t = TABLE
-    x0, x1, z0, z1, top = t["x0"], t["x1"], t["z0"], t["z1"], t["top"]
-    xm, mid = (x0 + x1) / 2, (z0 + z1) / 2
-    far = [(x0 + 34, z1 + 36, 14, 3), (xm + 2, z1 + 43, -9, 4), (x1 - 30, z1 + 31, 24, 5)]      # pushed back as three people left them
-    near = [(x0 + 52, z0 - 36, -5, 6), (x1 - 52, z0 - 32, 8, 7)]                               # and two that nobody has sat in
-    red = col("#8a3a34") * 0.75
-
-    def cloth(X, Y, Z):                                                  # linen with two woven red lines near its edge
-        e = np.minimum(np.minimum(X - (x0 - 1.5), (x1 + 1.5) - X), np.minimum(Z - (z0 - 1.5), (z1 + 1.5) - Z))
-        base = col("#7f7a6e")[None, None, :] * (1 + ((wnoise(X, Z, 40, SEED + 10) - 0.5) * 0.06)[..., None])
-        line = ((e > 7.0) & (e < 9.6)) | ((e > 11.6) & (e < 12.9))
-        return np.where(line[..., None], red[None, None, :], base)
-
-    def fall(X, Y, Z):                                                   # the part that hangs, turned from the lamp
-        base = col("#bdb7b4")[None, None, :] * (1 + ((wnoise(X + Z, Y, 30, SEED + 12) - 0.5) * 0.06)[..., None])
-        line = ((Y > top - 15.5) & (Y < top - 13.0)) | ((Y > top - 18.6) & (Y < top - 17.4))
-        return np.where(line[..., None], col("#9a5a56")[None, None, :], base)
-    yt = top + 0.3
-
-    def lay_far(L):
-        for (cx, cz, a, sd) in far:
-            chair_lay(L, cx, cz, a, toward=-1, seed=sd)
-
-    def fine_far():
-        s = Sheet(SHAPE)
-        for (cx, cz, a, sd) in far:
-            chair_fine(s, cx, cz, a, toward=-1)
-        return [s]
-
-    def lay_table(L):
-        for (lx, lz) in ((x0 + 9, z1 - 9), (x1 - 9, z1 - 9), (x0 + 9, z0 + 9), (x1 - 9, z0 + 9)):
-            B(L, lx - 4.5, lx + 4.5, 0, 54, lz - 4.5, lz + 4.5, grainy(WALNUT, SEED + 11, "y"), cast=False)
-        # the cloth: the top in the full light of the lamp; where it hangs, it turns from the light
-        B(L, x0 - 1.5, x1 + 1.5, top - 25, top, z0 - 1.5, z1 + 1.5, cloth, front=fall, side=fall)
-
-    def fine_table():
-        s = Sheet(SHAPE)
-        zf = z0 - 1.7
-        hem = lambda X: LIGHTS.paint("#bdb7b4", (X, top - 25, zf), (0, 0, -1))
-        # (straight under the lamp everything would bleach to white: the things on the table are painted
-        # as if half as pale as they are, the way the cloth is, so that they keep their colors)
-        lit = lambda albedo, pos, n=(0, 1, 0), dim=1.0: LIGHTS.paint(albedo, pos, n, dim * 0.52)
-        for i in range(20):                                             # the hem, in scallops
-            xa = lerp(x0 - 1.5, x1 + 1.5, i / 20)
-            xb = lerp(x0 - 1.5, x1 + 1.5, (i + 1) / 20)
-            quad(s, [(xa, top - 24.5, zf), (xb, top - 24.5, zf), ((xa + xb) / 2 + 2.6, top - 28.5, zf), ((xa + xb) / 2 - 2.6, top - 28.5, zf)], hem((xa + xb) / 2))
-            c = P((xa + xb) / 2, top - 22, zf)
-            s.ellipse(c[0], c[1], 0.8, 0.8, "#8a86a0", 0.6)                                  # a little cut-work above each one
-        for xx in (x0 + 6, x0 + 60, xm + 34, x1 - 5):                                        # folds where it hangs
-            seg(s, [(xx, top - 23, zf), (xx + 1.5, top - 1, zf)], "#6a6680", 1.0, 0.30)
-            seg(s, [(xx + 2.5, top - 23, zf), (xx + 4, top - 1, zf)], "#ffffff", 0.8, 0.22)
-        seg(s, [(x0 - 1.5, top, zf), (x1 + 1.5, top, zf)], "#fffdf2", 1.1, 0.9)              # the table's edge under the cloth
-        seg(s, [(x1 + 1.6, top, z0 - 1.5), (x1 + 1.6, top, z1 + 1.5)], "#fffdf2", 0.9, 0.7)
-        seg(s, [(x0 - 1.5, top, z1 + 1.5), (x1 + 1.5, top, z1 + 1.5)], "#8a86a0", 0.8, 0.45)
-        seg(s, [(xm, yt, z0), (xm, yt, z1)], "#a8a4b8", 0.8, 0.36)                           # the creases of the iron
-        seg(s, [(x0, yt, mid), (x1, yt, mid)], "#a8a4b8", 0.8, 0.30)
-
-        def china(px_, pz, rx, rz, up):
-            disc(s, px_ + 2.0, yt, pz - 1.6, rx + 1.2, rz + 0.8, "#57546e", 0.42)            # its shadow on the cloth
-            disc(s, px_, yt + 0.5, pz, rx, rz, lit("#fbf8ee", up))
-            disc(s, px_, yt + 0.6, pz, rx * 0.86, rz * 0.86, lit("#3f68a8", up))             # a blue band round the rim
-            disc(s, px_, yt + 0.6, pz, rx * 0.76, rz * 0.76, lit("#fbf8ee", up))
-            disc(s, px_, yt + 0.6, pz, rx * 0.58, rz * 0.58, lit("#e4decc", up))
-            seg(s, ring(px_, yt + 0.6, pz, rx, rz, 20, 200, 340), "#ffffff", 0.7, 0.9)
-
-        def place(px_, pz, full, seed, side):
-            """One place: plate, knife and fork, glass, napkin. `full` = nobody came to eat it.
-            `side` is -1 for the places on our side of the table, 1 for the far side."""
-            rng = np.random.default_rng(SEED + seed)
-            up = (px_, yt, pz)
-            china(px_, pz, 14.5, 12.5, up)
-            if full:                                                    # cold chicken, potatoes, peas: untouched
-                disc(s, px_ - 3.6, yt + 1.4, pz + 1.8, 6.6, 4.6, lit("#a8642c", up))
-                disc(s, px_ - 4.6, yt + 2.4, pz + 2.6, 4.2, 2.8, lit("#d89850", up))
-                seg(s, [(px_ - 8.5, yt + 1.6, pz + 0.5), (px_ - 11.5, yt + 1.6, pz - 1.5)], lit("#f6eedc", up), 1.3)
-                for k in range(3):
-                    disc(s, px_ + 3.2 + k * 2.6 - 1.5, yt + 1.4, pz + 3.8 - k * 2.6, 3.0, 2.5, lit("#f6d870", up))
-                    disc(s, px_ + 2.6 + k * 2.6 - 1.5, yt + 2.0, pz + 4.2 - k * 2.6, 1.3, 1.0, lit("#fff0b0", up))
-                disc(s, px_ + 1.5, yt + 0.9, pz - 4.6, 5.2, 3.0, lit("#4f8a30", up), 0.9)
-                for k in range(12):
-                    disc(s, px_ + 1.5 + rng.normal(0, 2.4), yt + 1.2, pz - 4.6 + rng.normal(0, 1.4), 1.1, 1.0, lit("#7fbc4a", up))
-            else:                                                       # eaten: a bone, a smear of gravy, a pea or two
-                disc(s, px_ + 2, yt + 0.8, pz - 1, 5.5, 3.6, lit("#b89264", up), 0.45)
-                seg(s, [(px_ - 5, yt + 1, pz + 3), (px_ + 0.5, yt + 1, pz + 0.5)], lit("#f4ecd8", up), 1.3)
-                for k in range(2):
-                    disc(s, px_ + 5 + rng.normal(0, 2), yt + 1.0, pz + rng.normal(0, 2), 1.0, 0.9, lit("#7fbc4a", up))
-            silver = lit("#9aa4b0", up)
-            if full:                                                    # knife and fork laid straight, the napkin still folded
-                seg(s, [(px_ + 18.5, yt + 0.6, pz - 10), (px_ + 18.5, yt + 0.6, pz + 10)], silver, 1.1)
-                seg(s, [(px_ - 18.5, yt + 0.6, pz - 10), (px_ - 18.5, yt + 0.6, pz + 10)], silver, 1.1)
-                quad(s, [(px_ - 30, yt + 0.5, pz - 8), (px_ - 22, yt + 0.5, pz - 8), (px_ - 22, yt + 0.5, pz + 8), (px_ - 30, yt + 0.5, pz + 8)], lit("#c8473c", up))
-                seg(s, [(px_ - 30, yt + 0.6, pz), (px_ - 22, yt + 0.6, pz)], lit("#8a2c28", up), 0.7, 0.8)
-            else:                                                       # left across the plate, the napkin thrown down
-                seg(s, [(px_ - 8, yt + 1.2, pz - 6), (px_ + 9, yt + 1.2, pz + 5)], silver, 1.1)
-                seg(s, [(px_ - 4, yt + 1.2, pz - 8), (px_ + 12, yt + 1.2, pz + 2)], silver, 1.1)
-                cr = [(px_ - 29 + rng.normal(0, 1.5), yt + 0.5, pz - 6 + rng.normal(0, 2)), (px_ - 19, yt + 0.5, pz - 9), (px_ - 17 + rng.normal(0, 1.5), yt + 0.5, pz + 2), (px_ - 23, yt + 0.5, pz + 9), (px_ - 31, yt + 0.5, pz + 3)]
-                quad(s, [(x + 1.5, y - 0.2, z - 1.5) for x, y, z in cr], "#57546e", 0.35)
-                quad(s, cr, lit("#c8473c", up))
-                seg(s, [cr[0], cr[2]], lit("#8a2c28", up), 0.7, 0.8)
-                seg(s, [cr[1], cr[3]], lit("#e8786a", up), 0.7, 0.7)
-            # the glass: full for the two, drained for the three
-            gx, gz = px_ + 18, pz + 13 * side
-            a, b = P(gx, yt, gz), P(gx, yt + 12, gz)
-            s.ellipse(a[0] + 1.5, a[1] + 0.6, 3.6, 1.6, "#57546e", 0.35)
-            s.poly([(a[0] - 2.4, a[1]), (a[0] + 2.4, a[1]), (b[0] + 3.0, b[1]), (b[0] - 3.0, b[1])], lit("#b8d0dc", up), 0.6)
-            if full:
-                m = P(gx, yt + 9, gz)
-                s.poly([(a[0] - 2.4, a[1]), (a[0] + 2.4, a[1]), (m[0] + 2.8, m[1]), (m[0] - 2.8, m[1])], lit("#e09a38", up), 0.92)
-            s.line([(a[0] - 2.4, a[1]), (b[0] - 3.0, b[1])], "#ffffff", 0.8, 0.9)
-            s.ellipse(b[0], b[1], 3.0, 1.3, "#ffffff", 0.6)
-        zn, zfar = z0 + 22, z1 - 22
-        place(x0 + 34, zfar, False, 21, 1)
-        place(xm + 2, zfar, False, 22, 1)
-        place(x1 - 30, zfar, False, 23, 1)
-        # ---- in the middle: the roast chicken on its dish (carved on one side), potatoes, gravy, a jug, bread
-        up = (xm, yt, mid)
-        disc(s, xm + 2.5, yt, mid - 2, 28, 16.5, "#57546e", 0.42)
-        disc(s, xm, yt + 0.6, mid, 27, 15.5, lit("#aab4c0", up))
-        disc(s, xm, yt + 0.8, mid, 23.5, 13, lit("#dfe6ea", up))
-        seg(s, ring(xm, yt + 0.8, mid, 27, 15.5, 20, 200, 340), "#ffffff", 0.8, 0.9)
-        disc(s, xm - 2, yt + 4, mid, 15, 10, lit("#7a4420", up))
-        disc(s, xm - 2.5, yt + 6, mid + 0.5, 13.5, 8.6, lit("#a8642e", up))
-        disc(s, xm - 4, yt + 9.5, mid + 1, 9.5, 6, lit("#c98440", up))
-        disc(s, xm - 6, yt + 12, mid + 1.5, 4.5, 2.8, lit("#f0bc6c", up))
-        for sgn in (-1, 1):                                                                                 # its legs, tied
-            seg(s, [(xm + 7, yt + 6, mid + sgn * 4), (xm + 15, yt + 9.5, mid + sgn * 2.2)], lit("#b87838", up), 3.0)
-            seg(s, [(xm + 15, yt + 9.5, mid + sgn * 2.2), (xm + 17.5, yt + 11, mid + sgn * 1.6)], lit("#f6eedc", up), 1.4)
-        for q in range(3):                                                                                  # a sprig of parsley, roast potatoes round it
-            disc(s, xm - 15 + q * 2, yt + 2, mid - 9 + q * 0.6, 1.8, 1.3, lit("#5a9a3c", up))
-        for (dx, dz) in ((-17, 4), (-14, 8), (8, 9), (14, -9)):
-            disc(s, xm + dx, yt + 2.2, mid + dz, 3.0, 2.3, lit("#e8b858", up))
-        quad(s, [(xm + 5, yt + 1.5, mid - 8), (xm + 17, yt + 1.5, mid - 7), (xm + 16, yt + 1.5, mid - 1.5), (xm + 6, yt + 1.5, mid - 2.5)], lit("#f0d8b8", up))    # slices laid by
-        seg(s, [(xm + 11, yt + 1.6, mid - 7.5), (xm + 10.5, yt + 1.6, mid - 2)], lit("#c8a880", up), 0.7, 0.8)
-        seg(s, [(xm + 28, yt + 1.2, mid - 14), (xm + 45, yt + 1.2, mid - 10)], lit("#9aa4b0", up), 1.2)     # the carving knife
-        seg(s, [(xm + 45, yt + 1.2, mid - 10), (xm + 53, yt + 1.2, mid - 8.5)], lit("#3a2a20", up), 1.8)
-        bx = xm - 54                                                                                        # a bowl of potatoes
-        disc(s, bx + 2, yt, mid + 4, 14.5, 10, "#57546e", 0.42)
-        quad(s, [(bx - 12, yt + 8, mid + 6), (bx + 12, yt + 8, mid + 6), (bx + 8, yt, mid + 6), (bx - 8, yt, mid + 6)], lit("#4a78a8", (bx, yt + 4, mid), (0, 0.3, -1)))
-        disc(s, bx, yt + 8, mid + 6, 12, 7.6, lit("#6c98c4", up))
-        for k, (dx, dz) in enumerate(((-4.5, 0), (2, 1.6), (-1, -2.8), (5.5, -1.6), (-6.5, 2.8), (1, 3.6))):
-            disc(s, bx + dx, yt + 9.6, mid + 6 + dz, 3.5, 2.7, lit("#f2d680", up))
-            disc(s, bx + dx - 0.8, yt + 10.2, mid + 6.4 + dz, 1.5, 1.1, lit("#fbeeb0", up))
-        jx, jz = xm + 50, mid + 14                                                                          # the water jug
-        a, b = P(jx, yt, jz), P(jx, yt + 26, jz)
-        s.ellipse(a[0] + 2.5, a[1] + 1, 7.5, 3.0, "#57546e", 0.42)
-        s.poly([(a[0] - 6, a[1]), (a[0] + 6, a[1]), (b[0] + 4.6, b[1]), (b[0] - 4.6, b[1])], lit("#9cc4de", (jx, yt + 12, jz), (0, 0.2, -1)), 0.85)
-        m = P(jx, yt + 16, jz)
-        s.poly([(a[0] - 6, a[1]), (a[0] + 6, a[1]), (m[0] + 5.2, m[1]), (m[0] - 5.2, m[1])], lit("#5a90c0", (jx, yt + 8, jz), (0, 0.2, -1)), 0.9)
-        s.line([(a[0] - 5.4, a[1] - 1), (b[0] - 4.2, b[1] + 1)], "#ffffff", 1.0, 0.9)
-        s.line([(b[0] + 4.6, b[1] + 2), (b[0] + 9.5, b[1] + 5), (b[0] + 9, b[1] + 13), (a[0] + 5.6, a[1] - 6)], lit("#9cc4de", (jx, yt + 12, jz)), 1.3, 0.9)
-        s.ellipse(b[0], b[1], 4.6, 1.7, "#ffffff", 0.6)
-        gx, gz = xm - 30, mid - 17                                                                          # the gravy boat
-        disc(s, gx + 1.5, yt, gz - 1, 10, 5.4, "#57546e", 0.4)
-        disc(s, gx, yt + 0.5, gz, 9.5, 5.0, lit("#fbf8ee", up))
-        disc(s, gx + 0.5, yt + 3.5, gz, 7.8, 4.0, lit("#7a4a26", up))
-        seg(s, [(gx - 9, yt + 3, gz), (gx - 13.5, yt + 6, gz)], lit("#fbf8ee", up), 1.8)
-        for k, (dx, c) in enumerate(((66, "#fbf8ee"), (72, "#3a3438"))):                                    # salt and pepper
-            a, b = P(x0 + dx + 4, yt, mid - 6 + k * 4), P(x0 + dx + 4, yt + 8, mid - 6 + k * 4)
-            s.line([a, b], lit(c, (x0 + dx, yt + 4, mid)), 2.6)
-            s.ellipse(b[0], b[1], 1.5, 0.9, lit("#9aa4b0", up))
-        bx, bz = x1 - 66, mid + 4                                                                           # the bread basket
-        disc(s, bx + 2, yt, bz - 1, 14.5, 9.5, "#57546e", 0.4)
-        quad(s, [(bx - 13, yt + 6, bz), (bx + 13, yt + 6, bz), (bx + 10, yt, bz), (bx - 10, yt, bz)], lit("#9a6a30", (bx, yt + 3, bz), (0, 0.3, -1)))
-        disc(s, bx, yt + 6, bz, 13, 8.2, lit("#c08a44", up))
-        disc(s, bx, yt + 6.5, bz, 10.5, 6.2, lit("#f2eee4", up))
-        for (dx, dz) in ((-3.5, 0.5), (4, -0.5), (0, 2.6)):
-            disc(s, bx + dx, yt + 8.6, bz + dz, 4.8, 3.2, lit("#c8904a", up))
-            disc(s, bx + dx - 0.8, yt + 9.2, bz + dz + 0.4, 2.6, 1.6, lit("#e8bc78", up))
-        place(x0 + 52, zn, True, 24, -1)
-        place(x1 - 52, zn, True, 25, -1)
-        return [s]
-
-    def lay_near(L):
-        for (cx, cz, a, sd) in near:
-            chair_lay(L, cx, cz, a, toward=1, seed=sd)
-
-    def fine_near():
-        s = Sheet(SHAPE)
-        for (cx, cz, a, sd) in near:
-            chair_fine(s, cx, cz, a, toward=1)
-        return [s]
-    run(L, fine, "table", [(lay_far, fine_far), (lay_table, fine_table), (lay_near, fine_near), (None, lamp_over_table)])
-
-
-def lamp_over_table():
-    """The pendant: a wide shade of milky glass on a chain, hanging from the ceiling rose."""
-    x, y, z = PENDANT
-    s = Sheet(SHAPE)
-    shade(s, (x, y, z), y - 15, y + 12, 33, 9, "#ffeab0", "#e8a850", ribs=11)
-    cap = P(x, y + 12, z)
-    s.poly([(cap[0] - 6.5, cap[1] + 1), (cap[0] + 6.5, cap[1] + 1), (cap[0] + 3, cap[1] - 6.5), (cap[0] - 3, cap[1] - 6.5)], "#a8802e")
-    s.line([(cap[0] - 6.5, cap[1] + 1), (cap[0] + 6.5, cap[1] + 1)], "#f0d078", 0.9)
-    s.line([(cap[0] - 3, cap[1] - 6.5), (cap[0] - 6.5, cap[1] + 1)], "#f0d078", 0.7, 0.8)
-    return [s]
-
-
-# ---------------------------------------------------------------- the desk, the family computer, its chair
-def desk(L, fine=False):
-    d = DESK
-    x0, x1, z0, top = d["x0"], d["x1"], d["z0"], d["top"]
-    oak = grainy("#b47c46", SEED + 30, "x", 0.10, (60, 5))
-    oak_v = grainy("#a06c3a", SEED + 31, "y", 0.10, (60, 5))
-    mz = MON["z"]
-    mx = (MON["x0"] + MON["x1"]) / 2
-    ch = Turned(-58.0, z0 - 52.0, 26.0)                                 # the chair: pushed back and turned, as someone left it
-    ckw = dict(ang=ch.ang, about=(ch.cx, ch.cz))
-    blue, blue_l = "#4f6f98", "#6485ae"
-    tz = z0 + 13.8
-    tx0, tx1 = x1 - 36, x1 - 14
-
-    def lay_desk(L):
-        Fc(L, [(x0 + 2, 0, ZW - 6), (x1 - 2, 0, ZW - 6), (x1 - 2, top - 4, ZW - 6), (x0 + 2, top - 4, ZW - 6)], "#3a2418", n=(0, 0, -1), dim=0.45)   # the dark under it
-        B(L, tx0, tx1, 0, 44, z0 + 14, ZW - 10, "#cfc8b4", top="#ded8c6", cast=False)               # the computer itself: a beige tower, on the floor
-        B(L, x0 + 2, x0 + 52, 0, top - 4, z0 + 2, ZW, oak_v)                                        # the drawers
-        B(L, x1 - 6, x1 - 2, 0, top - 4, z0 + 2, ZW, oak_v, cast=False)
-        B(L, x0, x1, top - 4, top, z0, ZW, oak_v, top=oak)
-        # the monitor: foot, neck, and the flat black case
-        B(L, mx - 17, mx + 17, top, top + 1.6, mz - 6, mz + 14, "#34343e", cast=False)
-        B(L, mx - 4, mx + 4, top + 1.6, MON["y0"] + 6, mz + 3, mz + 7, "#2a2a32", cast=False)
-        B(L, MON["x0"], MON["x1"], MON["y0"], MON["y1"], mz, mz + 6, "#2c2c36", top="#4a4a56", cast=False)
-        Fc(L, [(SCR["x0"], SCR["y0"], mz - 0.2), (SCR["x1"], SCR["y0"], mz - 0.2), (SCR["x1"], SCR["y1"], mz - 0.2), (SCR["x0"], SCR["y1"], mz - 0.2)], "#10161f", n=(0, 0, -1), lit=False)
-        B(L, mx - 24, mx + 22, top, top + 2.2, z0 + 7, z0 + 23, "#d6cfbb", top="#e2dccb", cast=False)   # keyboard
-
-    def fine_desk():
-        s = Sheet(SHAPE)
-        zf = z0 + 1.8
-        # ---- drawers: three, each with its shadow line and a brass pull
-        for (ya, yb) in ((6, 26), (28, 48), (50, 70)):
-            quad(s, [(x0 + 6, ya, zf), (x0 + 48, ya, zf), (x0 + 48, yb, zf), (x0 + 6, yb, zf)], lit("#b88048", (x0 + 27, (ya + yb) / 2, z0), (0, 0, -1)), 0.75)
-            seg(s, [(x0 + 6, ya, zf), (x0 + 48, ya, zf), (x0 + 48, yb, zf)], DARK, 0.9, 0.5)
-            seg(s, [(x0 + 6, ya, zf), (x0 + 6, yb, zf), (x0 + 48, yb, zf)], lit("#e8b878", (x0 + 27, yb, z0)), 0.8, 0.6)
-            seg(s, [(x0 + 22, (ya + yb) / 2 + 1, zf - 1), (x0 + 32, (ya + yb) / 2 + 1, zf - 1)], lit("#e8c060", (x0 + 27, (ya + yb) / 2, z0), (0, 0.5, -1)), 1.6)
-        seg(s, [(x0, top, z0), (x1, top, z0)], lit("#f0c890", (mx, top, z0)), 1.0, 0.85)                  # the front edge of the top
-        seg(s, [(x0, top - 4.2, z0), (x1, top - 4.2, z0)], DARK, 1.1, 0.55)
-        seg(s, [(x1, top, z0), (x1, top, ZW)], lit("#f0c890", (x1, top, z0 + 30)), 0.9, 0.6)
-        # ---- the tower: drive doors, a button, a green lamp
-        for yy in (36, 30):
-            quad(s, [(tx0 + 3, yy, tz), (tx1 - 3, yy, tz), (tx1 - 3, yy + 4.5, tz), (tx0 + 3, yy + 4.5, tz)], lit("#b8b09a", (tx0, yy, tz), (0, 0, -1)))
-            seg(s, [(tx0 + 3, yy, tz), (tx1 - 3, yy, tz)], DARK, 0.7, 0.5)
-        seg(s, [(tx0 + 5, 24, tz), (tx0 + 12, 24, tz)], DARK, 1.0, 0.6)
-        b = P(tx1 - 6, 14, tz)
-        s.ellipse(b[0], b[1], 1.6, 1.6, lit("#a8a08a", (tx0, 14, tz), (0, 0, -1)))
-        b = P(tx0 + 6, 14, tz)
-        s.ellipse(b[0], b[1], 1.0, 1.0, "#7cf08a")
-        for yy in (4, 8):
-            seg(s, [(tx0 + 4, yy, tz), (tx1 - 4, yy, tz)], DARK, 0.7, 0.4)
-        # ---- the monitor: its dark glass, the bezel's lit edges, a small blue lamp
-        quad(s, [(SCR["x0"], SCR["y0"], mz - 0.3), (SCR["x1"], SCR["y0"], mz - 0.3), (SCR["x1"], SCR["y1"], mz - 0.3), (SCR["x0"], SCR["y1"], mz - 0.3)], "#10161f")
-        quad(s, [(SCR["x0"], SCR["y1"], mz - 0.3), (SCR["x0"] + 26, SCR["y1"], mz - 0.3), (SCR["x0"] + 8, SCR["y0"], mz - 0.3), (SCR["x0"], SCR["y0"], mz - 0.3)], "#27344a", 0.55)   # the room in the dark glass
-        seg(s, [(MON["x0"], MON["y1"], mz), (MON["x1"], MON["y1"], mz)], lit("#8a8a98", (mx, MON["y1"], mz)), 0.9, 0.9)
-        seg(s, [(MON["x0"], MON["y0"], mz), (MON["x0"], MON["y1"], mz)], lit("#6a6a78", (mx, 110, mz), (-1, 0, 0)), 0.8, 0.7)
-        b = P(MON["x1"] - 5, MON["y0"] + 2, mz - 0.3)
-        s.ellipse(b[0], b[1], 0.9, 0.9, "#8fd0ff")
-        # ---- the keyboard's rows, the mouse on its mat, Dad's mug, papers, a jar of pens
-        ky = top + 2.3
-        for k in range(4):
-            zz = z0 + 9.5 + k * 3.6
-            seg(s, [(mx - 22, ky, zz), (mx + 20, ky, zz)], "#6a6458", 0.8, 0.55)
-        seg(s, [(mx - 24, ky, z0 + 7), (mx + 22, ky, z0 + 7)], lit("#fff8e8", (mx, ky, z0)), 0.8, 0.7)
-        quad(s, [(mx + 28, top + 0.3, z0 + 6), (mx + 50, top + 0.3, z0 + 6), (mx + 50, top + 0.3, z0 + 26), (mx + 28, top + 0.3, z0 + 26)], lit("#3a5a8a", (mx + 40, top, z0 + 16)))
-        disc(s, mx + 38, top + 1.5, z0 + 15, 3.4, 5.0, lit("#e2dccb", (mx + 38, top + 2, z0 + 15)))
-        seg(s, [(mx + 38, top + 1.5, z0 + 20), (mx + 34, top + 0.5, z0 + 36), (mx + 20, top + 0.5, z0 + 44)], "#3a3438", 0.7, 0.8)
-        mgx, mgz = x1 - 14, z0 + 20                                                                        # the mug: red, his
-        a, b = P(mgx, top, mgz), P(mgx, top + 10, mgz)
-        s.poly([(a[0] - 3.2, a[1]), (a[0] + 3.2, a[1]), (b[0] + 3.4, b[1]), (b[0] - 3.4, b[1])], lit("#c8402f", (mgx, top + 5, mgz), (-0.3, 0.2, -0.9)))
-        s.ellipse(b[0], b[1], 3.4, 1.5, lit("#e87a66", (mgx, top + 10, mgz)))
-        s.ellipse(b[0], b[1], 2.4, 1.0, lit("#3a2018", (mgx, top + 10, mgz)))
-        s.line([(a[0] + 3.2, a[1] - 2), (a[0] + 6.0, a[1] - 3.5), (b[0] + 3.4, b[1] + 2)], lit("#c8402f", (mgx, top + 5, mgz)), 1.2)
-        for k, (dx, dz, a_) in enumerate(((10, 30, 0.2), (16, 26, -0.25), (6, 12, 0.5))):                   # papers on the left
-            ca, sa = math.cos(a_), math.sin(a_)
-            cx_, cz_ = x0 + dx + 10, z0 + dz + 6
-            pts = [(cx_ + ux * ca - uz * sa, top + 0.3 + k * 0.3, cz_ + ux * sa + uz * ca) for ux, uz in ((-10, -13), (10, -13), (10, 13), (-10, 13))]
-            quad(s, pts, lit(("#f4f0e2", "#e8e2d0", "#f0e4a8")[k], (cx_, top, cz_)))
-            seg(s, [pts[0], pts[1]], DARK, 0.6, 0.25)
-        jx, jz = x0 + 22, z0 + 54                                                                          # the pen jar
-        a, b = P(jx, top, jz), P(jx, top + 11, jz)
-        s.poly([(a[0] - 3, a[1]), (a[0] + 3, a[1]), (b[0] + 3, b[1]), (b[0] - 3, b[1])], lit("#4a7a6a", (jx, top + 5, jz), (0, 0.2, -1)))
-        for k, c in enumerate(("#e8c84a", "#d85a4a", "#4a7ab8")):
-            s.line([(b[0] - 1.5 + k * 1.5, b[1]), (b[0] - 3 + k * 3, b[1] - 6)], lit(c, (jx, top + 14, jz)), 0.9)
-        return [s]
-
-    seat_o = rrect(0, 0, 46, 44, 10)
-    back_o = [(-19, 60), (19, 60), (22, 70), (21, 92), (14, 99), (-14, 99), (-21, 92), (-22, 70)]
-
-    def lay_chair(L):
-        # a blue office chair on five castors, turned half away from us
-        for k in range(5):
-            a_ = math.radians(72 * k + 20)
-            ex, ez = ch.cx + math.cos(a_) * 27, ch.cz + math.sin(a_) * 27
-            Fc(L, [(ch.cx - 2 * math.sin(a_), 9, ch.cz + 2 * math.cos(a_)), (ch.cx + 2 * math.sin(a_), 9, ch.cz - 2 * math.cos(a_)), (ex + 1.6 * math.sin(a_), 5, ez - 1.6 * math.cos(a_)), (ex - 1.6 * math.sin(a_), 5, ez + 1.6 * math.cos(a_))], "#3c3c48", n=(0, 1, 0))
-        B(L, ch.cx - 3, ch.cx + 3, 8, 41, ch.cz - 3, ch.cz + 3, "#2a2a32", cast=False)
-        prism_y(L, ch, seat_o, 41, 49, blue, blue_l)
-        for sx in (-1, 1):                                                # the arms: a post and a pad
-            ch_b = ch.p(sx * 25.5, 0, 2)
-            B(L, ch_b[0] - 1.5, ch_b[0] + 1.5, 47, 66, ch_b[2] - 2, ch_b[2] + 2, "#2a2a32", cast=False)
-            prism_y(L, ch, [(sx * 25.5 - 3.5, -13), (sx * 25.5 + 3.5, -13), (sx * 25.5 + 3.5, 13), (sx * 25.5 - 3.5, 13)], 66, 69, "#34343e", "#4a4a58", cast=False)
-        prism_z(L, ch, [(-3, 44), (3, 44), (3, 64), (-3, 64)], -27, -23, "#2a2a32")                        # the bar that carries the back
-        prism_z(L, ch, back_o, -31, -24, blue, blue_l)
-
-    def fine_chair():
-        s = Sheet(SHAPE)
-        for k in range(5):
-            a_ = math.radians(72 * k + 20)
-            ex, ez = ch.cx + math.cos(a_) * 28, ch.cz + math.sin(a_) * 28
-            c = P(ex, 2.5, ez)
-            s.ellipse(c[0], c[1], 2.4, 2.4, "#16161c")
-            s.ellipse(c[0] - 0.6, c[1] - 0.6, 0.8, 0.8, "#6a6a78")
-        hi = lambda pos, n=(0, 1, 0): lit("#a8c0dc", pos, n)
-        top_edge = [ch.p(x, y, -31) for x, y in back_o[2:7]]
-        seg(s, top_edge, hi(ch.p(0, 99, -31)), 1.0, 0.75)                                                   # the light along the top of the back
-        seg(s, [ch.p(x, y, -31.2) for x, y in (back_o[6:] + back_o[:3])], DARK, 0.9, 0.45)
-        seg(s, [ch.p(x * 0.72, 79 + (y - 79) * 0.72, -31.3) for x, y in back_o] + [ch.p(back_o[0][0] * 0.72, 79 + (back_o[0][1] - 79) * 0.72, -31.3)], DARK, 0.7, 0.25)   # a seam round its pad
-        seg(s, [ch.p(x, 49.2, z) for x, z in seat_o[:6]], hi(ch.p(0, 49, 0)), 0.8, 0.5)
-        seg(s, [ch.p(x, 41, z) for x, z in seat_o[:11]], DARK, 1.0, 0.4)
-        return [s]
-    run(L, fine, "desk", [(lay_desk, fine_desk), (lay_chair, fine_chair)])
-
-
-# ---------------------------------------------------------------- the piano
-def piano(L, fine=False):
-    p = PIANO
-    x0, x1, z0, top, kz = p["x0"], p["x1"], p["z0"], p["top"], p["keys"]
-    xm = (x0 + x1) / 2
-    eb = grainy("#4e3028", SEED + 40, "x", 0.10, (70, 6))
-    eb_top = grainy("#5c3a30", SEED + 41, "x", 0.10, (70, 6))
-    sx0, sx1, sz0, sz1 = xm - 36, xm + 34, z0 - 92, z0 - 58                                             # the stool
-    zf = z0 - 0.3
-    hi = lambda pos, n=(0, 1, 0), a=1.0: lit("#c08a68", pos, n, a)
-
-    def lay_piano(L):
-        B(L, x0, x1, 0, top, z0, ZW, eb, top=eb_top)
-        Fc(L, [(x0 + 11, 9, z0 - 0.2), (x1 - 11, 9, z0 - 0.2), (x1 - 11, 58, z0 - 0.2), (x0 + 11, 58, z0 - 0.2)], "#3a231e", n=(0, 0, -1))
-        for dx in (-9, 0, 9):                                                                           # the pedals
-            Fc(L, [(xm + dx - 1.6, 3.5, z0 - 1), (xm + dx + 1.6, 3.5, z0 - 1), (xm + dx + 1.6, 2.5, z0 - 10), (xm + dx - 1.6, 2.5, z0 - 10)], "#e8c060", n=(0, 1, 0))
-        for xa in (x0 + 1, x1 - 8):                                                                     # the legs under the key bed
-            B(L, xa, xa + 7, 0, 62, kz + 2, kz + 9, eb, cast=False)
-        B(L, x0, x1, 62, 71, kz, z0, eb, top=eb_top)                                                    # the key bed
-        for xa in (x0, x1 - 9):                                                                         # its cheeks
-            B(L, xa, xa + 9, 71, 80, kz, z0, eb, top=eb_top, cast=False)
-        Fc(L, [(x0 + 9.5, 71.3, kz + 2), (x1 - 9.5, 71.3, kz + 2), (x1 - 9.5, 71.3, z0 - 3), (x0 + 9.5, 71.3, z0 - 3)], "#f2ecda", n=(0, 1, 0))
-        B(L, xm - 31, xm + 31, 86, 88.5, z0 - 6, z0, eb_top, cast=False)                                # the music desk
-
-    def fine_piano():
-        s = Sheet(SHAPE)
-        # ---- the case: lid edge, the upper panel with its moulding, the lower panel, polish
-        seg(s, [(x0, top, z0), (x1, top, z0)], hi((xm, top, z0)), 1.1, 0.9)
-        seg(s, [(x0, top - 3.5, zf), (x1, top - 3.5, zf)], DARK, 1.0, 0.6)
-        seg(s, [(x0, top, z0), (x0, top, ZW)], hi((x0, top, z0 + 30)), 0.9, 0.7)
-        for (xa, xb, ya, yb) in ((x0 + 10, x1 - 10, 92, 118), (x0 + 12, x1 - 12, 11, 56)):
-            seg(s, [(xa, ya, zf), (xa, yb, zf), (xb, yb, zf)], DARK, 0.9, 0.55)
-            seg(s, [(xa, ya, zf), (xb, ya, zf), (xb, yb, zf)], hi((xm, ya, z0), (0, 0.4, -0.9)), 0.8, 0.5)
-        for k in range(3):                                                                              # the lamp's light sliding on the varnish
-            xa = xm + 34 + k * 9
-            quad(s, [(xa, 93, zf), (xa + 4, 93, zf), (xa - 3, 117, zf), (xa - 7, 117, zf)], "#ffd8a0", 0.12)
-        # ---- the fall board, and the keys: white ones, the black ones in twos and threes
-        quad(s, [(x0 + 9, 71.5, z0 - 2.8), (x1 - 9, 71.5, z0 - 2.8), (x1 - 9, 82, z0 - 0.5), (x0 + 9, 82, z0 - 0.5)], lit("#4e3028", (xm, 77, z0), (0, 0.5, -0.8)))
-        seg(s, [(x0 + 9, 82, z0 - 0.5), (x1 - 9, 82, z0 - 0.5)], hi((xm, 82, z0)), 0.8, 0.7)
-        ka, kb = x0 + 9.5, x1 - 9.5
-        ky = 71.5
-        nw = 40
-        for i in range(1, nw):
-            xx = lerp(ka, kb, i / nw)
-            seg(s, [(xx, ky, kz + 2), (xx, ky, z0 - 3)], "#7a7468", 0.6, 0.6)
-        for i in range(nw - 1):
-            if i % 7 in (2, 6):
-                continue
-            xx = lerp(ka, kb, (i + 1) / nw)
-            quad(s, [(xx - 1.0, ky + 0.6, kz + 11), (xx + 1.0, ky + 0.6, kz + 11), (xx + 1.0, ky + 0.6, z0 - 3), (xx - 1.0, ky + 0.6, z0 - 3)], "#17120f")
-        seg(s, [(ka, ky, kz + 2), (kb, ky, kz + 2)], "#fffdf0", 0.9, 0.9)
-        quad(s, [(ka, 68, kz - 0.2), (kb, 68, kz - 0.2), (kb, 71.2, kz - 0.2), (ka, 71.2, kz - 0.2)], lit("#e2dcc8", (xm, 70, kz), (0, 0, -1)))
-        seg(s, [(x0, 62, kz - 0.2), (x1, 62, kz - 0.2)], DARK, 1.0, 0.5)
-        # ---- music on the desk: two open pages, staves and notes too small to read
-        for (xa, xb, lean) in ((xm - 25, xm - 1, -1.5), (xm + 1, xm + 25, 1.5)):
-            pg = [(xa, 88.5, z0 - 4.5), (xb, 88.5, z0 - 4.5), (xb + lean * 0.3, 119, z0 - 1), (xa + lean * 0.3, 119, z0 - 1)]
-            quad(s, pg, lit("#f6f2e4", ((xa + xb) / 2, 104, z0 - 3), (0, 0.3, -0.95)))
-            for r in range(5):
-                yy = 93 + r * 5.2
-                seg(s, [(xa + 2.5, yy, z0 - 4), (xb - 2.5, yy, z0 - 4)], "#4a4650", 0.6, 0.55)
-                for q in range(4):
-                    c = P(xa + 4 + q * 5.2 + (r % 2), yy + 1.0 + ((q * 7 + r * 3) % 3) - 1, z0 - 4)
-                    s.ellipse(c[0], c[1], 0.8, 0.7, "#2a2630", 0.8)
-        # ---- on the lid: the metronome, a pile of music, a photograph in a silver frame, the lamp
-        ly = top
-        mxx, mzz = x0 + 22, z0 + 26
-        quad(s, [(mxx - 6, ly, mzz), (mxx + 6, ly, mzz), (mxx + 2.2, ly + 22, mzz), (mxx - 2.2, ly + 22, mzz)], lit("#9a6436", (mxx, ly + 10, mzz), (0, 0.2, -1)))
-        seg(s, [(mxx, ly + 3, mzz - 0.5), (mxx + 2.6, ly + 20, mzz - 0.5)], lit("#e8c060", (mxx, ly + 12, mzz)), 0.9)
-        quad(s, [(mxx - 4.6, ly + 1.5, mzz - 0.3), (mxx + 4.6, ly + 1.5, mzz - 0.3), (mxx + 3.4, ly + 8, mzz - 0.3), (mxx - 3.4, ly + 8, mzz - 0.3)], lit("#3a2418", (mxx, ly + 5, mzz), (0, 0, -1)), 0.8)
-        bx_, bz_ = x0 + 52, z0 + 30
-        for k, c in enumerate(("#e8dcc0", "#b5483a", "#e2d8c0", "#3f6f8f")):
-            quad(s, [(bx_ - 14 + k, ly + k * 2.2, bz_ - 14), (bx_ + 14 + k * 0.5, ly + k * 2.2, bz_ - 14), (bx_ + 14 + k * 0.5, ly + k * 2.2 + 2.2, bz_ - 14), (bx_ - 14 + k, ly + k * 2.2 + 2.2, bz_ - 14)], lit(c, (bx_, ly + 4, bz_), (0, 0, -1)))
-        quad(s, [(bx_ - 11, ly + 9, bz_ - 14), (bx_ + 15, ly + 9, bz_ - 14), (bx_ + 15, ly + 9, bz_ + 14), (bx_ - 11, ly + 9, bz_ + 14)], lit("#5a86a8", (bx_, ly + 9, bz_)))
-        fx_, fz_ = xm + 12, z0 + 34
-        quad(s, [(fx_ - 8, ly, fz_), (fx_ + 8, ly, fz_), (fx_ + 8, ly + 20, fz_ + 3), (fx_ - 8, ly + 20, fz_ + 3)], lit("#cfd6dc", (fx_, ly + 10, fz_), (0, 0.2, -1)))
-        quad(s, [(fx_ - 5.6, ly + 2.6, fz_ - 0.2), (fx_ + 5.6, ly + 2.6, fz_ - 0.2), (fx_ + 5.6, ly + 17.4, fz_ + 2.6), (fx_ - 5.6, ly + 17.4, fz_ + 2.6)], lit("#8fa8b8", (fx_, ly + 10, fz_), (0, 0.2, -1)))
-        c = P(fx_, ly + 9, fz_)
-        s.ellipse(c[0], c[1] - 1.5, 1.6, 1.6, lit("#e8c0a0", (fx_, ly + 10, fz_), (0, 0.2, -1)))
-        s.ellipse(c[0], c[1] + 2.4, 2.6, 2.4, lit("#f0f0f0", (fx_, ly + 10, fz_), (0, 0.2, -1)))
-        lx_, ly_, lz_ = PIANOLAMP
-        disc(s, lx_, top + 0.4, lz_, 8, 6, lit("#c9a050", (lx_, top, lz_ - 8)))
-        s.line([P(lx_, top, lz_), P(lx_, ly_ - 12, lz_)], lit("#c9a050", (lx_ - 6, top + 14, lz_ - 6), (-0.6, 0, -0.8)), 1.8)
-        s.line([P(lx_ - 0.6, top, lz_), P(lx_ - 0.6, ly_ - 12, lz_)], "#fff0b0", 0.7, 0.8)
-        shade(s, (lx_, ly_, lz_), ly_ - 13, ly_ + 9, 15, 7.5, "#ffe6a8", "#e09a48", top_c="#fff8dc", ribs=7)
-        return [s]
-
-    def lay_stool(L):
-        for (lx, lz) in ((sx0 + 3, sz1 - 3), (sx1 - 3, sz1 - 3), (sx0 + 3, sz0 + 3), (sx1 - 3, sz0 + 3)):
-            B(L, lx - 2.5, lx + 2.5, 0, 44, lz - 2.5, lz + 2.5, eb, cast=False)
-        B(L, sx0, sx1, 44, 49, sz0, sz1, eb, top=eb_top)
-        B(L, sx0 + 1.5, sx1 - 1.5, 49, 54, sz0 + 1.5, sz1 - 1.5, "#a83c3c", top="#c04a48", cast=False)
-
-    def fine_stool():
-        s = Sheet(SHAPE)
-        xa, xb, za, zb, yy = sx0 + 1.5, sx1 - 1.5, sz0 + 1.5, sz1 - 1.5, 54.2
-        seg(s, [(xa, yy, za), (xb, yy, za), (xb, yy, zb), (xa, yy, zb), (xa, yy, za)], lit("#e88a80", (xm, yy, za)), 0.8, 0.6)
-        for i in range(3):
-            c = P(lerp(xa, xb, (i + 0.5) / 3), yy, (za + zb) / 2)
-            s.ellipse(c[0], c[1], 1.0, 0.8, lit("#7a2428", (xm, yy, za)))
-        seg(s, [(sx0, 49, sz0), (sx1, 49, sz0)], hi((xm, 49, sz0)), 0.9, 0.7)
-        seg(s, [(sx0, 44, sz0 - 0.2), (sx1, 44, sz0 - 0.2)], DARK, 0.9, 0.5)
-        for lx in (sx0 + 3, sx1 - 3):
-            seg(s, [(lx - 2.5, 0, sz0 + 0.5), (lx - 2.5, 44, sz0 + 0.5)], hi((lx, 22, sz0), (-1, 0, 0)), 0.8, 0.5)
-        return [s]
-    run(L, fine, "piano", [(lay_piano, fine_piano), (lay_stool, fine_stool)])
-
-
-# ---------------------------------------------------------------- Dad's armchair and his reading lamp
-def armchair(L, fine=False):
-    a = ARM
-    t = Turned(a["cx"], a["cz"], a["ang"])
-    cord = "#93a274"
-
-    def ribbed(axis, base=cord, seed=0, amount=0.10):                    # corduroy: fine ribs of light and dark
-        b = col(base)
-
-        def f(X, Y, Z):
-            lx, lz = t.local(X, Z)
-            u = {"x": lx, "y": Y, "z": lz}[axis]
-            rib = 0.5 + 0.5 * np.sin(u * 2 * np.pi / 3.4)
-            n = wnoise(lx + Y, lz + Y * 0.5, 26, SEED + 50 + seed) - 0.5
-            return b[None, None, :] * (1 - amount * 0.5 + amount * rib + 0.16 * n)[..., None]
-        return f
-    BACK = [(-38, 30), (38, 30), (38, 88), (32, 100), (12, 106), (-12, 106), (-32, 100), (-38, 88)]      # the back, from the front
-    CUSH = [(-27, 44), (27, 44), (27, 86), (22, 96), (-22, 96), (-27, 86)]                               # its cushion
-    ARMP = [(27, 7), (47, 7), (47, 54), (44, 60), (37, 63), (30, 60), (27, 54)]                          # an arm, from the front (the right one)
-    tx, tz = t.p(72, 0, -8)[0], t.p(72, 0, -8)[2]                                                        # the little table at his right hand
-
-    def strips(L, outline, za, zb, albedo, from_y):
-        """The top of something whose front has `outline`: bands from the front edge (za) back to zb."""
-        n = len(outline)
-        for i in range(n):
-            (xa, ya), (xb, yb) = outline[i], outline[(i + 1) % n]
-            if min(ya, yb) < from_y or (xa == xb):
-                continue
-            nx, ny = (yb - ya), -(xb - xa)
-            if ny < 0:
-                nx, ny = -nx, -ny
-            t.face(L, [(xa, ya, za), (xb, yb, za), (xb, yb, zb), (xa, ya, zb)], albedo, (nx, ny, 0))
-
-    def arm(L, sgn, seed):
-        prof = [(x * sgn, y) for x, y in ARMP]
-        if sgn > 0:
-            t.face(L, [(47, 7, -40), (47, 7, 36), (47, 54, 36), (47, 54, -40)], ribbed("z", seed=seed), (1, 0, 0))     # its outer flank
+"""The living room's furniture that the game lays over the backdrop as cut-outs: the piano (with its lamp and
+bench), Dad's armchair (with the reading lamp and the crossword), the pencil, and the dinner table (five places,
+five chairs, the pendant lamp, the family Bible).
+
+Each is built from boxes and turned pieces standing in the room, through the same camera as the room itself."""
+
+import math
+
+import numpy as np
+
+from brush import F32
+import home_living_room_model as M
+from home_living_room_kit import Layer, paint_of, flat, col, sstep, hash2, vnoise, fbm, rot
+from home_living_room_room import (V, BX, FL, TAG, G, HH, XR, WHITE, OAK, DARKWOOD, BRASS, RED, NAVY, CREAM, Tex, c255, pxcm, near, panel)
+
+
+class Recorder:
+    """Stands in for a Layer to find out which boxes throw shadows (the ones laid with sh=True)."""
+
+    def __init__(self):
+        self.tf, self.boxes = None, []
+
+    def box(self, X0, X1, Y0, Y1, Z0, Z1, paint=None, tag=0, skip=(), paints=None, sh=False):
+        if not sh:
+            return
+        pts = [(x, 0, z) for x in (X0, X1) for z in (Z0, Z1)]
+        if self.tf is not None:
+            pts = [self.tf(p) for p in pts]
+        xs, zs = [p[0] for p in pts], [p[2] for p in pts]
+        self.boxes.append((min(xs), max(xs), float(Y0), float(Y1), min(zs), max(zs)))
+
+    def _nothing(self, *a, **k):
+        return None
+    poly = prism = lathe = disc = ribbon = tube = extrude_x = extrude_z = _nothing
+
+
+class Things:
+    def __init__(self, room):
+        self.R = room
+        self.P = room.P
+        self.L = room.L
+
+    # ================================================================ the piano
+    def piano(self, lay, open_panel=False):
+        R, P = self.R, self.P
+        x0, x1, _, top, _, zk = BX["piano"]
+        zb = 39.0                                             # the case is this deep; the keys stand out beyond it
+        tag = TAG["piano"]
+        mah = (0.34, 0.15, 0.085)
+        wood = P(R.wood(mah, 6.0, "Y", grain=0.30), gloss=R.shine(0.22))
+        woodx = P(R.wood(mah, 7.0, "X", grain=0.30), gloss=R.shine(0.30))
+        dark = P(col(mah) * 0.55)
+        # the case: two sides, the top, the bottom rail
+        lay.box(x0, x0 + 5, 0, top, 0, zb, wood, tag, sh=False)
+        lay.box(x1 - 5, x1, 0, top, 0, zb, wood, tag)
+        lay.box(x0, x1, 0, top, 0, zb - 3, dark, tag, skip=("front",), sh=True)
+        lay.box(x0 - 1.5, x1 + 1.5, top, top + 3.5, 0, zb + 1.5, woodx, tag)
+        lay.box(x0, x1, 0, 13, 0, zb, woodx, tag)
+
+        # the upper front: a panel behind the music desk
+        def upper(X, Y, Z, iy, ix):
+            c = R.wood(mah, 9.0, "X", grain=0.28)(X, Y, Z, iy, ix)
+            c *= panel(X, Y, x0 + 12, x1 - 12, 87.0, top - 6.0, 2.5)[:, None]
+            return c
+        lay.poly([(x0 + 5, 82, zb - 1), (x1 - 5, 82, zb - 1), (x1 - 5, top, zb - 1), (x0 + 5, top, zb - 1)], P(upper, gloss=R.shine(0.18)), tag)
+        # the lower front: the panel by the pedals (it comes off)
+        lx0, lx1, ly0, ly1 = x0 + 9, x1 - 9, 15.0, 58.0
+        if not open_panel:
+            def lower(X, Y, Z, iy, ix):
+                c = R.wood(mah, 11.0, "X", grain=0.28)(X, Y, Z, iy, ix)
+                c *= panel(X, Y, lx0 + 5, lx1 - 5, ly0 + 5, ly1 - 5, 2.5)[:, None]
+                return c
+            lay.poly([(x0 + 5, 13, zb - 1.5), (x1 - 5, 13, zb - 1.5), (x1 - 5, 62, zb - 1.5), (x0 + 5, 62, zb - 1.5)], P(lower, gloss=R.shine(0.12)), TAG["panel"])
         else:
-            t.face(L, [(-27, 44, -40), (-27, 44, 10), (-27, 54, 10), (-27, 54, -40)], ribbed("z", seed=seed), (1, 0, 0), dim=0.7)
-        strips(L, prof, -40, 36, ribbed("x", "#a3b284", seed), 54)
-        t.face(L, [(x, y, -40) for x, y in prof], ribbed("x", "#9aa97a", seed), (0, 0, -1))
+            # open: the frame round a dark hole, the strings' lower ends, the pedal rods, a glint of iron
+            lay.poly([(x0 + 5, 13, zb - 1.5), (x1 - 5, 13, zb - 1.5), (x1 - 5, 62, zb - 1.5), (x0 + 5, 62, zb - 1.5)], P(R.wood(mah, 11.0, "X", grain=0.28)), TAG["panel"])
 
-    def lay_lamp_foot(L):
-        fx, fy, fz = FLOORLAMP
-        B(L, fx - 12, fx + 12, 0, 3, fz - 10, fz + 10, "#8a6a28")
-        B(L, fx - 1.4, fx + 1.4, 3, fy - 14, fz - 1.4, fz + 1.4, "#a8802e", cast=False)
+            def inside(X, Y, Z, n, iy, ix):
+                c = np.broadcast_to(np.array([0.035, 0.028, 0.030], dtype=F32), X.shape + (3,)).copy()
+                strings = (np.mod(X - lx0 + (Y - ly0) * 0.35, 3.1) < 0.9) & (Y > ly0 + 12)
+                c = np.where(strings[:, None], np.array([0.30, 0.22, 0.12], dtype=F32)[None, :] * (0.5 + 0.5 * (Y[:, None] - ly0) / (ly1 - ly0)), c)
+                board = (Y < ly0 + 12)
+                c = np.where(board[:, None], np.array([0.11, 0.07, 0.045], dtype=F32)[None, :], c)
+                return c
+            lay.poly([(lx0, ly0, zb - 1.3), (lx1, ly0, zb - 1.3), (lx1, ly1, zb - 1.3), (lx0, ly1, zb - 1.3)], inside, TAG["panel"])
+            rod = flat((0.28, 0.24, 0.18))
+            mid = (x0 + x1) / 2
+            for dx in (-9.0, 0.0, 9.0):
+                lay.ribbon((mid + dx, ly0, zb - 1.0), (mid + dx * 2.6, ly1, zb - 1.0), 1.1, 1.1, rod, TAG["panel"])
+            # the panel itself, taken off and stood on its end against the wall beside the piano
+            px0, px1 = x0 - 50.0, x0 - 6.0
+            ph = lx1 - lx0
 
-    def lay_body(L):
-        for (lx, lz) in ((-40, 36), (40, 36), (-40, -34), (40, -34)):
-            q = t.p(lx, 0, lz)
-            B(L, q[0] - 3.5, q[0] + 3.5, 0, 7, q[2] - 3.5, q[2] + 3.5, "#5a3820", cast=False)
-        # the back: its face, the roll of its top, the side we can see
-        t.face(L, [(x, y, 20) for x, y in BACK], ribbed("x", seed=1), (0, 0, -1), dim=0.9)
-        t.face(L, [(38, 30, 20), (38, 30, 44), (38, 88, 44), (38, 88, 20)], ribbed("z", seed=1), (1, 0, 0))
-        strips(L, BACK, 20, 44, ribbed("x", "#a3b284", 1), 88)
-        t.face(L, [(x, y, 8) for x, y in CUSH], ribbed("x", "#9dac7e", 2), (0, 0, -1))
-        t.face(L, [(27, 44, 8), (27, 44, 20), (27, 86, 20), (27, 86, 8)], ribbed("z", "#9dac7e", 2), (1, 0, 0))
-        strips(L, CUSH, 8, 20, ribbed("x", "#a9b88a", 2), 86)
-        arm(L, -1, 3)                                                                                    # the far arm
-        t.face(L, [(-27, 7, -42), (27, 7, -42), (27, 31, -42), (-27, 31, -42)], ribbed("x", seed=4), (0, 0, -1), dim=0.85)   # under the seat
-        t.face(L, [(-27, 31, -44), (27, 31, -44), (27, 42, -44), (-27, 42, -44)], ribbed("x", "#9dac7e", 5), (0, 0, -1))  # the seat cushion
-        t.face(L, [(-27, 42, -44), (27, 42, -44), (27, 46, -40), (-27, 46, -40)], ribbed("x", "#a9b88a", 5), (0, 0.7, -0.7))
-        t.face(L, [(-27, 46, -40), (27, 46, -40), (27, 46, 8), (-27, 46, 8)], ribbed("x", "#a6b488", 5), (0, 1, 0),
-               dim=lambda X, Y, Z: 0.62 + 0.38 * step(4.0, -22.0, t.local(X, Z)[1]))                    # darker where the back overhangs it
-        for cs in (corners(a["cx"] - 40, a["cx"] + 40, 0, 46, a["cz"] - 40, a["cz"] + 40, a["ang"]), corners(a["cx"] - 36, a["cx"] + 36, 30, 104, a["cz"] + 20, a["cz"] + 44, a["ang"], (a["cx"], a["cz"]))):
-            if isinstance(L, Collector):
-                L.boxes.append(cs)
+            def off(X, Y, Z, iy, ix):
+                c = R.wood(mah, 11.0, "Y", grain=0.28)(X, Y, Z, iy, ix)
+                c *= panel(X, Y / 0.994, px0 + 5, px1 - 5, 5.0, ph - 5.0, 2.5)[:, None]
+                return c
+            lay.poly([(px0, 0.5, 17.0), (px1, 0.5, 17.0), (px1, ph * 0.994, 3.5), (px0, ph * 0.994, 3.5)], P(off, gloss=R.shine(0.15)), TAG["panel"])
+            lay.poly([(px1, 0.5, 17.0), (px1, 0.5, 15.0), (px1, ph * 0.994, 1.5), (px1, ph * 0.994, 3.5)], dark, TAG["panel"])
+            lay.poly([(px0, ph * 0.994, 3.5), (px1, ph * 0.994, 3.5), (px1, ph * 0.994, 1.5), (px0, ph * 0.994, 1.5)], P(col(mah) * 1.3), TAG["panel"])
+        # the key bed, its cheeks, the fall above the keys
+        lay.box(x0, x1, 60, 67, zb - 2, zk, woodx, tag, sh=True)
+        lay.box(x0, x0 + 8, 67, 80, zb - 2, zk, wood, tag)
+        lay.box(x1 - 8, x1, 67, 80, zb - 2, zk, wood, tag)
+        lay.poly([(x0 + 8, 69.4, zb - 1), (x1 - 8, 69.4, zb - 1), (x1 - 8, 82, zb - 1), (x0 + 8, 82, zb - 1)], P(col(mah) * 0.9, gloss=R.shine(0.3)), tag)
+        kx0, kx1 = x0 + 8.0, x1 - 8.0
+        kw = (kx1 - kx0) / 52.0
+        T = Tex(kx1 - kx0, zk - zb - 1.5, 6.0, c255((0.93, 0.90, 0.80)))
+        dk = zk - zb - 1.5
+        for i in range(52):                                   # the white keys' joints, and the black keys in their twos and threes
+            T.line([(i * kw, 0), (i * kw, dk)], c255((0.50, 0.46, 0.40)), 0.30)
+            if (i % 7) in (0, 1, 3, 4, 5) and i < 51:
+                T.rect((i + 1) * kw - 0.75, 0, (i + 1) * kw + 0.75, dk * 0.62, c255((0.07, 0.06, 0.07)))
+        T.rect(0, dk - 1.2, kx1 - kx0, dk, c255((0.70, 0.66, 0.56)))
+        lay.poly([(kx0, 69.4, zb), (kx1, 69.4, zb), (kx1, 69.4, zk - 0.5), (kx0, 69.4, zk - 0.5)],
+                 P(lambda X, Y, Z, iy, ix: T.at(X - kx0, (zk - 0.5) - Z)), tag)
+        lay.poly([(kx0, 67, zk - 0.5), (kx1, 67, zk - 0.5), (kx1, 69.4, zk - 0.5), (kx0, 69.4, zk - 0.5)], P((0.80, 0.76, 0.64)), tag)
+        # legs under the key bed, pedals
+        for xa in (x0 + 1.5, x1 - 9.5):
+            lay.box(xa, xa + 8, 0, 60, zb, zk - 5, wood, tag)
+            lay.box(xa - 1, xa + 9, 0, 6, zb, zk - 3, woodx, tag)
+        mid = (x0 + x1) / 2
+        for dx in (-9.0, 0.0, 9.0):
+            lay.box(mid + dx - 2.2, mid + dx + 2.2, 3.0, 4.6, zb, zb + 11, P(BRASS, gloss=R.shine(0.7)), tag)
+        # the music desk and the hymnal standing open on it
+        lay.box(x0 + 26, x1 - 26, 88.0, 90.0, zb - 1, zb + 6, woodx, tag)
+        hx = mid - 2.0
+        page = P(self.pages(hx - 15.5, 31.0, 91.0, 23.0, seed=4))
+        lay.poly([(hx - 16.5, 90.2, zb + 4.6), (hx + 16.5, 90.2, zb + 4.6), (hx + 16.5, 114.5, zb + 0.2), (hx - 16.5, 114.5, zb + 0.2)], P((0.20, 0.10, 0.08)), tag)
+        lay.poly([(hx - 15.5, 91.0, zb + 5.0), (hx + 15.5, 91.0, zb + 5.0), (hx + 15.5, 114.0, zb + 0.7), (hx - 15.5, 114.0, zb + 0.7)], page, tag)
+        # on the top: the lamp, a metronome, a photograph, a pile of music
+        ty = top + 3.5
+        lx, _, lz = M.LIGHTS["piano"]
+        brass = P(BRASS * 0.95, gloss=R.shine(0.6))
+        lay.lathe(lx, lz, [(8.0, ty), (8.5, ty + 2), (3.0, ty + 4), (2.0, ty + 9), (5.0, ty + 14), (4.0, ty + 19), (1.4, ty + 22), (1.4, ty + 26)], brass, TAG["lamp"], sides=10)
+        lay.lathe(lx, lz, [(15.0, ty + 22), (9.0, ty + 43)], R.shade_paint((1.0, 0.82, 0.52), 1.7, band=(ty + 22, ty + 43)), TAG["lamp"], sides=12)
+        lay.disc((lx, ty + 43, lz), 9.0, flat((1.9, 1.65, 1.05)), TAG["lamp"], sides=12)
+        mx, mz = x0 + 22.0, 20.0                              # the metronome
+        mw = P(R.wood((0.42, 0.24, 0.12), 3.0, "Y"))
+        lay.poly([(mx - 6, ty, mz + 5), (mx + 6, ty, mz + 5), (mx + 2.2, ty + 21, mz + 1.5), (mx - 2.2, ty + 21, mz + 1.5)], mw, tag)
+        lay.poly([(mx + 6, ty, mz + 5), (mx + 6, ty, mz - 5), (mx + 2.2, ty + 21, mz - 1.5), (mx + 2.2, ty + 21, mz + 1.5)], P(col((0.42, 0.24, 0.12)) * 0.7), tag)
+        lay.ribbon((mx, ty + 3, mz + 5.2), (mx + 2.5, ty + 19, mz + 2.2), 0.8, 0.8, flat((0.85, 0.80, 0.60)), tag)
+        R.photo(lay, "back", x0 + 40, ty, 20, 25, 77, 1)       # (stands against the wall)
+        yy = ty
+        for (w, th, c) in ((30, 2.2, (0.86, 0.82, 0.70)), (28, 3.0, (0.20, 0.30, 0.48)), (29, 1.8, (0.88, 0.84, 0.72)), (26, 2.6, (0.50, 0.14, 0.12))):
+            lay.box(x0 + 74, x0 + 74 + w, yy, yy + th, 8, 31, P(col(c)), tag)
+            yy += th
 
-    def fine_body():
-        s = Sheet(SHAPE)
-        pale = lambda pos, n=(0, 1, 0): lit("#cbd6a8", pos, n)
-        seam = lambda pts_, a_=0.5, wd=1.0: seg(s, [t.p(*q) for q in pts_], DARK, wd, a_)
-        pipe = lambda pts_, a_=0.7, wd=0.9: seg(s, [t.p(*q) for q in pts_], pale(t.p(*pts_[0])), wd, a_)
-        pipe([(x, y, 20) for x, y in BACK[2:]] + [(-38, 30, 20)], 0.75)                                  # piping round the back
-        pipe([(x, y, 44) for x, y in BACK[2:]], 0.45)
-        pipe([(x, y, 8) for x, y in CUSH[2:]] + [(-27, 44, 8)], 0.7)
-        seam([(-27, 44.3, 8.2), (27, 44.3, 8.2)], 0.55, 1.2)                                             # where the cushions meet
-        seam([(-27, 46.2, -40), (-27, 46.2, 8)], 0.45, 1.1)
-        seam([(27, 46.2, -40), (27, 46.2, 8)], 0.4, 1.0)
-        pipe([(-27, 46.2, -40), (27, 46.2, -40)], 0.7, 1.0)                                              # the seat cushion's front edge
-        pipe([(-27, 42, -44.2), (27, 42, -44.2)], 0.35)
-        seam([(-27, 31, -44.3), (27, 31, -44.3)], 0.5, 1.1)
-        seam([(-27, 7.2, -42.2), (27, 7.2, -42.2)], 0.5, 1.2)
-        pipe([(x * -1, y, -40) for x, y in ARMP[2:]], 0.6)                                               # the far arm's front
-        pipe([(-37, 63.2, -40), (-37, 63.2, 20)], 0.4)
-        # ---- it has kept his shape: the hollow in the seat, and the one his shoulders made in the back
-        dent = [t.p(math.cos(q) * 15 - 3, 46.3, -16 + math.sin(q) * 12) for q in np.linspace(0, 6.28, 18)]
-        s.poly(pts2(dent), "#2c3824", 0.26)
-        dent2 = [t.p(math.cos(q) * 9.5 - 3, 46.4, -15 + math.sin(q) * 7.5) for q in np.linspace(0, 6.28, 14)]
-        s.poly(pts2(dent2), "#2c3824", 0.20)
-        seg(s, [t.p(-18, 46.4, -19), t.p(-14, 46.4, -6), t.p(-3, 46.4, -3), t.p(8, 46.4, -6)], pale(t.p(0, 46, -10)), 0.8, 0.42)
-        hol = [t.p(math.cos(q) * 14, 70 + math.sin(q) * 14, 7.7) for q in np.linspace(0, 6.28, 16)]
-        s.poly(pts2(hol), "#2c3824", 0.20)
-        for k in range(2):                                                                               # two buttons in the back
-            c = P(*t.p(-11 + k * 22, 82, 7.6))
-            s.ellipse(c[0], c[1], 1.4, 1.4, lit("#56643e", t.p(0, 82, 8), (0, 0, -1)))
-            s.ellipse(c[0] - 0.4, c[1] - 0.4, 0.5, 0.5, pale(t.p(0, 82, 8)))
-        # ---- a knitted blanket over the far corner of the back, hanging down in front
-        wool = lambda y, n=(0, 0.5, -0.8), c="#c8643c": lit(c, t.p(-20, y, 14), n)
-        s.poly(pts2([t.p(-31, 101, 44), t.p(-9, 106.6, 44), t.p(-9, 106.6, 20), t.p(-31, 101, 20)]), wool(104, (0, 1, 0)))
-        s.poly(pts2([t.p(-31, 101, 20), t.p(-9, 106.6, 20), t.p(-9, 97, 7.6), t.p(-28, 97, 7.6)]), wool(100, (0, 0.8, -0.6)))
-        s.poly(pts2([t.p(-28, 97, 7.5), t.p(-9, 97, 7.5), t.p(-9.5, 66, 7.5), t.p(-18, 61, 7.5), t.p(-27, 64, 7.5)]), wool(80, (0, 0, -1)))
-        for k in range(7):
-            yy = 95 - k * 4.6
-            seg(s, [t.p(-27.6, yy, 7.4), t.p(-9.3, yy, 7.4)], wool(yy, (0, 0, -1), ("#f0d8a0", "#7a3a2a", "#e8a850")[k % 3]), 1.3, 0.9)
-        for k in range(6):
-            xx = -26 + k * 3.2
-            seg(s, [t.p(xx, 64 - abs(k - 2.5) * 0.8, 7.4), t.p(xx, 59 - abs(k - 2.5) * 0.8, 7.4)], wool(60, (0, 0, -1), "#f0d8a0"), 0.8)
-        return [s]
+    def pages(self, u0, w, v0, h, seed=1, flat_on="wall", lines=11, music=True):
+        """An open book's two pages: lines of print (or staves), a dark gutter down the middle."""
+        def alb(X, Y, Z, iy, ix):
+            u = (X - u0) / w
+            v = (Y - v0) / h
+            c = np.broadcast_to(np.array([0.93, 0.90, 0.78], dtype=F32), X.shape + (3,)).copy()
+            c *= (1 - 0.35 * np.exp(-np.abs(u - 0.5) / 0.035))[:, None]                      # the gutter
+            inpage = (np.abs(np.abs(u - 0.5) - 0.25) < 0.19)
+            ln = np.mod(v * lines, 1.0)
+            if music:
+                row = (np.mod(v * 4.0, 1.0) > 0.25) & (np.mod(v * 4.0, 1.0) < 0.70)
+                ink = inpage & row & (np.mod(v * 4.0 * 9.0, 1.0) < 0.36)
+            else:
+                ink = inpage & (ln > 0.25) & (ln < 0.62) & (vnoise(u * 60.0, np.floor(v * lines) * 3.0, seed) > 0.22)
+            ink = ink & (v > 0.08) & (v < 0.92)
+            return np.where(ink[:, None], c * np.array([0.52, 0.50, 0.50], dtype=F32), c)
+        return alb
 
-    def lay_near_arm(L):
-        arm(L, 1, 6)
+    def bench(self, lay):
+        R, P = self.R, self.P
+        x0, x1, _, h, z0, z1 = BX["stool"]
+        tag = TAG["stool"]
+        wood = P(R.wood((0.34, 0.15, 0.085), 5.0, "X", grain=0.3), gloss=R.shine(0.2))
+        lay.box(x0, x1, h - 8, h - 2, z0, z1, wood, tag, sh=True)
+        lay.box(x0 + 2, x1 - 2, h - 2, h + 1.5, z0 + 2, z1 - 2, P(lambda X, Y, Z, iy, ix: col((0.50, 0.16, 0.14))[None, :] * (0.85 + 0.3 * vnoise(X * 0.5, Z * 0.5, 4.0))[:, None]), tag)
+        for xa in (x0 + 2, x1 - 7):
+            for za in (z0 + 2, z1 - 7):
+                lay.box(xa, xa + 5, 0, h - 8, za, za + 5, wood, tag)
+        lay.box(x0 + 5, x1 - 5, 12, 15, z0 + 3, z0 + 6, wood, tag)
 
-    def fine_near_arm():
-        s = Sheet(SHAPE)
-        pale = lambda pos, n=(0, 1, 0): lit("#cbd6a8", pos, n)
-        seg(s, [t.p(x, y, -40) for x, y in ARMP[2:]] + [t.p(27, 7, -40)], pale(t.p(37, 60, -40)), 0.9, 0.7)
-        seg(s, [t.p(47, 54, -40), t.p(47, 54, 36)], pale(t.p(47, 54, 0)), 0.9, 0.55)
-        seg(s, [t.p(27, 7.2, -40.2), t.p(47, 7.2, -40.2), t.p(47, 7.2, 36)], DARK, 1.2, 0.5)
-        seg(s, [t.p(47.1, 7, -40), t.p(47.1, 54, -40)], DARK, 0.9, 0.35)
-        c = P(*t.p(37, 50, -40.2))                                                                       # the worn roll at the front of the arm
-        r = 8.0 * cam.scale(t.p(37, 50, -40)[2])
-        s.ellipse(c[0], c[1], r, r, "#dce4bc", 0.20)
-        s.ellipse(c[0], c[1], r * 0.2, r * 0.2, lit("#56643e", t.p(37, 50, -40), (0, 0, -1)))
-        # ---- the crossword folded on the arm, his pencil across it
-        ay = 63.5
-        np_ = [t.p(29.5, ay - 1.2, -30), t.p(45, ay - 1.5, -31), t.p(45.5, ay - 1.5, -4), t.p(30, ay - 1.2, -3)]
-        s.poly(pts2(np_), lit("#efe9d8", t.p(37, ay, -16)))
-        s.poly(pts2([t.p(32, ay, -17), t.p(42, ay, -18), t.p(42.5, ay, -6), t.p(32.5, ay, -5.5)]), "#3a3640", 0.6)
-        for k in range(1, 4):
-            seg(s, [t.p(32 + k * 2.6, ay + 0.1, -17.2), t.p(32.4 + k * 2.6, ay + 0.1, -5.6)], "#efe9d8", 0.6, 0.8)
-            seg(s, [t.p(32, ay + 0.1, -17 + k * 3), t.p(42.5, ay + 0.1, -17.5 + k * 3)], "#efe9d8", 0.6, 0.8)
-        for k in range(3):
-            seg(s, [t.p(32, ay, -28 + k * 3), t.p(43, ay, -29 + k * 3)], "#5a5660", 0.6, 0.6)
-        seg(s, [t.p(31, ay + 0.6, -24), t.p(44, ay + 0.6, -10)], lit("#e8b83a", t.p(37, ay, -16)), 1.2)
-        seg(s, np_ + [np_[0]], DARK, 0.6, 0.3)
-        return [s]
+    # ================================================================ Dad's armchair, the reading lamp, the crossword
+    def armchair(self, lay, pencil=False, only_pencil=False):
+        R, P = self.R, self.P
+        bx = BX["armchair"]
+        cx, cz = (bx[0] + bx[1]) / 2, (bx[4] + bx[5]) / 2
+        tag = TAG["armchair"]
+        lay.tf = rot((cx, cz), 25.0)
 
-    def lay_table(L):
-        B(L, tx - 2.5, tx + 2.5, 0, 50, tz - 2.5, tz + 2.5, WALNUT, cast=False)
-        Fc(L, ring(tx, 52, tz, 20, 18)[:-1], grainy("#a8703c", SEED + 58, "x"), n=(0, 1, 0))
-        if isinstance(L, Collector):
-            L.boxes.append(corners(tx - 17, tx + 17, 50, 52, tz - 15, tz + 15))
+        def leather(base, seed):
+            base = col(base)
 
-    def fine_table():
-        s = Sheet(SHAPE)
-        seg(s, ring(tx, 52.2, tz, 20, 18), lit("#e8b878", (tx, 52, tz - 18)), 0.9, 0.7)
-        seg(s, ring(tx, 50, tz, 20, 18, 12, 180, 360), DARK, 1.2, 0.5)
-        for k in range(3):
-            a_ = math.radians(210 + k * 60)
-            seg(s, [(tx, 14, tz), (tx + math.cos(a_) * 15, 0, tz + math.sin(a_) * 13)], lit(WALNUT, (tx, 6, tz)), 1.8)
-        mgx, mgz = tx - 7, tz - 2                                                                        # his mug, and a book face-down
-        a_, b_ = P(mgx, 52.3, mgz), P(mgx, 62, mgz)
-        s.poly([(a_[0] - 3.2, a_[1]), (a_[0] + 3.2, a_[1]), (b_[0] + 3.5, b_[1]), (b_[0] - 3.5, b_[1])], lit("#e8e2d0", (mgx, 57, mgz), (-0.3, 0.2, -0.9)))
-        s.ellipse(b_[0], b_[1], 3.5, 1.5, lit("#f6f2e6", (mgx, 62, mgz)))
-        s.ellipse(b_[0], b_[1], 2.5, 1.0, lit("#4a2c1c", (mgx, 62, mgz)))
-        bk = [(tx + 1, 52.6, tz - 9), (tx + 15, 52.6, tz - 6), (tx + 13, 52.6, tz + 9), (tx - 1, 52.6, tz + 6)]
-        quad(s, bk, lit("#3f6f8f", (tx + 7, 53, tz)))
-        seg(s, [((bk[0][0] + bk[1][0]) / 2, 53.6, (bk[0][2] + bk[1][2]) / 2), ((bk[2][0] + bk[3][0]) / 2, 53.6, (bk[2][2] + bk[3][2]) / 2)], lit("#8fb6d0", (tx + 7, 54, tz)), 1.0)
-        gx, gz = tx - 4, tz - 11                                                                          # his reading glasses
-        for sx in (-1, 1):
-            c = P(gx + sx * 3.0, 52.8, gz)
-            s.ellipse(c[0], c[1], 2.2, 1.3, "#2a2024", 0.85)
-            s.ellipse(c[0], c[1], 1.4, 0.7, lit("#cfe0e8", (gx, 53, gz)), 0.9)
-        # yesterday's papers on the floor under the little table
-        for k in range(3):
-            pp_ = [(tx - 12 + k * 2, 0.4 + k * 0.8, tz + 6 + k), (tx + 12 + k, 0.4 + k * 0.8, tz + 3 - k), (tx + 14 - k, 0.4 + k * 0.8, tz + 20), (tx - 10, 0.4 + k * 0.8, tz + 23 - k)]
-            quad(s, pp_, lit(("#d8d2c0", "#e8e2d0", "#cfc8b4")[k], (tx, 1, tz + 12)))
-            seg(s, [pp_[0], pp_[1]], DARK, 0.6, 0.35)
-        # ---- his slippers, waiting in front of the chair
-        for k, (lx, lz, an) in enumerate(((-13, -66, -0.25), (5, -62, 0.12))):
-            c = t.p(lx, 0, lz)
-            an += math.radians(a["ang"])
-            ca, sa = math.cos(an), math.sin(an)
-            sole = [(c[0] + ux * ca - uz * sa, 1.0, c[2] + ux * sa + uz * ca) for ux, uz in ((-5, -13), (5, -13), (6, 6), (4, 13), (-4, 13), (-6, 6))]
-            quad(s, [(x + 2, 0.1, z - 1) for x, y, z in sole], DARK, 0.35)
-            quad(s, sole, lit("#7a4a30", c))
-            topp = [(c[0] + ux * ca - uz * sa, 5.0, c[2] + ux * sa + uz * ca) for ux, uz in ((-5, -2), (5, -2), (5.5, 7), (3.5, 13), (-3.5, 13), (-5.5, 7))]
-            quad(s, topp, lit("#a8423a", (c[0], 5, c[2])))
-            seg(s, [topp[0], topp[1]], lit("#e8d8c0", (c[0], 5, c[2])), 1.2)
-        return [s]
-    run(L, fine, "armchair", [(lay_lamp_foot, reading_lamp), (lay_body, fine_body), (lay_near_arm, fine_near_arm), (lay_table, fine_table)])
+            def alb(X, Y, Z, iy, ix):
+                n = fbm(X * 0.06 + Y * 0.02, Z * 0.06 + Y * 0.05, seed, 3)
+                crack = vnoise(X * 0.9 + Y * 0.3, Z * 0.9, seed + 4)
+                return base[None, :] * (0.78 + 0.42 * n)[:, None] * (0.93 + 0.14 * crack)[:, None]
+            return alb
+        hide = (0.30, 0.115, 0.07)
+        lea = P(leather(hide, 3.0), gloss=R.shine(0.30, (1.0, 0.85, 0.6)), warm=3.4, cool=1.7)
+        lea2 = P(leather(col(hide) * 1.15, 5.0), gloss=R.shine(0.35, (1.0, 0.85, 0.6)), warm=3.4, cool=1.7)
+        dk = P(col(hide) * 0.5)
+        x0, x1 = cx - 46, cx + 46                              # across the chair (the sitter's left .. right)
+        zf, zr = cz - 46, cz + 46                              # its front (it faces the back wall) .. its back
+        if not only_pencil:
+            for xa in (x0 + 3, x1 - 9):                        # stubby turned feet
+                for za in (zf + 3, zr - 9):
+                    lay.box(xa, xa + 6, 0, 12, za, za + 6, P(DARKWOOD), tag)
+            lay.box(x0, x1, 11, 40, zf, zr - 2, lea, tag, sh=True, skip=("top", "bottom", "left", "right", "front", "back"))
+            lay.box(x0 + 2, x1 - 2, 40, 98, zr - 22, zr, lea, tag, sh=True, skip=("top", "bottom", "left", "right", "front", "back"))
+            # a barrel back: the hide goes round behind the sitter in one curve, low at the arms, high in the middle
+            bz = cz + 4.0
+            R0 = 46.0
 
+            def ring(y, r_in, r_out, a0, a1, paint, n=6):
+                for k in range(n):
+                    pa, pb = math.radians(a0 + (a1 - a0) * k / n), math.radians(a0 + (a1 - a0) * (k + 1) / n)
+                    lay.poly([(cx + math.cos(pa) * r_in, y, bz + math.sin(pa) * r_in), (cx + math.cos(pa) * r_out, y, bz + math.sin(pa) * r_out),
+                              (cx + math.cos(pb) * r_out, y, bz + math.sin(pb) * r_out), (cx + math.cos(pb) * r_in, y, bz + math.sin(pb) * r_in)], paint, tag)
 
-def reading_lamp():
-    x, y, z = FLOORLAMP
-    s = Sheet(SHAPE)
-    disc(s, x, 3.2, z, 12, 9.5, lit("#c9a050", (x, 3, z - 10)))
-    disc(s, x - 2, 3.4, z - 1, 5, 3.5, lit("#f0d078", (x, 3, z - 10)), 0.8)
-    a, b = P(x, 3, z), P(x, y - 14, z)
-    s.line([(a[0] - 0.7, a[1]), (b[0] - 0.7, b[1])], lit("#f0d078", (x - 8, 80, z - 8), (-0.8, 0, -0.6)), 0.9, 0.9)
-    for yy in (40, 96):
-        c = P(x, yy, z)
-        s.ellipse(c[0], c[1], 2.4, 1.6, lit("#e8c060", (x - 6, yy, z - 6), (-0.5, 0.3, -0.8)))
-    s2 = Sheet(SHAPE)
-    shade(s2, (x, y, z), y - 15, y + 15, 25, 13, "#ffe2a0", "#dc9442", top_c="#fff8dc", ribs=9, fringe=3.2)
-    c = P(x + 9, y - 15, z - 10)
-    s2.line([(c[0], c[1]), (c[0], c[1] + 14)], "#f0d078", 0.7, 0.9)                                     # the pull chain
-    s2.ellipse(c[0], c[1] + 15, 1.2, 1.2, "#f0d078")
-    return [s, s2]
+            def end(a_, y0_, y1_, r_in, r_out, paint):
+                pa = math.radians(a_)
+                lay.poly([(cx + math.cos(pa) * r_in, y0_, bz + math.sin(pa) * r_in), (cx + math.cos(pa) * r_out, y0_, bz + math.sin(pa) * r_out),
+                          (cx + math.cos(pa) * r_out, y1_, bz + math.sin(pa) * r_out), (cx + math.cos(pa) * r_in, y1_, bz + math.sin(pa) * r_in)], paint, tag)
+            lay.lathe(cx, bz, [(R0 - 2.0, 11), (R0 - 0.5, 30), (R0, 62)], lea, tag, sides=18, a0=-6, a1=186)
+            lay.lathe(cx, bz, [(R0, 62), (R0 + 0.5, 80), (R0 - 1.0, 90)], lea, tag, sides=16, a0=14, a1=166)
+            lay.lathe(cx, bz, [(R0 - 1.0, 90), (R0 - 2.0, 98), (R0 - 5.5, 103), (R0 - 10.0, 104.5)], lea2, tag, sides=12, a0=32, a1=148)
+            lay.lathe(cx, bz, [(33.0, 46), (32.0, 90)], lea, tag, sides=16, a0=14, a1=166, smooth=False)       # the inside of the back
+            lay.lathe(cx, bz, [(32.0, 90), (33.0, 100), (36.0, 104.5)], lea, tag, sides=12, a0=32, a1=148, smooth=False)
+            ring(90.0, 32.0, R0 - 1.0, 14, 32, lea2)
+            ring(90.0, 32.0, R0 - 1.0, 148, 166, lea2)
+            for a_ in (14, 166):
+                end(a_, 62.0, 90.0, 32.0, R0, lea2)
+            for a_ in (32, 148):
+                end(a_, 90.0, 104.0, 33.0, R0 - 2.0, lea2)
+            seam = P(col(hide) * 0.40)
+            for a_ in (40.0, 140.0):                                                           # the seams where the hides are joined
+                pa = math.radians(a_)
+                lay.ribbon((cx + math.cos(pa) * (R0 + 0.6), 13, bz + math.sin(pa) * (R0 + 0.6)), (cx + math.cos(pa) * (R0 + 0.2), 98, bz + math.sin(pa) * (R0 + 0.2)), 1.2, 1.2, seam, tag)
+            nail = P(BRASS * 1.05, gloss=R.shine(0.8))
+            for k in range(22):                                                                # brass nails round the foot of it
+                pa = math.radians(2 + k * 8.4)
+                lay.ribbon((cx + math.cos(pa) * (R0 - 0.9), 15.6, bz + math.sin(pa) * (R0 - 0.9)), (cx + math.cos(pa) * (R0 - 0.8), 17.8, bz + math.sin(pa) * (R0 - 0.8)), 2.0, 2.0, nail, tag)
+            # the seat, its cushion, the arms rolled over at the top
+            lay.box(cx - 33, cx + 33, 11, 42, zf, cz + 12, lea, tag)
+            lay.box(cx - 30, cx + 30, 42, 51.5, zf - 2, cz + 14, self.puff(lea2, lay.tf((cx, 51.5, cz - 16)), 30.0, 30.0, 0.5), tag)
+            lay.box(cx - 30, cx + 30, 45.5, 47.0, zf - 2.4, cz + 14, dk, tag, skip=("top", "bottom"))          # its piping
+            for sgn, xe in ((1, x1), (-1, x0)):
+                arm = [(xe - sgn * 17, 11), (xe - sgn * 17.5, 56), (xe - sgn * 20, 60), (xe - sgn * 19, 65), (xe - sgn * 13, 68.5), (xe - sgn * 5, 68.5),
+                       (xe + sgn * 1.5, 65), (xe + sgn * 2, 60), (xe, 55), (xe, 11)]
+                lay.extrude_z(arm, zf - 2, cz + 12, self.puff(lea, lay.tf((xe, 38.0, cz - 18)), 46.0, 30.0, 0.7), tag, cap_paint=lea2)
+                for k in range(5):                                                             # brass nails down the front of the arm
+                    lay.disc((xe - sgn * 8.5, 15 + k * 8.0, zf - 2.3), 1.1, nail, tag, axis="Z", sides=6)
+            # a knitted blanket thrown over the back, on the far side from us
+            def knit(X, Y, Z, iy, ix):
+                s = np.floor((Y + (X + Z) * 0.25) / 9.0)
+                cols = np.array([[0.62, 0.48, 0.22], [0.20, 0.32, 0.34], [0.70, 0.64, 0.50], [0.20, 0.32, 0.34], [0.46, 0.18, 0.15], [0.20, 0.32, 0.34]], dtype=F32)
+                c = cols[np.mod(s, 6).astype(np.intp)]
+                return c * (0.85 + 0.25 * np.sin((X + Z) * 2.1) * np.sin(Y * 2.3))[:, None]
+            kn = P(knit, warm=3.0, cool=1.7)
+            lay.lathe(cx, bz, [(R0 + 1.2, 50), (R0 + 1.6, 80), (R0 + 0.3, 90), (R0 - 0.8, 98), (R0 - 4.2, 103.8), (R0 - 9.0, 105.6)], kn, tag, sides=8, a0=66, a1=118)
+            lay.lathe(cx, bz, [(R0 - 9.0, 105.6), (31.0, 101), (30.5, 82)], kn, tag, sides=8, a0=66, a1=118, smooth=False)
+            for a_ in (66, 118):
+                end(a_, 50.0, 98.0, R0 - 0.5, R0 + 1.6, kn)
+            # the folded newspaper on the arm nearest us, crossword uppermost
+            nx0, nz0 = x1 - 16.5, zf + 9.0
+            T = Tex(16.0, 26.0, 8.0, c255((0.84, 0.82, 0.74)))
+            for i in range(9):                                 # the grid: black squares among white
+                for j in range(9):
+                    blk = ((i * 3 + j * 5) % 7 == 0) or ((i + j * 2) % 9 == 4)
+                    T.rect(1.5 + i * 1.45, 11.0 + j * 1.45, 1.5 + (i + 1) * 1.45, 11.0 + (j + 1) * 1.45, c255((0.10, 0.10, 0.12)) if blk else c255((0.97, 0.96, 0.90)))
+            for i in range(10):
+                T.line([(1.5 + i * 1.45, 11.0), (1.5 + i * 1.45, 24.05)], c255((0.25, 0.25, 0.28)), 0.14)
+                T.line([(1.5, 11.0 + i * 1.45), (14.55, 11.0 + i * 1.45)], c255((0.25, 0.25, 0.28)), 0.14)
+            for j in range(7):                                 # the clues
+                T.line([(1.5, 2.0 + j * 1.25), (7.2, 2.0 + j * 1.25)], c255((0.42, 0.42, 0.44)), 0.35)
+                T.line([(8.6, 2.0 + j * 1.25), (14.4, 2.0 + j * 1.25)], c255((0.42, 0.42, 0.44)), 0.35)
+            lay.box(nx0, nx0 + 16, 66.0, 67.6, nz0, nz0 + 26, P((0.80, 0.78, 0.70)), TAG["crossword"])
+            lay.poly([(nx0, 67.7, nz0), (nx0 + 16, 67.7, nz0), (nx0 + 16, 67.7, nz0 + 26), (nx0, 67.7, nz0 + 26)],
+                     P(self.on_turned(T, lay.tf, (nx0, nz0), 26.0)), TAG["crossword"])
+            # his reading glasses, folded, beside it
+            gl = flat((0.10, 0.09, 0.08))
+            gx, gz = nx0 + 3.0, nz0 + 31.0
+            lay.tube([(gx, 66.6, gz), (gx + 5, 66.6, gz + 1), (gx + 6.5, 66.6, gz + 1.2), (gx + 11.5, 66.6, gz + 2)], 0.7, gl, tag)
+            lay.disc((gx + 2.6, 66.5, gz + 0.5), 2.6, P((0.55, 0.62, 0.66), gloss=R.shine(0.6)), tag, sides=8)
+            lay.disc((gx + 9.0, 66.5, gz + 1.6), 2.6, P((0.55, 0.62, 0.66), gloss=R.shine(0.6)), tag, sides=8)
+        if pencil or only_pencil:
+            # the pencil: yellow, six-sided, a pink rubber in a brass band, lying across the crossword
+            nx0, nz0 = x1 - 16.5, zf + 9.0
+            pa, pb = (nx0 + 2.0, 68.6, nz0 + 21.0), (nx0 + 14.5, 68.6, nz0 + 4.0)
+            d = tuple(pb[k] - pa[k] for k in range(3))
+            at = lambda t: tuple(pa[k] + d[k] * t for k in range(3))
+            lay.ribbon(at(0.0), at(0.10), 1.5, 1.5, flat((0.93, 0.50, 0.52)), TAG["pencil"])
+            lay.ribbon(at(0.10), at(0.17), 1.6, 1.6, flat((0.80, 0.66, 0.30)), TAG["pencil"])
+            lay.ribbon(at(0.17), at(0.88), 1.5, 1.5, flat((0.98, 0.80, 0.12)), TAG["pencil"])
+            lay.ribbon(at(0.88), at(0.97), 1.5, 0.5, flat((0.90, 0.74, 0.50)), TAG["pencil"])
+            lay.ribbon(at(0.97), at(1.0), 0.5, 0.2, flat((0.12, 0.12, 0.14)), TAG["pencil"])
+        lay.tf = None
 
+    @staticmethod
+    def puff(paint, centre, rx, ry, bend=0.7):
+        """Paint for a stuffed surface: the same paint, lit as if the surface swelled outward from `centre`."""
+        cx_, cy_, cz_ = centre
 
-def front_plane():
-    """Right at the front, bottom left: the old aspidistra in its pot. People always pass behind it.
-    -> (color, coverage). It stands between us and the lamp, so it is mostly dark, with light along the
-    edges of the leaves that lean toward the table."""
-    rng = np.random.default_rng(SEED + 90)
-    X, Z = -416.0, -10.0
-    s = Sheet(SHAPE)
-    k = cam.scale(Z)
-    a, b = P(X, 0, Z), P(X, 32, Z)
-    # the pot: glazed, blue-green, on a saucer
-    s.ellipse(a[0], a[1] + 1, 18 * k, 6.5 * k, lit("#5a3a28", (X, 0, Z)))
-    s.poly([(a[0] - 13 * k, a[1]), (a[0] + 13 * k, a[1]), (b[0] + 18 * k, b[1]), (b[0] - 18 * k, b[1])], lit("#3f8078", (X, 16, Z), (0.5, 0.2, -0.8)))
-    s.poly([(a[0] + 2 * k, a[1]), (a[0] + 13 * k, a[1]), (b[0] + 18 * k, b[1]), (b[0] + 5 * k, b[1])], lit("#56a096", (X + 14, 16, Z), (0.9, 0.2, -0.4)))
-    s.ellipse(a[0], a[1], 13 * k, 4.6 * k, lit("#3f8078", (X, 2, Z), (0.5, 0.2, -0.8)))
-    s.ellipse(b[0], b[1], 18 * k, 6.2 * k, lit("#6ab0a4", (X, 34, Z)))
-    s.ellipse(b[0], b[1] + 0.6, 15.5 * k, 5.0 * k, lit("#2a1c14", (X, 34, Z)))
-    s.line([(b[0] + 10 * k, b[1] + 4), (a[0] + 8 * k, a[1] - 2)], "#c8f0e4", 1.0, 0.4)
-    base = (b[0], b[1])
-    dark, mid = "#0e1c18", "#17352a"
-    light = lit("#2a5230", (X + 30, 80, Z), (0.7, 0.5, -0.5), 0.8)
-    rim = lit("#7a9c4c", (X + 40, 90, Z), (0.8, 0.5, -0.3), 1.0)
-    leaves = [(-1.15, 62, 10, 0.60), (-0.86, 84, 12, 0.46), (-0.58, 76, 11, 0.36), (-0.32, 96, 12, 0.20), (-0.06, 84, 11, 0.06), (0.16, 100, 13, -0.10),
-              (0.40, 82, 11, -0.22), (0.62, 92, 12, -0.34), (0.86, 70, 10, -0.50), (-0.72, 52, 9, 0.7), (0.30, 58, 9, -0.1), (1.10, 54, 10, -0.70), (-0.14, 64, 10, 0.2)]
-    order = sorted(range(len(leaves)), key=lambda i: -abs(leaves[i][0]))
-    for i in order:
-        ang, ln, wd, bend = leaves[i]
-        ang += rng.normal(0, 0.05)
-        spine = []
-        x, y = base[0] + rng.normal(0, 3), base[1] - 1
-        n = 14
-        for q in range(n + 1):
-            t = q / n
-            a_ = ang - bend * t ** 1.6 * 1.35
-            spine.append((x, y, a_, t))
-            x += math.sin(a_) * ln / n
-            y -= math.cos(a_) * ln / n
-        left, right = [], []
-        for (x, y, a_, t) in spine:
-            w = wd * 0.16 if t < 0.22 else wd * math.sin(math.pi * (t - 0.22) / 0.78) ** 0.75 * (1.0 - 0.25 * t)
-            left.append((x - math.cos(a_) * w, y - math.sin(a_) * w))
-            right.append((x + math.cos(a_) * w, y + math.sin(a_) * w))
-        mid_pts = [(x, y) for x, y, _, _ in spine]
-        toward = ang > -0.2                                              # this leaf leans toward the lamp
-        s.poly(left + right[::-1], dark)
-        s.poly(mid_pts + right[::-1], light if toward else mid)
-        if toward:
-            s.line(right[4:], rim, 1.0, 0.9)
-        else:
-            s.line(right[5:12], light, 0.9, 0.6)
-        s.line(mid_pts[2:], "#0c1c12" if not toward else "#2c5630", 0.9, 0.8)
-        for q in range(4, n - 1):                                        # the ribs along it
-            s.line([mid_pts[q], (lerp(mid_pts[q + 1][0], right[q + 1][0], 0.85), lerp(mid_pts[q + 1][1], right[q + 1][1], 0.85))], dark, 0.6, 0.30)
-            s.line([mid_pts[q], (lerp(mid_pts[q + 1][0], left[q + 1][0], 0.85), lerp(mid_pts[q + 1][1], left[q + 1][1], 0.85))], "#000000", 0.6, 0.16)
-        if i % 4 == 1:                                                   # an old leaf, yellowing at the tip
-            s.poly([mid_pts[-4], right[-3], mid_pts[-1], left[-3]], "#8a8a3a", 0.5)
-    return s.done()
+        def p(X, Y, Z, n, iy, ix):
+            nx, ny, nz = n
+            tl = math.hypot(nx, nz)
+            if tl < 0.2:                                      # a top: let it swell both ways across
+                mx, my, mz = nx + bend * (X - cx_) / rx, ny, nz + bend * (Z - cz_) / rx
+            else:
+                tx, tz = -nz / tl, nx / tl
+                u = ((X - cx_) * tx + (Z - cz_) * tz) / rx
+                v = (Y - cy_) / ry
+                mx, my, mz = nx + bend * u * tx, ny + bend * v, nz + bend * u * tz
+            l = np.sqrt(mx * mx + my * my + mz * mz) + 1e-6
+            return paint(X, Y, Z, (mx / l, my / l, mz / l), iy, ix)
+        return p
 
+    def on_turned(self, T, tf, origin, depth):
+        """Albedo from a flat drawing laid on a thing that has been turned: the drawing's own (u, v) are found
+        by turning the place back."""
+        (px, pz), c, s = self._pivot(tf)
+        ox, oz = origin
 
-def chain(rgb, alpha):
-    """The pendant's chain: one plumb column of pixels from the ceiling rose down to the lamp, put on after
-    everything else so that it stays whole in a cut-out with hard edges."""
-    x, y, z = PENDANT
-    top = P(x, y + 17, z)
-    rose = ceil_pt(x, z)
-    cx = int(round(top[0] - 0.5))
-    y0, y1 = int(round(rose[1])) + 2, int(round(top[1])) + 1
-    for yy in range(y0, y1):
-        link = (yy - y0) % 4
-        rgb[yy, cx] = col("#b08a44") * 0.55 if link == 1 else col("#1c1418")
-        alpha[yy, cx] = 1.0
+        def alb(X, Y, Z, iy, ix):
+            dx, dz = X - px, Z - pz
+            lx, lz = px + dx * c + dz * s, pz - dx * s + dz * c
+            return T.at(lx - ox, depth - (lz - oz))
+        return alb
 
+    @staticmethod
+    def _pivot(tf):
+        """The pivot and angle of a turn made with kit.rot (read back from what it does)."""
+        a, b = tf((0.0, 0.0, 0.0)), tf((1.0, 0.0, 0.0))
+        c, s = b[0] - a[0], b[2] - a[2]
+        # tf(p) = pivot + R (p - pivot)  ->  pivot = (I - R)^-1 (a)   with a = tf(0)
+        det = (1 - c) * (1 - c) + s * s
+        px = ((1 - c) * a[0] - s * a[2]) / det
+        pz = (s * a[0] + (1 - c) * a[2]) / det
+        return (px, pz), c, s
 
-PIECES = (desk, piano, table, armchair)
+    def reading_lamp(self, lay):
+        R, P = self.R, self.P
+        lx, ly, lz = M.LIGHTS["reading"]
+        tag = TAG["lamp"]
+        brass = P(BRASS * 0.9, gloss=R.shine(0.7))
+        lay.lathe(lx, lz, [(14.0, 0), (14.0, 2.5), (5.0, 5.0), (1.6, 8.0)], brass, tag, sides=12)
+        lay.ribbon((lx, 8, lz), (lx, ly - 16, lz), 2.6, 2.6, brass, tag)
+        lay.lathe(lx, lz, [(3.2, ly - 16), (1.6, ly - 12), (1.6, ly + 6)], brass, tag, sides=6)
+        y0, y1 = ly - 12.0, ly + 14.0
+
+        def pleated(X, Y, Z, n, iy, ix):
+            base = R.shade_paint((1.0, 0.80, 0.50), 1.75, band=(y0, y1))(X, Y, Z, n, iy, ix)
+            ang = np.arctan2(Z - lz, X - lx)
+            return base * (0.90 + 0.10 * np.sin(ang * 26.0))[:, None]
+        lay.lathe(lx, lz, [(21.0, y0), (13.0, y1)], pleated, tag, sides=14)
+        lay.disc((lx, y1, lz), 13.0, flat((1.9, 1.65, 1.05)), tag, sides=14)
+        lay.ribbon((lx + 6, y0, lz + 9), (lx + 6, y0 - 15, lz + 9), 0.5, 0.5, flat((0.70, 0.56, 0.24)), tag)     # the pull chain
+        lay.disc((lx + 6, y0 - 16, lz + 9), 1.2, flat((0.80, 0.64, 0.28)), tag, axis="Z", sides=6)
+
+    def by_the_chair(self, lay):
+        """What lies about Dad's chair at the front edge: a basket of newspapers, his slippers, a mug on a small table."""
+        R, P = self.R, self.P
+        tag = TAG["lamp"]                                     # (not part of the armchair's own outline in layout.json)
+        # a round side table on the chair's far side, under the lamp: a mug, two books
+        lx, _, lz = M.LIGHTS["reading"]
+        tx, tz = lx + 30.0, lz - 34.0
+        wood = P(R.wood(DARKWOOD * 1.6, 3.0, "Y"), gloss=R.shine(0.2))
+        lay.lathe(tx, tz, [(15.0, 0), (15.0, 2), (3.0, 5), (2.2, 50), (5.0, 54)], wood, tag, sides=10)
+        lay.lathe(tx, tz, [(21.0, 54), (21.0, 57)], wood, tag, sides=14)
+        lay.disc((tx, 57, tz), 21.0, P(R.wood(DARKWOOD * 1.9, 4.0, "X"), gloss=R.shine(0.3)), tag, sides=14)
+        lay.box(tx - 14, tx + 4, 57, 60.5, tz - 6, tz + 12, P((0.18, 0.28, 0.44)), tag)
+        lay.box(tx - 12, tx + 5, 60.5, 63.0, tz - 5, tz + 11, P((0.60, 0.22, 0.16)), tag)
+        lay.lathe(tx + 11, tz - 7, [(4.0, 57), (4.3, 66)], P((0.86, 0.84, 0.76)), tag, sides=8)
+        lay.disc((tx + 11, 65.6, tz - 7), 3.6, P((0.22, 0.12, 0.07)), tag, sides=8)
+        # a basket of newspapers, in front of the chair on our side
+        bx_, bz = 398.0, 704.0
+        lay.tf = rot((bx_, bz), -14.0)
+        wk = P(R.wicker((0.58, 0.42, 0.22)))
+        lay.box(bx_ - 22, bx_ + 22, 0, 26, bz - 15, bz + 15, wk, tag, sh=True)
+        lay.poly([(bx_ - 20, 26.2, bz - 13), (bx_ + 20, 26.2, bz - 13), (bx_ + 20, 26.2, bz + 13), (bx_ - 20, 26.2, bz + 13)], P((0.12, 0.09, 0.07)), tag)
+        for i, (dx, c, h) in enumerate(((-13, (0.84, 0.82, 0.74), 34), (-6, (0.78, 0.76, 0.70), 37), (1, (0.86, 0.84, 0.78), 32), (9, (0.70, 0.30, 0.22), 35), (15, (0.82, 0.80, 0.72), 30))):
+            lay.box(bx_ + dx, bx_ + dx + 4.5, 6, h, bz - 12, bz + 12, P(col(c)), tag)
+        lay.tf = None
+        # the Son's toy station wagon, parked where he left it
+        wx, wz = 432.0, 676.0
+        lay.tf = rot((wx, wz), 28.0)
+        red = P((0.74, 0.22, 0.16), gloss=R.shine(0.5))
+        lay.box(wx - 6, wx + 6, 2.2, 7.5, wz - 14, wz + 14, red, tag)
+        lay.box(wx - 5.6, wx + 5.6, 7.5, 12.0, wz - 6, wz + 13, P((0.20, 0.26, 0.36), gloss=R.shine(0.9)), tag)
+        lay.box(wx - 6, wx + 6, 12.0, 13.0, wz - 6.5, wz + 13.5, red, tag)
+        lay.box(wx - 6.2, wx + 6.2, 3.4, 6.2, wz - 9, wz + 12, P((0.62, 0.42, 0.20)), tag, skip=("top", "bottom", "front", "back"))
+        for dz_ in (-9.0, 9.0):
+            for dx_ in (-6.4, 6.4):
+                lay.disc((wx + dx_, 2.4, wz + dz_), 2.4, P((0.08, 0.08, 0.09)), tag, axis="X", sides=8)
+        lay.tf = None
+        # his slippers, left where he stepped out of them
+        for (sx, sz, a) in ((352.0, 668.0, 22.0), (366.0, 676.0, 38.0)):
+            lay.tf = rot((sx, sz), a)
+            sl = P((0.36, 0.22, 0.30))
+            lay.box(sx - 5, sx + 5, 0, 3.5, sz - 13, sz + 13, sl, tag)
+            lay.box(sx - 5.5, sx + 5.5, 3.5, 8, sz - 13.5, sz - 1, P((0.42, 0.26, 0.36)), tag)
+            lay.tf = None
+
+    # ================================================================ the dinner table
+    def chair(self, lay, cx, cz, facing, tag, pulled=0.0, booster=False):
+        """A ladder-back chair with a rush seat. `facing` in degrees: 0 faces the back wall, 90 faces right (+X),
+        180 faces us, -90 faces left."""
+        R, P = self.R, self.P
+        lay.tf = rot((cx, cz), facing)
+        wood = P(R.wood((0.46, 0.26, 0.12), cx * 0.01, "Y", grain=0.3), gloss=R.shine(0.15))
+        x0, x1, zf, zr = cx - 21, cx + 21, cz - 21, cz + 21
+        for xa in (x0, x1 - 4):
+            lay.box(xa, xa + 4, 0, 44, zf, zf + 4, wood, tag)                                   # front legs
+            lay.box(xa, xa + 4, 0, 98, zr - 4, zr, wood, tag, sh=True)                          # back posts
+            lay.box(xa + 0.8, xa + 3.2, 14, 16.5, zf + 4, zr - 4, wood, tag)                    # stretchers
+        lay.box(x0 + 4, x1 - 4, 20, 22.5, zf + 0.8, zf + 3.2, wood, tag)
+        lay.box(x0 + 4, x1 - 4, 14, 16.5, zr - 3.2, zr - 0.8, wood, tag)
+
+        def rush(X, Y, Z, iy, ix):
+            (px, pz), c, s = self._pivot(rot((cx, cz), facing))
+            dx, dz = X - px, Z - pz
+            lx, lz = dx * c + dz * s, -dx * s + dz * c
+            d = np.maximum(np.abs(lx), np.abs(lz))
+            q = np.where(np.abs(lx) > np.abs(lz), lz, lx)
+            wv = np.sin(d * 2.2) * 0.5 + 0.5
+            return np.array([0.74, 0.60, 0.34], dtype=F32)[None, :] * (0.72 + 0.34 * wv)[:, None] * (0.92 + 0.12 * np.sin(q * 1.9))[:, None]
+        lay.box(x0, x1, 42, 46, zf, zr - 3, P(rush), tag, sh=True)
+        for y in (58, 73, 88):                                                                  # the slats of the back
+            lay.box(x0 + 4, x1 - 4, y, y + 6.5, zr - 3.2, zr - 1.2, wood, tag, sh=True)
+        for xa in (x0, x1 - 4):                                                                 # little turned finials
+            lay.lathe(xa + 2, zr - 2, [(2.0, 98), (2.8, 100.5), (0.0, 103.5)], wood, tag, sides=6)
+        if booster:                                                                             # a child's cushion on the seat
+            lay.box(x0 + 5, x1 - 5, 46, 52, zf + 3, zr - 7, P((0.30, 0.42, 0.62)), tag)
+        lay.tf = None
+
+    def table(self, lay):
+        R, P = self.R, self.P
+        x0, x1, _, top, z0, z1 = BX["table"]
+        tag = TAG["table"]
+        mid = (x0 + x1) / 2
+        wood = P(R.wood((0.40, 0.22, 0.11), 2.0, "Y"))
+        for xa in (x0 + 5, x1 - 12):
+            for za in (z0 + 6, z1 - 13):
+                lay.box(xa, xa + 7, 0, top - 4, za, za + 7, wood, tag)
+        lay.box(x0 + 3, x1 - 3, top - 12, top - 3, z0 + 4, z1 - 4, wood, tag)
+        lay.box(x0, x1, top - 3, top, z0, z1, wood, tag, sh=True)
+
+        # the white cloth: creased where it was folded, hanging a hand's length all round
+        def cloth(X, Y, Z, iy, ix):
+            px = pxcm(X, Z)
+            c = np.broadcast_to(np.array([0.90, 0.88, 0.80], dtype=F32), X.shape + (3,)).copy()
+            fold = np.maximum(near(X, mid, 0.5, px, 0.45), near(Z, z0 + (z1 - z0) / 3.0, 0.5, px, 0.45))
+            fold = np.maximum(fold, near(Z, z0 + (z1 - z0) * 2.0 / 3.0, 0.5, px, 0.45))
+            c *= (1 - 0.10 * fold)[:, None]
+            c *= (0.95 + 0.08 * fbm(X * 0.05, Z * 0.05, 3.0, 2))[:, None]
+            edge = np.minimum(np.minimum(X - x0, x1 - X), np.minimum(Z - z0, z1 - Z))
+            hem = (edge > 2.2) & (edge < 4.2) & (np.mod(X + Z, 3.0) < 1.9)                        # a line of blue stitching round the edge
+            c = np.where(hem[:, None], np.array([0.36, 0.50, 0.72], dtype=F32)[None, :], c)
+            return c
+        cl = P(cloth, mott=(R.mott, 0.04))
+        lay.poly([(x0 - 1, top + 0.6, z0 - 1), (x1 + 1, top + 0.6, z0 - 1), (x1 + 1, top + 0.6, z1 + 1), (x0 - 1, top + 0.6, z1 + 1)], cl, tag)
+        hang = P(R.cloth((0.86, 0.84, 0.77), 2.0, fold=11.0, deep=0.16, along="Z"))
+        hangx = P(R.cloth((0.86, 0.84, 0.77), 2.0, fold=11.0, deep=0.16, along="X"))
+        lay.poly([(x0 - 1, top + 0.6, z0 - 1), (x0 - 1, top + 0.6, z1 + 1), (x0 - 1.5, top - 24, z1 + 1), (x0 - 1.5, top - 24, z0 - 1)], hang, tag)
+        lay.poly([(x1 + 1, top + 0.6, z0 - 1), (x1 + 1, top + 0.6, z1 + 1), (x1 + 1.5, top - 24, z1 + 1), (x1 + 1.5, top - 24, z0 - 1)], hang, tag)
+        lay.poly([(x0 - 1, top + 0.6, z0 - 1), (x1 + 1, top + 0.6, z0 - 1), (x1 + 1, top - 24, z0 - 1.5), (x0 - 1, top - 24, z0 - 1.5)], hangx, tag)
+        lay.poly([(x0 - 1, top + 0.6, z1 + 1), (x1 + 1, top + 0.6, z1 + 1), (x1 + 1, top - 24, z1 + 1.5), (x0 - 1, top - 24, z1 + 1.5)], hangx, tag)
+        ty = top + 0.7
+
+        china = (0.93, 0.92, 0.86)
+        steel = P((0.66, 0.68, 0.70), gloss=R.shine(0.9, (1.0, 0.95, 0.85)))
+
+        def shadow(cx, cz, r, k=0.55):
+            lay.disc((cx, ty + 0.05, cz), r, P(col((0.86, 0.84, 0.77)) * k), tag, sides=12)
+
+        def place(cx, cz, toward, used, kind=""):
+            """One place: `toward` is (dx, dz) from the plate to the person's chair."""
+            tx, tz = toward
+            sx, sz = -tz, tx                                   # along the table edge (to the diner's right... or left)
+            shadow(cx + 0.8, cz + 0.8, 13.6)
+            lay.lathe(cx, cz, [(8.0, ty), (12.8, ty + 1.6)], P(china), tag, sides=14)
+            lay.disc((cx, ty + 1.2, cz), 12.2, P(china), tag, sides=14)
+            ring = P((0.26, 0.40, 0.66))
+            lay.lathe(cx, cz, [(10.6, ty + 1.3), (11.6, ty + 1.45)], ring, tag, sides=14, smooth=False)
+            fx, fz = cx + sx * 16.5, cz + sz * 16.5              # fork one side, knife and spoon the other
+            kx, kz = cx - sx * 16.5, cz - sz * 16.5
+            if used:
+                # eaten: crumbs and a smear, knife and fork laid together across the plate, the napkin dropped beside it
+                rng = np.random.default_rng(int(cx * 7 + cz))
+                for _ in range(7):
+                    a, r = rng.uniform(0, 6.28), rng.uniform(0, 7.5)
+                    lay.disc((cx + math.cos(a) * r, ty + 1.3, cz + math.sin(a) * r), rng.uniform(0.8, 2.2),
+                             P([(0.60, 0.40, 0.18), (0.50, 0.62, 0.26), (0.74, 0.30, 0.16), (0.80, 0.70, 0.40)][int(rng.integers(0, 4))]), tag, sides=6)
+                lay.ribbon((cx - sx * 2 - tx * 7, ty + 1.9, cz - sz * 2 - tz * 7), (cx + sx * 6 + tx * 9, ty + 1.9, cz + sz * 6 + tz * 9), 1.3, 1.1, steel, tag)
+                lay.ribbon((cx - sx * 5 - tx * 6, ty + 1.9, cz - sz * 5 - tz * 6), (cx + sx * 3 + tx * 10, ty + 1.9, cz + sz * 3 + tz * 10), 1.3, 1.1, steel, tag)
+                nx, nz = fx + sx * 3 + tx * 2, fz + sz * 3 + tz * 2
+                nap = P(lambda X, Y, Z, iy, ix: np.array([0.80, 0.84, 0.90], dtype=F32)[None, :] * (0.80 + 0.3 * vnoise(X * 0.5, Z * 0.5, cx))[:, None])
+                lay.poly([(nx - 6, ty + 0.4, nz - 5), (nx + 3, ty + 0.4, nz - 7), (nx + 8, ty + 0.4, nz + 1), (nx + 2, ty + 0.4, nz + 7), (nx - 7, ty + 0.4, nz + 3)], nap, tag)
+                lay.poly([(nx - 3, ty + 2.5, nz - 2), (nx + 3, ty + 0.6, nz - 5), (nx + 6, ty + 0.6, nz + 2), (nx + 1, ty + 2.2, nz + 4)], P((0.88, 0.90, 0.94)), tag)
+            else:
+                # nobody's tonight: fork and knife straight, the napkin still folded on the clean plate
+                lay.ribbon((fx - tx * 8, ty + 0.5, fz - tz * 8), (fx + tx * 9, ty + 0.5, fz + tz * 9), 1.4, 1.0, steel, tag)
+                lay.ribbon((kx - tx * 8, ty + 0.5, kz - tz * 8), (kx + tx * 9, ty + 0.5, kz + tz * 9), 1.5, 1.2, steel, tag)
+                lay.ribbon((kx - sx * 3 - tx * 8, ty + 0.5, kz - sz * 3 - tz * 8), (kx - sx * 3 + tx * 7, ty + 0.5, kz - sz * 3 + tz * 7), 1.2, 1.0, steel, tag)
+                nap = P((0.30, 0.44, 0.70))
+                lay.poly([(cx - tx * 7 - sx * 6, ty + 1.8, cz - tz * 7 - sz * 6), (cx - tx * 7 + sx * 6, ty + 1.8, cz - tz * 7 + sz * 6),
+                          (cx + tx * 7, ty + 4.5, cz + tz * 7)], nap, tag)
+                lay.poly([(cx - tx * 7 - sx * 6, ty + 1.8, cz - tz * 7 - sz * 6), (cx + tx * 7, ty + 4.5, cz + tz * 7), (cx + tx * 7.5 - sx * 5, ty + 1.8, cz + tz * 7.5 - sz * 5)],
+                         P((0.22, 0.34, 0.58)), tag)
+            # a glass above the knife (a child's cup with a straw for the youngest)
+            gx, gz = kx - tx * 14 + sx * 3, kz - tz * 14 + sz * 3
+            shadow(gx + 0.8, gz + 0.8, 4.4, 0.7)
+            if kind == "child":
+                lay.lathe(gx, gz, [(3.4, ty), (3.9, ty + 9)], P((0.92, 0.46, 0.60)), tag, sides=8)
+                lay.disc((gx, ty + 9, gz), 3.9, P((0.96, 0.60, 0.70)), tag, sides=8)
+                lay.ribbon((gx, ty + 9, gz), (gx + 3, ty + 17, gz - 2), 0.8, 0.8, flat((0.95, 0.95, 0.90)), tag)
+            else:
+                water = 0.75 if not used else 0.25
+                gp = P((0.60, 0.70, 0.74), gloss=R.shine(1.2, (1.0, 0.97, 0.9)))
+                lay.lathe(gx, gz, [(2.6, ty), (3.4, ty + 11)], gp, tag, sides=8)
+                lay.disc((gx, ty + 11 * water, gz), 2.6 + 0.8 * water, P((0.80, 0.88, 0.92)), tag, sides=8)
+
+        places = [((mid, z0 + 18.0), (0, -1), False, ""),                         # the head of the table: Dad's
+                  ((x0 + 21.0, z0 + 50.0), (-1, 0), False, ""),                    # the Son's, on the left
+                  ((x1 - 21.0, z0 + 50.0), (1, 0), True, ""),
+                  ((x0 + 21.0, z0 + 144.0), (-1, 0), True, "child"),
+                  ((x1 - 21.0, z0 + 144.0), (1, 0), True, "")]
+        for (c, toward, used, kind) in places:
+            place(c[0], c[1], toward, used, kind)
+
+        # the serving dishes down the middle, gone cold
+        dz = z0 + 62.0
+        shadow(mid + 1.5, dz + 1.5, 16.5)                                          # a covered casserole, blue enamel
+        en = P((0.20, 0.36, 0.62), gloss=R.shine(0.8, (1.0, 0.95, 0.85)))
+        lay.lathe(mid, dz, [(12.0, ty), (15.0, ty + 9.0), (15.6, ty + 9.6)], en, tag, sides=14)
+        lay.lathe(mid, dz, [(15.6, ty + 9.6), (11.0, ty + 14.0), (3.0, ty + 15.5), (0.0, ty + 15.6)], P((0.24, 0.42, 0.70), gloss=R.shine(0.9, (1.0, 0.95, 0.85))), tag, sides=14)
+        lay.lathe(mid, dz, [(2.2, ty + 15.4), (3.0, ty + 18.5), (0.0, ty + 19.2)], P((0.14, 0.14, 0.16)), tag, sides=8)
+        lay.box(mid - 19.5, mid - 14.5, ty + 7.5, ty + 9.5, dz - 3, dz + 3, en, tag)
+        lay.box(mid + 14.5, mid + 19.5, ty + 7.5, ty + 9.5, dz - 3, dz + 3, en, tag)
+        dz = z0 + 100.0                                                           # a bowl of greens with the servers in it
+        shadow(mid + 1.5, dz + 1.5, 14.5)
+        lay.lathe(mid, dz, [(6.0, ty), (13.5, ty + 9.0)], P(R.wood((0.58, 0.36, 0.16), 3.0, "Y")), tag, sides=14)
+        lay.disc((mid, ty + 8.0, dz), 12.6, P((0.20, 0.36, 0.14)), tag, sides=14)
+        rng = np.random.default_rng(5)
+        for _ in range(26):
+            a, r = rng.uniform(0, 6.28), rng.uniform(0, 10.5)
+            c = [(0.28, 0.50, 0.18), (0.40, 0.62, 0.22), (0.16, 0.34, 0.14), (0.78, 0.20, 0.14), (0.86, 0.80, 0.50)][int(rng.integers(0, 5) if rng.random() < 0.3 else rng.integers(0, 3))]
+            lay.disc((mid + math.cos(a) * r, ty + 8.4 + rng.uniform(0, 1.6), dz + math.sin(a) * r), rng.uniform(1.6, 3.2), P(c), tag, sides=6)
+        lay.ribbon((mid + 2, ty + 9, dz + 2), (mid + 15, ty + 15, dz - 9), 1.6, 1.2, P(R.wood((0.62, 0.40, 0.18), 3.0, "Y")), tag)
+        dz = z0 + 136.0                                                           # the bread basket under its cloth, two rolls left
+        shadow(mid - 3 + 1.5, dz + 1.5, 15.0)
+        lay.lathe(mid - 3, dz, [(10.0, ty), (14.0, ty + 7.5)], P(R.wicker((0.66, 0.48, 0.24))), tag, sides=12)
+        lay.disc((mid - 3, ty + 6.5, dz), 13.0, P((0.84, 0.30, 0.24)), tag, sides=12)
+        lay.poly([(mid - 16, ty + 7.6, dz - 4), (mid - 2, ty + 9.5, dz - 12), (mid + 8, ty + 7.8, dz - 2), (mid - 4, ty + 9.0, dz + 9)], P((0.90, 0.36, 0.28)), tag)
+        for (bx_, bz) in ((mid + 2, dz + 5), (mid - 7, dz + 3)):
+            lay.lathe(bx_, bz, [(4.6, ty + 7.6), (4.0, ty + 10.4), (0.0, ty + 11.6)], P((0.80, 0.56, 0.26)), tag, sides=8)
+        # a jug of water, the butter, salt and pepper, a gravy boat
+        jx, jz = mid + 20.0, z0 + 84.0
+        shadow(jx + 1, jz + 1, 7.5, 0.6)
+        jug = P((0.62, 0.74, 0.80), gloss=R.shine(1.3, (1.0, 0.97, 0.9)))
+        lay.lathe(jx, jz, [(5.5, ty), (6.8, ty + 9), (5.0, ty + 17), (5.6, ty + 21)], jug, tag, sides=10)
+        lay.disc((jx, ty + 14, jz), 5.6, P((0.78, 0.88, 0.94)), tag, sides=10)
+        lay.tube([(jx - 5.5, ty + 18, jz), (jx - 10, ty + 15, jz), (jx - 9.5, ty + 8, jz), (jx - 6.5, ty + 5, jz)], 1.4, jug, tag)
+        bx_, bz = mid - 22.0, z0 + 88.0
+        lay.box(bx_ - 7, bx_ + 7, ty, ty + 1.5, bz - 5, bz + 5, P(china), tag)
+        lay.box(bx_ - 5, bx_ + 4, ty + 1.5, ty + 4.5, bz - 2.6, bz + 2.6, P((0.96, 0.86, 0.42)), tag)
+        for (sx_, sz_, c) in ((mid - 14.0, z0 + 118.0, (0.92, 0.92, 0.90)), (mid - 9.0, z0 + 120.5, (0.30, 0.28, 0.28))):
+            lay.lathe(sx_, sz_, [(2.2, ty), (2.0, ty + 6.5), (1.4, ty + 8.0)], P(c), tag, sides=6)
+            lay.disc((sx_, ty + 8.0, sz_), 1.4, P((0.75, 0.76, 0.78)), tag, sides=6)
+        gx, gz = mid + 19.0, z0 + 122.0
+        lay.lathe(gx, gz, [(4.0, ty), (6.5, ty + 5.5)], P(china), tag, sides=10)
+        lay.disc((gx, ty + 4.6, gz), 5.8, P((0.42, 0.26, 0.14)), tag, sides=10)
+        # two candles in brass sticks that nobody lit
+        for cz_ in (z0 + 40.0, z0 + 158.0):
+            lay.lathe(mid + (6 if cz_ > z0 + 100 else -4), cz_, [(4.5, ty), (4.5, ty + 1.2), (1.2, ty + 2.5), (1.2, ty + 7.0), (2.4, ty + 8.0)], P(BRASS, gloss=R.shine(0.9)), tag, sides=8)
+            lay.lathe(mid + (6 if cz_ > z0 + 100 else -4), cz_, [(1.1, ty + 8.0), (1.0, ty + 24.0), (0.0, ty + 25.0)], P((0.93, 0.90, 0.80)), tag, sides=6)
+
+        # the family Bible, open beside the plate at the head of the table, its ribbon across the page
+        bx0, bz0 = mid - 53.0, z0 + 5.0
+        bw, bd = 37.0, 27.0
+        btag = TAG["bible"]
+        lay.box(bx0 - 1.2, bx0 + bw + 1.2, ty, ty + 1.0, bz0 - 1.2, bz0 + bd + 1.2, P((0.10, 0.07, 0.06)), btag)
+        for (xa, xb, tilt) in ((bx0, bx0 + bw / 2, 1), (bx0 + bw / 2, bx0 + bw, -1)):
+            lay.box(xa, xb, ty + 1.0, ty + 3.6, bz0, bz0 + bd, P((0.86, 0.80, 0.62)), btag)
+
+        def page(X, Y, Z, iy, ix):
+            u = (X - bx0) / bw
+            v = (Z - bz0) / bd
+            c = np.broadcast_to(np.array([0.96, 0.93, 0.80], dtype=F32), X.shape + (3,)).copy()
+            c *= (1 - 0.40 * np.exp(-np.abs(u - 0.5) / 0.03))[:, None]
+            colu = np.mod(np.abs(u - 0.5) * 2 * 2.0, 1.0)                                    # two columns to a page
+            inpage = (np.abs(u - 0.5) > 0.03) & (np.abs(u - 0.5) < 0.465) & (colu > 0.10) & (colu < 0.92) & (v > 0.07) & (v < 0.93)
+            ln = np.mod(v * 17.0, 1.0)
+            ink = inpage & (ln > 0.2) & (ln < 0.62) & (vnoise(u * 90.0, np.floor(v * 17.0) * 3.0, 5.0) > 0.2)
+            c = np.where(ink[:, None], c * np.array([0.55, 0.52, 0.50], dtype=F32), c)
+            edge = (np.abs(u - 0.5) > 0.485) | (v < 0.015) | (v > 0.985)                       # the gilt of the page edges
+            return np.where(edge[:, None], BRASS[None, :] * 1.0, c)
+        lay.poly([(bx0, ty + 3.7, bz0), (bx0 + bw, ty + 3.7, bz0), (bx0 + bw, ty + 3.7, bz0 + bd), (bx0, ty + 3.7, bz0 + bd)], P(page), btag)
+        rib = P((0.72, 0.10, 0.10))
+        lay.poly([(bx0 + bw * 0.52, ty + 3.85, bz0), (bx0 + bw * 0.56, ty + 3.85, bz0), (bx0 + bw * 0.60, ty + 3.85, bz0 + bd), (bx0 + bw * 0.56, ty + 3.85, bz0 + bd)], rib, btag)
+        lay.poly([(bx0 + bw * 0.56, ty + 3.85, bz0 + bd), (bx0 + bw * 0.60, ty + 3.85, bz0 + bd), (bx0 + bw * 0.63, ty + 0.4, bz0 + bd + 6.5), (bx0 + bw * 0.585, ty + 0.4, bz0 + bd + 7.5)], P((0.60, 0.08, 0.08)), btag)
+
+    def chairs(self, lay):
+        t = TAG["table"]
+        b = BX
+        self.chair(lay, *self._mid(b["chair-head"]), 180.0, t)
+        self.chair(lay, *self._mid(b["chair-left-far"]), 90.0, t)
+        self.chair(lay, *self._mid(b["chair-left-near"]), 66.0, t)
+        self.chair(lay, *self._mid(b["chair-right-far"]), -84.0, t)
+        self.chair(lay, *self._mid(b["chair-right-near"]), -122.0, t)
+
+    @staticmethod
+    def _mid(b):
+        return (b[0] + b[1]) / 2, (b[4] + b[5]) / 2
+
+    def pendant(self, lay):
+        """The lamp over the table: a low dome of leaded glass, amber with a border of green and red, on a long chain."""
+        R = self.R
+        lx, ly, lz = M.LIGHTS["pendant"]
+        x0, x1, y0, y1, z0, z1 = BX["pendant"]
+        r = (x1 - x0) / 2
+        tag = TAG["pendant"]
+
+        def glass(X, Y, Z, n, iy, ix):
+            ang = np.arctan2(Z - lz, X - lx)
+            t = (Y - y0) / (y1 - y0)
+            seg = np.floor((ang + math.pi) / (2 * math.pi) * 14.0)
+            amber = np.array([1.0, 0.72, 0.30], dtype=F32)[None, :] * (0.86 + 0.24 * hash2(seg, np.floor(t * 3.0), 3.0))[:, None]
+            c = amber
+            border = t < 0.26
+            bc = np.where((np.mod(seg, 2) < 0.5)[:, None], np.array([0.42, 0.72, 0.30], dtype=F32)[None, :], np.array([0.95, 0.32, 0.16], dtype=F32)[None, :])
+            c = np.where(border[:, None], bc, c)
+            fs = (ang + math.pi) / (2 * math.pi) * 14.0 - seg
+            lead = (np.minimum(fs, 1 - fs) < 0.07) | (np.abs(t - 0.26) < 0.03) | (np.abs(t - 0.62) < 0.02) | (t < 0.035)
+            vx, vz = V.cam_x - X, V.cam_z - Z
+            vl = np.sqrt(vx * vx + vz * vz) + 1e-6
+            facing = np.clip((n[0] * vx + n[2] * vz) / vl, 0, 1)
+            c = c * (1.05 + 0.75 * facing ** 1.2)[:, None]
+            return np.where(lead[:, None], np.array([0.10, 0.08, 0.06], dtype=F32)[None, :], c)
+        lay.lathe(lx, lz, [(r, y0), (r * 0.94, y0 + (y1 - y0) * 0.26), (r * 0.66, y0 + (y1 - y0) * 0.70), (r * 0.26, y1)], glass, tag, sides=14)
+        lay.lathe(lx, lz, [(r * 0.26, y1), (r * 0.20, y1 + 3), (2.0, y1 + 5)], self.P(BRASS * 0.7, gloss=R.shine(0.6)), tag, sides=8)
+        lay.ribbon((lx, y1 + 5, lz), (lx, HH, lz), 0.8, 2.0, flat((0.47, 0.36, 0.18)), tag)       # its chain: about a pixel wide all the way up
+
+    # ================================================================ what throws shadows
+    def shadow_boxes(self):
+        rec = Recorder()
+        self.piano(rec)
+        self.bench(rec)
+        self.armchair(rec)
+        self.by_the_chair(rec)
+        self.table(rec)
+        self.chairs(rec)
+        return rec.boxes

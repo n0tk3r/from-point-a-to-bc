@@ -19,7 +19,7 @@
 
 import { highway, lane, VANISH, NEAR, REST, FAR } from "./highway.js";
 
-const YEARS = ["1969 A.D.", "1492 A.D.", "476 A.D.", "44 B.C.", "2560 B.C."];
+const YEARS = ["1969 A.D.", "1492 A.D.", "476 A.D.", "44 B.C.", "1921 B.C."];
 
 export default async function intro(g) {
   const { ease } = g;

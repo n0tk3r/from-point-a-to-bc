@@ -143,12 +143,16 @@ async function talkToClerk(g) {
       { id: "count", line: "rome.clerk.ask.count" },
       { id: "feet", line: "rome.clerk.ask.feet" },
       { id: "hum", line: "rome.clerk.ask.hum" },
+      // The accounts on his table are from Judea: Antipater's, and his son Herod's. The boy knows a KING Herod, from the
+      // Christmas story (Matthew 2); the clerk knows a governor's son, which is what Herod is this year.
+      { id: "judea", line: "rome.clerk.ask.judea" },
       { id: "dad", line: "rome.clerk.ask.dad" },
       { id: "bye", line: "rome.clerk.ask.bye" },
     ]);
     if (pick === "count") await g.say("rome.clerk.ask.count", "rome.clerk.ans.count.1", "rome.clerk.ans.count.2", "rome.clerk.ans.count.3");
     else if (pick === "feet") await g.say("rome.clerk.ask.feet", "rome.clerk.ans.feet.1", "rome.clerk.ans.feet.2", "rome.clerk.ans.feet.3");
     else if (pick === "hum") await g.say("rome.clerk.ask.hum", "rome.clerk.ans.hum.1", "rome.clerk.ans.hum.2", "rome.clerk.ans.hum.3", "rome.clerk.ans.hum.4");
+    else if (pick === "judea") await g.say("rome.clerk.ask.judea", "rome.clerk.ans.judea.1", "rome.clerk.ans.judea.2", "rome.clerk.ans.judea.3", "rome.clerk.ans.judea.4");
     else if (pick === "dad") await g.say("rome.clerk.ask.dad", "rome.clerk.ans.dad.1", "rome.clerk.ans.dad.2", "rome.clerk.ans.dad.3");
     else return g.say("rome.clerk.ask.bye", "rome.clerk.ans.bye");
   }

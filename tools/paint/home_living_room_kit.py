@@ -1,429 +1,573 @@
-"""Tools for painting a room by lamplight: a camera, lamps, lit faces, cast shadows, a few materials.
+"""The living room painter's own tools.
 
-These are the helpers of home_living_room.py (the shared library has only landscape tools). The idea:
-every surface is given its LOCAL color (wood, cloth, paper), and the lamps of the room then light it
-where it stands, so that each lamp makes one warm pool on floor, wall and furniture alike, and what
-no lamp reaches stays cool and dark.
+Everything in the room is laid in as flat pieces (polygons) that stand in the ROOM, in centimetres, and every
+piece goes through the one camera (room.View). A piece is filled pixel by pixel: for each pixel we know the
+place in the room it shows (X, Y, Z), so its paint (boards, paper, cloth) is laid in its own measurements and
+its light is worked out from where the lamps stand. Nearer pieces cover farther ones (a depth sheet), so
+nothing has to be sorted by hand and nothing can be drawn "from another place".
 
-World measurements are centimetres, as in persp.py: x to the right of the middle of the room, y UP
-from the floor, z away from us."""
+    cam   = Cam(view)                       the rays of the picture (painted at twice the size, then reduced)
+    lay   = Layer(cam)                      a sheet of paint with its own depth
+    lay.poly(points, paint)                 a flat piece; `paint(X, Y, Z, n, iy, ix) -> colors`
+    lay.box(...), lay.lathe(...), lay.ribbon(...), lay.disc(...)
+    lamps = Lamps(cam)                      the light of the room: warm lamps, the kitchen door, the moon
+"""
 
 import math
+import os
 
 import numpy as np
 from PIL import Image, ImageDraw
 
-from brush import *
-from persp import Camera
+from brush import F32, rgb, lerp, blur, noise, resize, grain, palette_of, to_palette, save, strokes, over
 
-W, H = 800, 600
-SHAPE = (H, W)
-HZ, FULL = -150, 585                       # the game's depth numbers for this room
-WALL_Y = 385                               # the picture row where the back wall meets the floor
-cam = Camera(HZ, FULL)
-VX, VY, FO, EYE, Z0 = cam.vx, cam.vy, cam.F, cam.eye, cam.Z0
-ZW = cam.depth_at(WALL_Y)                  # how far away the back wall is (about 327 cm)
-KW = cam.scale(ZW)                         # picture pixels per cm on the back wall (about 0.665)
-CAM_POS = np.array([0.0, EYE, -Z0])
+SS = 2                                                      # the room is painted at twice the size and reduced
 
 
-def P(x, y, z):
-    """World -> picture."""
-    return cam.pt(x, y, max(z, -Z0 * 0.8))
-
-
-def on_plane(n, c, px, py):
-    """Where the ray through the picture place (px, py) meets the plane n . p = c -> (x, y, z)."""
-    den = n[0] * (px - VX) / FO - n[1] * (py - VY) / FO + n[2]
-    den = np.where(np.abs(den) < 1e-6, 1e-6, den)
-    D = (c - n[1] * EYE + n[2] * Z0) / den
-    return (px - VX) * D / FO, EYE - (py - VY) * D / FO, D - Z0
-
-
+# ---------------------------------------------------------------- small things
 def col(c):
     return rgb(c) if isinstance(c, str) else np.asarray(c, dtype=F32)
 
 
-# ---------------------------------------------------------------- lamps
-class Lamp:
-    """A lamp with a shade. `down` and `up` are the cones of bare light out of the bottom and the top of the
-    shade: (full inside this angle, nothing outside this one, strength). `side` is what comes through
-    the shade itself. `facing` makes a flat light that only shines one way (a screen, a window)."""
-
-    def __init__(self, name, pos, color, power, down=None, up=None, side=0.0, r0=35.0, facing=None, wrap=0.22,
-                 bounce=0.0, reach=260.0):
-        self.name, self.pos = name, np.asarray(pos, dtype=float)
-        self.x, self.y, self.z = pos
-        self.color, self.power = col(color), power
-        self.down, self.up, self.side, self.r0, self.facing, self.wrap = down, up, side, r0, facing, wrap
-        self.bounce, self.reach = bounce, reach
-
-    def at(self, X, Y, Z, n, low=1.0):
-        """How much of this lamp's light falls on a surface at (X, Y, Z) that faces along n.
-        `low` (0 to 1) thins what comes through and under the shade, for the walls high up."""
-        vx, vy, vz = self.x - X, self.y - Y, self.z - Z
-        d2 = vx * vx + vy * vy + vz * vz
-        d = np.sqrt(d2) + 1e-6
-        ux, uy, uz = vx / d, vy / d, vz / d
-        cosn = np.clip((n[0] * ux + n[1] * uy + n[2] * uz) * (1 - self.wrap) + self.wrap, 0, 1)
-        g = self.side
-        if self.down:
-            g = g + self.down[2] * step(math.cos(math.radians(self.down[1])), math.cos(math.radians(self.down[0])), uy)
-        if self.facing is not None:
-            f = self.facing
-            g = g * np.clip(-(f[0] * ux + f[1] * uy + f[2] * uz), 0, 1) ** f[3]
-        else:
-            g = g * low
-        if self.up:
-            g = g + self.up[2] * step(math.cos(math.radians(self.up[1])), math.cos(math.radians(self.up[0])), -uy)
-        return self.power * g * cosn / (d2 / 1e4 + (self.r0 / 100.0) ** 2)
-
-    def fill(self, X, Y, Z):
-        """Light of this lamp come back off the floor and walls: soft, from nowhere, dying with distance."""
-        d = np.sqrt((self.x - X) ** 2 + (self.y - Y) ** 2 + (self.z - Z) ** 2)
-        return self.bounce * np.exp(-d / self.reach)
+def sstep(e0, e1, x):
+    t = np.clip((x - e0) / (e1 - e0 + 1e-9), 0, 1)
+    return t * t * (3 - 2 * t)
 
 
-class Lights:
-    def __init__(self, lamps, cool, expo=1.15, high=(190.0, 330.0, 0.80)):
-        """`cool` is the light of the night that is everywhere. `high`: above the first height the
-        lamplight thins, and by the second only (1 - third) of it is left: shaded lamps leave the
-        top of a room dark."""
-        self.lamps, self.cool, self.expo, self.high = lamps, col(cool), expo, high
-
-    def lamp(self, name):
-        return next(l for l in self.lamps if l.name == name)
-
-    def light(self, X, Y, Z, n, shadows=None, only=None, bounce=1.0):
-        """All the light at a place, as color (..., 3). `shadows` maps a lamp's name to a mask (1 = that
-        lamp cannot see this place)."""
-        X, Y, Z = (np.asarray(v, dtype=F32) for v in (X, Y, Z))
-        out = np.zeros(np.broadcast(X, Y, Z).shape + (3,), dtype=F32)
-        out += self.cool * (0.80 + 0.20 * n[1])
-        low = 1 - self.high[2] * step(self.high[0], self.high[1], Y)
-        for l in self.lamps:
-            if only is not None and l.name not in only:
-                continue
-            e = l.at(X, Y, Z, n, low)
-            if shadows is not None and l.name in shadows:
-                e = e * (1 - shadows[l.name])
-            if l.bounce:
-                e = e + l.fill(X, Y, Z) * bounce * low
-            out += np.asarray(e, dtype=F32)[..., None] * l.color
-        return out
-
-    def tone(self, c):
-        """Light times local color -> paint. Bright things run toward white instead of clipping, and
-        what is left in the dark leans to blue-violet, as night shadows do beside lamplight."""
-        t = (1 - np.exp(-self.expo * np.clip(c, 0, None))).astype(F32)
-        lum = t @ np.array([0.3, 0.55, 0.15], dtype=F32)
-        k = np.clip(1 - lum, 0, 1) ** 2.4
-        t = t + np.asarray(k)[..., None] * np.array([-0.030, -0.006, 0.050], dtype=F32)
-        return np.clip(t, 0, 1).astype(F32)
-
-    def paint(self, albedo, pos, n, dim=1.0):
-        """The color of one small thing of local color `albedo` at `pos` facing `n` (no cast shadows)."""
-        return self.tone(col(albedo) * self.light(pos[0], pos[1], pos[2], n) * dim)
-
-
-# ---------------------------------------------------------------- layers and faces
-class Layer:
-    """A picture and its coverage: the backdrop (all covered) or a cut-out (clear to begin with).
-    `w` is how much paint is on each pixel (rgb holds color times that); `a` is the outline."""
-
-    def __init__(self, rgb_=None):
-        if rgb_ is None:
-            self.rgb = np.zeros((H, W, 3), dtype=F32)
-            self.a = np.zeros((H, W), dtype=F32)
-            self.w = np.zeros((H, W), dtype=F32)
-        else:
-            self.rgb = rgb_
-            self.a = np.ones((H, W), dtype=F32)
-            self.w = np.ones((H, W), dtype=F32)
-
-    def put(self, color, mask):
-        """Lay a whole-picture color (or picture) on through a mask."""
-        over(self.rgb, color, mask)
-        self.a = np.maximum(self.a, mask)
-        self.w = self.w * (1 - mask) + mask
-
-    def sheet(self, sheet, amount=1.0, hide=None):
-        c, a = sheet.done()
-        a = a * amount
-        if hide is not None:
-            a = a * (1 - hide)
-        self.put(c, a)
-
-    def true(self):
-        """The colors themselves (not thinned toward black at the soft edges)."""
-        return self.rgb / np.maximum(self.w, 1e-3)[..., None]
-
-    def onto(self, other):
-        other.put(self.true(), self.w)
-
-
-def local_mask(pp, x0, y0, x1, y1, ss=3):
-    im = Image.new("L", ((x1 - x0) * ss, (y1 - y0) * ss), 0)
-    ImageDraw.Draw(im).polygon([((x - x0) * ss, (y - y0) * ss) for x, y in pp], fill=255)
-    return np.asarray(im.resize((x1 - x0, y1 - y0), Image.BOX), dtype=F32) / 255
-
-
-def grow(pp, by):
-    """Push a polygon's corners out from its middle by `by` pixels, so neighbouring faces overlap a hair."""
-    cx = sum(p[0] for p in pp) / len(pp)
-    cy = sum(p[1] for p in pp) / len(pp)
-    out = []
-    for x, y in pp:
-        d = math.hypot(x - cx, y - cy) + 1e-6
-        out.append((x + (x - cx) / d * by, y + (y - cy) / d * by))
-    return out
-
-
-def normal_of(pts):
-    a, b, c = (np.asarray(p, dtype=float) for p in pts[:3])
-    n = np.cross(b - a, c - a)
-    k = np.linalg.norm(n)
-    if k < 1e-9:
-        return np.array([0.0, 1.0, 0.0])
-    n = n / k
-    if np.dot(n, CAM_POS - a) < 0:
-        n = -n
-    return n
-
-
-def face(L, lights, pts, albedo, n=None, dim=1.0, shadows=None, emit=None, lit=True, alpha=1.0, pad=0.35, only=None, bounce=1.0):
-    """Paint one flat face of something (a polygon in the world) with its local color, lit by the lamps.
-
-    `albedo` is a color, or a function (X, Y, Z) -> colors for wood grain and the like. `dim` darkens it
-    (a number, or a function (X, Y, Z) -> numbers) where something stands in the light's way.
-    Returns (mask, (x0, y0, x1, y1)) of what was painted, or None if it is out of the picture."""
-    pp = [P(*p) for p in pts]
-    if pad:
-        pp = grow(pp, pad)
-    x0 = max(0, int(math.floor(min(p[0] for p in pp))) - 1)
-    x1 = min(W, int(math.ceil(max(p[0] for p in pp))) + 2)
-    y0 = max(0, int(math.floor(min(p[1] for p in pp))) - 1)
-    y1 = min(H, int(math.ceil(max(p[1] for p in pp))) + 2)
-    if x1 <= x0 or y1 <= y0:
-        return None
-    m = local_mask(pp, x0, y0, x1, y1) * alpha
-    if m.max() <= 0:
-        return None
-    if n is None:
-        n = normal_of(pts)
-    n = np.asarray(n, dtype=float)
-    c = float(np.dot(n, np.asarray(pts[0], dtype=float)))
-    py, px = np.mgrid[y0:y1, x0:x1].astype(F32)
-    X, Y, Z = on_plane(n, c, px + 0.5, py + 0.5)
-    a = albedo(X, Y, Z) if callable(albedo) else col(albedo)
-    if lit:
-        sh = None if shadows is None else {k: v[y0:y1, x0:x1] for k, v in shadows.items()}
-        light = lights.light(X, Y, Z, n, sh, only=only, bounce=bounce)
-        d = dim(X, Y, Z) if callable(dim) else dim
-        if not np.isscalar(d):
-            d = np.asarray(d, dtype=F32)[..., None]
-        c_ = lights.tone(a * light * d)
-    else:
-        c_ = np.broadcast_to(a, (y1 - y0, x1 - x0, 3)).astype(F32)
-    if emit is not None:
-        e = emit(X, Y, Z) if callable(emit) else col(emit)
-        c_ = np.clip(c_ + e, 0, 1)
-    sl = (slice(y0, y1), slice(x0, x1))
-    L.rgb[sl] = L.rgb[sl] * (1 - m[..., None]) + c_ * m[..., None]
-    L.a[sl] = np.maximum(L.a[sl], m)
-    L.w[sl] = L.w[sl] * (1 - m) + m
-    return m, (x0, y0, x1, y1)
-
-
-def turn(cx, cz, x, z, ang):
-    """Turn a place on the floor about (cx, cz) by `ang` degrees (positive turns the front to the right)."""
-    a = math.radians(ang)
-    dx, dz = x - cx, z - cz
-    return cx + dx * math.cos(a) - dz * math.sin(a), cz + dx * math.sin(a) + dz * math.cos(a)
-
-
-def corners(x0, x1, y0, y1, z0, z1, ang=0.0, about=None):
-    """The eight corners of a box, turned about a point on the floor if asked: bottom four, then top four."""
-    cx, cz = about if about is not None else ((x0 + x1) / 2, (z0 + z1) / 2)
-    ring = [(x0, z0), (x1, z0), (x1, z1), (x0, z1)]
-    if ang:
-        ring = [turn(cx, cz, x, z, ang) for x, z in ring]
-    return [(x, y0, z) for x, z in ring] + [(x, y1, z) for x, z in ring]
-
-
-def box(L, lights, x0, x1, y0, y1, z0, z1, color, top=None, front=None, side=None, ang=0.0, about=None, **kw):
-    """A box standing in the room: the faces we can see, each lit where it is. `color` is the local color of
-    every face unless `top`, `front` or `side` say otherwise (the front is the face at z0)."""
-    c = corners(x0, x1, y0, y1, z0, z1, ang, about)
-    b, t = c[:4], c[4:]
-    faces = [("front", [b[0], b[1], t[1], t[0]]), ("right", [b[1], b[2], t[2], t[1]]), ("back", [b[2], b[3], t[3], t[2]]),
-             ("left", [b[3], b[0], t[0], t[3]]), ("top", [t[0], t[1], t[2], t[3]])]
-    mid = np.mean(np.asarray(c, dtype=float), axis=0)
-    for name, pts in faces:
-        fm = np.mean(np.asarray(pts, dtype=float), axis=0)
-        n = normal_of(pts)
-        out = fm - mid
-        if np.dot(n, out) < 0:
-            n = -n
-        if np.dot(n, CAM_POS - fm) <= 1e-6:
-            continue                                          # it faces away from us
-        a = color
-        if name == "top" and top is not None:
-            a = top
-        elif name == "front" and front is not None:
-            a = front
-        elif name in ("left", "right", "back") and side is not None:
-            a = side
-        face(L, lights, pts, a, n=n, **kw)
-    return c
-
-
-# ---------------------------------------------------------------- cast shadows
-def hull(points):
-    pts = sorted(set((round(float(x), 2), round(float(y), 2)) for x, y in points))
-    if len(pts) < 3:
-        return pts
-
-    def cross(o, a, b):
-        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-    lower, upper = [], []
-    for p in pts:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
-            lower.pop()
-        lower.append(p)
-    for p in reversed(pts):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
-            upper.pop()
-        upper.append(p)
-    return lower[:-1] + upper[:-1]
-
-
-class Shadows:
-    """For each lamp, the places on the floor and on the back wall that it cannot see, because a piece of
-    furniture stands in the way. Each piece is given as boxes (their eight corners)."""
-
-    def __init__(self, lamps, ss=2):
-        self.lamps, self.ss = lamps, ss
-        self.floor = {l.name: Image.new("L", (W * ss, H * ss), 0) for l in lamps}
-        self.wall = {l.name: Image.new("L", (W * ss, H * ss), 0) for l in lamps}
-
-    def add(self, cs, reach=5.0, lamps=None, wall=True, strength=1.0):
-        s = self.ss
-        v = int(255 * strength)
-        for l in self.lamps:
-            if lamps is not None and l.name not in lamps:
-                continue
-            if min(c[1] for c in cs) >= l.y:
-                continue                                      # the whole thing is above the lamp
-            q = []
-            for (x, y, z) in cs:
-                t = l.y / max(l.y - y, l.y / reach)
-                q.append(P(l.x + (x - l.x) * t, 0.0, l.z + (z - l.z) * t))
-            hp = hull(q)
-            if len(hp) >= 3:
-                ImageDraw.Draw(self.floor[l.name]).polygon([(x * s, y * s) for x, y in hp], fill=v)
-            if not wall or max(c[2] for c in cs) <= l.z + 2:
-                continue
-            q = []
-            for (x, y, z) in cs:
-                t = min((ZW - l.z) / max(z - l.z, (ZW - l.z) / reach), reach)
-                q.append(P(l.x + (x - l.x) * t, max(l.y + (y - l.y) * t, -40.0), ZW))
-            hp = hull(q)
-            if len(hp) >= 3:
-                ImageDraw.Draw(self.wall[l.name]).polygon([(x * s, y * s) for x, y in hp], fill=v)
-
-    def done(self, soft):
-        """-> two dictionaries of masks (floor, wall). `soft` maps a lamp's name to how blurred its shadows
-        are. On the floor a shadow is crisp near the lamp that throws it and loose far away, as real ones are."""
-        px, py = grid((H, W))
-
-        def get(im, name, lamp=None):
-            m = np.asarray(im.resize((W, H), Image.BOX), dtype=F32) / 255
-            s0 = soft.get(name, 3.0)
-            if lamp is None:
-                return np.clip(blur(m, s0), 0, 1)
-            fx, fy = P(lamp.x, 0.0, lamp.z)
-            far = np.clip(np.hypot(px - fx, (py - fy) * 1.5) / 260.0, 0, 1)
-            return np.clip(lerp(blur(m, s0 * 0.55), blur(m, s0 * 2.6), far), 0, 1)
-        by = {l.name: l for l in self.lamps}
-        return ({k: get(v, k, by[k]) for k, v in self.floor.items()}, {k: get(v, k) for k, v in self.wall.items()})
-
-
-# ---------------------------------------------------------------- materials (local color, in world measurements)
-_TILES = {}
-
-
-def wnoise(u, v, cell, seed, octaves=3):
-    """Noise laid on a surface: `u`, `v` are places on it in cm, `cell` the size of the blotches in cm
-    (a number, or (along u, along v))."""
-    key = (cell if np.isscalar(cell) else tuple(cell), seed, octaves)
-    if key not in _TILES:
-        _TILES[key] = noise((512, 512), cell, seed, octaves)
-    t = _TILES[key]
-    return sample(t, np.mod(u, 509.0), np.mod(v, 509.0))
-
-
-def hash01(i, j, seed=0.0):
-    """One repeatable random number (0 to 1) for each whole-number place (i, j)."""
-    h = np.sin(i * 127.1 + j * 311.7 + seed * 74.7) * 43758.5453
+def hash2(i, j, seed=0.0):
+    h = np.sin(np.asarray(i, dtype=np.float64) * 127.1 + np.asarray(j, dtype=np.float64) * 311.7 + seed * 74.7) * 43758.5453
     return (h - np.floor(h)).astype(F32)
 
 
-def wood(along, across, base, dark, seed, plank=12.0, length=140.0, gap=0.22, tone=0.16, grain=0.10):
-    """Boards: `along` runs the length of them and `across` over them (cm). -> colors.
-    Each board has its own tone, butt joints at its own places, and a grain that runs along it."""
-    i = np.floor(across / plank)
-    f = across / plank - i
-    shift = hash01(i, 3.0, seed) * length
-    j = np.floor((along + shift) / length)
-    g = (along + shift) / length - j
-    t = hash01(i, j, seed + 1.0) - 0.5
-    c = col(base)[None, None, :] * (1 + t[..., None] * 2 * tone)
-    c = c * (1 + ((wnoise(along, across * 7.0, (90, 9), int(seed) + 5) - 0.5) * 2 * grain)[..., None])
-    warm = (hash01(i, j, seed + 2.0) - 0.5) * 0.05
-    c[..., 0] += warm
-    c[..., 2] -= warm
-    joint = np.maximum(step(1 - gap / plank * 1.6, 1.0, f) + step(gap / plank * 1.6, 0.0, f) * 0.5,
-                       step(1 - gap / length * 2.2, 1.0, g))
-    return lerp(c, col(dark)[None, None, :], np.clip(joint, 0, 1)[..., None] * 0.75).astype(F32)
+def vnoise(u, v, seed=0.0):
+    """Smooth noise 0..1 at places (u, v): one blob per unit."""
+    u = np.asarray(u, dtype=np.float64)
+    v = np.asarray(v, dtype=np.float64)
+    iu, iv = np.floor(u), np.floor(v)
+    fu, fv = u - iu, v - iv
+    fu = fu * fu * (3 - 2 * fu)
+    fv = fv * fv * (3 - 2 * fv)
+    a, b = hash2(iu, iv, seed), hash2(iu + 1, iv, seed)
+    c, d = hash2(iu, iv + 1, seed), hash2(iu + 1, iv + 1, seed)
+    return (a + (b - a) * fu + (c - a) * fv + (a - b - c + d) * fu * fv).astype(F32)
 
 
-def grainy(base, seed, along="x", amount=0.10, cell=(60, 5)):
-    """A plain piece of wood (a table top, a panel): its color with grain running along x, y or z."""
-    b = col(base)
-
-    def f(X, Y, Z):
-        u, v = {"x": (X, Y + Z), "y": (Y, X + Z), "z": (Z, X + Y)}[along]
-        n = wnoise(u, v * 3.0, cell, seed) - 0.5
-        return b[None, None, :] * (1 + n[..., None] * 2 * amount)
-    return f
+def fbm(u, v, seed=0.0, octaves=3):
+    out, w, tot = 0.0, 1.0, 0.0
+    for k in range(octaves):
+        out = out + w * vnoise(u * (2 ** k), v * (2 ** k), seed + k * 3.1)
+        tot += w
+        w *= 0.5
+    return out / tot
 
 
-def mottled(base, seed, amount=0.06, cell=30):
-    """A plain painted or plastered surface, a little uneven."""
-    b = col(base)
+def rot(pivot, deg):
+    """A turn about an upright line through `pivot` (X, Z): -> function of a room point."""
+    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    px, pz = pivot
 
-    def f(X, Y, Z):
-        n = wnoise(X + Z * 0.7, Y + Z * 0.5, cell, seed) - 0.5
-        return b[None, None, :] * (1 + n[..., None] * 2 * amount)
-    return f
-
-
-def edge_weight(crisp, gain=7.0, top=0.9, spread=0.6):
-    """Where a picture has hard edges (0 to `top`): used to put the built things back crisply after the
-    brush has been over them, while the open surfaces keep their brushwork."""
-    lum = crisp @ np.array([0.3, 0.55, 0.15], dtype=F32)
-    gy, gx = np.gradient(lum)
-    e = np.hypot(gx, gy)
-    e = np.maximum(e, blur(e, spread))
-    return np.clip(e * gain, 0, top).astype(F32)
+    def tf(p):
+        x, y, z = p
+        dx, dz = x - px, z - pz
+        return (px + dx * c - dz * s, y, pz + dx * s + dz * c)
+    return tf
 
 
-def hand(a, amount=0.7, cell=26.0, seed=41):
-    """The same slight wander for every layer of the scene, so ruled lines look drawn by hand and the
-    cut-outs still fit the backdrop to the pixel."""
-    h, w = a.shape[:2]
-    x, y = grid((h, w))
-    dx = (noise((h, w), cell, seed, 2) - 0.5) * 2 * amount
-    dy = (noise((h, w), cell, seed + 1, 2) - 0.5) * 2 * amount
-    return sample(a, x + dx, y + dy)
+def normal_of(pts):
+    """Newell's normal of a flat polygon in the room."""
+    nx = ny = nz = 0.0
+    n = len(pts)
+    for i in range(n):
+        x0, y0, z0 = pts[i]
+        x1, y1, z1 = pts[(i + 1) % n]
+        nx += (y0 - y1) * (z0 + z1)
+        ny += (z0 - z1) * (x0 + x1)
+        nz += (x0 - x1) * (y0 + y1)
+    l = math.sqrt(nx * nx + ny * ny + nz * nz) or 1.0
+    return (nx / l, ny / l, nz / l)
+
+
+# ---------------------------------------------------------------- the camera's rays, and a sheet of paint with depth
+class Cam:
+    def __init__(self, view, ss=SS, size=(800, 600)):
+        self.v, self.ss = view, ss
+        self.W, self.H = size[0] * ss, size[1] * ss
+        py, px = np.mgrid[0:self.H, 0:self.W].astype(F32)
+        a = ((px + 0.5) / ss - view.cx) / view.F
+        u = (view.hz - (py + 0.5) / ss) / view.F
+        self.rX = (a * view.rx + view.fx).astype(F32)
+        self.rY = u.astype(F32)
+        self.rZ = (a * view.rz + view.fz).astype(F32)
+        self.C = (view.cam_x, view.eye, view.cam_z)
+
+    def plane_points(self, axis, at, step=1):
+        """Where every picture pixel (at 1/step of the picture's size... of the DOUBLE size) falls on a plane:
+        axis 'Y' (level, height `at`), 'X' or 'Z' (upright). -> X, Y, Z, ok"""
+        rX, rY, rZ = self.rX[::step, ::step], self.rY[::step, ::step], self.rZ[::step, ::step]
+        C = self.C
+        with np.errstate(divide="ignore", invalid="ignore"):
+            t = {"X": (at - C[0]) / rX, "Y": (at - C[1]) / rY, "Z": (at - C[2]) / rZ}[axis]
+        ok = np.isfinite(t) & (t > 20)
+        t = np.where(ok, t, 0).astype(F32)
+        return C[0] + rX * t, C[1] + rY * t, C[2] + rZ * t, ok
+
+
+class Layer:
+    def __init__(self, cam):
+        self.cam = cam
+        self.col = np.zeros((cam.H, cam.W, 3), dtype=F32)
+        self.z = np.full((cam.H, cam.W), 1e9, dtype=F32)
+        self.a = np.zeros((cam.H, cam.W), dtype=F32)
+        self.tag = np.zeros((cam.H, cam.W), dtype=np.uint8)
+        self.tf = None                                      # a turn applied to every point laid (see rot)
+        self.count = 0
+
+    # ---- one flat piece
+    def poly(self, pts, paint, tag=0, bias=0.0, n=None):
+        if self.tf is not None:
+            pts = [self.tf(p) for p in pts]
+        cam, v, ss = self.cam, self.cam.v, self.cam.ss
+        pp = v.poly(pts)
+        if len(pp) < 3:
+            return
+        xs = [p[0] * ss for p in pp]
+        ys = [p[1] * ss for p in pp]
+        x0, x1 = int(max(0, math.floor(min(xs)))), int(min(cam.W, math.ceil(max(xs)) + 1))
+        y0, y1 = int(max(0, math.floor(min(ys)))), int(min(cam.H, math.ceil(max(ys)) + 1))
+        if x1 <= x0 or y1 <= y0:
+            return
+        im = Image.new("L", (x1 - x0, y1 - y0), 0)
+        ImageDraw.Draw(im).polygon([(x - x0, y - y0) for x, y in zip(xs, ys)], fill=255)
+        m = np.asarray(im) > 0
+        if not m.any():
+            return
+        nn = normal_of(pts)
+        C = cam.C
+        if sum(nn[k] * (C[k] - pts[0][k]) for k in range(3)) < 0:      # light it from the side we see
+            nn = (-nn[0], -nn[1], -nn[2])
+        d = sum(nn[k] * (pts[0][k] - C[k]) for k in range(3))
+        sl = (slice(y0, y1), slice(x0, x1))
+        den = nn[0] * cam.rX[sl] + nn[1] * cam.rY[sl] + nn[2] * cam.rZ[sl]
+        with np.errstate(divide="ignore", invalid="ignore"):
+            t = d / den
+        ok = m & np.isfinite(t) & (t > 20) & (t < self.z[sl] + bias)
+        if not ok.any():
+            return
+        iy, ix = np.nonzero(ok)
+        tt = t[ok].astype(F32)
+        X = C[0] + cam.rX[sl][ok] * tt
+        Y = C[1] + cam.rY[sl][ok] * tt
+        Z = C[2] + cam.rZ[sl][ok] * tt
+        c = paint(X, Y, Z, nn if n is None else n, iy + y0, ix + x0)
+        self.col[sl][ok] = c
+        self.z[sl][ok] = tt
+        self.a[sl][ok] = 1.0
+        if tag is not None:
+            self.tag[sl][ok] = tag
+        self.count += 1
+
+    # ---- solids made of flat pieces
+    def box(self, X0, X1, Y0, Y1, Z0, Z1, paint, tag=0, skip=(), paints=None, sh=False):
+        """A box. `paints` may give another paint for a face by name: top, bottom, left, right, back, front."""
+        faces = {
+            "top": [(X0, Y1, Z0), (X1, Y1, Z0), (X1, Y1, Z1), (X0, Y1, Z1)],
+            "bottom": [(X0, Y0, Z0), (X1, Y0, Z0), (X1, Y0, Z1), (X0, Y0, Z1)],
+            "left": [(X0, Y0, Z0), (X0, Y0, Z1), (X0, Y1, Z1), (X0, Y1, Z0)],
+            "right": [(X1, Y0, Z0), (X1, Y0, Z1), (X1, Y1, Z1), (X1, Y1, Z0)],
+            "back": [(X0, Y0, Z0), (X1, Y0, Z0), (X1, Y1, Z0), (X0, Y1, Z0)],
+            "front": [(X0, Y0, Z1), (X1, Y0, Z1), (X1, Y1, Z1), (X0, Y1, Z1)],
+        }
+        for name, pts in faces.items():
+            if name in skip:
+                continue
+            self.poly(pts, (paints or {}).get(name, paint), tag)
+
+    def prism(self, outline, Y0, Y1, paint, tag=0, top=None, cap=True):
+        """An upright prism: `outline` is its plan [(X, Z), ...]; sides, and the top if `cap`."""
+        n = len(outline)
+        for i in range(n):
+            (xa, za), (xb, zb) = outline[i], outline[(i + 1) % n]
+            self.poly([(xa, Y0, za), (xb, Y0, zb), (xb, Y1, zb), (xa, Y1, za)], paint, tag)
+        if cap:
+            self.poly([(x, Y1, z) for x, z in outline], top or paint, tag)
+
+    def extrude_x(self, profile, xa, xb, paint, tag=0, caps=True, cap_paint=None):
+        """A side view drawn as [(Z, Y), ...] and pushed through from X = xa to xb (a seat and its back, a roof)."""
+        n = len(profile)
+        for i in range(n):
+            (za, ya), (zb, yb) = profile[i], profile[(i + 1) % n]
+            self.poly([(xa, ya, za), (xb, ya, za), (xb, yb, zb), (xa, yb, zb)], paint, tag)
+        if caps:
+            for x in (xa, xb):
+                self.poly([(x, y, z) for z, y in profile], cap_paint or paint, tag)
+
+    def extrude_z(self, profile, za, zb, paint, tag=0, caps=True, cap_paint=None):
+        """A front view drawn as [(X, Y), ...] and pushed through from Z = za to zb (a rolled arm, a moulding)."""
+        n = len(profile)
+        for i in range(n):
+            (xa, ya), (xb, yb) = profile[i], profile[(i + 1) % n]
+            self.poly([(xa, ya, za), (xa, ya, zb), (xb, yb, zb), (xb, yb, za)], paint, tag)
+        if caps:
+            for z in (za, zb):
+                self.poly([(x, y, z) for x, y in profile], cap_paint or paint, tag)
+
+    def lathe(self, cx, cz, profile, paint, tag=0, sides=14, smooth=True, a0=0.0, a1=360.0):
+        """A turned thing about an upright line: `profile` is [(radius, height), ...] from the bottom up.
+        With `smooth` the light is worked out for a round surface, not for its flat facets."""
+        for (r0, y0), (r1, y1) in zip(profile[:-1], profile[1:]):
+            slope = (r0 - r1) / (abs(y1 - y0) + 1e-6)                    # how much the surface faces up
+            for k in range(sides):
+                p, q = math.radians(a0 + (a1 - a0) * k / sides), math.radians(a0 + (a1 - a0) * (k + 1) / sides)
+                pts = [(cx + math.cos(p) * r0, y0, cz + math.sin(p) * r0), (cx + math.cos(q) * r0, y0, cz + math.sin(q) * r0),
+                       (cx + math.cos(q) * r1, y1, cz + math.sin(q) * r1), (cx + math.cos(p) * r1, y1, cz + math.sin(p) * r1)]
+                if abs(r0) < 1e-6:
+                    pts = [pts[0], pts[2], pts[3]]
+                elif abs(r1) < 1e-6:
+                    pts = pts[:3]
+                if smooth:
+                    self.poly(pts, _Round(paint, cx, cz, slope, self.tf), tag)
+                else:
+                    self.poly(pts, paint, tag)
+
+    def disc(self, centre, r, paint, tag=0, axis="Y", sides=18, squash=1.0):
+        cx, cy, cz = centre
+        pts = []
+        for k in range(sides):
+            a = 2 * math.pi * k / sides
+            c, s = math.cos(a) * r, math.sin(a) * r * squash
+            pts.append({"Y": (cx + c, cy, cz + s), "Z": (cx + c, cy + s, cz), "X": (cx, cy + s, cz + c)}[axis])
+        self.poly(pts, paint, tag)
+
+    def ribbon(self, P, Q, w0, w1, paint, tag=0, bias=0.0):
+        """A thin thing seen as a strip that always faces us (a cord, a rod, a spindle): widths in cm."""
+        if self.tf is not None:
+            P, Q = self.tf(P), self.tf(Q)
+        v = self.cam.v
+        ln = v.line(P, Q)
+        if not ln:
+            return
+        (ax, ay), (bx, by) = ln
+        dx, dy = bx - ax, by - ay
+        l = math.hypot(dx, dy)
+        if l < 1e-6:
+            return
+        px, py = -dy / l, dx / l                              # across the strip, in the picture
+        up = (0.0, 1.0, 0.0)
+        right = (v.rx, 0.0, v.rz)
+        # picture y runs down: a step of (px, py) in the picture is (px along right, -py along up) in the room
+        off = tuple(px * right[k] - py * up[k] for k in range(3))
+        a = [tuple(P[k] + off[k] * w0 / 2 for k in range(3)), tuple(P[k] - off[k] * w0 / 2 for k in range(3))]
+        b = [tuple(Q[k] - off[k] * w1 / 2 for k in range(3)), tuple(Q[k] + off[k] * w1 / 2 for k in range(3))]
+        keep, self.tf = self.tf, None
+        self.poly(a + b, paint, tag, bias=bias, n=(-v.fx, 0.25, -v.fz))
+        self.tf = keep
+
+    def tube(self, pts, w, paint, tag=0):
+        """A bent rod or cord through several room points (each straight piece a ribbon)."""
+        for p, q in zip(pts[:-1], pts[1:]):
+            self.ribbon(p, q, w, w, paint, tag)
+
+    # ---- the finished sheet at the picture's own size
+    def done(self):
+        ss = self.cam.ss
+        h, w = self.cam.H // ss, self.cam.W // ss
+        c = self.col.reshape(h, ss, w, ss, 3)
+        a = self.a.reshape(h, ss, w, ss)
+        asum = a.sum(axis=(1, 3))
+        color = (c * a[..., None]).sum(axis=(1, 3)) / np.maximum(asum, 1e-6)[..., None]
+        return color.astype(F32), (asum / (ss * ss)).astype(F32)
+
+    def tags(self):
+        return self.tag[::self.cam.ss, ::self.cam.ss]
+
+    def depth(self):
+        return self.z[::self.cam.ss, ::self.cam.ss]
+
+
+class _Round:
+    """Paint for a turned surface: the same paint, lit as a round thing."""
+
+    def __init__(self, paint, cx, cz, slope, tf):
+        self.paint, self.slope = paint, slope
+        self.cx, self.cz = (cx, cz) if tf is None else (tf((cx, 0, cz))[0], tf((cx, 0, cz))[2])
+
+    def __call__(self, X, Y, Z, n, iy, ix):
+        dx, dz = X - self.cx, Z - self.cz
+        l = np.sqrt(dx * dx + dz * dz) + 1e-6
+        k = 1.0 / math.sqrt(1 + self.slope * self.slope)
+        return self.paint(X, Y, Z, (dx / l * k, np.full_like(X, self.slope * k), dz / l * k), iy, ix)
+
+
+# ---------------------------------------------------------------- the light of the room
+class Lamps:
+    """Warm lamps that stand at places in the room, the kitchen's light coming through its doorway, the moon
+    coming through the tall window, and the cool dark that is left where none of them reach."""
+
+    def __init__(self, cam):
+        self.cam = cam
+        self.lamps = []
+        self.boxes = []                                       # things that throw shadows: (X0, X1, Y0, Y1, Z0, Z1)
+        self.maps = {}                                        # baked shadows: plane name -> {lamp id: picture-sized sheet}
+        self.cool = col((0.085, 0.105, 0.20))                 # the night that fills the room
+        self.warm = col((0.20, 0.135, 0.075))                 # lamplight that has bounced about the lower room
+        self.moon = None
+        self.gain = 1.0
+
+    def lamp(self, id, at, color, power, reach=150.0, down=0.6, up=0.3, side=0.4, fill=0.22, door=None, throws=True):
+        """`down`, `up`, `side`: how much of the lamp's light leaves it downward, upward, and through the shade.
+        `door` = (axis, at, u0, u1, v0, v1): the light only passes through this opening in a wall."""
+        self.lamps.append(dict(id=id, at=tuple(float(a) for a in at), color=col(color), power=power, reach=reach, down=down, up=up,
+                               side=side, fill=fill, door=door, throws=throws))
+
+    def set_moon(self, toward, color, power, window):
+        """`toward`: the way to the moon from inside the room. `window` = (Z0, Z1, Y0, Y1, bars_z, bars_y, bar) on the wall X = 0."""
+        t = np.asarray(toward, dtype=np.float64)
+        self.moon = dict(dir=tuple(t / np.linalg.norm(t)), color=col(color), power=power, window=window)
+
+    # ---- is the way from a place to a lamp clear?
+    @staticmethod
+    def clear(X, Y, Z, L, boxes, lift=1.5):
+        dx, dy, dz = L[0] - X, L[1] - Y, L[2] - Z
+        vis = np.ones(X.shape, dtype=bool)
+        tiny = 1e-5
+        dx = np.where(np.abs(dx) < tiny, tiny, dx)
+        dy = np.where(np.abs(dy) < tiny, tiny, dy)
+        dz = np.where(np.abs(dz) < tiny, tiny, dz)
+        d = np.sqrt(dx * dx + dy * dy + dz * dz)
+        s0 = lift / d                                          # do not let a surface shade itself
+        for (x0, x1, y0, y1, z0, z1) in boxes:
+            ta, tb = (x0 - X) / dx, (x1 - X) / dx
+            lo, hi = np.minimum(ta, tb), np.maximum(ta, tb)
+            ta, tb = (y0 - Y) / dy, (y1 - Y) / dy
+            lo, hi = np.maximum(lo, np.minimum(ta, tb)), np.minimum(hi, np.maximum(ta, tb))
+            ta, tb = (z0 - Z) / dz, (z1 - Z) / dz
+            lo, hi = np.maximum(lo, np.minimum(ta, tb)), np.minimum(hi, np.maximum(ta, tb))
+            vis &= ~((hi > np.maximum(lo, s0)) & (lo < 0.985))
+        return vis
+
+    @staticmethod
+    def through(X, Y, Z, L, door, soft=4.0):
+        """How much of the way from a place to a lamp passes through an opening in a wall (0..1, soft edged)."""
+        axis, at, u0, u1, v0, v1 = door
+        if axis == "Z":
+            den = L[2] - Z
+            den = np.where(np.abs(den) < 1e-5, 1e-5, den)
+            s = (at - Z) / den
+            u = X + (L[0] - X) * s
+        else:
+            den = L[0] - X
+            den = np.where(np.abs(den) < 1e-5, 1e-5, den)
+            s = (at - X) / den
+            u = Z + (L[2] - Z) * s
+        w = Y + (L[1] - Y) * s
+        inside = sstep(u0 - soft, u0 + soft, u) * sstep(u1 + soft, u1 - soft, u) * sstep(v1 + soft, v1 - soft, w) * (w > v0 - 1)
+        same_side = (s <= 0) | (s >= 1)                         # the place is on the lamp's own side of the wall
+        return np.where(same_side, 1.0, inside).astype(F32)
+
+    def moonlight(self, X, Y, Z, n):
+        """The moon through the window: lit only where the way to the moon passes through a pane."""
+        m = self.moon
+        if m is None:
+            return 0.0
+        dx, dy, dz = m["dir"]
+        Z0, Z1, Y0, Y1, bars_z, bars_y, bar = m["window"]
+        s = -X / dx                                             # the way to the moon meets the wall X = 0 here
+        zz, yy = Z + dz * s, Y + dy * s
+        soft = 2.0 + s * 0.012
+        g = sstep(Z0 - soft, Z0 + soft, zz) * sstep(Z1 + soft, Z1 - soft, zz) * sstep(Y0 - soft, Y0 + soft, yy) * sstep(Y1 + soft, Y1 - soft, yy)
+        for b in bars_z:
+            g = g * (1 - sstep(bar + soft, bar - soft * 0.5, np.abs(zz - b)) * 0.92)
+        for b in bars_y:
+            g = g * (1 - sstep(bar + soft, bar - soft * 0.5, np.abs(yy - b)) * 0.92)
+        ndl = np.clip(n[0] * dx + n[1] * dy + n[2] * dz, 0, 1)
+        return (g * (s > 0) * ndl * m["power"]).astype(F32)
+
+    # ---- shadows worked out once for a whole wall or floor, softened, and kept
+    def bake(self, name, axis, at, boxes=None, only=None, soft=1.6, spread=7.0, cache=None):
+        import hashlib, pickle
+        boxes = self.boxes if boxes is None else boxes
+        key = hashlib.md5(pickle.dumps((name, axis, at, boxes, only, soft, spread, [(l["id"], l["at"]) for l in self.lamps],
+                                         self.cam.W, self.cam.H, self.cam.C))).hexdigest()[:12]
+        path = None if cache is None else os.path.join(cache, f"shade-{name}-{key}.npz")
+        if path and os.path.exists(path):
+            z = np.load(path)
+            self.maps[name] = {k: z[k] for k in z.files}
+            return
+        step = self.cam.ss * 2                                  # shadows are soft: half the picture's size is plenty
+        X, Y, Z, ok = self.cam.plane_points(axis, at, step)
+        h1, w1 = self.cam.H // self.cam.ss, self.cam.W // self.cam.ss
+        out = {}
+        rng = np.random.default_rng(5)
+        for l in self.lamps:
+            if not l["throws"] or (only is not None and l["id"] not in only):
+                continue
+            acc = np.zeros(X.shape, dtype=F32)
+            offs = [(0, 0, 0), (spread, 0, spread * 0.6), (-spread, 0, -spread * 0.6), (spread * 0.5, spread * 0.5, -spread), (-spread * 0.5, -spread * 0.5, spread)]
+            for o in offs:
+                L = (l["at"][0] + o[0], l["at"][1] + o[1], l["at"][2] + o[2])
+                acc += self.clear(X, Y, Z, L, boxes)
+            acc /= len(offs)
+            acc = blur(acc, soft)
+            out[l["id"]] = np.clip(resize(acc, (h1, w1)), 0, 1).astype(F32)
+        self.maps[name] = out
+        if path:
+            np.savez_compressed(path, **out)
+
+    def bake_moon(self, name, axis, at, boxes, soft=0.45):
+        """What stands between a floor (or wall) and the moon: worked out at the picture's own size, and kept sharp,
+        because the moon throws the banister's own thin shadows."""
+        X, Y, Z, ok = self.cam.plane_points(axis, at, self.cam.ss)
+        dx, dy, dz = self.moon["dir"]
+        far = (X + dx * 4000.0, Y + dy * 4000.0, Z + dz * 4000.0)
+        vis = self.clear(X, Y, Z, far, boxes).astype(F32)
+        self.maps.setdefault(name, {})["moon"] = np.clip(blur(vis, soft), 0, 1)
+
+    # ---- the light that reaches a place
+    def __call__(self, X, Y, Z, n, iy=None, ix=None, plane=None, boxes=None, warm=1.0, cool=1.0, moon=1.0, skip=()):
+        nx, ny, nz = n
+        out = np.zeros(X.shape + (3,), dtype=F32)
+        ss = self.cam.ss
+        maps = self.maps.get(plane) if plane else None
+        for l in self.lamps:
+            if l["id"] in skip:
+                continue
+            Lx, Ly, Lz = l["at"][0] - X, l["at"][1] - Y, l["at"][2] - Z
+            d2 = Lx * Lx + Ly * Ly + Lz * Lz
+            d = np.sqrt(d2) + 1e-6
+            ndl = (nx * Lx + ny * Ly + nz * Lz) / d
+            diff = np.clip((ndl + 0.18) / 1.18, 0, 1) * (1 - l["fill"]) + l["fill"] * np.clip(0.6 + 0.4 * ndl, 0, 1)
+            fall = l["power"] * l["reach"] ** 2 / (l["reach"] ** 2 + d2)
+            vy = -Ly / d                                        # the way the light is travelling: -1 straight down
+            g = l["side"] + (l["down"] - l["side"]) * sstep(0.25, 0.85, -vy) + (l["up"] - l["side"]) * sstep(0.25, 0.85, vy)
+            k = fall * g * diff
+            if l["door"] is not None:
+                k = k * self.through(X, Y, Z, l["at"], l["door"])
+            if maps is not None and l["id"] in maps and iy is not None:
+                k = k * maps[l["id"]][iy // ss, ix // ss]
+            elif boxes:
+                k = k * self.clear(X, Y, Z, l["at"], boxes)
+            out += k[..., None] * l["color"]
+        if self.moon is not None and moon:
+            m = self.moonlight(X, Y, Z, n) * moon
+            if maps is not None and "moon" in maps and iy is not None:
+                m = m * maps["moon"][iy // ss, ix // ss]
+            out += m[..., None] * self.moon["color"]
+        # what is left: cool night from above and from the window, warm bounce low in the room
+        low = np.clip(1.15 - Y / 300.0, 0.15, 1.0)
+        up = np.asarray(ny, dtype=F32) * np.ones(X.shape, dtype=F32)
+        out += (0.75 + 0.25 * up)[..., None] * (self.cool * cool)
+        out += (low * warm * (0.8 - 0.2 * up))[..., None] * self.warm
+        return out * self.gain
+
+
+def tone(c, k=1.35, keep=0.5):
+    """Light on paint -> the color on the picture: bright things roll off softly instead of clipping.
+    Half of it is done on the brightness alone, so that a thing in strong light keeps its own color
+    (lit leather stays red-brown; it does not bleach to cream)."""
+    c = np.clip(c, 0, None)
+    each = 1.0 - np.exp(-c * k)
+    lum = c @ np.array([0.3, 0.55, 0.15], dtype=F32)
+    scale = (1.0 - np.exp(-lum * k)) / np.maximum(lum, 1e-5)
+    whole = np.clip(c * scale[..., None], 0, 1)
+    return (each * (1 - keep) + whole * keep).astype(F32)
+
+
+# ---------------------------------------------------------------- paints
+def paint_of(lamps, albedo, plane=None, boxes=None, emit=None, warm=1.0, cool=1.0, moon=1.0, skip=(), gloss=None, mott=None, gain=1.0):
+    """A paint: its own color (one color, or a function of the place) under the room's light.
+    `emit`: light of its own (a lampshade, a window): a color or a function. `mott`: (sheet, amount) patchiness."""
+    base = None if callable(albedo) else col(albedo)
+
+    def paint(X, Y, Z, n, iy, ix):
+        a = albedo(X, Y, Z, iy, ix) if base is None else base
+        c = a * lamps(X, Y, Z, n, iy, ix, plane=plane, boxes=boxes, warm=warm, cool=cool, moon=moon, skip=skip) * gain
+        if mott is not None:
+            c = c * (1 + (mott[0][iy // lamps.cam.ss, ix // lamps.cam.ss] - 0.5)[..., None] * 2 * mott[1])
+        if gloss is not None:
+            c = c + gloss(X, Y, Z, n, iy, ix)
+        if emit is not None:
+            c = c + (emit(X, Y, Z, iy, ix) if callable(emit) else col(emit))
+        return c
+    return paint
+
+
+def flat(color):
+    """Paint that takes no light: for things that shine by themselves."""
+    c = col(color)
+    return lambda X, Y, Z, n, iy, ix: np.broadcast_to(c, X.shape + (3,))
+
+
+# ---------------------------------------------------------------- lettering in whole pixels (needlework, and a clerk's hand)
+# A small face of capitals seven pixels high, as a cross-stitch sampler has them: every letter is its own width.
+STITCH = {
+    "A": [".##.", "#..#", "#..#", "####", "#..#", "#..#", "#..#"],
+    "B": ["###.", "#..#", "#..#", "###.", "#..#", "#..#", "###."],
+    "C": [".###", "#...", "#...", "#...", "#...", "#...", ".###"],
+    "D": ["###.", "#..#", "#..#", "#..#", "#..#", "#..#", "###."],
+    "E": ["###", "#..", "#..", "##.", "#..", "#..", "###"],
+    "F": ["###", "#..", "#..", "##.", "#..", "#..", "#.."],
+    "G": [".###", "#...", "#...", "#.##", "#..#", "#..#", ".###"],
+    "H": ["#..#", "#..#", "#..#", "####", "#..#", "#..#", "#..#"],
+    "I": ["#", "#", "#", "#", "#", "#", "#"],
+    "J": ["..#", "..#", "..#", "..#", "..#", "#.#", ".#."],
+    "K": ["#..#", "#.#.", "##..", "#...", "##..", "#.#.", "#..#"],
+    "L": ["#..", "#..", "#..", "#..", "#..", "#..", "###"],
+    "M": ["#...#", "##.##", "#.#.#", "#.#.#", "#...#", "#...#", "#...#"],
+    "N": ["#..#", "##.#", "##.#", "#.##", "#.##", "#..#", "#..#"],
+    "O": [".##.", "#..#", "#..#", "#..#", "#..#", "#..#", ".##."],
+    "P": ["###.", "#..#", "#..#", "###.", "#...", "#...", "#..."],
+    "R": ["###.", "#..#", "#..#", "###.", "#.#.", "#..#", "#..#"],
+    "S": [".###", "#...", "#...", ".##.", "...#", "...#", "###."],
+    "T": ["###", ".#.", ".#.", ".#.", ".#.", ".#.", ".#."],
+    "U": ["#..#", "#..#", "#..#", "#..#", "#..#", "#..#", ".##."],
+    "V": ["#...#", "#...#", "#...#", ".#.#.", ".#.#.", "..#..", "..#.."],
+    "W": ["#...#", "#...#", "#...#", "#.#.#", "#.#.#", "##.##", "#...#"],
+    "Y": ["#.#", "#.#", "#.#", ".#.", ".#.", ".#.", ".#."],
+    ",": ["..", "..", "..", "..", "..", ".#", "#."],
+    " ": ["..", "..", "..", "..", "..", "..", ".."],
+}
+# and a smaller one, five high, for the chapter and verse
+SMALL = {
+    "J": ["..#", "..#", "..#", "#.#", ".#."], "O": [".#.", "#.#", "#.#", "#.#", ".#."], "S": [".##", "#..", ".#.", "..#", "##."],
+    "H": ["#.#", "#.#", "###", "#.#", "#.#"], "U": ["#.#", "#.#", "#.#", "#.#", "###"], "A": [".#.", "#.#", "###", "#.#", "#.#"],
+    "2": ["##.", "..#", ".#.", "#..", "###"], "4": ["#.#", "#.#", "###", "..#", "..#"], "1": [".#", "##", ".#", ".#", ".#"],
+    "5": ["###", "#..", "##.", "..#", "##."], ":": [".", "#", ".", "#", "."], " ": ["..", "..", "..", "..", ".."],
+}
+
+
+def stitch_mask(words, face=STITCH, gap=1):
+    """Words set in a pixel face -> a small sheet of 0 and 1."""
+    rows = len(next(iter(face.values())))
+    cols = []
+    for ch in words:
+        g = face[ch]
+        for k in range(len(g[0])):
+            cols.append([1 if g[r][k] == "#" else 0 for r in range(rows)])
+        for _ in range(gap):
+            cols.append([0] * rows)
+    cols = cols[:-gap] if gap else cols
+    return np.array(cols, dtype=F32).T
+
+
+def put_mask(pic, m, x, y, color, amount=1.0, drop=None):
+    """Lay a small 0/1 sheet onto the picture with its top-left at (x, y). `drop`: every that-many columns the
+    line steps down one pixel (lettering on a wall that runs away from us)."""
+    h, w = m.shape
+    c = col(color)
+    for k in range(w):
+        yy = y + (int(k / drop) if drop else 0)
+        colm = m[:, k]
+        seg = pic[yy:yy + h, x + k]
+        seg[...] = seg * (1 - colm[:, None] * amount) + c * colm[:, None] * amount
+    return pic
+
+
+# ---------------------------------------------------------------- the last pass
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02, pal=None):
+    g = grain(picture, seed, amount)
+    if pal is None:
+        sample_of = g if alpha is None else g[alpha > 0.5]
+        pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    idx = to_palette(g, pal, speckle=speckle)
+    save(name, idx, pal, alpha)
+    return os.path.getsize(name)

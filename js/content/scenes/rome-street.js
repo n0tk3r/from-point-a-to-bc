@@ -11,6 +11,14 @@
 //
 // The street boy is the act's hint-giver: ask him what to do and his answer follows the story.
 //
+// And one person who is part of no chain: the date seller, a Jew from Judea, at the kerb of the right-hand
+// pavement, by the last stepping stone. With him, and in three other places here, the family's faith and the
+// Bible's history come into the act (briefs/WEAVE.md): the first time the boy walks into this street he works out
+// that it is B.C., "before Christ"; at the fountain he knows the coin; a second look at the stepping stones is a
+// look at the road. None of it gives, takes or opens anything. (And one line of the act's thread of chickens,
+// briefs/DATING.md: shown the soothsayer's breakfast, the date seller declines, as every day, to have his fortune
+// told by the soothsayer's hens.)
+//
 // Try it: index.html?scene=rome-street&lead=son&flags=rome.arrived
 // Later states: add rome.knowsRule, rome.hasToga, rome.delivered, rome.hasBreakfast, rome.inside ... to &flags=
 
@@ -22,6 +30,9 @@ const heard = (g, id) => !!g.store.data.seenLines[id];
 const twice = (first, second) => (g) => g.say(heard(g, first) ? second : first);
 /** Someone who can stand turns to the boy. */
 const turnTo = (g, who) => { const a = g.actor(who), me = g.lead; if (a && me) a.look(me.x, me.y); };
+/** Two poses from the people's rig, asked for through a guard, so that a figure without them simply stands. */
+const hold = (a, on) => a && a.hold && a.hold(on);                // a hand kept held out
+const pray = (a, on) => a && a.pray && a.pray(on);                // head bowed, hands folded
 
 /** His sneakers light up when he stomps: a blink of red on the paving under his feet. */
 async function stomp(g) {
@@ -132,6 +143,10 @@ async function borrowWish(g) {
   g.give("coin");
   g.flag("rome.hasCoin", true);
   await g.say("rome.fountain.shiny", "rome.fountain.wish.1", "rome.fountain.wish.2");    // new, and shiny: that is what it is for
+  // His first hard look at it. It is the coin of the story he knows (Matthew 22:17-21, in his own words), and it
+  // is not: he has known since he walked into this street that he is on the wrong side of that story. "Not yet."
+  await g.wait(450);
+  await g.say("rome.fountain.caesar.1", "rome.fountain.caesar.2", "rome.fountain.caesar.3", "rome.fountain.caesar.4");
 }
 
 // ---------- the street boy: a friend, and the act's hints ----------
@@ -178,6 +193,81 @@ async function talkToUrchin(g) {
     }
   }
 }
+
+// ---------- the date seller: part of no chain ----------
+// He is there to be talked to. He hands over nothing that is carried and sets no fact of the story but his own
+// "we have met". What he and the boy talk about: the dates; his God; and what he prays for, which is the heart of it.
+
+/** Where he looks when nobody is talking to him: past the fountain, and a long way off. */
+const SELLER_FACES = "SE";
+
+async function meetDateSeller(g) {
+  if (g.flag("rome.metDateSeller")) return;
+  await g.say("rome.dateseller.hi.1", "rome.dateseller.hi.2", "rome.dateseller.hi.3");
+  g.flag("rome.metDateSeller", true);
+}
+
+/** The first date is a gift. It is eaten on the spot: nothing goes into the backpack. */
+async function tryDate(g, seller) {
+  await g.say("rome.dateseller.ask.try", "rome.dateseller.ans.try.1");
+  hold(seller, true);                                             // a date, held out on his open hand
+  await g.reach();                                                // and taken
+  hold(seller, false);
+  await g.say("rome.dateseller.ans.try.2", "rome.dateseller.ans.try.3", "rome.dateseller.ans.try.4");
+}
+
+/** What the man prays for. The boy knows the town the prophet names, and a great deal more, and it is not his to
+    tell. He says one true thing instead, and is blessed for it: Numbers 6:24, which he has heard every Sunday of
+    his life, so that his head goes down before he knows it has. */
+async function whatHePraysFor(g, seller) {
+  const me = g.lead, toEachOther = () => { if (seller && me) { seller.look(me.x, me.y); me.look(seller.x, seller.y); } };
+  await g.say("rome.dateseller.ask.pray", "rome.dateseller.ans.pray.1", "rome.dateseller.ans.pray.2");
+  if (me) me.face("S");                                           // he turns away, to us: this part is not for the man
+  await g.say("rome.dateseller.ans.pray.3", "rome.dateseller.ans.pray.4");
+  toEachOther();
+  await g.say("rome.dateseller.ans.pray.5");
+  await g.wait(500);                                              // the man looks at him for a moment
+  await g.say("rome.dateseller.ans.pray.6");
+  const blessing = g.say("rome.dateseller.bless.1");
+  await g.wait(650);                                              // three words in, the boy knows what this is
+  pray(me, true);
+  await blessing;
+  await g.wait(600);
+  pray(me, false);
+  await g.wait(350);
+  await g.say("rome.dateseller.bless.2");
+}
+
+async function talkToDateSeller(g) {
+  const seller = g.actor("dateseller"), me = g.lead;
+  if (seller && me) { seller.look(me.x, me.y); me.look(seller.x, seller.y); }
+  await meetDateSeller(g);
+  for (;;) {
+    const pick = await g.choose([
+      { id: "try", line: "rome.dateseller.ask.try", when: (g) => !heard(g, "rome.dateseller.ans.try.4") },      // one gift
+      { id: "god", line: "rome.dateseller.ask.god" },
+      // what he prays for comes up once the boy knows whom he prays to; and a blessing is not given twice for the asking
+      { id: "pray", line: "rome.dateseller.ask.pray", when: (g) => heard(g, "rome.dateseller.ans.god.6") && !heard(g, "rome.dateseller.bless.2") },
+      { id: "bye", line: "rome.dateseller.ask.bye" },
+    ]);
+    if (pick === "try") await tryDate(g, seller);
+    else if (pick === "god") await g.say("rome.dateseller.ask.god", "rome.dateseller.ans.god.1", "rome.dateseller.ans.god.2", "rome.dateseller.ans.god.3", "rome.dateseller.ans.god.4", "rome.dateseller.ans.god.5", "rome.dateseller.ans.god.6");
+    else if (pick === "pray") await whatHePraysFor(g, seller);
+    else {
+      await g.say("rome.dateseller.ask.bye", "rome.dateseller.ans.bye");
+      if (seller) seller.face(SELLER_FACES);                      // and he goes back to his watching
+      return;
+    }
+  }
+}
+
+/** A carried thing shown to him: he turns to the boy, says what he makes of it, and goes back to his watching. */
+const showSeller = (...ids) => async (g) => {
+  const seller = g.actor("dateseller");
+  turnTo(g, "dateseller");
+  await g.say(...ids);
+  if (seller) seller.face(SELLER_FACES);
+};
 
 export default {
   id: "rome-street",
@@ -230,6 +320,13 @@ export default {
     { id: "keeper", kind: "keeper", at: [151, 459], face: "SE" },   // on the shop floor, a sidewalk's height above the road
     { id: "washer", kind: "washer", at: [330, 505], face: "SE" },
     { id: "urchin", kind: "urchin", at: [525, 540], face: "W" },    // sitting on the right-hand curb, his feet in the road (his hips are just behind the curb's edge, seven pixels right of the painter's mark, which is where his feet go)
+    // The date seller is not in the painter's list: he was placed by eye, on the right-hand pavement at the kerb,
+    // just up the street from the last stepping stone, where people cross: clear of the fountain (34 pixels to his
+    // right), of the street boy and of the way down the roadway. He stands, so the engine blocks the ground under his
+    // feet (473 to 511 across, rows 432 to 452). Why here and not farther up the pavement: words are written over the
+    // speaker's head, and from the fountain, the stepping stones and the place the boy first stops, a man farther up
+    // would be written across. Here the engine counts him as standing beside the speaker and lifts the words over him.
+    { id: "dateseller", kind: "dateseller", at: [492, 444], face: SELLER_FACES },
   ],
 
   // Back to front: a later area lies over an earlier one. The painter lists the things small before big ("where two
@@ -242,7 +339,7 @@ export default {
     },
     { id: "notice-right", name: "more writing", poly: [[716, 372], [799, 345], [799, 520], [716, 478]], walkTo: [634, 523], face: "E", look: "rome.rufus.look" },
     { id: "balcony", name: "apartments", poly: [[641, 75], [718, 37], [718, 277], [641, 277], [568, 263], [568, 122]], walkTo: [593, 510], face: "N", look: "rome.flats.look" },
-    { id: "stepping-stones", name: "stepping stones", rect: [315, 448, 168, 34], walkTo: [400, 491], face: "N", look: "rome.stones.look" },
+    { id: "stepping-stones", name: "stepping stones", rect: [315, 448, 168, 34], walkTo: [400, 491], face: "N", look: twice("rome.stones.look", "rome.stones.look2") },   // the second look is at the road itself
     { id: "laundry", name: "washing lines", poly: [[256, 106], [614, 102], [614, 238], [456, 238], [456, 154], [374, 154], [374, 244], [256, 244]], walkTo: [387, 481], face: "N", look: twice("rome.laundry.look", "rome.laundry.look2") },
     { id: "notices", name: "writing on the wall", rect: [4, 195, 228, 49], walkTo: [166, 537], face: "N", look: twice("rome.notices.look", "rome.notices.look2") },   // the red letters over the snack bar: MARCVS, and VOTA
     {
@@ -300,14 +397,37 @@ export default {
         toga: "rome.urchin.toga", breakfast: "rome.urchin.breakfast",
       },
     },
+    {
+      // He is talked to from the roadway, at the curb below him, so that the boy looks up at him and neither hides the other.
+      id: "dateseller", name: "date seller", verb: "Talk to", rect: [470, 344, 46, 102], walkTo: [446, 460], face: "E",
+      look: twice("rome.dateseller.look", "rome.dateseller.look2"), use: talkToDateSeller,
+      useWith: {
+        quarter: showSeller("rome.dateseller.quarter.1", "rome.dateseller.quarter.2"),
+        phone: showSeller("rome.dateseller.phone"), toga: showSeller("rome.dateseller.toga"), coin: showSeller("rome.dateseller.coin.1", "rome.dateseller.coin.2"),
+        breakfast: showSeller("rome.dateseller.breakfast"),      // the soothsayer's, and so his hens (briefs/DATING.md): not by hens, thank you
+      },
+    },
   ],
 
-  // Runs when the lead arrives. It must be safe to run twice, so the remark checks its own fact.
+  // Runs when the lead arrives. It must be safe to run twice, so each remark checks its own fact.
+  // The first time, the keeper is crying his wares, and the name he cries tells the boy when he is: before Christ.
+  // (Two facts, so that a game saved in this street before that was written still gets it, the next time he comes.)
   async enter(g, from) {
     if (from === "rome-steps") await g.walkTo(404, 494);          // he comes down the street toward us, between the stepping stones
-    if (g.flag("rome.sawStreet")) return;
+    const first = !g.flag("rome.sawStreet");
+    if (!first && g.flag("rome.knowsBC")) return;
     await g.wait(300);
-    await g.say("rome.street.arrive.1", "rome.street.arrive.2");
+    if (first) await g.say("rome.street.arrive.1");
+    if (!g.flag("rome.knowsBC")) {
+      const me = g.lead, keeper = g.actor("keeper");
+      await g.say("rome.street.cry");
+      if (me && keeper) me.look(keeper.x, keeper.y);              // he looks round at the snack bar
+      await g.say("rome.street.bc.1");
+      if (me) me.face("S");                                       // and then at nothing at all
+      await g.say("rome.street.bc.2", "rome.street.bc.3", "rome.street.bc.4");
+      g.flag("rome.knowsBC", true);
+    }
+    if (first) await g.say("rome.street.arrive.2");
     g.flag("rome.sawStreet", true);
   },
 };

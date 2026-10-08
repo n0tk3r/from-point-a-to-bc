@@ -402,8 +402,12 @@ size = (feet - horizon) / (full - horizon)
 ```
 
 The painter works from the same two numbers, so doors and wagons come out the right size
-for the people. A room seen from close up has its horizon far above the picture (the
-living room's is at -150), so people hardly change size as they cross it.
+for the people. The rooms of the house go further: each is painted through one camera
+whose numbers are the scene's own `horizon` and `full` (the two of them fix how high it
+stands), and floor, walls, furniture, light and shadows all go through it, so a person the
+engine draws stands in the room at the right size wherever they are on its floor. How a
+room is painted that way is in [tools/paint/README.md](../tools/paint/README.md), "Painting
+a room".
 
 Steps shorten with size, so the walk still matches the ground. Walking into the picture
 also covers more ground than walking across it: one pixel up the screen counts as 2.2
@@ -467,6 +471,7 @@ An **animation is a pose that changes with time:**
 | At rest | Slow breathing, and a blink every few seconds |
 | Talking | A gesture and three mouth shapes. There are twenty gestures and each person uses a few of them (see below). The line decides which, so a line always plays the same way. |
 | Reaching | Out at chest height, or bending down to the ground. Anyone in a skirt dips at the knee and bows a little, and does not bend double. |
+| Praying | The head bowed, the eyes shut, the hands folded in front, eased into over about a quarter of a second and held, through whatever is said, until a script lets it go. Each of the family prays in their own way (`pray`, below). |
 | Sitting | Cross-legged on the ground, or on a seat: a chair, a bench, a stool, a step. Someone who is found sitting breathes, blinks and talks sitting down, with the same gestures of their own that they would use standing. |
 
 This is the method of one of the games this one looks up to, with a puppet in place of an
@@ -484,13 +489,13 @@ pictures underneath.
 
 ### Who is in the cast
 
-Twenty-three people, all in `js/art/people.js`:
+Twenty-four people, all in `js/art/people.js`:
 
 | Where | Who |
 | --- | --- |
 | The family | `dad`, `son`, `mom`, `bigsis`, `lilsis` |
 | Egypt | `scribe` (sits cross-legged on the ground), `carrier`, `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
-| Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table) |
+| Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table), `dateseller` (a basket of dates on his hip) |
 | Nevada | `oldtimer` (in a lawn chair that is drawn with him), `agent` |
 
 Two more figures are the same two men after the story has changed them:
@@ -510,6 +515,7 @@ Colors and clothes say who a person is when they stand still. These settings in
 | `pace` | How fast they walk, in picture pixels a second at full size (155 unless it says otherwise) | The water carrier plods at 110. The street boy darts at 190. |
 | `gestures` | What their hands do when they talk, as a short list of numbers | Dad nods, makes a point, shrugs, puts a hand on his hip. The Son throws both arms up. The clerk wipes his brow and counts on his fingers. |
 | `hold` | An arm that is always busy with something | The overseer's staff, the youngest hauler's loaf |
+| `pray` | How they stand to pray: how high the folded hands are, how far the head bows, and whether the hands are clasped tight and the eyes squeezed shut | Dad folds his big hands low in front of him, his head well down. The Son takes his cap off and holds it in both hands. Mom folds her hands at her breast, and her handbag slides down to the crook of her elbow. Big Sister prays exactly as she was taught, hands together at her breast. Little Sister prays with all her might: hands clasped tight under her chin, eyes squeezed shut. |
 | `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, or a height) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, the old-timer |
 | `rest` | Where an arm lies when a pose leaves it alone | The scribe's pen hand |
 
@@ -677,12 +683,21 @@ Each has its own slider in Options.
 
 Each era has a theme, named in `js/content/world.js` and described in
 `js/content/sound.js`. Changing scene cross-fades to the new era's theme. A scene can
-name a theme of its own with `music`.
+name a theme of its own with `music`, or give a function of the game that names one, so
+that the story can change it. Big Sister's attic plays its own quiet track until the
+batteries are taken out of her sound machine, and the house's after that:
+
+```js
+music: (g) => (g.flag("home.retreatQuiet") ? "home" : "retreat"),
+```
+
+The engine asks again each time the scene is entered (`g.musicOf(scene)`). A script that
+has just changed the story asks at once: `g.music(g.musicOf(g.scene))`.
 
 Until music is written, each theme is a **short pattern played by a built-in
 synthesizer**, so the game already has a different sound for the title, the road,
-Egypt, Rome, home in the evening, the Nevada desert and the tunnel. To use a real
-recording, add one line:
+Egypt, Rome, home in the evening, Big Sister's attic, the Nevada desert and the tunnel.
+To use a real recording, add one line:
 
 ```js
 egypt: { src: "audio/music/egypt.{ext}", volume: 0.8 },
@@ -790,8 +805,9 @@ From that list the game gets three things for free:
 - **A storyboard.** `tools/storyboard.html` draws every act, chain and scene from
   the same data. Plan there, and the plan cannot drift from the game.
 
-Today there are a prologue and four acts: Egypt (four scenes), Rome (three), home, and
-the Nevada desert. The puzzle documents in `docs/` say what happens in each.
+Today there are a prologue and four acts: Egypt (four scenes), Rome (three), home (five,
+the rooms of the house), and the Nevada desert. The puzzle documents in `docs/` say what
+happens in each.
 
 ### Storyboarding before the art exists
 
@@ -820,9 +836,13 @@ at the end of each act. A strong fit for this premise: something sent through a 
 in one era turns up in another, so people who are apart can still help each other.
 (The coin the Son throws into the door in Rome falls out of the sky in Nevada.)
 
-**Together.** Mom and the girls share a scene. A scene says so with
-`party: ["mom", "bigsis", "lilsis"]`: they arrive together, each on a mark of her own,
-and switching is instant because nobody has to go anywhere. In a party:
+**Together.** Mom and the girls go through the house as one. Each of its five scenes (the
+living room, the landing, Dad's study, Little Sister's room and Big Sister's attic) says so
+with `party: ["mom", "bigsis", "lilsis"]`: when the one being played takes the stairs, a
+door or the attic ladder, the other two come too and arrive beside her, each on a place of
+her own, and switching between them is instant because nobody has to go anywhere. ("A
+scene for several leads" in section 10 shows how a scene says where each of them arrives.)
+In a party:
 
 - **Each can do what the others cannot.** A clickable thing can answer each lead
   differently: `use: { lilsis: intoCloset, mom: "home.closet.use.mom", bigsis: "home.closet.use.bigsis" }`.
@@ -837,9 +857,9 @@ and switching is instant because nobody has to go anywhere. In a party:
   bottom is always there, with a tag: "Mom's handbag", or "Mom's handbag: empty". (What
   each lead's pockets are called is `keeps` in `world.js`.) A portrait carries a small
   number when that person is holding something, and pointing at it says what.
-- **They stay where they are left.** Companions do not follow the lead about. When
-  the lead walks up to something, she stands beside a companion who is already there,
-  not on top of her.
+- **They stay where they are left.** Within a scene, companions do not follow the lead
+  about. When the lead walks up to something, she stands beside a companion who is
+  already there, not on top of her.
 
 The two halves of the family meeting in one scene needs nothing new: put all five in a
 `party`.
@@ -1003,8 +1023,12 @@ copy. On top of the above it has:
 
 ```js
 party: ["mom", "bigsis", "lilsis"],                         // they are here together
-spawn: { default: [...], mom: [...], bigsis: [...], lilsis: [...] },      // a mark each
+spawn: { default: [...], mom: [...], bigsis: [...], lilsis: [...],       // a mark each, for when the act opens here
+         fromLanding: [...] },                              // a way in: where the lead arrives, down the stairs
+arrive: { fromLanding: [[...], [...]] },                    // where the other two arrive by it: in the order of `party`, the lead left out
 hotspots: [
+  { id: "stairs", name: "the stairs", verb: "Go up", poly: [...], walkTo: [...],
+    use: (g) => g.goto("home-landing", { spawn: "fromStairs" }) },        // the way out names the way in at the other end
   { id: "closet", name: "closet under the stairs", rect: [...], walkTo: [...],
     look: { mom: "home.closet.look.mom", bigsis: "home.closet.look.bigsis", lilsis: "home.closet.look.lilsis" },
     use: { lilsis: intoCloset, mom: "home.closet.use.mom", bigsis: "home.closet.use.bigsis" } },   // one answer for each lead; `any` is for whoever is not named
@@ -1012,6 +1036,15 @@ hotspots: [
 talk: { mom: { bigsis: [["line.a", "line.b"], { when: (g) => g.has("coin"), say: ["line.c", "line.d"] }] } },   // what Mom and Big Sister say when Mom clicks her
 async given(g, item, to, from) { /* something was handed over */ },
 ```
+
+All five scenes of the house are built this way. A way in is a name. The scene that is
+left gives it (`g.goto("home-landing", { spawn: "fromStairs" })`), and the scene that is
+entered puts the lead on its `spawn` mark of that name and the two who are not leading on
+its `arrive` places of that name. Without an `arrive` for the way they came, each of them
+goes to her own mark in `spawn`, or beside the lead. One who is already standing in the
+scene (after a saved game is loaded, say) stays where she is. So the landing has a way in
+for each way onto it (the stairs, the attic ladder, each room that opens off it), and each
+of the other four scenes has one way in from the landing.
 
 **A painting.** Write the scene file first and play it as a sketch. Then paint it
 (section 2, and the guide in `tools/paint/`), put the pictures in
@@ -1125,15 +1158,16 @@ loads the game, by the plain addresses, with the old risk.
 | `g.flag("name")`, `g.flag("name", true)` | Reads or records a story fact. Recording one makes the cut-outs and the clickable areas read their tests again. |
 | `g.give("item")`, `g.take("item")`, `g.has("item")` | Pockets of the current lead |
 | `g.holder("item")`, `g.item("item")` | Which lead is carrying a thing, or `null`; and the thing's own entry in `items` |
-| `await g.goto("scene", { via: "wormhole" })` | Changes scene by fade, cut or time tunnel. `{ spawn: "name" }` arrives on that mark of the scene's `spawn`. |
-| `await g.card("Ancient Egypt", "about 2560 B.C.")` | Shows a title card |
+| `await g.goto("scene", { via: "wormhole" })` | Changes scene by fade, cut or time tunnel. `{ spawn: "name" }` arrives on that mark of the scene's `spawn`, and the rest of a `party` on its `arrive` places of that name ("A scene for several leads", above). |
+| `await g.card("Ancient Egypt", "about 1920 B.C.")` | Shows a title card. (Egypt is about 1920 B.C. because the game counts the years before Christ from the Bible's own genealogies, as Archbishop Ussher counted them: see "How the game counts the years" in [CHARACTERS.md](CHARACTERS.md#how-the-game-counts-the-years).) |
 | `await g.cutscene("intro")` | Plays a skippable cutscene |
 | `await g.wait(ms)`, `await g.tween(ms, (k) => ...)`, `await g.fade(1)` | Timing, motion, fades |
-| `g.music("egypt")`, `g.sfx("portal")` | Sound |
+| `g.music("egypt")`, `g.sfx("portal")` | Sound. `g.musicOf(g.scene)` is the track the scene plays now: its `music`, which may depend on the story, or its era's. |
 | `await g.walkTo(x, y)`, `await g.walkTo(x, y, "scribe")` | Walks the lead, or someone else, to a place, round whatever is in the way |
 | `await g.moveTo(x, y)`, `await g.moveTo(x, y, "agent")` | Walks in a straight line to a place the player could not click on (into a closet) |
 | `await g.reach()`, `await g.reach(true)` | The lead reaches out, or bends down to the ground |
 | `g.lead.hold()`, `g.lead.hold(false)` | Someone keeps an arm held out while people talk (holding a thing up), until told to let it drop |
+| `g.actor("mom").pray()`, `g.actor("mom").pray(false)` | Someone stands in prayer, in their own way (section 4), through whatever is said, until told to stop. It is for someone standing still: end it before they walk. |
 | `g.assets.url(path)`, `g.assets.picture(path)` | For a script that puts a painted picture on the live layer: its stamped address, and a promise that it has arrived |
 | `g.actor("scribe").face("W")`, `g.lead.look(x, y)` | Turns someone to a compass point, or toward a place |
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
@@ -1198,10 +1232,11 @@ and live light, the depth system, the save format, the sound system, the line-ID
 dialogue system, the story-as-data structure, the pixel renderer and the figure, the
 interface, the Koine Road typeface, the stamping of files.
 
-**Painted:** the highway of the intro and the title, and nine scenes: four in Egypt,
-three in Rome, the living room and the Nevada roadside. Eighteen things to carry.
+**Painted:** the highway of the intro and the title, and thirteen scenes: four in Egypt,
+three in Rome, the five rooms of the house and the Nevada roadside. Twenty-four things to
+carry.
 
-**Drawn:** twenty-three people.
+**Drawn:** twenty-four people.
 
 **Written:** a prologue and four acts. Act One (Egypt) and Act Two (Rome) have puzzle
 documents; the two acts in the present are a first draft, as their puzzle document says.
@@ -1219,7 +1254,8 @@ October 2026 from his brief, and are waiting to be played.
   show a feeling.
 - Other people walking about by themselves. Anyone can be walked by a script, and the
   patch of ground they block follows them when the script ends; nobody wanders unasked.
-- Companions who follow the lead. In a party the others stay where they were left.
+- Companions who follow the lead about a scene. In a party the others come along from one
+  scene to the next, but inside a scene they stay where they were left.
 - Close-ups the player can click inside. A close-up is a picture to read, not a
   small scene of its own.
 - Scrolling scenes wider than the screen.

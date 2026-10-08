@@ -17,7 +17,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ART = os.path.join(HERE, "..", "..", "art")
 # out/<folder> -> art/<place>. (The first scene painted kept its working name, egypt1.)
 PLACES = {"egypt1": "scenes/egypt-crash", "items": "items"}
-SCENES = ["highway", "egypt1", "egypt-site", "egypt-gallery", "egypt-chamber", "rome-street", "rome-steps", "rome-temple", "home-living-room", "nevada-roadside", "items"]
+# Everything that `python3 install.py` installs, in the order of the story.
+SCENES = [
+    "highway",
+    "egypt1", "egypt-site", "egypt-gallery", "egypt-chamber",                                 # Act One
+    "rome-street", "rome-steps", "rome-temple",                                               # Act Two
+    "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",  # Act Three: the house
+    "nevada-roadside",                                                                        # Act Four
+    "items",
+]
 
 
 def install(name):

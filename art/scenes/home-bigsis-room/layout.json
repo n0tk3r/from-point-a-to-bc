@@ -1,0 +1,1181 @@
+{
+ "id": "home-bigsis-room",
+ "horizon": 120,
+ "full": 440,
+ "view": {
+  "horizon": 120,
+  "full": 440,
+  "cam": [
+   380,
+   1150
+  ],
+  "yaw": 0,
+  "focal": 800,
+  "centre_x": 400
+ },
+ "eye_cm": 350,
+ "vanishing": [
+  400,
+  120
+ ],
+ "light": "night, soft and low, from many small warm sources: three paper lanterns under the slope, two strings of tiny lights looped along the rafters, candles in glass along the far wall's ledge and by the bed, a salt lamp (deep amber) far left, a desk lamp turned low, a glow from under the bed, the landing's light coming up the hatch; cool moonlight through the two skylights lies in two soft slanted patches across the middle of the floor",
+ "walk": [
+  [
+   203,
+   378
+  ],
+  [
+   483,
+   378
+  ],
+  [
+   488,
+   395
+  ],
+  [
+   562,
+   397
+  ],
+  [
+   618,
+   493
+  ],
+  [
+   589,
+   514
+  ],
+  [
+   98,
+   514
+  ]
+ ],
+ "blocked": [],
+ "feet": {
+  "bookcase": [
+   [
+    163,
+    363
+   ],
+   [
+    344,
+    363
+   ],
+   [
+    343,
+    370
+   ],
+   [
+    158,
+    370
+   ]
+  ],
+  "soundtable": [
+   [
+    362,
+    365
+   ],
+   [
+    441,
+    365
+   ],
+   [
+    442,
+    375
+   ],
+   [
+    361,
+    375
+   ]
+  ],
+  "cushions": [
+   [
+    444,
+    365
+   ],
+   [
+    480,
+    365
+   ],
+   [
+    484,
+    376
+   ],
+   [
+    446,
+    376
+   ]
+  ],
+  "desk": [
+   [
+    484,
+    365
+   ],
+   [
+    582,
+    365
+   ],
+   [
+    592,
+    378
+   ],
+   [
+    489,
+    378
+   ]
+  ],
+  "stool": [
+   [
+    527,
+    382
+   ],
+   [
+    552,
+    382
+   ],
+   [
+    557,
+    391
+   ],
+   [
+    531,
+    391
+   ]
+  ],
+  "bed": [
+   [
+    574,
+    397
+   ],
+   [
+    695,
+    397
+   ],
+   [
+    770,
+    468
+   ],
+   [
+    619,
+    468
+   ]
+  ],
+  "footlamps": [
+   [
+    636,
+    475
+   ],
+   [
+    682,
+    475
+   ],
+   [
+    697,
+    494
+   ],
+   [
+    648,
+    494
+   ]
+  ],
+  "palm": [
+   [
+    131,
+    377
+   ],
+   [
+    154,
+    377
+   ],
+   [
+    147,
+    385
+   ],
+   [
+    123,
+    385
+   ]
+  ],
+  "saltlamp": [
+   [
+    118,
+    392
+   ],
+   [
+    150,
+    392
+   ],
+   [
+    140,
+    404
+   ],
+   [
+    106,
+    404
+   ]
+  ],
+  "diffuser": [
+   [
+    143,
+    405
+   ],
+   [
+    168,
+    405
+   ],
+   [
+    160,
+    414
+   ],
+   [
+    135,
+    414
+   ]
+  ],
+  "plants": [
+   [
+    81,
+    417
+   ],
+   [
+    131,
+    417
+   ],
+   [
+    112,
+    437
+   ],
+   [
+    60,
+    437
+   ]
+  ],
+  "towels": [
+   [
+    73,
+    440
+   ],
+   [
+    117,
+    440
+   ],
+   [
+    100,
+    458
+   ],
+   [
+    54,
+    458
+   ]
+  ],
+  "hatch": [
+   [
+    78,
+    528
+   ],
+   [
+    244,
+    528
+   ],
+   [
+    216,
+    599
+   ],
+   [
+    22,
+    599
+   ]
+  ],
+  "rules": [
+   [
+    245,
+    566
+   ],
+   [
+    341,
+    566
+   ],
+   [
+    336,
+    604
+   ],
+   [
+    231,
+    604
+   ]
+  ],
+  "tea": [
+   [
+    415,
+    562
+   ],
+   [
+    514,
+    562
+   ],
+   [
+    529,
+    620
+   ],
+   [
+    417,
+    620
+   ]
+  ],
+  "pouf": [
+   [
+    604,
+    539
+   ],
+   [
+    699,
+    539
+   ],
+   [
+    740,
+    596
+   ],
+   [
+    631,
+    596
+   ]
+  ]
+ },
+ "planes": [
+  {
+   "id": "desk",
+   "file": "desk.png",
+   "base": [
+    [
+     487,
+     379
+    ],
+    [
+     594,
+     379
+    ]
+   ],
+   "solid": [
+    [
+     483,
+     365
+    ],
+    [
+     584,
+     365
+    ],
+    [
+     603,
+     391
+    ],
+    [
+     491,
+     391
+    ]
+   ],
+   "note": "desk and stool, the manuscript, the pencils, the lamp. Nobody can stand behind it; `solid` is the floor under desk and stool."
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the hatch with its rail and the top of the ladder, the notice on its easel, her shoes, the tea cushion, the pouf, the books"
+  }
+ ],
+ "things": [
+  {
+   "id": "bookcase",
+   "what": "the long low bookcase: her books arranged by color, in a rainbow",
+   "shape": {
+    "rect": [
+     157,
+     287,
+     187,
+     83
+    ]
+   },
+   "stand": [
+    244,
+    380
+   ],
+   "face": "N"
+  },
+  {
+   "id": "timeline",
+   "what": "her timeline: one long strip of paper on the wall, a ruled line, small drawings; a red mark three quarters along",
+   "shape": {
+    "rect": [
+     166,
+     275,
+     317,
+     21
+    ]
+   },
+   "stand": [
+    305,
+    380
+   ],
+   "face": "N",
+   "red_mark": [
+    404,
+    286
+   ]
+  },
+  {
+   "id": "soundtable",
+   "what": "the low table in the middle of the far wall",
+   "shape": {
+    "rect": [
+     360,
+     304,
+     82,
+     71
+    ]
+   },
+   "stand": [
+    339,
+    387
+   ],
+   "face": "E"
+  },
+  {
+   "id": "machine",
+   "what": "the sound machine: a small rounded box with a speaker grille and a dial (it runs on batteries)",
+   "shape": {
+    "rect": [
+     367,
+     312,
+     31,
+     22
+    ]
+   },
+   "stand": [
+    339,
+    387
+   ],
+   "face": "E"
+  },
+  {
+   "id": "fountain",
+   "what": "the little tabletop fountain: water over stones in a bowl",
+   "shape": {
+    "rect": [
+     407,
+     304,
+     30,
+     32
+    ]
+   },
+   "stand": [
+    339,
+    387
+   ],
+   "face": "E"
+  },
+  {
+   "id": "desk",
+   "what": "her writing desk: the manuscript squared up, a jar of pencils, a small lamp turned low; the stool (cut-out desk.png)",
+   "shape": {
+    "rect": [
+     482,
+     302,
+     110,
+     87
+    ]
+   },
+   "stand": [
+    524,
+    398
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cards",
+   "what": "her novel, planned on index cards in a neat grid over the desk",
+   "shape": {
+    "rect": [
+     496,
+     276,
+     75,
+     29
+    ]
+   },
+   "stand": [
+    524,
+    398
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bed",
+   "what": "the low platform bed: white and cream linen, many pillows, a glow from under it",
+   "shape": {
+    "rect": [
+     572,
+     322,
+     198,
+     140
+    ]
+   },
+   "stand": [
+    571,
+    431
+   ],
+   "face": "E"
+  },
+  {
+   "id": "book",
+   "what": "the book on her pillow, her place kept with a ribbon",
+   "shape": {
+    "rect": [
+     598,
+     355,
+     20,
+     15
+    ]
+   },
+   "stand": [
+    571,
+    431
+   ],
+   "face": "E"
+  },
+  {
+   "id": "canopy",
+   "what": "the gauze hung over the bed from a hoop under the rafters",
+   "shape": {
+    "rect": [
+     568,
+     170,
+     149,
+     223
+    ]
+   },
+   "stand": [
+    571,
+    431
+   ],
+   "face": "E"
+  },
+  {
+   "id": "saltlamp",
+   "what": "the salt lamp, deep amber, on its stump",
+   "shape": {
+    "rect": [
+     112,
+     337,
+     33,
+     66
+    ]
+   },
+   "stand": [
+    195,
+    405
+   ],
+   "face": "W"
+  },
+  {
+   "id": "diffuser",
+   "what": "the diffuser on the smaller stump, breathing a thin thread of mist",
+   "shape": {
+    "rect": [
+     138,
+     369,
+     26,
+     45
+    ]
+   },
+   "stand": [
+    195,
+    405
+   ],
+   "face": "W",
+   "mist": [
+    152,
+    369
+   ]
+  },
+  {
+   "id": "plants",
+   "what": "the stand of green plants: ferns, trailing ivy, and the small palm in the corner",
+   "shape": {
+    "rect": [
+     60,
+     284,
+     125,
+     153
+    ]
+   },
+   "stand": [
+    170,
+    428
+   ],
+   "face": "W"
+  },
+  {
+   "id": "towels",
+   "what": "the basket of rolled towels",
+   "shape": {
+    "rect": [
+     62,
+     402,
+     48,
+     55
+    ]
+   },
+   "stand": [
+    170,
+    428
+   ],
+   "face": "W"
+  },
+  {
+   "id": "robe",
+   "what": "her white robe on its hook",
+   "shape": {
+    "rect": [
+     36,
+     276,
+     29,
+     110
+    ]
+   },
+   "stand": [
+    170,
+    428
+   ],
+   "face": "W"
+  },
+  {
+   "id": "slippers",
+   "what": "her slippers, set side by side",
+   "shape": {
+    "rect": [
+     81,
+     459,
+     30,
+     16
+    ]
+   },
+   "stand": [
+    170,
+    428
+   ],
+   "face": "W"
+  },
+  {
+   "id": "mat",
+   "what": "the exercise mat, rolled out",
+   "shape": {
+    "rect": [
+     216,
+     397,
+     87,
+     61
+    ]
+   },
+   "stand": [
+    321,
+    426
+   ],
+   "face": "W"
+  },
+  {
+   "id": "rug",
+   "what": "the round rug",
+   "shape": {
+    "rect": [
+     345,
+     392,
+     153,
+     58
+    ]
+   },
+   "stand": [
+    421,
+    419
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cushions",
+   "what": "floor cushions, stacked by the sound table",
+   "shape": {
+    "rect": [
+     446,
+     346,
+     36,
+     27
+    ]
+   },
+   "stand": [
+    339,
+    387
+   ],
+   "face": "E"
+  },
+  {
+   "id": "skylight",
+   "what": "the two skylights in the slope of the roof: the night, the stars, the moon",
+   "shape": {
+    "rect": [
+     213,
+     119,
+     374,
+     91
+    ]
+   },
+   "stand": [
+    421,
+    419
+   ],
+   "face": "N",
+   "panes": [
+    [
+     213,
+     119,
+     118,
+     91
+    ],
+    [
+     469,
+     119,
+     118,
+     91
+    ]
+   ]
+  },
+  {
+   "id": "window",
+   "what": "the round window in the left end wall, seen from the side",
+   "shape": {
+    "rect": [
+     62,
+     204,
+     34,
+     85
+    ]
+   },
+   "stand": [
+    195,
+    405
+   ],
+   "face": "W"
+  },
+  {
+   "id": "hangplant",
+   "what": "a hanging plant under the slope, by the round window",
+   "shape": {
+    "rect": [
+     128,
+     98,
+     43,
+     157
+    ]
+   },
+   "stand": [
+    170,
+    428
+   ],
+   "face": "W"
+  },
+  {
+   "id": "lanterns",
+   "what": "three paper lanterns under the slope",
+   "shape": {
+    "rect": [
+     169,
+     140,
+     373,
+     98
+    ]
+   },
+   "stand": [
+    421,
+    419
+   ],
+   "face": "N"
+  },
+  {
+   "id": "strings",
+   "what": "strings of tiny warm lights looped from rafter to rafter",
+   "shape": {
+    "rect": [
+     49,
+     59,
+     701,
+     188
+    ]
+   },
+   "stand": [
+    421,
+    419
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hatch",
+   "what": "the hatch in the floor: the top of the attic ladder coming up through it, and the rail round it (front plane): the way down",
+   "shape": {
+    "rect": [
+     21,
+     424,
+     223,
+     175
+    ]
+   },
+   "stand": [
+    172,
+    511
+   ],
+   "face": "S"
+  },
+  {
+   "id": "rules",
+   "what": "her notice on its little easel: THE RETREAT / 1. SHOES OFF / 2. VOICES DOWN / 3. NO CHICKENS (front plane)",
+   "shape": {
+    "rect": [
+     232,
+     466,
+     106,
+     113
+    ]
+   },
+   "stand": [
+    172,
+    511
+   ],
+   "face": "S"
+  },
+  {
+   "id": "pouf",
+   "what": "the big knitted pouf and a folded blanket (front plane)",
+   "shape": {
+    "rect": [
+     615,
+     491,
+     157,
+     92
+    ]
+   },
+   "stand": [
+    501,
+    512
+   ],
+   "face": "S"
+  },
+  {
+   "id": "tea",
+   "what": "a floor cushion with her tea tray on it (front plane)",
+   "shape": {
+    "rect": [
+     415,
+     535,
+     113,
+     65
+    ]
+   },
+   "stand": [
+    501,
+    512
+   ],
+   "face": "S"
+  }
+ ],
+ "exits": [
+  {
+   "to": "home-landing",
+   "id": "hatch",
+   "shape": {
+    "poly": [
+     [
+      21,
+      424
+     ],
+     [
+      244,
+      424
+     ],
+     [
+      244,
+      600
+     ],
+     [
+      21,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    172,
+    511
+   ],
+   "face": "S"
+  }
+ ],
+ "marks": {
+  "fromLadder": {
+   "mom": [
+    294,
+    456
+   ],
+   "bigsis": [
+    373,
+    454
+   ],
+   "lilsis": [
+    188,
+    484
+   ]
+  },
+  "mom": [
+   294,
+   456
+  ],
+  "bigsis": [
+   373,
+   454
+  ],
+  "lilsis": [
+   188,
+   484
+  ]
+ },
+ "stands": {
+  "mom": {
+   "at": [
+    294,
+    456
+   ],
+   "grownup_px": 168
+  },
+  "bigsis": {
+   "at": [
+    373,
+    454
+   ],
+   "grownup_px": 167
+  },
+  "lilsis": {
+   "at": [
+    188,
+    484
+   ],
+   "grownup_px": 182
+  },
+  "athatch": {
+   "at": [
+    172,
+    511
+   ],
+   "grownup_px": 196
+  },
+  "atsound": {
+   "at": [
+    339,
+    387
+   ],
+   "grownup_px": 133
+  },
+  "atbooks": {
+   "at": [
+    244,
+    380
+   ],
+   "grownup_px": 130
+  },
+  "attimeline": {
+   "at": [
+    305,
+    380
+   ],
+   "grownup_px": 130
+  },
+  "atdesk": {
+   "at": [
+    524,
+    398
+   ],
+   "grownup_px": 139
+  },
+  "atbed": {
+   "at": [
+    571,
+    431
+   ],
+   "grownup_px": 156
+  },
+  "atlamp": {
+   "at": [
+    195,
+    405
+   ],
+   "grownup_px": 143
+  },
+  "atplants": {
+   "at": [
+    170,
+    428
+   ],
+   "grownup_px": 154
+  },
+  "atmat": {
+   "at": [
+    321,
+    426
+   ],
+   "grownup_px": 153
+  },
+  "middle": {
+   "at": [
+    421,
+    419
+   ],
+   "grownup_px": 149
+  },
+  "front": {
+   "at": [
+    501,
+    512
+   ],
+   "grownup_px": 196
+  }
+ },
+ "cutouts": {
+  "desk": [
+   482,
+   302,
+   110,
+   88
+  ],
+  "front": [
+   21,
+   424,
+   752,
+   176
+  ]
+ },
+ "lights": {
+  "lanterns": [
+   [
+    182,
+    216
+   ],
+   [
+    410,
+    191
+   ],
+   [
+    528,
+    219
+   ]
+  ],
+  "saltlamp": [
+   129,
+   349
+  ],
+  "candles": [
+   [
+    201,
+    266
+   ],
+   [
+    296,
+    266
+   ],
+   [
+    394,
+    266
+   ],
+   [
+    462,
+    266
+   ],
+   [
+    562,
+    266
+   ],
+   [
+    629,
+    266
+   ]
+  ],
+  "desk-lamp": [
+   567,
+   306
+  ],
+  "footlamps": [
+   [
+    649,
+    470
+   ],
+   [
+    683,
+    479
+   ]
+  ],
+  "moon": [
+   536,
+   154
+  ],
+  "moon-patches": [
+   [
+    [
+     185,
+     409
+    ],
+    [
+     283,
+     409
+    ],
+    [
+     232,
+     472
+    ],
+    [
+     111,
+     472
+    ]
+   ],
+   [
+    [
+     432,
+     409
+    ],
+    [
+     531,
+     409
+    ],
+    [
+     534,
+     472
+    ],
+    [
+     413,
+     472
+    ]
+   ]
+  ],
+  "machine": [
+   383,
+   325
+  ],
+  "fountain": [
+   422,
+   320
+  ],
+  "mist": [
+   152,
+   369
+  ],
+  "hatch": [
+   142,
+   561
+  ]
+ },
+ "notice": [
+  "THE RETREAT",
+  "1. SHOES OFF",
+  "2. VOICES DOWN",
+  "3. NO CHICKENS"
+ ]
+}

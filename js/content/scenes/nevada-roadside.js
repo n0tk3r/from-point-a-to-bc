@@ -14,6 +14,21 @@
 // what he saw: the low sun flashed off the wagon's chrome, and the sky opened where the flash fell. The
 // family do with a new silver coin what the wagon did by accident. A coin's worth of light: a coin's worth of door.
 //
+// The family's faith hangs on moments that were already here, and no puzzle knows of it (briefs/WEAVE.md):
+//   the coin, when Big Sister reads it, is the coin of the tribute money, and Mom has the verse (Matthew 22:21)
+//   before the coin goes up, Mom bows her head and the girls with her: a prayer in a line, and Little Sister's Amen
+//   just before the reveal Little Sister asks what B.C. is, and is told
+//   after "Daddy's EARLY", which stays the top of the scene, Mom has Psalm 31:15, and then the last two lines as they were
+// And Little Sister's flashlight, which comes in her pocket from the house, gets its own answer where the tracks stop.
+//
+// The author's two rules of 7 October (briefs/DATING.md) hang on moments that were already here as well:
+//   the years: the notice seals sectors 44 and 1921, every year before Christ is the Bible's own count, and 1921 B.C.
+//     is on Big Sister's timeline, the year Abram went down into Egypt. Her mother knows the chapter. Big Sister sees,
+//     once, that the doors open on years that matter, and does not know why.
+//   the chickens: the old-timer's hens (told of, never seen) have stopped laying and face the fence; at the door it is
+//     Little Sister who hears chickens, before anybody smells a sausage; and once she has heard of the hens, she
+//     misses General Feathers.
+//
 // Try it: index.html?scene=nevada-roadside&lead=mom
 // (to start at the last beat add &flags=nevada.arrived,nevada.witness,nevada.coinRead,nevada.distracted,nevada.notice,nevada.connected
 //  and they will have no coin: for the coin, play it from the start.)
@@ -26,6 +41,9 @@ const who = (g) => g.store.data.active;
 const heard = (g, id) => !!g.store.data.seenLines[id];
 /** Does Big Sister hold both halves of the answer: what the coin is, and what the notice says? */
 const ready = (g) => !!(g.flag("nevada.coinRead") && g.flag("nevada.notice"));
+/** Head bowed, hands folded, each in her own way (Figure.pray in the engine). It is for someone standing still: let it go before she walks or reaches. */
+const pray = (a, on) => a && a.pray && a.pray(on);
+const THREE = ["mom", "bigsis", "lilsis"];
 
 /** Once Big Sister has both the coin and the notice, she puts them together. Said once. */
 async function connect(g) {
@@ -95,8 +113,9 @@ async function talkToOldTimer(g) {
       if (pick === "wagon") break;
       await g.say(`nevada.car.no.${pick}`);
     }
-    // What he saw. He does not know that the flash of light is the part that matters.
-    await g.say("nevada.old.saw.1", "nevada.old.saw.1b", "nevada.old.saw.2", "nevada.old.saw.3", "nevada.old.saw.4", "nevada.old.saw.5");
+    // What he saw. He does not know that the flash of light is the part that matters. And one more odd thing about the
+    // week: his hens (behind the shack, never seen) have stopped laying, and face the fence. Little Sister knows what that means.
+    await g.say("nevada.old.saw.1", "nevada.old.saw.1b", "nevada.old.saw.2", "nevada.old.saw.3", "nevada.old.saw.3b", "nevada.old.saw.3c", "nevada.old.saw.4", "nevada.old.saw.5");
     await g.reach();
     g.give("coin");
     g.flag("nevada.witness", true);
@@ -115,7 +134,11 @@ async function talkToOldTimer(g) {
 }
 
 async function readCoin(g) {
-  await g.say("nevada.coin.read.1", "nevada.coin.read.2", "nevada.coin.read.3", "nevada.coin.read.4");
+  await g.say("nevada.coin.read.1", "nevada.coin.read.2");
+  // Caesar's own portrait: it is the coin of the tribute money. Little Sister knows it from Sunday school, Big Sister
+  // has the fact, and Mom has the verse. Then back to what matters for the puzzle: the coin is new.
+  await g.say("nevada.coin.read.2b", "nevada.coin.read.2c", "nevada.coin.read.2d");
+  await g.say("nevada.coin.read.3", "nevada.coin.read.4");
   g.flag("nevada.coinRead", true);
   await connect(g);
 }
@@ -124,6 +147,8 @@ async function readCoin(g) {
 async function talkToAgent(g) {
   const me = who(g);
   if (g.flag("nevada.distracted")) return me === "lilsis" ? g.say("nevada.agent.again.1", "nevada.agent.again.2") : g.say("nevada.agent.busy");
+  // Mom's second try is General Washington's: courtesy, with the rule book named. It moves him no more than the first.
+  if (me === "mom" && heard(g, "nevada.agent.mom.4")) return g.say("nevada.agent.mom.5", "nevada.agent.mom.6", "nevada.agent.mom.7");
   if (me !== "lilsis") return g.say(...[1, 2, 3, 4].map((n) => `nevada.agent.${me}.${n}`));
   await g.say("nevada.agent.lil.1", "nevada.agent.lil.2", "nevada.agent.lil.3", "nevada.agent.lil.4", "nevada.agent.lil.5", "nevada.agent.lil.6");
   // He retreats along the fence with a hand to his ear. She goes with him.
@@ -168,11 +193,24 @@ async function flash(g) {
   if (g.flag("demo.done")) return g.say("nevada.gate.6");        // it is open already, the size of the coin: the same light will not make it bigger
   if (!ready(g)) return g.say(`nevada.tracks.early.${me}`);
   await connect(g);
-  // The one with the coin goes to the corner of the glass. The other two stand back to watch.
-  const others = Object.keys(BACK).filter((id) => id !== me);
+  // "Places, girls." The one with the coin goes to the corner of the glass. The other two stand back to watch.
+  await g.say("nevada.gate.0");
+  const others = THREE.filter((id) => id !== me);
   await Promise.all([g.walkTo(HOLD[0], HOLD[1]), ...others.map((id) => g.walkTo(BACK[id][0], BACK[id][1], id))]);
-  for (const id of Object.keys(BACK)) { const a = g.actor(id); if (a) a.face("E"); }
-  await g.say("nevada.gate.1", `nevada.flash.${me}`);
+  for (const id of THREE) { const a = g.actor(id); if (a) a.face("E"); }
+  await g.say("nevada.gate.1");
+  // First things first. Mom bows her head, and the girls with her: nobody has to be told. A prayer in a line, in
+  // her own words, and Little Sister's Amen. Then heads up and hands down, before anyone reaches or walks.
+  pray(g.actor("mom"), true);
+  await g.wait(280);
+  for (const id of ["bigsis", "lilsis"]) pray(g.actor(id), true);
+  await g.wait(420);
+  await g.say("nevada.pray.1", "nevada.pray.2");
+  for (const id of THREE) pray(g.actor(id), false);
+  await g.wait(360);
+  // The low morning sun. If it is Mom who has the coin, she knows of another one that was rising and not setting.
+  if (me === "mom") await g.say("nevada.flash.sun");
+  await g.say(`nevada.flash.${me}`);
   // The coin goes up into the sun, and flashes: once, onto the place that hums.
   const coin = hand(g), arm = g.reach();
   await g.wait(230);                                              // (her arm is out)
@@ -187,11 +225,17 @@ async function flash(g) {
   // The two tall ones take a step back. Little Sister has started before anybody can say no: it is the height of her eye.
   await Promise.all([g.walkTo(EYE[0], EYE[1], "lilsis"), ...["mom", "bigsis"].map((id) => g.walkTo(BACK[id][0], BACK[id][1], id))]);
   const lil = g.actor("lilsis");
-  for (const id of ["mom", "bigsis", "lilsis"]) { const a = g.actor(id); if (a) a.face("E"); }
-  await g.say("nevada.door.1", "nevada.door.2", "nevada.door.3", "nevada.door.4", "nevada.door.5", "nevada.door.6");
-  await g.say("nevada.gate.2", "nevada.gate.2b", "nevada.gate.3");
+  for (const id of THREE) { const a = g.actor(id); if (a) a.face("E"); }
+  // What comes through it. Chickens first: Little Sister hears them before anybody smells a sausage, and her mother confirms her.
+  await g.say("nevada.door.1", "nevada.door.2", "nevada.door.2b", "nevada.door.3", "nevada.door.4", "nevada.door.5", "nevada.door.6");
+  // Both years. At the first of them, the Roman one, Little Sister asks what B.C. is, with her eye still at the door,
+  // and her mother tells her: "before". The second is on Big Sister's timeline, the year Abram went down into Egypt, and
+  // her mother knows the chapter. Then Big Sister sees that both are years that matter, and does not know why. A few
+  // lines later Little Sister has done the sum her own way.
+  await g.say("nevada.gate.2", "nevada.gate.2c", "nevada.gate.2d", "nevada.gate.2b", "nevada.gate.2e", "nevada.gate.2f", "nevada.gate.3");
   if (lil) lil.face("W");                                         // she turns round to them: she told them
-  await g.say("nevada.gate.4", "nevada.gate.5", "nevada.gate.6", "nevada.gate.7");
+  // The top of the scene is hers, word for word. Then Big Sister needs to sit down, Mom has the psalm, and the last two lines are as they were.
+  await g.say("nevada.gate.4", "nevada.gate.5", "nevada.gate.5b", "nevada.gate.6", "nevada.gate.7");
   g.flag("demo.done", true);
   await g.wait(500);
   await g.fade(1, 900);
@@ -293,11 +337,13 @@ export default {
     {
       // The ruts from the fence to the glass, and the glass. The place that hums is in the air over it: there is nothing there to click on but this.
       id: "tracks", name: "where the tracks stop", verb: "Go to", poly: [[604, 466], [712, 466], [732, 520], [730, 548], [650, 560], [566, 546], [564, 522]], walkTo: [548, 548], face: "E",
-      look: each("nevada.tracks.look"), use: atTheTracks, useWith: { coin: flash },
+      // (Her flashlight, tried here: light is the right idea, and this is too little of it. Whoever holds it, she is the one who says so.)
+      look: each("nevada.tracks.look"), use: atTheTracks, useWith: { coin: flash, lilflash: "nevada.tracks.lilflash" },
     },
   ],
 
-  // Handing the coin over. Big Sister is the one who knows what it is.
+  // Handing the coin over. Big Sister is the one who knows what it is. (The things they brought from the house can be
+  // handed about too, and this scene has nothing to add: the game's own line is said, and that is all.)
   async given(g, item, to) {
     if (item !== "coin") return;
     if (to === "bigsis" && !g.flag("nevada.coinRead")) await readCoin(g);
@@ -309,6 +355,7 @@ export default {
     mom: {
       bigsis: [
         { when: (g) => g.has("coin") && !g.flag("nevada.coinRead"), say: ["nevada.talk.mom.bigsis.coin.a", "nevada.talk.mom.bigsis.coin.b"] },
+        { when: (g) => !!g.flag("nevada.coinRead"), say: ["nevada.talk.mom.bigsis.quarter.a", "nevada.talk.mom.bigsis.quarter.b"] },      // whose face is on the money, and what ours says
         ["nevada.talk.mom.bigsis.1a", "nevada.talk.mom.bigsis.1b"],
         ["nevada.talk.mom.bigsis.2a", "nevada.talk.mom.bigsis.2b", "nevada.talk.mom.bigsis.2c"],
       ],
@@ -327,7 +374,11 @@ export default {
       ],
     },
     lilsis: {
-      mom: [["nevada.talk.lilsis.mom.1a", "nevada.talk.lilsis.mom.1b"], ["nevada.talk.lilsis.mom.2a", "nevada.talk.lilsis.mom.2b", "nevada.talk.lilsis.mom.2c"]],
+      mom: [
+        // Once the old-timer has told of his hens, the next word she has with her mother is about her own chicken.
+        { when: (g) => !!g.flag("nevada.witness"), say: ["nevada.talk.lilsis.mom.4a", "nevada.talk.lilsis.mom.4b"] },
+        ["nevada.talk.lilsis.mom.1a", "nevada.talk.lilsis.mom.1b"], ["nevada.talk.lilsis.mom.2a", "nevada.talk.lilsis.mom.2b", "nevada.talk.lilsis.mom.2c"], ["nevada.talk.lilsis.mom.3a", "nevada.talk.lilsis.mom.3b"],
+      ],
       bigsis: [["nevada.talk.lilsis.bigsis.1a", "nevada.talk.lilsis.bigsis.1b", "nevada.talk.lilsis.bigsis.1c"], ["nevada.talk.lilsis.bigsis.2a", "nevada.talk.lilsis.bigsis.2b", "nevada.talk.lilsis.bigsis.2c"]],
     },
   },
@@ -335,7 +386,7 @@ export default {
   async enter(g) {
     if (g.flag("nevada.arrived")) return;
     await g.wait(500);
-    await g.say("nevada.arrive.1", "nevada.arrive.2", "nevada.arrive.3", "nevada.arrive.4");
+    await g.say("nevada.arrive.1", "nevada.arrive.2", "nevada.arrive.2b", "nevada.arrive.3", "nevada.arrive.4");
     g.flag("nevada.arrived", true);
   },
 };

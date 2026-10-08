@@ -7,13 +7,22 @@
 //     the sunglasses, so Dad can be holding the copper mirror before he knows what a mirror is for, and the top
 //     step will not take it until he does.
 //   - a beat's `scene` is the one place it is finished in.
+//   - nothing of the family's faith is a beat. Dad's three prayers (the arrival, the dark doorway, the open door), the
+//     basket he looks for in the reeds, the bricks and Psalm 90:4 hang on moments and hotspots that were already
+//     there, and no puzzle knows of them (docs/PUZZLES-egypt.md, "The family's faith, and the Bible's Egypt").
+//   - nor is the scribe's news, that Abram is in Egypt this week (Genesis 12:10-20: "egypt.heardAbram"), nor General
+//     Feathers, his youngest's stuffed hen, found in his suitcase (`chicken`). A player who talks to people finds the
+//     one, and everybody who opens the suitcase finds the other; no puzzle needs either, and the Hint button does not
+//     send him to them.
 // The chains: A gets him inside. B teaches the rule. C1, C2 and C3 are the three reflectors, in any order.
+// The date: about 1920 B.C., by the Bible's own count of years (briefs/DATING.md; docs/CHARACTERS.md, "How the game
+// counts the years").
 
 export const act = {
   id: 1, title: "Act One: Scattered", era: "egypt", gate: "egypt.ready",
-  summary: "Dad lands by the Nile, alone, about 2560 B.C. His son's sneaker prints go up to the pyramid that is being finished, where work has stopped because a wall inside has begun to hum. Dad gets himself onto the scribe's list and past the guard; learns from a lamp boy, and from a flashlight on its last batteries, that light opens the door in the air and more light opens it wider; and brings a sunbeam around three corners, with a windshield shade, a door mirror and a goldsmith's copper mirror, to open it wide enough to walk through.",
+  summary: "Dad lands by the Nile, alone, about 1920 B.C.: the Egypt of his Bible, though at first he cannot tell when in it. His son's sneaker prints go up to the pyramid that is being finished, where work has stopped because a wall inside has begun to hum. In his suitcase, under the shirts, is his youngest's stuffed hen, General Feathers, sent along to keep an eye on him; and the scribe at the site, grumbling about the grain account, tells him the palace gossip that tells him when he is: Abram is in Egypt this week (Genesis 12). Dad gets himself onto the scribe's list and past the guard; learns from a lamp boy, and from a flashlight on its last batteries, that light opens the door in the air and more light opens it wider; and brings a sunbeam around three corners, with a windshield shade, a door mirror and a goldsmith's copper mirror, to open it wide enough to walk through.",
   beats: [
-    { id: "egypt.arrive", kind: "cutscene", title: "Crash landing by the Nile: small sneaker prints go up the track", lead: "dad", scene: "egypt-crash", needs: ["seen.intro"], sets: "egypt.arrived" },
+    { id: "egypt.arrive", kind: "cutscene", title: "Crash landing by the Nile: small sneaker prints go up the track (and a prayer)", lead: "dad", scene: "egypt-crash", needs: ["seen.intro"], sets: "egypt.arrived" },
 
     { id: "egypt.map", kind: "puzzle", chain: "A", title: "Take the road map from the glovebox", lead: "dad", scene: "egypt-crash", needs: ["egypt.arrived"], sets: "egypt.hasMap", hint: "hint.egypt.map" },
     { id: "egypt.reed", kind: "puzzle", chain: "A", title: "Cut a reed by the river", lead: "dad", scene: "egypt-crash", needs: ["egypt.arrived"], sets: "egypt.hasReed", hint: "hint.egypt.reed" },
@@ -29,6 +38,6 @@ export const act = {
     { id: "egypt.trade", kind: "puzzle", chain: "C3", title: "Trade the sunglasses to the goldsmith for his copper mirror", lead: "dad", scene: "egypt-chamber", needs: ["egypt.knowsLight"], sets: "egypt.hasCopper", hint: "hint.egypt.trade" },
     { id: "egypt.topmirror", kind: "puzzle", chain: "C3", title: "Stand the copper mirror on the step at the top of the gallery", lead: "dad", scene: "egypt-gallery", needs: ["egypt.hasCopper", "egypt.knowsLight"], sets: "egypt.topSet", hint: "hint.egypt.topmirror" },
 
-    { id: "egypt.leave", kind: "gate", title: "The sunbeam opens the door wide: step up to it", lead: "dad", scene: "egypt-chamber", needs: ["egypt.shadeSet", "egypt.footSet", "egypt.topSet"], sets: "egypt.ready", hint: "hint.egypt.leave" },
+    { id: "egypt.leave", kind: "gate", title: "The sunbeam opens the door wide (and he gives thanks): step up to it (Psalm 90:4)", lead: "dad", scene: "egypt-chamber", needs: ["egypt.shadeSet", "egypt.footSet", "egypt.topSet"], sets: "egypt.ready", hint: "hint.egypt.leave" },
   ],
 };

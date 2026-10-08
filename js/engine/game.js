@@ -6,7 +6,7 @@
 //     g.give("reed");  g.has("reed");  g.take("reed");
 //     g.flag("egypt.penGiven", true);         record a story fact
 //     await g.goto("rome-steps", { via: "wormhole" });
-//     await g.card("Ancient Egypt", "about 2560 B.C.");
+//     await g.card("Ancient Egypt", "about 1920 B.C.");
 //     await g.wait(500);  await g.tween(800, (k) => ...);  await g.fade(1);
 //     await g.reach();                        the lead reaches out (g.reach(true): bends down)
 //     g.team(["mom", "bigsis", "lilsis"]);    who the player can switch between
@@ -215,6 +215,9 @@ export class Game {
   /** Say which leads the player can switch between from now on. */
   team(list) { this.store.data.team = list.filter((id) => this.leads.includes(id)); this.store.emit(); }
   music(id) { this.audio.music(id); }
+  /** The track a scene plays: its own `music` (a track id, or a function of the game that returns one, so that the
+      story can change it), or else its era's. A script that has just changed the story calls g.music(g.musicOf(g.scene)). */
+  musicOf(scene) { const m = typeof scene.music === "function" ? scene.music(this) : scene.music; return m || this.eras[scene.era].music; }
   sfx(id) { if (!this.clock.skipping) this.audio.sfx(id); }
   actor(id) { return this.view.cast.get(id); }
   /** One of the scene's painted cut-outs, by the id it has under `planes`: .show(bool), .set(state), .fade(opacity), .place(x, y, scale).
@@ -379,7 +382,7 @@ export class Game {
         console.error(err);
         this.stopTunnel();
         delete this.scenes[id];
-        if (from) this.music(from.music || this.eras[from.era].music);
+        if (from) this.music(this.musicOf(from));
         await this.fade(0, 300);
         this.ui.hud(this.mode === "play");
         this.ui.toast("That part of the game would not load. Check your connection and try again.", 4500);
@@ -387,7 +390,7 @@ export class Game {
       }
       const marks = scene.spawn || {};         // a named way in, then this lead's own mark, then the usual one
       try {
-        await this.enterScene(scene, at || (spawn !== "default" && marks[spawn]) || marks[this.store.data.active] || marks.default);
+        await this.enterScene(scene, at || (spawn !== "default" && marks[spawn]) || marks[this.store.data.active] || marks.default, spawn);
       } catch (err) {                              // the scene broke while it was being built: never leave the player looking at black
         this.stopTunnel();
         return await this.trouble(err, `Scene "${id}"`);
@@ -408,7 +411,7 @@ export class Game {
 
   /** Build a scene on the stage from the saved state. No story happens here.
       It returns once every picture the scene can show has arrived, so the caller can fade in on a finished stage. */
-  async enterScene(scene, pos) {
+  async enterScene(scene, pos, way = "default") {
     const d = this.store.data, cast = this.view.cast;
     this.dialogue.clear();
     this.closeup();
@@ -449,15 +452,19 @@ export class Game {
     d.where[d.active] = { scene: scene.id, x: Math.round(x), y: Math.round(y), face: this.lead.yaw };
 
     // A scene can name a party: leads who are here together. They arrive with whoever is leading,
-    // each on their own mark, and the player can switch between them.
+    // each on their own mark, and the player can switch between them. When they come in by a named way
+    // (g.goto(id, { spawn: "fromStairs" })), the scene can say where the ones who are NOT leading end up:
+    //     arrive: { fromStairs: [[x, y], [x, y]] }      (in the order of `party`, the lead left out)
     const markOf = (id, n) => marks[id] || [x + 55 * (n + 1), y];
     const party = (scene.party || []).filter((id) => this.leads.includes(id));
     if (party.includes(d.active)) {
+      const beside = (scene.arrive && scene.arrive[way]) || [];
+      let nth = 0;
       party.forEach((id, n) => {
         if (!d.team.includes(id)) d.team.push(id);
         const at = d.where[id];
         if (id === d.active || (at && at.scene === scene.id && at.x != null)) return;
-        const mark = markOf(id, n);
+        const mark = beside[nth++] || markOf(id, n);
         d.where[id] = { scene: scene.id, x: mark[0], y: mark[1] };
       });
     }
@@ -472,7 +479,7 @@ export class Game {
     });
     if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts
     this.rebuildSpots();
-    this.music(scene.music || this.eras[scene.era].music);
+    this.music(this.musicOf(scene));
     this.ui.hud(true);
     this.ui.refresh();
     await shown;
@@ -582,10 +589,11 @@ export class Game {
     if (!at) return at;
     const d = this.store.data, others = d.team.filter((id) => id !== d.active).map((id) => this.actor(id)).filter(Boolean);
     const taken = (x, y) => others.some((a) => Math.abs(a.x - x) < 38 && Math.abs(a.y - y) < 15);
-    for (const dx of [0, 42, -42, 84, -84]) {
-      const x = at[0] + dx, y = at[1] + (dx ? 5 : 0);
-      if (!taken(x, y) && (dx === 0 || this.map.ok(x, y))) return [x, y];
-    }
+    for (const dy of [5, 18, -12])
+      for (const dx of [0, 42, -42, 84, -84, 126, -126]) {
+        const x = at[0] + dx, y = at[1] + (dx ? dy : 0);
+        if (!taken(x, y) && (dx === 0 || this.map.ok(x, y))) return [x, y];
+      }
     return at;
   }
 
@@ -597,11 +605,12 @@ export class Game {
     const d = this.store.data, others = d.team.filter((id) => id !== d.active && id !== mate.id).map((id) => this.actor(id)).filter(Boolean);
     const free = (x, y) => this.map.ok(x, y) && !others.some((a) => Math.abs(a.x - x) < 38 && Math.abs(a.y - y) < 15);
     const side = lead.x <= mate.x ? -1 : 1;
-    for (const [sd, dy] of [[side, 2], [-side, 2], [side, 24], [-side, 24], [side, -20], [-side, -20]]) {
-      const x = mate.x + sd * reach, y = mate.y + dy;
-      if (free(x, y)) return [x, y];
-    }
-    return [mate.x + side * reach, mate.y + 2];
+    for (const k of [1, 1.4, 1.8])                     // (a step farther off, if there is no room close by)
+      for (const [sd, dy] of [[side, 2], [-side, 2], [side, 24], [-side, 24], [side, -20], [-side, -20]]) {
+        const x = mate.x + sd * reach * k, y = mate.y + dy;
+        if (free(x, y)) return [x, y];
+      }
+    return null;                                       // no room beside them: a word from where the lead stands, never on top of someone
   }
 
   /** A few words with a companion. The scene supplies them, as talk: { mom: { bigsis: [exchange, ...] } },

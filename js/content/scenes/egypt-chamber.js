@@ -1,5 +1,5 @@
 // Act One, the last of four scenes: the burial chamber.
-// Egypt, about 2560 B.C. Dad plays.
+// Egypt, about 1920 B.C. (the Bible's own count of years: briefs/DATING.md). Dad plays.
 //
 // Red granite, no pictures, and the king's furniture half unpacked. The old goldsmith works on by lamplight:
 // he is too deaf to hear the hum, and mishears everything else. The door in time is here, in the bare wall
@@ -11,6 +11,12 @@
 //   chain C3   The goldsmith's eyes are tired of shining things. The sunglasses buy his copper hand mirror.
 //   the gate   With the shade up outside and both mirrors in the gallery, the sunbeam comes in at the doorway
 //              and lands on the wall, and the door opens wide. Dad steps up to it, and the act ends.
+//
+// Two moments here are Dad's own. When the door opens he gives thanks (the last of his three prayers in the act).
+// And when he steps up to it, with the hole in time in front of him, he says Psalm 90:4, once: the psalm is headed
+// "A Prayer of Moses". If he has not heard the scribe's news he does not know whether Moses is long gone or not born
+// yet, and says so; if he has ("egypt.heardAbram"), he knows Moses is not born yet, and has the tenses worked out.
+// The card that closes the act: nearly nineteen hundred years later (1921 B.C. to 44 B.C. is 1,877 years).
 //
 // The door and every beam are light, so they are drawn live. Nothing of the door shows until it is opened.
 //
@@ -27,6 +33,8 @@ const twice = (first, second) => (g) => g.say(count(g, first) <= count(g, second
 const allSet = (g) => !!(g.flag("egypt.shadeSet") && g.flag("egypt.footSet") && g.flag("egypt.topSet"));
 /** Dad keeps his arm out, as at the top of a reach, until told to drop it: he is holding something up. */
 const holdOut = (g, on) => { if (g.lead) g.lead.hold(on); };
+/** Head bowed, hands folded (true), or let it go (false). A figure that has no such pose simply stands. */
+const pray = (a, on) => a && a.pray && a.pray(on);
 
 // ---------- light: the door, the sunbeam, the flashlight, the lamps ----------
 // The place that hums is a door-sized piece of bare wall between the king's furniture and the sarcophagus, from
@@ -154,7 +162,8 @@ async function trade(g) {
 }
 
 // ---------- the gate ----------
-/** The sunbeam arrives, and the door opens wide. Played once, the first time he comes in with all three reflectors in place. */
+/** The sunbeam arrives, the door opens wide, and Dad gives thanks. Played once, the first time he comes in with all
+    three reflectors in place. */
 async function sunrise(g) {
   await g.walkTo(214, 524);                       // he steps out of the doorway, out of the sunbeam's way
   g.lead.face("E");
@@ -165,10 +174,20 @@ async function sunrise(g) {
   await g.tween(1600, (k) => door(g, k, 1 - (1 - WIDE) * k), g.ease.out);      // it opens round, and stretches to a doorway as it grows
   g.flag("egypt.doorOpen", true);
   await g.say("egypt.hole.big", "egypt.gate.gold");
+  await g.wait(300);
+  pray(g.lead, true);                             // and then, where he stands, he gives thanks
+  await g.wait(400);
+  await g.say("egypt.gate.thanks");
+  pray(g.lead, false);
+  await g.wait(350);                              // (his hands are his own again before the player has him)
 }
 
 async function useDoor(g) {
   if (g.flag("egypt.ready")) return g.say("egypt.hole.wait");
+  // The hole in time is in front of him: Psalm 90:4, once. What he makes of "A Prayer of Moses" depends on whether
+  // the scribe's news has told him when he is.
+  const knows = !!g.flag("egypt.heardAbram");
+  await g.say("egypt.gate.psalm.1", "egypt.gate.psalm.2", knows ? "egypt.gate.psalm.3b" : "egypt.gate.psalm.3", knows ? "egypt.gate.psalm.4b" : "egypt.gate.psalm.4");
   await g.say("egypt.hole.go");
   g.flag("egypt.ready", true);
   // Act break: leave Dad at the door and pick the story up with the Son, in Rome.
@@ -177,7 +196,7 @@ async function useDoor(g) {
   d.act = 2;
   d.active = "son";
   await g.fade(1, 500);
-  await g.card("Meanwhile", "about twenty-five hundred years later", { plain: true });
+  await g.card("Meanwhile", "nearly nineteen hundred years later", { plain: true });
   await g.goto("rome-steps", { via: "wormhole" });
 }
 
@@ -252,7 +271,7 @@ export default {
       id: "hum", name: "wall that hums", verb: "Touch", rect: [462, 236, 80, 164], walkTo: [452, 506], face: "NE", when: (g) => !g.flag("egypt.doorOpen"),
       look: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.hum.look2" : "egypt.hum.look"),
       use: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.hum.use2" : "egypt.hum.use"),
-      useWith: { flashlight: shine, carmirror: "egypt.hum.mirror", coppermirror: "egypt.hum.mirror", shade: "egypt.hum.shade" },
+      useWith: { flashlight: shine, carmirror: "egypt.hum.mirror", coppermirror: "egypt.hum.mirror", shade: "egypt.hum.shade", chicken: "egypt.chicken.hum" },
     },
     {
       id: "door", name: "humming door", verb: "Go through", walkTo: [500, 500], face: "N", when: (g) => !!g.flag("egypt.doorOpen"),
@@ -268,6 +287,7 @@ export default {
       useWith: {
         sunglasses: trade, rootbeer: "egypt.goldsmith.rootbeer", pass: "egypt.goldsmith.pass", carmirror: "egypt.goldsmith.carmirror", coppermirror: "egypt.goldsmith.copper",
         flashlight: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.flash.dead" : "egypt.goldsmith.flashlight"),
+        chicken: (g) => (count(g, "egypt.goldsmith.chicken") ? g.say("egypt.chicken.stock") : g.say("egypt.chicken.show", "egypt.goldsmith.chicken")),      // he admires the medal, once
       },
     },
     {

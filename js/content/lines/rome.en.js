@@ -9,9 +9,31 @@
 //   item.coin.lilsis. Each is marked "kept" below. They are the standard for the Son's voice.
 //   The act's check script (check-rome.mjs) holds them, and says so if one is changed.
 //
-// Speakers: son, and the seven Romans (doorkeeper, soothsayer, senator, keeper, washer, urchin, clerk).
-// The Son has a name for each of them: the door guy, the chicken man, the snack guy, the laundry lady, the counting
-// guy, and Walnut. The Romans never use a modern word; he never stops.
+// Speakers: son, the seven Romans (doorkeeper, soothsayer, senator, keeper, washer, urchin, clerk), and the date
+// seller, a Jew from Judea who lives in Rome. The Son has a name for each of the Romans: the door guy, the chicken
+// man, the snack guy, the laundry lady, the counting guy, and Walnut. The date seller he calls "mister".
+// Nobody of the time ever uses a modern word; he never stops.
+//
+// THE FAMILY'S FAITH, AND THE BIBLE'S HISTORY AS HISTORY (briefs/WEAVE.md). The Son is ten and has been to Sunday
+// school all his life. Fifty-five lines carry it, each marked "woven" where its group begins:
+//   - Scripture is quoted twice, word for word from the King James Version (the texts are in briefs/out/facts-home.md):
+//     Micah 5:2, its first clause (rome.dateseller.ans.pray.2), and Numbers 6:24 (rome.dateseller.bless.1). Each ends
+//     on the King James mark, a comma and a colon, because each verse runs on. Do not "tidy" them.
+//   - Everything else from the Bible is the Son telling it in his own words: the tribute money (Matthew 22:17-21),
+//     Caesar Augustus (Luke 2:1), the angels (Luke 2:9-14), Paul's road into Rome (Acts 28:15), Jericho (Joshua 6:20).
+//   - "Not yet." is his tag for all of it, and it is said three times in the act and no more: at the fountain, to
+//     the senator, and on a second look at the stepping stones. The check script counts them.
+//   - He never says "early" about it: that word is Little Sister's, in Act Four.
+//
+// THE CHICKENS, AND THE YEARS (briefs/DATING.md, the author's two rules; briefs/WEAVE-2.md). Chickens are the thread
+// through every era: a chicken notices a door in time before any person does. Four lines carry it here, each marked
+// "chickens": the soothsayer's birds will not touch their grain, and he takes it for the worst of omens
+// (rome.soothsayer.ans.birds.omen); they all stand facing the temple doors, and the boy notices it himself and thinks
+// of his little sister, whose chicken is General Feathers and who says "Chickens KNOW." (rome.birdcage.doors.1, .2);
+// and the date seller will not have his fortune told by hens (rome.dateseller.breakfast). Nobody explains it.
+// The years: Rome's own date, 44 B.C., is the same in every count. No line here counts the years back to Egypt or to
+// anything else before Christ; a year B.C. said in this act must be one of the Bible's count in DATING.md (the check
+// script holds it).
 
 export const lines = {
   // ================= rome-steps: the steps of the temple =================
@@ -88,6 +110,8 @@ export const lines = {
   "rome.soothsayer.hi.5": ["soothsayer", "I said it in February, too. Nobody listened then, either."],
   "rome.soothsayer.ask.birds": ["son", "Why do you keep chickens in a cage?"],
   "rome.soothsayer.ans.birds.1": ["soothsayer", "They are sacred. When they feed well, the day is good. Today they will not touch a grain."],
+  // chickens: he takes it for the worst of omens, which for a man selling omens on the Ides of March it is. (The id gives him a hand across his brow.)
+  "rome.soothsayer.ans.birds.omen": ["soothsayer", "The worst omen there is, and on the Ides. I sell omens, boy. This one I could not give away."],
   "rome.soothsayer.ans.birds.2": ["son", "Maybe they're just not breakfast chickens."],
   "rome.soothsayer.ans.birds.3": ["soothsayer", "Nor am I, today. My bread and sausage come up from the cookshop by the fountain. Not this morning."],
   "rome.soothsayer.ans.birds.4": ["soothsayer", "I foresaw it. It did not help."],
@@ -121,6 +145,11 @@ export const lines = {
   "rome.birdcage.look": ["son", "Chickens in a cage. They've got the look Mom gets when Dad says 'shortcut'."],
   "rome.birdcage.look2": ["son", "Sacred chickens. I asked one what makes it sacred. It said nothing. Very professional."],
   "rome.birdcage.use": ["son", "Here, chick chick. ...Nothing. They can tell I don't have snacks. Chickens always know."],
+  // chickens: they all stand facing the temple doors, where the door in time is. He notices it himself (the first time he
+  // calls them, or the second time he looks, fed or not), and thinks of his little sister. He does not explain it.
+  // (The ids give him a point up the steps, then both arms up for the General.)
+  "rome.birdcage.doors.1": ["son", "...Huh. They're all facing up the steps. At the temple doors. Every single one. Chickens KNOW."],
+  "rome.birdcage.doors.2": ["son", "That's what my little sister says. She has a chicken called General Feathers. The General outranks me."],
   "rome.birdcage.fed": ["son", "Now they're eating like it's a contest. Good omen! I don't know what for. It still counts."],
   "rome.birdcage.breakfast": ["son", "That's the old guy's breakfast. If I feed it to his chickens, he'll foresee me doing it."],
 
@@ -142,6 +171,13 @@ export const lines = {
   "rome.senator.ans.toga.2": ["son", "I can't even see it."],
   "rome.senator.ans.toga.3": ["senator", "They would. Finding the stain on another man is most of what we do."],
   "rome.senator.ans.toga.4": ["senator", "The washerwoman by the fountain has had my best one for three days. THREE."],
+  // woven: the great-nephew nobody thinks about is the Caesar Augustus of Luke 2:1. Nobody in Rome knows it this morning.
+  "rome.senator.ask.caesar": ["son", "Does Caesar have a kid? A kid like that could get in ANYWHERE."],
+  "rome.senator.ans.caesar.1": ["senator", "Caesar has no son. There is a great-nephew: Gaius Octavius, eighteen, off at his books in Apollonia."],
+  "rome.senator.ans.caesar.2": ["senator", "Nobody gives the boy a thought. I mention him only because I am thorough."],
+  "rome.senator.ans.caesar.3": ["son", "I know another Caesar! Caesar AUGUSTUS. Luke 2:1. He counts everybody. It's how the Christmas story starts."],
+  "rome.senator.ans.caesar.4": ["senator", "Augustus. There is no such name. I know every name in Rome that matters."],
+  "rome.senator.ans.caesar.5": ["son", "...Not yet."],
   "rome.senator.ask.dad": ["son", "Have you seen my dad? Moustache, shirt with flowers all over it?"],
   "rome.senator.ans.dad.1": ["senator", "Flowers. On a shirt. In the Forum. No. I would have made a speech about it."],
   "rome.senator.ans.dad.2": ["son", "Mom's made a few."],
@@ -176,6 +212,13 @@ export const lines = {
   // ================= rome-street: the shopping street =================
 
   "rome.street.arrive.1": ["son", "Whoa. A whole street of snacks and laundry."],
+  // woven: he hears whose nose is on the new money, and works out when he is. (The era card has just told the
+  // player "44 B.C."; this is where he catches up, and where everything he says "Not yet." about begins.)
+  "rome.street.cry": ["keeper", "Hot sausage, hot bread, old silver, new silver, the new has Caesar's nose on it, I take every nose!"],
+  "rome.street.bc.1": ["son", "Caesar? JULIUS Caesar? Big Sis has him on her timeline. Before the red mark. That whole side is B.C."],
+  "rome.street.bc.2": ["son", "B.C. Before Christ. ...So Jesus hasn't been born."],
+  "rome.street.bc.3": ["son", "So it's before Christmas. Not this Christmas. EVERY Christmas. All of them. The FIRST one."],
+  "rome.street.bc.4": ["son", "Operation Don't Wreck Anything. I mean it. I've never been in front of anything this big."],
   "rome.street.arrive.2": ["son", "Step one, I can SMELL you."],
   "rome.toforum.look": ["son", "The big temple, way down there. The hum's inside. So's the door guy. One of them likes me."],
 
@@ -274,6 +317,11 @@ export const lines = {
   "rome.fountain.shiny": ["son", "Brand new, and SO shiny. I can see my face in it, next to the serious man. He's not happy about it."],
   "rome.fountain.wish.1": ["urchin", "That's somebody's wish, you know."],
   "rome.fountain.wish.2": ["son", "I'm only borrowing it. I'll pay it back with interest. Interest is extra wishes."],
+  // woven: his first hard look at it. Matthew 22:17-21 in his own words (the verse itself is Mom's, in Act Four).
+  "rome.fountain.caesar.1": ["son", "It says CAESAR on it. So that's the nose the snack guy yells about. It's the Caesar coin!"],
+  "rome.fountain.caesar.2": ["son", "Like in the story! They ask Jesus about taxes, and He says, show me a coin. Whose picture is on it?"],
+  "rome.fountain.caesar.3": ["son", "Caesar's. So Caesar gets his coin. And God gets what's God's. Which is everything. Me included."],
+  "rome.fountain.caesar.4": ["son", "But Jesus is all grown up in that story. So this isn't that Caesar. Not yet."],
   "rome.fountain.toga": ["son", "Dunk a clean bedsheet in a fountain? The laundry lady has ARMS. I've seen them."],
   "rome.fountain.quarter": ["son", "Pay it back with a quarter? Somebody digs that up in two thousand years and has SO many questions."],
   "rome.fountain.phone": ["son", "It's already dead. It doesn't need to be drowned too."],
@@ -331,8 +379,52 @@ export const lines = {
   "rome.urchin.toga": ["urchin", "A senator's toga! Don't let it touch the ground. Don't let it touch ME. I'm mostly ground."],
   "rome.urchin.breakfast": ["urchin", "That's old Gloom's. I can smell it from here. I'm being very brave about it."],
 
+  // ---------- the date seller (woven: all of him) ----------
+  // A Jew from Judea, about fifty, selling dates from Jericho on the right-hand pavement. Courteous, humorous,
+  // unhurried, nobody's fool. He is part of no puzzle and gives nothing that is carried. He says nothing about
+  // the Romans' gods, and nobody tells him anything about the future: the Son, for once, holds his tongue.
+  "rome.dateseller.look": ["son", "A man with a beard and a basket of... giant raisins? He's the only one in Rome who isn't in a hurry."],
+  "rome.dateseller.look2": ["son", "He keeps looking the same way, past the fountain and a long way off. Like he's waiting for somebody."],
+  "rome.dateseller.hi.1": ["dateseller", "Dates, young sir. From Jericho, in Judea. There are none better: I have looked."],
+  "rome.dateseller.hi.2": ["son", "Jericho? The Jericho with the WALLS?"],
+  "rome.dateseller.hi.3": ["dateseller", "You know of the walls. In that hat. ...The same Jericho. The palms have done better than the walls."],
+  "rome.dateseller.ask.try": ["son", "Can I try one? I'm between snacks."],
+  "rome.dateseller.ans.try.1": ["dateseller", "For a boy who knows of Jericho, the first is a gift. Here."],
+  "rome.dateseller.ans.try.2": ["son", "It's candy. It's candy that GROWS. Nine out of... OW. There's a rock in it!"],
+  "rome.dateseller.ans.try.3": ["dateseller", "The stone. That part is a palm tree that has not begun. I ought to charge you for the tree."],
+  "rome.dateseller.ans.try.4": ["son", "Nine out of ten. One off for the surprise rock."],
+  "rome.dateseller.ask.god": ["son", "Everybody here has a statue to pray to. Which one's yours?"],
+  "rome.dateseller.ans.god.1": ["dateseller", "None. We have one God: the God of Abraham, of Isaac and of Jacob. He made heaven and earth."],
+  "rome.dateseller.ans.god.2": ["son", "Abraham, Isaac and Jacob? I KNOW them! That's who we pray to at my house!"],
+  "rome.dateseller.ans.god.3": ["dateseller", "At your house. ...Then the world is larger than Rome has told me."],
+  "rome.dateseller.ans.god.4": ["dateseller", "Rome finds us Jews very funny: a great Temple in Jerusalem, and no statue in it."],
+  "rome.dateseller.ans.god.5": ["dateseller", "Pompey himself went in, nineteen years ago. He found no image. Not one."],
+  "rome.dateseller.ans.god.6": ["dateseller", "I ask them how they would carve the One who made the stone. They buy their dates and go."],
+  "rome.dateseller.ask.pray": ["son", "What do you pray for?"],
+  "rome.dateseller.ans.pray.1": ["dateseller", "For the one who is promised. Every day, facing Jerusalem. The prophet Micah has told us his town:"],
+  "rome.dateseller.ans.pray.2": ["dateseller", "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'"],          // Micah 5:2, King James Version, the first clause: exact, comma and all
+  "rome.dateseller.ans.pray.3": ["son", "Micah 5:2! That was my line in the Christmas program. ...Bethlehem. I know SO much about Bethlehem."],
+  "rome.dateseller.ans.pray.4": ["son", "I've never wanted to tell anybody anything so much. It's not mine to tell. That news has its own angels."],
+  "rome.dateseller.ans.pray.5": ["son", "Mister? It's going to be worth the wait. If I were you, I'd keep watching that town."],
+  "rome.dateseller.ans.pray.6": ["dateseller", "...That was not a guess. I will not ask you what it was. But I will watch."],
+  // (The id of the blessing is chosen with care: the engine picks each line's gesture from its id, and this one
+  // gives him a hand laid on his chest. Renumber it and he may bless the boy with a shrug, or with a date in his hand.)
+  "rome.dateseller.bless.1": ["dateseller", "And for you, young sir: 'The LORD bless thee, and keep thee:'"],                                   // Numbers 6:24, King James Version: exact, colon and all
+  "rome.dateseller.bless.2": ["son", "Numbers 6:24! Pastor says that at the end of church. The very same words. ...Thanks, mister."],
+  "rome.dateseller.ask.bye": ["son", "Bye, mister."],
+  "rome.dateseller.ans.bye": ["dateseller", "Go well, young sir. Come any day but the seventh. That day I rest, and Rome always wants dates."],
+  "rome.dateseller.quarter.1": ["dateseller", "A bird. An eagle? Whoever struck this was proud of his bird. ...It is not silver, young sir."],
+  "rome.dateseller.quarter.2": ["dateseller", "A coin should go home. Every year we send our offering to the Temple in Jerusalem: the half-shekel."],
+  "rome.dateseller.phone": ["dateseller", "A black stone, polished like a mirror. It shows me an old man selling dates. It is not wrong."],
+  "rome.dateseller.toga": ["dateseller", "A senator's toga. I know the man. He buys the best dates in Rome and remembers them as cheaper."],
+  "rome.dateseller.coin.1": ["dateseller", "Caesar. He has been a friend to us Jews of Rome: we may meet, and keep our fathers' customs."],
+  "rome.dateseller.coin.2": ["dateseller", "But that is fountain silver, young sir. Somebody's wish. Not a price."],
+  // chickens: the soothsayer's breakfast, shown to him. He will not have his fortune told by hens, thank you. (A small shrug.)
+  "rome.dateseller.breakfast": ["dateseller", "The soothsayer's. Every day he offers to tell my fortune by his hens. Every day: not by hens, thank you."],
+
   // ---------- the rest of the street ----------
   "rome.stones.look": ["son", "Big stones to hop across the street, so your feet stay out of the... street. Good thinking, Rome."],
+  "rome.stones.look2": ["son", "Paul walks into Rome on a road like this. The Appian Way: it's on my Bible map. The church comes out to meet him. Not yet."],   // woven: Acts 28:15
   "rome.cat.look": ["son", "A cat on a sill, ignoring a whole city. Cats were already like this. That's kind of comforting."],
   "rome.cat.use": ["son", "Here, kitty. ...Ignored. In a whole other century. Consistent. Ten out of ten."],
   "rome.shrine.look": ["son", "A tiny house in the wall, for a painted snake. With a night-light. He has a nicer room than me."],
@@ -440,6 +532,12 @@ export const lines = {
   "rome.clerk.ans.hum.2": ["clerk", "I did not look up. I was at nine hundred."],
   "rome.clerk.ans.hum.3": ["son", "That was... probably the wind."],
   "rome.clerk.ans.hum.4": ["clerk", "That is what I decided."],
+  // woven: the governor of Galilee is the King Herod of Matthew 2. Not this year. (This one does not get the tag: three is the limit.)
+  "rome.clerk.ask.judea": ["son", "What's on all the wax pads?"],
+  "rome.clerk.ans.judea.1": ["clerk", "Accounts. Judea's: Antipater's, and his son Herod's, from Galilee, where the young man governs."],
+  "rome.clerk.ans.judea.2": ["son", "Herod? KING Herod? The bad king in the Christmas story?"],
+  "rome.clerk.ans.judea.3": ["clerk", "Herod is no king. He is a procurator's son with expensive tastes. I have the figures."],
+  "rome.clerk.ans.judea.4": ["son", "...I'd count him twice. I'm just saying."],
   "rome.clerk.ask.dad": ["son", "Have you seen my dad?"],
   "rome.clerk.ans.dad.1": ["clerk", "Is he made of silver?"],
   "rome.clerk.ans.dad.2": ["son", "No."],

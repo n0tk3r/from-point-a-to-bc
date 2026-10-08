@@ -1,7 +1,8 @@
-# The present: puzzle document (first draft)
+# The present: puzzle document
 
 The part of the game that starts in the present, with the rest of the family: Mom,
-Big Sister (13) and Little Sister (7). They find out where Dad's phone was last seen,
+Big Sister (13) and Little Sister (7). At home, that evening, they pray, go through the
+house, and find out where Dad's phone was last seen and what he last said. Then they
 drive to the middle of the Nevada desert, find a witness, learn that the government
 has been closing parts of the desert for "elevated radiation", and open a door in
 time exactly the size of a coin.
@@ -10,22 +11,42 @@ It is laid out the way the project's puzzle-document method asks: for each act t
 characters, the puzzle structure, the location layout, and then the cut-scenes and
 puzzles in order. Every puzzle here is playable now.
 
-**Status: first draft.** The outline (phone location, Nevada, witness, closed
-government areas) and the three characters' abilities are the author's. Everything
-else is invention to make that outline playable: the router, the password, the wedding
-question, the old-timer, the man in gray, the coin, the notice. Keep, change or throw
-out. Act Four was put onto its painting on 2026-10-07, and three things in it changed
-on the author's instructions: the notice now seals sectors 44 and 2560 (Act One's
-Egypt is now set about 2560 B.C., as the Great Pyramid is being finished); the door in
-time where the tracks stop cannot be seen until a puzzle opens it (the last beat, #9,
-is new); and Big Sister has no glasses and no book in her arm.
+**Status.** Act Three was remade on 2026-10-07 on the author's instructions, in two
+passes. In the morning: a house with an upstairs instead of one room; ten puzzles
+instead of three; Mom as clever as her elder daughter, with a territory of her own
+(music, the stage, her books, the Founders and the United States); and the family's
+Christian faith as part of how they live and talk. In the evening, when the rooms had
+been painted: each sister has a room of her own (Little Sister's is a kingdom of
+chickens; Big Sister's is the attic, the Retreat); the house is five rooms; there is an
+eleventh puzzle (the flashlight is dead, and the only batteries are in Big Sister's
+sound machine); every date before Christ is the Bible's count, as Archbishop Ussher
+counted it, and Big Sister's timeline says so (see "How the game counts the years" in
+[CHARACTERS.md](CHARACTERS.md)); and chickens run through the whole game, beginning
+here. The outline (phone location, Nevada, witness, closed government areas), the three
+characters' abilities and Little Sister's line "Daddy's not lost. Daddy's EARLY." are
+the author's. The rest is invention to make that outline playable: keep, change or
+throw out. Four of the five rooms are fitted to their finished paintings by the
+painters' own measurements. The fifth, the landing, is fitted to its painting as it
+stands, and waits for one repaint (the attic ladder let down, and Little Sister's door
+as hers alone): until then the ladder is clicked at the hatch and its cord. Act Four
+was put onto its painting on the same day; its part of this document is its own
+writer's, and is being brought into step with the new years (the notice now seals
+sectors 44 and 1921).
 
 Play it: `index.html?scene=home-living-room` starts Act Three and
 `index.html?scene=nevada-roadside` starts Act Four. In the full game it follows Rome,
-on a card that reads "Meanwhile, about two thousand years later".
+on a card that reads "Meanwhile, about two thousand years later". The other four rooms
+of the house open the same way, with the facts that get you there:
+`?scene=home-landing&lead=bigsis&flags=home.arrived`,
+`?scene=home-study&lead=mom&flags=home.arrived,home.keyInPiano,home.hasKey,home.studyOpen`,
+`?scene=home-lilsis-room&lead=lilsis&flags=home.arrived`,
+`?scene=home-bigsis-room&lead=bigsis&flags=home.arrived,home.flashTaken`.
 
-Puzzles are numbered within this chapter for now. When the whole game has a puzzle
-document they take their place in one run of numbers.
+Puzzles are numbered within each act for now: Act Three's are #1 to #11. Act Four's
+still carry the numbers they had when Act Three had four puzzles (#5 to #9), and want
+renumbering when that act's revision is merged. Where the ledger at the end names a
+puzzle, it says which act. When the whole game has a puzzle document they take their
+place in one run of numbers.
 
 ## The idea of the chapter
 
@@ -34,14 +55,16 @@ other**: three people in one place, and every puzzle needs the right one.
 
 | | What only she can do | In Act Three | In Act Four |
 | --- | --- | --- | --- |
-| **Mom** | Adults listen to her, and she knows her husband | Answers the question about the wedding | Gets the witness to talk; knows the car |
-| **Big Sister** | Remembers the fact | Knows the year behind the password | Knows the coin, and reads the notice for what it means |
-| **Little Sister** | Fits in small places and can distract anybody | Squeezes into the closet under the stairs | Asks the man in gray two hundred questions |
+| **Mom** | Adults listen to her, and she knows her husband, her piano and her country | Sees the key in her piano; answers the question about the wedding; winds the tape; knows the year the vault wants | Gets the witness to talk; knows the car |
+| **Big Sister** | Remembers the fact | Reads the riddle (eighty-eight keys); hears which note the key is under; knows the year behind the password; and it is her sound machine, so only she may take its batteries | Knows the coin, and reads the notice for what it means |
+| **Little Sister** | Fits in small places and can distract anybody | Gets under the keyboard and into the closet under the stairs; owns the flashlight, and the fort it lives in; knows her brother's password, and chickens | Asks the man in gray two hundred questions |
 
-The player switches between them with the portraits at the top left. Trying a job as
-the wrong person is never a dead end: she says, in her own way, why it is not hers,
-and that is the hint. The Hint button does the same: the one whose job it is says what
-to try, and the other two say whose job it is.
+The player switches between them with the portraits at the top left. In the house they
+go about TOGETHER: when the one being played takes the stairs or a door, the other two
+come too. Trying a job as the wrong person is never a dead end: she says, in her own
+way, why it is not hers, and that is the hint. The Hint button does the same: the one
+whose job it is says what to try, and the other two say whose job it is. A carried
+thing can be handed to either of the others (hold it, click her or her portrait).
 
 ---
 
@@ -51,92 +74,292 @@ Home, the present, 9:40 in the evening.
 
 ## Characters
 
-- MOM: classy, refined and loving; has stopped counting voicemails politely; wants all five of them at one table.
-- BIG SISTER: thirteen, has read every book in the house; knows the year of everything; wants to be the one who works it out.
-- LITTLE SISTER: seven, small but mighty; has started before you have finished explaining; wants to help, right now.
-- DAD (a voice on the voicemail): is either driving or lost, and is never lost.
+- MOM: classy, refined and loving, and as clever as her elder daughter; plays the piano, thinks like a stage manager when things go wrong ("Places, girls."), reads lives of the Founders the way other people read thrillers; prays before she does anything else; wants all five of them at one table.
+- BIG SISTER: thirteen, has read every book in the house; knows the year of everything; says "Fun fact:" where her mother says "A matter of record:"; wants to be the one who works it out. Has made the attic into a spa retreat, and tonight is the one thing in it that is not calm.
+- LITTLE SISTER: seven, small but mighty; has started before you have finished explaining; adds her own postscript to a prayer; wants to help, right now. Loves chickens above everything. Her favorite, General Feathers, went on the trip in Daddy's suitcase, to keep an eye on him.
+- DAD (a voice on the voicemail, and on his own answering machine): is either driving or lost, and is never lost. Signs his notices "THE MANAGEMENT".
+- THE SON (a voice on the toy alarm on his bedroom door): "Operation Keep Out." He still wants a dog.
+
+The family are Reformed Christians, and it shows the way music shows in this house:
+grace is said, the Bible by Dad's plate is read after supper, the children know their
+verses, and when Dad does not come home the first thing Mom does is pray. How that is
+written (King James only, exact and brief, with its reference; hymns named, never
+quoted; nobody preaches) is in [CHARACTERS.md](CHARACTERS.md).
 
 ## Puzzle structure
 
 ```
-        Cut-scene: Voicemail, for the ninth time
-                          |
-            +-------------+--------------+
-            |                            |
-   #1 Plug In The Router        #2 Read Dad's Note
-      (Little Sister)              (Big Sister)
-            |                            |
-            +-------------+--------------+
-                          |
-            #3 Answer The Question
-                  (Mom)
-                          |
-            #4 Leave For Nevada           the gate
-                  (any of them)
+                  Cut-scene: Voicemail, for the ninth time (and a prayer)
+                                      |
+            +-------------------------+----------------------------+
+            |                                                      |
+   #1 The Other Eighty-Eight                           #4 The Retreat Goes Dark
+      (Big Sister or Mom reads Dad's riddle;              (the closet is too dark; Little Sister's
+       or either of them plays, and hears                  own flashlight, from her fort, is dead;
+       one dead note)                                      Big Sister gives up the batteries out of
+            |                                              her sound machine, up in the attic)
+   #2 The Key In The Piano                                         |
+      (Mom sees it, Big Sister hears it,               #5 Plug In The Router
+       Little Sister gets it)                             (Little Sister, in the closet under the
+            |                                              stairs, by flashlight)
+   #3 Open Trip Headquarters (whoever holds the key)               |
+            |                                                      |
+     +------+------------------+----------------------+            |
+     |                         |                      |            |
+ #6 Read Dad's Note      #8 Wind The Tape       #10 We The People  |
+    (Big Sister: 1928)      (Mom, with Dad's        (Mom: 1787)    |
+     |                       pencil)                -> the spare   |
+     |                         |                       car key     |
+     +------------+       #9 Play The Message          |           |
+                  |          (any of them)             |           |
+                  +------------------------------------|-----------+
+                  |                                    |
+          #7 Answer The Question (Mom)                 |
+             -> the map: one dot                       |
+                  |                                    |
+                  +------------------+-----------------+
+                                     |
+                      #11 Leave For Nevada      THE GATE
+                      (needs the dot, the message and the car key)
 ```
 
-Goal of the act: **find where the phone was last seen.** Two short chains that can be
-done in either order, one puzzle that needs both, then the gate. Easy on purpose: these
-are the first puzzles for a team of three, and each teaches one rule of playing them.
-#1 teaches that each of them can do something the others cannot. #2 teaches that they
-can hand things to each other.
+Goal of the act: **find where the phone was last seen, hear what he last said, and get
+a car key.** Chain A (#1 to #3) opens the study. Chain B (#4, #5) is open from the first
+line, takes them into both sisters' rooms, and feeds chain C. Behind the study door three
+chains can be done in any order: C (#6, #7: the computer), D (#8, #9: the answering
+machine) and E (#10: the vault). Easy on purpose: these are the first puzzles for a team
+of three, and each teaches one rule of playing them. #2 teaches that each of them can do
+something the others cannot. #3, #4 and #6 teach that they can hand things to each
+other. #4 teaches that the house is more than one room, and that a thing may be
+somebody's to give and nobody else's to take.
+
+The beats, as the game has them (`js/content/acts/home.js`), twelve of them:
+`home.arrive`, `home.riddle` (#1), `home.key` (#2), `home.study` (#3), `home.batteries`
+(#4), `home.router` (#5), `home.note` (#6), `home.login` (#7), `home.tape` (#8),
+`home.message` (#9), `home.vault` (#10), `home.leave` (#11).
 
 ## Location layout
 
 ```
-+--------------------------------------------------------------------------+
-| THE LIVING ROOM                                                          |
-|                                                                          |
-|  front door   window   COMPUTER    bookcase   photograph   stairs        |
-|  (the gate)            on its desk            PIANO        CLOSET UNDER  |
-|                        + Dad's note                        THE STAIRS    |
-|                                                                          |
-|  DINNER TABLE, set for five                        DAD'S ARMCHAIR        |
-|                                                                          |
-|  Here: Mom, Big Sister, Little Sister                                    |
-+--------------------------------------------------------------------------+
+ THE ATTIC
++----------------------------------------------------------------------------------+
+| THE RETREAT (home-bigsis-room): Big Sister's            two skylights, the moon  |
+|                                                                                  |
+|  round    plants      BOOKCASE (by color)   THE SOUND TABLE:     her DESK   her  |
+|  window   salt lamp   + her TIMELINE        the SOUND MACHINE    (the novel BED  |
+|           robe and      on the wall         (the only batteries) on cards)       |
+|           towels        over it             + the fountain                       |
+|                                                                                  |
+|  THE HATCH (the way down)    her RULES, on an easel     exercise mat             |
++-----|----------------------------------------------------------------------------+
+      |  the attic ladder
+ UPSTAIRS
++-----|----------------------------------------------------------------------------+
+| THE LANDING (home-landing)                                                       |
+|                                                                                  |
+|  top of the  THE SON'S DOOR  hamper  LITTLE SISTER'S  THE ATTIC  hall     DAD'S  |
+|  stairs      (toy alarm;     photos  DOOR (BEWARE     LADDER     table    STUDY  |
+|  window      shut all act)           OF CHICKENS)     (THE       (key     DOOR + |
+|     |        his school bag             |             RETREAT)   bowl)    HIS    |
+|     |                                   |                        the trip NOTICE |
+|     |                                   |                        countdown  |    |
+|     |        - - - - - - - the railing: the living room below - - - - -    |    |
++-----|-----------------------------------|-----------------------------------|----+
+      |                                   |                                   |
+      |    +------------------------------+---------+   +---------------------+------------+
+      |    | LITTLE SISTER'S ROOM (home-lilsis-room)|   | DAD'S STUDY (home-study)         |
+      |    |  her drawings  window  MY CHICKENS     |   |  corkboard  window  WALL MAP     |
+      |    |  THE FLOCK     (paper  (the chart)     |   |  DESK + COMPUTER    biplane      |
+      |    |                rooster)   rooster lamp |   |  + Dad's note       globe        |
+      |    |  BLANKET FORT   tea party   her BED    |   |  ANSWERING          shelves +    |
+      |    |  + her flashlight          + the PILLOW|   |  MACHINE            FAMILY VAULT |
+      |    |  (NO BIG SISTERS)          (RESERVED)  |   |  banner: TRIP HEADQUARTERS       |
+      |    |  HEN HOUSE         THE NEST     door   |   |  door    things that did not fit |
+      |    +----------------------------------------+   +----------------------------------+
+ DOWNSTAIRS
++-----|----------------------------------------------------------------------------+
+| THE LIVING ROOM (home-living-room)        (the landing and its three doors above)|
+|   stairs                                                                         |
+|   window    MOM'S      kitchen   WE THE    clock    PIANO     FRONT DOOR         |
+|   photos    BOOKCASE   (look)    PEOPLE             (the key   (the gate)        |
+|   CLOSET UNDER                   (framed)            is in it)  sampler over it  |
+|   THE STAIRS (the router)                                       coat hooks       |
+|                                                                                  |
+|   DAD'S ARMCHAIR (its back to us)                 DINNER TABLE, set for five,    |
+|   + his CROSSWORD + his PENCIL                    running away from us           |
+|                                                   + the family BIBLE at its head |
+|   Here: Mom, Big Sister, Little Sister                                           |
++----------------------------------------------------------------------------------+
 ```
 
-One room. The front door is the only way out, and it leads to Act Four.
+Five scenes, one painting each, each seen through one camera. Ways between them:
+living room `stairs` <-> landing `stairs`; landing `lilsis` <-> Little Sister's room
+`door`; landing `ladder` <-> the Retreat's `hatch`; landing `study` <-> study `door`
+(once unlocked). The front door of the living room is the only way out of the house,
+and it leads to Act Four. The Retreat has its own music (one slow tune in D major, from
+the sound machine) until its batteries are taken: after that the house's tune is heard
+up there too.
 
 ## Cut-scenes and puzzles
 
 ```
-Cut-Scene: Voicemail, for the ninth time        (opens the act)
+Cut-Scene: Voicemail, for the ninth time (and a prayer)        (opens the act)
 ```
 The living room. A phone rings out and goes to voicemail: "You've reached Dad. I'm
-either driving or lost. And I am never lost." Mom has now called nine times. Dinner was
-at six and five places are set. Little Sister: "Daddy's not lost. Daddy's EARLY." Big
-Sister does the arithmetic on a four-hour drive, and remembers that Dad's phone still
-reports to the family computer. Mom: "Then that is where we begin, girls."
+either driving or lost. And I am never lost." Mom has now called nine times. Little
+Sister: "Daddy's not lost. Daddy's EARLY." Big Sister does the arithmetic on a
+four-hour drive. Dinner was at six, five places are set, and Mom is not clearing two of
+them away. Then: "First things first, girls." She prays, in two lines of her own:
+"Father, You know where they are tonight, and I do not. Keep them. And bring us to
+them. In Jesus' name." Little Sister adds a postscript: "And please make Daddy ask for
+directions. Just ONE time. Amen." Big Sister remembers that Dad's phone still reports
+to the family computer, "the mainframe", which is upstairs in his study, and that the
+internet has been down since Dad "improved" the wiring. Mom says where the router
+lives (the closet under the stairs, next to the vacuum cleaner), and turns stage
+manager: "Places, girls. We are going to find out where that phone was last seen."
 *Plants:* "Daddy's EARLY" (pays off at the end of Act Four). That Dad never asks for
-directions (#3). That Dad set the computer up himself (#1, #2).
+directions (#7; and Little Sister has now prayed that he will). The study, the computer
+and the router (#1 to #7). "Places, girls."
+*Notes:* the old cut-scene's lines are kept and in their old order. All three bow their
+heads for the prayer (`actor.pray`, when the pose exists).
 
 ```
-Puzzle #1: Plug In The Router        (Home · Lead: Little Sister · the closet under the stairs)
+Puzzle #1: The Other Eighty-Eight        (Home · Lead: Big Sister or Mom · the landing, or the piano)
 Needs:        nothing
-Setup:        The computer says "No internet." Dad "improved" the wiring before he left: the
-              router is in the closet under the stairs, and something has fallen against the
-              door from inside. It opens four inches.
-Wrong tries:  Use the computer            -> the "No internet" screen. Mom says where the router lives.
-              Mom at the closet           -> "A lady does not squeeze into closets, darling. A lady has
+Setup:        Dad's study is locked. Taped to its door, in his capitals: "TRIP HEADQUARTERS. AUTHORIZED
+              PERSONNEL ONLY. LOST YOUR KEY? IT IS WITH THE OTHER EIGHTY-EIGHT. - THE MANAGEMENT". The first
+              time they come upstairs Big Sister points at it, and Mom says: "With your father there is
+              always a notice."
+Wrong tries:  The study door            -> "Locked. Naturally. And he has left us a notice instead of a key."
+              Little Sister reads it    -> "Eighty-eight keys! Daddy has a LOT of doors."
+              The key bowl on the hall table -> every key this family owns, except the two Mom wants tonight.
+Solution:     Big Sister or Mom reads the notice (it is shown close up). Big Sister: "Eighty-eight of what?
+              ...Keys. Fun fact: a standard piano has eighty-eight keys. Dad has hidden the study key in the
+              piano." Mom: "He has hidden a key in MY piano." (If it is Mom who reads it: "A matter of
+              record: a full-size piano has eighty-eight keys." and Big Sister was half a second behind.)
+              OR, from the other end, before anyone has read it: Mom or Big Sister plays the piano
+              downstairs, and one note goes thunk. "Something is lying on the hammers."
+Gives:        The knowledge that something is in the piano (`home.keyInPiano`).
+Plants/pays:  Plants "THE MANAGEMENT" (the vault's label, and the card inside it). If they found the dead
+              note first, reading the notice afterwards joins the two up: "So THAT is what is lying on
+              the hammers."
+Notes:        A piano has eighty-eight keys: a fact Mom and Big Sister both have, and Little Sister has
+              not. The hint from each says the notice is a riddle; Little Sister's says it wants
+              somebody who likes words.
+```
+
+```
+Puzzle #2: The Key In The Piano        (Home · Lead: Little Sister · the living room)
+Needs:        #1
+Setup:        The key is down inside Mom's upright piano, on the hammers, under the A above middle C.
+Wrong tries:  Mom at the piano          -> she lifts the lid and can SEE it, with a tag on it in Dad's
+                                           capitals. "And I cannot reach it. My arms are a civilized length."
+                                           "The panel down by the pedals lifts off. Under the keyboard,
+                                           sweetheart: that is your cue."
+              Big Sister at the piano   -> "It is under the A above middle C. I can hear exactly where."
+                                           "I am not putting my arm in a piano. I need all ten fingers. I
+                                           am halfway through a sonata."
+              Mom asks Big Sister       -> "It is a piano, Mother, not a mailbox. Ask the one who fits
+                                           under things."
+Solution:     Play as Little Sister and use the piano. "I FIT!" She goes under the keyboard, takes the
+              panel by the pedals off, and comes out with a marble, a penny and a key.
+Gives:        The study key (tagged "TRIP HQ"). The piano's lower panel stays off from now on.
+Plants/pays:  "I FIT!" is hers, and belongs here as much as at the closet (#5); in Act Four she eyes
+              the fence the same way.
+Notes:        "He hid it in a piano, and then he labelled it." Whoever is standing at the piano makes
+              room for her. Once the key is out the piano is a piano again: Big Sister plays her phrase
+              in a minor key, Little Sister plays "Plonk", and Mom, who would not play before, plays a
+              hymn she names ("A Mighty Fortress Is Our God"), quietly, for courage, and says the first
+              verse of the psalm behind it (Psalm 46:1).
+```
+
+```
+Puzzle #3: Open Trip Headquarters        (Home · Lead: whoever holds the key · the landing)
+Needs:        #2
+Setup:        Little Sister has the key. It can be handed to either of the others.
+Wrong tries:  The study door, as one who is not holding the key -> she says who is. Mom: "Your little
+              sister is holding the key. She fetched it, and she shall turn it." Big Sister: "Mom has
+              the key. Technically she outranks the Management."
+              The key on the Son's door -> "It doesn't have a keyhole! It has a PASSWORD."
+              The key on the front door -> "This door wants a car at the other end of it."
+Solution:     As whoever holds the key, use the study door (the key in her pockets is enough; using
+              the key on the door does the same). Mom: "'Authorized personnel only.' I authorized
+              myself on our wedding day." They all go in.
+Gives:        The study. From now on its door is the way into `home-study`.
+Plants/pays:  Plants handing things over, which #6 and #8 use, and Act Four's coin depends on.
+Notes:        The first time in: Mom, "He has not let me dust in here since March."; Big Sister
+              points out the computer and the "family vault"; Little Sister: "Something's BLINKING!"
+              (the answering machine: #8).
+```
+
+```
+Puzzle #4: The Retreat Goes Dark        (Home · Lead: Little Sister, then Big Sister · her fort, and the attic)
+Needs:        nothing
+Setup:        The closet under the stairs is too dark to find a plug in (#5), and Little Sister will not
+              go in without her own flashlight. It lives just inside her blanket fort, in her room,
+              where nobody but she may go: "NO BIG SISTERS" is her sign, and her rule.
+Wrong tries:  Mom or Big Sister at the fort, or at the flashlight -> "One does not enter a lady's fort
+                                             uninvited." / "'NO BIG SISTERS.' I respect a posted boundary."
+              A dead flashlight at the closet -> "Not with a DEAD flashlight! It's dark in there. It
+                                             wants batteries first. THEN I'll go in."
+              Big Sister at her sound machine, before there is a dead flashlight in the house -> "It
+                                             stays on. Tonight of all nights. It is the only one of us
+                                             that is calm."
+              Mom at the sound machine     -> "The batteries are in there, and they are not mine to take.
+                                             Not from a daughter. Your sister must do this herself."
+              Little Sister at the sound machine -> "The batteries are IN there! But I can't touch it.
+                                             Rule AND treaty. She has to. It's HER music box."
+Solution:     Little Sister fetches her flashlight from the fort. "CLICK. ...Click? CLICK CLICK CLICK."
+              "It's DEAD. I used it all up last night. I was reading to the flock under the blanket.
+              They wanted the WHOLE book." Mom has not seen a battery of that size in the house since
+              Easter. Big Sister, unasked: "...There are four. In my sound machine. In the Retreat. I
+              should like it noted that I said so myself." Up the attic ladder. As Big Sister, open the
+              sound machine: "Very well. The Retreat goes dark so that the internet may live." The music
+              stops. Then batteries and flashlight have to meet in one pair of hands: whoever holds one
+              is handed the other, and puts them in. (If Big Sister is holding the flashlight herself
+              when she takes them, in they go.)
+Gives:        A flashlight that works (`home.flashWorks`). The Retreat is quiet for the rest of the act.
+Plants/pays:  Pays off handing things over. Plants the sacrifice: "I intend to mention this again."
+              ("You will, darling. Often. And each time I shall say thank you, and mean it.")
+Notes:        Little Sister: "IT STOPPED. ...Now I can hear the water. It's going tick, tick, tick."
+              The fountain sounds like a clock, which Big Sister had been managing not to notice. She
+              can fetch the flashlight before she has ever tried the closet. Whoever goes to the fort,
+              the bed or the sound table has it to herself: the other two step back and watch. A beat's
+              hint is one line for each of them, whatever has been done so far, so these three are
+              worded to be true at every stage: a dead flashlight wants batteries, the only ones live in
+              the sound machine, and then the two must meet.
+```
+
+```
+Puzzle #5: Plug In The Router        (Home · Lead: Little Sister · the closet under the stairs)
+Needs:        #4 to finish it. (She can try the closet from the first line, and that is how #4 begins.)
+Setup:        Dad "improved" the wiring this morning, and the internet has been down since. The router
+              is in the closet under the stairs: a low door that stops at Mom's shoulder and opens four
+              inches. A tiny red light shows in the gap.
+Wrong tries:  Mom at the closet           -> "A lady does not squeeze into closets, darling. A lady has
                                              a seven-year-old."
               Big Sister at the closet    -> "I refuse. There are spiders in there, and I am thirteen.
                                              Both of those are final."
-              Hint as Mom or Big Sister   -> each says it is a job for someone small.
-Solution:     Play as Little Sister and open the closet. "I FIT!" She disappears into the gap.
-              From inside she finds the vacuum, Daddy's golf sticks, and a plug that is not plugged
-              into anything. Mom talks her through the socket. The little light goes from red to green.
-Gives:        The internet. The screen on the desk changes to the sign-in page.
-Plants/pays:  Plants "I FIT!" and how small the gap is (in Act Four she eyes the fence the same way).
-Notes:        "I'm a ENGINEER!" "AN engineer." "That's what I SAID."
-              If Mom or Big Sister is standing along the back wall on that side of the room when she
-              goes in, they come forward onto the rug to watch.
+              Little Sister, with no light -> "I FIT!" She goes in. "It's SO dark. I can't find the plug.
+                                             I found the vacuum. With my NOSE." She comes out: "I need
+                                             my flashlight. MINE. The pink one. It lives in my fort."
+                                             She will not go in again without it.
+              Little Sister, when one of the others is holding it -> "I need my flashlight BACK.
+                                             Somebody's got it who isn't me."
+              The computer upstairs, before this is done -> "No internet."
+Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Flashlight ON.
+              There's the vacuum. And Daddy's golf sticks. And a plug that isn't plugged into
+              anything!" Mom talks her through the socket. The little light goes from red to green.
+Gives:        The internet. The computer upstairs can be signed in to.
+Plants/pays:  "I FIT!" again. The flashlight goes with her to Nevada (where, in full morning sun, its
+              little spot cannot even be seen).
+Notes:        "I'm a ENGINEER!" "AN engineer." "That's what I SAID." The other two stand clear of the
+              closet door to watch. While she is in there with it, its glow shows in the gap.
 ```
 
 ```
-Puzzle #2: Read Dad's Note        (Home · Lead: Big Sister · the computer)
-Needs:        nothing
+Puzzle #6: Read Dad's Note        (Home · Lead: Big Sister · the study)
+Needs:        #3
 Setup:        The computer wants a four-figure password. There is a yellow note stuck to the monitor,
               in Dad's handwriting: "Password: the year of the best thing since." He has left off the end.
 Wrong tries:  Mom reads the note          -> "Since WHAT, my love?"
@@ -144,21 +367,19 @@ Wrong tries:  Mom reads the note          -> "Since WHAT, my love?"
               Little Sister at the sign-in page (if the router is on) -> she types 1, 2, 3, 4. "It said no AGAIN."
               Mom or Little Sister takes the note -> it goes in her pocket. Looking at it there: "Your sister
                                              will know. She knows the year of everything."
-              Little Sister, looking at it in her pocket -> "Words. I'll give it to somebody who reads
-                                             books with NO pictures."
 Solution:     Get the note in front of Big Sister: she takes it herself, or whoever has it hands it to
-              her (hold the note, click Big Sister or her portrait). "Since sliced bread. With Dad, everything is the best
-              thing since sliced bread. Fun fact: sliced bread was first sold on the seventh of July, 1928,
-              in Chillicothe, Missouri. The password is 1928."
+              her (in any room). "Since sliced bread. With Dad, everything is the best thing since
+              sliced bread. Fun fact: sliced bread was first sold on the seventh of July, 1928, in
+              Chillicothe, Missouri. The password is 1928."
 Gives:        The password.
-Plants/pays:  Plants handing things over, which #6 depends on.
-Notes:        History is the rule that makes it work. The fact is true and has been checked.
-              The hint is on the note and not on the screen, so this chain does not have to wait for #1.
+Plants/pays:  Pays off #3 (handing things over).
+Notes:        Exactly as in the first version of the act, moved upstairs. The fact is true and has
+              been checked. The hint is on the note and not on the screen, so this does not wait for #5.
 ```
 
 ```
-Puzzle #3: Answer The Question        (Home · Lead: Mom · the computer)
-Needs:        #1 and #2
+Puzzle #7: Answer The Question        (Home · Lead: Mom · the study)
+Needs:        #5 and #6
 Setup:        With the router on and the password known, anyone can sign in. Then the computer asks one
               more thing, because it has not seen this sign-in before: "What did you promise on your
               wedding day?"
@@ -168,32 +389,167 @@ Wrong tries:  Big Sister signs in         -> "I was not invited to the wedding. 
               Mom: "To always take the scenic route."    -> "No. That was not a promise. That was a warning."
 Solution:     Mom: "To never ask for directions." The map comes up: one dot. "Dad's phone. Last seen
               5:47 p.m. Thirty-seven miles past Last Gas." In the middle of Nevada.
-Gives:        The place. The screen on the desk shows the map from now on.
-Plants/pays:  Pays off the voicemail. Plants the place name for Act Four.
+Gives:        The place (`home.foundPing`).
+Plants/pays:  Pays off the voicemail, Little Sister's postscript to the prayer, and the wedding
+              photograph on the landing ("He was forty minutes late for it. He had refused to ask the
+              way."). Plants the place name for Act Four.
 Notes:        "He promised me he would never ask for directions. It is the one promise he has always kept."
-              A wrong answer costs nothing but a line. The password stays typed in once anyone has typed it.
+              A wrong answer costs nothing but a line. If they have already heard the message (#9),
+              Big Sister does the sum here: "5:47. His message was at 5:41. Six minutes after that, his
+              phone stops."
 ```
 
 ```
-Puzzle #4: Leave For Nevada        (Home · Lead: any of them · the front door)       THE GATE
+Puzzle #8: Wind The Tape        (Home · Lead: Mom · the study; the pencil is in the living room)
 Needs:        #3
-Setup:        Nothing stops them now.
-Wrong tries:  The door before #3: Mom -> "Not until we know where we are going. One of us in this
-              family must." Big Sister -> "A journey without a destination is just Dad."
-              Little Sister -> "Is it a 'mergency?"
-Solution:     Open the door. "Coats, girls. We are going to Nevada." "We are going to be perfectly polite,
-              and completely impossible to get rid of."
-Gives:        Act Four.
-Notes:        The drive is a card ("The Middle of Nevada. The next morning."). It could become a
-              cut-scene of its own: the car, the map, "Is Nevada past the mailbox?"
-              As they leave, the other two turn to whoever is at the door.
+Setup:        Dad will not replace his answering machine. Its little red light is blinking: one new
+              message. And a loop of its tape is hanging out (Little Sister "fixed" it last week).
+Wrong tries:  Little Sister at the machine -> "I'm not allowed to fix it again. Mommy said. With her
+                                              whole-name voice."
+              Big Sister at the machine    -> "Fun fact: you can wind a cassette by turning its hub with
+                                              a pencil. Mine are too slim. Dad's is not." And with the
+                                              pencil in her hand: "I know that it fits. I do not know
+                                              how hard to turn. That tape is his voice. Mom should do this."
+              Mom, with no pencil          -> "It wants winding back in, and for that I want a pencil."
+                                              "There is exactly one pencil in this house that can ever
+                                              be found. It is on your father's crossword."
+              Big Sister's own pencils (her desk, in the Retreat) -> the slim kind. Not for this.
+Solution:     Fetch Dad's pencil from his crossword, on the arm of his chair in the living room (any of
+              them can take it), get it to Mom, and have Mom use the machine. "I recorded entire
+              musicals off the radio with one of these. Pencil in the hub, and gently."
+Gives:        A machine that will play (`home.tapeWound`). The loop of tape is gone from the picture.
+Plants/pays:  Pays off handing things over. Plants the message.
+Notes:        Mom is of the generation that did this. Big Sister has the fact and not the knack. If
+              one of the girls is holding the pencil when the machine is tried, she says so.
 ```
 
-Also in the room, for character and nothing else: the piano (Big Sister plays a
-phrase in a minor key; Little Sister plays "Plonk"; Mom will not, tonight), the
-bookcase, the photograph of the five of them, the window, the stairs, the dinner table
-and Dad's armchair. Each of the three has her own line for each. They also have things
-to say to each other.
+```
+Puzzle #9: Play The Message        (Home · Lead: any of them · the study)
+Needs:        #8
+Setup:        One new message.
+Solution:     Any of them presses play. The other two come and stand to listen. Dad, cheerful: "Hi,
+              honey. It's 5:41 and we are making GREAT time. I found a shortcut." "Thirty-seven miles
+              past the last gas station and not one other car. The boy says hi." "He says the road
+              sign up ahead looks funny. ...Huh. That IS funny." "That sign just changed its--" And
+              the tape hisses.
+Gives:        Dad's last message (`home.heardMessage`). The machine's light stops blinking.
+Plants/pays:  This is the moment the player saw in the opening of the game. Act Four's witness says
+              "The road sign changed its mind."
+Notes:        Little Sister: "Changed its WHAT? Daddy! Changed its WHAT?" Big Sister does the
+              arithmetic: with the dot already found, "5:41 on the tape. His phone was last seen at
+              5:47. Whatever happened took six minutes."; without it, she writes down the minute. Mom:
+              "I do not need to hear it twice. He sounded happy." Nobody plays it a second time.
+```
+
+```
+Puzzle #10: We The People        (Home · Lead: Mom · the study; the clue is in the living room)
+Needs:        #3
+Setup:        Mom's car keys left the house this morning in Dad's pocket (the front door says so the
+              first time anyone tries to leave). The spare is in the "family vault": a cash box with a
+              dial, on the study shelves. Its label, in Dad's hand: "FAMILY VAULT. Combination: the
+              year WE THE PEOPLE got it in writing. Your mother will know. She brings it up."
+Wrong tries:  Big Sister reads the label  -> "I can think of three years. Mom will know which."
+              Little Sister reads it      -> "MOMMY! The box says you know!"
+              Mom: "Seventeen seventy-six." -> "No. A matter of record: 1776 is the Declaration, the
+                                               Fourth of July. 'We the People' came later."
+              Mom: "Seventeen eighty-nine." -> "No. In 1789 the new government began, and General
+                                               Washington took the oath. It was written by then."
+              Mom: "Let me think about it." -> she leaves the dial alone.
+              The study key on the vault  -> "The vault has a dial, darling, not a keyhole."
+Solution:     Mom: "Seventeen eighty-seven." "Signed in Philadelphia on the seventeenth of September.
+              He does listen. Just not at the time." Inside: her spare car key, two ketchup packets,
+              and a card: "KNEW YOU'D KNOW. - THE MANAGEMENT."
+Gives:        The spare car key (`home.hasCarKey`).
+Plants/pays:  The clue is in the house for a player who does not know: the framed Preamble in the
+              living room. Mom, looking at it: "'We the People.' A matter of record: signed in
+              Philadelphia, the seventeenth of September, 1787." Pays off "THE MANAGEMENT". The ketchup
+              is Dad's running gag (he is saving it; nobody has asked for what).
+Notes:        The wrong years cost a line each, and each line is true. "He keeps ketchup in a vault."
+```
+
+```
+Puzzle #11: Leave For Nevada        (Home · Lead: any of them · the front door)       THE GATE
+Needs:        #7, #9 and #10
+Setup:        Nothing stops them now.
+Wrong tries:  The door, with no dot on the map: Mom -> "Not until we know where we are going. One of us
+              in this family must." Big Sister -> "A journey without a destination is just Dad."
+              Little Sister -> "Is it a 'mergency?" (The first time, Mom adds why they will want a
+              key: "And there is the matter of my car. Your father moved it this morning. My keys left
+              in his pocket." Big Sister:
+              the spare is in the family vault. Little Sister: "It's a box with a clicky wheel!")
+              The door, with the dot and no message: Mom -> "There is a message on your father's
+              machine upstairs, and I would like to hear it first."
+              The door, with both and no key: Big Sister -> "Destination: yes. Message: yes. Car key:
+              no. Two out of three does not start an engine."
+Solution:     Open the door. Mom: "One moment. In this family nobody starts a journey without the
+              psalm." Big Sister: "Psalm 121. Verse 8." Little Sister, by heart: "The LORD shall
+              preserve thy going out and thy coming in from this time forth, and even for evermore."
+              Mom: "Amen. Going out, and coming in. All five of us." Then, as before: "Coats, girls.
+              We are going to Nevada." "We are going to be perfectly polite, and completely impossible
+              to get rid of."
+Gives:        Act Four.
+Notes:        The drive is a card ("The Middle of Nevada. The next morning."). As they leave, the
+              other two turn to whoever is at the door. Whoever holds the car key, it is Mom who drives.
+```
+
+Also in the house, for character and nothing else. Each of the three has her own line
+for every one of these, and they have things to say to each other in every room.
+
+- **The Son's door** (the landing). His toy alarm asks for the password, in his own
+  recorded voice. Little Sister knows it, because she has watched him, and does the
+  voice: "The password is: I still want a dog." It lets her in. Mom, quietly: "Not
+  tonight, sweetheart. I am not ready to look at that room with nobody in it." The door
+  stays shut all act. It is the one place the act is allowed to be sad.
+- **The railing**: the living room, seen from above. "A set with the lights left on and
+  nobody on it. Two of the cast are late."
+- **The family Bible**, at the head of the table by Dad's plate, open where he left it
+  this morning at the psalm for a journey. Mom has verse 2 of Psalm 121, Big Sister
+  verse 1, and Little Sister knows Psalm 23:1 by heart, and adds what she wants: "...I
+  do want Daddy, though."
+- **The sampler** over the front door (Joshua 24:15) and **the framed Preamble**.
+- **Mom's bookcase**: the Adams letters, General Washington, Dr. Franklin, a great many
+  plays, and the hymnal. Abigail Adams's "Remember the Ladies".
+- **Little Sister's room**, which is all chickens. The flock ("Admiral Doodle on top.
+  Corporal Speckle. Private Peep. Each has a name, a rank and a job. I know them all.
+  Against my will."); the chart, MY CHICKENS, twelve of them, the General with a star
+  ("You go up a rank every time you go in the wash."); the tea party; the hen house that
+  was a dollhouse ("Everybody in my hen house is home. I checked. Twice."); the pillow
+  with one place kept on it, RESERVED, for General Feathers, who is on the trip in
+  Daddy's suitcase ("I'm not worried about the General. I'm a LITTLE worried about
+  Daddy. That's why I SENT her."). It is where **"Chickens KNOW."** is first said, of
+  the flock, as a plain fact: it pays off in every other act. And at the nest Mom says
+  the truest thing in the room, once: "The Lord's own picture of Himself: 'even as a
+  hen gathereth her chickens under her wings'. Matthew 23:37." "Tonight I know just how
+  the hen feels."
+- **The Retreat.** Little Sister takes her boots off with great ceremony and whispers
+  at full volume ("THIS IS MY WHISPER."). Mom: "Soft light, one sound, nothing out of
+  place. Darling, it is a set. It is a very good set." She can name the key the music
+  is in (D major). The rules, close up: THE RETREAT. 1. SHOES OFF. 2. VOICES DOWN. 3. NO
+  CHICKENS; and under the third, in crayon, AN APPEAL HAS BEEN LODGED. ("You have not
+  made a room. You have founded a republic.") The room is perfectly calm and Big Sister
+  is not: she has counted the little lights in fours, twice.
+- **Big Sister's timeline**, on the Retreat's wall: where the game says how it counts
+  the years. "I used Archbishop Ussher's dates. He counted the years from the Bible's
+  own genealogies." The first time any of them looks along it they read it between
+  them: 4004 B.C., the Creation; 2348 B.C., the Flood; 1921 B.C., Abram leaves Haran
+  and goes down into Egypt; 1491 B.C., the Exodus; 44 B.C., the Ides of March; and at
+  the red mark, what B.C. and A.D. mean. Mom's matter of record is that the
+  Archbishop's book was published in 1650. Little Sister: "There's not much paper
+  before Abram! I thought the beginning would be the LONGEST bit." Big Sister: "It is
+  as long as it was." Nothing else is said about the dates, here or anywhere. Little
+  Sister is on the timeline, at the far end, in pencil. (1921 and 44 are the two numbers
+  on the notice in Act Four.)
+- **The wall map**, **the corkboard** and **the banner** in the study: Dad's route in
+  red wool, and a shorter piece, in yellow, across a part of the map with nothing on it
+  ("Yellow is for caution. He chose it himself."); the Son's "Operation Road Trip",
+  whose steps one to five are "snacks"; TRIP in Dad's blue, and HEADQUARTERS in the
+  Son's hand, one color to a letter.
+- The clock, the kitchen (her best hen is on the fridge, guarding the snacks), the
+  photographs (the lake; the wedding), the stairs (sixteen steps: Big Sister has
+  counted), the coat hooks, the hall table's key bowl, the countdown to the trip, the
+  Son's school bag, the laundry hamper, the globe, the model biplane, the shelves of
+  manuals read halfway, the things that did not fit in the car ("He left the maps."),
+  Dad's armchair and his crossword.
 
 ---
 
@@ -450,19 +806,38 @@ a few steps from it with his back turned, reporting a seven-year-old to his supe
 
 | Thing | Comes from | Who can hold it | Used for |
 | --- | --- | --- | --- |
-| Sticky note | The monitor, Act Three | Any of the three | #2: only Big Sister can read what it means |
-| Silver coin | The Son takes it from a fountain in Rome, opens a door the size of it with the morning sun, and tosses it through (Act Two). It hits the old-timer's hat in Nevada. | The Son; then Mom, and whoever she gives it to | #6: only Big Sister knows what it is. #9: any of them can flash the sun off it |
+| Study key | Inside the piano, Act Three #2. Only Little Sister can get it out. | Little Sister; then whoever she gives it to | Act Three #3: whoever holds it opens Dad's study |
+| Little Sister's flashlight | Her blanket fort, in her room. Only she may take it. It is dead. | Little Sister (it can be lent, and must come back) | Act Three #4: it wants batteries. #5: the dark of the closet under the stairs |
+| Batteries | Big Sister's sound machine, in the Retreat, Act Three #4. Only she may take them. | Big Sister; then whoever she gives them to | Act Three #4: handed to whoever holds the flashlight (or the other way about), they go into it, and are not seen again |
+| Sticky note | The monitor in the study, Act Three | Any of the three | Act Three #6: only Big Sister can read what it means |
+| Dad's pencil | His crossword, on the arm of his chair in the living room | Any of the three | Act Three #8: Mom winds the answering machine's tape with it |
+| Spare car key | The family vault, Act Three #10 | Mom; then whoever she gives it to | Act Three #11: they cannot leave without it. Mom drives. |
+| Silver coin | The Son takes it from a fountain in Rome, opens a door the size of it with the morning sun, and tosses it through (Act Two). It hits the old-timer's hat in Nevada. | The Son; then Mom, and whoever she gives it to | Act Four #6: only Big Sister knows what it is. Act Four #9: any of them can flash the sun off it |
+
+The five things from the house that are not used up (the key, the flashlight, the note, the pencil, the car key) are still in their pockets in Nevada. The batteries are in the flashlight.
 
 **Plants and payoffs**
 
 | Planted | Where | Pays off |
 | --- | --- | --- |
 | "Daddy's not lost. Daddy's EARLY." | Opening of Act Three | The last scene of Act Four |
-| Dad never asks for directions | The voicemail | #3, the wedding question. (Draft: the last thing Dad does in the game is ask for directions.) |
+| Dad never asks for directions | The voicemail; Little Sister's postscript to the prayer ("please make Daddy ask for directions. Just ONE time."); the wedding photograph on the landing | Act Three #7, the wedding question. (Draft: the last thing Dad does in the game is ask for directions. That would also be a seven-year-old's prayer answered.) |
+| "THE MANAGEMENT" | Act Three #1, Dad's notice | Act Three #10: the vault's label ("Your mother will know. She brings it up.") and the card inside it ("KNEW YOU'D KNOW.") |
+| "I FIT!" | Act Three #2 (under the keyboard) and #5 (the closet) | The fence: "I could fit under that." For the next act. |
+| Handing a thing to someone | Act Three #3 (the key), #6 (the note), #8 (the pencil) | Act Four #6 (the coin) |
+| The road sign that changed its mind | The intro | Act Three #9: "That sign just changed its--". Then the old-timer's account, Act Four #5 |
+| 5:41 on the tape; 5:47 on the map | Act Three #9 and #7 | Whichever comes second: Big Sister counts the six minutes |
+| "Thirty-seven miles past Last Gas" | Act Three #7 (the map) and #9 (Dad says it himself) | The first line of Act Four |
+| The ketchup packets Dad is saving | Act One (his running gag) | Act Three #10: two of them are in the family vault. Nobody has asked what he is saving them for. |
+| "I still want a dog" | Rome, Act Two: "Edge, we get a dog." | Act Three: it is the password on his bedroom door. Not yet answered. |
+| Psalm 121:8: "thy going out and thy coming in" | Act Three #11, at the front door. Mom: "Going out, and coming in. All five of us." | Not yet: the coming in. (Mom's "My times are in thy hand", Psalm 31:15, belongs to the end of Act Four.) |
+| Little Sister's flashlight | Act Three #4 and #5 | Act Four: light opens doors in this story, and hers is too small to be seen in the morning sun. For later. |
+| "Chickens KNOW." | Act Three, Little Sister at her flock | The geese in Egypt, the sacred chickens in Rome, the old-timer's hens in Act Four: in every era the birds face a door in time before any person has noticed it. |
+| General Feathers' place on the pillow: RESERVED | Act Three, Little Sister's room | She is in Dad's suitcase in Egypt (Act One), in charge. Not yet: her coming home. |
+| 1921 B.C. and 44 B.C. on Big Sister's timeline | Act Three, the Retreat | The two sectors on the notice in Act Four. "Her timeline has that year on it." |
+| "The Retreat goes dark so that the internet may live." "I intend to mention this again." | Act Three #4 | Not yet. She will. |
+| The appeal lodged against rule three (NO CHICKENS) | Act Three, the rules in the Retreat | Not yet heard. |
 | The coin that "didn't come back down" | Rome, Act Two | #5 and #6 |
-| The road sign that changed its mind | The intro | The old-timer's account, #5 |
-| Handing a thing to someone | #2 | #6 |
-| "I FIT!" | #1 | The fence: "I could fit under that." For the next act. |
 | "Sun was low. Hit the chrome on that wagon and threw a flash up ahead, like a signal mirror." | #5, the old-timer's account | #9: the coin, held up to the low morning sun |
 | "Look at the edges. It is NEW." | #6 | #9: a new coin shines |
 | "Why is the sky DOWN?" | Rome, Act Two, looking through the coin-sized door | #5: the coin fell out of the sky and hit his hat |
@@ -472,14 +847,37 @@ a few steps from it with his back turned, reporting a seven-year-old to his supe
 | A door the size of a coin, with a morning in it | The closing scene | Not yet. It is the way through, and it is too small. More light would be a bigger door: they have not been told. |
 | Sausages | The closing scene: the first thing Little Sister notices | Not yet. Her brother is on the other side of a door like this one, and he found Rome's snack bar the same way: "Step one, I can SMELL you." |
 
-**Facts used.** The password (#2), the bomb tests (#8), the coin (#6) and the two years
-(the closing scene) all rest on real history. The list, and which of them have been
-checked against a source, is at the end of [CHARACTERS.md](CHARACTERS.md). Two were
-reworded on 2026-10-07 to say less and be surer: of the coin, only that in 44 B.C. coins
-were struck in Rome with Caesar's own portrait while he was alive (not that he was the
-first); of 2560 B.C., only "About when the Great Pyramid was finished."
+(The last nine rows are Act Four's, and their puzzle numbers are that act's own.)
 
-**How it was checked.** `briefs/out/nevada-check.mjs` reads the act's files against each
+**Facts used.** In Act Three the riddle (#1: a piano's eighty-eight keys), the password
+(#6: sliced bread, 1928), the tape (#8: a cassette can be wound with a pencil) and the
+vault (#10: the Constitution signed in 1787, the Declaration adopted in 1776, the new
+government and Washington's oath in 1789) rest on real history; so do the things Mom
+and Big Sister say for the pleasure of it (Luther's hymn, Abigail Adams's letter,
+Washington's Rules of Civility, Adams and Jefferson, Bach's "S.D.G.", Cristofori's
+piano, what B.C. and A.D. mean, the year Archbishop Ussher's book was published). The
+years before Christ on Big Sister's timeline (4004, 2348, 1921, 1491) are the Bible's
+count, as Ussher counted it: the author's rule for the whole game. Six verses of
+Scripture are quoted, and nine words of a seventh (Matthew 23:37), from the King James
+Version, each with its reference. In Act Four the bomb tests (#8), the coin (#6)
+and the two years (the closing scene) all rest on real history. The lists, and which
+of them have been checked against a source, are at the end of
+[CHARACTERS.md](CHARACTERS.md): Big Sister's facts, Mom's facts, and the verses. Two of
+Act Four's were reworded on 2026-10-07 to say less and be surer: of the coin, only that
+in 44 B.C. coins were struck in Rome with Caesar's own portrait while he was alive (not
+that he was the first); of 2560 B.C., only "About when the Great Pyramid was finished."
+One of Act Three's was reworded the same day on the fact-checker's finding: a cassette
+is wound with "a pencil", and nobody says that the pencil's six sides are why it fits.
+
+**How it was checked.** Act Three: `briefs/out/check-home.mjs` reads the act's five
+scene files, its lines, its beats, the carried things and the sounds against each
+other and against the painters' measurements (walk outlines, places to stand, cut-outs;
+and that every place to stand can be walked to from every way in), and plays the act
+two ways on a stand-in for the engine, trying everything as each of the three before
+every step. `briefs/out/play-home.py` plays it two ways in the
+real game by real clicks, by different orders of the middle chains, and keeps a picture
+of every scene and every moment worth looking at in `briefs/out/home-shots/`. Act Four:
+`briefs/out/nevada-check.mjs` reads the act's files against each
 other, against the painter's measurements and against the author's instructions, and
 plays it three ways on a stand-in for the engine. `briefs/out/nevada-play.py` plays it
 three ways in the real game by real clicks, with a different one of the three holding

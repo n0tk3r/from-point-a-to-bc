@@ -29,6 +29,7 @@ export const cast = {
   senator:  { name: "Senator", color: "#c98ae0", sprite: "senator" },
   doorkeeper: { name: "Doorkeeper", color: "#c9b08a", sprite: "doorkeeper" },
   clerk:    { name: "Clerk", color: "#e0b0a4", sprite: "clerk" },
+  dateseller: { name: "Date Seller", color: "#e9c46a", sprite: "dateseller" },
   // Nevada
   oldtimer: { name: "Old-Timer", color: "#e6d3a0", sprite: "oldtimer" },
   agent:    { name: "Man in Gray", color: "#c9ced6", sprite: "agent" },
@@ -38,7 +39,7 @@ export const cast = {
 /** Time periods. The id matches a palette in css/tokens.css and a track in sound.js. */
 export const eras = {
   present: { name: "The present", date: "", music: "road" },
-  egypt:   { name: "Ancient Egypt", date: "about 2560 B.C.", music: "egypt" },
+  egypt:   { name: "Ancient Egypt", date: "about 1920 B.C.", music: "egypt" },      // by the Bible's own count of years (Ussher): see docs/CHARACTERS.md, "How the game counts the years"
   rome:    { name: "Rome", date: "44 B.C.", music: "rome" },
   home:    { name: "Home", date: "The present", music: "home" },
   nevada:  { name: "The Middle of Nevada", date: "The next morning", music: "nevada" },
@@ -57,6 +58,7 @@ export const items = {
   carmirror:    { name: "door mirror", icon: "carmirror.png", look: "item.carmirror.look" },
   sunglasses:   { name: "sunglasses", icon: "sunglasses.png", look: "item.sunglasses.look" },
   coppermirror: { name: "copper mirror", icon: "coppermirror.png", look: "item.coppermirror.look" },
+  chicken:      { name: "General Feathers", icon: "chicken.png", look: "item.chicken.look" },    // Little Sister's stuffed chicken, sent along to keep an eye on him
   // Act Two: the Son's
   toga:      { name: "senator's toga", icon: "toga.png", look: "item.toga.look" },
   tunic:     { name: "small tunic", icon: "tunic.png", look: "item.tunic.look" },
@@ -67,6 +69,11 @@ export const items = {
   gum:       { name: "pack of gum", icon: "gum.png", look: "item.gum.look" },
   // The coin goes on from the Son to Mom and the girls, so each of them has a line for it.
   coin: { name: "silver coin", icon: "coin.png", look: { son: "item.coin.look", mom: "item.coin.mom", bigsis: "item.coin.bigsis", lilsis: "item.coin.lilsis", any: "item.coin.look" } },
-  // Act Three
+  // Act Three: each of the three has her own line for each thing
   note: { name: "sticky note", icon: "note.png", look: { mom: "item.note.mom", bigsis: "item.note.bigsis", lilsis: "item.note.lilsis", any: "item.note.mom" } },
+  studykey: { name: "study key", icon: "studykey.png", look: { mom: "item.studykey.mom", bigsis: "item.studykey.bigsis", lilsis: "item.studykey.lilsis", any: "item.studykey.mom" } },
+  lilflash: { name: "pink flashlight", icon: "lilflash.png", look: { mom: "item.lilflash.mom", bigsis: "item.lilflash.bigsis", lilsis: "item.lilflash.lilsis", any: "item.lilflash.lilsis" } },
+  pencil: { name: "Dad's pencil", icon: "pencil.png", look: { mom: "item.pencil.mom", bigsis: "item.pencil.bigsis", lilsis: "item.pencil.lilsis", any: "item.pencil.mom" } },
+  carkey: { name: "spare car key", icon: "carkey.png", look: { mom: "item.carkey.mom", bigsis: "item.carkey.bigsis", lilsis: "item.carkey.lilsis", any: "item.carkey.mom" } },
+  batteries: { name: "batteries", icon: "batteries.png", look: { mom: "item.batteries.mom", bigsis: "item.batteries.bigsis", lilsis: "item.batteries.lilsis", any: "item.batteries.bigsis" } },
 };

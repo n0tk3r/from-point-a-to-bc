@@ -1,0 +1,912 @@
+{
+ "id": "home-study",
+ "horizon": 120,
+ "full": 440,
+ "view": {
+  "horizon": 120,
+  "full": 440,
+  "cam": [
+   410,
+   1210
+  ],
+  "yaw": -6,
+  "focal": 800,
+  "centre_x": 400
+ },
+ "eye_cm": 350,
+ "vanishing": [
+  484,
+  120
+ ],
+ "light": "night: desk lamp far left (warm, small), shaded lamp on the shelves at the right (warm), the moon through the gable window (pale blue patch on the floor), the landing's lamp through the open door at the front left",
+ "walk": [
+  [
+   247,
+   374
+  ],
+  [
+   322,
+   376
+  ],
+  [
+   314,
+   389
+  ],
+  [
+   374,
+   391
+  ],
+  [
+   380,
+   376
+  ],
+  [
+   624,
+   382
+  ],
+  [
+   653,
+   391
+  ],
+  [
+   718,
+   497
+  ],
+  [
+   226,
+   473
+  ],
+  [
+   205,
+   418
+  ]
+ ],
+ "blocked": [],
+ "feet": {
+  "desk": [
+   [
+    276,
+    348
+   ],
+   [
+    425,
+    352
+   ],
+   [
+    420,
+    372
+   ],
+   [
+    258,
+    367
+   ]
+  ],
+  "chair": [
+   [
+    334,
+    372
+   ],
+   [
+    370,
+    373
+   ],
+   [
+    365,
+    385
+   ],
+   [
+    327,
+    384
+   ]
+  ],
+  "cabinet": [
+   [
+    174,
+    388
+   ],
+   [
+    215,
+    389
+   ],
+   [
+    196,
+    408
+   ],
+   [
+    152,
+    406
+   ]
+  ],
+  "shelves": [
+   [
+    668,
+    392
+   ],
+   [
+    710,
+    393
+   ],
+   [
+    783,
+    481
+   ],
+   [
+    727,
+    479
+   ]
+  ],
+  "globe": [
+   [
+    622,
+    367
+   ],
+   [
+    647,
+    368
+   ],
+   [
+    652,
+    375
+   ],
+   [
+    627,
+    374
+   ]
+  ],
+  "chest": [
+   [
+    507,
+    354
+   ],
+   [
+    592,
+    357
+   ],
+   [
+    596,
+    367
+   ],
+   [
+    508,
+    364
+   ]
+  ],
+  "heap": [
+   [
+    321,
+    519
+   ],
+   [
+    671,
+    538
+   ],
+   [
+    712,
+    629
+   ],
+   [
+    288,
+    601
+   ]
+  ],
+  "pile": [
+   [
+    728,
+    495
+   ],
+   [
+    797,
+    499
+   ],
+   [
+    837,
+    547
+   ],
+   [
+    758,
+    543
+   ]
+  ],
+  "door-leaf": [
+   [
+    68,
+    587
+   ],
+   [
+    147,
+    624
+   ]
+  ]
+ },
+ "planes": [
+  {
+   "id": "desk",
+   "file": "desk.png",
+   "base": [
+    [
+     258,
+     367
+    ],
+    [
+     420,
+     372
+    ]
+   ],
+   "solid": [
+    [
+     276,
+     348
+    ],
+    [
+     425,
+     352
+    ],
+    [
+     417,
+     387
+    ],
+    [
+     246,
+     381
+    ]
+   ],
+   "note": "desk, chair, computer (screen dark), lamp. Nobody can stand behind it; `solid` is the floor under desk and chair."
+  },
+  {
+   "id": "screen",
+   "states": {
+    "offline": "screen-offline.png",
+    "login": "screen-login.png",
+    "map": "screen-map.png"
+   },
+   "base": [
+    [
+     258,
+     368
+    ],
+    [
+     420,
+     373
+    ]
+   ],
+   "note": "just the lit glass, laid over the dark monitor of desk.png"
+  },
+  {
+   "id": "note",
+   "file": "note.png",
+   "base": [
+    [
+     258,
+     368
+    ],
+    [
+     420,
+     373
+    ]
+   ],
+   "note": "shown until the note is taken"
+  },
+  {
+   "id": "tape",
+   "file": "tape-out.png",
+   "base": [
+    [
+     152,
+     406
+    ],
+    [
+     196,
+     408
+    ]
+   ],
+   "note": "the spilled loop, shown until it is wound back in"
+  },
+  {
+   "id": "vault-open",
+   "file": "vault-open.png",
+   "base": [
+    [
+     668,
+     392
+    ],
+    [
+     727,
+     479
+    ]
+   ],
+   "note": "lid up; covers the shut box of the backdrop exactly"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the door's wall, frame and open leaf at the left; the heap at the bottom; the suitcase and mat at the right"
+  }
+ ],
+ "things": [
+  {
+   "id": "window",
+   "what": "the gable window, the night and the moon in it",
+   "shape": {
+    "rect": [
+     399,
+     172,
+     89,
+     100
+    ]
+   },
+   "stand": [
+    456,
+    381
+   ],
+   "face": "N"
+  },
+  {
+   "id": "desk",
+   "what": "Dad's big old desk (cut-out desk.png, with the chair and the computer)",
+   "shape": {
+    "rect": [
+     258,
+     263,
+     167,
+     108
+    ]
+   },
+   "stand": [
+    342,
+    393
+   ],
+   "face": "N"
+  },
+  {
+   "id": "computer",
+   "what": "the family computer, \"the mainframe\": a beige case and a fat monitor",
+   "shape": {
+    "rect": [
+     331,
+     263,
+     47,
+     53
+    ]
+   },
+   "stand": [
+    342,
+    393
+   ],
+   "face": "N",
+   "screen": [
+    337,
+    271,
+    31,
+    25
+   ]
+  },
+  {
+   "id": "note",
+   "what": "the yellow sticky note on the monitor's frame, top right (cut-out note.png)",
+   "shape": {
+    "rect": [
+     361,
+     267,
+     14,
+     13
+    ]
+   },
+   "stand": [
+    394,
+    382
+   ],
+   "face": "W",
+   "click": {
+    "rect": [
+     357,
+     263,
+     22,
+     21
+    ]
+   }
+  },
+  {
+   "id": "corkboard",
+   "what": "the corkboard: lists, and the boy's drawings of the station wagon pinned over them",
+   "shape": {
+    "rect": [
+     286,
+     213,
+     68,
+     54
+    ]
+   },
+   "stand": [
+    274,
+    379
+   ],
+   "face": "N"
+  },
+  {
+   "id": "wallmap",
+   "what": "the road map of the West: pins, red wool for the route, a shorter yellow piece cutting the corner",
+   "shape": {
+    "rect": [
+     488,
+     215,
+     124,
+     109
+    ]
+   },
+   "stand": [
+    558,
+    383
+   ],
+   "face": "N"
+  },
+  {
+   "id": "machine",
+   "what": "the answering machine on the filing cabinet: a grey wedge, tape window, big buttons",
+   "shape": {
+    "rect": [
+     156,
+     296,
+     51,
+     28
+    ]
+   },
+   "stand": [
+    243,
+    401
+   ],
+   "face": "W",
+   "tape": [
+    161,
+    312,
+    31,
+    47
+   ]
+  },
+  {
+   "id": "cabinet",
+   "what": "the filing cabinet the machine stands on",
+   "shape": {
+    "rect": [
+     152,
+     306,
+     63,
+     101
+    ]
+   },
+   "stand": [
+    243,
+    401
+   ],
+   "face": "W"
+  },
+  {
+   "id": "shelves",
+   "what": "the low shelves of manuals and jars, with the shaded lamp",
+   "shape": {
+    "rect": [
+     667,
+     294,
+     117,
+     187
+    ]
+   },
+   "stand": [
+    651,
+    420
+   ],
+   "face": "E"
+  },
+  {
+   "id": "vault",
+   "what": "the family vault: a grey cash box with a dial and a label, at the near end of the shelves",
+   "shape": {
+    "rect": [
+     712,
+     344,
+     65,
+     38
+    ]
+   },
+   "stand": [
+    666,
+    460
+   ],
+   "face": "E",
+   "open": [
+    711,
+    309,
+    67,
+    73
+   ]
+  },
+  {
+   "id": "globe",
+   "what": "the floor globe",
+   "shape": {
+    "rect": [
+     621,
+     290,
+     31,
+     85
+    ]
+   },
+   "stand": [
+    602,
+    384
+   ],
+   "face": "E"
+  },
+  {
+   "id": "banner",
+   "what": "the paper banner on a string between two rafters: TRIP HEADQUARTERS",
+   "shape": {
+    "rect": [
+     270,
+     133,
+     265,
+     43
+    ]
+   },
+   "stand": [
+    431,
+    427
+   ],
+   "face": "N"
+  },
+  {
+   "id": "door",
+   "what": "the door to the landing: its frame at the left edge, the leaf standing open (front plane)",
+   "shape": {
+    "rect": [
+     0,
+     306,
+     153,
+     294
+    ]
+   },
+   "stand": [
+    252,
+    466
+   ],
+   "face": "W"
+  },
+  {
+   "id": "chair",
+   "what": "his desk chair, his cardigan over the back",
+   "shape": {
+    "rect": [
+     325,
+     315,
+     43,
+     68
+    ]
+   },
+   "stand": [
+    342,
+    393
+   ],
+   "face": "N"
+  },
+  {
+   "id": "aeroplane",
+   "what": "the model biplane on a thread, over the map",
+   "shape": {
+    "rect": [
+     509,
+     160,
+     82,
+     84
+    ]
+   },
+   "stand": [
+    558,
+    383
+   ],
+   "face": "N"
+  },
+  {
+   "id": "heap",
+   "what": "what would not fit in the car: the cooler, the tent in its bag, the box of maps (front plane)",
+   "shape": {
+    "rect": [
+     265,
+     460,
+     512,
+     140
+    ]
+   },
+   "stand": [
+    402,
+    477
+   ],
+   "face": "S"
+  },
+  {
+   "id": "chest",
+   "what": "the old chest under the map",
+   "shape": {
+    "rect": [
+     507,
+     311,
+     89,
+     55
+    ]
+   },
+   "stand": [
+    558,
+    383
+   ],
+   "face": "N"
+  },
+  {
+   "id": "calendar",
+   "what": "the calendar",
+   "shape": {
+    "rect": [
+     367,
+     213,
+     22,
+     38
+    ]
+   },
+   "stand": [
+    274,
+    379
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rug",
+   "what": "the rug",
+   "shape": {
+    "rect": [
+     383,
+     385,
+     243,
+     65
+    ]
+   },
+   "stand": [
+    431,
+    427
+   ],
+   "face": "E"
+  }
+ ],
+ "exits": [
+  {
+   "to": "home-landing",
+   "id": "door",
+   "shape": {
+    "poly": [
+     [
+      0,
+      306
+     ],
+     [
+      153,
+      320
+     ],
+     [
+      153,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    252,
+    466
+   ],
+   "face": "W"
+  }
+ ],
+ "marks": {
+  "fromLanding": {
+   "mom": [
+    298,
+    448
+   ],
+   "bigsis": [
+    251,
+    432
+   ],
+   "lilsis": [
+    360,
+    457
+   ]
+  },
+  "mom": [
+   298,
+   448
+  ],
+  "bigsis": [
+   251,
+   432
+  ],
+  "lilsis": [
+   360,
+   457
+  ]
+ },
+ "stands": {
+  "mom": {
+   "at": [
+    298,
+    448
+   ],
+   "grownup_px": 164
+  },
+  "bigsis": {
+   "at": [
+    251,
+    432
+   ],
+   "grownup_px": 156
+  },
+  "lilsis": {
+   "at": [
+    360,
+    457
+   ],
+   "grownup_px": 168
+  },
+  "atdesk": {
+   "at": [
+    342,
+    393
+   ],
+   "grownup_px": 136
+  },
+  "atnote": {
+   "at": [
+    394,
+    382
+   ],
+   "grownup_px": 131
+  },
+  "atmachine": {
+   "at": [
+    243,
+    401
+   ],
+   "grownup_px": 141
+  },
+  "atvault": {
+   "at": [
+    666,
+    460
+   ],
+   "grownup_px": 170
+  },
+  "atshelves": {
+   "at": [
+    651,
+    420
+   ],
+   "grownup_px": 150
+  },
+  "atmap": {
+   "at": [
+    558,
+    383
+   ],
+   "grownup_px": 132
+  },
+  "atcork": {
+   "at": [
+    274,
+    379
+   ],
+   "grownup_px": 129
+  },
+  "atdoor": {
+   "at": [
+    252,
+    466
+   ],
+   "grownup_px": 173
+  },
+  "atglobe": {
+   "at": [
+    602,
+    384
+   ],
+   "grownup_px": 132
+  },
+  "atwindow": {
+   "at": [
+    456,
+    381
+   ],
+   "grownup_px": 130
+  },
+  "atbanner": {
+   "at": [
+    431,
+    427
+   ],
+   "grownup_px": 154
+  },
+  "front": {
+   "at": [
+    402,
+    477
+   ],
+   "grownup_px": 179
+  },
+  "frontright": {
+   "at": [
+    622,
+    488
+   ],
+   "grownup_px": 184
+  }
+ },
+ "cutouts": {
+  "note": [
+   361,
+   267,
+   14,
+   13
+  ],
+  "screen": [
+   337,
+   271,
+   31,
+   25
+  ],
+  "tape": [
+   161,
+   312,
+   31,
+   47
+  ],
+  "vault-open": [
+   711,
+   309,
+   67,
+   73
+  ],
+  "desk": [
+   259,
+   263,
+   167,
+   120
+  ],
+  "front": [
+   0,
+   300,
+   800,
+   300
+  ]
+ },
+ "lights": {
+  "machine": [
+   193,
+   317
+  ],
+  "desk-lamp": [
+   301,
+   275
+  ],
+  "shelf-lamp": [
+   696,
+   307
+  ],
+  "moon": [
+   459,
+   197
+  ],
+  "screen": [
+   337,
+   271,
+   31,
+   25
+  ]
+ }
+}

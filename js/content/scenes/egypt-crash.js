@@ -1,5 +1,5 @@
 // Act One, the first of four scenes: where the wagon came down, on the bank of the Nile.
-// Egypt, about 2560 B.C. Dad plays.
+// Egypt, about 1920 B.C. (the Bible's own count of years: briefs/DATING.md). Dad plays.
 //
 // The wagon is nose-down in the sand with the holiday luggage still tied to its roof, and his son's
 // sneaker prints go up the track to the pyramid. Nearly everything Dad will need is in or on the car:
@@ -12,11 +12,23 @@
 //   the windshield shade (trunk)   only once he knows the door wants light ("egypt.knowsLight")    chain C
 //   the door mirror (the wagon)    only then, too                                                  chain C
 //
+// Under the shirts in the suitcase, with the sunglasses: General Feathers, his youngest's stuffed hen, sent along
+// "to keep an eye on Daddy", and her note in crayon (shown close up). No puzzle needs her. He carries her
+// (`chicken`), talks to her, and shows her to people; nobody in this Egypt has ever seen a chicken.
+//
 // The water carrier is the first person he meets. He saw the boy go up the track, and he knows the news
-// from the building site: a wall is humming, and the scribe's pen has split.
+// from the building site: a wall is humming, the scribe's pen has split, and the geese stand facing the pyramid.
+//
+// Dad is a Christian father, and this is the Egypt of his Bible. When he understands that the boy is gone, he prays
+// (the first of his three prayers in the act). At the reeds he looks for a basket; at the river he wonders which of
+// Abraham, Joseph and Moses he has missed and which are still to come; the pyramids get one more thought. Once the
+// scribe up at the site has told him the palace gossip ("egypt.heardAbram"), he knows: Abram is in Egypt this week,
+// and Joseph and Moses are still to come. What he says at the river and the reeds after that says so.
+// (None of this is part of a puzzle.)
 //
 // Try it: index.html?scene=egypt-crash&lead=dad
 // Later states: &flags=egypt.arrived,egypt.knowsLight   (the shade and the mirror can then be taken)
+//               &flags=egypt.arrived,egypt.heardAbram   (he has heard the news of Abram)
 
 const art = "art/scenes/egypt-crash/";
 
@@ -24,8 +36,44 @@ const art = "art/scenes/egypt-crash/";
 const count = (g, id) => g.store.data.seenLines[id] || 0;
 /** A thing worth looking at twice: the first line, then the second, turn about. */
 const twice = (first, second) => (g) => g.say(count(g, first) <= count(g, second) ? first : second);
+/** Of several lines, the one heard least: a thing with more than two things to say about it says them in turn. */
+const turns = (...ids) => (g) => g.say(ids.reduce((best, id) => (count(g, id) < count(g, best) ? id : best)));
 /** Someone who can stand turns to Dad. */
 const turnTo = (g, who) => { const a = g.actor(who), me = g.lead; if (a && me) a.look(me.x, me.y); };
+/** Head bowed, hands folded (true), or let it go (false). A figure that has no such pose simply stands. */
+const pray = (a, on) => a && a.pray && a.pray(on);
+
+// ---------- the river ----------
+/** The river has the old joke, and the end of the joke: it is the Nile. And once, straight after that, what the
+    Nile is to a man who knows his Bible. Before the scribe's news he wonders who he has missed and who is still to
+    come, and does not settle it. After it he knows, and says so, once (even if he wondered before). */
+async function lookAtRiver(g) {
+  const second = count(g, "egypt.river.look") > count(g, "egypt.river.look2");
+  await g.say(second ? "egypt.river.look2" : "egypt.river.look");
+  if (!second) return;
+  if (g.flag("egypt.heardAbram")) { if (!count(g, "egypt.river.after.1")) await g.say("egypt.river.after.1", "egypt.river.after.2", "egypt.river.after.3"); }
+  else if (!count(g, "egypt.river.bible.1")) await g.say("egypt.river.bible.1", "egypt.river.bible.2", "egypt.river.bible.3", "egypt.river.bible.4");
+}
+
+// ---------- General Feathers ----------
+// Little Sister's note, as the close-up shows it: crayon on a sheet torn from a pad (the kit draws the paper: js/art/kit.js, `paper`).
+const NOTE = {
+  tape: false, tilt: -2.5, tint: "#fbf6e6", width: 500,
+  lines: [
+    { text: "DADDY.", size: 46, gap: 18, anchor: "start", fill: "#c8402f", turn: -3 },
+    { text: "GENERAL FEATHERS", size: 40, fill: "#5b3fa0", turn: 2 },
+    { text: "IS IN CHARGE.", size: 40, gap: 22, fill: "#5b3fa0", turn: -1.5 },
+    { text: "DO WHAT SHE SAYS.", size: 40, fill: "#c8402f", turn: 1.5 },
+  ],
+};
+
+/** Showing her to somebody: he introduces her, and they answer, once each, in their own way. After that (and for
+    anybody with no answer of their own) Dad's stock reply. `answer` is their line, and Dad's comeback if he has one. */
+const showGeneral = (who, ...answer) => async (g) => {
+  turnTo(g, who);
+  if (count(g, answer[0])) return g.say("egypt.chicken.stock");
+  await g.say("egypt.chicken.show", ...answer);
+};
 
 // ---------- the water carrier ----------
 async function talkToCarrier(g) {
@@ -45,7 +93,7 @@ async function talkToCarrier(g) {
     ]);
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.carrier.boy.1", "egypt.carrier.boy.2", "egypt.carrier.boy.3");
     else if (pick === "horizon") await g.say("egypt.carrier.ask.horizon", "egypt.carrier.horizon.1", "egypt.carrier.horizon.2");
-    else if (pick === "news") await g.say("egypt.carrier.ask.news", "egypt.carrier.news.1", "egypt.carrier.news.2", "egypt.carrier.news.3");
+    else if (pick === "news") await g.say("egypt.carrier.ask.news", "egypt.carrier.news.1", "egypt.carrier.news.2", "egypt.carrier.news.3", "egypt.carrier.news.4");
     else if (pick === "donkey") { await g.say("egypt.carrier.ask.donkey", "egypt.carrier.donkey.1", "egypt.carrier.donkey.2"); g.flag("egypt.knowsDonkey", true); }
     else if (pick === "camels") await g.say("egypt.carrier.ask.camels", "egypt.carrier.camels.1", "egypt.carrier.camels.2", "egypt.carrier.camels.3");
     else return g.say("egypt.carrier.ask.bye", "egypt.carrier.bye");
@@ -59,6 +107,8 @@ async function cutReed(g) {
   await g.say("egypt.reeds.take");
   g.give("reed");
   g.flag("egypt.hasReed", true);
+  await g.reach(true);                    // and while he is in there, he parts the reeds and has a look (Exodus 2:3)
+  await g.say("egypt.reeds.basket.1", g.flag("egypt.heardAbram") ? "egypt.reeds.basket.3" : "egypt.reeds.basket.2");     // (once he has the news, he knows Moses is still to come)
 }
 
 async function searchGlovebox(g) {
@@ -103,13 +153,23 @@ async function searchCooler(g) {
   g.flag("egypt.tookRootbeer", true);
 }
 
-/** The suitcase: the sunglasses, and six shirts that stay where they are. */
+/** The suitcase: the sunglasses on top, six shirts that stay where they are, and under the shirts General Feathers
+    with her orders. Everybody opens the suitcase (the sunglasses are needed), so nobody misses her. */
 async function searchSuitcase(g) {
   await openLid(g, "egypt.suitcaseOpen");
-  if (g.flag("egypt.tookSunglasses")) return g.say("egypt.suitcase.again");
-  await g.say("egypt.suitcase.take");
-  g.give("sunglasses");
-  g.flag("egypt.tookSunglasses", true);
+  if (g.flag("egypt.tookSunglasses") && g.flag("egypt.tookGeneral")) return g.say("egypt.suitcase.again");
+  if (!g.flag("egypt.tookSunglasses")) {
+    g.give("sunglasses");                 // (handed over first, so that its notice has gone by the time the note is up)
+    g.flag("egypt.tookSunglasses", true);
+    await g.say("egypt.suitcase.take");
+  }
+  await g.reach(true);                    // down under the shirts
+  g.closeup(g.art.paper(NOTE), "Little Sister's note, in crayon: DADDY. GENERAL FEATHERS IS IN CHARGE. DO WHAT SHE SAYS.", { grid: [800, 600] });
+  await g.say("egypt.suitcase.general.1", "egypt.suitcase.general.2");
+  g.closeup();
+  g.give("chicken");
+  g.flag("egypt.tookGeneral", true);
+  await g.say("egypt.suitcase.general.3");
 }
 
 /** The door mirror comes off only when he knows what a mirror is for. */
@@ -175,10 +235,10 @@ export default {
 
   // The far things first: an area lower in this list lies over the ones above it.
   hotspots: [
-    { id: "pyramid", name: "pyramids", poly: [[566, 76], [430, 250], [604, 262], [800, 258], [800, 204], [716, 204], [690, 232]], look: twice("egypt.pyramids.look", "egypt.pyramids.look2") },
+    { id: "pyramid", name: "pyramids", poly: [[566, 76], [430, 250], [604, 262], [800, 258], [800, 204], [716, 204], [690, 232]], look: turns("egypt.pyramids.look", "egypt.pyramids.look2", "egypt.pyramids.look3") },
     {
       id: "river", name: "river", verb: "Wade into", poly: [[0, 266], [340, 266], [318, 276], [292, 300], [258, 336], [210, 384], [146, 440], [80, 492], [16, 530], [0, 540]], walkTo: [184, 446], face: "W",
-      look: twice("egypt.river.look", "egypt.river.look2"), use: "egypt.river.use",
+      look: lookAtRiver, use: "egypt.river.use",
     },
     { id: "boat", name: "boat", rect: [84, 280, 98, 48], look: twice("egypt.boat.look", "egypt.boat.look2") },
     { id: "palms", name: "palm trees", poly: [[150, 0], [300, 0], [356, 150], [330, 212], [258, 232], [150, 190], [112, 90]], look: "egypt.palms.look" },
@@ -187,6 +247,7 @@ export default {
     {
       id: "footprints", name: "sneaker prints", verb: "Follow", poly: [[474, 490], [492, 490], [504, 460], [508, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 430], [478, 462]], walkTo: [424, 502], face: "NE",       // (a step clear of the steam)
       look: "egypt.footprints.look", use: "egypt.footprints.use",
+      useWith: { chicken: "egypt.chicken.footprints" },
     },
     {
       id: "track", name: "track to the pyramid", verb: "Walk up", poly: [[476, 300], [508, 298], [516, 326], [472, 330]], walkTo: [500, 372], face: "N",       // he is on his way up it when the picture changes
@@ -200,7 +261,7 @@ export default {
     {
       id: "carrier", name: "water carrier", verb: "Talk to", rect: [244, 362, 32, 92], walkTo: [228, 486], face: "NE",
       look: "egypt.carrier.look", use: talkToCarrier,
-      useWith: { rootbeer: ["egypt.carrier.rootbeer.1", "egypt.carrier.rootbeer.2"], map: ["egypt.carrier.map.1", "egypt.carrier.map.2", "egypt.carrier.map.3"] },
+      useWith: { rootbeer: ["egypt.carrier.rootbeer.1", "egypt.carrier.rootbeer.2"], map: ["egypt.carrier.map.1", "egypt.carrier.map.2", "egypt.carrier.map.3"], chicken: showGeneral("carrier", "egypt.carrier.chicken") },
     },
     {
       id: "wagon", name: "wagon", verb: "Start", walkTo: [604, 563], face: "N", look: "egypt.wagon.look", use: "egypt.wagon.try",
@@ -235,6 +296,13 @@ export default {
     await g.walkTo(424, 502);                                     // to where the prints begin
     g.lead.look(492, 316);                                        // up the track
     await g.say("egypt.arrive.4", "egypt.arrive.5");
+    g.lead.face("SE");                                            // he turns from the track, and bows his head where he stands
+    await g.wait(300);
+    pray(g.lead, true);
+    await g.wait(400);
+    await g.say("egypt.arrive.pray.1", "egypt.arrive.pray.2");
+    pray(g.lead, false);
+    await g.wait(350);                                            // (his hands are his own again before the player has him)
     g.flag("egypt.arrived", true);
   },
 };

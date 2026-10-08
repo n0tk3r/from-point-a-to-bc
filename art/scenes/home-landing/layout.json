@@ -1,0 +1,778 @@
+{
+ "id": "home-landing",
+ "horizon": 135,
+ "full": 322,
+ "eye_cm": 205,
+ "view": {
+  "horizon": 135,
+  "full": 322,
+  "cam": [
+   775,
+   760
+  ],
+  "yaw": -40,
+  "focal": 560,
+  "centre_x": 400
+ },
+ "light": "night: a warm lamp on the hall table (right of the middle), cool moonlight from the tall window on the left, a warm glow from the living room below",
+ "walk": [
+  [
+   373,
+   253
+  ],
+  [
+   785,
+   329
+  ],
+  [
+   783,
+   364
+  ],
+  [
+   325,
+   264
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    668,
+    306
+   ],
+   [
+    705,
+    313
+   ],
+   [
+    691,
+    329
+   ],
+   [
+    651,
+    321
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "rail",
+   "file": "rail.png",
+   "plane": "front",
+   "what": "the whole railing (white balusters, dark handrail, newel posts), the banister of the stairs, the quilt hung over the rail, and the hanging light out in the room"
+  },
+  {
+   "id": "study-open",
+   "file": "study-open.png",
+   "base": [
+    [
+     695,
+     301
+    ],
+    [
+     778,
+     316
+    ]
+   ],
+   "state": "the study door stands open (laid exactly over the shut door; people are always in front of it)"
+  },
+  {
+   "id": "ladder",
+   "file": "ladder.png",
+   "base": [
+    [
+     586,
+     307
+    ],
+    [
+     688,
+     328
+    ]
+   ],
+   "what": "the attic ladder let down from the open hatch, the hatch's door hanging with it, Big Sister's card on it (THE RETREAT); its base is the line under its near side out to its feet: people between it and the wall are behind it, people between it and the rail in front"
+  }
+ ],
+ "things": [
+  {
+   "id": "son",
+   "what": "the Son's door: his notices, his KEEP OUT sign, the toy alarm by the handle (it stays shut)",
+   "shape": {
+    "poly": [
+     [
+      424,
+      255
+     ],
+     [
+      465,
+      262
+     ],
+     [
+      465,
+      135
+     ],
+     [
+      424,
+      135
+     ]
+    ]
+   },
+   "stand": [
+    420,
+    265
+   ],
+   "face": "N",
+   "grownup_px": 111
+  },
+  {
+   "id": "lilsis",
+   "what": "Little Sister's door, hers alone now: one name-plate buried in chicken stickers, her crayon drawing of a hen taped on at her height, and her hand-lettered sign BEWARE OF CHICKENS",
+   "shape": {
+    "poly": [
+     [
+      537,
+      274
+     ],
+     [
+      594,
+      284
+     ],
+     [
+      594,
+      135
+     ],
+     [
+      537,
+      135
+     ]
+    ]
+   },
+   "stand": [
+    544,
+    288
+   ],
+   "face": "N",
+   "grownup_px": 131
+  },
+  {
+   "id": "study",
+   "what": "Dad's study door",
+   "shape": {
+    "poly": [
+     [
+      695,
+      301
+     ],
+     [
+      778,
+      316
+     ],
+     [
+      778,
+      135
+     ],
+     [
+      695,
+      135
+     ]
+    ]
+   },
+   "stand": [
+    723,
+    322
+   ],
+   "face": "N",
+   "grownup_px": 160
+  },
+  {
+   "id": "sign",
+   "what": "Dad's notice taped to the study door",
+   "shape": {
+    "poly": [
+     [
+      698,
+      217
+     ],
+     [
+      774,
+      224
+     ],
+     [
+      774,
+      167
+     ],
+     [
+      698,
+      165
+     ]
+    ]
+   },
+   "stand": [
+    723,
+    322
+   ],
+   "face": "N",
+   "grownup_px": 160
+  },
+  {
+   "id": "halltable",
+   "what": "the hall table: the lamp (lit), the key bowl, the day's post",
+   "shape": {
+    "rect": [
+     598,
+     181,
+     81,
+     125
+    ]
+   },
+   "stand": [
+    626,
+    303
+   ],
+   "face": "N",
+   "grownup_px": 144
+  },
+  {
+   "id": "chart",
+   "what": "the long strip of paper pinned up over the hall table: a countdown to the trip, days crossed off, a little red car at the end",
+   "shape": {
+    "rect": [
+     605,
+     166,
+     76,
+     34
+    ]
+   },
+   "stand": [
+    626,
+    303
+   ],
+   "face": "N",
+   "grownup_px": 144
+  },
+  {
+   "id": "photos",
+   "what": "framed family photographs",
+   "shape": {
+    "rect": [
+     475,
+     151,
+     54,
+     51
+    ]
+   },
+   "stand": [
+    476,
+    277
+   ],
+   "face": "N",
+   "grownup_px": 121
+  },
+  {
+   "id": "hamper",
+   "what": "the laundry hamper, folded washing on its lid",
+   "shape": {
+    "rect": [
+     461,
+     217,
+     44,
+     58
+    ]
+   },
+   "stand": [
+    467,
+    274
+   ],
+   "face": "N",
+   "grownup_px": 119
+  },
+  {
+   "id": "ladder",
+   "what": "the attic ladder, let down from the open hatch to the floor: the way up to Big Sister's room, The Retreat (soft warm light up there); her card hangs on it at eye height: THE RETREAT (ladder.png)",
+   "shape": {
+    "poly": [
+     [
+      577,
+      79
+     ],
+     [
+      579,
+      76
+     ],
+     [
+      586,
+      76
+     ],
+     [
+      603,
+      79
+     ],
+     [
+      701,
+      314
+     ],
+     [
+      688,
+      328
+     ],
+     [
+      680,
+      326
+     ],
+     [
+      601,
+      138
+     ]
+    ]
+   },
+   "card": [
+    595,
+    149,
+    46,
+    29
+   ],
+   "hatch": [
+    [
+     604,
+     80
+    ],
+    [
+     667,
+     76
+    ],
+    [
+     647,
+     70
+    ],
+    [
+     579,
+     75
+    ]
+   ],
+   "stand": [
+    718,
+    325
+   ],
+   "face": "W",
+   "grownup_px": 163
+  },
+  {
+   "id": "window",
+   "what": "the tall stair window: the moon, the tree",
+   "shape": {
+    "poly": [
+     [
+      138,
+      323
+     ],
+     [
+      238,
+      297
+     ],
+     [
+      238,
+      128
+     ],
+     [
+      138,
+      127
+     ]
+    ]
+   },
+   "stand": [
+    353,
+    261
+   ],
+   "face": "W",
+   "grownup_px": 108
+  },
+  {
+   "id": "rail",
+   "what": "the railing: look down on the living room",
+   "shape": {
+    "rect": [
+     381,
+     212,
+     221,
+     118
+    ]
+   },
+   "stand": [
+    546,
+    310
+   ],
+   "face": "S",
+   "grownup_px": 150
+  },
+  {
+   "id": "stairs",
+   "what": "the stairs down to the living room",
+   "shape": {
+    "poly": [
+     [
+      271,
+      256
+     ],
+     [
+      312,
+      266
+     ],
+     [
+      226,
+      367
+     ],
+     [
+      186,
+      348
+     ]
+    ]
+   },
+   "stand": [
+    335,
+    264
+   ],
+   "face": "W",
+   "grownup_px": 110
+  },
+  {
+   "id": "bag",
+   "what": "the Son's school bag on its peg, his shoes under it (look only)",
+   "shape": {
+    "rect": [
+     390,
+     186,
+     30,
+     72
+    ]
+   },
+   "stand": [
+    373,
+    261
+   ],
+   "face": "N"
+  },
+  {
+   "id": "quilt",
+   "what": "a patchwork quilt hung over the railing to air (part of rail.png)",
+   "shape": {
+    "rect": [
+     756,
+     255,
+     43,
+     108
+    ]
+   },
+   "stand": [
+    731,
+    347
+   ],
+   "face": "S"
+  },
+  {
+   "id": "chandelier",
+   "what": "the hanging light out over the living room, not lit tonight (part of rail.png)",
+   "shape": {
+    "rect": [
+     234,
+     368,
+     60,
+     34
+    ]
+   },
+   "stand": [
+    546,
+    310
+   ],
+   "face": "S",
+   "grownup_px": 150
+  },
+  {
+   "id": "living-room",
+   "what": "the living room below: the rug, the piano and its lamp, the kitchen doorway, the bookcase, the front door",
+   "shape": {
+    "rect": [
+     320,
+     400,
+     480,
+     200
+    ]
+   },
+   "stand": [
+    546,
+    310
+   ],
+   "face": "S",
+   "grownup_px": 150
+  }
+ ],
+ "exits": [
+  {
+   "to": "home-living-room",
+   "way": "stairs",
+   "shape": {
+    "poly": [
+     [
+      271,
+      256
+     ],
+     [
+      312,
+      266
+     ],
+     [
+      226,
+      367
+     ],
+     [
+      186,
+      348
+     ]
+    ]
+   },
+   "stand": [
+    335,
+    264
+   ]
+  },
+  {
+   "to": "home-lilsis-room",
+   "way": "lilsis",
+   "shape": {
+    "poly": [
+     [
+      537,
+      274
+     ],
+     [
+      594,
+      284
+     ],
+     [
+      594,
+      135
+     ],
+     [
+      537,
+      135
+     ]
+    ]
+   },
+   "stand": [
+    544,
+    288
+   ]
+  },
+  {
+   "to": "home-study",
+   "way": "study",
+   "shape": {
+    "poly": [
+     [
+      695,
+      301
+     ],
+     [
+      778,
+      316
+     ],
+     [
+      778,
+      135
+     ],
+     [
+      695,
+      135
+     ]
+    ]
+   },
+   "stand": [
+    723,
+    322
+   ]
+  },
+  {
+   "to": "home-bigsis-room",
+   "way": "ladder",
+   "shape": {
+    "poly": [
+     [
+      577,
+      79
+     ],
+     [
+      579,
+      76
+     ],
+     [
+      586,
+      76
+     ],
+     [
+      603,
+      79
+     ],
+     [
+      701,
+      314
+     ],
+     [
+      688,
+      328
+     ],
+     [
+      680,
+      326
+     ],
+     [
+      601,
+      138
+     ]
+    ]
+   },
+   "stand": [
+    718,
+    325
+   ]
+  }
+ ],
+ "marks": {
+  "fromStairs": {
+   "lilsis": [
+    337,
+    262
+   ],
+   "bigsis": [
+    375,
+    263
+   ],
+   "mom": [
+    431,
+    279
+   ]
+  },
+  "fromLilsis": {
+   "bigsis": [
+    541,
+    290
+   ],
+   "lilsis": [
+    476,
+    287
+   ],
+   "mom": [
+    590,
+    308
+   ]
+  },
+  "fromStudy": {
+   "mom": [
+    721,
+    324
+   ],
+   "bigsis": [
+    635,
+    318
+   ],
+   "lilsis": [
+    578,
+    301
+   ]
+  },
+  "fromLadder": {
+   "bigsis": [
+    718,
+    325
+   ],
+   "mom": [
+    642,
+    328
+   ],
+   "lilsis": [
+    756,
+    345
+   ]
+  }
+ },
+ "stands": {
+  "stairs": [
+   335,
+   264
+  ],
+  "son": [
+   420,
+   265
+  ],
+  "lilsis": [
+   544,
+   288
+  ],
+  "study": [
+   723,
+   322
+  ],
+  "sign": [
+   723,
+   322
+  ],
+  "halltable": [
+   626,
+   303
+  ],
+  "photos": [
+   476,
+   277
+  ],
+  "hamper": [
+   467,
+   274
+  ],
+  "ladder": [
+   718,
+   325
+  ],
+  "window": [
+   353,
+   261
+  ],
+  "rail": [
+   546,
+   310
+  ]
+ },
+ "sizes": {
+  "fromStairs": {
+   "lilsis": 73,
+   "bigsis": 99,
+   "mom": 118
+  },
+  "fromLilsis": {
+   "bigsis": 119,
+   "lilsis": 88,
+   "mom": 142
+  },
+  "fromStudy": {
+   "mom": 156,
+   "bigsis": 141,
+   "lilsis": 96
+  },
+  "fromLadder": {
+   "bigsis": 147,
+   "mom": 158,
+   "lilsis": 121
+  }
+ },
+ "vanishing": {
+  "along_the_landing": [
+   -267,
+   135
+  ],
+  "out_toward_us": [
+   870,
+   135
+  ]
+ },
+ "notes": [
+  "The rail plane is drawn over everybody: people are seen through its balusters from the knee down.",
+  "Below the landing's edge everything is the living room, 285 cm lower: nobody walks there in this picture.",
+  "Not painted (the game lights them): the lamp of the Son's toy alarm (beside his door handle).",
+  "The attic ladder (ladder.png) stands with its feet just in front of the study door's left edge. People pass it in front (between it and the rail) and stand behind it under its high end, at the hall table. Its blocked ground reaches back to the wall: there is no way past behind its feet (the floor here is about 30 px deep, and the game keeps people 5 px clear of blocked ground above and below)."
+ ]
+}

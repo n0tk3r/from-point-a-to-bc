@@ -230,6 +230,20 @@ export class Figure extends Sprite {
       up while people talk. hold(false) lets it drop. */
   hold(on = true, low = false) { this.act = on ? { low, k: 1 } : null; return this; }
 
+  /** Stand in prayer (head bowed, eyes shut, hands folded: each of the family has their own way, `pray` in js/art/people.js)
+      until told otherwise: pray(false) lets it go. It eases in and out over about a quarter of a second. Like hold(), it
+      stays through talking, so a prayer said aloud is said in this pose, and it is for someone standing still: end it
+      before they walk. (It is an "act" called "pray" that counts from 2 to 3, so frame() never takes it for a reach.) */
+  pray(on = true) {
+    const SPAN = 280, now = () => performance.now(), start = now(), praying = !!this.act && this.act.low === "pray";
+    if (!on && !praying) return this;                                        // not praying: nothing to end
+    const from = praying ? this.act.at() : 0, to = on ? 1 : 0;               // (an ease already under way carries on from where it has got to)
+    const act = { low: "pray", at: () => from + (to - from) * Math.min(1, (now() - start) / SPAN), get k() { return 2 + this.at(); } };
+    this.act = act;
+    if (!on) setTimeout(() => { if (this.act === act) { this.act = null; this.t = 0; } }, SPAN + 20);
+    return this;
+  }
+
   /** A one-off action: "reach" (out, at chest height) or "pick" (down to the ground). */
   play(clock, name) {
     if (clock.skipping || this.spec.seated) return Promise.resolve();

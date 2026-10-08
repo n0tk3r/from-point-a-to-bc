@@ -1,5 +1,5 @@
 // Act One, the third of four scenes: inside the pyramid, the great rising gallery.
-// Egypt, about 2560 B.C. Dad plays.
+// Egypt, about 1920 B.C. (the Bible's own count of years: briefs/DATING.md). Dad plays.
 //
 // Awe first, then comedy. The passage from outside comes in at the foot on the left; the ramp climbs to a
 // small doorway at the top (to egypt-chamber). The lamp boy sits at the foot and will not go up again.
@@ -77,6 +77,13 @@ async function talkToBoy(g) {
     else if (pick === "lamps") await g.say("egypt.lampboy.ask.lamps", "egypt.lampboy.lamps.1", "egypt.lampboy.lamps.2", "egypt.lampboy.lamps.3");
     else return g.say("egypt.lampboy.ask.bye", "egypt.lampboy.bye");
   }
+}
+
+/** General Feathers, shown to the boy who feeds the lamps: he wants to know what she eats. He asks once; after that,
+    Dad's stock reply. */
+async function showGeneral(g) {
+  if (count(g, "egypt.lampboy.chicken")) return g.say("egypt.chicken.stock");
+  await g.say("egypt.chicken.show", "egypt.lampboy.chicken", "egypt.lampboy.chicken.2");
 }
 
 /** The flashlight, shown to the boy. Alight, he wants nothing to do with it. Dead, it is a lamp, and lamps are his trade. */
@@ -205,7 +212,7 @@ export default {
     {
       id: "lampboy", name: "lamp boy", verb: "Talk to", rect: [548, 470, 60, 112], walkTo: [510, 572], face: "E",
       look: "egypt.lampboy.look", use: talkToBoy,
-      useWith: { flashlight: showFlashlight, rootbeer: "egypt.lampboy.rootbeer", sunglasses: "egypt.lampboy.sunglasses" },
+      useWith: { flashlight: showFlashlight, rootbeer: "egypt.lampboy.rootbeer", sunglasses: "egypt.lampboy.sunglasses", chicken: showGeneral },
     },
   ],
 

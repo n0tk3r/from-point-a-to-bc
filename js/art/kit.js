@@ -373,9 +373,44 @@ export function notice() {
     <circle cx="96" cy="88" r="17" fill="#f2c230"/><circle cx="96" cy="88" r="17" fill="none" stroke="#1f130a" stroke-width="1"/><circle cx="96" cy="88" r="2.4" fill="#1f130a"/>${blade(-90)}${blade(30)}${blade(150)}
     ${words(184, 82, 11, "ELEVATED", "#1f130a")}${words(184, 96, 11, "RADIATION LEVELS", "#1f130a")}
     <rect x="76" y="112" width="168" height="0.8" fill="#4a2f20"/>
-    ${words(160, 125, 10, "SECTORS 44 AND 2560", "#c8402f")}${words(160, 135, 6, "SEALED UNTIL FURTHER NOTICE", "#1f130a")}
+    ${words(160, 125, 10, "SECTORS 44 AND 1921", "#c8402f")}${words(160, 135, 6, "SEALED UNTIL FURTHER NOTICE", "#1f130a")}
     ${words(160, 146, 4.6, "No entry. No photographs. No questions.", "#4a2f20", 400)}
     <circle cx="70" cy="24" r="1.4" fill="#6b6866"/><circle cx="250" cy="24" r="1.4" fill="#6b6866"/><circle cx="70" cy="146" r="1.4" fill="#6b6866"/><circle cx="250" cy="146" r="1.4" fill="#6b6866"/>
+  </g>`;
+}
+
+/**
+ * A sheet of paper with a few lines of lettering on it, close enough to read: a notice taped to a door, the label
+ * on a box. Drawn on the 800x600 picture, so it is shown with g.closeup(art.paper({...}), "label", { grid: [800, 600] }).
+ * The sheet keeps to the upper part of the picture, because words spoken during a close-up run along the bottom.
+ *   lines   [{ text, size, gap, anchor, fill }]: one line of lettering each. `size` is the letter height in pixels
+ *           (30 if not said), `gap` the extra space left under the line, `anchor` "middle" (the usual), "start" or "end".
+ *   width   of the sheet (540)        tint   the paper's color        ink   the lettering's
+ *   tilt    degrees: a notice somebody put up by hand never hangs quite straight
+ *   tape    true: a strip of tape across each top corner
+ */
+export function paper({ lines = [], width = 540, tint = "#f4efe0", ink = "#2b2622", tilt = 0, tape = true } = {}) {
+  const plain = (text) => String(text).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const pad = 46, lead = 1.5;
+  let tall = pad * 2 - 8;
+  for (const l of lines) tall += (l.size || 30) * lead + (l.gap || 0);
+  const x0 = (W - width) / 2, y0 = Math.max(18, (H - 96 - tall) / 2);
+  let y = y0 + pad, text = "";
+  for (const l of lines) {
+    const size = l.size || 30, anchor = l.anchor || "middle";
+    const x = anchor === "start" ? x0 + pad : anchor === "end" ? x0 + width - pad : W / 2;
+    y += size;
+    const slant = l.turn ? ` transform="rotate(${l.turn} ${x} ${y})"` : "";      // (a line added by another hand, not quite straight)
+    text += `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="700" fill="${l.fill || ink}"${slant}>${plain(l.text)}</text>`;
+    y += size * (lead - 1) + (l.gap || 0);
+  }
+  const strip = (x, turn) => `<rect x="${x - 34}" y="${y0 - 10}" width="68" height="24" fill="#e9e2c4" opacity="0.82" transform="rotate(${turn} ${x} ${y0 + 2})"/>`;
+  return `<g shape-rendering="geometricPrecision" transform="rotate(${tilt} ${W / 2} ${y0 + tall / 2})">
+    <rect x="${x0 + 7}" y="${y0 + 9}" width="${width}" height="${tall}" fill="#07040d" opacity="0.4"/>
+    <rect x="${x0}" y="${y0}" width="${width}" height="${tall}" fill="${tint}"/>
+    <rect x="${x0}" y="${y0 + tall - 26}" width="${width}" height="26" fill="#000" opacity="0.05"/>
+    <path d="M${x0 + 20},${y0 + tall * 0.47} h${width - 40}" stroke="#000" stroke-width="1" opacity="0.07"/>
+    ${text}${tape ? strip(x0 + 44, -38) + strip(x0 + width - 44, 38) : ""}
   </g>`;
 }
 

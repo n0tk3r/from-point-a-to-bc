@@ -1,0 +1,620 @@
+{
+ "id": "home-lilsis-room",
+ "horizon": 120.0,
+ "full": 440.0,
+ "eye_cm": 350,
+ "view": {
+  "horizon": 120,
+  "full": 440,
+  "cam": [
+   310,
+   1210
+  ],
+  "yaw": 6,
+  "focal": 800,
+  "centre_x": 400
+ },
+ "vanishing": [
+  315.9,
+  120.0
+ ],
+ "light": "night. Warm: the rooster lamp on her bedside table (right), the fort's string of lights (left), the egg night-light by the flock (far left), a little from the landing through the door (front right). Cool: the moon through the gable window, falling down the floor and to the left, across the fried-egg rug.",
+ "walk": [
+  [
+   309,
+   369
+  ],
+  [
+   482,
+   363
+  ],
+  [
+   511,
+   405
+  ],
+  [
+   547,
+   405
+  ],
+  [
+   588,
+   455
+  ],
+  [
+   602,
+   456
+  ],
+  [
+   619,
+   477
+  ],
+  [
+   458,
+   485
+  ],
+  [
+   445,
+   450
+  ],
+  [
+   269,
+   458
+  ],
+  [
+   267,
+   472
+  ],
+  [
+   216,
+   474
+  ],
+  [
+   230,
+   427
+  ],
+  [
+   242,
+   420
+  ],
+  [
+   250,
+   388
+  ],
+  [
+   301,
+   382
+  ],
+  [
+   309,
+   377
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    386,
+    404
+   ],
+   [
+    487,
+    400
+   ],
+   [
+    511,
+    440
+   ],
+   [
+    396,
+    445
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "fort",
+   "file": "fort.png",
+   "base": [
+    [
+     0,
+     484
+    ],
+    [
+     203,
+     474
+    ]
+   ]
+  },
+  {
+   "id": "flashlight",
+   "file": "flashlight.png",
+   "base": [
+    [
+     0,
+     485
+    ],
+    [
+     203,
+     475
+    ]
+   ],
+   "note": "show until she takes it"
+  },
+  {
+   "id": "teaparty",
+   "file": "teaparty.png",
+   "base": [
+    [
+     392,
+     445
+    ],
+    [
+     513,
+     440
+    ]
+   ]
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front"
+  }
+ ],
+ "things": [
+  {
+   "id": "window",
+   "what": "the gable window: the night, the tree and the moon; chicken curtains",
+   "shape": {
+    "rect": [
+     276,
+     144,
+     146,
+     159
+    ]
+   },
+   "stand": [
+    352,
+    369
+   ],
+   "face": "N"
+  },
+  {
+   "id": "drawings",
+   "what": "her drawings on the gable, most of them chickens (the big one: five stick people, a red car, a chicken on its roof)",
+   "shape": {
+    "rect": [
+     163,
+     179,
+     115,
+     116
+    ]
+   },
+   "stand": [
+    299,
+    387
+   ],
+   "face": "N"
+  },
+  {
+   "id": "chart",
+   "what": "THE CHICKEN CHART: a poster she made, rows of chickens in crayon, each different, each labelled; its title reads MY CHICKENS",
+   "shape": {
+    "rect": [
+     398,
+     224,
+     85,
+     75
+    ]
+   },
+   "stand": [
+    477,
+    368
+   ],
+   "face": "N"
+  },
+  {
+   "id": "flock",
+   "what": "the flock: a mountain of stuffed animals on her beanbag, the stuffed chickens on top and in front (a rooster with a felt tail, white hens, a speckled one, chicks)",
+   "shape": {
+    "rect": [
+     132,
+     271,
+     156,
+     112
+    ]
+   },
+   "stand": [
+    299,
+    387
+   ],
+   "face": "W"
+  },
+  {
+   "id": "bed",
+   "what": "her bed: a quilt of hens, heaped with stuffed animals",
+   "shape": {
+    "rect": [
+     543,
+     301,
+     148,
+     151
+    ]
+   },
+   "stand": [
+    545,
+    424
+   ],
+   "face": "E"
+  },
+  {
+   "id": "pillow",
+   "what": "the pillow: one round place kept free, and propped at the back of it a paper sign that reads RESERVED",
+   "shape": {
+    "rect": [
+     554,
+     319,
+     76,
+     48
+    ]
+   },
+   "stand": [
+    545,
+    424
+   ],
+   "face": "E"
+  },
+  {
+   "id": "teaparty",
+   "what": "the tea party: a low table set for tea, and every guest is a chicken (cut-out teaparty.png)",
+   "shape": {
+    "rect": [
+     384,
+     352,
+     116,
+     85
+    ]
+   },
+   "stand": [
+    375,
+    424
+   ],
+   "face": "E"
+  },
+  {
+   "id": "nest",
+   "what": "the nest: a cardboard box lettered NEST, straw, a stuffed hen sitting, plastic eggs (front plane)",
+   "shape": {
+    "rect": [
+     506,
+     451,
+     146,
+     134
+    ]
+   },
+   "stand": [
+    524,
+    479
+   ],
+   "face": "S"
+  },
+  {
+   "id": "coop",
+   "what": "the toy hen house: the dollhouse, lettered HEN HOUSE, a hen at every lit window, a ramp to the front door (front plane)",
+   "shape": {
+    "rect": [
+     277,
+     430,
+     180,
+     170
+    ]
+   },
+   "stand": [
+    256,
+    469
+   ],
+   "face": "S"
+  },
+  {
+   "id": "fort",
+   "what": "the blanket fort: two chairs, a clothes-horse, every blanket she owns; NO BIG SISTERS",
+   "shape": {
+    "rect": [
+     0,
+     342,
+     216,
+     146
+    ]
+   },
+   "stand": [
+    227,
+    471
+   ],
+   "face": "W"
+  },
+  {
+   "id": "flashlight",
+   "what": "her flashlight, just inside the fort's way in (cut-out flashlight.png; it can be taken)",
+   "shape": {
+    "rect": [
+     130,
+     470,
+     35,
+     9
+    ]
+   },
+   "stand": [
+    227,
+    471
+   ],
+   "face": "W"
+  },
+  {
+   "id": "door",
+   "what": "the door to the landing: its open leaf and frame at the right edge (front plane)",
+   "shape": {
+    "rect": [
+     703,
+     296,
+     97,
+     304
+    ]
+   },
+   "stand": [
+    609,
+    474
+   ],
+   "face": "E"
+  },
+  {
+   "id": "lamp",
+   "what": "the rooster lamp on her bedside table (lit)",
+   "shape": {
+    "rect": [
+     503,
+     291,
+     59,
+     112
+    ]
+   },
+   "stand": [
+    545,
+    424
+   ],
+   "face": "N"
+  },
+  {
+   "id": "nightlight",
+   "what": "the egg-shaped night-light on the floor by the flock (lit)",
+   "shape": {
+    "rect": [
+     291,
+     337,
+     19,
+     24
+    ]
+   },
+   "stand": [
+    299,
+    387
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mobile",
+   "what": "a mobile of felt chickens, hung from a rafter (front plane)",
+   "shape": {
+    "rect": [
+     539,
+     234,
+     66,
+     70
+    ]
+   },
+   "stand": [
+    545,
+    424
+   ],
+   "face": "N"
+  },
+  {
+   "id": "coat",
+   "what": "her small yellow coat on its peg, her red boots under it",
+   "shape": {
+    "rect": [
+     492,
+     270,
+     25,
+     82
+    ]
+   },
+   "stand": [
+    477,
+    368
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "rug",
+   "what": "a rug like a fried egg",
+   "shape": {
+    "rect": [
+     243,
+     407,
+     160,
+     48
+    ]
+   },
+   "stand": [
+    323,
+    406
+   ],
+   "face": "S"
+  },
+  {
+   "id": "books",
+   "what": "picture books in a low crate, one leaning against it with a hen on its cover (front plane)",
+   "shape": {
+    "rect": [
+     146,
+     511,
+     97,
+     85
+    ]
+   },
+   "stand": [
+    227,
+    471
+   ],
+   "face": "S"
+  },
+  {
+   "id": "toybox",
+   "what": "her toy box (front plane)",
+   "shape": {
+    "rect": [
+     3,
+     468,
+     133,
+     132
+    ]
+   },
+   "stand": [
+    227,
+    471
+   ],
+   "face": "S"
+  }
+ ],
+ "exits": [
+  {
+   "to": "home-landing",
+   "id": "door",
+   "shape": {
+    "rect": [
+     703,
+     296,
+     97,
+     304
+    ]
+   },
+   "stand": [
+    609,
+    474
+   ]
+  }
+ ],
+ "marks": {
+  "mom": [
+   518,
+   469
+  ],
+  "bigsis": [
+   461,
+   475
+  ],
+  "lilsis": [
+   580,
+   471
+  ],
+  "fromLanding": {
+   "mom": [
+    518,
+    469
+   ],
+   "bigsis": [
+    461,
+    475
+   ],
+   "lilsis": [
+    580,
+    471
+   ]
+  },
+  "atFort": [
+   227,
+   471
+  ],
+  "atBed": [
+   545,
+   424
+  ],
+  "atFlock": [
+   299,
+   387
+  ],
+  "atNest": [
+   524,
+   479
+  ],
+  "atTeaParty": [
+   375,
+   424
+  ],
+  "atChart": [
+   477,
+   368
+  ],
+  "atWindow": [
+   352,
+   369
+  ],
+  "atDoor": [
+   609,
+   474
+  ]
+ },
+ "lettering": {
+  "NO BIG SISTERS": {
+   "poly": [
+    [
+     15,
+     458
+    ],
+    [
+     101,
+     455
+    ],
+    [
+     101,
+     414
+    ],
+    [
+     15,
+     417
+    ]
+   ]
+  },
+  "MY CHICKENS": {
+   "rect": [
+    414,
+    227,
+    54,
+    7
+   ]
+  },
+  "RESERVED": {
+   "rect": [
+    566,
+    325,
+    42,
+    13
+   ]
+  },
+  "HEN HOUSE": {
+   "rect": [
+    339,
+    462,
+    78,
+    11
+   ]
+  },
+  "NEST": {
+   "rect": [
+    540,
+    537,
+    95,
+    42
+   ]
+  }
+ },
+ "note": "front.png holds, left to right: her toy box, the crate of picture books, the hen house (id coop), the nest (id nest), the door; and, hanging, the mobile of felt chickens. Lamps and windows are painted lit; nothing here blinks or changes."
+}

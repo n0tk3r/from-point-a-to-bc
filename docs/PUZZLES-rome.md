@@ -10,8 +10,13 @@ structure, the location layout, and then the cut-scenes and puzzles in order. Ev
 puzzle here is written as playable script, in `js/content/scenes/rome-steps.js`,
 `rome-street.js` and `rome-temple.js`.
 
-**Status: first draft.** The three places, the seven people, the five things, the ten
-beats and the rule of the doors are the design (`briefs/LEVEL-rome.md`). What is
+**Status: first draft.** The three places, the seven Romans, the five things, the ten
+beats and the rule of the doors are the design (`briefs/LEVEL-rome.md`). The eighth
+person, the date seller, and everything under "The family's faith" below were added on
+7 October from `briefs/WEAVE.md`: fifty-five lines, no puzzle touched. The same evening
+the author's two rules (`briefs/DATING.md`: how the game counts the years, and the
+chickens) added four more lines, under "The chickens, and the years" below; again no
+puzzle touched, and none of the fifty-five changed. What is
 invention here, to keep, change or throw out: every line that is not an old one
 (seventeen are kept word for word: the eleven the design names, his two old hints, and
 the four looks at the coin); why each person wants what they want (the keeper's absent
@@ -22,7 +27,9 @@ asleep on the Forum, which he wants; and the three things in his pockets doing s
 duty as wrong answers.
 
 Play it: `index.html?scene=rome-steps&lead=son` starts the act. In the full game it
-follows Egypt, on a card that reads "Meanwhile, about twenty-five hundred years later".
+follows Egypt, on a card that reads "Meanwhile, nearly nineteen hundred years later":
+Dad's Egypt is about 1920 B.C. by the Bible's count, and 1921 B.C. to 44 B.C. is 1,877
+years (`briefs/DATING.md`). The card is the Egypt act's (`egypt-chamber.js`).
 
 How it is tested. `node briefs/out/check-rome.mjs` reads the act as it sits in the
 game, walks every route on the engine's own walk map, compares every place with the
@@ -31,8 +38,11 @@ a stand-in for the engine (`-v` prints them line by line). `python3
 briefs/out/play-rome.py` plays the act in the game itself, in a headless browser, by
 real mouse clicks, twice: once by the book (chain A, then B, inside without the coin,
 then C), and once the other way round (C, B, A), with the Hint button pressed at every
-stage. It stops on any console error, and saves a picture of every moment that matters
-in `briefs/out/shots-rome/`. Neither is a person playing it.
+stage; and then a third, short visit, as a game saved before 7 October would make it.
+On the way it goes through every branch of the date seller, and everything else that
+was woven in, and checks what is on offer in each list of things to say. It stops on
+any console error, and saves a picture of every moment that matters in
+`briefs/out/shots-rome/`. Neither is a person playing it.
 
 Where things are: every place in the three scene files is the painter's own
 measurement of the finished picture (`layout.json` beside each picture in
@@ -41,9 +51,9 @@ measurement of the finished picture (`layout.json` beside each picture in
 A few places differ from the painters' on purpose, and the check script lists each with
 its reason: places to stand that the engine will not let anyone stand on; places that
 lie under the inventory bar, which covers the bottom of the picture whenever the game
-is waiting for a click; and the soothsayer's corner of the steps, which is wired for
-the picture without the folding stool and the second staff that were first painted
-there.
+is waiting for a click; and two seated people, who are placed by the ground under their
+hips. The date seller is in no painter's list: he was placed by eye (see his entry
+under "The family's faith").
 
 Puzzles are numbered within this act.
 
@@ -85,6 +95,7 @@ Rome, the Ides of March, 44 B.C. Morning.
 - THE WASHERWOMAN: runs the laundry on "first" and "then"; cleans cloth the Roman way and sees nothing odd in it; wants the senator's toga off her hands.
 - THE STREET BOY ("Walnut"): the Son's age, best at nuts on the street; cannot take his eyes off the light-up sneakers; wants a friend, and is the act's hint-giver.
 - THE CLERK: counts the Roman People's silver, twice, by lamplight; loses count whenever anyone speaks; wants to reach a number.
+- THE DATE SELLER: a Jew from Judea, about fifty, selling dates from Jericho at the kerb; courteous, humorous, unhurried, nobody's fool; keeps the seventh day, prays toward Jerusalem, sends his half-shekel home; wants nothing from the boy, and is waiting for someone. He is part of no puzzle.
 
 ## Puzzle structure
 
@@ -152,8 +163,8 @@ first one that is open): `rome.arrived`, `rome.hasToga`, `rome.delivered`,
 |  SNACK BAR, sign, price list  writing  shrine |  |  THE PLACE THAT HUMS      |
 |  THE KEEPER            on the walls FOUNTAIN  |  |  (left wall, in shadow)   |
 |  laundry basket                               |  |  chests, a cat      rack  |
-|  THE WASHERWOMAN   stepping stones            |  |  THE CLERK at his table   |
-|                    THE STREET BOY             |  |  SUNLIGHT ON THE FLOOR    |
+|  THE WASHERWOMAN   stepping stones  THE DATE  |  |  THE CLERK at his table   |
+|                    THE STREET BOY    SELLER   |  |  SUNLIGHT ON THE FLOOR    |
 |                           jars, a cart wheel  |  |  out: the door leaves     |
 +-----------------------------------------------+  +---------------------------+
 ```
@@ -179,6 +190,25 @@ The way to the street, which is behind the laurel and easy to miss.
 *Also:* the three things in his pockets arrive with him, without fuss: a dead phone, a
 quarter, half a pack of gum. He plays the act alone: Dad is still in Egypt, standing at
 his door, and there is nobody to switch to.
+
+```
+Cut-Scene: Before Christ        (the first time he walks into the street)
+```
+He comes down the street between the stepping stones. "Whoa. A whole street of snacks
+and laundry." From the snack bar, the keeper, crying his wares: "Hot sausage, hot bread,
+old silver, new silver, the new has Caesar's nose on it, I take every nose!" The boy
+looks round. "Caesar? JULIUS Caesar? Big Sis has him on her timeline. Before the red
+mark. That whole side is B.C." And then to nobody: "B.C. Before Christ. ...So Jesus
+hasn't been born." "So it's before Christmas. Not this Christmas. EVERY Christmas. All
+of them. The FIRST one." "Operation Don't Wreck Anything. I mean it. I've never been in
+front of anything this big." And then, being ten: "Step one, I can SMELL you."
+*Plants:* everything he will say "Not yet." about (the coin, #7; the senator; the road).
+The red mark on Big Sister's timeline, which the player sees in Act Three. What B.C.
+means, which is what makes Little Sister's "EARLY" land in Act Four.
+*Why here:* the era card has just told the player "Rome, 44 B.C."; the boy has to work
+it out, and this is the earliest moment every way through the act passes. Whatever he
+does first in the street, he knows by then. (A game saved in the street before this was
+written hears the cry the next time he walks in: `rome.knowsBC` is its own fact.)
 
 ```
 Puzzle #1: Take The Toga        (Rome · the street · the washerwoman)        chain A
@@ -231,6 +261,8 @@ Plants/pays:  Pays off the washerwoman's errand. His speech is about drains. "It
               with me."
 Notes:        He goes because his figure is already wearing a toga and cannot change it on stage:
               the clean one leaves under his arm. Nothing he says looks ahead to the day's events.
+              Once the boy has heard of Caesar (the cut-scene in the street), there is one more thing
+              to ask him, until he leaves: "Does Caesar have a kid?" See "The family's faith" below.
 ```
 
 ```
@@ -283,6 +315,8 @@ Setup:        An old soothsayer sits on the steps beside a cage of sacred chicke
               "Not today. The birds will not feed, and I have no breakfast to tempt them. I send the
               god nothing."
 Wrong tries:  Call the chickens              -> "They can tell I don't have snacks. Chickens always know."
+                                                And, the first time: they are all facing the temple
+                                                doors (see "The chickens, and the years", below).
               Feed the breakfast to the birds -> "If I feed it to his chickens, he'll foresee me doing it."
               Take the breakfast to the doorkeeper -> "I do not eat at the door. ...Is that the sausage
                                                 from the street with the fountain?" "It's the chicken
@@ -302,6 +336,10 @@ Notes:        The first time they speak: "Beware the Ides of March." "Which one 
               "Then it's a bit late to be-ware." "I said it in February, too. Nobody listened then,
               either." His gloom is the game's only nod to the day, and the Son does not understand
               it: "Okay. Bye! Happy Ides!" "It is not that kind of day."
+              Asked about the birds before they have fed: "Today they will not touch a grain." "The
+              worst omen there is, and on the Ides. I sell omens, boy. This one I could not give away."
+              They will not touch their grain, and they eat the cookshop's bread: whatever they know,
+              they are still chickens.
 ```
 
 ```
@@ -352,6 +390,12 @@ Wrong tries:  Take a second one             -> "One wish is borrowing. Two is a 
                                                something big. Or small."
 Solution:     Reach in. "Operation Borrow-A-Wish is GO. Splish." "Brand new, and SO shiny. I can see
               my face in it, next to the serious man. He's not happy about it."
+              Then, after the street boy has had his say (below), his first hard look at it: "It says
+              CAESAR on it. So that's the nose the snack guy yells about. It's the Caesar coin!" "Like
+              in the story! They ask Jesus about taxes, and He says, show me a coin. Whose picture is
+              on it?" "Caesar's. So Caesar gets his coin. And God gets what's God's. Which is
+              everything. Me included." "But Jesus is all grown up in that story. So this isn't that
+              Caesar. Not yet."
 Gives:        The silver coin.
 Teaches:      Nothing yet, and that is the point: it is a shiny thing picked up because it was there.
               What it is for comes later (#8).
@@ -359,8 +403,10 @@ Hints:        Hint button (only once he is inside without it): "That fountain is
               people's wishes. I only need to borrow one." The street boy, asked how to put light on
               a wall: "Shiniest things on this street are the new silver ones in the fountain. They
               flash like fish."
-Plants/pays:  Plants shiny, twice. The keeper names the face on it (Caesar, "struck this year"): the
-              Son never learns why that matters. Big Sister does, in Act Four.
+Plants/pays:  Plants shiny, twice. He reads the name on it himself, and the keeper, shown it, says
+              when it was struck ("this year"): the Son never learns why that matters. Big Sister
+              does, in Act Four, where the same story is told again with the verse (Mom's).
+              Pays off the keeper's cry: "the new has Caesar's nose on it".
 Notes:        The street boy sees him do it: "That's somebody's wish, you know." "I'm only borrowing
               it. I'll pay it back with interest. Interest is extra wishes."
 ```
@@ -446,8 +492,8 @@ You can't even sneeze that."), pigeons, and three things the painter added: the 
 board on the temple's base ("Rome has terms and conditions."), a handcart of sacks at a
 low door ("The treasury has a drive-through."), and a dog asleep in the shade ("I ask
 for one every birthday. Dad says we'll see. We never see."). **In the street:** the
-washing lines, the laundry basket, the stepping stones, a cat ("Cats were already like
-this") and the songbird it is watching ("The cat over there is a big fan. A BIG fan."),
+washing lines, the laundry basket, the stepping stones (whose second look is at the road
+itself: see below), a cat ("Cats were already like this") and the songbird it is watching ("The cat over there is a big fan. A BIG fan."),
 a little shrine, the red writing on the walls ("They spelled Marcus with a V. Nobody
 tell Marcus."), the price list painted on the snack bar ("No pictures. How do you know
 what a thing LOOKS like?") and its hanging sign ("Pictures! Finally."), the apartments,
@@ -470,6 +516,124 @@ birds do not say. But boys who look, find. That is not prophecy. That is boys."
 
 ---
 
+## The family's faith, and the Bible's history as history
+
+Added on 7 October (`briefs/WEAVE.md`). The Son is ten and has been to Sunday school all
+his life, and he has landed about forty years before the first Christmas. Nothing here gives,
+takes or opens anything: it is what he knows, coming up where it would.
+
+The rules it keeps. Scripture is quoted twice, word for word from the King James
+Version, each time by the date seller and each time with its reference said (by the
+boy, who learned both by heart): the first clause of Micah 5:2, and Numbers 6:24. Both
+end on the King James mark, a comma and a colon, because both verses run on. Everything
+else from the Bible is the boy telling it in his own words. Nobody argues, nobody is
+laughed at for what he believes, nobody is told what is coming. "Not yet." is said
+three times in the act and no more (the check script counts). Nobody says "early":
+that word is Little Sister's, in Act Four.
+
+| Where | What happens | The lines |
+| --- | --- | --- |
+| The street, the first time (a cut-scene, above) | **B.C.** The keeper's cry gives him Caesar; Big Sister's timeline gives him B.C.; "before Christ" does the rest. Operation Don't Wreck Anything. | `rome.street.cry`, `rome.street.bc.1` to `.4` |
+| The fountain, on taking the coin (#7) | **The coin.** The tribute money (Matthew 22:17-21), in his own words, with the point of it right. "This isn't that Caesar. Not yet." | `rome.fountain.caesar.1` to `.4` |
+| The senator, asked "Does Caesar have a kid? A kid like that could get in ANYWHERE." (on offer once he has been to the street, until the senator leaves) | **Caesar's great-nephew.** "Caesar has no son. There is a great-nephew: Gaius Octavius, eighteen, off at his books in Apollonia." "Nobody gives the boy a thought. I mention him only because I am thorough." "I know another Caesar! Caesar AUGUSTUS. Luke 2:1. He counts everybody. It's how the Christmas story starts." "Augustus. There is no such name. I know every name in Rome that matters." "...Not yet." | `rome.senator.ask.caesar`, `rome.senator.ans.caesar.1` to `.5` |
+| The clerk, asked "What's on all the wax pads?" | **Herod.** "Accounts. Judea's: Antipater's, and his son Herod's, from Galilee, where the young man governs." "Herod? KING Herod? The bad king in the Christmas story?" "Herod is no king. He is a procurator's son with expensive tastes. I have the figures." "...I'd count him twice. I'm just saying." (No tag here: three is the limit.) | `rome.clerk.ask.judea`, `rome.clerk.ans.judea.1` to `.4` |
+| The stepping stones, looked at a second time | **The road.** "Paul walks into Rome on a road like this. The Appian Way: it's on my Bible map. The church comes out to meet him. Not yet." (Acts 28:15 names two stations on that road and not the road, so he has the name from a map.) | `rome.stones.look2` |
+| The date seller | below | `rome.dateseller.*` (34 lines) |
+
+### The date seller
+
+He stands at the kerb of the right-hand pavement, just up the street from the last
+stepping stone, where people cross: at 492, 444, facing the fountain and past it. He is
+in no painter's list; the place was chosen by eye and by measurement. Farther up the
+pavement, where there is more room, the words of anyone speaking at the fountain, the
+stepping stones or the boy's first stopping place were written across him (words go
+over the speaker's head, and that is where his was). At the kerb the engine counts him
+as standing beside the speaker and lifts the words over him. Words spoken at the
+laundry and by the street boy still pass over him: there is no place up the street
+where none do. His ground is blocked (the engine does it for anyone standing), his area
+to click on touches no other, and he is 34 pixels clear of the fountain. The boy talks
+to him from the roadway, at 446, 460, looking up.
+
+Looked at: "A man with a beard and a basket of... giant raisins? He's the only one in
+Rome who isn't in a hurry." And again: "He keeps looking the same way, past the fountain
+and a long way off. Like he's waiting for somebody."
+
+The first time: "Dates, young sir. From Jericho, in Judea. There are none better: I
+have looked." "Jericho? The Jericho with the WALLS?" "You know of the walls. In that
+hat. ...The same Jericho. The palms have done better than the walls." That the boy
+knows Jericho is why the man talks to him at all.
+
+| He asks | What is said | Notes |
+| --- | --- | --- |
+| "Can I try one? I'm between snacks." | "For a boy who knows of Jericho, the first is a gift. Here." He holds one out on his open hand; the boy takes it. "It's candy. It's candy that GROWS. Nine out of... OW. There's a rock in it!" "The stone. That part is a palm tree that has not begun. I ought to charge you for the tree." "Nine out of ten. One off for the surprise rock." | Once: one gift. It is eaten; nothing is carried away. |
+| "Everybody here has a statue to pray to. Which one's yours?" | "None. We have one God: the God of Abraham, of Isaac and of Jacob. He made heaven and earth." "Abraham, Isaac and Jacob? I KNOW them! That's who we pray to at my house!" "At your house. ...Then the world is larger than Rome has told me." "Rome finds us Jews very funny: a great Temple in Jerusalem, and no statue in it." "Pompey himself went in, nineteen years ago. He found no image. Not one." "I ask them how they would carve the One who made the stone. They buy their dates and go." | The joke is his, told on himself. He says nothing about anybody else's gods. |
+| "What do you pray for?" (on offer once the one above has been asked) | "For the one who is promised. Every day, facing Jerusalem. The prophet Micah has told us his town:" "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'" The boy turns away, to us: "Micah 5:2! That was my line in the Christmas program. ...Bethlehem. I know SO much about Bethlehem." "I've never wanted to tell anybody anything so much. It's not mine to tell. That news has its own angels." And back to the man: "Mister? It's going to be worth the wait. If I were you, I'd keep watching that town." A moment. "...That was not a guess. I will not ask you what it was. But I will watch." "And for you, young sir: 'The LORD bless thee, and keep thee:'" The boy's head goes down as it does every Sunday, cap off, hands folded, before he knows it has. "Numbers 6:24! Pastor says that at the end of church. The very same words. ...Thanks, mister." | The heart of the act. Once: a blessing is not given twice for the asking. |
+| "Bye, mister." | "Go well, young sir. Come any day but the seventh. That day I rest, and Rome always wants dates." | No weekday is named anywhere: the game does not say what day of the week the Ides fell on. |
+
+Things shown to him. The quarter: "A bird. An eagle? Whoever struck this was proud of
+his bird. ...It is not silver, young sir." "A coin should go home. Every year we send
+our offering to the Temple in Jerusalem: the half-shekel." The dead phone: "A black
+stone, polished like a mirror. It shows me an old man selling dates. It is not wrong."
+The senator's toga: "A senator's toga. I know the man. He buys the best dates in Rome
+and remembers them as cheaper." The fountain coin: "Caesar. He has been a friend to us
+Jews of Rome: we may meet, and keep our fathers' customs." "But that is fountain
+silver, young sir. Somebody's wish. Not a price." The soothsayer's breakfast: "The
+soothsayer's. Every day he offers to tell my fortune by his hens. Every day: not by
+hens, thank you." (one line of the chickens' thread, below). The gum, the tunic and the
+incense get the Son's stock replies.
+
+Two things about how it is staged. The engine picks the gesture for each line from the
+line's id, and the date seller has four: an open hand with a date on it, a finger
+raised, a hand laid on his chest, a small shrug. The ids here were chosen with that in
+mind (the blessing is said with the hand on the chest; "He found no image. Not one."
+with the shrug), so renumbering them changes what his hands do. And the boy's cap,
+which he would not take off for the doorkeeper ("The cap is load-bearing"), comes off
+by itself for the blessing: that is the people artist's prayer pose, and nobody
+mentions it.
+
+---
+
+## The chickens, and the years
+
+Added on the evening of 7 October, from the author's two rules (`briefs/DATING.md`) and
+`briefs/WEAVE-2.md`. Four lines; nothing here gives, takes or opens anything.
+
+**The chickens.** They are the thread through every era of the game: a chicken notices
+a door in time before any person does, goes quiet, will not eat, and stands facing it.
+Nobody explains it. Here they are the soothsayer's sacred chickens, which in Rome really
+were kept for omens: if they would not eat, it was a bad sign.
+
+| Where | What happens | The lines |
+| --- | --- | --- |
+| The soothsayer, asked "Why do you keep chickens in a cage?" before they have fed | This morning they will not touch their grain ("Today they will not touch a grain.", which was there), and he takes it for the worst of omens, as a man who sells omens would on the Ides of March: "The worst omen there is, and on the Ides. I sell omens, boy. This one I could not give away." | `rome.soothsayer.ans.birds.1`, `rome.soothsayer.ans.birds.omen` |
+| The cage: the first time he calls them, or the second time he looks, fed or not. Once. | He notices it himself, and looks up the steps where they are looking: "...Huh. They're all facing up the steps. At the temple doors. Every single one. Chickens KNOW." Then he thinks of his little sister: "That's what my little sister says. She has a chicken called General Feathers. The General outranks me." He does not explain it. | `rome.birdcage.doors.1`, `.2` |
+| The date seller, shown the soothsayer's breakfast | "The soothsayer's. Every day he offers to tell my fortune by his hens. Every day: not by hens, thank you." Courteous; nothing is said about anybody's gods. | `rome.dateseller.breakfast` |
+
+Two things that were there already now belong to the thread. When it is calling them
+that shows him, his old line at the cage ("They can tell I don't have snacks. Chickens
+always know.") comes just before he sees what they do know. And when the breakfast comes
+they eat the cookshop's bread,
+which is not their grain ("They feed. Look at them feed."), and go on facing the doors:
+whatever they know, they are still chickens. "Chickens KNOW." is Little Sister's. The Son
+quotes her, once (the check script holds it), so in play order the player hears it first
+from her brother, and from her own mouth in Act Three. General Feathers is in Dad's
+suitcase in Act One: the Son does not know that, and the player does.
+
+**The years.** Every year before Christ in the game is the Bible's own count, as
+Archbishop Ussher counted it (`briefs/DATING.md`). Rome's own date, 44 B.C., is the same in
+every count, and this act names no other year before Christ. The one thing about the act
+that counted years from Egypt was the card before it, which reckoned from the old
+textbook date of the pyramid; by the Bible's count Dad's Egypt is about 1920 B.C., and
+the card is now to read "nearly nineteen hundred years later" (1921 to 44 B.C. is 1,877
+years). The card that ends this act, "about two thousand years later", counts from Rome
+to the present (44 B.C. to A.D. 2026 is 2,069 years) and stands. The boy's "Big Sis has
+him on her timeline" agrees with her wall, which is made with Ussher's dates and names
+44 B.C., the Ides of March (`home.timeline.6`). The check script now refuses a year B.C.
+that is not in DATING.md's table, and anything in the act's files or this document that
+leans on the old date.
+
+---
+
 ## Ledger for this act
 
 **People**
@@ -478,11 +642,12 @@ birds do not say. But boys who look, find. That is not prophecy. That is boys."
 | --- | --- | --- | --- | --- |
 | Doorkeeper | steps, in the doors | a boy, a clean tunic, something for the god | the way in | the three things; what is inside; Dad |
 | Soothsayer | steps, sitting | his breakfast, for him and for the birds | the incense box | the chickens; the temple; the boy's future |
-| Senator | steps, until #2 | his clean toga | his thanks, which the washerwoman honors | why he is late; the stain; Dad |
+| Senator | steps, until #2 | his clean toga | his thanks, which the washerwoman honors | why he is late; the stain; Caesar's great-nephew; Dad |
 | Snack-bar keeper | street, behind his counter | a boy with legs | the breakfast, and a snack | the quarter; pizza; who owes him; Dad |
 | Washerwoman | street, by her basket | the toga taken up the hill | the toga, then the tunic | how cloth is cleaned; the tunic; Dad |
 | Street boy | street, on the curb | to see the shoes light up again | hints, and a friend | the walnut game; the temple; what to do next |
-| Clerk | temple, at his table | to reach a number | nothing | what he counts; the statue's feet; the hum; Dad |
+| Clerk | temple, at his table | to reach a number | nothing | what he counts; the statue's feet; the hum; the accounts from Judea; Dad |
+| Date seller | street, at the kerb by the last stepping stone | nothing | one date, eaten on the spot; a blessing | the dates; his God; what he prays for; (shown the breakfast) the soothsayer's hens |
 
 **Things that are carried**
 
@@ -501,7 +666,11 @@ birds do not say. But boys who look, find. That is not prophecy. That is boys."
 doorkeeper has said what he lets in), `rome.metSoothsayer`, `rome.metSenator`,
 `rome.metUrchin`, `rome.metClerk` (first words said), `rome.sawStreet`, `rome.sawInside`
 (arrival remarks made), `rome.knowsWash` (he has heard how cloth is cleaned),
-`rome.offered` (the incense is at the god's feet).
+`rome.offered` (the incense is at the god's feet), `rome.knowsBC` (he has heard the
+keeper's cry and worked out when he is: it puts the question about Caesar on offer),
+`rome.metDateSeller`. What the date seller has already given (the date, the blessing),
+and what the boy has noticed at the cage, are kept by the lines themselves having been
+said, as the engine counts them.
 
 **Plants and payoffs**
 
@@ -515,12 +684,22 @@ doorkeeper has said what he lets in), `rome.metSoothsayer`, `rome.metSenator`,
 | "I'll carry it by the corners." | #1 | The washerwoman's fact: "I'm going back to the corners." |
 | The key-ring flashlight | Before the act (the pyramid) | #8: "I shined my flashlight at the hum, and POP: door." |
 | Shiny | #7: the coin; the street boy's pot lid | #8 |
-| Caesar's face on a new coin | The keeper, shown the coin | Act Four, #6: Big Sister reads it |
+| Caesar's face on a new coin | The keeper's cry; the coin, read at the fountain; the keeper, shown it | Act Four, #6: Big Sister reads it |
+| "The new has Caesar's nose on it" | The keeper's cry, the first time in the street | The street: "Caesar? JULIUS Caesar?"; #7: "So that's the nose the snack guy yells about." |
+| The red mark on Big Sister's timeline | The street: "Before the red mark. That whole side is B.C." | Act Three: the timeline is on her wall, and she says what the mark is |
+| B.C. is "before Christ" | The street | Act Four, at the gate: what makes "Daddy's EARLY!" land |
+| The Caesar coin, and whose picture is on it | #7, in the Son's words | Act Four: the same coin, and the verse, in Mom's |
+| "Not yet." | #7 | The senator ("There is no such name."); the road |
+| "The cap is load-bearing." | #6, to the doorkeeper | The date seller's blessing: it comes off by itself |
+| A boy who knows the walls of Jericho | The date seller's first words | Why the man answers his questions; "...That was not a guess." |
 | "Why is the sky DOWN?" | #8 | Act Four, #5: it fell out of the sky and hit his hat |
 | "... It didn't come back down." | #9 (the old line) | Act Four, #5 |
 | Dad's ketchup packets (his running gag) | CHARACTERS.md | #4: "He KNEW." |
 | A dog, which he asks for every birthday | The dog asleep on the Forum: "Dad says we'll see. We never see." | #9 (the old line): "Edge, we get a dog." |
 | "Dad says EVERYTHING is the wind." | The old line, at the hum | The clerk, about the noise by that wall at dawn: "That was... probably the wind." "That is what I decided." |
+| The sacred birds will not touch their grain: "The worst omen there is" | The soothsayer, asked about the birds | #5: they feed on the cookshop's bread, and go on facing the doors |
+| "Chickens always know." | The first call of the chickens | The same moment: they are all facing the temple doors. "Chickens KNOW." |
+| "Chickens KNOW.", and General Feathers, who outranks him | The cage: his little sister's saying, and her chicken | Act Three: Little Sister says it herself, and the General's place on her pillow is kept. (Act One: the General is in Dad's suitcase. The Son does not know.) |
 | "Bring it back clean." | #3 | Not yet. He still has the tunic. |
 | A door the size of a coin, left open | #8 | Not yet. He is still in the temple, and now has no coin. |
 | A boy who would like to see the shoes light up again | The street | Not yet. Walnut is owed two nuts. |
@@ -531,9 +710,13 @@ doorkeeper has said what he lets in), `rome.metSoothsayer`, `rome.metSenator`,
 
 The rule is the one in [CHARACTERS.md](CHARACTERS.md): people of the time are never
 wrong about their own time, and nothing goes down as **Checked** from memory. Each row
-was read in the source named, on 2026-10-06. **To check** means believed right and not
-confirmed. `briefs/LEVEL-rome.md` lists most of these as true; the last column says
-whether this draft found them in a source.
+of the first table was read in the source named, on 2026-10-06. **To check** means
+believed right and not confirmed. `briefs/LEVEL-rome.md` lists most of these as true;
+the last column says whether this draft found them in a source.
+
+The second table, further down, holds the statements added on 7 October with the
+family's faith: the Bible's history, and Rome's where it touches it. A third, after it,
+holds those of the four lines of the chickens, added that evening.
 
 | The statement | Who says it, and where | Status |
 | --- | --- | --- |
@@ -560,7 +743,75 @@ whether this draft found them in a source.
 | There is a February before March | The soothsayer, `rome.soothsayer.hi.5` | **To check.** Not on the level's list. |
 | Rome has consuls, and people know their faces | The keeper, `rome.keeper.ans.pay.1` (the design's own line) | **To check.** |
 
-Sources: Wikipedia, [Assassination of Julius Caesar](https://en.wikipedia.org/wiki/Assassination_of_Julius_Caesar),
+### Added on 7 October: the Bible's history, and Rome's where it touches it
+
+Every statement the fifty-five new lines make. "facts-home" is `briefs/out/facts-home.md`,
+the checker's report of 7 October, where each item was read in the sources it names and
+each verse in two King James copies; the id in brackets is its heading there. "Read
+2026-10-07" is this writer's own reading, for the few things that are not on the
+checker's list. Scripture the game QUOTES is marked so; everything else from the Bible
+is in the Son's own words, or the date seller's.
+
+| The statement | Who says it, and where | Source, and status |
+| --- | --- | --- |
+| The new silver has Caesar's portrait on it, and the old has not | The keeper, `rome.street.cry` | **Checked.** The row above ("New coins this year carry Caesar's own face"). |
+| The Caesar on the money is Julius Caesar, and his time is B.C. | The Son, `rome.street.bc.1` | **Checked**: it is 44 B.C. (the first row above). That he is on Big Sister's timeline "before the red mark" is the home act's to keep true (`home.timeline.bigsis`: "At the red mark the years turn round. Before it they count down: B.C."). **Confirmed with the home act** as it stood on the evening of 7 October: her wall is made with Ussher's dates and names "44 B.C.: the Ides of March. That one is Rome's." (`home.timeline.6`). |
+| B.C. means "before Christ", and it is counted back from the birth of Jesus | The Son, `rome.street.bc.2` | **Checked.** facts-home (`time.bc.ad`): Britannica, Christian Era. |
+| So Jesus has not been born, and there has been no Christmas | The Son, `rome.street.bc.2`, `.3` | **Checked.** facts-home (`time.bc.ad`, `time.jesus.birth`: probably about 6 to 4 B.C.). The Son gives no number of years. |
+| The coin has the name CAESAR on it | The Son, `rome.fountain.caesar.1` | **Checked**, read 2026-10-07. WildWinds, Julius Caesar: the portrait denarii of 44 B.C. read CAESAR IMP, CAESAR DICT QVART, CAESAR DICT PERPETVO: every one bears the name. Wikipedia, Julius Caesar: "shows Caesar's laurelled head surrounded by the CAESAR DICT PERPETVO". Not on the checker's list. |
+| The tribute money: they ask Jesus about paying taxes to Caesar; He has a coin shown Him and asks whose image is on it; "Caesar's"; give Caesar what is Caesar's and God what is God's | The Son, `rome.fountain.caesar.2`, `.3`, in his own words | **Checked.** Matthew 22:19-21, facts-home (`kjv.matt22.19-21`). The question itself is verse 17 ("Is it lawful to give tribute unto Caesar, or not?"): read 2026-10-07, Bible Hub, King James Version. "Which is everything. Me included." is the boy's own. |
+| The Caesar of that story is a later Caesar than this one | The Son, `rome.fountain.caesar.4` | **Checked.** facts-home (`rome.denarius.penny`): the emperor then was Tiberius (born 42 B.C., emperor A.D. 14 to 37). The Son names nobody. |
+| Caesar has no son | The senator, `rome.senator.ans.caesar.1` | **Checked** for a son in law, read 2026-10-07: Wikipedia, Julius Caesar: "his only legitimate child, Julia" (she died in 54 B.C.). The same page lists Caesarion, Cleopatra's son, born in 47 B.C., as "unacknowledged". A Roman senator would say it as he does; the wording is the brief's. |
+| His great-nephew Gaius Octavius is eighteen, and away at his studies at Apollonia | The senator, `rome.senator.ans.caesar.1` | **Checked.** facts-home (`rome.octavius`): Suetonius, Augustus 4, 5 and 8. |
+| Nobody in Rome thinks of him as Caesar's heir | The senator, `rome.senator.ans.caesar.2` | **Checked.** facts-home (`rome.octavius`): the will that adopted him was read after Caesar's death (Suetonius, Julius 83). The senator does not call him an heir; nobody does. |
+| The Bible has a Caesar Augustus, who has everybody counted, and the Christmas story begins with him | The Son, `rome.senator.ans.caesar.3`, in his own words, with the reference | **Checked.** Luke 2:1, facts-home (`kjv.luke2.1`): "a decree from Caesar Augustus, that all the world should be taxed" ("taxed" is the King James word for enrolled). |
+| There is no such name as Augustus, this morning | The senator, `rome.senator.ans.caesar.4` | **Checked.** facts-home (`rome.octavius`): the Senate gave him the name in 27 B.C. (Suetonius, Augustus 7.2). |
+| Antipater has charge of Judea, and his son Herod, a young man, governs Galilee | The clerk, `rome.clerk.ans.judea.1` | **Checked.** facts-home (`rome.herod.galilee`): Josephus, Antiquities 14.143 and 14.158. No age is given for Herod, as the checker asks. |
+| Antipater is a procurator | The clerk, `rome.clerk.ans.judea.3` | **Checked.** The same: "so he made him procurator of Judea" (Whiston's Josephus). |
+| Their accounts are on a clerk's table in the treasury at Rome | The clerk, `rome.clerk.ans.judea.1` | **To check.** The brief's invention. (Pompey made Judea pay tribute to Rome, as this writer remembers Josephus; that was not read today, and where such accounts were kept is not known to him.) |
+| Herod has expensive tastes | The clerk, `rome.clerk.ans.judea.3` | The clerk's opinion, and the brief's line. Not sourced for 44 B.C. |
+| Herod is not a king | The clerk, `rome.clerk.ans.judea.3` | **Checked.** facts-home (`rome.herod.galilee`): named king by the Senate in 40 B.C. |
+| A King Herod is the bad king of the Christmas story | The Son, `rome.clerk.ans.judea.2` | **Checked.** Matthew 2:1, facts-home (`kjv.matt2.1`): "in the days of Herod the king"; that it is the same Herod, facts-home (`rome.herod.galilee`). |
+| Paul came into Rome by road, and the brethren came out along it to meet him | The Son, `rome.stones.look2`, in his own words | **Checked.** Acts 28:15-16, facts-home (`kjv.acts28.15-16`). |
+| The road was the Appian Way | The Son, `rome.stones.look2` | **Checked.** facts-home (`rome.appian`): Acts names two stations on it (Appii forum, The three taverns) and not the road. So the boy has the name from the map in his Bible, and says so. |
+| Jericho is famous for its dates | The date seller, `rome.dateseller.hi.1` | **Checked.** facts-home (`rome.jericho.dates`): Strabo 16.2.41; Josephus, Wars 4.468. "None better" is a seller's opinion. |
+| The walls of Jericho fell | The Son, `rome.dateseller.hi.2`; the date seller, `.hi.3` | **Checked**, read 2026-10-07: Joshua 6:20, Bible Hub, King James Version ("the wall fell down flat"). An allusion, in their own words; not on the checker's list of verses, and nothing is quoted. |
+| A date has a stone in it, from which a palm grows | The date seller, `rome.dateseller.ans.try.3` | Common knowledge. |
+| The Jews have one God, the God of Abraham, Isaac and Jacob, who made heaven and earth | The date seller, `rome.dateseller.ans.god.1`, in his own words | **Checked**, read 2026-10-07: Exodus 3:6 and 3:15, Bible Hub, King James Version ("the God of Abraham, the God of Isaac, and the God of Jacob"); "which made heaven and earth", Psalm 121:2, facts-home (`kjv.ps121.1-2`). |
+| The family prays to the same God | The Son, `rome.dateseller.ans.god.2` | The family's own faith (`briefs/WEAVE.md`). |
+| The Temple in Jerusalem has no statue in it | The date seller, `rome.dateseller.ans.god.4` | **Checked.** facts-home (`rome.pompey.no.image`): Tacitus, Histories 5.9, and 5.5 ("they do not allow any images to stand in their cities, much less in their temples"). |
+| Rome finds that funny | The date seller, `rome.dateseller.ans.god.4` | **To check** for 44 B.C. itself. Cicero is contemptuous in 59 B.C. (facts-home, `rome.jews.in.rome`); Tacitus's "the shrine had nothing to reveal" is 150 years later. It is the brief's ("a Roman joke about a people who have a temple with no statue in it"). |
+| Pompey went into the Temple nineteen years ago and found no image | The date seller, `rome.dateseller.ans.god.5` | **Checked.** facts-home (`rome.pompey.temple`: Josephus, Antiquities 14.71-73, 63 B.C.; `rome.pompey.no.image`: Tacitus). 63 less 44 is 19. |
+| He prays every day, facing Jerusalem | The date seller, `rome.dateseller.ans.pray.1` | The custom is Scripture's: Daniel 6:10, facts-home (`kjv.dan6.10`): "his windows being open in his chamber toward Jerusalem". That a Jew in Rome in 44 B.C. did so: **to check** (the brief's). |
+| His people wait for one who is promised, and the prophet Micah names his town | The date seller, `rome.dateseller.ans.pray.1` | **Checked.** Micah 5:2, facts-home (`kjv.mic5.2`). |
+| **QUOTED:** "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | The date seller, `rome.dateseller.ans.pray.2`; the reference by the Son, `.ans.pray.3` | **Checked**, exact: Micah 5:2, the first clause, facts-home (`kjv.mic5.2`). The verse runs on, so the quotation ends on its comma. |
+| Angels bring the news of that birth | The Son, `rome.dateseller.ans.pray.4` | **Checked**, read 2026-10-07: Luke 2:9-13, Bible Hub, King James Version. An allusion, in his own words; not on the checker's list of verses. |
+| **QUOTED:** "The LORD bless thee, and keep thee:" | The date seller, `rome.dateseller.bless.1`; the reference by the Son, `.bless.2` | **Checked**, exact: Numbers 6:24, facts-home (`kjv.num6.24-26`). The verse ends with a colon, and so does the quotation. |
+| That blessing is said at the end of church | The Son, `rome.dateseller.bless.2` | The family's own church. |
+| He keeps the seventh day, and does not sell on it | The date seller, `rome.dateseller.ans.bye` | **Checked.** facts-home (`rome.sabbath`): Horace, Satires 1.9; Dolabella's letter of 43 B.C., in Josephus, Antiquities 14.225-227. No day of the week is named in the game. |
+| Every year the Jews of Rome send an offering to the Temple in Jerusalem: the half-shekel | The date seller, `rome.dateseller.quarter.2` | **Checked, with the checker's wording.** facts-home (`rome.temple.tax`, "true with a change"): the sentence is its safe line for a Jewish character, word for word. No Roman in the game uses the word. |
+| There are Jews living in Rome | The date seller, `rome.dateseller.coin.1`; he is one | **Checked.** facts-home (`rome.jews.in.rome`): Cicero, Pro Flacco 66-67 (59 B.C.). |
+| Caesar has let them meet, and keep the customs of their fathers | The date seller, `rome.dateseller.coin.1` | **Checked.** facts-home (`rome.jews.in.rome`): Josephus, Antiquities 14.213-216 ("I permit these Jews to gather themselves together, according to the customs and laws of their forefathers"). "A friend to us" is his own judgment; Suetonius (Julius 84) has the Jews of Rome mourning Caesar for nights together. |
+
+The statements the four lines of the chickens add (the evening of 7 October, `briefs/DATING.md`):
+
+| The statement | Who says it, and where | Source, and status |
+| --- | --- | --- |
+| Sacred chickens that will not eat are the worst of omens | The soothsayer, `rome.soothsayer.ans.birds.omen` | **Checked** that it is a bad omen: the row in the first table ("Sacred chickens tell omens by how they feed"), Wikipedia, Augury: "If the chickens refused to come out or eat ... the signs were considered unfavourable." "The worst there is" is his own judgment, and so is "I sell omens" (a soothsayer on the steps owning the cage is the design's liberty, as that row says). |
+| It is the Ides | The soothsayer, `rome.soothsayer.ans.birds.omen` | **Checked**: the first row of the first table. |
+| A chicken notices a door in time before any person does, and stands facing it | The Son, `rome.birdcage.doors.1` (seen, and not explained) | The author's rule for this game (`briefs/DATING.md`, "Chickens know"). Not history, and nobody in the game says it is. |
+| His little sister has a chicken called General Feathers, who outranks him, and she says "Chickens KNOW." | The Son, `rome.birdcage.doors.2`, `.doors.1` | The family's own (`briefs/DATING.md`; `docs/CHARACTERS.md`, Little Sister). |
+| The soothsayer offers to tell the date seller's fortune by his hens, and he declines | The date seller, `rome.dateseller.breakfast` | His own choice, lightly put. Behind it, as this writer remembers it: the Law forbids divination (Deuteronomy 18:10-11; Leviticus 19:26). Nothing is quoted and no verse is named on screen. **To check** (not read today, and not on the checker's list). |
+
+Sources for this table, beyond `briefs/out/facts-home.md` and the sources it names:
+WildWinds, [Julius Caesar](https://www.wildwinds.com/coins/imp/julius_caesar/i.html);
+Wikipedia, [Julius Caesar](https://en.wikipedia.org/wiki/Julius_Caesar),
+[Roman Republican currency](https://en.wikipedia.org/wiki/Roman_Republican_currency);
+Bible Hub, King James Version: [Joshua 6:20](https://biblehub.com/kjv/joshua/6-20.htm),
+[Exodus 3](https://biblehub.com/kjv/exodus/3.htm), [Matthew 22](https://biblehub.com/kjv/matthew/22.htm),
+[Luke 2](https://biblehub.com/kjv/luke/2.htm).
+
+Sources for the first table: Wikipedia, [Assassination of Julius Caesar](https://en.wikipedia.org/wiki/Assassination_of_Julius_Caesar),
 [Temple of Saturn](https://en.wikipedia.org/wiki/Temple_of_Saturn), [Toga](https://en.wikipedia.org/wiki/Toga),
 [Fulling](https://en.wikipedia.org/wiki/Fulling), [Fullo](https://en.wikipedia.org/wiki/Fullo),
 [Thermopolium](https://en.wikipedia.org/wiki/Thermopolium), [Popina](https://en.wikipedia.org/wiki/Popina),
@@ -575,11 +826,20 @@ Brewminate, [Nuts and Knucklebones: Toys and Games in Ancient Rome](https://brew
 **What the Son gets wrong out loud, on purpose.** Togas are bedsheets. The sacred
 chickens are pets. The temple is a church and a bank. The jars in the counter hold
 soup. The walnut game is marbles. MARCVS is misspelled, and VOTA might mean vote. The god
-has a blanket on his head and a hook knife. No Roman agrees with any of it.
+has a blanket on his head and a hook knife. Dates are giant raisins, and the stone in
+one is a rock. No Roman agrees with any of it. About the Bible he is not wrong: what he
+tells, he tells in a ten-year-old's words, and he gets it right.
 
 **What nobody says.** Nobody on screen knows what will happen to Caesar today, and the
 game neither shows it nor says it. The soothsayer does not know why the day is bad. The
 senator hurries off to an ordinary meeting. The keeper knows Caesar as a nose on a coin.
+The date seller calls him a friend to the Jews of Rome, and does not know that it is
+the last morning he will be one. Nobody in Rome knows who Gaius Octavius will be, or
+Herod. The boy knows, and each time says only "Not yet.", or less. Nobody tells the date
+seller what is coming, or when: the boy does not know the number of years himself. No
+line says how long before or after anything in the Old Testament this morning is: none
+needs to, and if one ever does, the count is the Bible's (`briefs/DATING.md`). Nobody
+explains the chickens.
 
 **One fact outside this act that these sources bear on.** Big Sister says in Act Four
 (`nevada.coin.read.2`, marked "To check" in CHARACTERS.md) that Caesar "was the first

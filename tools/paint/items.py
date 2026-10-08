@@ -663,12 +663,372 @@ def gum(b, l):
     l.line([at(0, -W), at(0, W), at(0, W, 1)], green[3], 0.9, 0.6)
 
 
+def _hole(b, points):
+    """Cut a hole right through what is on the base sheet (a keyhole for a ring, the eye of a tag)."""
+    b.poly(points, "#000000", 0.0)
+
+
+def _cord(l, points, light, dark, width=1.3):
+    """A string or cord: its darker edge first, then its lit middle."""
+    l.line(points, dark, width + 1.0)
+    l.line(points, light, width)
+
+
+def studykey(b, l):
+    """The key to Dad's study: an ordinary brass door key on a loop of white string, with a little paper tag
+    that somebody has pencilled something on."""
+    brass = ("#fbe894", "#dfb244", "#a97c26", "#6a4a14")
+    ox, oy, dx, dy = 10.6, 11.6, 0.788, 0.616                # the round end of the key, and the way it points
+    K = lambda pts: [(ox + dx * x - dy * y, oy + dy * x + dx * y) for x, y in pts]
+    bow = [(0.6, 0), (2.2, -7.4), (8.2, -10.6), (15.4, -9.8), (20.2, -5.8), (22.0, -4.8), (22.0, 4.8), (20.2, 5.8), (15.4, 9.8), (8.2, 10.6), (2.2, 7.4)]
+    cuts = [(51.6, 1.4), (49.4, 4.0), (47.0, 1.0), (44.6, 4.6), (41.6, 0.2), (38.6, 4.6), (36.2, 2.0), (33.6, 4.6), (30.6, 0.6), (27.6, 4.6), (25.5, 4.6)]
+    blade = [(20.6, -4.8), (25.5, -4.6), (50.2, -4.6), (53.4, -1.2)] + cuts + [(20.6, 4.8)]
+    b.poly(K(blade), brass[1])
+    b.poly(K([(20.6, -4.8), (25.5, -4.6), (50.2, -4.6), (52.0, -2.7), (25.5, -2.6), (20.6, -2.8)]), brass[0])       # the back of the blade catches the light
+    b.poly(K([(25.5, 1.4), (51.6, 1.4)] + cuts), brass[2])                                                            # the cut edge is in shade
+    b.poly(loop(K(bow), 5), brass[1])
+    b.poly(loop(K([(0.6, 0), (2.2, -7.4), (8.2, -10.6), (15.4, -9.8), (12.0, -6.4), (7.6, -5.6), (4.6, -1.6), (4.4, 3.4), (2.2, 7.4)]), 5), brass[0])     # the bow's rim, toward the sun
+    b.poly(loop(K([(15.4, 9.8), (20.2, 5.8), (22.0, 4.8), (22.0, -1.0), (18.6, 3.2), (14.0, 6.8), (8.2, 8.2), (8.2, 10.6)]), 5), brass[2])               # and away from it
+    hole = K(oval(6.6, 0.0, 3.2, 3.2))
+    _hole(b, hole)
+    l.line(K([(24.6, -0.9), (50.4, -0.9)]), brass[3], 1.2, 0.85)                                                      # the groove down the blade
+    l.line(K([(24.6, -2.0), (50.0, -2.0)]), brass[0], 0.8, 0.9)
+    l.line(K([(21.6, -4.8), (21.6, 4.8)]), brass[3], 1.0, 0.7)                                                        # the shoulder
+    l.line(K([(25.5, 4.6)] + cuts[::-1]), brass[3], 0.8, 0.7)                                                         # the cuts, crisp
+    l.line(K([(12.6, -2.6), (17.4, -2.6)]), brass[3], 1.0, 0.6)                                                       # two worn marks where a maker's name was
+    l.line(K([(12.6, 0.6), (16.0, 0.6)]), brass[3], 1.0, 0.6)
+    ring = loop(K(bow), 5)
+    l.line(ring[38:] + ring[:12], brass[0], 1.0, 0.9)
+    l.line(hole[8:20], brass[3], 0.9, 0.8)                                                                            # the near wall of the hole is in its own shade
+    # the tag, of buff paper, its corners clipped, an eyelet at the top
+    ex, ey = 13.6, 40.4
+    Tg = lambda pts: rot([(ex + x, ey + y) for x, y in pts], -11, (ex, ey))
+    paper = ("#fdf3d2", "#efdcaa", "#c9b27e", "#8c7650")
+    tag = [(-4.2, -3.4), (4.2, -3.4), (7.6, 0.6), (7.6, 18.4), (-7.6, 18.4), (-7.6, 0.6)]
+    b.poly(Tg(tag), paper[1])
+    b.poly(Tg([(-4.2, -3.4), (4.2, -3.4), (5.6, -1.8), (-7.6, 12.0), (-7.6, 0.6)]), paper[0])
+    b.poly(Tg([(7.6, 9.0), (7.6, 18.4), (-2.0, 18.4)]), paper[2])
+    b.poly(Tg(oval(0, 0.4, 2.7, 2.7)), "#b0703a")            # the eyelet's patch
+    _hole(b, Tg(oval(0, 0.4, 1.2, 1.2)))
+    for (y, x0, x1, ph) in ((7.4, -4.8, 4.8, 0.0), (11.4, -4.8, 2.4, 1.7)):                                           # what is pencilled on it: not to be read
+        pts = [(lerp(x0, x1, i / 12), y + math.sin(i * 1.9 + ph) * 1.0) for i in range(13)]
+        l.line(Tg(pts), "#5c554e", 1.0, 0.9)
+    l.line(Tg([(-5.0, 15.0), (1.0, 14.6)]), "#5c554e", 0.9, 0.7)
+    l.line(Tg([(7.6, 0.6), (7.6, 18.4), (-7.6, 18.4)]), paper[3], 0.9, 0.7)
+    # the string: a loop through the key and through the tag, knotted
+    eye = Tg([(0, 0.4)])[0]
+    hx, hy = K([(6.6, 0.0)])[0]
+    string = ("#fff3d0", "#a58c5e")                          # kitchen string: soft, a little yellow, never quite straight
+    _cord(l, curve([(hx - 0.6, hy + 0.4), (9.6, 20.6), (7.0, 25.6), (8.6, 31.0), (10.6, 35.4), (eye[0] - 1.0, eye[1] - 0.6)], 5), *string, width=1.2)
+    _cord(l, curve([(hx + 0.8, hy + 0.6), (15.4, 21.6), (17.6, 26.4), (16.4, 31.4), (17.2, 35.6), (eye[0] + 0.8, eye[1] - 0.4)], 5), *string, width=1.2)
+    l.poly(oval(eye[0] + 0.3, eye[1] - 3.3, 2.6, 2.2), string[1])                                                    # the knot, and its two ends
+    l.poly(oval(eye[0], eye[1] - 3.7, 1.8, 1.5), string[0])
+    _cord(l, curve([(eye[0] + 1.2, eye[1] - 3.6), (eye[0] + 4.4, eye[1] - 6.4), (eye[0] + 6.6, eye[1] - 5.4)], 4), *string, width=1.0)
+    _cord(l, curve([(eye[0] - 1.2, eye[1] - 3.2), (eye[0] - 4.2, eye[1] - 2.6), (eye[0] - 5.6, eye[1] - 0.2)], 4), *string, width=1.0)
+
+
+def lilflash(b, l):
+    """Little Sister's flashlight: short and fat, pink, with a yellow head, a big rubber button, a wrist cord,
+    and the stickers she has put on it."""
+    c, deg = (32.0, 33.0), -17
+    T = lambda pts: rot(pts, deg, c)
+    pink = ("#ffc0dc", "#f67fb6", "#c44e8e", "#8c2f64")
+    yellow = ("#fff39a", "#ffd43c", "#dc9a2a", "#9a6618")
+    teal = ("#a2f4ea", "#34c4be", "#1d8c8e", "#12585e")
+    # the wrist cord, from the tail
+    cord = T(curve([(7.4, 34.0), (3.4, 37.6), (2.8, 45.0), (7.4, 50.4), (12.6, 49.0), (12.4, 43.6), (9.0, 38.6), (7.6, 34.6)], 6))
+    l.line(cord, teal[3], 3.2)
+    l.line(cord, teal[1], 2.0)
+    l.line([(x - 0.5, y - 0.5) for x, y in cord[4:20]], teal[0], 0.8, 0.9)
+    # the barrel
+    barrel = [(11, 21.5), (37.5, 21.5), (37.5, 44.5), (11, 44.5)]
+    tail = loop([(11.4, 21.5), (11.4, 44.5), (7.6, 41.8), (6.0, 33), (7.6, 24.2)], 5)
+    b.poly(T(tail), pink[1])
+    b.poly(T(barrel), pink[1])
+    b.poly(T([(8.6, 23.4), (11, 21.5), (37.5, 21.5), (37.5, 27.4), (10, 27.4), (7.2, 28.6)]), pink[0])               # the top of it, in the light
+    b.poly(T([(7.2, 38.6), (10, 39.4), (37.5, 39.4), (37.5, 44.5), (11, 44.5), (8.4, 42.6)]), pink[2])               # its underside
+    # the head: yellow, flaring to a wide rim
+    b.poly(T([(37.5, 21.5), (45.5, 17.0), (51.5, 17.0), (51.5, 49.0), (45.5, 49.0), (37.5, 44.5)]), yellow[1])
+    b.poly(T([(37.5, 21.5), (45.5, 17.0), (51.5, 17.0), (51.5, 23.6), (45.5, 23.6), (37.5, 27.4)]), yellow[0])
+    b.poly(T([(37.5, 39.4), (45.5, 42.6), (51.5, 42.6), (51.5, 49.0), (45.5, 49.0), (37.5, 44.5)]), yellow[2])
+    b.poly(T(oval(51.6, 33.0, 4.3, 16.0)), yellow[2])        # the rim, and the lens in it
+    l.poly(T(oval(52.2, 33.0, 3.2, 13.4)), "#fffadc")
+    l.poly(T(oval(52.6, 35.4, 2.0, 8.6)), "#ffe49a")
+    l.poly(T(oval(51.6, 26.0, 1.3, 3.6)), "#ffffff")
+    rim = T(oval(51.6, 33.0, 4.3, 16.0))
+    l.line(rim[10:24], yellow[3], 1.0, 0.8)
+    l.line(T([(45.5, 17.2), (45.5, 48.8)]), yellow[3], 1.0, 0.6)
+    l.line(T([(37.5, 21.6), (37.5, 44.4)]), pink[3], 1.1, 0.8)                                                       # where the head screws on
+    l.line(T([(12.6, 22.6), (36.0, 22.6)]), "#ffffff", 1.1, 0.75)                                                    # a shine along the top
+    l.line(T([(13.0, 21.8), (13.0, 44.2)]), pink[2], 1.0, 0.6)
+    # the button: big, round, rubbery, standing well up out of the barrel
+    b.poly(T(loop([(15.6, 23.0), (16.6, 16.8), (23.0, 13.8), (29.4, 16.8), (30.4, 23.0), (23.0, 24.6)], 5)), teal[1])
+    b.poly(T(loop([(17.0, 20.6), (18.0, 16.8), (22.6, 14.6), (26.6, 15.8), (22.6, 17.6), (19.6, 21.4)], 5)), teal[0])
+    b.poly(T(loop([(26.4, 23.6), (30.2, 22.6), (29.4, 17.6), (27.6, 20.6)], 4)), teal[2])
+    l.line(T(curve([(15.4, 23.4), (23.0, 25.4), (30.6, 23.4)], 5)), teal[3], 1.2, 0.9)
+    l.ellipse(*T([(20.2, 17.2)])[0], 1.3, 1.0, "#ffffff")
+    # her stickers: a star and a heart
+    star = []
+    for i in range(10):
+        a = math.radians(-90 + i * 36)
+        r = 5.2 if i % 2 == 0 else 2.2
+        star.append((20.6 + math.cos(a) * r, 34.2 + math.sin(a) * r))
+    l.poly(T(rot(star, 12, (20.6, 34.2))), "#b86a1a")
+    l.poly(T(rot([(20.6 + (x - 20.6) * 0.8, 34.2 + (y - 34.2) * 0.8) for x, y in star], 12, (20.6, 34.2))), "#fff6a8")
+    heart = [(31.0, 38.4), (27.2, 34.4), (27.4, 31.8), (29.4, 30.8), (31.0, 32.4), (32.6, 30.8), (34.6, 31.8), (34.8, 34.4)]
+    l.poly(T(rot(loop(heart, 4), -10, (31.0, 34.4))), "#e2364c")
+    l.ellipse(*T([(29.2, 32.6)])[0], 0.9, 0.8, "#ffb4be")
+    for run in ([(40.6, 30.4), (44.0, 28.6)], [(41.6, 38.0), (43.6, 39.6)], [(15.0, 30.0), (16.6, 31.4)]):          # scuffs: it has been everywhere with her
+        l.line(T(run), "#fff8e0", 0.8, 0.7)
+
+
+def pencil(b, l):
+    """Dad's crossword pencil: yellow, six-sided, bitten ragged below the metal, the pink eraser worn to a slant."""
+    ax, ay, ux, uy = 7.6, 57.4, 0.700, -0.714                # its point, and the way it lies
+    nx, ny = -uy, ux                                         # across it, toward the shadow side
+    at = lambda t, w: (ax + ux * t + nx * w, ay + uy * t + ny * w)
+    H = 5.5
+    yellow = ("#fff07a", "#f9cb36", "#c9941e", "#8a6212")
+    wood = ("#f6dcb0", "#dfb884", "#b08a5c")
+    facets = ((-H, -H + 3.6, 0), (-H + 3.6, H - 3.4, 1), (H - 3.4, H, 2))
+    # the sharpened end: bare wood, and the lead
+    b.poly([at(3.2, -1.2), at(14.4, -H), at(14.4, H), at(3.2, 1.2)], wood[1])
+    b.poly([at(3.2, -1.2), at(14.4, -H), at(14.4, -H + 3.6), at(3.2, -0.3)], wood[0])
+    b.poly([at(3.2, 0.4), at(14.4, H - 3.4), at(14.4, H), at(3.2, 1.2)], wood[2])
+    b.poly([at(-0.6, 0.1), at(3.6, -1.4), at(3.6, 1.4)], "#33333c")
+    l.line([at(0.6, -0.3), at(3.2, -1.0)], "#8a8a96", 0.7, 0.9)
+    # the six sides, of which we see three
+    for (w0, w1, k) in facets:
+        b.poly([at(14.2, w0), at(55.2, w0), at(55.2, w1), at(14.2, w1)], yellow[k])
+        b.poly(loop([at(14.6, w0), at(13.0, lerp(w0, w1, 0.25)), at(11.0, (w0 + w1) / 2), at(13.0, lerp(w0, w1, 0.75)), at(14.6, w1)], 3), yellow[k])   # the paint runs to a point on each
+    l.line([at(14.4, -H + 3.6), at(55.0, -H + 3.6)], yellow[2], 0.8, 0.6)
+    l.line([at(14.4, H - 3.4), at(55.0, H - 3.4)], yellow[3], 0.8, 0.5)
+    l.line([at(14.6, -H + 0.7), at(37.0, -H + 0.7)], "#fffbd2", 0.9, 0.9)
+    for t in (21.0, 23.8, 26.4, 29.4):                       # what is left of the gilt stamp
+        l.line([at(t, -0.8), at(t + 1.4, -0.8)], "#6f6a3c", 1.6, 0.55)
+    # the metal band and the eraser
+    b.poly([at(55.0, -H - 0.4), at(62.4, -H - 0.4), at(62.4, H + 0.4), at(55.0, H + 0.4)], "#b9c0a8")
+    b.poly([at(55.0, -H - 0.4), at(62.4, -H - 0.4), at(62.4, -H + 3.2), at(55.0, -H + 3.2)], "#f2f5e6")
+    b.poly([at(55.0, H - 3.0), at(62.4, H - 3.0), at(62.4, H + 0.4), at(55.0, H + 0.4)], "#7c846c")
+    for t in (56.3, 57.9, 59.8, 61.3):
+        l.line([at(t, -H - 0.4), at(t, H + 0.4)], "#565c4a", 0.8, 0.85)
+    rubber = ("#ffc2cc", "#f08ca0", "#b95c74")
+    b.poly(loop([at(62.2, -H + 0.2), at(67.0, -H + 0.2), at(69.8, -2.8), at(70.2, 0.8), at(67.8, 4.2), at(65.4, H - 0.2), at(62.2, H - 0.2)], 4), rubber[1])
+    b.poly(loop([at(62.2, -H + 0.2), at(67.0, -H + 0.2), at(69.0, -3.4), at(66.0, -1.8), at(62.2, -1.8)], 4), rubber[0])
+    b.poly(loop([at(62.2, 2.4), at(67.2, 2.2), at(67.8, 4.2), at(65.4, H - 0.2), at(62.2, H - 0.2)], 4), rubber[2])
+    b.poly(loop([at(68.2, -3.8), at(69.8, -2.8), at(70.2, 0.8), at(68.6, 3.0), at(68.0, 0.0)], 4), "#9a7880")        # rubbed grey with graphite
+    # he chews it while he thinks: the paint bitten off in dents, the wood showing
+    for (t, w, r, turn) in ((40.4, -3.6, 2.2, 20), (45.4, -0.8, 2.6, -15), (50.6, -3.8, 2.0, 35), (43.0, 3.0, 2.2, 10), (48.6, 2.0, 2.4, -30), (52.6, -0.6, 1.8, 15), (37.4, 0.6, 1.6, 0)):
+        cx, cy = at(t, w)
+        ang = math.degrees(math.atan2(uy, ux)) + turn
+        l.poly(oval(cx + 0.6, cy + 0.6, r * 1.25, r * 0.74, ang, 10), yellow[3])
+        l.poly(oval(cx, cy, r * 1.15, r * 0.62, ang, 10), wood[0] if w < 1 else wood[1])
+    for (t, w, d) in ((43.6, -H, 1.9), (49.6, -H, 1.7), (46.6, H, 1.9), (52.2, H, 1.6), (39.6, H, 1.4)):                # and nicked all along its edges
+        s = 1 if w > 0 else -1
+        _hole(b, [at(t - 1.9, w + s * 1.5), at(t, w - s * d), at(t + 1.9, w + s * 1.5)])
+    l.line([at(55.8, -2.0), at(57.6, 1.6)], "#565c4a", 1.3, 0.8)                                                      # a tooth mark in the metal too
+
+
+def carkey(b, l):
+    """The spare key to the wagon: a black plastic head, a steel blade with a groove milled down it, a plain split
+    ring, and a small red tag with a paper label nobody can read."""
+    ox, oy, dx, dy = 41.6, 15.6, -0.738, 0.675               # the top of its head, and the way the blade points
+    K = lambda pts: [(ox + dx * x - dy * y, oy + dy * x + dx * y) for x, y in pts]       # (across the key, +y is the side toward the sun)
+    black = ("#9298a6", "#535763", "#2b2d36", "#131419")
+    steel = ("#ffffff", "#d3dae1", "#98a2ae", "#58616d")
+    # the blade
+    b.poly(K([(20.0, -3.5), (47.4, -3.5), (50.8, -1.5), (51.4, 0.7), (49.6, 2.9), (47.4, 3.5), (20.0, 3.5)]), steel[1])
+    b.poly(K([(20.0, 1.6), (48.4, 1.6), (49.6, 2.9), (47.4, 3.5), (20.0, 3.5)]), steel[0])
+    b.poly(K([(20.0, -3.5), (47.4, -3.5), (50.0, -2.0), (20.0, -1.8)]), steel[2])
+    groove = curve([(22.6, 0.2), (27.0, -0.9), (31.0, 0.7), (35.0, -0.9), (39.0, 0.6), (43.0, -0.8), (47.4, 0.0)], 5)
+    l.line(K(groove), steel[3], 1.3, 0.9)                                                                             # milled, not cut: a modern key
+    l.line(K([(x, y + 0.9) for x, y in groove]), steel[0], 0.7, 0.9)
+    # the head: a lug at the top for the ring, then the grip
+    lug = loop(K([(2.0, -4.6), (-2.6, -4.0), (-4.6, 0.0), (-2.6, 4.0), (2.0, 4.6)]), 4)
+    b.poly(lug, black[1])
+    head = [(0.4, -7.4), (3.0, -11.0), (9.0, -11.6), (17.0, -9.4), (22.4, -6.6), (22.4, 6.6), (17.0, 9.4), (9.0, 11.6), (3.0, 11.0), (0.4, 7.4)]
+    b.poly(loop(K(head), 5), black[1])
+    b.poly(loop(K([(0.4, 7.4), (3.0, 11.0), (9.0, 11.6), (17.0, 9.4), (22.4, 6.6), (22.4, 3.6), (16.6, 6.2), (9.0, 8.0), (4.4, 7.4), (2.8, 3.8)]), 5), black[0])    # the edge toward the sun
+    b.poly(loop(K([(0.4, -7.4), (3.0, -11.0), (9.0, -11.6), (17.0, -9.4), (22.4, -6.6), (22.4, -4.0), (16.6, -6.6), (9.0, -8.4), (4.4, -7.8), (2.8, -3.8)]), 5), black[2])
+    b.poly(loop(K([(6.6, -4.8), (16.4, -4.4), (19.6, -2.4), (19.6, 2.4), (16.4, 4.4), (6.6, 4.8)]), 4), black[3])                                                  # a grip moulded in it
+    for x in (8.6, 11.6, 14.6, 17.4):
+        l.line(K([(x, -3.6), (x, 3.6)]), black[0], 1.1, 0.75)
+    l.line(K([(5.0, 8.4), (15.0, 9.0)]), "#e6eaf2", 1.0, 0.8)                                                         # a shine on its shoulder
+    hole = K(oval(-1.6, 0.0, 1.9, 1.9))
+    _hole(b, hole)
+    l.line(K([(22.4, -6.4), (22.4, 6.4)]), black[3], 1.1, 0.8)
+    l.line(lug[14:], black[0], 0.9, 0.8)
+    # the ring, through the lug, and the tag on it
+    hx, hy = K([(-1.6, 0.0)])[0]
+    rx, ry = hx + 6.6, hy + 6.2
+    ring = oval(rx, ry, 8.8, 9.0, 0, 32)
+    l.line(ring + ring[:1], steel[3], 2.6)
+    l.line(ring + ring[:1], steel[1], 1.4)
+    l.line(ring[16:27], steel[0], 0.9, 0.95)
+    ex, ey = rx + 0.6, ry + 9.6
+    Tg = lambda pts: rot([(ex + x, ey + y) for x, y in pts], 8, (ex, ey))
+    red = ("#f58a78", "#d9463c", "#9a2a2c", "#5e1a1e")
+    b.poly(Tg(rrect(0, 8.8, 7.0, 11.0, 2.6)), red[1])
+    b.poly(Tg([(-7.0, 0.4), (-4.4, -2.2), (2.0, -2.2), (-7.0, 9.0)]), red[0])
+    b.poly(Tg([(7.0, 9.4), (7.0, 17.2), (4.4, 19.8), (-2.0, 19.8)]), red[2])
+    b.poly(Tg(rrect(0, 10.8, 4.9, 6.8, 1.0)), "#fbf6e6")                                                              # the paper in its window
+    _hole(b, Tg(oval(0, 0.4, 1.3, 1.3)))
+    for (y, x0, x1, ph) in ((7.8, -3.3, 3.3, 0.6), (10.8, -3.3, 3.3, 2.0), (13.8, -3.3, 0.8, 0.9)):                   # ballpoint: nothing anyone could read
+        pts = [(lerp(x0, x1, i / 9), y + math.sin(i * 2.1 + ph) * 0.8) for i in range(10)]
+        l.line(Tg(pts), "#3a4a7c", 0.9, 0.9)
+    edge = Tg(rrect(0, 10.8, 4.9, 6.8, 1.0))
+    l.line(edge + edge[:1], red[2], 0.8, 0.8)
+    l.line(ring[4:12], steel[3], 2.6)                                                                                 # the ring again where it comes through the tag
+    l.line(ring[4:12], steel[1], 1.4)
+
+
+def chicken(b, l):
+    """GENERAL FEATHERS: Little Sister's favourite stuffed hen, sitting up very straight. White and plump, soft and
+    well worn (five times through the wash), a red felt comb gone floppy on one side, an orange felt beak and a red
+    wattle, two button eyes of which one is blue (sewn back on, a little too high), and on a ribbon round her neck
+    the paper medal she got for bravery. Her head is cocked: she is a little lopsided, and entirely dignified."""
+    white = ("#fffdf4", "#f0e9dc", "#d6cdc6", "#aea4ba", "#7e7596")        # wool-white in the sun, going cool and violet in shade
+    red = ("#ff7c64", "#e0342c", "#a62028", "#5e1220")
+    orange = ("#ffd47c", "#f7a12a", "#c86e18", "#80440e")
+    # her tail, pinched up behind
+    b.poly(loop([(52.0, 30.0), (56.4, 18.0), (59.6, 12.4), (61.6, 14.6), (61.6, 26.0), (59.8, 37.0), (54.0, 38.0)], 4), white[2])      # two felt feathers: the far one ...
+    tail = loop([(44.6, 31.6), (48.0, 20.6), (51.6, 11.6), (55.2, 6.6), (57.8, 9.0), (57.6, 18.0), (58.8, 28.0), (57.6, 37.6), (53.0, 40.6)], 5)
+    b.poly(tail, white[1])                                                                                       # ... and the near one
+    b.poly(loop([(47.0, 29.6), (50.0, 19.6), (53.2, 11.0), (55.4, 8.0), (55.0, 16.0), (53.6, 26.6), (50.8, 33.0)], 4), white[0])
+    # her body: a plump loaf of a hen, lit across the top and the breast
+    body = loop([(14.0, 29.0), (9.6, 37.0), (8.6, 45.6), (11.6, 53.4), (19.6, 59.0), (32.0, 61.0), (44.4, 59.4), (53.0, 54.4), (58.2, 46.0), (59.0, 37.0), (56.0, 30.6),
+                 (49.0, 28.2), (41.0, 28.6), (32.0, 26.4), (23.0, 26.4)], 5)
+    b.poly(body, white[1])
+    b.poly(loop([(14.0, 29.0), (9.8, 37.0), (9.2, 44.6), (12.0, 47.8), (16.6, 42.0), (23.0, 36.4), (32.6, 32.4), (44.0, 31.8), (52.6, 33.4), (56.0, 30.6), (49.0, 28.2),
+                 (41.0, 28.6), (32.0, 26.4), (23.0, 26.4)], 5), white[0])
+    b.poly(loop([(11.8, 53.6), (19.6, 59.0), (32.0, 61.0), (44.4, 59.4), (53.0, 54.4), (58.2, 46.0), (59.0, 38.0), (55.4, 45.6), (48.0, 51.6), (38.0, 54.6), (26.4, 55.4),
+                 (17.6, 53.2)], 5), white[2])
+    b.poly(loop([(17.0, 58.2), (32.0, 60.6), (44.4, 59.2), (53.0, 54.2), (57.8, 47.0), (52.0, 53.8), (43.0, 57.4), (31.0, 58.2)], 4), white[3])
+    b.poly(loop([(15.6, 31.0), (24.0, 28.4), (32.0, 29.6), (27.0, 33.4), (19.0, 36.0), (14.0, 35.0)], 4), white[2], 0.55)                  # the shade her head throws
+    # the wing: a felt patch sewn on her side, standing off it a little
+    wing = loop([(27.6, 40.4), (30.6, 35.2), (37.4, 33.2), (45.6, 35.0), (52.6, 39.6), (56.4, 47.0), (52.6, 47.4), (50.6, 49.4), (46.6, 48.0), (43.6, 50.0), (39.6, 48.4),
+                 (35.6, 49.0), (32.6, 46.8), (29.2, 45.0)], 4)
+    b.poly([(x + 0.8, y + 1.8) for x, y in wing], white[3])
+    b.poly(wing, white[1])
+    b.poly(loop([(28.4, 39.6), (31.2, 35.6), (37.6, 33.8), (45.4, 35.6), (52.0, 39.8), (44.0, 39.2), (36.0, 39.8), (31.0, 42.0)], 4), white[0])
+    # her head, cocked a little
+    hc = (22.0, 17.6)
+    H = lambda pts: rot([(x, y + 0.9) for x, y in pts], 8, (hc[0], hc[1] + 0.9))
+    b.poly(H(oval(hc[0], hc[1], 10.8, 10.0, 0, 32)), white[1])
+    b.poly(H(loop([(11.6, 17.6), (13.4, 11.2), (19.0, 8.0), (26.2, 8.2), (30.6, 11.2), (24.0, 11.8), (18.0, 14.2), (14.6, 20.6)], 5)), white[0])
+    b.poly(H(loop([(32.0, 15.6), (32.6, 21.0), (29.8, 25.4), (23.0, 27.8), (16.4, 26.4), (24.0, 24.2), (29.2, 20.6)], 4)), white[2])
+    # the comb: three upright lobes of red felt sewn along her crown, and a fourth that has gone floppy
+    lobes = ((16.6, 6.6, 2.5, 3.0, -20), (21.8, 4.8, 2.7, 3.3, -4), (26.9, 5.6, 2.5, 3.0, 14))
+    for (x, y, rx, ry, turn) in lobes:
+        l.poly(H(oval(x + 0.5, y + 0.5, rx, ry, turn, 20)), red[3])
+    l.poly(H(oval(31.2, 9.0, 2.0, 3.2, 58, 20)), red[3])
+    l.poly(H(oval(30.8, 8.6, 1.9, 3.0, 58, 20)), red[2])                                                           # the floppy one hangs over in shade
+    l.poly(H([(14.8, 9.0), (29.6, 7.6), (29.8, 10.2), (15.2, 11.2)]), red[1])                                      # its base, sewn along the crown
+    for (x, y, rx, ry, turn) in lobes:
+        l.poly(H(oval(x, y, rx, ry, turn, 20)), red[1])
+        l.poly(H(oval(x - 0.7, y - 1.0, rx * 0.5, ry * 0.42, turn, 14)), "#f8604a", 0.85)                          # the felt is matt: only a soft light on each
+    l.line(H([(15.2, 10.8), (29.6, 9.8)]), red[3], 0.9, 0.8)
+    for (x0, y0, x1, y1) in ((19.2, 6.2, 19.4, 8.2), (24.4, 5.6, 24.4, 7.8)):
+        l.line(H([(x0, y0), (x1, y1)]), red[3], 0.8, 0.85)                                                          # the dips between the lobes
+    # the ribbon round her neck, and the medal on it: a paper disc cut out with pinking shears, coloured gold in crayon, a star on it
+    rib = ("#86e6dc", "#26aaa6", "#167276", "#0e464c")
+    for strand in (curve([(12.8, 25.6), (14.0, 30.4), (17.0, 33.8), (20.6, 35.0)], 5), curve([(31.6, 24.0), (30.0, 29.6), (25.8, 33.6), (22.0, 35.0)], 5)):
+        l.line(strand, rib[3], 2.6)
+        l.line(strand, rib[1], 1.5)
+        l.line([(x - 0.4, y - 0.4) for x, y in strand[1:-3]], rib[0], 0.7, 0.7)
+    mx, my = 21.2, 39.2
+    edge = [(mx + math.cos(a) * (5.0 if i % 2 == 0 else 4.3), my + math.sin(a) * (5.0 if i % 2 == 0 else 4.3)) for i, a in enumerate(np.linspace(0, 2 * math.pi, 24, endpoint=False))]
+    l.poly([(x + 0.7, y + 0.9) for x, y in edge], white[4], 0.8)                                                    # it hangs a little off her breast
+    l.poly(edge, "#e9a62c")
+    l.poly(oval(mx, my, 3.9, 3.9), "#ffd23e")
+    l.poly(oval(mx - 1.0, my - 1.1, 2.2, 1.8, -30), "#fff29c")
+    star = []
+    for i in range(10):
+        a = math.radians(-76 + i * 36)                       # drawn in crayon, not quite straight
+        star.append((mx + 0.2 + math.cos(a) * (2.6 if i % 2 == 0 else 1.1), my + 0.3 + math.sin(a) * (2.6 if i % 2 == 0 else 1.1)))
+    l.poly(star, "#d0542a", 0.95)
+    # her face: the orange felt beak, the wattle, and the two buttons
+    l.poly(H([(20.0, 18.8), (25.2, 19.6), (23.0, 22.6), (16.0, 23.4)]), orange[1])
+    l.poly(H([(20.0, 18.8), (25.2, 19.6), (21.0, 20.8), (16.4, 23.0)]), orange[0])
+    l.line(H([(16.6, 23.2), (22.8, 21.8)]), orange[3], 0.8, 0.85)
+    wat = H(loop([(20.8, 22.8), (23.2, 23.0), (23.8, 26.4), (22.2, 28.6), (20.2, 27.2), (19.8, 24.4)], 3))
+    l.poly(wat, red[1])
+    l.poly(H(loop([(20.6, 23.4), (22.0, 23.4), (21.6, 26.0), (20.6, 26.0)], 3)), red[0])
+    ex, ey = H([(17.2, 15.8)])[0]                                                                                   # the black one, her own
+    l.ellipse(ex, ey, 2.0, 2.1, "#141018")
+    l.ellipse(ex - 0.6, ey - 0.7, 0.7, 0.7, "#ffffff")
+    bx, by = H([(26.6, 14.0)])[0]                                                                                   # the blue one: a bigger button, sewn on a little high
+    l.ellipse(bx + 0.3, by + 0.4, 2.7, 2.7, "#16285e")
+    l.ellipse(bx, by, 2.3, 2.3, "#3a74e0")
+    l.ellipse(bx - 0.8, by - 0.8, 0.8, 0.7, "#d4e6ff")
+    l.line([(bx - 0.4, by + 0.6), (bx + 1.0, by - 0.6)], "#efe8da", 0.6, 0.85)                                       # the thread it was sewn back on with
+    # her feet: orange felt, sticking out in front
+    for (x, y, turn) in ((14.4, 58.6, -16), (25.2, 59.8, 10)):
+        F = lambda pts: rot([(x + px, y + py) for px, py in pts], turn, (x, y))
+        l.poly(F([(-3.0, -2.4), (3.0, -2.4), (5.4, 1.4), (3.8, 2.8), (1.4, 2.0), (0.0, 4.0), (-1.4, 2.0), (-3.8, 2.8), (-5.4, 1.2)]), "#ff9418")     # three fat felt toes
+        l.poly(F([(-3.0, -2.4), (3.0, -2.4), (4.2, 0.0), (-4.2, 0.0)]), "#ffbe3c")
+        for px in (-1.6, 1.4):
+            l.line(F([(px * 0.5, 0.6), (px, 2.0)]), orange[2], 0.8, 0.85)
+    # the wash: a mended seam on her side, the stitches of the wing, the fluff gone to little pills
+    for i in range(4):
+        px, py = lerp(41.0, 48.2, i / 3), lerp(53.0, 50.6, i / 3)
+        l.line([(px - 0.8, py - 0.8), (px + 0.8, py + 0.8)], "#8a90b4", 0.6, 0.7)
+        l.line([(px - 0.8, py + 0.8), (px + 0.8, py - 0.8)], "#8a90b4", 0.6, 0.7)
+    w = wing[22:52]
+    for i in range(0, len(w) - 2, 3):
+        l.line(w[i:i + 2], white[3], 0.8, 0.8)
+    l.line(curve([(50.6, 30.6), (52.4, 20.0), (54.6, 11.0)], 4), white[2], 0.8, 0.8)                             # the stitched feathers of her tail
+    l.line(curve([(57.6, 9.6), (57.4, 18.0), (58.6, 28.0), (57.8, 36.0)], 4), white[3], 0.9, 0.85)
+    for (x, y) in ((33.6, 30.0), (40.0, 30.8), (46.0, 31.6), (13.0, 41.0), (17.4, 47.6), (12.4, 49.4)):
+        l.line(curve([(x - 1.8, y - 0.6), (x, y + 0.8), (x + 1.8, y - 0.6)], 3), white[2], 0.7, 0.6)                # a few feathers stitched on her breast and back
+    for (x, y) in ((36.2, 51.4), (29.4, 56.2), (50.2, 44.0), (44.0, 55.4), (21.6, 50.4)):
+        l.ellipse(x, y, 0.6, 0.55, white[0], 0.8)
+
+
+def _battery(b, l, c, deg, flip=False, L=35.0, R=4.6):
+    """One AA battery lying on its side, middle `c`, its + end pointing `deg` (or the other way if flipped)."""
+    ux, uy = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    nx, ny = -uy, ux                                         # across it, toward the shadow side
+    s = -1.0 if flip else 1.0
+    at = lambda t, w: (c[0] + ux * t * s + nx * w, c[1] + uy * t * s + ny * w)
+    wrap = ("#a6c6f4", "#5088dc", "#2f5eb2", "#1d4086", "#112656")              # a plain blue wrapper ...
+    band = ("#ffffff", "#eef2f6", "#c2cad4", "#8a95a4", "#525c6a")              # ... silver toward the + end
+    metal = ("#ffffff", "#dfe4ea", "#a8b0bc", "#6c7682", "#3c434e")
+    h, k0 = L / 2, L / 2 - 10.0
+    bands = ((-R, -0.62 * R, 1), (-0.62 * R, -0.18 * R, 0), (-0.18 * R, 0.4 * R, 2), (0.4 * R, 0.78 * R, 3), (0.78 * R, R, 4))
+    for (w0, w1, k) in bands:                                # the round of it, in five bands, which the brush softens
+        b.poly([at(-h + 0.8, w0), at(k0, w0), at(k0, w1), at(-h + 0.8, w1)], wrap[k])
+        b.poly([at(k0, w0), at(h - 1.6, w0), at(h - 1.6, w1), at(k0, w1)], band[k])
+    # the ends are made of metal and cut square: restated crisp
+    l.poly([at(-h, -R + 0.6), at(-h + 1.0, -R + 0.3), at(-h + 1.0, R - 0.3), at(-h, R - 0.6)], metal[2])       # the flat - end
+    l.line([at(-h + 0.3, -R + 0.9), at(-h + 0.3, 0.0)], metal[0], 0.8, 0.9)
+    l.poly([at(h - 1.8, -R + 0.2), at(h - 0.3, -R + 0.3), at(h, -R + 0.7), at(h, R - 0.7), at(h - 0.3, R - 0.3), at(h - 1.8, R - 0.2)], metal[2])     # the + end: its shoulder ...
+    l.poly([at(h - 1.8, -R + 0.2), at(h - 0.3, -R + 0.3), at(h, -R + 0.7), at(h, -0.5 * R), at(h - 1.8, -0.5 * R)], metal[0])
+    l.poly([at(h - 1.8, 0.45 * R), at(h, 0.45 * R), at(h, R - 0.7), at(h - 0.3, R - 0.3), at(h - 1.8, R - 0.2)], metal[3])
+    l.poly([at(h - 0.3, -1.9), at(h + 2.2, -1.7), at(h + 2.2, 1.7), at(h - 0.3, 1.9)], metal[2])               # ... and the nub
+    l.poly([at(h - 0.3, -1.9), at(h + 2.2, -1.7), at(h + 2.2, -0.5), at(h - 0.3, -0.5)], metal[0])
+    l.poly([at(h - 0.3, 0.9), at(h + 2.2, 0.8), at(h + 2.2, 1.7), at(h - 0.3, 1.9)], metal[4])
+    l.line([at(k0, -R + 0.3), at(k0, R - 0.3)], wrap[4], 0.8, 0.75)                                              # where the silver meets the blue
+    l.line([at(h - 1.7, -R + 0.4), at(h - 1.7, R - 0.4)], metal[4], 0.8, 0.85)
+    l.line([at(-h + 2.4, -0.42 * R), at(k0 - 1.4, -0.42 * R)], wrap[0], 1.0, 0.9)                                # the shine along it
+    l.line([at(k0 + 1.2, -0.42 * R), at(h - 2.6, -0.42 * R)], band[0], 1.0, 0.95)
+
+
+def batteries(b, l):
+    """Four AA batteries out of Big Sister's sound machine, loose, lying together, one of them turned round: plain
+    blue wrappers with a silver end, no name and no words on them."""
+    for (cx, cy, deg, flip) in ((23.6, 17.6, -36, False), (27.6, 28.4, -30, False), (34.4, 37.4, -25, True), (40.8, 47.2, -32, False)):
+        _battery(b, l, (cx, cy), deg, flip)
+
+
 ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
              coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
 ITEMS["pass"] = pass_
 ITEMS.update(phone=phone, quarter=quarter, gum=gum)
+ITEMS.update(studykey=studykey, lilflash=lilflash, pencil=pencil, carkey=carkey)
+ITEMS.update(chicken=chicken, batteries=batteries)
 ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",
-         "phone", "quarter", "gum"]
+         "phone", "quarter", "gum", "studykey", "lilflash", "pencil", "carkey", "chicken", "batteries"]
 
 
 # ---------------------------------------------------------------- painting one
@@ -707,17 +1067,20 @@ def save(name, folder="out/items"):
 
 def sheet(folder="out/items", out="out/items-sheet.png", k=4):
     """Every picture at 4x on a dark and a light ground, and at its real size and at half size underneath."""
-    cols = 5
+    cols = 5 if len(ORDER) <= 20 else 6
     rows = (len(ORDER) + cols - 1) // cols
     cell = S * k + 16
-    strip = 2 * (S + 14) + 2 * (32 + 12) + 8
+    per = len(ORDER) if len(ORDER) <= 22 else (len(ORDER) + 1) // 2        # how many to a row in the strips underneath
+    lines = (len(ORDER) + per - 1) // per
+    band = lines * (S + 14 + 32 + 12)
+    strip = 2 * band + 8
     im = Image.new("RGB", (cols * cell + 16, rows * (cell + 14) + strip + 16), (40, 34, 44))
     from PIL import ImageDraw
     dr = ImageDraw.Draw(im)
     small_y = rows * (cell + 14) + 12
     grounds = [(40, 34, 44), (222, 204, 164)]
     for g, ground in enumerate(grounds):
-        dr.rectangle([0, small_y + g * (S + 14 + 32 + 12), im.size[0], small_y + (g + 1) * (S + 14 + 32 + 12)], fill=ground)
+        dr.rectangle([0, small_y + g * band, im.size[0], small_y + (g + 1) * band], fill=ground)
     for i, name in enumerate(ORDER):
         pic = Image.open(f"{folder}/{name}.png").convert("RGBA")
         cx, cy = 16 + (i % cols) * cell, 12 + (i // cols) * (cell + 14)
@@ -726,9 +1089,9 @@ def sheet(folder="out/items", out="out/items-sheet.png", k=4):
         big = pic.resize((S * k, S * k), Image.NEAREST)
         im.paste(big, (cx, cy), big)
         dr.text((cx + 2, cy + S * k + 1), name, fill=(230, 224, 210))
-        for g in range(len(grounds)):
-            y0 = small_y + g * (S + 14 + 32 + 12) + 6
-            x0 = 12 + i * ((im.size[0] - 24) // len(ORDER))
+        for g in range(len(grounds)):                        # at real size, and at half size under it, on the dark bar and on a light ground
+            y0 = small_y + g * band + (i // per) * (S + 14 + 32 + 12) + 6
+            x0 = 12 + (i % per) * ((im.size[0] - 24) // per)
             im.paste(pic, (x0, y0), pic)
             half = pic.resize((32, 32), Image.LANCZOS)
             im.paste(half, (x0 + 16, y0 + S + 6), half)
