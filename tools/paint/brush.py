@@ -230,6 +230,12 @@ class Sheet:
         self.d.ellipse([(cx - rx) * s, (cy - ry) * s, (cx + rx) * s, (cy + ry) * s], fill=self._fill(color, alpha))
         return self
 
+    def clear(self, points):
+        """Wipe the sheet inside a polygon: whatever was drawn there is gone, and the picture under it will show."""
+        s = self.ss
+        self.d.polygon([(float(x) * s, float(y) * s) for x, y in points], fill=(0, 0, 0, 0))
+        return self
+
     def done(self):
         """-> (color picture, coverage mask) at picture size."""
         h, w = self.shape

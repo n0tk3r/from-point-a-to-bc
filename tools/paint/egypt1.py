@@ -592,9 +592,9 @@ def layout(steam_foot):
         {"id": "donkey", "what": "Lot's donkey, head down, drinking at the water's edge, two water jars slung on it", "plane": "donkey",
          "shape": {"poly": hug((da > 0.5) | (dla > 0.5))}, "stand": [244, 440], "face": "W"},
         {"id": "reeds", "what": "the reed bed in the shallows", "shape": {"rect": [212, 334, 30, 42]}, "stand": [244, 392], "face": "W"},
-        {"id": "footprints", "what": "small sneaker prints going up the track",
-         "shape": {"poly": [[474, 490], [492, 490], [504, 460], [508, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 430], [478, 462]]},
-         "stand": [458, 484], "face": "E"},
+        {"id": "footprints", "what": "small sneaker prints going up the track (following them takes him up it)",
+         "shape": {"poly": [[468, 496], [498, 496], [510, 460], [514, 420], [512, 380], [506, 340], [502, 318], [474, 318], [474, 350], [480, 390], [480, 430], [472, 462]]},
+         "stand": [424, 502], "face": "NE"},
         {"id": "block", "what": "a dropped block of white stone and its broken sledge, on the far dune", "shape": {"rect": [698, 326, 66, 36]}, "stand": [716, 374], "face": "N"},
         {"id": "boat", "what": "a boat bringing stone across the river", "shape": {"rect": [84, 280, 98, 48]}, "stand": [246, 448], "face": "W"},
         {"id": "pyramid", "what": "the Great Pyramid, nearly finished", "shape": {"poly": r([GREAT[0], GREAT[1], GREAT[2], GREAT[3]])}, "stand": [540, 420], "face": "N"},
@@ -607,7 +607,7 @@ def layout(steam_foot):
            "solid": r([(368, 418), (428, 418), (434, 430), (428, 440), (374, 440), (366, 430)]),
            "bundle": {"at": list(BUNDLE), "box": r([(BUNDLE[0] - 22 * g, BUNDLE[1] - 19 * g), (BUNDLE[0] + 22 * g, BUNDLE[1] + 1)]),
                       "what": "his bundle, painted into the backdrop at his left hand, behind him: a mantle of banded wool (madder, ochre, indigo on undyed), rolled and corded"}}
-    exits = [{"id": "track", "to": "egypt-site", "what": "the track up to the plateau", "shape": {"poly": [[476, 300], [508, 298], [516, 326], [472, 330]]}, "stand": [492, 316], "face": "N"}]
+    exits = [{"id": "track", "to": "egypt-site", "what": "the track up to the plateau: a wide band of it, the sand on either side included, so that a click anywhere near it is a click on it", "shape": {"poly": [[452, 286], [532, 284], [544, 330], [540, 380], [530, 420], [512, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 420], [470, 420], [460, 380], [454, 330]]}, "stand": [500, 372], "face": "N"}]
     base = [[490, 541], [790, 537]]                                  # the line where the wagon meets the sand
     up = lambda by: [[base[0][0], base[0][1] + by], [base[1][0], base[1][1] + by]]
     frames = [f"steam-{i}.png" for i in range(4)]

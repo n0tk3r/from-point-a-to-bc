@@ -475,6 +475,7 @@ def wagon(shape, origin, scale=1.0, tilt=7.0, take=(), mirror=True, buried=True,
         d.disc(cx - 0.8, 22.8, 10.5, CHROME["light"])
         d.disc(cx, 22, 5.0, CHROME["mid"])
         d.disc(cx - 1.6, 24.0, 2.2, CHROME["shine"])
+        dl.clear_disc(cx, 22, 27.5)                                                       # nothing drawn on the lines sheet crosses the wheel: the wood's grain stops at the arch
         for a in range(0, 360, 45):
             dl.line([(cx + math.cos(math.radians(a)) * 6, 22 + math.sin(math.radians(a)) * 6), (cx + math.cos(math.radians(a)) * 10, 22 + math.sin(math.radians(a)) * 10)], CHROME["dark"], 0.8, 0.7)
     # glass
@@ -487,14 +488,14 @@ def wagon(shape, origin, scale=1.0, tilt=7.0, take=(), mirror=True, buried=True,
         dl.line([w[0], w[1], w[2], w[3], w[0]], CHROME["light"], 0.9, 0.9)
     d.poly([(194, 64), (212, 64), (212, 76), (208, 80), (198, 80), (194, 76)], "#0e1422")             # a seat back
     # seams, handles, the long bright line under the windows
-    for px, y0 in ((136, 20), (179, 20), (225, 30)):
+    for px, y0 in ((136, 20), (179, 20), (225, 50)):                                       # (the rear door's seam stops at the wheel arch)
         dl.line([(px, y0), (px, 62)], RED["dark"], 0.8, 0.75)
     for px in (166, 211):
         dl.line([(px, 57), (px + 9, 57)], CHROME["shine"], 1.6)
         dl.line([(px, 56), (px + 9, 56)], CHROME["dark"], 0.7, 0.8)
     dl.line([(12, 58.4), (104, 62.2), (292, 62.2)], CHROME["light"], 1.0, 0.85)
     dl.line([(8, 19.5), (22, 18), (82, 18)], RED["dark"], 1.2, 0.8)
-    dl.line([(204, 18), (262, 18), (296, 20)], RED["dark"], 1.2, 0.8)
+    dl.line([(262, 18), (296, 20)], RED["dark"], 1.2, 0.8)                                 # the sill behind the rear wheel (there is none across its arch)
     d.poly([(293, 40), (298.4, 40), (298.2, 55), (294, 60)], "#d83a2c")                   # the tail lamp wraps round the corner
     d.poly([(296, 20), (300.5, 21), (300.5, 30), (298, 31)], CHROME["mid"])               # and the end of the rear bumper
     if mirror:                                                                             # the door mirror stands out toward us

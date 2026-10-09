@@ -435,7 +435,7 @@ Wrong tries:  With neither      -> "One out of three. I am not a difficult man. 
                                    have to find out."
               The dead phone    -> "A small black door. It is shut. I approve."
 Solution:     Try the doors, or talk to him, carrying both. "Tunic: ON. It goes over the hoodie. And
-              the backpack. I'm a lumpy Roman." "...Three out of three." "YES." "The cap." "The cap is
+              the backpack. I'm a lumpy Roman." "...Three out of three." "YES." "The hair." "The hair is
               load-bearing." "...Go in. Walk. Touch nothing. The clerk is counting."
 Gives:        The inside of the temple, for good. After this he is waved through.
 Teaches:      This is the puzzle of the act, stated in the first minute by the man in the way.
@@ -642,7 +642,7 @@ knows Jericho is why the man talks to him at all.
 | --- | --- | --- |
 | "Can I try one? I'm between snacks." | "For a boy who knows of Jericho, the first is a gift. Here." He holds one out on his open hand; the boy takes it. "It's candy. It's candy that GROWS. Nine out of... OW. There's a rock in it!" "The stone. That part is a palm tree that has not begun. I ought to charge you for the tree." "Nine out of ten. One off for the surprise rock." | Once: one gift. It is eaten; nothing is carried away. |
 | "Everybody here has a statue to pray to. Which one's yours?" | "None. We have one God: the God of Abraham, of Isaac and of Jacob. He made heaven and earth." "Abraham, Isaac and Jacob? I KNOW them! That's who we pray to at my house!" "At your house. ...Then the world is larger than Rome has told me." "Rome finds us Jews very funny: a great Temple in Jerusalem, and no statue in it." "Pompey himself went in, nineteen years ago. He found no image. Not one." "I ask them how they would carve the One who made the stone. They buy their dates and go." | The joke is his, told on himself. He says nothing about anybody else's gods. |
-| "What do you pray for?" (on offer once the one above has been asked) | "For the one who is promised. Every day, facing Jerusalem. The prophet Micah has told us his town:" "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'" The boy turns away, to us: "Micah 5:2! That was my line in the Christmas program. ...Bethlehem. I know SO much about Bethlehem." "I've never wanted to tell anybody anything so much. It's not mine to tell. That news has its own angels." And back to the man: "Mister? It's going to be worth the wait. If I were you, I'd keep watching that town." A moment. "...That was not a guess. I will not ask you what it was. But I will watch." "And for you, young sir: 'The LORD bless thee, and keep thee:'" The boy's head goes down as it does every Sunday, cap off, hands folded, before he knows it has. "Numbers 6:24! Pastor says that at the end of church. The very same words. ...Thanks, mister." | The heart of the act. Once: a blessing is not given twice for the asking. |
+| "What do you pray for?" (on offer once the one above has been asked) | "For the one who is promised. Every day, facing Jerusalem. The prophet Micah has told us his town:" "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'" The boy turns away, to us: "Micah 5:2! That was my line in the Christmas program. ...Bethlehem. I know SO much about Bethlehem." "I've never wanted to tell anybody anything so much. It's not mine to tell. That news has its own angels." And back to the man: "Mister? It's going to be worth the wait. If I were you, I'd keep watching that town." A moment. "...That was not a guess. I will not ask you what it was. But I will watch." "And for you, young sir: 'The LORD bless thee, and keep thee:'" The boy's head goes down as it does every Sunday, hands folded, before he knows it has. "Numbers 6:24! Pastor says that at the end of church. The very same words. ...Thanks, mister." | The heart of the act. Once: a blessing is not given twice for the asking. |
 | "Bye, mister." | "Go well, young sir. Come any day but the seventh. That day I rest, and Rome always wants dates." | No weekday is named anywhere: the game does not say what day of the week the Ides fell on. |
 
 Things shown to him. The quarter: "A bird. An eagle? Whoever struck this was proud of
@@ -661,10 +661,10 @@ Two things about how it is staged. The engine picks the gesture for each line fr
 line's id, and the date seller has four: an open hand with a date on it, a finger
 raised, a hand laid on his chest, a small shrug. The ids here were chosen with that in
 mind (the blessing is said with the hand on the chest; "He found no image. Not one."
-with the shrug), so renumbering them changes what his hands do. And the boy's cap,
-which he would not take off for the doorkeeper ("The cap is load-bearing"), comes off
-by itself for the blessing: that is the people artist's prayer pose, and nobody
-mentions it.
+with the shrug), so renumbering them changes what his hands do. And the boy's hair,
+which he would not flatten for the doorkeeper ("The hair is load-bearing"), stays up
+for the blessing; his head is what goes down. That is the people artist's prayer pose,
+and nobody mentions it.
 
 ---
 
@@ -765,7 +765,7 @@ said, as the engine counts them.
 | B.C. is "before Christ" | The street | Act Four, at the gate: what makes "Daddy's EARLY!" land |
 | The Caesar coin, and whose picture is on it | #7, in the Son's words | Act Four: the same coin, and the verse, in Mom's |
 | "Not yet." | #7 | The senator ("There is no such name."); the road |
-| "The cap is load-bearing." | #6, to the doorkeeper | The date seller's blessing: it comes off by itself |
+| "The hair is load-bearing." | #6, to the doorkeeper | The date seller's blessing: his head goes down; the hair does not |
 | A boy who knows the walls of Jericho | The date seller's first words | Why the man answers his questions; "...That was not a guess." |
 | "Why is the sky DOWN?" | #8 | Act Four, #5: it fell out of the sky and hit his hat |
 | "... It didn't come back down." | #9 (the old line) | Act Four, #5 |

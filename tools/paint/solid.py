@@ -44,6 +44,11 @@ class Draft:
         self.poly([(x + math.cos(i / n * 2 * math.pi) * r * squash, y + math.sin(i / n * 2 * math.pi) * r) for i in range(n)], color, alpha, z)
         return self
 
+    def clear_disc(self, x, y, r, z=0.0, squash=1.0, n=28):
+        """Wipe the sheet inside a disc (Sheet.clear): for lines that must not cross a wheel."""
+        self.s.clear(self.pts([(x + math.cos(i / n * 2 * math.pi) * r * squash, y + math.sin(i / n * 2 * math.pi) * r) for i in range(n)], z))
+        return self
+
     def arc(self, x, y, r, a0, a1, n=14):
         """Points round part of a circle, angles in degrees, counter-clockwise from the right."""
         return [(x + math.cos(math.radians(lerp(a0, a1, i / n))) * r, y + math.sin(math.radians(lerp(a0, a1, i / n))) * r) for i in range(n + 1)]

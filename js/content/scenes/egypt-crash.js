@@ -593,12 +593,15 @@ export default {
     { id: "reeds", name: "reeds", verb: "Pick", poly: [[216, 341], [222, 335], [231, 336], [238, 341], [239, 373], [214, 373]], walkTo: [244, 392], face: "W", look: "egypt.reeds.look", use: cutReed },
     { id: "block", name: "dropped block", verb: "Push", poly: [[706, 333], [718, 327], [743, 326], [743, 350], [736, 353], [734, 357], [699, 356], [698, 352], [706, 350]], walkTo: [716, 374], face: "N", look: "egypt.block.look", use: "egypt.block.use" },     // the block and its broken sledge
     {
-      id: "footprints", name: "sneaker prints", verb: "Follow", poly: [[474, 490], [492, 490], [504, 460], [508, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 430], [478, 462]], walkTo: [424, 502], face: "NE",       // (a step clear of the steam)
-      look: "egypt.footprints.look", use: "egypt.footprints.use",
-      useWith: { chicken: "egypt.chicken.footprints" },
+      id: "footprints", name: "sneaker prints", verb: "Follow", poly: [[468, 496], [498, 496], [510, 460], [514, 420], [512, 380], [506, 340], [502, 318], [474, 318], [474, 350], [480, 390], [480, 430], [472, 462]], walkTo: [424, 502], face: "NE",       // (a step clear of the steam)
+      look: "egypt.footprints.look", useWith: { chicken: "egypt.chicken.footprints" },
+      // "Then so do I": following them is going up the track (he says so, walks to its foot, and the picture changes)
+      use: async (g) => { await g.say("egypt.footprints.use"); await g.walkTo(500, 372); await g.goto("egypt-site", { spawn: "fromCrash" }); },
     },
     {
-      id: "track", name: "track to the pyramid", verb: "Walk up", poly: [[476, 300], [508, 298], [516, 326], [472, 330]], walkTo: [500, 372], face: "N",       // he is on his way up it when the picture changes
+      // The track itself, a wide band of it: the far end and the whole stretch above the prints, with the sand on either side,
+      // so that a click anywhere near it is a click on it. (The top edge of the picture is the way up as well.)
+      id: "track", name: "track to the pyramid", verb: "Walk up", poly: [[452, 286], [532, 284], [544, 330], [540, 380], [530, 420], [512, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 420], [470, 420], [460, 380], [454, 330]], walkTo: [500, 372], face: "N",       // he is on his way up it when the picture changes
       look: "egypt.track.look", use: (g) => g.goto("egypt-site", { spawn: "fromCrash" }),
     },
     {

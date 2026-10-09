@@ -630,7 +630,7 @@ Colors and clothes say who a person is when they stand still. These settings in
 | `pace` | How fast they walk, in picture pixels a second at full size (155 unless it says otherwise) | The water carrier plods at 110. The street boy darts at 190. |
 | `gestures` | What their hands do when they talk, as a short list of numbers | Dad nods, makes a point, shrugs, puts a hand on his hip. The Son throws both arms up. The clerk wipes his brow and counts on his fingers. |
 | `hold` | An arm that is always busy with something | The overseer's staff, the youngest hauler's loaf |
-| `pray` | How they stand to pray: how high the folded hands are, how far the head bows, and whether the hands are clasped tight and the eyes squeezed shut | Dad folds his big hands low in front of him, his head well down. The Son takes his cap off and holds it in both hands. Mom folds her hands at her breast, and her handbag slides down to the crook of her elbow. Big Sister prays exactly as she was taught, hands together at her breast. Little Sister prays with all her might: hands clasped tight under her chin, eyes squeezed shut. |
+| `pray` | How they stand to pray: how high the folded hands are, how far the head bows, and whether the hands are clasped tight and the eyes squeezed shut | Dad folds his big hands low in front of him, his head well down. The Son folds his hands at his middle and bows his head; his hair stays up. Mom folds her hands at her breast, and her handbag slides down to the crook of her elbow. Big Sister prays exactly as she was taught, hands together at her breast. Little Sister prays with all her might: hands clasped tight under her chin, eyes squeezed shut. |
 | `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, or a height) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, the old-timer |
 | `rest` | Where an arm lies when a pose leaves it alone | The scribe's pen hand |
 
@@ -1081,7 +1081,7 @@ is that **an era changes what is painted, and nothing about how.**
 | Group | Colors | Used for | Changes? |
 | --- | --- | --- | --- |
 | **Time** | neon cyan, magenta, violet, white core | Portals, the tunnel, anything time travel has touched, highlights in the interface | Never |
-| **Travellers** | Dad's yellow shirt, the Son's blue hoodie and red cap, Mom's emerald dress, Big Sister's indigo cardigan, Little Sister's pink overalls and yellow boots, the red wagon | The people and things from the present | Never (each era's light falls on them: "The paints") |
+| **Travellers** | Dad's yellow shirt, the Son's blue hoodie, Mom's emerald dress, Big Sister's indigo cardigan, Little Sister's pink overalls and yellow boots, the red wagon | The people and things from the present | Never (each era's light falls on them: "The paints") |
 | **Era** | The warm stone and sand of Egypt, the brick and blue shadow of a Roman street, lamplight and wallpaper at home, the dust of Nevada | The world of each period | Per era |
 
 Because of this, in any screenshot from any era you can tell at a glance what

@@ -166,8 +166,8 @@ directions: he promised.
 
 **How he looks and moves.** Yellow flowered vacation shirt worn loose over a stomach,
 olive shorts, striped socks, sandals. Brown hair slicked back and to the side, green
-eyes, stubble and a short beard along the jaw and chin (no moustache). He walks like a
-man who knows where he is going. When he talks he nods, makes a point, shrugs, or puts a
+eyes, a few days' stubble over the jaw and a little beard under the chin (no moustache).
+He walks like a man who knows where he is going. When he talks he nods, makes a point, shrugs, or puts a
 hand on his hip.
 
 **How he changes (draft).** The last thing he does in the game is ask for directions.
@@ -206,8 +206,8 @@ his bedroom door at home, which says NO GIRLS ALLOWED and is booby-trapped: a to
 
 **In play.** He pokes, climbs, trades and befriends. He fits where Dad does not.
 
-**How he looks and moves.** Blonde hair under a red cap, blue eyes, blue hoodie, purple
-backpack, navy shorts, sneakers. He walks with a bounce, fists pumping and head going
+**How he looks and moves.** Blonde hair that sticks up in tufts and has never met a comb,
+blue eyes, blue hoodie, purple backpack, navy shorts, sneakers. He walks with a bounce, fists pumping and head going
 from side to side. When he talks he points, throws both arms up, waves both hands, or
 shrugs.
 
@@ -452,7 +452,8 @@ Daddy. And she is right: about the chickens, about the hiding ("Nobody EVER find
 her sister: "That is, regrettably, true."), and about Daddy being EARLY.
 
 **How she looks and moves.** Pink overalls with a star on the bib, yellow rain boots,
-pigtails with yellow ties, soft blue eyes and a few freckles. She stands with her fists
+short wild blonde hair to just past her shoulders, a fringe, soft blue eyes and a few
+freckles. She stands with her fists
 on her hips and stomps when she walks, arms straight, like a small soldier. When she
 talks she throws both arms up, shows her muscles, or points.
 
@@ -522,7 +523,7 @@ carry personality, and are worth as much care as the colors:
 `tools/sprites.html` shows all of it moving.
 
 **Colors.** Each of the family owns one color that nobody else in the family wears,
-so they can be told apart at any size: Dad yellow, the Son blue with a red cap, Mom
+so they can be told apart at any size: Dad yellow, the Son blue, Mom
 emerald, Big Sister indigo, Little Sister pink with yellow boots. Their words on
 screen are a pale tint of the same color.
 

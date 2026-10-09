@@ -169,13 +169,29 @@ def key_scene(scene, src, dst, strength=STRENGTH, quiet=False):
     pb = paint(back, key, st, maps=maps_b, lab0=lab_b)
     back_out = np.where(covered[..., None], pb, pc)
     painted_alts = {a: paint(p, key, st, maps=m, lab0=l) for a, (p, l, m, _) in alts.items()}
+    # A cut-out that another cut-out lies over (the pencil on the armchair, the door mirror on the wagon, the flashlight
+    # in the fort's way in) is keyed from the picture with nothing over it: back and the cut-outs up to itself. Taken from
+    # the whole composite, it would carry the thing over it baked into its own pixels, and show it after the game had
+    # hidden that thing (a pencil still on the crossword once it is in the pocket). Elsewhere the two pictures are the same.
+    pcs = {}
+    for i, n in enumerate(planes):
+        above = [m for m in planes[i + 1:] if (masks[n] & masks[m]).any()]
+        if not above:
+            pcs[n] = pc
+            continue
+        own = picture(src, plan, without=planes[i + 1:])
+        lab_n = rgb_to_lab(own)
+        pcs[n] = paint(own, key, st, maps=read_maps(lab_n, key), lab0=lab_n)
     full = np.ones(back.shape[:2], bool)
     pal = palette_for([back_out, pc] + list(painted_alts.values()), [full, covered] + [alts[a][3] for a in alts])
     written = ["back"]
     save_indexed(path(dst, "back"), to_index(back_out, pal, seed=st), pal)
     ic = to_index(pc, pal, seed=st + 1)
     for n in planes:
-        save_indexed(path(dst, n), ic, pal, masks[n])
+        if pcs[n] is pc:
+            save_indexed(path(dst, n), ic, pal, masks[n])
+        else:
+            save_indexed(path(dst, n), to_index(pcs[n], pal, seed=st + 1), pal, masks[n])
         written.append(n)
     for u, m in unions.items():
         save_indexed(path(dst, u), ic, pal, m)
