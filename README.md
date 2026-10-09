@@ -9,9 +9,9 @@ Dad's shortcut sends a father and son tumbling through history, and the rest of 
 In development. What is here now:
 
 - **The engine**: scenes, walking, clickable areas, inventory, dialogue with choices, cutscenes that can be skipped, close-ups, hints.
-- **Painted scenes**: every scene is one painted picture, 800 pixels by 600, with painted cut-outs for the things people walk behind and the things the story changes. The highway of the intro and nine scenes are painted so far.
+- **Painted scenes**: every scene is one painted picture, 800 pixels by 600, with painted cut-outs for the things people walk behind and the things the story changes. The highway of the intro and all thirteen scenes of the story are painted: four in Egypt, three in Rome, the five rooms of the house, and the roadside in Nevada.
 - **Five playable leads**: Dad and the Son, lost in different centuries, and Mom, Big Sister and Little Sister, who work as a team. You switch between them with their portraits. Each can do something the others cannot, and they talk to each other and hand things over.
-- **Pixel-art people drawn by code**: each of the twenty-three is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people.
+- **Pixel-art people drawn by code**: each of the twenty-four is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people.
 - **Depth**: people walk behind things and in front of them, round obstacles, and get smaller as they walk away.
 - **An intro movie** that runs into the title screen.
 - **Saved games**: autosave, three slots, and a save file you can download and load on any device.
@@ -68,7 +68,8 @@ art/              the painted pictures: a folder for each scene (scenes/), and t
                   that can be carried (items/)
 fonts/            Koine Road, the game's typeface
 tools/            the storyboard page, the sprite viewer, the local server (serve.py),
-                  the stamping tool (stamp.py) and the typeface's source
+                  the stamping tool (stamp.py), the painter (paint/: the scripts that
+                  paint every picture) and the typeface's source
 docs/             how it is built (DESIGN.md), who the people are (CHARACTERS.md),
                   and a puzzle document for each part of the story
 ```

@@ -1895,6 +1895,8 @@ if __name__ == "__main__":
     print("back", finish(done["back"][0], f"{OUT}/back.png", 160, dear=dear))
     for name, colors in (("fort", 80), ("flashlight", 24), ("teaparty", 64), ("front", 96)):
         print(name, finish(done[name][0], f"{OUT}/{name}.png", colors, done[name][1]))
+    import home_lilsis_room_mobile                          # round four: the mobile is lifted out of front.png, its own cut-out, to stir
+    print("mobile", home_lilsis_room_mobile.split(OUT))
     import home_lilsis_room_layout
     home_lilsis_room_layout.write(f"{OUT}/layout.json", signs=dict(SIGNS))
     print("done", round(time.time() - t0, 1))

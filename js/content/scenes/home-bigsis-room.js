@@ -29,9 +29,9 @@ const home = (g) => THREE.every((id) => g.actor(id));
 const turn = (g, at) => { for (const id of THREE) { const a = g.actor(id); if (a && a !== g.lead) a.look(at[0], at[1]); } };
 
 // ---------- the light ----------
-// Drawn live: the sound machine's little lamp, which is lit while it plays, and the thread of mist from the diffuser.
+// Drawn live: the sound machine's little lamp, which is lit while it plays. (The thread of mist from the diffuser, drawn
+// here until round four, is the engine's now, with the candles and the little fountain: see `fx`.)
 const LAMP = [383, 325];
-const MIST = [152, 368];
 function light(g) {
   const lamp = g.q("#sound-lamp");
   if (lamp) lamp.setAttribute("opacity", g.flag("home.retreatQuiet") ? 0 : 1);
@@ -149,6 +149,10 @@ export default {
   spawn: { default: [294, 456], mom: [294, 456], bigsis: [240, 470], lilsis: [188, 484], fromLadder: [294, 456] },
   arrive: { fromLadder: [[240, 470], [188, 484]] },
   exits: ["home-landing"],
+  // The way out across the edges of the picture: the hatch is at the front, so the bottom of the picture is the way down.
+  edges: {
+    S: { to: "home-landing", spawn: "fromLadder", name: "down the ladder", walkTo: [172, 508] },
+  },
 
   picture: art + "back.png",
 
@@ -158,18 +162,41 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },
   ],
 
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). The candles are flameless, in glass, as the
+  // painting has them: the wax glows from inside, and what flickers is the little light in its top (its glow is painted).
+  // The little fountain on the sound table runs all the time (a thread of water off the bamboo spout, rings on its
+  // pool), and the diffuser on its stump breathes out a soft mist.
+  fx: [
+    // [id, at x, at y, base, size, width, glow]: six along the low wall's ledge (the last behind the gauze over the bed,
+    // which lets about half of it through), two on the bookcase, two on the shelf over the pillows, two in the lanterns at
+    // the bed's foot, and the tall glass by the towels
+    ...[["ledge-1", 201.3, 266.2, 366, 2, 1.2, 6.3], ["ledge-2", 296.5, 266.2, 366, 2, 1.2, 6.3], ["ledge-3", 394.4, 266.2, 366, 2, 1.2, 6.3],
+      ["ledge-4", 461.6, 266.2, 366, 2, 1.2, 6.3], ["ledge-5", 562.3, 266.2, 366, 2, 1.2, 6.3], ["ledge-6", 629.5, 266.2, 366, 2, 1.2, 6.3],
+      ["bookcase-1", 175, 295.4, 370, 2, 1.2, 6.3], ["bookcase-2", 260.4, 297.3, 370, 2, 1.2, 6.3],
+      ["bedshelf-1", 709.2, 308.8, 412, 2.2, 1.2, 7.5], ["bedshelf-2", 714, 313.9, 417, 2.2, 1.2, 7.6],
+      ["foot-1", 648.8, 468, 484, 2.7, 1.2, 9.3], ["foot-2", 682.8, 479.3, 493, 2.7, 1.3, 9.5], ["floor", 96.4, 444.9, 463, 2.5, 1.2, 8.8]]
+      .map(([id, x, y, base, size, width, glow]) => ({ id: `candle-${id}`, type: "flame", at: [x, y], base, size, width, color: "#fff2c8", edge: "#ffb45a", glow, glowColor: "#ffb070", glowOpacity: 0.1, flicker: 0.35,
+        ...(id === "ledge-6" ? { behind: [[[643, 190], [580, 335], [700, 335]]], behindOpacity: 0.45 } : {}) })),
+    // the little fountain: a thread of water from the bamboo spout onto the stones, and rings on its pool (raised water)
+    { id: "fountain", type: "stream", base: 375, path: [[422.6, 315.1], [421.8, 317.3], [421.4, 320.6]], width: [0.8, 1.2], color: "#d6e8f2", light: "#ffffff", opacity: 0.75, speed: 26, splash: 1.5 },
+    { id: "fountain-pool", type: "ripples", at: [421.1, 325.9], base: 375, radius: [1, 9.3], flat: 0.42, every: [0.5, 1.1], rings: 2, speed: 7, color: "#cfe4f4", trough: "#2c4a58", opacity: 0.45 },
+    // the diffuser's mist, rising, spreading and fading
+    { id: "diffuser-mist", type: "smoke", at: [151.6, 369.7], base: 414, color: "#f6f2f0", opacity: 0.16, height: 34, width: [2, 14], lean: [5, -34], rate: 2.5 },
+  ],
+
   // LIGHT, drawn live. `light` (above) puts the machine's lamp out when its batteries have gone.
   live() {
-    return `<g id="sound-lamp" fill="#ffd27a" shape-rendering="geometricPrecision"><circle cx="${LAMP[0]}" cy="${LAMP[1]}" r="4" opacity="0.28"/><circle cx="${LAMP[0]}" cy="${LAMP[1]}" r="1.4"/></g>
-      <path class="tw" d="M${MIST[0]} ${MIST[1]} q-4 -7 0 -14 q4 -7 0 -14 q-3 -6 0 -11" stroke="#fff" stroke-opacity="0.28" stroke-width="1.6" stroke-linecap="round" fill="none"/>`;
+    return `<g id="sound-lamp" fill="#ffd27a" shape-rendering="geometricPrecision"><circle cx="${LAMP[0]}" cy="${LAMP[1]}" r="4" opacity="0.28"/><circle cx="${LAMP[0]}" cy="${LAMP[1]}" r="1.4"/></g>`;
   },
 
   setup: light,
 
   // Back to front: a later area lies over an earlier one.
   hotspots: [
-    { id: "skylight", name: "skylights", rect: [213, 119, 374, 91], walkTo: [421, 419], face: "N", look: each("home.skylight") },
-    { id: "window", name: "round window", rect: [62, 204, 34, 85], walkTo: [195, 405], face: "W", look: each("home.retreat.window") },
+    // (two skylights in the roof, each in its frame: the branch and the stars in the left one, the moon in the right)
+    { id: "skylight", name: "skylight", rect: [216, 122, 119, 82], walkTo: [421, 419], face: "N", look: each("home.skylight") },
+    { id: "skylight2", name: "skylight", rect: [465, 124, 123, 82], walkTo: [421, 419], face: "N", look: each("home.skylight") },
+    { id: "window", name: "round window", poly: [[78, 205], [85, 208], [90, 217], [94, 231], [95, 247], [94, 263], [90, 277], [85, 286], [78, 289], [72, 286], [67, 277], [63, 263], [62, 247], [63, 231], [67, 217], [72, 208]], walkTo: [195, 405], face: "W", look: each("home.retreat.window") },
     { id: "plants", name: "plants", poly: [[98, 290], [128, 280], [172, 290], [186, 330], [186, 420], [112, 438], [100, 400], [98, 330]], walkTo: [170, 428], face: "W", look: each("home.plants") },
     { id: "towels", name: "robe and towels", poly: [[36, 276], [66, 276], [66, 388], [110, 402], [113, 477], [54, 477], [36, 388]], walkTo: [170, 428], face: "W", look: each("home.towels") },
     { id: "saltlamp", name: "salt lamp", poly: [[112, 337], [145, 337], [147, 368], [165, 370], [165, 414], [136, 414], [134, 403], [110, 403]], walkTo: [195, 405], face: "W", look: each("home.saltlamp") },
@@ -182,17 +209,18 @@ export default {
     },
     { id: "fountain", name: "fountain", rect: [405, 302, 34, 34], walkTo: [339, 387], face: "E", look: atTable(each("home.fountain")) },
     {
-      id: "desk", name: "her writing desk", poly: [[496, 276], [571, 276], [571, 302], [592, 302], [592, 389], [482, 389], [482, 302], [496, 302]], walkTo: [524, 398], face: "N",
+      id: "desk", name: "her writing desk", plane: "desk", poly: [[496, 276], [571, 276], [571, 302], [592, 302], [592, 389], [482, 389], [482, 302], [496, 302]], walkTo: [524, 398], face: "N",
       look: each("home.desk"), useWith: { pencil: each("home.desk.pencil") },
     },
     { id: "bed", name: "her bed", poly: [[638, 172], [660, 172], [718, 330], [770, 400], [770, 462], [620, 462], [572, 400], [572, 330]], walkTo: [571, 431], face: "E", look: each("home.bedbig") },
     { id: "mat", name: "exercise mat", poly: [[247, 397], [303, 397], [287, 458], [216, 458]], walkTo: [321, 426], face: "W", look: each("home.mat") },
     {
       // (She stands three pixels farther in than the painter's [172, 511]: on that spot there is no ground to either side, and the three end up standing in one another.)
-      id: "hatch", name: "the way down", verb: "Climb down", poly: [[21, 424], [244, 424], [244, 600], [21, 600]], walkTo: [172, 508], face: "S",
+      // (The area is the opening and the near side of its rail, below the floor where people stand when they come up.)
+      id: "hatch", name: "the way down", verb: "Climb down", poly: [[21, 516], [244, 516], [244, 600], [21, 600]], walkTo: [172, 508], face: "S", plane: "front",
       look: each("home.hatch"), use: (g) => g.goto("home-landing", { spawn: "fromLadder" }),
     },
-    { id: "rules", name: "the rules", verb: "Read", rect: [232, 466, 106, 113], walkTo: [172, 508], face: "S", look: readRules, use: readRules },
+    { id: "rules", name: "the rules", verb: "Read", rect: [232, 470, 106, 109], walkTo: [172, 508], face: "S", plane: "front", look: readRules, use: readRules },
   ],
 
   given,
@@ -221,7 +249,7 @@ export default {
       bigsis: [
         { when: (g) => g.flag("home.flashTaken") && !g.flag("home.flashWorks") && !g.holder("batteries"), say: ["home.talk.batt.lilsis.bigsis.a", "home.talk.batt.lilsis.bigsis.b"] },
         ["home.talk.retreat.lilsis.bigsis.1a", "home.talk.retreat.lilsis.bigsis.1b"],
-        ["home.talk.retreat.lilsis.bigsis.2a", "home.talk.retreat.lilsis.bigsis.2b"],
+        ["home.talk.retreat.lilsis.bigsis.2a", "home.talk.retreat.lilsis.bigsis.2b", "home.talk.retreat.lilsis.bigsis.2c"],
       ],
     },
   },

@@ -26,7 +26,7 @@ const twice = (first, second) => (g) => g.say(count(g, first) <= count(g, second
 /** How far the sunbeam gets: 0 not in at all, 1 as far as the foot of the ramp, 2 up to the top step, 3 into the chamber. */
 const sunReach = (g) => (!g.flag("egypt.shadeSet") ? 0 : !g.flag("egypt.footSet") ? 1 : !g.flag("egypt.topSet") ? 2 : 3);
 
-// ---------- light: the sunbeam in three stretches, and the lamps ----------
+// ---------- light: the sunbeam in three stretches ----------
 // The painter's marks for the beam: in through the lit opening (by 193, 450), to the mirror in the slot (531, 409),
 // up to the mirror on the top step (400, 176), and in at the doorway right behind it.
 const BEAM_IN = [[166, 439], [170, 467], [532, 416], [530, 402]];     // the soft outer light: from the edge of the opening in the left wall across to the slot
@@ -35,7 +35,7 @@ const BEAM_UP = [[525, 412], [537, 406], [403, 174], [397, 178]];     // from th
 const CORE_UP = [[529, 410], [533, 408], [401, 175.5], [399, 176.5]];
 const SPILL = [541, 426, 24, 15];                                     // where the beam lands on bare stone, before there is a mirror in the slot (cx, cy, rx, ry)
 const TOP = [400, 172, 20, 24];                                       // the doorway at the top, lit: the last stretch is too short to see as a beam
-const LAMPS = [[283, 371, 0.61], [326, 251, 0.38], [337, 218, 0.32], [496, 297, 0.47], [467, 219, 0.32], [309, 507, 0.83], [560, 463, 0.84], [641, 546, 1.18]];   // each flame, and how big things are there
+// (The lamps' flames were drawn here as soft ellipses until round four; they are the engine's `flame` now: see `fx`.)
 const points = (shape) => shape.map((p) => p.join(",")).join(" ");
 const beam = (id, outer, core) => `<g id="${id}" opacity="0" shape-rendering="geometricPrecision">
   <polygon points="${points(outer)}" fill="#ffe7a0" opacity="0.3" filter="url(#sun-soft)"/><polygon points="${points(core)}" fill="#fff4c8" opacity="0.55" filter="url(#sun-edge)"/></g>`;
@@ -141,6 +141,13 @@ export default {
     fromChamber: [400, 232],        // down from the doorway at the top
   },
   exits: ["egypt-site", "egypt-chamber"],
+  // The left of the picture is the way out to the daylight (the lit opening in the left wall), and the top of it is the
+  // way up the ramp to the doorway at the top. The long stair outside is walked whole only once, so the way out comes
+  // down it the first time and is found halfway down after that, as through the opening itself.
+  edges: {
+    W: { to: "egypt-site", name: "outside", walkTo: [239, 542], use: (g) => g.goto("egypt-site", { spawn: g.flag("egypt.cameDown") ? "fromGalleryAgain" : "fromGallery" }) },
+    N: { to: "egypt-chamber", spawn: "fromGallery", name: "up the ramp", walkTo: [400, 231] },
+  },
 
   picture: art + "back.png",
 
@@ -150,16 +157,12 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },
   ],
 
-  // Everything here is light: the sunbeam, where it spills on the bench, the doorway at the top when the sun gets
-  // there, and the lamp flames. All of the beam starts hidden; dress() shows what the facts say, and the scripts above
-  // bring a new stretch up. The painting has the lit stone round each lamp; the game adds a flame that will not keep still.
+  // The light here: the sunbeam, where it spills on the bench, and the doorway at the top when the sun gets there. All of
+  // the beam starts hidden; dress() shows what the facts say, and the scripts above bring a new stretch up. (The lamps'
+  // flames are in `fx`, below.)
   live() {
-    const flame = ([x, y, k], n) => `<ellipse cx="${x}" cy="${y - 2 * k}" rx="${9 * k}" ry="${11 * k}" fill="#ffc266" opacity="0.5" filter="url(#lamp-soft)"/>` +
-      `<ellipse class="flicker" cx="${x}" cy="${y - 3 * k}" rx="${5 * k}" ry="${7 * k}" fill="#ffe9b0" opacity="0.8" filter="url(#lamp-soft)" style="animation-delay:${-0.37 * n}s"/>`;
     return `<defs><filter id="sun-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
-        <filter id="sun-edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter>
-        <filter id="lamp-soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="2.5"/></filter></defs>
-      <g shape-rendering="geometricPrecision">${LAMPS.map(flame).join("")}</g>
+        <filter id="sun-edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
       ${beam("beam-in", BEAM_IN, CORE_IN)}
       <ellipse id="beam-spill" opacity="0" cx="${SPILL[0]}" cy="${SPILL[1]}" rx="${SPILL[2]}" ry="${SPILL[3]}" fill="#fff3c4" filter="url(#sun-soft)" shape-rendering="geometricPrecision"/>
       ${beam("beam-up", BEAM_UP, CORE_UP)}
@@ -169,48 +172,65 @@ export default {
       </g>`;
   },
 
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). The painted tongues of the eight lamps are gone
+  // (the lamplight on the stone, the glow round each flame, the light in the oil and the soot stay painted), and the
+  // engine draws each flame on its wick, flickering, at its lamp's depth: a man passing in front of a lamp covers it.
+  // The lamp on the bench at the front right is on the front plane. (`at`: the wick; `size`: how tall the painted flame stood.)
+  fx: [
+    // [at x, at y, base, size, width, lean]: lamps 1 to 5 on the benches up the ramp, 6 on the floor, 7 by the boy, 8 at the front
+    [282.6, 374.7, 377, 10.3, 6.2, -0.4], [326.1, 252.9, 254, 6.5, 3.9, -0.3], [337, 220.2, 221, 5.5, 3.3, -0.2], [496.2, 299.7, 302, 8, 4.8, -0.3],
+    [466.9, 221.2, 222, 5.5, 3.3, -0.2], [309.2, 512.2, 515, 14.1, 8.4, -0.6], [560, 468.3, 472, 14.2, 8.5, -0.6], [641.2, 555.3, "front", 20, 12, -0.8],
+  ].map(([x, y, base, size, width, lean], n) => ({ id: `lamp-${n + 1}`, type: "flame", at: [x, y], base, size, width, edge: "#f08a1c", color: "#ffd45a", glowOpacity: 0.12, lean })),
+
   actors: [
-    { id: "lampboy", kind: "lampboy", at: [582, 586], face: "SW" },       // on the front edge of the stone bench, his legs hanging
+    // On the front edge of the stone bench, his legs hanging. He will not go up the ramp again; but now and then he gets
+    // up (his jar of oil with him) to see to the lamp beside him, or steps out to the foot of the ramp and looks up it, and
+    // comes back to his bench. His mark is on the bench, off the floor: he walks straight there and back.
+    { id: "lampboy", kind: "lampboy", at: [582, 586], face: "SW",
+      life: { every: [20, 38], spots: [[522, 532, "NE"], [500, 566, "N"]], stay: [3, 6] } },
   ],
 
   setup: dress,
 
-  // The far things first: an area lower in this list lies over the ones above it.
+  // The far things first: an area lower in this list lies over the ones above it. Each shape follows its thing's own
+  // edge, within a few pixels; the ladder is a cut-out and the lamp boy a person, and Show outlines their own silhouettes.
+  // The walls leave the top of the picture to the way up the ramp, and its left edge to the way out.
   hotspots: [
-    { id: "walls", name: "gallery walls", rect: [100, 0, 600, 150], look: twice("egypt.gallery.walls.look", "egypt.gallery.walls.look2") },
+    { id: "wall-left", name: "gallery walls", poly: [[44, 60], [340, 60], [333, 192], [300, 240], [268, 300], [245, 350], [225, 388], [164, 431], [164, 593], [157, 600], [44, 600]], look: twice("egypt.gallery.walls.look", "egypt.gallery.walls.look2") },
+    { id: "wall-right", name: "gallery walls", poly: [[460, 60], [800, 60], [800, 600], [700, 600], [640, 540], [600, 470], [570, 420], [555, 370], [530, 310], [505, 250], [475, 195]], look: twice("egypt.gallery.walls.look", "egypt.gallery.walls.look2") },
     {
-      id: "top-door", name: "doorway at the top", verb: "Go through", rect: [377, 150, 46, 48], walkTo: [400, 231], face: "N",
+      id: "top-door", name: "doorway at the top", verb: "Go through", poly: [[381, 152], [419, 152], [419, 197], [381, 197]], walkTo: [400, 231], face: "N",
       look: (g) => g.say(g.flag("egypt.sawChamber") ? "egypt.gallery.top.look2" : "egypt.gallery.top.look"),
       use: (g) => g.goto("egypt-chamber", { spawn: "fromGallery" }),
     },
     {
-      id: "step-top", name: "top step", rect: [361, 192, 77, 13], walkTo: [395, 230], face: "N",
+      id: "step-top", name: "top step", poly: [[364, 198], [436, 198], [438, 206], [361, 206]], walkTo: [395, 230], face: "N",
       look: (g) => g.say(g.flag("egypt.topSet") ? "egypt.gallery.step.set" : "egypt.gallery.step.look"),
       useWith: { coppermirror: standMirror, carmirror: "egypt.top.wrong", shade: "egypt.gallery.shade" },
     },
-    { id: "chest", name: "chest", rect: [456, 227, 21, 64], walkTo: [431, 306], face: "E", look: "egypt.gallery.chest.look" },
-    { id: "dinner", name: "bread and beer", rect: [283, 314, 47, 44], walkTo: [355, 380], face: "W", look: "egypt.gallery.dinner.look" },
-    { id: "sledge-runner", name: "sledge runner", rect: [472, 299, 19, 113], walkTo: [460, 413], face: "E", look: "egypt.gallery.runner.look" },
-    { id: "marks", name: "builders' marks", rect: [568, 322, 61, 117], walkTo: [501, 538], face: "E", look: twice("egypt.gallery.marks.look", "egypt.gallery.marks.look2") },
+    { id: "chest", name: "chest", poly: [[455, 236], [475, 236], [484, 258], [483, 277], [455, 277], [452, 258]], walkTo: [431, 306], face: "E", look: "egypt.gallery.chest.look" },      // the chest, and the two jars of white stone above it
+    { id: "dinner", name: "bread and beer", poly: [[290, 320], [300, 317], [310, 322], [315, 333], [324, 337], [326, 349], [318, 355], [300, 354], [290, 343]], walkTo: [355, 380], face: "W", look: "egypt.gallery.dinner.look" },
+    { id: "sledge-runner", name: "sledge runner", poly: [[465, 299], [479, 297], [497, 410], [484, 413]], walkTo: [460, 413], face: "E", look: "egypt.gallery.runner.look" },
+    { id: "marks", name: "builders' marks", poly: [[571, 338], [584, 337], [592, 358], [599, 362], [616, 363], [618, 394], [626, 417], [624, 432], [614, 428], [598, 414], [574, 392], [570, 360]], walkTo: [501, 538], face: "E", look: twice("egypt.gallery.marks.look", "egypt.gallery.marks.look2") },
     {
-      id: "low-passage", name: "low passage", verb: "Look into", rect: [373, 376, 54, 63], walkTo: [400, 511], face: "N",
+      id: "low-passage", name: "low passage", verb: "Look into", poly: [[376, 389], [425, 389], [425, 438], [376, 438]], walkTo: [400, 511], face: "N",
       look: "egypt.gallery.low.look", use: "egypt.gallery.low.use",
       useWith: { flashlight: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.flash.dead" : "egypt.gallery.low.flashlight") },
     },
     {
-      id: "slot-foot", name: "slot in the bench", rect: [520, 398, 47, 57], walkTo: [462, 471], face: "E",
+      id: "slot-foot", name: "slot in the bench", poly: [[518, 396], [553, 394], [557, 415], [562, 422], [560, 452], [528, 452], [522, 422]], walkTo: [462, 471], face: "E",      // the slot, and the mirror once it is in
       look: (g) => g.say(g.flag("egypt.footSet") ? "egypt.gallery.slot.set" : g.flag("egypt.shadeSet") ? "egypt.gallery.slot.beam" : "egypt.gallery.slot.look"),
       useWith: { carmirror: wedgeMirror, coppermirror: "egypt.foot.wrong", shade: "egypt.gallery.shade" },
     },
-    { id: "oil-jars", name: "oil jars", verb: "Borrow", rect: [216, 431, 109, 89], walkTo: [316, 529], face: "W", look: "egypt.gallery.jars.look", use: "egypt.gallery.jars.use" },
-    { id: "rope", name: "coil of rope", rect: [487, 500, 47, 23], walkTo: [475, 527], face: "E", look: "egypt.gallery.rope.look" },
+    { id: "oil-jars", name: "oil jars", verb: "Borrow", poly: [[233, 446], [243, 440], [256, 442], [262, 452], [268, 446], [278, 447], [283, 462], [284, 492], [300, 492], [302, 503], [314, 508], [313, 519], [296, 519], [285, 513], [262, 513], [247, 516], [234, 508], [230, 470]], walkTo: [316, 529], face: "W", look: "egypt.gallery.jars.look", use: "egypt.gallery.jars.use" },
+    { id: "rope", name: "coil of rope", poly: [[533,511], [530,516], [522,520], [510,521], [498,520], [490,516], [487,511], [490,506], [498,502], [510,501], [522,502], [530,506]], walkTo: [475, 527], face: "E", look: "egypt.gallery.rope.look" },
     {
       id: "way-out", name: "way out", verb: "Take the", poly: [[164, 593], [222, 511], [221, 389], [164, 431]], walkTo: [239, 542], face: "W",
       look: "egypt.gallery.out.look", use: (g) => g.goto("egypt-site", { spawn: g.flag("egypt.cameDown") ? "fromGalleryAgain" : "fromGallery" }),      // (the long stair outside is walked whole only once)
     },
-    { id: "ladder", name: "ladder", rect: [92, 250, 66, 350], walkTo: [210, 569], face: "W", look: "egypt.gallery.ladder.look" },
+    { id: "ladder", name: "ladder", plane: "front", poly: [[97, 241], [108, 241], [131, 243], [138, 247], [157, 600], [92, 600]], walkTo: [210, 569], face: "W", look: "egypt.gallery.ladder.look" },
     {
-      id: "lampboy", name: "lamp boy", verb: "Talk to", rect: [548, 470, 60, 112], walkTo: [510, 572], face: "E",
+      id: "lampboy", name: "lamp boy", verb: "Talk to", poly: [[582, 475], [572, 477], [568, 483], [571, 498], [566, 502], [556, 537], [549, 548], [549, 577], [542, 582], [546, 588], [554, 587], [559, 591], [569, 589], [572, 586], [573, 558], [592, 549], [596, 543], [595, 506], [587, 497], [590, 482]], walkTo: [510, 572], face: "E",
       look: "egypt.lampboy.look", use: talkToBoy,
       useWith: { flashlight: showFlashlight, rootbeer: "egypt.lampboy.rootbeer", sunglasses: "egypt.lampboy.sunglasses", chicken: showGeneral },
     },

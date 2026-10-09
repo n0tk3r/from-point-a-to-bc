@@ -1177,5 +1177,335 @@
   "1. SHOES OFF",
   "2. VOICES DOWN",
   "3. NO CHICKENS"
- ]
+ ],
+ "fx": [
+  {
+   "type": "flame",
+   "id": "candle-ledge-1",
+   "at": [
+    201.3,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-ledge-2",
+   "at": [
+    296.5,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-ledge-3",
+   "at": [
+    394.4,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-ledge-4",
+   "at": [
+    461.6,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-ledge-5",
+   "at": [
+    562.3,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-ledge-6",
+   "at": [
+    629.5,
+    266.2
+   ],
+   "base": 366,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "behind": [
+    [
+     [
+      643,
+      190
+     ],
+     [
+      580,
+      335
+     ],
+     [
+      700,
+      335
+     ]
+    ]
+   ],
+   "behindOpacity": 0.45,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax; this one stands behind the gauze over the bed ('behind': the veil, which lets about half of it through)"
+  },
+  {
+   "type": "flame",
+   "id": "candle-bookcase-1",
+   "at": [
+    175.0,
+    295.4
+   ],
+   "base": 370,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-bookcase-2",
+   "at": [
+    260.4,
+    297.3
+   ],
+   "base": 370,
+   "size": 2.0,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 6.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-bedshelf-1",
+   "at": [
+    709.2,
+    308.8
+   ],
+   "base": 412,
+   "size": 2.2,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 7.5,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-bedshelf-2",
+   "at": [
+    714.0,
+    313.9
+   ],
+   "base": 417,
+   "size": 2.2,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 7.6,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-foot-1",
+   "at": [
+    648.8,
+    468.0
+   ],
+   "base": 484,
+   "size": 2.7,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 9.3,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-foot-2",
+   "at": [
+    682.8,
+    479.3
+   ],
+   "base": 493,
+   "size": 2.7,
+   "width": 1.3,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 9.5,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "flame",
+   "id": "candle-floor",
+   "at": [
+    96.4,
+    444.9
+   ],
+   "base": 463,
+   "size": 2.5,
+   "width": 1.2,
+   "color": "#fff2c8",
+   "edge": "#ffb45a",
+   "glow": 8.8,
+   "glowColor": "#ffb070",
+   "glowOpacity": 0.1,
+   "flicker": 0.35,
+   "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its 'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+  },
+  {
+   "type": "stream",
+   "id": "fountain",
+   "path": [
+    [
+     422.6,
+     315.1
+    ],
+    [
+     421.8,
+     317.3
+    ],
+    [
+     421.4,
+     320.6
+    ]
+   ],
+   "base": 375,
+   "width": [
+    0.8,
+    1.2
+   ],
+   "color": "#d6e8f2",
+   "light": "#ffffff",
+   "opacity": 0.75,
+   "speed": 26,
+   "splash": 1.5,
+   "what": "the little fountain on the sound table: a thread of water from the bamboo spout down onto the stones in its bowl (a brook that, tonight, sounds like a clock). It runs all the time"
+  },
+  {
+   "type": "ripples",
+   "id": "fountain-pool",
+   "at": [
+    421.1,
+    325.9
+   ],
+   "base": 375,
+   "radius": [
+    1.0,
+    9.3
+   ],
+   "flat": 0.42,
+   "every": [
+    0.5,
+    1.1
+   ],
+   "rings": 2,
+   "speed": 7,
+   "color": "#cfe4f4",
+   "trough": "#2c4a58",
+   "opacity": 0.45,
+   "what": "rings on the bowl's little pool where the water comes off the stones: raised water, so it has a base (the sound table's front)"
+  },
+  {
+   "type": "smoke",
+   "id": "diffuser-mist",
+   "at": [
+    151.6,
+    369.7
+   ],
+   "base": 414,
+   "color": "#f6f2f0",
+   "opacity": 0.16,
+   "height": 34,
+   "width": [
+    2,
+    14
+   ],
+   "lean": [
+    5,
+    -34
+   ],
+   "rate": 2.5,
+   "new": true,
+   "what": "NEW (it was never painted): the diffuser on its little stump, far left, breathing out a soft white mist that rises, spreads and fades. The layout's lights.mist [152, 369] meant the same place"
+  }
+ ],
+ "fx_note": "round four: the fountain's thread of running water and the rings on its pool are gone from back.png (every other pixel is as it was); 'fx' runs them, flickers the little light of each flameless candle, and adds the diffuser's mist"
 }

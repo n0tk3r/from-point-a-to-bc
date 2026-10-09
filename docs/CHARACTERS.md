@@ -67,8 +67,8 @@ themselves: warm, natural and unselfconscious.
   their hands (the pose `actor.pray` in a script).
 - No catechism lines yet: the author will say which one his family uses.
 - God's care over time is the family's quiet answer to the whole story: "My times are
-  in thy hand" (Psalm 31:15). That line belongs to Mom at the end of Act Four. At home,
-  the psalm for a journey is Psalm 121.
+  in thy hand" (Psalm 31:15). That line belongs to Mom at the end of Act Four
+  (`nevada.gate.5b`). At home, the psalm for a journey is Psalm 121.
 - The Bible's history is history, on the same timeline the family is scattered along.
   Big Sister's wall timeline (in her attic, the Retreat) is where the game says how it
   counts the years, and what B.C. and A.D. mean: see the next section.
@@ -79,6 +79,7 @@ themselves: warm, natural and unselfconscious.
 > "'The LORD is my shepherd; I shall not want.' Psalm 23. I know ALL of it. ...I do want Daddy, though."
 > "You may say it whenever you like, my love. It is not the clock He is listening for."
 > "The Lord's own picture of Himself: 'even as a hen gathereth her chickens under her wings'. Matthew 23:37." "Tonight I know just how the hen feels."
+> "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen."
 
 ---
 
@@ -120,7 +121,9 @@ The years (these, and no others, for anything before Christ):
   years". Nobody says "about 2560", "four and a half thousand years", or anything about
   millions of years.
 - **The doors in time open on years that matter.** 44 B.C. is the Ides of March. 1921
-  B.C. is Abram in Egypt. Big Sister may notice. Nobody explains it yet.
+  B.C. is Abram in Egypt. Big Sister notices it once, at the end of Act Four ("The Ides
+  of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why.",
+  `nevada.gate.2f`). Nobody explains it yet.
 - **Where the game says it.** Big Sister made her timeline with Ussher's dates, and says
   so once: "I used Archbishop Ussher's dates. He counted the years from the Bible's own
   genealogies." (`home.timeline.1`). The first time any of the three looks along it they
@@ -128,7 +131,9 @@ The years (these, and no others, for anything before Christ):
   A.D. mean): 4004, 2348, 1921, 1491 and 44 B.C. are named there, and no others. Mom's
   "A matter of record" is that the Archbishop's book was published in 1650. Little
   Sister notices how little paper there is before Abram, and her sister answers: "It
-  is as long as it was." That is all the comment the dates get, anywhere.
+  is as long as it was." That is all the comment the dates get, anywhere. In Act Four Big
+  Sister names 1921 B.C. again, from her timeline, and says how far back it is ("Nearly
+  four thousand years early"): dates stated as plain fact, not comment.
 - Any of the family may state a date from the table as plain fact. Each such line is in
   the facts tables at the end of this document with its source given as "The Bible's
   count (Ussher)".
@@ -193,7 +198,9 @@ about it. Under the noise he misses his dad.
 - Never sarcastic. He is delighted, not cool.
 
 **Running gags.** Snacks. Scores out of ten. "Operation." His list of Things Dad Says
-Are The Wind. "Are we when yet?" The dog he is hoping for.
+Are The Wind. "Are we when yet?" The dog he is hoping for (it is also the password on
+his bedroom door at home, which says NO GIRLS ALLOWED and is booby-trapped: a toy alarm,
+"Operation No Girls", and a toy blaster in the slot over the door).
 
 **In play.** He pokes, climbs, trades and befriends. He fits where Dad does not.
 
@@ -259,8 +266,9 @@ the facts allow, and she is too polite to interrupt nonsense the first time.
 **Running gags (draft).** Her handbag holds everything that matters. Lists. Addressing
 a difficult man as "the gentleman" until he behaves like one. Being the first person
 in forty years to say good morning. "A matter of record." Things that are flat (the
-doorbell, the clock's tick, her husband). Her husband signs himself "The Management";
-she is what the Management answers to.
+doorbell, the clock's tick, her husband, and the hum of a door in time: "Very quietly,
+and a little flat."). Her husband signs himself "The Management"; she is what the
+Management answers to.
 
 **In play.** Grown-ups listen to her, so she is the one who gets people talking, and
 she is the one who knows the answers about her husband and about her country: what he
@@ -284,6 +292,10 @@ do is to make a scene.
 > "He promised me he would never ask for directions. It is the one promise he has always kept."
 > "I do not need to hear it twice. He sounded happy."
 > "We are going to be perfectly polite, and completely impossible to get rid of."
+> "Reformation Day, darling. A matter of record: Martin Luther's ninety-five theses, 1517."
+> "Then you have not read one of them. Good morning."
+> "Genesis 12. I have known that chapter all my life, darling. I had never once thought of it as a morning."
+> "'My times are in thy hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one."
 
 ---
 
@@ -341,7 +353,7 @@ She stands holding one elbow, thinking, and walks with a small, even swing of bo
 arms. When she talks she nods, raises a finger, puts a hand to her chin, or points.
 
 **How she changes (draft).** She learns to say "I don't know", and that it is where
-finding out begins.
+finding out begins. The first step is at the end of Act Four ("...I don't know why.").
 
 > "Fun fact: sliced bread was first sold on the seventh of July, 1928, in Chillicothe, Missouri."
 > "We don't have a destination. A journey without a destination is just Dad."
@@ -349,6 +361,8 @@ finding out begins.
 > "Sector 44. Sector 1921. Years. I am almost certain. 'Almost' is the part I don't like."
 > "It is as long as it was."
 > "No. ...A little. Do not tell the room."
+> "The Ides of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why."
+> "I don't want to go in there. The rug is probably booby-trapped."
 
 ---
 
@@ -381,7 +395,8 @@ supervision, which is why she sent her.
 notices a door in time before any person does: the birds go quiet, will not eat, will
 not lay, and all stand facing it. Nobody explains this. She says it first at home, of
 her own flock, and it pays off in every other act: the geese in Egypt, the sacred
-chickens in Rome, the old-timer's hens in Nevada. Keep it light: a thread, not a lecture.
+chickens in Rome, the old-timer's hens in Nevada (`nevada.old.saw.3b`, `.3c`). Keep it
+light: a thread, not a lecture.
 
 **Wants.** To help, right now. To be big. A snack. The front seat.
 
@@ -391,16 +406,28 @@ chickens in Rome, the old-timer's hens in Nevada. Keep it light: a thread, not a
 started before you have finished explaining.
 
 **How she talks.**
-- Short, loud and certain. She declares things.
-- "I FIT!" "I'm small but I'm MIGHTY."
+- Short, loud and certain. She declares things, and she is often right.
+- "I FIT!" "I'm small but I'm MIGHTY." "I'm not scared. I'm BRAVE-scared."
+- Spunky. Brave declarations and little challenges ("We'll SEE about that."); orders, to
+  the flock, to her sister, to the General in her absence ("Keep an eye on Daddy,
+  General!") and to her mother when she can get away with it ("Mommy, sit down. You've
+  been standing up since dinner. I'll do the worrying for a while."); she will not be
+  left out ("Come ON, everybody. I know the way!"); and she is ready before anyone has
+  finished explaining ("I'm ALREADY going.").
+- A seven-year-old's logic, stated as law: "NO GIRLS ALLOWED? I'm not a girl. I'm a
+  SISTER. That's a whole different thing." She says hi to things and names them (the
+  vacuum, the spiders, the dot on the map), counts on her fingers ("THREE fingers past my
+  bedtime"), and has one word in a room that comes out nearly right, never more.
 - Questions in chains: why, and why, and why.
 - She takes everything literally.
 - She says the true thing the grown-ups are stepping round.
 - "Mommy" and "Daddy".
+- Never babyish, never annoying, never the butt of the joke.
 
-**Running gags (draft).** "I FIT!" Her loose tooth, which she will show to anyone.
-The questions. Long words coming out nearly right: "radiator levels", "a ENGINEER",
-"a 'mergency", "I lodged a appeal". "Daddy's not lost. Daddy's EARLY", which turns out to
+**Running gags (draft).** "I FIT!" Her loose tooth, which she will show to anyone, and
+which is not allowed out till Daddy is home to see it. The questions. Long words coming
+out nearly right, one to a room at most: "radiator levels", "a ENGINEER", "the answer
+machine", "I lodged a appeal". "Daddy's not lost. Daddy's EARLY", which turns out to
 be exactly true. "Chickens KNOW." The General, who outranks everybody. Her flashlight,
 which is pink, lives in her fort, and is dead when it is wanted, because she read to the
 flock under the blanket until the batteries ran out.
@@ -408,6 +435,16 @@ flock under the blanket until the batteries ran out.
 **In play.** She goes where nobody else fits: behind, under and through. She distracts
 people by asking them things until they give up, so that her mother and sister can do
 what needs doing.
+
+**In Act Four (round three).** She names everything: the old-timer is the Rock Wizard
+("I just decided"), the man in gray is Mister Gray, the place where the tracks stop is the
+Hummy Place, the notice's radiation sign is a yellow spinny flower. She counts the man in
+gray's questions on her fingers as she asks them ("That's EIGHT fingers. I have TOES
+too."), gives him orders ("You stay RIGHT there. Next question."), and will not be left
+out ("I get to HOLD it? Finally!"). She is ready before anyone has finished explaining
+("So we need a flash. I'm READY."). Her loose tooth is not for sale: it is waiting for
+Daddy. And she is right: about the chickens, about the hiding ("Nobody EVER finds me";
+her sister: "That is, regrettably, true."), and about Daddy being EARLY.
 
 **How she looks and moves.** Pink overalls with a star on the bib, yellow rain boots,
 pigtails with yellow ties. She stands with her fists on her hips and stomps when she
@@ -418,11 +455,17 @@ shows her muscles, or points.
 
 > "I FIT!"
 > "The red light went GREEN! I fixed the internet! I'm a ENGINEER!"
-> "Is your car gray? Is your DOG gray? Do you have a dog?"
-> "I don't HAVE a dollar. I have a tooth."
+> "That's not an ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"
+> "I don't HAVE a dollar. I have a loose tooth. But it's not for sale. It's waiting for Daddy."
 > "They know something's up. They knew before I did. Chickens KNOW."
 > "I'm not worried about the General. I'm a LITTLE worried about Daddy. That's why I SENT her. He needs supervising."
 > "THIS IS MY WHISPER."
+> "SHH! Everybody SHH! ...CHICKENS. Three! No, FOUR! I can hear CHICKENS in there!"
+> "Mommy, I miss General Feathers. But Daddy needs her MORE. She's keeping an eye on him. He has to do what she SAYS."
+> "Not without my flashlight! I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."
+> "NO GIRLS ALLOWED? I'm not a girl. I'm a SISTER. That's a whole different thing."
+> "It said CORRECT! You can't say ten out of ten and then SHOOT people! ...It was a GOOD trap, though."
+> "Daddy's puzzle. He lets me do the three-letter ones. I always put HEN. It's right more than you'd think."
 
 ---
 
@@ -455,8 +498,8 @@ head of their own acts: [PUZZLES-egypt.md](PUZZLES-egypt.md) and
 
 **The middle of Nevada, the present (draft)**
 
-- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
-- THE MAN IN GRAY: stands in front of a government notice in the desert; can neither confirm nor deny the fence; wants nobody to read what is behind him, and is no match for a seven-year-old.
+- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing, and keeps hens out back; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
+- THE MAN IN GRAY: stands in front of a government notice in the desert; can neither confirm nor deny the fence, a dog, or General Washington; wants nobody to read what is behind him, and is no match for a seven-year-old.
 
 ---
 
@@ -493,10 +536,12 @@ say about their own times is in the tables at the end of
 | Sliced bread was first sold on 7 July 1928, in Chillicothe, Missouri | `home.note.solve.2` (it is the password) | **Checked** |
 | Atomic bombs were tested in Nevada from 1951 until 1992 | `nevada.notice.big.1` | **Checked** (first test 27 January 1951; last underground test 23 September 1992) |
 | The first message sent on the network that became the internet was "LO": they were typing LOGIN and it crashed. October 1969 | `home.pc.offline.bigsis` | Headlines agree |
-| Nevada became a state on 31 October 1864 | `nevada.arrive.2` | Headlines agree |
-| Julius Caesar was killed on the Ides of March, 44 B.C. | `nevada.gate.2` | Headlines agree. (Read by the writer of the Rome act: the first row of the table in [PUZZLES-rome.md](PUZZLES-rome.md)) |
+| Nevada became a state on 31 October 1864 | `nevada.arrive.2`; and `nevada.talk.mom.bigsis.quarter.b` ("The year Nevada became a state") | **Checked** (`us.nevada`). Abraham Lincoln, Proclamation 119, "Done at the city of Washington, this 31st day of October, A.D. 1864": https://www.presidency.ucsb.edu/node/202435 ; State of Nevada: https://jic.nv.gov/About/History_of_Nevada |
+| Julius Caesar was killed on the Ides of March, 44 B.C. | `nevada.gate.2`; and `nevada.gate.2f` ("The Ides of March") | Headlines agree. (Read by the writer of the Rome act: the first row of the table in [PUZZLES-rome.md](PUZZLES-rome.md)) |
 | Bartolomeo Cristofori built the first piano, in Florence, around 1700. It was called a harpsichord with soft and loud | `home.piano.look.bigsis`, `home.piano.look.bigsis2` | **Checked** (the fact-check of 7 October) |
 | The coin is a Roman denarius. In 44 B.C. coins were struck in Rome with Julius Caesar's own portrait, while he was alive | `nevada.coin.read.1`, `nevada.coin.read.2`, `item.coin.bigsis` | **Checked**, through a tool that fetches a page and quotes it (see below) |
+| The coin called a "penny" in Matthew 22:19 (King James Version) is, in the Greek, a denarius. The emperor then was Tiberius, so the coin brought to Jesus most likely bore his portrait | `nevada.coin.read.2c` | **Checked** (`rome.denarius.penny`). "Most likely" must stay: it may have been an older denarius, of Julius or of Augustus. https://biblehub.com/text/matthew/22-19.htm ; https://www.britannica.com/summary/Tiberius ; https://development.byustudies.byu.edu/article/coins-in-the-new-testament |
+| "In God We Trust" first appeared on a United States coin in 1864, on the two-cent piece | `nevada.talk.mom.bigsis.quarter.b` | **Checked** (`us.in.god.we.trust`). "First", not "since". U.S. Mint timeline: https://www.usmint.gov/learn/history/timeline ; Law Library of Congress: https://blogs.loc.gov/law/2013/04/in-god-we-trust/ |
 | A standard piano has eighty-eight keys | `home.sign.bigsis.2` (it solves Dad's riddle) | **Checked** (the fact-check of 7 October) |
 | A cassette can be wound by turning its hub with a pencil | `home.tape.need.bigsis`, `item.pencil.bigsis` | **Checked** (the fact-check of 7 October), once the lines stopped giving the pencil's six sides as the reason |
 | B.C. means "before Christ". A.D. is Latin: anno Domini, "in the year of the Lord" | `home.timeline.bigsis`, `home.timeline.bigsis2` | **Checked** (the fact-check of 7 October) |
@@ -506,14 +551,17 @@ say about their own times is in the tables at the end of
 | 1921 B.C.: Abram leaves Haran, and goes down into Egypt (Genesis 12:10) | `home.timeline.5` | The Bible's count (Ussher) |
 | 1491 B.C.: the Exodus | `home.timeline.6` | The Bible's count (Ussher) |
 | 44 B.C.: the Ides of March | `home.timeline.6` | Rome's own date, the same in every count (see the row for `nevada.gate.2`) |
+| 1921 B.C.: the year Abram went down into Egypt (Genesis 12:10). It is on her timeline | `nevada.gate.2b`; and `nevada.gate.2f` ("Abram in Egypt") | The Bible's count (Ussher), as `home.timeline.5`. Told in her own words; the verse's exact text is `kjv.gen12.10` in `briefs/out/facts-home.md` |
+| From 1921 B.C. to A.D. 2026 is "nearly four thousand years" (3,946: there is no year 0) | `nevada.gate.5` ("...Nearly four thousand years early.") | The sum given in `briefs/DATING.md`, done again by `briefs/out/nevada-check.mjs` |
 | John Adams and Thomas Jefferson died on the same day, 4 July 1826 | `home.talk.landing.bigsis.mom.2a` (Mom caps it: see her table) | **Checked** (the fact-check of 7 October) |
 | Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (The old-timer says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
 
 What the words mean:
 
-- **Checked**: read in the source named below. "The fact-check of 7 October" read each
-  such fact in at least two sources, and its report (with the addresses) is kept with
-  the project's working papers, not in the game.
+- **Checked**: read in the source named below, or in the row. "The fact-check of 7
+  October" read each such fact in at least two sources, and its report (with the
+  addresses) is kept with the project's working papers, not in the game; a name in
+  brackets, such as `us.nevada`, is that report's own name for the item.
 - **The Bible's count (Ussher)**: a year before Christ from the table in
   [How the game counts the years](#how-the-game-counts-the-years). That table is the
   author's rule for the game, and such a year is not a "fact to check" against a
@@ -546,7 +594,7 @@ Sources for the three that are checked:
 Pages whose headlines agree with the next three:
 
 - "LO": Paleofuture, [The First Internet Message Ever Sent Was "LO"](https://paleofuture.com/blog/2014/7/3/the-first-internet-message-ever-sent-was-lo); History of Information, [Charley Kline Sends the First Message Over the ARPANET](https://www.historyofinformation.com/detail.php?entryid=1108); This Day in Tech History, 29 October, [First Message on the Internet](https://thisdayintechhistory.com/10/29/first-message-on-the-internet/).
-- Nevada: History.com, This Day in History for 31 October, [the U.S. Congress admits Nevada as the 36th state](https://www.history.com/this-day-in-history/october-31/the-u-s-congress-admits-nevada-as-the-36th-state).
+- Nevada, before it was checked (its row now names the sources read): History.com, This Day in History for 31 October, [the U.S. Congress admits Nevada as the 36th state](https://www.history.com/this-day-in-history/october-31/the-u-s-congress-admits-nevada-as-the-36th-state).
 - The Ides of March: JURIST, [Julius Caesar assassinated on Ides of March](https://www.jurist.org/news/page/6531); History.com, This Day in History for 15 March, [The Ides of March](https://www.history.com/this-day-in-history/march-15/the-ides-of-march).
 
 ---
@@ -572,8 +620,14 @@ same rule as for her daughter: every one is true, and nothing goes on this list 
 | A cassette's tape is wound back in with a pencil in its hub | `home.tape.wind.1` (she does it) | **Checked** (the fact-check of 7 October) |
 | Archbishop Ussher's book of dates (his Annals) was published in 1650 | `home.timeline.2` | To check. It is the year the author's rule gives ("his Annals, 1650") |
 | The tune the Retreat's sound machine plays is in D major | `home.sound.look.mom`, `home.talk.retreat.mom.bigsis.key.a` | True of the game's own track (`retreat` in js/content/sound.js: five notes of D major) |
+| The thirty-first of October is Reformation Day: Martin Luther's Ninety-five Theses are dated 31 October 1517 | `nevada.arrive.2b` (she caps her daughter's "Halloween") | **Checked** (`us.reformation.day`). Never "to the very day": Luther's date is in the old calendar. https://www.britannica.com/print/article/415676 |
+| By the time he was sixteen George Washington had copied out 110 Rules of Civility | `nevada.agent.mom.5` (said to the man in gray, on her second try) | **Checked** (`us.washington.rules`). He copied them; he did not write them. https://blogs.loc.gov/teachers/2012/05/george-washington-living-the-rules-of-civility/ ; https://www.mountvernon.org/library/digitalhistory/digital-encyclopedia/article/the-rules-of-civility-and-decent-behaviour |
+| When the Constitution was signed, Benjamin Franklin said of the sun on the back of Washington's chair that it was "a rising and not a setting Sun" | `nevada.flash.sun` (only when it is Mom who holds the coin up) | **Checked** (`us.franklin.sun`). The seven words are James Madison's record of him, 17 September 1787, capital S and full stop included. The chair's sun is carved (National Park Service); Madison's word was "painted", so "carved" stays outside the quotation marks. https://avalon.law.yale.edu/18th_century/debates_917.asp ; https://www.nps.gov/articles/000/assembly-room-furnishings.htm |
+| Julius Caesar's coins bore his own portrait; American money bears the motto "In God We Trust" | `nevada.talk.mom.bigsis.quarter.a` | **Checked**: the portrait as in Big Sister's table (the coin); the motto `us.in.god.we.trust` (its sources are in Big Sister's table). She does not say whose face is on the quarter: "on the quarter since 1932" is no longer true of every quarter (`us.quarter`). |
+| B.C. means "before Christ" | `nevada.gate.2d` (she tells Little Sister) | **Checked** (`time.bc.ad`). https://www.britannica.com/topic/Christian-Era |
+| Genesis 12 is the chapter in which Abram goes down into Egypt | `nevada.gate.2e` ("Genesis 12. I have known that chapter all my life, darling.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She names the chapter and quotes nothing of it. |
 
-Three are worded with care on purpose.
+Four are worded with care on purpose.
 
 - Of the piano, "a full-size piano" (and Big Sister says "a standard piano"): a few
   pianos have more keys than eighty-eight, or fewer.
@@ -581,6 +635,9 @@ Three are worded with care on purpose.
 - Of the cassette, neither of them says that the pencil's six sides are why it fits.
   The fact-checker found pages that say a pencil fits the hub, and none that give the
   six sides as the reason. (Dad's pencil is six-sided in the picture, and that is fine.)
+- Of the sun on General Washington's chair she says "carved", which is right for the chair,
+  and quotes only Dr. Franklin's seven words. James Madison, who wrote them down, called
+  the sun "painted".
 
 ## Scripture quoted in the game
 
@@ -596,9 +653,18 @@ that each can be checked word for word, capitals and punctuation included.
 | Joshua 24:15, its last clause | "...as for me and my house, we will serve the LORD." | `home.sampler.mom` | Mom, at the sampler over the front door | **Checked** (the fact-check of 7 October) |
 | Psalm 46:1 | "God is our refuge and strength, a very present help in trouble." | `home.piano.use.mom2` | Mom, at the piano, after the hymn | **Checked** (the fact-check of 7 October) |
 | Matthew 23:37, nine words from the middle of the verse | "even as a hen gathereth her chickens under her wings" | `home.nest.mom` | Mom, at the nest in Little Sister's room. (No full stop inside the quotation marks: the verse goes on.) | Given as exact King James in the editor's brief; to check against a printed text |
+| Matthew 22:21, its second sentence | "Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." | `nevada.coin.read.2d` (the reference, "Matthew 22:21.", is in the same line) | Mom, when Big Sister reads the coin, in Nevada | **Checked** (`kjv.matt22.19-21`): https://www.bibleserver.com/KJV/Matthew22 ; https://biblehub.com/kjv/matthew/22.htm |
+| Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` (the reference, "Psalm 31, verse 15.", is in the same line) | Mom, at the end of Act Four, the second line after "Daddy's EARLY" | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close before the line's own colon and there is no full stop inside them. |
 
-Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5`,
-in Big Sister's own words).
-Named and not quoted: the hymn "A Mighty Fortress Is Our God" (`home.piano.use.mom`).
+Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5` and
+`nevada.gate.2b`, in Big Sister's own words; in Act Four her mother names the chapter,
+`nevada.gate.2e`, and quotes nothing of it).
+Named and not quoted: the hymn "A Mighty Fortress Is Our God" (`home.piano.use.mom`); and
+the hymn "O God, Our Help in Ages Past" (`nevada.talk.lilsis.mom.3b`: Mom is humming it
+in Nevada; the title is to confirm, under "To confirm" at the end of
+[PUZZLES-the-present.md](PUZZLES-the-present.md)).
 Quoted from documents, not from Scripture: "We the People" (the first three words of
-the Constitution) and "Remember the Ladies" (three words of Abigail Adams's letter).
+the Constitution), "Remember the Ladies" (three words of Abigail Adams's letter),
+"a rising and not a setting Sun." (seven words of Benjamin Franklin's, as James Madison
+recorded them at the signing of the Constitution: `nevada.flash.sun`) and "In God We
+Trust" (the motto: `nevada.talk.mom.bigsis.quarter.a`).

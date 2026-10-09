@@ -19,6 +19,7 @@
 // Measurements are fractions of the character's own height.
 
 import { Surface, ramp, pack, shifted } from "./pix.js";
+import { PaintSurface, faceOf, noise } from "./paint.js";
 
 const DEG = Math.PI / 180;
 
@@ -146,8 +147,8 @@ function skeleton(d, p) {
     const curl = fist ? 1.45 : q.flat ? 0.05 : (q.curl ?? 0.42);
     const fingers = unit(add(mul(hDir, Math.cos(curl)), mul(bendDir, Math.sin(curl))));
     const palm = add(wrist, mul(hDir, hl * 0.50)), tip = add(palm, mul(fingers, hl * (fist ? 0.26 : 0.50)));
-    // the thumb lies along the forward (or upper) edge of the hand
-    let edge = torso(Math.abs(hDir[2]) > 0.75 ? [0, 1, 0] : [0, 0, 1]);
+    // the thumb lies along the forward (or upper) edge of the hand, or wherever `thumb` says (an open hand held palm up has it outward)
+    let edge = torso(q.thumb || (Math.abs(hDir[2]) > 0.75 ? [0, 1, 0] : [0, 0, 1]));
     edge = unit(sub(edge, mul(hDir, dot3(edge, hDir))));
     const thumb0 = add(wrist, add(mul(hDir, hl * 0.20), mul(edge, d.handR * 0.62)));
     const thumb1 = add(thumb0, mul(unit(add(mul(hDir, 0.80), mul(edge, 0.60))), hl * (q.grip ? 0.20 : 0.30)));
@@ -222,23 +223,34 @@ const EYES = {
  * spec: who they are (see people.js). pose: how they are standing. yawDeg: the way they face.
  * size: their height in art pixels.
  * Returns a Surface whose anchor (ox, oy) is the point on the ground between the feet.
+ * opt.seat: draw only the seat that is drawn with this person (a stool, a lawn chair) and its shadow: see drawSeat.
+ * opt.paint: paint them (paint.js) instead of drawing them in pixels: { k: painted pixels to one picture pixel of the
+ *   stage (size is then their height in painted pixels), window: [x, y, w, h], only that part of the picture, measured
+ *   from the point between the feet (for a portrait) }. Each person's `paint` settings (people.js) say how they are painted.
  */
-export function drawFigure(spec, pose, yawDeg, size) {
+export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const d = spec.dim, S = size;
+  const only = opt && opt.seat ? new Set(spec.seatParts || [EXTRA3, EXTRA2]) : null;      // (the parts a seat is drawn as)
   // (spec.span and spec.tall make room for someone wide or tall with what they carry; spec.under, for something lying
   //  on the ground nearer to us than their feet, which is drawn below them)
+  const paint = opt && opt.paint ? opt.paint : null, win = paint && paint.window;
   const below = Math.ceil(S * (spec.under || 0));
   const W = (Math.ceil(S * (spec.span || 1.05)) + 14) & ~1, H = Math.ceil(S * (spec.tall || 1.2)) + 12 + below;
-  const ox = W / 2, oy = H - 6 - below;
-  const sf = new Surface(W, H, ox, oy);
+  const ox = win ? -win[0] : W / 2, oy = win ? -win[1] : H - 6 - below;
+  const sf = paint ? new PaintSurface(win ? win[2] : W, win ? win[3] : H, ox, oy, { k: paint.k || 1 }) : new Surface(W, H, ox, oy);
+  if (paint) sf.size = S;
   const th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th), TILT = 0.22;
   // character space to picture space. The camera looks slightly down, so nearer things sit lower.
   const P = (v) => { const dp = (v[0] * s + v[2] * c) * S; return [ox + (-v[0] * c + v[2] * s) * S, oy - v[1] * S + dp * TILT, dp]; };
   const R = (r) => Math.max(0.85, r * S);
   const J = skeleton(d, pose);
   const fine = S >= 84, coarse = S < 52;
+  // (painted, a person may have a head a little bigger than their skeleton's, its top where it was: a small child's)
+  const big = paint && spec.paint && spec.paint.head ? spec.paint.head : 1;
+  const HR = big !== 1 ? d.headR.map((v) => v * big) : d.headR, HC = big !== 1 ? add(J.head, [0, -(big - 1) * d.headR[1], 0]) : J.head;
 
   const limb = (a, b, ra, rb, mat, o) => {
+    if (only && !only.has(o && o.part)) return;
     const A = P(a), B = P(b);
     // hem (far end) and cuff (near end): the cloth stops in a straight edge, unless the limb points so nearly at the viewer that its end is what shows
     if (o && (o.hem || o.cuff)) { const long = Math.hypot(B[0] - A[0], B[1] - A[1]), min = o.hemMin ?? 1.4; o = { ...o, squareEnd: !!o.hem && long > R(rb) * min, squareStart: !!o.cuff && long > R(ra) * min }; }
@@ -246,6 +258,7 @@ export function drawFigure(spec, pose, yawDeg, size) {
   };
   // r3 = [half width, half height, half depth] in the part's own frame, which is turned by `psi` from the body
   const ball = (ctr, r3, mat, o = {}, psi = 0) => {
+    if (only && !only.has(o.part)) return;
     const C = P(ctr), a = th + psi, ca = Math.cos(a), sa = Math.sin(a);
     sf.ball(C[0], C[1], C[2], R(Math.hypot(r3[0] * ca, r3[2] * sa)), R(r3[1]), R(Math.hypot(r3[0] * sa, r3[2] * ca)), mat, o);
   };
@@ -260,6 +273,7 @@ export function drawFigure(spec, pose, yawDeg, size) {
   /** A line drawn on the cloth between two points in space, seen only where that part is on top. `facing` (optional)
       is the way that bit of cloth faces: the line is left out when it is on the far side of the figure. */
   const fold = (a, b, part, facing = null, by = 1) => {
+    if (only && !only.has(part)) return;
     if (facing && facing[0] * s + facing[2] * c < 0.12) return;
     const A = P(a), B = P(b);
     sf.stroke(A[0], A[1], B[0], B[1], by, part);
@@ -276,7 +290,8 @@ export function drawFigure(spec, pose, yawDeg, size) {
   };
 
   const skin = spec.skin, top = spec.top || {}, bottom = spec.bottom || {}, socks = spec.socks, shoes = spec.shoes || {};
-  const hair = spec.hair || {}, face = spec.face || {}, apron = spec.apron || null;
+  const hair = spec.hair || {}, apron = spec.apron || null;
+  const face = paint && spec.paint && spec.paint.shape ? { ...(spec.face || {}), ...spec.paint.shape } : spec.face || {};     // (painted, a face may be shaped a little differently: people.js `paint.shape`)
   const breath = pose.breath || 0;
   const tw = J.twist, ht = J.hipTwist, topMat = top.mat || skin, psi = tw * 0.6;
   const cloth = S * 0.014;                                              // cloth sits just outside whatever it covers
@@ -285,7 +300,8 @@ export function drawFigure(spec, pose, yawDeg, size) {
   // ----- shadow on the ground -----
   // (Someone sitting on a solid thing that the scene has painted, a step or a kerb or a stone bench, has no ground
   //  under the seat to throw a shadow on: theirs lies under their feet. `sit.solid` says so.)
-  if (pose.seated && spec.sit && spec.sit.solid) {
+  if (only) sf.oval(ox, oy - 0.5, S * (spec.seatShadow ?? 0.11), Math.max(1.5, S * 0.026), -1e8, SHADOW);     // (a seat by itself: its own shadow)
+  else if (pose.seated && spec.sit && spec.sit.solid) {
     const f = P(mix(J.R.ball, J.L.ball, 0.5)), wide = Math.abs(P(J.R.ball)[0] - P(J.L.ball)[0]) / 2;
     sf.oval(f[0], f[1] + 0.5, wide + S * 0.075, Math.max(1.5, S * 0.026), -1e8, SHADOW);
   } else sf.oval(ox, oy - 0.5, S * (spec.shadow || 0.18), Math.max(1.5, S * 0.032), -1e8, SHADOW);
@@ -377,14 +393,20 @@ export function drawFigure(spec, pose, yawDeg, size) {
     const top = { at: add(J.spine(d.waistY - 0.004 - slung), J.torso([0, 0, (d.bellyFwd || 0) * 0.6])), r2: waist2, turned: psi, u: -0.45 }, seat = { at: add(J.hipC, [0, 0.004, 0]), r2: hip2, turned: ht, u: 0 };
     const loose = { [PELVIS]: under, [LEG.R]: under, [LEG.L]: under, [SHORTS.R]: under, [SHORTS.L]: under };
     const cone = (A, B, o) => { const ra = widthAt(A.r2, A.turned), rb = widthAt(B.r2, B.turned); limb(A.at, B.at, ra, rb, bottom.mat, { part: SKIRT, depth: (depthAt(A.r2, A.turned) + depthAt(B.r2, B.turned)) / (ra + rb), over: loose, bias: S * 0.006, ...o }); };
-    if (pose.seated) {
+    // bands of color woven across the cloth: [from, to, material], measured down the legs as `len` is (sitBands, if given,
+    // are the ones that show sitting down: a band that runs round the shins makes no sense over crossed legs)
+    const bandAt = bottom.bands ? (u) => { for (const [a, b, m] of bottom.bands) if (u >= a && u < b) return m; return undefined; } : null;
+    if (pose.seated || pose.lap) {
       // Sitting, a skirt lies along the thighs and is stretched between them: a lap. An apron covers it.
+      // (`lap`: someone getting up, whose thighs are still far from upright.)
       const lap = apron ? apron.mat : bottom.mat, ease = 0.013, end = Math.min(1, len);
-      cone(top, seat, { squareEnd: true });
+      const sitBand = bottom.sitBands ? (u) => { for (const [a, b, m] of bottom.sitBands) if (u >= a && u < b) return m; return undefined; } : bandAt;
+      const woven = sitBand && !apron ? (u0, u1) => (t) => sitBand(lerp(u0, u1, t)) : () => null;
+      cone(top, seat, { squareEnd: true, fn: woven(top.u, 0) });
       for (const k of ["R", "L"]) {
         const L = J[k];
-        limb(L.hip, down(L, end), legAt(0) + ease, legAt(end) + ease, lap, { part: SKIRT, hem: len <= 1 });
-        if (len > 1) limb(L.knee, down(L, len), legAt(1) + ease, legAt(len) + ease, lap, { part: SKIRT, hem: true });
+        limb(L.hip, down(L, end), legAt(0) + ease, legAt(end) + ease, lap, { part: SKIRT, hem: len <= 1, fn: woven(0, end) });
+        if (len > 1) limb(L.knee, down(L, len), legAt(1) + ease, legAt(len) + ease, lap, { part: SKIRT, hem: true, fn: woven(1, len) });
       }
       // Seen from in front, a long robe would be one flat sheet from waist to feet. A draughtsman shows the knees:
       // the lap lies flat and light, a line runs from knee to knee where the cloth turns over them, and below
@@ -392,14 +414,14 @@ export function drawFigure(spec, pose, yawDeg, size) {
       const kr = P(J.R.knee), kl = P(J.L.knee), toward = (kr[2] + kl[2]) / 2 - P(J.hipC)[2];        // how far the knees come toward us
       const kneesOut = len > 1.05 && toward > S * 0.08;
       for (let u = 0.2; u < len + 0.07; u += 0.14) {                    // the cloth between the legs, all the way down
-        const at = Math.min(u, len), hangs = kneesOut && at > 1.04, r = legAt(at) + ease * 0.7;
-        limb(down(J.R, at), down(J.L, at), r, r, lap, hangs ? { part: SKIRT, tone: 2, depth: 0.35 } : { part: SKIRT, tone: 1 });
+        const at = Math.min(u, len), hangs = kneesOut && at > 1.04, r = legAt(at) + ease * 0.7, m = (sitBand && !apron && sitBand(at)) || lap;
+        limb(down(J.R, at), down(J.L, at), r, r, m, hangs ? { part: SKIRT, tone: 2, depth: 0.35 } : { part: SKIRT, tone: 1 });
       }
-      if (kneesOut && !coarse) {
+      if (kneesOut && !coarse && !only) {
         const drop = R(legAt(1) + ease) * 0.55, sag = Math.abs(kr[0] - kl[0]) * 0.10, mx = (kr[0] + kl[0]) / 2, my = (kr[1] + kl[1]) / 2 + drop + sag;
         sf.stroke(kr[0], kr[1] + drop, mx, my, 1, SKIRT); sf.stroke(mx, my, kl[0], kl[1] + drop, 1, SKIRT);
       }
-      if (len > 1.15) for (const k of ["R", "L"]) {                     // a long robe also falls from under the thighs to its hem: from the side it is one fall of cloth, not two trouser legs
+      if (len > 1.15 && !(pose.rising > 0)) for (const k of ["R", "L"]) {     // a long robe also falls from under the thighs to its hem: from the side it is one fall of cloth, not two trouser legs (not while getting up)
         const L = J[k], hemY = down(L, len)[1];
         for (const u of [0.20, 0.40, 0.60, 0.80, 1.0]) { const a = down(L, u), r = (legAt(u) + ease) * 0.86; if (a[1] - hemY > 0.03) limb(a, [a[0], hemY, a[2]], r, r, bottom.mat, { part: SKIRT, tone: 1, hem: true }); }
       }
@@ -419,11 +441,13 @@ export function drawFigure(spec, pose, yawDeg, size) {
       const stripe = bottom.stripe && !coarse ? bottom.stripe : null;
       for (let i = 0; i + 1 < rings.length; i++) {
         const A = rings[i], B = rings[i + 1], last = i === rings.length - 2;
-        const fn = pleats || stripe || apron ? (t, nx) => {
+        const fn = pleats || stripe || apron || bandAt ? (t, nx) => {
           const round = roundAt(nx, ht), low = lerp(A.u, B.u, t);
           const ap = apronOn(round, low);
           if (ap) return ap;
           if (stripe) for (const at of stripe.at) if (Math.abs(wrap(round - at)) < stripe.half) return stripe.mat;
+          const band = bandAt && bandAt(low);
+          if (band) return band;
           return pleats && Math.floor((Math.asin(clamp1(nx)) / Math.PI + 0.5) * bottom.pleats + 0.5) % 2 ? pleats : undefined;
         } : null;
         cone(A, B, { squareEnd: i > 0, fn });                           // each length ends in a straight edge (the next one's rounded top fills the join), and the last is the hem
@@ -491,14 +515,16 @@ export function drawFigure(spec, pose, yawDeg, size) {
     return back < low && back > low - strap ? bottom.mat : undefined;                        // a strap down each side of the back
   } : null;
   const stripe = top.stripe && !coarse ? top.stripe : null;             // stripes down the cloth, each at its own place round the body
+  const tBands = top.bands || null;                                     // bands woven across it: [from, to, material], measured down from the line of the shoulders
   const bibTop = apron && apron.bib ? d.shoulderY - apron.bib : null;   // an apron with a bib comes up the chest
-  const dressed = printed || bib || stripe || bibTop != null;
+  const dressed = printed || bib || stripe || bibTop != null || !!tBands;
   const clothAt = dressed ? (u, x, y) => {
     if (u < -1 || u > 1) return undefined;                              // plain cloth out past the trunk's own width
     const round = roundAt(u, psi);
     if (bibTop != null && !coarse && Math.abs(round) < (apron.half ?? 1.0) * 0.72 && TA[1] + (chestY - bibTop) * S < y) return apron.mat;
     if (stripe) for (const at of stripe.at) if (Math.abs(wrap(round - at)) < stripe.half) return stripe.mat;
     if (bib) { const m = bibAt(u, y); if (m) return m; }
+    if (tBands) { const below = rT * 0.80 - high(y); for (const [a, b, m] of tBands) if (below >= a && below < b) return m; }
     return printed ? flowers(round * 0.115, high(y), top.pattern) : undefined;
   } : null;
   const onCloth = clothAt ? (t, nx, ny, x, y) => clothAt(clamp1(nx), x, y) : null;
@@ -545,26 +571,26 @@ export function drawFigure(spec, pose, yawDeg, size) {
     }
     if (build === "strong") fold(trunkAt(d.shoulderY - 0.140, 0), trunkAt(d.waistY + 0.022, 0), TORSO, front);
     const nav = P(trunkAt(d.waistY - (d.paunch ? 0.012 : -0.004), 0, d.paunch ? d.paunch[2] * 0.3 : 0));
-    if (front[0] * s + front[2] * c > 0.5) sf.mark(nav[0] - 0.5, nav[1] - 0.5, 1, TORSO);
+    if (front[0] * s + front[2] * c > 0.5 && !only) sf.mark(nav[0] - 0.5, nav[1] - 0.5, 1, TORSO);
   }
   // neck, and what shows at the collar
   const neckR = d.neckR ?? 1;
-  limb(add(J.spine(d.shoulderY - 0.012), J.torso([0, 0, -0.004])), add(J.head, [0, -d.headR[1] * 0.55, -0.014]), 0.033 * neckR, 0.031 * neckR, skin, { part: NECK });
+  limb(add(J.spine(d.shoulderY - 0.012), J.torso([0, 0, -0.004])), add(HC, [0, -HR[1] * 0.55, -0.014]), 0.033 * neckR, 0.031 * neckR, skin, { part: NECK });
   if (top.mat && top.open) {
     const front = d.trunkTop[1];                         // the open neck: a narrow strip of chest, lying on the chest's own curve
-    limb(add(J.sh, J.torso([0, 0.012, front * 0.34])), add(J.sh, J.torso([0, -(top.open === true ? 0.046 : top.open), front * 0.95])), 0.021, 0.008, top.under || skin, { part: NECK, bias: cloth * 1.5 });
+    limb(add(J.sh, J.torso([0, 0.012, front * 0.34])), add(J.sh, J.torso([0, -(top.open === true ? 0.046 : top.open), front * 0.95])), 0.021, 0.008, top.under || skin, { part: NECK, bias: cloth * 1.5, keepNormal: true });
   }
   if (top.mat && top.band) {                             // a round collar: a band lying at the base of the neck, with two rounded points in front
     ball(add(J.sh, J.torso([0, -0.012, d.trunkTop[1] * 0.44])), [0.052, 0.026, 0.044], top.band, {
-      part: COLLAR, bias: cloth * 1.5,
+      part: COLLAR, bias: cloth * 1.5, keepNormal: true,
       fn: (ux, uy) => (ux * ux * 0.8 + (uy + 1.05) ** 2 < 0.62 || (Math.abs(ux) < 0.09 && uy > 0.05) ? null : undefined),
     }, tw);
   }
   if (top.mat && top.collar) {
     const cm = top.collar === true ? shifted(top.mat, -1) : top.collar, front = d.trunkTop[1];
-    for (const sd of [1, -1]) limb(add(J.sh, J.torso([sd * 0.026, 0.012, front * 0.30])), add(J.sh, J.torso([sd * 0.052, -0.016, front * 0.74])), 0.012, 0.008, cm, { part: COLLAR, bias: cloth * 1.5 });
+    for (const sd of [1, -1]) limb(add(J.sh, J.torso([sd * 0.026, 0.012, front * 0.30])), add(J.sh, J.torso([sd * 0.052, -0.016, front * 0.74])), 0.012, 0.008, cm, { part: COLLAR, bias: cloth * 1.5, keepNormal: 0.6 });
   }
-  if (top.buttons && fine) {                              // a row of buttons down the front
+  if (top.buttons && fine && !only) {                     // a row of buttons down the front
     const facing = trunkFacing(0);
     if (facing[0] * s + facing[2] * c > 0.35) for (let hgt = d.shoulderY - 0.075; hgt > hemY + 0.02; hgt -= 0.046) { const q = P(trunkAt(hgt, 0)); sf.dot(q[0] - 0.5, q[1] - 0.5, top.buttons.tones ? top.buttons.tones[1] : pack(top.buttons), TORSO); }
   }
@@ -602,7 +628,8 @@ export function drawFigure(spec, pose, yawDeg, size) {
       if (sleeves > 1) limb(A.shoulder, A.elbow, r0 + 0.005, r1 + 0.008, far(k, top.mat), { part: SLEEVE[k] });
       limb(sleeves > 1 ? A.elbow : A.shoulder, end, sleeves > 1 ? r1 + 0.008 : r0 + 0.005, (sleeves > 1 ? lerp(r1, r2, sleeves - 1) : lerp(r0, r1, sleeves)) + (top.cuff ?? 0.010), far(k, top.mat), {
         part: SLEEVE[k], hem: true,
-        fn: printed ? (t, nx) => (t <= 0 ? undefined : flowers(seed + Math.asin(clamp1(nx)) * 0.045, t * len, top.pattern)) : null,
+        fn: printed ? (t, nx) => (t <= 0 ? undefined : flowers(seed + Math.asin(clamp1(nx)) * 0.045, t * len, top.pattern))
+          : top.trim ? (t) => (t > 1 - (top.trimW ?? 0.30) ? far(k, top.trim) : undefined) : null,
       });
     }
     // the hand
@@ -614,27 +641,31 @@ export function drawFigure(spec, pose, yawDeg, size) {
   }
 
   // ----- head -----
-  const hy = J.headYaw, hr = d.headR, hc = J.head;
+  const hy = J.headYaw, hr = HR, hc = HC;
   const cpi = Math.cos(J.headPitch), spi = Math.sin(J.headPitch);
   const tipped = (v) => [v[0], v[1] * cpi - v[2] * spi, v[1] * spi + v[2] * cpi];           // the head's own nod
   const headPt = (v) => add(hc, turn(tipped(v), hy));                 // a point given in the head's own frame
   const hp = (x, y, z) => headPt([x * hr[0], y * hr[1], z * hr[2]]);  // the same, in fractions of the skull's half-sizes
   // from a point on the head as seen, back to the head's own directions: hairlines, hats and hoods turn and nod with it
   const onHead = (ux, uy, uz) => { const o = own(ux, uy, uz, hy); return [o[0], o[1] * cpi + o[2] * spi, -o[1] * spi + o[2] * cpi]; };
-  const hairAt = hair.where || (() => false);
+  // (painted, the edge of the hair is broken into locks and wisps, not cut like a helmet's)
+  const hairAt = paint && hair.where ? (x, y, z) => hair.where(x, y + 0.070 * noise(x * 4.6 + 3.1, z * 4.6 - 1.7) + 0.022 * noise(x * 11.0, z * 11.0 + 5.3), z) : hair.where || (() => false);
   const eyeY = face.eyeY ?? 0.06, eyeX = face.eyeX ?? 0.36, mouthY = face.mouthY ?? -0.74;
   const scalp = hair.mat && !hair.wig ? hair.mat : null;
   // The head is built of several shapes and shaded as one: flat, with a band of shade inside its outline on the side away from the light.
-  ball(hc, hr, skin, { part: HEAD, tone: 1, fn: scalp ? (ux, uy, uz) => { const o = onHead(ux, uy, uz); return hairAt(o[0], o[1], o[2]) ? scalp : undefined; } : null }, hy);
+  ball(hc, hr, skin, { part: HEAD, tone: 1, headShape: true, fn: scalp ? (ux, uy, uz) => { const o = onHead(ux, uy, uz); return hairAt(o[0], o[1], o[2]) ? scalp : undefined; } : null }, hy);
+  if (paint) { if (hair.mat) sf.hairMats.add(hair.mat); for (const mt of [face.beard, face.moustache, face.beardGrey]) if (mt) sf.hairMats.add(mt); }
   // the jaw: from the cheeks down and forward to the chin. A beard is the same shape in another color, starting lower.
   const jaw = face.jaw ?? 0.88, chin = face.chin ?? 0.50, chinY = face.chinY ?? -0.84, chinZ = face.chinZ ?? 0.54;
-  limb(hp(0, -0.22, 0.24), hp(0, chinY, chinZ), hr[0] * jaw, hr[0] * chin, face.shadow || skin, { part: HEAD, tone: 1 });
-  if (face.shadow) limb(hp(0, -0.20, 0.22), hp(0, -0.34, 0.30), hr[0] * (jaw + 0.01), hr[0] * (jaw - 0.02), skin, { part: HEAD, tone: 1 });      // an unshaven jaw: the cheeks above it are clean
+  limb(hp(0, -0.22, 0.24), hp(0, chinY, chinZ), hr[0] * jaw, hr[0] * chin, (!paint && face.shadow) || skin, { part: HEAD, tone: 1 });
+  if (face.shadow && !paint) limb(hp(0, -0.20, 0.22), hp(0, -0.34, 0.30), hr[0] * (jaw + 0.01), hr[0] * (jaw - 0.02), skin, { part: HEAD, tone: 1 });      // an unshaven jaw: the cheeks above it are clean
   if (face.beard) {
     const long = face.beardLen ?? 0;
-    limb(hp(0, -0.50, 0.30), hp(0, chinY - 0.04 - long, chinZ + 0.02), hr[0] * (jaw - 0.06), hr[0] * (chin + 0.06), face.beard, {
+    const [by, bz] = face.beardFrom || [-0.50, 0.30];                  // (where it starts on the cheeks: farther back, and the lips show above it in profile)
+    limb(hp(0, by, bz), hp(0, chinY - 0.04 - long, face.beardZ ?? chinZ + 0.02), hr[0] * (jaw - 0.06), hr[0] * (face.beardW ?? chin + 0.06), face.beard, {
       part: HAIR,                                                       // (a beard going grey: it is lighter over the chin)
       fn: face.beardGrey && fine ? (t, across) => (t > 0.56 && Math.abs(across) < 0.52 ? face.beardGrey : undefined) : null,
+      squareEnd: !!face.beardSquare,                                    // (trimmed square across the bottom; beardW: how broad it is there, beardZ: how far forward)
     });
   }
   if (face.jowl) ball(hp(0, -0.90, 0.26), [hr[0] * face.jowl, hr[1] * 0.26, hr[2] * 0.52], skin, { part: HEAD, tone: 1 }, hy);       // a second chin
@@ -646,16 +677,17 @@ export function drawFigure(spec, pose, yawDeg, size) {
   if (face.ears !== false) for (const sd of [1, -1]) if (!hairAt(sd * 0.99, -0.10, -0.08) || hair.ears) ball(hp(sd * 0.98, eyeY - 0.20, -0.08), [0.009, 0.019, 0.012].map((v) => v * (face.ear ?? 1)), skin, { part: EAR }, hy);
   if (hair.mat) {
     const g = hair.bulk ?? 1.07, g3 = Array.isArray(g) ? g : [g, g, g], up3 = hair.lift || [0, 0.003, 0];
+    const hairTex = paint && spec.paint && spec.paint.hairTexture !== undefined ? spec.paint.hairTexture : hair.texture;     // (painted, a texture of its own, laid on the head)
     if (g3[0] !== 1 || hair.wig) ball(headPt(up3), [hr[0] * g3[0], hr[1] * g3[1], hr[2] * g3[2]], hair.mat, {
-      part: HAIR,
-      fn: (ux, uy, uz, x, y) => { const o = onHead(ux, uy, uz); return !hairAt(o[0], o[1], o[2]) ? null : hair.texture ? hair.texture(o[0], o[1], o[2], x, y) : undefined; },
+      part: HAIR, headShape: true,
+      fn: (ux, uy, uz, x, y) => { const o = onHead(ux, uy, uz); return !hairAt(o[0], o[1], o[2]) ? null : hairTex ? hairTex(o[0], o[1], o[2], paint ? Math.floor(x / (paint.k || 1)) : x, paint ? Math.floor(y / (paint.k || 1)) : y) : undefined; },
     }, hy);
     // Thick hair, or a wig, stands out from the head: what shows between it and the cheek is the far side of it, seen from inside.
     if (g3[0] >= 1.14 || hair.wig) ball(headPt(up3), [hr[0] * g3[0], hr[1] * g3[1], hr[2] * g3[2]], shifted(hair.mat, 1), {
-      part: HAIR, bias: -R(hr[2] * g3[2]) * 1.25,
+      part: HAIR, bias: -R(hr[2] * g3[2]) * 1.25, headShape: true,
       fn: (ux, uy, uz) => { const o = onHead(ux, uy, -uz); return hairAt(o[0], o[1], o[2]) ? undefined : null; },
     }, hy);
-    for (const q of hair.puffs || []) ball(hp(q[0], q[1], q[2]), [hr[0] * q[3], hr[1] * q[4], hr[2] * q[5]], q[6] || hair.mat, { part: HAIR }, hy);
+    for (const q of hair.puffs || []) ball(hp(q[0], q[1], q[2]), [hr[0] * q[3], hr[1] * q[4], hr[2] * q[5]], q[6] || hair.mat, { part: HAIR, headShape: true }, hy);
   }
   if (face.wrap) {
     // Modern wrap-around sunglasses: one dark band across both eyes with a notch over the nose, and an arm back to each ear.
@@ -670,94 +702,105 @@ export function drawFigure(spec, pose, yawDeg, size) {
     }, hy);
   }
   const wrapMid = eyeY + 0.03;
-  if (face.moustache) for (const sd of [1, -1]) limb(hp(0, mouthY + 0.20, 1.02), hp(sd * (face.moustacheW ?? 0.33), mouthY + 0.10, 0.86), 0.0058, 0.0044, face.moustache, { part: HAIR });
+  if (face.moustache && !(paint && !face.beard)) for (const sd of [1, -1]) limb(hp(0, mouthY + 0.20, face.moustacheZ ?? 1.02), hp(sd * (face.moustacheW ?? 0.33), mouthY + 0.10, 0.86), 0.0058, 0.0044, face.moustache, { part: HAIR });
 
   // hats, hair that hangs, packs, bags and whatever else this character wears or carries
   const ctx = {
     sf, J, P, R, limb, ball, own, onHead, headPt, hp, wide, deep, widthAt, depthAt, roundAt, fold, trunkAt, trunkFacing, skirtAt, far, d, S, th, hy, tw, ht, fine, coarse, pose, spec, skin, cloth, under, farSide: farK,
+    px: paint ? paint.k || 1 : 1, painted: !!paint,                     // (painted: painted pixels to a picture pixel, for anything placed by the pixel)
     parts: { HEAD, HAIR, TORSO, PELVIS, SKIRT, EXTRA, EXTRA2, EXTRA3, HAT, NECK, ARM, HAND, LEG, FOOT, SLEEVE, DRAPE, DRAPE2, BELT, COLLAR, HELD, NOSE, EAR },
   };
   if (spec.extras) spec.extras(ctx);
+  if (only) {                                                           // a seat by itself: nothing more to draw
+    const held = Math.max(1, Math.round(S * 0.020));
+    return sf.finish({ reach: held, rim: fine && spec.rim !== false, outline: fine && spec.outline !== false, inset: () => 0, seams: () => false,
+      cast: (a, b) => (a === EXTRA2 || a === EXTRA3) && a !== b ? held : 0 });
+  }
 
-  // ----- face, placed pixel by pixel -----
-  // How much of a face there is room for depends on how many pixels wide the head is (a child's head is
-  // bigger than a grown-up's of the same height). Full: the eye patterns above, brows, lines. Middle: every
-  // eye is drawn the narrow way and the mouth is short. Small: a dot for each eye.
-  const headPx = 2 * hr[0] * S, faceFull = headPx >= FACE_FULL, faceFine = headPx >= FACE_MID;
-  const ang = th + hy, sideways = Math.sin(ang), frontOn = Math.abs(sideways) < 0.12 && Math.cos(ang) > 0;
-  const see = (v) => { const w = turn(tipped(v), hy); return w[0] * s + w[2] * c; };          // how much a head direction faces the viewer
-  const scr = (x, y, z) => P(hp(x, y, z));
-  const mid = scr(0, eyeY, 0.80)[0];                                    // the middle of the face, as seen
-  const mirror = (x) => Math.round(2 * mid) - 1 - x;
-  const eyeDark = pack(face.eye || "#2a1a12"), eyeWhite = pack(face.white || "#f6efe4"), lidTone = skin.tones[2], lineTone = pack(face.lid || "#5a3424");
-  const browTone = face.brows == null ? 0 : typeof face.brows === "string" ? pack(face.brows) : face.brows;
-  const shade = face.shades ? pack(face.shades) : 0;
-  const eyes = [];
-  for (const sd of [1, -1]) {
-    const vis = see(unit([sd * 0.25, 0, 0.97]));
-    if (vis < 0.20) continue;
-    const q = scr(sd * eyeX, eyeY, 0.80), w = faceFull && vis > 0.70 ? 2 : 1;
-    const right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;                    // which way is "away from the nose", as seen
-    eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis });
-  }
-  if (frontOn && eyes.length === 2) { eyes[1].x = mirror(eyes[0].x); eyes[1].y = eyes[0].y; }   // seen straight on, a face is the same on both sides
-  for (const e of eyes) {
-    const put = (i, j, color) => sf.dot(e.x + e.out * i, e.y + j, color, HEAD);
-    if (shade) {                                                                          // dark glasses: a lens over each eye
-      if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j, shade);
-      else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j, shade); }
-      else { put(0, 0, shade); put(1, 0, shade); }
-      continue;
-    }
-    if (!faceFine) { put(0, 0, pose.blink ? lidTone : eyeDark); continue; }
-    const kind = EYES[pose.blink ? (pose.squeeze ? "tight" : "shut") : face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;
-    rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) { const ch = row[i]; if (ch !== ".") put(i, j - kind.at, ch === "#" ? eyeDark : ch === "o" ? eyeWhite : ch === "=" ? lineTone : lidTone); } });
-    if (browTone && (faceFull || !kind.at)) {                                             // (on a middle-sized face a lid line does for the brow as well)
-      const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, tilt = faceFull ? (pose.blink && pose.squeeze ? 1 : face.browTilt || 0) : 0;     // (eyes squeezed shut pull the brows down toward the nose)
-      for (let i = 0; i < n; i++) put(i - (n > 3 ? 1 : 0), -up + (tilt > 0 && i === 0 ? 1 : tilt < 0 && i === n - 1 ? 1 : 0), browTone);
-    }
-    if (face.freckles && faceFull) { put(0, 3, lidTone); put(2, 4, lidTone); }
-  }
-  if (face.wrap && face.glint !== false && S >= 52) {
-    // one small glint on the dark glasses, at the upper corner (toward the light) of whichever lens is farthest left as we see it
-    let best = null;
-    for (const sd of [1, -1]) { if (see(unit([sd * 0.45, 0, 0.89])) < 0.30) continue; const q = scr(sd * 0.46, wrapMid + 0.07, 0.90); if (!best || q[0] < best[0]) best = q; }
-    if (best) { const gx = Math.round(best[0] - 0.5), gy = Math.round(best[1] - 0.5), glint = pack(face.glint || "#c4cdea"); sf.dot(gx, gy, glint, HAT); if (faceFull) sf.dot(gx - 1, gy, glint, HAT); }
-  }
-  // seen from the side, glasses show the arm that runs back to the ear
-  if (shade && eyes.length === 1 && faceFine) for (let i = 2; i <= 5; i++) sf.dot(eyes[0].x + eyes[0].out * i, eyes[0].y - 1, shade, HEAD);
-  // the mouth: a line from corner to corner when shut; open shapes for talking
-  if (face.mouth !== false && !coarse && see([0, 0, 1]) > 0.10) {
-    const mw = face.mouthW ?? 0.22, mz = 0.95;
-    const pts = [scr(-mw, mouthY, mz - 0.12), scr(0, mouthY, mz + (Math.abs(sideways) > 0.6 ? 0.06 : 0)), scr(mw, mouthY, mz - 0.12)].filter((q, i) => i === 1 || see(unit([(i - 1) * 0.5, 0, 0.87])) > 0.25);
-    let x0 = Infinity, x1 = -Infinity;
-    for (const q of pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); }
-    const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = pose.mouth || 0;
-    let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
-    if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
-    else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
-    const lip = pack(face.lip || "#8a4636"), inside = pack("#3a1612"), on = face.beard ? HAIR : HEAD, smile = face.smile || 0;
-    const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
-    if (!hidden) for (let x = a; x <= b; x++) {
-      const end = faceFine && b - a >= 2 && (x === a || x === b) && Math.abs(sideways) < 0.6;
-      if (open === 0) sf.dot(x, y - (end ? smile : 0), lip, on);
-      else if (!end || open > 1) { sf.dot(x, y, inside, on); if (open > 1) sf.dot(x, y + 1, x === a || x === b ? lip : inside, on); }
-      else sf.dot(x, y, lip, on);
-    }
-    if (face.lips && faceFull && open === 0 && !hidden) for (let x = a + (b - a >= 2 ? 1 : 0); x <= b - (b - a >= 2 ? 1 : 0); x++) sf.dot(x, y + 1, pack(face.lips), on);       // a painted lower lip
-  }
-  // the lines of an older face: from the nose to the corners of the mouth, across the forehead, under the eyes
-  if (face.lines && faceFull) {
-    const n = face.lines;
+  // ----- the face -----
+  // Painted (paint.js): the features are painted onto the head where it is, as the picture is finished.
+  if (paint) sf.head = { hc, hy, cpi, spi, hr, S, th, ox, oy, tilt: TILT, spec, pose, skin, face: faceOf(spec) };
+  else {
+    // ----- face, placed pixel by pixel -----
+    // How much of a face there is room for depends on how many pixels wide the head is (a child's head is
+    // bigger than a grown-up's of the same height). Full: the eye patterns above, brows, lines. Middle: every
+    // eye is drawn the narrow way and the mouth is short. Small: a dot for each eye.
+    const headPx = 2 * hr[0] * S, faceFull = headPx >= FACE_FULL, faceFine = headPx >= FACE_MID;
+    const ang = th + hy, sideways = Math.sin(ang), frontOn = Math.abs(sideways) < 0.12 && Math.cos(ang) > 0;
+    const see = (v) => { const w = turn(tipped(v), hy); return w[0] * s + w[2] * c; };          // how much a head direction faces the viewer
+    const scr = (x, y, z) => P(hp(x, y, z));
+    const mid = scr(0, eyeY, 0.80)[0];                                    // the middle of the face, as seen
+    const mirror = (x) => Math.round(2 * mid) - 1 - x;
+    const eyeDark = pack(face.eye || "#2a1a12"), eyeWhite = pack(face.white || "#f6efe4"), lidTone = skin.tones[2], lineTone = pack(face.lid || "#5a3424");
+    const browTone = face.brows == null ? 0 : typeof face.brows === "string" ? pack(face.brows) : face.brows;
+    const shade = face.shades ? pack(face.shades) : 0;
+    const eyes = [];
     for (const sd of [1, -1]) {
-      if (see(unit([sd * 0.5, 0, 0.87])) < 0.35) continue;
-      const a = scr(sd * 0.26, eyeY - 0.50, 0.93), b = scr(sd * 0.38, mouthY + 0.10, 0.86);
-      sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD);
-      if (n > 1) { const e0 = scr(sd * 0.22, eyeY - 0.20, 0.84), e1 = scr(sd * 0.52, eyeY - 0.16, 0.80); sf.stroke(e0[0], e0[1], e1[0], e1[1], 1, HEAD); }
+      const vis = see(unit([sd * 0.25, 0, 0.97]));
+      if (vis < 0.20) continue;
+      const q = scr(sd * eyeX, eyeY, 0.80), w = faceFull && vis > 0.70 ? 2 : 1;
+      const right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;                    // which way is "away from the nose", as seen
+      eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis });
     }
-    if (n > 1 && see([0, 0, 1]) > 0.3 && !hairAt(0, 0.50, 0.86)) { const a = scr(-0.34, eyeY + 0.52, 0.84), b = scr(0.34, eyeY + 0.52, 0.84); sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD); }
-  }
+    if (frontOn && eyes.length === 2) { eyes[1].x = mirror(eyes[0].x); eyes[1].y = eyes[0].y; }   // seen straight on, a face is the same on both sides
+    for (const e of eyes) {
+      const put = (i, j, color) => sf.dot(e.x + e.out * i, e.y + j, color, HEAD);
+      if (shade) {                                                                          // dark glasses: a lens over each eye
+        if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j, shade);
+        else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j, shade); }
+        else { put(0, 0, shade); put(1, 0, shade); }
+        continue;
+      }
+      if (!faceFine) { put(0, 0, pose.blink ? lidTone : eyeDark); continue; }
+      const kind = EYES[pose.blink ? (pose.squeeze ? "tight" : "shut") : face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;
+      rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) { const ch = row[i]; if (ch !== ".") put(i, j - kind.at, ch === "#" ? eyeDark : ch === "o" ? eyeWhite : ch === "=" ? lineTone : lidTone); } });
+      if (browTone && (faceFull || !kind.at)) {                                             // (on a middle-sized face a lid line does for the brow as well)
+        const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, tilt = faceFull ? (pose.blink && pose.squeeze ? 1 : face.browTilt || 0) : 0;     // (eyes squeezed shut pull the brows down toward the nose)
+        for (let i = 0; i < n; i++) put(i - (n > 3 ? 1 : 0), -up + (tilt > 0 && i === 0 ? 1 : tilt < 0 && i === n - 1 ? 1 : 0), browTone);
+      }
+      if (face.freckles && faceFull) { put(0, 3, lidTone); put(2, 4, lidTone); }
+    }
+    if (face.wrap && face.glint !== false && S >= 52) {
+      // one small glint on the dark glasses, at the upper corner (toward the light) of whichever lens is farthest left as we see it
+      let best = null;
+      for (const sd of [1, -1]) { if (see(unit([sd * 0.45, 0, 0.89])) < 0.30) continue; const q = scr(sd * 0.46, wrapMid + 0.07, 0.90); if (!best || q[0] < best[0]) best = q; }
+      if (best) { const gx = Math.round(best[0] - 0.5), gy = Math.round(best[1] - 0.5), glint = pack(face.glint || "#c4cdea"); sf.dot(gx, gy, glint, HAT); if (faceFull) sf.dot(gx - 1, gy, glint, HAT); }
+    }
+    // seen from the side, glasses show the arm that runs back to the ear
+    if (shade && eyes.length === 1 && faceFine) for (let i = 2; i <= 5; i++) sf.dot(eyes[0].x + eyes[0].out * i, eyes[0].y - 1, shade, HEAD);
+    // the mouth: a line from corner to corner when shut; open shapes for talking
+    if (face.mouth !== false && !coarse && see([0, 0, 1]) > 0.10) {
+      const mw = face.mouthW ?? 0.22, mz = 0.95;
+      const pts = [scr(-mw, mouthY, mz - 0.12), scr(0, mouthY, mz + (Math.abs(sideways) > 0.6 ? 0.06 : 0)), scr(mw, mouthY, mz - 0.12)].filter((q, i) => i === 1 || see(unit([(i - 1) * 0.5, 0, 0.87])) > 0.25);
+      let x0 = Infinity, x1 = -Infinity;
+      for (const q of pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); }
+      const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = pose.mouth || 0;
+      let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
+      if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
+      else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
+      const lip = pack(face.lip || "#8a4636"), inside = pack("#3a1612"), on = face.beard ? HAIR : HEAD, smile = face.smile || 0;
+      const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
+      if (!hidden) for (let x = a; x <= b; x++) {
+        const end = faceFine && b - a >= 2 && (x === a || x === b) && Math.abs(sideways) < 0.6;
+        if (open === 0) sf.dot(x, y - (end ? smile : 0), lip, on);
+        else if (!end || open > 1) { sf.dot(x, y, inside, on); if (open > 1) sf.dot(x, y + 1, x === a || x === b ? lip : inside, on); }
+        else sf.dot(x, y, lip, on);
+      }
+      if (face.lips && faceFull && open === 0 && !hidden) for (let x = a + (b - a >= 2 ? 1 : 0); x <= b - (b - a >= 2 ? 1 : 0); x++) sf.dot(x, y + 1, pack(face.lips), on);       // a painted lower lip
+    }
+    // the lines of an older face: from the nose to the corners of the mouth, across the forehead, under the eyes
+    if (face.lines && faceFull) {
+      const n = face.lines;
+      for (const sd of [1, -1]) {
+        if (see(unit([sd * 0.5, 0, 0.87])) < 0.35) continue;
+        const a = scr(sd * 0.26, eyeY - 0.50, 0.93), b = scr(sd * 0.38, mouthY + 0.10, 0.86);
+        sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD);
+        if (n > 1) { const e0 = scr(sd * 0.22, eyeY - 0.20, 0.84), e1 = scr(sd * 0.52, eyeY - 0.16, 0.80); sf.stroke(e0[0], e0[1], e1[0], e1[1], 1, HEAD); }
+      }
+      if (n > 1 && see([0, 0, 1]) > 0.3 && !hairAt(0, 0.50, 0.86)) { const a = scr(-0.34, eyeY + 0.52, 0.84), b = scr(0.34, eyeY + 0.52, 0.84); sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD); }
+    }
 
+  }
   // Lines the eye expects: between the two legs, between an arm and the body it hangs against,
   // and a thin shadow under the edge of a sleeve, a pair of shorts, a skirt or an untucked shirt.
   const armR = (q) => q === ARM.R || q === SLEEVE.R, armL = (q) => q === ARM.L || q === SLEEVE.L;
@@ -905,13 +948,15 @@ export function standPose(f = 0, o = {}) {
  *   8 an open hand     9 both hands waving              10 pointing straight ahead   11 a finger in the air
  *   12 arms folded     13 a hand cupped to the ear      14 a shaken fist             15 waving something away
  *   16 wiping the brow 17 counting on the fingers       18 both hands spread wide    19 a thumb over the shoulder
+ *   20 a nod aside, toward something off to that side (the river, the road), the open hand following it
+ *   21 a hand raised in blessing, open, the palm toward the listener
  * o.hand ("R" or "L") is the hand that makes one-handed gestures: the other may be holding something.
  */
 export function talkPose(f = 0, g = 0, o = {}) {
   const wob = Math.sin((2 * Math.PI * f) / 6), p = standPose(f, o), d = o.dim || ADULT, sp = spots(d);
   const H = o.hand === "L" ? "L" : "R", sd = H === "R" ? 1 : -1, O = H === "R" ? "L" : "R";
   const both = (make) => { p.R = { ...legs("R"), ...make(1) }; p.L = { ...legs("L"), ...make(-1) }; };
-  const legs = (side) => { const q = { ...p[side] }; for (const k of ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl", "finger", "point", "flat"]) delete q[k]; return q; };   // an arm let go of whatever the stance had it doing
+  const legs = (side) => { const q = { ...p[side] }; for (const k of ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl", "finger", "point", "flat", "thumb"]) delete q[k]; return q; };   // an arm let go of whatever the stance had it doing
   const free = (side) => ({ ...legs(side), arm: side === "R" ? [0.05, 0.10] : [-0.02, 0.10], elbow: 0.16 });
   if (g === 1) {                    // one hand up, making a point
     p[H] = { ...legs(H), arm: [0.42, 0.16], elbow: 1.75 + 0.18 * wob };
@@ -979,6 +1024,12 @@ export function talkPose(f = 0, g = 0, o = {}) {
   } else if (g === 19) {            // a thumb jerked back over the shoulder: "up there", "that way"
     p[H] = { ...legs(H), hand: [sd * (d.shoulderW + 0.004), -0.004 + 0.008 * wob, 0.060], bend: [sd * 0.35, -1, 0.35], grip: true, point: [0, 0.6, -0.8] };
     p.head = { nod: 0.0, turn: sd * 0.14 };
+  } else if (g === 20) {            // a nod aside, toward something off to that side: the head turns and dips, the open hand follows low
+    p[H] = { ...legs(H), arm: [0.28, 0.42], fore: [sd * 0.80, -0.22 + 0.04 * wob, 0.55], flat: true, thumb: [0, 1, 0] };
+    p.head = { nod: 0.10 + 0.05 * Math.max(0, wob), turn: sd * 0.62 };
+  } else if (g === 21) {            // a hand raised in blessing: the forearm upright, the hand open, its palm toward the listener
+    p[H] = { ...legs(H), arm: [0.95 + 0.04 * wob, 0.80], fore: [sd * 0.08, 0.99, 0.06], flat: true, point: [0, 1, 0.04], thumb: [-sd, 0, 0] };
+    p.head = { nod: 0.03 + 0.015 * wob };
   } else p.head = { nod: 0.035 * wob };
   void free;
   p.gesture = g;                                                      // (for whatever a character carries that belongs to one gesture)
@@ -1038,6 +1089,33 @@ export function prayPose(o = {}) {
   return p;
 }
 
+/**
+ * Dazzled: a sudden glare in the eyes (the low sun off a mirror). The body pulls back from it, the head turns a little
+ * away and drops, the eyes are screwed shut, and one hand comes up flat to the brow to shade them; the other lifts a
+ * little, half startled. A still pose. o: dim, lean, stance, and hand ("R" or "L"): the hand that shades.
+ */
+export function shadePose(o = {}) {
+  const d = o.dim || ADULT, H = o.hand === "L" ? "L" : "R", sd = H === "R" ? 1 : -1, O = H === "R" ? "L" : "R";
+  const p = standPose(0, { stance: o.stance, dim: d, lean: (o.lean ?? 0.02) - 0.07 });
+  const keep = (q) => ({ leg: q.leg, knee: q.knee });
+  p.twist = -sd * 0.12;
+  p.breath = 1;                                                       // (the shoulders come up)
+  p.head = { nod: 0.13, turn: -sd * 0.40 };                           // away from the shading hand, and down
+  p[O] = { ...keep(p[O]), arm: [0.14, 0.20], elbow: 0.50 };
+  // Where the brow is, with the head turned and bowed so: the hand lies flat over the eyes like the peak of a cap, from
+  // the near temple across and a little forward, and the elbow stands out to the side, below it.
+  const J = skeleton(d, p), hr = d.headR, cpi = Math.cos(J.headPitch), spi = Math.sin(J.headPitch);
+  const headDir = (v) => turn([v[0], v[1] * cpi - v[2] * spi, v[1] * spi + v[2] * cpi], J.headYaw);
+  const cL = Math.cos(J.lean), sL = Math.sin(J.lean), cT = Math.cos(J.twist), sT = Math.sin(J.twist);
+  const toTorso = (w) => { const v1 = w[1] * cL + w[2] * sL, f = -w[1] * sL + w[2] * cL; return [w[0] * cT - f * sT, v1, w[0] * sT + f * cT]; };     // (torso() turned back)
+  const wrist = toTorso(sub(add(J.head, headDir([sd * hr[0] * 1.02, hr[1] * 0.64, hr[2] * 0.80])), J.sh));
+  p[H] = { ...keep(p[H]), hand: wrist, bend: [sd, -0.25, 0.35], flat: true, point: toTorso(headDir([-sd * 0.80, 0.02, 0.60])), thumb: toTorso(headDir([0, -1, 0])) };
+  p.blink = true;
+  p.squeeze = true;
+  p.shading = 1;
+  return p;
+}
+
 /** Part of the way from one pose to another, for easing into a pose and out of it: e runs from 0 (the first) to 1
     (the second). A hand travels from where it was to where it will be and the elbow follows; the rest goes in step. */
 function between(d, a, b, e) {
@@ -1060,7 +1138,7 @@ function between(d, a, b, e) {
 
 /** Heights of things to sit on, as fractions of a grown person's height: a step is a step whoever sits on it. */
 const SEATS = { chair: 0.262, bench: 0.294, stool: 0.150, step: 0.105 };
-const ARM_KEYS = ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl", "finger", "point", "flat"];
+const ARM_KEYS = ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl", "finger", "point", "flat", "thumb"];
 
 /**
  * Sitting. o.seat says on what:
@@ -1072,7 +1150,8 @@ const ARM_KEYS = ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl"
  *   or a number: the height of the seat, as a fraction of a grown person's height.
  * o.gesture: 0 at rest; 1 talking, with this person's own main gesture (o.main); any other number is that
  * gesture from talkPose, made sitting down. o.dim is the build and o.height the sitter's height (1 for an adult).
- * o.lean, o.knees (how far apart) and o.feet (how far out in front) adjust the way of sitting.
+ * o.lean, o.knees (how far apart) and o.feet (how far out in front) adjust the way of sitting; o.nod tips the head
+ * (less than 0: looking up, as someone on the ground does at whoever stands talking to them).
  * The figure's anchor is the point on the ground under the hips.
  */
 export function sitPose(f = 0, o = {}) {
@@ -1091,13 +1170,13 @@ export function sitPose(f = 0, o = {}) {
       leg: [pitch, roll], shin: [sd * Math.sin(roll) * 0.25, -Math.cos(tilt), Math.sin(tilt)], foot: 0, footYaw: low && !lowest ? 0.36 : 0.14,
       hand: [sd * (d.hipW + Math.sin(roll) * d.thigh * 0.80), sp.hip - Math.cos(pitch) * d.thigh * 0.80 + 0.042, Math.sin(pitch) * d.thigh * 0.80 + 0.012], bend: [sd, -0.3, -0.6], curl: 0.6,     // a hand resting on each knee
     });
-    p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.62 - h, breath: br, lean: o.lean ?? (low ? 0.10 : -0.08), R: side(1), L: side(-1), head: { nod: low ? -0.02 : 0.06 } };
+    p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.62 - h, breath: br, lean: o.lean ?? (low ? 0.10 : -0.08), R: side(1), L: side(-1), head: { nod: o.nod ?? (low ? -0.02 : 0.06) } };
   } else {
     const side = (sd) => ({
       leg: [1.42, 0.86], shin: [-sd * 0.9, -0.12, -0.36], footYaw: -1.35, foot: 0,
       hand: [sd * 0.060, sp.hip + 0.070, sp.belly + 0.100], bend: [sd, -0.4, -0.5], curl: 0.7,         // hands come together over the lap
     });
-    p = { seated: true, breath: br, lean: o.lean ?? 0.05, R: side(1), L: side(-1), head: { nod: 0 } };
+    p = { seated: true, breath: br, lean: o.lean ?? 0.05, R: side(1), L: side(-1), head: { nod: o.nod ?? 0 } };
   }
   if (g) {
     // The gesture's arms on the sitting body: any arm the gesture does not use stays where it was resting.
@@ -1111,6 +1190,29 @@ export function sitPose(f = 0, o = {}) {
     if (t.head) p.head = { nod: (p.head.nod || 0) + (t.head.nod || 0), turn: t.head.turn || 0 };
     if (which === 0) p.head = { nod: (p.head.nod || 0) + 0.035 * Math.sin((2 * Math.PI * f) / 6) };
   }
+  return p;
+}
+
+/**
+ * Sitting in prayer: the hands lifted a little in front, open, palms up; the head bowed and the eyes shut. It is this
+ * person's own way of sitting (o: as for sitPose) with the arms and the head changed. o.pray says how:
+ *   high   how high the hands are: 0 just over the lap, 1 level with the chin (0.70 if not given)
+ *   out    how far in front of the chest (0.08)        apart   how far apart (0.050)        bow   how far the head is bowed (0.32)
+ */
+export function sitPrayPose(o = {}) {
+  const d = o.dim || ADULT, sp = spots(d), how = o.pray || {}, high = how.high ?? 0.70;
+  const p = sitPose(0, { ...o, gesture: 0 });
+  const y = lerp(sp.waist - 0.010, sp.chinY - 0.030, high), z = sp.chest + (how.out ?? 0.08), x = how.apart ?? 0.050;
+  for (const [k, sd] of [["R", 1], ["L", -1]]) {
+    const q = { ...p[k] };
+    for (const name of ARM_KEYS) delete q[name];
+    p[k] = { ...q, hand: [sd * x, y, z], bend: [sd * 0.6, -1, -0.1], flat: true, point: [sd * 0.40, 0.75, 0.55], thumb: [sd, 0, 0] };
+  }
+  p.breath = 0;
+  p.lean = (p.lean || 0) + (how.lean ?? 0.04);
+  p.head = { nod: how.bow ?? 0.32 };
+  p.blink = true;
+  p.praying = 1;
   return p;
 }
 
@@ -1150,23 +1252,460 @@ export const poses = {
   talk: (spec, f, g) => { const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o))); },
   /** (A figure in the game is in prayer when its "act" is one called "pray", counted from 2 to 3 so that it is never
       taken for a reach: see Figure.pray in js/engine/cast.js.) */
-  reach: (spec, k, low) => low === "pray" ? poses.pray(spec, k >= 2 ? k - 2 : k) : holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
-  /** In prayer, the way this character prays (spec.pray: see prayPose). k eases from standing (0) into the pose (1). */
+  /** (A figure in the game is shading its eyes when its "act" is one called "shade", counted from 4 to 5: see Figure.shade.) */
+  reach: (spec, k, low) => low === "pray" ? poses.pray(spec, k >= 2 ? k - 2 : k) : low === "shade" ? poses.shade(spec, k >= 4 ? k - 4 : k) : holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
+  /** In prayer, the way this character prays (spec.pray: see prayPose, and sitPrayPose for someone found sitting).
+      k eases from standing, or sitting, (0) into the pose (1). */
   pray: (spec, k = 1) => {
-    const full = holding(spec, prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray }));
+    const seated = !!spec.seated;
+    const full = holding(spec, seated ? sitPrayPose({ ...sitHow(spec), pray: spec.pray }) : prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray }));
     if (k >= 1) return full;
-    const from = poses.stand(spec, 0);
+    const from = seated ? poses.sit(spec, 0) : poses.stand(spec, 0);
     if (!(k > 0)) return from;
     const e = k * k * (3 - 2 * k), p = holding(spec, between(spec.dim, from, full, e));
     p.blink = e > 0.5; p.squeeze = !!full.squeeze && e > 0.5; p.praying = e;
     return p;
   },
+  /** Dazzled, a hand flat to the brow (see shadePose): for someone standing. k comes up from standing (0) to the pose (1), quickly. */
+  shade: (spec, k = 1) => {
+    const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) };
+    const full = holding(spec, resting(spec, shadePose(o), standPose(0, o)));
+    if (k >= 1) return full;
+    const from = poses.stand(spec, 0);
+    if (!(k > 0)) return from;
+    const e = 1 - (1 - k) * (1 - k), p = holding(spec, between(spec.dim, from, full, e));
+    p.blink = p.squeeze = e > 0.35; p.shading = e;
+    return p;
+  },
   /** o.gesture: 0 at rest; 1 talking, with this character's own main gesture; another number is that gesture. o.seat overrides what they sit on. */
   sit: (spec, f, o = {}) => {
-    const how = { ...(spec.sit || {}), ...o, dim: spec.dim, height: spec.height, seat: o.seat || (spec.sit && spec.sit.seat) || seatOf(spec), main: o.main ?? mainGesture(spec), hand: freeHand(spec) };
+    const how = sitHow(spec, o);
     return holding(spec, resting(spec, sitPose(f, how), sitPose(f, { ...how, gesture: 0 })));
   },
 };
+/** How this character sits: their own `sit` settings, with whatever `o` changes. */
+function sitHow(spec, o = {}) {
+  return { ...(spec.sit || {}), ...o, dim: spec.dim, height: spec.height, seat: o.seat || (spec.sit && spec.sit.seat) || seatOf(spec), main: o.main ?? mainGesture(spec), hand: freeHand(spec) };
+}
+
+// =====================================================================================
+// Getting up and sitting down, and the small things people do where they are
+// =====================================================================================
+// Someone found sitting can stand up and sit down again (Figure.sit in js/engine/cast.js), and everyone has a few small
+// movements of their own (Figure.fidget). The rig draws every moment of them; the engine plays them on the game clock.
+
+const VIEW_TILT = 0.22;                                                 // (as in drawFigure: how far down the picture a step toward us goes)
+const smooth = (k) => k * k * (3 - 2 * k);
+const span = (k, a, b) => (k <= a ? 0 : k >= b ? 1 : (k - a) / (b - a));
+const cloneP = (p) => ({ ...p, R: { ...(p.R || {}) }, L: { ...(p.L || {}) }, head: { ...(p.head || {}) } });
+/** A pose with one arm changed: the leg on that side as it was, the arm as `q` says. */
+const withArm = (p, side, q) => { const o = { ...p[side] }; for (const name of ARM_KEYS) delete o[name]; p[side] = { ...o, ...q }; return p; };
+/** From a point in a figure's own space back to its torso's space (measured from the middle of the shoulders), for a skeleton J. */
+const torsoOf = (J) => {
+  const cL = Math.cos(J.lean), sL = Math.sin(J.lean), cT = Math.cos(J.twist), sT = Math.sin(J.twist);
+  return (w) => { const v = sub(w, J.sh), v1 = v[1] * cL + v[2] * sL, f = -v[1] * sL + v[2] * cL; return [v[0] * cT - f * sT, v1, v[0] * sT + f * cT]; };
+};
+/** How someone is when nothing is happening: sitting if they are found sitting, else standing. */
+const restOf = (spec) => (spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0));
+
+/** The same person on their feet: someone found sitting, standing, with their own `stood` settings (what they hold, and how). */
+const UPS = new WeakMap();
+export function upOf(spec) {
+  if (!spec || !spec.seated) return spec;
+  let up = UPS.get(spec);
+  if (!up) { up = { ...spec, ...(spec.stood || {}), seated: false, sit: undefined }; UPS.set(spec, up); }
+  return up;
+}
+
+/** How someone found sitting gets up: `forward`, how far in front of their seat they stand once up (in their own heights;
+    nothing for someone on the ground, who gets up where they sat), and `ms`, how long it takes (spec.riseMs if given). */
+const RISES = new WeakMap();
+export function riseOf(spec) {
+  let r = RISES.get(spec);
+  if (r) return r;
+  const how = sitHow(spec), ground = how.seat === "ground";
+  const J0 = skeleton(spec.dim, poses.sit(spec, 0));
+  const feet = (J0.R.ankle[2] + J0.L.ankle[2]) / 2 - J0.hipC[2];
+  r = { ground, feet, forward: ground ? 0 : Math.max(0, feet * 0.55), ms: spec.riseMs ?? (ground ? 1250 : spec.height < 0.85 ? 760 : 1000) };
+  RISES.set(spec, r);
+  return r;
+}
+
+/** Where someone stands once up, from the point they sat on: [right, down] in picture pixels, for a figure `size` pixels tall facing `yawDeg`. */
+export function standOffset(spec, yawDeg, size) {
+  const f = riseOf(spec).forward * size, th = yawDeg * DEG;
+  return [f * Math.sin(th), f * Math.cos(th) * VIEW_TILT];
+}
+
+/** The seat that is drawn with someone (the goldsmith's stool, the old-timer's lawn chair), by itself, where they sat:
+    for while they are up. Anchored as their seated picture is, at the point under the seat. */
+export function drawSeat(spec, yawDeg, size, paint = undefined) {
+  return drawFigure(spec, poses.sit(spec, 0), yawDeg, size, { seat: true, paint });
+}
+
+/** A leg reaching from its hip to a place for its ankle (in the figure's own space, unturned), the knee bending toward
+    `hint`: the `leg` angles and `shin` direction that skeleton() takes, and where the knee is. */
+function legTo(d, s, hip, ankle, hint) {
+  const a = d.thigh, b = d.shin, v = sub(ankle, hip), far = Math.hypot(v[0], v[1], v[2]);
+  const L = Math.min(a + b - 0.001, Math.max(Math.abs(a - b) + 0.001, far)), dir = far > 1e-6 ? mul(v, 1 / far) : [0, -1, 0];
+  const along = (a * a - b * b + L * L) / (2 * L), out = Math.sqrt(Math.max(0, a * a - along * along));
+  const side = unit(sub(hint, mul(dir, dot3(hint, dir))));
+  const knee = add(hip, add(mul(dir, along), mul(side, out))), end = add(hip, mul(dir, L));
+  const t = unit(sub(knee, hip));
+  return { leg: [Math.atan2(t[2], -t[1]), Math.asin(clamp1(s * t[0]))], shin: unit(sub(end, knee)), knee };
+}
+
+/**
+ * Getting up from the seat: k runs from 0 (sitting, as they always sit) to 1 (standing, as they always stand); played
+ * backwards it is sitting down. The picture is anchored where their feet will be once they are up (standOffset says
+ * where that is from the seat), and the seat is not in it: a seat drawn with them is drawn apart (drawSeat) and stays put.
+ * From a chair, a stool or a step: the feet come back, the weight comes forward over them, the hands go to the knees,
+ * and the legs push the body up as it straightens. From the ground: lean forward, hands to the knees, the legs come out
+ * of the cross and under the body, and up. `inPlace`: the same where the seat is (no step forward: someone who walked
+ * back to their seat and sits down on it).
+ */
+function risePose(spec, k, inPlace = false) {
+  const R = riseOf(spec), up = upOf(spec), d = spec.dim, Fs = inPlace ? 0 : R.forward;
+  const S0 = poses.sit(spec, 0), S4 = poses.stand(up, 0);
+  if (!(k > 0)) return { ...S0, shift: (S0.shift || 0) - Fs, noSeat: true, rising: 0 };
+  if (k >= 1) return S4;
+  const J0 = skeleton(d, S0), J4 = skeleton(d, S4), ground = R.ground;
+  const less = (v) => [v[0], v[1], v[2] - Fs];                          // (from the point under the seat to the point under the feet)
+  const L0 = S0.lean || 0, L4 = S4.lean || 0, H0 = J0.hipC[1], H4 = J4.hipC[1];
+  const hip0 = less(J0.hipC), hip4 = J4.hipC;
+  // the phases, as fractions of the whole: still sitting until `seatK`; the hands on the knees from `onK` to `offK`
+  const seatK = ground ? 0.26 : 0.30, offK = ground ? 0.76 : 0.68;
+  let hc, lean, seated, ankleOf, hintOf, yawOf;
+  if (!ground) {
+    if (k < seatK) {
+      // still on the seat: the feet come back under the knees, the weight comes forward
+      const e = smooth(k / seatK);
+      seated = true; hc = hip0; lean = lerp(L0, 0.48, e);
+      ankleOf = (s) => { const a0 = less(J0[s].ankle), a4 = J4[s].ankle; return [lerp(a0[0], (a0[0] + a4[0]) / 2, e), lerp(a0[1], a4[1], e), lerp(a0[2], 0, e)]; };
+      hintOf = (s) => unit(add(mul(unit(sub(J0[s].knee, J0[s].hip)), 1 - e), mul([s === "R" ? 0.25 : -0.25, 0.1, 1], e)));
+      yawOf = (s) => lerp(S0[s].footYaw ?? 0.24, 0.20, e);
+    } else {
+      // up: the hips go forward over the feet, then up; the body straightens
+      const e = (k - seatK) / (1 - seatK), ez = smooth(span(e, 0, 0.55)), ey = smooth(span(e, 0.04, 0.90));
+      seated = false;
+      hc = [lerp(hip0[0], hip4[0], ey), lerp(H0, H4, ey), lerp(hip0[2], hip4[2], ez)];
+      lean = lerp(0.48, L4, smooth(span(e, 0.30, 1))) + 0.07 * Math.sin(Math.PI * span(e, 0, 0.6));
+      ankleOf = (s) => { const a0 = less(J0[s].ankle), a4 = J4[s].ankle, m = [(a0[0] + a4[0]) / 2, a4[1], 0]; return mix(m, a4, smooth(e)); };
+      hintOf = (s) => [s === "R" ? 0.20 : -0.20, 0.1, 1];
+      yawOf = (s) => lerp(0.20, S4[s].footYaw ?? 0.24, e);
+    }
+  } else {
+    const Hsq = Math.max(H0 + 0.05, d.thigh * 0.95 + d.ankleH * 0.6);                   // the height of the hips in a squat
+    const sq = (s) => [(s === "R" ? 1 : -1) * (d.hipW + 0.035), J4[s].ankle[1], 0.035];     // the feet, under the body, squatting
+    if (k < seatK) {
+      // still sitting cross-legged: the weight comes forward, the hands go to the knees
+      const e = smooth(k / seatK);
+      seated = true; hc = hip0; lean = lerp(L0, 0.40, e);
+      ankleOf = (s) => J0[s].ankle; hintOf = (s) => sub(J0[s].knee, J0[s].hip); yawOf = (s) => S0[s].footYaw ?? -1.35;
+    } else if (k < 0.55) {
+      // the legs come out of the cross and under the body, and the hips come up off the ground into a squat
+      const e = smooth(span(k, seatK, 0.55));
+      seated = false; hc = [0, lerp(H0, Hsq, e), lerp(hip0[2], -0.045, e)]; lean = lerp(0.40, 0.62, e);
+      ankleOf = (s) => mix(J0[s].ankle, sq(s), e);
+      hintOf = (s) => unit(add(mul(unit(sub(J0[s].knee, J0[s].hip)), 1 - e), mul([s === "R" ? 0.35 : -0.35, 0.5, 1], e)));
+      yawOf = (s) => lerp(S0[s].footYaw ?? -1.35, 0.30, e);
+    } else {
+      // and up
+      const e = smooth(span(k, 0.55, 1));
+      seated = false; hc = [lerp(0, hip4[0], e), lerp(Hsq, H4, e), lerp(-0.045, hip4[2], e)]; lean = lerp(0.62, L4, e);
+      ankleOf = (s) => mix(sq(s), J4[s].ankle, e);
+      hintOf = (s) => [s === "R" ? 0.30 : -0.30, 0.25, 1];
+      yawOf = (s) => lerp(0.30, S4[s].footYaw ?? 0.24, e);
+    }
+  }
+  const all = smooth(k);
+  const p = {
+    seated, noSeat: true, rising: k, breath: 0, lean, twist: 0, hipTwist: 0, sway: hc[0], shift: hc[2],
+    head: { nod: lerp((S0.head && S0.head.nod) || 0, (S4.head && S4.head.nod) || 0, all) - 0.35 * (lean - lerp(L0, L4, all)), turn: 0 },
+  };
+  // the legs, by reaching from the hips to where the feet are
+  const knees = {};
+  let flat = 0;
+  for (const s of ["R", "L"]) {
+    const sd = s === "R" ? 1 : -1, hipJ = add(hc, [sd * d.hipW, 0, 0]), leg = legTo(d, sd, hipJ, ankleOf(s), hintOf(s));
+    knees[s] = leg.knee;
+    flat += leg.leg[0] / 2;
+    p[s] = { leg: leg.leg, shin: leg.shin, knee: 0, foot: 0, footYaw: yawOf(s) };
+  }
+  if (!seated && flat > 0.80 + lean * 0.3) p.lap = true;                // (a skirt lies on thighs that are still nearly level)
+  // the arms: what they hold, they hold; a free hand goes to its knee to push, and then to its place standing
+  const sh = add(hc, [0, (d.shoulderY - d.hipY) * Math.cos(lean), (d.shoulderY - d.hipY) * Math.sin(lean)]);
+  const toT = torsoOf({ lean, twist: 0, sh });
+  const onK = 0.04;
+  for (const s of ["R", "L"]) {
+    const sd = s === "R" ? 1 : -1, a0 = J0[s], a4 = J4[s], held = !!((spec.hold && spec.hold[s]) || (up.hold && up.hold[s]));
+    const q0 = S0[s] || {}, q4 = S4[s] || {}, flags = (q) => { const f = {}; for (const n of ["grip", "curl", "finger", "point", "flat", "thumb"]) if (q[n] !== undefined) f[n] = q[n]; return f; };
+    let hand, bend, f;
+    if (held && up.takeUp != null) {
+      // a thing taken up off the ground on the way (Lot's staff, lying beside him: `takeUp` in people.js): the hand goes
+      // down to where it will stand, takes it there (from `takeUp` on it is in the hand, planted), and climbs up it
+      const T = up.takeUp, wr = J4[s].wrist, low = 0.22, side = [sd * 0.60, 0.10, -0.50];
+      if (k < T) { const e = smooth(span(k, 0.06, T)); hand = mix(a0.wLoc, toT([wr[0], low, wr[2]]), e); bend = mix(sub(a0.eLoc, a0.sLoc), side, e); f = e < 0.6 ? flags(q0) : { curl: 0.70 }; }
+      else { const e = smooth(span(k, T, 1)); hand = mix(toT([wr[0], lerp(low, wr[1], e), wr[2]]), a4.wLoc, smooth(span(k, 0.85, 1))); bend = mix(side, sub(a4.eLoc, a4.sLoc), e); f = flags(q4); }
+    } else if (held) {
+      const e = smooth(span(k, 0.20, 0.90));
+      hand = mix(a0.wLoc, a4.wLoc, e); bend = sub(mix(a0.eLoc, a4.eLoc, e), a0.sLoc); f = flags(e < 0.5 ? q0 : q4);
+    } else {
+      const knee = toT(add(knees[s], [0, 0.030, -0.014])), kneeBend = [sd * 0.55, -0.15, -0.55];
+      if (k < seatK) { const e = smooth(span(k, onK, seatK)); hand = mix(a0.wLoc, knee, e); bend = mix(sub(a0.eLoc, a0.sLoc), kneeBend, e); f = e < 0.5 ? flags(q0) : { curl: 0.75 }; }
+      else if (k < offK) { hand = knee; bend = kneeBend; f = { curl: 0.75 }; }
+      else { const e = smooth(span(k, offK, 1)); hand = mix(knee, a4.wLoc, e); bend = mix(kneeBend, sub(a4.eLoc, a4.sLoc), e); f = e < 0.5 ? { curl: 0.75 } : flags(q4); }
+    }
+    p[s] = { ...p[s], hand, bend, ...f };
+  }
+  return p;
+}
+
+// ---------- small movements ----------
+// Each is a few key poses made from the person's own resting pose (standing, or sitting if they are found sitting), at
+// points from 0 to 1 of its time, eased one into the next. The first and the last are the resting pose itself, so a
+// small movement starts and ends exactly where the person was. `hold`: where a movement that can be held stops, for as
+// long as it is held (Figure.fidget(name, { hold: true })).
+const STAND_FIDGETS = ["shift", "look", "neck", "stretch"], SIT_FIDGETS = ["shift", "look", "knees", "stretch"];
+const free = (o) => ["R", "L"].filter((s) => !o.held(s));
+const nodOf = (p) => (p.head && p.head.nod) || 0;
+const FIDGETS = {
+  /** shifting the weight onto the other leg (sitting: shifting on the seat) */
+  shift: { ms: 1900, make(o) {
+    const b = o.base;
+    if (o.seated) return [[0, b], [0.32, { ...cloneP(b), sway: 0.016, twist: 0.16, lean: (b.lean || 0) + 0.05, head: { nod: nodOf(b) + 0.03, turn: -0.10 } }], [0.66, { ...cloneP(b), sway: -0.010, twist: -0.08, head: { nod: nodOf(b), turn: 0.06 } }], [1, b]];
+    const dir = (b.sway || 0) < -0.004 ? -1 : 1, W = dir > 0 ? "L" : "R", F = dir > 0 ? "R" : "L", p = cloneP(b);
+    p.sway = -0.022 * dir; p.hipTwist = 0.08 * dir; p.lean = (b.lean || 0) + 0.01;
+    p[W] = { ...p[W], leg: [-0.03, 0.04], knee: 0.02 }; p[F] = { ...p[F], leg: [0.18, 0.08], knee: 0.36, footYaw: 0.50 };
+    p.head = { nod: nodOf(b) + 0.02, turn: 0.06 * dir };
+    return [[0, b], [0.30, p], [0.72, p], [1, b]];
+  } },
+  /** looking about: a long look one way, then the other and up */
+  look: { ms: 2400, make(o) {
+    const b = o.base, one = cloneP(b), two = cloneP(b);
+    one.head = { nod: nodOf(b) - 0.02, turn: 0.55 }; two.head = { nod: nodOf(b) - 0.15, turn: -0.45 };
+    if (!o.seated && !o.still) { one.twist = 0.06; two.twist = -0.05; }
+    return [[0, b], [0.18, one], [0.42, one], [0.60, two], [0.84, two], [1, b]];
+  } },
+  /** a hand to the back of the neck, rubbing it, the head down */
+  neck: { ms: 2100, make(o) {
+    const b = o.base, s = o.held(o.H) ? o.O : o.H, sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.14, turn: -sd * 0.08 } }, s, { hand: [sd * (0.032 + dx), o.sp.headY - hr[1] * 1.30 + dy, -(hr[2] * 0.70)], bend: [sd, 0.55, 0.15], curl: 0.5 });
+    const n1 = at(0, 0), n2 = at(-0.012, 0.010);
+    return [[0, b], [0.26, n1], [0.42, n2], [0.58, n1], [0.74, n2], [1, b]];
+  } },
+  /** a stretch: the free arms up over the head, the body back */
+  stretch: { ms: 2200, make(o) {
+    const b = o.base, up = (roll, elbow) => { const p = { ...cloneP(b), lean: (b.lean || 0) - (o.seated ? 0.03 : 0.06), breath: 1, head: { nod: nodOf(b) - 0.15 } }; for (const s of free(o)) withArm(p, s, { arm: [2.80, roll], elbow, flat: true }); return p; };
+    return [[0, b], [0.38, up(0.32, 0.22)], [0.60, up(0.46, 0.12)], [1, b]];
+  } },
+  /** sitting: rubbing the knees */
+  knees: { ms: 2000, make(o) {
+    const b = o.base, rub = (back) => { const p = { ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) + 0.05 } }; for (const s of free(o)) withArm(p, s, { hand: o.toTorso(add(o.J[s].knee, [0, 0.032, -0.012 - back])), bend: [s === "R" ? 0.6 : -0.6, -0.2, -0.5], curl: 0.6 }); return p; };
+    const k1 = rub(0), k2 = rub(0.040);
+    return [[0, b], [0.24, k1], [0.40, k2], [0.56, k1], [0.72, k2], [1, b]];
+  } },
+  // ---- each person's own ----
+  /** the overseer: taps his staff on the ground, twice */
+  tap: { ms: 1700, make(o) {
+    const b = o.base, s = o.held("R") ? "R" : "L", q = b[s];
+    const up = { ...withArm(cloneP(b), s, { ...q, hand: add(q.hand, [0, 0.060, 0.006]) }), staffLift: 0.060, head: { nod: nodOf(b) + 0.06 } }, down = { ...cloneP(b), staffLift: 0, head: { nod: nodOf(b) + 0.06 } };
+    return [[0, b], [0.16, up], [0.30, down], [0.46, up], [0.60, down], [1, b]];
+  } },
+  /** the guard: leans on his staff, both hands on it */
+  lean: { ms: 3600, hold: 0.30, make(o) {
+    const b = o.base, p = cloneP(b), sp = o.sp;
+    withArm(p, "R", { hand: [0.150, -0.090, 0.120], bend: [0.6, -1, -0.3], grip: true });
+    withArm(p, "L", { hand: [0.120, -0.030, 0.128], bend: [-0.4, -1, -0.2], grip: true });
+    p.sway = 0.012; p.lean = (b.lean || 0) + 0.06; p.hipTwist = -0.05; p.head = { nod: nodOf(b) + 0.06, turn: -0.12 };
+    p.L = { ...p.L, leg: [0.12, 0.06], knee: 0.24 };
+    void sp;
+    return [[0, b], [0.30, p], [0.76, p], [1, b]];
+  } },
+  /** the senator: settles the folds of his toga over his left arm */
+  toga: { ms: 2300, make(o) {
+    const b = o.base, sp = o.sp, lift = withArm(cloneP(b), "L", { hand: [-0.112, -0.165, 0.112], bend: [-0.6, -0.5, -0.6], curl: 0.9 });
+    const t1 = withArm(cloneP(lift), "R", { hand: [-0.070, -0.040, sp.chest + 0.040], bend: [1, -0.4, 0.1], curl: 0.8 });
+    const t2 = withArm(cloneP(lift), "R", { hand: [-0.095, -0.115, sp.chest + 0.050], bend: [1, -0.5, 0.0], curl: 0.8 });
+    t1.head = t2.head = { nod: nodOf(b) + 0.10, turn: -0.18 };
+    return [[0, b], [0.28, t1], [0.50, t2], [0.66, t2], [1, b]];
+  } },
+  /** the date seller: hitches his basket up on his hip */
+  hitch: { ms: 1500, make(o) {
+    const b = o.base, q = b.L, p = withArm(cloneP(b), "L", { ...q, hand: add(q.hand, [0.014, 0.060, -0.004]) });
+    p.sway = -0.022; p.hipTwist = 0.08; p.R = { ...p.R, knee: (p.R.knee || 0) + 0.14 }; p.head = { nod: nodOf(b) + 0.04, turn: 0.10 };
+    return [[0, b], [0.30, p], [0.48, p], [1, b]];
+  } },
+  /** the washerwoman: takes the wet cloth from her shoulder and wrings it out */
+  wring: { ms: 2600, make(o) {
+    const b = o.base, sp = o.sp, w = (tw) => {
+      const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.12 } };
+      withArm(p, "R", { hand: [0.030, sp.waist + 0.012, sp.belly + 0.105], bend: [1, -0.6, -0.3], grip: true, point: [-1, tw, 0.3] });
+      withArm(p, "L", { hand: [-0.030, sp.waist + 0.002, sp.belly + 0.100], bend: [-1, -0.6, -0.3], grip: true, point: [1, -tw, 0.3] });
+      return p;
+    };
+    const w1 = w(0.35), w2 = w(-0.35);
+    return [[0, b], [0.20, w1], [0.38, w2], [0.56, w1], [0.74, w2], [1, b]];
+  } },
+  /** the snack-bar keeper: wipes down his counter */
+  wipe: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, s = o.spec.fidgetHand || (o.held("R") ? "L" : "R"), sd = s === "R" ? 1 : -1;
+    const at = (x) => { const p = withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) + 0.14 } }, s, { hand: [sd * x, sp.waist + 0.035, sp.belly + 0.175], bend: [sd, -0.4, -0.4], flat: true, point: [0, -0.2, 1] }); return p; };
+    const w1 = at(0.110), w2 = at(-0.010);
+    return [[0, b], [0.18, w1], [0.36, w2], [0.54, w1], [0.72, w2], [1, b]];
+  } },
+  /** the doorkeeper: folds his arms */
+  fold: { ms: 3600, hold: 0.22, make(o) {
+    const b = o.base, p = cloneP(b);
+    STANCES.folded(p, o.sp, o.d);
+    p.lean = (b.lean || 0) - 0.02; p.head = { nod: nodOf(b) - 0.04 };
+    return [[0, b], [0.22, p], [0.80, p], [1, b]];
+  } },
+  /** a hauler: rolls his shoulders */
+  roll: { ms: 1900, make(o) {
+    const b = o.base, r1 = { ...cloneP(b), breath: 1, twist: 0.14, lean: (b.lean || 0) - 0.04, head: { nod: nodOf(b) - 0.08, turn: -0.10 } }, r2 = { ...cloneP(b), breath: 0.2, twist: -0.14, lean: (b.lean || 0) + 0.05, head: { nod: nodOf(b) + 0.06, turn: 0.10 } };
+    return [[0, b], [0.25, r1], [0.50, r2], [0.75, r1], [1, b]];
+  } },
+  /** the man in gray: looks at his watch */
+  watch: { ms: 2200, make(o) {
+    const b = o.base, sp = o.sp, p = withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.20, turn: -0.28 } }, "L", { hand: [-0.010, sp.waist + 0.095, sp.chest + 0.105], bend: [-1, -0.6, -0.2], curl: 0.6, point: [1, 0.15, 0.25] });
+    return [[0, b], [0.30, p], [0.72, p], [1, b]];
+  } },
+  /** the man in gray: straightens his tie */
+  tie: { ms: 1800, make(o) {
+    const b = o.base, sp = o.sp, at = (dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.07 } }, "R", { hand: [0.008, -0.044 + dy, sp.chest + 0.034], bend: [1, -0.6, -0.1], grip: true, point: [0, 1, 0.3] });
+    const t1 = at(0), t2 = at(-0.014);
+    return [[0, b], [0.30, t1], [0.45, t2], [0.60, t1], [1, b]];
+  } },
+  /** the old-timer, standing: rubs the small of his back and arches it */
+  back: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, at = (lean) => { const p = { ...cloneP(b), lean: (b.lean || 0) - lean, head: { nod: nodOf(b) - 0.10 } }; for (const s of free(o)) withArm(p, s, { hand: [(s === "R" ? 1 : -1) * 0.046, sp.waist - 0.030, -(sp.back + 0.032)], bend: [s === "R" ? 0.7 : -0.7, -0.3, -0.7], curl: 0.6 }); return p; };
+    const b1 = at(0.08), b2 = at(0.13);
+    return [[0, b], [0.30, b1], [0.55, b2], [0.75, b1], [1, b]];
+  } },
+  /** the scribe: trims his pen with a little knife */
+  pen: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, at = (dx) => {
+      const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.18 } };
+      withArm(p, "R", { hand: [0.022, -0.108, sp.chest + 0.115], bend: [1, -0.6, -0.2], grip: true, point: [-0.4, 0.8, 0.5] });
+      withArm(p, "L", { hand: [-0.020 + dx, -0.118, sp.chest + 0.108], bend: [-1, -0.6, -0.2], grip: true, point: [0.9, 0.1, 0.4] });
+      return p;
+    };
+    const p1 = at(0), p2 = at(0.016);
+    return [[0, b], [0.24, p1], [0.38, p2], [0.52, p1], [0.66, p2], [1, b]];
+  } },
+  /** the goldsmith: holds something small up to the light and turns it */
+  light: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, at = (px) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.08, turn: -0.22 } }, "L", { hand: [-0.040, sp.headY - 0.020, sp.chest + 0.085], bend: [-0.6, -1, -0.1], curl: 0.9, point: [px, 1, 0.35] });
+    const l1 = at(0.35), l2 = at(-0.40);
+    return [[0, b], [0.28, l1], [0.48, l2], [0.68, l1], [1, b]];
+  } },
+  /** the lamp boy: a yawn, an arm up, the mouth wide */
+  yawn: { ms: 2200, make(o) {
+    const b = o.base, p = { ...cloneP(b), breath: 1, blink: true, mouth: 2, head: { nod: nodOf(b) - 0.20 } };
+    for (const s of free(o)) withArm(p, s, { arm: [2.60, 0.45], elbow: 0.45, flat: true });
+    return [[0, b], [0.34, p], [0.64, p], [1, b]];
+  } },
+  /** the clerk: rubs his tired eyes */
+  eyes: { ms: 2000, make(o) {
+    const b = o.base, sp = o.sp, hr = o.d.headR, s = o.held("L") ? "R" : "L", sd = s === "R" ? 1 : -1;
+    const at = (dx) => withArm({ ...cloneP(b), blink: true, head: { nod: nodOf(b) + 0.14 } }, s, { hand: [sd * (0.010 + dx), sp.headY - hr[1] * 0.02, hr[2] + 0.030], bend: [sd, -0.3, 0.3], curl: 0.6, point: [-sd, 0.2, 0] });
+    const e1 = at(0), e2 = at(0.014);
+    return [[0, b], [0.30, e1], [0.45, e2], [0.60, e1], [1, b]];
+  } },
+  /** the soothsayer: strokes his beard */
+  beard: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, s = o.held("L") ? "R" : "L", sd = s === "R" ? 1 : -1;
+    const at = (dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.04 } }, s, { hand: [sd * 0.004, sp.chinY - 0.030 + dy, sp.chest + 0.062], bend: [sd, -0.6, 0], curl: 0.8, point: [0, -1, 0.3] });
+    const b1 = at(0), b2 = at(-0.034);
+    return [[0, b], [0.28, b1], [0.46, b2], [0.62, b1], [0.80, b2], [1, b]];
+  } },
+  /** the street boy: scratches his head */
+  scratch: { ms: 1900, make(o) {
+    const b = o.base, sp = o.sp, hr = o.d.headR, s = o.held("R") ? "L" : "R", sd = s === "R" ? 1 : -1;
+    const at = (dx) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.10, turn: sd * 0.12 } }, s, { hand: [sd * (0.030 + dx), sp.headY + hr[1] * 0.78, -0.010], bend: [sd, 0.6, 0], curl: 0.9 });
+    const s1 = at(0), s2 = at(0.012);
+    return [[0, b], [0.28, s1], [0.40, s2], [0.52, s1], [0.64, s2], [1, b]];
+  } },
+  /** the old-timer, sitting: a hand to the brim of his hat */
+  hat: { ms: 2000, make(o) {
+    const b = o.base, sp = o.sp, hr = o.d.headR;
+    const p = withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.06 } }, "R", { hand: [0.026, sp.headY + hr[1] * 0.42, hr[2] + 0.048], bend: [1, -0.4, 0.2], curl: 0.6, point: [-0.3, 0.3, 1] });
+    return [[0, b], [0.34, p], [0.66, p], [1, b]];
+  } },
+};
+
+/** The small movements that suit someone, as they are now (sitting or standing): everyone's, and their own (spec.fidgets). */
+export function fidgetsOf(spec) {
+  const own = spec.fidgets || {}, mine = (spec.seated ? own.sit : own.stand) || [];
+  const list = own.only ? mine : [...(spec.seated ? SIT_FIDGETS : STAND_FIDGETS), ...mine];
+  return list.filter((n, i) => FIDGETS[n] && list.indexOf(n) === i && !(own.not || []).includes(n));
+}
+/** How long a small movement takes, in ms of game time (0: there is no such movement). */
+export const fidgetMs = (spec, name) => (FIDGETS[name] ? FIDGETS[name].ms : 0);
+/** Where a small movement that can be held stops while it is held (a fraction of its time), or null. */
+export const fidgetHold = (name) => (FIDGETS[name] && FIDGETS[name].hold) || null;
+
+const FKEYS = new WeakMap();
+function fidgetKeys(spec, name) {
+  let m = FKEYS.get(spec);
+  if (!m) FKEYS.set(spec, (m = new Map()));
+  let keys = m.get(name);
+  if (!keys) {
+    const d = spec.dim, base = restOf(spec), H = freeHand(spec), J = skeleton(d, base);
+    const o = { spec, d, sp: spots(d), base, seated: !!spec.seated, H, O: H === "R" ? "L" : "R", J, toTorso: torsoOf(J), held: (s) => !!(spec.hold && spec.hold[s]), still: !!(spec.hold && Object.values(spec.hold).some((h) => h && h.still)) };
+    keys = FIDGETS[name].make(o);
+    m.set(name, keys);
+  }
+  return keys;
+}
+/** The step of a small movement to draw at u (0 to 1) when it is shown in `n` steps: a moment it is held for gives one picture. */
+export function fidgetStep(spec, name, u, n) {
+  if (!FIDGETS[name] || !(u > 0) || !(u < 1)) return u >= 1 ? n : 0;
+  const keys = fidgetKeys(spec, name);
+  let i = 0;
+  while (i + 2 < keys.length && keys[i + 1][0] <= u) i++;
+  return keys[i][1] === keys[i + 1][1] ? Math.round(keys[i][0] * n) : Math.round(u * n);
+}
+
+Object.assign(poses, {
+  /** Getting up from their seat (k 0 to 1), or, backwards, sitting down: see risePose. */
+  rise: (spec, k, inPlace = false) => risePose(spec, k, inPlace),
+  /** One moment (u from 0 to 1) of one of this person's small movements: see FIDGETS. */
+  fidget: (spec, name, u) => {
+    const F = FIDGETS[name], base = restOf(spec);
+    if (!F || !(u > 0) || !(u < 1)) return base;
+    const keys = fidgetKeys(spec, name);
+    let i = 0;
+    while (i + 2 < keys.length && keys[i + 1][0] <= u) i++;
+    const [u0, a] = keys[i], [u1, b] = keys[i + 1], e = smooth(span(u, u0, u1));
+    const p = a === b ? cloneP(a) : between(spec.dim, a, b, e);
+    if (a.staffLift != null || b.staffLift != null) p.staffLift = lerp(a.staffLift || 0, b.staffLift || 0, e);
+    p.fidget = name; p.fu = u;
+    return p;
+  },
+});
+
+/** Where the middle of someone's head is in their picture, measured from the point between the feet (x right, y down),
+    and the head's half height, in pixels, for someone `size` pixels tall facing yawDeg (painted: their painted head). */
+export function headPoint(spec, pose, yawDeg, size) {
+  const J = skeleton(spec.dim, pose), big = (spec.paint && spec.paint.head) || 1, th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th);
+  const v = add(J.head, [0, -(big - 1) * spec.dim.headR[1], 0]), dp = (v[0] * s + v[2] * c) * size;
+  return [(-v[0] * c + v[2] * s) * size, -v[1] * size + dp * 0.22, spec.dim.headR[1] * big * size];
+}
+
+/** A painted head-and-shoulders portrait, n pixels square, turned a little (yawDeg), the eyes on the viewer: the team
+    buttons. The same person as their figure, drawn by the same means (paint.js), at several times the size it is shown.
+    Returns the finished picture (toCanvas() makes a canvas of it). */
+export function portraitOf(spec, n = 256, yawDeg = 24) {
+  const how = (spec.paint && spec.paint.portrait) || {};
+  const big = (spec.paint && spec.paint.head) || 1, size = ((how.head ?? 0.30) * n) / (spec.dim.headR[1] * big);
+  const pose = { ...(spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0)), look: "viewer" };
+  const [hx, hy] = headPoint(spec, pose, yawDeg, size);
+  const win = [Math.round(hx - n / 2 + (how.x ?? 0) * n), Math.round(hy - n * (how.y ?? 0.44)), n, n];
+  return drawFigure(spec, pose, yawDeg, size, { paint: { k: n / 84, window: win } });
+}
 
 /** How tall a character is as they are usually found (standing, or sitting on whatever they sit on), in their own
     heights: 1 for someone standing, about 0.6 for someone cross-legged on the ground. For placing words over a head. */
@@ -1185,12 +1724,12 @@ export function tallOf(spec) {
 /** A staff held upright in one hand, its foot on the ground. o: mat, top (how high it reaches, in heights), r,
     knob (a material: a ball on top), crook (true: a curled top), out and fwd (how far its foot is set from under the hand). */
 function staff(c, side, o = {}) {
-  const { J, limb, ball, parts } = c, g = J[side].palm, r = o.r ?? 0.0075, top = o.top ?? 1.0;
+  const { J, limb, ball, parts } = c, g = J[side].palm, r = o.r ?? 0.0075, raised = c.pose.staffLift || 0, top = (o.top ?? 1.0) + raised;      // (staffLift: lifted off the ground, as when it is tapped)
   // Standing, its foot is on the ground. Walking, it is carried: lifted clear of the ground and tipped a little
   // forward, rising and falling with the steps, so that it never slides along the ground.
   const gait = c.pose.gait, a = gait ? 2 * Math.PI * gait.phase : 0;
   const lift = gait ? 0.030 + 0.010 * Math.cos(2 * a) : 0, back = gait ? 0.034 + 0.014 * Math.sin(a) : 0;
-  const foot = [g[0] + (o.out || 0), 0.004 + lift, g[2] + (o.fwd || 0) - back], k = (top - g[1]) / Math.max(0.05, g[1] - foot[1]);
+  const foot = [g[0] + (o.out || 0), 0.004 + lift + raised, g[2] + (o.fwd || 0) - back], k = (top - g[1]) / Math.max(0.05, g[1] - foot[1]);
   const head = [g[0] + (g[0] - foot[0]) * k, top, g[2] + (g[2] - foot[2]) * k];
   limb(foot, head, r * 1.1, r * 0.9, o.mat, { part: parts.HELD });
   if (o.knob) ball(head, [r * 2, r * 2, r * 2], o.knob, { part: parts.HELD });
@@ -1299,7 +1838,8 @@ function cloak(c, o) {
  * shoulder, so the right arm is free. Smaller and closer than a toga; an end of it hangs in front of the left
  * shoulder and the other behind.
  * o: mat; band (a material: dark bands woven across the cloth near each end, and a line along its edge);
- *    len and front (how far below the shoulders the end behind, and the end in front, hang).
+ *    len and front (how far below the shoulders the end behind, and the end in front, hang); fringe (a material: a
+ *    fringe of threads on each end).
  */
 function mantle(c, o) {
   const { J, limb, ball, fold, trunkAt, trunkFacing, wide, deep, d, tw, fine, under, cloth, parts } = c;
@@ -1330,12 +1870,17 @@ function mantle(c, o) {
     const from = T(-(sw - 0.022), -0.014, face * (chest * 0.80)), to = [from[0] - 0.004, from[1] - len, from[2] + face * 0.012];
     limb(from, to, r0, r1, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.6, depth: deep(fall) / r0, hem: true, fn: bands });
     if (fine) fold(add(from, [0.008, -0.030, 0]), add(to, [0.010, len * 0.30, 0]), parts.DRAPE, trunkFacing(face > 0 ? -0.5 : Math.PI + 0.5));
+    if (o.fringe) {                                                     // a fringe: the warp threads left long and knotted, hanging from the end
+      const by = c.S >= 64 ? 1 : 0, low = [to[0], to[1] - 0.026, to[2]];
+      limb(add(to, [0, 0.004, 0]), low, r1, r1 * 0.96, o.fringe, { part: parts.DRAPE, over: lie, bias: cloth * 2.6, depth: deep(foot) / r1, squareStart: true, squareEnd: true,
+        fn: (t, nx, ny, x) => (t > 0.25 && (x + by) % 2 ? null : undefined) });
+    }
   }
 }
 
 /** A low stool under someone sitting. o: mat, r (half its width). */
 function stool(c, o = {}) {
-  if (!c.pose.seated) return;                                           // (it stays where it is when they get up)
+  if (!c.pose.seated || c.pose.noSeat) return;                          // (it stays where it is when they get up: see drawSeat)
   const { J, ball, limb, parts } = c, y = J.seatY, hip = J.hipC, r = o.r ?? 0.072;
   ball([hip[0], y - 0.010, hip[2] - 0.010], [r, 0.012, r], o.mat, { part: parts.EXTRA3 });
   for (const [dx, dz] of [[-1, -0.6], [1, -0.6], [0, 1]]) limb([hip[0] + dx * r * 0.6, y - 0.016, hip[2] - 0.010 + dz * r * 0.6], [hip[0] + dx * r * 0.95, 0.004, hip[2] - 0.010 + dz * r * 0.95], 0.008, 0.007, shifted(o.mat, 1), { part: parts.EXTRA3 });

@@ -15,13 +15,14 @@
 // The stair is not walked by clicking on it: the entrance takes Dad up it, once the guard lets him.
 //
 // Things here that are no part of any puzzle:
-//   - The scribe's news (ask him for it: "Any news?"). As the grumble of a man who keeps the grain account, he tells
-//     this week's palace gossip, from outside, with no idea whom he is talking about: famine across the desert, a
-//     rich herdsman called Abram and his sister, taken into the Great House; the sickness there since; the word that
-//     she is his WIFE; the king sending him away this morning. Genesis 12:10-20. Dad understands slowly, and then all
-//     at once: he is standing in Genesis 12. He would give a lot to go and shake that man's hand, and he has a boy to
-//     find. Told once ("egypt.heardAbram"); from then on he knows when he is, and the river, the reeds and the open
-//     door say so. Nobody meets Abram or Sarai; nobody of the time says anything about Abram's God.
+//   - The scribe's news (ask him for it: "Any news?"; offered once Lot, down by the river, has told Dad who he is:
+//     "egypt.heardAbram"). As the grumble of a man who keeps the grain account, he tells this week's palace gossip,
+//     the Egyptian side of the story Lot told, from outside, with no idea whom he is talking about: famine across the
+//     desert, a rich herdsman called Abram and his sister, taken into the Great House; the king's gifts; the sickness
+//     there since; the word that she is his WIFE; the king sending him away today, in a hurry. Genesis 12:10-20. Dad
+//     hears it knowing more than the scribe does (he has met the man's nephew; he knows what "Pharaoh" means, and how
+//     the story is written), and finishes on the man by the river, praying for his boy. Told once. Nobody meets Abram
+//     or Sarai; no Egyptian says anything about Abram's God.
 //   - The mud bricks: he half remembers that Israel made bricks for Pharaoh, looks up at the stone, and is put right
 //     by the text of Exodus (not by a person; nobody of the time speaks of Israel).
 //   - The masons' stone, looked at again: seashells in it, in the desert. The Flood (Genesis 7:19-20), and Mizraim,
@@ -91,7 +92,7 @@ async function talkToScribe(g) {
     const pick = await g.choose([
       { id: "boy", line: "egypt.ask.boy" },
       { id: "list", line: "egypt.scribe.ask.list" },
-      { id: "news", line: "egypt.scribe.ask.news", when: (g) => !g.flag("egypt.heardAbram") },      // told once
+      { id: "news", line: "egypt.scribe.ask.news", when: (g) => !!g.flag("egypt.heardAbram") && !count(g, "egypt.scribe.ask.news") },      // once Lot has told him; told once
       { id: "bye", line: "egypt.ask.bye" },
     ]);
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.scribe.boy.1", "egypt.scribe.boy.2");
@@ -101,23 +102,18 @@ async function talkToScribe(g) {
   }
 }
 
-// ---------- the news: Abram is in Egypt ----------
+// ---------- the news: the same week, from the Egyptian side ----------
 /** The scribe's grumble about the grain account turns into this week's gossip from the palace. He has no idea whom
-    he is talking about. Dad understands slowly, then all at once; then he looks out the way the man has gone, and
-    back up at the doorway his son went in by. Genesis 12:10-20, told from outside; nobody meets Abram or Sarai. */
+    he is talking about; Dad, who has met the man's nephew by the river, does, and knows how the story is written.
+    At the end he looks back down the track to the river. Genesis 12:10-20, told from outside; nobody meets Abram or Sarai. */
 async function news(g) {
   turnTo(g, "scribe");
   await g.say("egypt.scribe.ask.news", "egypt.scribe.news.1", "egypt.scribe.news.2", "egypt.scribe.news.3", "egypt.scribe.news.4", "egypt.scribe.news.5");
   await g.say("egypt.scribe.news.6", "egypt.scribe.news.7", "egypt.scribe.news.8", "egypt.scribe.news.9", "egypt.scribe.news.10");
-  g.flag("egypt.heardAbram", true);
   await g.wait(400);
-  g.lead.look(40, 300);                           // out across the desert, the way the man has gone
-  await g.wait(500);
-  await g.say("egypt.abram.1", "egypt.abram.2", "egypt.abram.3", "egypt.abram.4");
-  await g.wait(300);
-  g.lead.look(541, 234);                          // and back up at the doorway
-  await g.wait(400);
-  await g.say("egypt.abram.5");
+  g.lead.look(60, 590);                           // back down the track, toward the river
+  await g.wait(450);
+  if (g.flag("egypt.lotPrayed")) await g.say("egypt.scribe.news.11");     // (Lot has prayed for the boy: in a game played straight through he always has by now)
 }
 
 async function giveReed(g) {
@@ -338,6 +334,17 @@ async function talkToHaulers(g) {
   }
 }
 
+/** The three haulers are one conversation, and three shapes: each man is outlined as himself. */
+const HAULERS = {
+  name: "haulers", verb: "Talk to", walkTo: [352, 440], face: "NW",
+  look: "egypt.haulers.look", use: talkToHaulers,
+  useWith: {
+    rootbeer: ["egypt.haulers.rootbeer.1", "egypt.haulers.rootbeer.2", "egypt.haulers.rootbeer.3", "egypt.haulers.rootbeer.4"],
+    shade: ["egypt.haulers.shade.1", "egypt.haulers.shade.2"],
+    chicken: "egypt.chicken.stock",
+  },
+};
+
 export default {
   id: "egypt-site",
   era: "egypt",
@@ -365,6 +372,10 @@ export default {
     fromGalleryAgain: [670, 326],   // every time after the first: already halfway down them
   },
   exits: ["egypt-crash", "egypt-gallery"],
+  // The bottom of the picture is the way back down to the river: a click anywhere along it, and down he goes.
+  edges: {
+    S: { to: "egypt-crash", spawn: "fromSite", name: "down to the river" },
+  },
 
   picture: art + "back.png",
 
@@ -374,6 +385,23 @@ export default {
     { id: "shade", src: art + "shade.png", base: 521, when: (g) => !!g.flag("egypt.shadeSet"),        // in the hands of the man on the sunny spot,
       solid: [[305, 508], [355, 508], [355, 528], [305, 528]] },                                      // who takes up that patch of sand while he holds it
     { id: "front", src: art + "front.png", plane: "front" },
+    // The gang's standard's two streamers (round four), lifted out of the picture so that they can stir in the wind; the
+    // pole and its board stay in back.png.
+    { id: "streamers", src: art + "streamers.png", base: 398 },
+  ],
+
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). Nothing that moves is painted still: the
+  // painter took them out of the picture and marked where they go (layout.json, "fx"), and the engine draws them moving.
+  fx: [
+    // bread ovens' smoke in the builders' town far off beyond the plateau's lip: it rises behind the queens' pyramids,
+    // which let a fifth of it show through, as haze
+    ...[[20, 275, 279], [88, 269, 273], [140, 263, 267]].map(([x, y, base], n) => ({ id: `oven-smoke-${n + 1}`, type: "smoke", at: [x, y], base, color: "#f4ecdc", opacity: 0.32, height: 19, width: [1, 5], lean: [20, -17], rate: 2,
+      behind: [[[7, 277], [36, 227], [65, 277], [44.7, 280]], [[64, 274], [80.8, 245.3], [95.2, 245.3], [112, 274], [95.2, 277]], [[111, 272], [130, 240], [149, 272], [135.7, 275]]], behindOpacity: 0.2 })),
+    // black kites wheeling high in the warm air over the left, mostly gliding (behind everything)
+    { id: "kites", type: "birds", kind: "flyers", circle: { at: [186, 74], r: [34, 14] }, count: 3, speed: 12, scale: 0.9, color: "#3a3a4e", size: [5, 9],
+      frames: { glide: "kite-0.png", flap: ["kite-1.png", "kite-0.png", "kite-2.png", "kite-0.png"], bank: "kite-3.png", middle: [6.5, 5] } },
+    // the standard's two streamers (red, cream) blowing out to the right from the pole
+    { id: "streamers", type: "sway", plane: "streamers", anchor: "left", at: [200, 306], amount: 1.5, period: 2.6, wave: 40, lean: 0.1 },
   ],
 
   // The sunbeam is light, so it is drawn live and stays smooth: a glow round the shade, the beam, and the doorway lit.
@@ -389,14 +417,35 @@ export default {
       </g>`;
   },
 
+  // THEIR OWN LIVES (round four: js/engine/life.js). Everyone fidgets in their own way; the scribe, the overseer and
+  // the haulers now and then walk a few steps and come back, one at a time, each in their own time. The scribe's mark
+  // is on his mat under the awning, off the sand the family walks on: he gets up there, and walks straight out and back.
   actors: [
-    { id: "scribe", kind: "scribe", at: [150, 448], face: "E" },
-    { id: "overseer", kind: "overseer", at: [470, 520], face: "W" },         // in front of his stalled sledge
-    { id: "hauler3", kind: "hauler3", at: [270, 394], face: "S" },
-    { id: "hauler2", kind: "hauler2", at: [296, 405], face: "S" },
-    { id: "hauler1", kind: "hauler1", at: [322, 416], face: "SW" },
-    { id: "guard", kind: "guard", at: [690, 420], face: "SW", when: (g) => !g.flag("egypt.shadeSet") },      // at the foot of the stair
-    { id: "guard", kind: "guard", at: [330, 520], face: "E", when: (g) => !!g.flag("egypt.shadeSet") },      // on the sunny spot, holding the shade
+    // The scribe sits on his mat. While his pen is split he has nothing to do (writer's block): now and then he gets up,
+    // walks out from under the awning to look at the stalled sledge and the pyramid, or down the track for anyone
+    // bringing reeds, and sits down again. Once he has a pen he is writing, catching up on a whole morning, and stays.
+    { id: "scribe", kind: "scribe", at: [150, 448], face: "E", when: (g) => !g.flag("egypt.penGiven"),
+      life: { every: [22, 40], spots: [[232, 488, "NE"], [120, 494, "S"]], stay: [3, 7] } },
+    { id: "scribe", kind: "scribe", at: [150, 448], face: "E", when: (g) => !!g.flag("egypt.penGiven"),
+      life: { still: true } },
+    // The overseer paces in front of his stalled sledge: over toward the haulers to glare at them, or along to look up
+    // at the doorway the work is waiting on.
+    { id: "overseer", kind: "overseer", at: [470, 520], face: "W",         // in front of his stalled sledge
+      life: { every: [16, 30], spots: [[408, 504, "NW"], [528, 540, "N"]], stay: [2.5, 5] } },
+    // The haulers are on a break by their rope (one speaks, one agrees, one eats): now and then one of them strolls a few
+    // steps and back. They stand so close that the usual patch of ground under each would take in his neighbour's place:
+    // each blocks a smaller patch under his own feet, so that he can come home exactly to his mark.
+    { id: "hauler3", kind: "hauler3", at: [270, 394], face: "S", solid: [[260, 386], [280, 386], [280, 399], [260, 399]],
+      life: { every: [40, 70], spots: [[232, 404, "SW"]], stay: [3, 6] } },
+    { id: "hauler2", kind: "hauler2", at: [296, 405], face: "S", solid: [[286, 397], [306, 397], [306, 410], [286, 410]],
+      life: { every: [32, 58], spots: [[258, 432, "S"], [338, 444, "SE"]], stay: [3, 7] } },
+    { id: "hauler1", kind: "hauler1", at: [322, 416], face: "SW", solid: [[312, 408], [332, 408], [332, 421], [312, 421]],
+      life: { every: [28, 52], spots: [[372, 440, "SE"], [360, 412, "E"]], stay: [3, 6] } },
+    // The guard keeps the stair (and, once he has the shade, holds it up on the sunny spot): small movements only.
+    { id: "guard", kind: "guard", at: [690, 420], face: "SW", when: (g) => !g.flag("egypt.shadeSet"),      // at the foot of the stair
+      life: { still: true, fidget: [5, 12] } },
+    { id: "guard", kind: "guard", at: [330, 520], face: "E", when: (g) => !!g.flag("egypt.shadeSet"),      // on the sunny spot, holding the shade
+      life: { still: true, fidget: [6, 14] } },
   ],
 
   // Make the picture match the story facts. Runs on arrival and after loading a save.
@@ -405,56 +454,53 @@ export default {
     if (g.flag("egypt.shadeSet")) redraw(g, "guard", "guard-shade");
   },
 
-  // The far things first: an area lower in this list lies over the ones above it.
+  // The far things first: an area lower in this list lies over the ones above it. Each shape follows its thing's own
+  // edge, within a few pixels; a thing that is a cut-out or a person says so (`plane`, or an id that is a person's), and
+  // Show outlines its own silhouette.
   hotspots: [
-    { id: "pyramid", name: "pyramid", poly: [[268, 334], [341, 0], [800, 0], [800, 316]], look: twice("egypt.site.pyramid.look", "egypt.site.pyramid.look2") },
-    { id: "small-pyramids", name: "small pyramids", rect: [0, 228, 176, 56], look: "egypt.site.small.look" },
-    { id: "yard", name: "stone yard", rect: [24, 280, 140, 48], look: "egypt.site.yard.look" },
-    { id: "scaffold", name: "scaffold", rect: [640, 60, 160, 300], look: "egypt.site.scaffold.look" },
+    { id: "pyramid", name: "pyramid", poly: [[345, 0], [800, 0], [800, 330], [270, 336], [200, 300], [165, 274], [182, 250]], look: twice("egypt.site.pyramid.look", "egypt.site.pyramid.look2") },
+    { id: "small-pyramids", name: "small pyramids", poly: [[6, 281], [37, 228], [59, 272], [87, 240], [101, 264], [115, 264], [130, 239], [143, 263], [143, 281]], look: "egypt.site.small.look" },
+    { id: "yard", name: "stone yard", poly: [[29, 293], [44, 288], [78, 280], [100, 276], [150, 275], [166, 284], [166, 296], [150, 305], [128, 306], [96, 316], [57, 317], [28, 316]], look: "egypt.site.yard.look" },
+    { id: "scaffold", name: "scaffold", poly: [[634, 99], [648, 95], [655, 62], [718, 58], [745, 108], [772, 163], [800, 205], [800, 383], [772, 386], [742, 372], [716, 262], [682, 252], [662, 196], [640, 156], [640, 108]], look: "egypt.site.scaffold.look" },
     {
       id: "stair", name: "stairs", verb: "Climb", poly: [[686, 400], [746, 400], [659, 269], [613, 269]], walkTo: [742, 424], face: "W",
       look: "egypt.site.stair.look", use: climb, useWith: { pass: climb },
     },
     {
-      id: "entrance", name: "entrance", verb: "Climb to", rect: [515, 195, 52, 75], walkTo: [742, 424], face: "W",
+      id: "entrance", name: "entrance", verb: "Climb to", poly: [[497, 188], [541, 143], [587, 188], [570, 192], [567, 268], [516, 268], [512, 192]], walkTo: [742, 424], face: "W",       // the doorway, under its two slabs
       look: (g) => g.say(g.flag("egypt.inside") ? "egypt.site.entrance.look2" : "egypt.site.entrance.look"), use: climb, useWith: { pass: climb },
     },
-    { id: "bricks", name: "mud bricks", verb: "Lift", rect: [520, 376, 96, 24], walkTo: [560, 410], face: "N", look: "egypt.site.bricks.look", use: liftBrick },
-    { id: "scribe-desk", name: "scribe's station", rect: [52, 332, 195, 145], walkTo: [248, 464], face: "W", look: twice("egypt.site.desk.look", "egypt.site.desk.look2") },
+    { id: "bricks", name: "mud bricks", verb: "Lift", poly: [[507, 373], [589, 374], [591, 384], [617, 385], [636, 390], [636, 398], [592, 397], [507, 386]], walkTo: [560, 410], face: "N", look: "egypt.site.bricks.look", use: liftBrick },      // the bricks drying, and their mold
+    { id: "scribe-desk", name: "scribe's station", plane: "awning", poly: [[57, 343], [100, 339], [241, 333], [244, 349], [239, 440], [221, 475], [211, 475], [160, 468], [62, 475], [57, 470]], walkTo: [248, 464], face: "W", look: twice("egypt.site.desk.look", "egypt.site.desk.look2") },      // the awning, and the wages and the office under it
     { id: "rope", name: "hauling rope", poly: [[392, 444], [400, 460], [300, 414], [226, 388], [222, 374], [300, 396]], walkTo: [352, 440], face: "NW", look: "egypt.site.rope.look" },
-    { id: "sledge", name: "sledge", verb: "Pull", rect: [395, 379, 177, 102], walkTo: [420, 492], face: "NE", look: twice("egypt.site.sledge.look", "egypt.site.sledge.look2"), use: "egypt.site.sledge.use" },
-    { id: "blocks", name: "masons' tools", verb: "Borrow", poly: [[561, 486], [636, 447], [800, 440], [800, 600], [556, 600]], walkTo: [538, 566], face: "E", look: lookAtStone, use: "egypt.site.blocks.use" },
+    { id: "sledge", name: "sledge", verb: "Pull", plane: "sledge", poly: [[394, 453], [397, 458], [407, 455], [424, 469], [559, 481], [562, 466], [568, 463], [565, 440], [552, 439], [552, 385], [478, 379], [454, 382], [442, 389], [443, 433], [439, 435], [421, 423], [415, 428], [424, 442], [418, 445], [405, 435], [398, 438], [403, 448]], walkTo: [420, 492], face: "NE", look: twice("egypt.site.sledge.look", "egypt.site.sledge.look2"), use: "egypt.site.sledge.use" },
+    { id: "blocks", name: "masons' tools", verb: "Borrow", plane: "front", poly: [[749, 446], [722, 437], [674, 440], [665, 417], [650, 416], [641, 442], [610, 445], [610, 472], [606, 479], [595, 475], [586, 476], [583, 473], [584, 467], [580, 465], [570, 483], [559, 484], [559, 522], [540, 578], [521, 586], [519, 595], [522, 599], [570, 599], [573, 596], [577, 599], [765, 599], [765, 551], [779, 547], [783, 542]], walkTo: [538, 566], face: "E", look: lookAtStone, use: "egypt.site.blocks.use" },      // the casing blocks, the tools on them, a pole and a coil of rope
     {
-      id: "sunspot", name: "sunny spot", verb: "Stand in", rect: [296, 504, 70, 30], walkTo: [330, 520], face: "E", when: (g) => !g.flag("egypt.shadeSet"),
+      id: "sunspot", name: "sunny spot", verb: "Stand in", poly: [[367, 519], [362, 526], [349, 532], [331, 534], [313, 532], [300, 526], [295, 519], [300, 512], [313, 506], [331, 504], [349, 506], [362, 512]], walkTo: [330, 520], face: "E", when: (g) => !g.flag("egypt.shadeSet"),
       look: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.site.sunspot.look2" : "egypt.site.sunspot.look"), use: "egypt.site.sunspot.use",
       useWith: { shade: tryShade },
     },
-    { id: "water", name: "water jars", rect: [0, 494, 100, 40], walkTo: [130, 590], face: "W", look: "egypt.site.water.look" },      // the shoulders of the jars: below them the corner is the way out
+    { id: "water", name: "water jars", plane: "front", poly: [[1, 494], [0, 574], [65, 580], [69, 585], [85, 581], [81, 566], [94, 562], [94, 556], [86, 553], [86, 535], [73, 517], [75, 509], [49, 506], [42, 510], [46, 518], [38, 527], [25, 511], [23, 497]], walkTo: [130, 590], face: "W", look: "egypt.site.water.look" },      // the two jars, and the rails in front of them
     {
-      id: "track", name: "track to the river", verb: "Walk down", poly: [[0, 520], [150, 540], [176, 600], [0, 600]], walkTo: [130, 590], face: "W",
+      id: "track", name: "track to the river", verb: "Walk down", poly: [[108, 548], [152, 538], [178, 566], [182, 600], [104, 600]], walkTo: [130, 590], face: "W",       // the trodden sand past the fence, off the bottom of the picture
       look: "egypt.site.track.look", use: (g) => g.goto("egypt-crash", { spawn: "fromSite" }),
     },
+    // the gang: one speaks, one agrees, one eats (one conversation, and each man his own shape)
+    { ...HAULERS, id: "hauler3", poly: [[268, 323], [263, 327], [264, 335], [258, 339], [255, 349], [261, 353], [260, 395], [264, 397], [270, 393], [276, 397], [279, 395], [278, 371], [282, 367], [281, 339], [275, 335], [276, 327]] },
+    { ...HAULERS, id: "hauler2", poly: [[294, 336], [288, 342], [289, 347], [283, 351], [286, 369], [286, 406], [290, 408], [296, 404], [302, 408], [305, 406], [305, 369], [308, 362], [308, 351], [302, 347], [302, 340]] },
+    { ...HAULERS, id: "hauler1", poly: [[320, 333], [314, 337], [314, 347], [310, 350], [306, 381], [307, 385], [313, 389], [314, 410], [310, 413], [310, 416], [313, 418], [319, 417], [324, 420], [330, 416], [331, 373], [341, 368], [342, 363], [327, 346], [328, 338]] },
     {
-      id: "haulers", name: "haulers", verb: "Talk to", poly: [[256, 322], [338, 330], [340, 418], [304, 418], [256, 396]], walkTo: [352, 440], face: "NW",
-      look: "egypt.haulers.look", use: talkToHaulers,
-      useWith: {
-        rootbeer: ["egypt.haulers.rootbeer.1", "egypt.haulers.rootbeer.2", "egypt.haulers.rootbeer.3", "egypt.haulers.rootbeer.4"],
-        shade: ["egypt.haulers.shade.1", "egypt.haulers.shade.2"],
-        chicken: "egypt.chicken.stock",
-      },
-    },
-    {
-      id: "overseer", name: "overseer", verb: "Talk to", rect: [444, 386, 54, 136], walkTo: [404, 532], face: "E",
+      id: "overseer", name: "overseer", verb: "Talk to", poly: [[474, 388], [463, 390], [458, 400], [452, 393], [447, 397], [449, 461], [442, 485], [448, 488], [448, 514], [452, 517], [456, 514], [461, 525], [476, 522], [477, 505], [485, 500], [482, 437], [485, 417], [478, 411], [483, 403], [482, 394]], walkTo: [404, 532], face: "E",
       look: "egypt.overseer.look", use: talkToOverseer,
       useWith: { map: "egypt.overseer.map", shade: "egypt.overseer.shade", carmirror: "egypt.overseer.mirror", coppermirror: "egypt.overseer.mirror", rootbeer: "egypt.overseer.rootbeer", chicken: "egypt.chicken.stock" },
     },
     {
-      id: "scribe", name: "scribe", verb: "Talk to", rect: [124, 392, 52, 58], walkTo: [248, 464], face: "W",
+      id: "scribe", name: "scribe", verb: "Talk to", poly: [[150, 392], [144, 397], [145, 408], [141, 411], [142, 426], [140, 440], [145, 447], [164, 452], [169, 448], [169, 440], [173, 437], [173, 428], [170, 426], [165, 427], [160, 423], [159, 416], [161, 411], [159, 407], [162, 401], [156, 393]], walkTo: [248, 464], face: "W",
       look: (g) => g.say(g.flag("egypt.penGiven") ? "egypt.scribe.look2" : "egypt.scribe.look"), use: talkToScribe,
       useWith: { reed: giveReed, map: giveMap, rootbeer: "egypt.scribe.rootbeer", shade: "egypt.scribe.shade", pass: "egypt.scribe.pass", chicken: showGeneral("scribe", "egypt.scribe.chicken") },
     },
     {
-      id: "guard", name: "guard", verb: "Talk to", rect: [672, 326, 36, 96], walkTo: [742, 424], face: "W", when: (g) => !g.flag("egypt.shadeSet"),
+      id: "guard", name: "guard", verb: "Talk to", poly: [[669, 324], [664, 361], [666, 420], [673, 419], [672, 370], [677, 368], [681, 394], [677, 419], [693, 424], [699, 420], [701, 380], [697, 340], [689, 333], [684, 335], [678, 357], [673, 358]], walkTo: [742, 424], face: "W", when: (g) => !g.flag("egypt.shadeSet"),
       look: "egypt.guard.look", use: talkToGuard,
       useWith: {
         pass: (g) => (g.flag("egypt.inside") ? g.say("egypt.guard.after") : showPass(g)),
@@ -463,7 +509,7 @@ export default {
       },
     },
     {
-      id: "guard-sun", name: "guard", verb: "Talk to", poly: [[308, 380], [352, 380], [350, 411], [439, 374], [444, 383], [424, 406], [354, 435], [352, 522], [308, 522]], walkTo: [268, 534], face: "E", when: (g) => !!g.flag("egypt.shadeSet"),
+      id: "guard-sun", name: "guard", verb: "Talk to", poly: [[440, 372], [392, 395], [368, 400], [357, 409], [351, 407], [341, 416], [340, 391], [332, 385], [319, 390], [320, 520], [339, 523], [345, 476], [342, 445], [363, 429], [425, 407], [444, 390]], walkTo: [268, 534], face: "E", when: (g) => !!g.flag("egypt.shadeSet"),      // the man, and the shade held up in his hands
       look: "egypt.guard.look2", use: talkToGuard,
       useWith: { rootbeer: "egypt.guard.full", sunglasses: "egypt.guard.sunglasses", chicken: showGeneral("guard", "egypt.guard.chicken", "egypt.guard.chicken.2") },
     },

@@ -98,6 +98,32 @@ export class WalkMap {
     return best || [x, y];
   }
 
+  /**
+   * Where to walk to leave by an edge of the picture (edges.js): the floor nearest a click at (x, y), pushed as far
+   * toward that edge as the floor goes. For "N", the column nearest x that has floor in it, and in that column the
+   * floor nearest the top; for "S", the floor nearest the bottom. For "W" and "E", the floor nearest the click, and in
+   * its row the floor nearest the left or the right. (A click at the side is often level with the far edge of the floor,
+   * where the floor stops well short of the side: the nearest floor is then lower down, close to the side.)
+   * Null if there is no floor at all.
+   */
+  toward(side, x, y) {
+    if (side === "W" || side === "E") {
+      const near = this.nearest(x, y);
+      if (!this.ok(near[0], near[1])) return null;
+      const row = Math.floor(near[1]), line = this.ok_.subarray(row * W, (row + 1) * W);
+      const end = side === "W" ? line.indexOf(1) : line.lastIndexOf(1);
+      return [end + 0.5, row + 0.5];
+    }
+    const from = Math.min(W - 1, Math.max(0, Math.round(x))), top = side === "N";
+    for (let k = 0; k < W; k++) {
+      for (const c of k ? [from - k, from + k] : [from]) {
+        if (c < 0 || c >= W) continue;
+        for (let d = top ? 0 : H - 1; d >= 0 && d < H; d += top ? 1 : -1) if (this.ok_[d * W + c]) return [c + 0.5, d + 0.5];
+      }
+    }
+    return null;
+  }
+
   /** Is the straight line from a to b free of obstacles? */
   clear(a, b) {
     const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])));

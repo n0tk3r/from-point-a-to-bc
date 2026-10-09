@@ -42,8 +42,8 @@ them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome
 | Look | One way of painting, one figure and one light for every person, one typeface, and time travel in neon | Each era changes what is painted, never the rules. See section 9. |
 | Updates | Every code file, style file and picture is fetched by an address that changes when the file changes, and a game in progress keeps what it has fetched | A push can never leave a browser running old files next to new ones, or put a new painting behind an old script. See "Publishing a new version" in section 10. |
 
-Size today: 51 code and style files, about 750 KB (about 230 KB when the server compresses
-it); 83 pictures, 3.4 MB in all; and a 49 KB font. Nothing else is downloaded.
+Size today: 57 code and style files, about 1 MB (about 350 KB when the server compresses
+it); 106 pictures, 4.7 MB in all; and a 49 KB font. Nothing else is downloaded.
 
 ## Where things are
 
@@ -63,7 +63,11 @@ js/engine/              the engine. Knows nothing about this story.
   scene.js                the stage: backdrop, live light, clickable areas
   cast.js                 people, painted cut-outs and props: depth order, animation, the store of finished pictures
   walk.js                 where the lead can stand, routes round obstacles, size by distance
+  life.js                 the scene's people living their own lives: small movements, and a walk now and then
+  edges.js                ways out at the edges of the picture: the bands, what the label says, a check of every scene's
+  outline.js              Show: an outline round each thing that can be clicked
   fx.js                   canvas effects (the time tunnel)
+  effects.js              things that move by nature: smoke, flames and embers, water, birds, cloth that stirs
   story.js                reads the story data: open beats, checks
   ui.js                   heads-up display and menus
   game.js                 ties it together; the `g` that scripts use
@@ -151,7 +155,8 @@ The rule is: **who needs to know about the motion decides the tool.**
 Players who ask their system for less motion (`prefers-reduced-motion`), or tick
 **Less motion and no flashes** in Options, get still decoration, people who stand
 quite still, cut-outs that hold their first picture, plain fades in place of white
-flashes, and a slow tunnel.
+flashes, a slow tunnel, and smoke, flames, water and birds that move gently, at half
+speed or less (no bird flaps up: they walk off instead).
 
 ### Keeping it fast
 
@@ -162,8 +167,8 @@ flashes, and a slow tunnel.
   time: `Game.start` in `js/engine/game.js` is the place.
 - **A scene's pictures are here before it is shown.** Entering a scene fetches its
   backdrop and every picture its cut-outs can show, and only then fades in, so nothing
-  pops in late. The pictures of the scenes that can be walked to from it (`exits`) are
-  made ready ahead of time.
+  pops in late. The pictures of the scenes that can be walked to from it (`exits`, and
+  wherever its ways out at the edges lead) are made ready ahead of time.
 - **The whole game is fetched quietly behind the title.** Once the title is up, the
   engine goes through every scene's pictures, one at a time and only when the page has a
   moment to spare, and holds the files in memory (`Game.gather`, `assets.js`). It starts
@@ -186,7 +191,16 @@ flashes, and a slow tunnel.
 - **A budget per scene**, to keep older machines smooth: about 20 things animating at
   once on the live layer, and only `transform` and `opacity` in any CSS animation.
   The backdrop can be as detailed as you like. Hold **H** in the game to check a scene's
-  clickable areas.
+  clickable areas: each gets an outline.
+- **The things that move by nature take turns.** Each changes its picture only as often
+  as its motion needs (a bird thirty times a second, smoke twenty, a flame fifteen, a
+  swaying cut-out six, light on water five), and in any one frame only four of them may
+  change: the cast then repaints a few small patches and never the whole layer (section 2,
+  "Things that move by nature").
+- **Show costs nothing until it is asked for.** Its outlines are worked out once, when it
+  is turned on (some 30 to 50 ms in the busiest scenes on the test machine), and again only
+  if what it shows changes while it is on. While it is off its layer is hidden and nothing
+  is drawn.
 
 **What a frame costs.** Measured in Chromium with the processor slowed four times over,
 as a stand-in for an old laptop, while the lead walks across the three busiest scenes
@@ -250,8 +264,9 @@ The picture is a stack of layers, back to front:
 | --- | --- | --- |
 | Backdrop | The scene's painting: everything that is far away or flat on the ground | A picture file, shown as it is |
 | Live | Light: wormholes, the glow they throw, beams, anything that must stay smooth or move by itself | Smooth drawings in picture pixels, animated by CSS or by a script |
-| Cast | People, painted cut-outs and props | Pixels, sorted by depth and repainted where something has changed |
+| Cast | People, painted cut-outs and props, and the things that move by nature (smoke, flames, water, birds) | Pixels, sorted by depth and repainted where something has changed |
 | Tunnel | The time tunnel | A canvas effect, only during travel |
+| Outlines | Show: an outline round each thing that can be clicked, and an arrow at each way out at an edge | A canvas, drawn once when Show is turned on, hidden while it is off (section 10, "What Show shows") |
 | Clickable areas | Invisible shapes | Real buttons, so a keyboard or a screen reader can reach them |
 | Close-up | A screen, a notice or a note, shown large over a dimmed scene | A smooth drawing, put up and taken down by a script |
 | Words and menus | Speech, pockets, cards, menus | Ordinary page text |
@@ -272,10 +287,10 @@ then scaled, and how they are scaled depends on how far:
 - **By two or more, with hard pixels.** This is a large or a sharp screen. Each picture
   pixel is a clean block, and smoothing at that size is simply a blur.
 
-The painting, the people, a painted part that a cutscene puts on the live layer and the
-tunnel always get the same treatment, so they always match one another. The rule is one
-class on the stage, set by the scene view when the stage changes size (`CRISP_FROM` in
-`js/engine/scene.js`, and "crisp" in `css/game.css`).
+The painting, the people, a painted part that a cutscene puts on the live layer, the
+tunnel and the outlines of Show always get the same treatment, so they always match one
+another. The rule is one class on the stage, set by the scene view when the stage
+changes size (`CRISP_FROM` in `js/engine/scene.js`, and "crisp" in `css/game.css`).
 
 ### A painted scene
 
@@ -301,10 +316,101 @@ calls `full`.
 **Light is never painted in either.** A glow, a beam or a door in time is drawn live by
 the scene (`live` in the scene file), so that it can appear, move and fade.
 
+**Nothing that moves by nature is painted still.** Smoke, a flame, running water, rings
+on a pool, birds, washing in the wind: the painter leaves it out of the picture and marks
+where it goes, and the engine draws it moving (below, "Things that move by nature").
+
 **A scene with no painting yet is sketched.** Leave `picture` out of a scene file and
 the engine draws sky, ground and a labelled box for each clickable thing, in the era's
 colors. A scene whose painting will not load is sketched too, with a warning in the
 console, and can still be played.
+
+### Things that move by nature
+
+The author, after playing Rome: "any statically drawn thing that naturally moves can break the illusion of the reality
+we're trying to create." So nothing that moves by itself in the world is painted still: smoke, fire, running water,
+rings on water, light on water, birds, washing and banners in the wind. The painter leaves such a thing out of the
+picture (or takes it out, leaving what was behind it and every other pixel as it was) and marks where it goes, in the
+scene's `layout.json` under `"fx"`. The scene lists the same marks under `fx`, and `js/engine/effects.js` draws them,
+moving, on the cast layer among the people:
+
+```js
+fx: [
+  { id: "altar-smoke", type: "smoke", at: [286, 429], base: [[244, 518], [338, 509]], height: 196, width: [2, 15], lean: [-30, -196], opacity: 0.45 },
+  { id: "pigeons", type: "birds", count: 5, area: [[430, 466], [796, 438], [796, 586], [258, 586]],
+    frames: { foot: [23, 40], sizeAt: 590, stand: ["pigeon-1.png", "pigeon-3.png"], peck: ["pigeon-4.png", "pigeon-5.png"],
+      walk: ["pigeon-6.png", "pigeon-7.png", "pigeon-8.png", "pigeon-9.png"], fly: ["pigeon-13.png", "pigeon-14.png", "pigeon-15.png"] } },
+  { id: "laundry-1", type: "sway", plane: "laundry-1", anchor: "top", amount: 1 },
+],
+```
+
+The marks go into the scene file as they are: the field names are the same in both places, and a mark's notes
+(`what`, `note`) and words where a number goes ("wind": "from the left") are simply passed over. The kinds:
+
+| Kind | What it draws | Its own fields, with their defaults |
+| --- | --- | --- |
+| `smoke` | Soft puffs that rise from a point, rise straight for a little, then bend away with the air, waver, widen and fade. Gusts give the column soft bends. | `at` (where it leaves the fire); `height` (110 px); `width` (at the top, or `[at the start, at the top]`: `[top × 0.18, 36]`); `lean` (where the top ends up, `[dx, dy]`, or dx) or `wind` (6 px a second sideways); `rise` (height / 6 px a second); `rate` (3 puffs a second); `gust` (0.35); `color` (`#d9d5cd`); `opacity` (0.32) |
+| `flame` | A tongue of flame with a white heart and a soft glow round it, flickering: ducking, stretching, its tip wandering | `at` (the foot of the flame, at the wick); `size` (12 px tall); `width` (size × 0.42); `color`, `edge`, `core` (its middle, outside and heart); `glow` (size × 2.2 px; 0: none), `glowColor`, `glowOpacity` (0.22); `flicker` (0.5, from 0 to 1); `lean`; `lull` (0; up to 1: it dies down to nothing now and then, as charcoal's tongues do) |
+| `embers` | A bed of coals that glow and fade each in its own time, a soft light over the bed that swells (over a big bed, in one part and then another), and now and then a spark | `at` and `size` (`[half its width, half its depth]`: `[10, 3.5]`), or `bed` (its shape); `count` (from the size); `color`, `cool`; `glow`, `glowColor`, `glowOpacity` (0.2); `breath` (2.4 s); `sparks` (0.25 a second); `blobs` |
+| `ripples` | Rings that spread and fade on still water, with a light edge and a darker trough just inside it | `at`; `radius` (where a ring has gone, or `[where it starts, where it has gone]`: `[1, 16]`); `flat` (0.32, its height over its width); `every` (a number of seconds: steadily; `[low, high]`: now and then; `[1.5, 4]`); `rings` (2 from each drop); `speed` (13 px a second); `color`, `trough`; `opacity` (0.6) |
+| `stream` | Water running along a path, light running down it, and a splash where it lands: foam, rings and drops | `path` (from the spout's mouth to where it lands, smoothed); `width` (3, or `[at the mouth, at the end]`); `color`, `light`; `opacity` (0.55); `speed` (55 px a second); `splash` (5 px; 0: none) |
+| `shimmer` | A few glints of light that come, drift and go on a water surface, kept inside its shape: very quiet | `poly` (or `area`, or `rect`); `holes` (shapes kept clear: a boat, reeds); `count` (the water's area / 1100); `size` (6 px at the near edge, shorter farther off); `flow` (`[4, 0]` px a second); `life` (1.8 s); `color`; `opacity` (0.45) |
+| `birds`, flyers | Small birds crossing the sky now and then along `lanes`, or wheeling round a `circle` (kites): beating their wings in bursts and gliding between, banking at the ends of a circle | `lanes` (lines across the sky, beginning and ending off the picture) or `circle` (`{ at, r: [rx, ry] }`); `every` (`[6, 14]` s between crossings); `group` (`[1, 3]` birds); `count` (2, wheeling); `speed` (70 crossing, 14 wheeling); `size` (7 px across, drawn); `scale` (or `[low, high]`: each bird its own size); `frames` (`glide`, `flap`, `bank`, `middle`, `mirror`); without frames, small dark silhouettes drawn by the engine |
+| `birds`, a flock | Birds on the ground (`area`) or along a ledge (`perch`) that stand, look about, peck, walk a few steps and turn; go up when somebody comes near and land again a little way off, the ones beside them going too; with nowhere clear to land, fly off and come back later | `area` (or `poly`, `rect`) or `perch`; `count` (5); `frames` (below), or birds drawn by the engine: `look` (`pigeon`, `dove`, `sparrow`) and `size` (26 px long where a person is 160 tall); `depth` (smaller farther off: on an area); `moves` (`{ stand: 2, look: 2, peck: 4, walk: 3, turn: 1, away: 0 }`; `away`: one flies off by itself and comes back); `shy` (150 px at full size, about a metre and a half; half that from someone standing still; 0: never startled); `fly`, `turn` (false: never); `back` (`[8, 20]` s away); `treads` (`[y, ...]`) or `tread` (px): birds on steps keep to the treads and hop from one to the next; `walk` (12), `flight` (95) |
+| `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
+
+Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
+depth among the people exactly as for a cut-out (section 3: a row, a line, `"front"`, `"back"`); `when` (on the stage
+only while the story says so, read again whenever the story changes); `scale` (every size and speed of it, times this);
+`opacity`, `color`; `clip` (a shape it is kept inside: rings that must not run onto the sand); `behind` (shapes where it
+passes behind something painted nearer, and is not drawn, or only at `behindOpacity`: smoke rising behind a pyramid);
+`seed`. A smoke, a flame, embers or a stream sits by default at the row of its own point, so give the `base` of the thing
+it belongs to (an altar's smoke has the altar's base: a man behind the altar is behind its smoke); water on the ground
+and birds in the sky lie behind everybody; birds on the ground sort by their own feet, each one, like people. A sway is
+its cut-out: the cut-out keeps its depth, its states and everything a script does to it.
+
+**Painted frames for birds.** One picture a frame, clear background, every frame of a bird on the same size of canvas
+with its feet at the same point: `frames: { foot: [x, y], face: "E", sizeAt: 590, stand: [...], look: [...], peck:
+[...], walk: [...], turn: [...], takeoff: [...], fly: [...], glide: [...], land: [...], shadow: "..." }`. Only `stand`
+is needed; a missing list falls back sensibly (no `walk`: the bird hops; no `fly`: it never flies). The engine turns
+the frames round for a bird facing the other way (not the `shadow`, which lies under a bird on the ground and goes when
+it takes off: the sun does not move). `sizeAt` is the row at which they are the right size: they grow and shrink from
+there with the depth, as people do (`scale: "depth"` means the row `full`); without it they are drawn as painted, times
+`scale`. File names are in the scene's own folder unless `dir` says otherwise; with `set: "pigeon-dark"`, a number `n`
+stands for `pigeon-dark-n.png`. The frames are fetched with the scene's other pictures (ahead of time, and in the
+quiet fetching behind the title), and a scene does not show until they are here.
+
+**On the game clock.** Each moving thing keeps its own time, which goes on with the game clock: at its speed, and not
+at all while the game is paused. What it shows at a moment is worked out from its seed and that time alone (the puffs
+of a smoke, the glints on water, when the birds cross), so a scene opened twice looks the same at the same moment of its
+time. The only exception is a flock that somebody has startled, since what it does then depends on where people walked.
+For less motion, each one's time runs at half speed or less, it changes its picture less often, flames flicker less,
+flyers glide, and a flock never flies: a startled bird walks off instead.
+
+**Cheap.** Each kind changes its picture only as often as its motion needs: a bird thirty times a second, smoke, rings
+and a stream twenty, a flame fifteen, embers ten, a sway six, light on water five. In any one frame only four of them
+may change (`game.effects.budget`): the ones that have waited longest go first, and a bird on the move before them all,
+so the others wait a frame or two, which nobody sees. The cast then repaints a few small patches, never the whole layer
+(it does that when more than six things change at once: `Cast.update`). Each picture is cut to the box the thing can
+reach; a group of birds crossing together is one picture. A swaying cut-out is repainted whole each time it moves, so
+keep sways to the things that need them. The engine's own scene, with twelve moving things (two of them big sways) and
+some 120 puffs, glints, coals and birds on the stage, has the cast layer repaint about 3 million pixels a second, all in
+patches (with none of them, 0.2 million). Measured as in section 1 ("What a frame costs"), with the processor slowed four
+times over: a frame's main-thread work while the lead walks across it goes from 3.5 to 6.2 ms, and while he stands from
+0.8 to 6.0 ms, every frame still on time. A scene with a few moving things costs a fraction of that.
+
+**Never clickable, never outlined.** They are on the cast layer, which takes no clicks: a click on smoke is a click on
+whatever is under it, the floor or a clickable area. None of them is a clickable area, and their ids on the stage begin
+`fx:`, which no area names, so Show never outlines them. A scene that wants the player to click the pigeons gives them
+an area of its own, and its script can startle them: `g.effects.get("pigeons").scare([x, y])`.
+
+**Trying marks out.** In the game, in the browser's console, a painter can put every mark of the scene on the stage
+before any scene file has them:
+`(await (await fetch("art/scenes/" + game.scene.id + "/layout.json")).json()).fx.forEach((m) => game.effects.add(m))`.
+A mark the engine cannot use says so in the console, by its id. `game.effects.hold(true)` stops their time,
+`game.effects.seek(5000)` shows them five seconds in, `game.effects.stats()` counts what is moving, and `?nofx` in the
+page address (or `game.effects.enabled = false`) takes them all away. The engine's own scene shows every kind:
+`index.html?scene=engine-proof&lead=dad&flags=proof.fx`.
 
 ### How the pictures are painted
 
@@ -382,7 +488,8 @@ The scene's `walk.area` is the outline of the ground people can stand on. Inside
 - a cut-out or a prop can give a `solid` outline, the patch of ground it takes up. A
   cut-out blocks its patch only while it is shown;
 - people who are not leads block a small patch at their feet (the lead's own companions
-  do not: she can walk past them).
+  do not: she can walk past them), and someone away on a walk of their own has their
+  place kept for them (section 4, "Their own lives").
 
 From these the engine builds a map of where the lead may stand, pixel by pixel, keeping
 him a little clear of each blocked patch. When the player clicks, it finds a route round
@@ -471,7 +578,8 @@ An **animation is a pose that changes with time:**
 | At rest | Slow breathing, and a blink every few seconds |
 | Talking | A gesture and three mouth shapes. There are twenty gestures and each person uses a few of them (see below). The line decides which, so a line always plays the same way. |
 | Reaching | Out at chest height, or bending down to the ground. Anyone in a skirt dips at the knee and bows a little, and does not bend double. |
-| Praying | The head bowed, the eyes shut, the hands folded in front, eased into over about a quarter of a second and held, through whatever is said, until a script lets it go. Each of the family prays in their own way (`pray`, below). |
+| Praying | The head bowed, the eyes shut, the hands folded in front, eased into over about a quarter of a second and held, through whatever is said, until a script lets it go. Each of the family prays in their own way (`pray`, below). Someone sitting prays sitting down: Lot, on the sand by the river, lifts his open hands in front of him, palms up, his head bowed. |
+| Shading the eyes | A flinch back, the head turned a little away, the eyes screwed shut and a hand laid flat over the brow, up in about a seventh of a second and held until a script lets it go (`shade`). Anyone standing can do it: Dad does it when the car's door mirror throws the sun in his eyes. |
 | Sitting | Cross-legged on the ground, or on a seat: a chair, a bench, a stool, a step. Someone who is found sitting breathes, blinks and talks sitting down, with the same gestures of their own that they would use standing. |
 
 This is the method of one of the games this one looks up to, with a puppet in place of an
@@ -489,19 +597,21 @@ pictures underneath.
 
 ### Who is in the cast
 
-Twenty-four people, all in `js/art/people.js`:
+Twenty-four people in the story, all in `js/art/people.js` (which also keeps `carrier`, the water carrier of the
+first drafts, whose place by the river Lot has taken):
 
 | Where | Who |
 | --- | --- |
 | The family | `dad`, `son`, `mom`, `bigsis`, `lilsis` |
-| Egypt | `scribe` (sits cross-legged on the ground), `carrier`, `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
+| Egypt | `lot` (Abram's nephew: sits cross-legged on the sand and prays), `scribe` (sits cross-legged on the ground), `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
 | Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table), `dateseller` (a basket of dates on his hip) |
 | Nevada | `oldtimer` (in a lawn chair that is drawn with him), `agent` |
 
-Two more figures are the same two men after the story has changed them:
-`goldsmith-shades` (the goldsmith with the sunglasses on) and `guard-shade` (the guard
-holding the windshield shade up, his staff laid on the sand). A scene swaps one for the
-other in place, under the same id, so the man keeps his name and the color of his words.
+Three more figures are the same men in another state: `goldsmith-shades` (the goldsmith
+with the sunglasses on), `guard-shade` (the guard holding the windshield shade up, his
+staff laid on the sand) and `lot-standing` (Lot on his feet, his staff in his hand). A
+scene swaps one for the other in place, under the same id, so the man keeps his name and
+the color of his words.
 
 ### Making someone themselves
 
@@ -539,11 +649,86 @@ Three things a scene writer needs to know:
   found, sitting or standing (`tallOf` in `rig.js`), and a speaker's words are put ten
   pixels above that, for a seated scribe far away and a standing father close by alike.
   (A staff that rises above its owner's head is not counted.)
-- **A person's place does not move with them.** Anyone can be walked by a script, but the
-  patch of ground they block stays where the scene first put them, so give anyone who
-  walks `solid: false`.
+- **A person's place goes with them.** On their mark they block their `solid` (or a small
+  patch at their feet); walked somewhere else by a script, a patch at their feet there.
+  `solid: false` lets the lead walk through them. (On a walk of their own, below, their
+  place is kept for them.)
 
 [CHARACTERS.md](CHARACTERS.md) is where these choices come from.
+
+### Their own lives
+
+Nobody in a painted scene should stand like a statue: in a picture that is otherwise alive, a person who never moves
+breaks the illusion as surely as painted smoke does. So everyone in a scene who is not one of the family (the scene's
+`actors`) lives a little by themselves while the player is busy elsewhere (`js/engine/life.js`):
+
+- **Small movements**, every few seconds, where they are: shifting their weight, looking about, a hand to the back of
+  the neck, a stretch, and the movements that are theirs alone. The rig draws them (`figure.fidgets` lists a person's
+  own, `figure.fidget(name)` plays one); the engine chooses when, and which, never the same one twice running.
+- **A bigger moment** now and then, for a person whose scene says where they may go: whoever sits stands up, walks a
+  few steps to one of their places, stretches or looks at something there for a few seconds, walks back and sits down
+  again; whoever stands strolls a little way off and comes back.
+
+A scene says how each person lives, in their entry under `actors`:
+
+```js
+actors: [
+  { id: "scribe", kind: "scribe", at: [150, 448], face: "E",
+    life: {
+      fidget: true,                      // small movements in place (the default, for everyone)
+      every: [18, 40],                   // seconds between bigger moments, picked at random in the range
+      spots: [[178, 462, "E"], [120, 470, "S"]],     // where they may go (where their feet go), and which way they face there
+      stay: [3, 8],                      // seconds they stay there, doing a small movement or two
+      stand: true,                       // someone seated stands up first, and sits down again on coming back
+      when: (g) => !g.flag("egypt.writing"),         // only while the story allows
+      still: false,                      // true: small movements only; never leaves the mark (a guard at a door)
+    } },
+],
+```
+
+| Setting | Default | Meaning |
+| --- | --- | --- |
+| no `life` at all | | Small movements now and then, every 7 to 15 seconds; never leaves the mark |
+| `fidget` | `true`: every 4 to 10 seconds | `false`: none at all; `[4, 9]`: every 4 to 9 seconds |
+| `every` | `[18, 40]` | Seconds between bigger moments. The first comes about a third of the way into it. |
+| `spots` | none | Where they may go: `[x, y, facing]`, the facing optional. A spot is on the floor (the scene's `walk`), clear of blocked ground, and the way there goes round things by the walk map at an easy stroll. Someone whose own mark is off the floor the family walks on (a keeper behind his counter, a clerk behind his table) walks in a straight line between the mark and the spot, so give them spots on their own ground. A few steps reads best: 40 to 120 pixels from the mark. With no spots, they never leave the mark. |
+| `stay` | `[3, 8]` | Seconds they stay at the spot |
+| `stand` | `true` | `false`: someone seated never gets up |
+| `when` | always | A test of the story: nothing happens while it is false |
+| `still` | `false` | `true`: small movements only |
+
+What the engine sees to, so that a scene never has to:
+
+- **The game clock.** All of it stops with the menu. Nothing starts while a script has control, while anyone is
+  talking or a choice is on the screen, in a cutscene, during a close look at something, or while Show is on; whoever
+  is walking when one of those begins stands still until it is over.
+- **One at a time.** Only one person in a scene is away at a time, and the next waits a few seconds after the last is
+  home. Nobody goes anywhere in the first 6 to 10 seconds after a scene opens.
+- **The story first.** A person whose own `when` or whose `life.when` is false is left alone, and so is anyone who is
+  talking, praying, holding something out or being walked by a script. Only someone who is on their mark goes
+  anywhere: a person a script has left somewhere else stays there.
+- **The family is kept clear.** A spot is picked only if the way there and back passes 60 pixels or more from every
+  member of the family on the stage. Whoever is away turns for home if one of the family comes within 60 pixels of
+  the way they still have to go, and on their walks they go round the family, never through.
+- **Nobody is talked to away from home.** Whatever starts a script (a click on someone, a carried thing used on them or
+  given to them, a look) first sends everyone who is away, or up from their seat, home at a brisk walk, to sit down
+  again, while the lead walks over to the place the scene gives for the conversation. The script starts when both are
+  there, and never waits more than about two seconds: after that they are simply put on their marks. So every script
+  can go on assuming that everyone is on their mark, as it always has. A script can ask for it too:
+  `await g.settle()` brings everyone home, `await g.settle("scribe")` one person. (A hint, or a look at a thing in the
+  pockets, only has the lead speak: nobody is sent home for that, and anyone walking simply waits.)
+- **Their clickable area goes with them.** The area with the person's id, or one that says `actor: "<id>"`, follows
+  them while they are away (or up from their seat): a box round the figure as it is drawn at that moment, which Show
+  outlines by the figure itself. Back on the mark, the scene's own shape applies again.
+- **The ground.** While someone is away their place is kept for them, so the lead cannot stand in it, and where they
+  stand still is blocked. While they walk, they block nothing.
+- **Saves.** Nothing of it is saved. A game loaded, or a scene entered, has everyone on their mark.
+- **Less motion.** With that option on, the small movements stay and the walks stop.
+- **Tests.** `index.html?still` (or `game.life.enabled = false`) turns all of it off, and the act tests open the game
+  that way, since they click on people where the scene puts them. `game.life.where()` says who is where and what they
+  are doing, `game.life.force("scribe")` starts someone's bigger moment at once, and `await game.life.idle()` waits
+  until everyone is home. The engine's own test (part `life`) watches the two people of the proof scene, who are there
+  with the fact `proof.life`.
 
 ---
 
@@ -836,12 +1021,13 @@ at the end of each act. A strong fit for this premise: something sent through a 
 in one era turns up in another, so people who are apart can still help each other.
 (The coin the Son throws into the door in Rome falls out of the sky in Nevada.)
 
-**Together.** Mom and the girls go through the house as one. Each of its five scenes (the
-living room, the landing, Dad's study, Little Sister's room and Big Sister's attic) says so
-with `party: ["mom", "bigsis", "lilsis"]`: when the one being played takes the stairs, a
-door or the attic ladder, the other two come too and arrive beside her, each on a place of
-her own, and switching between them is instant because nobody has to go anywhere. ("A
-scene for several leads" in section 10 shows how a scene says where each of them arrives.)
+**Together.** Mom and the girls go through the house as one. Each of its five scenes
+(the living room, the landing, Dad's study, Little Sister's room and Big Sister's attic)
+says so with `party: ["mom", "bigsis", "lilsis"]`: when the one being played takes the
+stairs, a door or the attic ladder, or walks off the edge of the picture, the other two
+come too and arrive beside her, each on a place of her own, and switching between them
+is instant because nobody has to go anywhere. ("A scene for several leads" in section 10
+shows how a scene says where each of them arrives.)
 In a party:
 
 - **Each can do what the others cannot.** A clickable thing can answer each lead
@@ -950,6 +1136,12 @@ export default {
   spawn: { default: [420, 572] },               // where the lead arrives. A lead's own id names a mark of their own.
   facing: "S",                                  // (added) which way the lead faces on arriving. This is the usual way.
   exits: ["egypt-site"],                        // (added) scenes that can be walked to from here: their pictures are made ready ahead of time
+  edges: {                                      // ways out at the edges of the picture (below)
+    N: { to: "sketch-example", name: "up the track", walkTo: [496, 302] },
+    E: { to: "sketch-example" },
+    W: { to: "sketch-example", name: "across the river", when: (g) => !!g.flag("proof.ferry"),
+      use: async (g) => { await g.say("egypt.river.look"); await g.goto("sketch-example"); } },
+  },
 
   picture: art + "back.png",                    // the backdrop
   planes: [                                     // painted cut-outs, sorted with the people
@@ -960,11 +1152,18 @@ export default {
     { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") },   // (added) there only while the story says so
   ],
   live(art, g) { return art.portal(500, 300, 40, "door"); },                     // (added) light, drawn and not painted
+  fx: [                                         // (added) things that move by nature, drawn moving (section 2, "Things that move by nature")
+    { id: "fire-smoke", type: "smoke", at: [468, 422], base: 430, height: 130, width: [6, 46], wind: 7 },          // its base: a man behind the fire is behind its smoke
+    { id: "doves", type: "birds", look: "dove", count: 6, area: [[268, 372], [318, 334], [372, 338], [392, 372], [330, 402], [282, 400]] },
+    { id: "palms-sway", type: "sway", plane: "palms", anchor: "bottom", amount: 1.4 },                            // a cut-out stirring from its feet
+  ],
 
-  actors: [{ id: "carrier", kind: "carrier", at: [260, 451], face: "SE" }],      // (added) people who are not the lead
+  actors: [{ id: "lot", kind: "lot", at: [404, 432], face: "E",                 // (added) people who are not the lead (Lot sits: his kind says so)
+    life: { every: [18, 40], spots: [[446, 470, "E"]], stay: [3, 8] } }],       // (added) what they do by themselves now and then (section 4, "Their own lives")
   hotspots: [
     { id: "pyramids", name: "pyramids", rect: [432, 78, 368, 172], look: "egypt.pyramids.look" },       // a box: x, y, width, height. (A circle is [x, y, radius].)
     { id: "wagon", name: "wagon", verb: "Search",                                // (the verb is added: what the pointer says it will do)
+      plane: "wagon",                           // (added) Show outlines the wagon's own silhouette (here it would anyway: a cut-out has this id)
       poly: [[462, 492], [560, 470], [600, 420], [650, 388], [750, 394], [790, 440], [790, 520], [740, 544], [462, 520]],
       walkTo: [600, 574], face: "N",            // where the lead goes to do it, and which way he then faces
       look: "egypt.wagon.look",                 // a line ID,
@@ -987,7 +1186,8 @@ toward, `"E"` screen right, and the four in between.
 To jump straight to a scene while building it: `index.html?scene=rome-street&lead=son`.
 Every act before that scene's own counts as played, so hints work. Add
 `&flags=rome.arrived,rome.sawStreet` to start with more of the story done. Hold **H** in
-the game to see every clickable area. The storyboard page draws each scene with its
+the game to see an outline round every clickable thing, and an arrow at every way out at
+an edge. The storyboard page draws each scene with its
 walkable ground, its blocked patches and its base lines, and has a **Play from here**
 link under every scene.
 
@@ -1017,6 +1217,59 @@ built again.
 drawing markup in picture pixels. `art.portal(x, y, radius, id)` is the door in time.
 Give a part an `id` and a script finds it with `g.q("#door")`, to fade, move or scale it.
 The live layer is under the cast.
+
+**A way out at the edge of the picture.** As in the old adventure games, the player can
+walk off the edge of the screen. A scene lists the ways out across the edges of its picture
+under `edges`, by side: `N` is the top of the picture, `S` the bottom, `W` the left, `E` the
+right (`js/engine/edges.js`):
+
+| Field | Meaning |
+| --- | --- |
+| `to`, `spawn` | The scene, and the named way in at the other end: what `g.goto(to, { spawn })` is given, as for a door. Without `spawn` the lead arrives on the other scene's usual mark. |
+| `name` | What the label line says: `"Go "` and the name ("Go up the track"). Without one, `"Go to "` and the other scene's own name, with "The", "A" or "An" made small ("Go to the great gallery"); a name that begins with somebody's name keeps its capital ("Go to Little Sister's room"). When the other scene's name does not read well after "Go to", give `name`. |
+| `walkTo` | Where the lead walks before leaving. Without it: the floor nearest the click, pushed as far toward that edge as the floor goes (for the top and the bottom, in the column of the click; for the sides, along the row of the floor nearest the click). A way that is one particular path (a track, a stair) should say where it starts. |
+| `when` | A test of the story. The way is there only while it passes; until then its band is plain floor. |
+| `use` | A script to run instead of the plain `g.goto`, with the controls held as for any script: a way out that is also a gate, or that needs a line first. |
+
+Along each edge that has a way out lies a band: the top 60 pixels of the picture, the
+bottom 52, the left 44, the right 44. Where two bands meet, a point belongs to the nearer
+edge. Over the floor in a band the pointer becomes an arrow pointing out of the picture
+that way, drawn for the game (`edge-n`, `edge-s`, `edge-w` and `edge-e` in
+`css/game.css`), and the label line says where the way leads. A click there walks the lead
+toward that edge, and when he is there the scene changes, the party coming along as
+through any door. It is an ordinary walk, not a script: a click anywhere else on the way
+sends him there instead, and nobody leaves; a double click hurries him; on a touch screen a
+tap does the same. Anything that can be clicked in a band wins over it: a clickable area, a
+companion standing there, a button of the interface. With a thing in hand a band is floor
+like any other (a click puts the thing away), and in look mode a click there only ends look
+mode: nobody leaves by looking. The doors, stairs and tracks a scene already has as
+clickable areas go on working beside its edges, and they are what a keyboard reaches.
+
+At every start the engine checks every scene's ways out and warns in the console
+("Edge check: ...") about a way to a scene that does not exist, a `spawn` the other scene
+has no mark for, a side that is not one of the four, a way with neither `to` nor `use`, or a
+`name` that begins with "Go" (the label puts that in itself).
+
+**What Show shows.** The **Show** button (for a moment), holding **H**, or `g.reveal(true)`
+in a script puts the class `reveal` on the clickable layer, and a layer of its own shows an
+outline round each thing that can be clicked: a crisp light line, two pixels wide, just
+outside the thing, with a soft time-cyan glow outward, and nothing filled
+(`js/engine/outline.js`). Which outline:
+
+- An area that names something on the stage follows that thing's own silhouette, as it is
+  drawn at that moment (its state, its frame, where it stands), as much of it as lies inside
+  the area grown by four pixels. It names it with `plane: "<id>"`; with no `plane`, a cut-out,
+  a person or a prop with the area's own id is taken. So the wagon is outlined as a wagon,
+  and the man by the river as the man himself, not as boxes.
+- A companion is outlined by her own figure.
+- Any other area by its own `poly`, `rect` or `circle`, so a shape should hug its thing to
+  within a few pixels. An area whose thing is not showing falls back to its own shape.
+- An area whose `when` fails is left out. Each way out at an edge gets a soft arrow at the
+  middle of its edge.
+
+It is drawn once when Show is turned on, and again only if what it shows changes while it
+is on: another scene, an area coming or going, a cut-out's state, a companion's place. The
+area that has keyboard focus (Tab) gets the same outline, by itself.
 
 **A scene for several leads.** `js/content/scenes/home-living-room.js` is the one to
 copy. On top of the above it has:
@@ -1065,7 +1318,11 @@ staff) goes in the entry's `extras` function.
 `icon`. An icon whose name ends in `.png` is a painted picture in `art/items/` (64x64);
 any other name is one of the small drawn icons in `kit.js`. A thing a script names that
 is not in the list does not stop the game: it is shown by its id, with a note in the
-console.
+console. The engine puts "the" before a thing's name when it makes a sentence of it ("You
+have the reed", "Mom has the reed", "Put the reed away"), except for a proper name: give
+the thing `proper: true` and it is "You have General Feathers". A name that begins with a
+capital counts as proper by itself ("You have Dad's pencil"); `proper: false` puts "the"
+back.
 
 **A close-up.** For something too small to read in the scene (a screen, a notice), draw
 it large and show it from a script: `g.closeup(g.art.notice(), "The notice on the fence")`.
@@ -1091,8 +1348,8 @@ see it in place and to see any warnings.
 
 ### Publishing a new version
 
-GitHub Pages lets a browser keep each file for ten minutes. The game is some fifty code
-files and more than eighty pictures, so without care a browser can end up running new
+GitHub Pages lets a browser keep each file for ten minutes. The game is some sixty code
+files and more than a hundred pictures, so without care a browser can end up running new
 files beside old ones. It happened on 2026-10-06: for some minutes after a push, the
 title came up and New game went to a black screen. One sequence reproduces that exactly
 with the two versions involved: the earlier version's page is on screen when the later
@@ -1157,17 +1414,24 @@ loads the game, by the plain addresses, with the old risk.
 | `await g.choose([{ id, line }])` | Offers things to say; gives back the chosen `id` |
 | `g.flag("name")`, `g.flag("name", true)` | Reads or records a story fact. Recording one makes the cut-outs and the clickable areas read their tests again. |
 | `g.give("item")`, `g.take("item")`, `g.has("item")` | Pockets of the current lead |
-| `g.holder("item")`, `g.item("item")` | Which lead is carrying a thing, or `null`; and the thing's own entry in `items` |
+| `g.holder("item")`, `g.item("item")`, `g.the("item")` | Which lead is carrying a thing, or `null`; the thing's own entry in `items`; and its name as it goes into a sentence ("the reed", "General Feathers") |
 | `await g.goto("scene", { via: "wormhole" })` | Changes scene by fade, cut or time tunnel. `{ spawn: "name" }` arrives on that mark of the scene's `spawn`, and the rest of a `party` on its `arrive` places of that name ("A scene for several leads", above). |
+| `g.leave("N")` | Leaves by the scene's way out at that edge, as a click in the middle of its band does: the lead walks there, and on. `g.edgeAt(x, y)` says which way out a place of the picture lies in the band of (`"N"`, `"S"`, `"W"`, `"E"` or `null`), and `g.leaving` which one the lead is on his way out by. |
+| `g.reveal(true)`, `g.reveal(false)`, `g.reveal(true, 2400)` | Show: turns the outlines on until told otherwise, off, or on for a while (as the button does). `g.outlines.drawn` lists what was outlined, and how. |
 | `await g.card("Ancient Egypt", "about 1920 B.C.")` | Shows a title card. (Egypt is about 1920 B.C. because the game counts the years before Christ from the Bible's own genealogies, as Archbishop Ussher counted them: see "How the game counts the years" in [CHARACTERS.md](CHARACTERS.md#how-the-game-counts-the-years).) |
 | `await g.cutscene("intro")` | Plays a skippable cutscene |
 | `await g.wait(ms)`, `await g.tween(ms, (k) => ...)`, `await g.fade(1)` | Timing, motion, fades |
 | `g.music("egypt")`, `g.sfx("portal")` | Sound. `g.musicOf(g.scene)` is the track the scene plays now: its `music`, which may depend on the story, or its era's. |
+| `g.effects.get("altar-smoke").show(false)`, `.show(true)`, `.auto()` | One of the scene's moving things (`fx`) taken away, or shown, whatever its `when` says; `auto()` hands it back to its `when` (section 2, "Things that move by nature"). |
+| `g.effects.get("pigeons").scare([x, y])`, `.scare()` | The birds of a flock near that place go up (all of them, with no place), as if somebody had rushed at them, and keep clear of it for a moment: a "Chase". |
+| `g.effects.add({ type: "flame", at: [x, y], size: 10 })` | Puts another moving thing on the stage, until the scene changes (a fire the story lights). |
+| `await g.settle()`, `await g.settle("scribe")` | Brings everyone of the scene's people who is away on a walk of their own home (or one of them), briskly, sitting down if they sit (section 4, "Their own lives"). Every script already gets this before it starts. |
 | `await g.walkTo(x, y)`, `await g.walkTo(x, y, "scribe")` | Walks the lead, or someone else, to a place, round whatever is in the way |
 | `await g.moveTo(x, y)`, `await g.moveTo(x, y, "agent")` | Walks in a straight line to a place the player could not click on (into a closet) |
 | `await g.reach()`, `await g.reach(true)` | The lead reaches out, or bends down to the ground |
 | `g.lead.hold()`, `g.lead.hold(false)` | Someone keeps an arm held out while people talk (holding a thing up), until told to let it drop |
-| `g.actor("mom").pray()`, `g.actor("mom").pray(false)` | Someone stands in prayer, in their own way (section 4), through whatever is said, until told to stop. It is for someone standing still: end it before they walk. |
+| `g.actor("mom").pray()`, `g.actor("mom").pray(false)` | Someone prays, in their own way (section 4), through whatever is said, until told to stop: standing still, or sitting where they sit. End it before they walk. |
+| `g.lead.shade()`, `g.lead.shade(false)` | Someone standing shades their eyes from a glare (section 4) until told to stop |
 | `g.assets.url(path)`, `g.assets.picture(path)` | For a script that puts a painted picture on the live layer: its stamped address, and a promise that it has arrived |
 | `g.actor("scribe").face("W")`, `g.lead.look(x, y)` | Turns someone to a compass point, or toward a place |
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
@@ -1212,11 +1476,13 @@ In the browser's console, `game` is the game object that scripts are handed as `
 **The engine's test** drives a real browser through the engine and fails on any console
 error: the painted stage and its layers, depth read off the screen pixel by pixel,
 walking and routes, every form of cut-out, live light, close-ups, the inventory, old
-saves, every scene in the list, how the cast layer repaints, how people are sized,
-seated people talking, words over heads, the fetching of every picture behind the title
-(and that nothing is asked of the server afterwards), hard and smooth pixels, the
-interface at two sizes and in three other window shapes, the storyboard page, the intro
-and the stamping tools: 192 checks, in about three minutes. It takes screenshots, which
+saves, every scene in the list (and that each of its ways out at the edges can be
+clicked and walked to), how the cast layer repaints, how people are sized, seated people
+talking, words over heads, the ways out at the edges of the picture, the outlines of
+Show, the names of things with and without "the", the fetching of every picture behind
+the title (and that nothing is asked of the server afterwards), hard and smooth pixels,
+the interface at two sizes and in three other window shapes, the storyboard page, the
+intro and the stamping tools: some 250 checks, in about four minutes. It takes screenshots, which
 have to be looked at: a picture that is wrong throws no error. Three more scripts
 measure what a frame costs (the table in section 1), take the pictures that the choice
 between hard and smooth pixels was made from, and take pictures of seated people
@@ -1228,7 +1494,8 @@ beside the game, and their paths have to be changed before they can be run from 
 ## 12. What is built and what is not
 
 **Built, and meant to stay:** the engine, the 800x600 painted stage with its cut-outs
-and live light, the depth system, the save format, the sound system, the line-ID
+and live light, the depth system, the things that move by nature (smoke, flames, water,
+birds, cloth), the save format, the sound system, the line-ID
 dialogue system, the story-as-data structure, the pixel renderer and the figure, the
 interface, the Koine Road typeface, the stamping of files.
 
@@ -1259,6 +1526,10 @@ October 2026 from his brief, and are waiting to be played.
 - Close-ups the player can click inside. A close-up is a picture to read, not a
   small scene of its own.
 - Scrolling scenes wider than the screen.
+- The moving things in the acts' own scenes. The engine draws them (section 2, "Things that move by nature") and the
+  painters have taken them out of the pictures and marked them in each scene's `layout.json`; the scene files list them
+  under `fx` next round. Not built: a startled bird landing in another flock's place (the gutter, say), and sound for
+  any of them (a fountain's splash, the crackle of a brazier).
 - Touch polish: larger targets and a bigger inventory on phones.
 - Layered music, ambient sound loops, per-scene reverb.
 - Translations (the line files are ready for them) and a caption option for sounds.
@@ -1276,7 +1547,13 @@ in the river and at the water's edge end on the bank. A cast layer repainted in 
 was compared with one painted whole on every frame of a walk in three scenes, and never
 differed by a pixel. Saves from both older versions were loaded. Seated people were
 watched talking, and the words over six heads were measured: ten pixels above each,
-seated or standing, small or full size. And with the title up and the pictures gathered,
+seated or standing, small or full size. The ways out at the edges were tried with a real
+mouse and a real tap: the arrow and the label in each band and in a corner, an area and a
+companion in a band winning over it, a way that is not there yet, a click that changes its
+mind on the way, look mode, a thing in hand, a double click, and the party arriving
+together on the other side. Show's outlines were read off the screen: nothing inside any
+area is filled, and every pixel of the line round the wagon, and round a companion, lies
+within three pixels of their own paint. And with the title up and the pictures gathered,
 the server was made to refuse every picture: the game was continued, and a scene never
 yet shown was entered, with every painting, cut-out and inventory picture in place.
 
@@ -1308,6 +1585,7 @@ to showing the drawing itself.
 | Do this | With a mouse | On a touch screen | On a keyboard |
 | --- | --- | --- | --- |
 | Walk | Click the ground | Tap the ground | |
+| Leave by the edge of the picture | Click near that edge, where the pointer turns into an arrow pointing out | Tap near that edge | Tab to the door or the path, Enter (where the way out is also a thing to click) |
 | Hurry a walk | Double-click | Double-tap | |
 | Use, talk, pick up | Click the thing | Tap the thing | Tab to it, Enter |
 | Look | Right-click, or **Look** then click | Press and hold, or **Look** then tap | Tab to it, L |
@@ -1319,7 +1597,7 @@ to showing the drawing itself.
 | Pick a reply | Click it | Tap it | Number keys |
 | Skip a cutscene | **Skip** | **Skip** | Esc |
 | Menu | **Menu** | **Menu** | Esc |
-| Show what can be clicked | **Show** | **Show** | Hold H |
+| Show what can be clicked (an outline round each thing, an arrow at each way out) | **Show** | **Show** | Hold H |
 | Move past a title card | Click | Tap | Space or Enter |
 
 ---
@@ -1343,15 +1621,19 @@ The game makes choices so that it runs. These are yours to keep or change:
 6. **Passing things between eras through wormholes** as a core puzzle idea.
 7. **Verbs:** one main action plus Look. Classic games had a verb list; a third
    verb such as Talk could be added.
-8. **Hints:** a Hint button that has the lead think aloud. Keep it, limit it, or
+8. **How near an edge a click leaves the scene.** The bands are the top 60 pixels of the
+   picture, the bottom 52 and 44 at each side (`BANDS` in `js/engine/edges.js`), and
+   anything clickable in a band wins over it. Wider bands are easier to hit and take more
+   of the floor away from plain walking.
+9. **Hints:** a Hint button that has the lead think aloud. Keep it, limit it, or
    drop it.
-9. **Voices:** from the start or later. The engine handles either.
-10. **Who the leads are.** [CHARACTERS.md](CHARACTERS.md) describes all five. Nobody has
+10. **Voices:** from the start or later. The engine handles either.
+11. **Who the leads are.** [CHARACTERS.md](CHARACTERS.md) describes all five. Nobody has
     a name yet: on screen they are Dad, Son, Mom, Big Sister and Little Sister.
-11. **Where the present-day chapter goes.** It plays after Rome. It could open the game
+12. **Where the present-day chapter goes.** It plays after Rome. It could open the game
     instead, or be cut in between the scenes in the past.
-12. **The puzzles.** The three puzzle documents lay them out so they are easy to change.
-13. **Big Sister's facts.** Every fact she states has to be true. The list, and which
+13. **The puzzles.** The three puzzle documents lay them out so they are easy to change.
+14. **Big Sister's facts.** Every fact she states has to be true. The list, and which
     of them have been checked against a source, is at the end of CHARACTERS.md.
 
 ---

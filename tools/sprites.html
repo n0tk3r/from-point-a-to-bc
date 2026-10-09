@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-build="fd70021ac7">
+<html lang="en" data-build="4a80f06813">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,11 +30,13 @@
 {
   "imports": {
     "../js/art/kit.js": "../js/art/kit.js?v=f0f77faa78",
-    "../js/art/people.js": "../js/art/people.js?v=c8c1cb02f4",
+    "../js/art/paint.js": "../js/art/paint.js?v=67bcf0ba1c",
+    "../js/art/painter.js": "../js/art/painter.js?v=9c010c0c8f",
+    "../js/art/people.js": "../js/art/people.js?v=5114f8d00a",
     "../js/art/pix.js": "../js/art/pix.js?v=9573e1ffa7",
     "../js/art/props.js": "../js/art/props.js?v=f1a88e489d",
-    "../js/art/rig.js": "../js/art/rig.js?v=cd7f3dc246",
-    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=5607e4093d",
+    "../js/art/rig.js": "../js/art/rig.js?v=7fed55dd51",
+    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=f6c68f4596",
     "../js/content/acts/home.js": "../js/content/acts/home.js?v=fb878f4e85",
     "../js/content/acts/nevada.js": "../js/content/acts/nevada.js?v=aeea6bc75d",
     "../js/content/acts/prologue.js": "../js/content/acts/prologue.js?v=e657c02ab6",
@@ -44,43 +46,47 @@
     "../js/content/cutscenes/title.js": "../js/content/cutscenes/title.js?v=b9b59316cd",
     "../js/content/lines.en.js": "../js/content/lines.en.js?v=3a4763dd4d",
     "../js/content/lines/common.en.js": "../js/content/lines/common.en.js?v=4ba8a59a51",
-    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=46617d2660",
-    "../js/content/lines/home.en.js": "../js/content/lines/home.en.js?v=85d69e62b0",
-    "../js/content/lines/nevada.en.js": "../js/content/lines/nevada.en.js?v=0189581b79",
+    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=15ad7c2c4b",
+    "../js/content/lines/home.en.js": "../js/content/lines/home.en.js?v=6978cefc85",
+    "../js/content/lines/nevada.en.js": "../js/content/lines/nevada.en.js?v=ccf1b54ac0",
     "../js/content/lines/rome.en.js": "../js/content/lines/rome.en.js?v=421dbab1a6",
-    "../js/content/scenes/egypt-chamber.js": "../js/content/scenes/egypt-chamber.js?v=2398f1f244",
-    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=aee6bb7cfd",
-    "../js/content/scenes/egypt-gallery.js": "../js/content/scenes/egypt-gallery.js?v=48c3d729f0",
-    "../js/content/scenes/egypt-site.js": "../js/content/scenes/egypt-site.js?v=f60db7266c",
-    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=61a9a59e36",
-    "../js/content/scenes/home-bigsis-room.js": "../js/content/scenes/home-bigsis-room.js?v=64962a9764",
-    "../js/content/scenes/home-landing.js": "../js/content/scenes/home-landing.js?v=e745061fc2",
-    "../js/content/scenes/home-lilsis-room.js": "../js/content/scenes/home-lilsis-room.js?v=e12f954416",
-    "../js/content/scenes/home-living-room.js": "../js/content/scenes/home-living-room.js?v=b00aecae5d",
-    "../js/content/scenes/home-study.js": "../js/content/scenes/home-study.js?v=5e6ebdb1d5",
+    "../js/content/scenes/egypt-chamber.js": "../js/content/scenes/egypt-chamber.js?v=a2f212d897",
+    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=d16b01a000",
+    "../js/content/scenes/egypt-gallery.js": "../js/content/scenes/egypt-gallery.js?v=e951e3ba04",
+    "../js/content/scenes/egypt-site.js": "../js/content/scenes/egypt-site.js?v=cddb80a986",
+    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=1601b5e981",
+    "../js/content/scenes/home-bigsis-room.js": "../js/content/scenes/home-bigsis-room.js?v=e7d928882f",
+    "../js/content/scenes/home-landing.js": "../js/content/scenes/home-landing.js?v=ff66d03df2",
+    "../js/content/scenes/home-lilsis-room.js": "../js/content/scenes/home-lilsis-room.js?v=148d1d6f79",
+    "../js/content/scenes/home-living-room.js": "../js/content/scenes/home-living-room.js?v=1008526237",
+    "../js/content/scenes/home-study.js": "../js/content/scenes/home-study.js?v=5b22b148dc",
     "../js/content/scenes/index.js": "../js/content/scenes/index.js?v=6a1254b807",
-    "../js/content/scenes/nevada-roadside.js": "../js/content/scenes/nevada-roadside.js?v=f1f0a1a380",
-    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=58539176d9",
-    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=b0a2931a25",
-    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=0a62a8624c",
+    "../js/content/scenes/nevada-roadside.js": "../js/content/scenes/nevada-roadside.js?v=cc5b81eff9",
+    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=69f8c9c9dc",
+    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=e525d2dbbf",
+    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=26ab059f0c",
     "../js/content/scenes/sketch-example.js": "../js/content/scenes/sketch-example.js?v=51e81ac160",
-    "../js/content/sound.js": "../js/content/sound.js?v=c390fbdd7c",
+    "../js/content/sound.js": "../js/content/sound.js?v=bbec1d6724",
     "../js/content/story.js": "../js/content/story.js?v=c1cbbd8556",
-    "../js/content/world.js": "../js/content/world.js?v=1e6b5389ba",
+    "../js/content/world.js": "../js/content/world.js?v=75ed790d56",
     "../js/engine/assets.js": "../js/engine/assets.js?v=68e63e1a73",
     "../js/engine/audio.js": "../js/engine/audio.js?v=6159df06e2",
-    "../js/engine/cast.js": "../js/engine/cast.js?v=de7d39348f",
+    "../js/engine/cast.js": "../js/engine/cast.js?v=a5ecd1b9c0",
     "../js/engine/clock.js": "../js/engine/clock.js?v=6108df5801",
     "../js/engine/dialogue.js": "../js/engine/dialogue.js?v=ad86f8c5dd",
+    "../js/engine/edges.js": "../js/engine/edges.js?v=9b47be934e",
+    "../js/engine/effects.js": "../js/engine/effects.js?v=903ac04319",
     "../js/engine/fx.js": "../js/engine/fx.js?v=04bfeb4b61",
-    "../js/engine/game.js": "../js/engine/game.js?v=175821ff8d",
+    "../js/engine/game.js": "../js/engine/game.js?v=ba738545bc",
     "../js/engine/grid.js": "../js/engine/grid.js?v=701c0b36ab",
+    "../js/engine/life.js": "../js/engine/life.js?v=66eea0aa58",
+    "../js/engine/outline.js": "../js/engine/outline.js?v=80797bf388",
     "../js/engine/save.js": "../js/engine/save.js?v=cb83d8447e",
-    "../js/engine/scene.js": "../js/engine/scene.js?v=007c66a01c",
+    "../js/engine/scene.js": "../js/engine/scene.js?v=934af10f46",
     "../js/engine/state.js": "../js/engine/state.js?v=bb5addbb13",
     "../js/engine/story.js": "../js/engine/story.js?v=5668206d56",
-    "../js/engine/ui.js": "../js/engine/ui.js?v=453bfbda82",
-    "../js/engine/walk.js": "../js/engine/walk.js?v=a2617d8c49",
+    "../js/engine/ui.js": "../js/engine/ui.js?v=578bd22f3c",
+    "../js/engine/walk.js": "../js/engine/walk.js?v=ea117bdc0a",
     "../js/main.js": "../js/main.js?v=4b03af2283"
   }
 }
@@ -111,16 +117,16 @@
   "art/items/sunglasses.png": "fb20ed6164",
   "art/items/toga.png": "c6b5a40078",
   "art/items/tunic.png": "d582f05040",
-  "art/scenes/egypt-chamber/back.png": "9f13f6dcaa",
-  "art/scenes/egypt-chamber/bench.png": "baf9d0cda3",
-  "art/scenes/egypt-chamber/front.png": "242006b715",
-  "art/scenes/egypt-chamber/layout.json": "c2e51ce38e",
+  "art/scenes/egypt-chamber/back.png": "b810ac40b9",
+  "art/scenes/egypt-chamber/bench.png": "5596600cd9",
+  "art/scenes/egypt-chamber/front.png": "8ce6b642c7",
+  "art/scenes/egypt-chamber/layout.json": "80112047b6",
   "art/scenes/egypt-chamber/mirror.png": "1a37b44cb5",
-  "art/scenes/egypt-crash/back.png": "bcc829b4bf",
+  "art/scenes/egypt-crash/back.png": "05f5220b68",
   "art/scenes/egypt-crash/cooler-open.png": "06d443960c",
-  "art/scenes/egypt-crash/donkey.png": "7adfa05c74",
+  "art/scenes/egypt-crash/donkey.png": "84a1c31fda",
   "art/scenes/egypt-crash/front.png": "e4a2121792",
-  "art/scenes/egypt-crash/layout.json": "921d6281bd",
+  "art/scenes/egypt-crash/layout.json": "5388a0a169",
   "art/scenes/egypt-crash/mirror.png": "12bb296008",
   "art/scenes/egypt-crash/palm-1.png": "16ba289ecf",
   "art/scenes/egypt-crash/palm-2.png": "d745195fdf",
@@ -133,17 +139,22 @@
   "art/scenes/egypt-crash/suitcase-open.png": "2094d677d3",
   "art/scenes/egypt-crash/trunk-open.png": "ab02d6ceb9",
   "art/scenes/egypt-crash/wagon.png": "39f3cc9d1d",
-  "art/scenes/egypt-gallery/back.png": "d134b4c933",
-  "art/scenes/egypt-gallery/front.png": "69a5c5890c",
-  "art/scenes/egypt-gallery/layout.json": "712ffca5bf",
+  "art/scenes/egypt-gallery/back.png": "6600ca8898",
+  "art/scenes/egypt-gallery/front.png": "6f4aef9646",
+  "art/scenes/egypt-gallery/layout.json": "1f1940d324",
   "art/scenes/egypt-gallery/mirror-foot.png": "6aeb123cce",
   "art/scenes/egypt-gallery/mirror-top.png": "03e400758e",
   "art/scenes/egypt-site/awning.png": "8e863ae8db",
-  "art/scenes/egypt-site/back.png": "c795ee10eb",
+  "art/scenes/egypt-site/back.png": "6c2b755c7e",
   "art/scenes/egypt-site/front.png": "12dfbc20cf",
-  "art/scenes/egypt-site/layout.json": "dbc8ae3c28",
+  "art/scenes/egypt-site/kite-0.png": "5792eddd87",
+  "art/scenes/egypt-site/kite-1.png": "401b6b8af1",
+  "art/scenes/egypt-site/kite-2.png": "71caa18ec8",
+  "art/scenes/egypt-site/kite-3.png": "7ccf4a8a47",
+  "art/scenes/egypt-site/layout.json": "e1c81db165",
   "art/scenes/egypt-site/shade.png": "001ab929a9",
   "art/scenes/egypt-site/sledge.png": "a93c13f7aa",
+  "art/scenes/egypt-site/streamers.png": "4c2be459f8",
   "art/scenes/highway/back.png": "8be085926a",
   "art/scenes/highway/layout.json": "dec53b37ed",
   "art/scenes/highway/sign-bc.png": "0e470d4449",
@@ -151,20 +162,21 @@
   "art/scenes/highway/sun.png": "d72248f0a5",
   "art/scenes/highway/wagon-rear-0.png": "78e0128c3b",
   "art/scenes/highway/wagon-rear-1.png": "e12217debe",
-  "art/scenes/home-bigsis-room/back.png": "55a2c60919",
+  "art/scenes/home-bigsis-room/back.png": "37621def0f",
   "art/scenes/home-bigsis-room/desk.png": "0956db73ed",
   "art/scenes/home-bigsis-room/front.png": "763d4f4e65",
-  "art/scenes/home-bigsis-room/layout.json": "beb6dbf2cc",
-  "art/scenes/home-landing/back.png": "4c7d6db799",
+  "art/scenes/home-bigsis-room/layout.json": "1e8078785e",
+  "art/scenes/home-landing/back.png": "57e3b9fbb7",
   "art/scenes/home-landing/ladder.png": "dfe46233fb",
-  "art/scenes/home-landing/layout.json": "704375e0e6",
+  "art/scenes/home-landing/layout.json": "dc7d5957e0",
   "art/scenes/home-landing/rail.png": "95a93c413c",
   "art/scenes/home-landing/study-open.png": "7a77f8c8ed",
   "art/scenes/home-lilsis-room/back.png": "f734ec5e54",
   "art/scenes/home-lilsis-room/flashlight.png": "7cafad69a8",
   "art/scenes/home-lilsis-room/fort.png": "d81d1c5be9",
-  "art/scenes/home-lilsis-room/front.png": "11e7aa58d1",
-  "art/scenes/home-lilsis-room/layout.json": "147efaa123",
+  "art/scenes/home-lilsis-room/front.png": "45a6ca5d6f",
+  "art/scenes/home-lilsis-room/layout.json": "42359ecb44",
+  "art/scenes/home-lilsis-room/mobile.png": "732d9ff8ce",
   "art/scenes/home-lilsis-room/teaparty.png": "efa49554e9",
   "art/scenes/home-living-room/armchair.png": "32f92375e4",
   "art/scenes/home-living-room/back.png": "87f91878af",
@@ -183,30 +195,204 @@
   "art/scenes/home-study/screen-offline.png": "c1ecef926f",
   "art/scenes/home-study/tape-out.png": "0cd456d39f",
   "art/scenes/home-study/vault-open.png": "65a635f2da",
-  "art/scenes/nevada-roadside/back.png": "5914317a32",
+  "art/scenes/nevada-roadside/back.png": "78a69ecd58",
+  "art/scenes/nevada-roadside/bird-0.png": "9b85bc74d6",
+  "art/scenes/nevada-roadside/bird-1.png": "03e658442d",
+  "art/scenes/nevada-roadside/bird-2.png": "8fc33aa46c",
+  "art/scenes/nevada-roadside/bird-3.png": "44a91d1098",
   "art/scenes/nevada-roadside/car.png": "a4680b6fdc",
   "art/scenes/nevada-roadside/front.png": "544a2777d4",
-  "art/scenes/nevada-roadside/layout.json": "79a523e361",
+  "art/scenes/nevada-roadside/layout.json": "d9581d1586",
   "art/scenes/nevada-roadside/pump.png": "9b26e18756",
   "art/scenes/nevada-roadside/stand.png": "cef00a0d51",
   "art/scenes/rome-steps/altar.png": "95cfaae75e",
-  "art/scenes/rome-steps/back.png": "c2380716bb",
+  "art/scenes/rome-steps/back.png": "ba69fe4d44",
+  "art/scenes/rome-steps/cage-front.png": "2e930119a7",
   "art/scenes/rome-steps/columns.png": "ca55325253",
+  "art/scenes/rome-steps/front-base.png": "8274d77394",
   "art/scenes/rome-steps/front.png": "efe2a345d3",
-  "art/scenes/rome-steps/layout.json": "03471f1cb7",
+  "art/scenes/rome-steps/hen-brown-1.png": "d0505cfef7",
+  "art/scenes/rome-steps/hen-brown-2.png": "db9821b7da",
+  "art/scenes/rome-steps/hen-brown-3.png": "7d17677112",
+  "art/scenes/rome-steps/hen-brown-4.png": "2e6075c5c4",
+  "art/scenes/rome-steps/hen-brown-5.png": "8089946ecb",
+  "art/scenes/rome-steps/hen-brown-6.png": "f60737ea9e",
+  "art/scenes/rome-steps/hen-brown-7.png": "ad255b0c40",
+  "art/scenes/rome-steps/hen-white-1.png": "11f39adada",
+  "art/scenes/rome-steps/hen-white-2.png": "4e56815d70",
+  "art/scenes/rome-steps/hen-white-3.png": "fd03519325",
+  "art/scenes/rome-steps/hen-white-4.png": "3a2e2ef073",
+  "art/scenes/rome-steps/hen-white-5.png": "0906cfb3d8",
+  "art/scenes/rome-steps/hen-white-6.png": "f37c905253",
+  "art/scenes/rome-steps/hen-white-7.png": "b47d1d77cc",
+  "art/scenes/rome-steps/laurel.png": "b7aca7cac6",
+  "art/scenes/rome-steps/layout.json": "e61a049637",
+  "art/scenes/rome-steps/pigeon-1.png": "8c375edceb",
+  "art/scenes/rome-steps/pigeon-10.png": "af1e08a777",
+  "art/scenes/rome-steps/pigeon-11.png": "e0e42f2fbc",
+  "art/scenes/rome-steps/pigeon-12.png": "60a62a43ab",
+  "art/scenes/rome-steps/pigeon-13.png": "c7d51e2905",
+  "art/scenes/rome-steps/pigeon-14.png": "3b93b50c60",
+  "art/scenes/rome-steps/pigeon-15.png": "fce6d64993",
+  "art/scenes/rome-steps/pigeon-16.png": "b6f7f93da1",
+  "art/scenes/rome-steps/pigeon-17.png": "8d497b9320",
+  "art/scenes/rome-steps/pigeon-18.png": "3fd62d6e23",
+  "art/scenes/rome-steps/pigeon-2.png": "2cfa9d5fa3",
+  "art/scenes/rome-steps/pigeon-3.png": "2d817bf241",
+  "art/scenes/rome-steps/pigeon-4.png": "4949144ad2",
+  "art/scenes/rome-steps/pigeon-5.png": "ccb3c62bb7",
+  "art/scenes/rome-steps/pigeon-6.png": "5b845767cb",
+  "art/scenes/rome-steps/pigeon-7.png": "bb9c8c595a",
+  "art/scenes/rome-steps/pigeon-8.png": "bd85afd657",
+  "art/scenes/rome-steps/pigeon-9.png": "019353106b",
+  "art/scenes/rome-steps/pigeon-dark-1.png": "45d84b7604",
+  "art/scenes/rome-steps/pigeon-dark-10.png": "cb2a56fdf8",
+  "art/scenes/rome-steps/pigeon-dark-11.png": "62e9773060",
+  "art/scenes/rome-steps/pigeon-dark-12.png": "14049e1825",
+  "art/scenes/rome-steps/pigeon-dark-13.png": "07832f9cbb",
+  "art/scenes/rome-steps/pigeon-dark-14.png": "dc88dc30ef",
+  "art/scenes/rome-steps/pigeon-dark-15.png": "d12e537506",
+  "art/scenes/rome-steps/pigeon-dark-16.png": "86284ba6b1",
+  "art/scenes/rome-steps/pigeon-dark-17.png": "fe59a9d17b",
+  "art/scenes/rome-steps/pigeon-dark-18.png": "7a1605fe98",
+  "art/scenes/rome-steps/pigeon-dark-2.png": "8883643982",
+  "art/scenes/rome-steps/pigeon-dark-3.png": "c009114625",
+  "art/scenes/rome-steps/pigeon-dark-4.png": "e884479172",
+  "art/scenes/rome-steps/pigeon-dark-5.png": "ab1e4f3036",
+  "art/scenes/rome-steps/pigeon-dark-6.png": "5344c8b7dc",
+  "art/scenes/rome-steps/pigeon-dark-7.png": "4bcde2db9f",
+  "art/scenes/rome-steps/pigeon-dark-8.png": "18a057c2bc",
+  "art/scenes/rome-steps/pigeon-dark-9.png": "c1b1bb9d47",
+  "art/scenes/rome-steps/pigeon-pale-1.png": "bbb41f8c71",
+  "art/scenes/rome-steps/pigeon-pale-10.png": "61fff3b157",
+  "art/scenes/rome-steps/pigeon-pale-11.png": "f432e3428e",
+  "art/scenes/rome-steps/pigeon-pale-12.png": "d0d11ee49a",
+  "art/scenes/rome-steps/pigeon-pale-13.png": "cee4a219cc",
+  "art/scenes/rome-steps/pigeon-pale-14.png": "3c2e5004ae",
+  "art/scenes/rome-steps/pigeon-pale-15.png": "185af63aeb",
+  "art/scenes/rome-steps/pigeon-pale-16.png": "1ccd8f6883",
+  "art/scenes/rome-steps/pigeon-pale-17.png": "0266937df6",
+  "art/scenes/rome-steps/pigeon-pale-18.png": "e7835f6848",
+  "art/scenes/rome-steps/pigeon-pale-2.png": "7bc4ab3cbb",
+  "art/scenes/rome-steps/pigeon-pale-3.png": "38ccffa09d",
+  "art/scenes/rome-steps/pigeon-pale-4.png": "956ec232cc",
+  "art/scenes/rome-steps/pigeon-pale-5.png": "cc5506bd9b",
+  "art/scenes/rome-steps/pigeon-pale-6.png": "6f4e76d2df",
+  "art/scenes/rome-steps/pigeon-pale-7.png": "d7dbcdcdee",
+  "art/scenes/rome-steps/pigeon-pale-8.png": "05847fcad4",
+  "art/scenes/rome-steps/pigeon-pale-9.png": "482c138d66",
+  "art/scenes/rome-steps/pigeon-shadow-1.png": "42964d88cc",
   "art/scenes/rome-steps/stone.png": "1f150726cc",
+  "art/scenes/rome-steps/swallow-1.png": "6d1cba7a27",
+  "art/scenes/rome-steps/swallow-2.png": "28feee6d1e",
+  "art/scenes/rome-steps/swallow-3.png": "8db2d90253",
+  "art/scenes/rome-steps/swallow-4.png": "7566b8b9d5",
   "art/scenes/rome-steps/tripod.png": "f67b861c8a",
   "art/scenes/rome-street/awning.png": "e6843a5d20",
-  "art/scenes/rome-street/back.png": "0ce49e777d",
-  "art/scenes/rome-street/fountain.png": "2f6c71e191",
+  "art/scenes/rome-street/back.png": "30f394bc64",
+  "art/scenes/rome-street/cat-1.png": "5c5ff6e2e6",
+  "art/scenes/rome-street/cat-2.png": "6ca9450326",
+  "art/scenes/rome-street/cat-3.png": "f7185eb325",
+  "art/scenes/rome-street/cat-4.png": "f8dc2291fe",
+  "art/scenes/rome-street/cat-5.png": "3bcf6ba960",
+  "art/scenes/rome-street/fountain.png": "a0b6bcbfcf",
   "art/scenes/rome-street/front.png": "c2e832e552",
+  "art/scenes/rome-street/laundry-1.png": "fb7ac44abf",
+  "art/scenes/rome-street/laundry-10.png": "57c1334f8d",
+  "art/scenes/rome-street/laundry-11.png": "24073b2036",
+  "art/scenes/rome-street/laundry-12.png": "7c91691ebe",
+  "art/scenes/rome-street/laundry-2.png": "267451ee6a",
+  "art/scenes/rome-street/laundry-3.png": "11c7cf120c",
+  "art/scenes/rome-street/laundry-4.png": "3f75dac513",
+  "art/scenes/rome-street/laundry-5.png": "24cc6b490d",
+  "art/scenes/rome-street/laundry-6.png": "4a3ed23242",
+  "art/scenes/rome-street/laundry-7.png": "ebd5e6f521",
+  "art/scenes/rome-street/laundry-8.png": "22c81170cb",
+  "art/scenes/rome-street/laundry-9.png": "00d8856b06",
+  "art/scenes/rome-street/laundry-lines.png": "b312f55f7a",
   "art/scenes/rome-street/laundry.png": "0f9cbdddf6",
-  "art/scenes/rome-street/layout.json": "9910ebcc13",
+  "art/scenes/rome-street/layout.json": "81c3b5ea5e",
+  "art/scenes/rome-street/pigeon-1.png": "0823eccd31",
+  "art/scenes/rome-street/pigeon-10.png": "727be0c03f",
+  "art/scenes/rome-street/pigeon-11.png": "34f5b74be9",
+  "art/scenes/rome-street/pigeon-12.png": "be850553bf",
+  "art/scenes/rome-street/pigeon-13.png": "2e91c23266",
+  "art/scenes/rome-street/pigeon-14.png": "b8640ea90d",
+  "art/scenes/rome-street/pigeon-15.png": "0898d7d0cd",
+  "art/scenes/rome-street/pigeon-16.png": "eedcdea6a1",
+  "art/scenes/rome-street/pigeon-17.png": "ab1fc9d24f",
+  "art/scenes/rome-street/pigeon-18.png": "e4b6237b1d",
+  "art/scenes/rome-street/pigeon-2.png": "52a5cb6613",
+  "art/scenes/rome-street/pigeon-3.png": "93326a32f8",
+  "art/scenes/rome-street/pigeon-4.png": "63140aadd2",
+  "art/scenes/rome-street/pigeon-5.png": "d4aab18154",
+  "art/scenes/rome-street/pigeon-6.png": "c771383e65",
+  "art/scenes/rome-street/pigeon-7.png": "35d708c868",
+  "art/scenes/rome-street/pigeon-8.png": "79ea2b1d6e",
+  "art/scenes/rome-street/pigeon-9.png": "8eb4a317fd",
+  "art/scenes/rome-street/pigeon-pale-1.png": "ba4163c615",
+  "art/scenes/rome-street/pigeon-pale-10.png": "06a9cdcaf2",
+  "art/scenes/rome-street/pigeon-pale-11.png": "cdcf7e32bd",
+  "art/scenes/rome-street/pigeon-pale-12.png": "2803ce0350",
+  "art/scenes/rome-street/pigeon-pale-13.png": "ee9d43705f",
+  "art/scenes/rome-street/pigeon-pale-14.png": "66f1e30e23",
+  "art/scenes/rome-street/pigeon-pale-15.png": "cf7d3e7029",
+  "art/scenes/rome-street/pigeon-pale-16.png": "88accf16a9",
+  "art/scenes/rome-street/pigeon-pale-17.png": "a5bca2eb0b",
+  "art/scenes/rome-street/pigeon-pale-18.png": "e9636566be",
+  "art/scenes/rome-street/pigeon-pale-2.png": "1d82ef3ee3",
+  "art/scenes/rome-street/pigeon-pale-3.png": "fd89cef2b1",
+  "art/scenes/rome-street/pigeon-pale-4.png": "d583c15db3",
+  "art/scenes/rome-street/pigeon-pale-5.png": "92558841ef",
+  "art/scenes/rome-street/pigeon-pale-6.png": "16ea79ccd1",
+  "art/scenes/rome-street/pigeon-pale-7.png": "ad176632e9",
+  "art/scenes/rome-street/pigeon-pale-8.png": "ef5a86b60e",
+  "art/scenes/rome-street/pigeon-pale-9.png": "ed36fe7307",
+  "art/scenes/rome-street/pigeon-shade-1.png": "bbe9443577",
+  "art/scenes/rome-street/pigeon-shade-10.png": "9c352ee346",
+  "art/scenes/rome-street/pigeon-shade-11.png": "0753796498",
+  "art/scenes/rome-street/pigeon-shade-12.png": "f11e2ba7c1",
+  "art/scenes/rome-street/pigeon-shade-13.png": "c381accce7",
+  "art/scenes/rome-street/pigeon-shade-14.png": "5010f8c2fb",
+  "art/scenes/rome-street/pigeon-shade-15.png": "fbb5d8d018",
+  "art/scenes/rome-street/pigeon-shade-16.png": "8563b3ed85",
+  "art/scenes/rome-street/pigeon-shade-17.png": "31f4ce963e",
+  "art/scenes/rome-street/pigeon-shade-18.png": "0fc47218a5",
+  "art/scenes/rome-street/pigeon-shade-2.png": "55fd4c3e58",
+  "art/scenes/rome-street/pigeon-shade-3.png": "cc553b19f1",
+  "art/scenes/rome-street/pigeon-shade-4.png": "6b410dfe81",
+  "art/scenes/rome-street/pigeon-shade-5.png": "f5d5b90588",
+  "art/scenes/rome-street/pigeon-shade-6.png": "faf7041242",
+  "art/scenes/rome-street/pigeon-shade-7.png": "6f2dc5bc61",
+  "art/scenes/rome-street/pigeon-shade-8.png": "dd100075d4",
+  "art/scenes/rome-street/pigeon-shade-9.png": "2b7ca7168b",
+  "art/scenes/rome-street/sparrow-1.png": "ed0ec89ca2",
+  "art/scenes/rome-street/sparrow-10.png": "57b43a760d",
+  "art/scenes/rome-street/sparrow-11.png": "54fedd866a",
+  "art/scenes/rome-street/sparrow-12.png": "92ca2412c8",
+  "art/scenes/rome-street/sparrow-13.png": "f8686b8558",
+  "art/scenes/rome-street/sparrow-14.png": "a21e0b9238",
+  "art/scenes/rome-street/sparrow-15.png": "ef4541449f",
+  "art/scenes/rome-street/sparrow-16.png": "374c1582ed",
+  "art/scenes/rome-street/sparrow-17.png": "1ada634846",
+  "art/scenes/rome-street/sparrow-18.png": "962e8f4f42",
+  "art/scenes/rome-street/sparrow-2.png": "04fd761a79",
+  "art/scenes/rome-street/sparrow-3.png": "86060caf46",
+  "art/scenes/rome-street/sparrow-4.png": "aaed325cbf",
+  "art/scenes/rome-street/sparrow-5.png": "cffbade2cc",
+  "art/scenes/rome-street/sparrow-6.png": "7ce47b750f",
+  "art/scenes/rome-street/sparrow-7.png": "c63a71adf1",
+  "art/scenes/rome-street/sparrow-8.png": "09c545044c",
+  "art/scenes/rome-street/sparrow-9.png": "535497c1c8",
+  "art/scenes/rome-street/swallow-1.png": "117fad334b",
+  "art/scenes/rome-street/swallow-2.png": "d651d04cbf",
+  "art/scenes/rome-street/swallow-3.png": "a96730e23a",
+  "art/scenes/rome-street/swallow-4.png": "b2811deb88",
   "art/scenes/rome-street/tunic.png": "baf473b14c",
   "art/scenes/rome-temple/back.png": "9f4686b3ac",
   "art/scenes/rome-temple/front.png": "cef6285362",
-  "art/scenes/rome-temple/layout.json": "2cdddd5d1f",
-  "art/scenes/rome-temple/table.png": "2d3e7c1367"
+  "art/scenes/rome-temple/layout.json": "2981565152",
+  "art/scenes/rome-temple/table.png": "cd8486a7f0"
 }
 </script>
 <!-- /files -->
@@ -223,6 +409,7 @@
     </select></label>
     <label>Zoom <input type="range" id="zoom" min="1" max="5" step="1" value="2"> <span id="zoomv">2x</span></label>
     <label>Speed <input type="range" id="speed" min="0" max="2" step="0.1" value="1"> <span id="speedv">1x</span></label>
+    <label title="Painted people (js/art/paint.js), painted at the zoom's size; the game shows them with ?people=painted"><input type="checkbox" id="painted"> Painted</label>
   </div>
   <div id="out"></div>
   <nav class="bar"><a href="../index.html">Play the game</a><a href="storyboard.html">Storyboard</a></nav>
@@ -230,8 +417,17 @@
 
 <script type="module">
   // This page uses only the drawing code in js/art, so it works whatever state the game itself is in.
-  import { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, strideOf, tallOf, poses, BASE } from "../js/art/rig.js";
+  import { walkPose, standPose, talkPose, reachPose, sitPose, strideOf, tallOf, poses, BASE, upOf, riseOf, fidgetsOf, fidgetMs } from "../js/art/rig.js";
+  import * as rig from "../js/art/rig.js";
   import { people } from "../js/art/people.js";
+  import { paintedPeople } from "../js/art/paint.js";
+
+  // Painted (the checkbox, or ?people=painted): every picture is painted (js/art/paint.js) at the zoom's size, as the
+  // game paints people on a screen that shows the stage that many times over, and shown smoothly, pixel for pixel.
+  let painted = paintedPeople;
+  const drawFigure = (spec, pose, yaw, size, opt) => (painted ? rig.drawFigure(spec, pose, yaw, Math.round(size * zoom), { ...(opt || {}), paint: { k: zoom } }) : rig.drawFigure(spec, pose, yaw, size, opt));
+  const drawSeat = (spec, yaw, size) => (painted ? rig.drawSeat(spec, yaw, Math.round(size * zoom), { k: zoom }) : rig.drawSeat(spec, yaw, size));
+  const standOffset = (spec, yaw, size) => rig.standOffset(spec, yaw, painted ? size * zoom : size);
 
   const WALK_FRAMES = 12;               // pictures in one walk cycle, as the game shows it (js/engine/cast.js)
   const PACE = 155;                     // picture pixels a second at full size, unless a character has a pace of their own
@@ -240,14 +436,14 @@
   const names = ["S", "SE", "E", "NE", "N", "NW", "W", "SW"];
   const palette = { g1: "#dbb46b", g2: "#c79b55", g3: "#a97f42", line: "#3b2616" };
   const GESTURES = ["a nod", "making a point", "a shrug", "hand on hip", "both arms up", "hand to heart", "hand to chin", "muscles", "open hand", "waving", "pointing", "finger up",
-    "arms folded", "hand to ear", "shaken fist", "waving away", "wiping brow", "counting", "hands wide", "thumb back"];
-  const GROUPS = [["The family", ["dad", "son", "mom", "bigsis", "lilsis"]], ["Egypt", ["scribe", "carrier", "overseer", "hauler1", "hauler2", "hauler3", "guard", "guard-shade", "lampboy", "goldsmith", "goldsmith-shades"]],
+    "arms folded", "hand to ear", "shaken fist", "waving away", "wiping brow", "counting", "hands wide", "thumb back", "a nod aside", "a blessing"];
+  const GROUPS = [["The family", ["dad", "son", "mom", "bigsis", "lilsis"]], ["Egypt", ["lot", "lot-standing", "scribe", "carrier", "overseer", "hauler1", "hauler2", "hauler3", "guard", "guard-shade", "lampboy", "goldsmith", "goldsmith-shades"]],
     ["Rome", ["keeper", "washer", "urchin", "soothsayer", "senator", "doorkeeper", "clerk", "dateseller"]], ["Nevada", ["oldtimer", "agent"]]];
   const SWATCHES = [["sand", "#d9a35c"], ["dark", "#3a2c2a"], ["stone", "#8a8478"], ["marble", "#e9dcc0"]];
   const ask = new URLSearchParams(location.search);
   let zoom = 2, speed = 1, live = [], props = null;
 
-  const sized = (c) => { c.style.width = c.width * zoom + "px"; c.style.height = c.height * zoom + "px"; return c; };
+  const sized = (c) => { const z = painted ? 1 : zoom; c.style.width = c.width * z + "px"; c.style.height = c.height * z + "px"; if (painted) c.style.imageRendering = "auto"; return c; };
   const framed = (canvas, label, ground) => {
     const fig = document.createElement("figure");
     if (ground) { fig.style.background = ground; fig.style.padding = "4px"; }
@@ -276,6 +472,44 @@
     live.push({ ctx: c.getContext("2d"), frameAt, last: null, x, y });
     return framed(c, label);
   }
+  /** Drawn pictures laid together by their anchors ([{ sf, dx, dy }], dx and dy from the first anchor), on one canvas of size w by h with that anchor at (ax, ay). */
+  const laid = (layers, w, h, ax, ay) => { const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d"); for (const L of layers) g.drawImage(L.sf.toCanvas(), Math.round(ax + L.dx - L.sf.ox), Math.round(ay + L.dy - L.sf.oy)); return c; };
+  /** Someone found sitting: getting up, standing a moment, sitting down again, over and over, as figure.sit(false) and
+      sit(true) play it in a scene. A seat drawn with them stays where it is, and they stand up in front of it. */
+  function liveRise(id, spec, size, yaw, label) {
+    const up = upOf(spec), r = riseOf(spec), [dx, dy] = standOffset(spec, yaw, size), seat = spec.sit && spec.sit.drawn ? drawSeat(spec, yaw, size) : null;
+    const ease = (e) => e * e * (3 - 2 * e), parts = [1300, r.ms, 1500, r.ms * 1.05], total = parts.reduce((a, b) => a + b, 0);
+    const withSeat = (sf) => [...(seat ? [{ sf: seat, dx: 0, dy: 0 }] : []), { sf, dx, dy }];
+    const at = (t) => {
+      let u = t % total;
+      if (u < parts[0]) return { key: "sit", layers: () => [{ sf: drawFigure(spec, poses.sit(spec, 0), yaw, size), dx: 0, dy: 0 }] };
+      u -= parts[0];
+      if (u < parts[1]) { const k = Math.round(ease(u / parts[1]) * 12) / 12; return { key: "up" + k, layers: () => withSeat(drawFigure(up, poses.rise(spec, k), yaw, size)) }; }
+      u -= parts[1];
+      if (u < parts[2]) return { key: "stand", layers: () => withSeat(drawFigure(up, poses.stand(up, 0), yaw, size)) };
+      u -= parts[2];
+      const k = Math.round((1 - ease(Math.min(1, u / parts[3]))) * 12) / 12;
+      return { key: "up" + k, layers: () => withSeat(drawFigure(up, poses.rise(spec, k), yaw, size)) };
+    };
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const t of [0, parts[0] + parts[1] * 0.3, parts[0] + parts[1] * 0.6, parts[0] + parts[1] + 10]) for (const L of at(t).layers()) {
+      const b = L.sf.bounds(); x0 = Math.min(x0, b.left - L.sf.ox + L.dx); x1 = Math.max(x1, b.right - L.sf.ox + L.dx); y0 = Math.min(y0, b.top - L.sf.oy + L.dy); y1 = Math.max(y1, b.bottom - L.sf.oy + L.dy);
+    }
+    const m = Math.ceil(size * 0.12);
+    x0 = Math.floor(x0) - m; y0 = Math.floor(y0) - 4; x1 = Math.ceil(x1) + m; y1 = Math.ceil(y1) + 5;
+    const w = x1 - x0, h = y1 - y0;
+    return moving(label, w, h, (t) => { const s = at(t); return picture(`rise|${id}|${yaw}|${size}|${s.key}`, () => ({ toCanvas: () => laid(s.layers(), w, h, -x0, -y0) })); });
+  }
+  /** Getting up, step by step, still: the seat apart where it is, the person where their feet are. */
+  const riseStill = (spec, size, yaw, k, label) => {
+    const up = upOf(spec), [dx, dy] = standOffset(spec, yaw, size), seat = spec.sit && spec.sit.drawn ? drawSeat(spec, yaw, size) : null;
+    const layers = [...(seat ? [{ sf: seat, dx: 0, dy: 0 }] : []), { sf: drawFigure(up, poses.rise(spec, k), yaw, size), dx, dy }];
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const L of layers) { const b = L.sf.bounds(); x0 = Math.min(x0, b.left - L.sf.ox + L.dx); x1 = Math.max(x1, b.right - L.sf.ox + L.dx); y0 = Math.min(y0, b.top - L.sf.oy + L.dy); y1 = Math.max(y1, b.bottom - L.sf.oy + L.dy); }
+    const m = Math.ceil(size * 0.12);                                   // (room for the shadows on the ground, which bounds() leaves out)
+    x0 = Math.floor(x0) - m; y0 = Math.floor(y0) - 3; x1 = Math.ceil(x1) + m; y1 = Math.ceil(y1) + 4;
+    return framed(laid(layers, x1 - x0, y1 - y0, -x0, -y0), label);
+  };
   function liveFigure(id, spec, size, label, yaw, rule) {
     // the box is made big enough for the whole movement by trying a few moments of it first
     let x0 = Infinity, y0 = Infinity, x1 = 0, y1 = 0;
@@ -305,8 +539,18 @@
       const u = t % 5600, e = u < 280 ? u / 280 : u < 3600 ? 1 : u < 3880 ? 1 - (u - 3600) / 280 : 0, k = Math.round(e * 5) / 5;
       return { key: "pray" + k, pose: () => poses.pray(spec, k) };
     },
+    prayAloud: (spec) => (t) => { const mouth = [0, 1, 2, 1][Math.floor(t / 120) % 4]; return { key: "prayT" + mouth, pose: () => ({ ...poses.pray(spec, 1), mouth }) }; },
+    shade: (spec) => (t) => {           // the hand up to the brow (actor.shade(true): fast), held, and down again (shade(false))
+      const u = t % 4200, e = u < 140 ? u / 140 : u < 2600 ? 1 : u < 2840 ? 1 - (u - 2600) / 240 : 0, k = Math.round(e * 5) / 5;
+      return { key: "shade" + k, pose: () => poses.shade(spec, k) };
+    },
     sit: (spec) => (t) => { const f = Math.floor(t / 420) % 8, blink = Math.floor(t / 110) % 39 === 0; return { key: `sit${f}.${blink ? 1 : 0}`, pose: () => ({ ...poses.sit(spec, f), blink }) }; },
     sitTalk: (spec) => (t) => { const f = Math.floor(t / 170) % 6, mouth = [0, 1, 2, 1][Math.floor(t / 120) % 4]; return { key: `sitT${f}.${mouth}`, pose: () => ({ ...poses.sit(spec, f, { gesture: 1 }), mouth }) }; },
+    /** one small movement (figure.fidget(name) in a scene), a little rest, and again; as the game steps it */
+    fidget: (spec, name) => {
+      const ms = fidgetMs(spec, name), n = Math.max(6, Math.round(ms / 110));
+      return (t) => { const u = (t % (ms + 700)) / ms, q = u >= 1 ? 0 : Math.round(u * n); return { key: `fid${name}.${q}`, pose: () => poses.fidget(spec, name, q / n) }; };
+    },
   };
 
   function person(id) {
@@ -321,9 +565,18 @@
         liveFigure(id, spec, size, "talking", 0, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 45, rules.sitTalk(spec)), liveFigure(id, spec, size, "talking", 270, rules.sitTalk(spec))]);
       strip("Sitting, eight directions", names.map((n, i) => show(drawFigure(spec, poses.sit(spec, 0), i * 45, size), n)));
       strip("Talking: this character's own gestures, sitting", gesturesOf(spec).flatMap((g) => [45, 0].map((yaw) => show(drawFigure(spec, { ...poses.sit(spec, 1, { gesture: g === 0 ? 1 : g, main: g }), mouth: 2 }, yaw, size), GESTURES[g] || "g" + g))));
-      strip("If they stood up: standing, walking, talking", [0, 45, 90, 180, 270].map((yaw) => show(drawFigure(spec, poses.stand(spec, 0), yaw, size), names[yaw / 45]))
-        .concat([0, 0.25, 0.5, 0.75].map((ph) => show(drawFigure(spec, poses.walk(spec, ph), 90, size), "walk " + ph)))
-        .concat(gesturesOf(spec).slice(0, 2).map((g) => show(drawFigure(spec, { ...poses.talk(spec, 1, g), mouth: 2 }, 45, size), GESTURES[g]))));
+      if (spec.pray) strip("In prayer, sitting: actor.pray(true) and actor.pray(false) in a scene's script (it eases in and out, stays until it is turned off, and the lips move if they speak meanwhile)",
+        [liveFigure(id, spec, size, "into it and out", 90, rules.pray(spec)), liveFigure(id, spec, size, "into it and out", 45, rules.pray(spec)), liveFigure(id, spec, size, "praying aloud", 90, rules.prayAloud(spec))]
+          .concat(names.map((n, i) => show(drawFigure(spec, poses.pray(spec), i * 45, size), n)))
+          .concat([0.52, 0.4].map((k) => show(drawFigure(spec, poses.pray(spec), 90, Math.round(size * k)), Math.round(size * k) + " px"))));
+      const up = upOf(spec), upId = id + "^up";
+      strip(`Getting up and sitting down again: figure.sit(false) and figure.sit(true) in a scene (${riseOf(spec).ms} ms each way; ${spec.sit && spec.sit.drawn ? "the seat stays where it is" : "the seat is painted"})`,
+        [0, 45, 90, 270].map((yaw) => liveRise(id, spec, size, yaw, names[yaw / 45]))
+          .concat([0, 0.25, 0.42, 0.58, 0.75, 1].map((k) => riseStill(spec, size, 90, k, k === 0 ? "getting up" : "" + k))));
+      strip("Small movements, sitting: figure.fidget(name) (figure.fidgets lists them)", fidgetsOf(spec).flatMap((name) => [45, 0].map((yaw) => liveFigure(id, spec, size, yaw ? name : "", yaw, rules.fidget(spec, name)))));
+      strip("On their feet: walking (in eight directions), talking, and their small movements standing", names.map((n, i) => liveFigure(upId, up, size, n, i * 45, rules.walk(up)))
+        .concat([45, 0].map((yaw) => liveFigure(upId, up, size, "talking", yaw, rules.talk(up))))
+        .concat(fidgetsOf(up).map((name) => liveFigure(upId, up, size, name, 45, rules.fidget(up, name)))));
     } else {
       strip(`Moving: the walk in eight directions (${WALK_FRAMES} pictures to a cycle)`, names.map((n, i) => liveFigure(id, spec, size, n, i * 45, rules.walk(spec))));
       strip("Moving: at rest, talking, reaching", [
@@ -339,6 +592,11 @@
         [liveFigure(id, spec, size, "into it and out", 45, rules.pray(spec)), liveFigure(id, spec, size, "into it and out", 0, rules.pray(spec))]
           .concat(names.map((n, i) => show(drawFigure(spec, poses.pray(spec), i * 45, size), n)))
           .concat([0.6875, 0.5].map((k) => show(drawFigure(spec, poses.pray(spec), 45, Math.round(size * k)), Math.round(size * k) + " px"))));
+      strip("Dazzled: actor.shade(true) and actor.shade(false) (a hand flat to the brow, the eyes screwed shut; anyone standing)",
+        [liveFigure(id, spec, size, "up and down", 0, rules.shade(spec)), liveFigure(id, spec, size, "up and down", 45, rules.shade(spec))]
+          .concat(names.map((n, i) => show(drawFigure(spec, poses.shade(spec), i * 45, size), n)))
+          .concat([show(drawFigure(spec, { ...poses.shade(spec), mouth: 2 }, 315, size), "talking"), show(drawFigure(spec, poses.shade(spec), 45, Math.round(size * 0.6)), Math.round(size * 0.6) + " px")]));
+      strip("Small movements: figure.fidget(name) in a scene (figure.fidgets lists them)", fidgetsOf(spec).flatMap((name) => [45, 0].map((yaw) => liveFigure(id, spec, size, yaw ? name : "", yaw, rules.fidget(spec, name)))));
       strip("Reaching, and a blink", [0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, false), 90, size), "out " + k)).concat([0.5, 1].map((k) => show(drawFigure(spec, poses.reach(spec, k, true), 90, size), "down " + k))).concat([show(drawFigure(spec, { ...poses.stand(spec, 0), blink: true }, 0, size), "blink")]));
       strip("If they sat down: a chair, a stool, a step, the ground", ["chair", "stool", "step", "ground"].flatMap((seat) => [45, 270].map((yaw) => show(drawFigure(spec, poses.sit(spec, 0, { seat }), yaw, size), seat))));
     }
@@ -384,7 +642,7 @@
   }
 
   function build() {
-    out.innerHTML = ""; live = [];
+    out.innerHTML = ""; live = []; drawn.clear();
     const who = whoEl.value;
     if (who === "nobody") return;
     if (who === "everyone") everyone();
@@ -408,6 +666,9 @@
   else if (ask.get("who") && order.includes(ask.get("who"))) whoEl.value = ask.get("who");
   if (ask.get("ground")) groundEl.value = grounds[ask.get("ground")] || ask.get("ground");
   if (ask.get("zoom")) { zoom = Math.max(1, Math.min(5, Number(ask.get("zoom")) || 2)); zoomEl.value = zoom; document.getElementById("zoomv").textContent = zoom + "x"; }
+  const paintedEl = document.getElementById("painted");
+  paintedEl.checked = painted;
+  paintedEl.addEventListener("change", () => { painted = paintedEl.checked; build(); });
   const setGround = () => { document.documentElement.style.setProperty("--ground", groundEl.value); document.documentElement.style.setProperty("--ink", ["#3a2c2a", "#28172f"].includes(groundEl.value) ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.6)"); };
   setGround();
   build();
@@ -434,7 +695,7 @@
   speedEl.addEventListener("input", () => { speed = Number(speedEl.value); document.getElementById("speedv").textContent = speed + "x"; });
   groundEl.addEventListener("change", setGround);
   // for scripts that make pictures with this page (scratchpad/lineup.py, mock.py): the drawing code, and the people
-  window.lab = { drawFigure, walkPose, standPose, talkPose, reachPose, sitPose, poses, standOf: poses.stand, walkOf: poses.walk, talkOf: poses.talk, tallOf, strideOf, people, get props() { return props || {}; }, show, BASE };
+  window.lab = { drawFigure, portraitOf: rig.portraitOf, get painted() { return painted; }, set painted(on) { painted = !!on; paintedEl.checked = painted; build(); }, walkPose, standPose, talkPose, reachPose, sitPose, poses, standOf: poses.stand, walkOf: poses.walk, talkOf: poses.talk, tallOf, strideOf, people, get props() { return props || {}; }, show, BASE, upOf, riseOf, drawSeat, standOffset, fidgetsOf };
 </script>
 </body>
 </html>

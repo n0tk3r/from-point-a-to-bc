@@ -4,8 +4,11 @@
 
 import * as saves from "./save.js";
 import { icon } from "../art/kit.js";
-import { portrait } from "./cast.js";
+import { portrait, portraitAddress } from "./cast.js";
 import { url } from "./assets.js";
+import { paintedPeople } from "../art/paint.js";
+
+const CLEAR = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";     // one clear pixel
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -27,6 +30,7 @@ export class UI {
     this.toastEl = q("#toast"); this.gateEl = q("#gate");
     this.open = null;
     this.hovered = null;
+    this.edge = null;          // the way out whose band the pointer is in, over the floor ("N", "S", "W", "E"): set by the game (game.js, bindInput)
     this.over = null;          // the team portrait the pointer is on
     this.faces = {};           // portraits, drawn once
 
@@ -46,12 +50,7 @@ export class UI {
 
     this.lookEl.addEventListener("click", () => { g.lookMode = !g.lookMode; this.refresh(); });
     q("#t-hint").addEventListener("click", () => g.hint());
-    q("#t-show").addEventListener("click", () => {
-      const hot = g.view.hotEl;
-      hot.classList.add("reveal");
-      clearTimeout(this._reveal);
-      this._reveal = setTimeout(() => hot.classList.remove("reveal"), 2400);
-    });
+    q("#t-show").addEventListener("click", () => g.reveal(true, 2400));       // an outline round everything that can be clicked, for a moment (outline.js)
     q("#t-menu").addEventListener("click", () => this.pauseMenu());
     // The team: a portrait for each lead the player can switch to.
     const faceOf = (event) => { const b = event.target.closest ? event.target.closest("[data-lead]") : null; return b ? b.dataset.lead : null; };
@@ -129,20 +128,35 @@ export class UI {
 
   label() {
     const g = this.g;
-    let text = "";
+    let text = "", edge = null;
     if (g.mode === "play" && !g.busy) {
       const spot = this.hovered, name = spot ? spot.name : "";
+      // In the band of a way out, over the floor, with nothing in hand: where it leads (even in look mode, though a click
+      // there then only stops looking). With something in hand the band is floor like any other.
+      edge = !spot && !this.over && !this.thing && !g.held ? g.edgeOpen(this.edge) : null;
       if (this.over) {
         const has = (g.store.data.inventory[this.over] || []).map((id) => g.item(id).name).join(", ");
         if (this.reach(this.over)) text = `Give ${g.item(g.held).name} to ${g.cast[this.over].name}`;
         else text = (this.over === g.store.data.active ? `${g.cast[this.over].name} (playing now)` : `Play as ${g.cast[this.over].name}`) + (has ? `. Carrying: ${has}` : "");
       }
-      else if (this.thing && g.item(this.thing) && !spot) text = g.lookMode ? `Look at ${g.item(this.thing).name}` : g.held === this.thing ? `Put the ${g.item(this.thing).name} away` : g.item(this.thing).name[0].toUpperCase() + g.item(this.thing).name.slice(1);
+      else if (this.thing && g.item(this.thing) && !spot) text = g.lookMode ? `Look at ${g.item(this.thing).name}` : g.held === this.thing ? `Put ${g.the(this.thing)} away` : g.item(this.thing).name[0].toUpperCase() + g.item(this.thing).name.slice(1);
       else if (g.held) text = spot && spot.mate ? `Give ${g.item(g.held).name} to ${name}` : `Use ${g.item(g.held).name} with ${name || "…"}`;
+      else if (edge) text = g.edgeLabel(edge);
       else if (g.lookMode) text = `Look at ${name || "…"}`;
       else if (spot) text = `${spot.verb || (spot.use ? "Use" : "Look at")} ${name}`;
     }
     this.labelEl.textContent = text;
+    this.arrow(edge);
+  }
+
+  /** The pointer over the band of a way out: an arrow pointing out of the picture that way (the class edge-n, edge-s,
+      edge-w or edge-e on #hot: css/game.css draws them). Null puts the usual pointer back. */
+  arrow(side) {
+    if (side === this._arrow) return;
+    const hot = this.g.view.hotEl;
+    if (this._arrow) hot.classList.remove("edge-" + this._arrow.toLowerCase());
+    if (side) hot.classList.add("edge-" + side.toLowerCase());
+    this._arrow = side;
   }
 
   refresh() {
@@ -160,10 +174,18 @@ export class UI {
       this._team = now;
       this.teamEl.innerHTML = team.map((id, n) => {
         const name = esc(g.cast[id].name), on = id === d.active, has = count(id);
+        if (!this.faces[id] && paintedPeople) {                  // (a painted portrait is painted by the painter, and put in when it comes)
+          this.faces[id] = CLEAR;
+          portraitAddress(g.cast[id].sprite).then((src) => {
+            this.faces[id] = src;
+            const img = this.teamEl.querySelector(`[data-lead="${CSS.escape(id)}"] img`);
+            if (img) img.src = src;
+          });
+        }
         if (!this.faces[id]) { const face = portrait(g.cast[id].sprite); this.faces[id] = face ? face.toDataURL() : ""; }
         return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}` +
           ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}">` +
-          `<img src="${this.faces[id]}" alt="" draggable="false"></button>`;
+          `<img src="${this.faces[id]}" alt="" draggable="false"${paintedPeople ? ' style="image-rendering: auto"' : ""}></button>`;      // (a painted portrait is shown smoothly, never in hard pixels)
       }).join("");
     }
     // The inventory is always on screen: whose it is, then what is in it, or "empty".

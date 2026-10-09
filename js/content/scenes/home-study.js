@@ -214,6 +214,12 @@ export default {
   spawn: { default: [298, 448], mom: [298, 448], bigsis: [251, 432], lilsis: [360, 457], fromLanding: [298, 448] },
   arrive: { fromLanding: [[251, 432], [360, 457]] },
   exits: ["home-landing"],
+  // The way out across the edges of the picture: the door to the landing stands open at the front left, so the left
+  // edge and the bottom both lead out to the landing.
+  edges: {
+    W: { to: "home-landing", spawn: "fromStudy", name: "out to the landing", walkTo: [252, 466] },
+    S: { to: "home-landing", spawn: "fromStudy", name: "out to the landing", walkTo: [252, 466] },
+  },
 
   picture: art + "back.png",
 
@@ -265,7 +271,7 @@ export default {
     },
     {
       id: "computer", name: "computer", verb: "Use", walkTo: [342, 393], face: "N", look: each("home.pc.look"), use: useComputer,
-      poly: [[331, 263], [378, 263], [378, 300], [425, 302], [425, 371], [372, 372], [368, 386], [326, 386], [324, 371], [258, 367], [258, 302], [331, 300]],
+      poly: [[331, 262], [380, 262], [380, 298], [384, 306], [376, 313], [328, 313], [325, 305], [331, 298]],   // (the monitor and its keyboard)
       useWith: { note: useComputer, pencil: { lilsis: "home.pc.pencil.lilsis" } },
     },
     {
@@ -279,11 +285,11 @@ export default {
       look: machineLook, use: useMachine, useWith: { pencil: useMachine, lilflash: { lilsis: shineAtMachine } },
     },
     {
-      id: "heap", name: "things that did not fit in the car", walkTo: [402, 477], face: "S", look: each("home.boxes"),
+      id: "heap", name: "things that did not fit in the car", walkTo: [402, 477], face: "S", look: each("home.boxes"), plane: "front",
       poly: [[262, 530], [296, 522], [304, 500], [352, 498], [362, 466], [477, 466], [480, 505], [492, 500], [565, 458], [602, 462], [604, 512], [630, 512], [636, 524], [710, 524], [710, 558], [640, 600], [262, 600]],
     },
     {
-      id: "door", name: "the door to the landing", verb: "Go through", poly: [[0, 306], [153, 320], [153, 600], [0, 600]], walkTo: [252, 466], face: "W",
+      id: "door", name: "the door to the landing", verb: "Go through", poly: [[0, 300], [153, 314], [153, 600], [0, 600]], walkTo: [252, 466], face: "W", plane: "front",
       look: each("home.study.door"), use: (g) => g.goto("home-landing", { spawn: "fromStudy" }),
     },
   ],

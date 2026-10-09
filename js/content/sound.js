@@ -102,6 +102,8 @@ export const sound = {
     hush: { notes: [[74, 0, 0.5], [69, 0.16, 0.6], [62, 0.34, 1.1]], level: 0.045, wave: "sine" },                          // a sound machine winding down as its batteries come out
     unlock: { noise: [1900, 500], len: 0.16, q: 3, notes: [[86, 0, 0.03], [52, 0.13, 0.09]], level: 0.1 },                // a key turned in a door
     alarm: { notes: [[91, 0, 0.09], [86, 0.1, 0.09], [91, 0.2, 0.09], [86, 0.3, 0.09], [91, 0.4, 0.14]], level: 0.045 }, // a toy door alarm, pleased with itself
+    // A foam dart leaving a toy blaster: a short breath of air that drops in pitch, and the soft pop of the spring.
+    thwip: { noise: [5200, 1400], len: 0.09, q: 2.6, notes: [[88, 0, 0.018], [81, 0.016, 0.028], [74, 0.04, 0.035]], level: 0.075, wave: "triangle" },
     latch: { noise: [900, 280], len: 0.1, q: 2, notes: [[47, 0, 0.05]], level: 0.09 },                                   // a door pulled shut again
     wind: { noise: [700, 2400], len: 1.4, q: 7, notes: [[74, 0.05, 0.02], [74, 0.25, 0.02], [74, 0.45, 0.02], [74, 0.65, 0.02], [74, 0.85, 0.02], [74, 1.05, 0.02], [74, 1.25, 0.02]], level: 0.06 },   // a pencil turning the hub of a cassette
     machine: { notes: [[45, 0, 0.05], [83, 0.22, 0.45]], level: 0.07, wave: "sine" },                                    // an answering machine: the clack of its play button, and its beep

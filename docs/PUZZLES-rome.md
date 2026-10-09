@@ -42,12 +42,21 @@ stage; and then a third, short visit, as a game saved before 7 October would mak
 On the way it goes through every branch of the date seller, and everything else that
 was woven in, and checks what is on offer in each list of things to say. It stops on
 any console error, and saves a picture of every moment that matters in
-`briefs/out/shots-rome/`. Neither is a person playing it.
+`briefs/out/shots-rome/`. Neither is a person playing it. Since round three the check
+script also holds each scene's ways out at the edges of the picture (where they lead,
+where he walks first, that the ground there can be walked to, that the old ways out are
+kept), takes every one of them from every state it explores, and holds the clickable
+shapes (no rectangles but the two painted boards; each cut-out and person named for Show);
+and the play script leaves each scene by a click in the band along its edge and comes
+back, after checking the arrow and the line that says where it goes, and turns Show on
+in each scene for a picture, checking that everything is outlined.
 
 Where things are: every place in the three scene files is the painter's own
 measurement of the finished picture (`layout.json` beside each picture in
 `art/scenes/`), or was set by eye against the picture with the people standing in it
-(their clickable shapes, the things the painters added after their lists were made).
+(the things the painters added after their lists were made). The clickable shapes were
+traced again in round three, to hug their things for Show: they differ from the painters'
+rough boxes on purpose, and the check script holds that each is still where the painter's is.
 A few places differ from the painters' on purpose, and the check script lists each with
 its reason: places to stand that the engine will not let anyone stand on; places that
 lie under the inventory bar, which covers the bottom of the picture whenever the game
@@ -153,7 +162,7 @@ first one that is open): `rome.arrived`, `rome.hasToga`, `rome.delivered`,
 |  left edge:      ALTAR   tripod                                              |
 |  to the street   THE SENATOR (until his toga comes)   pigeons  carved stone  |
 +------------------------------------------------------------------------------+
-        |  up the street / down the street                 | through the doors
+        |  up the street (top edge) / to the street (left edge)   | through the doors
 +-----------------------------------------------+  +---------------------------+
 | THE STREET (rome-street)                      |  | INSIDE THE TEMPLE         |
 |                                               |  | (rome-temple)             |
@@ -165,12 +174,77 @@ first one that is open): `rome.arrived`, `rome.hasToga`, `rome.delivered`,
 |  laundry basket                               |  |  chests, a cat      rack  |
 |  THE WASHERWOMAN   stepping stones  THE DATE  |  |  THE CLERK at his table   |
 |                    THE STREET BOY    SELLER   |  |  SUNLIGHT ON THE FLOOR    |
-|                           jars, a cart wheel  |  |  out: the door leaves     |
+|                           jars, a cart wheel  |  |  out: behind us (bottom)  |
 +-----------------------------------------------+  +---------------------------+
 ```
 
 Three scenes. The street and the steps are open from the start; the temple is shut
 until #6, and open to him ever after.
+
+### The ways between the scenes: the edges of the picture (round three)
+
+The author, on the evening of 7 October: a click at the top or the bottom of the picture
+should be enough to walk to the next scene, and the same at the sides if a scene lies that
+way. So each scene names the way out that lies off an edge of its picture (`edges` in the
+scene file). A click on the ground in the band along that edge (the top 60 pixels, the
+bottom 52, the sides 44) walks the Son to that way out and through it; there the pointer
+is an arrow pointing out of the picture, and the line at the bottom of the screen says
+where it goes. Anything that can be clicked in the band still wins over it. The ways out
+that were there before are all kept.
+
+| Scene | Edge | Leads to | The line says | He walks first to | The way out that was there before, kept |
+| --- | --- | --- | --- | --- | --- |
+| The steps | left | the street | "Go to the street" | the painter's way out at the left edge of the pavement, behind the laurel (34, 470) | "the street", that way out itself: now the painter's 40 pixels again (it was widened to 64 to be easier to find; the whole left edge does that now) |
+| The street | top | the steps, in the Forum | "Go up the street to the Forum" | the far end of the street (400, 338), whatever part of the top was clicked | "the Forum", the gap at the end of the street and the roadway up to it |
+| Inside the temple | bottom | the steps | "Go out to the steps" | the doors behind us (400, 594) | the door leaves at both sides of the picture, and the bottom edge itself ("the steps") |
+
+The steps have no way out at the top: the temple's doors are in the middle of its front
+wall, and stay a thing to click on (they are the doorkeeper's gate, #6). No other edge of
+the three pictures leads anywhere: the street runs on toward us and the Forum lies off to
+the left of the steps, but the act does not go there. A game saved just after the coin
+went through goes home from the temple, by the bottom edge as by the door leaves.
+
+### What Show outlines (round three)
+
+Show (the button, or holding H) outlines each thing that can be clicked, with a light line
+and a glow, and fills nothing; each way out at an edge gets an arrow. So every clickable
+area hugs its thing, a few pixels outside its edge, traced from the painter's pictures and
+cut-outs and from the figures the game draws. The cut-outs (the fountain, the
+small tunic, the jars and the cart wheel; the altar, the tripod, the carved stone; the
+clerk's table, the door leaves, the near brazier; since round four the cat on her sill)
+and every person are outlined by their own pictures; the washing, which since round four
+is thirteen pieces that each stir by themselves, by its own hugging shape. Things that
+come in several pieces are several things to click, which all say the same: the three
+stepping stones, the ten pigeons on the pavement (since round four: each outlined by the
+bird itself, wherever it is), the nine bronze tablets of the laws in the temple. The place
+that hums has nothing painted on it, so its outline is a ring round the spot on the wall
+(and the little door's, when it is open, a smaller ring). The price list and the shrine
+are boards painted on the wall, and stay rectangles.
+
+### The pigeons, and everything else that moves (round four)
+
+Nothing that moves by nature is painted still any more (briefs/ROUND-4.md): the altar's
+smoke rises and leans with the morning air, the coals breathe, pigeons potter and peck on
+the pavement, the steps and the temple's gutter, swallows cross the sky, the laurel at the
+front and the washing in the street stir, the fountain runs, the cat's tail swings, the
+lamps and braziers flicker. None of it is a thing to click, but for one: **the pigeons**.
+The ten on the pavement (eight on the open pavement right of the altar, and two by the cart's shade) are
+each a thing to click wherever they are, and all say the same as the five painted ones
+did: looked at, "Pigeons. The exact same pigeons as at home..."; **Chase**, and he takes
+one quick step at the one he clicked, they all go up and land again a little way off (or
+fly off over the roofs and come back later), and he says, as before, "I'm not chasing them.
+I chased one at a rest stop once and Dad had to apologize to a truck." Walking near them
+sends them up too. Nothing else about the act changed for a player: the people who now get
+up and walk about by themselves (below) are always back on their marks before anyone talks
+to them.
+
+**The people's own lives.** In the street the snack-bar keeper goes along behind his counter
+to his pots or his stove, the washerwoman to her basket or out under her lines, the street
+boy up off the kerb to the fountain or a step into the road, the date seller a few steps up
+the pavement or along the kerb; on the steps the senator paces, the soothsayer gets up
+(slowly) to look at his birds or along his step, and the doorkeeper keeps the door (small
+movements only); in the temple the clerk goes to his rack or along behind his table. One at
+a time, each in their own time, and never while a script has the stage.
 
 ## Cut-scenes and puzzles
 
@@ -186,7 +260,8 @@ Step one: snacks. Step two: also Dad. Step three: get back in there. I'm adding 
 It's my operation." And he turns to the left edge of the picture, where the street is:
 "Step one is THAT way, past the bush. My nose is never wrong about snacks."
 *Plants:* the door is inside, and shut (#8). Step one, snacks (#4). Fourteen steps (#5).
-The way to the street, which is behind the laurel and easy to miss.
+The way to the street, which is behind the laurel and easy to miss (since round three the
+whole left edge of the picture is that way, and his nose has already pointed there).
 *Also:* the three things in his pockets arrive with him, without fuss: a dead phone, a
 quarter, half a pack of gum. He plays the act alone: Dad is still in Egypt, standing at
 his door, and there is nobody to switch to.

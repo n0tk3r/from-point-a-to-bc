@@ -1,19 +1,25 @@
 """Checks on the finished pictures of egypt1 (run after egypt1.py): python3 egypt1_check.py
 
-  1. back.png, palms.png and front.png are pixel for pixel what they were (out/egypt1-before/).
+  1. palms.png and front.png are pixel for pixel what they were (out/egypt1-before/); back.png too, except in the
+     two places round three repainted (the reed clump where the donkey now drinks, and Lot's bundle); every other
+     picture but donkey.png is pixel for pixel the round-two delivery (out/egypt1-before/round2/).
   2. wagon.png with mirror.png laid on it is the old wagon.png wherever that was solid; where the old one was
      clear inside the car (thin paint) the new one shows exactly the backdrop.
   3. Each open piece of luggage covers every pixel where the shut piece shows, and no open piece leaves
      a pixel with nothing behind it.
-  4. Every combination of states is laid together into out/egypt1-look/states.png, to look at."""
+  4. Every combination of states is laid together into out/egypt1-look/states.png, to look at.
+  5. The donkey drinks: its muzzle is in the river, its hooves on the sand, its rings on the water, and it is clear
+     of the wagon and the boy's prints. Every standing place is open floor even with the margin the game keeps
+     round blocked ground, and the place to talk to Lot is clear of the ground he sits on."""
 import itertools, sys
 import numpy as np
 from PIL import Image
 from brush import *
 import wagon
 
-NEW, OLD = "out/egypt1", "out/egypt1-before"
+NEW, OLD, R2 = "out/egypt1", "out/egypt1-before", "out/egypt1-before/round2"
 WAGON = (722, 540)
+REPAINTED = {"the reed clump where the donkey drinks": (120, 375, 200, 440), "Lot's bundle": (360, 410, 412, 440)}   # x0, y0, x1, y1
 ok = True
 
 
@@ -27,10 +33,27 @@ def say(good, text):
     print(("ok    " if good else "WRONG ") + text)
 
 
-for name in ("back", "palms", "front"):
+for name in ("palms", "front"):
     a, b = rgba(f"{NEW}/{name}.png"), rgba(f"{OLD}/{name}.png")
     same = a.shape == b.shape and not np.any(a != b)
     say(same, f"{name}.png is pixel-identical to the approved copy" if same else f"{name}.png differs in {int(np.any(a != b, axis=2).sum())} pixels")
+a, b = rgba(f"{NEW}/back.png"), rgba(f"{OLD}/back.png")
+differ = np.any(a != b, axis=2)
+allowed = np.zeros_like(differ)
+for x0, y0, x1, y1 in REPAINTED.values():
+    allowed[y0:y1, x0:x1] = True
+say(not np.any(differ & ~allowed), f"back.png is pixel-identical to the approved copy except in the places repainted in round three "
+    f"({', '.join(f'{k}: {int(differ[y0:y1, x0:x1].sum())} pixels' for k, (x0, y0, x1, y1) in REPAINTED.items())}; elsewhere {int((differ & ~allowed).sum())})")
+same = []
+for name in sorted(n[:-4] for n in __import__("os").listdir(R2) if n.endswith(".png")):
+    if name in ("back", "donkey"):
+        continue
+    a, b = rgba(f"{NEW}/{name}.png"), rgba(f"{R2}/{name}.png")
+    if a.shape == b.shape and not np.any(a != b):
+        same.append(name)
+    else:
+        say(False, f"{name}.png has changed since round two")
+say(len(same) == 14, f"{len(same)} pictures are pixel-identical to the round-two delivery: {', '.join(same)}")
 
 old, new, mir, back = rgba(f"{OLD}/wagon.png"), rgba(f"{NEW}/wagon.png"), rgba(f"{NEW}/mirror.png"), rgba(f"{NEW}/back.png")
 both = np.where(mir[..., 3:] > 0, mir, new)
@@ -107,6 +130,66 @@ def inside(pt, poly):
 spots = [(t["id"], t["stand"]) for t in doc["things"] + doc["exits"]] + list(doc["marks"].items())
 bad = [name for name, pt in spots if not inside(pt, doc["walk"]) or any(inside(pt, b) for b in doc["blocked"])]
 say(not bad, f"all {len(spots)} standing places and marks are on open floor" if not bad else f"not on open floor: {bad}")
+
+
+def floor(doc, more=()):
+    """Where the game lets a figure stand, worked out as its WalkMap does: inside the walk outline, and not within
+    12 pixels across or 5 up or down of any blocked outline (a pixel counts when its middle is inside)."""
+    import math
+    ok = np.zeros((600, 800), dtype=bool)
+
+    def rows(poly, fill):
+        ys = [p[1] for p in poly]
+        for y in range(max(0, math.floor(min(ys))), min(599, math.ceil(max(ys))) + 1):
+            py, xs = y + 0.5, []
+            for (xi, yi), (xj, yj) in zip(poly, poly[-1:] + poly[:-1]):
+                if (yi > py) != (yj > py):
+                    xs.append(xi + (py - yi) / (yj - yi) * (xj - xi))
+            xs.sort()
+            for k in range(0, len(xs) - 1, 2):
+                a, b = max(0, math.ceil(xs[k] - 0.5)), min(799, math.ceil(xs[k + 1] - 0.5) - 1)
+                if a <= b:
+                    fill(y, a, b)
+    rows(doc["walk"], lambda y, a, b: ok[y].__setitem__(slice(a, b + 1), True))
+
+    def block(y, a, b):
+        ok[max(0, y - 5):min(599, y + 5) + 1, max(0, a - 12):min(799, b + 12) + 1] = False
+    for poly in list(doc["blocked"]) + list(more):
+        rows(poly, block)
+    return ok
+
+
+lot = doc["lot"]
+lx, ly = lot["hips"]
+s = (ly - doc["horizon"]) / (doc["full"] - doc["horizon"])
+seat = [[lx - 32 * s, ly - 12], [lx + 32 * s, ly - 12], [lx + 32 * s, ly + 8], [lx - 32 * s, ly + 8]]     # what the game blocks round a person on his mark
+ok_floor = floor(doc, [seat, lot["solid"]])
+stands = [(t["id"], t["stand"]) for t in doc["things"] + doc["exits"]] + [("talkToLot", doc["marks"]["talkToLot"]), ("dad", doc["marks"]["dad"])]
+bad = [name for name, (x, y) in stands if not ok_floor[int(y), int(x)]]
+say(not bad, f"all {len(stands)} standing places are open floor as the game works it out (12 px across and 5 up or down clear of blocked ground, "
+    f"Lot sitting on his mark)" if not bad else f"the game would move Dad off: {bad}")
+say(inside(lot["hips"], doc["walk"]) and not any(inside(lot["hips"], b) for b in doc["blocked"]) and lot["hips"] == doc["marks"]["lot"],
+    f"Lot's mark {lot['hips']} is on the sand, and nothing painted stands on it")
+
+# the donkey drinks
+import egypt1 as E, egypt1_donkey as D
+water = E.river() > 0.5
+mx, my = D.muzzle(E.DONKEY, E.DONKEY_SCALE)
+hooves = D.hooves(E.DONKEY, E.DONKEY_SCALE)
+dk = rgba(f"{NEW}/donkey.png")[..., 3] > 0
+_, da, _, dla = D.donkey((600, 800), E.DONKEY, E.DONKEY_SCALE, jar_at=None, drink=D.DRINK)
+body = (da > 0.5) | (dla > 0.5)
+say(water[int(round(my)), int(round(mx))] and all(not water[int(round(hy)), int(round(hx))] for hx, hy, r in hooves),
+    f"the donkey's muzzle ({mx:.1f}, {my:.1f}) is in the river and its four hooves are on the sand (x {min(h[0] for h in hooves):.1f}..{max(h[0] for h in hooves):.1f})")
+ys, xs = np.nonzero(dk & ~body & water)                     # on the water, and not the animal: the rings
+say(len(xs) and xs.min() > mx - 22 and xs.max() < mx + 22 and ys.min() > my - 6 and ys.max() < my + 6,
+    f"besides the animal itself, all the cut-out has on the water is the rings round its muzzle and its head's shadow at the edge ({len(xs)} pixels, x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()})")
+plane = [p for p in doc["planes"] if p["id"] == "donkey"][0]
+say(plane["base"] == int(round(hooves[0][1])), f"the donkey plane's base {plane['base']} is the line of its near hooves")
+keep_clear = {"the wagon": [p for p in doc["planes"] if p["id"] == "wagon"][0]["solid"],
+              "the boy's prints": [t for t in doc["things"] if t["id"] == "footprints"][0]["shape"]["poly"], "the track": doc["exits"][0]["shape"]["poly"]}
+hit = [k for k, poly in keep_clear.items() if any(inside((x + 0.5, y + 0.5), poly) for y, x in zip(*np.nonzero(dk)))]
+say(not hit, "the donkey is clear of the wagon, the boy's prints and the track" if not hit else f"the donkey overlaps {hit}")
 wanted = ["river", "reeds", "footprints", "pyramid", "boat", "wagon", "hood", "glovebox", "mirror", "suitcase", "trunk", "cooler", "donkey", "block"]
 have = [t["id"] for t in doc["things"]]
 say(all(w in have for w in wanted) and doc["exits"][0]["id"] == "track", "layout.json names every thing in the brief, and the track as an exit")

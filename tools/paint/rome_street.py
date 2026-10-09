@@ -22,7 +22,12 @@ y 451-477, the roadway, a drain cover bottom left, a loaded handcart far up the 
 the Forum and the temple (x 368-432, y 182-243). Right: the fountain against the wall (x 541-700,
 y 355-502), a painted notice and scratched scribbles nearer us, the timber balcony the washing lines
 are tied to (x 560-720, y 30-275), the cat on a sill (745, 180). Bottom right, in front of
-everything: two wine jars and a handcart wheel."""
+everything: two wine jars and a handcart wheel.
+
+ROUND FOUR: the fountain's falling water and its rings, the sparrow drinking, the pigeons, the swallows, the cat's tail,
+the shrine's flame and the glints on the running water are no longer painted (PAINT_MOVING = True paints them as
+before); the game draws them moving from the marks in layout.json "fx". rome_street_four.py paints the frames and
+cuts the washing into pieces that can stir; rome_street_check4.py proves nothing else changed."""
 
 import json
 import math
@@ -38,6 +43,9 @@ import sky
 import letter
 from rome_street_kit import *
 
+PAINT_MOVING = False                                        # round four: the fountain's running water, the birds, the cat's tail and the shrine's
+                                                            # flame are the game's to draw, moving (layout.json "fx"; rome_street_four.py); True paints
+                                                            # them in, still, as the picture was before
 LIGHT = (-0.62, -0.50, 0.60)                                # the way the sunlight travels, in the world
 SKY_LIGHT = (0.70, -0.70)                                   # toward the sun, in the picture (for clouds)
 SUN_T = 0.50 / 0.62                                         # a shadow falls this much for every cm it crosses the street
@@ -67,6 +75,8 @@ STONE_Z = (402.0, 470.0)
 STONE_H = 22.0
 STONE_OWN = [(0.0, 3.0, 0.0), (-6.0, -4.0, 2.5), (4.0, 0.0, -1.5)]            # each one's own start, end and height, added to those
 BALC = dict(x=318.0, z0=180.0, z1=640.0, floor=352.0, rail=452.0, top=598.0, posts=(180.0, 333.0, 486.0, 640.0))
+RIDGE_PIGEONS = ((-582.0, 1, "#8d96ac"), (-556.0, -1, "#a8a4a8"), (-436.0, 1, "#7a8298"), (-300.0, -1, "#e8e4dc"))   # x along the ridge, facing, tone
+SWALLOWS = ((372, 44, 3.2), (430, 66, 2.6), (352, 78, 2.2), (462, 22, 2.8))                                     # x, y, size (px)
 SHADOW_L = 397.0                                            # how high the shadow stands on the left-hand wall
 BASKET = (-192.0, 268.0)                                    # where the washing basket stands (x, z), on the sidewalk
 
@@ -1220,9 +1230,11 @@ def awning_plane(seed=5):
     return color, alpha, lc, la2
 
 
-def fountain_plane(seed=5):
+def fountain_plane(seed=5, moving=None):
     """The public fountain: a basin of four stone slabs, brim full, and a short pillar with a carved face that
-    spouts into it. A bronze jug has been left on the rim. -> (color, alpha, lines color, alpha)"""
+    spouts into it. A bronze jug has been left on the rim. -> (color, alpha, lines color, alpha)
+    `moving`: with the water falling from the mouth, its rings, and the sparrow drinking (PAINT_MOVING if not said)."""
+    moving = PAINT_MOVING if moving is None else moving
     b, l = Dr(), Dr()
     f = FOUNT
     x0, x1, z0, z1 = f["x0"], f["x1"], f["z0"], f["z1"]
@@ -1285,11 +1297,12 @@ def fountain_plane(seed=5):
         l.line([(cx - 9, y0 + 16, z0 - 0.5), (cx + 9, y0 + 16, z0 - 0.5)], in_shade(tone, "front") * 0.9, 1.6)
     l.poly([(x0, y1, z0 - 0.5), (x0 + 9, y1, z0 - 0.5), (x0, y1 - 8, z0 - 0.5)], in_shade(stone, "deep") * 1.8)                  # a corner knocked off by a cart
     sx_, sy_ = P(x1 - 40, y1, z0 + 7)                                                                      # a sparrow come to drink
-    l.s.ellipse(sx_, sy_ - 3.2, 4.0, 2.6, in_shade("#8a6a4a", "front") * 1.2)
-    l.s.ellipse(sx_ - 3.4, sy_ - 5.4, 1.9, 1.8, in_shade("#6a4a34", "front") * 1.2)
-    l.s.line([(sx_ + 3, sy_ - 3.6), (sx_ + 7.5, sy_ - 5.5)], in_shade("#5a4030", "front") * 1.2, 1.2)
-    l.s.line([(sx_ - 5.2, sy_ - 5.2), (sx_ - 6.8, sy_ - 4.6)], in_shade("#d8a060", "front") * 1.2, 0.7)
-    l.s.ellipse(sx_ + 0.6, sy_ - 2.6, 2.2, 1.2, np.clip(in_shade("#d8c0a0", "front") * 1.2, 0, 1))
+    if moving:
+        l.s.ellipse(sx_, sy_ - 3.2, 4.0, 2.6, in_shade("#8a6a4a", "front") * 1.2)
+        l.s.ellipse(sx_ - 3.4, sy_ - 5.4, 1.9, 1.8, in_shade("#6a4a34", "front") * 1.2)
+        l.s.line([(sx_ + 3, sy_ - 3.6), (sx_ + 7.5, sy_ - 5.5)], in_shade("#5a4030", "front") * 1.2, 1.2)
+        l.s.line([(sx_ - 5.2, sy_ - 5.2), (sx_ - 6.8, sy_ - 4.6)], in_shade("#d8a060", "front") * 1.2, 0.7)
+        l.s.ellipse(sx_ + 0.6, sy_ - 2.6, 2.2, 1.2, np.clip(in_shade("#d8c0a0", "front") * 1.2, 0, 1))
     for (cx, cz, tone) in ((262.0, 300.0, "#e8c468"), (330.0, 286.0, "#dfe4ea"), (300.0, 318.0, "#c8944a"), (372.0, 305.0, "#e8c468"), (352.0, 276.0, "#c8944a"), (282.0, 272.0, "#dfe4ea")):
         ccx, ccy = P(cx, yw, cz)                                                                      # coins under the water
         l.s.ellipse(ccx, ccy, 2.0, 0.9, lerp(col(tone), col("#4f6f9e"), 0.35), 0.95)
@@ -1315,13 +1328,14 @@ def fountain_plane(seed=5):
     fall = []
     for t in np.linspace(0, 1, 9):
         fall.append((mx, my - (my - yw) * t * t, mz - 44 * t))
-    l.line(fall, "#e6f0ff", 1.5, 0.95)
-    l.line([(p[0] + 1.6, p[1], p[2]) for p in fall[2:]], "#9fb8e4", 0.8, 0.8)
     lx, ly = P(mx, yw, mz - 44)
-    for rr, aa in ((5.0, 0.9), (9.0, 0.6), (14.0, 0.35)):
-        pts = [(lx + math.cos(a) * rr * 1.6, ly + math.sin(a) * rr * 0.42) for a in np.linspace(0, 2 * math.pi, 22)]
-        l.s.line(pts, "#dfeaff", 0.7, aa)
-    l.s.ellipse(lx, ly, 3.0, 1.2, "#ffffff", 0.9)
+    if moving:
+        l.line(fall, "#e6f0ff", 1.5, 0.95)
+        l.line([(p[0] + 1.6, p[1], p[2]) for p in fall[2:]], "#9fb8e4", 0.8, 0.8)
+        for rr, aa in ((5.0, 0.9), (9.0, 0.6), (14.0, 0.35)):
+            pts = [(lx + math.cos(a) * rr * 1.6, ly + math.sin(a) * rr * 0.42) for a in np.linspace(0, 2 * math.pi, 22)]
+            l.s.line(pts, "#dfeaff", 0.7, aa)
+        l.s.ellipse(lx, ly, 3.0, 1.2, "#ffffff", 0.9)
     # a bronze jug left on the corner of the rim
     jx, jy = P(x0 + 16, y1, z0 + 9)
     l.s.poly([(jx - 5, jy), (jx + 5, jy), (jx + 7.5, jy - 9), (jx + 3.2, jy - 15), (jx + 3.6, jy - 20), (jx - 3.6, jy - 20), (jx - 3.2, jy - 15), (jx - 7.5, jy - 9)], in_shade("#b8873a", "front") * 1.05)
@@ -1524,11 +1538,21 @@ def pigeon(s, x, y, size, facing=1, tone="#8d96ac", sun=1.0, kind="front"):
     return s
 
 
-def cat(s, x, y, h, kind="warm"):
-    """A ginger-and-white cat sitting on a sill at (x, y), looking down the street to the left; its tail hangs over the edge."""
+CAT_TAIL = [(0.26, -0.06), (0.42, 0.12), (0.36, 0.36), (0.44, 0.50)]   # the cat's tail as painted, in her heights from where she sits
+
+
+def cat_tail(s, x, y, h, kind="warm", bend=None):
+    """Her tail, hanging over the edge of the sill (`bend`: another curve than CAT_TAIL, for the game's frames)."""
+    ginger = in_shade("#d98a3c", kind) * 1.25
+    s.taper(curve([(x + a * h, y + b * h) for a, b in (bend or CAT_TAIL)], 6), ginger, 0.13 * h, 0.08 * h)
+
+
+def cat(s, x, y, h, kind="warm", tail=True):
+    """A ginger-and-white cat sitting on a sill at (x, y), looking down the street to the left; its tail hangs over the edge.
+    (`tail` False: without it, for the game's frames of it to swing: round four.)"""
     ginger, white, dark = in_shade("#d98a3c", kind) * 1.25, np.clip(in_shade("#fbf4e6", kind) * 1.2, 0, 1), in_shade("#8a4a24", kind) * 1.1
-    tail = curve([(x + 0.26 * h, y - 0.06 * h), (x + 0.42 * h, y + 0.12 * h), (x + 0.36 * h, y + 0.36 * h), (x + 0.44 * h, y + 0.50 * h)], 6)
-    s.taper(tail, ginger, 0.13 * h, 0.08 * h)
+    if tail:
+        cat_tail(s, x, y, h, kind)
     s.poly([(x - 0.30 * h, y), (x + 0.34 * h, y), (x + 0.33 * h, y - 0.34 * h), (x + 0.18 * h, y - 0.62 * h), (x - 0.08 * h, y - 0.68 * h), (x - 0.27 * h, y - 0.42 * h)], ginger)
     s.poly([(x - 0.25 * h, y), (x - 0.02 * h, y), (x - 0.03 * h, y - 0.46 * h), (x - 0.21 * h, y - 0.50 * h)], white)                                 # its white front
     s.poly([(x + 0.12 * h, y), (x + 0.34 * h, y), (x + 0.33 * h, y - 0.30 * h), (x + 0.2 * h, y - 0.36 * h)], dark, 0.5)                              # the haunch, turned from the light
@@ -1590,7 +1614,7 @@ def crack(l, to3, u0, y0, length, seed, tone, lean=0.0, wd=0.8, a=0.7):
     return pts
 
 
-def shrine(b, l, seed=0):
+def shrine(b, l, seed=0, flame=True):
     """The crossroads shrine on the corner pier: a little arched niche with a lamp burning in it, and below it,
     painted on a white ground, a crested snake gliding up through leaves toward an altar."""
     z = ZF - 0.5
@@ -1608,8 +1632,9 @@ def shrine(b, l, seed=0):
     b.front(nx0 - 2, nx1 + 2, ny0 - 3, ny0, z - 2, sh("#d8ccb4", 1.15))                                                 # its little shelf
     lx, ly = P(-279.0, ny0, z - 1)
     l.s.poly([(lx - 4.0, ly), (lx + 3.0, ly), (lx + 4.6, ly - 2.4), (lx - 4.4, ly - 2.6)], sh("#c8744a", 1.2))             # the lamp
-    l.s.ellipse(lx + 5.0, ly - 4.6, 1.3, 2.4, "#ffb040")                                                               # and its flame
-    l.s.ellipse(lx + 5.0, ly - 4.2, 0.7, 1.3, "#fff4b0")
+    if flame:
+        l.s.ellipse(lx + 5.0, ly - 4.6, 1.3, 2.4, "#ffb040")                                                           # and its flame
+        l.s.ellipse(lx + 5.0, ly - 4.2, 0.7, 1.3, "#fff4b0")
     # the painted snake
     snake = []
     for t in np.linspace(0, 1, 26):
@@ -1659,9 +1684,11 @@ def price_list(b, l, seed=0):
     return
 
 
-def details(pic, base, info, solids, seed=5):
+def details(pic, base, info, solids, seed=5, moving=None):
     """Over the brushwork: say every built edge again, then the small crisp things: joints in the paving, tiles,
-    cracks and patches, lettering, the shrine and the price list, pots, the cat, pigeons."""
+    cracks and patches, lettering, the shrine and the price list, pots, the cat, pigeons.
+    `moving`: paint in what moves by nature too, still, as before round four (PAINT_MOVING if not said)."""
+    moving = PAINT_MOVING if moving is None else moving
     shape = SHAPE
     (bc, ba), (lc, la), cast = solids
     rng = np.random.default_rng(seed + 77)
@@ -1775,12 +1802,15 @@ def details(pic, base, info, solids, seed=5):
         kb.line([(xj, 0, ZK), (xj, SWH, ZK), (xj + rng.normal(0, 3), SWH, ZK + 32)], in_shade("#3c3440", "deep") * 1.2, 0.8, 0.7)
     spill = [(FOUNT["x0"] - 2 - t * 76 + math.sin(t * 9) * 3, SWH + 0.3, 298 + t * 14 + math.sin(t * 5) * 5) for t in np.linspace(0, 1, 12)]
     kb.line([(a_, b_, c_ + 3) for a_, b_, c_ in spill], in_shade("#3a3444", "deep") * 1.2, 2.6, 0.45)        # what spills from the basin runs across the sidewalk to the gutter
-    kb.line(spill, "#a8c0f0", 1.2, 0.85)
-    kb.line([(KR, SWH - 2, 312), (KR, 2, 314)], "#9ab4ea", 1.0, 0.6)
+    if moving:                                                                                              # (the light on the running water: the game's now)
+        kb.line(spill, "#a8c0f0", 1.2, 0.85)
+        kb.line([(KR, SWH - 2, 312), (KR, 2, 314)], "#9ab4ea", 1.0, 0.6)
     for i in range(40):                                                                                     # the trickle in the right-hand gutter, running away from the fountain
         zz = 300 + i * 34.0 + rng.random() * 14
         if rng.random() < 0.72:
-            kb.line([(KR - 8 - rng.random() * 6, 0.3, zz), (KR - 8 - rng.random() * 6, 0.3, zz + 16 + rng.random() * 22)], "#a8c0ee", 0.9, 0.5 * np.clip(1.5 - zz / 1300.0, 0.25, 1))
+            trickle = [(KR - 8 - rng.random() * 6, 0.3, zz), (KR - 8 - rng.random() * 6, 0.3, zz + 16 + rng.random() * 22)]     # (drawn or not, the same dice)
+            if moving:
+                kb.line(trickle, "#a8c0ee", 0.9, 0.5 * np.clip(1.5 - zz / 1300.0, 0.25, 1))
     put(pic, kb.s)
 
     # ---- 4. walls: where plaster has fallen, its broken edge; cracks; runs of dirt; painted lines
@@ -1900,18 +1930,19 @@ def details(pic, base, info, solids, seed=5):
     put(pic, r.s)
     birds = Sheet2(shape)
     kk = kz(L1["zr"])
-    for (xx, fc, tone) in ((-582.0, 1, "#8d96ac"), (-556.0, -1, "#a8a4a8"), (-436.0, 1, "#7a8298"), (-300.0, -1, "#e8e4dc")):
-        bx, by = P(xx, L1["ridge"] + 3, L1["zr"])
-        pigeon(birds, bx, by, 34 * kk, fc, tone, sun=1.0)
-    bx, by = P(BALC["x"] - 22, BALC["top"] + 14, 300.0)
-    pigeon(birds, bx, by, 30 * kz(300.0), -1, "#8d96ac", sun=0.0, kind="warm")
-    for (sx, sy, sz) in ((372, 44, 3.2), (430, 66, 2.6), (352, 78, 2.2), (462, 22, 2.8)):                     # swallows, high up
-        birds.line([(sx - sz, sy - sz * 0.5), (sx, sy), (sx + sz, sy - sz * 0.6)], "#1c2a4a", 0.9, 0.85)
+    if moving:
+        for (xx, fc, tone) in RIDGE_PIGEONS:
+            bx, by = P(xx, L1["ridge"] + 3, L1["zr"])
+            pigeon(birds, bx, by, 34 * kk, fc, tone, sun=1.0)
+        bx, by = P(BALC["x"] - 22, BALC["top"] + 14, 300.0)
+        pigeon(birds, bx, by, 30 * kz(300.0), -1, "#8d96ac", sun=0.0, kind="warm")
+        for (sx, sy, sz) in SWALLOWS:                                                                       # swallows, high up
+            birds.line([(sx - sz, sy - sz * 0.5), (sx, sy), (sx + sz, sy - sz * 0.6)], "#1c2a4a", 0.9, 0.85)
 
     # ---- 7. pots of flowers, the cat on her sill
     k1 = kz(85.0)
     cx, cy = P(WR - 7, 455.0, 96.0)
-    cat(birds, cx, cy, 36 * k1)
+    cat(birds, cx, cy, 36 * k1, tail=moving)
     # what she is watching: a songbird in a wicker cage, hung from the balcony's beam
     gz = 246.0
     gk = kz(gz)
@@ -1944,7 +1975,7 @@ def details(pic, base, info, solids, seed=5):
 
     # ---- 9. the shrine and the price list on the snack bar's piers
     sb, sl = Dr(), Dr()
-    shrine(sb, sl, seed)
+    shrine(sb, sl, seed, flame=moving)
     price_list(sb, sl, seed)
     put(pic, sb.s, wobble=0.4, seed=8)
     put(pic, sl.s)
@@ -2002,13 +2033,23 @@ def grade(picture, vib=0.6, lift=0.055):
     return np.clip(out, 0, 1).astype(F32)
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02):
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02, was=None):
+    """Grain, then a palette chosen for the picture, with speckle. `was` (round four) = (the picture as it was approved,
+    its alpha): the palette is chosen from that, exactly as it was then, so that every pixel that has not changed since
+    keeps its old color. -> the size of the file"""
     g = grain(picture, seed, amount)
     sample_of = g if alpha is None else g[alpha > 0.5]
+    if was is not None:
+        g0 = grain(was[0], seed, amount)
+        sample_of = g0 if was[1] is None else g0[was[1] > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
     save(name, idx, pal, alpha)
+    PALETTES[name] = pal                                                       # (round four: rome_street_four.py paints frames in it)
     return os.path.getsize(name)
+
+
+PALETTES = {}
 
 
 def show(picture, name):
@@ -2031,6 +2072,13 @@ def brushed(color, alpha, fast, sizes=(7, 4, 2), keep=0.42, seed=4):
     return out
 
 
+def fountain_cut(fast, seed=5, moving=None):
+    fc, fa, flc, fla = fountain_plane(seed, moving)
+    c = brushed(fc, fa, fast, keep=0.45)
+    over(c, flc, fla)
+    return c, np.maximum(fa, fla)
+
+
 def planes(fast, seed=5):
     """Every cut-out, finished. -> {name: (color, alpha)}"""
     out = {}
@@ -2038,10 +2086,7 @@ def planes(fast, seed=5):
     c = brushed(ac, aa, fast, keep=0.5)
     over(c, alc, ala)
     out["awning"] = (c, np.maximum(aa, ala))
-    fc, fa, flc, fla = fountain_plane(seed)
-    c = brushed(fc, fa, fast, keep=0.45)
-    over(c, flc, fla)
-    out["fountain"] = (c, np.maximum(fa, fla))
+    out["fountain"] = fountain_cut(fast, seed)
     wc, wa, wlc, wla = laundry_plane(seed)
     c = brushed(wc, wa, fast, sizes=(6, 3, 2), keep=0.45)
     over(c, wlc, wla)
@@ -2224,7 +2269,10 @@ if __name__ == "__main__":
         if cache:
             np.save(BR, pic)
     print("brushed", round(time.time() - t0, 1))
+    if not PAINT_MOVING:                                                      # round four: the picture as it was approved (its palette is kept)
+        pic_was = grade(details(pic.copy(), base, info, solids, moving=True))
     details(pic, base, info, solids)
+    ungraded = pic.copy()
     pic = grade(pic)
     print("details", round(time.time() - t0, 1))
     cut = {name: (grade(c), a) for name, (c, a) in planes(fast).items()}
@@ -2239,10 +2287,18 @@ if __name__ == "__main__":
     print("painted", round(time.time() - t0, 1))
     if fast:
         sys.exit()
-    print("back", finish(pic, "out/rome-street/back.png", 152))
+    if PAINT_MOVING:
+        print("back", finish(pic, "out/rome-street/back.png", 152))
+    else:
+        print("back", finish(pic, "out/rome-street/back.png", 152, was=(pic_was, None)))
+        fountain_was = tuple(np.asarray(v) for v in fountain_cut(fast, moving=True))
+        fountain_was = (grade(fountain_was[0]), fountain_was[1])
     for name, colors in (("awning", 72), ("fountain", 64), ("laundry", 72), ("tunic", 32), ("front", 56)):
         c, a = cut[name]
-        print(name, finish(c, "out/rome-street/%s.png" % name, colors, a))
+        print(name, finish(c, "out/rome-street/%s.png" % name, colors, a, was=fountain_was if name == "fountain" and not PAINT_MOVING else None))
+    if not PAINT_MOVING:                                                      # round four: frames, the washing in pieces, the marks
+        import rome_street_four as four
+        lay.update(four.everything(sys.modules[__name__], pic, pic_was, ungraded, cut, fountain_was, info))
     with open("out/rome-street/layout.json", "w") as fh:
         json.dump(lay, fh, indent=1)
     os.system("%s comp.py out/rome-street back %s" % (sys.executable, " ".join(ORDER)))

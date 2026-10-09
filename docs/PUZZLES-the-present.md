@@ -30,8 +30,8 @@ painters' own measurements. The fifth, the landing, is fitted to its painting as
 stands, and waits for one repaint (the attic ladder let down, and Little Sister's door
 as hers alone): until then the ladder is clicked at the hatch and its cord. Act Four
 was put onto its painting on the same day; its part of this document is its own
-writer's, and is being brought into step with the new years (the notice now seals
-sectors 44 and 1921).
+writer's, and has been brought into step with the new years (the notice now seals
+sectors 44 and 1921) and the chickens.
 
 Play it: `index.html?scene=home-living-room` starts Act Three and
 `index.html?scene=nevada-roadside` starts Act Four. In the full game it follows Rome,
@@ -76,9 +76,9 @@ Home, the present, 9:40 in the evening.
 
 - MOM: classy, refined and loving, and as clever as her elder daughter; plays the piano, thinks like a stage manager when things go wrong ("Places, girls."), reads lives of the Founders the way other people read thrillers; prays before she does anything else; wants all five of them at one table.
 - BIG SISTER: thirteen, has read every book in the house; knows the year of everything; says "Fun fact:" where her mother says "A matter of record:"; wants to be the one who works it out. Has made the attic into a spa retreat, and tonight is the one thing in it that is not calm.
-- LITTLE SISTER: seven, small but mighty; has started before you have finished explaining; adds her own postscript to a prayer; wants to help, right now. Loves chickens above everything. Her favorite, General Feathers, went on the trip in Daddy's suitcase, to keep an eye on him.
+- LITTLE SISTER: seven, small but mighty; fearless (BRAVE-scared at the very most), bossy, loving, and certain about everything, chickens most of all; has started before you have finished explaining; gives orders to the flock, to her sister and, when she can get away with it, to her mother; adds her own postscript to a prayer; wants to help, right now. Her favorite, General Feathers, went on the trip in Daddy's suitcase, to keep an eye on him.
 - DAD (a voice on the voicemail, and on his own answering machine): is either driving or lost, and is never lost. Signs his notices "THE MANAGEMENT".
-- THE SON (a voice on the toy alarm on his bedroom door): "Operation Keep Out." He still wants a dog.
+- THE SON (a voice on the toy alarm on his bedroom door): "Operation No Girls." His door says NO GIRLS ALLOWED, and a toy blaster hidden over it backs that up. He still wants a dog.
 
 The family are Reformed Christians, and it shows the way music shows in this house:
 grace is said, the Bible by Dad's plate is read after supper, the children know their
@@ -158,11 +158,11 @@ The beats, as the game has them (`js/content/acts/home.js`), twelve of them:
 | THE LANDING (home-landing)                                                       |
 |                                                                                  |
 |  top of the  THE SON'S DOOR  hamper  LITTLE SISTER'S  THE ATTIC  hall     DAD'S  |
-|  stairs      (toy alarm;     photos  DOOR (BEWARE     LADDER     table    STUDY  |
-|  window      shut all act)           OF CHICKENS)     (THE       (key     DOOR + |
-|     |        his school bag             |             RETREAT)   bowl)    HIS    |
-|     |                                   |                        the trip NOTICE |
-|     |                                   |                        countdown  |    |
+|  stairs      (NO GIRLS       photos  DOOR (BEWARE     LADDER     table    STUDY  |
+|  window      ALLOWED: toy            OF CHICKENS)     (THE       (key     DOOR + |
+|     |        alarm, booby               |             RETREAT)   bowl)    HIS    |
+|     |        trap; shut all act)        |                        the trip NOTICE |
+|     |        his school bag             |                        countdown  |    |
 |     |        - - - - - - - the railing: the living room below - - - - -    |    |
 +-----|-----------------------------------|-----------------------------------|----+
       |                                   |                                   |
@@ -195,10 +195,24 @@ The beats, as the game has them (`js/content/acts/home.js`), twelve of them:
 Five scenes, one painting each, each seen through one camera. Ways between them:
 living room `stairs` <-> landing `stairs`; landing `lilsis` <-> Little Sister's room
 `door`; landing `ladder` <-> the Retreat's `hatch`; landing `study` <-> study `door`
-(once unlocked). The front door of the living room is the only way out of the house,
-and it leads to Act Four. The Retreat has its own music (one slow tune in D major, from
+(once unlocked). Each way can also be taken across the edge of the picture, by a click
+in the band along that edge, where the pointer becomes an arrow and the label says where
+it goes (`edges` in each scene): the living room's left and top edges go up the stairs
+(the landing is the top of that picture); the landing's left and bottom edges go down
+them, its top edge up the ladder to the Retreat, and its right edge into the study once
+the study is open; the study's left and bottom edges, Little Sister's right and bottom
+edges and the Retreat's bottom edge go out to the landing. The landing seen from below,
+in the living room, is a way up too. The front door of the living room is a door in a
+wall, not an edge: it is the only way out of the house, and it leads to Act Four. The Retreat has its own music (one slow tune in D major, from
 the sound machine) until its batteries are taken: after that the house's tune is heard
 up there too.
+
+**What moves (round four).** Nothing that moves by nature is painted still any more: in the
+Retreat the little fountain on the sound table runs (a thread of water off the bamboo
+spout, rings on its pool), the flameless candles' little lights flicker, and the diffuser
+breathes out a soft mist; in Little Sister's room the mobile of felt chickens stirs, each
+chicken swinging a little on its thread. None of it is a thing to click, and nothing about
+the puzzles changed. (Nobody but the family is in the house, so nobody else walks about.)
 
 ## Cut-scenes and puzzles
 
@@ -300,15 +314,15 @@ Setup:        The closet under the stairs is too dark to find a plug in (#5), an
               where nobody but she may go: "NO BIG SISTERS" is her sign, and her rule.
 Wrong tries:  Mom or Big Sister at the fort, or at the flashlight -> "One does not enter a lady's fort
                                              uninvited." / "'NO BIG SISTERS.' I respect a posted boundary."
-              A dead flashlight at the closet -> "Not with a DEAD flashlight! It's dark in there. It
-                                             wants batteries first. THEN I'll go in."
+              A dead flashlight at the closet -> "A DEAD flashlight is just a pink stick! It wants
+                                             batteries. THEN I go in. That's the plan."
               Big Sister at her sound machine, before there is a dead flashlight in the house -> "It
                                              stays on. Tonight of all nights. It is the only one of us
                                              that is calm."
               Mom at the sound machine     -> "The batteries are in there, and they are not mine to take.
                                              Not from a daughter. Your sister must do this herself."
-              Little Sister at the sound machine -> "The batteries are IN there! But I can't touch it.
-                                             Rule AND treaty. She has to. It's HER music box."
+              Little Sister at the sound machine -> "The batteries are IN there! I can't touch it: rule
+                                             AND treaty. So YOU have to. It's your music box. Go on."
 Solution:     Little Sister fetches her flashlight from the fort. "CLICK. ...Click? CLICK CLICK CLICK."
               "It's DEAD. I used it all up last night. I was reading to the flock under the blanket.
               They wanted the WHOLE book." Mom has not seen a battery of that size in the house since
@@ -342,14 +356,17 @@ Wrong tries:  Mom at the closet           -> "A lady does not squeeze into close
                                              Both of those are final."
               Little Sister, with no light -> "I FIT!" She goes in. "It's SO dark. I can't find the plug.
                                              I found the vacuum. With my NOSE." She comes out: "I need
-                                             my flashlight. MINE. The pink one. It lives in my fort."
-                                             She will not go in again without it.
+                                             my flashlight. MINE. The pink one, from my fort. Come ON,
+                                             everybody. I know the way!" She will not go in again
+                                             without it: "Not without my flashlight! I'm not scared.
+                                             I'm BRAVE-scared. Brave-scared people bring a flashlight."
               Little Sister, when one of the others is holding it -> "I need my flashlight BACK.
-                                             Somebody's got it who isn't me."
+                                             Somebody's got it who isn't me. Hand it over, please.
+                                             I'm the closet person."
               The computer upstairs, before this is done -> "No internet."
-Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Flashlight ON.
-              There's the vacuum. And Daddy's golf sticks. And a plug that isn't plugged into
-              anything!" Mom talks her through the socket. The little light goes from red to green.
+Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Flashlight ON!
+              Hi, vacuum. Hi, spiders. And there's a plug that isn't plugged into ANYTHING!" Mom
+              talks her through the socket. The little light goes from red to green.
 Gives:        The internet. The computer upstairs can be signed in to.
 Plants/pays:  "I FIT!" again. The flashlight goes with her to Nevada (where, in full morning sun, its
               little spot cannot even be seen).
@@ -473,10 +490,11 @@ Needs:        #7, #9 and #10
 Setup:        Nothing stops them now.
 Wrong tries:  The door, with no dot on the map: Mom -> "Not until we know where we are going. One of us
               in this family must." Big Sister -> "A journey without a destination is just Dad."
-              Little Sister -> "Is it a 'mergency?" (The first time, Mom adds why they will want a
-              key: "And there is the matter of my car. Your father moved it this morning. My keys left
-              in his pocket." Big Sister:
-              the spare is in the family vault. Little Sister: "It's a box with a clicky wheel!")
+              Little Sister -> "I'm READY. I've been ready since dinner. ...Which way IS Daddy?" (The
+              first time, Mom adds why they will want a key: "And there is the matter of my car. Your
+              father moved it this morning. My keys left in his pocket." Big Sister: the spare is in
+              the family vault. Little Sister: "It's a box with a clicky wheel! Mommy will know the
+              clicks.")
               The door, with the dot and no message: Mom -> "There is a message on your father's
               machine upstairs, and I would like to hear it first."
               The door, with both and no key: Big Sister -> "Destination: yes. Message: yes. Car key:
@@ -495,11 +513,30 @@ Notes:        The drive is a card ("The Middle of Nevada. The next morning."). A
 Also in the house, for character and nothing else. Each of the three has her own line
 for every one of these, and they have things to say to each other in every room.
 
-- **The Son's door** (the landing). His toy alarm asks for the password, in his own
-  recorded voice. Little Sister knows it, because she has watched him, and does the
-  voice: "The password is: I still want a dog." It lets her in. Mom, quietly: "Not
-  tonight, sweetheart. I am not ready to look at that room with nobody in it." The door
-  stays shut all act. It is the one place the act is allowed to be sad.
+- **The Son's door** (the landing). It says NO GIRLS ALLOWED ("He spelled all three
+  words correctly this year. I was so proud that I very nearly obeyed it."), and it is
+  booby-trapped. His toy alarm asks for the password in his own recorded voice ("HALT!
+  This is Operation No Girls. What's the password?"). Little Sister knows it, because she
+  has watched him, and does the voice: "The password is: I still want a dog." It says
+  CORRECT, ten out of ten. Big Sister declines to guess, and simply opens the door.
+  Either way, when a sister opens it, his toy blaster, hidden in the slot over the door,
+  fires a volley of seven foam darts, orange and blue (drawn live, a "thwip" each), which
+  come down on the runner in front of the door and stay there. Big Sister says the
+  author's line: "I don't want to go in there. The rug is probably booby-trapped."
+  Little Sister, if it was her: "It said CORRECT! You can't say ten out of ten and then
+  SHOOT people! ...It was a GOOD trap, though." If it was her sister: "He GOT you! SEVEN
+  darts! ...Right. I'm making a sign for MY door. NO BROTHERS. Except on Saturdays."
+  Mom does not try his door tonight ("'NO GIRLS ALLOWED.' I am his mother, which he has
+  always counted as a separate thing. ...Not tonight."); when the darts have come down
+  she says, quietly, "Not tonight, sweetheart (darling). I am not ready to look at that
+  room with nobody in it." The second time either sister tries it, one more dart, the
+  one he kept back, flops out at her feet: "ONE more! He saved one for me! ...That's not
+  a trap anymore. That's just RUDE." / "One more. He kept one in reserve. I respect that,
+  and I am still not going in." After that the trap is spent and nobody tries: Little
+  Sister can wait ("I'm getting good at it"), and Big Sister stands by what she said
+  about the rug. The darts lie on the runner for the rest of the act (Mom leaves them
+  where they fell, for him to count). The door stays shut all act. It is still the one
+  place the act is allowed to be sad.
 - **The railing**: the living room, seen from above. "A set with the lights left on and
   nobody on it. Two of the cast are late."
 - **The family Bible**, at the head of the table by Dad's plate, open where he left it
@@ -559,9 +596,9 @@ The middle of Nevada, the next morning.
 
 ## Characters
 
-- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
-- THE MAN IN GRAY: stands in front of a government notice; can neither confirm nor deny the fence; wants nobody to read what is behind him, and is no match for a seven-year-old.
-- MOM, BIG SISTER, LITTLE SISTER: as before, with lemonade.
+- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing, and keeps hens out back; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
+- THE MAN IN GRAY: stands in front of a government notice; can neither confirm nor deny the fence, a dog, or General Washington; wants nobody to read what is behind him, and is no match for a seven-year-old.
+- MOM, BIG SISTER, LITTLE SISTER: as before, with lemonade, and with the five things from the house still in their pockets. None of them is needed here.
 
 ## Puzzle structure
 
@@ -628,22 +665,48 @@ reach: the closed area, and the rest of the tire tracks. The low morning sun is 
 right and a little behind us, so shadows fall to the left, and the glass lies in it.
 Nobody can walk onto the glass: Mom has said so, and routes go round it.
 
+There is no way out of the scene at the edges of the picture (the car brought them, and
+the only way on is the door in time), so the bands along the edges are plain ground. Show
+outlines each thing that can be clicked, following its own edge: the shack with its sign,
+its wind arrow and its stovepipe; the fence's far side, its corner post and the barbed
+wire along its top; the notice; the pump, the lemonade stand and Mom's car (by their own
+pictures); the old-timer in his chair and the man in gray (by their own figures); and,
+where the tracks stop, the glass and the last stretch of the two ruts that run into it.
+Each of the three is outlined by her own figure, and no area lies over the places where
+they stand to be talked to: where they arrive, and wherever the scene sends them.
+
+**What moves, and who (round four).** Nothing that moves by nature is painted still any
+more: two big birds cross the high sky now and then, slowly, and a thin thread of woodsmoke
+rises from the shack's stovepipe (there is no wind this morning, so it goes nearly
+straight up). And the two people live a little: the old-timer now and then gets up
+out of his lawn chair, slowly (the chair stays where it is), takes a few steps back toward
+his pump rubbing the small of his back, or out in front to look down the road, and sits
+down again; the man in gray looks at his watch and straightens his tie, and keeps the
+notice covered while he stands in front of it; once Little Sister has moved him along the
+fence he paces a little there, never back in front of the notice. Neither is ever away
+from his place when someone talks to him. None of it changes the puzzles.
+
 ## Cut-scenes and puzzles
 
 ```
 Cut-Scene: Where the map stops        (opens the act)
 ```
 A dirt lot. Mom: "Thirty-seven miles past Last Gas. This is where the map stops." Big
-Sister has a fact about Nevada. Little Sister: "It's all DIRT. Who ordered this much
-dirt?" Mom: "Somebody here saw something. We will ask nicely."
+Sister: "Fun fact: Nevada became a state on the thirty-first of October, 1864.
+Halloween." Her mother caps it: "Reformation Day, darling. A matter of record: Martin
+Luther's ninety-five theses, 1517." Little Sister: "It's ALL dirt. Who ordered this much
+dirt? ...Okay. I'm ready. Where do I start looking for Daddy?" Mom: "Somebody here saw
+something. We will ask nicely. Stay where I can see you, girls."
 
 ```
 Puzzle #5: Ask Nicely        (Nevada · Lead: Mom · the lemonade stand)
 Needs:        nothing
 Setup:        One witness: an old man who has watched this road for forty years and tells everybody he
               did not see nothing. Men in gray suits have already been asking.
-Wrong tries:  Little Sister asks          -> "Lemonade's a dollar, little miss. Stories are extra."
-                                             "I don't HAVE a dollar. I have a tooth."
+Wrong tries:  Little Sister asks          -> "Mister! Did you see my daddy? He's THIS tall, he has a
+                                             moustache, and he's EARLY." "Lemonade's a dollar, little
+                                             miss. Stories are extra." "I don't HAVE a dollar. I have a
+                                             loose tooth. But it's not for sale. It's waiting for Daddy."
               Big Sister asks             -> she cross-examines him. "That is a double negative. Technically,
                                              you saw something." "Technically, I'm closed."
               Mom: "A sensible silver sedan."         -> "Nothing sensible came down this road yesterday."
@@ -655,15 +718,22 @@ Solution:     Mom says good morning, and asks to buy three lemonades and a few m
               threw a flash up ahead, like a signal mirror. Right where it landed, the sky opened up like
               a tin can. The road sign changed its mind. And that wagon drove straight in." An hour later
               the gray suits put up a fence. "Radiation," they say. It is the third piece of desert they
-              have shut this year.
+              have shut this year. And one more odd thing about the week: "Been a strange week. My hens
+              quit laying the day the sky opened. Stand out back all day now, facing that fence." Little
+              Sister: "That's EVIDENCE. Chickens KNOW."
 Gives:        The witness's account. A silver coin that fell out of the sky this morning and hit his hat.
 Plants/pays:  Pays off the intro (the sign that changed its mind) and the look of the wagon. The coin is
               the one the Son tossed through the coin-sized door in Rome: the other side of that door is
               high over this desert ("Why is the sky DOWN?"). Plants the flash of low sun, which he tells
-              without knowing it is the part that matters: it pays off in #9. (Ask him again, as Mom:
-              "Low sun on bright chrome, ma'am. One flash, up ahead. And where it fell, the sky came
-              open. Never seen the like.") Plants the Geiger counter that never clicks (ask him again,
-              as Mom or as Big Sister): the radiation is an excuse.
+              without knowing it is the part that matters: it pays off in #9. (Ask him again, as Mom, who
+              asks for it like a stage manager, "The flash of light, if you would. From the top.": "Low
+              sun on bright chrome, ma'am. One flash, up ahead. And where it fell, the sky came open.
+              Never seen the like.") Plants the Geiger counter that never clicks (ask him again, as Mom
+              or as Big Sister): the radiation is an excuse. Pays off "Chickens KNOW." (Act Three): his
+              hens are never seen (they are out behind the shack), stopped laying the day the sky opened,
+              and stand all day facing the fence, where the tracks stop. He tells it as one more odd
+              thing; Little Sister takes it as evidence. Plants the chickens she hears through the door
+              at the end (the closing scene).
 Notes:        This is the author's "finding witness and finding out there have been government areas that
               have been shut down in the desert due to elevated radiation levels". Courtesy is the key,
               and knowing her husband's car is the lock.
@@ -673,21 +743,33 @@ Notes:        This is the author's "finding witness and finding out there have b
 Puzzle #6: Hand Over The Coin        (Nevada · Lead: Mom, then Big Sister)
 Needs:        #5
 Setup:        Mom has a coin she cannot read: "It looks old and it looks new. Your sister will know which."
-Wrong tries:  Give it to Little Sister    -> "A money! With a grumpy man on it. Can I buy a lemonade with it?"
-                                             (She can pass it on.)
+Wrong tries:  Give it to Little Sister    -> "I get to HOLD it? Finally! Hi, grumpy man. You're with ME now.
+                                             I'm holding you with BOTH hands." (She can pass it on.)
               Offer it back to the old-timer -> "He gave it to us, darling. It would be rude to give it back."
               Talk to Big Sister with the coin -> "Then hand it over, Mother. I can't footnote what I can't hold."
               Show it to the man in gray  -> "I can neither confirm nor deny that that is a coin."
                                              "If it were a coin, I would have to file a report. So it is not a coin."
-Solution:     Hold the coin and click Big Sister (or her portrait). "Mother. This is a Roman denarius. And that is Julius
-              Caesar. Fun fact: in 44 B.C., coins were struck in Rome with Caesar's own portrait. While
-              he was alive. And it isn't two thousand years old. Look at the edges. It is NEW. It has
-              hardly been in a pocket."
+Solution:     Hold the coin and click Big Sister (or her portrait). "Mother. This is a Roman denarius.
+              And that is Julius Caesar. Fun fact: in 44 B.C., coins were struck in Rome with Caesar's
+              own portrait. While he was alive." Little Sister knows it at once: "It's the Caesar money
+              from Sunday school!" Big Sister has the fact: "The 'penny' they brought to Jesus was a
+              denarius, like this one. Most likely with a later Caesar on it: Tiberius." And Mom has
+              the verse: "'Render therefore unto Caesar the things which are Caesar's; and unto God
+              the things that are God's.' Matthew 22:21." Then Big Sister goes back to the coin: "And it
+              isn't two thousand years old. Look at the edges. It is NEW. It has hardly been in a
+              pocket." Mom: "A new coin, from 44 B.C., that fell out of the sky. In Nevada."
 Gives:        Half the answer: a new coin from 44 B.C.
-Plants/pays:  Pays off #2 (handing things over) and the Son's coin toss in Act Two. Plants that the coin
-              is new, which is to say that it shines: #9.
+Plants/pays:  Pays off Act Three #3 (handing things over) and the Son's coin toss in Act Two. Plants that
+              the coin is new, which is to say that it shines: #9. Pays off the fountain in Rome, where the
+              Son told the same story in his own words with this same coin in his hand ("So Caesar gets
+              his coin. And God gets what's God's."): there the verse was left for his mother.
 Notes:        A thing sent through a hole in one year comes out of a hole in another. This is the first
-              time one half of the family helps the other without knowing it.
+              time one half of the family helps the other without knowing it. The three lines about the
+              tribute money change nothing in the puzzle: that the coin is NEW is still the half of the
+              answer it gives. Once the coin has been read, a word between Mom and Big Sister has a second
+              exchange about it: "A matter of record: Caesar put his own face on his money. Ours says 'In
+              God We Trust.'" "Fun fact: first in 1864, on the two-cent piece. The year Nevada became a
+              state. That half is mine."
 ```
 
 ```
@@ -699,15 +781,27 @@ Wrong tries:  Read the notice             -> each of them can see AREA CLOSED ab
                                              'AREA CLOSED'. The small print is behind his jacket."
               Mom asks him to move        -> "There is no notice, ma'am." "I can see all four corners of it."
                                              "I can neither confirm nor deny a corner."
+              Mom asks a second time      -> courtesy, with the rule book named. "A matter of record:
+                                             by the time he was sixteen, General Washington had copied
+                                             out 110 rules of civility." "I can neither confirm nor
+                                             deny General Washington." "Then you have not read one of
+                                             them. Good morning."
               Big Sister asks on what authority -> "I can neither confirm nor deny that it is an area."
                                              "It has a fence." "I can neither confirm nor deny the fence."
-Solution:     Play as Little Sister and talk to him. "Why is your tie gray? Is your car gray? Is your DOG
-              gray? Do you have a dog? What's his NAME? Why are you standing there? Is it your turn?"
-              He retreats along the fence with a hand to his ear ("Sir? I have a situation. She is about
-              seven.") and she goes with him.
-Gives:        A clear view of the notice. He stays busy for the rest of the act.
+Solution:     Play as Little Sister and talk to him. She has named him already ("I'm naming him Mister
+              Gray"), and she counts her questions on her fingers: "Hi, Mister Gray! I have some
+              questions. Number ONE: why is your tie gray?" "Move along, little girl." "That's not an
+              ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"
+              "I can neither confirm nor deny a dog." "Five: what's his NAME? Why are you standing THERE?
+              Is it your turn? Do you get a snack? That's EIGHT fingers. I have TOES too." He retreats
+              along the fence with a hand to his ear ("Sir? I have a situation. She is about seven. And
+              she says she has toes.") and she goes with him: "Tell her you're not DONE. ...Hi, Mister
+              Gray's mommy!"
+Gives:        A clear view of the notice. He stays busy for the rest of the act ("You stay RIGHT there.
+              Next question. Why is the sky?").
 Plants/pays:  Pays off "ask a LOT of times". Looking at the fence, she says: "I could fit under that.
-              ...I'm just SAYING." That is for the next act.
+              I fit under EVERYTHING. ...I'm just SAYING." That is for the next act. Mom's second try pays off Act Three, on the
+              landing ("as a schoolboy, George Washington copied out 110 Rules of Civility").
 Notes:        Courtesy cannot move him, and neither can logic. The notice itself says "No questions."
 ```
 
@@ -715,16 +809,18 @@ Notes:        Courtesy cannot move him, and neither can logic. The notice itself
 Puzzle #8: Read The Notice        (Nevada · Lead: Big Sister · the fence)
 Needs:        #7
 Setup:        The notice can be read now: AREA CLOSED. BY ORDER. ELEVATED RADIATION LEVELS.
-              SECTORS 44 AND 2560 SEALED UNTIL FURTHER NOTICE.
+              SECTORS 44 AND 1921 SEALED UNTIL FURTHER NOTICE.
 Wrong tries:  Mom reads it                -> she reads it out. "Sectors. As though the desert had been
                                              numbered. Your sister should see this."
-              Little Sister reads it      -> "A, R, E, A. And a yellow spinny flower. 'Radiator levels.'"
+              Little Sister reads it      -> "A, R, E, A. AREA! I can READ that. And a yellow spinny flower.
+                                             'Radiator levels.' That's bad, right?"
 Solution:     Big Sister reads it. Radiation is easy to believe in Nevada: atomic bombs were tested here
               from 1951 until 1992. "Which makes it a very good excuse. But look at the sectors. Forty-four.
-              Twenty-five sixty. Nobody numbers sectors like that. Those aren't places, Mother. I think
+              Nineteen twenty-one. Nobody numbers sectors like that. Those aren't places, Mother. I think
               those are years."
 Gives:        The other half of the answer.
-Plants/pays:  44 and 2560 are the years the Son and Dad are in. Whoever put up the fence knows that.
+Plants/pays:  44 and 1921 are the years the Son and Dad are in. Whoever put up the fence knows that.
+              Both are on Big Sister's timeline at home (Act Three): she says so in the closing scene.
 Notes:        Whichever of #6 and #8 comes second, she joins them up on the spot: "Sector 44. A new coin
               from 44 B.C. It is the same forty-four. The holes don't go to places. They go to YEARS."
 ```
@@ -733,66 +829,114 @@ Notes:        Whichever of #6 and #8 comes second, she joins them up on the spot
 Puzzle #9: Flash The Coin Where The Tracks Stop        (Nevada · Lead: whoever holds the coin · the patch of glass)       THE GATE
 Needs:        #6 and #8
 Setup:        Tire tracks run out from under the fence and stop at a patch of sand that has turned to
-              glass. There is nothing else to see. Little Sister, looking: "The ground is SHINY. And it
-              hums. Like a bee in a jar, but there's no bee. And no jar."
+              glass. There is nothing else to see. Little Sister, looking: "The ground's all SHINY. And it
+              hums, like a bee in a jar. But there's no bee. And no jar. It's the Hummy Place."
 Wrong tries:  Go to the tracks before both halves: Mom -> "I would like to understand it before any of
               us stands on it." Big Sister -> "A theory is not a fact until I can footnote it."
-              Little Sister -> "Can I jump on it? ...Mommy's doing the eyebrow."
+              Little Sister -> "I'll jump on it first. I'm the lightest, so it's SAFEST. ...Mommy's doing
+              the eyebrow. That's a no."
               The coin at the tracks before both halves -> the same.
+              Little Sister's flashlight where the tracks stop (at any time, whoever is holding it)
+              -> Little Sister: "CLICK. It's ON! ...Where's my spot? I can't even SEE my spot. The
+              sun's got a WAY bigger flashlight." Nothing opens. Light is the right idea, and this
+              is too little of it. (Tried anywhere else, and the other four things from the house
+              tried anywhere at all: the game's stock replies.)
               Go to the tracks after both halves, with nothing in hand -> she listens, and remembers
-              the old man. Mom: "It hums, darlings. Very quietly, like your father when he is lost and
-              will not say so." "The gentleman said a flash of low sun fell just here. I wonder what we
-              have that flashes." Big Sister: "A flash of low sun fell here, and the sky opened. That
-              is his whole story. So: we need a flash." Little Sister: "The wizard said the car went
-              FLASH and the sky went OPEN. I want to do a flash!"
-Solution:     Use the coin where the tracks stop, as whichever of them is holding it. She goes to the
-              corner of the glass, the other two stand back, and she holds the coin up to the low sun.
-              Mom: "Stand back a little, darlings. I am about to do something your father would think
-              of." Big Sister: "A low sun. A new coin. And an old man's story. This is called an
-              experiment." Little Sister: "I'm gonna do a FLASH! Like the car did! Everybody WATCH!"
-              One flash. The light stays where it fell, over the glass, and a door opens there, exactly
-              the size of the coin.
+              the old man. Mom: "It hums, darlings. Very quietly, and a little flat. Like your father
+              when he is lost and will not say so." "The gentleman said a flash of low sun fell just
+              here. I wonder what we have that flashes." Big Sister: "A flash of low sun fell here,
+              and the sky opened. That is his whole story. So: we need a flash." Little Sister: "It HUMS!
+              Right THERE! There's nothing there and it HUMS! ...Hello? Daddy? Are you in there?" "The
+              Rock Wizard said the car went FLASH and the sky went OPEN. So we need a flash. I'm READY."
+Solution:     Use the coin where the tracks stop, as whichever of them is holding it. Mom: "Places,
+              girls." The one with the coin goes to the corner of the glass, and the other two stand
+              back. Big Sister: "The tracks don't turn. They don't skid. They just stop." Then, first
+              things first: Mom bows her head, and the girls with her. Nobody has to be told. "Father,
+              You brought us this far. We do not understand what comes next, and You do. Keep us, and
+              keep them. In Jesus' name." Little Sister: "And thank You for the lemonade. And tell Daddy
+              we're COMING, so he doesn't have to be brave by himself. Amen." Heads up, and the coin goes
+              up into the low sun. Each has her own
+              line for it. Mom (and only when it is she who holds the coin, a line before it: "Dr.
+              Franklin said the sun carved on General Washington's chair was 'a rising and not a
+              setting Sun.' So is this one."): "Stand back a little, darlings. I am about to do
+              something your father would think of." Big Sister: "A low sun. A new coin. And an old
+              man's story. This is called an experiment." Little Sister: "My turn! I'm gonna do a
+              FLASH, like the car did! Everybody stand BACK. And WATCH." One flash. The light stays where it fell,
+              over the glass, and a door opens there, exactly the size of the coin.
 Gives:        A door in time the size of a coin, and the closing scene.
 Teaches:      Their half of the rule of the doors: light opens them. (A coin's worth of light, a coin's
               worth of door: they have not been told that yet, and Mom's last line knows it anyway.)
 Hints:        Mom: "A flash of low sun opened the sky where the tracks stop. We have a low sun, and a
               very new coin." Big Sister: "A flash of sun opened it once. The sun is low again, and the
               coin is new enough to flash. Where the tracks stop." Little Sister: "The shiny money can
-              do a FLASH! Like the car did! At the hummy place, where the car tracks stop!"
+              do a FLASH, like the car did! At the Hummy Place, where the car tracks stop! I'm READY."
 Plants/pays:  Pays off the old man's flash (#5), the newness of the coin (#6), and the Son's "little
               light, little door" in Rome, which nobody here has heard.
 Notes:        Any of the three can do it, and each has her own line: the coin can be handed round
               first. Until this moment there is nothing of the door on the screen. The light is drawn
               live: the flash of the coin (`#spark`), a short beam (`#ray`), the spot where it lands
               (`#glint`), and the game's own wormhole at a radius of 10 on a dark disc (`#hole`, in
-              `#door`), all out of sight until the coin goes up.
+              `#door`), all out of sight until the coin goes up. They pray, and then they do the
+              experiment: it is the light that opens the door, here as everywhere, and nothing on the
+              screen says otherwise. While the prayer is said all three stand in the game's praying
+              pose (`actor.pray`: head bowed, hands folded, each in her own way), and it is let go
+              before anyone reaches or walks.
 ```
 
 ```
 Cut-Scene: Some when        (closes the act)
 ```
 Little Sister is at the door before anybody can say no: it is at the height of her eye.
-"A HOLE! In the AIR! And it's LITTLE! It's littler than ME!" Big Sister narrates it:
-"'The air,' she noted, 'now had a hole in it. A hole exactly the size of the coin.'"
-Little Sister, with her eye to it: "It's a DIFFERENT sunny in there! And it smells like
-SAUSAGES!" Mom: "Sausages. She is quite right. And bread, and woodsmoke. And I believe I
-can hear chickens." Big Sister: "It is morning in there, too. I do not think it is THIS
-morning." "Then which morning, darling?" She gives both: "Sector 44: forty-four B.C. The
-year Julius Caesar was killed, on the Ides of March." "Sector 2560: twenty-five sixty
-B.C. About when the Great Pyramid was finished." "They didn't crash, Mother. They didn't
-go anywhere. They went some WHEN." Little Sister, turning round to them: "I TOLD you!
-Daddy's not lost! Daddy's EARLY!" Big Sister: "...More than four thousand years early.
-She was right. I need to sit down." Mom: "Then we know where they are. And we have a
-door. It is only a little small." "Girls. We are going to go and bring them home."
+"A HOLE! In the AIR! And it's littler than ME! ...I bet I could still FIT." Big Sister
+narrates it: "'The air,' she noted, 'now had a hole in it. A hole exactly the size of the
+coin.'" Little Sister, with her eye to it, hears them first, and counts them: "SHH!
+Everybody SHH! ...CHICKENS. Three! No, FOUR! I can hear CHICKENS in there!" And then:
+"It's a DIFFERENT sunny in there! And it smells
+like SAUSAGES!" Mom: "Chickens. She is quite right. And sausages, and bread, and
+woodsmoke." Big Sister: "It is morning in there, too. I do not think it is THIS
+morning." "Then which morning, darling?" She gives both, and at the first of them Little
+Sister, with her eye still at the door, has a question: "Sector 44: forty-four B.C. The
+year Julius Caesar was killed, on the Ides of March." "Wait! What's B.C.? Somebody tell
+me QUICK." Mom: "Before
+Christ, sweetheart. Before Jesus was born." "Sector 1921: nineteen twenty-one B.C. It is
+on my timeline: the year Abram went down into Egypt." Her mother knows the chapter:
+"Genesis 12. I have known that chapter all my life, darling. I had never once thought of
+it as a morning." And Big Sister sees a pattern she cannot explain: "The Ides of March.
+Abram in Egypt. The holes open on years that MATTER. ...I don't know why." "They didn't
+crash, Mother. They didn't go anywhere. They went some WHEN." Little Sister, turning
+round to them: "I TOLD you! Daddy's not lost! Daddy's EARLY!" Big Sister: "...Nearly four
+thousand years early. She was right. I need to sit down." Mom: "'My times are in thy
+hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one." "Then we know
+where they are. And we have a door. It is only a little small." "Girls. We are going to
+go and bring them home."
 
 "Daddy's EARLY" is the top of the scene, and is word for word the line the author asked
-to keep. Three lines follow it, as before.
+to keep. It is still Little Sister's last word. Four lines follow it: Big Sister's, the
+psalm, and the last two exactly as they were. ("Then we know where they are" now follows
+the psalm, and means two things. Not a word of it was changed.)
 
-*What comes through the door, and why it is so little.* A different sunlight; the smell
-of sausage, bread and woodsmoke; chickens. That is a March morning in Rome in 44 B.C. as
-Act Two has it (the snack bar's bread and sausage, the soothsayer's sacred chickens on
-the temple steps), and it is all they get. They do not see the Son, hear him, or learn
-which of the two years is in there: Big Sister names both and chooses neither. The
+*"Wait! What's B.C.? Somebody tell me QUICK."* is what makes EARLY land: she is told
+"before", and a few lines later she has done the sum her own way. It is asked and answered
+at the Roman year and nowhere else.
+
+*The second year* is the Bible's own count, as Archbishop Ussher counted it (see "How the
+game counts the years" in [CHARACTERS.md](CHARACTERS.md)): 1921 B.C., the year Abram went
+down into Egypt (Genesis 12:10), and it is on Big Sister's timeline at home. She tells it
+in her own words; her mother names the chapter and does not quote it. "Nearly four
+thousand years early" is the sum: from 1921 B.C. to A.D. 2026 is 3,946 years (there is no
+year 0). Nobody here speaks of the pyramid.
+
+*The pattern.* Both years are years when something happened: the doors open on years
+that matter. Big Sister notices it, once, and does not know why. It is a plant, and
+nothing pays it off yet.
+
+*What comes through the door, and why it is so little.* Chickens; a different sunlight;
+the smell of sausage, bread and woodsmoke. That is a March morning in Rome in 44 B.C. as
+Act Two has it (the soothsayer's sacred chickens on the temple steps, facing the temple
+doors, and the snack bar's bread and sausage), and it is all they get. Little Sister hears
+the chickens before anybody smells a sausage: chickens are the first thing she would
+notice anywhere, and she is always right about them. They do not see the Son, hear him, or
+learn which of the two years is in there: Big Sister names both and chooses neither. The
 player, who has been to Rome, knows more than the family does.
 
 *Plants:* the way through is here, it is too small, and somebody official is standing
@@ -823,18 +967,21 @@ The five things from the house that are not used up (the key, the flashlight, th
 | "Daddy's not lost. Daddy's EARLY." | Opening of Act Three | The last scene of Act Four |
 | Dad never asks for directions | The voicemail; Little Sister's postscript to the prayer ("please make Daddy ask for directions. Just ONE time."); the wedding photograph on the landing | Act Three #7, the wedding question. (Draft: the last thing Dad does in the game is ask for directions. That would also be a seven-year-old's prayer answered.) |
 | "THE MANAGEMENT" | Act Three #1, Dad's notice | Act Three #10: the vault's label ("Your mother will know. She brings it up.") and the card inside it ("KNEW YOU'D KNOW.") |
-| "I FIT!" | Act Three #2 (under the keyboard) and #5 (the closet) | The fence: "I could fit under that." For the next act. |
+| "I FIT!" | Act Three #2 (under the keyboard) and #5 (the closet) | The fence: "I could fit under that. I fit under EVERYTHING." For the next act. And the coin-sized door: "I bet I could still FIT." |
 | Handing a thing to someone | Act Three #3 (the key), #6 (the note), #8 (the pencil) | Act Four #6 (the coin) |
 | The road sign that changed its mind | The intro | Act Three #9: "That sign just changed its--". Then the old-timer's account, Act Four #5 |
 | 5:41 on the tape; 5:47 on the map | Act Three #9 and #7 | Whichever comes second: Big Sister counts the six minutes |
 | "Thirty-seven miles past Last Gas" | Act Three #7 (the map) and #9 (Dad says it himself) | The first line of Act Four |
 | The ketchup packets Dad is saving | Act One (his running gag) | Act Three #10: two of them are in the family vault. Nobody has asked what he is saving them for. |
-| "I still want a dog" | Rome, Act Two: "Edge, we get a dog." | Act Three: it is the password on his bedroom door. Not yet answered. |
-| Psalm 121:8: "thy going out and thy coming in" | Act Three #11, at the front door. Mom: "Going out, and coming in. All five of us." | Not yet: the coming in. (Mom's "My times are in thy hand", Psalm 31:15, belongs to the end of Act Four.) |
+| "I still want a dog" | Rome, Act Two: "Edge, we get a dog." | Act Three: it is the password on his bedroom door. Little Sister does his voice, it is CORRECT, and his booby trap goes off anyway. Not yet answered. |
+| NO GIRLS ALLOWED, and eight foam darts on the runner | Act Three, the Son's door: "I don't want to go in there. The rug is probably booby-trapped." | Not yet. He will want a full report (Big Sister intends to say it was adequate); Mom has left the darts where they fell, for him to count. |
+| "NO BROTHERS. Except on Saturdays." | Act Three, Little Sister, when the trap gets her sister | Not yet: the sign is not made. |
+| Her loose tooth, "not allowed out till Daddy's home. He has to SEE it." | Act Three, a word with Big Sister in the study | Not yet. |
+| Psalm 121:8: "thy going out and thy coming in" | Act Three #11, at the front door. Mom: "Going out, and coming in. All five of us." | Not yet: the coming in. (Mom's "My times are in thy hand", Psalm 31:15, is the second line after "Daddy's EARLY" at the end of Act Four.) |
 | Little Sister's flashlight | Act Three #4 and #5 | Act Four: light opens doors in this story, and hers is too small to be seen in the morning sun. For later. |
-| "Chickens KNOW." | Act Three, Little Sister at her flock | The geese in Egypt, the sacred chickens in Rome, the old-timer's hens in Act Four: in every era the birds face a door in time before any person has noticed it. |
-| General Feathers' place on the pillow: RESERVED | Act Three, Little Sister's room | She is in Dad's suitcase in Egypt (Act One), in charge. Not yet: her coming home. |
-| 1921 B.C. and 44 B.C. on Big Sister's timeline | Act Three, the Retreat | The two sectors on the notice in Act Four. "Her timeline has that year on it." |
+| "Chickens KNOW." | Act Three, Little Sister at her flock | The geese in Egypt, the sacred chickens in Rome, the old-timer's hens in Act Four (#5: they quit laying the day the sky opened and stand facing the fence; Little Sister: "That's EVIDENCE. Chickens KNOW."): in every era the birds face a door in time before any person has noticed it. |
+| General Feathers' place on the pillow: RESERVED | Act Three, Little Sister's room | She is in Dad's suitcase in Egypt (Act One), in charge. In Act Four, once she has heard of the old-timer's hens, Little Sister misses her: "Mommy, I miss General Feathers. But Daddy needs her MORE. She's keeping an eye on him. He has to do what she SAYS." "Then he is well looked after, sweetheart. She outranks him." Not yet: her coming home. |
+| 1921 B.C. and 44 B.C. on Big Sister's timeline | Act Three, the Retreat | The two sectors on the notice in Act Four. In the closing scene: "Sector 1921: nineteen twenty-one B.C. It is on my timeline: the year Abram went down into Egypt." |
 | "The Retreat goes dark so that the internet may live." "I intend to mention this again." | Act Three #4 | Not yet. She will. |
 | The appeal lodged against rule three (NO CHICKENS) | Act Three, the rules in the Retreat | Not yet heard. |
 | The coin that "didn't come back down" | Rome, Act Two | #5 and #6 |
@@ -842,12 +989,25 @@ The five things from the house that are not used up (the key, the flashlight, th
 | "Look at the edges. It is NEW." | #6 | #9: a new coin shines |
 | "Why is the sky DOWN?" | Rome, Act Two, looking through the coin-sized door | #5: the coin fell out of the sky and hit his hat |
 | A Geiger counter that never clicks | #5, ask again as Mom or as Big Sister | Not yet. The radiation is an excuse: for what? |
-| Sectors 44 and 2560 | #8 | Not yet. Who numbered them, and how many more are there? |
+| Sectors 44 and 1921 | #8 | Not yet. Who numbered them, and how many more are there? |
 | A hum where there is nothing to hum | #9, before the coin goes up | #9. It is the door, shut. |
 | A door the size of a coin, with a morning in it | The closing scene | Not yet. It is the way through, and it is too small. More light would be a bigger door: they have not been told. |
-| Sausages | The closing scene: the first thing Little Sister notices | Not yet. Her brother is on the other side of a door like this one, and he found Rome's snack bar the same way: "Step one, I can SMELL you." |
+| Sausages | The closing scene: the second thing Little Sister notices (the first is chickens) | Not yet. Her brother is on the other side of a door like this one, and he found Rome's snack bar the same way: "Step one, I can SMELL you." |
+| "Father, You know where they are tonight, and I do not. Keep them." "And bring us to them." | Act Three, the opening prayer | Act Four #9, before the coin goes up: "Father, You brought us this far. We do not understand what comes next, and You do. Keep us, and keep them. In Jesus' name." |
+| Little Sister's postscript to a prayer | Act Three: "And please make Daddy ask for directions. Just ONE time. Amen." | Act Four #9: "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen." Not yet answered, either of them. |
+| "Places, girls." | Act Three, the opening (and the title of Big Sister's next chapter) | Act Four #9: Mom says it, and the three take their marks at the glass |
+| George Washington's 110 Rules of Civility | Act Three, a word on the landing | Act Four #7: Mom's second try at the man in gray. "I can neither confirm nor deny General Washington." |
+| "Is Daddy in trouble?" | Act Three, a word in the study | Act Four, a word with her mother: "Mommy, is Daddy STILL in trouble?" "A little, sweetheart. But only with me, and only once he is home." |
+| The tribute money, in a ten-year-old's own words | Rome, Act Two, at the fountain: "So Caesar gets his coin. And God gets what's God's." | Act Four #6: the same coin, and his mother has the verse (Matthew 22:21) |
+| "That is not what early means." | Opening of Act Three (Big Sister) | The last scene of Act Four: "Wait! What's B.C.? Somebody tell me QUICK." "Before Christ, sweetheart." And then it is exactly what early means. |
+| Little Sister's loose tooth: not allowed out till Daddy has seen it | Act Three (a word with her sister in the study) | Act Four: it is not for sale ("It's waiting for Daddy"), and when they find him it comes second, after the internet. Not yet: Daddy sees it. |
+| "I'm not scared. I'm BRAVE-scared." | Act Three #5, the closet | Act Four, holding her sister's hand by the fence: "Okay. I'm holding it MIGHTILY. I'm not scared. I'm BRAVE-scared." |
+| Mom is humming "O God, Our Help in Ages Past" | Act Four, a word with Little Sister | Not yet, and never said aloud: it is the hymn made from Psalm 90, which is the psalm Dad says at the door in Egypt (Act One). To confirm before anyone leans on it: see "To confirm", at the end of this document. |
+| The old-timer's hens, never seen, facing the fence | #5, his account: "Been a strange week. My hens quit laying the day the sky opened. Stand out back all day now, facing that fence." | The closing scene: through the door, it is Little Sister who hears chickens, before anybody smells a sausage. |
+| "The holes open on years that MATTER. ...I don't know why." | The closing scene (Big Sister): the Ides of March, and Abram in Egypt | Not yet. Nobody explains it. (It is also the first time she says "I don't know" in this act.) |
+| "I had never once thought of it as a morning." | The closing scene (Mom, of Genesis 12) | Not yet. Her husband is standing in that chapter. |
 
-(The last nine rows are Act Four's, and their puzzle numbers are that act's own.)
+(The last twenty rows are Act Four's, and their puzzle numbers are that act's own.)
 
 **Facts used.** In Act Three the riddle (#1: a piano's eighty-eight keys), the password
 (#6: sliced bread, 1928), the tape (#8: a cassette can be wound with a pencil) and the
@@ -858,14 +1018,21 @@ Washington's Rules of Civility, Adams and Jefferson, Bach's "S.D.G.", Cristofori
 piano, what B.C. and A.D. mean, the year Archbishop Ussher's book was published). The
 years before Christ on Big Sister's timeline (4004, 2348, 1921, 1491) are the Bible's
 count, as Ussher counted it: the author's rule for the whole game. Six verses of
-Scripture are quoted, and nine words of a seventh (Matthew 23:37), from the King James
-Version, each with its reference. In Act Four the bomb tests (#8), the coin (#6)
-and the two years (the closing scene) all rest on real history. The lists, and which
-of them have been checked against a source, are at the end of
-[CHARACTERS.md](CHARACTERS.md): Big Sister's facts, Mom's facts, and the verses. Two of
-Act Four's were reworded on 2026-10-07 to say less and be surer: of the coin, only that
+Scripture are quoted in Act Three, and nine words of a seventh (Matthew 23:37), and two in
+Act Four (Matthew 22:21 at the coin, and the first clause of Psalm 31:15 at the end), from
+the King James Version, each with its reference. In Act Four the bomb tests (#8), the coin
+(#6) and 44 B.C. (the closing scene) rest on real history, and so do the things Mom and
+Big Sister say for the pleasure of it (Reformation Day, the coin of the tribute money,
+General Washington's rules, "In God We Trust" and the year 1864, Dr. Franklin's rising
+sun, what B.C. means). The other year, 1921 B.C., the year Abram went down into Egypt
+(Genesis 12:10, told and not quoted), is the Bible's count, as on Big Sister's timeline.
+The lists, and which of them have been checked against a source, are at the end of
+[CHARACTERS.md](CHARACTERS.md): Big Sister's facts, Mom's facts, and the verses. One of
+Act Four's was reworded on 2026-10-07 to say less and be surer: of the coin, only that
 in 44 B.C. coins were struck in Rome with Caesar's own portrait while he was alive (not
-that he was the first); of 2560 B.C., only "About when the Great Pyramid was finished."
+that he was the first). The second sector on the notice was the textbook's year for the
+Great Pyramid until the evening of that day; it is now 1921 B.C., the Bible's count,
+stated as plain fact, and nobody in the act speaks of the pyramid.
 One of Act Three's was reworded the same day on the fact-checker's finding: a cassette
 is wound with "a pencil", and nobody says that the pencil's six sides are why it fits.
 
@@ -879,10 +1046,24 @@ real game by real clicks, by different orders of the middle chains, and keeps a 
 of every scene and every moment worth looking at in `briefs/out/home-shots/`. Act Four:
 `briefs/out/nevada-check.mjs` reads the act's files against each
 other, against the painter's measurements and against the author's instructions, and
-plays it three ways on a stand-in for the engine. `briefs/out/nevada-play.py` plays it
-three ways in the real game by real clicks, with a different one of the three holding
-the coin at the end each time, and keeps a picture of every moment worth looking at in
-`briefs/out/nevada-shots/`.
+plays it three ways on a stand-in for the engine. It holds the two verses letter for
+letter against the fact-checker's list (`briefs/out/facts-home.json`), keeps a table of
+every line that states history with where it was checked, sees that every year before
+Christ is the Bible's count and every span of years the right sum, keeps the oldest
+history to the reveal and the chickens to three to six lines (Little Sister hearing them
+first), and sees that all three stand in prayer while the prayer is said and nobody after
+it. Since round three it also holds Little Sister's two kept lines word for word, sees
+that she says "Mommy" and "Daddy", that "radiator" is her one word that comes out nearly
+right, and that she counts the man in gray's questions right; that every area hugs its
+thing (no rectangles), that cut-outs and people are named for Show, that no area lies over
+the places where the three of them stand to be talked to, and that the scene has no ways
+out at its edges. `briefs/out/nevada-play.py` plays it three ways in the real game by real
+clicks, with a different one of the three holding the coin at the end each time, the first
+two times with things from the house in their pockets, and keeps a picture of every moment
+worth looking at in `briefs/out/nevada-shots/`; it hears every one of Little Sister's new
+lines, turns Show on for a picture before and after the man in gray moves (every thing
+outlined, the cut-outs, the people and the three of them by their own pictures, and no
+arrow), and clicks in a band along the edge to see that nobody leaves.
 
 ## What comes next (not written)
 
@@ -891,11 +1072,40 @@ the coin at the end each time, and keeps a picture of every moment worth looking
   sun on a whole chrome bumper, and a door a station wagon could drive into), and so
   does Mom's car, which has mirrors.
 - The man in gray is a few steps away. What he does when he turns round.
-- Whether the door gives onto 44 B.C., onto 2560 B.C., or onto neither. Big Sister has
-  named both and chosen neither; the sausages are a clue the player can read and the
-  family cannot.
+- Whether the door gives onto 44 B.C., onto 1921 B.C., or onto neither. Big Sister has
+  named both and chosen neither; the chickens and the sausages are clues the player can
+  read and the family cannot.
+- Why the doors open on years that matter (the Ides of March; Abram in Egypt). Big Sister
+  has noticed, and does not know why. Nobody explains it yet.
 - What the men in gray know, and whether they are after the same thing.
 - When the two halves of the family first hear from each other. The coin went one way
   by accident. Something could go the other way on purpose: the Son, in Rome, is
   standing beside a door the size of a coin with nothing left to send through it.
 - Little Sister eyed the fence: "I could fit under that." Still for later.
+
+**To confirm** (wording and facts in Act Four)
+
+- The hymn's title (`nevada.talk.lilsis.mom.3b`), written from knowledge and not from the
+  fact-checker's list: "O God, Our Help in Ages Past" (Isaac Watts, 1719). Watts's own first
+  line is "Our God, our help in ages past", and some hymnals give the title so. Which does
+  the author's hymnal print? Only the title is in the game.
+- That the hymn is Watts's paraphrase of Psalm 90, the psalm Dad says at the door in Egypt
+  (`egypt.gate.psalm.1`, Psalm 90:4). Neither act says so; if one ever does, check it first.
+- "Reformation Day" as the name of 31 October (`nevada.arrive.2b`). The date of the
+  Ninety-five Theses was checked; the name of the day was not an item of its own.
+- "Ours says 'In God We Trust.'" (`nevada.talk.mom.bigsis.quarter.a`). What was checked is
+  that the motto was first on a United States coin in 1864, and is the national motto
+  (1956). That it is on the coins in a handbag today is taken as common knowledge.
+- "Before Jesus was born" (`nevada.gate.2d`): Mom's gloss of "before Christ" for a
+  seven-year-old, and what the count means. Historians put the birth itself a few years
+  before A.D. 1; nothing in the line depends on that.
+- The years. Every line that said 2560 or leaned on it has changed (`nevada.notice.mom.1`,
+  `nevada.notice.big.2`, `nevada.notice.again`, `nevada.gate.2b`, `nevada.gate.5`). Big
+  Sister's "it isn't two thousand years old" (`nevada.coin.read.3`) is about 44 B.C., and
+  stands: a coin of 44 B.C. would be 2,069 years old.
+- "What's B.C.?" (`nevada.gate.2c`) is asked although Big Sister's timeline at home explains
+  B.C. the night before (`home.timeline.bigsis`). A seven-year-old asking twice is in
+  character; if the author would rather she remembered, `.2c` and `.2d` can go, or be
+  turned round so that she answers it herself. Nothing else depends on them.
+- The hens are heard of, not heard: nothing is drawn, and the game has no chicken sound. If
+  one is wanted from behind the shack, it belongs in `js/content/sound.js`.

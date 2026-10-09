@@ -12,6 +12,15 @@
 //   rest       where an arm lies when a pose leaves it alone: { L: { hand: [...] } }
 //   pace       how fast they walk, in picture pixels a second at full size
 //   pray       how they stand to pray: { high: how high the folded hands are (0 the belt, 1 under the chin), bow, tight }
+//              (someone found sitting prays sitting, hands lifted and open: { high, out, apart, bow }: see sitPrayPose in rig.js)
+//   stood      for someone found sitting: what changes when they stand up (what they hold and how, how they walk)
+//   sit.drawn  their seat is drawn with them (a stool, a lawn chair): it stays where it is when they get up
+//   riseMs     how long getting up takes them, in ms, if not the usual
+//   fidgets    their own small movements, besides everyone's: { stand: [...], sit: [...] } (`only: true`: theirs and no others)
+//   paint      how they are painted when people are painted (paint.js; the address switch ?people=painted):
+//              face: the painted face (eye: size and kind, iris colour, brows, lips, smile, blush, lashes: see faceOf),
+//              shape: the face's own measurements changed a little for the painting (eyeY, mouthY, jaw, chin, nose),
+//              head: a head this much bigger than the skeleton's, its top where it was (a small child's)
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -19,7 +28,7 @@
 // docs/CHARACTERS.md says who these people are. To change someone, change the numbers
 // and colors here; every view and every animation follows. tools/sprites.html shows the result.
 
-import { ADULT, CHILD, WOMAN, blend, ramp, shifted, add, mix, turn, wear } from "./rig.js";
+import { ADULT, CHILD, WOMAN, blend, ramp, shifted, add, mix, turn, wear, upOf } from "./rig.js";
 
 // Skin: the plain color, the shade, and a deeper line. (The first tone is kept for things that shine.)
 const SKIN = ramp("#fbdcc0", "#f0bc9a", "#c98664", "#8c5440");
@@ -67,6 +76,9 @@ export const dad = {
   shoes: { kind: "sandals", mat: ramp("#a8744a", "#7d5030", "#553521", "#332015"), sole: ramp("#6b4a30", "#4d3320", "#332015", "#1f130c") },
   gestures: [0, 1, 2, 3],                               // a nod, a point, a shrug, a hand on the hip
   pray: { high: -0.40, bow: 0.34 },                     // his big hands folded low in front of him, his head well down
+  // painted: a friendly face, blue-grey eyes, strong brows, the moustache, and a smile he cannot quite keep down
+  paint: { face: { eye: { w: 0.215, h: 0.088, iris: 0.50, lid: 0.12 }, iris: "#5d7c9a", browUp: 0.058, browThick: 0.080, browArch: 0.030, stubble: 0.5,
+                   lip: "#b0675a", lipA: 0.55, upper: 0.030, lower: 0.058, smile: 0.60, mouthW: 0.30, blush: 0.07, cheer: 0.30 } },
 };
 
 // ---------- the Son: red cap, blue hoodie, backpack. Zany: he bounces, and his hands never stop. ----------
@@ -88,6 +100,9 @@ export const son = {
   walk: { swing: 0.50, arm: 0.58, elbow: 0.95, pump: 0.30, lean: 0.10, lift: 1.3, bob: 0.05, wag: 0.10, sway: 0.020 },   // a bounce, fists pumping, head going from side to side
   gestures: [1, 4, 9, 2],                               // a point, both arms up, both hands waving, a shrug
   pray: { high: 0.06, bow: 0.32, out: 0.012 },          // his cap off and held in both hands in front of him (see below), for once standing still
+  // painted: bright blue eyes wide open, brows up, a grin from ear to ear
+  paint: { face: { eye: { w: 0.240, h: 0.118, iris: 0.52 }, iris: "#3f78b8", browUp: 0.092, browThick: 0.062, browArch: 0.040,
+                   lip: "#b8665a", lipA: 0.45, smile: 1.0, mouthW: 0.30, blush: 0.12, expressive: 1.3, cheer: 0.40 } },
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, tw, J, parts, pose }) {
     const hr = d.headR;
     if ((pose.praying || 0) > 0.5) {
@@ -130,6 +145,10 @@ export const mom = {
   gestures: [0, 5, 8, 0],                               // a nod, a hand to the heart, an open hand
   pray: { high: 0.42, bow: 0.28 },                      // her hands folded at her breast
   pace: 150,
+  // painted: green eyes under arched brows, lashes and a little colour on the lids, rose lips, a warm cheek
+  paint: { shape: { chinY: -0.76, chin: 0.44 },
+           face: { eye: { w: 0.230, h: 0.100, iris: 0.55, lid: 0.14, lash: 1.4 }, iris: "#5c8a4c", eyeshadow: "#9a6676", browUp: 0.085, browThick: 0.052, browArch: 0.050,
+                   lip: "#c24a5e", lipA: 0.92, upper: 0.046, lower: 0.066, smile: 0.45, mouthW: 0.31, blush: 0.16, cheer: 0.15 } },
   extras({ ball, limb, hp, d, hy, tw, J, S, parts, pose }) {
     // pearls: one at each ear, and a string of them at the neck
     for (const sd of [1, -1]) ball(hp(sd * 1.0, -0.34, -0.06), [0.007, 0.008, 0.007], PEARL, { part: parts.EXTRA }, hy);
@@ -163,6 +182,10 @@ export const bigsis = {
   walk: { swing: 0.43, arm: 0.30, lean: 0.04 },
   gestures: [0, 11, 6, 10],                             // a nod, a finger in the air, a hand to her chin, pointing ahead
   pray: { high: 0.46, bow: 0.31 },                      // exactly as she was taught: hands together at her breast, head bowed
+  // painted: thoughtful hazel eyes, level brows, lashes, a small composed smile
+  paint: { shape: { chinY: -0.74, chin: 0.44, jaw: 0.82 },
+           face: { eye: { w: 0.235, h: 0.104, iris: 0.55, lid: 0.12, lash: 1.0, line: 0.032, flick: 0.10 }, iris: "#7a5a32", browUp: 0.078, browThick: 0.058, browArch: 0.024,
+                   lip: "#c96a68", lipA: 0.62, upper: 0.038, lower: 0.056, smile: 0.32, mouthW: 0.25, blush: 0.12, cheer: 0.10 } },
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, J, S, parts }) {
     const hr = d.headR;
     // long hair: down the back, and a lock in front of each shoulder
@@ -193,18 +216,32 @@ export const lilsis = {
   gestures: [0, 4, 7, 10],                              // a nod, both arms up, showing her muscles, pointing ahead
   pray: { high: 0.97, bow: 0.15, tight: true },         // with all her might: hands clasped tight under her chin, eyes squeezed shut
   pace: 145,
-  extras({ sf, P, ball, limb, hp, d, hy, th, J, fine, parts }) {
+  // painted: very much seven. A head a little bigger for her height, big blue eyes set low with long lashes, brows that
+  // go up and down with everything she says, round cheeks with a blush, a small nose and mouth, her freckles
+  paint: { head: 1.08, shape: { eyeY: -0.20, mouthY: -0.66, jaw: 0.94, chin: 0.60, chinY: -0.74, nose: [0.45, 0.55, 0.62] },
+           face: { eye: { w: 0.285, h: 0.168, iris: 0.57, lid: 0.04, lash: 2, line: 0.026, flick: 0.10, glint2: true, socket: 0.06, lower: 0.18 }, eyeX: 0.40, iris: "#4b8bd0",
+                   browUp: 0.100, browThick: 0.058, browArch: 0.055, browColor: "#9a6a36", lip: "#e06a72", lipA: 0.75, upper: 0.032, lower: 0.048,
+                   smile: 0.75, mouthW: 0.17, blush: 0.32, expressive: 1.5, cheer: 0.25 },
+           portrait: { head: 0.27, y: 0.42 } },
+  extras({ sf, P, ball, limb, hp, d, hy, th, J, fine, parts, painted, px }) {
     // pigtails: each starts at a yellow band high on the side of her head, puffs out, and hangs to a point beside her cheek
     for (const sd of [1, -1]) {
       const root = hp(sd * 0.90, 0.50, -0.12), off = (out, up, back = 0) => add(root, turn([sd * out, up, -back], hy));
-      limb(off(0.016, -0.004), off(0.046, -0.034, 0.004), 0.018, 0.028, LIL_HAIR, { part: parts.HAIR });
-      limb(off(0.046, -0.034, 0.004), off(0.052, -0.112, 0.014), 0.028, 0.010, LIL_HAIR, { part: parts.HAIR });
+      if (painted) {
+        // painted: a full bunch, out from the tie and down to a soft point, and a loose lock beside it
+        limb(off(0.014, -0.004), off(0.044, -0.040, 0.004), 0.019, 0.029, LIL_HAIR, { part: parts.HAIR });
+        limb(off(0.044, -0.040, 0.004), off(0.050, -0.104, 0.012), 0.029, 0.009, LIL_HAIR, { part: parts.HAIR });
+        limb(off(0.040, -0.030, -0.010), off(0.064, -0.084, -0.012), 0.012, 0.004, LIL_HAIR, { part: parts.HAIR });
+      } else {
+        limb(off(0.016, -0.004), off(0.046, -0.034, 0.004), 0.018, 0.028, LIL_HAIR, { part: parts.HAIR });
+        limb(off(0.046, -0.034, 0.004), off(0.052, -0.112, 0.014), 0.028, 0.010, LIL_HAIR, { part: parts.HAIR });
+      }
       ball(off(0.014, 0.004), [0.024, 0.026, 0.024], SUN, { part: parts.HAT }, hy);
     }
     // a star on the bib of her overalls
     if (fine && Math.cos(th) > 0.5) {
       const c = P(add(J.spine(d.shoulderY - 0.150), J.torso([0, 0, d.trunkTop[1] * 0.98]))), x = Math.round(c[0] - 0.5), y = Math.round(c[1] - 0.5), star = SUN.tones[0];
-      for (const [i, k] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) sf.dot(x + i, y + k, star, parts.TORSO);
+      for (const [i, k] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) sf.dot(x + i * px, y + k * px, star, parts.TORSO);
     }
   },
 };
@@ -266,12 +303,23 @@ export const scribe = {
   bottom: { kind: "kilt", mat: LINEN, len: 0.92, flare: 1.05, sash: shifted(LINEN, 1) },
   shoes: { kind: "bare" },
   rest: { R: { hand: [0.034, -0.215, 0.180], bend: [1, -0.4, -0.5], grip: true }, L: { hand: [-0.074, -0.232, 0.150], bend: [-1, -0.4, -0.5], flat: true } },      // a pen in one hand, the other steadying the sheet
+  stood: { hold: { L: { hand: [-0.052, -0.168, 0.098], bend: [-1, -0.5, -0.4], grip: true } }, rest: { R: { hand: [0.122, -0.300, 0.070], bend: [0.6, -0.6, -0.5], grip: true } } },     // on his feet: the sheet held against him, the pen in his other hand
   gestures: [11, 17, 1],                                // a finger in the air, counting off, making a point
+  fidgets: { sit: ["pen"] },                            // he trims his pen
   extras(c) {
-    const { ball, limb, hp, wide, deep, J, parts } = c;
+    const { ball, limb, hp, wide, deep, J, pose, parts } = c;
     wear.collar(c, { rows: [LAPIS, GOLD, TURQ], wide: 0.070, deep: 0.034, drop: 0.024 });
     // spare pens behind his ear
     limb(hp(1.02, 0.10, -0.30), hp(1.06, 0.34, 0.50), 0.004, 0.004, PAPYRUS, { part: parts.HAT });
+    if (pose.fidget === "pen" && pose.fu > 0.16 && pose.fu < 0.84) limb(J.L.palm, add(J.L.palm, [0.026, 0.010, 0.014]), 0.0042, 0.0026, IRON, { part: parts.HELD });     // the little knife
+    if (!pose.seated) {
+      // on his feet: the sheet held upright against him in his left hand, the palette along its foot, and the pen
+      const g = J.L.palm, w = [0.070, 0.010], r = wide(w);
+      limb(add(g, [0.020, -0.012, 0.012]), add(g, [0.030, 0.085, 0.004]), r, r, PAPYRUS, { part: parts.EXTRA, depth: deep(w) / r, squareStart: true, squareEnd: true });
+      limb(add(g, [-0.016, -0.016, 0.020]), add(g, [0.074, -0.016, 0.020]), 0.0100, 0.0100, WOOD, { part: parts.EXTRA2, squareStart: true, squareEnd: true });
+      limb(J.R.palm, add(J.R.palm, [0.010, -0.046, 0.012]), 0.0045, 0.003, WOOD, { part: parts.HELD });
+      return;
+    }
     // the sheet across his knees, the palette with its two cakes of ink, and the pen
     const lap = add(mix(J.R.knee, J.L.knee, 0.5), [0, 0.060, -0.070]), w = [0.086, 0.012], r = wide(w);
     limb(add(lap, [0, 0.030, -0.044]), add(lap, [0, -0.004, 0.060]), r, r, PAPYRUS, { part: parts.EXTRA, depth: deep(w) / r, squareStart: true, squareEnd: true });
@@ -308,6 +356,65 @@ export const carrier = {
   },
 };
 
+// ---------- Lot, Abram's nephew (Genesis 11:27 to 13:5): a herdsman of a rich household from Haran and Canaan ----------
+// About forty, strong and weathered; grave, courteous, plain-spoken. He is the first person Dad meets, and he is plainly
+// not an Egyptian: black hair to the neck bound with a plain band of red wool, a full black beard cut square, a long
+// tunic of wool woven in bands of madder red, ochre and indigo on the undyed cloth, a leather belt, a fringed mantle of
+// indigo over his left shoulder, sandals. He is found sitting cross-legged on the sand in the shade, at his prayers:
+// his hands lifted a little in front of him, open, his head bowed (`pray`); his shepherd's staff lies on the sand at his
+// side. When someone talks to him he looks up (`sit.nod`) and talks with his hands: an open hand, a hand to his chest,
+// a nod toward the river, a hand raised in blessing. `lot-standing`, below, is the same man on his feet.
+const WEATHER = ramp("#e4ac82", "#c78a5c", "#97603c", "#623c24");         // skin: sun and wind, a lifetime with flocks
+const RAVEN = ramp("#4e4548", "#2d2629", "#1c1719", "#0f0b0d");           // his hair: black
+const RAVEN_BEARD = ramp("#584d50", "#362e31", "#231d1f", "#130f10");     // his beard, a shade lighter, as beards are
+const FLEECE = ramp("#f2e4c4", "#dccaa2", "#ae9a76", "#7a684c");          // undyed wool
+const MADDER_WOOL = ramp("#e27a6c", "#be4b40", "#8c2f2b", "#5c1c1b");     // dyed with madder root
+const OCHRE_WOOL = ramp("#f4c87a", "#daa24a", "#a8742c", "#704c1c");
+const INDIGO_WOOL = ramp("#6f7bb0", "#46528a", "#2f3864", "#1d2240");
+const STAFF = ramp("#b8915e", "#8e6a3e", "#664a28", "#433018");           // a herdsman's staff, dark with handling
+const LOT_TAKES = 0.40;                                                   // getting up, he takes his staff up off the sand here (see `stood`)
+export const lot = {
+  name: "Lot", height: 1.02, seated: "ground", shadow: 0.27, span: 1.16, under: 0.10,
+  dim: { ...ADULT, headR: [0.056, 0.066, 0.063], shoulderW: 0.106, trunkTop: [0.110, 0.072], trunkLow: [0.098, 0.074], bellyFwd: 0.006, pelvisR: [0.098, 0.064, 0.076],
+         armR: [0.032, 0.027, 0.019], legR: [0.053, 0.034, 0.022], handR: 0.024, neckR: 1.10 },
+  build: "strong",
+  skin: WEATHER,
+  hair: { mat: RAVEN, bulk: 1.08, where: hairline({ front: 0.64, temple: 0.48, side: -0.40, back: -0.95, burn: 0.62 }), puffs: [[0, -0.50, -0.56, 0.88, 0.52, 0.54]] },      // thick, to the neck
+  face: { eyes: "deep", eye: "#1c120c", brows: RAVEN.tones[1], browW: 4, beard: RAVEN_BEARD, beardLen: 0.17, beardSquare: true, beardW: 0.70, beardZ: 0.50, beardFrom: [-0.46, 0.10], moustache: RAVEN_BEARD, moustacheW: 0.30, moustacheZ: 0.95, mouthShows: true,
+          lip: "#7a3e32", lines: 1, nose: [1.1, 1.15, 1.05], jaw: 0.92, chin: 0.56, chinZ: 0.46, mouthW: 0.20 },
+  top: { mat: FLEECE, sleeves: 0.86, cuff: 0.010, trim: MADDER_WOOL, belt: shifted(HIDE, 1),
+         bands: [[0.050, 0.088, MADDER_WOOL], [0.088, 0.100, INDIGO_WOOL], [0.150, 0.180, OCHRE_WOOL]] },
+  bottom: { kind: "skirt", mat: FLEECE, len: 1.70, flare: 1.08,
+            bands: [[0.20, 0.36, MADDER_WOOL], [0.36, 0.42, INDIGO_WOOL], [0.75, 0.88, OCHRE_WOOL], [1.20, 1.36, MADDER_WOOL], [1.36, 1.42, INDIGO_WOOL], [1.56, 9, OCHRE_WOOL]],
+            sitBands: [[0.74, 0.90, OCHRE_WOOL], [1.50, 1.58, MADDER_WOOL], [1.58, 9, OCHRE_WOOL]],
+            folds: [[-0.85, 0.3, 1.70, 0.08], [0.50, 0.5, 1.70, -0.08], [-0.15, 0.9, 1.70], [2.6, 0.3], [-2.5, 0.4]] },
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  hand: "R",
+  sit: { nod: -0.06 },                                  // (sitting, he looks up at whoever stands talking to him)
+  pray: { high: 0.85, out: 0.075, apart: 0.085, bow: 0.40 },      // his hands lifted a little in front of him, open, palms up; his head bowed
+  gestures: [8, 5, 20, 21],                             // an open hand, a hand to his chest, a nod toward the river, a hand raised in blessing
+  walk: { swing: 0.40, arm: 0.26, lean: 0.03 },
+  pace: 130,
+  stood: { span: 1.12, under: 0.10, hold: { L: { hand: [-0.178, -0.198, 0.122], bend: [-1, -0.3, -0.6], grip: true } }, pray: { high: 0.45, bow: 0.30 },      // on his feet: his staff in his left hand (and room below him for it on the sand, as he gets up)
+           takeUp: LOT_TAKES },                         // getting up, his left hand goes down at his side, takes up the staff there, and he climbs up it
+  extras(c) { lotGear(c); },
+};
+/** Lot's band, mantle and staff. Sitting, the staff lies on the sand at his side, nearer us than he is, and stays where it
+    lies whichever way he turns to talk; standing, he has it in his left hand. */
+function lotGear(c) {
+  const { ball, onHead, headPt, d, hy, limb, pose, th, parts } = c, hr = d.headR;
+  // a plain band of red wool round his head, tied behind under the hair
+  ball(headPt([0, 0.004, 0]), [hr[0] * 1.11, hr[1] * 1.11, hr[2] * 1.11], MADDER_WOOL, { part: parts.HAT, fn: (ux, uy, uz) => { const q = onHead(ux, uy, uz), y = q[1] - (q[2] < 0 ? 0.14 * q[2] : 0); return Math.abs(y - 0.56) < 0.11 ? undefined : null; } }, hy);
+  wear.mantle(c, { mat: INDIGO_WOOL, fringe: shifted(INDIGO_WOOL, -1), len: 0.38, front: 0.24 });
+  if (!pose.seated && !(pose.rising < LOT_TAKES)) { wear.staff(c, "L", { mat: STAFF, top: 1.06, r: 0.0085, crook: true }); return; }      // (getting up, he takes it up on the way: `takeUp`)
+  const cs = Math.cos(th), sn = Math.sin(th), on = (X, D, y = 0.0095) => [-X * cs + D * sn, y, X * sn + D * cs];     // (X: across the picture, D: toward us)
+  limb(on(-0.36, 0.265), on(0.30, 0.265), 0.0105, 0.0098, STAFF, { part: parts.HELD });
+  const crook = [on(0.30, 0.265), on(0.335, 0.269), on(0.360, 0.255), on(0.368, 0.231), on(0.356, 0.211), on(0.336, 0.211)];
+  for (let i = 0; i + 1 < crook.length; i++) limb(crook[i], crook[i + 1], 0.0094, 0.0090, STAFF, { part: parts.HELD });
+}
+// ---------- the same man on his feet (a scene puts this in his place when he stands up) ----------
+export const lotStanding = { ...upOf(lot), name: "Lot, standing", under: 0 };       // (what Figure.sit(false) makes of him: see `stood`)
+
 // ---------- the overseer of works: a big stomach, a staff of office, and twenty years behind him that were on time ----------
 export const overseer = {
   name: "Overseer", height: 1.0, lean: -0.02,
@@ -326,6 +433,9 @@ export const overseer = {
   walk: { swing: 0.34, arm: 0.22, lean: 0.0, sway: 0.022, twist: 0.08 },
   pace: 135,
   gestures: [14, 10, 15, 16, 3],                        // a shaken fist, pointing, waving it all away, wiping his brow, a hand on his hip
+  fidgets: { stand: ["tap"] },                          // he taps his staff on the ground
+  // painted: the wig's rows of curls laid round the head, each row offset from the one above
+  paint: { hairTexture: (x, y, z) => { const row = Math.floor((y + 1) * 7), a = Math.atan2(x, z) * 7 / Math.PI + (row & 1) * 0.5; return (y + 1) * 7 - row < 0.42 && a - Math.floor(a) < 0.62 ? shifted(BLACK, -1) : undefined; } },
   extras(c) {
     const { limb, skirtAt, J, d, cloth, under, parts } = c;
     wear.collar(c, { rows: [TURQ, GOLD, LAPIS, GOLD] });
@@ -339,6 +449,7 @@ export const overseer = {
 // ---------- the hauling gang, "Friends of Khufu", on a break that has lasted since the wall began to hum ----------
 const haulerBase = {
   name: "Hauler", top: {}, shoes: { kind: "bare" }, build: "strong",
+  fidgets: { stand: ["roll"] },                         // they roll their shoulders
   bottom: { kind: "kilt", mat: WORN, len: 0.60, flare: 1.02, sash: shifted(WORN, 1), wrap: true },
 };
 // the one who does the talking: tall, easy, a coil of rope over his shoulder
@@ -387,6 +498,7 @@ export const hauler3 = {
   hold: { R: { hand: [0.036, -0.012, 0.110], bend: [1, -0.8, 0.1], grip: true } },
   walk: { swing: 0.46, arm: 0.44, lean: 0.05, bob: 0.02 },
   gestures: [0, 8, 2, 0],                               // a nod with his mouth full, an open hand, a shrug
+  paint: { hairTexture: (x, y, z) => { const a = Math.atan2(x, z) * 9 / Math.PI, b = (y + 1) * 9; return (Math.floor(a) + Math.floor(b)) % 2 === 0 && (a - Math.floor(a) - 0.5) ** 2 + (b - Math.floor(b) - 0.5) ** 2 < 0.16 ? shifted(BLACK, -1) : undefined; } },     // (painted: the curls, laid round the head)
   extras({ ball, J, parts }) {
     ball(add(J.R.palm, [0, 0.014, 0.008]), [0.030, 0.020, 0.028], BREAD, { part: parts.HELD });       // the loaf
   },
@@ -406,6 +518,7 @@ export const guard = {
   hold: { R: { hand: [0.200, -0.150, 0.100], bend: [0.25, -1, -0.45], grip: true } },
   walk: { swing: 0.40, arm: 0.24, lean: 0.03 },
   gestures: [0, 15, 16, 0],                             // a nod, waving someone away, wiping his brow
+  fidgets: { stand: ["lean"] },                         // he leans on his staff
   extras(c) {
     headband(c, LINEN, 0.50);
     strap(c, HIDE, -1, 0.009);
@@ -430,6 +543,7 @@ export const guardShade = {
   // With his hands full he talks with his head. It hangs while he is silent; to speak he lifts it and shakes it (2),
   // looks up from under his brows (16), throws it back at the sky (4), or nods (0). The arms of those gestures never happen.
   gestures: [2, 16, 4, 0],
+  fidgets: { only: true, stand: ["look"] },             // (his hands are on the shade, where it is painted: only his head moves)
   extras(c) {
     const { limb, parts } = c;
     headband(c, LINEN, 0.50);
@@ -454,6 +568,7 @@ export const lampboy = {
   walk: { swing: 0.50, arm: 0.40, lean: 0.08, lift: 1.15, bob: 0.03 },
   pace: 175,
   gestures: [10, 19, 11, 2],                            // pointing, a thumb over his shoulder, a finger in the air, a shrug
+  fidgets: { sit: ["yawn"] },                           // a yawn
   sit: { seat: 0.247, lean: 0.04, knees: 0.06, solid: true },      // the gallery's stone bench as it is painted: 40 pixels above the floor where he sits
   extras({ ball, limb, hp, hy, J, d, parts }) {
     // the side-lock that children wear: one plait from the right temple, curled at its end
@@ -484,10 +599,13 @@ export const goldsmith = {
   shoes: { kind: "bare" },
   hold: { R: { hand: [0.085, -0.230, 0.150], bend: [1, -0.4, -0.5], grip: true } },       // his little hammer
   gestures: [13, 0, 8, 2],                              // a hand cupped to his ear, a nod, an open hand, a shrug
-  sit: { seat: "stool", lean: 0.14 },
+  sit: { seat: "stool", lean: 0.14, drawn: true },
+  stood: { hold: { R: { hand: [0.150, -0.318, 0.060], bend: [0.4, -1, -0.4], grip: true } } },      // on his feet, the hammer at his side
+  fidgets: { sit: ["light"] },                          // he holds something small up to the light and turns it
   extras(c) {
-    const { limb, J, parts } = c;
+    const { limb, ball, J, pose, parts } = c;
     wear.stool(c, { mat: WOOD, r: 0.066 });
+    if (pose.fidget === "light" && pose.fu > 0.14 && pose.fu < 0.86) ball(add(J.L.tip, [0, 0.010, 0]), [0.0090, 0.0090, 0.0090], GOLD, { part: parts.HELD });     // a bead of gold, between finger and thumb
     const g = J.R.palm;
     limb(add(g, [0, -0.012, -0.006]), add(g, [0, 0.050, 0.020]), 0.0055, 0.0055, WOOD, { part: parts.HELD });
     limb(add(g, [0, 0.050, 0.004]), add(g, [0, 0.054, 0.040]), 0.011, 0.011, ramp("#d8d2c8", "#a9a296", "#77716a", "#4c4843"), { part: parts.HELD, squareStart: true, squareEnd: true });
@@ -549,12 +667,18 @@ export const keeper = {
   walk: { swing: 0.36, arm: 0.30, sway: 0.024, twist: 0.10, lean: 0.02 },
   pace: 140,
   gestures: [1, 18, 9, 2, 5],                           // a point with the ladle, both hands wide, both hands waving, a shrug, a hand to his heart
-  extras({ limb, ball, J, parts }) {
+  fidgets: { stand: ["wipe"] }, fidgetHand: "L",        // he wipes down his counter with the cloth off his shoulder
+  extras({ limb, ball, J, pose, parts }) {
     // the ladle, which is never out of his hand
     const up = upFromFist(J.R), dir = norm([up[0] - J.R.hDir[0] * 0.35, up[1] - J.R.hDir[1] * 0.35, up[2] - J.R.hDir[2] * 0.35]), g = J.R.palm;
     limb(along(g, dir, -0.024), along(g, dir, 0.150), 0.0055, 0.0050, WOOD, { part: parts.HELD });
     ball(along(g, dir, 0.166), [0.022, 0.016, 0.022], BRONZE, { part: parts.HELD });
-    // a cloth over his left shoulder
+    // a cloth over his left shoulder (in his hand while he wipes the counter with it)
+    if (pose.fidget === "wipe" && pose.fu > 0.12 && pose.fu < 0.88) {
+      const g = J.L.palm;
+      limb(add(g, [0, -0.012, -0.020]), add(g, [0, -0.012, 0.040]), 0.026, 0.024, WHITE, { part: parts.HELD, squareStart: true, squareEnd: true, depth: 0.3 });
+      return;
+    }
     limb(add(J.L.shoulder, J.torso([0.014, 0.030, 0.030])), add(J.L.shoulder, J.torso([0.020, -0.090, 0.058])), 0.020, 0.024, WHITE, { part: parts.EXTRA2 });
     limb(add(J.L.shoulder, J.torso([0.014, 0.030, -0.020])), add(J.L.shoulder, J.torso([0.018, -0.060, -0.056])), 0.020, 0.022, WHITE, { part: parts.EXTRA2 });
   },
@@ -574,9 +698,18 @@ export const washer = {
   walk: { swing: 0.48, arm: 0.50, lean: 0.07, sway: 0.016 },
   pace: 185,
   gestures: [3, 15, 8, 1],                              // a hand on her hip, waving it away, an open hand, making a point
+  fidgets: { stand: ["wring"] },                        // she wrings out the wet cloth
   extras(c) {
-    const { limb, J, parts } = c;
+    const { limb, J, pose, parts } = c;
     wear.headcloth(c, { mat: MADDER, brow: 0.56, nape: 0.62, tails: 0.26, bulk: 1.12 });
+    if (pose.fidget === "wring" && pose.fu > 0.14 && pose.fu < 0.86) {
+      // the cloth twisted between her two fists, its ends hanging
+      const a = J.R.palm, b = J.L.palm;
+      limb(a, b, 0.016, 0.016, WOOL, { part: parts.HELD });
+      limb(add(a, [0.004, -0.008, 0.004]), add(a, [0.012, -0.070, 0.010]), 0.013, 0.016, WOOL, { part: parts.HELD });
+      limb(add(b, [-0.004, -0.008, 0.004]), add(b, [-0.010, -0.058, 0.012]), 0.013, 0.015, WOOL, { part: parts.HELD });
+      return;
+    }
     // a wet cloth over her shoulder
     limb(add(J.R.shoulder, J.torso([-0.014, 0.028, 0.030])), add(J.R.shoulder, J.torso([-0.024, -0.110, 0.056])), 0.020, 0.026, WOOL, { part: parts.EXTRA2 });
     limb(add(J.R.shoulder, J.torso([-0.014, 0.028, -0.020])), add(J.R.shoulder, J.torso([-0.020, -0.070, -0.052])), 0.020, 0.022, WOOL, { part: parts.EXTRA2 });
@@ -596,10 +729,11 @@ export const urchin = {
   walk: { swing: 0.52, arm: 0.60, lean: 0.10, lift: 1.2, bob: 0.04 },
   pace: 190,
   gestures: [10, 19, 2, 1],                             // pointing, a thumb over his shoulder, a shrug, making a point
+  fidgets: { sit: ["scratch"] },                        // he scratches his head
   sit: { seat: "step", lean: 0.16, knees: 0.22, solid: true },      // the kerb
-  extras({ sf, P, trunkAt, d, fine, parts }) {
+  extras({ sf, P, trunkAt, d, fine, parts, px }) {
     // a patch on his tunic
-    if (fine) { const q = P(trunkAt(d.waistY + 0.060, 0.45)), m = shifted(DUN, 1).tones[1]; for (const [i, j] of [[0, 0], [1, 0], [0, 1], [1, 1], [2, 1], [2, 0]]) sf.dot(q[0] + i, q[1] + j, m, parts.TORSO); }
+    if (fine) { const q = P(trunkAt(d.waistY + 0.060, 0.45)), m = shifted(DUN, 1).tones[1]; for (const [i, j] of [[0, 0], [1, 0], [0, 1], [1, 1], [2, 1], [2, 0]]) sf.dot(q[0] + i * px, q[1] + j * px, m, parts.TORSO); }
   },
 };
 
@@ -615,6 +749,9 @@ export const soothsayer = {
   shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
   hold: { R: { hand: [0.215, -0.150, 0.110], bend: [0.3, -1, -0.3], grip: true } },
   gestures: [11, 2, 0, 16],                             // a finger in the air, a shrug, a nod, a hand across his brow
+  fidgets: { sit: ["beard"] },                          // he strokes his beard
+  riseMs: 1350,                                         // (his knees)
+  stood: { walk: { swing: 0.30, arm: 0.16, lean: 0.10, lift: 0.75 }, pace: 95 },
   sit: { seat: 0.134, lean: 0.20, knees: 0.14, solid: true },      // a step of the temple of Saturn as it is painted (ten pixels high where he sits): his place is the tread below his seat
   extras(c) {
     wear.toga(c, { mat: OLDWOOL, hood: true });
@@ -638,6 +775,8 @@ export const senator = {
   walk: { swing: 0.36, arm: 0.34, lean: 0.02, twist: 0.08 },
   pace: 185,
   gestures: [1, 11, 15, 14],                            // a point with the scroll, the scroll in the air, waving it all away, shaking it
+  fidgets: { stand: ["toga"] },                         // he settles the folds of his toga over his arm
+  paint: { face: { eye: { lash: 0, lid: 0.30, line: 0.034 } } },     // (painted: heavy lids, pleased with himself; no lashes)
   extras(c) {
     const { limb, J, parts } = c;
     wear.toga(c, { mat: WOOL, edge: PURPLE });
@@ -663,6 +802,7 @@ export const doorkeeper = {
   walk: { swing: 0.40, arm: 0.26, lean: 0.02, sway: 0.020 },
   pace: 140,
   gestures: [0, 15, 19, 10],                            // a nod (barely), waving someone off, a thumb at the doors behind him, pointing the way out
+  fidgets: { stand: ["fold"] },                         // he folds his arms
   extras(c) {
     wear.cloak(c, { mat: MADDER, len: 0.40, pin: BRONZE });
     wear.staff(c, "R", { mat: WOOD, top: 1.02, r: 0.0105, knob: IRON });
@@ -684,7 +824,9 @@ export const clerk = {
   hold: { R: { hand: [0.050, -0.180, 0.225], bend: [1, -0.5, -0.4], grip: true } },        // his pen hand stays on the table
   rest: { L: { hand: [-0.070, -0.196, 0.200], bend: [-1, -0.5, -0.4], flat: true } },
   gestures: [16, 17, 1, 0],                             // a hand across his eyes, counting on his fingers, making a point, a nod
-  sit: { lean: 0.12 },
+  sit: { lean: 0.12, drawn: true },
+  stood: { hold: { R: { hand: [0.132, -0.326, 0.052], bend: [0.4, -1, -0.4], grip: true } }, rest: undefined },     // on his feet: the pen at his side
+  fidgets: { sit: ["eyes"] },                           // he rubs his eyes
   extras(c) {
     const { limb, J, d, parts } = c;
     wear.stool(c, { mat: WOOD, r: 0.070 });
@@ -725,6 +867,7 @@ export const dateseller = {
   walk: { swing: 0.36, arm: 0.26, lean: 0.03 },
   pace: 125,
   gestures: [8, 11, 5, 2],                              // an open hand (with a date on it), a finger raised, a hand to his chest, a small shrug
+  fidgets: { stand: ["hitch"] },                        // he hitches his basket up on his hip
   extras(c) {
     const { ball, J, tw, pose, parts } = c;
     wear.mantle(c, { mat: CAMEL, band: BAND });
@@ -762,7 +905,9 @@ const WEBBING = ramp("#8fe0b0", "#4fb07e", "#357c59", "#22513a");
 const TUBE = ramp("#f6f8fa", "#c4cad1", "#8b929a", "#565c64");
 const BRACES = ramp("#c9584a", "#a23c32", "#742a24", "#4a1a17");
 export const oldtimer = {
-  name: "Old-Timer", height: 0.97, seated: "chair", sit: { seat: 0.215 }, shadow: 0.25, span: 1.2,       // (a lawn chair is a low one)
+  name: "Old-Timer", height: 0.97, seated: "chair", sit: { seat: 0.215, drawn: true }, shadow: 0.25, span: 1.2, seatShadow: 0.17,       // (a lawn chair is a low one)
+  stood: { walk: { swing: 0.34, arm: 0.22, lean: 0.06 }, pace: 105 },
+  fidgets: { stand: ["back"], sit: ["hat"] },           // standing, a hand to the small of his back; sitting, a touch to his hat
   dim: { ...ADULT, trunkTop: [0.110, 0.076], trunkLow: [0.110, 0.094], bellyFwd: 0.014 },
   skin: SKIN_WEATHERED,
   hair: { mat: SNOW, where: hairline({ front: 1.3, temple: 1.1, side: 0.20, back: -0.50 }) },
@@ -775,7 +920,7 @@ export const oldtimer = {
     // a straw hat: a wide brim and a low crown
     ball(hp(0, 0.62, 0.06), [0.118, 0.012, 0.118], STRAW, { part: parts.HAT }, hy);
     ball(hp(0, 0.86, 0), [d.headR[0] * 0.98, d.headR[1] * 0.42, d.headR[2] * 0.98], shifted(STRAW, 1), { part: parts.HAT }, hy);
-    if (!pose.seated) return;
+    if (!pose.seated || pose.noSeat) return;            // (when he gets up it stays where it is: see drawSeat in rig.js)
     // the lawn chair: webbing for the seat and the back, on a frame of bent tube
     const at = (x, y, z) => [hip[0] + x, y, hip[2] + z];
     ball(at(0, seat, 0.075), [0.120, 0.012, 0.140], WEBBING, { part: parts.EXTRA3 });
@@ -806,8 +951,13 @@ export const agent = {
   stance: "behind",
   walk: { swing: 0.42, arm: 0.26, lean: 0.03 },
   gestures: [0, 8, 0, 10],                              // mostly nothing; an open hand; a pointing finger
-  extras({ limb, d, J, parts }) {
+  fidgets: { stand: ["watch", "tie"] },                 // he looks at his watch; he straightens his tie
+  extras({ limb, ball, d, J, pose, parts }) {
     const front = d.trunkTop[1];
+    if (pose.fidget === "watch" && pose.fu > 0.18 && pose.fu < 0.82) {        // his watch, out from under the cuff
+      const at = mix(J.L.wrist, J.L.elbow, 0.10);
+      ball(at, [0.0115, 0.0115, 0.0115], ramp("#e8ecf0", "#b8c0c8", "#7c848e", "#4c525a"), { part: parts.HELD });
+    }
     limb(add(J.sh, J.torso([0, 0.004, front * 0.50])), add(J.sh, J.torso([0, -0.112, front * 1.00])), 0.008, 0.012, TIE, { part: parts.EXTRA, bias: 4 });
   },
 };
@@ -818,6 +968,7 @@ export const people = {
   scribe, carrier, overseer, hauler1, hauler2, hauler3, guard, lampboy, goldsmith,
   keeper, washer, urchin, soothsayer, senator, doorkeeper, clerk, dateseller,
   oldtimer, agent,
+  lot,
   // the same people at another moment of the story (a scene puts one in the other's place):
-  "guard-shade": guardShade, "goldsmith-shades": goldsmithShades,
+  "guard-shade": guardShade, "goldsmith-shades": goldsmithShades, "lot-standing": lotStanding,
 };

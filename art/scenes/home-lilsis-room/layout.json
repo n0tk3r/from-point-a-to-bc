@@ -616,5 +616,24 @@
    ]
   }
  },
- "note": "front.png holds, left to right: her toy box, the crate of picture books, the hen house (id coop), the nest (id nest), the door; and, hanging, the mobile of felt chickens. Lamps and windows are painted lit; nothing here blinks or changes."
+ "note": "front.png holds, left to right: her toy box, the crate of picture books, the hen house (id coop), the nest (id nest), the door; the mobile of felt chickens that hangs in front of them all is mobile.png now (round four: see the 'cutout' of fx 'mobile'). Lamps and windows are painted lit; nothing here blinks or changes.",
+ "fx": [
+  {
+   "type": "sway",
+   "id": "mobile",
+   "plane": "mobile",
+   "anchor": "top",
+   "amount": 1.6,
+   "period": 5.5,
+   "wave": 60,
+   "lean": 0,
+   "cutout": {
+    "id": "mobile",
+    "file": "mobile.png",
+    "plane": "front",
+    "note": "NEW cut-out: add it to the scene's planes. It is the mobile lifted out of front.png by its own pixels (front.png + mobile.png is the old front.png exactly): until a scene shows it the room has no mobile. Kept out of 'planes' here only so that the checks stay clean until then"
+   },
+   "what": "Little Sister's mobile of felt chickens, stirring in the air of the room: each chicken swings a little on its thread, slowly. It hangs from a rafter on the front plane; the bars at the top hardly move (anchor top)"
+  }
+ ]
 }

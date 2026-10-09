@@ -565,5 +565,1538 @@
    560
   ]
  },
- "notes": "The keeper's mark is on the shop floor, which is a sidewalk's height above the road, so it is 11 px higher than the brief's. The urchin sits on the right-hand kerb with his feet in the road at his mark. The stepping stones are listed under blocked; drop them if they get in the way. Things are listed small before big: where two shapes overlap, the earlier one is meant. Only snack-bar, fountain, laundry, basket, tunic and the exit to-forum are asked for by the brief; the rest are extra things to look at."
+ "notes": "The keeper's mark is on the shop floor, which is a sidewalk's height above the road, so it is 11 px higher than the brief's. The urchin sits on the right-hand kerb with his feet in the road at his mark. The stepping stones are listed under blocked; drop them if they get in the way. Things are listed small before big: where two shapes overlap, the earlier one is meant. Only snack-bar, fountain, laundry, basket, tunic and the exit to-forum are asked for by the brief; the rest are extra things to look at.",
+ "fx": [
+  {
+   "id": "fountain-stream",
+   "type": "stream",
+   "what": "the water falling from the carved face's mouth into the basin (taken out of fountain.png)",
+   "path": [
+    [
+     605.8,
+     395.9
+    ],
+    [
+     606.7,
+     397.0
+    ],
+    [
+     607.6,
+     398.9
+    ],
+    [
+     608.5,
+     401.7
+    ],
+    [
+     609.5,
+     405.2
+    ],
+    [
+     610.4,
+     409.6
+    ],
+    [
+     611.4,
+     414.8
+    ],
+    [
+     612.3,
+     420.9
+    ],
+    [
+     613.3,
+     427.8
+    ]
+   ],
+   "width": 1.6,
+   "color": "#b4cdf2",
+   "light": "#ffffff",
+   "opacity": 0.8,
+   "speed": 60,
+   "splash": 4,
+   "base": 502,
+   "note": "As painted: a thin bright fall 1.5 px wide (#e6f0ff) with a darker edge on its right (#9fb8e4), curving out from the mouth (606, 396) and down to the water at (613, 428). It falls inside the basin: base one row in front of the fountain's (501)."
+  },
+  {
+   "id": "fountain-rings",
+   "type": "ripples",
+   "what": "the rings where the water lands in the basin",
+   "at": [
+    613.3,
+    427.8
+   ],
+   "radius": [
+    3,
+    22
+   ],
+   "flat": 0.26,
+   "every": 0.6,
+   "rings": 1,
+   "speed": 16,
+   "color": "#dfeaff",
+   "opacity": 0.6,
+   "clip": [
+    [
+     572.8,
+     441.7
+    ],
+    [
+     683.7,
+     441.7
+    ],
+    [
+     654.3,
+     419.8
+    ],
+    [
+     554.9,
+     419.8
+    ]
+   ],
+   "base": 502,
+   "note": "Steady: the painting had three rings at once, 8, 14 and 22 px across, fading outward, and a white splash at the middle."
+  },
+  {
+   "id": "fountain-water",
+   "type": "shimmer",
+   "what": "the basin's brim-full water",
+   "poly": [
+    [
+     572.8,
+     441.7
+    ],
+    [
+     683.7,
+     441.7
+    ],
+    [
+     654.3,
+     419.8
+    ],
+    [
+     554.9,
+     419.8
+    ]
+   ],
+   "flow": [
+    0,
+    0
+   ],
+   "count": 8,
+   "size": 5,
+   "color": "#eef4ff",
+   "opacity": 0.35,
+   "base": 502,
+   "note": "Very quiet. The water itself, its dark and the sky in it, are painted in fountain.png and stay."
+  },
+  {
+   "id": "sparrow",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a sparrow come to drink at the fountain (taken out of fountain.png)",
+   "perch": [
+    [
+     591.9,
+     440.4
+    ],
+    [
+     682.2,
+     440.4
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     12,
+     21
+    ],
+    "face": "E",
+    "stand": [
+     "sparrow-1.png",
+     "sparrow-3.png"
+    ],
+    "look": [
+     "sparrow-2.png"
+    ],
+    "peck": [
+     "sparrow-4.png",
+     "sparrow-5.png"
+    ],
+    "walk": [
+     "sparrow-6.png",
+     "sparrow-7.png",
+     "sparrow-8.png",
+     "sparrow-9.png"
+    ],
+    "turn": [
+     "sparrow-10.png"
+    ],
+    "fly": [
+     "sparrow-13.png",
+     "sparrow-14.png",
+     "sparrow-15.png"
+    ],
+    "land": [
+     "sparrow-18.png"
+    ]
+   },
+   "base": 503,
+   "back": [
+    10,
+    25
+   ],
+   "painted": [
+    667.9,
+    440.4
+   ],
+   "note": "On the basin's near rim, between the bronze jug and the corner: it sips (peck), hops along the rim (walk), looks about, and flies off when the boy comes near. It stands ON the fountain, so `base` puts it in front of the fountain's cut-out (501): sorted by its feet (row 440) it would be hidden behind the basin."
+  },
+  {
+   "id": "spill",
+   "type": "stream",
+   "what": "the water that spills from the basin, across the sidewalk, down the kerb and away along the gutter",
+   "path": [
+    [
+     554.1,
+     486.1
+    ],
+    [
+     550.5,
+     485.3
+    ],
+    [
+     545.9,
+     484.7
+    ],
+    [
+     540.3,
+     484.2
+    ],
+    [
+     533.9,
+     483.9
+    ],
+    [
+     527.8,
+     483.9
+    ],
+    [
+     522.8,
+     484.0
+    ],
+    [
+     519.2,
+     484.2
+    ],
+    [
+     516.2,
+     484.4
+    ],
+    [
+     512.8,
+     484.5
+    ],
+    [
+     508.2,
+     484.4
+    ],
+    [
+     502.3,
+     484.1
+    ],
+    [
+     501.1,
+     484.6
+    ],
+    [
+     500.9,
+     493.6
+    ],
+    [
+     492.3,
+     491.2
+    ],
+    [
+     480.9,
+     458.9
+    ],
+    [
+     468.4,
+     423.7
+    ],
+    [
+     459.3,
+     397.9
+    ],
+    [
+     451.1,
+     374.7
+    ]
+   ],
+   "width": 1.2,
+   "color": "#8aa4d8",
+   "light": "#d4e4ff",
+   "opacity": 0.45,
+   "speed": 28,
+   "splash": 0,
+   "plane": "back",
+   "note": "On the ground, under everyone. Its wet dark is painted and stays; the glints that were painted on it are taken out, and this runs light along it instead (the painting's glints faded to a quarter far up the gutter)."
+  },
+  {
+   "id": "pigeons-roof",
+   "type": "birds",
+   "kind": "flock",
+   "what": "pigeons on the ridge of the corner house's roof, in the sun",
+   "perch": [
+    [
+     27.9,
+     30.5
+    ],
+    [
+     288.4,
+     30.5
+    ]
+   ],
+   "count": 3,
+   "frames": {
+    "foot": [
+     28,
+     49
+    ],
+    "face": "E",
+    "stand": [
+     "pigeon-1.png",
+     "pigeon-3.png"
+    ],
+    "look": [
+     "pigeon-2.png"
+    ],
+    "peck": [
+     "pigeon-4.png",
+     "pigeon-5.png"
+    ],
+    "walk": [
+     "pigeon-6.png",
+     "pigeon-7.png",
+     "pigeon-8.png",
+     "pigeon-9.png"
+    ],
+    "turn": [
+     "pigeon-10.png"
+    ],
+    "fly": [
+     "pigeon-13.png",
+     "pigeon-14.png",
+     "pigeon-15.png"
+    ],
+    "land": [
+     "pigeon-18.png"
+    ]
+   },
+   "scale": 0.89,
+   "plane": "back",
+   "shy": 0,
+   "moves": {
+    "stand": 4,
+    "look": 2,
+    "peck": 0.5,
+    "walk": 1.5,
+    "turn": 1
+   },
+   "painted": [
+    [
+     90.6,
+     30.5
+    ],
+    [
+     104.5,
+     30.5
+    ],
+    [
+     168.2,
+     30.5
+    ]
+   ]
+  },
+  {
+   "id": "pigeon-roof-pale",
+   "type": "birds",
+   "kind": "flock",
+   "what": "and a pale one with them",
+   "perch": [
+    [
+     27.9,
+     30.5
+    ],
+    [
+     288.4,
+     30.5
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     28,
+     49
+    ],
+    "face": "E",
+    "stand": [
+     "pigeon-pale-1.png",
+     "pigeon-pale-3.png"
+    ],
+    "look": [
+     "pigeon-pale-2.png"
+    ],
+    "peck": [
+     "pigeon-pale-4.png",
+     "pigeon-pale-5.png"
+    ],
+    "walk": [
+     "pigeon-pale-6.png",
+     "pigeon-pale-7.png",
+     "pigeon-pale-8.png",
+     "pigeon-pale-9.png"
+    ],
+    "turn": [
+     "pigeon-pale-10.png"
+    ],
+    "fly": [
+     "pigeon-pale-13.png",
+     "pigeon-pale-14.png",
+     "pigeon-pale-15.png"
+    ],
+    "land": [
+     "pigeon-pale-18.png"
+    ]
+   },
+   "scale": 0.89,
+   "plane": "back",
+   "shy": 0,
+   "seed": 2,
+   "moves": {
+    "stand": 4,
+    "look": 2,
+    "peck": 0.5,
+    "walk": 1.5,
+    "turn": 1
+   },
+   "painted": [
+    [
+     240.5,
+     30.5
+    ]
+   ]
+  },
+  {
+   "id": "pigeon-balcony",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a pigeon on the little roof over the balcony, in the shade",
+   "perch": [
+    [
+     620.3,
+     67.6
+    ],
+    [
+     558.4,
+     113.2
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     28,
+     49
+    ],
+    "face": "E",
+    "stand": [
+     "pigeon-shade-1.png",
+     "pigeon-shade-3.png"
+    ],
+    "look": [
+     "pigeon-shade-2.png"
+    ],
+    "peck": [
+     "pigeon-shade-4.png",
+     "pigeon-shade-5.png"
+    ],
+    "walk": [
+     "pigeon-shade-6.png",
+     "pigeon-shade-7.png",
+     "pigeon-shade-8.png",
+     "pigeon-shade-9.png"
+    ],
+    "turn": [
+     "pigeon-shade-10.png"
+    ],
+    "fly": [
+     "pigeon-shade-13.png",
+     "pigeon-shade-14.png",
+     "pigeon-shade-15.png"
+    ],
+    "land": [
+     "pigeon-shade-18.png"
+    ]
+   },
+   "plane": "back",
+   "shy": 0,
+   "moves": {
+    "stand": 4,
+    "look": 2,
+    "peck": 0,
+    "walk": 1,
+    "turn": 1
+   },
+   "painted": [
+    601.5,
+    81.4
+   ]
+  },
+  {
+   "id": "swallows",
+   "type": "birds",
+   "kind": "flyers",
+   "what": "swallows over the street, high up",
+   "lanes": [
+    [
+     [
+      -12,
+      14
+     ],
+     [
+      140,
+      8
+     ],
+     [
+      300,
+      18
+     ],
+     [
+      380,
+      30
+     ],
+     [
+      420,
+      -12
+     ]
+    ],
+    [
+     [
+      300,
+      -12
+     ],
+     [
+      345,
+      55
+     ],
+     [
+      410,
+      90
+     ],
+     [
+      445,
+      50
+     ],
+     [
+      440,
+      -12
+     ]
+    ],
+    [
+     [
+      455,
+      -12
+     ],
+     [
+      400,
+      50
+     ],
+     [
+      330,
+      82
+     ],
+     [
+      298,
+      40
+     ],
+     [
+      280,
+      -12
+     ]
+    ]
+   ],
+   "frames": {
+    "flap": [
+     "swallow-1.png",
+     "swallow-2.png",
+     "swallow-3.png",
+     "swallow-2.png"
+    ],
+    "glide": "swallow-4.png",
+    "middle": [
+     5,
+     3
+    ]
+   },
+   "scale": 1,
+   "every": [
+    5,
+    13
+   ],
+   "group": [
+    1,
+    3
+   ],
+   "speed": 110,
+   "plane": "back",
+   "painted": [
+    [
+     372,
+     44
+    ],
+    [
+     430,
+     66
+    ],
+    [
+     352,
+     78
+    ],
+    [
+     462,
+     22
+    ]
+   ],
+   "note": "Only in the sky: above the corner house's roof (y < 25) and down the gap between the houses (x 295 to 465). They pass behind the washing (it is in front of everything)."
+  },
+  {
+   "id": "shrine-flame",
+   "type": "flame",
+   "what": "the little lamp burning in the crossroads shrine's niche (taken out of back.png)",
+   "at": [
+    219.5,
+    360.6
+   ],
+   "size": 4.8,
+   "width": 2.6,
+   "color": "#fff4b0",
+   "edge": "#ffb040",
+   "glow": 6,
+   "glowOpacity": 0.25,
+   "flicker": 0.25,
+   "base": 479,
+   "note": "Tiny: a white-yellow heart in an orange tongue. Its foot is on the lamp's nozzle."
+  },
+  {
+   "id": "stove-embers",
+   "type": "embers",
+   "what": "the snack bar's charcoal stove: the fire through the three holes in its front",
+   "at": [
+    180.6,
+    410.2
+   ],
+   "size": [
+    9,
+    1.5
+   ],
+   "count": 4,
+   "sparks": 0,
+   "glow": 10,
+   "base": 480,
+   "holes": [
+    [
+     175.4,
+     410.2
+    ],
+    [
+     180.6,
+     410.2
+    ],
+    [
+     185.9,
+     410.2
+    ]
+   ],
+   "note": "Painted in awning.png (unchanged), as the coals under the pot are."
+  },
+  {
+   "id": "stove-steam",
+   "type": "smoke",
+   "what": "steam from the bronze pot on the stove (the breakfast is hot): none was painted",
+   "at": [
+    184.3,
+    388.4
+   ],
+   "height": 50,
+   "width": [
+    3,
+    12
+   ],
+   "lean": [
+    5,
+    -50
+   ],
+   "rise": 12,
+   "rate": 2,
+   "gust": 0.3,
+   "color": "#f4f0f0",
+   "opacity": 0.25,
+   "base": 480,
+   "note": "Faint wisps from the pot's mouth; the counter is in the shade, so pale on dark."
+  },
+  {
+   "id": "wet-paving",
+   "type": "shimmer",
+   "what": "the wet stones of the gutter and of the sidewalk before the fountain: standing water",
+   "poly": [
+    [
+     417,
+     285
+    ],
+    [
+     421,
+     301
+    ],
+    [
+     426,
+     317
+    ],
+    [
+     431,
+     333
+    ],
+    [
+     437,
+     349
+    ],
+    [
+     441,
+     365
+    ],
+    [
+     446,
+     381
+    ],
+    [
+     451,
+     397
+    ],
+    [
+     458,
+     413
+    ],
+    [
+     460,
+     429
+    ],
+    [
+     468,
+     445
+    ],
+    [
+     471,
+     461
+    ],
+    [
+     477,
+     477
+    ],
+    [
+     482,
+     493
+    ],
+    [
+     500,
+     509
+    ],
+    [
+     524,
+     525
+    ],
+    [
+     595,
+     541
+    ],
+    [
+     595,
+     541
+    ],
+    [
+     640,
+     541
+    ],
+    [
+     640,
+     541
+    ],
+    [
+     715,
+     525
+    ],
+    [
+     716,
+     509
+    ],
+    [
+     705,
+     493
+    ],
+    [
+     666,
+     477
+    ],
+    [
+     596,
+     461
+    ],
+    [
+     486,
+     445
+    ],
+    [
+     479,
+     429
+    ],
+    [
+     473,
+     413
+    ],
+    [
+     467,
+     397
+    ],
+    [
+     460,
+     381
+    ],
+    [
+     454,
+     365
+    ],
+    [
+     448,
+     349
+    ],
+    [
+     441,
+     333
+    ],
+    [
+     434,
+     317
+    ],
+    [
+     428,
+     301
+    ],
+    [
+     422,
+     285
+    ]
+   ],
+   "flow": [
+    0,
+    0
+   ],
+   "count": 10,
+   "size": 4,
+   "life": 2.2,
+   "color": "#c8d8ff",
+   "opacity": 0.3,
+   "note": "Quiet glints that come and go on the wet paving; the painted glints and the wet dark stay. On the ground (under everyone)."
+  },
+  {
+   "id": "laundry-1",
+   "type": "sway",
+   "plane": "laundry-1",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.1,
+   "lean": 0.3,
+   "what": "a sheet (#f4ecd8) on the beyond line (laundry-1.png)",
+   "rope": [
+    [
+     322.8,
+     111.3
+    ],
+    [
+     334.2,
+     113.6
+    ],
+    [
+     345.7,
+     115.7
+    ],
+    [
+     357.0,
+     117.6
+    ],
+    [
+     368.3,
+     119.2
+    ]
+   ],
+   "hangs": 38
+  },
+  {
+   "id": "laundry-2",
+   "type": "sway",
+   "plane": "laundry-2",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.47,
+   "lean": 0.3,
+   "what": "a tunic (#c98a5a) on the beyond line (laundry-2.png)",
+   "rope": [
+    [
+     379.6,
+     120.6
+    ],
+    [
+     386.6,
+     121.3
+    ],
+    [
+     393.6,
+     122.0
+    ],
+    [
+     400.5,
+     122.5
+    ],
+    [
+     407.5,
+     123.0
+    ]
+   ],
+   "hangs": 34
+  },
+  {
+   "id": "laundry-3",
+   "type": "sway",
+   "plane": "laundry-3",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.84,
+   "lean": 0.3,
+   "what": "a sheet (#dfe6ee) on the beyond line (laundry-3.png)",
+   "rope": [
+    [
+     451.5,
+     123.8
+    ],
+    [
+     461.0,
+     123.4
+    ],
+    [
+     470.4,
+     122.9
+    ],
+    [
+     479.9,
+     122.3
+    ],
+    [
+     489.3,
+     121.4
+    ]
+   ],
+   "hangs": 41
+  },
+  {
+   "id": "laundry-4",
+   "type": "sway",
+   "plane": "laundry-4",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 4.21,
+   "lean": 0.3,
+   "what": "a tunic (#f0e6cc) on the beyond line (laundry-4.png)",
+   "rope": [
+    [
+     505.3,
+     119.6
+    ],
+    [
+     512.0,
+     118.6
+    ],
+    [
+     518.6,
+     117.6
+    ],
+    [
+     525.2,
+     116.5
+    ],
+    [
+     531.8,
+     115.4
+    ]
+   ],
+   "hangs": 9
+  },
+  {
+   "id": "laundry-5",
+   "type": "sway",
+   "plane": "laundry-5",
+   "anchor": "top",
+   "amount": 1.5,
+   "period": 3.1,
+   "lean": 0.3,
+   "what": "a sheet (#fffdf2) on the far line (laundry-5.png)",
+   "rope": [
+    [
+     276.6,
+     114.6
+    ],
+    [
+     294.0,
+     118.1
+    ],
+    [
+     311.6,
+     121.3
+    ],
+    [
+     329.5,
+     124.0
+    ],
+    [
+     347.5,
+     126.3
+    ]
+   ],
+   "hangs": 34
+  },
+  {
+   "id": "laundry-6",
+   "type": "sway",
+   "plane": "laundry-6",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.47,
+   "lean": 0.3,
+   "what": "a tunic (#f3e2bc) on the far line (laundry-6.png)",
+   "rope": [
+    [
+     355.1,
+     127.1
+    ],
+    [
+     363.5,
+     127.9
+    ],
+    [
+     372.0,
+     128.6
+    ],
+    [
+     380.5,
+     129.2
+    ],
+    [
+     389.0,
+     129.8
+    ]
+   ],
+   "hangs": 51
+  },
+  {
+   "id": "laundry-7",
+   "type": "sway",
+   "plane": "laundry-7",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.84,
+   "lean": 0.3,
+   "what": "a tunic (#c75c44) on the far line (laundry-7.png)",
+   "rope": [
+    [
+     464.1,
+     130.2
+    ],
+    [
+     473.2,
+     129.8
+    ],
+    [
+     482.3,
+     129.2
+    ],
+    [
+     491.4,
+     128.6
+    ],
+    [
+     500.6,
+     127.8
+    ]
+   ],
+   "hangs": 50
+  },
+  {
+   "id": "laundry-8",
+   "type": "sway",
+   "plane": "laundry-8",
+   "anchor": "top",
+   "amount": 1.5,
+   "period": 4.21,
+   "lean": 0.3,
+   "what": "a sheet (#f2ecdc) on the far line (laundry-8.png)",
+   "rope": [
+    [
+     509.0,
+     127.0
+    ],
+    [
+     523.9,
+     125.4
+    ],
+    [
+     538.9,
+     123.6
+    ],
+    [
+     554.0,
+     121.4
+    ],
+    [
+     569.3,
+     119.0
+    ]
+   ],
+   "hangs": 80
+  },
+  {
+   "id": "laundry-9",
+   "type": "sway",
+   "plane": "laundry-9",
+   "anchor": "top",
+   "amount": 1.5,
+   "period": 3.1,
+   "lean": 0.3,
+   "what": "a toga (#fffdf4) on the near line (laundry-9.png)",
+   "rope": [
+    [
+     262.6,
+     140.4
+    ],
+    [
+     289.3,
+     144.7
+    ],
+    [
+     316.3,
+     148.2
+    ],
+    [
+     343.9,
+     150.7
+    ],
+    [
+     371.9,
+     152.3
+    ]
+   ],
+   "hangs": 93
+  },
+  {
+   "id": "laundry-10",
+   "type": "sway",
+   "plane": "laundry-10",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.47,
+   "lean": 0.3,
+   "what": "a strip of cloth (#e3b54c) on the near line (laundry-10.png)",
+   "rope": [
+    [
+     457.5,
+     151.3
+    ],
+    [
+     462.1,
+     151.0
+    ],
+    [
+     466.7,
+     150.7
+    ],
+    [
+     471.3,
+     150.3
+    ],
+    [
+     475.9,
+     150.0
+    ]
+   ],
+   "hangs": 43
+  },
+  {
+   "id": "laundry-11",
+   "type": "sway",
+   "plane": "laundry-11",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.84,
+   "lean": 0.3,
+   "what": "a tunic (#9fb8dc) on the near line (laundry-11.png)",
+   "rope": [
+    [
+     485.2,
+     149.2
+    ],
+    [
+     496.9,
+     148.0
+    ],
+    [
+     508.6,
+     146.7
+    ],
+    [
+     520.5,
+     145.2
+    ],
+    [
+     532.4,
+     143.6
+    ]
+   ],
+   "hangs": 68
+  },
+  {
+   "id": "laundry-12",
+   "type": "sway",
+   "plane": "laundry-12",
+   "anchor": "top",
+   "amount": 1.5,
+   "period": 4.21,
+   "lean": 0.3,
+   "what": "a sheet (#f6f0e0) on the near line (laundry-12.png)",
+   "rope": [
+    [
+     542.0,
+     142.2
+    ],
+    [
+     556.4,
+     139.8
+    ],
+    [
+     571.0,
+     137.2
+    ],
+    [
+     585.8,
+     134.4
+    ],
+    [
+     600.6,
+     131.4
+    ]
+   ],
+   "hangs": 92
+  },
+  {
+   "id": "tunic-sway",
+   "type": "sway",
+   "plane": "tunic",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 2.9,
+   "lean": 0.3,
+   "what": "the small tunic on the low line (the existing cut-out tunic.png, already in the scene)",
+   "rope": [
+    [
+     256.8,
+     317.6
+    ],
+    [
+     265.2,
+     316.1
+    ],
+    [
+     273.5,
+     314.6
+    ],
+    [
+     281.9,
+     313.1
+    ],
+    [
+     290.4,
+     311.4
+    ]
+   ]
+  }
+ ],
+ "cutouts": [
+  {
+   "id": "cat",
+   "frames": [
+    "cat-1.png",
+    "cat-2.png",
+    "cat-3.png",
+    "cat-2.png",
+    "cat-1.png",
+    "cat-4.png",
+    "cat-5.png",
+    "cat-4.png"
+   ],
+   "fps": 2.5,
+   "at": [
+    740,
+    180
+   ],
+   "foot": [
+    16,
+    37
+   ],
+   "base": 180,
+   "what": "the cat on her sill, her tail swinging slowly: a cut-out with frames (as the steam at the car in Egypt). Her body is cut from back.png itself; only the tail moves. The tail is no longer painted in back.png, so until this goes in she has none."
+  },
+  {
+   "id": "laundry-1",
+   "file": "laundry-1.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-2",
+   "file": "laundry-2.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-3",
+   "file": "laundry-3.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-4",
+   "file": "laundry-4.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-5",
+   "file": "laundry-5.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-6",
+   "file": "laundry-6.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-7",
+   "file": "laundry-7.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-8",
+   "file": "laundry-8.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-9",
+   "file": "laundry-9.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-10",
+   "file": "laundry-10.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-11",
+   "file": "laundry-11.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-12",
+   "file": "laundry-12.png",
+   "plane": "front"
+  },
+  {
+   "id": "laundry-lines",
+   "file": "laundry-lines.png",
+   "plane": "front",
+   "what": "the washing lines and the three sparrows sitting on the far one: last, over every piece"
+  }
+ ],
+ "frames": {
+  "pigeon": {
+   "files": "<set>-<n>.png, n 1 to 18",
+   "sets": [
+    "pigeon",
+    "pigeon-pale",
+    "pigeon-shade"
+   ],
+   "size": [
+    56,
+    61
+   ],
+   "foot": [
+    28,
+    49
+   ],
+   "acts": {
+    "stand": [
+     1
+    ],
+    "look": [
+     2
+    ],
+    "alert": [
+     3
+    ],
+    "peck": [
+     4,
+     5
+    ],
+    "walk": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "turn": [
+     10
+    ],
+    "takeoff": [
+     11,
+     12
+    ],
+    "fly": [
+     13,
+     14,
+     15,
+     16
+    ],
+    "glide": [
+     17
+    ],
+    "land": [
+     18,
+     11
+    ]
+   },
+   "faces": "right",
+   "note": "The same frames as rome-steps (see its layout.json), painted at the size of the pigeon on the balcony (scale 1) in this picture's palette; pigeon-shade for the one in the shade."
+  },
+  "sparrow": {
+   "files": "sparrow-<n>.png, n 1 to 18",
+   "size": [
+    24,
+    26
+   ],
+   "foot": [
+    12,
+    21
+   ],
+   "acts": {
+    "stand": [
+     1
+    ],
+    "look": [
+     2
+    ],
+    "alert": [
+     3
+    ],
+    "peck": [
+     4,
+     5
+    ],
+    "walk": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "turn": [
+     10
+    ],
+    "takeoff": [
+     11,
+     12
+    ],
+    "fly": [
+     13,
+     14,
+     15,
+     16
+    ],
+    "glide": [
+     17
+    ],
+    "land": [
+     18,
+     11
+    ]
+   },
+   "faces": "right",
+   "note": "A house sparrow, brown, in the fountain's shade; drawn the way the pigeons are (peck = a sip, walk = little hops)."
+  },
+  "swallow": {
+   "files": "swallow-<n>.png, n 1 to 4",
+   "size": [
+    11,
+    8
+   ],
+   "foot": [
+    5,
+    3
+   ],
+   "acts": {
+    "fly": [
+     1,
+     2,
+     3,
+     2
+    ],
+    "glide": [
+     4
+    ]
+   },
+   "note": "Symmetric, never mirrored."
+  },
+  "cat": {
+   "files": "cat-<n>.png, n 1 to 5",
+   "size": [
+    41,
+    59
+   ],
+   "foot": [
+    16,
+    37
+   ],
+   "at": [
+    740,
+    180
+   ]
+  },
+  "laundry": {
+   "files": [
+    "laundry-lines.png",
+    "laundry-1.png",
+    "laundry-2.png",
+    "laundry-3.png",
+    "laundry-4.png",
+    "laundry-5.png",
+    "laundry-6.png",
+    "laundry-7.png",
+    "laundry-8.png",
+    "laundry-9.png",
+    "laundry-10.png",
+    "laundry-11.png",
+    "laundry-12.png"
+   ],
+   "note": "800x600 cut-outs, plane front. To let the washing stir, the scene shows these instead of laundry.png, in this order: laundry-1 .. laundry-12 (back to front), then laundry-lines last (the lines are over everything, as painted). Laid together they are laundry.png pixel for pixel."
+  }
+ },
+ "fx_note": "Round four. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene; `cutouts` are the new cut-outs (the cat with her tail, and the washing in pieces, which replace the plane `laundry`: the laundry-N sways need them). Taken out of the painting: the water falling from the fountain's mouth and its rings, and the sparrow drinking (fountain.png); the four pigeons on the corner house's ridge and the one over the balcony, the four swallows, the cat's tail, the shrine lamp's flame, and the glints on the water spilling from the basin and running down the gutter (back.png). Every other pixel of back.png and fountain.png is as it was, and awning.png, front.png, laundry.png and tunic.png are byte for byte the same. New: the washing in pieces (laundry-*.png) so that it can stir, the cat's frames, the birds' frames. Left as they are, on purpose: the three sparrows sitting on the far washing line (they sit, like the birds on the highway's wire), the songbird in its wicker cage (5 px), the strings of garlic, sausages and loaves under the awning, the hanging sign, the pot plants, the far dabs of people in the square, the clouds."
 }

@@ -713,5 +713,318 @@
    391,
    406
   ]
- }
+ },
+ "fx": [
+  {
+   "type": "smoke",
+   "id": "oven-smoke-1",
+   "at": [
+    20,
+    275
+   ],
+   "base": 279,
+   "color": "#f4ecdc",
+   "opacity": 0.32,
+   "height": 19,
+   "width": [
+    1.0,
+    5
+   ],
+   "lean": [
+    20,
+    -17
+   ],
+   "rate": 2,
+   "behind": [
+    [
+     [
+      7.0,
+      277.0
+     ],
+     [
+      36.0,
+      227.0
+     ],
+     [
+      65.0,
+      277.0
+     ],
+     [
+      44.7,
+      280.0
+     ]
+    ],
+    [
+     [
+      64.0,
+      274.0
+     ],
+     [
+      80.8,
+      245.3
+     ],
+     [
+      95.2,
+      245.3
+     ],
+     [
+      112.0,
+      274.0
+     ],
+     [
+      95.2,
+      277.0
+     ]
+    ],
+    [
+     [
+      111.0,
+      272.0
+     ],
+     [
+      130.0,
+      240.0
+     ],
+     [
+      149.0,
+      272.0
+     ],
+     [
+      135.7,
+      275.0
+     ]
+    ]
+   ],
+   "behindOpacity": 0.2,
+   "what": "a bread oven's smoke in the builders' town down by the river, very far off beyond the plateau's lip: a thin pale thread, rising a little and bending away to the right with the wind. 'behind': the three queens' pyramids are nearer than the town, so the smoke rises behind them (the painting let a fifth of it show through, as haze)"
+  },
+  {
+   "type": "smoke",
+   "id": "oven-smoke-2",
+   "at": [
+    88,
+    269
+   ],
+   "base": 273,
+   "color": "#f4ecdc",
+   "opacity": 0.32,
+   "height": 19,
+   "width": [
+    1.0,
+    5
+   ],
+   "lean": [
+    20,
+    -17
+   ],
+   "rate": 2,
+   "behind": [
+    [
+     [
+      7.0,
+      277.0
+     ],
+     [
+      36.0,
+      227.0
+     ],
+     [
+      65.0,
+      277.0
+     ],
+     [
+      44.7,
+      280.0
+     ]
+    ],
+    [
+     [
+      64.0,
+      274.0
+     ],
+     [
+      80.8,
+      245.3
+     ],
+     [
+      95.2,
+      245.3
+     ],
+     [
+      112.0,
+      274.0
+     ],
+     [
+      95.2,
+      277.0
+     ]
+    ],
+    [
+     [
+      111.0,
+      272.0
+     ],
+     [
+      130.0,
+      240.0
+     ],
+     [
+      149.0,
+      272.0
+     ],
+     [
+      135.7,
+      275.0
+     ]
+    ]
+   ],
+   "behindOpacity": 0.2,
+   "what": "a bread oven's smoke in the builders' town down by the river, very far off beyond the plateau's lip: a thin pale thread, rising a little and bending away to the right with the wind. 'behind': the three queens' pyramids are nearer than the town, so the smoke rises behind them (the painting let a fifth of it show through, as haze)"
+  },
+  {
+   "type": "smoke",
+   "id": "oven-smoke-3",
+   "at": [
+    140,
+    263
+   ],
+   "base": 267,
+   "color": "#f4ecdc",
+   "opacity": 0.32,
+   "height": 19,
+   "width": [
+    1.0,
+    5
+   ],
+   "lean": [
+    20,
+    -17
+   ],
+   "rate": 2,
+   "behind": [
+    [
+     [
+      7.0,
+      277.0
+     ],
+     [
+      36.0,
+      227.0
+     ],
+     [
+      65.0,
+      277.0
+     ],
+     [
+      44.7,
+      280.0
+     ]
+    ],
+    [
+     [
+      64.0,
+      274.0
+     ],
+     [
+      80.8,
+      245.3
+     ],
+     [
+      95.2,
+      245.3
+     ],
+     [
+      112.0,
+      274.0
+     ],
+     [
+      95.2,
+      277.0
+     ]
+    ],
+    [
+     [
+      111.0,
+      272.0
+     ],
+     [
+      130.0,
+      240.0
+     ],
+     [
+      149.0,
+      272.0
+     ],
+     [
+      135.7,
+      275.0
+     ]
+    ]
+   ],
+   "behindOpacity": 0.2,
+   "what": "a bread oven's smoke in the builders' town down by the river, very far off beyond the plateau's lip: a thin pale thread, rising a little and bending away to the right with the wind. 'behind': the three queens' pyramids are nearer than the town, so the smoke rises behind them (the painting let a fifth of it show through, as haze)"
+  },
+  {
+   "type": "birds",
+   "kind": "flyers",
+   "id": "kites",
+   "circle": {
+    "at": [
+     186,
+     74
+    ],
+    "r": [
+     34,
+     14
+    ]
+   },
+   "count": 3,
+   "speed": 12,
+   "scale": 0.9,
+   "frames": {
+    "glide": "kite-0.png",
+    "flap": [
+     "kite-1.png",
+     "kite-0.png",
+     "kite-2.png",
+     "kite-0.png"
+    ],
+    "bank": "kite-3.png",
+    "middle": [
+     6.5,
+     5.0
+    ]
+   },
+   "color": "#3a3a4e",
+   "size": [
+    5,
+    9
+   ],
+   "what": "black kites wheeling high in the warm air over the left, in front of the great cloud (the painting had three, 5 to 9 px across). Mostly gliding, a few beats now and then. The circle keeps them in the open sky left of the pyramid's sunlit edge (x < 330 at the top, x < 300 at y 150), where nothing stands: no base, they are behind everything"
+  },
+  {
+   "type": "sway",
+   "id": "streamers",
+   "plane": "streamers",
+   "anchor": "left",
+   "at": [
+    200,
+    306
+   ],
+   "amount": 1.5,
+   "period": 2.6,
+   "wave": 40,
+   "lean": 0.1,
+   "cutout": {
+    "id": "streamers",
+    "file": "streamers.png",
+    "base": 398,
+    "note": "NEW cut-out: add it to the scene's planes. Until a scene shows it the standard has no streamers (back.png has the pole and board without them). It is kept out of 'planes' here only so that the checks stay clean until then"
+   },
+   "what": "the gang's standard's two streamers (red, cream) stirring in the wind: tied to the pole on the left, blowing out to the right. streamers.png is the approved picture's own pixels there; the pole and board stay in back.png"
+  }
+ ],
+ "notes": [
+  "round four: nothing that moves by nature is painted still. The kites in the sky, the far ovens' smoke and the standard's streamers are gone from back.png (every other pixel is as it was); the streamers are their own cut-out now (streamers.png: see the 'cutout' of fx 'streamers'); 'fx' says where the game draws all three moving"
+ ]
 }

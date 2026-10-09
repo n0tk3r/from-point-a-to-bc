@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 
 from brush import F32, blur, lerp, noise, ramp, rgb, smooth, step
-from home_landing_kit import Tex, scribble, width_of
+from home_landing_kit import GLYPHS, Tex, scribble, width_of
 
 INK = "#1c2140"                     # Dad's felt-tip
 NOTICE = ["TRIP HEADQUARTERS", "AUTHORIZED PERSONNEL ONLY", "LOST YOUR KEY? IT IS WITH", "THE OTHER EIGHTY-EIGHT.", "- THE MANAGEMENT"]
@@ -47,8 +47,104 @@ def door(kind="plain", leaf="#e7dec9", casing="#ece4d2", open_=False):
     return t
 
 
-def sons_door():
-    """Covered in a boy's notices: a home-made KEEP OUT, warning tape, drawings, and his alarm by the handle."""
+def keep_out(t):
+    """The sign's first words (the picture as first delivered, and as round two left it)."""
+    t.write("KEEP", 53.5, 158.5, 18.0, "#16131a", weight=0.2, wide=0.72, gap=0.22, anchor="m", seed=3, wobble=0.07)
+    t.write("OUT", 53.5, 135.0, 18.0, "#b3281e", weight=0.21, wide=0.78, gap=0.24, anchor="m", seed=4, wobble=0.07)
+
+
+# ---- round three (briefs/PAINT-3.md, B): the same card now says NO GIRLS ALLOWED, in a ten-year-old's best capitals.
+# The card is 75 x 54 cm and a little crooked (its bottom edge falls 4 cm to the right), and on the landing it is
+# only about 37 x 32 px, so the words are as big as the card allows and black, the ink that reads best on yellow in
+# the dim end of the landing; only NO, the shout, is in his red. The alarm's wire comes up out of its box and runs up
+# over the card's lower right corner to the contact on the frame (it is drawn after the card): the stem of the D of
+# ALLOWED is drawn right under it, so that the wire disappears into the D instead of cutting a letter in two.
+KID_INK, KID_RED = "#16131a", "#b3281e"
+CARD_ANGLE = math.atan2(129.3 - 133.0, 88.6 - 17.0)        # the card's red border, along its bottom edge: -2.96 degrees
+CARD_AT = (17.0, 133.0)                                     # that border's bottom left corner (the middle of its line)
+KID_WIDTH = {"I": 0.25, "L": 0.78, "E": 0.78, "W": 1.42, "D": 0.94, "N": 1.12, "O": 1.08}     # each letter's width, as a part of an ordinary one
+
+
+def card_pt(s, n):
+    """A place on the Son's card: `s` cm along its bottom border from its left end, `n` cm up from it -> door cm."""
+    ca, sa = math.cos(CARD_ANGLE), math.sin(CARD_ANGLE)
+    return (CARD_AT[0] + s * ca - n * sa, CARD_AT[1] + s * sa + n * ca)
+
+
+def card_s(u, v):
+    """Door cm -> (s, n) on the card (the inverse of card_pt)."""
+    ca, sa = math.cos(CARD_ANGLE), math.sin(CARD_ANGLE)
+    du, dv = u - CARD_AT[0], v - CARD_AT[1]
+    return (du * ca + dv * sa, -du * sa + dv * ca)
+
+
+def kid_word(t, word, s0, n0, cap, color, width, gap, weight, seed, wobble=0.05, at=None):
+    """One word in block capitals along the card (its baseline from (s0, n0), `width` an ordinary letter's width in
+    cm, `gap` the space between letters), each letter a little off its line as a boy's hand leaves it. `at` may
+    fix where one letter's left stroke stands: {index: s}. -> the s where each letter starts."""
+    rng = np.random.default_rng(seed)
+    starts, s = [], s0
+    for i, ch in enumerate(word):
+        if at and i in at:
+            s = at[i]
+        w = width * KID_WIDTH.get(ch, 1.0)
+        dn = rng.normal(0, wobble) * cap * 0.5                    # a little above or below the line
+        lean = rng.normal(0, wobble) * 0.5                        # and leaning a little
+        c = cap * (1.0 + rng.normal(0, wobble * 0.3))
+        starts.append(s)
+        for st in GLYPHS[ch]:
+            pts = []
+            for gx, gy in st:
+                if ch == "I":                                     # a boy's I: one stroke, no bars
+                    if gx != 2:
+                        continue
+                    px = s + w / 2
+                else:
+                    px = s + gx / 4 * w
+                hy = (6 - gy) / 6 * c
+                pts.append(card_pt(px + lean * hy, n0 + hy + dn))
+            if len(pts) >= 2:
+                t.line(pts, color, cap * weight, solid=False)
+        s += w + gap
+    return starts
+
+
+WIRE = ((80.5, 119.0), (81.0, 150.0))        # the alarm's wire where it runs up over the card (as sons_door draws it)
+
+
+def wire_s(n):
+    """Where the wire crosses the card's line `n` cm up from its bottom border: the s there."""
+    (u0, v0), (u1, v1) = WIRE
+    s = 63.0
+    for _ in range(12):
+        u, v = card_pt(s, n)
+        s = card_s(u0 + (u1 - u0) * (v - v0) / (v1 - v0), v)[0]
+    return s
+
+
+def no_girls_allowed(t, cap=(11.6, 11.2, 11.2), width=(9.8, 6.6, 6.4), gap=(5.6, 4.4, 4.1), weight=(0.27, 0.19, 0.19),
+                     base=(35.3, 19.0, 3.1), red=(True, False, False), d_at=None):
+    """NO / GIRLS / ALLOWED, three lines on the Son's card. The D of ALLOWED stands with its stem under the wire."""
+    if d_at is None:                                              # the wire, halfway up the line of ALLOWED
+        d_at = wire_s(base[2] + cap[2] / 2)
+    out = {}
+    for k, word in enumerate(("NO", "GIRLS", "ALLOWED")):
+        w = sum(width[k] * KID_WIDTH.get(ch, 1.0) for ch in word) + gap[k] * (len(word) - 1)
+        if word == "ALLOWED":                                     # ending with the D's stem on the wire, the rest to its left
+            s0 = d_at - (w - width[k] * KID_WIDTH["D"])
+            at = {6: d_at}
+        else:
+            s0, at = 35.0 - w / 2, None
+        out[word] = kid_word(t, word, s0, base[k], cap[k], KID_RED if red[k] else KID_INK, width[k], gap[k], weight[k], seed=60 + k, at=at)
+    return out
+
+
+LETTERING = {"KEEP OUT": keep_out, "NO GIRLS ALLOWED": no_girls_allowed}
+
+
+def sons_door(sign="KEEP OUT"):
+    """Covered in a boy's notices: a home-made sign (KEEP OUT; from round three NO GIRLS ALLOWED), warning tape,
+    drawings, and his alarm by the handle."""
     t = door()
     rng = np.random.default_rng(5)
     # warning tape, corner to corner under the sign
@@ -63,8 +159,7 @@ def sons_door():
     t.poly([(15, 131), (90, 127), (91.5, 181), (16.5, 185)], "#f2d23a")
     t.poly([(15, 131), (90, 127), (90.2, 129.5), (15.2, 133.5)], "#c79f22")
     t.line([(17, 133), (88.6, 129.3), (89.8, 179), (18.3, 182.8), (17, 133)], "#b3281e", 1.6, solid=False)
-    t.write("KEEP", 53.5, 158.5, 18.0, "#16131a", weight=0.2, wide=0.72, gap=0.22, anchor="m", seed=3, wobble=0.07)
-    t.write("OUT", 53.5, 135.0, 18.0, "#b3281e", weight=0.21, wide=0.78, gap=0.24, anchor="m", seed=4, wobble=0.07)
+    LETTERING[sign](t)
     # other notices and drawings
     t.poly([(14, 189), (38, 190.5), (37.4, 203.6), (13.4, 202.4)], "#202028")           # a black flag with a white skull, more or less
     t.ellipse(26, 197, 3.6, 3.2, "#e9e6dc", solid=False)

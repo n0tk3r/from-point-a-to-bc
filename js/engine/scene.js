@@ -23,10 +23,13 @@
 
 import { Cast, picturesOf } from "./cast.js";
 import { picture, url } from "./assets.js";
+import { fxPictures } from "./effects.js";
 import { W, H, OLD, fit } from "./grid.js";
 import * as art from "../art/kit.js";
+import { paintedPeople } from "../art/paint.js";
 
 const SVG = "http://www.w3.org/2000/svg";
+const SHAPE = new Set(["x", "y", "width", "height", "cx", "cy", "r", "points"]);      // the attributes that say an area's shape
 
 // The pictures are 800 pixels wide and the stage is whatever the window allows. When each picture pixel covers at
 // least this many screen pixels, the pictures are shown with hard pixels; below it they are smoothed, because hard
@@ -69,7 +72,13 @@ export class SceneView {
     this.palette = paletteOf(stage);
     this.cast.palette = this.palette;
     // Hard pixels or smooth: measured now, and again whenever the stage changes size. (A stage 1599.98 screen pixels wide is twice 800.)
-    const measure = () => stage.classList.toggle("crisp", (stage.getBoundingClientRect().width * (window.devicePixelRatio || 1)) / W >= CRISP_FROM - 0.02);
+    // Painted people (?people=painted) are painted at the stage's own size on the screen, at 1, 2 or 3 times its
+    // 800 x 600 (cast.js, setResolution: under 1.5 times, 1; then 2; from 3 times, 3).
+    const measure = () => {
+      const times = (stage.getBoundingClientRect().width * (window.devicePixelRatio || 1)) / W;
+      stage.classList.toggle("crisp", times >= CRISP_FROM - 0.02);
+      if (paintedPeople) this.cast.setResolution(times);
+    };
     measure();
     if (window.ResizeObserver) new ResizeObserver(measure).observe(stage);
     window.addEventListener("resize", measure);
@@ -204,6 +213,26 @@ export class SceneView {
     this.hotEl.innerHTML = `<rect class="floor" width="${W}" height="${H}"/>` + spots.map(shape).join("");
   }
 
+  /** One area's shape has changed (someone has walked off with theirs, or come back: life.js). Its element is given the
+      new shape where it is, keeping everything else about it (and keyboard focus, if it had it). */
+  reshape(i) {
+    const old = this.hotEl.querySelector(`.spot[data-i="${i}"]`), h = this.spots[i];
+    if (!old || !h) return;
+    const tag = h.rect ? "rect" : h.circle ? "circle" : "polygon";
+    let el = old;
+    if (old.tagName.toLowerCase() !== tag) {
+      el = document.createElementNS(SVG, tag);
+      for (const { name, value } of [...old.attributes]) if (!SHAPE.has(name)) el.setAttribute(name, value);
+      const focused = document.activeElement === old;
+      old.replaceWith(el);
+      if (focused) el.focus({ preventScroll: true });
+    }
+    const set = (o) => { for (const [k, v] of Object.entries(o)) el.setAttribute(k, v); };
+    if (h.rect) set({ x: h.rect[0], y: h.rect[1], width: h.rect[2], height: h.rect[3] });
+    else if (h.circle) set({ cx: h.circle[0], cy: h.circle[1], r: h.circle[2] });
+    else set({ points: h.poly.map((p) => p.join(",")).join(" ") });
+  }
+
   /** Hide the areas whose `when` test fails right now. */
   refreshHotspots(game) {
     this.hotEl.querySelectorAll(".spot").forEach((el) => {
@@ -226,7 +255,7 @@ export class SceneView {
 }
 
 /** Every picture file a scene can show: its backdrop, and each cut-out's picture, states and frames. */
-export const picturesIn = (scene) => [scene.picture, ...(scene.planes || []).flatMap(picturesOf)].filter(Boolean);
+export const picturesIn = (scene) => [scene.picture, ...(scene.planes || []).flatMap(picturesOf), ...fxPictures(scene)].filter(Boolean);      // (fxPictures: the painted frames of its birds)
 
 /** Where a clickable area meets the ground: the middle of its bottom edge. The lead turns to face this. */
 export function footOf(spot) {

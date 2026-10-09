@@ -10,17 +10,22 @@
 //   - nothing of the family's faith is a beat. Dad's three prayers (the arrival, the dark doorway, the open door), the
 //     basket he looks for in the reeds, the bricks and Psalm 90:4 hang on moments and hotspots that were already
 //     there, and no puzzle knows of them (docs/PUZZLES-egypt.md, "The family's faith, and the Bible's Egypt").
-//   - nor is the scribe's news, that Abram is in Egypt this week (Genesis 12:10-20: "egypt.heardAbram"), nor General
-//     Feathers, his youngest's stuffed hen, found in his suitcase (`chicken`). A player who talks to people finds the
-//     one, and everybody who opens the suitcase finds the other; no puzzle needs either, and the Hint button does not
-//     send him to them.
+//   - nor is Lot: the man praying under the palm by the river is Abram's nephew, who tells Dad who he is (Genesis
+//     11:27 to 13:5, in his own words) and so when Dad is: Abram is in Egypt this week ("egypt.heardAbram"; the
+//     scribe's gossip at the site is the same week from the Egyptian side), and who prays for Dad's boy before they
+//     part ("egypt.lotPrayed"). Nor General Feathers, his youngest's stuffed hen, found in his suitcase (`chicken`).
+//     A player who talks to people finds the one, and everybody who opens the suitcase finds the other; no puzzle
+//     needs either, and the Hint button does not send him to them. Lot still says what the old water carrier said
+//     for the puzzles (the boy went up the track; the Horizon; the wall that hums; the scribe's split pen).
+//   - nor is the door mirror's glint, and the sun off it in his eyes the first time he comes up to the car
+//     ("egypt.dazzled"): the mirror's hint, long before he needs it.
 // The chains: A gets him inside. B teaches the rule. C1, C2 and C3 are the three reflectors, in any order.
 // The date: about 1920 B.C., by the Bible's own count of years (briefs/DATING.md; docs/CHARACTERS.md, "How the game
 // counts the years").
 
 export const act = {
   id: 1, title: "Act One: Scattered", era: "egypt", gate: "egypt.ready",
-  summary: "Dad lands by the Nile, alone, about 1920 B.C.: the Egypt of his Bible, though at first he cannot tell when in it. His son's sneaker prints go up to the pyramid that is being finished, where work has stopped because a wall inside has begun to hum. In his suitcase, under the shirts, is his youngest's stuffed hen, General Feathers, sent along to keep an eye on him; and the scribe at the site, grumbling about the grain account, tells him the palace gossip that tells him when he is: Abram is in Egypt this week (Genesis 12). Dad gets himself onto the scribe's list and past the guard; learns from a lamp boy, and from a flashlight on its last batteries, that light opens the door in the air and more light opens it wider; and brings a sunbeam around three corners, with a windshield shade, a door mirror and a goldsmith's copper mirror, to open it wide enough to walk through.",
+  summary: "Dad lands by the Nile, alone, about 1920 B.C.: the Egypt of his Bible, though at first he cannot tell when in it. His son's sneaker prints go up to the pyramid that is being finished, where work has stopped because a wall inside has begun to hum. In his suitcase, under the shirts, is his youngest's stuffed hen, General Feathers, sent along to keep an eye on him. The man praying in the shade of a palm by the river, while his donkey drinks, is Lot, Abram's nephew, waiting for the king's men to see his uncle's household out of Egypt; he tells Dad who he is, and so when Dad is (Genesis 12), and before they part he prays for Dad's boy. Dad gets himself onto the scribe's list and past the guard; learns from a lamp boy, and from a flashlight on its last batteries, that light opens the door in the air and more light opens it wider; and brings a sunbeam around three corners, with a windshield shade, a door mirror and a goldsmith's copper mirror, to open it wide enough to walk through.",
   beats: [
     { id: "egypt.arrive", kind: "cutscene", title: "Crash landing by the Nile: small sneaker prints go up the track (and a prayer)", lead: "dad", scene: "egypt-crash", needs: ["seen.intro"], sets: "egypt.arrived" },
 

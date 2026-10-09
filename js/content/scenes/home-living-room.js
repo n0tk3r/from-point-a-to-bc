@@ -19,6 +19,10 @@
 //                      flashlight, and the flashlight has batteries in it that work (Big Sister's, from the Retreat)
 //   the gate           the front door: they leave when they have the dot on the map, Dad's message and a car key
 // A hotspot can answer each of them differently: { mom: ..., bigsis: ..., lilsis: ... }.
+// Every room can also be left across the edge of its picture (`edges`: a click in the band along an edge), and every
+// hotspot's shape hugs its thing, for Show; one that is a painted cut-out says so (`plane`), and Show outlines the
+// cut-out's own silhouette. No shape lies over a place where one of the three stands, except where that place is behind
+// the thing itself (here: the foot of the stairs, behind Dad's armchair).
 //
 // Every place below is measured from the finished painting (art/scenes/home-living-room/layout.json is the painter's
 // own list): the table runs away from us with its head at the far end, and Dad's chair has its back to us.
@@ -252,6 +256,12 @@ export default {
   spawn: { default: [435, 418], mom: [435, 418], bigsis: [513, 413], lilsis: [385, 404], fromLanding: [121, 494] },
   arrive: { fromLanding: [[205, 468], [292, 500]] },
   exits: ["home-landing", "nevada-roadside"],
+  // The ways out across the edges of the picture: the foot of the stairs is at the left, and the landing they climb to
+  // is the top of the picture. (The front door is a door in the wall, and the way out of the act: a hotspot only.)
+  edges: {
+    W: { to: "home-landing", spawn: "fromStairs", name: "up the stairs", walkTo: [121, 494] },
+    N: { to: "home-landing", spawn: "fromStairs", name: "up the stairs", walkTo: [121, 494] },
+  },
 
   picture: art + "back.png",
 
@@ -282,14 +292,23 @@ export default {
 
   // Back to front: a later area lies over an earlier one.
   hotspots: [
-    { id: "landing", name: "the landing upstairs", poly: [[286, 44], [752, 32], [752, 192], [286, 192]], walkTo: [435, 418], face: "N", look: each("home.upstairs") },
+    {
+      // (the gallery seen from below: from the ceiling to the beam under its floor. To use it is to go up there.)
+      id: "landing", name: "the landing upstairs", verb: "Go up to", poly: [[288, 49], [752, 36], [752, 190], [288, 193]], walkTo: [121, 494], face: "W",
+      look: each("home.upstairs"), use: (g) => g.goto("home-landing", { spawn: "fromStairs" }),
+    },
     {
       id: "stairs", name: "the stairs", verb: "Go up", walkTo: [121, 494], face: "W",
       poly: [[19, 458], [100, 473], [283, 180], [283, 118], [262, 118], [196, 200], [172, 234], [120, 238], [19, 340]],
       look: each("home.stairs"), use: (g) => g.goto("home-landing", { spawn: "fromStairs" }),
     },
-    { id: "window", name: "stair window", poly: [[117, 6], [216, 6], [216, 172], [197, 199], [173, 233], [117, 241]], walkTo: [174, 470], face: "W", look: each("home.window") },
-    { id: "photos", name: "family photographs", poly: [[0, 76], [116, 76], [116, 240], [19, 338], [0, 345]], walkTo: [142, 488], face: "W", look: each("home.photo") },
+    { id: "window", name: "stair window", poly: [[117, 8], [126, 8], [214, 34], [214, 172], [197, 199], [173, 233], [117, 241]], walkTo: [174, 470], face: "W", look: each("home.window") },
+    {
+      // (the lake photograph, and the little frames that go down the wall beside the stairs)
+      id: "photos", name: "family photographs", walkTo: [142, 488], face: "W", look: each("home.photo"),
+      poly: [[36, 76], [111, 76], [111, 139], [119, 139], [120, 178], [108, 192], [90, 192], [90, 231], [72, 232], [71, 251], [54, 252], [49, 266], [51, 294],
+        [32, 296], [31, 308], [8, 312], [7, 341], [0, 342], [0, 312], [11, 282], [28, 271], [31, 241], [52, 221], [67, 208], [67, 190], [91, 169], [106, 159], [106, 153], [36, 153]],
+    },
     {
       id: "closet", name: "closet under the stairs", verb: "Open", poly: [[199, 321], [236, 307], [238, 394], [212, 411], [199, 410]], walkTo: [256, 408], face: "W",
       look: closetLook, use: { lilsis: intoCloset, any: closetOthers },
@@ -300,7 +319,7 @@ export default {
     { id: "frame", name: "'We the People'", rect: [491, 205, 48, 66], walkTo: [504, 364], face: "N", look: each("home.frame") },
     { id: "clock", name: "clock", circle: [569, 222, 15], walkTo: [525, 369], face: "N", look: each("home.clock") },
     {
-      id: "piano", name: "piano", verb: "Play", walkTo: [568, 383], face: "N",
+      id: "piano", name: "piano", verb: "Play", walkTo: [568, 383], face: "N", plane: "piano",
       poly: [[538, 270], [552, 258], [600, 258], [606, 248], [628, 248], [640, 270], [641, 362], [616, 366], [616, 381], [556, 378], [556, 360], [538, 357]],
       look: pianoLook, use: playPiano, useWith: { studykey: each("home.piano.keyback"), lilflash: { lilsis: playPiano } },
     },
@@ -312,17 +331,19 @@ export default {
     { id: "sampler", name: "sampler", rect: [641, 203, 85, 39], walkTo: [689, 385], face: "N", look: each("home.sampler") },
     { id: "coats", name: "coat hooks", rect: [717, 252, 32, 146], walkTo: [693, 388], face: "E", look: each("home.coats") },
     {
-      id: "armchair", name: "Dad's armchair", walkTo: [285, 525], face: "SW", look: each("home.chair"),
-      poly: [[70, 484], [100, 470], [124, 478], [150, 470], [190, 482], [196, 502], [242, 522], [247, 560], [247, 600], [68, 600]],
+      // (his chair from behind, and his reading lamp beside it: the cut-out's own outline)
+      id: "armchair", name: "Dad's armchair", walkTo: [285, 525], face: "SW", look: each("home.chair"), plane: "armchair",
+      poly: [[50, 366], [118, 366], [118, 420], [100, 428], [100, 469], [150, 466], [196, 480], [200, 500], [250, 515], [252, 600], [66, 600], [66, 484], [78, 472], [78, 420], [50, 420]],
     },
     { id: "crossword", name: "Dad's crossword", poly: [[180, 534], [226, 516], [236, 529], [234, 540], [192, 551]], walkTo: [285, 525], face: "SW", look: each("home.crossword") },
     {
-      id: "pencil", name: "Dad's pencil", verb: "Take", rect: [189, 525, 37, 11], walkTo: [285, 525], face: "SW", when: (g) => !g.flag("home.pencilTaken"),
+      id: "pencil", name: "Dad's pencil", verb: "Take", rect: [189, 525, 37, 11], walkTo: [285, 525], face: "SW", plane: "pencil", when: (g) => !g.flag("home.pencilTaken"),
       look: each("home.pencil.look"), use: takePencil,
     },
     {
-      id: "table", name: "dinner table", walkTo: [496, 504], face: "E", look: each("home.table"),
-      poly: [[520, 470], [572, 462], [574, 428], [624, 428], [626, 464], [670, 470], [678, 522], [728, 536], [730, 468], [742, 468], [744, 542], [800, 572],
+      // (the table, its chairs and the dishes: the cut-out's own outline; clear of the lamp that hangs over it)
+      id: "table", name: "dinner table", walkTo: [496, 504], face: "E", look: each("home.table"), plane: "table",
+      poly: [[520, 470], [572, 462], [576, 441], [622, 441], [626, 464], [670, 470], [678, 522], [728, 536], [730, 468], [742, 468], [744, 542], [800, 572],
         [800, 600], [388, 600], [388, 490], [401, 490], [403, 562], [461, 566], [460, 456], [484, 440], [487, 503], [513, 507]],
     },
     { id: "bible", name: "family Bible", poly: [[523, 456], [577, 461], [573, 484], [520, 478]], walkTo: [496, 504], face: "E", look: each("home.bible") },
@@ -355,7 +376,7 @@ export default {
       ],
     },
     lilsis: {
-      mom: [["home.talk.lilsis.mom.1a", "home.talk.lilsis.mom.1b"], ["home.talk.lilsis.mom.2a", "home.talk.lilsis.mom.2b", "home.talk.lilsis.mom.2c"]],
+      mom: [["home.talk.lilsis.mom.1a", "home.talk.lilsis.mom.1b"], ["home.talk.lilsis.mom.2a", "home.talk.lilsis.mom.2b", "home.talk.lilsis.mom.2c"], ["home.talk.lilsis.mom.3a", "home.talk.lilsis.mom.3b"]],
       bigsis: [
         { when: (g) => g.flag("home.flashTaken") && !g.flag("home.flashWorks") && !g.holder("batteries"), say: ["home.talk.batt.lilsis.bigsis.a", "home.talk.batt.lilsis.bigsis.b"] },
         ["home.talk.lilsis.bigsis.1a", "home.talk.lilsis.bigsis.1b", "home.talk.lilsis.bigsis.1c"],

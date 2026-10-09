@@ -379,6 +379,11 @@ def strings(st):
 
 
 
+# Round four: water that runs, and rings on water, are drawn by the game, moving (layout.json "fx"). False leaves the
+# fountain's falling thread of water and the rings on its pool out of the picture; True paints them still, as approved.
+FLOWING = False
+
+
 # ---------------------------------------------------------------- small makers used again and again
 def candle(st, x, y, z, name="candle", grp="back", r=3.3, h=8.5, power=1.0):
     """A flameless candle in a glass: the wax glows from inside, brightest at the little lamp in its top."""
@@ -737,14 +742,20 @@ def sound_table(st):
     def m_water(c):
         d = c.rad / fr
         k = lerp(col("#2c4a58"), col("#4f7a86"), np.clip(d, 0, 1)[:, None])
-        rip = np.clip(np.sin(c.rad * 2.6) * 0.5 + 0.5, 0, 1) ** 4
+        rip = np.clip(np.sin(c.rad * 2.6) * 0.5 + 0.5, 0, 1) ** 4 if FLOWING else np.zeros_like(c.rad)   # (rings: the game's now)
         return k + col("#a8c8d8")[None, :] * (rip * 0.28)[:, None]
     st.cyl((fx, fz), fr * 0.72, y1, y1 + 10, m_bowl, r1=fr, name="fountain", cap=m_water)
     for k, (dx, dz, r_, dy, kc) in enumerate(((-5, 1, 6.6, 2.0, "#a09a92"), (5, -1, 5.8, 2.2, "#c0b6a8"), (0, 5, 5.0, 1.6, "#8a8482"), (-1, -3, 5.4, 6.8, "#d0c6b6"), (3, 2, 4.0, 7.4, "#989088"), (-6, -4, 3.8, 3.0, "#b4aca0"))):
         st.ball((fx + dx, y1 + 9.5 + dy, fz + dz), r_, plain(kc, 0.12, 3, k), "fountain", shadow=False, squash=(1, 0.72, 0.9))
     st.stick((fx + 14, y1 + 8, fz - 10), (fx + 13, y1 + 36, fz - 11), 1.7, col("#c2aa5e"), "fountain")                     # bamboo upright
     st.stick((fx + 15.5, y1 + 30, fz - 11), (fx + 1.0, y1 + 24.5, fz - 4), 1.45, col("#cfb768"), "fountain")               # and the spout
-    st.rope([(fx + 0.8, y1 + 24, fz - 3.8), (fx - 0.4, y1 + 21, fz - 3.0), (fx - 1.0, y1 + 16.5, fz - 2.4)], 0.55, col("#d6e8f2"), name="fountain", min_px=0.7, flag=2, emi=col("#9fbcd2") * 0.5)
+    if FLOWING:                                                                                                            # the water (the game's now)
+        st.rope(SPOUT_WATER(fx, y1, fz), 0.55, col("#d6e8f2"), name="fountain", min_px=0.7, flag=2, emi=col("#9fbcd2") * 0.5)
+
+
+def SPOUT_WATER(fx, y1, fz):
+    """The thread of water from the bamboo spout down onto the stones in the bowl (room cm)."""
+    return [(fx + 0.8, y1 + 24, fz - 3.8), (fx - 0.4, y1 + 21, fz - 3.0), (fx - 1.0, y1 + 16.5, fz - 2.4)]
 
 
 def m_weave(color, seed=0):

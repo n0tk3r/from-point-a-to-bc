@@ -59,8 +59,8 @@ body {
    The painting and the people always get the same treatment, so they always match. So does a painted picture that
    a cutscene puts in the live layer, whatever it asks for itself, and the time tunnel. */
 #scene > canvas, #scene > img, #cast { width: 100%; height: 100%; }
-#scene > canvas, #scene > img, #cast, #fx, #scene > .live image { image-rendering: auto !important; }
-.stage.crisp #scene > canvas, .stage.crisp #scene > img, .stage.crisp #cast, .stage.crisp #fx, .stage.crisp #scene > .live image {
+#scene > canvas, #scene > img, #cast, #fx, #outlines, #scene > .live image { image-rendering: auto !important; }
+.stage.crisp #scene > canvas, .stage.crisp #scene > img, .stage.crisp #cast, .stage.crisp #fx, .stage.crisp #outlines, .stage.crisp #scene > .live image {
   image-rendering: crisp-edges !important; image-rendering: pixelated !important;
 }
 #cast, #dialogue, #card, #fade, #title { pointer-events: none; }
@@ -76,12 +76,16 @@ body {
 #hot { width: 100%; height: 100%; display: block; }
 #hot .floor { fill: transparent; }
 #hot .spot { fill: transparent; stroke: none; cursor: pointer; outline: none; }
-#hot.reveal .spot, #hot .spot:focus-visible {
-  fill: rgba(94, 242, 255, 0.14);
-  stroke: var(--time-cyan);
-  stroke-width: 2;
-  stroke-dasharray: 8 5;
-}
+/* Show (the button, or holding H) and keyboard focus are drawn on a layer of their own, just under this one: an outline
+   round each thing that can be clicked, following its shape, with nothing filled (js/engine/outline.js). The areas here
+   are never painted. The class "reveal" on #hot is what turns Show on. */
+#outlines { width: 100%; height: 100%; pointer-events: none; }
+/* The band along an edge of the picture with a way out (js/engine/edges.js): over the floor there, the pointer is an
+   arrow pointing out of the picture that way. A clickable area in the band keeps its own pointer. */
+#hot.edge-n { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 L29 15.5 L21 15.5 L21 29.5 L11 29.5 L11 15.5 L3 15.5 Z' fill='%23f6e3b8' stroke='%231f130a' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M16 6.5 L23 14' stroke='%235ef2ff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 16 2, default; }
+#hot.edge-s { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(180 16 16)'%3E%3Cpath d='M16 2 L29 15.5 L21 15.5 L21 29.5 L11 29.5 L11 15.5 L3 15.5 Z' fill='%23f6e3b8' stroke='%231f130a' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M16 6.5 L23 14' stroke='%235ef2ff' stroke-width='2' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E") 16 30, default; }
+#hot.edge-w { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(270 16 16)'%3E%3Cpath d='M16 2 L29 15.5 L21 15.5 L21 29.5 L11 29.5 L11 15.5 L3 15.5 Z' fill='%23f6e3b8' stroke='%231f130a' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M16 6.5 L23 14' stroke='%235ef2ff' stroke-width='2' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E") 2 16, default; }
+#hot.edge-e { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(90 16 16)'%3E%3Cpath d='M16 2 L29 15.5 L21 15.5 L21 29.5 L11 29.5 L11 15.5 L3 15.5 Z' fill='%23f6e3b8' stroke='%231f130a' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M16 6.5 L23 14' stroke='%235ef2ff' stroke-width='2' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E") 30 16, default; }
 
 /* ---------- title ---------- */
 #title { top: 2.2%; bottom: auto; text-align: center; }

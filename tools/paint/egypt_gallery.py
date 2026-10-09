@@ -307,8 +307,9 @@ def line3(sheet, g, a, b, color, width=1.0, alpha=1.0, pieces=1, rng=None, gap=0
         sheet.line([p0, p1], color, width, alpha * k)
 
 
-def lamp(sheet, g, X, Y, Z, rng, lit=True):
-    """An oil lamp: a shallow dish of red clay with oil in it and a wick at the lip. (X, Y, Z) is where it stands."""
+def lamp(sheet, g, X, Y, Z, rng, lit=True, tongue=False):
+    """An oil lamp: a shallow dish of red clay with oil in it and a wick at the lip. (X, Y, Z) is where it stands.
+    Round four: a lit lamp's flame is drawn by the game, moving; `tongue=True` paints it in still, as approved."""
     k = F_ / Z
     cx, cy = PW(g, X, Y, Z)
     rx, ry = max(2.6, 10.5 * k), max(1.4, 4.4 * k)
@@ -318,15 +319,17 @@ def lamp(sheet, g, X, Y, Z, rng, lit=True):
     if lit:
         fx, fy = cx + rx * 0.62, cy - ry * 0.9
         fh = max(5.0, 16.0 * k)
-        sheet.poly([(fx - fh * 0.26, fy), (fx + fh * 0.26, fy), (fx + fh * 0.1, fy - fh * 0.62), (fx - fh * 0.05, fy - fh)], "#ffb23c")
-        sheet.poly([(fx - fh * 0.15, fy), (fx + fh * 0.15, fy), (fx, fy - fh * 0.66)], "#fff6c4")
+        if tongue:
+            sheet.poly([(fx - fh * 0.26, fy), (fx + fh * 0.26, fy), (fx + fh * 0.1, fy - fh * 0.62), (fx - fh * 0.05, fy - fh)], "#ffb23c")
+            sheet.poly([(fx - fh * 0.15, fy), (fx + fh * 0.15, fy), (fx, fy - fh * 0.66)], "#fff6c4")
         sheet.ellipse(cx + rx * 0.2, cy - ry * 0.8, rx * 0.4, ry * 0.3, "#f0b060", 0.8)   # the flame in the oil
     return cx, cy
 
 
-def stonework(pic, info, seed=5):
+def stonework(pic, info, seed=5, tongues=False):
     """Over the brushwork: the joints between the stones, a dark line at every hard edge and a light one
-    on every edge that faces a lamp, the laps of the walls, the slots in the benches, and the lamps."""
+    on every edge that faces a lamp, the laps of the walls, the slots in the benches, and the lamps.
+    (`tongues=True`: with the lamps' flames painted in still, as approved; round four leaves them to the game.)"""
     g = info["g"]
     sid, X, Y, Z, h = g["sid"], g["X"], g["Y"], g["Z"], g["h"]
     rng = np.random.default_rng(seed + 100)
@@ -429,10 +432,10 @@ def stonework(pic, info, seed=5):
         s.line([top[0], top[1]], "#f6dca6" if has else "#8a7460", 1.0, 0.7)             # the near rim
         if has:
             zc = (z0 + z1) / 2
-            flames.append(lamp(s, g, side * (x0 + x1) / 2, R(zc) + BENCH - deep + 2.5, zc - 4, rng) + (F_ / zc,))
+            flames.append(lamp(s, g, side * (x0 + x1) / 2, R(zc) + BENCH - deep + 2.5, zc - 4, rng, tongue=tongues) + (F_ / zc,))
     for (lx, ly, lz, pw, kind) in LAMPS:
         if kind in ("floor", "ledge"):
-            flames.append(lamp(s, g, lx, ly - 7.0, lz, rng) + (F_ / lz,))
+            flames.append(lamp(s, g, lx, ly - 7.0, lz, rng, tongue=tongues) + (F_ / lz,))
     px0, py0 = PW(g, -HALF - 52.0, 108.0, ZB)                                        # a peg in the passage wall, and rope hung on it
     kk = F_ / ZB
     s.line([(px0 - 3, py0), (px0 + 3.5, py0 - 1)], "#3a3040", 2.0)
@@ -448,7 +451,8 @@ def stonework(pic, info, seed=5):
     for (cx, cy, k) in flames:                                                           # the least bit of glow, right at the flame
         r = max(4.0, 17.0 * k)
         glow(pic, "#ffc070", mask_ellipse(SHAPE, cx + 6 * k, cy - 9 * k, r, r, soft=r * 0.55) * 0.7)
-        glow(pic, "#fff2c0", mask_ellipse(SHAPE, cx + 6.5 * k, cy - 10 * k, r * 0.3, r * 0.36, soft=1.0) * 0.9)
+        if tongues:                                                                      # (and its white heart: part of the flame, so the game draws it now)
+            glow(pic, "#fff2c0", mask_ellipse(SHAPE, cx + 6.5 * k, cy - 10 * k, r * 0.3, r * 0.36, soft=1.0) * 0.9)
     info["flames"] = flames
     return pic
 
@@ -621,7 +625,9 @@ def restate(pic, crisp, info):
 
 
 def flames(pic, info):
-    """Last of all, the flames themselves, small and sharp: white at the wick, yellow, an orange tip."""
+    """Last of all, the flames themselves, small and sharp: white at the wick, yellow, an orange tip. (As approved:
+    round four no longer paints them. A flame that never moves breaks the illusion; the game draws each one
+    flickering, at the wick, from layout.json "fx".)"""
     s = Sheet(SHAPE)
     for (cx, cy, k) in info.get("flames", []):
         rx, ry = max(2.6, 10.5 * k), max(1.4, 4.4 * k)
@@ -647,8 +653,9 @@ MIRROR_FOOT = (197.0, 687.0)                                 # X, Z of the middl
 MIRROR_TOP = (9.0, K.Y_STEP, Z_END)                          # on the lip of the tall step, a little right of the middle
 
 
-def cutouts(info, seed=5):
-    """-> {name: (color, alpha)}: the two mirrors, each where the story will put it, and the front plane."""
+def cutouts(info, seed=5, tongues=False):
+    """-> {name: (color, alpha)}: the two mirrors, each where the story will put it, and the front plane.
+    (`tongues=True`: the front plane's lamp with its flame painted in, as approved.)"""
     g = info["g"]
     out = {}
     s = Sheet(SHAPE)
@@ -660,22 +667,52 @@ def cutouts(info, seed=5):
     out["mirror-top"] = s.done()
     s = Sheet(SHAPE)
     T.front_left(s, P)
-    flame = T.front_right(s, P, lambda X, Y, Z: lamp(s, {"wob": (np.zeros(SHAPE, F32), np.zeros(SHAPE, F32))}, X, Y, Z, None))
+    flame = T.front_right(s, P, lambda X, Y, Z: lamp(s, {"wob": (np.zeros(SHAPE, F32), np.zeros(SHAPE, F32))}, X, Y, Z, None, tongue=tongues))
     c, a = s.done()
     c = c * (1 + (noise(SHAPE, 4, seed + 70, 2) - 0.5)[..., None] * 0.2)
     out["front"] = (np.clip(c, 0, 1), a)
+    out["front-flame"] = tuple(flame) + (F_ / 424.0,)                 # (where the front lamp is, as the slots' lamps are listed: x, y, size)
     return out
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02):
-    """Grain, then the limited palette. (As in the example, but the grain is scaled to the light: in a picture
-    this dark, full-strength grain would turn the shadows to snow.)"""
+def fx_marks(info, cuts):
+    """Round four: each lamp's flame, for the game to draw flickering (layout.json "fx"), in the engine's own terms
+    (js/engine/effects.js). The painting keeps the lamplight on the stone, the warm glow round each flame and the
+    flame's light in the oil; only the tongues (and their white hearts) are gone."""
+    out = []
+    lamps = [(f, False) for f in info.get("flames", [])] + [(cuts["front-flame"], True)]
+    for i, ((cx, cy, k), front) in enumerate(lamps):
+        rx, ry = max(2.6, 10.5 * k), max(1.4, 4.4 * k)
+        fx, fy = cx + rx * 0.62, cy - ry * 0.9                       # the wick, at the lip of the dish
+        fh = max(5.5, 17.0 * k)                                       # how tall the painted flame stood
+        out.append({"type": "flame", "id": f"lamp-{i + 1}", "at": [round(fx, 1), round(fy, 1)], "base": "front" if front else int(round(cy)),
+                    "size": round(fh, 1), "width": round(fh * 0.6, 1), "edge": "#f08a1c", "color": "#ffd45a", "glowOpacity": 0.12, "lean": round(-0.04 * fh, 1),
+                    "svg": [int(round(cx + 6.5 * k)), int(round(cy - 10 * k))], "pxPerCm": round(float(k), 2),
+                    "what": "an oil lamp's flame: a small tongue standing up from the wick at the dish's lip (orange outside, yellow, white at the wick). "
+                            "'at' is the wick; 'svg' the point the scene's SVG flicker uses today. The painting keeps a warm glow round it already, "
+                            "so the engine's own glow can be faint" + ("; this lamp is on the front plane (front.png): its flame is drawn over the cast" if front else "")})
+    return out
+
+
+def grained(picture, seed=7, amount=0.02):
     lum = (picture @ np.array([0.3, 0.55, 0.15], dtype=F32))[..., None]
     g = picture + (grain(picture, seed, amount) - picture) * np.clip(0.30 + 1.5 * lum, 0, 1)
-    g = np.clip(g, 0, 1)
-    sample_of = g if alpha is None else g[alpha > 0.5]
+    return np.clip(g, 0, 1)
+
+
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02, keep=None, keep_alpha=None):
+    """Grain, then the limited palette. (As in the example, but the grain is scaled to the light: in a picture
+    this dark, full-strength grain would turn the shadows to snow.) `keep` (round four) is the picture as approved,
+    with `keep_alpha` its mask if it is a cut-out: the palette is worked out from it exactly as before, every pixel
+    where `picture` is the same keeps its old index, and only the changed places are reduced again."""
+    g = grained(picture if keep is None else keep, seed, amount)
+    a = alpha if keep is None else (alpha if keep_alpha is None else keep_alpha)
+    sample_of = g if a is None else g[a > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
+    if keep is not None:
+        changed = np.abs(picture - keep).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grained(picture, seed, amount), pal, speckle=speckle), idx)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
 
@@ -735,6 +772,10 @@ def layout(info, cuts):
                  "mirror-top": [mt[0] + mt[2] // 2 - 2, mt[1] + mt[3] // 3], "door": [400, int((door[0][1] + door[2][1]) / 2)]},
         "lamps": [[int(round(cx + 6.5 * k)), int(round(cy - 10 * k)), round(float(k), 2)] for (cx, cy, k) in info.get("flames", [])] + [[int(round(v)) for v in P(198.0 + 6, BENCH + 12, 424.0)] + [1.18]],
         "lamps-note": "x, y of each flame and its size (pixels per cm there), for the game's flicker; the last is on the front plane.",
+        "fx": fx_marks(info, cuts),
+        "notes": ["round four: no flame is painted still any more. The tongues of all eight lamps, and the white heart of each, are gone (back.png and front.png); "
+                  "the lamplight on the stone, the warm glow round each flame and the flame's light in the oil are as they were. 'fx' gives each flame's wick ('at'), its height ('size'), and its depth; "
+                  "'svg' is the point the scene's SVG flicker uses today (the same as 'lamps')"],
     }
     return out
 
@@ -772,12 +813,18 @@ if __name__ == "__main__":
     along = np.arctan2(gy - K.VY, gx - K.VX).astype(F32)                 # brush marks run with the courses, toward the place the gallery runs to
     pic = base.copy() if fast else strokes(base, sizes=(9, 5, 2), seed=2, density=1.6, jitter=0.042, keep=0.32, flow=along)
     pic = restate(pic, base, info)
-    stonework(pic, info)
+    approved = pic.copy()                                                # as approved: the flames painted in still (for the palettes)
+    stonework(approved, info, tongues=True)
+    wear(approved, info)
+    things(approved, info)
+    approved = grade(approved)
+    flames(approved, info)
+    stonework(pic, info)                                                 # round four: no flame is painted; the game draws them moving
     wear(pic, info)
     things(pic, info)
     pic = grade(pic)
-    flames(pic, info)
     cuts = cutouts(info)
+    cuts0 = cutouts(info, tongues=True)
     whole = pic.copy()
     for name in ("mirror-foot", "mirror-top", "front"):
         over(whole, cuts[name][0], (cuts[name][1] > 0.5).astype(F32))
@@ -786,8 +833,8 @@ if __name__ == "__main__":
     print("painted", round(time.time() - t0, 1))
     if fast:
         sys.exit()
-    print("back", finish(pic, OUT + "/back.png", 160, speckle=0.008))
-    print("front", finish(cuts["front"][0], OUT + "/front.png", 64, cuts["front"][1]))
+    print("back", finish(pic, OUT + "/back.png", 160, speckle=0.008, keep=approved))
+    print("front", finish(cuts["front"][0], OUT + "/front.png", 64, cuts["front"][1], keep=cuts0["front"][0], keep_alpha=cuts0["front"][1]))
     print("mirror-foot", finish(cuts["mirror-foot"][0], OUT + "/mirror-foot.png", 40, cuts["mirror-foot"][1], speckle=0.006, amount=0.008))
     print("mirror-top", finish(cuts["mirror-top"][0], OUT + "/mirror-top.png", 32, cuts["mirror-top"][1], speckle=0.006, amount=0.008))
     with open(OUT + "/layout.json", "w") as f:

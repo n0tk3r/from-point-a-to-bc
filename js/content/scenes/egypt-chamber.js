@@ -14,8 +14,8 @@
 //
 // Two moments here are Dad's own. When the door opens he gives thanks (the last of his three prayers in the act).
 // And when he steps up to it, with the hole in time in front of him, he says Psalm 90:4, once: the psalm is headed
-// "A Prayer of Moses". If he has not heard the scribe's news he does not know whether Moses is long gone or not born
-// yet, and says so; if he has ("egypt.heardAbram"), he knows Moses is not born yet, and has the tenses worked out.
+// "A Prayer of Moses". If Lot has not told him who he is, he does not know whether Moses is long gone or not born yet,
+// and says so; if he has ("egypt.heardAbram"), he knows Moses is not born yet, and has the tenses worked out.
 // The card that closes the act: nearly nineteen hundred years later (1921 B.C. to 44 B.C. is 1,877 years).
 //
 // The door and every beam are light, so they are drawn live. Nothing of the door shows until it is opened.
@@ -47,7 +47,7 @@ const BEAM = [[98, 380], [104, 404], [502, 310], [498, 290]];         // the sof
 const CORE = [[100, 388], [102, 396], [501, 304], [499, 296]];        // its bright middle
 const FLASH_FAR = [[505, 397], [511, 399], [538, 361], [518, 351]];   // the flashlight's light, from his hand to the hole, where he first stands
 const FLASH_NEAR = [[521, 375], [527, 377], [537, 360], [520, 352]];  // and from a step nearer
-const LAMPS = [[160, 278, 0.8], [371, 283, 0.8], [256, 429, 0.9], [706, 374, 0.8], [775, 448, 1], [58, 494, 1]];   // each flame, and how big things are there
+// (The lamps' flames were drawn here as soft ellipses until round four; they are the engine's `flame` now: see `fx`.)
 const points = (shape) => shape.map((p) => p.join(",")).join(" ");
 /** Show or hide a part of the light at once (setup), or bring it up over a moment (scripts). */
 const lit = (g, id, on) => { const el = g.q("#" + id); if (el) el.setAttribute("opacity", on ? 1 : 0); };
@@ -185,7 +185,7 @@ async function sunrise(g) {
 async function useDoor(g) {
   if (g.flag("egypt.ready")) return g.say("egypt.hole.wait");
   // The hole in time is in front of him: Psalm 90:4, once. What he makes of "A Prayer of Moses" depends on whether
-  // the scribe's news has told him when he is.
+  // Lot, by the river, has told him when he is.
   const knows = !!g.flag("egypt.heardAbram");
   await g.say("egypt.gate.psalm.1", "egypt.gate.psalm.2", knows ? "egypt.gate.psalm.3b" : "egypt.gate.psalm.3", knows ? "egypt.gate.psalm.4b" : "egypt.gate.psalm.4");
   await g.say("egypt.hole.go");
@@ -217,6 +217,10 @@ export default {
     fromGallery: [150, 484],        // in at the low doorway on the left
   },
   exits: ["egypt-gallery", "rome-steps"],
+  // The left of the picture is the way back through the low doorway in the left wall, to the gallery.
+  edges: {
+    W: { to: "egypt-gallery", spawn: "fromChamber", name: "back to the gallery", walkTo: [106, 468] },
+  },
 
   picture: art + "back.png",
 
@@ -230,12 +234,8 @@ export default {
   // Everything here is light. The sunbeam, the flashlight and the door all start hidden: dress() shows what the
   // facts say, and the scripts above play the moments in between. Nothing of the door is drawn until it is opened.
   live(kit) {
-    const flame = ([x, y, k], n) => `<ellipse cx="${x}" cy="${y - 2 * k}" rx="${9 * k}" ry="${11 * k}" fill="#ffc266" opacity="0.5" filter="url(#lamp-soft)"/>` +
-      `<ellipse class="flicker" cx="${x}" cy="${y - 3 * k}" rx="${5 * k}" ry="${7 * k}" fill="#ffe9b0" opacity="0.8" filter="url(#lamp-soft)" style="animation-delay:${-0.41 * n}s"/>`;
     return `<defs><filter id="sun-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
-        <filter id="sun-edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter>
-        <filter id="lamp-soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="2.5"/></filter></defs>
-      <g shape-rendering="geometricPrecision">${LAMPS.map(flame).join("")}</g>
+        <filter id="sun-edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
       <g id="beam" opacity="0" shape-rendering="geometricPrecision">
         <polygon points="${points(BEAM)}" fill="#ffe7a0" opacity="0.3" filter="url(#sun-soft)"/>
         <polygon points="${points(CORE)}" fill="#fff4c8" opacity="0.55" filter="url(#sun-edge)"/>
@@ -248,27 +248,52 @@ export default {
       <g id="door" style="display:none">${kit.portal(DOOR[0], DOOR[1], DOOR[2], "hole")}</g>`;
   },
 
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). The six lamps' painted flames and their six
+  // threads of smoke are gone (the bright air round each flame, the lamplight, the oil full of light and the brazier's
+  // painted coals stay), and the engine draws them: each flame on its wick, at its lamp's depth (lamp C on the bench, E at
+  // the right edge on the front plane), a thread of smoke rising from each in the still air, and the coals breathing.
+  fx: [
+    // [id, at x, at y, base, size, width; where the smoke starts, how high it goes, where its top ends up]
+    ...[["A", 162.3, 282.2, 406, 8.9, 3.9, [159.8, 271.5], 47, -0.6], ["B", 373.7, 287.5, 404, 8.9, 3.9, [371.2, 276.8], 72, 5.4], ["F", 60, 499.3, 504, 10.3, 4.6, [57.9, 488], 70, 4.8],
+      ["D", 708.2, 381.3, 467, 9.8, 4.3, [706.3, 367.7], 48, -2.8], ["C", 259.1, 436.2, 512, 10.3, 4.6, [256.4, 423.2], 51, 2.6], ["E", 779.5, 453.3, "front", 11.9, 5.2, [775.2, 442.1], 55, 5]]
+      .flatMap(([n, x, y, base, size, width, from, high, drift]) => [
+        { id: `lamp-${n}`, type: "flame", at: [x, y], base, size, width, edge: "#ffa436", color: "#ffe488", glowOpacity: 0.12 },
+        { id: `lamp-${n}-smoke`, type: "smoke", at: from, base, color: "#d8c0b8", opacity: 0.15, height: high, width: [0.8, 3.4], lean: [drift, -high], rate: 3 },
+      ]),
+    // the goldsmith's brazier on his bench: the coals breathe over the painted ones, and now and then a spark goes up
+    { id: "brazier", type: "embers", at: [371.1, 482.9], base: 512, size: [11.7, 5.5], color: "#ffb847", cool: "#5a1408", glowColor: "#ff6a2a", glowOpacity: 0.18, sparks: 0.15 },
+  ],
+
   actors: [
-    { id: "goldsmith", kind: "goldsmith", at: [330, 494], face: "SE" },       // on his stool, behind the bench
+    // On his stool, behind the bench. Now and then he gets up from his work (the stool stays where it is) and shuffles a
+    // few steps along behind his bench, the bench between him and us: to his brazier, to look into the fire, or to the
+    // other end, by the lamp and his jug; and back to his stool. His mark is at the bench's back edge, off the floor:
+    // he walks straight along there and back. (Places on the floor behind him would bring him home a few pixels short
+    // of his stool, which stands just inside the margin the engine keeps round the bench.)
+    { id: "goldsmith", kind: "goldsmith", at: [330, 494], face: "SE",
+      life: { every: [22, 42], spots: [[372, 497, "S"], [276, 497, "SW"]], stay: [3, 7] } },
   ],
 
   setup: dress,
 
-  // The far things first: an area lower in this list lies over the ones above it.
+  // The far things first: an area lower in this list lies over the ones above it. Each shape follows its thing's own
+  // edge, within a few pixels: the back wall round the things in front of it, the king's things round their tops, and
+  // the place that hums the shape of the door it will be. The bench (with the brazier) and the copper mirror are
+  // cut-outs, and the goldsmith a person (only as much of him as shows over his bench): Show outlines their silhouettes.
   hotspots: [
-    { id: "walls", name: "granite walls", rect: [140, 20, 620, 166], look: twice("egypt.chamber.walls.look", "egypt.chamber.walls.look2") },
+    { id: "walls", name: "granite walls", poly: [[150, 48], [752, 48], [752, 332], [588, 332], [586, 383], [554, 383], [548, 460], [456, 460], [455, 350], [450, 338], [420, 338], [415, 350], [378, 355], [377, 285], [367, 285], [365, 345], [335, 340], [330, 338], [305, 338], [300, 345], [232, 345], [230, 295], [215, 295], [210, 188], [165, 190], [160, 280], [150, 280]], look: twice("egypt.chamber.walls.look", "egypt.chamber.walls.look2") },
     {
       id: "doorway", name: "doorway", verb: "Go through", poly: [[135, 330], [135, 413], [67, 469], [67, 369]], walkTo: [106, 468], face: "W",
       look: "egypt.chamber.door.look", use: (g) => g.goto("egypt-gallery", { spawn: "fromChamber" }),
     },
-    { id: "treasure", name: "the king's furniture", verb: "Touch", rect: [138, 186, 322, 282], walkTo: [392, 478], face: "N", look: twice("egypt.chamber.treasure.look", "egypt.chamber.treasure.look2"), use: "egypt.chamber.treasure.use" },
-    { id: "lid", name: "sarcophagus lid", rect: [588, 328, 164, 56], walkTo: [700, 532], face: "N", look: "egypt.chamber.lid.look" },
+    { id: "treasure", name: "the king's furniture", verb: "Touch", poly: [[128, 447], [136, 425], [137, 375], [152, 368], [154, 272], [166, 272], [168, 365], [172, 190], [208, 190], [208, 296], [230, 296], [232, 346], [306, 346], [308, 338], [336, 338], [338, 352], [364, 352], [365, 279], [377, 279], [378, 355], [414, 343], [457, 341], [461, 390], [471, 414], [471, 450], [408, 456], [345, 451], [240, 447]], walkTo: [392, 478], face: "N", look: twice("egypt.chamber.treasure.look", "egypt.chamber.treasure.look2"), use: "egypt.chamber.treasure.use" },
+    { id: "lid", name: "sarcophagus lid", poly: [[588, 331], [751, 331], [751, 384], [588, 384]], walkTo: [700, 532], face: "N", look: "egypt.chamber.lid.look" },
     {
       id: "sarcophagus", name: "sarcophagus", verb: "Climb into", poly: [[560, 500], [746, 500], [746, 415], [731, 383], [554, 383], [560, 415]], walkTo: [650, 532], face: "N",
       look: twice("egypt.chamber.sarc.look", "egypt.chamber.sarc.look2"), use: "egypt.chamber.sarc.use",
     },
     {
-      id: "hum", name: "wall that hums", verb: "Touch", rect: [462, 236, 80, 164], walkTo: [452, 506], face: "NE", when: (g) => !g.flag("egypt.doorOpen"),
+      id: "hum", name: "wall that hums", verb: "Touch", poly: [[546, 338], [540, 386], [523, 421], [500, 434], [477, 421], [460, 386], [454, 338], [460, 290], [477, 255], [500, 242], [523, 255], [540, 290]], walkTo: [452, 506], face: "NE", when: (g) => !g.flag("egypt.doorOpen"),      // the door it will be
       look: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.hum.look2" : "egypt.hum.look"),
       use: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.hum.use2" : "egypt.hum.use"),
       useWith: { flashlight: shine, carmirror: "egypt.hum.mirror", coppermirror: "egypt.hum.mirror", shade: "egypt.hum.shade", chicken: "egypt.chicken.hum" },
@@ -279,10 +304,10 @@ export default {
       look: "egypt.hole.big", use: useDoor,
       useWith: { flashlight: "egypt.flash.dead" },
     },
-    { id: "bench", name: "goldsmith's bench", rect: [192, 426, 162, 96], walkTo: [300, 528], face: "N", look: "egypt.chamber.bench.look" },
-    { id: "brazier", name: "brazier", rect: [356, 478, 54, 38], walkTo: [434, 524], face: "W", look: "egypt.chamber.brazier.look" },
+    { id: "bench", name: "goldsmith's bench", plane: "bench", poly: [[189, 517], [212, 516], [223, 505], [239, 509], [249, 485], [255, 490], [257, 512], [268, 507], [331, 507], [342, 512], [353, 463], [345, 456], [324, 460], [313, 436], [302, 439], [294, 456], [265, 457], [260, 453], [264, 434], [259, 424], [250, 434], [254, 462], [244, 481], [237, 474], [228, 475], [223, 500], [195, 505]], walkTo: [300, 528], face: "N", look: "egypt.chamber.bench.look" },      // the bench and what is on it, his jug and his dinner
+    { id: "brazier", name: "brazier", plane: "bench", poly: [[356, 480], [356, 486], [364, 496], [361, 508], [367, 511], [382, 508], [392, 514], [401, 514], [407, 509], [409, 494], [401, 490], [389, 489], [383, 478], [377, 475], [364, 475]], walkTo: [434, 524], face: "W", look: "egypt.chamber.brazier.look" },      // the brazier, and his basket of charcoal
     {
-      id: "goldsmith", name: "goldsmith", verb: "Talk to", rect: [302, 384, 60, 80], walkTo: [434, 524], face: "NW",
+      id: "goldsmith", name: "goldsmith", verb: "Talk to", poly: [[333, 403], [325, 409], [327, 424], [319, 432], [316, 443], [317, 464], [327, 466], [342, 462], [361, 481], [369, 477], [368, 459], [343, 425], [346, 420], [344, 408]], walkTo: [434, 524], face: "NW",      // as much of him as shows over his bench
       look: (g) => g.say(g.flag("egypt.hasCopper") ? "egypt.goldsmith.look2" : "egypt.goldsmith.look"), use: talkToGoldsmith,
       useWith: {
         sunglasses: trade, rootbeer: "egypt.goldsmith.rootbeer", pass: "egypt.goldsmith.pass", carmirror: "egypt.goldsmith.carmirror", coppermirror: "egypt.goldsmith.copper",
@@ -291,7 +316,7 @@ export default {
       },
     },
     {
-      id: "mirror", name: "copper mirror", verb: "Borrow", rect: [289, 440, 29, 40], walkTo: [304, 528], face: "N", when: (g) => !g.flag("egypt.hasCopper"),
+      id: "mirror", name: "copper mirror", verb: "Borrow", plane: "mirror", poly: [[308, 441], [299, 441], [290, 449], [290, 458], [298, 466], [298, 474], [300, 475], [304, 474], [305, 467], [313, 463], [318, 455], [315, 445]], walkTo: [304, 528], face: "N", when: (g) => !g.flag("egypt.hasCopper"),
       look: "egypt.chamber.mirror.look", use: ["egypt.chamber.mirror.use", "egypt.goldsmith.mirror.no"],
     },
   ],

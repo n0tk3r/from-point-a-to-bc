@@ -328,8 +328,12 @@ def lay(pic, draw, at, yaw=0.0, lift=0.0, fast=False, seed=4, sizes=(5, 3, 2), k
     return pa
 
 
-def details(pic, info, seed=SEED, fast=False):
-    """The crisp things, over the brushwork."""
+BIRDS = [(486, 150, 5.0), (702, 60, 3.6)]                    # two birds high over the desert (round four: the game flies them)
+
+
+def details(pic, info, seed=SEED, fast=False, as_approved=False):
+    """The crisp things, over the brushwork. Round four: the two birds in the sky are no longer painted still (the game
+    flies them); `as_approved=True` paints them in as the picture was approved, to work out its palette."""
     shape = (H, W)
     x, y = grid(shape)
     rng = np.random.default_rng(seed + 77)
@@ -390,7 +394,7 @@ def details(pic, info, seed=SEED, fast=False):
     l0, r0, k0 = tops[0]
     for p0, drop in ((l0, 90), (r0, 60)):                                             # and run off the edge toward us
         poles.line(curve([p0, ((p0[0] - 10) / 2, p0[1] - 8 + drop * k0), (-12, p0[1] - 50)], 6), "#4a4458", 0.45, 0.7)
-    for (bx, by, bw) in ((486, 150, 5.0), (702, 60, 3.6)):
+    for (bx, by, bw) in (BIRDS if as_approved else ()):
         poles.line([(bx - bw, by - bw * 0.35), (bx - bw * 0.3, by - bw * 0.05), (bx, by + bw * 0.25), (bx + bw * 0.4, by - bw * 0.15), (bx + bw * 1.1, by - bw * 0.5)], "#2e3a5c", 0.9, 0.85)
     poles.onto(pic)
 
@@ -656,11 +660,17 @@ def front_plane(back, fast=False, seed=SEED):
     return c0, np.maximum(a0, a1)
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02):
-    g = grain(picture, seed, amount)
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02, keep=None):
+    """Grain, then the limited palette. `keep` (round four) is the picture as approved: the palette is worked out from
+    it exactly as before, every pixel where `picture` is the same keeps its old index, and only the changed places are
+    reduced again (with that palette)."""
+    g = grain(picture if keep is None else keep, seed, amount)
     sample_of = g if alpha is None else g[alpha > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
+    if keep is not None:
+        changed = np.abs(picture - keep).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
 
@@ -668,6 +678,25 @@ def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=
 def box_of(alpha, pad=0):
     ys, xs = np.where(alpha > 0.5)
     return [int(xs.min()) - pad, int(ys.min()) - pad, int(xs.max() - xs.min()) + 1 + 2 * pad, int(ys.max() - ys.min()) + 1 + 2 * pad]
+
+
+def fx_marks():
+    """Round four: what moves by nature here, for the game to draw moving (layout.json "fx"), in the engine's own terms
+    (js/engine/effects.js)."""
+    shack = Solid(None, P.SHACK_AT, P.SHACK_YAW)
+    pipe = shack.pt(316, 356, 190)                                    # under the stovepipe's cap
+    foot = shack.pt(0, 0, 0)                                          # the shack's front left corner, on the ground
+    return [
+        {"type": "birds", "kind": "flyers", "id": "birds", "lanes": [[[-20, 168], [820, 128]], [[820, 54], [-20, 92]], [[-20, 112], [820, 70]]],
+         "every": [25, 55], "group": [1, 2], "speed": 34, "color": "#2e3a5c", "size": [7, 10],
+         "frames": {"glide": "bird-0.png", "flap": ["bird-1.png", "bird-0.png", "bird-2.png", "bird-0.png"], "bank": "bird-3.png", "middle": [7.0, 5.5]},
+         "what": "two big dark birds (ravens, or a hawk) high over the desert, crossing slowly now and then: a long glide, a few slow beats. The painting "
+                 "had them still at [486, 150] and [702, 60], 7 and 10 px across. No base: they are behind everything"},
+        {"type": "smoke", "id": "stovepipe", "at": [round(pipe[0], 1), round(pipe[1], 1)], "base": int(round(foot[1])),
+         "color": "#e6e2ea", "opacity": 0.30, "height": 46, "width": [1.5, 7], "lean": [4, -46], "rate": 2, "new": True,
+         "what": "NEW (nothing was painted here): the old-timer has his coffee on, so a thin thread of woodsmoke from the stovepipe on the shack's roof. "
+                 "There is no wind this morning (the painting's own note: the wind sock hangs slack), so it rises nearly straight and spreads at the top"},
+    ]
 
 
 def layout(planes, info):
@@ -723,6 +752,10 @@ def layout(planes, info):
         "fence_side": {"poly": fence_a, "what": "the whole of the fence's near side, to the right edge"},
         "tracks_run": [r(gp(*TRACK[0])), r(gp(*TRACK[1])), r(gp(*TRACK[2])), r(gp(*TRACK[3]))],
         "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here.",
+        "fx": fx_marks(),
+        "fx_note": "round four: the two birds that were painted still in the sky are gone from back.png (every other pixel is as it was); 'fx' flies them, and adds "
+                   "a thread of smoke from the stovepipe (new). Left still on purpose: the wind sock, the umbrella, the hanging GAS sign and the tumbleweed in the "
+                   "fence: there is no wind this morning, and the wind sock hangs slack to say so.",
     }
     return out
 
@@ -782,6 +815,8 @@ if __name__ == "__main__":
     print("under", round(time.time() - t0, 1))
     pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
     print("brushed", round(time.time() - t0, 1))
+    approved = pic.copy()
+    details(approved, info, fast=fast, as_approved=True)              # as approved, with the birds painted in: for the palette
     details(pic, info, fast=fast)
     print("details", round(time.time() - t0, 1))
     planes = {}
@@ -801,7 +836,7 @@ if __name__ == "__main__":
     print("painted", round(time.time() - t0, 1))
     if fast:
         sys.exit()
-    print("back", finish(pic, OUT + "/back.png", 152))
+    print("back", finish(pic, OUT + "/back.png", 152, keep=approved))
     print("pump", finish(planes["pump"][0], OUT + "/pump.png", 48, planes["pump"][1]))
     print("stand", finish(planes["stand"][0], OUT + "/stand.png", 80, planes["stand"][1]))
     print("car", finish(planes["car"][0], OUT + "/car.png", 64, planes["car"][1]))

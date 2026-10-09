@@ -253,6 +253,28 @@ def paint(crisp, seed=2, keep=None):
     return np.clip(out + 0.45 * (out - blur(out, 0.9)), 0, 1)             # and the whole a little sharper, as a small brush leaves it
 
 
+def paint_keeping(crisp, crisp0, seed=2, keep=None, near=4 / 255, pad=10):
+    """paint() for a picture changed in one small place since it was approved (round four: the fountain's water).
+    brush.strokes draws its random numbers as it meets the picture, so a change anywhere would move every stroke after
+    it: here the strokes are laid once, over the picture as approved, and kept everywhere; only round the change is the
+    brush laid again, over a small patch, and feathered in. So all the brushwork away from it is exactly as approved."""
+    b = strokes(crisp0, sizes=(8, 4, 2), seed=seed, density=1.5, jitter=0.036, keep=0.24)
+    diff = np.abs(crisp - crisp0).max(axis=2) > near
+    if diff.any():
+        ys, xs = np.nonzero(diff)
+        y0, y1, x0, x1 = max(ys.min() - pad, 0), min(ys.max() + pad + 1, H), max(xs.min() - pad, 0), min(xs.max() + pad + 1, W)
+        local = strokes(crisp[y0:y1, x0:x1], sizes=(8, 4, 2), seed=seed, density=1.5, jitter=0.036, keep=0.24)
+        m = np.clip(blur(diff.astype(F32), 2.5) * 3.0, 0, 1)[y0:y1, x0:x1, None]
+        b[y0:y1, x0:x1] = lerp(b[y0:y1, x0:x1], local, m)
+    hf = np.abs(crisp - blur(crisp, 1.4)).sum(axis=2)                 # (and the rest exactly as paint() does it)
+    w = np.clip(hf * 7.5 - 0.05, 0, 1)
+    w = np.maximum(w, blur(w, 0.7))
+    if keep is not None:
+        w = np.maximum(w, keep)
+    out = lerp(b, crisp, (0.12 + 0.86 * w)[..., None])
+    return np.clip(out + 0.45 * (out - blur(out, 0.9)), 0, 1)
+
+
 def maps_of(st):
     """What the details pass needs to know about each pixel: how far away it is, how much it faces up, what it is."""
     return wob(st.pick(np.minimum(st.t, 5000.0))), wob(st.pick(st.N[..., 1])), wob_near(st.pick(st.oid)), st
@@ -357,13 +379,61 @@ def palette_for(px, colors, seed=3, rounds=12):
     return np.concatenate([c1, c2]).astype(F32)
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.006, amount=0.009):
-    g = grain(picture, seed, amount)
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.006, amount=0.009, keep=None):
+    """Grain, then the palette. `keep` (round four) is the picture as approved: the palette is worked out from it exactly
+    as before, every pixel where `picture` is the same keeps its old index, and only the changed places are reduced
+    again (with that palette)."""
+    g = grain(picture if keep is None else keep, seed, amount)
     sample_of = g if alpha is None else g[alpha > 0.5]
     pal = palette_for(sample_of, colors)
     idx = to_palette(g, pal, speckle=speckle)
+    if keep is not None:
+        changed = np.abs(picture - keep).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
+
+
+def fx_marks():
+    """Round four: what moves by nature in the Retreat, for the game to draw moving (layout.json "fx"), in the engine's own
+    terms (js/engine/effects.js). Every point is where the room's camera sees the thing (as the painting was made)."""
+    r1 = lambda v: round(float(v), 1)
+    pt = lambda X, Y, Z: [r1(c) for c in V.pt(X, Y, Z)]
+    fl = lambda X, Z: int(round(V.pt(X, 0, Z)[1]))                      # the floor row under a place: its depth
+    out = []
+    candles = [(f"ledge-{i + 1}", (x, M.LEDGE[3] + 7.0, 6.5), fl(x, 11)) for i, x in enumerate(M.CANDLES)]
+    x0, x1, _, y1, z0, z1 = M.BOOKCASE
+    candles += [("bookcase-1", (x0 + 20, y1 + 8.5, 12), fl(x0 + 20, z1)), ("bookcase-2", (x0 + 142, y1 + 6.5, 15), fl(x0 + 142, z1))]
+    sx0, sx1, sy0, sy1, sz0, sz1 = M.BEDSHELF
+    candles += [("bedshelf-1", (sx0 - 1, sy1 + 8.5, sz0 + 14), fl(sx0 - 6, sz0 + 14)), ("bedshelf-2", (sx0 - 1.5, sy1 + 6.2, sz0 + 30), fl(sx0 - 6, sz0 + 30))]
+    candles += [(f"foot-{i + 1}", (lx, 1.6 + 10 - 2 * i, lz), fl(lx, lz + 8.5 - 1.5 * i)) for i, (lx, lz) in enumerate(M.FOOTLAMPS)]
+    candles += [("floor", (M.FLOORCANDLE[0], 1.2 + 15, M.FLOORCANDLE[1]), fl(M.FLOORCANDLE[0], M.FLOORCANDLE[1] + 6.2))]
+    veil = [[643, 190], [580, 335], [700, 335]]                             # the gauze over the bed, between us and the ledge's last candle
+    for name, (X, Y, Z), base in candles:
+        k = V.scale_at(X, Z)                                              # pixels to a centimetre there
+        out.append({"type": "flame", "id": f"candle-{name}", "at": pt(X, Y, Z), "base": base, "size": r1(max(2.0, 2.6 * k)), "width": r1(max(1.2, 1.2 * k)),
+                    "color": "#fff2c8", "edge": "#ffb45a", "glow": r1(9 * k), "glowColor": "#ffb070", "glowOpacity": 0.10, "flicker": 0.35,
+                    **({"behind": [veil], "behindOpacity": 0.45} if name == "ledge-6" else {}),
+                    "what": "a flameless candle in glass (as the painting has it: the wax glows from inside, and the little light in its top is its "
+                            "'flame'). What moves is that little light, a gentle flicker; the glow round it is painted. 'at' is the top of the wax"
+                            + ("; this one stands behind the gauze over the bed ('behind': the veil, which lets about half of it through)" if name == "ledge-6" else "")})
+    fx_, fz_, fr = M.FOUNTAIN
+    ty = M.SOUNDTABLE[3]
+    table = fl(fx_, M.SOUNDTABLE[5])
+    path = [pt(*p) for p in T.SPOUT_WATER(fx_, ty, fz_)]
+    out.append({"type": "stream", "id": "fountain", "path": path, "base": table, "width": [0.8, 1.2], "color": "#d6e8f2", "light": "#ffffff",
+                "opacity": 0.75, "speed": 26, "splash": 1.5,
+                "what": "the little fountain on the sound table: a thread of water from the bamboo spout down onto the stones in its bowl (a brook "
+                        "that, tonight, sounds like a clock). It runs all the time"})
+    out.append({"type": "ripples", "id": "fountain-pool", "at": pt(fx_ - 1.5, ty + 10, fz_ + 1), "base": table, "radius": [1.0, round(fr * 0.62 * V.scale_at(fx_, fz_), 1)],
+                "flat": 0.42, "every": [0.5, 1.1], "rings": 2, "speed": 7, "color": "#cfe4f4", "trough": "#2c4a58", "opacity": 0.45,
+                "what": "rings on the bowl's little pool where the water comes off the stones: raised water, so it has a base (the sound table's front)"})
+    dx, dz, dr, dh = M.STUMP2
+    out.append({"type": "smoke", "id": "diffuser-mist", "at": pt(dx, dh + 21.5, dz), "base": fl(dx, dz + dr), "color": "#f6f2f0", "opacity": 0.16,
+                "height": 34, "width": [2, 14], "lean": [5, -34], "rate": 2.5, "new": True,
+                "what": "NEW (it was never painted): the diffuser on its little stump, far left, breathing out a soft white mist that rises, spreads and "
+                        "fades. The layout's lights.mist [152, 369] meant the same place"})
+    return out
 
 
 def cover(st, grp=None, name=None):
@@ -380,6 +450,15 @@ def whole(pic, st):
     crisp = grade(wob(np.clip(pic + halo(st), 0, 1)))
     maps = maps_of(st)
     return glints(details(paint(crisp, 2, keep_mask(st)), maps), maps)
+
+
+def whole_keeping(pic, st, pic0, st0):
+    """whole() for an under-painting changed in one small place since `pic0` was approved: the brushwork is the approved
+    picture's everywhere but round the change (paint_keeping)."""
+    crisp0 = grade(wob(np.clip(pic0 + halo(st0), 0, 1)))
+    crisp = grade(wob(np.clip(pic + halo(st), 0, 1)))
+    maps = maps_of(st)
+    return glints(details(paint_keeping(crisp, crisp0, 2, keep_mask(st)), maps), maps)
 
 
 if __name__ == "__main__":
@@ -402,28 +481,38 @@ if __name__ == "__main__":
         sys.exit()
 
     SS = 2
-    # ---- everything in the room (the cut-outs are taken from this one)
+    # ---- everything in the room (the cut-outs are taken from this one): as approved, the fountain's water painted in
+    T.FLOWING = True
     A, stA = render(ss=SS, fast=False)
     to_image(A).save("out/home-bigsis-room-1-under.png")
     print("all", round(time.time() - t0, 1))
-    # ---- the room with the desk and the foreground taken away (their shadows stay)
+    # ---- the room with the desk and the foreground taken away (their shadows stay): as approved (for its palette) ...
+    B0, stB0 = render(ss=SS, fast=False, skip=("desk", "front"), occ=stA.occ)
+    print("back as approved", round(time.time() - t0, 1))
+    # ... and as it is now: round four leaves the fountain's running water and the rings on its pool to the game
+    T.FLOWING = False
     B, stB = render(ss=SS, fast=False, skip=("desk", "front"), occ=stA.occ)
     print("back", round(time.time() - t0, 1))
     pA = whole(A, stA)
-    pB = whole(B, stB)
+    pB0 = whole(B0, stB0)
+    pB = whole_keeping(B, stB, B0, stB0)
     print("painted", round(time.time() - t0, 1))
     a_desk = wob(cover(stA, grp="desk"))
     a_front = wob(np.clip(cover(stA, grp="front") + cover(stA, name="well"), 0, 1))   # (the cut-out is whole over the hatch's opening)
     to_image(pA).save("out/home-bigsis-room-2-all.png")
     tones(pA, "tones:")
     sizes = {}
-    sizes["back"] = finish(pB, f"{OUT}/back.png", 160)
+    sizes["back"] = finish(pB, f"{OUT}/back.png", 160, keep=pB0)
     sizes["desk"] = finish(pA, f"{OUT}/desk.png", 64, a_desk)
     sizes["front"] = finish(pA, f"{OUT}/front.png", 96, a_front)
     print("cut-outs", round(time.time() - t0, 1), sizes)
 
     import home_bigsis_room_layout
-    home_bigsis_room_layout.write(stA, stB, a_desk, a_front, wob)
+    L = home_bigsis_room_layout.write(stA, stB, a_desk, a_front, wob)
+    L["fx"] = fx_marks()                                                   # round four: what moves by nature
+    L["fx_note"] = ("round four: the fountain's thread of running water and the rings on its pool are gone from back.png (every other pixel is "
+                    "as it was); 'fx' runs them, flickers the little light of each flameless candle, and adds the diffuser's mist")
+    json.dump(L, open(f"{OUT}/layout.json", "w"), indent=1)
     import subprocess
     subprocess.run([sys.executable, "comp.py", OUT, "back", "desk", "front"])
     subprocess.run([sys.executable, "home_bigsis_room_people.py"])     # the game's own figures in the room (needs the game's server)

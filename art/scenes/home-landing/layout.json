@@ -94,7 +94,7 @@
  "things": [
   {
    "id": "son",
-   "what": "the Son's door: his notices, his KEEP OUT sign, the toy alarm by the handle (it stays shut)",
+   "what": "the Son's door: his notices, his home-made sign NO GIRLS ALLOWED (it said KEEP OUT), the toy alarm by the handle (it stays shut); his booby trap over it (`trap`)",
    "shape": {
     "poly": [
      [
@@ -120,7 +120,44 @@
     265
    ],
    "face": "N",
-   "grownup_px": 111
+   "grownup_px": 111,
+   "trap": {
+    "from": [
+     444,
+     134
+    ],
+    "gap": [
+     [
+      425,
+      134
+     ],
+     [
+      464,
+      134
+     ]
+    ],
+    "land": {
+     "poly": [
+      [
+       393,
+       262
+      ],
+      [
+       442,
+       271
+      ],
+      [
+       420,
+       278
+      ],
+      [
+       370,
+       268
+      ]
+     ]
+    },
+    "what": "his booby trap: a volley of foam darts comes out of the gap over his door (`from`, the middle of the door's top edge; `gap`, its two ends) and lands on the runner in front of it (`land`: the runner's outer half, in front of a sister standing at his door; seen between the balusters of the rail plane). The game draws the darts."
+   }
   },
   {
    "id": "lilsis",
@@ -772,7 +809,7 @@
  "notes": [
   "The rail plane is drawn over everybody: people are seen through its balusters from the knee down.",
   "Below the landing's edge everything is the living room, 285 cm lower: nobody walks there in this picture.",
-  "Not painted (the game lights them): the lamp of the Son's toy alarm (beside his door handle).",
+  "Not painted (the game lights them): the lamp of the Son's toy alarm (beside his door handle: painted dark at [458, 191], at the right of the alarm box under its little window).",
   "The attic ladder (ladder.png) stands with its feet just in front of the study door's left edge. People pass it in front (between it and the rail) and stand behind it under its high end, at the hall table. Its blocked ground reaches back to the wall: there is no way past behind its feet (the floor here is about 30 px deep, and the game keeps people 5 px clear of blocked ground above and below)."
  ]
 }

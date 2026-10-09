@@ -3,9 +3,10 @@
 // when he looks at a thing in his pockets.
 //   "line.id": ["who", "What they say."]
 //
-// Speakers: dad, and the nine Egyptians (carrier, scribe, overseer, hauler1, hauler2, hauler3, guard, lampboy,
-// goldsmith). These rules hold all through, and briefs/out/check-egypt.mjs holds the lines to them:
-//   - Dad shortens his words, and the Egyptians never do.
+// Speakers: dad; Lot, Abram's nephew, by the river (lot); and the eight Egyptians (scribe, overseer, hauler1,
+// hauler2, hauler3, guard, lampboy, goldsmith). These rules hold all through, and briefs/out/check-egypt.mjs holds
+// the lines to them:
+//   - Dad shortens his words, and the people of the time never do.
 //   - Dad never raises his voice: there is not one exclamation mark in his lines.
 //   - An Egyptian says only what is true of the time (docs/PUZZLES-egypt.md has the list, and what has been
 //     checked). Dad may guess wrong out loud, and is put right.
@@ -13,17 +14,22 @@
 //     arrival, the dark doorway, the open door) and no more. When he quotes Scripture it is the King James Version,
 //     word for word, with the reference said (the check holds each quotation to the checked text in
 //     briefs/out/facts-home.json); anything else from the Bible he tells in his own words, with the reference, and
-//     no quotation marks. Nobody of the time speaks of Israel, Joseph or Moses, or of anybody's God, and nobody's
-//     belief is anybody's joke.
+//     no quotation marks. No Egyptian speaks of Israel, Joseph or Moses, or of anybody's God, and nobody's belief
+//     is anybody's joke.
 //   - Years: only the Bible's own count (briefs/DATING.md). From here to the present is "nearly four thousand
 //     years"; from here to Rome, "nearly nineteen hundred". Nobody uses the textbook figures, or millions of years.
-//   - Abram is in Egypt this week (Genesis 12:10-20). The scribe has the palace gossip, as an Egyptian would tell
-//     it, with no idea whom he is talking about. Until Dad has heard it he does not know WHEN he is, and only wonders;
-//     after it ("egypt.heardAbram") he knows: what he says at the river, the reeds and the open door follows.
-//     Nobody meets Abram or Sarai, and Dad passes no judgment on anybody in the story.
+//   - Abram is in Egypt this week (Genesis 12:10-20), and the man praying under the palm by the river, while his
+//     donkey drinks, is his nephew Lot (Genesis 13:1: "and Lot with him"). Lot tells who he is as his own memory, in
+//     his own words, and only what Genesis 11:27 to 13:5 tells: never quoted, no reference, nothing of what is still
+//     to come to him, and no judgment of anybody, his uncle least of all. He prays; he is the one person of the time
+//     who speaks of the LORD. Until Dad has heard him, Dad does not know WHEN he is, and only wonders; after it
+//     ("egypt.heardAbram") he knows: what he says at the river, the reeds and the open door follows. Up at the site
+//     the scribe has the same week from the Egyptian side, as palace gossip, with no idea whom he is talking about,
+//     and Dad hears it knowing more than he does. Nobody meets Abram or Sarai, and nobody passes judgment.
 //   - General Feathers, his youngest's stuffed hen, is in his suitcase under the shirts. No puzzle needs her. He
 //     talks to her, and shows her to people: five of them answer once each, in character; for the rest, and after
-//     that, Dad has a stock reply. Nobody in this Egypt has seen a chicken: they keep geese, ducks and pigeons.
+//     that, Dad has a stock reply. Nobody in this Egypt has seen a chicken (they keep geese, ducks and pigeons), and
+//     nor has Lot, who keeps flocks and herds.
 //
 // The lines marked "kept" are the author's own, from the first version of the act. They are the standard the rest
 // was written to: leave them word for word. The two marked "changed" are his with a word or two altered, on purpose.
@@ -49,10 +55,10 @@ export const lines = {
   "egypt.river.bible.2": ["dad", "Joseph was sold here and ended up running it. Moses was born here."],
   "egypt.river.bible.3": ["dad", "Any one of them could come round that bend. Or not for a thousand years."],
   "egypt.river.bible.4": ["dad", "I should have looked at the dates in the back of my Bible. I always go straight to the maps."],
-  // (once he has heard the scribe's news, he knows: Abram is here, and Joseph and Moses are still to come)
+  // (once Lot has told him who he is, he knows: Abram is here, and Joseph and Moses are still to come)
   "egypt.river.after.1": ["dad", "Abram's in Egypt this week. Right where my Bible said he'd be."],
   "egypt.river.after.2": ["dad", "Joseph's still to come. Sold here, and ends up running it. Then Moses."],
-  "egypt.river.after.3": ["dad", "Turns out I didn't need the dates in the back of my Bible. I needed a scribe."],
+  "egypt.river.after.3": ["dad", "Turns out I didn't need the dates in the back of my Bible. I needed his nephew."],
   "egypt.reeds.look": ["dad", "Reeds. Nature's ballpoint."],                                                                         // kept
   "egypt.reeds.take": ["dad", "One reed. I'll bring it back. That's a lie. I never bring pens back."],                               // kept
   "egypt.reeds.again": ["dad", "One is plenty. I'm not opening a stationery shop."],                                                 // kept
@@ -65,14 +71,15 @@ export const lines = {
   "egypt.pyramids.look": ["dad", "They look brand new. Somebody kept the receipt."],                                                 // kept
   "egypt.pyramids.look2": ["dad", "It's farther off than it looks. Big things always are. I learned that from a shopping mall."],
   "egypt.pyramids.look3": ["dad", "I wonder who in my Bible stood right here and looked at those. And whether he's been by yet."],
+  "egypt.pyramids.look3b": ["dad", "I wonder if Abram stood where I'm standing and looked at those. This week, he could have."],     // (once Lot has told him)
   "egypt.footprints.look": ["dad", "Small prints, and not one straight line. He stopped to look at something every four feet. That's my boy."],
   "egypt.footprints.use": ["dad", "They go up the track, toward the pyramid. Then so do I."],
   "egypt.chicken.footprints": ["dad", "I showed her the prints. She knows those sneakers. She's been stepped on by them."],
   "egypt.track.look": ["dad", "A track worn flat by a lot of feet, straight up to the pyramid. I didn't ask anybody. I want that noted."],
   "egypt.block.look": ["dad", "A dropped block and a broken sledge. Somebody's having a worse day than I am. It helps."],
   "egypt.block.use": ["dad", "I gave it a push. It's the size of a dishwasher, and it feels the same way about moving."],
-  "egypt.donkey.look": ["dad", "A donkey with three water jars. Low mileage, runs on hay, never needs a jump."],
-  "egypt.donkey.look2": ["dad", "Donkey the donkey. These are my kind of people."],
+  "egypt.donkey.look": ["dad", "A donkey having a long drink. Low mileage, runs on hay, never needs a jump."],
+  "egypt.donkey.look2": ["dad", "He's been drinking since I landed. Wherever he's headed, he's not starting it thirsty."],
   "egypt.donkey.use": ["dad", "He let me scratch his ears. Friendliest anyone's been since Nevada."],
   "egypt.donkey.sunglasses": ["dad", "He gave me a look. I've had that look from a car salesman. I put them away."],
 
@@ -88,6 +95,8 @@ export const lines = {
   "egypt.wagon.use": ["dad", "There's a road map in the glovebox. Three states, zero centuries."],                                   // kept
   "egypt.wagon.empty": ["dad", "Nothing left in there but ketchup packets. I'm saving those."],                                      // kept
   "egypt.mirror.look": ["dad", "The door mirror. It's shown me every wrong turn I ever made, only smaller."],
+  // the first time he comes up to the car, the low sun off the door mirror catches him in the eye (once: the mirror's hint)
+  "egypt.mirror.dazzle": ["dad", "Ow. The door mirror just put the sun in my eye. Objects in mirror are brighter than they appear."],
   "egypt.mirror.take": ["dad", "One twist and it's off. It's been one twist from off since March."],
   "egypt.car.noreason": ["dad", "I'm not taking my own car apart without a reason. I usually have at least a bad one."],
   "egypt.suitcase.look": ["dad", "The suitcase. I sat on it to get it shut. It hasn't forgiven me."],
@@ -110,38 +119,68 @@ export const lines = {
   "egypt.cooler.have": ["dad", "One at a time. It's a cooler, not a bar."],
   "egypt.cooler.more": ["dad", "One more. The rest are for the drive home. I'm an optimist."],
 
-  // ---------- the water carrier, and Donkey ----------
-  "egypt.carrier.look": ["dad", "An old man watering a donkey. He hasn't looked at the car once. That takes practice."],
-  "egypt.carrier.hello": ["carrier", "You came down out of the sky in a red box. Nothing was pulling it."],
+  // ---------- Lot, Abram's nephew: under the palm, praying, while his donkey drinks ----------
+  // Before he has said who he is he is a stranger on the screen ("herdsman"); after it, "Lot". He tells who he is as
+  // his own memory, in his own words, from Genesis 11:27 to 13:5 and nothing beyond it (docs/PUZZLES-egypt.md has
+  // each statement and its verse). Dad's understanding lands here, the first time Lot has told it.
+  "egypt.lot.look": ["dad", "A man sitting in the shade, praying. My car fell out of the sky in front of him, and he didn't lose his place."],
+  "egypt.lot.look2": ["dad", "Lot, Abram's nephew, back at his prayers. One of them was for my boy."],                          // (after he has prayed for the boy)
+  "egypt.lot.hello": ["lot", "You came down out of the sky in a red box, and nothing was pulling it."],
   "egypt.scribe.hello2": ["dad", "It has a hundred and forty horses. They're resting."],                                             // kept
-  "egypt.carrier.hello2": ["carrier", "So is Donkey. Nobody calls him a hundred and forty."],
+  "egypt.lot.hello2": ["lot", "Then let them rest. Since my uncle left Haran at the word of the LORD, I have stopped asking how anybody arrives."],
   "egypt.ask.boy": ["dad", "Have you seen a boy? About this tall, asks a lot of questions?"],                                        // kept
-  "egypt.carrier.boy.1": ["carrier", "A small one in strange sandals. He went up the track, asking everyone where the 'wy-fy' was."],
-  "egypt.carrier.boy.2": ["carrier", "I said it would be up at the Horizon. Everything is."],
-  "egypt.carrier.boy.3": ["dad", "That's him. He asks that everywhere. It's how he says hello."],
-  "egypt.carrier.ask.horizon": ["dad", "What's this Horizon everybody's at?"],
-  "egypt.carrier.horizon.1": ["carrier", "The big white one, up the track. The king's. Its name is Horizon of Khufu."],
-  "egypt.carrier.horizon.2": ["dad", "A pyramid called Horizon. Finally, one I can actually reach."],
-  "egypt.carrier.ask.news": ["dad", "Anything I should know before I go up?"],
-  "egypt.carrier.news.1": ["carrier", "A wall inside has begun to hum, and the haulers have put down the rope."],
-  "egypt.carrier.news.2": ["carrier", "And the scribe's pen has split, so he can write nobody onto his list. It is a slow day."],
-  "egypt.carrier.news.3": ["dad", "A humming wall and a paperwork problem. I've had Mondays like that."],
-  "egypt.carrier.news.4": ["carrier", "And the geese on the bank all stand facing the Horizon. They have since the wall began to hum."],
-  "egypt.carrier.ask.donkey": ["dad", "Good-looking donkey. What's his name?"],
-  "egypt.carrier.donkey.1": ["carrier", "Donkey."],
-  "egypt.carrier.donkey.2": ["dad", "Good name. I had a goldfish called Fish. Same system."],
-  "egypt.carrier.ask.camels": ["dad", "No camels? I was told there'd be camels."],
-  "egypt.carrier.camels.1": ["carrier", "I do not know that word. Is it a kind of donkey?"],
-  "egypt.carrier.camels.2": ["dad", "Taller. Worse attitude."],
-  "egypt.carrier.camels.3": ["carrier", "Then I am glad we have none."],
-  "egypt.carrier.ask.bye": ["dad", "Well. I've got a hill to climb and a boy to ground."],
-  "egypt.carrier.bye": ["carrier", "Walk slowly. Everything up there has already gone wrong. You cannot be late."],
-  "egypt.carrier.rootbeer.1": ["dad", "Something cold? On the house."],
-  "egypt.carrier.rootbeer.2": ["carrier", "It hisses. I carry water. Water does not hiss at a man."],
-  "egypt.carrier.map.1": ["carrier", "Where is the river on this?"],
-  "egypt.carrier.map.2": ["dad", "There isn't one. It's Nevada."],
-  "egypt.carrier.map.3": ["carrier", "Then it is a picture of nowhere. Keep it."],
-  "egypt.carrier.chicken": ["carrier", "Not a goose, not a duck, not a pigeon. I have seen every bird on this river, and she is none of them."],
+  "egypt.lot.boy.1": ["lot", "A small one in strange sandals passed me and went up the track, asking everyone where the 'wy-fy' was."],
+  "egypt.lot.boy.2": ["lot", "I told him I did not know it. If the Egyptians have one, it is up at their Horizon. They keep everything there."],
+  "egypt.lot.boy.3": ["dad", "That's him. He asks that everywhere. It's how he says hello."],
+  "egypt.lot.ask.horizon": ["dad", "What's this Horizon everybody's at?"],
+  "egypt.lot.horizon.1": ["lot", "The great white one, up the track. It is their king's tomb. The Egyptians call it the Horizon of Khufu."],
+  "egypt.lot.horizon.2": ["dad", "A pyramid called Horizon. Finally, one I can actually reach."],
+  "egypt.lot.ask.news": ["dad", "Anything I should know before I go up?"],
+  "egypt.lot.news.1": ["lot", "Those who come down for water say a wall inside the Horizon has begun to hum, and the haulers have put down the rope."],
+  "egypt.lot.news.2": ["lot", "And their scribe's pen has split, so he can write nobody onto his list. To hear them, the sky has fallen."],
+  "egypt.lot.news.3": ["dad", "A humming wall and a paperwork problem. I've had Mondays like that."],
+  "egypt.lot.news.4": ["lot", "And the geese on the bank have faced the Horizon since the hum began. When a flock all faces one way, something is there."],
+  // who he is: his father, his grandfather, the call, the promise, Canaan, the famine (Genesis 11:27-32, 12:1-10, 13:5)
+  "egypt.lot.ask.who": ["dad", "Who are you, if you don't mind my asking?"],
+  "egypt.lot.who.1": ["lot", "Lot, the son of Haran. My father died in Ur of the Chaldees, before his own father, Terah."],
+  "egypt.lot.who.2": ["lot", "Terah took my uncle Abram, and Sarai his wife, and me, out of Ur for Canaan. We stayed at Haran, and Terah died there."],
+  "egypt.lot.who.3": ["dad", "Ur of the Chaldees. I've only ever seen that on a map in the back of my Bible."],
+  "egypt.lot.who.4": ["lot", "The LORD had bidden my uncle leave his country, and his kindred, and his father's house, for a land He would show him."],
+  "egypt.lot.who.5": ["lot", "He promised to make of him a great nation, and that in him all the families of the earth would be blessed."],
+  "egypt.lot.who.6": ["lot", "My uncle was seventy and five years old. He went, as the LORD had told him, and I went with him."],
+  "egypt.lot.who.7": ["lot", "In Canaan he built an altar to the LORD at Sichem, and another by Bethel, and there he called on the name of the LORD."],
+  "egypt.lot.who.8": ["lot", "Then came a grievous famine, and we went down into Egypt to sojourn there. Now I have flocks and herds and tents of my own."],
+  // and Dad understands, slowly and then all at once: he is standing in Genesis 12 (an aside, looking out over the river)
+  "egypt.abram.1": ["dad", "I'm standing in Genesis 12. Now I know when I am."],
+  "egypt.abram.2": ["dad", "He's still Abram. The new name comes later. And no son yet. He'll have one."],
+  "egypt.abram.3": ["dad", "God promised that every family on earth would be blessed in him. Genesis 12:3. That includes mine."],
+  // this week, told briefly and judging nobody (Genesis 12:14-20)
+  "egypt.lot.ask.week": ["dad", "So what brings you down to the river? You look like a man waiting for a ride."],
+  "egypt.lot.week.1": ["lot", "When we came into Egypt, the king's princes praised my uncle's wife to the king, and she was taken into his house."],
+  "egypt.lot.week.2": ["lot", "The king was good to my uncle for her sake: sheep, oxen, asses, servants, and camels. I had never seen a camel."],
+  "egypt.lot.week.3": ["lot", "Then the LORD struck the king and his house with great plagues, because of Sarai, and the king gave her back."],
+  "egypt.lot.week.4": ["lot", "Today his men send us out of Egypt with all that we have. So I wait here for them, and I pray."],
+  "egypt.lot.week.5": ["dad", "I'd heard something like that."],
+  "egypt.lot.week.6": ["lot", "Then the story has gone farther than we have."],
+  // parting, the first time after he has told it: two men and two sons, and Lot prays for the boy (his own prayer, not Dad's)
+  "egypt.lot.ask.bye": ["dad", "Well. I've got a hill to climb and a boy to ground."],
+  "egypt.lot.son.1": ["lot", "Your boy. My uncle has no son at all, and the LORD has promised him a great nation."],
+  "egypt.lot.son.2": ["dad", "A nation coming, and not one son yet. I've got one son, and I've mislaid him."],
+  "egypt.lot.son.3": ["lot", "Then you are both waiting on a son. Yours, at least, is already walking."],
+  "egypt.abram.4": ["dad", "I'd give a lot to go and shake your uncle's hand."],
+  "egypt.abram.5": ["dad", "But I've got a boy to find."],
+  "egypt.lot.son.4": ["lot", "Then go and find him. But first, let me ask for him."],
+  "egypt.lot.prayer": ["lot", "LORD, the God of my father's brother Abram: the boy has gone up the track. Keep him, until his father comes to him."],
+  "egypt.lot.amen": ["dad", "Amen."],
+  "egypt.lot.thanks": ["dad", "Thank you. I asked Him the same thing when I landed. It's good to hear somebody else ask."],
+  "egypt.lot.bye": ["lot", "Go in peace, and walk slowly. Everything up there has already gone wrong. You cannot be late."],
+  // things offered to him
+  "egypt.lot.rootbeer.1": ["dad", "Something cold? On the house."],
+  "egypt.lot.rootbeer.2": ["lot", "It hisses. Where I come from, a man leaves a hissing thing alone."],
+  "egypt.lot.map.1": ["lot", "Where is the river on this?"],
+  "egypt.lot.map.2": ["dad", "There isn't one. It's Nevada."],
+  "egypt.lot.map.3": ["lot", "A land with no river. Then I will pray that it has wells."],
+  "egypt.lot.chicken": ["lot", "I keep flocks and herds, and I would not know whether to shear her, milk her, or follow her."],
 
   // ================= egypt-site: the foot of the pyramid =================
 
@@ -173,7 +212,7 @@ export const lines = {
   "egypt.site.rope.look": ["dad", "Rope as thick as my wrist, lying where they dropped it. I've left a garden hose out for less reason."],
   "egypt.site.scaffold.look": ["dad", "Poles lashed together with rope, four stories up. I get dizzy cleaning the gutters."],
   "egypt.site.yard.look": ["dad", "Blocks lined up by the road, waiting their turn. It's the pickup line at school, only heavier."],
-  "egypt.site.water.look": ["dad", "Water jars, by the road from the river. The old man's delivery. He's the only one here on schedule."],
+  "egypt.site.water.look": ["dad", "Water jars, by the road from the river. Somebody carried those up full. I get winded carrying a cooler."],
   "egypt.site.bricks.look": ["dad", "Mud bricks drying in the sun, beside their mold. Somebody here invented the ice cube tray."],
   "egypt.site.bricks.use.1": ["dad", "Bricks for Pharaoh. I know this one. The Israelites made the bricks, and here's the brickyard."],
   "egypt.site.bricks.use.2": ["dad", "Except these are for the steps. The job is that hill, and that hill is stone."],
@@ -209,23 +248,20 @@ export const lines = {
   "egypt.scribe.pass": ["scribe", "I wrote it. I do not need to read it. That is the whole point of writing."],
   "egypt.scribe.chicken": ["scribe", "There is no sign for that bird. I cannot write her down. So, officially, she is not here."],
 
-  // ---------- the scribe's news: Abram is in Egypt (Genesis 12:10-20, told from outside, as this week's gossip) ----------
+  // ---------- the scribe's news: the same week from the Egyptian side (Genesis 12:10-20, told from outside, as gossip) ----------
+  // Offered once Lot has told Dad who he is: Dad hears it knowing more than the scribe does.
   "egypt.scribe.ask.news": ["dad", "Any news? I've been out of touch."],
   "egypt.scribe.news.1": ["scribe", "Only the grain account. There is famine across the desert, and its herdsmen have come down to eat our grain."],
   "egypt.scribe.news.2": ["scribe", "One of them is rich. Flocks as far as you can see. Abram, by name. He brought his sister."],
-  "egypt.scribe.news.3": ["dad", "Abram. That rings a bell."],
+  "egypt.scribe.news.3": ["dad", "Abram. I've met his nephew."],
   "egypt.scribe.news.4": ["scribe", "She is very fair. The king's princes praised her to him, and she was taken into the Great House."],
   "egypt.scribe.news.5": ["dad", "The Great House. That's what 'Pharaoh' means. I read that in a footnote."],
-  "egypt.scribe.news.6": ["scribe", "The king has been good to him for her sake. Sheep, oxen, asses, servants. All out of my stores."],
+  "egypt.scribe.news.6": ["scribe", "The king has been good to him for her sake. Sheep, oxen, asses, servants, camels. Every one went through my accounts."],
   "egypt.scribe.news.7": ["scribe", "Then a sickness fell on the Great House. And now the word is that she is his WIFE."],
   "egypt.scribe.news.8": ["dad", "And now the king's sending him away. Him, his wife, and everything he owns."],
-  "egypt.scribe.news.9": ["scribe", "This morning, in a hurry, with the king's men to see him out of the country. How do you know? It is written nowhere."],
+  "egypt.scribe.news.9": ["scribe", "Today, in a hurry, with the king's men to see him out of the country. How do you know? It is written nowhere."],
   "egypt.scribe.news.10": ["dad", "Not yet."],
-  "egypt.abram.1": ["dad", "I'm standing in Genesis 12. Now I know when I am."],
-  "egypt.abram.2": ["dad", "He's still Abram. The new name comes later. And no son yet. He'll have one."],
-  "egypt.abram.3": ["dad", "God promised that every family on earth would be blessed in him. Genesis 12:3. That includes mine."],
-  "egypt.abram.4": ["dad", "I'd give a lot to go and shake that man's hand."],
-  "egypt.abram.5": ["dad", "But I've got a boy to find."],
+  "egypt.scribe.news.11": ["dad", "And down by the river his nephew's waiting for the king's men, and praying. For my boy, among other things."],
 
   // ---------- the overseer: the schedule ----------
   "egypt.overseer.look": ["dad", "A big man with a staff and a schedule. I can't see the schedule. I can hear it."],
@@ -490,7 +526,7 @@ export const lines = {
   "egypt.hole.wait": ["dad", "Not until I know where it comes out. I've made that mistake once today."],                             // kept
 
   // ================= General Feathers, shown to people =================
-  // Five of them answer once each, in their own way (the carrier, the scribe, the guard, the lamp boy, the goldsmith).
+  // Five of them answer once each, in their own way (Lot, the scribe, the guard, the lamp boy, the goldsmith).
   // For everybody else, and for anybody who has met her already, Dad's stock reply.
   "egypt.chicken.show": ["dad", "This is General Feathers. She's in charge."],
   "egypt.chicken.stock": ["dad", "Nobody here has ever seen a bird like her. She's taking it well."],

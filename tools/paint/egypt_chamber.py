@@ -299,9 +299,10 @@ def casters():
     return out + th.treasure_blocks() + th.stand_blocks(LAMPS[:2])
 
 
-def things_sheet():
-    """The furniture, drawn crisply on a clear sheet. -> pen"""
-    pen = th.Pen(LAMPS, AMB)
+def things_sheet(tongues=False):
+    """The furniture, drawn crisply on a clear sheet. -> pen. (`tongues=True`: the lamps' flames painted in still, as
+    approved; round four leaves them to the game.)"""
+    pen = th.Pen(LAMPS, AMB, tongues=tongues)
     for l in LAMPS[:2]:
         th.lamp_stand(pen, l.X, l.D, l.Y - 7.0, stout=1.2)
     th.carrying_poles(pen)
@@ -321,9 +322,9 @@ def lid_sheet():
     return pen
 
 
-def bench_sheet():
+def bench_sheet(tongues=False):
     """The goldsmith's bench and everything on it, and the brazier beside it: one cut-out."""
-    pen = th.Pen(LAMPS, AMB)
+    pen = th.Pen(LAMPS, AMB, tongues=tongues)
     th.bench(pen)
     th.bench_things(pen)
     th.brazier(pen)
@@ -337,8 +338,8 @@ def mirror_sheet():
     return pen
 
 
-def front_sheet():
-    pen = th.Pen(LAMPS, AMB)
+def front_sheet(tongues=False):
+    pen = th.Pen(LAMPS, AMB, tongues=tongues)
     th.front_things(pen)
     le = LAMPS[4]
     th.lamp_stand(pen, le.X, le.D, le.Y - 7.0, gilt=True, stout=1.5)
@@ -366,7 +367,7 @@ def under(seed=21):
     pen = things_sheet()
     tc, ta = pen.base.done()
     over(pic, blur(tc, 0.8), blur(ta, 0.8))
-    info.update(pen=pen, things=(tc, ta), blocks=blocks)
+    info.update(pen=pen, things=(tc, ta), blocks=blocks, pen_approved=things_sheet(tongues=True))
     return np.clip(pic, 0, 1), info
 
 
@@ -544,7 +545,8 @@ def stone_edges(pic, info):
 
 
 def smoke(pic, seed):
-    """A thread of smoke stands up from every flame in the still air."""
+    """A thread of smoke stands up from every flame in the still air. (As approved: round four no longer paints it;
+    smoke that stands still breaks the illusion, so the game draws it rising, from layout.json "fx".)"""
     rng = np.random.default_rng(seed)
     for l in LAMPS:
         x, y = l.at
@@ -615,9 +617,11 @@ def restate(pic, info):
     return pic
 
 
-def details(pic, info, seed=21):
-    """Over the brushwork: say the built things again crisply, then the small things."""
-    pen = info["pen"]
+def details(pic, info, seed=21, as_approved=False):
+    """Over the brushwork: say the built things again crisply, then the small things. Round four: the lamps' flames
+    and their threads of smoke are not painted (the game draws them moving); `as_approved=True` paints them in still,
+    as the picture was approved, to work out its palette."""
+    pen = info["pen_approved" if as_approved else "pen"]
     tc, ta = info["things"]
     restate(pic, info)
     info["cover"] = np.clip(ta + info["stonework"] + info["sarc"]["hole"], 0, 1)
@@ -628,19 +632,25 @@ def details(pic, info, seed=21):
     stone_edges(pic, info)
     reflections(pic, info, seed + 63)
     over(pic, tc, ta * 0.94)
-    smoke(pic, seed + 64)
+    if as_approved:
+        smoke(pic, seed + 64)
     flames(pic)
     pen.fine.onto(pic)
     return pic
 
 
-def cut_out(pen, back, seed, fast=False, margin=8):
+def cut_out(pen, back, seed, fast=False, margin=8, box_from=None):
     """A cut-out from a pen's two sheets: brushed like the backdrop, its crisp lines put back, hard edges.
-    -> (color picture, mask)."""
+    -> (color picture, mask). `box_from` (round four): the pen of the cut-out as approved, so that the brush goes over
+    exactly the same patch as it did then (a painted flame at its top made that patch a little taller)."""
     bc, ba = pen.base.done()
     fc, fa = pen.fine.done()
     alpha = np.maximum(ba, (fa > 0.45) * fa)
-    ys, xs = np.where(alpha > 0.05)
+    if box_from is not None:
+        fa0 = box_from.fine.done()[1]
+        ys, xs = np.where(np.maximum(box_from.base.done()[1], (fa0 > 0.45) * fa0) > 0.05)
+    else:
+        ys, xs = np.where(alpha > 0.05)
     y0, y1 = max(ys.min() - margin, 0), min(ys.max() + margin + 1, H)
     x0, x1 = max(xs.min() - margin, 0), min(xs.max() + margin + 1, W)
     flat = back.copy()
@@ -653,17 +663,23 @@ def cut_out(pen, back, seed, fast=False, margin=8):
     return flat, (alpha > 0.5).astype(F32)
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.012, amount=0.016, accents=()):
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.012, amount=0.016, accents=(), keep=None, keep_alpha=None):
     """Grain, then a limited palette with speckle. `accents` are parts of the picture whose colors must not
-    be lost (the few bright lights), given extra weight when the palette is chosen."""
-    g = grain(picture, seed, amount)
-    sample_of = g if alpha is None else g[alpha > 0.5]
+    be lost (the few bright lights), given extra weight when the palette is chosen. `keep` (round four) is the picture
+    as approved (with `keep_alpha` its mask, for a cut-out): the palette is worked out from it exactly as before, every
+    pixel where `picture` is the same keeps its old index, and only the changed places are reduced again."""
+    g = grain(picture if keep is None else keep, seed, amount)
+    a_ = alpha if keep is None or keep_alpha is None else keep_alpha
+    sample_of = g if a_ is None else g[a_ > 0.5]
     parts = [sample_of.reshape(-1, 1, 3)]
     for (x, y, w, h, times) in accents:
         parts += [g[y:y + h, x:x + w].reshape(-1, 1, 3)] * times
     n = len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0))
     pal = palette_of(parts, colors=min(colors, max(2, n)))
     idx = to_palette(g, pal, speckle=speckle)
+    if keep is not None:
+        changed = np.abs(picture - keep).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
 
@@ -679,8 +695,48 @@ def footprint(outline, pad=4.0):
     return out
 
 
-def layout(mirror_at):
-    """The numbers the game needs, measured from the picture as painted."""
+def fx_marks(things_pen, bench_pen, front_pen, seed=21):
+    """Round four: each lamp's flame and its thread of smoke, and the brazier's coals, for the game to draw moving
+    (layout.json "fx"), in the engine's own terms (js/engine/effects.js). The flames are where the pens put them; the
+    smoke as smoke() painted it."""
+    rng = np.random.default_rng(seed + 64)
+    threads = {}
+    for l in LAMPS:                                                     # (the same draws, in the same order, as smoke())
+        x, y = l.at
+        h = 46 + rng.random() * 30
+        rng.normal(0, 1.5), rng.normal(2, 3)
+        threads[l.name] = ((x, y - 9), h, rng.normal(4, 5))
+    base_row = int(round(row_of(th.BENCH["d1"])))
+    near = lambda x, y: min(LAMPS, key=lambda l: (l.at[0] - x) ** 2 + (l.at[1] - y) ** 2)
+    out, smokes = [], []
+    for pen, on in ((things_pen, "back.png"), (bench_pen, "bench.png"), (front_pen, "front.png")):
+        for (x, y, size) in pen.flames:
+            l = near(x, y)
+            base = "front" if on == "front.png" else base_row if on == "bench.png" else int(round(P(l.X, 0, l.D)[1]))
+            out.append({"type": "flame", "id": f"lamp-{l.name}", "at": [round(x, 1), round(y + 1.6 * size, 1)], "base": base,
+                        "size": round(8.4 * size, 1), "width": round(3.7 * size, 1), "edge": "#ffa436", "color": "#ffe488", "glowOpacity": 0.12, "lamp": on,
+                        "what": "an oil lamp's flame: a small hard tear of light standing up from its wick (orange outside, yellow, a white heart low down). "
+                                "'at' is its foot. The painting keeps the bright air round it, so the engine's own glow can be faint"
+                                + {"bench.png": "; on the goldsmith's bench: draw it over bench.png (same base) and under mirror.png (base + 1)",
+                                   "front.png": "; on the front plane: drawn over the cast"}.get(on, "")})
+            (sx, sy), h, lean = threads[l.name]
+            smokes.append({"type": "smoke", "id": f"lamp-{l.name}-smoke", "at": [round(sx, 1), round(sy, 1)], "base": base,
+                           "color": "#d8c0b8", "opacity": 0.15, "height": int(round(h)), "width": [0.8, 3.4], "lean": [round(lean, 1), -int(round(h))], "rate": 3,
+                           "what": "a thread of smoke standing up from the flame in the still air of a room with no window: almost straight, wavering a "
+                                   "little, fading as it rises ('lean' is where the painted thread's top was)"})
+    bx, bd = th.BRAZIER
+    k = k_of(bd)
+    x0, yb = P(bx, 0, bd)
+    sq = (row_of(bd) - G.vy) / G.F
+    out.append({"type": "embers", "id": "brazier", "at": [round(x0, 1), round(yb - 28 * k, 1)], "base": base_row, "size": [round(14.2 * k, 1), round(14.2 * k * sq, 1)],
+                "color": "#ffb847", "cool": "#5a1408", "glowColor": "#ff6a2a", "glowOpacity": 0.18, "sparks": 0.15, "lamp": "bench.png",
+                "what": "the goldsmith's brazier: a bed of glowing charcoal that breathes. The lumps are painted in bench.png, hottest in the middle, "
+                        "and the red light on the floor round it in back.png; draw this over bench.png (same base)"})
+    return out + smokes
+
+
+def layout(mirror_at, fx=None):
+    """The numbers the game needs, measured from the picture as painted. (`fx`: round four's marks, from fx_marks().)"""
     (xf, yft, yfb), (xn, ynt, ynb) = door_corners()
     b = th.BENCH
     bx, bd = th.BRAZIER
@@ -714,6 +770,9 @@ def layout(mirror_at):
         "beam": [[int(round((xf + xn) / 2)), int(round((yft + ynb) / 2 - 8))], [500, 300]],
         "sarcophagus": {"rect": [554, 383, 193, 118]},
         "notes": "The goldsmith sits BEHIND the bench (feet above its baseline). mirror.png lies exactly over bench.png; without it the jar it leaned on is whole. The beam's line from the doorway to the hum passes in front of everything painted along the back wall.",
+        **({"fx": fx, "fx-note": "round four: nothing that moves by nature is painted still. The six flames (back.png: A, B, D, F; bench.png: C; front.png: E) and the "
+                                 "six threads of smoke (back.png) are gone; the glow round each flame, the lamplight, the oil full of light and the brazier's painted "
+                                 "coals stay. 'at' of a flame is its foot (the wick); of a thread of smoke, where it starts, just over the flame"} if fx is not None else {}),
     }
     return lay
 
@@ -758,12 +817,18 @@ if __name__ == "__main__":
     print("under", round(time.time() - t0, 1))
     pic = base.copy() if fast else brushwork(base, room_flow(), sizes=(13, 7, 3), seed=4, density=1.5, jitter=0.07, keep=0.18)
     info["under"] = base
-    details(pic, info)
+    approved = pic.copy()
+    details(approved, info, as_approved=True)                         # as approved: flames and smoke painted in still (for the palettes)
+    details(pic, info)                                                # round four: without them; the game draws them moving
     mp = mirror_sheet()
     mirror_at = th.mirror(th.Pen(LAMPS, AMB))
-    bench_c, bench_a = cut_out(bench_sheet(), pic, 5, fast)
-    mirror_c, mirror_a = cut_out(mp, bench_c * bench_a[..., None] + pic * (1 - bench_a[..., None]), 6, True)
-    front_c, front_a = cut_out(front_sheet(), pic, 7, fast)
+    bench0_pen, front0_pen = bench_sheet(tongues=True), front_sheet(tongues=True)
+    bench0_c, bench0_a = cut_out(bench0_pen, approved, 5, fast)                      # the cut-outs as approved
+    front0_c, front0_a = cut_out(front0_pen, approved, 7, fast)
+    bench_pen, front_pen = bench_sheet(), front_sheet()                              # and without their lamps' flames, brushed on
+    bench_c, bench_a = cut_out(bench_pen, approved, 5, fast, box_from=bench0_pen)    # the same ground, over the same patch
+    front_c, front_a = cut_out(front_pen, approved, 7, fast, box_from=front0_pen)
+    mirror_c, mirror_a = cut_out(mp, bench0_c * bench0_a[..., None] + approved * (1 - bench0_a[..., None]), 6, True)
     whole = pic.copy()
     for c, a in ((bench_c, bench_a), (mirror_c, mirror_a), (front_c, front_a)):
         over(whole, c, a)
@@ -772,11 +837,11 @@ if __name__ == "__main__":
     if fast:
         sys.exit()
     gold = [(130, 220, 330, 250, 2), (240, 430, 160, 90, 3)]
-    print("back", finish(pic, f"{OUT}/back.png", 160, accents=gold))
-    print("bench", finish(bench_c, f"{OUT}/bench.png", 72, bench_a))
+    print("back", finish(pic, f"{OUT}/back.png", 160, accents=gold, keep=approved))
+    print("bench", finish(bench_c, f"{OUT}/bench.png", 72, bench_a, keep=bench0_c, keep_alpha=bench0_a))
     print("mirror", finish(mirror_c, f"{OUT}/mirror.png", 32, mirror_a))
-    print("front", finish(front_c, f"{OUT}/front.png", 56, front_a))
-    write_layout(layout(mirror_at), f"{OUT}/layout.json")
+    print("front", finish(front_c, f"{OUT}/front.png", 56, front_a, keep=front0_c, keep_alpha=front0_a))
+    write_layout(layout(mirror_at, fx_marks(info["pen"], bench_pen, front_pen)), f"{OUT}/layout.json")
     comp = Image.open(f"{OUT}/back.png").convert("RGBA")              # everything laid together, to look at (as comp.py does)
     for name in ("bench", "mirror", "front"):
         comp.alpha_composite(Image.open(f"{OUT}/{name}.png").convert("RGBA"))

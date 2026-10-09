@@ -29,6 +29,10 @@ import { hold, url, picture } from "./assets.js";
 import { UI, iconPath } from "./ui.js";
 import { tunnel } from "./fx.js";
 import { openBeats, checkStory, leadsOf, hintFor } from "./story.js";
+import { BANDS, edgeAt, edgeLabel, open, checkEdges } from "./edges.js";
+import { Outlines } from "./outline.js";
+import { Life } from "./life.js";
+import { Effects } from "./effects.js";
 import * as art from "../art/kit.js";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -59,6 +63,10 @@ export class Game {
     this.view.cast.calm = this.calm;
     this.dialogue = new Dialogue(this);
     this.ui = new UI(this);
+    this.outlines = new Outlines(this);   // what Show draws (outline.js)
+    this.life = new Life(this);           // the scene's people living their own lives: small movements, and a walk now and then (life.js)
+    this.effects = new Effects(this);     // the things in a scene that move by nature: smoke, flames, water, birds, cloth (effects.js)
+    this.names = {};                      // each scene's name, by its id, once its file is in (for the label over a way out)
 
     this.mode = "boot";      // boot, cutscene, title or play
     this.busy = 0;           // above zero while a script has control
@@ -73,7 +81,7 @@ export class Game {
   }
 
   get mode() { return this._mode; }
-  set mode(value) { this._mode = value; document.body.dataset.mode = value; }   // lets the style sheet react to it
+  set mode(value) { this._mode = value; document.body.dataset.mode = value; if (this.outlines) this.outlines.changed(); }   // lets the style sheet react to it (and Show draws only in play)
 
   // =============== start-up ===============
   async boot() {
@@ -93,6 +101,9 @@ export class Game {
     // server for no more code, so a new version published in the middle of a session cannot get mixed
     // into this one. (A scene that will not load now is tried again when the player gets there.)
     await Promise.all(this.sceneIds.map((id) => this.getScene(id).catch(() => { delete this.scenes[id]; })));
+    const loaded = {};
+    for (const id of this.sceneIds) if (this.scenes[id]) loaded[id] = await this.scenes[id];
+    for (const problem of checkEdges(loaded)) console.warn("Edge check:", problem);
     // No pictures yet. The title fetches its own; the rest are fetched behind it, once it is up (see gather),
     // and a scene that is entered before its turn has come fetches its own first (see enterScene).
 
@@ -200,7 +211,13 @@ export class Game {
     if (this.store.has(item)) return;
     this.store.give(item);
     this.sfx("pickup");
-    if (!this.clock.skipping) this.ui.toast(`You have the ${this.item(item).name}`);
+    if (!this.clock.skipping) this.ui.toast(`You have ${this.the(item)}`);
+  }
+  /** A thing's name as it goes into a sentence: "the reed", but "General Feathers". A name is used as it is when the item
+      says `proper: true`, or when the name begins with a capital ("Dad's pencil"); `proper: false` puts "the" back. */
+  the(id) {
+    const it = this.item(id), name = it.name;
+    return (it.proper ?? /^[A-Z]/.test(name)) ? name : "the " + name;
   }
   /** What is known about a thing that can be carried (its entry in `items`). A thing that is not there, through a slip
       in a script or a save from another version, gets its own id for a name and a note in the console, and the game carries on. */
@@ -362,7 +379,7 @@ export class Game {
   /** Fetch a scene file the first time it is needed, then keep it. */
   async getScene(id) {
     if (!this.sceneIds.includes(id)) throw new Error(`No scene called "${id}". Add it to js/content/scenes/index.js.`);
-    if (!this.scenes[id]) this.scenes[id] = this.loadScene(id);      // keep the promise, so two askers share one fetch
+    if (!this.scenes[id]) this.scenes[id] = this.loadScene(id).then((scene) => { this.names[id] = scene.name; return scene; });      // keep the promise, so two askers share one fetch
     return this.scenes[id];
   }
 
@@ -403,7 +420,7 @@ export class Game {
       if (scene.enter) await scene.enter(this, from ? from.id : null);
     } finally {
       this.busy--;
-      this.settle();
+      this.tidy();
       this.ui.refresh();
     }
     this.autosave();
@@ -417,14 +434,17 @@ export class Game {
     this.closeup();
     this.held = null;
     this.lookMode = false;
+    this._leaving = null;
     this.view.clear();
     this.scene = scene;
+    this.life.enter(scene);                     // everyone's own life starts again with the scene, on their marks (life.js)
     this.mode = "play";
     this.titleEl.hidden = true;
     this.view.setEra(scene.era);
     // The backdrop, the light that stays smooth, and the painted cut-outs (`planes`), each of which reads the story
     // to see whether it shows and in which state. A scene with no painting gets its kit drawing, or a sketch.
-    const shown = this.view.show(scene, this);
+    // Then the things in it that move by nature (`fx`: smoke, flames, water, birds, cloth), each at its depth (effects.js).
+    const shown = Promise.all([this.view.show(scene, this), this.effects.enter(scene)]);
 
     // Props and people who are not the lead. Each can block the ground it stands on.
     const blocked = [...(scene.blocked || [])];
@@ -484,8 +504,9 @@ export class Game {
     this.ui.refresh();
     await shown;
     // Once this scene has everything it needs: fetch the pictures of the scenes that can be reached from it
-    // (`exits`), so that walking on does not mean waiting for them.
-    for (const next of scene.exits || []) this.getScene(next).then((there) => this.view.warm(there)).catch(() => {});
+    // (`exits`, and its ways out at the edges), so that walking on does not mean waiting for them.
+    const next = new Set([...(scene.exits || []), ...Object.values(scene.edges || {}).map((way) => way && way.to)].filter((id) => this.sceneIds.includes(id)));
+    for (const id of next) this.getScene(id).then((there) => this.view.warm(there)).catch(() => {});
     this.gather();                               // (already under way, unless the game was opened straight into a scene)
   }
 
@@ -494,21 +515,46 @@ export class Game {
       story changes; the map is built again only when the answer would be different. */
   remap(anyway = false) {
     if (!this.scene) return;
-    const cast = this.view.cast;
-    const solid = cast.cutouts().filter((c) => c.spec.solid && !c.hidden);
-    // People who are not leads block the ground they stand on: their own `solid` while they are on their mark,
-    // and a patch under their feet wherever a script has walked them to since.
-    const people = [];
-    for (const a of this.scene.actors || []) {
-      const f = cast.get(a.id);
-      if (!f || f.hidden || a.solid === false) continue;
-      const moved = Math.abs(f.x - a.at[0]) > 4 || Math.abs(f.y - a.at[1]) > 4, s = f.scale;
-      people.push(a.solid && !moved ? a.solid : [[f.x - 32 * s, f.y - 12], [f.x + 32 * s, f.y - 12], [f.x + 32 * s, f.y + 8], [f.x - 32 * s, f.y + 8]]);
-    }
+    const { solid, people } = this.ground();
     const key = solid.map((c) => c.id).join("|") + "#" + people.map((p) => p.flat().map(Math.round).join(",")).join("|");
     if (!anyway && key === this._solid) return;
     this._solid = key;
     this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people]);
+  }
+
+  /** The ground that things and people take up: the cut-outs that are showing ({ solid }), and the people who are not
+      leads ({ people }: outlines). A person blocks their own `solid` while they are on their mark, and a patch under
+      their feet wherever a script has walked them to since. One who is away on a walk of their own (life.js) has their
+      place kept for them, and blocks a patch where they stand still, but nothing while they walk. `except`: leave out
+      that person (for working out their own way about). */
+  ground(except = null) {
+    const cast = this.view.cast, scene = this.scene;
+    const solid = cast.cutouts().filter((c) => c.spec.solid && !c.hidden);
+    const patch = (x, y, s) => [[x - 32 * s, y - 12], [x + 32 * s, y - 12], [x + 32 * s, y + 8], [x - 32 * s, y + 8]];
+    const people = [];
+    for (const a of scene.actors || []) {
+      const f = cast.get(a.id);
+      if (a.id === except || !f || f.hidden || a.solid === false) continue;
+      if (this.life.isAway(a.id)) {
+        if (!a.when || a.when(this)) people.push(a.solid || patch(a.at[0], a.at[1], a.scale ?? scaleAt(scene, a.at[1])));
+        if (!f.walking) people.push(patch(f.x, f.y, f.scale));
+        continue;
+      }
+      const moved = Math.abs(f.x - a.at[0]) > 4 || Math.abs(f.y - a.at[1]) > 4;
+      people.push(a.solid && !moved ? a.solid : patch(f.x, f.y, f.scale));
+    }
+    return { solid, people };
+  }
+
+  /** Where one of the scene's people may walk on a walk of their own (life.js): the ground as the lead has it, less
+      their own place and with the family standing in it, so that they go round the family and not through them. */
+  groundFor(id) {
+    const { solid, people } = this.ground(id), d = this.store.data, family = [];
+    for (const who of new Set([d.active, ...(d.team || [])])) {
+      const f = this.actor(who);
+      if (f && !f.hidden) family.push([[f.x - 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y + 6], [f.x - 20 * f.scale, f.y + 6]]);
+    }
+    return new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people, ...family]);
   }
 
   /** The story has changed, or a script has ended: the picture follows. Clickable areas and painted cut-outs
@@ -516,19 +562,22 @@ export class Game {
   follow() {
     this.view.refresh(this);
     this.remap();
+    this.outlines.changed();                    // (while Show is on, it draws again if what it shows has changed)
   }
 
-  /** Run a piece of script with the controls locked. */
-  async run(script) {
+  /** Run a piece of script with the controls locked. First, anyone of the scene's people who is away on a walk of their
+      own goes home (life.js), so that every script finds everyone on their mark; `{ settle: false }` for a script that
+      only has the lead say something (a hint), during which they simply stand where they are until it is over. */
+  async run(script, { settle = true } = {}) {
     this.busy++;
     this.ui.refresh();
-    try { await script(); }
+    try { if (settle) await this.life.settle(); await script(); }
     catch (err) {
       console.error("Script stopped:", err);
       this.ui.toast("Something went wrong there. If it keeps happening, reload the page.", 5000);
       if (this._fade > 0.5 && this.mode === "play") await this.fade(0, 300);       // it stopped half-way through a fade
     }
-    finally { this.busy--; this.closeup(); this.settle(); this.ui.refresh(); }
+    finally { this.busy--; this.closeup(); this.tidy(); this.ui.refresh(); }
   }
 
   /** Something broke that should not have. Say so on the screen and go back to the title, which rebuilds
@@ -561,11 +610,14 @@ export class Game {
   }
 
   // =============== companions ===============
-  /** The clickable areas: the scene's own, and one over each companion standing here. */
+  /** The clickable areas: the scene's own, and one over each companion standing here. A person's own area (the one with
+      their id, or that says `actor: "<id>"`) is a copy that remembers the scene's shape (`home`), so that it can go with
+      them on a walk of their own and come back to that shape when they do (life.js). */
   rebuildSpots() {
     const scene = this.scene, d = this.store.data;
     if (!scene) return;
-    const spots = [...(scene.hotspots || [])];
+    const people = new Set((scene.actors || []).map((a) => a.id));
+    const spots = (scene.hotspots || []).map((h) => (people.has(h.actor || h.id) ? { ...h, home: h } : h));
     for (const id of d.team) {
       const a = id === d.active ? null : this.actor(id);
       if (!a) continue;
@@ -573,15 +625,28 @@ export class Game {
       spots.push({ id: "mate." + id, name: this.cast[id].name, verb: "Talk to", mate: id, rect: [a.x - w / 2, a.y - h, w, h] });
     }
     this.view.setHotspots(spots);
+    this.life.follow();                         // (someone away has theirs round them at once)
     this.follow();
+    this.ui.edge = null;                        // (until the pointer moves again)
     this.ui.hover(null);
   }
 
   /** After a script has moved people about: note where everyone on the team is standing, and move their clickable areas. */
-  settle() {
+  tidy() {
     if (!this.scene || this.mode !== "play") return;
     for (const id of this.store.data.team) this.rememberPlace(id);
     this.rebuildSpots();
+  }
+
+  /** Everyone back on their marks: anyone of the scene's people who is away on a walk of their own (or up from their
+      seat) goes home, briskly, and sits down again if they sit (life.js); then, as after any script, the team's places
+      are noted and the clickable areas follow. Resolves when they are home (after about two seconds at most, they are
+      put there). Every script gets this before it starts; a script can also ask for it: `await g.settle()`, or for one
+      person, `await g.settle("scribe")`. */
+  settle(who = null) {
+    const home = this.life.settle(who);
+    this.tidy();
+    return home;
   }
 
   /** A place to stand that no companion is already standing on: the place asked for, or a step to one side of it. */
@@ -635,16 +700,22 @@ export class Game {
     await this.reach();
     if (!this.store.pass(item, to)) return;
     this.sfx("pickup");
-    if (!this.clock.skipping) this.ui.toast(`${this.cast[to].name} has the ${this.item(item).name}`);
+    if (!this.clock.skipping) this.ui.toast(`${this.cast[to].name} has ${this.the(item)}`);
     if (this.scene.given) await this.scene.given(this, item, to, from);
   }
 
   async interact(spot, verb = "use") {
     if (this.busy || this.mode !== "play") return;
+    this._leaving = null;                          // (if he was on his way out by an edge, he is not now)
+    // A person's own area may have gone with them on a walk of their own (life.js). Nobody is talked to away from home:
+    // they go back to their place while the lead walks over to it, as the scene has it, and the script starts once both are there.
+    spot = spot.home || spot;
     await this.run(async () => {
+      const homing = this.life.settle();
       const lead = this.lead, scene = this.scene, mate = spot.mate ? this.actor(spot.mate) : null;
       const stand = mate ? this.beside(mate) : this.clearOf(spot.walkTo);
       if (stand) await lead.walkPath(this.clock, this.map.path([lead.x, lead.y], stand), (yy) => scaleAt(scene, yy));
+      await homing;
       if (spot.face) lead.face(spot.face); else lead.look(...footOf(spot));       // turn to the thing
       this.rememberPlace();
       const item = this.held;
@@ -662,21 +733,86 @@ export class Game {
       } else {
         await this.act(spot.use);
       }
-    });
+    }, { settle: false });
     this.autosave();
   }
 
   walk(x, y) {
     const lead = this.lead, scene = this.scene;
     if (!lead || !scene || this.busy) return;
+    this._leaving = null;
     lead.walkPath(this.clock, this.map.path([lead.x, lead.y], [x, y]), (yy) => scaleAt(scene, yy)).then(() => this.rememberPlace());
+  }
+
+  // =============== ways out at the edges of the picture (edges.js) ===============
+  /** The side ("N", "S", "W", "E") of the way out whose band holds this point of the picture, or null. A clickable area
+      there still wins over the band: this answers only for the floor. */
+  edgeAt(x, y) { return this.mode === "play" ? edgeAt(this.scene, this, x, y) : null; }
+  /** The side the lead is on his way out by (after a click in its band, before the scene changes), or null. */
+  get leaving() { return this._leaving ? this._leaving.side : null; }
+  /** Is there a way out at this side of the picture now? Its side if there is, or null. */
+  edgeOpen(side) { return side && this.scene && this.scene.edges && open(this.scene.edges[side], this) ? side : null; }
+  /** What the label line says over that way out: "Go up the track", "Go to the great gallery". */
+  edgeLabel(side) {
+    const way = this.scene && this.scene.edges && this.scene.edges[side];
+    return way ? edgeLabel(way, this.names[way.to]) : "";
+  }
+
+  /**
+   * Leave by the way out at one side of the picture, as a click at (x, y) in its band does: the lead walks toward that
+   * edge (to the way's `walkTo`, or to the floor nearest (x, y) pushed as far toward the edge as it goes), and when he is
+   * there, g.goto(to, { spawn }) (or the way's own `use`). It is an ordinary walk, not a script: a click anywhere else
+   * on the way sends him there instead, and then nobody leaves. A double click hurries him, as on any walk.
+   */
+  leave(side, x = W / 2, y = H / 2) {
+    const scene = this.scene, lead = this.lead, way = scene && scene.edges && scene.edges[side];
+    if (!lead || !way || this.busy || this.mode !== "play" || !open(way, this)) return;
+    const target = way.walkTo || this.map.toward(side, x, y) || [lead.x, lead.y];
+    const route = this.map.path([lead.x, lead.y], target), end = route[route.length - 1];
+    const trip = (this._leaving = { side, end });
+    lead.walkPath(this.clock, route, (yy) => scaleAt(scene, yy)).then(async () => {
+      this.rememberPlace();
+      if (this._leaving !== trip) return;                   // he was sent somewhere else on the way
+      this._leaving = null;
+      if (this.scene !== scene || this.lead !== lead || this.busy || this.mode !== "play") return;
+      if (Math.hypot(lead.x - end[0], lead.y - end[1]) > 1.5) return;
+      await this.run(async () => { if (way.use) await way.use(this); else await this.goto(way.to, { spawn: way.spawn }); }, { settle: !!way.use });     // (nobody need go home for a scene that is being left)
+      this.autosave();
+    });
+  }
+
+  /** For test scripts: a point of the picture inside the band of that way out where a real click lands on the floor
+      (not on a clickable area, or a button lying over it), nearest the middle of the edge; or null if there is none. */
+  edgePoint(side) {
+    if (!this.edgeOpen(side)) return null;
+    const box = this.stage.getBoundingClientRect(), depth = BANDS[side], across = side === "N" || side === "S";
+    const rows = [depth / 2, depth / 4, (depth * 3) / 4, 4, depth - 4];       // how far in from the edge
+    for (let k = 0; k <= (across ? W : H) / 2; k += 8) {
+      for (const along of k ? [(across ? W : H) / 2 - k, (across ? W : H) / 2 + k] : [(across ? W : H) / 2]) {
+        for (const d of rows) {
+          const x = across ? along : side === "W" ? d : W - d, y = !across ? along : side === "N" ? d : H - d;
+          const el = document.elementFromPoint(box.left + (x / W) * box.width, box.top + (y / H) * box.height);
+          if (el && el.classList && el.classList.contains("floor") && this.edgeAt(x, y) === side) return [x, y];
+        }
+      }
+    }
+    return null;
+  }
+
+  /** Show what can be clicked (the Show button, holding H): reveal(true) until reveal(false), or reveal(true, ms) for a while.
+      It is the class "reveal" on #hot that does it: the outlines follow it (outline.js). */
+  reveal(on = true, ms = 0) {
+    clearTimeout(this._revealing);
+    this.view.hotEl.classList.toggle("reveal", !!on);
+    if (on && ms) this._revealing = setTimeout(() => this.view.hotEl.classList.remove("reveal"), ms);
+    this.outlines.changed();
   }
 
   async useItem(item) {
     if (this.busy) return;
     if (this.lookMode) {
       this.lookMode = false;
-      return this.run(() => this.act(this.item(item).look));
+      return this.run(() => this.act(this.item(item).look), { settle: false });      // (only the lead speaks: anyone away stands still till it is said)
     }
     this.held = this.held === item ? null : item;
     this.ui.refresh();
@@ -690,13 +826,14 @@ export class Game {
     const open = openBeats(this.story, d.flags).filter((b) => hintFor(this.story, b, who));
     const beat = open.find((b) => leadsOf(this.story, b).includes(who)) || open[0];
     const line = beat ? hintFor(this.story, beat, who) : this.fallback("hint");
-    if (line) await this.run(() => this.say(line));
+    if (line) await this.run(() => this.say(line), { settle: false });
   }
 
   /** Change which lead the player controls. Each lead keeps their own place and pockets. */
   async switchLead(to) {
     const d = this.store.data;
     if (this.busy || this.mode !== "play" || d.active === to || !d.team.includes(to)) return;
+    this._leaving = null;
     this.rememberPlace();
     const place = d.where[to];
     if (!place || !place.scene) return;
@@ -707,7 +844,7 @@ export class Game {
       this.lookMode = false;
       d.active = to;
       this.sfx("switch");
-      this.settle();
+      this.tidy();
       this.store.emit();
       this.autosave();
       return;
@@ -773,7 +910,7 @@ export class Game {
       await this.trouble(err, "Loading a save");
     } finally {
       this.busy--;
-      this.settle();
+      this.tidy();
       this.ui.refresh();
     }
   }
@@ -830,11 +967,17 @@ export class Game {
       if (event.detail && document.activeElement && document.activeElement.blur) document.activeElement.blur();
       if (this.mode !== "play" || this.busy) return;
       const spot = spotOf(event);
-      const verb = this.lookMode ? "look" : "use";
+      const verb = this.lookMode ? "look" : "use", looking = this.lookMode;
       this.lookMode = false;
       if (spot) this.interact(spot, verb);
       else if (this.held) { this.held = null; this.ui.refresh(); }
-      else { this.ui.refresh(); this.walk(...this.view.toPicture(event)); }
+      else {
+        const [x, y] = this.view.toPicture(event), side = this.edgeAt(x, y);
+        this.ui.refresh();
+        if (side && looking) return;                    // in the band of a way out: nobody leaves by looking
+        if (side) this.leave(side, x, y);               // walk off the edge of the picture
+        else this.walk(x, y);
+      }
     });
     // A double click hurries whoever is walking, so a long way across a scene never has to be sat through.
     hot.addEventListener("dblclick", () => { const lead = this.lead; if (lead && lead.walking) lead.hurry = true; });
@@ -845,9 +988,16 @@ export class Game {
       else if (this.held) { this.held = null; this.ui.refresh(); }
     });
     hot.addEventListener("pointerover", (event) => this.ui.hover(spotOf(event)));
-    hot.addEventListener("pointerleave", () => this.ui.hover(null));
-    hot.addEventListener("focusin", (event) => this.ui.hover(spotOf(event)));
-    hot.addEventListener("focusout", () => this.ui.hover(null));
+    hot.addEventListener("pointerleave", () => { this.ui.edge = null; this.ui.hover(null); });
+    // Over the floor in the band of a way out, the pointer is an arrow and the label says where the way leads (ui.js).
+    hot.addEventListener("pointermove", (event) => {
+      const side = spotOf(event) ? null : this.edgeAt(...this.view.toPicture(event));
+      if (side !== this.ui.edge) { this.ui.edge = side; this.ui.label(); }
+    });
+    // Keyboard focus (Tab) outlines the one area it is on, the way Show outlines them all.
+    const visible = (el) => { try { return el.matches(":focus-visible"); } catch { return true; } };
+    hot.addEventListener("focusin", (event) => { const spot = spotOf(event); this.ui.hover(spot); this.outlines.focus(spot && visible(event.target) ? spot : null); });
+    hot.addEventListener("focusout", () => { this.ui.hover(null); this.outlines.focus(null); });
     hot.addEventListener("keydown", (event) => {
       const spot = spotOf(event);
       if (!spot) return;
@@ -879,10 +1029,10 @@ export class Game {
         const to = this.ui.team()[Number(key) - 1];
         if (to) this.switchLead(to);
       } else if (key.toLowerCase() === "h") {
-        hot.classList.add("reveal");
+        if (!event.repeat) this.reveal(true);          // held down: Show stays on until it is let go
       }
     });
-    document.addEventListener("keyup", (event) => { if (event.key.toLowerCase() === "h") hot.classList.remove("reveal"); });
+    document.addEventListener("keyup", (event) => { if (event.key.toLowerCase() === "h") this.reveal(false); });
 
     // If a browser put the sound to sleep, the next click or key wakes it.
     const wake = () => { if (this.mode !== "boot" && !document.hidden) this.audio.unlock(); };

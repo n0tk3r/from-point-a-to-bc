@@ -55,8 +55,19 @@ the ladder's shadows and its feet on the floor laid onto THEN's own brushwork as
 pixel keeps its old palette index; the palette gains eight colors (160). out/home-landing-2-changed.png shows
 which pixels changed.
 
+THE THIRD PASS (briefs/PAINT-3.md, B): the Son's home-made card on his door said KEEP OUT; it now says NO GIRLS
+ALLOWED, on the same card in the same place (home_landing_things.no_girls_allowed; the warning tape, the alarm and its
+wire as they were; the D of ALLOWED has its stem under the wire). State NOW3 is NOW with the new words. son_sign()
+paints his door again in a small window, with the old words and the new, and lays the new painting onto back.png
+wherever the two differ (only letters on the card: about 800 pixels), in back.png's own palette; every other pixel
+keeps its index and the palette is the same 160 colors. rail.png, study-open.png and ladder.png are not touched (a
+whole run makes them again from THEN, to the byte). layout.json gains things.son.trap: where the Son's booby trap
+fires its foam darts from (the gap over his door) and the strip of runner where they land.
+out/home-landing-3-changed.png shows which pixels changed.
+
     python3 home_landing.py          everything (about fifty seconds)
-    python3 home_landing.py fast     NOW only, no brush pass, coarser: for composing
+    python3 home_landing.py sign     the third pass alone, onto out/home-landing/back.png as it stands (seconds)
+    python3 home_landing.py fast     NOW3 only, no brush pass, coarser: for composing
 
 The people check (the game's server on port 8765): those behind the ladder first, then the ladder over them,
 then the rest and the rail:
@@ -136,6 +147,14 @@ LADDER_BASE = ((516.0, 108.0), (627.0, 108.0))                # its base: the li
 THEN = dict(name="then", ladder=False, lamp=(527.0, 18.0), bowl=(553.0, 21.0))
 NOW = dict(name="now", ladder=True, lamp=(515.0, 18.0), bowl=(537.0, 23.0))        # (the lamp and the key bowl stand 12 and 16 cm farther left on the
 #                                                                                     table, clear of the ladder; the lamp's LIGHT is where it was)
+NOW3 = dict(NOW, name="now3", son_sign="NO GIRLS ALLOWED")    # round three (briefs/PAINT-3.md, B): the Son's card says NO GIRLS ALLOWED
+SIGN3_WINDOW = (380, 110, 510, 290)                            # x0, y0, x1, y1: his whole door and room round it (his door's painting must lie
+#                                                                wholly inside: how much it is softened is measured over all of it)
+# The Son's booby trap (round three): the toy blaster he has rigged behind his door shoots a volley of foam darts out
+# of the gap over it (`at`: X, Y on the back wall, the middle of the door's top edge; `gap`: the X of its two ends) and
+# they come down on the runner in front of it (`land`: X0, X1, Z0, Z1 on the floor: the runner's outer half, past where
+# a sister stands to try the door, from a little left of the door to a little right of it). The game draws the darts.
+TRAP = dict(at=(232.5, 205.5), gap=(192.0, 273.0), land=(184.0, 282.0, 74.0, 128.0))
 HATCH_GLOW = 0.50                                              # the warm breath of The Retreat's light on the rim of the open hatch
 ATTIC_LADDER = 0.80                                            # how strongly that light falls on the ladder's top rungs
 
@@ -765,7 +784,7 @@ def decals(tr, T, open_study=False, state=None):
     tr.decal(TH.curtains().array(), "X", 0, "Z", z1 + 22, z0 - 22, "Y", y0 - 20, y1 + 22)
     # ---- the landing's wall
     middle = TH.lilsis_door() if state["ladder"] else TH.girls_door()
-    for (x0, x1), tex in ((SON, TH.sons_door()), (GIRLS, middle), (STUDY, TH.door(open_=open_study))):
+    for (x0, x1), tex in ((SON, TH.sons_door(state.get("son_sign", "KEEP OUT"))), (GIRLS, middle), (STUDY, TH.door(open_=open_study))):
         tr.decal(tex.array(), "Z", 0, "X", x0 - 10, x1 + 10, "Y", 0, 216, k=3)
     if not open_study:
         tr.decal(TH.notice().array(), "Z", 0, "X", SIGN[0], SIGN[1], "Y", SIGN[2], SIGN[3], k=3)
@@ -1827,8 +1846,17 @@ def layout():
     opening = outline([(hx0, CEIL, hz0), (hx1, CEIL, hz0), (hx1, CEIL, hz1), (hx0, CEIL, hz1)])
     (wz0, wz1), (wy0, wy1) = WINDOW["Z"], WINDOW["Y"]
     stairs_shape = outline([(2, 0, 176), (106, 0, 176), (106, float(stair_line(330.0)), 330), (2, float(stair_line(330.0)), 330)])
+    (tX, tY), (tx0, tx1, tz0, tz1) = TRAP["at"], TRAP["land"]
+    trap = {"from": P2(tX, 0.0, tY), "gap": [P2(x_, 0.0, tY) for x_ in TRAP["gap"]],
+            "land": {"poly": outline([(tx0, 0.0, tz0), (tx1, 0.0, tz0), (tx1, 0.0, tz1), (tx0, 0.0, tz1)])},
+            "what": "his booby trap: a volley of foam darts comes out of the gap over his door (`from`, the middle of the door's top edge; `gap`, "
+                    "its two ends) and lands on the runner in front of it (`land`: the runner's outer half, in front of a sister standing at his door; "
+                    "seen between the balusters of the rail plane). The game draws the darts."}
+    assert RUNNER[0] <= tx0 and tx1 <= RUNNER[1] and RUNNER[2] <= tz0 and tz1 <= RUNNER[3]          # on the runner
+    assert all(inside(p, walk) and not inside(p, ground) for p in trap["land"]["poly"])             # on the floor people walk on
     things = [
-        dict(id="son", what="the Son's door: his notices, his KEEP OUT sign, the toy alarm by the handle (it stays shut)", shape={"poly": outline(wall_quad(SON[0], SON[1], 0, DOOR_H))}, **stand("son")),
+        dict(id="son", what="the Son's door: his notices, his home-made sign NO GIRLS ALLOWED (it said KEEP OUT), the toy alarm by the handle (it stays shut); his booby trap over it (`trap`)",
+             shape={"poly": outline(wall_quad(SON[0], SON[1], 0, DOOR_H))}, **stand("son"), trap=trap),
         dict(id="lilsis", what="Little Sister's door, hers alone now: one name-plate buried in chicken stickers, her crayon drawing of a hen taped on at her height, and her hand-lettered sign BEWARE OF CHICKENS", shape={"poly": outline(wall_quad(LILSIS[0], LILSIS[1], 0, DOOR_H))}, **stand("lilsis")),
         dict(id="study", what="Dad's study door", shape={"poly": outline(wall_quad(STUDY[0], STUDY[1], 0, DOOR_H))}, **stand("study")),
         dict(id="sign", what="Dad's notice taped to the study door", shape={"poly": outline(wall_quad(SIGN[0], SIGN[1], SIGN[2], SIGN[3]))}, **stand("sign")),
@@ -1858,7 +1886,7 @@ def layout():
     L["vanishing"] = {"along_the_landing": [round(V.vanishing()[1][0]), 135], "out_toward_us": [round(V.vanishing()[0][0]), 135]}
     L["notes"] = ["The rail plane is drawn over everybody: people are seen through its balusters from the knee down.",
                   "Below the landing's edge everything is the living room, 285 cm lower: nobody walks there in this picture.",
-                  "Not painted (the game lights them): the lamp of the Son's toy alarm (beside his door handle).",
+                  f"Not painted (the game lights them): the lamp of the Son's toy alarm (beside his door handle: painted dark at {P2(SON[0] - 10.0 + 80.6, 0.0, 113.9)}, at the right of the alarm box under its little window).",
                   "The attic ladder (ladder.png) stands with its feet just in front of the study door's left edge. People pass it in front (between it and the rail) and stand behind it under its high end, at the hall table. Its blocked ground reaches back to the wall: there is no way past behind its feet (the floor here is about 30 px deep, and the game keeps people 5 px clear of blocked ground above and below)."]
     # every place a person is sent to must be on the floor people may stand on, and not where the ladder stands
     for name, pt in list(L["stands"].items()) + [(f"{w}.{k}", p) for w, d in L["marks"].items() for k, p in d.items()] + [(t["id"], t["stand"]) for t in things]:
@@ -1938,12 +1966,49 @@ def comp_files(name, layers):
     im.convert("RGB").save(name)
 
 
+def son_sign(path):
+    """Round three: the Son's card says NO GIRLS ALLOWED. His door is painted again, in a window round it, with the
+    old words (NOW) and with the new (NOW3); wherever the two differ, and nowhere else, the new painting is laid onto
+    the picture in `path`, in that picture's own palette (its first 152 colours, the first picture's, which painted
+    this door); every other pixel keeps its index, and the palette is not touched. On his door the lettering is never
+    warped or brushed (lettering_mask), so the window paints exactly what the whole picture would. Run on a picture
+    that has the new words already, it changes nothing. -> (the number of pixels changed, their mask)."""
+    im = Image.open(path)
+    idx = np.array(im)
+    raw = im.getpalette()
+    pal = np.array(raw, dtype=F32).reshape(-1, 3) / 255
+    x0, y0, x1, y1 = SIGN3_WINDOW
+
+    def painted_window(state):
+        R = render(ss=2, window=SIGN3_WINDOW, state=state)
+        full = np.zeros(SHAPE + (3,), dtype=F32)
+        full[y0:y1, x0:x1] = R["pic"]
+        return full
+    old, new = painted_window(NOW), painted_window(NOW3)
+    changed = np.abs(new - old).max(axis=2) > 1.0 / 1024
+    assert not (changed & (lettering_mask(False, NOW3) < 0.999)).any(), "the new words reach past the lettering on his door"
+    q = to_palette(grained(new), pal[:152], speckle=0.010)
+    out = np.where(changed, q, idx).astype(np.uint8)
+    pic = Image.fromarray(out, "P")
+    pic.putpalette(raw)
+    pic.save(path, optimize=True)
+    return int(changed.sum()), changed.astype(F32)
+
+
 if __name__ == "__main__":
     t0 = time.time()
     os.makedirs(OUT, exist_ok=True)
     fast = "fast" in sys.argv
+    if "sign" in sys.argv:                                    # round three alone, onto the picture as delivered: the Son's card, the trap
+        n3, changed3 = son_sign(f"{OUT}/back.png")
+        Image.fromarray((changed3 * 255).astype(np.uint8)).save("out/home-landing-3-changed.png")
+        json.dump(layout(), open(f"{OUT}/layout.json", "w"), indent=1)
+        comp_files("out/home-landing-comp.png", ("ladder", "rail"))
+        comp_files("out/home-landing-open-comp.png", ("study-open", "ladder", "rail"))
+        print("sign", n3, "done", round(time.time() - t0, 1))
+        sys.exit()
     if fast:                                                  # composing: the new landing, unbrushed, the ladder and the rail on it
-        R, base, pic = painted(NOW, fast=True)
+        R, base, pic = painted(NOW3, fast=True)
         save_rgb(base, "out/home-landing-1-under.png")
         lc, la = ladder_plane(R)
         rc, ra = rail_plane(R)
@@ -1977,6 +2042,9 @@ if __name__ == "__main__":
     Image.fromarray((np.dstack([np.clip(lc, 0, 1), la]) * 255 + 0.5).astype(np.uint8), "RGBA").save("out/home-landing-2-ladder.png")
     Image.fromarray((changed * 255).astype(np.uint8)).save("out/home-landing-2-changed.png")
     print("back", finish_over(back, changed, pal0, idx0, f"{OUT}/back.png"))
+    n3, changed3 = son_sign(f"{OUT}/back.png")               # ---- round three: the Son's card, laid onto the picture just made
+    Image.fromarray((changed3 * 255).astype(np.uint8)).save("out/home-landing-3-changed.png")
+    print("sign", n3)
     print("ladder", finish(lc, f"{OUT}/ladder.png", 64, la, speckle=0.008, amount=0.012))
     print("rail", finish(rc, f"{OUT}/rail.png", 56, ra, speckle=0.008, amount=0.012))
     print("study-open", finish(oc, f"{OUT}/study-open.png", 72, oa))

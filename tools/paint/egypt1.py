@@ -21,6 +21,14 @@ QUEENS = [(730, 252, 24, 44), (762, 251, 21, 38), (789, 250, 18, 32)]           
 TRACK = [(380, 670), (420, 580), (462, 490), (490, 410), (486, 340), (492, 300), (520, 270)]
 WAGON = (722, 540)                                          # where its rear wheel meets the ground
 SUN_UP = 0.8                                                # a shadow is this many times as long as the thing is tall
+REEDS = [(300, 302, 18, 16, 16), (272, 330, 22, 22, 18), (238, 366, 26, 30, 20)]                                     # reeds standing in the shallows
+REEDS_APPROVED = REEDS + [(170, 428, 34, 44, 22)]           # as first approved: round three took out the clump below the near palm, where the donkey drinks
+# Lot (the game draws him) sits on the sand in the near palm's shade: with the sun low on the left its crown's shadow
+# lies some way to the right of its foot, and its darkest part is here, a few steps from his donkey at the water.
+LOT = (404, 432)                                            # the ground under his hips
+LOT_TALK = (448, 444)                                       # where Dad stands to talk with him, facing west (clear of the car's steam)
+BUNDLE = (380, 427)                                         # his bundle on the sand at his left hand, behind him
+VILLAGE_SMOKE = [(392, 286), (446, 288)]                    # the builders' village's two cooking fires (round four: the game draws the smoke)
 
 
 def small(q):
@@ -142,9 +150,11 @@ def under(seed=11):
     return np.clip(pic, 0, 1), info
 
 
-def details(pic, info, seed=11):
+def details(pic, info, seed=11, reeds=REEDS, lot=True, smoke=False):
     """The small crisp things, painted over the brushwork: far palms, the works on the pyramid, huts,
-    the boat, stones, footprints."""
+    the boat, stones, footprints. (`reeds=REEDS_APPROVED, lot=False, smoke=True` paints the backdrop as first
+    approved.) Round four: the village's cooking smoke is no longer painted (`smoke=False`): smoke that stands
+    still breaks the illusion, so the game draws it rising and drifting (layout.json "fx")."""
     shape = (H, W)
     x, y = grid(shape)
     rng = np.random.default_rng(seed + 77)
@@ -189,9 +199,9 @@ def details(pic, info, seed=11):
         for a in np.linspace(0.3, 2.84, 6):
             far.line([(px, py - hgt), (px + np.cos(a) * 6, py - hgt - np.sin(a) * 4 + 2.5)], "#3f6a34" if a > 1.4 else "#2f5228", 1.2)
     far.onto(pic)
-    for sx, sy in ((392, 286), (446, 288)):                  # smoke: thin, pale, leaning with the wind
-        smoke = mask_line(shape, curve([(sx, sy), (sx + 5, sy - 14), (sx + 16, sy - 26), (sx + 34, sy - 34)], 6), [1.5, 2.5, 4, 6, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10][:19], soft=2.2)
-        over(pic, "#f4ecdc", smoke * 0.38)
+    for sx, sy in (VILLAGE_SMOKE if smoke else ()):          # smoke: thin, pale, leaning with the wind
+        plume = mask_line(shape, curve([(sx, sy), (sx + 5, sy - 14), (sx + 16, sy - 26), (sx + 34, sy - 34)], 6), [1.5, 2.5, 4, 6, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10][:19], soft=2.2)
+        over(pic, "#f4ecdc", plume * 0.38)
 
     # ---- the boat bringing white stone across from the quarries, and what the water shows of it
     bx, by, bl = 132, 322, 92
@@ -225,7 +235,7 @@ def details(pic, info, seed=11):
         gy = lerp(BANK[i][1], BANK[i + 1][1], rng.random()) + rng.random() * 8
         flora.scrub(near, gx, gy, 5 + (gy - HZ) / 22, seed + 70 + k, colors=("#55652e", "#8c9c46", "#c8c672"))
     # reeds standing in the shallows, small with distance
-    for (rx, ry, rw, rh, n) in [(300, 302, 18, 16, 16), (272, 330, 22, 22, 18), (238, 366, 26, 30, 20), (170, 428, 34, 44, 22)]:
+    for (rx, ry, rw, rh, n) in reeds:
         flora.reeds(near, rx - 12, ry + 4, rw, rh, seed + rx, count=n)
     # small sneaker prints from the wagon up the track (his son went this way)
     walkway = curve([(470, 562), (472, 520), (486, 474), (496, 430), (494, 388), (487, 350), (486, 322)], 5)
@@ -235,6 +245,39 @@ def details(pic, info, seed=11):
         near.ellipse(px + side, py, 5.2 * k, 2.3 * k, "#a87850", 0.75)
         near.ellipse(px + side + 1.5 * k, py + 0.6 * k, 3.6 * k, 1.2 * k, "#7c5840", 0.55)
     near.onto(pic)
+    if lot:
+        bundle(pic)
+    return pic
+
+
+def bundle(pic):
+    """Lot's bundle on the sand beside his place: a mantle of banded wool (madder, ochre and indigo on undyed),
+    rolled and corded twice. It lies in the palm's shade, so its colours are shade colours, and its own shadow is
+    a soft dark directly under it."""
+    shape = (H, W)
+    bx, by = BUNDLE
+    g = (by - HZ) / (590 - HZ) * 160 / 175                  # pixels to a centimetre on the ground there
+    L, D = 44 * g, 19 * g                                   # its length and its thickness
+    x0, x1, top = bx - L / 2, bx + L / 2, by - D
+    under = mask_ellipse(shape, bx + 1.0, by + 0.3, L * 0.58, D * 0.30, soft=0.8)
+    under[under < 0.01] = 0                                  # (the blur leaves a faint haze over the whole picture: not wanted)
+    land.shadow(pic, under, "#4c3c66", 0.45, 0)
+    s = Sheet(shape)
+    roll = [(x0 + D * 0.25, top), (x1 - D * 0.2, top + 0.2), (x1, top + D * 0.5), (x1 - D * 0.2, by), (x0 + D * 0.25, by - 0.2)]
+    s.poly(roll, "#a3947f")                                  # undyed wool, in shade
+    s.ellipse(x0 + D * 0.25, top + D * 0.5, D * 0.25, D * 0.5, "#b4a48c")        # its rolled end, toward the light
+    s.line([(x0 + D * 0.25, top + D * 0.30), (x0 + D * 0.36, top + D * 0.52), (x0 + D * 0.22, top + D * 0.66)], "#6e604e", 0.8, 0.8)   # the turn of the cloth in it
+    for at, width, color in ((0.22, 0.10, "#7a2f2c"), (0.40, 0.07, "#2e3858"), (0.50, 0.09, "#97703a"), (0.60, 0.07, "#2e3858"), (0.80, 0.10, "#7a2f2c")):
+        cx = lerp(x0 + D * 0.25, x1 - D * 0.1, at)
+        w = width * L / 2
+        s.poly([(cx - w, top + 0.3), (cx + w, top + 0.4), (cx + w * 0.9, by - 0.3), (cx - w * 1.1, by - 0.4)], color)   # the bands go round the roll
+    s.line([(x0 + D * 0.3, top + 0.6), (x1 - D * 0.3, top + 0.7)], "#c8b89c", 0.9, 0.55)       # the top of the roll, where the sky lights it
+    s.line([(x0 + D * 0.3, by - 0.7), (x1 - D * 0.3, by - 0.6)], "#5a4a5c", 1.0, 0.5)          # and its underside
+    for at in (0.30, 0.70):                                  # the cords, and a knot on the near one
+        cx = lerp(x0 + D * 0.25, x1 - D * 0.1, at)
+        s.line([(cx - 0.4, top - 0.2), (cx + 0.5, by + 0.1)], "#3e2c22", 0.9)
+    s.ellipse(lerp(x0 + D * 0.25, x1 - D * 0.1, 0.30) - 0.3, top + 0.6, 1.0, 0.8, "#3e2c22")
+    s.onto(pic)
     return pic
 
 
@@ -265,6 +308,52 @@ def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=
     sample_of = g if alpha is None else g[alpha > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
+    save(name, idx, pal, alpha)
+    return os.path.getsize(name)
+
+
+def finish_keeping(picture, approved, name, colors, extra=8, seed=7, speckle=0.014, amount=0.02, far=0.06, since=None):
+    """finish() for a backdrop changed in a few places since it was approved. The palette is the one the approved
+    picture got (worked out from it again, exactly as finish() did), so every pixel that was not changed comes out
+    exactly as it was. The changed places may also use up to `extra` colours of their own, added at the end of the
+    palette, for colours the approved palette is `far` from. -> (file size, mask of the changed places).
+    `since` (round four) is the backdrop as round three left it: its palette, extra colours and all, is worked out
+    again exactly as it was, and only where `picture` differs from it is anything reduced again, with that palette."""
+    idx, pal, changed = _keeping(since if since is not None else picture, approved, colors, extra, seed, speckle, amount, far)
+    if since is not None:
+        changed = np.abs(picture - since).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
+    save(name, idx, pal)
+    return os.path.getsize(name), changed
+
+
+def _keeping(picture, approved, colors, extra, seed, speckle, amount, far):
+    """What finish_keeping() works out before it saves. -> (indexes, palette, changed)"""
+    g0 = grain(approved, seed, amount)
+    pal = palette_of([g0.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((g0 * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    g = grain(picture, seed, amount)
+    changed = np.abs(picture - approved).max(axis=2) > 0.5 / 255           # (a change too small to show is no change)
+    idx = np.where(changed, to_palette(g, pal, speckle=speckle), to_palette(g0, pal, speckle=speckle))
+    if changed.any() and extra:
+        px = g[changed]
+        gap = np.sqrt(((px[:, None, :] - pal[None, :, :]) ** 2).sum(axis=2).min(axis=1))
+        odd = px[gap > far]
+        if len(odd) >= 2:
+            more = palette_of([odd.reshape(-1, 1, 3)], colors=min(extra, len(odd)))
+            pal = np.concatenate([pal, more])
+            idx = np.where(changed, to_palette(g, pal, speckle=speckle), idx)
+    return idx, pal, changed
+
+
+def finish_keeping_cut(picture, alpha, approved, approved_alpha, name, colors, seed=7, speckle=0.014, amount=0.02):
+    """finish() for a cut-out changed in a few places since it was approved (round four: the donkey without its
+    painted rings). The palette is the one the approved cut-out got, worked out from it again exactly as finish()
+    did, and every pixel that did not change keeps its old index; the new mask may be smaller. -> file size."""
+    g0 = grain(approved, seed, amount)
+    sample_of = g0[approved_alpha > 0.5]
+    pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    changed = np.abs(picture - approved).max(axis=2) > 0.5 / 255
+    idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), to_palette(g0, pal, speckle=speckle))
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
 
@@ -314,14 +403,22 @@ def wagon_pictures(pic, back_rgb):
 
 
 STEAM = (472, 498)                                          # where the steam leaves the front edge of the hood (the bottom middle of its frames)
-DONKEY = (326, 447)                                         # where the ground under its middle is
+DONKEY = (198, 420)                                         # where the ground under its middle is: at the water's edge, in front of the near palm
 DONKEY_SCALE = 1.1 * (160 / 175) * (DONKEY[1] - HZ) / (590 - HZ)   # pixels to a centimetre there (and he is a big small donkey)
 
 
-def donkey_plane(back, fast=False):
-    """The water carrier's donkey with its jars, and its shadow on the sand under it."""
+def river(seed=11):
+    """The river's mask, as under() lays the water."""
+    return mask_poly((H, W), [(0, HZ), (350, HZ)] + BANK[1:] + [(0, 546)], wobble=1.5, seed=seed + 30)
+
+
+def donkey_plane(back, fast=False, rings=False):
+    """Lot's donkey with its two jars, drinking at the water's edge, and its shadow on the sand under it. (`rings=True`:
+    with the rings on the water round its muzzle painted in, as approved in round three; round four leaves them to
+    the game, which draws them spreading from MUZZLE.)"""
     import egypt1_donkey
-    return egypt1_donkey.render((H, W), DONKEY, DONKEY_SCALE, back, fast=fast)
+    return egypt1_donkey.render((H, W), DONKEY, DONKEY_SCALE, back, fast=fast, jar_at=None, drink=egypt1_donkey.DRINK,
+                                water=river(), flat=(DONKEY[1] - HZ) / 800, rings_on=rings)
 
 
 def lay(names, out, folder="out/egypt1"):
@@ -383,9 +480,67 @@ def hull(mask, most=10):
     return [[int(x), int(y)] for x, y in ring]
 
 
+def hug(mask, tol=1.2):
+    """A polygon that hugs a mask: down its left edge and back up its right edge, row by row (so it bridges the gaps
+    between legs), simplified to within `tol` pixels."""
+    rows = [y for y in range(mask.shape[0]) if mask[y].any()]
+    left = [(int(np.nonzero(mask[y])[0][0]), y) for y in rows]
+    right = [(int(np.nonzero(mask[y])[0][-1]) + 1, y) for y in rows]
+    pts = left + [(left[-1][0], rows[-1] + 1), (right[-1][0], rows[-1] + 1)] + right[::-1]
+
+    def simplify(p):
+        (x0, y0), (x1, y1) = p[0], p[-1]
+        n = max(np.hypot(x1 - x0, y1 - y0), 1e-9)
+        d = [abs((y1 - y0) * (x - x0) - (x1 - x0) * (y - y0)) / n for x, y in p[1:-1]]
+        if not d or max(d) <= tol:
+            return [p[0], p[-1]]
+        i = int(np.argmax(d)) + 1
+        return simplify(p[:i + 1])[:-1] + simplify(p[i:])
+    return [[int(x), int(y)] for x, y in simplify(pts)]
+
+
 def box(mask, pad=0):
     ys, xs = np.nonzero(mask)
     return [int(xs.min()) - pad, int(ys.min()) - pad, int(xs.max() - xs.min()) + 1 + 2 * pad, int(ys.max() - ys.min()) + 1 + 2 * pad]
+
+
+def fx_marks():
+    """Round four: everything in this place that moves by nature, for the game to draw moving (layout.json "fx").
+    Each mark is in the engine's own terms (js/engine/effects.js): where the thing is, its depth (`base`, as a plane's;
+    none for water lying on the ground, which the engine lays under everybody), and how the painting had it."""
+    import egypt1_donkey
+    r = lambda pts: [[int(round(x)), int(round(y))] for x, y in pts]
+    mx, my = egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)
+    k = DONKEY_SCALE / 1.1                                           # pixels to a centimetre on the water there, as the rings were painted
+    flat = round((DONKEY[1] - HZ) / 800, 3)
+    river = r([(0, HZ + 2), (344, HZ + 2)] + [(x - 1, y) for x, y in BANK[1:8]] + [(0, 532)])
+    out = []
+    for i, (sx, sy) in enumerate(VILLAGE_SMOKE):
+        out.append({"type": "smoke", "id": f"village-smoke-{i + 1}", "at": [sx, sy], "base": 296,
+                    "color": "#f4ecdc", "opacity": 0.38, "height": 36, "width": [1.5, 10], "lean": [34, -34], "rate": 2,
+                    "what": "a cooking fire's smoke over the builders' village, far off under the plateau: a thin pale thread. The painting had it rising "
+                            "straight for a few pixels, then bending away to the right with the wind off the river: 36 px up, 34 px over"})
+    out.append({"type": "ripples", "id": "donkey-rings", "at": [round(mx, 1), round(my, 1)], "radius": [1.5, round(32 * k, 1)], "flat": flat,
+                "every": [0.8, 1.8], "rings": 2, "speed": 9, "color": "#f2fbf8", "trough": "#46809e", "opacity": 0.7, "clip": river,
+                "what": "rings spreading on the river from the donkey's muzzle while he drinks. No base: they lie on the water, under everybody (the donkey's "
+                        "cut-out covers their middle, under his head). The painting had three at once, 4, 8.4 and 14 px across, each broken twice, "
+                        "fainter as they spread. 'clip' is the river: a ring must not run out onto the sand (the bank is a few px right of the muzzle)"})
+    out.append({"type": "shimmer", "id": "river", "poly": river,
+                "holes": [[84, 280, 98, 62], [280, 287, 22, 24], [249, 308, 24, 33], [214, 335, 27, 41]], "color": "#fff6e2", "opacity": 0.4,
+                "what": "the Nile near this bank: light moving on the water, very gently (the painting's own streaks and glints stay). 'holes' (rects x, y, w, h) "
+                        "keep it off the boat with its mast and its reflection, and off the three reed beds in the shallows"})
+    for i, (px, py, hgt, lean, sd) in enumerate(PALMS):
+        out.append({"type": "sway", "id": f"palm-{i + 1}-crown", "plane": f"palm-{i + 1}", "anchor": "bottom", "at": [px, py],
+                    "amount": round(0.006 * hgt, 1), "period": 4.5, "wave": 300, "lean": 0.2, "optional": True,
+                    "what": "the palm's crown stirring in the warm wind off the river; its foot does not move (anchor bottom, at its foot). Small and slow"})
+    out.append({"type": "birds", "kind": "flyers", "id": "kites", "lanes": [[[-20, 46], [820, 22]], [[-20, 120], [820, 64]]], "every": [18, 40], "group": [1, 2],
+                "speed": 40, "scale": 0.85, "optional": True, "new": True,
+                "frames": {"dir": "art/scenes/egypt-site/", "glide": "kite-0.png", "flap": ["kite-1.png", "kite-0.png", "kite-2.png", "kite-0.png"], "bank": "kite-3.png", "middle": [6.5, 5.0]},
+                "what": "NEW (no birds were painted here): now and then a kite or two crossing high over the river and the plateau, gliding, a few beats. "
+                        "The frames are the building site's kites (egypt-site). No base: they are behind every cut-out, so they pass behind the palms' crowns"})
+    out.append({"type": "sway", "id": "papyrus", "plane": "papyrus", "anchor": "bottom", "amount": 1.0, "period": 3.0, "optional": True,
+                "what": "the papyrus and reeds at the very front, bottom left (front.png, the plane the scene calls 'papyrus': nothing but that clump), stirring"})
+    return out
 
 
 def layout(steam_foot):
@@ -405,12 +560,10 @@ def layout(steam_foot):
     # ---- what stands on the ground
     heap = [(372, 549), (394, 530), (424, 514), (456, 502), (490, 499), (522, 506), (552, 512)]
     under_wagon = r(heap + [(757, 516), (797, 536), (793, 549), (640, 553), (550, 558), (450, 558)])
-    dc, da, dlc, dla = egypt1_donkey.donkey((H, W), DONKEY, DONKEY_SCALE)
+    dc, da, dlc, dla = egypt1_donkey.donkey((H, W), DONKEY, DONKEY_SCALE, jar_at=None, drink=egypt1_donkey.DRINK)
     hoofs = egypt1_donkey.hooves(DONKEY, DONKEY_SCALE)
     hx0, hx1 = min(h[0] - h[2] for h in hoofs), max(h[0] + h[2] for h in hoofs)
-    jar_box = box((da > 0.5) & (grid((H, W))[0] > hx1 + 6) & (grid((H, W))[1] > DONKEY[1] - 30))
-    under_donkey = r([(hx0 - 6, DONKEY[1] - 9), (hx1 + 6, DONKEY[1] - 9), (jar_box[0] + jar_box[2] + 3, DONKEY[1] - 3),
-                      (jar_box[0] + jar_box[2] + 3, jar_box[1] + jar_box[3] + 5), (hx1 + 6, DONKEY[1] + 6), (hx0 - 6, DONKEY[1] + 6)])
+    under_donkey = r([(hx0 - 6, DONKEY[1] - 9), (hx1 + 6, DONKEY[1] - 9), (hx1 + 6, DONKEY[1] + 6), (hx0 - 6, DONKEY[1] + 6)])
     blocked = [under_wagon, under_donkey]
     for (px, py, hgt, lean, k) in PALMS:                             # the foot of each palm
         w = hgt * 0.052
@@ -436,16 +589,24 @@ def layout(steam_foot):
         {"id": "cooler", "what": "the cooler on the roof (right)", "shape": {"poly": r(cooler)}, "stand": stand(730), "face": "N"},
         {"id": "hood", "what": "the hood, nose down in the sand, steaming", "shape": {"poly": r(hood)}, "stand": stand(566), "face": "N"},
         {"id": "wagon", "what": "the family wagon as a whole", "shape": {"poly": r(car)}, "stand": stand(604), "face": "N"},
-        {"id": "donkey", "what": "the water carrier's donkey and its jars", "shape": {"poly": hull(da > 0.5, 9)}, "stand": [int(DONKEY[0]) - 6, int(DONKEY[1]) + 20], "face": "N"},
-        {"id": "reeds", "what": "the reed bed in the shallows", "shape": {"rect": [212, 334, 30, 42]}, "stand": [229, 400], "face": "W"},
+        {"id": "donkey", "what": "Lot's donkey, head down, drinking at the water's edge, two water jars slung on it", "plane": "donkey",
+         "shape": {"poly": hug((da > 0.5) | (dla > 0.5))}, "stand": [244, 440], "face": "W"},
+        {"id": "reeds", "what": "the reed bed in the shallows", "shape": {"rect": [212, 334, 30, 42]}, "stand": [244, 392], "face": "W"},
         {"id": "footprints", "what": "small sneaker prints going up the track",
          "shape": {"poly": [[474, 490], [492, 490], [504, 460], [508, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 430], [478, 462]]},
          "stand": [458, 484], "face": "E"},
         {"id": "block", "what": "a dropped block of white stone and its broken sledge, on the far dune", "shape": {"rect": [698, 326, 66, 36]}, "stand": [716, 374], "face": "N"},
-        {"id": "boat", "what": "a boat bringing stone across the river", "shape": {"rect": [84, 280, 98, 48]}, "stand": [216, 412], "face": "W"},
+        {"id": "boat", "what": "a boat bringing stone across the river", "shape": {"rect": [84, 280, 98, 48]}, "stand": [246, 448], "face": "W"},
         {"id": "pyramid", "what": "the Great Pyramid, nearly finished", "shape": {"poly": r([GREAT[0], GREAT[1], GREAT[2], GREAT[3]])}, "stand": [540, 420], "face": "N"},
-        {"id": "river", "what": "the Nile", "shape": {"poly": r([(0, 266), (340, 266)] + [(x - 4, y) for x, y in BANK[1:8]] + [(0, 540)])}, "stand": [184, 446], "face": "W"},
+        {"id": "river", "what": "the Nile", "shape": {"poly": r([(0, 266), (340, 266)] + [(x - 4, y) for x, y in BANK[1:8]] + [(0, 540)])}, "stand": [240, 470], "face": "W"},
     ]
+    g = (BUNDLE[1] - HZ) / (590 - HZ) * 160 / 175
+    lot = {"note": "Lot sits on the sand here (the game draws him), in the near palm's shade: with the sun low on the left the crown's shadow lies to the "
+                   "right of the palm's foot, and this is its darkest part, a few steps from his donkey at the water",
+           "hips": list(LOT), "seated": "ground", "face": "E", "stand": list(LOT_TALK), "standFace": "W",
+           "solid": r([(368, 418), (428, 418), (434, 430), (428, 440), (374, 440), (366, 430)]),
+           "bundle": {"at": list(BUNDLE), "box": r([(BUNDLE[0] - 22 * g, BUNDLE[1] - 19 * g), (BUNDLE[0] + 22 * g, BUNDLE[1] + 1)]),
+                      "what": "his bundle, painted into the backdrop at his left hand, behind him: a mantle of banded wool (madder, ochre, indigo on undyed), rolled and corded"}}
     exits = [{"id": "track", "to": "egypt-site", "what": "the track up to the plateau", "shape": {"poly": [[476, 300], [508, 298], [516, 326], [472, 330]]}, "stand": [492, 316], "face": "N"}]
     base = [[490, 541], [790, 537]]                                  # the line where the wagon meets the sand
     up = lambda by: [[base[0][0], base[0][1] + by], [base[1][0], base[1][1] + by]]
@@ -456,7 +617,7 @@ def layout(steam_foot):
         "walk": walk, "blocked": blocked,
         "planes": [
             {"id": "palms", "file": "palms.png", "base": 400},
-            {"id": "donkey", "file": "donkey.png", "base": int(DONKEY[1]), "solid": under_donkey, "note": "its shadow is painted into the lower edge of this cut-out"},
+            {"id": "donkey", "file": "donkey.png", "base": int(DONKEY[1]), "solid": under_donkey, "note": "drinking at the water's edge; its shadow on the sand is painted into this cut-out (round four: the rings on the water are not: see fx 'donkey-rings')"},
             {"id": "wagon", "file": "wagon.png", "base": base, "solid": under_wagon, "note": "painted without the door mirror"},
             {"id": "mirror", "file": "mirror.png", "base": up(0.2), "note": "shown until the mirror is taken"},
             {"id": "suitcase-open", "file": "suitcase-open.png", "base": up(0.4), "note": "shown while the suitcase is open; hides the shut one"},
@@ -468,11 +629,18 @@ def layout(steam_foot):
         "palms_split": {"note": "palms.png cut into its three palms, pixel for pixel (any order): use these three in place of 'palms' so that somebody standing between two palms is sorted rightly with each",
                         "planes": [{"id": f"palm-{i + 1}", "file": f"palm-{i + 1}.png", "base": int(p[1])} for i, p in enumerate(PALMS)]},
         "things": things, "exits": exits,
-        "marks": {"dad": [420, 570], "carrier": [int(DONKEY[0]) - 66, int(DONKEY[1]) + 4]},
+        "marks": {"dad": [420, 570], "lot": list(LOT), "talkToLot": list(LOT_TALK), "muzzle": [round(v, 1) for v in egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)]},
+        "lot": lot,
         "steam": list(steam_foot),
+        "fx": fx_marks(),
         "notes": ["things are listed most particular first: where shapes overlap, the earlier one is meant",
                   "the three open pieces of luggage may be shown in any combination, laid in the order given (suitcase, trunk, cooler)",
-                  "wagon.png + mirror.png is the wagon as first approved; three patches of thin paint that were see-through (roof strip, rear panels) are now solid"],
+                  "wagon.png + mirror.png is the wagon as first approved; three patches of thin paint that were see-through (roof strip, rear panels) are now solid",
+                  "round three: the donkey stands at the water's edge in front of the near palm and drinks; the reed clump that stood in the water there is "
+                  "gone from back.png, and Lot's bundle is painted at his place; nothing else in back.png moved",
+                  "round four: nothing that moves by nature is painted still. The village's two threads of cooking smoke are gone from back.png and the "
+                  "rings round the donkey's muzzle from donkey.png (every other pixel of both is as it was); 'fx' says where the game draws them moving, "
+                  "and where the river shimmers"],
     }
     one = lambda v: json.dumps(v, separators=(", ", ": "))             # (written so that a person can read it: one thing to a line)
     rows = []
@@ -508,9 +676,14 @@ def check_layout(doc, comp, out):
         dr.text((min(p[0] for p in pts) * k + 3, min(p[1] for p in pts) * k - 13), t["id"], fill=(255, 255, 255, 255))
         dr.text((sx * k + 7, sy * k - 5), t["id"] + (" " + t["face"] if "face" in t else ""), fill=(0, 0, 0, 255))
     for name, (mx, my) in doc["marks"].items():
-        size = 160 * (my - HZ) / (590 - HZ)
+        size = 160 * (my - HZ) / (590 - HZ) * (0.55 if name == "lot" else 1.0)      # (Lot is seated)
         dr.rectangle([(mx - size * 0.15) * k, (my - size) * k, (mx + size * 0.15) * k, my * k], outline=(255, 0, 255, 255), width=2)
         dr.text(((mx + size * 0.15) * k + 3, (my - size) * k), name, fill=(255, 0, 255, 255))
+    if "lot" in doc:
+        dr.polygon([(x * k, y * k) for x, y in doc["lot"]["solid"]], outline=(255, 140, 0, 255))
+        sx, sy = doc["lot"]["stand"]
+        dr.ellipse([sx * k - 5, sy * k - 5, sx * k + 5, sy * k + 5], fill=(255, 140, 0, 255))
+        dr.text((sx * k + 7, sy * k - 5), "talk to Lot " + doc["lot"]["standFace"], fill=(0, 0, 0, 255))
     for p in doc["planes"]:
         if "base" in p:
             b = p["base"]
@@ -545,6 +718,10 @@ if __name__ == "__main__":
         Image.fromarray((base * 255).astype(np.uint8)).save("out/egypt1-1-under.png")
         print("under", round(time.time() - t0, 1))
         pic = base.copy() if mode == "fast" else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
+        approved = pic.copy()
+        details(approved, info, reeds=REEDS_APPROVED, lot=False, smoke=True)    # the backdrop as first approved, for its palette
+        since = pic.copy()
+        details(since, info, smoke=True)                                    # and as round three left it, for its extra colours
         details(pic, info)
         pc, pa = palms_plane()
         fc, fa = front_plane()
@@ -553,7 +730,9 @@ if __name__ == "__main__":
             whole_picture(pic, [(pc, pa), (dc, da), wagon_plane(pic), (fc, fa)])
             print("painted", round(time.time() - t0, 1))
             sys.exit()
-        print("back", finish(pic, "out/egypt1/back.png", 144))
+        size, changed = finish_keeping(pic, approved, "out/egypt1/back.png", 144, since=since)
+        ys, xs = np.nonzero(changed)
+        print("back", size, "repainted since round three", int(changed.sum()), "pixels in x", xs.min(), "..", xs.max(), "y", ys.min(), "..", ys.max())
         print("palms", finish(pc, "out/egypt1/palms.png", 40, pa))
         print("front", finish(fc, "out/egypt1/front.png", 32, fa))
         np.save("out/egypt1-look/pic.npy", pic)                      # (kept for `extras`)
@@ -561,7 +740,8 @@ if __name__ == "__main__":
     sizes, (wc, wa) = wagon_pictures(pic, back_rgb)
     print(sizes)
     dc, da, notes = donkey_plane(pic)
-    print("donkey", finish(dc, "out/egypt1/donkey.png", 72, da))
+    dc0, da0, _ = donkey_plane(pic, rings=True)                       # the donkey as approved in round three, for its palette
+    print("donkey", finish_keeping_cut(dc, da, dc0, da0, "out/egypt1/donkey.png", 72))
     if mode != "extras":
         whole_picture(pic, [(pc, pa), (dc, da), (wc, wa), (fc, fa)])
     import egypt1_steam

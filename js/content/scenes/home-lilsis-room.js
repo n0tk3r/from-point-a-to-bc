@@ -118,6 +118,12 @@ export default {
   spawn: { default: [518, 469], mom: [518, 469], bigsis: [461, 475], lilsis: [580, 471], fromLanding: [518, 469] },
   arrive: { fromLanding: [[461, 475], [580, 471]] },
   exits: ["home-landing"],
+  // The way out across the edges of the picture: her door is at the right edge, at the front, so the right edge and the
+  // bottom both lead out to the landing.
+  edges: {
+    E: { to: "home-landing", spawn: "fromLilsis", name: "out to the landing", walkTo: [609, 474] },
+    S: { to: "home-landing", spawn: "fromLilsis", name: "out to the landing", walkTo: [609, 474] },
+  },
 
   picture: art + "back.png",
 
@@ -126,34 +132,45 @@ export default {
     { id: "fort", src: art + "fort.png", base: [[0, 484], [203, 474]] },   // the blanket fort and its sign
     { id: "flashlight", src: art + "flashlight.png", base: [[0, 485], [203, 475]], when: (g) => !g.flag("home.flashTaken") },   // her flashlight in the fort's way in, until she takes it
     { id: "teaparty", src: art + "teaparty.png", base: [[392, 445], [513, 440]] },   // the low table, the spotted teapot and the four guests
-    { id: "front", src: art + "front.png", plane: "front" },   // her toy box, the crate of picture books, the hen house, the nest, the door; and the mobile of felt chickens
+    { id: "front", src: art + "front.png", plane: "front" },   // her toy box, the crate of picture books, the hen house, the nest, the door
+    { id: "mobile", src: art + "mobile.png", plane: "front" },  // and the mobile of felt chickens, a cut-out of its own since round four, so that it can stir
+  ],
+
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md): the mobile stirs in the air of the room, each
+  // chicken swinging a little on its thread, slowly; the bars at the top hardly move.
+  fx: [
+    { id: "mobile", type: "sway", plane: "mobile", anchor: "top", amount: 1.6, period: 5.5, wave: 60, lean: 0 },
   ],
 
   // Back to front: a later area lies over an earlier one.
   hotspots: [
     { id: "window", name: "window", poly: [[276, 146], [318, 146], [318, 100], [376, 100], [376, 146], [422, 146], [422, 303], [276, 303]], walkTo: [352, 369], face: "N", look: each("home.lilroom.window") },
-    { id: "drawings", name: "her drawings", poly: [[163, 222], [190, 200], [212, 184], [276, 184], [276, 296], [163, 296]], walkTo: [299, 387], face: "N", look: each("home.drawings") },
+    { id: "drawings", name: "her drawings", poly: [[165, 222], [186, 205], [211, 184], [277, 184], [277, 264], [203, 264], [201, 282], [165, 282]], walkTo: [299, 387], face: "N", look: each("home.drawings") },
     { id: "chart", name: "'MY CHICKENS'", rect: [398, 224, 85, 75], walkTo: [477, 368], face: "N", look: each("home.chart") },
     { id: "flock", name: "the flock", poly: [[134, 383], [138, 330], [168, 300], [190, 280], [232, 276], [264, 300], [289, 332], [289, 383]], walkTo: [299, 387], face: "W", look: flockLook },
-    { id: "lamp", name: "rooster lamp", poly: [[516, 300], [548, 295], [557, 330], [556, 400], [511, 402], [509, 352], [520, 330]], walkTo: [545, 424], face: "N", look: atBed(each("home.lamp")) },
+    { id: "lamp", name: "rooster lamp", poly: [[517, 298], [549, 295], [555, 326], [547, 333], [547, 358], [518, 360], [515, 340], [521, 328]], walkTo: [545, 424], face: "N", look: atBed(each("home.lamp")) },
     { id: "bed", name: "her bed", poly: [[560, 345], [562, 305], [640, 300], [648, 345], [692, 410], [692, 452], [598, 452], [556, 395]], walkTo: [545, 424], face: "E", look: atBed(each("home.lilbed")) },
     { id: "pillow", name: "the place on the pillow", rect: [560, 319, 72, 46], walkTo: [545, 424], face: "E", look: atBed(pillowLook) },
-    { id: "teaparty", name: "tea party", rect: [384, 352, 116, 85], walkTo: [375, 424], face: "E", look: each("home.teaparty") },
     {
-      id: "fort", name: "blanket fort", verb: "Go into", poly: [[0, 400], [20, 384], [120, 344], [206, 378], [216, 440], [206, 476], [0, 488]], walkTo: [227, 471], face: "W",
+      // (the table, the teapot and the four guests: the cut-out's own outline. The area keeps clear of the floor behind it.)
+      id: "teaparty", name: "tea party", walkTo: [375, 424], face: "E", plane: "teaparty", look: each("home.teaparty"),
+      poly: [[384, 378], [404, 372], [430, 362], [450, 352], [466, 352], [470, 368], [500, 368], [502, 380], [502, 440], [384, 440]],
+    },
+    {
+      id: "fort", name: "blanket fort", verb: "Go into", poly: [[0, 400], [20, 384], [120, 344], [206, 378], [216, 440], [206, 476], [0, 488]], walkTo: [227, 471], face: "W", plane: "fort",
       look: atFort(fortLook), use: atFort(fort), useWith: { lilflash: atFort(each("home.fort.putback")) },
     },
     {
-      id: "flashlight", name: "her flashlight", verb: "Take", rect: [127, 466, 42, 15], walkTo: [227, 471], face: "W", when: (g) => !g.flag("home.flashTaken"),
+      id: "flashlight", name: "her flashlight", verb: "Take", rect: [127, 466, 42, 15], walkTo: [227, 471], face: "W", plane: "flashlight", when: (g) => !g.flag("home.flashTaken"),
       look: atFort(each("home.flashlight")), use: atFort(fort),
     },
     {
-      id: "coop", name: "the hen house", walkTo: [256, 469], face: "S", look: each("home.coop"), useWith: { lilflash: { lilsis: shine("home.coop.flash") } },
+      id: "coop", name: "the hen house", walkTo: [256, 469], face: "S", plane: "front", look: each("home.coop"), useWith: { lilflash: { lilsis: shine("home.coop.flash") } },
       poly: [[280, 512], [285, 452], [440, 448], [448, 512], [444, 580], [376, 582], [376, 600], [352, 600], [352, 582], [285, 580]],
     },
-    { id: "nest", name: "the nest", poly: [[520, 512], [553, 506], [556, 486], [572, 480], [603, 497], [606, 512], [640, 518], [640, 586], [540, 590], [520, 560]], walkTo: [524, 479], face: "S", look: nestLook },
+    { id: "nest", name: "the nest", plane: "front", poly: [[520, 512], [553, 506], [556, 486], [572, 480], [603, 497], [606, 512], [640, 518], [640, 586], [540, 590], [520, 560]], walkTo: [524, 479], face: "S", look: nestLook },
     {
-      id: "door", name: "the door to the landing", verb: "Go through", rect: [703, 296, 97, 304], walkTo: [609, 474], face: "E",
+      id: "door", name: "the door to the landing", verb: "Go through", rect: [703, 296, 97, 304], walkTo: [609, 474], face: "E", plane: "front",
       look: each("home.lilroom.door"), use: (g) => g.goto("home-landing", { spawn: "fromLilsis" }),
     },
   ],

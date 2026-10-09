@@ -266,6 +266,8 @@ export default {
   // words go over a speaker's head and hers is the lowest. So the little one stands a row behind the other two.)
   spawn: { default: [286, 562], mom: [286, 562], bigsis: [334, 576], lilsis: [248, 528] },
   facing: "E",
+  // No `edges` (round three: a way out across the edge of the picture). This scene has no way out: the car brought them,
+  // and the only way on is the door in time where the tracks stop.
 
   picture: art + "back.png",
   planes: [
@@ -300,12 +302,30 @@ export default {
       <g id="spark" opacity="0" shape-rendering="geometricPrecision"><circle r="12" fill="url(#glint-glow)"/><path d="M-16,0 L16,0 M0,-16 L0,16" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/></g>`;
   },
 
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md): the two big birds that were painted still in
+  // the sky cross it slowly now and then, and the old-timer has his coffee on: a thread of woodsmoke from the stovepipe,
+  // nearly straight up in the still morning (the wind sock hangs slack: there is no wind).
+  fx: [
+    { id: "birds", type: "birds", kind: "flyers", lanes: [[[-20, 168], [820, 128]], [[820, 54], [-20, 92]], [[-20, 112], [820, 70]]], every: [25, 55], group: [1, 2], speed: 34, color: "#2e3a5c", size: [7, 10],
+      frames: { glide: "bird-0.png", flap: ["bird-1.png", "bird-0.png", "bird-2.png", "bird-0.png"], bank: "bird-3.png", middle: [7, 5.5] } },
+    { id: "stovepipe", type: "smoke", at: [305.2, 279.7], base: 419, color: "#e6e2ea", opacity: 0.3, height: 46, width: [1.5, 7], lean: [4, -46], rate: 2 },
+  ],
+
+  // THEIR OWN LIVES (round four: js/engine/life.js).
   actors: [
-    // He sits beside his table. (A seated person's place is the ground under the hips.)
-    { id: "oldtimer", kind: "oldtimer", at: [388, 498], face: "SE" },
+    // He sits beside his table. (A seated person's place is the ground under the hips.) Now and then he gets up out of his
+    // lawn chair, slowly (the chair stays put), and takes a few steps: back toward his pump and his shack, rubbing the
+    // small of his back, or out in front to look down the road; and sits down again. His mark, against the end of his
+    // stand, is off the ground the family walks on: he walks straight there and back.
+    { id: "oldtimer", kind: "oldtimer", at: [388, 498], face: "SE",
+      life: { every: [26, 48], spots: [[338, 468, "NE"], [372, 536, "SE"]], stay: [4, 8] } },
     // The man in gray: in front of the notice, and then a few yards along the fence. (The ground he stands on is among the cut-outs, above.)
-    { id: "agent", kind: "agent", at: [661, 458], face: "S", solid: false, when: (g) => !g.flag("nevada.distracted") },
-    { id: "agent", kind: "agent", at: [752, 468], face: "E", solid: false, when: (g) => !!g.flag("nevada.distracted") },
+    // While he is in front of the notice he keeps it covered (the story needs him there): small movements only, his
+    // watch and his tie. Once he has stepped aside he paces a little along the fence, never back in front of it.
+    { id: "agent", kind: "agent", at: [661, 458], face: "S", solid: false, when: (g) => !g.flag("nevada.distracted"),
+      life: { still: true, fidget: [5, 11] } },
+    { id: "agent", kind: "agent", at: [752, 468], face: "E", solid: false, when: (g) => !!g.flag("nevada.distracted"),
+      life: { every: [18, 34], spots: [[726, 480, "W"], [784, 482, "E"]], stay: [2.5, 5] } },
   ],
 
   // Make the light match the story facts. Runs on arrival and after loading a save.
@@ -315,28 +335,37 @@ export default {
   },
 
   // Back to front: a later area lies over an earlier one.
+  // SHAPES (round three: the Show button outlines each thing, so each shape hugs its thing, a few pixels outside its edge).
+  // They were traced from the painter's picture and cut-outs, and the old-timer and the man in gray from the figures the
+  // engine draws at their marks. A thing that is a painted cut-out names it (`plane`): Show then outlines the cut-out's own
+  // edge. The notice was already tight. The three of the family are clickable too (the engine puts an area over each one
+  // standing here), so no shape lies over the places where they stand: where they arrive, and where they are sent to
+  // stand (the places to stand below, and HOLD, BACK and EYE above). The check script holds it.
   hotspots: [
-    { id: "shack", name: "shack", rect: [131, 240, 216, 192], walkTo: [254, 449], face: "N", look: each("nevada.shack") },
-    { id: "fence", name: "fence", poly: [[583, 352], [583, 305], [612, 311], [800, 312], [800, 354], [627, 354], [627, 433], [612, 432]], walkTo: [590, 456], face: "N", look: each("nevada.fence") },
+    { id: "shack", name: "shack", poly: [[128, 331], [166, 312], [166, 277], [203, 277], [204, 262], [211, 240], [220, 242], [216, 263], [216, 277], [279, 277], [279, 300], [299, 299], [300, 273], [311, 273], [311, 300], [348, 298], [348, 412], [327, 420], [326, 425], [312, 426], [262, 426], [132, 426], [128, 422]], walkTo: [254, 449], face: "N", look: each("nevada.shack") },      // its sign, its wind arrow and its stovepipe; down to its porch, and no lower (Mom's head is just under it when they arrive)
+    { id: "fence", name: "fence", poly: [[562, 291], [614, 319], [800, 309], [800, 333], [617, 333], [617, 434], [606, 434], [603, 412], [562, 298]], walkTo: [590, 456], face: "N", look: each("nevada.fence") },      // its far side, its corner post, and the barbed wire along the top of its near side (the notice and the men are kept out of it)
     { id: "notice", name: "notice", verb: "Read", poly: [[630, 402], [695, 405], [695, 361], [630, 359]], walkTo: [646, 472], face: "N", look: readNotice, use: readNotice },
-    { id: "pump", name: "gas pump", rect: [334, 348, 40, 96], walkTo: [346, 466], face: "N", look: each("nevada.pump") },
-    { id: "stand", name: "lemonade stand", rect: [415, 318, 137, 177], walkTo: [486, 522], face: "N", look: each("nevada.stand") },
+    { id: "pump", name: "gas pump", plane: "pump", poly: [[346, 348], [340, 352], [338, 357], [339, 364], [344, 370], [340, 372], [336, 378], [336, 433], [334, 442], [362, 443], [365, 439], [363, 428], [370, 426], [372, 422], [372, 392], [368, 385], [363, 384], [362, 374], [355, 370], [361, 361], [359, 352], [353, 348]], walkTo: [346, 466], face: "N", look: each("nevada.pump") },
+    { id: "stand", name: "lemonade stand", plane: "stand", poly: [[490, 316], [486, 318], [485, 325], [413, 344], [416, 352], [428, 357], [437, 356], [448, 362], [463, 362], [478, 369], [474, 387], [474, 431], [471, 432], [467, 428], [452, 428], [444, 432], [443, 419], [431, 418], [424, 426], [423, 432], [415, 433], [416, 445], [420, 447], [420, 451], [428, 454], [423, 477], [426, 483], [425, 494], [428, 496], [431, 494], [435, 475], [439, 476], [439, 483], [449, 496], [453, 490], [472, 490], [475, 483], [480, 483], [486, 491], [503, 491], [507, 496], [512, 490], [513, 483], [522, 482], [525, 494], [531, 494], [522, 447], [537, 446], [539, 441], [530, 426], [524, 427], [520, 432], [516, 429], [490, 432], [480, 425], [483, 370], [485, 367], [491, 367], [501, 372], [518, 372], [526, 376], [539, 374], [544, 377], [551, 375], [553, 367], [492, 326], [493, 318]], walkTo: [486, 522], face: "N", look: each("nevada.stand") },      // its umbrella, its table and its sign
     {
-      id: "oldtimer", name: "old-timer", verb: "Talk to", rect: [360, 412, 62, 94], walkTo: [432, 528], face: "NW",      // him and his chair, as the game draws them (a little wider than the painter's stand-in)
+      id: "oldtimer", name: "old-timer", verb: "Talk to", poly: [[372, 416], [371, 419], [377, 423], [379, 430], [366, 433], [369, 461], [367, 467], [370, 470], [370, 477], [365, 498], [368, 500], [372, 497], [378, 477], [386, 480], [384, 494], [391, 495], [393, 505], [406, 506], [410, 503], [421, 503], [423, 498], [419, 495], [418, 469], [413, 463], [400, 435], [394, 430], [394, 423], [399, 421], [401, 417], [388, 411]], walkTo: [432, 528], face: "NW",      // him and his chair, as the game draws them
       look: each("nevada.old.look"), use: talkToOldTimer, useWith: { coin: "nevada.old.coin" },
     },
+    // The man in gray, before and after he backs off along the fence: Show outlines his own figure (the person "agent"), inside the area.
     {
-      id: "agent", name: "man in gray", verb: "Talk to", rect: [645, 366, 32, 96], walkTo: [626, 476], face: "NE", when: (g) => !g.flag("nevada.distracted"),
+      id: "agent", name: "man in gray", verb: "Talk to", poly: [[659, 365], [654, 368], [652, 373], [655, 379], [646, 384], [643, 398], [649, 403], [648, 458], [653, 462], [661, 455], [668, 462], [673, 458], [672, 403], [678, 398], [675, 384], [666, 379], [669, 376], [667, 368]], walkTo: [626, 476], face: "NE", when: (g) => !g.flag("nevada.distracted"),
       look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.1", "nevada.agent.coin.2"] },
     },
     {
-      id: "agent2", name: "man in gray", verb: "Talk to", rect: [736, 370, 32, 102], walkTo: [708, 482], face: "E", when: (g) => !!g.flag("nevada.distracted"),
+      id: "agent2", name: "man in gray", verb: "Talk to", plane: "agent", actor: "agent", poly: [[750, 371], [744, 377], [746, 388], [736, 400], [736, 412], [745, 430], [746, 470], [757, 472], [761, 469], [761, 463], [757, 460], [757, 447], [763, 402], [760, 388], [763, 381], [759, 373]], walkTo: [708, 482], face: "E", when: (g) => !!g.flag("nevada.distracted"),
       look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.1", "nevada.agent.coin.2"] },
     },
-    { id: "car", name: "Mom's car", rect: [0, 423, 225, 162], walkTo: [229, 588], face: "W", look: each("nevada.car.look") },
+    { id: "car", name: "Mom's car", plane: "car", poly: [[0, 423], [0, 582], [112, 582], [121, 586], [132, 586], [141, 582], [156, 582], [159, 580], [162, 569], [180, 569], [187, 564], [218, 523], [223, 520], [226, 505], [224, 486], [219, 475], [206, 466], [186, 460], [158, 457], [100, 425], [81, 421], [22, 421]], walkTo: [229, 588], face: "W", look: each("nevada.car.look") },
     {
-      // The ruts from the fence to the glass, and the glass. The place that hums is in the air over it: there is nothing there to click on but this.
-      id: "tracks", name: "where the tracks stop", verb: "Go to", poly: [[604, 466], [712, 466], [732, 520], [730, 548], [650, 560], [566, 546], [564, 522]], walkTo: [548, 548], face: "E",
+      // The glass where the tracks stop, and the last stretch of the two ruts that run into it. The place that hums is in
+      // the air over it: there is nothing there to click on but this. (The ruts higher up are left out: the family stand on
+      // them and between them, to read the notice, to talk to the man in gray, and beside him once he has moved.)
+      id: "tracks", name: "where the tracks stop", verb: "Go to", poly: [[595, 492], [613, 492], [604, 518], [694, 522], [693, 492], [709, 492], [711, 522], [726, 526], [738, 532], [740, 540], [733, 548], [700, 553], [650, 557], [620, 557], [590, 551], [572, 546], [560, 538], [558, 530], [566, 523], [585, 518]], walkTo: [548, 548], face: "E",
       // (Her flashlight, tried here: light is the right idea, and this is too little of it. Whoever holds it, she is the one who says so.)
       look: each("nevada.tracks.look"), use: atTheTracks, useWith: { coin: flash, lilflash: "nevada.tracks.lilflash" },
     },

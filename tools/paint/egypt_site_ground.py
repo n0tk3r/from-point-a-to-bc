@@ -85,7 +85,32 @@ def log_pile(sheet, x, y, r, n=3, length=60, seed=0):
     return sheet
 
 
-def near(picture, info, seed=21):
+STANDARD = (199.0, 398.0)                                                        # the gang's standard: the foot of its pole
+
+
+def standard_top():
+    """Where the top of the standard's pole is, in the picture."""
+    px, py = STANDARD
+    return px, py - 262 * size_at(py)
+
+
+def standard_streamers(s):
+    """The standard's two streamers, red and cream, tied on under its board and blowing out to the right."""
+    px, top = standard_top()
+    s.poly([(px + 1.5, top + 12.5), (px + 15, top + 15), (px + 23, top + 25), (px + 13, top + 22.5), (px + 2, top + 18)], "#b8402c")
+    s.line([(px + 3, top + 14.5), (px + 15, top + 17.5), (px + 21, top + 24)], "#de6a4c", 0.9, 0.8)
+    s.poly([(px + 1, top + 18.5), (px + 12, top + 24), (px + 16, top + 35), (px + 8, top + 30.5), (px + 1, top + 24.5)], "#f4ead0")
+    s.line([(px + 2, top + 21), (px + 10, top + 26), (px + 14, top + 33.5)], "#c8bca0", 0.8, 0.7)
+
+
+def streamers_mask(shape):
+    """How much of each pixel the streamers cover (as near() lays them)."""
+    s = Paper(shape)
+    standard_streamers(s)
+    return s.done()[1]
+
+
+def near(picture, info, seed=21, streamers=False):
     """Everything small on the floor of the site. Painted straight onto the backdrop."""
     shape = picture.shape[:2]
     x, y = grid(shape)
@@ -150,10 +175,8 @@ def near(picture, info, seed=21):
     s.ellipse(px + 0.8, top + 5, 3.2, 3.2, "#f2c444")
     s.ellipse(px + 0.2, top + 4.4, 1.6, 1.6, "#fbe08a")
     s.line([(px - 5, top - 1), (px + 6.5, top - 1.5), (px + 6.5, top + 10), (px - 5, top + 10.5), (px - 5, top - 1)], "#f6ecd2", 0.8, 0.9)
-    s.poly([(px + 1.5, top + 12.5), (px + 15, top + 15), (px + 23, top + 25), (px + 13, top + 22.5), (px + 2, top + 18)], "#b8402c")
-    s.line([(px + 3, top + 14.5), (px + 15, top + 17.5), (px + 21, top + 24)], "#de6a4c", 0.9, 0.8)
-    s.poly([(px + 1, top + 18.5), (px + 12, top + 24), (px + 16, top + 35), (px + 8, top + 30.5), (px + 1, top + 24.5)], "#f4ead0")
-    s.line([(px + 2, top + 21), (px + 10, top + 26), (px + 14, top + 33.5)], "#c8bca0", 0.8, 0.7)
+    if streamers:                                                                # (round four: they are their own cut-out now, to stir in the wind)
+        standard_streamers(s)
 
     # ---- where the sand was wetted ahead of the runners: a dark rim, a little shine, the jar and the dipper
     wet = info["wet"]
@@ -197,9 +220,10 @@ def near(picture, info, seed=21):
     return picture
 
 
-def far(picture, info, seed=21):
+def far(picture, info, seed=21, smoke=False):
     """The far left, before the queens' pyramids are said again: beyond the plateau's lip, the builders'
-    town and the river, pale with distance."""
+    town and the river, pale with distance. (`smoke=True`: with its bread ovens' smoke painted in, as approved.
+    Round four leaves the smoke to the game, which draws it rising; info["ovens"] says where.)"""
     shape = picture.shape[:2]
     rng = np.random.default_rng(seed + 400)
     lip = info["lip"]
@@ -218,10 +242,10 @@ def far(picture, info, seed=21):
         hy = float(lip[int(hx)]) - 4.2 - (k % 3) * 1.5
         build.hut(s, hx, hy, 5 + (k * 5) % 4, 2.6 + (k % 2) * 0.8, 2.5, seed + 30 + k, wall="#e6cca4", shade="#b8a4a8", roof="#f2e0b8", door="#8a7470")
     s.onto(picture, 0.85)
-    for sx in (20, 88, 140):                                                    # bread ovens smoking
-        sy = float(lip[sx]) - 8
-        smoke = mask_line(shape, curve([(sx, sy), (sx + 3, sy - 7), (sx + 9, sy - 13), (sx + 20, sy - 17)], 6), [1.0, 1.6, 2.4, 3.2, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5][:19], soft=1.6)
-        over(picture, "#f4ecdc", smoke * 0.32)
+    info["ovens"] = [(sx, float(lip[sx]) - 8) for sx in (20, 88, 140)]
+    for sx, sy in (info["ovens"] if smoke else ()):                             # bread ovens smoking
+        plume = mask_line(shape, curve([(sx, sy), (sx + 3, sy - 7), (sx + 9, sy - 13), (sx + 20, sy - 17)], 6), [1.0, 1.6, 2.4, 3.2, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5][:19], soft=1.6)
+        over(picture, "#f4ecdc", plume * 0.32)
     return picture
 
 

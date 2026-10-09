@@ -14,6 +14,7 @@ export const cast = {
   // Egypt (their words are tints nobody else in the game uses, and each stands clear of Dad's yellow)
   scribe:   { name: "Scribe", color: "#ffb48a", sprite: "scribe" },
   carrier:  { name: "Water Carrier", color: "#6fd6c4", sprite: "carrier" },
+  lot:      { name: "Lot", color: "#ff7a85", sprite: "lot" },
   overseer: { name: "Overseer", color: "#ff8c69", sprite: "overseer" },
   hauler1:  { name: "Hauler", color: "#c8dc6a", sprite: "hauler1" },
   hauler2:  { name: "Hauler", color: "#c8dc6a", sprite: "hauler2" },
@@ -58,7 +59,7 @@ export const items = {
   carmirror:    { name: "door mirror", icon: "carmirror.png", look: "item.carmirror.look" },
   sunglasses:   { name: "sunglasses", icon: "sunglasses.png", look: "item.sunglasses.look" },
   coppermirror: { name: "copper mirror", icon: "coppermirror.png", look: "item.coppermirror.look" },
-  chicken:      { name: "General Feathers", icon: "chicken.png", look: "item.chicken.look" },    // Little Sister's stuffed chicken, sent along to keep an eye on him
+  chicken:      { name: "General Feathers", proper: true, icon: "chicken.png", look: "item.chicken.look" },    // Little Sister's stuffed chicken, sent along to keep an eye on him
   // Act Two: the Son's
   toga:      { name: "senator's toga", icon: "toga.png", look: "item.toga.look" },
   tunic:     { name: "small tunic", icon: "tunic.png", look: "item.tunic.look" },

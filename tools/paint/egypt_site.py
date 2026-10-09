@@ -234,9 +234,14 @@ def under(seed=21):
     return np.clip(pic, 0, 1), info
 
 
-def details(pic, info, seed=21):
+KITES = [(196, 58, 4.2), (214, 70, 3.2), (150, 96, 2.6)]                       # kites turning in the warm air (round four: the game flies them)
+
+
+def details(pic, info, seed=21, as_approved=False):
     """The crisp things, over the brushwork: every edge of the stone again, joints, the works on the
-    face, and all the small things lying about."""
+    face, and all the small things lying about. Round four: what moves by nature is no longer painted still
+    (the kites, the far ovens' smoke, the standard's streamers); `as_approved=True` paints them in as before, to
+    work out the palette the picture was approved with."""
     shape = (H, W)
     x, y = grid(shape)
     rng = np.random.default_rng(seed + 77)
@@ -253,12 +258,12 @@ def details(pic, info, seed=21):
     edge.line([LIT.pt(BASE, 0), LIT.pt(BASE - 6000 / TAN, 6000)], "#fff6da", 1.0, 0.5)         # the far edge against the sky
     edge.line([SHADE.pt(0, 0), SHADE.pt(2700, 0)], "#6c6690", 1.2, 0.55)                       # the foot of the casing, in the bank
     edge.line([LIT.pt(0, 0), LIT.pt(BASE, 0)], "#d2a26c", 1.0, 0.55)
-    for (bx, by, r) in ((196, 58, 4.2), (214, 70, 3.2), (150, 96, 2.6)):                           # kites turning in the warm air
+    for (bx, by, r) in (KITES if as_approved else ()):                                                # kites turning in the warm air
         edge.line([(bx - r, by - r * 0.35), (bx - r * 0.3, by - r * 0.1), (bx, by + r * 0.25), (bx + r * 0.35, by - r * 0.15), (bx + r, by - r * 0.5)], "#3a3a4e", 1.0, 0.8)
     edge.onto(pic)
 
     # ---- the works on the sunlit face, and far things on the left
-    ground.far(pic, info, seed)
+    ground.far(pic, info, seed, smoke=as_approved)
     crisp = pic.copy()
     queens(crisp, seed)
     pic[...] = lerp(pic, crisp, 0.8)
@@ -301,21 +306,79 @@ def details(pic, info, seed=21):
     shadow(pic, sa * shade_all, 0.40, cool=0.08)
 
     # ---- and everything small on the ground
-    ground.near(pic, info, seed)
+    ground.near(pic, info, seed, streamers=as_approved)
     return pic
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02):
-    g = grain(picture, seed, amount)
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=0.02, keep=None):
+    """Grain, then the limited palette. `keep` (round four) is the picture as approved: the palette is worked out from
+    it exactly as before, every pixel where `picture` is the same keeps its old index, and only the changed places
+    are reduced again (with that palette)."""
+    g = grain(picture if keep is None else keep, seed, amount)
     sample_of = g if alpha is None else g[alpha > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
+    if keep is not None:
+        changed = np.abs(picture - keep).max(axis=2) > 0.5 / 255
+        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
 
 
-def layout():
-    """The numbers the game needs, worked out from the same measurements the picture is painted from."""
+def cut_from_back(approved, name, colors, mask, seed=7, speckle=0.014, amount=0.02):
+    """A cut-out made of the approved backdrop's own pixels, reduced exactly as finish() reduced them, with only the
+    colours it uses (round four: the standard's streamers, so that they can stir in the wind). Laid over the new
+    back.png it gives back the approved picture there. -> file size."""
+    g = grain(approved, seed, amount)
+    pal = palette_of([g.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((g * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    idx = to_palette(g, pal, speckle=speckle)
+    used = np.unique(idx[mask])
+    remap = np.zeros(256, dtype=np.uint8)
+    remap[used] = np.arange(len(used))
+    save(name, remap[idx], pal[used], mask.astype(F32))
+    return os.path.getsize(name)
+
+
+def fx_marks(info):
+    """Round four: everything here that moves by nature, for the game to draw moving (layout.json "fx"), in the engine's
+    own terms (js/engine/effects.js)."""
+    px, top = ground.standard_top()
+    r = lambda pts: [[round(float(x), 1), round(float(y), 1)] for x, y in pts]
+    behind = []                                                    # the queens' pyramids stand between us and the town: the smoke rises behind them
+    for i, q in enumerate(QUEENS):
+        a, l, c, rt = small(q)
+        if i == 1:                                                 # the middle one is built only seven tenths of the way up
+            t = 0.70
+            behind.append(r([l, (lerp(l[0], a[0], t), lerp(l[1], a[1], t)), (lerp(rt[0], a[0], t), lerp(rt[1], a[1], t)), rt, c]))
+        else:
+            behind.append(r([l, a, rt, c]))
+    out = []
+    for i, (sx, sy) in enumerate(info["ovens"]):
+        out.append({"type": "smoke", "id": f"oven-smoke-{i + 1}", "at": [int(sx), int(round(sy))], "base": int(round(sy)) + 4,
+                    "color": "#f4ecdc", "opacity": 0.32, "height": 19, "width": [1.0, 5], "lean": [20, -17], "rate": 2,
+                    "behind": behind, "behindOpacity": 0.2,
+                    "what": "a bread oven's smoke in the builders' town down by the river, very far off beyond the plateau's lip: a thin pale thread, "
+                            "rising a little and bending away to the right with the wind. 'behind': the three queens' pyramids are nearer than the town, "
+                            "so the smoke rises behind them (the painting let a fifth of it show through, as haze)"})
+    out.append({"type": "birds", "kind": "flyers", "id": "kites", "circle": {"at": [186, 74], "r": [34, 14]}, "count": 3, "speed": 12, "scale": 0.9,
+                "frames": {"glide": "kite-0.png", "flap": ["kite-1.png", "kite-0.png", "kite-2.png", "kite-0.png"], "bank": "kite-3.png", "middle": [6.5, 5.0]},
+                "color": "#3a3a4e", "size": [5, 9],
+                "what": "black kites wheeling high in the warm air over the left, in front of the great cloud (the painting had three, 5 to 9 px across). "
+                        "Mostly gliding, a few beats now and then. The circle keeps them in the open sky left of the pyramid's sunlit edge "
+                        "(x < 330 at the top, x < 300 at y 150), where nothing stands: no base, they are behind everything"})
+    out.append({"type": "sway", "id": "streamers", "plane": "streamers", "anchor": "left", "at": [int(round(px + 1)), int(round(top + 12.5))],
+                "amount": 1.5, "period": 2.6, "wave": 40, "lean": 0.1,
+                "cutout": {"id": "streamers", "file": "streamers.png", "base": int(ground.STANDARD[1]),
+                           "note": "NEW cut-out: add it to the scene's planes. Until a scene shows it the standard has no streamers (back.png has the pole "
+                                   "and board without them). It is kept out of 'planes' here only so that the checks stay clean until then"},
+                "what": "the gang's standard's two streamers (red, cream) stirring in the wind: tied to the pole on the left, blowing out to the right. "
+                        "streamers.png is the approved picture's own pixels there; the pole and board stay in back.png"})
+    return out
+
+
+def layout(fx=None):
+    """The numbers the game needs, worked out from the same measurements the picture is painted from. (`fx`: round
+    four's marks for the things that move by nature, from fx_marks().)"""
     def r(p):
         return [int(round(p[0])), int(round(p[1]))]
 
@@ -379,6 +442,10 @@ def layout():
         "door": {"rect": bbox(door), "middle": r(backp(DOOR_OFF, DOOR_H * 0.5))},
         "beam": [r(shade_mid), r(backp(DOOR_OFF, DOOR_H * 0.55))],
         "shade": {"heldAt": r(SUNSPOT), "middle": r(shade_mid)},
+        **({"fx": fx} if fx is not None else {}),
+        "notes": ["round four: nothing that moves by nature is painted still. The kites in the sky, the far ovens' smoke and the standard's streamers "
+                  "are gone from back.png (every other pixel is as it was); the streamers are their own cut-out now (streamers.png: see the 'cutout' "
+                  "of fx 'streamers'); 'fx' says where the game draws all three moving"],
     }
 
 
@@ -398,6 +465,8 @@ if __name__ == "__main__":
         print("under", round(time.time() - t0, 1), flush=True)
         pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
         print("brushed", round(time.time() - t0, 1), flush=True)
+        approved = pic.copy()
+        details(approved, info, as_approved=True)                               # as approved, with the moving things painted in: for the palette
         details(pic, info)
         Image.fromarray((np.clip(pic, 0, 1) * 255).astype(np.uint8)).save(OUT + "-2-back.png")
     planes = {"awning": things.awning_plane((H, W), fast), "sledge": things.sledge_plane((H, W), fast),
@@ -410,13 +479,14 @@ if __name__ == "__main__":
     print("painted", round(time.time() - t0, 1), flush=True)
     if fast:
         sys.exit()
-    print("back", finish(pic, OUT + "/back.png", 152))
+    print("back", finish(pic, OUT + "/back.png", 152, keep=approved))
+    print("streamers", cut_from_back(approved, OUT + "/streamers.png", 152, ground.streamers_mask((H, W)) > 0.3))
     for name, colors in (("awning", 56), ("sledge", 56), ("front", 72), ("shade", 32)):
         c, a = planes[name]
         print(name, finish(c, OUT + "/" + name + ".png", colors, a))
     with open(OUT + "/layout.json", "w") as f:
-        json.dump(layout(), f, indent=1)
-    for comp, names in ((OUT + "-comp.png", ("awning", "sledge", "shade", "front")), (OUT + "-comp-noshade.png", ("awning", "sledge", "front"))):
+        json.dump(layout(fx_marks(info)), f, indent=1)
+    for comp, names in ((OUT + "-comp.png", ("streamers", "awning", "sledge", "shade", "front")), (OUT + "-comp-noshade.png", ("streamers", "awning", "sledge", "front"))):
         im = Image.open(OUT + "/back.png").convert("RGBA")                       # everything laid together, as comp.py does
         for name in names:
             im.alpha_composite(Image.open(OUT + "/" + name + ".png").convert("RGBA"))

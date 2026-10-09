@@ -39,10 +39,12 @@ def mix(a, b, t):
 
 
 class Pen:
-    def __init__(self, lamps, amb, shape=SHAPE):
+    def __init__(self, lamps, amb, shape=SHAPE, tongues=False):
         self.base, self.fine = Paper(shape), Paper(shape)
         self.lamps, self.amb = lamps, np.asarray(amb, dtype=F32)
         self.rng = np.random.default_rng(5)
+        self.tongues = tongues            # round four: lamp flames are drawn by the game; True paints them in still, as approved
+        self.flames = []                  # (x, y, size) of every flame drawn or left to the game, in the order drawn
 
     # ------------------------------------------------ light
     def light(self, X, Y, D, n, wrap=0.25):
@@ -220,8 +222,12 @@ def turned(profile, steps=4):
 
 # ================================================================ lamps
 def flame(pen, at, size=1.0):
-    """A lamp's flame: a small hard tear of light. (The game adds the flicker and the glow.)"""
+    """A lamp's flame: a small hard tear of light. (The game adds the flicker and the glow.) Round four: the tear is
+    only painted when the pen says so (as approved); otherwise its place is noted for the game, which draws it moving."""
     x, y = P(*at)
+    pen.flames.append((x, y, size))
+    if not pen.tongues:
+        return
     f = pen.fine
     f.poly([(x - 1.9 * size, y + 0.6 * size), (x - 1.1 * size, y - 2.6 * size), (x + 0.2 * size, y - 6.8 * size), (x + 1.3 * size, y - 2.4 * size), (x + 1.8 * size, y + 0.6 * size), (x, y + 1.6 * size)], "#ffa436")
     f.poly([(x - 1.2 * size, y + 0.4 * size), (x - 0.6 * size, y - 2.2 * size), (x + 0.2 * size, y - 5.0 * size), (x + 0.9 * size, y - 2.0 * size), (x + 1.1 * size, y + 0.4 * size)], "#ffe488")

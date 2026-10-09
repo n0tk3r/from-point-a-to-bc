@@ -186,6 +186,12 @@ export default {
   // the places to stand for the sunlight, the near brazier and the chest by the door are a little higher than the painter's.)
   spawn: { default: [400, 532] },
   exits: ["rome-steps", "home-living-room"],
+  // The way out across the edge of the picture (round three): the doors are behind us, so the bottom edge is the way out,
+  // wherever along it he is sent (the inventory bar, which lies along the bottom, takes the clicks that land on its things).
+  // It goes as the three ways out below go: out to the steps, or, in a game saved just after the coin went through, home.
+  edges: {
+    S: { to: "rome-steps", spawn: "fromTemple", name: "out to the steps", walkTo: [400, 594], use: wayOut.use },
+  },
 
   picture: art + "back.png",
   planes: [
@@ -214,7 +220,28 @@ export default {
       <g id="door" opacity="0"><g class="flicker">${art.portal(190, 330, 11, "hole")}</g></g>`;
   },
 
-  actors: [{ id: "clerk", kind: "clerk", at: [614, 464], face: "W" }],
+  actors: [{ id: "clerk", kind: "clerk", at: [614, 464], face: "W",
+    life: { every: [25, 45], spots: [[642, 436, "NE"], [596, 446, "N"]], stay: [4, 8] } }],    // up from his table, back to his rack, or along behind the table (a straight line: the floor behind it is his own)
+
+  // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4a-ready.md). The clerk's lamp has lost its painted flame,
+  // and the engine draws it; the two braziers' coals breathe, low flames lick up from them and die down now and then
+  // (`lull`), and threads of smoke rise. All the light they throw on the room stays painted.
+  fx: [
+    // the clerk's oil lamp on his table, in still air, and its thread of smoke (base one row in front of the table's)
+    { id: "lamp-flame", type: "flame", at: [632.7, 406.7], base: 489, size: 10, width: 4.5, color: "#ffe9a0", edge: "#ff9a2c", glow: 16, glowColor: "#ffb860", glowOpacity: 0.2, flicker: 0.3 },
+    { id: "lamp-smoke", type: "smoke", at: [633, 396.7], base: 489, height: 40, width: [1, 4], lean: [2, -40], rise: 10, rate: 2, gust: 0.15, color: "#3a3438", opacity: 0.2 },
+    // the long bronze brazier by the door, at the front left (it is in front.png)
+    { id: "brazier-embers", type: "embers", plane: "front", at: [136.7, 539.4], size: [45.1, 14], count: 30, sparks: 0.3, bed: [[81, 553], [175, 553], [189, 525], [102, 525]] },
+    { id: "brazier-flame-1", type: "flame", plane: "front", at: [116.4, 541.5], size: 8, width: 4.4, color: "#ffcf6a", edge: "#ff7a20", glow: 0, flicker: 0.8, lull: 0.5 },
+    { id: "brazier-flame-2", type: "flame", plane: "front", at: [139, 535.2], size: 9, width: 5, color: "#ffcf6a", edge: "#ff7a20", glow: 0, flicker: 0.8, lull: 0.5 },
+    { id: "brazier-flame-3", type: "flame", plane: "front", at: [159.3, 542.9], size: 7, width: 3.9, color: "#ffcf6a", edge: "#ff7a20", glow: 0, flicker: 0.8, lull: 0.5 },
+    { id: "brazier-smoke", type: "smoke", plane: "front", at: [136.7, 533.4], height: 120, width: [3, 14], lean: [6, -120], rise: 14, rate: 2.5, gust: 0.2, color: "#b8a8a0", opacity: 0.18 },
+    // the pan of the brazier by the altar, far up the room: its smoke rises in front of the god (base: its feet)
+    { id: "brazier2-embers", type: "embers", at: [474.7, 305.2], base: 349, size: [10.3, 2.3], count: 8, sparks: 0.1 },
+    { id: "brazier2-flame-1", type: "flame", at: [471.7, 305.2], base: 349, size: 5, width: 2.5, color: "#ffcf6a", edge: "#ff7a20", glow: 0, flicker: 0.7, lull: 0.5 },
+    { id: "brazier2-flame-2", type: "flame", at: [478.7, 305.7], base: 349, size: 4, width: 2, color: "#ffcf6a", edge: "#ff7a20", glow: 0, flicker: 0.7, lull: 0.5 },
+    { id: "brazier2-smoke", type: "smoke", at: [474.7, 301.2], base: 349, height: 90, width: [2, 9], lean: [0, -90], rise: 12, rate: 2, gust: 0.15, color: "#b8a8a0", opacity: 0.16 },
+  ],
 
   // Make the light match the story facts. Runs on arrival and after loading a save.
   setup(g) {
@@ -223,36 +250,51 @@ export default {
   },
 
   // Back to front: a later area lies over an earlier one.
+  // SHAPES (round three: the Show button outlines each thing, so each shape hugs its thing, a few pixels outside its edge).
+  // They were traced from the painter's picture and cut-outs, and the clerk from the figure the engine draws at his mark.
+  // A thing that is a painted cut-out names it (`plane`): Show then outlines the cut-out's own edge (the door leaves and
+  // the near brazier are the cut-out "front"; the clerk's table is "table"). Each bronze tablet of the laws is a thing to
+  // click, and all say the same. The patch of sunlight and the painter's way out at the bottom edge were already tight.
+  // The place that hums is a bare patch of wall with nothing painted on it: its shape is a ring round the spot.
   hotspots: [
     // The way out is behind us. The painter gives it the bottom edge of the picture (the last of these three, at the
     // end of the list), which the inventory bar covers; so the two door leaves at the edges of the picture go out too.
-    { id: "out-left", ...wayOut, rect: [0, 0, 58, 600] },
-    { id: "out-right", ...wayOut, rect: [742, 0, 58, 600] },
-    { id: "tablets", ...tablets, poly: [[56, 250], [226, 194], [226, 268], [56, 370]] },                             // the laws, hung down the left wall (traced from the picture)
-    { id: "tablets-right", ...tablets, poly: [[572, 198], [744, 248], [744, 372], [572, 282]] },                     // and down the right
-    { id: "tablets-back", ...tablets, rect: [484, 174, 44, 62] },                                                    // and one on the back wall
-    { id: "standards", name: "standards", rect: [249, 188, 43, 126], walkTo: [290, 354], face: "N", look: "rome.standards.look" },
+    // (And since round three the whole bottom edge of the picture is the way out: see `edges`.)
+    { id: "out-left", ...wayOut, plane: "front", poly: [[0, 0], [0, 599], [53, 599], [56, 595], [57, 1]] },
+    { id: "out-right", ...wayOut, plane: "front", poly: [[743, 0], [743, 134], [741, 164], [744, 215], [742, 264], [743, 384], [741, 400], [743, 595], [746, 599], [799, 599], [799, 0]] },
+    // The laws, on bronze tablets hung down the left wall, down the right, and one on the back wall. Each hangs from a nail.
+    { id: "tablets", ...tablets, poly: [[59, 273], [80, 240], [83, 240], [102, 255], [102, 341], [60, 369]] },                     // the big one on the left wall
+    { id: "tablets-2", ...tablets, poly: [[132, 234], [144, 207], [147, 207], [158, 222], [158, 311], [132, 328]] },
+    { id: "tablets-3", ...tablets, poly: [[208, 203], [216, 186], [219, 186], [225, 199], [225, 257], [209, 268]] },
+    { id: "tablets-right", ...tablets, poly: [[703, 250], [721, 236], [724, 236], [742, 265], [741, 365], [703, 340]] },        // the big one on the right wall
+    { id: "tablets-right-2", ...tablets, poly: [[574, 199], [581, 190], [584, 190], [592, 206], [592, 268], [574, 262]] },
+    { id: "tablets-right-3", ...tablets, poly: [[594, 211], [601, 202], [604, 202], [611, 219], [611, 279], [595, 272]] },
+    { id: "tablets-right-4", ...tablets, poly: [[610, 231], [619, 221], [622, 221], [631, 239], [630, 294], [610, 291]] },
+    { id: "tablets-right-5", ...tablets, poly: [[639, 219], [652, 212], [655, 212], [668, 229], [667, 296], [639, 289]] },
+    { id: "tablets-back", ...tablets, poly: [[486, 184], [496, 180], [507, 174], [518, 180], [529, 184], [529, 236], [486, 236]] },           // and the one on the back wall, with its pointed top
+    { id: "standards", name: "standards", poly: [[249, 184], [262, 184], [268, 180], [276, 183], [279, 195], [279, 205], [288, 210], [296, 212], [296, 238], [290, 240], [292, 312], [252, 312], [250, 250], [246, 200]], walkTo: [290, 354], face: "N", look: "rome.standards.look" },
     {
-      id: "statue", name: "statue of the god", verb: "Untie", rect: [346, 127, 107, 208], walkTo: [400, 354], face: "N",
+      // The seated god, his throne, and the pedestal they stand on.
+      id: "statue", name: "statue of the god", verb: "Untie", poly: [[356, 160], [364, 148], [371, 141], [392, 127], [401, 127], [423, 140], [430, 145], [433, 180], [432, 262], [449, 268], [452, 272], [452, 332], [348, 332], [348, 272], [352, 268], [366, 262], [365, 215], [356, 190]], walkTo: [400, 354], face: "N",
       look: twice("rome.statue.look", "rome.statue.look2"), use: "rome.statue.use",
       useWith: { incense: offerIncense, coin: "rome.statue.coin", gum: "rome.statue.gum" },
     },
     {
-      id: "altar", name: "offering bowl", rect: [374, 297, 51, 53], walkTo: [400, 354], face: "N",                   // the small altar table before the god, and its bowl
+      id: "altar", name: "offering bowl", poly: [[388, 298], [412, 298], [414, 301], [425, 303], [424, 332], [421, 346], [378, 346], [375, 332], [375, 303], [386, 301]], walkTo: [400, 354], face: "N",                   // the small altar table before the god, and its bowl
       look: (g) => g.say(g.flag("rome.offered") ? "rome.bowl.done" : "rome.bowl.look"),
       useWith: { incense: offerIncense },
     },
-    { id: "brazier2", ...brazier, rect: [458, 297, 32, 53], walkTo: [469, 354], face: "N" },                          // the one by the altar
-    { id: "chests", ...chests, poly: [[55, 486], [95, 432], [134, 393], [167, 384], [213, 384], [213, 416], [193, 466], [126, 559], [55, 559]], walkTo: [214, 482], face: "W" },   // down the left wall
-    { id: "chests2", ...chests, poly: [[220, 317], [240, 295], [261, 305], [287, 340], [252, 349], [220, 349]], walkTo: [285, 355], face: "NW" },                                 // the chest and sacks at the far left
-    { id: "chests3", ...chests, poly: [[554, 333], [589, 298], [628, 348], [632, 375], [632, 415], [589, 415], [566, 382], [554, 363]], walkTo: [543, 389], face: "E" },          // down the right wall, one of them open
-    { id: "chests4", ...chests, poly: [[652, 451], [714, 442], [758, 499], [758, 576], [693, 588], [652, 518]], walkTo: [622, 536], face: "E" },                                  // by the door on the right
+    { id: "brazier2", ...brazier, poly: [[462, 299], [488, 299], [489, 307], [482, 312], [486, 350], [463, 350], [467, 312], [461, 307]], walkTo: [469, 354], face: "N" },                          // the one by the altar
+    { id: "chests", ...chests, poly: [[54, 546], [54, 482], [72, 467], [73, 447], [84, 433], [104, 430], [106, 419], [114, 413], [115, 396], [126, 392], [154, 392], [155, 385], [214, 383], [216, 396], [214, 436], [209, 445], [207, 466], [189, 474], [188, 500], [136, 524], [135, 548]], walkTo: [214, 482], face: "W" },   // down the left wall: the chests, the box of silver and the sacks
+    { id: "chests2", ...chests, poly: [[219, 330], [220, 318], [231, 305], [233, 297], [240, 292], [248, 295], [249, 304], [261, 306], [262, 321], [275, 318], [288, 326], [291, 344], [262, 349], [219, 349]], walkTo: [285, 355], face: "NW" },          // the chest and sacks at the far left
+    { id: "chests3", ...chests, poly: [[553, 333], [555, 320], [562, 315], [571, 318], [573, 331], [612, 331], [616, 338], [617, 416], [573, 416], [572, 368], [555, 366]], walkTo: [543, 389], face: "E" },          // down the right wall, one of them open
+    { id: "chests4", ...chests, poly: [[649, 452], [662, 449], [665, 432], [688, 429], [697, 441], [716, 439], [729, 447], [731, 460], [741, 466], [741, 590], [690, 593], [688, 580], [668, 579], [650, 521]], walkTo: [622, 536], face: "E" },          // by the door on the right, with the sacks on it and the laws leaning on it
     {
-      id: "cat", name: "sleeping cat", verb: "Pet", rect: [103, 434, 46, 21], walkTo: [196, 517], face: "W",        // on the chest nearest the brazier
+      id: "cat", name: "sleeping cat", verb: "Pet", poly: [[113, 441], [120, 436], [132, 435], [142, 438], [146, 446], [145, 454], [114, 455], [112, 449]], walkTo: [196, 517], face: "W",        // on the chest nearest the brazier
       look: "rome.bankcat.look", use: ["rome.bankcat.use.1", "rome.bankcat.use.2"], useWith: { coin: "rome.bankcat.coin" },
     },
-    { id: "rack", name: "clerk's rack", rect: [612, 292, 60, 173], walkTo: [573, 446], face: "E", look: "rome.rack.look" },   // rolls, tablets and keys, behind the clerk
-    { id: "brazier", ...brazier, rect: [72, 507, 124, 93], walkTo: [210, 538], face: "W" },                           // the near one, by the door
+    { id: "rack", name: "clerk's rack", poly: [[612, 300], [633, 296], [636, 290], [654, 290], [657, 300], [668, 305], [668, 420], [612, 420]], walkTo: [573, 446], face: "E", look: "rome.rack.look" },   // rolls, tablets, the jar on top and the keys, behind the clerk
+    { id: "brazier", ...brazier, plane: "front", poly: [[196, 512], [193, 511], [190, 514], [121, 514], [98, 516], [72, 548], [72, 587], [75, 589], [75, 599], [94, 599], [95, 589], [154, 587], [162, 588], [162, 599], [180, 599], [180, 581], [192, 576], [199, 594], [202, 596], [205, 595], [205, 591], [194, 567]], walkTo: [210, 538], face: "W" },                           // the near one, by the door
     {
       // (The painter's place to stand is 400, 555, where the inventory bar would hide his feet: he stands in the middle of the patch.)
       id: "sunpatch", name: "sunlight on the floor", verb: "Stand in", poly: [[303, 598], [368, 430], [482, 430], [478, 598]], walkTo: [404, 500], face: "NW",
@@ -261,28 +303,29 @@ export default {
       useWith: { coin: spark, phone: "rome.sun.phone", gum: "rome.sun.gum", quarter: "rome.sun.quarter" },
     },
     // The place that hums is one patch of bare wall. Shut, it is a thing to touch; open, it is a door. (The door itself is drawn at 190, 330.)
+    // Nothing is painted there, so its shape is a ring round the spot (Show outlines it); the open door's is a little ring round the door.
     // He stands at the far end of the floor's edge, where his head is level with the place and he can put his eye to it.
     // (The painter's place to stand, 232, 480, is nearer us: from there the place is well over his head, and the words
     // he says would lie over the door.)
     {
-      id: "hum", name: "place that hums", verb: "Touch", rect: [168, 286, 44, 84], walkTo: [264, 384], face: "W",
+      id: "hum", name: "place that hums", verb: "Touch", circle: [190, 330, 20], walkTo: [264, 384], face: "W",
       when: (g) => !g.flag("rome.doorOpen"),
       look: "rome.hole.look", use: tryTheHum,
       useWith: { phone: "rome.hum.try.3", coin: "rome.hum.coin", gum: "rome.hum.gum", incense: "rome.hum.incense" },
     },
     {
-      id: "hole", name: "coin-sized door", verb: "Go through", rect: [168, 286, 44, 84], walkTo: [264, 384], face: "W",
+      id: "hole", name: "coin-sized door", verb: "Go through", circle: [190, 330, 16], walkTo: [264, 384], face: "W",
       when: (g) => !!g.flag("rome.doorOpen"),
       look: "rome.door.look", use: ["rome.hole.use", "rome.hole.use2"],
       useWith: { coin: tossCoin, quarter: "rome.hole.quarter", phone: "rome.hole.phone", gum: "rome.hum.gum" },
     },
     {
-      id: "table", name: "clerk's table", rect: [503, 382, 153, 109], walkTo: [515, 509], face: "NE",
+      id: "table", name: "clerk's table", plane: "table", poly: [[502, 464], [502, 475], [506, 484], [525, 486], [528, 489], [554, 489], [557, 477], [642, 477], [643, 487], [650, 489], [653, 441], [657, 439], [657, 433], [641, 414], [648, 404], [644, 401], [637, 403], [633, 395], [629, 399], [628, 407], [634, 410], [635, 414], [598, 415], [598, 406], [589, 415], [567, 414], [567, 389], [579, 389], [575, 399], [579, 404], [586, 404], [590, 399], [584, 383], [568, 385], [563, 381], [557, 387], [542, 389], [537, 406], [541, 411], [552, 409], [548, 393], [561, 391], [560, 414], [536, 415], [540, 429], [540, 461], [524, 442], [519, 446], [513, 445], [515, 451], [509, 454]], walkTo: [515, 509], face: "NE",      // its balance, its lamp, and the sack against it
       look: "rome.table.look", use: ["rome.table.use.1", "rome.table.use.2", "rome.table.use.3"],
       useWith: { coin: clerkAndCoin, quarter: "rome.clerk.quarter" },
     },
     {
-      id: "clerk", name: "clerk", verb: "Talk to", rect: [582, 366, 46, 60], walkTo: [515, 509], face: "NE",         // what shows of him above his table
+      id: "clerk", name: "clerk", verb: "Talk to", poly: [[612, 371], [604, 370], [599, 373], [596, 385], [603, 392], [600, 400], [587, 410], [580, 408], [579, 417], [583, 419], [590, 417], [595, 419], [619, 419], [622, 417], [619, 394], [614, 387], [617, 378]], walkTo: [515, 509], face: "NE",         // what shows of him above his table
       look: twice("rome.clerk.look", "rome.clerk.look2"), use: talkToClerk,
       useWith: {
         coin: clerkAndCoin, quarter: "rome.clerk.quarter", incense: "rome.clerk.incense",

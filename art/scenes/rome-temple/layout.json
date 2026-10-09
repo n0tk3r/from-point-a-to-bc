@@ -488,5 +488,234 @@
    404
   ]
  },
- "notes": "Cut-outs are 800x600, laid at 0,0. `hum.at` is the exact spot on the wall. The clerk's mark is his stool behind the table (not walking floor). `lights` are where the game may draw live glow; nothing glows in the paint but the coals and the flame themselves."
+ "notes": "Cut-outs are 800x600, laid at 0,0. `hum.at` is the exact spot on the wall. The clerk's mark is his stool behind the table (not walking floor). `lights` are where the game may draw live glow; nothing glows in the paint but the coals and the flame themselves.",
+ "fx": [
+  {
+   "id": "lamp-flame",
+   "type": "flame",
+   "what": "the clerk's oil lamp on his table: its flame (taken out of table.png)",
+   "at": [
+    632.7,
+    406.7
+   ],
+   "size": 10,
+   "width": 4.5,
+   "color": "#ffe9a0",
+   "edge": "#ff9a2c",
+   "glow": 16,
+   "glowColor": "#ffb860",
+   "glowOpacity": 0.2,
+   "flicker": 0.3,
+   "base": 489,
+   "note": "`at` is the foot of the flame on the lamp's nozzle (its left end). As painted: an orange tongue 4.5 px wide and 10 high, a yellow heart, a white core 3 px up. A still room: it stands nearly straight and flickers. Its light on the table, the rack and the clerk's corner is painted and stays. Base one row in front of the table's (488)."
+  },
+  {
+   "id": "lamp-smoke",
+   "type": "smoke",
+   "what": "a thread of smoke from the lamp's flame",
+   "at": [
+    633.0,
+    396.7
+   ],
+   "base": 489,
+   "height": 40,
+   "width": [
+    1,
+    4
+   ],
+   "lean": [
+    2,
+    -40
+   ],
+   "rise": 10,
+   "rate": 2,
+   "gust": 0.15,
+   "color": "#3a3438",
+   "opacity": 0.2,
+   "note": "Very thin and faint: rising straight in the still air and wavering apart."
+  },
+  {
+   "id": "brazier-embers",
+   "type": "embers",
+   "what": "the bed of coals in the long bronze brazier by the door, at the front left",
+   "at": [
+    136.7,
+    539.4
+   ],
+   "size": [
+    45.1,
+    14.0
+   ],
+   "count": 30,
+   "sparks": 0.3,
+   "plane": "front",
+   "bed": [
+    [
+     81,
+     553
+    ],
+    [
+     175,
+     553
+    ],
+    [
+     189,
+     525
+    ],
+    [
+     102,
+     525
+    ]
+   ],
+   "note": "The coals are painted in front.png (dark lumps, the fire between them, a few white-hot): these breathe over them."
+  },
+  {
+   "id": "brazier-flame-1",
+   "type": "flame",
+   "what": "a low flame licking up from the coals by the door (none were painted)",
+   "at": [
+    116.4,
+    541.5
+   ],
+   "size": 8.0,
+   "width": 4.4,
+   "color": "#ffcf6a",
+   "edge": "#ff7a20",
+   "glow": 0,
+   "flicker": 0.8,
+   "plane": "front"
+  },
+  {
+   "id": "brazier-flame-2",
+   "type": "flame",
+   "what": "a low flame licking up from the coals by the door (none were painted)",
+   "at": [
+    139.0,
+    535.2
+   ],
+   "size": 9.0,
+   "width": 5.0,
+   "color": "#ffcf6a",
+   "edge": "#ff7a20",
+   "glow": 0,
+   "flicker": 0.8,
+   "plane": "front"
+  },
+  {
+   "id": "brazier-flame-3",
+   "type": "flame",
+   "what": "a low flame licking up from the coals by the door (none were painted)",
+   "at": [
+    159.3,
+    542.9
+   ],
+   "size": 7.0,
+   "width": 3.9,
+   "color": "#ffcf6a",
+   "edge": "#ff7a20",
+   "glow": 0,
+   "flicker": 0.8,
+   "plane": "front"
+  },
+  {
+   "id": "brazier-smoke",
+   "type": "smoke",
+   "what": "a thread of smoke over the coals by the door",
+   "at": [
+    136.7,
+    533.4
+   ],
+   "plane": "front",
+   "height": 120,
+   "width": [
+    3,
+    14
+   ],
+   "lean": [
+    6,
+    -120
+   ],
+   "rise": 14,
+   "rate": 2.5,
+   "gust": 0.2,
+   "color": "#b8a8a0",
+   "opacity": 0.18,
+   "note": "Faint, rising in the still air and curling; it thins out long before the ceiling."
+  },
+  {
+   "id": "brazier2-embers",
+   "type": "embers",
+   "what": "the coals in the pan of the brazier by the altar, far up the room",
+   "at": [
+    474.7,
+    305.2
+   ],
+   "size": [
+    10.3,
+    2.3
+   ],
+   "count": 8,
+   "sparks": 0.1,
+   "base": 349,
+   "note": "Painted in back.png, 26 px across: these breathe over the painted coals."
+  },
+  {
+   "id": "brazier2-flame-1",
+   "type": "flame",
+   "what": "a low flame over the far brazier's coals",
+   "at": [
+    471.7,
+    305.2
+   ],
+   "size": 5,
+   "width": 2.5,
+   "color": "#ffcf6a",
+   "edge": "#ff7a20",
+   "glow": 0,
+   "flicker": 0.7,
+   "base": 349
+  },
+  {
+   "id": "brazier2-flame-2",
+   "type": "flame",
+   "what": "a low flame over the far brazier's coals",
+   "at": [
+    478.7,
+    305.7
+   ],
+   "size": 4,
+   "width": 2,
+   "color": "#ffcf6a",
+   "edge": "#ff7a20",
+   "glow": 0,
+   "flicker": 0.7,
+   "base": 349
+  },
+  {
+   "id": "brazier2-smoke",
+   "type": "smoke",
+   "what": "a thread of smoke from the far brazier, before the god",
+   "at": [
+    474.7,
+    301.2
+   ],
+   "base": 349,
+   "height": 90,
+   "width": [
+    2,
+    9
+   ],
+   "lean": [
+    0,
+    -90
+   ],
+   "rise": 12,
+   "rate": 2,
+   "gust": 0.15,
+   "color": "#b8a8a0",
+   "opacity": 0.16,
+   "note": "It rises past the god's knees toward the dark of the ceiling. Base: the brazier's feet (348); the god and his pedestal are further back, so the smoke is in front of them."
+  }
+ ],
+ "fx_note": "Round four. The flame of the clerk's lamp is no longer painted (table.png changed only where it was); the game draws it. The two braziers were painted as beds of coals with no tongues of flame, so their pictures are unchanged: `fx` adds their breathing embers, low flames and a thread of smoke. All the light the fires throw on the room (walls, floor, chests, the god, the table) stays painted. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene. Left painted, on purpose: the cat asleep by the fire, the standards (indoors, no wind), the two unlit lamps."
 }

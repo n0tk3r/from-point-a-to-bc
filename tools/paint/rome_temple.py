@@ -23,7 +23,10 @@ THE PLAN
              front       the two door leaves at the borders, a brazier bottom left (front plane)
              (layout.json has every number, worked out from the same measurements the picture is drawn with)
 
-The picture is a backdrop and two cut-outs: `table` (the clerk sits behind it) and `front`."""
+The picture is a backdrop and two cut-outs: `table` (the clerk sits behind it) and `front`.
+ROUND FOUR: the clerk's lamp flame is no longer painted in table.png (PAINT_MOVING = True paints it as before); the game
+draws it, and the braziers' embers, low flames and smoke, from the marks in layout.json "fx". rome_temple_check4.py
+proves nothing else changed."""
 
 import json
 import math
@@ -43,6 +46,8 @@ W, H = 800, 600
 SHAPE = (H, W)
 HZ, FULL = 120, 585
 OUT = "out/rome-temple"
+PAINT_MOVING = False                                        # round four: the clerk's lamp flame is the game's to draw, flickering (layout.json "fx");
+                                                            # True paints it into table.png, still, as it was before
 
 cam = Camera(HZ, FULL)
 A, ZB, HC = 400.0, 1260.0, 700.0                            # half the room's width, how far the back wall is, the ceiling
@@ -1149,7 +1154,9 @@ def dress(seed=3):
 
 
 # ======================================================================== the clerk's table (cut-out)
-def table_plane(seed=80):
+def table_plane(seed=80, moving=None):
+    """The clerk's table and all on it. `moving`: with the lamp's flame painted in (PAINT_MOVING if not said)."""
+    moving = PAINT_MOVING if moving is None else moving
     D = Dual(SHAPE)
     rng = np.random.default_rng(seed)
     x0, x1, z0, z1, yt = TABLE
@@ -1273,6 +1280,21 @@ def table_plane(seed=80):
     D.poly([(c[0] - 9 * k, c[1] - 1.5 * k), (c[0] - 4 * k, c[1] - 4.6 * k), (c[0] + 5 * k, c[1] - 4.6 * k), (c[0] + 3 * k, c[1] - 2.6 * k), (c[0] - 5 * k, c[1] - 2.2 * k)], np.clip(BZ[0] * 0.7 + lampc * 0.5, 0, 1))
     D.line([(c[0] + 7.5 * k, c[1] - 1.5 * k), (c[0] + 10.5 * k, c[1] - 4 * k), (c[0] + 8 * k, c[1] - 6 * k)], BZ[1], max(0.7, 1.2 * k))            # its handle
     fx, fy = c[0] - 8.6 * k, c[1] - 2.4 * k
+    if moving:
+        lamp_flame(D, fx, fy)
+    return D
+
+
+def lamp_flame_at():
+    """Where the clerk's lamp's flame stands on its nozzle (picture px), as table_plane works it out."""
+    x0, x1, z0, z1, yt = TABLE
+    k = room.k((z0 + z1) / 2)
+    c = P(LAMP[0] + 2, yt + 22, LAMP[2])
+    return c[0] - 8.6 * k, c[1] - 2.4 * k
+
+
+def lamp_flame(D, fx, fy):
+    """The flame of the clerk's lamp: an orange tongue, a yellow heart, a white core."""
     D.poly([(fx - 2.3, fy), (fx - 1.9, fy - 4.4), (fx + 0.3, fy - 10.0), (fx + 2.1, fy - 4.4), (fx + 2.2, fy)], "#ff9a2c")
     D.poly([(fx - 1.4, fy - 0.2), (fx - 0.9, fy - 3.8), (fx + 0.3, fy - 7.4), (fx + 1.3, fy - 3.6), (fx + 1.3, fy - 0.2)], "#ffe9a0")
     D.ellipse(fx, fy - 1.8, 1.0, 1.5, "#fffbe8", fine=True)
@@ -1544,6 +1566,8 @@ def paint(fast):
     details(pic, places)
     print("back", round(time.time() - t0, 1))
     tc, ta = cutout(table_plane(), pic, 5, fast, sizes=(5, 3, 2), keep=0.45, restate=0.78)
+    if not PAINT_MOVING:                                    # the table as it was approved, flame and all: its palette is kept (see finish)
+        info["table_as_was"] = cutout(table_plane(moving=True), pic, 5, fast, sizes=(5, 3, 2), keep=0.45, restate=0.78)
     fc, fa = cutout(front_plane(), pic, 6, fast, sizes=(8, 4, 2))
     whole = pic.copy()
     over(whole, tc, ta)
@@ -1572,6 +1596,76 @@ def hull(points):
 
 def corners(x0, x1, y0, y1, z0, z1):
     return [P(x, y, z) for x in (x0, x1) for y in (y0, y1) for z in (z0, z1)]
+
+
+def flame_place(grow=2):
+    """Every pixel of table.png the lamp's flame touched (after the wobble every sheet is given), and a little round it."""
+    D = Dual(SHAPE)
+    lamp_flame(D, *lamp_flame_at())
+    la = sheets(D)[3]
+    place = la > 0.002
+    for _ in range(grow):
+        place = place | np.roll(place, 1, 0) | np.roll(place, -1, 0) | np.roll(place, 1, 1) | np.roll(place, -1, 1)
+    return place
+
+
+def fx_marks():
+    """Round four: the fires of the room, for the game to draw alive, in the engine's own fields (briefs/out/fx-4-ready.md).
+    Their light on the room stays painted."""
+    r = lambda q: [int(round(q[0])), int(round(q[1]))]
+    r1 = lambda q: [round(float(q[0]), 1), round(float(q[1]), 1)]
+    fx_, fy_ = lamp_flame_at()
+    x0, x1, z0, z1 = BOX1
+    y1 = BRAZIER1[1]
+    bed = [P(x0 + 5, y1 - 7, z0 + 6), P(x1 - 5, y1 - 7, z0 + 6), P(x1 - 5, y1 - 7, z1 - 6), P(x0 + 5, y1 - 7, z1 - 6)]
+    bx = sum(q[0] for q in bed) / 4
+    by = sum(q[1] for q in bed) / 4
+    half_w = (bed[1][0] - bed[0][0] + bed[2][0] - bed[3][0]) / 4
+    half_d = (bed[0][1] - bed[3][1]) / 2
+    k2 = room.k(BRAZIER2[2])
+    cx, cy = P(BRAZIER2[0], BRAZIER2[1], BRAZIER2[2])
+    rx = 29.0 * k2
+    ry = rx * room.squash(BRAZIER2[1], BRAZIER2[2])
+    feet2 = int(round(P(BRAZIER2[0], 0, BRAZIER2[2] - 20)[1]))
+    tbase = int(round(P(TABLE[0], 0, TABLE[2] + 2)[1]))
+    flames = [(-0.45, 0.15, 8.0), (0.05, -0.30, 9.0), (0.50, 0.25, 7.0)]                 # where on the near bed, and how tall
+    marks = [
+        {"id": "lamp-flame", "type": "flame", "what": "the clerk's oil lamp on his table: its flame (taken out of table.png)",
+         "at": r1((fx_, fy_)), "size": 10, "width": 4.5, "color": "#ffe9a0", "edge": "#ff9a2c", "glow": 16, "glowColor": "#ffb860",
+         "glowOpacity": 0.2, "flicker": 0.3, "base": tbase + 1,
+         "note": "`at` is the foot of the flame on the lamp's nozzle (its left end). As painted: an orange tongue 4.5 px wide and 10 high, "
+                 "a yellow heart, a white core 3 px up. A still room: it stands nearly straight and flickers. Its light on the table, the "
+                 "rack and the clerk's corner is painted and stays. Base one row in front of the table's (488)."},
+        {"id": "lamp-smoke", "type": "smoke", "what": "a thread of smoke from the lamp's flame",
+         "at": r1((fx_ + 0.3, fy_ - 10)), "base": tbase + 1, "height": 40, "width": [1, 4], "lean": [2, -40], "rise": 10, "rate": 2,
+         "gust": 0.15, "color": "#3a3438", "opacity": 0.2, "note": "Very thin and faint: rising straight in the still air and wavering apart."},
+        {"id": "brazier-embers", "type": "embers", "what": "the bed of coals in the long bronze brazier by the door, at the front left",
+         "at": r1((bx, by)), "size": [round(half_w, 1), round(half_d, 1)], "count": 30, "sparks": 0.3, "plane": "front",
+         "bed": [r(q) for q in bed],
+         "note": "The coals are painted in front.png (dark lumps, the fire between them, a few white-hot): these breathe over them."},
+    ]
+    for i, (u, v, size) in enumerate(flames):
+        marks.append({"id": f"brazier-flame-{i + 1}", "type": "flame", "what": "a low flame licking up from the coals by the door (none were painted)",
+                      "at": r1((bx + u * half_w, by + v * half_d)), "size": size, "width": round(size * 0.55, 1), "color": "#ffcf6a", "edge": "#ff7a20",
+                      "glow": 0, "flicker": 0.8, "plane": "front"})
+    marks += [
+        {"id": "brazier-smoke", "type": "smoke", "what": "a thread of smoke over the coals by the door",
+         "at": r1((bx, by - 6)), "plane": "front", "height": 120, "width": [3, 14], "lean": [6, -120], "rise": 14, "rate": 2.5, "gust": 0.2,
+         "color": "#b8a8a0", "opacity": 0.18, "note": "Faint, rising in the still air and curling; it thins out long before the ceiling."},
+        {"id": "brazier2-embers", "type": "embers", "what": "the coals in the pan of the brazier by the altar, far up the room",
+         "at": [round(cx, 1), round(cy, 1)], "size": [round(rx * 0.8, 1), round(ry * 0.76, 1)], "count": 8, "sparks": 0.1, "base": feet2,
+         "note": "Painted in back.png, 26 px across: these breathe over the painted coals."},
+        {"id": "brazier2-flame-1", "type": "flame", "what": "a low flame over the far brazier's coals", "at": [round(cx - 3, 1), round(cy, 1)],
+         "size": 5, "width": 2.5, "color": "#ffcf6a", "edge": "#ff7a20", "glow": 0, "flicker": 0.7, "base": feet2},
+        {"id": "brazier2-flame-2", "type": "flame", "what": "a low flame over the far brazier's coals", "at": [round(cx + 4, 1), round(cy + 0.5, 1)],
+         "size": 4, "width": 2, "color": "#ffcf6a", "edge": "#ff7a20", "glow": 0, "flicker": 0.7, "base": feet2},
+        {"id": "brazier2-smoke", "type": "smoke", "what": "a thread of smoke from the far brazier, before the god",
+         "at": [round(cx, 1), round(cy - 4, 1)], "base": feet2, "height": 90, "width": [2, 9], "lean": [0, -90], "rise": 12, "rate": 2,
+         "gust": 0.15, "color": "#b8a8a0", "opacity": 0.16,
+         "note": "It rises past the god's knees toward the dark of the ceiling. Base: the brazier's feet (348); the god and his pedestal "
+                 "are further back, so the smoke is in front of them."},
+    ]
+    return marks
 
 
 def layout(info):
@@ -1631,24 +1725,42 @@ def layout(info):
                    "lamp": [int(round(v)) for v in P(LAMP[0] - 9, LAMP[1] - 2, LAMP[2])]},
         "notes": "Cut-outs are 800x600, laid at 0,0. `hum.at` is the exact spot on the wall. The clerk's mark is his stool behind the table (not walking floor). `lights` are where the game may draw live glow; nothing glows in the paint but the coals and the flame themselves.",
     }
+    if not PAINT_MOVING:
+        out["fx"] = fx_marks()
+        out["fx_note"] = ("Round four. The flame of the clerk's lamp is no longer painted (table.png changed only where it was); the game draws it. "
+                          "The two braziers were painted as beds of coals with no tongues of flame, so their pictures are unchanged: `fx` "
+                          "adds their breathing embers, low flames and a thread of smoke. All the light the fires throw on the room "
+                          "(walls, floor, chests, the god, the table) stays painted. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), "
+                          "ready to copy into the scene. Left painted, on purpose: the cat asleep by the fire, the "
+                          "standards (indoors, no wind), the two unlit lamps.")
     with open(OUT + "/layout.json", "w") as f:
         json.dump(out, f, indent=1)
     return out
 
 
-def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.010, amount=0.016, gamma=0.6):
+def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.010, amount=0.016, gamma=0.6, was=None):
     """Grain, then a limited palette with speckle, as in the example; but this is a dark picture, so the
     grain is laid on in proportion to the light and the palette is chosen with the darks stretched out,
-    or the shadows would be all noise and four colors."""
+    or the shadows would be all noise and four colors.
+    `was` (round four) = (the picture as it was approved, its alpha, the place that has changed since): the palette
+    is chosen from the picture as it was, and outside that place every pixel keeps exactly what it had."""
     h, w, _ = picture.shape
-    rng = np.random.default_rng(seed)
-    lum = picture @ np.array([0.3, 0.55, 0.15], dtype=F32)
-    fine = rng.normal(0, 1, (h, w)).astype(F32)
-    coarse = blur(rng.normal(0, 1, (h, w)).astype(F32), 0.8) * 1.6
-    g = np.clip(picture + ((fine * 0.7 + coarse * 0.6) * amount * (0.30 + 0.9 * np.sqrt(np.clip(lum, 0, 1))))[..., None], 0, 1) ** gamma
-    sample_of = g if alpha is None else g[alpha > 0.5]
+
+    def grained(p):
+        rng = np.random.default_rng(seed)
+        lum = p @ np.array([0.3, 0.55, 0.15], dtype=F32)
+        fine = rng.normal(0, 1, (h, w)).astype(F32)
+        coarse = blur(rng.normal(0, 1, (h, w)).astype(F32), 0.8) * 1.6
+        return np.clip(p + ((fine * 0.7 + coarse * 0.6) * amount * (0.30 + 0.9 * np.sqrt(np.clip(lum, 0, 1))))[..., None], 0, 1) ** gamma
+    g = grained(picture)
+    g0, a0 = (grained(was[0]), was[1]) if was is not None else (g, alpha)
+    sample_of = g0 if a0 is None else g0[a0 > 0.5]
     pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
     idx = to_palette(g, pal, speckle=speckle)
+    if was is not None:
+        place = was[2]
+        idx = np.where(place, idx, to_palette(g0, pal, speckle=speckle))
+        alpha = np.where(place, alpha, a0) if alpha is not None else None
     save(name, idx, np.clip(pal, 0, 1) ** (1 / gamma), alpha)
     return os.path.getsize(name)
 
@@ -1666,7 +1778,12 @@ if __name__ == "__main__":
     if fast:
         sys.exit()
     print("back", finish(pic, OUT + "/back.png", 152))
-    print("table", finish(tc, OUT + "/table.png", 80, ta))
+    if PAINT_MOVING:
+        print("table", finish(tc, OUT + "/table.png", 80, ta))
+    else:                                                   # only where the flame was may table.png change
+        tc0, ta0 = info["table_as_was"]
+        print("table", finish(tc, OUT + "/table.png", 80, ta, was=(tc0, ta0, flame_place())))
+        Image.fromarray(flame_place().astype(np.uint8) * 255).save("out/rome-temple-moved.png")         # where table.png may change
     print("front", finish(fc, OUT + "/front.png", 80, fa))
     comp = Image.open(OUT + "/back.png").convert("RGBA")       # everything laid together, as comp.py does it
     for name in ("table", "front"):

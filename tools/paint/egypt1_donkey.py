@@ -41,6 +41,70 @@ def _loop(points, steps=5):
     return curve(pts[-1:] + pts + pts[:2], steps)[steps:steps + len(pts) * steps]
 
 
+# ---- drinking: the same donkey with its head let down to the water. The head is carried down whole (turned and
+# moved so that the tip of its muzzle is at `muzzle`, pointing `angle` degrees: -90 is straight down, -180 straight
+# ahead). The neck is the band between its root (from the breast up to the withers) and the head (from the throat
+# latch up behind the ears): each place in that band keeps how far along and how far across the band it is, and the
+# band's two edges are drawn anew as smooth curves, the crest from the withers and the throat from the breast, bowed
+# toward the points `crest` and `throat`. Places are in the measurements above with the legs already shortened.
+DRINK = dict(muzzle=(-92.0, -1.0), angle=-118.0, crest=(-50.0, 90.0), throat=(-58.0, 50.0))
+POLL, NOSE = (-53.0, 106.5), (-89.5, 72.5)                   # the top of the head and the tip of the muzzle, standing
+ROOT = ((-41.0, 60.0), (-22.0, 93.5))                        # where the neck leaves the body: the breast, the withers
+NAPE = ((-54.0, 81.5), (-44.0, 108.0))                       # where the head begins: the throat latch, and behind the ears
+
+
+def _cross(a, b):
+    return a[0] * b[1] - a[1] * b[0]
+
+
+def bend(drink=DRINK):
+    """-> a function taking a place on the standing donkey (legs shortened) to the same place on the drinking one,
+    and the head's own move (for the parts that go with the head whatever band they seem to be in)."""
+    head = math.hypot(NOSE[0] - POLL[0], NOSE[1] - POLL[1])
+    a1 = math.radians(drink["angle"])
+    turn = a1 - math.atan2(NOSE[1] - POLL[1], NOSE[0] - POLL[0])
+    c, s = math.cos(turn), math.sin(turn)
+    mx, my = drink["muzzle"]
+    px, py = mx - head * math.cos(a1), my - head * math.sin(a1)  # where the top of the head goes
+
+    def H(x, y):
+        dx, dy = x - POLL[0], y - POLL[1]
+        return px + dx * c - dy * s, py + dx * s + dy * c
+
+    (bx, by), (wx, wy) = ROOT
+    (lx, ly), (tx, ty) = NAPE
+    a1v = (wx - bx, wy - by)                                 # across the root, throat side to crest side
+    d1v = (tx - lx, ty - ly)                                 # across the nape
+    e0 = (lx - bx, ly - by)
+    e1 = (d1v[0] - a1v[0], d1v[1] - a1v[1])
+    L1, T1 = H(lx, ly), H(tx, ty)
+    kc, kt = drink["crest"], drink["throat"]
+
+    def bez(p0, k, p1, t):
+        return ((1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * k[0] + t * t * p1[0], (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * k[1] + t * t * p1[1])
+
+    def f(x, y):
+        if _cross(a1v, (x - bx, y - by)) <= 0:               # the body side of the root: nothing moves
+            return x, y
+        if _cross(d1v, (x - lx, y - ly)) >= 0:               # the head side of the nape: the head's move
+            return H(x, y)
+        q = (x - bx, y - by)                                 # in the band: how far across (u) and along (t) it
+        A, B, C = -_cross(a1v, e1), _cross(q, e1) - _cross(a1v, e0), _cross(q, e0)
+        if abs(A) < 1e-9:
+            us = [-C / B]
+        else:
+            r = math.sqrt(max(B * B - 4 * A * C, 0.0))
+            us = [(-B + r) / (2 * A), (-B - r) / (2 * A)]
+        u = min(us, key=lambda v: abs(v - 0.5))
+        E = (e0[0] + u * e1[0], e0[1] + u * e1[1])
+        t = ((q[0] - u * a1v[0]) * E[0] + (q[1] - u * a1v[1]) * E[1]) / (E[0] ** 2 + E[1] ** 2)
+        t = min(max(t, 0.0), 1.0)
+        lo, hi = bez((bx, by), kt, L1, t), bez((wx, wy), kc, T1, t)
+        return lo[0] + (hi[0] - lo[0]) * u, lo[1] + (hi[1] - lo[1]) * u
+    f.head = H
+    return f
+
+
 def jar(base, lines, at, s, tone=1.0, net=False, neck_rope=False):
     """A big water jar of red Nile clay: egg-shaped, a short neck, a rolled rim. `at` turns the jar's own
     measurements (see JAR) into places in the picture. `tone` under 1 puts it in shade (the far one)."""
@@ -72,17 +136,21 @@ def jar(base, lines, at, s, tone=1.0, net=False, neck_rope=False):
         lines.line(pts(girdle), ROPE["light"], w(0.9))
 
 
-def donkey(shape, foot, scale, jar_at=(77.0, -30.0)):
+def donkey(shape, foot, scale, jar_at=(77.0, -30.0), drink=None):
     """-> (color, alpha, line color, line alpha) on clear sheets the size of the picture. `foot` is where
     the ground under its middle is, on the line of its near hooves; `scale` is pixels to a centimetre.
-    `jar_at` is where the third jar stands: centimetres along, and toward us (minus) across the ground."""
+    `jar_at` is where the third jar stands: centimetres along, and toward us (minus) across the ground (None:
+    there is no third jar). `drink` (a dict like DRINK) lets its head down to the water."""
     base, lines = Sheet(shape), Sheet(shape)
     fx, fy = foot
     s = scale
+    down = bend(drink) if drink else None
 
     def P(x, y, far=False):
         dx, dy = (FAR if far else (0.0, 0.0))
         y = y * LEGS if y <= 50 else y - 50 * (1 - LEGS)     # a small donkey: short in the leg
+        if down is not None:
+            x, y = down(x, y)
         return (fx + (x + dx) * s, fy - (y + dy) * s)
 
     def pts(points, far=False):
@@ -184,7 +252,8 @@ def donkey(shape, foot, scale, jar_at=(77.0, -30.0)):
     # ---- the rope halter, and its rope let fall to the ground: he is not going anywhere
     rope([(-81.4, 90.6), (-79.6, 84), (-79.4, 76.0)], 2.2)
     rope([(-80.2, 86.5), (-68, 93.5), (-59.5, 100.5), (-54.6, 111)], 1.9)
-    rope(curve([(-79.4, 76.4), (-83.5, 60), (-84.0, 38), (-80.5, 15), (-74.5, 3.0), (-66, 0.8), (-57, 1.8)], 6), 2.0)
+    if down is None:                                         # (drinking, it has been let off its rope)
+        rope(curve([(-79.4, 76.4), (-83.5, 60), (-84.0, 38), (-80.5, 15), (-74.5, 3.0), (-66, 0.8), (-57, 1.8)], 6), 2.0)
 
     # ---- the load: a mat over its back, a pole lashed along it, and a jar hung in a net on each side
     blob([(-17, 100.6), (-4, 98.4), (14, 98.8), (31, 101.4), (32.4, 91), (31.6, 81.4), (8, 79.6), (-17.6, 81.0), (-18.6, 91)], MAT["mid"], steps=4)
@@ -207,6 +276,8 @@ def donkey(shape, foot, scale, jar_at=(77.0, -30.0)):
     rope([big(11.4, 103.0), (18.6, 104.0)], 1.3)
 
     # ---- the third jar, set down in the sand beside it
+    if jar_at is None:
+        return base.done() + lines.done()
     jx, jz = jar_at
     lean = math.radians(-8)
     ca, sa = math.cos(lean), math.sin(lean)
@@ -250,11 +321,47 @@ def hooves(foot, scale):
     return out
 
 
-def render(shape, foot, scale, back, seed=6, fast=False, tint_color="#62507f", amount=0.5):
+def muzzle(foot, scale, drink=DRINK):
+    """Where the drinking muzzle meets the water, in the picture: the middle of the muzzle at the surface."""
+    mx, my = drink["muzzle"]
+    return (foot[0] + (mx + 4.0) * scale, foot[1] - (my + 1.0) * scale)
+
+
+def rings(shape, at, scale, flat, seed, water=None):
+    """Rings spreading on the water from where the muzzle is in it: flat ellipses (the water is seen from low down,
+    so a ring is `flat` times as tall as it is wide), each a bright line where it catches the sky with a darker
+    trough inside it, broken here and there, fainter as it spreads. `scale` is pixels to a centimetre on the
+    ground there. -> (light, dark) masks."""
+    rng = np.random.default_rng(seed)
+    cx, cy = at
+    light, dark = Sheet(shape), Sheet(shape)
+    k = light.ss
+    for r_cm, a_light, a_dark in ((9.0, 0.95, 0.55), (19.0, 0.75, 0.4), (32.0, 0.45, 0.25)):
+        rx = r_cm * scale
+        ry = max(rx * flat, 0.7)
+        start = rng.uniform(0, 360)
+        gaps = sorted(rng.uniform(0, 360, 2))                # two breaks in each ring
+        for a0, a1 in ((0, gaps[0]), (gaps[0] + 28, gaps[1]), (gaps[1] + 28, 360)):
+            if a1 - a0 < 10:
+                continue
+            for sheet, dy, alpha, wd in ((light, 0.0, a_light, 1.0), (dark, -0.7, a_dark, 0.8)):
+                box = [(cx - rx) * k, (cy + dy - ry) * k, (cx + rx) * k, (cy + dy + ry) * k]
+                sheet.d.arc(box, start + a0, start + a1, fill=(255, 255, 255, int(255 * alpha)), width=max(1, int(round(wd * k))))
+    lm, dm = light.done()[1], dark.done()[1]
+    if water is not None:
+        lm, dm = lm * water, dm * water
+    return lm.astype(F32), (dm * (1 - lm)).astype(F32)
+
+
+def render(shape, foot, scale, back, seed=6, fast=False, tint_color="#62507f", amount=0.5, jar_at=(77.0, -30.0), drink=None, water=None, flat=0.2, rings_on=True):
     """The finished cut-out, standing on `back` (the painted backdrop): the donkey and the jars brushed and
     made crisp again, and under them their shadow, which is the backdrop's own sand gone darker and cooler.
-    -> (color, mask, notes). The shadow thins out at its edge in a speckle, since a cut-out's edge is hard."""
-    color, alpha, lc, la = donkey(shape, foot, scale)
+    -> (color, mask, notes). The shadow thins out at its edge in a speckle, since a cut-out's edge is hard.
+    Drinking (`drink`), the rings on the water round its muzzle were part of the cut-out too: `water` is the
+    river's mask, and `flat` how flat a ring on the water looks there (its height over its width).
+    `rings_on=False` (round four) leaves them out: rings that never spread break the illusion, so the game
+    draws them moving at muzzle() instead."""
+    color, alpha, lc, la = donkey(shape, foot, scale, jar_at=jar_at, drink=drink)
     solid = np.maximum(alpha, la)
     ys, xs = np.nonzero(solid > 0.02)
     y0, y1, x0, x1 = max(ys.min() - 20, 0), min(ys.max() + 30, shape[0]), max(xs.min() - 20, 0), min(xs.max() + 90, shape[1])
@@ -264,6 +371,12 @@ def render(shape, foot, scale, back, seed=6, fast=False, tint_color="#62507f", a
         sh = np.maximum(sh, mask_ellipse(shape, hx + r * 0.6, hy + 0.5, r * 1.7, max(1.2, r * 0.6), soft=0.7) * 0.9)
     ground = back.copy()
     tint(ground, tint_color, np.clip(sh * amount, 0, 1))
+    ripple = np.zeros(shape, dtype=F32)
+    if drink and rings_on:                                   # the rings, on the water under the animal's own picture
+        rl, rd = rings(shape, muzzle(foot, scale, drink), scale / 1.1, flat, seed + 3, water)
+        tint(ground, "#46809e", rd)
+        over(ground, "#f2fbf8", rl)
+        ripple = np.maximum(rl, rd)
     canvas = back.copy()                                     # the animal, brushed
     over(canvas, color, alpha)
     painted = canvas.copy()
@@ -275,7 +388,8 @@ def render(shape, foot, scale, back, seed=6, fast=False, tint_color="#62507f", a
     rng = np.random.default_rng(seed + 1)
     speck = 0.10 + 0.22 * rng.random(shape)                  # the shadow's edge breaks up into the sand's own grain
     mask = np.maximum(body, (sh > speck).astype(F32))
-    return ground, mask, dict(body=body > 0.5, shadow=sh, box=(x0, y0, x1, y1))
+    mask = np.maximum(mask, (ripple > 0.22).astype(F32))
+    return ground, mask, dict(body=body > 0.5, shadow=sh, box=(x0, y0, x1, y1), rings=ripple > 0.22)
 
 
 if __name__ == "__main__":

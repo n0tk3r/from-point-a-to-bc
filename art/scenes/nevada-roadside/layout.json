@@ -478,5 +478,97 @@
    328
   ]
  ],
- "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here."
+ "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here.",
+ "fx": [
+  {
+   "type": "birds",
+   "kind": "flyers",
+   "id": "birds",
+   "lanes": [
+    [
+     [
+      -20,
+      168
+     ],
+     [
+      820,
+      128
+     ]
+    ],
+    [
+     [
+      820,
+      54
+     ],
+     [
+      -20,
+      92
+     ]
+    ],
+    [
+     [
+      -20,
+      112
+     ],
+     [
+      820,
+      70
+     ]
+    ]
+   ],
+   "every": [
+    25,
+    55
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "speed": 34,
+   "color": "#2e3a5c",
+   "size": [
+    7,
+    10
+   ],
+   "frames": {
+    "glide": "bird-0.png",
+    "flap": [
+     "bird-1.png",
+     "bird-0.png",
+     "bird-2.png",
+     "bird-0.png"
+    ],
+    "bank": "bird-3.png",
+    "middle": [
+     7.0,
+     5.5
+    ]
+   },
+   "what": "two big dark birds (ravens, or a hawk) high over the desert, crossing slowly now and then: a long glide, a few slow beats. The painting had them still at [486, 150] and [702, 60], 7 and 10 px across. No base: they are behind everything"
+  },
+  {
+   "type": "smoke",
+   "id": "stovepipe",
+   "at": [
+    305.2,
+    279.7
+   ],
+   "base": 419,
+   "color": "#e6e2ea",
+   "opacity": 0.3,
+   "height": 46,
+   "width": [
+    1.5,
+    7
+   ],
+   "lean": [
+    4,
+    -46
+   ],
+   "rate": 2,
+   "new": true,
+   "what": "NEW (nothing was painted here): the old-timer has his coffee on, so a thin thread of woodsmoke from the stovepipe on the shack's roof. There is no wind this morning (the painting's own note: the wind sock hangs slack), so it rises nearly straight and spreads at the top"
+  }
+ ],
+ "fx_note": "round four: the two birds that were painted still in the sky are gone from back.png (every other pixel is as it was); 'fx' flies them, and adds a thread of smoke from the stovepipe (new). Left still on purpose: the wind sock, the umbrella, the hanging GAS sign and the tumbleweed in the fence: there is no wind this morning, and the wind sock hangs slack to say so."
 }

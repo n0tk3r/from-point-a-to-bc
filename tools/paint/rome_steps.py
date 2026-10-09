@@ -28,6 +28,11 @@ nothing else in the picture moved, the first lay-in under the brushwork is still
 the stool's shadow in it (temple_layers(stool=True)), that shadow is painted out on top (details), and the
 backdrop keeps the palette it was first given (rome_steps_palette.py).
 
+ROUND FOUR: what moves by nature (the altar's smoke, the smoke on the hill, the pigeons, the swallows, the two hens) is
+no longer painted in: the game draws it moving, from the marks in layout.json "fx" and the frames rome_steps_birds.py
+paints (cage-front.png lets the hens stand inside their cage; front-base.png and laurel.png let the laurel stir).
+PAINT_MOVING = True paints the picture as it was before. rome_steps_check4.py proves nothing else changed.
+
   python3 rome_steps.py         paints everything into out/rome-steps/ and lays it together as out/rome-steps-comp.png
   python3 rome_steps.py fast    skips the brush pass and the palette: out/rome-steps-2-all.png only
   (rome_steps_kit.py holds the tools; rome_steps_check.py draws layout.json over the picture.)"""
@@ -48,6 +53,7 @@ import sky
 from persp import Camera
 from rome_steps_kit import *
 from rome_steps_palette import PALETTE
+import rome_steps_birds as birds
 
 W, H = 800, 600
 SHAPE = (H, W)
@@ -55,6 +61,8 @@ HZ, FULL = 260, 590
 CAM = Camera(HZ, FULL)
 OUT = "out/rome-steps"
 KEEP = "out/rome-steps-kept"                                 # layers kept between runs while the rest is worked on
+PAINT_MOVING = False                                         # round four: the smoke, the birds and the hens are the game's to draw, moving
+                                                             # (True paints them in, still, as the picture was before; layout.json "fx" says where they go)
 
 T = Frame(CAM, 18.0, 330, 1930)                              # the temple
 SUN = unit((0.76, 0.62, -0.10))                              # toward the sun: (to the right, up, away from us)
@@ -612,6 +620,14 @@ STONE = (178.0, 262.0, -1068.0, -1030.0, 98.0)               # the boundary ston
 SEAT = (262.0, 4)                                            # where the soothsayer sits (the game draws him): u, and which step
 CAGE = (128.0, 196.0, 4)                                     # his cage of chickens: u0, u1, step
 STOOL_WAS = (318.0, 3)                                       # a folding stool stood here when the picture was first laid in: u, step
+# ---- what moves by nature (round four: not painted unless PAINT_MOVING; layout.json "fx" marks them for the game)
+ALTAR_SMOKE = [(0, 0), (-3, -22), (4, -48), (-7, -78), (-2, -112), (-16, -150), (-30, -196)]      # the altar's wisp, from its pan of embers (px)
+HILL_SMOKE = [(151, 190), (149, 172), (153, 156), (146, 140), (136, 128)]                          # a sacrifice up on the hill (px)
+GUTTER_PIGEONS = ((1010, 1), (1042, -1), (1150, 1), (880, -1))                                     # u along the gutter, facing
+SWALLOWS = ((206, 58, 5.0, 0.3), (236, 92, 3.6, -0.2), (176, 106, 3.0, 0.5), (36, 150, 2.6, 0.0))  # x, y, size, tilt
+PAVEMENT_PIGEONS = [(552, 512, 11.5, 1, True), (585, 524, 12.5, -1, False), (618, 506, 11, 1, False), (636, 540, 13, -1, True), (598, 552, 14, 1, True),
+                    (540, 470, 9.5, -1, False), (752, 530, 12.5, -1, False), (436, 566, 15, 1, True), (238, 470, 10, 1, False), (212, 478, 10.5, -1, True)]
+STEP_PIGEONS = ((610, 1, 9.0, -1, False), (905, 5, 8.0, 1, True), (980, 5, 7.6, -1, False))       # u, step, size, facing, pecking
 BASE = Frame.at(CAM, 9.0, -505.0, 700.0)                     # the statue base at the very front, bottom left
 BASE_BOX = (0.0, 250.0, 0.0, 130.0, 0.0, 122.0)
 
@@ -1151,9 +1167,10 @@ def stone_layer(fine=2, seed=75):
     return out
 
 
-def front_layer(fine=2, seed=77):
+def front_layer(fine=2, seed=77, branch=True):
     """Right at the front, bottom left: the top of a statue's base, half in the shade of a laurel, and a
-    branch of the laurel itself hanging into the picture. Everyone passes behind it. -> Canvas."""
+    branch of the laurel itself hanging into the picture. Everyone passes behind it. -> Canvas.
+    (`branch` False: the base alone, for round four's laurel.png, which lets the branch stir.)"""
     Bf = BASE.finer(fine)
     c = Canvas(Bf.shape)
     u0, u1, v0, v1, h0, h1 = BASE_BOX
@@ -1177,7 +1194,14 @@ def front_layer(fine=2, seed=77):
     fleck = step(0.50, 0.62, noise(SHAPE, 15, seed + 8, 3)) * step(0.35, 0.6, noise(SHAPE, 60, seed + 9, 2))
     shade = shade * (1 - 0.9 * fleck) * out.a
     out.c = out.c * (1 - shade[..., None] * (1 - np.array([0.46, 0.48, 0.74], dtype=F32)))
-    # the branch: it comes in from the left above the base and hangs down across it
+    if branch:
+        sc, sa = laurel_sheet(seed).done()
+        out.put(sc, sa)
+    return out
+
+
+def laurel_sheet(seed=77):
+    """The laurel's branch: it comes in from the left above the statue base and hangs down across it. -> Sheet"""
     s = Sheet(SHAPE)
     rng = np.random.default_rng(seed)
     greens = ["#132418", "#1d3620", "#2c4e24", "#487630", "#7ea040", "#bccb66"]
@@ -1209,9 +1233,30 @@ def front_layer(fine=2, seed=77):
     for (bx, by) in ((96, 474), (100, 479), (91, 478), (44, 500), (49, 505), (130, 468), (70, 424), (75, 428)):          # a few dark berries
         s.ellipse(bx, by, 2.4, 2.4, "#2a1c2c")
         s.ellipse(bx + 0.6, by - 0.7, 0.8, 0.8, "#8a7c9c")
-    sc, sa = s.done()
-    out.put(sc, sa)
-    return out
+    return s
+
+
+def laurel_apart():
+    """Round four: front.png in two, the statue base (front-base.png) and the laurel's branch (laurel.png), so that the
+    branch can stir; laid together they are front.png, pixel for pixel. Where the branch hides the base, the base is
+    filled out a few pixels from its own edge, so that nothing opens up when the branch moves. -> laid together, the same?"""
+    from scipy import ndimage
+    im = Image.open(f"{OUT}/front.png")
+    idx, clear = np.asarray(im), im.info["transparency"]
+    pal = np.array(im.getpalette()[:3 * clear], dtype=F32).reshape(-1, 3) / 255.0
+    opaque = idx != clear
+    leaves = (laurel_sheet().done()[1] > 0.5) & opaque
+    base_a = front_layer(branch=False).a > 0.5
+    own = opaque & ~leaves
+    base = np.where(own, idx, clear).astype(np.uint8)
+    dist, (iy, ix) = ndimage.distance_transform_edt(~own, return_indices=True)
+    fill = base_a & leaves & (dist <= 3.0)
+    base[fill] = idx[iy[fill], ix[fill]]
+    branch = np.where(leaves, idx, clear).astype(np.uint8)
+    save(f"{OUT}/front-base.png", base, pal, (base != clear).astype(F32))
+    save(f"{OUT}/laurel.png", branch, pal, (branch != clear).astype(F32))
+    again = np.where(branch != clear, branch, base)
+    return bool((again == idx).all())
 
 
 def pigeon(sheet, x, y, size, seed, face=1, pecking=False):
@@ -1241,18 +1286,47 @@ def pigeon(sheet, x, y, size, seed, face=1, pecking=False):
     return sheet
 
 
-def details(pic, info, back, first=None, seed=11):
+def cage_front(s):
+    """The soothsayer's cage, all that lies in front of the hens in it: the floor they stand on, the bars, the top,
+    the rails and the ring to carry it by. (In the picture it is drawn over the dark inside of the cage; cage.png
+    is this much of it again, so that the game's hens stand inside.)"""
+    P = T.pt
+    cu0, cu1, ck = CAGE
+    hk, vk = ck * RISE, VK(ck)
+    kk = T.k((cu0 + cu1) / 2, vk)
+    a0, a1 = P(cu0, vk + 4, hk), P(cu1, vk + 4, hk)
+    b0, b1 = P(cu0, vk + 34, hk), P(cu1, vk + 34, hk)
+    top = 46 * kk
+    wood, wood_l, wood_d = "#8a6238", "#c99a58", "#4e3622"
+    # the cage itself: a floor, a top, bars all round; a ring to carry it by
+    s.poly([a0, a1, b1, b0], wood_l)
+    for t in np.linspace(0, 1, 9):
+        q0, q1 = (lerp(b0[0], b1[0], t), lerp(b0[1], b1[1], t)), (lerp(a0[0], a1[0], t), lerp(a0[1], a1[1], t))
+        s.line([q1, (q1[0], q1[1] - top)], wood_l if t > 0.45 else wood, 1.3)
+        s.line([(q1[0] - 0.8, q1[1]), (q1[0] - 0.8, q1[1] - top)], wood_d, 0.7, 0.7)
+    s.poly([(a0[0] - 1.5, a0[1] - top), (a1[0] + 1.5, a1[1] - top), (b1[0] + 1.5, b1[1] - top - 1), (b0[0] - 1.5, b0[1] - top - 1)], wood_l)
+    s.line([(a0[0] - 1.5, a0[1] - top), (a1[0] + 1.5, a1[1] - top)], wood_d, 1.3)
+    s.line([(a0[0] - 1.5, a0[1] - top * 0.5), (a1[0] + 1.5, a1[1] - top * 0.5)], wood, 1.1)
+    s.line([(a0[0] - 1.5, a0[1]), (a1[0] + 1.5, a1[1])], wood_d, 1.6)
+    mx_, my_ = (a0[0] + a1[0] + b0[0] + b1[0]) / 4, (a0[1] + b0[1]) / 2 - top - 1
+    s.line([(mx_ - 5 * kk, my_), (mx_ - 4 * kk, my_ - 7 * kk), (mx_ + 4 * kk, my_ - 7 * kk), (mx_ + 5 * kk, my_)], wood_d, 1.3)
+    return s
+
+
+def details(pic, info, back, first=None, seed=11, moving=None):
     """Over the brushwork: say every built thing again, crisply, then the small things. `first` is the temple
     as it was first laid in under the brushwork: wherever it has been changed since, the change is painted
-    out at full strength."""
+    out at full strength. `moving`: paint in the smoke, the birds and the hens too (PAINT_MOVING if not said)."""
+    moving = PAINT_MOVING if moving is None else moving
     x, y = grid(SHAPE)
     rng = np.random.default_rng(seed + 5)
     P = T.pt
     fc, fa = info["forum"]
     over(pic, fc, fa * 0.88)
     land.haze(pic, HZ, "#f3ead2", 0.16, 0.07, fa)
-    wisp = mask_line(SHAPE, curve([(151, 190), (149, 172), (153, 156), (146, 140), (136, 128)], 6), [0.8 + 0.28 * i for i in range(25)], soft=1.6)
-    over(pic, "#f4ecde", (wisp * 0.42 * (0.5 + noise(SHAPE, (8, 24), seed + 22, 3))).clip(0, 1).astype(F32))     # smoke of a sacrifice up on the hill
+    if moving:
+        wisp = mask_line(SHAPE, curve(HILL_SMOKE, 6), [0.8 + 0.28 * i for i in range(25)], soft=1.6)
+        over(pic, "#f4ecde", (wisp * 0.42 * (0.5 + noise(SHAPE, (8, 24), seed + 22, 3))).clip(0, 1).astype(F32))     # smoke of a sacrifice up on the hill
     # joints of the paving: thin, broken, fainter far away
     jm = hand(info["joints"]) * info["ground"] * (0.62 + 0.5 * noise(SHAPE, 110, seed + 21, 3))
     tint(pic, "#8a6f5c", np.clip(jm * 0.60, 0, 1).astype(F32))
@@ -1348,30 +1422,20 @@ def details(pic, info, back, first=None, seed=11):
     top = 46 * kk
     wood, wood_l, wood_d = "#8a6238", "#c99a58", "#4e3622"
     s.poly([(b0[0], b0[1] - top), (b1[0], b1[1] - top), (b1[0] + 0, b1[1]), (b0[0], b0[1])], "#3a2a26", 0.92)                    # the dark inside
-    # two hens in it: a white one, and a brown one pecking
-    hx, hy = lerp(a0[0], a1[0], 0.34), a0[1] - 4 * kk
-    s.ellipse(hx, hy - 10 * kk, 11 * kk, 8 * kk, "#f4ead8")
-    s.ellipse(hx + 8 * kk, hy - 19 * kk, 4.2 * kk, 4.6 * kk, "#f8f0e0")
-    s.poly([(hx + 11 * kk, hy - 19 * kk), (hx + 16 * kk, hy - 17.5 * kk), (hx + 11 * kk, hy - 16 * kk)], "#e0a030")
-    s.ellipse(hx + 8 * kk, hy - 24 * kk, 2.4 * kk, 1.8 * kk, "#d03a2c")
-    s.poly([(hx - 10 * kk, hy - 12 * kk), (hx - 17 * kk, hy - 20 * kk), (hx - 8 * kk, hy - 16 * kk)], "#e6dcc8")
-    hx2 = lerp(a0[0], a1[0], 0.72)
-    s.ellipse(hx2, hy - 9 * kk, 10 * kk, 7.5 * kk, "#a8683a")
-    s.ellipse(hx2 - 8 * kk, hy - 5 * kk, 4 * kk, 4 * kk, "#b87844")
-    s.ellipse(hx2 - 9 * kk, hy - 9 * kk, 2.0 * kk, 1.6 * kk, "#c83428")
-    s.poly([(hx2 + 8 * kk, hy - 11 * kk), (hx2 + 15 * kk, hy - 19 * kk), (hx2 + 6 * kk, hy - 15 * kk)], "#7a4a2a")
-    # the cage itself: a floor, a top, bars all round; a ring to carry it by
-    s.poly([a0, a1, b1, b0], wood_l)
-    for t in np.linspace(0, 1, 9):
-        q0, q1 = (lerp(b0[0], b1[0], t), lerp(b0[1], b1[1], t)), (lerp(a0[0], a1[0], t), lerp(a0[1], a1[1], t))
-        s.line([q1, (q1[0], q1[1] - top)], wood_l if t > 0.45 else wood, 1.3)
-        s.line([(q1[0] - 0.8, q1[1]), (q1[0] - 0.8, q1[1] - top)], wood_d, 0.7, 0.7)
-    s.poly([(a0[0] - 1.5, a0[1] - top), (a1[0] + 1.5, a1[1] - top), (b1[0] + 1.5, b1[1] - top - 1), (b0[0] - 1.5, b0[1] - top - 1)], wood_l)
-    s.line([(a0[0] - 1.5, a0[1] - top), (a1[0] + 1.5, a1[1] - top)], wood_d, 1.3)
-    s.line([(a0[0] - 1.5, a0[1] - top * 0.5), (a1[0] + 1.5, a1[1] - top * 0.5)], wood, 1.1)
-    s.line([(a0[0] - 1.5, a0[1]), (a1[0] + 1.5, a1[1])], wood_d, 1.6)
-    mx_, my_ = (a0[0] + a1[0] + b0[0] + b1[0]) / 4, (a0[1] + b0[1]) / 2 - top - 1
-    s.line([(mx_ - 5 * kk, my_), (mx_ - 4 * kk, my_ - 7 * kk), (mx_ + 4 * kk, my_ - 7 * kk), (mx_ + 5 * kk, my_)], wood_d, 1.3)
+    if moving:                                         # (the game draws the hens now, standing behind the front of the cage: cage.png)
+        # two hens in it: a white one, and a brown one pecking
+        hx, hy = lerp(a0[0], a1[0], 0.34), a0[1] - 4 * kk
+        s.ellipse(hx, hy - 10 * kk, 11 * kk, 8 * kk, "#f4ead8")
+        s.ellipse(hx + 8 * kk, hy - 19 * kk, 4.2 * kk, 4.6 * kk, "#f8f0e0")
+        s.poly([(hx + 11 * kk, hy - 19 * kk), (hx + 16 * kk, hy - 17.5 * kk), (hx + 11 * kk, hy - 16 * kk)], "#e0a030")
+        s.ellipse(hx + 8 * kk, hy - 24 * kk, 2.4 * kk, 1.8 * kk, "#d03a2c")
+        s.poly([(hx - 10 * kk, hy - 12 * kk), (hx - 17 * kk, hy - 20 * kk), (hx - 8 * kk, hy - 16 * kk)], "#e6dcc8")
+        hx2 = lerp(a0[0], a1[0], 0.72)
+        s.ellipse(hx2, hy - 9 * kk, 10 * kk, 7.5 * kk, "#a8683a")
+        s.ellipse(hx2 - 8 * kk, hy - 5 * kk, 4 * kk, 4 * kk, "#b87844")
+        s.ellipse(hx2 - 9 * kk, hy - 9 * kk, 2.0 * kk, 1.6 * kk, "#c83428")
+        s.poly([(hx2 + 8 * kk, hy - 11 * kk), (hx2 + 15 * kk, hy - 19 * kk), (hx2 + 6 * kk, hy - 15 * kk)], "#7a4a2a")
+    cage_front(s)
     # a dish of grain by the cage, and what the hens have scattered
     d0 = P(cu1 + 20, vk + 16, hk)
     s.ellipse(d0[0], d0[1] - 1, 6, 2.6, "#b8683c")
@@ -1494,14 +1558,15 @@ def details(pic, info, back, first=None, seed=11):
         s.ellipse(bq[0] + (dx + 2) * kk, bq[1] + (dy - 2) * kk, r_ * kk * 0.35, r_ * kk * 0.35, "#f4c8a0", 0.8)
     jq = P(826, VK(2) + 22, 2 * RISE)
     amphora(s, jq[0], jq[1], kk * 0.5, 0.0, ("#9a5a3a", "#c87a4a", "#f0b078"))
-    # ---- pigeons sit along the gutter in the sun
-    for (gu, f) in ((1010, 1), (1042, -1), (1150, 1), (880, -1)):
-        gx_, gy_ = P(gu, FV - EAVE, E3)
-        if gy_ > 4:
-            pigeon(s, gx_, gy_, 5.0, seed + int(gu), f, False)
-    # ---- swallows over the square
-    for (bx, by, sz, tilt_) in ((206, 58, 5.0, 0.3), (236, 92, 3.6, -0.2), (176, 106, 3.0, 0.5), (36, 150, 2.6, 0.0)):
-        s.line([(bx - sz, by - sz * 0.35 + tilt_ * sz * 0.3), (bx - sz * 0.3, by - sz * 0.1), (bx, by + sz * 0.15), (bx + sz * 0.3, by - sz * 0.12), (bx + sz, by - sz * 0.5 - tilt_ * sz * 0.3)], "#34405c", 1.0, 0.9)
+    if moving:
+        # ---- pigeons sit along the gutter in the sun
+        for (gu, f) in GUTTER_PIGEONS:
+            gx_, gy_ = P(gu, FV - EAVE, E3)
+            if gy_ > 4:
+                pigeon(s, gx_, gy_, 5.0, seed + int(gu), f, False)
+        # ---- swallows over the square
+        for (bx, by, sz, tilt_) in SWALLOWS:
+            s.line([(bx - sz, by - sz * 0.35 + tilt_ * sz * 0.3), (bx - sz * 0.3, by - sz * 0.1), (bx, by + sz * 0.15), (bx + sz * 0.3, by - sz * 0.12), (bx + sz, by - sz * 0.5 - tilt_ * sz * 0.3)], "#34405c", 1.0, 0.9)
     # ---- the near paving: a cracked slab or two, grass in the joints, grit
     for (cx_, cy_, l_) in ((332, 572, 34), (566, 590, 26), (150, 452, 20), (706, 470, 22), (500, 448, 16)):
         pts_ = [(cx_, cy_)]
@@ -1518,16 +1583,15 @@ def details(pic, info, back, first=None, seed=11):
         r_ = 0.6 + 1.2 * (gy_ - 440) / 160 * rng.random()
         s.ellipse(gx_ - r_ * 1.2, gy_ + 0.3, r_ * 1.6, r_ * 0.5, "#8f7c98", 0.5)
         s.ellipse(gx_, gy_, r_ * 1.2, r_ * 0.8, ["#f4e2bc", "#cbb089", "#a48a70"][int(rng.integers(3))])
-    # ---- pigeons on the pavement and the steps, each with its shadow lying to the left
-    birds = [(552, 512, 11.5, 1, True), (585, 524, 12.5, -1, False), (618, 506, 11, 1, False), (636, 540, 13, -1, True), (598, 552, 14, 1, True),
-             (540, 470, 9.5, -1, False), (752, 530, 12.5, -1, False), (436, 566, 15, 1, True), (238, 470, 10, 1, False), (212, 478, 10.5, -1, True)]
-    for i, (bx, by, sz, f, peck) in enumerate(birds):
-        land.shadow(pic, mask_ellipse(SHAPE, bx - sz * 0.75, by - 0.5, sz * 0.9, sz * 0.22), "#7a6c98", 0.5, 0.6)
-        pigeon(s, bx, by, sz, seed + 40 + i, f, peck)
-    for (u_, k_, sz, f, peck) in ((610, 1, 9.0, -1, False), (905, 5, 8.0, 1, True), (980, 5, 7.6, -1, False)):       # three on the steps
-        bx, by = P(u_, VK(k_) + 20, k_ * RISE)
-        land.shadow(pic, mask_ellipse(SHAPE, bx - sz * 0.75, by - 0.5, sz * 0.9, sz * 0.22), "#7a6c98", 0.5, 0.6)
-        pigeon(s, bx, by, sz, seed + 60 + int(u_), f, peck)
+    if moving:
+        # ---- pigeons on the pavement and the steps, each with its shadow lying to the left
+        for i, (bx, by, sz, f, peck) in enumerate(PAVEMENT_PIGEONS):
+            land.shadow(pic, mask_ellipse(SHAPE, bx - sz * 0.75, by - 0.5, sz * 0.9, sz * 0.22), "#7a6c98", 0.5, 0.6)
+            pigeon(s, bx, by, sz, seed + 40 + i, f, peck)
+        for (u_, k_, sz, f, peck) in STEP_PIGEONS:           # three on the steps
+            bx, by = P(u_, VK(k_) + 20, k_ * RISE)
+            land.shadow(pic, mask_ellipse(SHAPE, bx - sz * 0.75, by - 0.5, sz * 0.9, sz * 0.22), "#7a6c98", 0.5, 0.6)
+            pigeon(s, bx, by, sz, seed + 60 + int(u_), f, peck)
     # ---- where the wine of the morning's offering was poured out, the stones are stained
     au0, au1, av0, av1, ahh = ALTAR
     spill = mask_poly(SHAPE, [P(au1 + 30, av0 - 40, 0), P(au1 + 96, av0 - 46, 0), P(au1 + 130, av0 - 10, 0), P(au1 + 60, av0 + 6, 0), P(au1 + 22, av0 - 12, 0)], soft=2.0, wobble=5, seed=seed + 31)
@@ -1543,12 +1607,13 @@ def details(pic, info, back, first=None, seed=11):
     s.onto(pic)
     # ---- a wisp of smoke from the altar, thin and pale, leaning with the morning air
     sx_, sy_ = P((au0 + au1) / 2, (av0 + av1) / 2, ahh + 6)
-    path = curve([(sx_, sy_), (sx_ - 3, sy_ - 22), (sx_ + 4, sy_ - 48), (sx_ - 7, sy_ - 78), (sx_ - 2, sy_ - 112), (sx_ - 16, sy_ - 150), (sx_ - 30, sy_ - 196)], 6)
+    path = curve([(sx_ + dx_, sy_ + dy_) for dx_, dy_ in ALTAR_SMOKE], 6)
     widths = [lerp(1.6, 15, (i / (len(path) - 1)) ** 1.2) for i in range(len(path))]
     smoke = mask_line(SHAPE, path, widths, soft=2.0)
     smoke = warp(smoke, 4.0, 18, seed + 61) * (0.45 + 0.75 * noise(SHAPE, (9, 30), seed + 62, 3)) * np.clip((sy_ - y) / 26.0, 0, 1) * np.clip(1.25 - (sy_ - y) / 200.0, 0, 1)
     info["smoke"] = np.clip(smoke * 0.62, 0, 1).astype(F32)
-    over(pic, "#f6efe2", info["smoke"])
+    if moving:
+        over(pic, "#f6efe2", info["smoke"])
     return pic
 
 
@@ -1578,6 +1643,116 @@ def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=
     idx = to_palette(g, pal, speckle=speckle)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
+
+
+def cage_k():
+    """Pixels per cm on the step where the hens' cage stands."""
+    cu0, cu1, ck = CAGE
+    return T.k((cu0 + cu1) / 2, VK(ck))
+
+
+def fx_marks():
+    """Round four: where the things that move by nature go, in the engine's own fields (briefs/out/fx-4-ready.md), and
+    how they were in the painting (`painted`, `what`, `note`: words the engine passes over)."""
+    P = T.pt
+    r = lambda q: [int(round(q[0])), int(round(q[1]))]
+    r1 = lambda q: [round(q[0], 1), round(q[1], 1)]
+    au0, au1, av0, av1, ahh = ALTAR
+    mu, mv = (au0 + au1) / 2, (av0 + av1) / 2
+    sx_, sy_ = P(mu, mv, ahh + 6)
+    altar_base = [r(P(au0 - 12, av0 - 12, 0)), r(P(au1 + 12, av0 - 12, 0))]           # the altar cut-out's own base
+    f0, f1 = P(mu - 26, mv, ahh + 3), P(mu + 26, mv, ahh + 3)
+    cu0, cu1, ck = CAGE
+    hk, vk = ck * RISE, VK(ck)
+    a0, a1 = P(cu0, vk + 4, hk), P(cu1, vk + 4, hk)
+    hy = round(a0[1] - 6 * cage_k(), 1)                      # where the hens' feet were (the bottom of their bodies)
+    hens = [("hen-white", lerp(a0[0], a1[0], 0.34)), ("hen-brown", lerp(a0[0], a1[0], 0.72))]
+    tread = lambda u, k: r(P(u, VK(k) + 20, k * RISE))
+    gut = lambda u: r1(P(u, FV - EAVE, E3))
+    pavement = [[430, 466], [560, 457], [680, 447], [796, 438], [796, 586], [258, 586], [252, 532], [346, 520], [410, 503]]
+    flock = lambda name: birds.flock_frames(name, size_at=FULL)
+    marks = [
+        {"id": "altar-smoke", "type": "smoke", "what": "the wisp from the pan of embers on the altar (the one the author saw)",
+         "at": r((sx_, sy_)), "base": altar_base, "height": 196, "width": [2, 15], "lean": [-30, -196], "rise": 20, "rate": 2.5, "gust": 0.3,
+         "color": "#f6efe2", "opacity": 0.45, "painted": [r((sx_ + dx, sy_ + dy)) for dx, dy in ALTAR_SMOKE],
+         "note": "Thin and pale, leaning up and to the left with the morning air: in the painting it rose 196 px, drifted 30 px left, "
+                 "widened from 2 to 15 px and was gone by the top (`painted` is the path it had). It rises from the pan between the two "
+                 "rolls on top of the altar; its base is the altar's, so anyone behind the altar is behind its smoke."},
+        {"id": "altar-embers", "type": "embers", "what": "the pan of embers on top of the altar",
+         "at": r(((f0[0] + f1[0]) / 2, f0[1] - 2)), "size": [13, 2.5], "count": 9, "sparks": 0.15, "base": altar_base,
+         "note": "Nine coals and two charred sticks are painted in altar.png: these breathe over them."},
+        {"id": "hill-smoke", "type": "smoke", "what": "the smoke of a sacrifice far off on the Capitol, right of its great temple",
+         "at": [151, 190], "plane": "back", "height": 62, "width": [1, 7], "lean": [-15, -62], "rise": 7, "rate": 2, "gust": 0.2,
+         "color": "#f4ecde", "opacity": 0.35, "painted": [list(p) for p in HILL_SMOKE], "note": "Tiny and slow, far behind everything."},
+        {"id": "pigeons", "type": "birds", "kind": "flock", "what": "pigeons pottering on the pavement in the sun, right of the altar",
+         "area": pavement, "count": 5, "frames": flock("pigeon"),
+         "painted": [[x, y] for (x, y, sz, f, pk) in PAVEMENT_PIGEONS[:8]],
+         "note": "With pigeons-dark and pigeons-pale (the same place: eight in all, as painted). Their frames are the size of a pigeon at "
+                 "row 590 (sizeAt), so they shrink with depth as people do, as the painted ones did. The area keeps them off the altar, "
+                 "the tripod and the steps; the boundary stone stands in it (they walk behind and in front of it). The scene's five "
+                 "pigeon hotspots point at where painted pigeons 1 to 5 stood."},
+        {"id": "pigeons-dark", "type": "birds", "kind": "flock", "what": "two darker pigeons among them", "area": pavement, "count": 2,
+         "frames": flock("pigeon-dark"), "seed": 2},
+        {"id": "pigeons-pale", "type": "birds", "kind": "flock", "what": "a pale one, nearly white", "area": pavement, "count": 1,
+         "frames": flock("pigeon-pale"), "seed": 3},
+        {"id": "pigeons-left", "type": "birds", "kind": "flock", "what": "two more on the pavement left of the altar, by the cart's shade",
+         "area": [[150, 458], [228, 450], [234, 486], [156, 492]], "count": 2, "frames": flock("pigeon"),
+         "painted": [[x, y] for (x, y, sz, f, pk) in PAVEMENT_PIGEONS[8:]]},
+        {"id": "pigeons-steps", "type": "birds", "kind": "flock", "what": "three on the right-hand end of the steps, away from the soothsayer and the way up",
+         "area": [tread(560, 1), [796, 422], [796, 355], tread(600, 7)], "count": 3, "frames": birds.flock_frames("pigeon"), "depth": False, "scale": 0.52,
+         "painted": [tread(u_, k_) for (u_, k_, sz, f, pk) in STEP_PIGEONS],
+         "note": "On the steps a pigeon is about 8 px: a fixed scale (the scene's depth rule holds people at minScale 0.40 up here, which "
+                 "would make them a little small). The flight is drawn as a slope; a bird stands on a tread or a riser alike."},
+        {"id": "pigeons-gutter", "type": "birds", "kind": "flock", "what": "pigeons sitting along the temple's gutter in the sun, high up",
+         "perch": [gut(840), gut(1220)], "count": 4, "frames": birds.flock_frames("pigeon"), "scale": 0.32, "plane": "back", "shy": 0,
+         "moves": {"stand": 4, "look": 2, "peck": 0.5, "walk": 1, "turn": 1},
+         "painted": [gut(gu) for gu, f in GUTTER_PIGEONS],
+         "note": "Tiny (5 px), out of anyone's reach. No cut-out is in front of them up there."},
+        {"id": "swallows", "type": "birds", "kind": "flyers", "what": "swallows over the square, back for the spring",
+         "lanes": [[[-12, 118], [90, 94], [180, 66], [244, 30], [262, -12]], [[-12, 64], [70, 44], [150, 26], [232, -12]]],
+         "frames": birds.flyer_frames("swallow"), "scale": 1, "every": [6, 14], "group": [1, 2], "speed": 120, "plane": "back",
+         "painted": [[x, y] for (x, y, sz, t) in SWALLOWS[:2]],
+         "note": "Only in the open sky left of the temple: the temple and its roof are in back.png, so a bird must not cross them (the "
+                 "lanes keep left of the roof's edge, which runs from (240, 96) up to (345, 0))."},
+        {"id": "swallows-far", "type": "birds", "kind": "flyers", "what": "more swallows, farther off over the Forum",
+         "lanes": [[[250, -12], [170, 40], [80, 88], [-12, 150]], [[-12, 132], [60, 112], [140, 100], [236, 70], [262, -12]]],
+         "frames": birds.flyer_frames("swallow"), "scale": 0.55, "every": [7, 16], "group": [1, 3], "speed": 80, "plane": "back",
+         "painted": [[x, y] for (x, y, sz, t) in SWALLOWS[2:]]},
+    ]
+    marks.append({"id": "laurel-sway", "type": "sway", "plane": "laurel", "anchor": "top", "amount": 1.2, "period": 4.2, "wave": 70, "lean": 0.2,
+                  "what": "the laurel's branch at the front, bottom left, stirring in the morning air",
+                  "note": "Needs the cut-out laurel (see `cutouts`: front.png in two, front-base.png and laurel.png). Small: its leaves hang "
+                          "from the stems, the stems hardly move."})
+    for name, x in hens:
+        x = round(x, 1)
+        marks.append({"id": name, "type": "birds", "kind": "flock", "what": f"the soothsayer's {name.split('-')[1]} hen in the cage, facing the temple doors",
+                      "area": [[x - 1.5, hy - 1], [x + 1.5, hy - 1], [x + 1.5, hy + 1], [x - 1.5, hy + 1]], "count": 1, "frames": birds.hen_frames(name),
+                      "shy": 0, "fly": False, "turn": False, "depth": False, "walk": 3, "moves": {"stand": 3, "look": 2, "walk": 1, "peck": 0, "turn": 0},
+                      "cover": "cage-front",
+                      "note": "She stands where she is and never pecks, turns round or flies: the story has the hens refusing their grain and "
+                              "facing the doors, even after they have fed. Each bird sorts by her feet (row 406), so she is behind the cut-out "
+                              "of the cage's front (cage-front, base 409 to 407: see `cutouts`), whose bars cross her."})
+    return marks
+
+
+def frames_note():
+    """What the painted frames are, for people (layout.json "frames"); the marks give them to the engine."""
+    pw, ph, pfx, pfy = birds.PIGEON_BOX
+    sw, shh, sfx, sfy = birds.SWALLOW_BOX
+    hw, hh, hfx, hfy = birds.HEN_BOX
+    return {
+        "pigeon": {"files": "<set>-<n>.png, n 1 to 18", "sets": list(birds.PIGEONS), "size": [pw, ph], "foot": [pfx, pfy],
+                   "acts": birds.PIGEON_ACTS, "faces": "right", "note": birds.PIGEON_NOTE + " The engine uses 1 to 10, 13 to 15 and 18; "
+                   "11, 12 (taking off), 16 (wings half up) and 17 (gliding) are there too."},
+        "pigeon-shadow": {"files": "pigeon-shadow-1.png", "size": [pw, ph], "foot": [pfx, pfy],
+                          "note": "Not used by the engine (it draws no shadows for birds): a soft see-through shadow (RGBA) for under a bird on "
+                                  "the ground, at the same foot point and scale; never mirrored, as the sun is on the right."},
+        "swallow": {"files": "swallow-<n>.png, n 1 to 4", "size": [sw, shh], "foot": [sfx, sfy], "acts": birds.SWALLOW_ACTS,
+                    "note": "Wings up, level, down, and a glide. The middle of the body is the foot point. Symmetric; 10 px across at scale 1."},
+        "hen-white": {"files": "hen-white-<n>.png, n 1 to 7", "size": [hw, hh], "foot": [hfx, hfy], "acts": birds.HEN_ACTS,
+                      "note": "Seen from behind, facing up the steps to the doors; at the size they are in the cage."},
+        "hen-brown": {"files": "hen-brown-<n>.png, n 1 to 7", "size": [hw, hh], "foot": [hfx, hfy], "acts": birds.HEN_ACTS},
+    }
 
 
 def layout():
@@ -1622,7 +1797,7 @@ def layout():
     feet = P(seat_u, VK(seat_k - 2) + 19, (seat_k - 2) * RISE)   # his feet, two steps down: clear step
     keeper = (492.0, 295.0)                                  # seen between the second and third columns, before the doorway
     at_door = (517.0, 296.0)
-    return {
+    out = {
         "id": "rome-steps", "horizon": HZ, "full": FULL, "light": "morning sun from the upper right; shadows fall to the left",
         "minScale": 0.40,
         "note": ("The porch is 252 cm above the pavement, so its floor is only a narrow strip of the picture (rows 291 to 305). "
@@ -1658,6 +1833,27 @@ def layout():
         "sizes": {"adult_px_at_foot_of_steps": round(175 * T.k(UW / 2 - 300, VK(1) - 40), 1), "adult_px_at_top_of_steps": round(175 * T.k(UW / 2 - GAP / 2, EDGE), 1),
                   "adult_px_at_doors": round(175 * T.k(UW / 2, DEEP - 70), 1), "step_px": "about 11 at the foot, 6 at the top"},
     }
+    if PAINT_MOVING:
+        return out
+    cu0, cu1, ck = CAGE
+    out.update({
+        "fx": fx_marks(),
+        "cutouts": [{"id": "cage-front", "file": "cage-front.png", "base": [r(P(cu0, VK(ck) + 4, ck * RISE)), r(P(cu1, VK(ck) + 4, ck * RISE))],
+                     "what": "the front of the hens' cage (its floor, bars, top, rails and ring), cut from back.png itself: laid over it, it changes "
+                             "nothing. A plane for the scene to add when it draws the hens, so that they stand inside the cage."},
+                    {"id": "front", "file": "front-base.png", "plane": "front",
+                     "what": "the statue base at the front, bottom left, without the laurel's branch: with laurel.png, it replaces front.png "
+                             "(the plane front) when the branch is to stir"},
+                    {"id": "laurel", "file": "laurel.png", "plane": "front", "what": "the laurel's branch, over the base: laid together they are front.png"}],
+        "frames": frames_note(),
+        "fx_note": ("Round four. Nothing that moves by nature is painted in back.png any more: the altar's smoke, the smoke on the hill, the "
+                    "pigeons on the pavement, the steps and the gutter (with their shadows), the swallows and the two hens are gone from it, "
+                    "and every other pixel is as it was. `fx` gives each in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy "
+                    "into the scene, and how it was in the painting (`painted`); `cutouts` is the new cut-out the hens need; `frames` says "
+                    "what the painted frames are. Left painted, on purpose: the clouds (they cast the shadow at the front), the dog asleep in "
+                    "the shade, the far people in the Forum (dabs of a few pixels, standing), the garland and its ribbons, the laurel."),
+    })
+    return out
 
 
 if __name__ == "__main__":
@@ -1679,7 +1875,12 @@ if __name__ == "__main__":
     Image.fromarray((np.clip(base, 0, 1) * 255).astype(np.uint8)).save("out/rome-steps-1-under.png")
     print("under", round(time.time() - t0, 1))
     pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
+    ground = pic.copy()
     details(pic, info, back, first)
+    if PAINT_MOVING:
+        ground = pic
+    else:                                                    # the cut-outs keep the brushwork they were given against the picture as it
+        details(ground, info, back, first, moving=True)      # was, birds and smoke and all, so that they stay exactly as they were
     print("details", round(time.time() - t0, 1))
     layers = [("columns", cols, 96), ("altar", altar_layer(), 64), ("tripod", tripod_layer(), 32), ("stone", stone_layer(), 32), ("front", front_layer(), 48)]
     whole = pic.copy()
@@ -1691,7 +1892,7 @@ if __name__ == "__main__":
             c, a = layer.straight()
             a = (a > 0.5).astype(F32)
         else:
-            c, a = brushed(layer, pic, seed=20 + i)
+            c, a = brushed(layer, ground, seed=20 + i)
         cut[name] = (c, a, ncol)
         over(whole, c, a)
     over(whole, "#f6efe2", info["smoke"] * 0.0)
@@ -1707,6 +1908,15 @@ if __name__ == "__main__":
     print("back", finish(pic, f"{OUT}/back.png", 160, palette=PALETTE))
     for name, (c, a, ncol) in cut.items():
         print(name, finish(c, f"{OUT}/{name}.png", ncol, a))
+    if not PAINT_MOVING:
+        # round four: the front of the hens' cage, cut from the finished backdrop itself (so it matches it pixel for pixel),
+        # and the frames of the birds and the hens
+        _, ca = cage_front(Sheet(SHAPE)).done()
+        save(f"{OUT}/cage-front.png", np.asarray(Image.open(f"{OUT}/back.png")), PALETTE, (ca > 0.3).astype(F32))
+        print("frames", {k_: len(v_) for k_, v_ in birds.paint(OUT, PALETTE, cage_k()).items()})
+        print("laurel apart; laid together the same as front.png:", laurel_apart())
+        moved = (np.abs(ground - pic).max(axis=2) > 0).astype(np.uint8) * 255                  # every pixel the moving things touched
+        Image.fromarray(moved).save("out/rome-steps-moved.png")                                 # (rome_steps_check4.py proves nothing else changed)
     json.dump(layout(), open(f"{OUT}/layout.json", "w"), indent=1)
-    os.system(f"{sys.executable} comp.py {OUT} back columns altar tripod stone front")
+    os.system(f"{sys.executable} comp.py {OUT} back columns altar tripod stone front" + ("" if PAINT_MOVING else " cage-front"))
     print("done", round(time.time() - t0, 1))
