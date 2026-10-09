@@ -19,7 +19,6 @@
 // Measurements are fractions of the character's own height.
 
 import { Surface, ramp, pack, shifted } from "./pix.js";
-import { PaintSurface, faceOf, noise } from "./paint.js";
 
 const DEG = Math.PI / 180;
 
@@ -199,24 +198,192 @@ function flowers(around, high, colors) {
 
 // ---------- eyes ----------
 // Each kind of eye is a few rows of pixels, written from the corner nearest the nose outward. The row
-// marked by `at` is the one the eye itself is on.  # the dark of the eye   o the white   = the lid, drawn
-// as a dark line   - a shadow under the brow or under the eye   . nothing.
+// marked by `at` is the one the eye itself is on.  # the dark of the eye (the pupil, in the iris's own darkest
+// colour)   i the iris   o the white   h the light in the eye   = the lid, or the lashes, drawn as a dark line
+// - a shadow under the brow or under the eye   . nothing.
 // `full` is the eye seen from in front; `thin` is the far eye of a three-quarter view, or an eye in profile.
+// (face.iris gives the iris its colour; with none, `i` is drawn as the dark of the eye.)
 const FACE_FULL = 13.3, FACE_MID = 10.0;      // head widths in pixels at which the full face, and the middle one, are drawn
 const EYES = {
-  plain:  { at: 0, full: ["##"], thin: ["#"] },                          // most grown men: small and dark
-  lash:   { at: 1, full: ["===", "##."], thin: ["==", "#."] },           // a dark upper lid, swept outward
-  big:    { at: 0, full: ["##", "##"], thin: ["#", "#"] },               // a child's eyes: two pixels tall
-  bright: { at: 0, full: ["#o", "##"], thin: ["#", "#"] },               // a child's eyes with the light in them
+  plain:  { at: 0, full: ["#i"], thin: ["#"] },                          // most grown men: small, the pupil toward the nose
+  lash:   { at: 1, full: ["===", "#i."], thin: ["==", "#."] },           // a dark upper lid, swept outward
+  big:    { at: 0, full: ["##", "ii"], thin: ["#", "i"] },               // a child's eyes: two pixels tall
+  bright: { at: 0, full: ["#h", "ii"], thin: ["#", "i"] },               // a child's eyes with the light in them
   wide:   { at: 0, full: ["o#o"], thin: ["#o"] },                        // startled, or sharp
-  heavy:  { at: 1, full: ["===", "##.", "--."], thin: ["==", "#.", "-."] },   // heavy lids and a bag under each eye: bored, or tired
-  girl:   { at: 1, full: ["==", "##"], thin: ["=", "#"] },               // a young face: a soft lid over a dark eye
+  heavy:  { at: 1, full: ["===", "#i.", "--."], thin: ["==", "#.", "-."] },   // heavy lids and a bag under each eye: bored, or tired
+  girl:   { at: 1, full: ["==.", "#i="], thin: ["=.", "#="] },           // a young woman's: a soft lid, and a lash at the outer corner
   kohl:   { at: 0, full: ["o#="], thin: ["#="] },                        // lined with black paint, the line drawn out toward the temple
   squint: { at: 0, full: ["=#="], thin: ["=="] },                        // screwed up against the sun, or against bad eyesight
   shut:   { at: 0, full: ["=="], thin: ["="] },
   tight:  { at: 0, full: ["==-"], thin: ["=-"] },                        // squeezed shut, as a child shuts them: a crease at the corner
-  deep:   { at: 1, full: ["---", "##."], thin: ["--", "#."] },           // set deep under the brow
+  deep:   { at: 1, full: ["---", "#i."], thin: ["--", "#."] },           // set deep under the brow
 };
+
+// ---------- a face's colours ----------
+/** Two packed colours mixed: t = 0 is a, 1 is b. */
+const mixPacked = (a, b, t) => { let o = 0; for (const sh of [0, 8, 16]) o |= Math.round(((a >>> sh) & 255) * (1 - t) + ((b >>> sh) & 255) * t) << sh; return ((255 << 24) | o) >>> 0; };
+const INKS = new WeakMap();
+/** The colours a face is drawn in, packed, worked out once for each face: the dark of the eye (face.eye), the iris
+    (face.iris; with none, the dark), the white, the light in an eye, the lid line (face.lid), the lid's own shadow (the
+    skin's shade), the brows, a blush (face.blush), freckles (face.freckle), the lips (face.lip, face.lips), dark glasses. */
+function inksOf(face, skin) {
+  let k = INKS.get(face);
+  if (k && k.skin === skin) return k;
+  const dark = pack(face.eye || "#2a1a12"), iris = face.iris ? pack(face.iris) : dark, white = pack(face.white || "#f6efe4");
+  const glint = pack(face.glintEye || "#fffdf6"), line = pack(face.lid || "#5a3424"), lidShade = skin.tones[2];
+  const brow = face.brows == null ? 0 : typeof face.brows === "string" ? pack(face.brows) : face.brows;
+  const lip = pack(face.lip || "#8a4636"), lips = face.lips ? pack(face.lips) : 0;
+  k = {
+    skin, dark, iris, white, glint, line, lidShade, brow, small: dark,
+    blush: face.blush ? pack(face.blush) : 0, freckle: face.freckle ? pack(face.freckle) : lidShade,
+    lip, lips, inside: pack(face.inside || "#3a1612"),
+    whiteShade: mixPacked(white, lidShade, 0.35), iris2: mixPacked(iris, white, 0.45), teeth: pack("#f6f0e6"), lipUp: lips ? mixPacked(lip, lips, 0.5) : lip,      // (for the faces of portraits)
+    blushSoft: face.blush ? mixPacked(pack(face.blush), skin.tones[1], 0.45) : 0,
+    shades: face.shades ? pack(face.shades) : 0,
+    of: (ch) => (ch === "#" ? dark : ch === "i" ? iris : ch === "o" ? white : ch === "h" ? glint : ch === "=" ? line : ch === "-" ? lidShade : 0),
+  };
+  INKS.set(face, k);
+  return k;
+}
+
+// ---------- a face at portrait size ----------
+// A team portrait is drawn with several times the pixels of a figure in a scene, and its face is drawn feature by
+// feature at that size, pixel by pixel, from the same face settings (people.js `face`, and `face.big` for what only
+// shows at that size): the eyes with their lids, whites, iris, pupil and the light in them, lashes for women and girls,
+// brows, the shadow under the nose, the lips, a blush, freckles. Hard pixels and the face's own few colours, as the
+// small faces are: nothing is blended.
+//   f: { sf, scr, see, face, ink, skin, eyeX, eyeY, mouthY, headPx, pose, sideways, noseTip, part }
+function bigFace(f) {
+  const { sf, scr, see, face, ink, eyeX, eyeY, mouthY, headPx, pose, sideways, noseTip, part } = f, big = face.big || {};
+  const u = headPx / 2;                                                 // pixels in half the width of the head
+  const put = (x, y, col) => { if (col) sf.dot(x, y, col, part); };
+  const lash = ink.line, lidShade = ink.lidShade, deep = f.skin.tones[3];
+  const eyeW = (big.eyeW ?? 0.40) * u, eyeH = eyeW * (big.eyeH ?? 0.46), irisR = eyeH * (big.iris ?? 0.62);
+  const lashes = big.lashes ?? 0, lidT = Math.max(1, Math.round(eyeH * (big.lid ?? 0.16)));
+  const tiny = u < 16;                                                  // (a portrait of about 60 pixels or less: room for an eye, its lid and a brow, and no more)
+  for (const sd of [1, -1]) {
+    const vis = see([sd * 0.25, 0, 0.97]);
+    if (vis < 0.2) continue;
+    const c = scr(sd * eyeX, eyeY, 0.80), w = eyeW * Math.min(1, 0.35 + vis * 0.65), h = eyeH;
+    const out = c[0] >= f.mid ? 1 : -1;                                 // the side away from the nose, as seen
+    const top = (q) => -Math.sqrt(Math.max(0, 1 - q * q)) * (1 + 0.10 * q * out),   // the upper lid: a little higher toward the outer corner
+      bot = (q) => Math.sqrt(Math.max(0, 1 - q * q)) * 0.72;
+    const x0 = Math.floor(c[0] - w / 2) - 3, x1 = Math.ceil(c[0] + w / 2) + 3, y0 = Math.floor(c[1] - h / 2) - 4, y1 = Math.ceil(c[1] + h / 2) + 2;
+    const inside = (x, y) => { const q = (x + 0.5 - c[0]) / (w / 2), v = (y + 0.5 - c[1]) / (h / 2); return Math.abs(q) <= 1 && v >= top(q) && v <= bot(q); };
+    if (pose.blink) {                                                    // shut: the line of the lashes, curving down
+      for (let x = x0; x <= x1; x++) { const q = (x + 0.5 - c[0]) / (w / 2); if (Math.abs(q) > 1.02) continue; put(x, Math.round(c[1] + h * 0.10 + h * 0.18 * (1 - q * q) - 0.5), lash); }
+      continue;
+    }
+    if (tiny) {
+      // A small portrait's eye, pixel by pixel: the lid over it, the white at the corners, the iris in the middle with its
+      // pupil toward the nose (so that the two meet the viewer's), and for women and girls a lash at the outer corner.
+      const ew = Math.max(3, Math.round(w)), eh = h < 2.6 ? 2 : 3, irisW = ew <= 3 ? 1 : ew - 2, i0 = Math.floor((ew - irisW) / 2);
+      const xIn = out > 0 ? Math.round(c[0] - ew / 2) : Math.round(c[0] + ew / 2) - 1, yT = Math.round(c[1] - eh / 2);
+      const at = (i, j, col) => put(xIn + out * i, yT + j, col);
+      const pupil = i0 + Math.floor((irisW - 1) / 2);
+      for (let i = 0; i < ew; i++) {
+        const corner = i === 0 || i === ew - 1;
+        if (!corner || (lashes && i === ew - 1)) at(i, -1, lash);         // the lid, over the iris (and out to the outer corner, where there are lashes)
+        for (let j = 0; j < eh; j++) {
+          if (corner && j === eh - 1) continue;                           // (the lower corners are skin: the eye is almond-shaped)
+          const iris = i >= i0 && i < i0 + irisW;
+          at(i, j, !iris ? ink.white : j === 0 && i === pupil ? ink.dark : ink.iris);
+        }
+      }
+      if (irisW >= 3) { const g = out > 0 ? pupil - 1 : pupil + 1; if (g >= i0 && g < i0 + irisW) at(g, 0, ink.glint); }      // the light in it, on the side toward the light
+      if (lashes) at(ew, -1, lash);
+    } else {
+      // the iris looks at the viewer: in the middle of the eye, a little up under the lid
+      const ix = c[0] + (big.gaze ?? 0) * out * w * 0.10, iy = c[1] + h * 0.06;
+      const small = h < 3.4;                                                // (a small eye has no room for the lid's shadow: an iris and its pupil)
+      for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+        if (!inside(x, y)) continue;
+        const d = Math.hypot(x + 0.5 - ix, (y + 0.5 - iy) * 1.05);
+        const underLid = !small && (!inside(x, y - lidT) || !inside(x, y - 1));
+        if (!small && d <= irisR * 0.46) put(x, y, ink.dark);              // the pupil
+        else if (d <= irisR) put(x, y, underLid ? ink.dark : ink.iris);    // the iris, darker under the lid
+        else put(x, y, underLid ? ink.whiteShade : ink.white);            // the white, in the lid's shadow at the top
+      }
+      if (small) put(Math.round(ix - 0.5), Math.round(iy - 0.5), ink.dark);
+      // the light in the eye, toward the light (up and to the left as we see it)
+      const gx = Math.round(ix - irisR * 0.42 - 0.5), gy = Math.round(iy - irisR * 0.42 - 0.5);
+      if (inside(gx, gy)) { put(gx, gy, ink.glint); if (irisR >= 3.2) put(gx + 1, gy, ink.glint); }
+      if (irisR >= 3.6 && inside(gx + 2, gy + 2)) put(Math.round(ix + irisR * 0.30), Math.round(iy + irisR * 0.30), ink.iris2);   // a second, smaller light below
+      // the upper lid: a dark line along the top of the eye, thicker toward the outer corner for women and girls
+      for (let x = x0; x <= x1; x++) {
+        let yTop = null;
+        for (let y = y0; y <= y1; y++) if (inside(x, y)) { yTop = y; break; }
+        if (yTop === null) continue;
+        const q = (x + 0.5 - c[0]) / (w / 2) * out;                        // -1 at the inner corner, 1 at the outer
+        put(x, yTop - 1, lash);
+        if (lashes && q > 0.1) put(x, yTop - 2, lash);
+        if (big.crease !== false && u >= 24) put(x, yTop - 2 - (lashes && q > 0.1 ? 1 : 0) - Math.max(1, Math.round(h * 0.18)), q > -0.6 && q < 0.8 ? lidShade : 0);      // the crease of the lid
+        // the lower lid: a soft line under the outer part of the eye
+        let yBot = null;
+        for (let y = y1; y >= y0; y--) if (inside(x, y)) { yBot = y; break; }
+        if (yBot !== null && q > -0.2 && q < 0.95) put(x, yBot + 1, lidShade);
+      }
+      // lashes at the outer corner, swept up and out
+      if (lashes) {
+        const ex = Math.round(c[0] + out * w / 2 - 0.5), ey = Math.round(c[1] - h * 0.30 - 0.5);
+        put(ex, ey, lash); put(ex + out, ey - 1, lash);
+        if (lashes > 1) { put(ex + out, ey, lash); put(ex + 2 * out, ey - 2, lash); }
+      }
+    }
+    // the brow: an arch over the eye, a pixel or two thick, the colour of the hair
+    if (ink.brow) {
+      const arch = big.arch ?? 0.20, lift = (big.browUp ?? 0.55) * h + (pose.browsUp || 0) + (tiny ? 2 : 0), thick = tiny ? 1 : Math.max(1, Math.round(u * (big.browT ?? 0.07)));
+      const bx0 = c[0] - out * w * 0.55, bx1 = c[0] + out * w * 0.62;
+      const n = Math.round(Math.abs(bx1 - bx0));
+      for (let i = 0; i <= n; i++) {
+        const t = i / Math.max(1, n), x = Math.round(bx0 + (bx1 - bx0) * t - 0.5);
+        const base = Math.min(c[1] - h * 0.55 - lift, c[1] - h / 2 - 2 - (lashes && !tiny ? 2 : 1));      // (and always a row of skin clear of the lid and the lashes)
+        const y = base - arch * h * Math.sin(Math.PI * Math.min(1, t * 1.15)) + (big.browTilt ?? 0) * h * (t - 0.5);
+        const tk = t > 0.85 ? Math.max(1, thick - 1) : thick;
+        for (let k = 0; k < tk; k++) put(x, Math.round(y - 0.5) + k, ink.brow);
+      }
+    }
+    // a blush on the cheek, under the outer part of the eye
+    if (ink.blush && vis > 0.55) {
+      const bc = scr(sd * (eyeX + 0.10), eyeY - 0.46, 0.80), rx = u * (big.blushR ?? 0.12), ry = rx * 0.55;
+      for (let y = Math.floor(bc[1] - ry); y <= Math.ceil(bc[1] + ry); y++) for (let x = Math.floor(bc[0] - rx); x <= Math.ceil(bc[0] + rx); x++) {
+        const r = ((x + 0.5 - bc[0]) / rx) ** 2 + ((y + 0.5 - bc[1]) / ry) ** 2;
+        if (r <= 1) put(x, y, r < 0.35 ? ink.blush : ink.blushSoft);
+      }
+    }
+  }
+  // freckles: a few across the nose and the cheeks
+  if (face.freckles) for (const [x, y] of [[-0.30, -0.30], [-0.18, -0.36], [0.20, -0.33], [0.32, -0.28], [-0.44, -0.40], [0.44, -0.40]]) {
+    if (see([x, 0, 0.95]) < 0.3) continue;
+    const q = scr(x, eyeY + y, 0.92);
+    put(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), ink.freckle);
+  }
+  // the nose: the shadow under its tip, and the nostrils
+  if (see([0, 0, 1]) > 0.35) {
+    const q = noseTip, w = Math.max(2, Math.round(u * 0.20)), x = Math.round(q[0] - 0.5), y = Math.round(q[1] - 0.5) + Math.max(1, Math.round(u * 0.04));
+    for (let i = -Math.floor(w / 2); i <= Math.ceil(w / 2); i++) put(x + i, y, lidShade);
+    if (u >= 9) { put(x - Math.ceil(w / 2), y - 1, deep); put(x + Math.ceil(w / 2), y - 1, deep); }
+  }
+  // the mouth: the line between the lips, lifted at the corners for a smile, and the lower lip under it
+  if (face.mouth !== false && see([0, 0, 1]) > 0.10) {
+    const mq = scr(0, mouthY, 0.95), mw = Math.max(2, (face.mouthW ?? 0.22) * u * 2 * (big.mouthW ?? 1.0)), smile = (face.smile || 0) * (big.smile ?? 1) * Math.max(1, u * 0.06), open = pose.mouth || 0;
+    const xa = Math.round(mq[0] - mw / 2), xb = Math.round(mq[0] + mw / 2) - 1, yc = Math.round(mq[1] - 0.5);
+    const lipDark = ink.lip, lipLow = ink.lips || ink.lip;
+    for (let x = xa; x <= xb; x++) {
+      const t = (x + 0.5 - mq[0]) / (mw / 2), lift = Math.round(smile * t * t);
+      if (open) { for (let k = 0; k < open + 1; k++) put(x, yc + k - lift, Math.abs(t) > 0.85 ? lipDark : ink.inside); if (open > 1 && Math.abs(t) < 0.5) put(x, yc - lift, ink.teeth); }
+      else put(x, yc - lift, lipDark);
+      // the lower lip: a little narrower, in the lip's lighter colour, and a shadow under it (on a small face, only the lip)
+      if (Math.abs(t) < 0.70) {
+        const yl = yc - lift + (open ? open + 1 : 1);
+        if (ink.lips) put(x, yl, lipLow);
+        if (Math.abs(t) < 0.45 && u >= 14) put(x, yl + (ink.lips ? 1 : 0), lidShade);
+      }
+    }
+    if (ink.lips && !open && u >= 14) for (let x = xa + 1; x <= xb - 1; x++) { const t = (x + 0.5 - mq[0]) / (mw / 2); if (Math.abs(t) < 0.55) put(x, yc - Math.round(smile * t * t) - 1, ink.lipUp); }   // the upper lip
+  }
+}
+
 
 /**
  * Draw a character.
@@ -224,30 +391,24 @@ const EYES = {
  * size: their height in art pixels.
  * Returns a Surface whose anchor (ox, oy) is the point on the ground between the feet.
  * opt.seat: draw only the seat that is drawn with this person (a stool, a lawn chair) and its shadow: see drawSeat.
- * opt.paint: paint them (paint.js) instead of drawing them in pixels: { k: painted pixels to one picture pixel of the
- *   stage (size is then their height in painted pixels), window: [x, y, w, h], only that part of the picture, measured
- *   from the point between the feet (for a portrait) }. Each person's `paint` settings (people.js) say how they are painted.
+ * opt.window: [x, y, w, h], draw only that part of the picture, measured from the anchor (x right, y down): a portrait.
+ * opt.portrait: the face is drawn feature by feature at whatever size the head is (bigFace), not in the small patterns.
  */
 export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const d = spec.dim, S = size;
   const only = opt && opt.seat ? new Set(spec.seatParts || [EXTRA3, EXTRA2]) : null;      // (the parts a seat is drawn as)
   // (spec.span and spec.tall make room for someone wide or tall with what they carry; spec.under, for something lying
   //  on the ground nearer to us than their feet, which is drawn below them)
-  const paint = opt && opt.paint ? opt.paint : null, win = paint && paint.window;
   const below = Math.ceil(S * (spec.under || 0));
   const W = (Math.ceil(S * (spec.span || 1.05)) + 14) & ~1, H = Math.ceil(S * (spec.tall || 1.2)) + 12 + below;
-  const ox = win ? -win[0] : W / 2, oy = win ? -win[1] : H - 6 - below;
-  const sf = paint ? new PaintSurface(win ? win[2] : W, win ? win[3] : H, ox, oy, { k: paint.k || 1 }) : new Surface(W, H, ox, oy);
-  if (paint) sf.size = S;
+  const win = opt && opt.window, ox = win ? -win[0] : W / 2, oy = win ? -win[1] : H - 6 - below;
+  const sf = new Surface(win ? win[2] : W, win ? win[3] : H, ox, oy);
   const th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th), TILT = 0.22;
   // character space to picture space. The camera looks slightly down, so nearer things sit lower.
   const P = (v) => { const dp = (v[0] * s + v[2] * c) * S; return [ox + (-v[0] * c + v[2] * s) * S, oy - v[1] * S + dp * TILT, dp]; };
   const R = (r) => Math.max(0.85, r * S);
   const J = skeleton(d, pose);
   const fine = S >= 84, coarse = S < 52;
-  // (painted, a person may have a head a little bigger than their skeleton's, its top where it was: a small child's)
-  const big = paint && spec.paint && spec.paint.head ? spec.paint.head : 1;
-  const HR = big !== 1 ? d.headR.map((v) => v * big) : d.headR, HC = big !== 1 ? add(J.head, [0, -(big - 1) * d.headR[1], 0]) : J.head;
 
   const limb = (a, b, ra, rb, mat, o) => {
     if (only && !only.has(o && o.part)) return;
@@ -290,8 +451,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   };
 
   const skin = spec.skin, top = spec.top || {}, bottom = spec.bottom || {}, socks = spec.socks, shoes = spec.shoes || {};
-  const hair = spec.hair || {}, apron = spec.apron || null;
-  const face = paint && spec.paint && spec.paint.shape ? { ...(spec.face || {}), ...spec.paint.shape } : spec.face || {};     // (painted, a face may be shaped a little differently: people.js `paint.shape`)
+  const hair = spec.hair || {}, face = spec.face || {}, apron = spec.apron || null;
   const breath = pose.breath || 0;
   const tw = J.twist, ht = J.hipTwist, topMat = top.mat || skin, psi = tw * 0.6;
   const cloth = S * 0.014;                                              // cloth sits just outside whatever it covers
@@ -575,20 +735,20 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   }
   // neck, and what shows at the collar
   const neckR = d.neckR ?? 1;
-  limb(add(J.spine(d.shoulderY - 0.012), J.torso([0, 0, -0.004])), add(HC, [0, -HR[1] * 0.55, -0.014]), 0.033 * neckR, 0.031 * neckR, skin, { part: NECK });
+  limb(add(J.spine(d.shoulderY - 0.012), J.torso([0, 0, -0.004])), add(J.head, [0, -d.headR[1] * 0.55, -0.014]), 0.033 * neckR, 0.031 * neckR, skin, { part: NECK });
   if (top.mat && top.open) {
     const front = d.trunkTop[1];                         // the open neck: a narrow strip of chest, lying on the chest's own curve
-    limb(add(J.sh, J.torso([0, 0.012, front * 0.34])), add(J.sh, J.torso([0, -(top.open === true ? 0.046 : top.open), front * 0.95])), 0.021, 0.008, top.under || skin, { part: NECK, bias: cloth * 1.5, keepNormal: true });
+    limb(add(J.sh, J.torso([0, 0.012, front * 0.34])), add(J.sh, J.torso([0, -(top.open === true ? 0.046 : top.open), front * 0.95])), 0.021, 0.008, top.under || skin, { part: NECK, bias: cloth * 1.5 });
   }
   if (top.mat && top.band) {                             // a round collar: a band lying at the base of the neck, with two rounded points in front
     ball(add(J.sh, J.torso([0, -0.012, d.trunkTop[1] * 0.44])), [0.052, 0.026, 0.044], top.band, {
-      part: COLLAR, bias: cloth * 1.5, keepNormal: true,
+      part: COLLAR, bias: cloth * 1.5,
       fn: (ux, uy) => (ux * ux * 0.8 + (uy + 1.05) ** 2 < 0.62 || (Math.abs(ux) < 0.09 && uy > 0.05) ? null : undefined),
     }, tw);
   }
   if (top.mat && top.collar) {
     const cm = top.collar === true ? shifted(top.mat, -1) : top.collar, front = d.trunkTop[1];
-    for (const sd of [1, -1]) limb(add(J.sh, J.torso([sd * 0.026, 0.012, front * 0.30])), add(J.sh, J.torso([sd * 0.052, -0.016, front * 0.74])), 0.012, 0.008, cm, { part: COLLAR, bias: cloth * 1.5, keepNormal: 0.6 });
+    for (const sd of [1, -1]) limb(add(J.sh, J.torso([sd * 0.026, 0.012, front * 0.30])), add(J.sh, J.torso([sd * 0.052, -0.016, front * 0.74])), 0.012, 0.008, cm, { part: COLLAR, bias: cloth * 1.5 });
   }
   if (top.buttons && fine && !only) {                     // a row of buttons down the front
     const facing = trunkFacing(0);
@@ -641,30 +801,40 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   }
 
   // ----- head -----
-  const hy = J.headYaw, hr = HR, hc = HC;
+  const hy = J.headYaw, hr = d.headR, hc = J.head;
   const cpi = Math.cos(J.headPitch), spi = Math.sin(J.headPitch);
   const tipped = (v) => [v[0], v[1] * cpi - v[2] * spi, v[1] * spi + v[2] * cpi];           // the head's own nod
   const headPt = (v) => add(hc, turn(tipped(v), hy));                 // a point given in the head's own frame
   const hp = (x, y, z) => headPt([x * hr[0], y * hr[1], z * hr[2]]);  // the same, in fractions of the skull's half-sizes
   // from a point on the head as seen, back to the head's own directions: hairlines, hats and hoods turn and nod with it
   const onHead = (ux, uy, uz) => { const o = own(ux, uy, uz, hy); return [o[0], o[1] * cpi + o[2] * spi, -o[1] * spi + o[2] * cpi]; };
-  // (painted, the edge of the hair is broken into locks and wisps, not cut like a helmet's)
-  const hairAt = paint && hair.where ? (x, y, z) => hair.where(x, y + 0.070 * noise(x * 4.6 + 3.1, z * 4.6 - 1.7) + 0.022 * noise(x * 11.0, z * 11.0 + 5.3), z) : hair.where || (() => false);
+  const hairAt = hair.where || (() => false);
   const eyeY = face.eyeY ?? 0.06, eyeX = face.eyeX ?? 0.36, mouthY = face.mouthY ?? -0.74;
   const scalp = hair.mat && !hair.wig ? hair.mat : null;
   // The head is built of several shapes and shaded as one: flat, with a band of shade inside its outline on the side away from the light.
-  ball(hc, hr, skin, { part: HEAD, tone: 1, headShape: true, fn: scalp ? (ux, uy, uz) => { const o = onHead(ux, uy, uz); return hairAt(o[0], o[1], o[2]) ? scalp : undefined; } : null }, hy);
-  if (paint) { if (hair.mat) sf.hairMats.add(hair.mat); for (const mt of [face.beard, face.moustache, face.beardGrey]) if (mt) sf.hairMats.add(mt); }
+  ball(hc, hr, skin, { part: HEAD, tone: 1, fn: scalp ? (ux, uy, uz) => { const o = onHead(ux, uy, uz); return hairAt(o[0], o[1], o[2]) ? scalp : undefined; } : null }, hy);
   // the jaw: from the cheeks down and forward to the chin. A beard is the same shape in another color, starting lower.
   const jaw = face.jaw ?? 0.88, chin = face.chin ?? 0.50, chinY = face.chinY ?? -0.84, chinZ = face.chinZ ?? 0.54;
-  limb(hp(0, -0.22, 0.24), hp(0, chinY, chinZ), hr[0] * jaw, hr[0] * chin, (!paint && face.shadow) || skin, { part: HEAD, tone: 1 });
-  if (face.shadow && !paint) limb(hp(0, -0.20, 0.22), hp(0, -0.34, 0.30), hr[0] * (jaw + 0.01), hr[0] * (jaw - 0.02), skin, { part: HEAD, tone: 1 });      // an unshaven jaw: the cheeks above it are clean
+  // A short beard (face.short: { mat, stubble, from, chin }): on the jaw itself, along its lower edge and over the chin, with
+  // stubble above it; never on the upper lip. `from` and `chin` are how far down the jaw (0 at the cheekbones, 1 at the
+  // chin) the stubble and the beard over the chin begin.
+  const sb = face.short, fwd = Math.sin(th + J.headYaw);
+  const stubbly = (x, y) => (S < 200 || (x + y) % 2 === 0 ? sb.stubble : undefined);       // (on a portrait's big face, stubble is a stipple over the skin)
+  const shortBeard = sb ? (t, nx, ny, x, y) => {
+    if (Math.abs(fwd) > 0.35 && nx * fwd > 0.30 && t < (sb.chin ?? 0.86)) return t > (sb.lip ?? 0.6) ? stubbly(x, y) : undefined;      // the front of a turned face: lips and upper lip stay clear
+    if (t > (sb.chin ?? 0.86) || ny > 0.30 || (Math.abs(nx) > 0.74 && t > (sb.side ?? 0.30))) return sb.mat;
+    return t > (sb.from ?? 0.45) ? stubbly(x, y) : undefined;
+  } : null;
+  limb(hp(0, -0.22, 0.24), hp(0, chinY, chinZ), hr[0] * jaw, hr[0] * chin, face.shadow || skin, { part: HEAD, tone: 1, fn: shortBeard || (face.shadow && face.shadowFrom ? (t) => (t < face.shadowFrom ? skin : undefined) : null) });     // (shadowFrom: how far down the jaw the stubble starts)
+  if (face.shadow) limb(hp(0, -0.20, 0.22), hp(0, -0.34, 0.30), hr[0] * (jaw + 0.01), hr[0] * (jaw - 0.02), skin, { part: HEAD, tone: 1 });      // an unshaven jaw: the cheeks above it are clean
   if (face.beard) {
     const long = face.beardLen ?? 0;
     const [by, bz] = face.beardFrom || [-0.50, 0.30];                  // (where it starts on the cheeks: farther back, and the lips show above it in profile)
+    const stub = face.beardStubble, stubTo = face.beardStubbleTo ?? 0.3;  // (a short beard: stubble where it starts, the beard itself below)
     limb(hp(0, by, bz), hp(0, chinY - 0.04 - long, face.beardZ ?? chinZ + 0.02), hr[0] * (jaw - 0.06), hr[0] * (face.beardW ?? chin + 0.06), face.beard, {
       part: HAIR,                                                       // (a beard going grey: it is lighter over the chin)
-      fn: face.beardGrey && fine ? (t, across) => (t > 0.56 && Math.abs(across) < 0.52 ? face.beardGrey : undefined) : null,
+      fn: stub ? (t) => (t <= 0.001 ? null : t < stubTo ? stub : undefined)
+        : face.beardGrey && fine ? (t, across) => (t > 0.56 && Math.abs(across) < 0.52 ? face.beardGrey : undefined) : null,
       squareEnd: !!face.beardSquare,                                    // (trimmed square across the bottom; beardW: how broad it is there, beardZ: how far forward)
     });
   }
@@ -674,20 +844,19 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const noseEnd = hp(0, eyeY - 0.04 - 0.34 * noseLen, 0.97 + 0.20 * noseOut);
   limb(hp(0, eyeY - 0.02, 0.90), noseEnd, 0.0045, 0.0082 * noseTip, skin, { part: NOSE });
   // ears, unless the hair hangs over them
-  if (face.ears !== false) for (const sd of [1, -1]) if (!hairAt(sd * 0.99, -0.10, -0.08) || hair.ears) ball(hp(sd * 0.98, eyeY - 0.20, -0.08), [0.009, 0.019, 0.012].map((v) => v * (face.ear ?? 1)), skin, { part: EAR }, hy);
+  if (face.ears !== false) for (const sd of [1, -1]) if (!hairAt(sd * 0.99, -0.10, -0.08) || hair.ears) ball(hp(sd * (face.earOut ?? 0.98), eyeY - 0.20, -0.08), [0.009, 0.019, 0.012].map((v) => v * (face.ear ?? 1)), skin, { part: EAR }, hy);      // (face.ear: how big; face.earOut: how far out from the middle of the head, in half-widths: an ear that stands clear of the hair)
   if (hair.mat) {
     const g = hair.bulk ?? 1.07, g3 = Array.isArray(g) ? g : [g, g, g], up3 = hair.lift || [0, 0.003, 0];
-    const hairTex = paint && spec.paint && spec.paint.hairTexture !== undefined ? spec.paint.hairTexture : hair.texture;     // (painted, a texture of its own, laid on the head)
     if (g3[0] !== 1 || hair.wig) ball(headPt(up3), [hr[0] * g3[0], hr[1] * g3[1], hr[2] * g3[2]], hair.mat, {
-      part: HAIR, headShape: true,
-      fn: (ux, uy, uz, x, y) => { const o = onHead(ux, uy, uz); return !hairAt(o[0], o[1], o[2]) ? null : hairTex ? hairTex(o[0], o[1], o[2], paint ? Math.floor(x / (paint.k || 1)) : x, paint ? Math.floor(y / (paint.k || 1)) : y) : undefined; },
+      part: HAIR,
+      fn: (ux, uy, uz, x, y) => { const o = onHead(ux, uy, uz); return !hairAt(o[0], o[1], o[2]) ? null : hair.texture ? hair.texture(o[0], o[1], o[2], x, y) : undefined; },
     }, hy);
     // Thick hair, or a wig, stands out from the head: what shows between it and the cheek is the far side of it, seen from inside.
     if (g3[0] >= 1.14 || hair.wig) ball(headPt(up3), [hr[0] * g3[0], hr[1] * g3[1], hr[2] * g3[2]], shifted(hair.mat, 1), {
-      part: HAIR, bias: -R(hr[2] * g3[2]) * 1.25, headShape: true,
+      part: HAIR, bias: -R(hr[2] * g3[2]) * 1.25,
       fn: (ux, uy, uz) => { const o = onHead(ux, uy, -uz); return hairAt(o[0], o[1], o[2]) ? undefined : null; },
     }, hy);
-    for (const q of hair.puffs || []) ball(hp(q[0], q[1], q[2]), [hr[0] * q[3], hr[1] * q[4], hr[2] * q[5]], q[6] || hair.mat, { part: HAIR, headShape: true }, hy);
+    for (const q of hair.puffs || []) ball(hp(q[0], q[1], q[2]), [hr[0] * q[3], hr[1] * q[4], hr[2] * q[5]], q[6] || hair.mat, { part: HAIR }, hy);
   }
   if (face.wrap) {
     // Modern wrap-around sunglasses: one dark band across both eyes with a notch over the nose, and an arm back to each ear.
@@ -702,12 +871,11 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     }, hy);
   }
   const wrapMid = eyeY + 0.03;
-  if (face.moustache && !(paint && !face.beard)) for (const sd of [1, -1]) limb(hp(0, mouthY + 0.20, face.moustacheZ ?? 1.02), hp(sd * (face.moustacheW ?? 0.33), mouthY + 0.10, 0.86), 0.0058, 0.0044, face.moustache, { part: HAIR });
+  if (face.moustache) for (const sd of [1, -1]) limb(hp(0, mouthY + 0.20, face.moustacheZ ?? 1.02), hp(sd * (face.moustacheW ?? 0.33), mouthY + 0.10, 0.86), 0.0058, 0.0044, face.moustache, { part: HAIR });
 
   // hats, hair that hangs, packs, bags and whatever else this character wears or carries
   const ctx = {
     sf, J, P, R, limb, ball, own, onHead, headPt, hp, wide, deep, widthAt, depthAt, roundAt, fold, trunkAt, trunkFacing, skirtAt, far, d, S, th, hy, tw, ht, fine, coarse, pose, spec, skin, cloth, under, farSide: farK,
-    px: paint ? paint.k || 1 : 1, painted: !!paint,                     // (painted: painted pixels to a picture pixel, for anything placed by the pixel)
     parts: { HEAD, HAIR, TORSO, PELVIS, SKIRT, EXTRA, EXTRA2, EXTRA3, HAT, NECK, ARM, HAND, LEG, FOOT, SLEEVE, DRAPE, DRAPE2, BELT, COLLAR, HELD, NOSE, EAR },
   };
   if (spec.extras) spec.extras(ctx);
@@ -717,89 +885,95 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
       cast: (a, b) => (a === EXTRA2 || a === EXTRA3) && a !== b ? held : 0 });
   }
 
-  // ----- the face -----
-  // Painted (paint.js): the features are painted onto the head where it is, as the picture is finished.
-  if (paint) sf.head = { hc, hy, cpi, spi, hr, S, th, ox, oy, tilt: TILT, spec, pose, skin, face: faceOf(spec) };
-  else {
-    // ----- face, placed pixel by pixel -----
-    // How much of a face there is room for depends on how many pixels wide the head is (a child's head is
-    // bigger than a grown-up's of the same height). Full: the eye patterns above, brows, lines. Middle: every
-    // eye is drawn the narrow way and the mouth is short. Small: a dot for each eye.
-    const headPx = 2 * hr[0] * S, faceFull = headPx >= FACE_FULL, faceFine = headPx >= FACE_MID;
-    const ang = th + hy, sideways = Math.sin(ang), frontOn = Math.abs(sideways) < 0.12 && Math.cos(ang) > 0;
-    const see = (v) => { const w = turn(tipped(v), hy); return w[0] * s + w[2] * c; };          // how much a head direction faces the viewer
-    const scr = (x, y, z) => P(hp(x, y, z));
-    const mid = scr(0, eyeY, 0.80)[0];                                    // the middle of the face, as seen
-    const mirror = (x) => Math.round(2 * mid) - 1 - x;
-    const eyeDark = pack(face.eye || "#2a1a12"), eyeWhite = pack(face.white || "#f6efe4"), lidTone = skin.tones[2], lineTone = pack(face.lid || "#5a3424");
-    const browTone = face.brows == null ? 0 : typeof face.brows === "string" ? pack(face.brows) : face.brows;
-    const shade = face.shades ? pack(face.shades) : 0;
-    const eyes = [];
+  // ----- face, placed pixel by pixel -----
+  // How much of a face there is room for depends on how many pixels wide the head is (a child's head is
+  // bigger than a grown-up's of the same height). Full: the eye patterns above, brows, cheeks, lines. Middle:
+  // every eye is drawn the narrow way and the mouth is short. Small: a dot for each eye.
+  const headPx = 2 * hr[0] * S, faceFull = headPx >= FACE_FULL, faceFine = headPx >= FACE_MID;
+  const ang = th + hy, sideways = Math.sin(ang), frontOn = Math.abs(sideways) < 0.12 && Math.cos(ang) > 0;
+  const see = (v) => { const w = turn(tipped(v), hy); return w[0] * s + w[2] * c; };          // how much a head direction faces the viewer
+  const scr = (x, y, z) => P(hp(x, y, z));
+  const mid = scr(0, eyeY, 0.80)[0];                                    // the middle of the face, as seen
+  const mirror = (x) => Math.round(2 * mid) - 1 - x;
+  const ink = inksOf(face, skin);                                       // the face's own colours (inksOf, below)
+  const shade = ink.shades, big = !!(opt && opt.portrait);
+  if (big) bigFace({ sf, scr, see: (v) => see(unit(v)), face, ink, skin, eyeX, eyeY, mouthY, headPx, pose, sideways, mid, noseTip: P(noseEnd), part: HEAD });
+  const eyes = [];
+  for (const sd of big ? [] : [1, -1]) {
+    const vis = see(unit([sd * 0.25, 0, 0.97]));
+    if (vis < 0.20) continue;
+    const q = scr(sd * eyeX, eyeY, 0.80), w = faceFull && vis > 0.70 ? 2 : 1;
+    const right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;                    // which way is "away from the nose", as seen
+    eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis });
+  }
+  if (frontOn && eyes.length === 2) { eyes[1].x = mirror(eyes[0].x); eyes[1].y = eyes[0].y; }   // seen straight on, a face is the same on both sides
+  for (const e of eyes) {
+    const put = (i, j, color) => sf.dot(e.x + e.out * i, e.y + j, color, HEAD);
+    if (shade) {                                                                          // dark glasses: a lens over each eye
+      if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j, shade);
+      else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j, shade); }
+      else { put(0, 0, shade); put(1, 0, shade); }
+      continue;
+    }
+    if (!faceFine) { put(0, 0, pose.blink ? ink.lidShade : ink.small); continue; }
+    const kind = pose.blink ? EYES[pose.squeeze ? "tight" : "shut"] : typeof face.eyes === "object" ? face.eyes : EYES[face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;      // (face.eyes: a kind of eye from the table, or a person's own)
+    rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) { const col = ink.of(row[i]); if (col) put(i, j - kind.at, col); } });
+    if (ink.brow && (faceFull || !kind.at)) {                                             // (on a middle-sized face a lid line does for the brow as well)
+      const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, squeezed = pose.blink && pose.squeeze;
+      const shape = faceFull && face.brow ? (e.w === 2 ? face.brow.full : face.brow.thin) || null : null;    // their own brows: a rise or fall for each pixel, from the nose outward
+      const tilt = faceFull ? (squeezed ? 1 : face.browTilt || 0) : 0;                     // (eyes squeezed shut pull the brows down toward the nose)
+      if (shape && !squeezed) shape.forEach((dy, i) => { if (dy !== null) put(i - (shape.length > 3 ? 1 : 0), -up + dy, ink.brow); });
+      else for (let i = 0; i < n; i++) put(i - (n > 3 ? 1 : 0), -up + (tilt > 0 && i === 0 ? 1 : tilt < 0 && i === n - 1 ? 1 : 0), ink.brow);
+    }
+    if (faceFull && e.w === 2) {
+      if (ink.blush) for (const [i, j] of face.cheek || [[1, 2]]) put(i, j, ink.blush);     // a little colour in the cheek
+      if (face.freckles) { put(0, 3, ink.freckle); put(2, 4, ink.freckle); }
+    }
+  }
+  if (face.wrap && face.glint !== false && S >= 52) {
+    // one small glint on the dark glasses, at the upper corner (toward the light) of whichever lens is farthest left as we see it
+    let best = null;
+    for (const sd of [1, -1]) { if (see(unit([sd * 0.45, 0, 0.89])) < 0.30) continue; const q = scr(sd * 0.46, wrapMid + 0.07, 0.90); if (!best || q[0] < best[0]) best = q; }
+    if (best) { const gx = Math.round(best[0] - 0.5), gy = Math.round(best[1] - 0.5), glint = pack(face.glint || "#c4cdea"); sf.dot(gx, gy, glint, HAT); if (faceFull) sf.dot(gx - 1, gy, glint, HAT); }
+  }
+  // seen from the side, glasses show the arm that runs back to the ear
+  if (shade && eyes.length === 1 && faceFine) for (let i = 2; i <= 5; i++) sf.dot(eyes[0].x + eyes[0].out * i, eyes[0].y - 1, shade, HEAD);
+  // the nose: the shadow under its tip, on the side away from the light (face.noseShade)
+  if (face.noseShade && faceFull && see([0, 0, 1]) > 0.35 && !shade && !big) {
+    const q = P(noseEnd), x = Math.round(q[0] - 0.5) + (sideways > 0.3 ? 0 : 1), y = Math.round(q[1] - 0.5) + 1;
+    sf.dot(x, y, ink.lidShade, HEAD);
+  }
+  // the mouth: a line from corner to corner when shut; open shapes for talking
+  if (face.mouth !== false && !coarse && see([0, 0, 1]) > 0.10 && !big) {
+    const mw = face.mouthW ?? 0.22, mz = 0.95;
+    const pts = [scr(-mw, mouthY, mz - 0.12), scr(0, mouthY, mz + (Math.abs(sideways) > 0.6 ? 0.06 : 0)), scr(mw, mouthY, mz - 0.12)].filter((q, i) => i === 1 || see(unit([(i - 1) * 0.5, 0, 0.87])) > 0.25);
+    let x0 = Infinity, x1 = -Infinity;
+    for (const q of pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); }
+    const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = pose.mouth || 0;
+    let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
+    if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
+    else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
+    const lip = ink.lip, inside = ink.inside, smile = face.smile || 0;
+    const dot = (x, y, col) => { sf.dot(x, y, col, HEAD); if (face.beard) sf.dot(x, y, col, HAIR); };      // (on the skin, or on a beard)
+    const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
+    if (!hidden) for (let x = a; x <= b; x++) {
+      const end = faceFine && b - a >= 2 && (x === a || x === b) && Math.abs(sideways) < 0.6;
+      if (open === 0) dot(x, y - (end ? smile : 0), lip);
+      else if (!end || open > 1) { dot(x, y, inside); if (open > 1) dot(x, y + 1, x === a || x === b ? lip : inside); }
+      else dot(x, y, lip);
+    }
+    if (ink.lips && faceFull && open === 0 && !hidden) for (let x = a + (b - a >= 2 ? 1 : 0); x <= b - (b - a >= 2 ? 1 : 0); x++) dot(x, y + 1, ink.lips);       // a painted lower lip
+  }
+  // the lines of an older face: from the nose to the corners of the mouth, across the forehead, under the eyes
+  if (face.lines && faceFull && !big) {
+    const n = face.lines;
     for (const sd of [1, -1]) {
-      const vis = see(unit([sd * 0.25, 0, 0.97]));
-      if (vis < 0.20) continue;
-      const q = scr(sd * eyeX, eyeY, 0.80), w = faceFull && vis > 0.70 ? 2 : 1;
-      const right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;                    // which way is "away from the nose", as seen
-      eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis });
+      if (see(unit([sd * 0.5, 0, 0.87])) < 0.35) continue;
+      const a = scr(sd * 0.26, eyeY - 0.50, 0.93), b = scr(sd * 0.38, mouthY + 0.10, 0.86);
+      sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD);
+      if (n > 1) { const e0 = scr(sd * 0.22, eyeY - 0.20, 0.84), e1 = scr(sd * 0.52, eyeY - 0.16, 0.80); sf.stroke(e0[0], e0[1], e1[0], e1[1], 1, HEAD); }
     }
-    if (frontOn && eyes.length === 2) { eyes[1].x = mirror(eyes[0].x); eyes[1].y = eyes[0].y; }   // seen straight on, a face is the same on both sides
-    for (const e of eyes) {
-      const put = (i, j, color) => sf.dot(e.x + e.out * i, e.y + j, color, HEAD);
-      if (shade) {                                                                          // dark glasses: a lens over each eye
-        if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j, shade);
-        else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j, shade); }
-        else { put(0, 0, shade); put(1, 0, shade); }
-        continue;
-      }
-      if (!faceFine) { put(0, 0, pose.blink ? lidTone : eyeDark); continue; }
-      const kind = EYES[pose.blink ? (pose.squeeze ? "tight" : "shut") : face.eyes || "plain"] || EYES.plain, rows = e.w === 2 ? kind.full : kind.thin;
-      rows.forEach((row, j) => { for (let i = 0; i < row.length; i++) { const ch = row[i]; if (ch !== ".") put(i, j - kind.at, ch === "#" ? eyeDark : ch === "o" ? eyeWhite : ch === "=" ? lineTone : lidTone); } });
-      if (browTone && (faceFull || !kind.at)) {                                             // (on a middle-sized face a lid line does for the brow as well)
-        const up = (face.browUp ?? 2) + (kind.at ? 1 : 0), n = e.w === 2 ? (face.browW ?? 3) : 2, tilt = faceFull ? (pose.blink && pose.squeeze ? 1 : face.browTilt || 0) : 0;     // (eyes squeezed shut pull the brows down toward the nose)
-        for (let i = 0; i < n; i++) put(i - (n > 3 ? 1 : 0), -up + (tilt > 0 && i === 0 ? 1 : tilt < 0 && i === n - 1 ? 1 : 0), browTone);
-      }
-      if (face.freckles && faceFull) { put(0, 3, lidTone); put(2, 4, lidTone); }
-    }
-    if (face.wrap && face.glint !== false && S >= 52) {
-      // one small glint on the dark glasses, at the upper corner (toward the light) of whichever lens is farthest left as we see it
-      let best = null;
-      for (const sd of [1, -1]) { if (see(unit([sd * 0.45, 0, 0.89])) < 0.30) continue; const q = scr(sd * 0.46, wrapMid + 0.07, 0.90); if (!best || q[0] < best[0]) best = q; }
-      if (best) { const gx = Math.round(best[0] - 0.5), gy = Math.round(best[1] - 0.5), glint = pack(face.glint || "#c4cdea"); sf.dot(gx, gy, glint, HAT); if (faceFull) sf.dot(gx - 1, gy, glint, HAT); }
-    }
-    // seen from the side, glasses show the arm that runs back to the ear
-    if (shade && eyes.length === 1 && faceFine) for (let i = 2; i <= 5; i++) sf.dot(eyes[0].x + eyes[0].out * i, eyes[0].y - 1, shade, HEAD);
-    // the mouth: a line from corner to corner when shut; open shapes for talking
-    if (face.mouth !== false && !coarse && see([0, 0, 1]) > 0.10) {
-      const mw = face.mouthW ?? 0.22, mz = 0.95;
-      const pts = [scr(-mw, mouthY, mz - 0.12), scr(0, mouthY, mz + (Math.abs(sideways) > 0.6 ? 0.06 : 0)), scr(mw, mouthY, mz - 0.12)].filter((q, i) => i === 1 || see(unit([(i - 1) * 0.5, 0, 0.87])) > 0.25);
-      let x0 = Infinity, x1 = -Infinity;
-      for (const q of pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); }
-      const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = pose.mouth || 0;
-      let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
-      if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
-      else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
-      const lip = pack(face.lip || "#8a4636"), inside = pack("#3a1612"), on = face.beard ? HAIR : HEAD, smile = face.smile || 0;
-      const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
-      if (!hidden) for (let x = a; x <= b; x++) {
-        const end = faceFine && b - a >= 2 && (x === a || x === b) && Math.abs(sideways) < 0.6;
-        if (open === 0) sf.dot(x, y - (end ? smile : 0), lip, on);
-        else if (!end || open > 1) { sf.dot(x, y, inside, on); if (open > 1) sf.dot(x, y + 1, x === a || x === b ? lip : inside, on); }
-        else sf.dot(x, y, lip, on);
-      }
-      if (face.lips && faceFull && open === 0 && !hidden) for (let x = a + (b - a >= 2 ? 1 : 0); x <= b - (b - a >= 2 ? 1 : 0); x++) sf.dot(x, y + 1, pack(face.lips), on);       // a painted lower lip
-    }
-    // the lines of an older face: from the nose to the corners of the mouth, across the forehead, under the eyes
-    if (face.lines && faceFull) {
-      const n = face.lines;
-      for (const sd of [1, -1]) {
-        if (see(unit([sd * 0.5, 0, 0.87])) < 0.35) continue;
-        const a = scr(sd * 0.26, eyeY - 0.50, 0.93), b = scr(sd * 0.38, mouthY + 0.10, 0.86);
-        sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD);
-        if (n > 1) { const e0 = scr(sd * 0.22, eyeY - 0.20, 0.84), e1 = scr(sd * 0.52, eyeY - 0.16, 0.80); sf.stroke(e0[0], e0[1], e1[0], e1[1], 1, HEAD); }
-      }
-      if (n > 1 && see([0, 0, 1]) > 0.3 && !hairAt(0, 0.50, 0.86)) { const a = scr(-0.34, eyeY + 0.52, 0.84), b = scr(0.34, eyeY + 0.52, 0.84); sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD); }
-    }
-
+    if (n > 1 && see([0, 0, 1]) > 0.3 && !hairAt(0, 0.50, 0.86)) { const a = scr(-0.34, eyeY + 0.52, 0.84), b = scr(0.34, eyeY + 0.52, 0.84); sf.stroke(a[0], a[1], b[0], b[1], 1, HEAD); }
   }
   // Lines the eye expects: between the two legs, between an arm and the body it hangs against,
   // and a thin shadow under the edge of a sleeve, a pair of shorts, a skirt or an untucked shirt.
@@ -816,10 +990,23 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // for a scene that lays a painted thing over a hand, and for tools.
   const spot = (v) => { const q = P(v); return [Math.round((q[0] - ox) * 10) / 10, Math.round((q[1] - oy) * 10) / 10]; };
   sf.spots = { handR: spot(J.R.palm), handL: spot(J.L.palm), head: spot(add(J.head, [0, hr[1], 0])) };
+  if (big) {
+    // A portrait's face is shaded as one form: a band of shade inside the outline of the head on the side away from the
+    // light, but no line where the chin stands in front of the skull (at this size that line would cross the face).
+    const { w: sw, h: sh, m: sm, t: st, p: spart } = sf, band = Math.max(1, Math.min(2, Math.round(S * 0.0055))), faceParts = new Set([HEAD, NOSE, EAR]);
+    for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) {
+      const i = y * sw + x;
+      if (!sm[i] || spart[i] !== HEAD || st[i] !== 1) continue;
+      for (let j = 1; j <= band; j++) {
+        const qx = x + Math.round(j * 0.30), qy = y + Math.round(j * 0.95), q = qy * sw + qx;
+        if (qx >= sw || qy >= sh || !sm[q] || !faceParts.has(spart[q])) { st[i] = 2; break; }
+      }
+    }
+  }
   return sf.finish({
     reach: Math.max(reach.chin, reach.brim, reach.arm, reach.hem, reach.held),
     rim: fine && spec.rim !== false, outline: fine && spec.outline !== false,     // at full size every form has a line of its own darker color round it; small, it would only be mud
-    inset: (q) => (q === HEAD ? [1, 0.30, 0.95] : 0),                  // a face is shaded under the jaw, and kept clear across the cheek, where the far eye is
+    inset: (q) => (q === HEAD && !big ? [1, 0.30, 0.95] : 0),       // (a portrait's face has its own band, above)      // a face is shaded under the jaw, and kept clear across the cheek, where the far eye is (wider on a portrait's big head)
     seams: (a, b, below, x, y) =>
       (a === SHORTS.R && b === LEG.R) || (a === SHORTS.L && b === LEG.L) || (a === SLEEVE.R && b === ARM.R) || (a === SLEEVE.L && b === ARM.L) ||
       (a === SKIRT && (b === LEG.R || b === LEG.L)) || (a === BELT || b === BELT) || (a === COLLAR && b === TORSO) ||
@@ -1339,8 +1526,8 @@ export function standOffset(spec, yawDeg, size) {
 
 /** The seat that is drawn with someone (the goldsmith's stool, the old-timer's lawn chair), by itself, where they sat:
     for while they are up. Anchored as their seated picture is, at the point under the seat. */
-export function drawSeat(spec, yawDeg, size, paint = undefined) {
-  return drawFigure(spec, poses.sit(spec, 0), yawDeg, size, { seat: true, paint });
+export function drawSeat(spec, yawDeg, size) {
+  return drawFigure(spec, poses.sit(spec, 0), yawDeg, size, { seat: true });
 }
 
 /** A leg reaching from its hip to a place for its ankle (in the figure's own space, unturned), the knee bending toward
@@ -1687,28 +1874,28 @@ Object.assign(poses, {
   },
 });
 
-/** Where the middle of someone's head is in their picture, measured from the point between the feet (x right, y down),
-    and the head's half height, in pixels, for someone `size` pixels tall facing yawDeg (painted: their painted head). */
-export function headPoint(spec, pose, yawDeg, size) {
-  const J = skeleton(spec.dim, pose), big = (spec.paint && spec.paint.head) || 1, th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th);
-  const v = add(J.head, [0, -(big - 1) * spec.dim.headR[1], 0]), dp = (v[0] * s + v[2] * c) * size;
-  return [(-v[0] * c + v[2] * s) * size, -v[1] * size + dp * 0.22, spec.dim.headR[1] * big * size];
-}
-
-/** A painted head-and-shoulders portrait, n pixels square, turned a little (yawDeg), the eyes on the viewer: the team
-    buttons. The same person as their figure, drawn by the same means (paint.js), at several times the size it is shown.
-    Returns the finished picture (toCanvas() makes a canvas of it). */
-export function portraitOf(spec, n = 256, yawDeg = 24) {
-  const how = (spec.paint && spec.paint.portrait) || {};
-  const big = (spec.paint && spec.paint.head) || 1, size = ((how.head ?? 0.30) * n) / (spec.dim.headR[1] * big);
-  const pose = { ...(spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0)), look: "viewer" };
-  const [hx, hy] = headPoint(spec, pose, yawDeg, size);
-  const win = [Math.round(hx - n / 2 + (how.x ?? 0) * n), Math.round(hy - n * (how.y ?? 0.44)), n, n];
-  return drawFigure(spec, pose, yawDeg, size, { paint: { k: n / 84, window: win } });
-}
-
 /** How tall a character is as they are usually found (standing, or sitting on whatever they sit on), in their own
     heights: 1 for someone standing, about 0.6 for someone cross-legged on the ground. For placing words over a head. */
+/**
+ * A team portrait: head and shoulders, n pixels square, drawn with that many pixels (not a figure enlarged), facing the
+ * viewer, the face feature by feature at that size (bigFace). spec.portrait (optional) frames it: { head: how much of
+ * the height the skull takes, y: where the middle of the head sits, from the top }.
+ */
+export function portraitOf(spec, n = 84, yawDeg = 0) {
+  const how = spec.portrait || {}, pose = spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0);
+  const size = ((how.head ?? 0.56) * n) / (spec.dim.headR[1] * 2);
+  const [hx, hy] = headPoint(spec, pose, yawDeg, size);
+  return drawFigure(spec, pose, yawDeg, size, { window: [Math.round(hx - n / 2), Math.round(hy - n * (how.y ?? 0.42)), n, n], portrait: true });
+}
+
+/** Where the middle of someone's head is in a picture drawn by drawFigure (the same spec, pose, way and size), measured
+    from the anchor: [x right, y down]. For a portrait, which frames the head. */
+export function headPoint(spec, pose, yawDeg, size) {
+  const J = skeleton(spec.dim, pose), th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th), v = J.head;
+  const dp = (v[0] * s + v[2] * c) * size;
+  return [(-v[0] * c + v[2] * s) * size, -v[1] * size + dp * 0.22];
+}
+
 export function tallOf(spec) {
   const J = skeleton(spec.dim, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0));
   return J.head[1] + spec.dim.headR[1] * 1.2;

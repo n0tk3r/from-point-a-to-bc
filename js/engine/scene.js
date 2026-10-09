@@ -26,7 +26,6 @@ import { picture, url } from "./assets.js";
 import { fxPictures } from "./effects.js";
 import { W, H, OLD, fit } from "./grid.js";
 import * as art from "../art/kit.js";
-import { paintedPeople } from "../art/paint.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 const SHAPE = new Set(["x", "y", "width", "height", "cx", "cy", "r", "points"]);      // the attributes that say an area's shape
@@ -72,13 +71,7 @@ export class SceneView {
     this.palette = paletteOf(stage);
     this.cast.palette = this.palette;
     // Hard pixels or smooth: measured now, and again whenever the stage changes size. (A stage 1599.98 screen pixels wide is twice 800.)
-    // Painted people (?people=painted) are painted at the stage's own size on the screen, at 1, 2 or 3 times its
-    // 800 x 600 (cast.js, setResolution: under 1.5 times, 1; then 2; from 3 times, 3).
-    const measure = () => {
-      const times = (stage.getBoundingClientRect().width * (window.devicePixelRatio || 1)) / W;
-      stage.classList.toggle("crisp", times >= CRISP_FROM - 0.02);
-      if (paintedPeople) this.cast.setResolution(times);
-    };
+    const measure = () => stage.classList.toggle("crisp", (stage.getBoundingClientRect().width * (window.devicePixelRatio || 1)) / W >= CRISP_FROM - 0.02);
     measure();
     if (window.ResizeObserver) new ResizeObserver(measure).observe(stage);
     window.addEventListener("resize", measure);

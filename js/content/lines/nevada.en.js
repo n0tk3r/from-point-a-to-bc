@@ -54,7 +54,7 @@ export const lines = {
   "nevada.old.look.mom": ["mom", "A gentleman in a lawn chair, selling rocks and lemonade to a road with no cars on it. He will have seen whatever passed."],
   "nevada.old.look.bigsis": ["bigsis", "One witness. Elderly, seated, hat. He is pretending not to watch us. Badly."],
   "nevada.old.look.lilsis": ["lilsis", "A real wizard! White beard, magic hat, and he sells ROCKS. His name is the Rock Wizard. I just decided."],
-  "nevada.old.lilsis.1": ["lilsis", "Mister! Did you see my daddy? He's THIS tall, he has a moustache, and he's EARLY."],
+  "nevada.old.lilsis.1": ["lilsis", "Mister! Did you see my daddy? He's THIS tall, he has a scratchy beard, and he's EARLY."],
   "nevada.old.lilsis.2": ["oldtimer", "Lemonade's a dollar, little miss. Stories are extra."],
   "nevada.old.lilsis.3": ["lilsis", "I don't HAVE a dollar. I have a loose tooth. But it's not for sale. It's waiting for Daddy."],
   "nevada.old.bigsis.1": ["bigsis", "Sir. Did you observe a red station wagon yesterday at approximately 5:47 p.m.?"],

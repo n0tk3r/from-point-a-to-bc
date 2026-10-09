@@ -23,6 +23,8 @@ import { AudioEngine } from "./audio.js";
 import { Dialogue } from "./dialogue.js";
 import { SceneView, footOf, picturesIn } from "./scene.js";
 import { Cutout } from "./cast.js";
+import * as castKit from "./cast.js";               // (castKit.forget: the paints, below)
+import { keyScene } from "../art/look.js";
 import { WalkMap, scaleAt } from "./walk.js";
 import { W, H, OLD, fit } from "./grid.js";
 import { hold, url, picture } from "./assets.js";
@@ -436,6 +438,10 @@ export class Game {
     this.lookMode = false;
     this._leaving = null;
     this.view.clear();
+    // The paints (js/art/look.js): the people and the moving things take this scene's key. The team's portraits are the
+    // interface's and are drawn with none (portrait() in cast.js sees to that itself, and keeps each one); pictures of
+    // people kept from another key are let go.
+    if (keyScene(scene.id, scene.era) && castKit.forget) castKit.forget();
     this.scene = scene;
     this.life.enter(scene);                     // everyone's own life starts again with the scene, on their marks (life.js)
     this.mode = "play";

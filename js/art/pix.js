@@ -16,6 +16,8 @@
 // x runs right, y runs DOWN, and z comes toward the viewer: a larger z is nearer
 // and hides what is behind it.
 
+import { tonesOf, pixelOf } from "./look.js";      // the paints: every colour in the key of the scene on stage (look.js)
+
 /** "#rrggbb" (or "#rrggbbaa") as one number in the byte order a canvas wants. */
 export function pack(hex) {
   const n = parseInt(hex.slice(1, 7), 16);
@@ -231,6 +233,7 @@ export class Surface {
   finish({ edge = true, contact = true, gap = 1.6, seams = null, cast = null, rim = false, inset = null, outline = false, reach = 12 } = {}) {
     const { w, h, m, t, z, p, mats } = this, n = w * h;
     const out = new Uint32Array(n), tones = new Uint8Array(n);
+    const keyed = mats.map(tonesOf);                         // each material's four tones in the paints of the scene (look.js)
     // which pixels have something solid on them (a ground shadow is not solid), and the box they all lie in
     const sol = new Uint8Array(n), soft = mats.map((material) => (material.soft ? 1 : 0));
     let bx0 = w, bx1 = -1, by0 = h, by1 = -1;
@@ -311,7 +314,7 @@ export class Surface {
           }
         }
         tones[i] = tone;
-        out[i] = material.tones[tone];
+        out[i] = keyed[m[i] - 1][tone];
       }
     }
     const before = this.marks.length ? tones.slice() : null;      // two lines that cross are not darker where they cross
@@ -322,14 +325,14 @@ export class Surface {
       const material = mats[m[i] - 1];
       if (material.soft) continue;
       const tone = Math.max(0, Math.min(3, before[i] + by));
-      if (by > 0 ? tone > tones[i] : tone < tones[i]) { tones[i] = tone; out[i] = material.tones[tone]; }
+      if (by > 0 ? tone > tones[i] : tone < tones[i]) { tones[i] = tone; out[i] = keyed[m[i] - 1][tone]; }
     }
     for (const [x, y, color, part] of this.stamps) {
       if (x < 0 || y < 0 || x >= w || y >= h) continue;
       const i = y * w + x;
       if (part !== null && p[i] !== part) continue;
       if (part === null && !m[i]) continue;
-      out[i] = color;
+      out[i] = pixelOf(color);
     }
     this.out = out;
     return this;

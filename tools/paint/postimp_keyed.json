@@ -1,0 +1,1134 @@
+{
+ "egypt-chamber": {
+  "key": "lamp-interior",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "9acac88c72fd224e054a44aa6c07895c320a412771a08467437775072d213032",
+    "keyed": "461ec3c09b0541e113ea359b88de25463fa31d842cb813c827cec2dc7149ea57"
+   },
+   "bench.png": {
+    "raw": "7829c047eeb144321089d79e86624061d5fbebb577c13d82787545c91ed85490",
+    "keyed": "b070199b0adaab98b10cf005cf51e65788c3b36d88f0e10df9ff10c7b876163b"
+   },
+   "front.png": {
+    "raw": "8755fbbffc111757374bc92feed446a58808fa5372bce1a41e429d2e0faffaa4",
+    "keyed": "dc77c41d66619325abc1a4db2269b49a8ba382fa7acf3b80c34c43d43976358c"
+   },
+   "mirror.png": {
+    "raw": "dd53a00d6935a1194ea56626a2a055cada8a0244cb788e52b5acf692928fc9f2",
+    "keyed": "37c6fe2fd6a08050f1cdc4bd0b4b84331f7ba6f4b03d63c83a4c592f215d5066"
+   }
+  }
+ },
+ "egypt-crash": {
+  "key": "egypt-noon",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "f8c08317ca0c4847ffae633d3e031c29bffbfe332fbccb657b1c4d195746ad93",
+    "keyed": "9c1c287affb8f3df755b5f6d60f8da1ce44af45fd6a3afff66b512f4c1f4dbc7"
+   },
+   "cooler-open.png": {
+    "raw": "4065b6eb7eaacb67b6f6e7e736e2cc5767f427c7719a9bc6367b23c84d1578b2",
+    "keyed": "4752f126fc16eb1cb928548253bf8c7ba3e7d32042558e21bee0537589ad2c2c"
+   },
+   "donkey.png": {
+    "raw": "8358c2b2b395d26ba3118bc03e369108b65126b209faf838a7cac88779dfc777",
+    "keyed": "07c68b54928f167d1a377cbbfbac47113b24e80d0c07b83184b714a84552c3a2"
+   },
+   "front.png": {
+    "raw": "72e98b0b51566032ac48f347d4b76720a98a655a5a04ea55e9dfabff346352bd",
+    "keyed": "57afaa5cf46cd5ef6dd66b168727bf559040a5d17c11af72ee38fedf24605507"
+   },
+   "mirror.png": {
+    "raw": "53d16494a54f6045c05b2d6ea83aabb1b53a42440055a126cffadf7f5b33011a",
+    "keyed": "0c02d96b00f021444eb97e0633e028d17234a8d7f5e21534d4f7fe7a8e17f7b9"
+   },
+   "palm-1.png": {
+    "raw": "018d97ac4f5ca6b302674806fcbb5e8055cebef35218e94bf0cc0dd29f6b6ca9",
+    "keyed": "58b81df0bca084770b35a4892ed4200160c233c8bf4e606538cd29f822d55682"
+   },
+   "palm-2.png": {
+    "raw": "4394cac59669d9878c187534fdc026e320807ab1b9241431cd30d1e26e6a3672",
+    "keyed": "7fe00bd57702958d8ae664114b00758dbf96fed0f3dee824ad7b9014a9753b1d"
+   },
+   "palm-3.png": {
+    "raw": "2bfdc069e9960f5de09f33a367dc4a5bda5f2503f4e7f6b28964091462d6ba64",
+    "keyed": "7fef6b45f452bd3011d75a390fb4ed775c498cc6dddba7fde479aeef2802298c"
+   },
+   "palms.png": {
+    "raw": "2f80a4c8fc3bd87c93f8583ea23781d80841e18aa15cdc017a88fca73d87ea72",
+    "keyed": "e04f8c8460b4b34a15c8d038c58c401dcf3d54a7e9950eb24cc260863fbbb509"
+   },
+   "steam-0.png": {
+    "raw": "4f867bd24b23b607014e33de1d7e38e5356690b9c09ed19eae3f30533b50496a",
+    "keyed": "16d77b4492641ab0ab203d967f260b5cb3337e44b636308ab0ce860d14154a6e"
+   },
+   "steam-1.png": {
+    "raw": "f5db9788a486aa4b9f6990579da9a9739cec3d51d7b90786c47514fffd7f5c9b",
+    "keyed": "907f40927b53538d3d497839935576dca169807e53c931234a3c6c0884b966e1"
+   },
+   "steam-2.png": {
+    "raw": "588fac85c3024b7db15a6a9398f17baafa90c5a71785102a3444e776bdd6de95",
+    "keyed": "b3fe38bdb3623a6a2b2a15ef138b6881b46a147b683e176a1ab9b2edc99fa847"
+   },
+   "steam-3.png": {
+    "raw": "75200c55f29069d98a212db1dd5ddeea42a7ed64773caf3b2446be5a0e1f7959",
+    "keyed": "689218fff025b5c5faae8e8e5059e788f867d01b23b0f5fb1e1c838880308e90"
+   },
+   "suitcase-open.png": {
+    "raw": "bba5e1cf085a2b4060a84c3ed5d21eefa42950185c8d60ac7c2902dce73bde8d",
+    "keyed": "d65ace3a5208709d5a0b952e7a4aa4aa4ec40155e4bdbb2de99bd0cae62e02a5"
+   },
+   "trunk-open.png": {
+    "raw": "147ba6efde08d9fece8de4be84fe1e2dc73dfa47e719808103ce7b2e6db1673d",
+    "keyed": "d42b3006478177f41a8e7695a5fe2d39bd06dac9c98af1af7f068c8458137f81"
+   },
+   "wagon.png": {
+    "raw": "296f681703824b3334910f5dac2f3ded74d637456166fe24495af6f767b92999",
+    "keyed": "48c61bf5731dcebda0fb76da1084d7f46d6c24e746eda4b3ed82f8d2f5bd8ca9"
+   }
+  }
+ },
+ "egypt-gallery": {
+  "key": "lamp-interior",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "21d7d84c6d94b5364ebdeef7d47d841b2db015593436bab54586deb9e4807234",
+    "keyed": "3aed942fabc2eec5c0046392729754a0285cf3ab612b98c9be0eedbe97ef5e4c"
+   },
+   "front.png": {
+    "raw": "2f94a6f8764ccf240ec94ae9d16b3e947b7c7f16d93ca6da33176a8bf7857a8d",
+    "keyed": "c9460a48a341b7156a56e2a6c65a8abdde8fedba94b55f97cf2965591e8eb682"
+   },
+   "mirror-foot.png": {
+    "raw": "afb85fedea92f705a1f95df57a9cdb7c6b63a4f39c43d5229657db2aa80f9e54",
+    "keyed": "d68dff5bd2207c3a60c630634a87a448f0d567d66c841bc6f86d0f7b85d76120"
+   },
+   "mirror-top.png": {
+    "raw": "05b2f51c611ef2516ed58ddfc63454615422338e67518e7f883ea54926a67a66",
+    "keyed": "641be44338933c78e01f1c343e51690507cd2027a9f2b82eab0a0cf7eb547646"
+   }
+  }
+ },
+ "egypt-site": {
+  "key": "egypt-noon",
+  "strength": 50,
+  "files": {
+   "awning.png": {
+    "raw": "b1ac3b9d89a3fc0bbf52121e91f5b0e64885cf1cabe9997b32c08b28509ce91b",
+    "keyed": "fd8dcbf198996cc15887c448680320225d47caf4137372f1da5444ec55b5fe8b"
+   },
+   "back.png": {
+    "raw": "08adb088de4682c86e0859ba2706a850a7543a550a72f5d395bb89e709860cca",
+    "keyed": "27260d5dfc184aa8fb1b7392a51cf41d74e25d52d47be73988e24042580ff486"
+   },
+   "front.png": {
+    "raw": "305fcf15347976a35022f8a2305d382f56614c793d4814c3a1878b0011718795",
+    "keyed": "e65061dd1b58c4da5431f8c9dc4e9aaf51e344d09e4c39baf702562686388b5c"
+   },
+   "kite-0.png": {
+    "raw": "9c1ee9cf9533fb4b1b83539d817cd9a5772ba5e6c5eb3840843b112a47fee23b",
+    "keyed": "5cd6488fec1d10baedef556931a2d32a546d1a3fe729780ae6b793c7ea6c261d"
+   },
+   "kite-1.png": {
+    "raw": "a14069d9e088c6bf6d067fd9c61e1584883ff5aa2bfa5db448687a9f18c76f62",
+    "keyed": "bee5e56e5ad6fa65dca886922651e76743aa2eddd480151375e37d942ec19801"
+   },
+   "kite-2.png": {
+    "raw": "9530c639ec55c5ba262f37e6f1d766dcf72b421c1d3d727f79d0f6c1d746804d",
+    "keyed": "fb2aa9c3e7dd28317d8092040e372621832d207c5bd8c4d33901b156758ee305"
+   },
+   "kite-3.png": {
+    "raw": "864516679fc8c4f8b80f19eb0f4454f38a43942538f7c1cb90e0613d71e28523",
+    "keyed": "b7a8d04c3b2ae0a282ddedc5a846724c1c7cad4160aaaf2a5348973129da1648"
+   },
+   "shade.png": {
+    "raw": "757893cf9ca9640fcff7984bfc44d8a6a6c2266f5ab11793d370ca66497477e1",
+    "keyed": "1a168e1ca1d6c8bb98ebe5da8ef6ea00dd6c46399f3741bee5ef41642403b89f"
+   },
+   "sledge.png": {
+    "raw": "67a6b7e0bd7735a3705a3eaf7391c7b9c025730c9fc5780f08b08d6369eaaf60",
+    "keyed": "a89c5a847f4f62dcaf499dd68da799c67265ba6c03911812f3939ecb91f63ff7"
+   },
+   "streamers.png": {
+    "raw": "333d66f82bd4e909ff409abe08bfdc5ec342d91f7032611a563cf31b88b8428e",
+    "keyed": "ac41254ee5cda3e736917d5d5b0c21fd0c0e28f0911f9346d4da07408e565db4"
+   }
+  }
+ },
+ "highway": {
+  "key": "highway-dusk",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "356e1c9dcaee3850c69e553af093db58afeab1f73f59b275ae01bf9847547e21",
+    "keyed": "fabfa09852f81bd852bac9bd28254a21ca9f0268f67d4b4bd989469c77cae5ba"
+   },
+   "sign-bc.png": {
+    "raw": "8386d45f38618c4a146406e3465e3051ecf478238dffd96dabc1118bcf8c563e",
+    "keyed": "0df4694227355c00b43cb4114c0e3dca6e676a15977a40b511adfc2663e69934"
+   },
+   "sign-strike.png": {
+    "raw": "470e5838576e651d7d8758ac41255f58d18c558bba75318d6a1a181efcbbe322",
+    "keyed": "0c1ac92716e79593dc381cc7b09c89c58b273e0175f7d08a42357e6da60461a9"
+   },
+   "sun.png": {
+    "raw": "de4b1a7aa12b09e157397426fc69db50e3350ddc273d1dc13ba5a39c96e99e3d",
+    "keyed": "135599e99938c4a08d2beaf5036c21462e136cfd8dd4daa774a8b624560a6c60"
+   },
+   "wagon-rear-0.png": {
+    "raw": "ec3660b3e8443923a7dbcd01cdada8d1369fd09b9103a5416ebe2993b30227d6",
+    "keyed": "c843b77c5e0db55f6b3dbe610db92087eb3e338309211c783ef4649a5a73be94"
+   },
+   "wagon-rear-1.png": {
+    "raw": "68229056084a49b97ca81ade164cc127b2848506198a79a37d770d63daa4aaa5",
+    "keyed": "6963b2bdbc6ba5f5a6941736e5caeafe84f86376aae2cd58d3edcee7b49ab721"
+   }
+  }
+ },
+ "home-bigsis-room": {
+  "key": "home-night",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "90de6092d1fd32ccdb998954196f106f783be550bc132a5b46acafc6a4d278ec",
+    "keyed": "588e8546e17dcb891db9f3f5d6c7315110c336e7872c5e1d88fcadd7587b2cde"
+   },
+   "desk.png": {
+    "raw": "4a428dfdabe449240ff4f0dbb85cc67a4d330022ef3980e8e13cd49784452e71",
+    "keyed": "513ff7681cbb213ad7a22ae5307abe4f429ad501674820a45bcb4b19cf817dc2"
+   },
+   "front.png": {
+    "raw": "2ad3530265d4adc90a8850f8becdc32b3b7ad3d11e1161f1faf993a0e4583e35",
+    "keyed": "2b96385f982fc67e90adfd7203fb0e4f5b6370b9da32f95747e37163a38ada58"
+   }
+  }
+ },
+ "home-landing": {
+  "key": "home-night",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "de0e93121673ef5ced72f495cd7badefd401d63875438227151188ecf5feab1a",
+    "keyed": "6474ce69612908501bfc89852fd611ad86e5542fee45286d1692c0fc56bdb89d"
+   },
+   "ladder.png": {
+    "raw": "e60581700602458f32216106c24d7798b47bc51cce17855ac545fc080faaa4d6",
+    "keyed": "da88fdca9d7a31cb54eaec3703c61970b607090fab951ddf6faf82a21c07e6dd"
+   },
+   "rail.png": {
+    "raw": "e7b1dc3b4011b837657e370507eea9f73c9f9b62fed9e900e16cde693395daff",
+    "keyed": "151f231e6df1cfc93830053686c3dc7b8bbd200adbd766e67976d354b016a8f9"
+   },
+   "study-open.png": {
+    "raw": "613ff41f0544967a6c9858a708947986cb1be16546424b89555a1284284d7228",
+    "keyed": "dda8aabaa67db35af24a6a973c6c1805bdb9c332edbe58ab2c1dbf1f33a26f4c"
+   }
+  }
+ },
+ "home-lilsis-room": {
+  "key": "home-night",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "5d0bb713b2e81fa0e9e96b68834a80d23b2efc948238f1340687cb8c8148a334",
+    "keyed": "ed73fb7e8a32165007a8be4ba46d86a5403a01e9f8dad24725dc7a73ba4fd718"
+   },
+   "flashlight.png": {
+    "raw": "58350657c83fc086d8095ef892e76f9ac62112d057648343ac5e84d3ec8690f2",
+    "keyed": "ad1003b35e1a24e2ec07a44d9df5bc514cb404515f5d5ec57791ac8597427397"
+   },
+   "fort.png": {
+    "raw": "fb2ef12c83288de7ec65fb1b923a5d7cb4327467ebc4fd5cbb50339a687b9092",
+    "keyed": "909e910b9d37216a15d77742fde63cb69037ada998c66420486b10c5e825e73d"
+   },
+   "front.png": {
+    "raw": "420ad5a6a19931847dde83f392b6894f8533c185127c0273a9ee6f18ad1a2975",
+    "keyed": "df1ee143d7d10a29d0dcc2e3e5be3fa05997b74706467bd772a8a33083961969"
+   },
+   "mobile.png": {
+    "raw": "46886ea7e4c3826ba7ea9c9127c6bd99ea2cce8aa86d8993be536c9257e5b17d",
+    "keyed": "6c236ffbad5ec656cb36ecdf19389df02c4fad95064b99b255d50ff24301de27"
+   },
+   "teaparty.png": {
+    "raw": "e642adfa9d0bff496d631c67e0c07ac750b4475e9e31dbb6d35428325d1a0bd5",
+    "keyed": "4b3345b61e31ed16d667417b6d46c2e93d02a8f046ab225aca58d8dd955ab510"
+   }
+  }
+ },
+ "home-living-room": {
+  "key": "home-night",
+  "strength": 50,
+  "files": {
+   "armchair.png": {
+    "raw": "61ae0492a866f15b8d1dcbd0c485e7dc3f5b29cadebb9286e55a32ee1e7b6633",
+    "keyed": "a12baca6c129bd1c9f0af8f5237ede0fd43846fe12cabd91727c6c51bbef5405"
+   },
+   "back.png": {
+    "raw": "bfaec67209714cdff9b431f257519c875bf05182466119e9434bb7a8911f0f7c",
+    "keyed": "59be9f63880da87e4b16c04356b666b2b55b1c8c2634a7c8ea8d95246004927b"
+   },
+   "pencil.png": {
+    "raw": "f689a5d02e20720536747ce74f10834e5f55352b725db401d2a87bafc4145cb4",
+    "keyed": "029058220e42125991e47c6a4cc54a0ec0a6e4bde0df4e2ec4b92bc2642ab0f1"
+   },
+   "piano-open.png": {
+    "raw": "208e92e0d35b0252b4eaaa33da2d6d62654ed5dfe63627ef78949379f432e4cb",
+    "keyed": "97b49755a23b3889d366ea67750ceb03f56dd61ed3ffb934cc9e707988cb1f02"
+   },
+   "piano.png": {
+    "raw": "8ddda3dfa97803b3779f103ad3e2d890d6dcf671d9f110be5760d00ae6c2183e",
+    "keyed": "11a5425571da3ce36b2aebd0b85d52546cb04d94d7c6a3a727bc8ee3e2c50c5a"
+   },
+   "table.png": {
+    "raw": "2e1d2d3db149727b79107c3434a37e58207381e58c41359cf49a8ebf37c558c5",
+    "keyed": "faa61d206e94021fb1bb2b4e4c09fc92eb4a9d9362913b11e9666651c27b2fde"
+   }
+  }
+ },
+ "home-study": {
+  "key": "home-night",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "0179e74d2c2a5e36a93bca5aabdc05cefa7a69b6893b22aa1143c527c830b108",
+    "keyed": "7183d079c163ff5defbc8286eadec1a43c2260b534d29bafc38145cc8ab10004"
+   },
+   "desk.png": {
+    "raw": "395246811563589986c11716f0debd490e03738640359b991cc49655b47d8359",
+    "keyed": "2e6f101ef59576c5f98b7897f05c2ac5ed363555089637f6849b821baa329655"
+   },
+   "front.png": {
+    "raw": "b7eb94170401304e3eea4e19f9fe44ab3c1f866d76f73e9ed9146e4bf4541eae",
+    "keyed": "645de6a4715d7e60e27872ed8a1167d1a9295a6d3868dbfa57149b9c42d56963"
+   },
+   "note.png": {
+    "raw": "107fe0f5260ef1087b308f5ef443a934b9df6e349254dd763b38fe777c2308e7",
+    "keyed": "423ae7344664e33aae0e51112637a7740115ca76704fa20347012a28ff7eeee9"
+   },
+   "screen-login.png": {
+    "raw": "d7076aef62ec84de2fab76efa096170b049a96aaea23c7c54323745d26511907",
+    "keyed": "b96430cb8514c9ca86c7ba2352d3bb5c970bf22671abf6eabe191ec9fa691150"
+   },
+   "screen-map.png": {
+    "raw": "65d8a31682c76bc833acc5f7549cae90d8e98f19190fff89b5e8f6317ed10b10",
+    "keyed": "0c244254ff3e369ec46fe5e9968e782133fcbf1b11a8f048ce827662bf28114c"
+   },
+   "screen-offline.png": {
+    "raw": "c7f545c11a807926756e89a290ab77956eee5cd086d1873f17eafb7d50fb4115",
+    "keyed": "200dd27287f9118856a866ee0d837636cfb3d42b36edc7268f7ca1653cb40455"
+   },
+   "tape-out.png": {
+    "raw": "2d9bf2063e418f3c81934c469be6a45e3aeb69e23a23a5434bfef3af248aef0b",
+    "keyed": "018a98af1829431f4cdf018062032933b49057d1baa5becaeefe6c0face357ff"
+   },
+   "vault-open.png": {
+    "raw": "fd62b73a6e2f5597fa253a0238612db67bfffb423041cadffdf22251b073968f",
+    "keyed": "e48c75f4c79a8430212ad8eb41947ecc6e7f325cf20893290f76d63ed0eda0bc"
+   }
+  }
+ },
+ "nevada-roadside": {
+  "key": "nevada-morning",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "974335aedf02c2add5b82751ab590ee06b9296a81513097bbd1838a237f8a766",
+    "keyed": "616e98ec5ad39e80096ad308b1aa2678b14e71f74e0f451f4a43573ab20bce16"
+   },
+   "bird-0.png": {
+    "raw": "04453795155d361bfb00e377c04d1d407276700163594a4d220542c46f8b209f",
+    "keyed": "9e0af6cf41e4933c68a3735d1b6e6a5395345d527291434689cd9876ac2779a3"
+   },
+   "bird-1.png": {
+    "raw": "b56945e0e9c85fee72c6cbaa96bac568ce6f4d0f59f4a7b5bd370262d8023c3e",
+    "keyed": "8f814f9851c32ba6b41932babd248cb1a8e87c84dfc740ec6d3abdee0e9c2aa8"
+   },
+   "bird-2.png": {
+    "raw": "4c82ad7d424a9022043921ce6b58635d92d67c2c11198d2c387891d822a08e35",
+    "keyed": "72c450f24de94b5f4c3506b40f2c6966d78981f233155c0b9965ce4b53332748"
+   },
+   "bird-3.png": {
+    "raw": "6ecc8098fa799b4befb2263e03fb35745e9bfbb7732ed437a28236ebbe9d6b75",
+    "keyed": "b5e2c65b7a581b5d038d0e7cfb64e91c4f607b985f9c51c74ac7ed41b1a78786"
+   },
+   "car.png": {
+    "raw": "6798795b7bc4475f45869de886564a3a96773dde80f6e6f16e9c0877265c43bc",
+    "keyed": "1c2c7fc00fd71ac852eb9aec758fc78ed5593a1c66e5409452f2e06ed9dbc9f1"
+   },
+   "front.png": {
+    "raw": "161cd64aebfe8b52657ebd9f0ea2775b2818df4adea92c9d67a59016c5882f0b",
+    "keyed": "8a8b840b6cd7add4a78c174382916098fd20eedf55420bec45009e8ddd8ea831"
+   },
+   "pump.png": {
+    "raw": "6acafaa512ca11f6dd805ea3c8cfacf9434c60ac66fee7c210d9bcf13ea177ae",
+    "keyed": "da2995178b26316d2cb648979e1b6dca3aade3467b77d350faeda0c3ff541ad0"
+   },
+   "stand.png": {
+    "raw": "3507f978952d9cc10d5e98ad41e19fbc5b2408c5ba330cb1fa4569db2ce6d350",
+    "keyed": "21c868054393b5f4fe734a2cf9c95fd28825652682032f6a364aa3d300579e3b"
+   }
+  }
+ },
+ "rome-steps": {
+  "key": "rome-morning",
+  "strength": 50,
+  "files": {
+   "altar.png": {
+    "raw": "57187312c3388e9085c91958ec09b705ed3b0af337eb3fb83fddd48b793fab8e",
+    "keyed": "4419ea64026e1de297715fd5d18ec561dc0ad6d61cb6544ec235456f9b1663f2"
+   },
+   "back.png": {
+    "raw": "e977498321e8b0b012858ef332436bfe2effaea3b890cc3e7d4f9c5e27da08e4",
+    "keyed": "92b376aca02d45996942cb229a5b5eb58159eca70fc2d2406f01c317a8bcb411"
+   },
+   "cage-front.png": {
+    "raw": "cd0c078692c2853d4e683e9e818654fe8541977cf05011aaa45efb63f2769faf",
+    "keyed": "2793401fe4c95a5c6964948f7b3ae6e8a0a06fcb0ef4ab9bb1dcb6ec1d74b1ab"
+   },
+   "columns.png": {
+    "raw": "af91b7c69413bebf5c6b946211b135708e45f621b036d78790fe359fe8c69dfa",
+    "keyed": "09b6c6ccb0035d043ff72a039aa5141ba84468a0600d18247abe38eccf93952b"
+   },
+   "front-base.png": {
+    "raw": "abf732b35c93561e4aa513466d389d90dab64a8372aeec9121f61b337de2de32",
+    "keyed": "100c70456ac06c5f50b4730a5940ee75bc0f2e7bc6f2457e9d5c9b6aba189e6b"
+   },
+   "front.png": {
+    "raw": "e99883c5facf1d245059ce97655a1b257a87a82ab6e04f21a81df6d2b8f3e151",
+    "keyed": "fcb4d08ab521f4a7f936c42a3d85cccd2c6f5a252e7ad14822d62b82011079e4"
+   },
+   "hen-brown-1.png": {
+    "raw": "1ac12a17d611a960a3ff93af7c6e3be724901d04f88c72af8f342d21b10294c3",
+    "keyed": "9b0dcea043452519ad52e7d7c333d3ae6fbb38c8e51f0ea7a89fe68d1e13d8a8"
+   },
+   "hen-brown-2.png": {
+    "raw": "48291e32d09de4a1f8b98fb7d4fe61c62ea3ad70db1d7854df52d1e51719784b",
+    "keyed": "361922f36a1be5181e259df1924e4fd2e83d7783d2846f2f6a737f420a2d5d9d"
+   },
+   "hen-brown-3.png": {
+    "raw": "3e071e89f1aa583439410e7638fa6ff466df4f9d9c4b0dd99adda6b7b839c81d",
+    "keyed": "01b97ab4c7770395a44cb501ff19408d10980fe7b74cf1ec287e9bba62d41ec2"
+   },
+   "hen-brown-4.png": {
+    "raw": "1a4f23e3187161b525a8006883e1e1e53ac20c66a42ef6bfe08ac688b43e2343",
+    "keyed": "58758a859af0a7c4fce2867445e0076b38b12c805ac1b485f7c28b97991ac079"
+   },
+   "hen-brown-5.png": {
+    "raw": "9f5951fe8676d3e747da28dd36f850a5b2c24ca194fe767aed33a0f43ea6eedd",
+    "keyed": "cee94b4a29f689c73f041af55990e540ee30ec996b4a57c41816eba0f89cc300"
+   },
+   "hen-brown-6.png": {
+    "raw": "864047b30ef026136b2e1a913264a92b7d34698dc86585c2dadf0116008297ef",
+    "keyed": "a4059d2da962e582557397b5f0a5234f2f7add67fae37498de3352187ed66aa3"
+   },
+   "hen-brown-7.png": {
+    "raw": "5c61c113babe48ac7421e67acf4d02434d40c3df3a37934a49c19eadf1c9d923",
+    "keyed": "6e407e12e0ca0647f54899de381f69d3385306042abab2fa4ef0a250429472da"
+   },
+   "hen-white-1.png": {
+    "raw": "39deb1828e7771eaf8d75f0a5c57a615c5c8442f7380c4be8107d7949f78737f",
+    "keyed": "4e630fdd444ca517f6f00640764162c9e8d80c6cc7e642d4bfd29178473ff3f4"
+   },
+   "hen-white-2.png": {
+    "raw": "a738096ad6482543cde92dae072829500dd80b71945798ff93347f5e24501be2",
+    "keyed": "20d1f2a12287c67fc4e88dcf0ebdff816773db3b30addacd94e08a62cee16e8b"
+   },
+   "hen-white-3.png": {
+    "raw": "fb16b5efa772e08332eb531380055a03ec17459f6abede20325280ee4aeafd39",
+    "keyed": "2b224944999d54c4e5d282374a8281883b4df50887200ba9ec821ddd77a8f31b"
+   },
+   "hen-white-4.png": {
+    "raw": "00df9806383629f6db2091a73518f50e337b50c458f71f772fd7e8e54aef4783",
+    "keyed": "ce0cf03991bcd196f9e6ebd2d4ad7e9a1238e5d8e457e750c5ba9f09dc7b4cbc"
+   },
+   "hen-white-5.png": {
+    "raw": "5ed46c93960e1dfb0dee81ef436b4b470c9a44417d0417468a17b033fa0757e7",
+    "keyed": "408e19144fd86deec67690e88f342718e44aeda01b214634738a4e739d196b07"
+   },
+   "hen-white-6.png": {
+    "raw": "b2bdc71d974720e9cb3c80ab49da7d6ae8466911b1c0bcb8dd4d69c110117ca4",
+    "keyed": "41776010294260defd65e42e445b1321469b7313b0ad8bef379d3f2f240103cc"
+   },
+   "hen-white-7.png": {
+    "raw": "653f951e5861b4a3737f31aa090b72a78e7aec92386a229c221e0695a0a5c15c",
+    "keyed": "ba9b1b60097a6c8ab3ad7e6c2fa103b5e45dcac523508c2c5b832ee56faf273f"
+   },
+   "laurel.png": {
+    "raw": "0b660eac678536dffb6147efe3b998cdbab19e734f9cc7330b7e6aadb2c670f7",
+    "keyed": "d08114b8707ff0b3886b9619fa55a886e6c866a5e9217be037e738747084c4eb"
+   },
+   "pigeon-1.png": {
+    "raw": "62fcb13251045b25b54fe8c52b4a5ace09b86870a8501eb106188cba3d9df9a0",
+    "keyed": "65b744f093d501f39e2bfcc235e00965ab5815df4d0fe277420a01da1059d279"
+   },
+   "pigeon-10.png": {
+    "raw": "ec267c2c29611407d77279375460697fffc1f041f77f4124098723352407ef27",
+    "keyed": "949efac0e18a3220e3ea7cab0b4df7d5998c0f670811f5c3f29b175134a77e92"
+   },
+   "pigeon-11.png": {
+    "raw": "3b1b9ea99b905181a06f763872a4e9170085bf3c9f393b149547a333faa79a92",
+    "keyed": "0d335f9b559a378f523e5f59e180da2d93419da40a8b7aeaaa2040da5d771406"
+   },
+   "pigeon-12.png": {
+    "raw": "3d5e3c62a2a35e9a18ed33d3f7e5425792be66701777aec7c37c63612bda5e78",
+    "keyed": "c66787719f7082b0d7a816950961e65138a95cf82ccd6476d130f5af0e2672ce"
+   },
+   "pigeon-13.png": {
+    "raw": "4a12536efb545f822e9bf7da6fb0ece02fa83730944bd7ff2e402cab72b96072",
+    "keyed": "581605bcade3ec27992b102b07dd48fd4fceec48085ddc823f272b6a9faa6ef1"
+   },
+   "pigeon-14.png": {
+    "raw": "4bbd7936bea4aa7c080052074fe47bb06bfa4ab5246682ef8d229d8aa76834db",
+    "keyed": "8d6bd2763355867dcdf47f4bc2d3650a314c87355fa8c9feeb8c9c01a193a6cb"
+   },
+   "pigeon-15.png": {
+    "raw": "0f76da66d7fb48ecb77864a2086196e17ec81b4ec8ab9a119472e17c40d19b6b",
+    "keyed": "778c84e20c15844f49e216c1bdeb0ef3566059e46b9874761fec5f1080f9275a"
+   },
+   "pigeon-16.png": {
+    "raw": "5eee051658df7cea524399831a2dfe2d4ed18714ed693defdb9609e814652463",
+    "keyed": "f6ffbbe05948e680130c95622fb6f61f1c5bebc941d5669505bfae651692656c"
+   },
+   "pigeon-17.png": {
+    "raw": "a3d1cbae122e266f63588887e9e6f553c5dec7d01966edfa92db1e90b287bc0b",
+    "keyed": "2a5e7132d37df6e48d276af4e1908f7487d546eaa7ade800c3b42300ced9b466"
+   },
+   "pigeon-18.png": {
+    "raw": "9f7595113c23746ec8517a1c2eb3bcf8c464060977f4bf5dda514ee4820ff3e0",
+    "keyed": "ecf54e9ed45ded98046e755526b41cdd8b09cf9d183a2d2bbdf4e1ca04d9070a"
+   },
+   "pigeon-2.png": {
+    "raw": "b35965b4b5f713beb3309ddedc6a68e7f619a63995e833255a10f54a4bc2cbd8",
+    "keyed": "41509cd7fb08f40db429e48d91363d122eb667972f3bd01c85d26053527f1d3c"
+   },
+   "pigeon-3.png": {
+    "raw": "a96bf6d0e4403fc63130c40f16bcfac841e47fee6c70a07b1b55a5f8452e8d35",
+    "keyed": "61d83a9f506b643ab4f814f5087b814bd17bbe200abd365158754fb25bf2bbf3"
+   },
+   "pigeon-4.png": {
+    "raw": "8d635a2fc76c21d885418c86b0340fb7c37b796a71f9ae252cd8b571663ddf67",
+    "keyed": "80d1366ce13a98c60b8b420b0bc295e5f47ccab562c6971670c3704b2984892e"
+   },
+   "pigeon-5.png": {
+    "raw": "ea8bf4056191c54612d896bc33ad8768a78387a3615d4d0261bf37bdf887d50f",
+    "keyed": "be1cec04a4d7c9c745f65f00950f6e7560cfe1f8a56cc117a149e8a50ac51825"
+   },
+   "pigeon-6.png": {
+    "raw": "b4130ae8d35724af98a1a1a36c93d636311239bb790e4e54dafa6d9c05a29ba8",
+    "keyed": "50551665f4f0f7f873a83268c9b5feba7ec82a99ac55d346248ebae96ceed4f6"
+   },
+   "pigeon-7.png": {
+    "raw": "a4d440859fc049480b284f496b1442103e6c0d9cd8a274c75f12bd9b31571eeb",
+    "keyed": "38a7849b08d7c86733c15217b1460676a1ea379aa7110f30558dd018a58c4f0b"
+   },
+   "pigeon-8.png": {
+    "raw": "38844c97b4f5b82f99c545abaa8d5cc66ed7189448873e3ea9aa944079dcdb36",
+    "keyed": "e9dc1869a497c206a1d9b14bb5ac79f5c7d4c77d7645d08b67b130d9548e3c28"
+   },
+   "pigeon-9.png": {
+    "raw": "3c550843ea393ba5a7119a9d28dfd902ddc86fa9e31e924e6f198524840dcb39",
+    "keyed": "fca3739847a4169afce8b3ea1b302a512c932ae850a80072d491054807cb5026"
+   },
+   "pigeon-dark-1.png": {
+    "raw": "71b9fc2f9447ee99f6592e487963375dc68497e9cd65061360c9f522538ec22d",
+    "keyed": "465f9f648eb144f28ecd50b2ee32aed122fb92e2f9e0c0917e948374eacd02ae"
+   },
+   "pigeon-dark-10.png": {
+    "raw": "a5e4d6c8889c723d6b774bedf2821b10d22f8734c7d370cb545c36ff84687fe6",
+    "keyed": "03a425e725b01c08f5e5db805ff2bebc49a4f8b1238d98eb3727ebcf4492576d"
+   },
+   "pigeon-dark-11.png": {
+    "raw": "5012f1061c2d831317e18e4386dd204cce18c4837def49d3e5f803f3e4a3a842",
+    "keyed": "cd2de81a8efaaea6093a0a484682b12bec5c9cac846d5e7ebb41a79a3ce777d6"
+   },
+   "pigeon-dark-12.png": {
+    "raw": "cb851bc4da438bccabc9e22f2a88f69946766772ad6f0cb942f9b3ae19477c31",
+    "keyed": "de769e084f06dbfdb678be0c594039a3b9fcee25ebfc7955518d06cb1d297611"
+   },
+   "pigeon-dark-13.png": {
+    "raw": "1aa248c778bc53b407e44f9f0a17841eb5b73514685c222315476c85ecc7cac6",
+    "keyed": "878ae5220b31b80c7b113bf38f570450cf9f542d8265a5ed29dbf346b53c3afa"
+   },
+   "pigeon-dark-14.png": {
+    "raw": "9eda74ce690d44f62af2c82eee68162ed1c8cab77670144a8c3cfd2331c4facd",
+    "keyed": "05e8a55b0ca2028e98c92e9538de801ae0584c3c769cda58a1c2325973d210c7"
+   },
+   "pigeon-dark-15.png": {
+    "raw": "a598d6bbf227d60d48843b4535aab6920e5047cbefc5b417ee2335ffbe1e3685",
+    "keyed": "c9a24f1db611e54e59dba5024ddd3fa44ba06818eb9079505ceb78c42f9c450a"
+   },
+   "pigeon-dark-16.png": {
+    "raw": "05a5e0d2a575ce70b99a14d99b196cf1c9efc2004f16ba819397419f1d1f6c93",
+    "keyed": "49bacc46caaf35ef229caf827fe04763e9f7621c324987251f238b9f55158276"
+   },
+   "pigeon-dark-17.png": {
+    "raw": "e7fb39e524ab367c2c4352b225b599c6e04f6493eeb5d48a4f0655505cfce4b5",
+    "keyed": "9bb31ff1e1590852947c9fac930178d49cea72070aff6b7027a7332f74858c18"
+   },
+   "pigeon-dark-18.png": {
+    "raw": "e4db6e4cb4afdc5fb7355fd58960899fbe3b1be2f04c87a39e71f9307607329c",
+    "keyed": "cf6e2f27d211e1c715aa8523267d4110c58c8585da9f6c3dcebe0a8d09c03a11"
+   },
+   "pigeon-dark-2.png": {
+    "raw": "5dda63f5fd9ebc2f9f5094af3053359e89fb7630f2ebaf11108129baaae40efd",
+    "keyed": "6f55b5d8366e7b869ade32154f9889080661ac02630d33917a95cb8beb0a4e41"
+   },
+   "pigeon-dark-3.png": {
+    "raw": "8f685936ed6def6293fad774a957c5736a337eb61ae1aa8de21118e784c42df4",
+    "keyed": "6933a783af511fa7f528f5ff70b450127042dea62883247350add36fdd1eb955"
+   },
+   "pigeon-dark-4.png": {
+    "raw": "bf6eff2c857c72fc7b9aa861bed69c0177fd409846c6a9d5a984b950279237b5",
+    "keyed": "25396eed1cdacf363ebdfd27c5044d43e02febdf24f3eb3adff769a1d51a74b0"
+   },
+   "pigeon-dark-5.png": {
+    "raw": "a65d6425a9f4005e40a25c0375236fca1d0594d36d10fc9b10d1f9b6123e8b2e",
+    "keyed": "5d34cd9555aa44b037882d69c6901c54d2544ad5194077062e5b7c86d08782e2"
+   },
+   "pigeon-dark-6.png": {
+    "raw": "a4abe0e7a343a158fb682be14b291fc52be99d9308cdff9e70647287c11e1208",
+    "keyed": "a752c40eeffe43ec0533e018ab9b63376be207ab0f7e216379ad0e6e4e865c7a"
+   },
+   "pigeon-dark-7.png": {
+    "raw": "0669de9962215184e6bfb1669ded3a2df4e42cb7c0a779eb533d811d1037616b",
+    "keyed": "02ee27a38ee5ae9710a06551e125574d1e58007090e2459db8ad677618c3e180"
+   },
+   "pigeon-dark-8.png": {
+    "raw": "46ca6e8681588591904f2ad2edbcc1b03eb8d98334d5796859ac7cb08df158ea",
+    "keyed": "2960fef3fd6d0b60ec6bfd94c501ebd8a848eaaed7ea3929554735b422e21dbe"
+   },
+   "pigeon-dark-9.png": {
+    "raw": "e09e9b6fe02988611c9078471b0b93519616bdc74c622794d99f762e844246b3",
+    "keyed": "c7baa9fd7c59316ea133f0ba1540ac72b9a95f4ede8df4b823a2b531107e4f9a"
+   },
+   "pigeon-pale-1.png": {
+    "raw": "c8343d04ad557d0e66052ee09f60f9eedd803ef2576829b1339fa0e9086043cf",
+    "keyed": "dcde49f681a5ac776d1678663543830a55a048c35bb628f7bbbf2a06c775f1c7"
+   },
+   "pigeon-pale-10.png": {
+    "raw": "6dd171f5bdfd04355e444f9a9826113e617cbc45b387961664391c093e42e2ef",
+    "keyed": "77470257eca46d03440494055f55b757408ad783ad4182781f76890bb81e4ee4"
+   },
+   "pigeon-pale-11.png": {
+    "raw": "e6df0492ef9098d0ec9653ffe72b684f0eae1b46f8c3019f3c25ee30e3f55392",
+    "keyed": "0bd066e8e181fee734e3a3a187a618c61930be9d7adfedf994477843e426b500"
+   },
+   "pigeon-pale-12.png": {
+    "raw": "406334a68d3025fd075afbd631d4e1c288f00816ecb410925818277f22b7ec9f",
+    "keyed": "ae59929cf249db3e2aab7ee7f6827b8d1c01e10a592dcc23d2e475cd0eddcd66"
+   },
+   "pigeon-pale-13.png": {
+    "raw": "21e8c67c10e9dfa531381a3e4a48b969ebf28fdbd8d8c07fb8aceb841fb76e5a",
+    "keyed": "12c433297e4b5dec348ea74a5a7e8877d6fdfd91aa776d1da13ecc40b7d82663"
+   },
+   "pigeon-pale-14.png": {
+    "raw": "aa27af76e82740b1537f46c6bc02f4909edfecdfc5d773df3ea072191b7ef0a7",
+    "keyed": "b0400eccaef7b368c495cce3ea2f2f383aa77044f28c0e191fc0d5ff6f7d3ea1"
+   },
+   "pigeon-pale-15.png": {
+    "raw": "6ee37620c2c65ddc853ac5d2e27ddfebbdaf246ac8c78dcac7d6f19db34329c5",
+    "keyed": "09e36dbb19e4d4e10d6a17a06969d8a2c067fa81a07d7689955265f307cf95f5"
+   },
+   "pigeon-pale-16.png": {
+    "raw": "f8f166fa74b04692b181908efb0d42d60a09d4c3e05f38891a116012418ec47e",
+    "keyed": "df7029cc37f803c24b898f23d164a7a4bb8b71734f3f4b1a7d7bbc432b361230"
+   },
+   "pigeon-pale-17.png": {
+    "raw": "10e75d2a702254a5bd1abf010ba56cca2b8e7e62f118d2e41a7b931c4c5bde8b",
+    "keyed": "21f134212bf703ec08a0992b0360726a7dad430cbf2dd9744fff20c0ffedf7ea"
+   },
+   "pigeon-pale-18.png": {
+    "raw": "5d3082fec453656edde56675beef0b1696fbf97ff9c42d279166df9979ca1984",
+    "keyed": "ebd4d7abf1904755048f1826de26b8b568e79b66dc7d0ae08814dd385e3663de"
+   },
+   "pigeon-pale-2.png": {
+    "raw": "1ac9461f6716220dc68eb888fcdbb8b7e4d546d6f6d93d8e0841a2703e603d62",
+    "keyed": "26994404bfc295eca0ed1a63fc244031d8205c4633f7e9ecc4b08605402e79e3"
+   },
+   "pigeon-pale-3.png": {
+    "raw": "7e9811918757ac465655fa61c7d5938a893e15c16e9629ff9d9db9957115962d",
+    "keyed": "59be7799eeb2cd34ecbef3efd9c9fc1deb36be9325193d511cd085b6690be18a"
+   },
+   "pigeon-pale-4.png": {
+    "raw": "fd219f2081448160667bd42dd19f32a2ee33edec1c95536be66b3e3a3a95c982",
+    "keyed": "673bfb9ea049b14116e9f8ed430edbed67bfd31b4adacc0b74ac5f8203fc2b26"
+   },
+   "pigeon-pale-5.png": {
+    "raw": "5095e9e9560f7d7ce4b0fca5123a4134b29e111b77064a3c82f9f38f937a72f8",
+    "keyed": "b4654853c8147bbbccc853f2848aa83c3f5dc15388aff8a4cecc28522f91536f"
+   },
+   "pigeon-pale-6.png": {
+    "raw": "3654d91c9521b9ed97231bfed0d9a1fe1221b8b191c52a88e0e51118af3a3510",
+    "keyed": "dc4a4292318b8dbc80818f3cc68d598c93dbf6841b7477eb2aa0705bec678ace"
+   },
+   "pigeon-pale-7.png": {
+    "raw": "c26aaedb6600fed0f04682b9d2d8d9d5c443d0fc61d0c5602e0febbd04ce1721",
+    "keyed": "bb1ddd9be27973e35e4ffcb2c7d32fd9016bacea82cf73b54198decabdaee9ea"
+   },
+   "pigeon-pale-8.png": {
+    "raw": "c7cb300cf57a4282afeee8182e2bbfa21da08ca1087f352664b8953504bb47a5",
+    "keyed": "517a5c617797c018fc5da5f5f558cdb637738618c805d47fd951ccaec068af13"
+   },
+   "pigeon-pale-9.png": {
+    "raw": "4cc3ae3a872652781417c5bfb653a2f9b488ded111f66cf265a127430eb18585",
+    "keyed": "a89bd52452b381633cc8a01ca8b1f39b183c53cb5b8b8a3dabe923c2d5985789"
+   },
+   "pigeon-shadow-1.png": {
+    "raw": "936da5860f41280ee4ea0cf2dae2866923ae015e6b9b97a5b44bdc4f3f5334b8",
+    "keyed": "9585faf90d2e18e89f837ff6de1d5f97419551b333274257a363dda83c145732"
+   },
+   "stone.png": {
+    "raw": "2a1c7d442d4e8e64ea41b8bcdb496fe990419c78a53be439aff60ec0edc81c3b",
+    "keyed": "517e07838590dc4a04cbcff1e9daa313bf17c5a1feab3211565af2a98a67466c"
+   },
+   "swallow-1.png": {
+    "raw": "c9154e3211699022288dc1cc0f5af25e7193fc054ea7d544c7f33552d5ea7913",
+    "keyed": "3df10464193bb03b0a64b02c5836be0dfe0a5b477bb68248456f82dc434427d6"
+   },
+   "swallow-2.png": {
+    "raw": "04f3d831c632447c8813d08ea2ac189df4aa77e3ad927cf8de2b59e017ff30a7",
+    "keyed": "7137a80d4721d17ad8e47eadd60cde7841ed742a6259082b3db69f8aa7b21003"
+   },
+   "swallow-3.png": {
+    "raw": "3a25379d504879b2d059ba27d6e969eb2a2f1317fa71dbc24afaad3ad5977881",
+    "keyed": "4a66996a967f5c6b41b1297f4c38c8614c5d31f14af658d33ffd231e2adeef88"
+   },
+   "swallow-4.png": {
+    "raw": "6c3f0ba990e1adad8630a6f4ec2c0dce140b11cfb7869676546669681cddb864",
+    "keyed": "869d6577ce54b737a952e2cccdc2ed8057f1c3460ef31dbe69bd27a6a54a52e6"
+   },
+   "tripod.png": {
+    "raw": "2f5c5fdf92ae5c1d8b90d3ad07f0060df4f38cab99a6997266d612bf8676bcbd",
+    "keyed": "10229a38fd96df21404258bf63c4e0114e3ee76fb33dce0a1778e1bb827ad7ef"
+   }
+  }
+ },
+ "rome-street": {
+  "key": "rome-morning",
+  "strength": 50,
+  "files": {
+   "awning.png": {
+    "raw": "fd1b8827077ba4c4ccc3b6cb318ecfc473bc6643f918c65eafb0a30184ef509f",
+    "keyed": "a3996f362d9cc65fbc60e23b269f5119821de1495d58f6c841bb187b5091a405"
+   },
+   "back.png": {
+    "raw": "2830a8764c57bb4579dec27aea76e303ffa2c3655297cfd137cf8babc7f6fad9",
+    "keyed": "3e4c7426c95d877b9a2cbc47c3c583e10b1583fd6e5e12a5571a3cbfd08e4e14"
+   },
+   "cat-1.png": {
+    "raw": "844328688b10ff03dcb3467c3a77d2122418a0a65b4d32924c19e688be27921b",
+    "keyed": "69e882896c0f74209690ee5770d4d9fb1accd73f96b7376c5ee53754cd635f77"
+   },
+   "cat-2.png": {
+    "raw": "631933fb432c0754494e60d876b253d40a7d2818a4c789a033d1025607e1b7ae",
+    "keyed": "5e8a8a6e42cfdc0269b1b999455116ae4e76a2606519fbcc8b6c372d78f8ba3b"
+   },
+   "cat-3.png": {
+    "raw": "16678c8d3750d53818ff4186b0b29fda572f7127f6f707d5823e3e7b444d4aee",
+    "keyed": "f16addd983eed91072440c402c65b4d0385cac448dcbb4cb5bcad3a365c32557"
+   },
+   "cat-4.png": {
+    "raw": "f2afa49b8f57d314460e78cc1032a976062b16878eb37c31c02b6b84c12e633e",
+    "keyed": "2c1a28cc1eeb91898898b65690dc97c9228ce259048370c98b257fc82a682886"
+   },
+   "cat-5.png": {
+    "raw": "5b0df1c3b2ec43e87e04dd5df8681700d2c86d479e01cf631663e705e20605da",
+    "keyed": "95e29599a4741fe10cdff1b6d81a48cfd9349eff30574d04d64064af56e79879"
+   },
+   "fountain.png": {
+    "raw": "d4761f2822d8ba2a5280f4b6923f423cecb4e44f552426867c52896423008a45",
+    "keyed": "2fc9de9638a911f6ac716af52a8eb7e22aeba466d76f14ad89a63e874144246a"
+   },
+   "front.png": {
+    "raw": "adefa991458977680624494618af672f1d5b87a689811d618c15f6a5eea4715c",
+    "keyed": "342ac21a518d458711f1d3dcc8447e7aa96f6b4480a7ab23d627c46cf7e394af"
+   },
+   "laundry-1.png": {
+    "raw": "62443f71982129d1012051e05fcf053b6950490b0b6f34370b75f6075076ec63",
+    "keyed": "9cfb52f73cb58dcb45fce9021c61e0af8308611dbe542e1025109022fec28561"
+   },
+   "laundry-10.png": {
+    "raw": "08ed1dc69aca0fe39e4ff2f59f3e589c2ec2b0d63b46889afc548b89e56ba013",
+    "keyed": "568162289c20fd6818e9c9a6962d2b83d68f2e100e606309612a756274002a9a"
+   },
+   "laundry-11.png": {
+    "raw": "7319347d6278eb34d5cf1dd9ff266c2975851912a5fd9030e54ad38c67567550",
+    "keyed": "3c4ce98566018d9c8fb4b82652d72a83abc8ad97f59318425b5bdf8c8bc61e81"
+   },
+   "laundry-12.png": {
+    "raw": "d1b0be455fae642d1e4b07b38014bc0944a839c8bab3ead8f232e4d069c41757",
+    "keyed": "83a00625ca3f446252594f861d0fb2bda3b08f1f7fc7844042c985c73403589e"
+   },
+   "laundry-2.png": {
+    "raw": "5ceb7faf284702d196ef54ca42d6225dc50fa7843a3c1cd2d08af7fd951137fa",
+    "keyed": "5eceaa22616379211dfd729f644e94f0f49dcf024330c69ecd687a7cfcb02d4a"
+   },
+   "laundry-3.png": {
+    "raw": "9f7a47c68440c2ab0b00018556b11cabfb1b586bd269660f2be81c3035221937",
+    "keyed": "4adb4aee7966a8ee1b1085a6a2a6e713a006ef3e4dd4af252d7c6ef4eaea7f58"
+   },
+   "laundry-4.png": {
+    "raw": "1432337316449a61c54ea3aa1ab638c8580edfa53fe0b6f6716c7d4e03ace0f6",
+    "keyed": "1c0edbce5c3341ab7eac51509694133b56390cf5b1a82b37019a730c593e9709"
+   },
+   "laundry-5.png": {
+    "raw": "a72d06dfb6918125b10fc8be5aae498f3be1f5cf5a0f49255bb00286a0ab7aed",
+    "keyed": "644255a5cb244e2a94a83b1c0fe921227e7670c39c7263d28a91400e49aae2f9"
+   },
+   "laundry-6.png": {
+    "raw": "dc30202381a9c05a9a57db73822bc61412e8a250b4e22fd88fb283da79658b9c",
+    "keyed": "de29e265a66bdbcd93ff11e8f95ff04679f4dcb0c30df01b4ca3845d7c0694ea"
+   },
+   "laundry-7.png": {
+    "raw": "2b4b03561a744a1d34afcd039cd3464fc279f348ee0b47a162c237940120476b",
+    "keyed": "3ce0595bd730d50add57d1a004f0cfb5f8263c6bd67dce07850a1f3d30340cb0"
+   },
+   "laundry-8.png": {
+    "raw": "d06d4a1172e7f19e16ca9326dd1d79ddb708733afe1e53319536deaa4933f78f",
+    "keyed": "42537538e62c59b080c93aae7d2fbfe6e97aec377b78937550243962e5b58f37"
+   },
+   "laundry-9.png": {
+    "raw": "5f51065a704d98ef43794687839695d49345c985bcd27861530368ee5b32d891",
+    "keyed": "1a3565491a290edc546b2cde29383571b4cf97b018c1b35bb1faff2e79d38fc1"
+   },
+   "laundry-lines.png": {
+    "raw": "0377ee8e4c699fe3a77b3ee1c6ee0d69d6955f06e4b4e852c1467f18dcd5fea5",
+    "keyed": "94496bfb4738d54a353a6d6925c3140641d7fe1b95cc34989fe88d16017e83b1"
+   },
+   "laundry.png": {
+    "raw": "7194b695f85e493d0cfee8ce01bd7f461348e69565e6b69a8c3b8841c7bf9594",
+    "keyed": "11b816627996a86a73664c50c829931f25612a658c71814aa389bf00308fcf4c"
+   },
+   "pigeon-1.png": {
+    "raw": "3285551ef77043c00b632a5e2a7c46afa86818cec7ed53da4225d4323c2e4833",
+    "keyed": "c6c0937b52cf2cb5886ea79e98c46c1e7dd0213ddd2f49889ab02152b7fcc447"
+   },
+   "pigeon-10.png": {
+    "raw": "79eb9021547a5b08af2002044529b83dcadd4ec46b9bf43ece728117df9abc39",
+    "keyed": "2fc9f7e51e6f21f55208aa53c4fd9ea5ddb27d19d89b7147b6eedd07709dab0b"
+   },
+   "pigeon-11.png": {
+    "raw": "d1bc877aad84ef80d0861e80ee77341e07027cf0640137121f2da7b90b7a11ea",
+    "keyed": "0bda87b1de728aa4b6efd3eee8c4e5c1d7c2ddc5de5f6183bc385675900a08b2"
+   },
+   "pigeon-12.png": {
+    "raw": "293bd7dc861b4f032080652eb5724ef8e0b72f28301b9cff35c5ca1905cc4480",
+    "keyed": "0ecb2a09c8761902382e3b61cd7f6b29d7674e3aa4ea317e02d2b2e21b9a3129"
+   },
+   "pigeon-13.png": {
+    "raw": "8400dfd0cd9b9d5d541a135ca3d02e9a5780e1a76922b0515a4e11cc597ae125",
+    "keyed": "1ffea1903f898a65d62fcfaebd17bb5c1afe8ea503964fbb25aa0e630345de8a"
+   },
+   "pigeon-14.png": {
+    "raw": "f42c71ccda133dcf050826d6c1fefde9ed53a3e4a27e770447146fd3804fdc6d",
+    "keyed": "33538aa9234f566a85b8c80ad2ed71edf29445a0dd842fbb5f98f8fa4820c53c"
+   },
+   "pigeon-15.png": {
+    "raw": "2500c999fa5ee12704b688a236f2bba4698fbaa45f2bb1cf007416c8b829fa4d",
+    "keyed": "2da659b85294cb64d1187306f855f1cbc19a3b5ef68c99a691d0a91c7996b225"
+   },
+   "pigeon-16.png": {
+    "raw": "269f6460c6e9ceca3f8c1766158dc334a7295e7cec654dfe2b8071eba17c0385",
+    "keyed": "6ebd37e1ba1cb406680adcc9829c30711990fb39ea5f9bb1818b18c88645b0f9"
+   },
+   "pigeon-17.png": {
+    "raw": "f67a47630b3174de7cd7704168f4b796d0e903b85e02564c5d38b749109126bc",
+    "keyed": "c55f7d6c85545c8c31010a503912c958caacee9f9bbeb11baac99d13ecec900c"
+   },
+   "pigeon-18.png": {
+    "raw": "bf93b108e1366dafb6ca87159d6217194aa378c190bac5f1a8bd2f2637221543",
+    "keyed": "3e6216e881c289deb1ab05bd7489af77b195fc3d3cfb10027269ff2380e611ff"
+   },
+   "pigeon-2.png": {
+    "raw": "9ce568649e5ac45d80fb328490476d6af230005b9caea8a5562323eadbe56c25",
+    "keyed": "4eca5b01103d2a3645b87a90e7494848d63b4f4beefc473c8b9620212eb4bb55"
+   },
+   "pigeon-3.png": {
+    "raw": "fac2ef1c816ff326f7791a2dadaf8ca4c3414d71de57e6d55a99d774d575fff0",
+    "keyed": "6c51187918630c8672cecfd2b1a8015c73b0efd5e39904b7c9be154441abad46"
+   },
+   "pigeon-4.png": {
+    "raw": "a2de40f63c07f86d2bbe7daf6394723c6c3627430f02e9bc49134264d316d161",
+    "keyed": "53362a9543be5aa9c1bcfe8dd49bfac8b6e9a5a02c59972cc095a8f8c4050212"
+   },
+   "pigeon-5.png": {
+    "raw": "6b65b1a954916f087b5f54bae2b45c4183d3fb557d4f38e68828493e52653ad9",
+    "keyed": "377575f832046f3c4ebc25a452ab8c281ebdbffb2536fb51f1029c658b046ba1"
+   },
+   "pigeon-6.png": {
+    "raw": "b9c63edb5d55323369ae10dcd960eef4dc09ef59ec68e9d530bacd9bf38b7183",
+    "keyed": "7bf1b5a0af5c1af4a8bfa23250bbda01df03de026b1b2b8116a64d9194f5db01"
+   },
+   "pigeon-7.png": {
+    "raw": "fe325508bced46099b4bd32fffa241b8b66466f67a9656d49d56885fda331ea8",
+    "keyed": "d0fae9c3c0e77f977695d171bb87f9f6150622c8a8202b430722fa69b44ed673"
+   },
+   "pigeon-8.png": {
+    "raw": "e9c3987df3e67afab1f4f09ee9d343684a20d6e442c86dfb6e9b9c3529a24618",
+    "keyed": "9c316208022fa943eddc75e304a2157340e0751b56481ffedb093f30755d459f"
+   },
+   "pigeon-9.png": {
+    "raw": "6d7364d1a2036d1ef8fe43e39990f5ca59f1cf9c2a1b6bb26e3f9671c34d1be2",
+    "keyed": "a73ba84cdeb65ae6f42e884a742c9b30b436f36dfadd7539b7958a42fb18a45e"
+   },
+   "pigeon-pale-1.png": {
+    "raw": "03fe74062347cf2c321fcde955f6e2bff4f4b19091161f925812c4690c83dd18",
+    "keyed": "48b956b5f3ed7baaa2bc9b254bc457d4d7c404c12d5f67cd9352cce2a4d3691e"
+   },
+   "pigeon-pale-10.png": {
+    "raw": "6811d8815fd30593fb4f9acb0c94e561abeb5127cd11fd4b63c79dcc8eb72f2b",
+    "keyed": "e5e2a34661de2c0487c7eccae030cfa9fa3cd0f6436667037449ef258b27caa2"
+   },
+   "pigeon-pale-11.png": {
+    "raw": "1bd8d19651f57032633e6916a418a33212fff984988a56347ea083839268d266",
+    "keyed": "f0eff74c27206a2ca8aa8e026cbe38f2d99d4c178c2b4fc4dccc01fe69702b6a"
+   },
+   "pigeon-pale-12.png": {
+    "raw": "0b7d56f5f0c2bf7476e4eece4caacd354d3a38f02e17dcd2d873d80dca136d50",
+    "keyed": "f1f2ba4da18b8d84f75c18bf6cf346b14051ca0c3e81056e6d782727fd5ba643"
+   },
+   "pigeon-pale-13.png": {
+    "raw": "b9888011506fd31d11b99ed4593e895c0cba57cd76747bf9634dd22d7cf8becc",
+    "keyed": "ce65093cbe4ddad2630606b55114358795977728fd2b65a447e8edd188073a8c"
+   },
+   "pigeon-pale-14.png": {
+    "raw": "4fc1b736fa6380bffd9f8044ddbe330ade116b4d1e7543527c855d10a2b9df59",
+    "keyed": "6cac3ae8a9d24e927781da87d922d5d57b685f39f30d897060a97b14533b365a"
+   },
+   "pigeon-pale-15.png": {
+    "raw": "67d95f1442a5fcc3f5201a014de5bb5752018dade7f5195107f9b8a5d3ae83f8",
+    "keyed": "697e648216454eed9169b178819eb9976b7b94a0e2bb93cd24696f35ad4fc7ba"
+   },
+   "pigeon-pale-16.png": {
+    "raw": "564b76871206148f451ed001ca017bdd9bb0ac10c5c8d4136ce025c517e2e15f",
+    "keyed": "1ec6df9a8edd1ffe8acf0ba94fc68e271f56db8faddcf1646632a7c8e7d1c79b"
+   },
+   "pigeon-pale-17.png": {
+    "raw": "5efc539a06dde623e934ad2502bb2260778bbe43e8c20f850a2d1f603140d4fe",
+    "keyed": "b302488ad84763a9fc2ce387fa4bca53e3110400b932362312e6c93050f48828"
+   },
+   "pigeon-pale-18.png": {
+    "raw": "de12793e3f1d5f64218599fa8578d917ceea525df0225fbdc3d8bb3a3723a36c",
+    "keyed": "605e8be08c7711ac0c074b579b357ca47a442b79ea98bf2a0134839057b23480"
+   },
+   "pigeon-pale-2.png": {
+    "raw": "28c3fa081bd404b138348622b70cea0516e3f93b9ef6926494d5e1f277b287f7",
+    "keyed": "7680d9a58cb21794d902ce1181383bc32cdc031195bed4054bd497c81df69b10"
+   },
+   "pigeon-pale-3.png": {
+    "raw": "26a017e4693e7ce5dfc4a444f72d79cbf8a64c2da846ccaaf4aa9d48d402056c",
+    "keyed": "4ff22070c502debdb3cd1340d2acf6bbfcda10ec5fb4ffb5c0099b41297b829c"
+   },
+   "pigeon-pale-4.png": {
+    "raw": "884e127fe0089e0525b1baa03c146790ccc169b5b2895deb07a94276759b8a43",
+    "keyed": "b9b3203dab23b1f81c6bc58b98aab6a1662121f61df37713400db8d7bc9104dd"
+   },
+   "pigeon-pale-5.png": {
+    "raw": "017fde7e63677ed4d162e1d34de1679729f319cc4dd6ddd7949f673433c586ac",
+    "keyed": "9f4b8afaed2ef346e68ff4cbbfac74166a41fcb23cd6459401cfe2c891aadc3d"
+   },
+   "pigeon-pale-6.png": {
+    "raw": "14b2b6645517605a44d8fbd2aceb0c925bd048482d54cc06e727c6d17748ed1e",
+    "keyed": "4d547b4efa817cb56f8be3771ed35107cc88812b9c2aec18dd4069e2e6a3b40a"
+   },
+   "pigeon-pale-7.png": {
+    "raw": "b53c199cd0581836ac99c25a6bfb8d40fc3152ec465c586103101f6d6a81dfc2",
+    "keyed": "10bd934b2736919ed13470e12bbbfd9e1d61f930b97cbb62f4e156aea53967d5"
+   },
+   "pigeon-pale-8.png": {
+    "raw": "af7326e96fa8d4d10c0c7d2e2c53b622ef3144a2252c9b2cf5d1129c7ca97130",
+    "keyed": "e86630b05b0465b336def8097842c07a8ac7d9f97ff2332ba6f8c1248afa7708"
+   },
+   "pigeon-pale-9.png": {
+    "raw": "37a8a133675add19bbb3343d79b06f382eafcc1e0ee20ab5c3106d598d5ab85e",
+    "keyed": "2ac62156e02bbd4d0b025685a491f225edc6b565c4414b9b455b3680e27ff308"
+   },
+   "pigeon-shade-1.png": {
+    "raw": "bbe0b01c86197f06d1d57846febc243669a4cbbd18f2531cd0d5767a8e23712e",
+    "keyed": "dfd3241c885ad42d7592afd36a545aa7f1ac65af6355443c40a9a617801f2933"
+   },
+   "pigeon-shade-10.png": {
+    "raw": "8f2f0dafa47bb65e0271f3b367776b3e8e44cc7f2cf61da91b5ad4baa3c4f2a2",
+    "keyed": "a59fd4711ee237fcc0a42b4e062f70ca1bb6365ba0adf37a467a27951211c7cb"
+   },
+   "pigeon-shade-11.png": {
+    "raw": "73a69c211e35259715e73ac169b33b632a0d5a116ec3a61ef690ae852fe7f959",
+    "keyed": "ec88cf8caf687c6f5b50ce1509a707c2301b17ecbf84e41637097c4645176b4f"
+   },
+   "pigeon-shade-12.png": {
+    "raw": "003872df92143697936557fa31a729978aadf0e4fae088a514fd54aa53cda384",
+    "keyed": "6c4a0049470cbc055c02817160932fd243902f1d8231a1cad3c7408754cb6644"
+   },
+   "pigeon-shade-13.png": {
+    "raw": "ef43277eaef1af81932c5ad9cc21da7537184ee06dd82c6ab078528d6cdc956b",
+    "keyed": "c8c06658b5c293fef2926137648144d58863a580a96ba8180f0132e052b19ce6"
+   },
+   "pigeon-shade-14.png": {
+    "raw": "401a908f1b74fa3a39b045d698d49c19ef4af11cc083065583e49b3271014948",
+    "keyed": "aadc47fc8226672a9804deac047661ac6dd47a8b6aeafd8fa612272088a5a0da"
+   },
+   "pigeon-shade-15.png": {
+    "raw": "b92f6d02682e2ec1f46d78fd3b6e39a0b3a25d3c2459cf8de06323a04549ea22",
+    "keyed": "48a636c3e7432dba6805cc02d886ed49fdcfb855ef2d943066416e53e4bb047a"
+   },
+   "pigeon-shade-16.png": {
+    "raw": "e443bdf69c20a4d1e349be7d3a7e1c83d8c75537fdaa8d168aa1d002f3a6e5ff",
+    "keyed": "3915c5de1d67b45b8bb2fcff39bebfa5a57ca761d1481ff6810a85ce4e955423"
+   },
+   "pigeon-shade-17.png": {
+    "raw": "6fca1d9a848141daf753dd7135e2e6e8f87e151bf3ca0bb6be57fe5320dc4cc6",
+    "keyed": "2597a110c201bf5379e145ba70a27206fa6befa2ad833554ed1348967d873d7e"
+   },
+   "pigeon-shade-18.png": {
+    "raw": "7f9d61a1fe04268eff082359a101142feb432f2bc693db0763e6de11a9420a48",
+    "keyed": "8fe257effd3183cdc7a2e0d2aab23bd762d35bf9b3976495885a787b77965e9c"
+   },
+   "pigeon-shade-2.png": {
+    "raw": "c369a8de29501b555b717132362442dc1fa11b036330d13d94c91081805069a2",
+    "keyed": "414575b6ba4df0973c655ee782ca6b2d1bc44d28cdc0920fe5a855a31b32f01f"
+   },
+   "pigeon-shade-3.png": {
+    "raw": "451130b2a0deb52fec39e0d3980187e3f8454d40f1eed2d1f1e1673f82e8f301",
+    "keyed": "74f5141372b42e14d00c6d9dbd50d6b33dd2982c834df5b962ccf660bb4ce489"
+   },
+   "pigeon-shade-4.png": {
+    "raw": "ca735310e5906f40a9bc3a0ed9d66af7e07973e243986ca22caf181466c370fe",
+    "keyed": "2956c7606feeff75c92a3422c259dc02d7d063cced545dfd6d91f1a768872f6f"
+   },
+   "pigeon-shade-5.png": {
+    "raw": "249887175d94c5497cbc9cb12c0551af315f4d5d71b2d19344f7edd6c9766feb",
+    "keyed": "93516d5487c9ba5717c1b76adc40a176683c2f3cbf793923f06202675a1ea32c"
+   },
+   "pigeon-shade-6.png": {
+    "raw": "5f5b11ad6877681499761292d98cc401c528862066730fbf32431721db6965ca",
+    "keyed": "70dede071664d962bc1d137e13f7e10970837e6630502ec567ee6dff638c23e5"
+   },
+   "pigeon-shade-7.png": {
+    "raw": "e4faa30c634df577e5104fb9d548a06260de09979810b264806dae9125009956",
+    "keyed": "24267d12e990482e07bb4747ce5f133f7e0b93c89092156ee7ec844642cfe4e5"
+   },
+   "pigeon-shade-8.png": {
+    "raw": "8f934726e10582ff91e4d98a90433da3153a3bc842c4d42726a7292fcf96d146",
+    "keyed": "144d0b7b17656bae030974c52e48a2b7f153c534db7cfca4e37cfefc379e97c6"
+   },
+   "pigeon-shade-9.png": {
+    "raw": "aa3cae78b0cbbe837383dedd27db91fee1b2a177dc0f92f33d3bac760a2b8799",
+    "keyed": "77fb83f94161ea2720f18231682b09c93c7cab1f04daab9d0603255f077e7db5"
+   },
+   "sparrow-1.png": {
+    "raw": "4e8908188d4266738c332b1ec408c3ec4fe7b0a6882590f4551f743f0c49dc76",
+    "keyed": "505da98652082f3f2a1db668c6625cde8c793a50b69be673ae5a992eaf3a0529"
+   },
+   "sparrow-10.png": {
+    "raw": "267beb7592dbba77ce91fd126ceb6cc53c2c1f415de7467f54c8368236ed323a",
+    "keyed": "2f7fd4f8fa9f0beea7cb4e4d1986d4c8f93eae29505509c76545536ab59735b4"
+   },
+   "sparrow-11.png": {
+    "raw": "6010cc59ef97748d5c1b9672cbfd355d1ff7d817f198a93bb4eb95705a5fd889",
+    "keyed": "d2830dc560f47d23c87862c71e18f665c21254681c88d965fe34dfffe9d1df43"
+   },
+   "sparrow-12.png": {
+    "raw": "61e06801e4382b5e1bd40f65216767ddaf08658d15903ef799489321187e3a34",
+    "keyed": "842328fe492f39169dd371329272e5b845b6b1a6a7ee9fa16bd6c0dff4666e8a"
+   },
+   "sparrow-13.png": {
+    "raw": "090dcb99d64930ae6f0a7dfeaf265c1df4a88ea5e91d513fd62befb49432d7f0",
+    "keyed": "48c2fe7c639d89fa5888b61cf63786bbc8dde04597a6369f1545226c8bb86afd"
+   },
+   "sparrow-14.png": {
+    "raw": "1cccf3d18c18bf3b31498d71581851025f2182448ddb22f1720770f1850b4877",
+    "keyed": "1cc5e0eded8eaadb67c6e5f5d6eb3ff1c696687db8c39a15b667043024bc590a"
+   },
+   "sparrow-15.png": {
+    "raw": "8dae128ef71ff3bbff33a0f1a19c2f9a3bd0d1c528609998ae37ae2e58682209",
+    "keyed": "19ece86eaee2038d9da310cfe60825333b2c9256b982a960ae3c10bf34159911"
+   },
+   "sparrow-16.png": {
+    "raw": "d2aaf46a4f16f1eeb55f53f1d36aa74aad9fb79975a96f8fa9f20e2e96237656",
+    "keyed": "17a5773cd863343f856c7a3de9850fd9511761c35c7b071d4ac5b64aa75ec514"
+   },
+   "sparrow-17.png": {
+    "raw": "676d59b1b2421bb4b33ef8fe6ba04803364d7d6f01dad7f65316f8b3916f738c",
+    "keyed": "963d7dc0aedcba6baf408974f5c8035d14f596fab18455a0044fb119fce9de0c"
+   },
+   "sparrow-18.png": {
+    "raw": "8daf955fa8d01d968ca36d7f12a53dc9c42073540b853318960319d5befe8eec",
+    "keyed": "e3782505f879c1b384e8a0482921586c7ee2f1933b686bdea02d2b3011f769ac"
+   },
+   "sparrow-2.png": {
+    "raw": "e67a84ff5c26eba0181bca1be4f574f48ab386096c438b501c447c5070fea4b9",
+    "keyed": "04c333db6f63f2cbbabc6b0ad2772069009819e2a04b131de5346bbdfcf43e07"
+   },
+   "sparrow-3.png": {
+    "raw": "9b36ba8b0300d3552e814e09062b2cc8cfe30ae6ea292f5aac7543b598c67938",
+    "keyed": "51bba1e7d62f2a77ee0cba55ba8cc1382db53417616fad4543b40d544db9157f"
+   },
+   "sparrow-4.png": {
+    "raw": "3bef01802fe719782eda7a99cab298cb6934e48c088be1708af21f6524bd42f1",
+    "keyed": "982f95b7b075ac28ed4b0b029ad285d80b31fec9f82209db06fbd6f3d9fd5a62"
+   },
+   "sparrow-5.png": {
+    "raw": "955113e4cddbeaf14939517beeb6b31408e7e6e1243f94342dfea34b0ee42a1d",
+    "keyed": "0debcfe1414016d1081b5da4be3b30f88d1a15475d6a60a849ad5fad6b76d7c0"
+   },
+   "sparrow-6.png": {
+    "raw": "12b8dfb4e6175f5a155fff1fc5ff3af4b7e19b08b378f5f535b583685ec3a32f",
+    "keyed": "f31a1bf46f5fbc5b3006d9a6c13706375afb4845afdc4be15fb755189f13a6e9"
+   },
+   "sparrow-7.png": {
+    "raw": "41657f5046d151cf37c7df765b7944860d3f65389ebeaf41f31f590092a32cb3",
+    "keyed": "1748ac473c4bde190f6f9ff56c07ad0b149b40733ebb14083a6405450b6f727f"
+   },
+   "sparrow-8.png": {
+    "raw": "e1f2a45b824f5a9994cee30430b428e74b3e8f1aa5aafa837ce2d10741884a45",
+    "keyed": "7c7151bc696e22546f8e9db47a2b7dba0ca92f53bc01747be0f40579528c1290"
+   },
+   "sparrow-9.png": {
+    "raw": "5395665a7c5d1c3dad5aa48ff3a0a11927b0c41f36bcdd5401aa9d5899d08d7a",
+    "keyed": "6896360a70148be38b918e6ba5b4a1b0e0e03f330ba950ee73a97d6393897a32"
+   },
+   "swallow-1.png": {
+    "raw": "712e8b5b10a492f7af09171b139b319fe419a3d38244acf738fe267f48006b43",
+    "keyed": "e5192a4ea7cb4c76d258dc0e4b0d9273581a46609016f37c5912ef92c7a2e9ae"
+   },
+   "swallow-2.png": {
+    "raw": "eac6083c4a70287fc7aaf4cb753254232b234cd73a25ea227a00d195ae5ddd15",
+    "keyed": "06c2eb68fa7d9992e5a6118c0181894aeda2108a907da54b6a30e4ea4c50001c"
+   },
+   "swallow-3.png": {
+    "raw": "def0056e0834fd2b6a11ced94903173ed2d5f4fc93c44b8e41bc395aeb5399ca",
+    "keyed": "823ab09da02102cde6a9882fc82b6689ebcd3c39604768dad9f58cb5b6d0ca97"
+   },
+   "swallow-4.png": {
+    "raw": "c931b7c652e33837db320f1104f98d260e8a2a5ba2e996c8bd705be5b033d0e2",
+    "keyed": "873b619a0b6c084a157dad68dd8f6e408ccc11f4de805c245ba3931e9142b2b1"
+   },
+   "tunic.png": {
+    "raw": "73525400644acc0c0db2b899dd8654656a8e15cb626976f33ade38a42efc47aa",
+    "keyed": "7ffd66487ee8d4d584fc5c0f2c3beffcd49a1a5747b7c781df07c8449a58a1c1"
+   }
+  }
+ },
+ "rome-temple": {
+  "key": "lamp-interior",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "b35c8ddebb887b8d78f6d6376e28221cd885381e05db177ef8c6a6cb41b95256",
+    "keyed": "e99b3f4a2f6cb52e74504e136eb97fc5ff88eb130514c1ad251f44d2f5925971"
+   },
+   "front.png": {
+    "raw": "2c42e2131de7cebc0f331bf9c024cd6349a4b24aaee07990696d29f1e908e5a8",
+    "keyed": "d13ae74c10eaa4eb8dd91b883c593b09a42c9e315635f4e233a6d2978a85b84a"
+   },
+   "table.png": {
+    "raw": "7f08b334a9e94670e15fc84bb19ba1c451d2ab56fb2aa7b62d4afa4cd292dcaa",
+    "keyed": "66cd751c86fbdaa815b71fc201efb31555e316be6f134deb16a569799c562869"
+   }
+  }
+ }
+}

@@ -77,6 +77,8 @@ js/art/                 everything that is drawn by code
   rig.js                  the jointed figure: poses, eight directions, the walk, stances, gestures, sitting
   people.js               the cast as the rig sees them: proportions, clothes, colors, and how each one stands, walks and talks
   props.js                things drawn by code that stand on the ground (kept for scenes that are not painted yet)
+  look.js                 the paints: the people and the moving things in the key of the scene on stage (section 9)
+  look-data.js            the paint box, the six keys and which scene uses which (written by tools/paint/postimp_key.py)
 js/content/             the game itself. Knows nothing about the engine's insides.
   world.js                cast, eras, items
   lines.en.js             gathers the spoken lines
@@ -451,6 +453,9 @@ underneath each one, including the shadow the thing leaves behind; a separate cu
 aligned to the pixel, for each state of a thing that changes.
 
 The inventory pictures (`art/items/`, 64x64) are painted the same way.
+
+Then the paints: a scene's pictures are mixed from the game's one box of paints in its key, on their way into
+`art/` (section 9, "The paints"). The inventory pictures belong to the interface and are not.
 
 ---
 
@@ -1076,7 +1081,7 @@ is that **an era changes what is painted, and nothing about how.**
 | Group | Colors | Used for | Changes? |
 | --- | --- | --- | --- |
 | **Time** | neon cyan, magenta, violet, white core | Portals, the tunnel, anything time travel has touched, highlights in the interface | Never |
-| **Travellers** | Dad's yellow shirt, the Son's blue hoodie and red cap, Mom's emerald dress, Big Sister's indigo cardigan, Little Sister's pink overalls and yellow boots, the red wagon | The people and things from the present | Never |
+| **Travellers** | Dad's yellow shirt, the Son's blue hoodie and red cap, Mom's emerald dress, Big Sister's indigo cardigan, Little Sister's pink overalls and yellow boots, the red wagon | The people and things from the present | Never (each era's light falls on them: "The paints") |
 | **Era** | The warm stone and sand of Egypt, the brick and blue shadow of a Roman street, lamplight and wallpaper at home, the dust of Nevada | The world of each period | Per era |
 
 Because of this, in any screenshot from any era you can tell at a glance what
@@ -1112,6 +1117,72 @@ silhouettes, three grounds, a dark, a light, two features), and the stage carrie
 `data-era="egypt"`. The paintings do not use it. It colors what is still drawn by code:
 the sketch of a scene that has not been painted, props, and the storyboard page, which
 shows all the palettes side by side.
+
+### The paints
+
+Chosen on 9 October: **every picture in the game is mixed from one box of paints, the Post-Impressionists' 23 of 1888,
+in a key for its era and hour, at strength 50.** The paintings are kept exactly as they were painted (every shape, edge
+and detail, the depth, the light's direction), and their colours are moved toward the box:
+
+- **Shadows become a colour.** A shadow takes its key's shadow paints at its own lightness (lilac, cobalt violet, deep
+  violet on warm ground and stone; viridian on greens; ultramarine on blues), instead of grey or brown. A thing that is
+  only dark in its own colour (bronze, wood, a red wall) leans toward its own darker paint and stays itself.
+- **Lights warm** toward the key's light (naples yellow and lead white in Rome's sun, chrome yellow at noon, lamplight
+  indoors). A pale wall keeps its own colour; the light only warms it.
+- **Every colour moves part of the way toward its nearest paints**, a little purer, as paint is purer than a print.
+  There is no black: the darkest darks lean to prussian blue and deep violet.
+- **A little of the painters' touch:** sparse short marks laid along the forms, each a little lighter and warmer or
+  darker and cooler (broken colour). Fine detail and lettering are left alone.
+
+The six keys (numbers in `tools/paint/postimp_paints.py`; the game reads them from `js/art/look-data.js`):
+
+| Key | Scenes | The pair | Light | Shadow |
+| --- | --- | --- | --- | --- |
+| Egypt at noon | egypt-crash, egypt-site | chrome yellow / cobalt blue | naples and chrome yellow, through orange | lilac, cobalt violet, deep violet |
+| Rome in the morning | rome-steps, rome-street | naples yellow / cobalt violet | lead white, naples yellow | lilac, cobalt violet, toward ultramarine |
+| The house at night | home-living-room, home-landing, home-study, home-lilsis-room, home-bigsis-room | lamplight / ultramarine | naples and chrome yellow, chrome orange | ultramarine, deep violet; viridian on greens |
+| Lamplit rooms | egypt-gallery, egypt-chamber, rome-temple | chrome orange / ultramarine | chrome yellow, chrome orange (the lamps are lights, not lit walls) | ultramarine, deep violet |
+| Nevada in the morning | nevada-roadside | chrome orange / cobalt blue | lead white, naples and chrome yellow | lilac, cobalt violet |
+| The highway at dusk | highway (the title screen and the opening movie) | chrome orange / ultramarine | chrome yellow to orange and geranium | cobalt violet, deep violet |
+
+**Strength 50.** The keys run from 0 (the painting as painted) to 100 (the paints at their clearest); the game uses 50
+everywhere (`STRENGTH` in `postimp_paints.py`, `strength` in `look-data.js`): every scene still reads as the painting
+it was, with coloured shadows, warmer light and one box of paints shared by the places and the people.
+
+**Where it happens.**
+
+- **The pictures** are keyed once, when they are installed: `tools/paint/install.py` runs `postimp_key.py` on the
+  painting in `out/`, so every file in `art/scenes/` is keyed already. The scene is keyed as the game composes it (back
+  and cut-outs together, so they read the same light); every cut-out keeps its exact edge; the frames of things that
+  move are keyed colour by colour, their shapes untouched; a scene's files share one palette of 255 colours.
+  `postimp_keyed.json` notes what each file was keyed from, and `python3 tools/paint/postimp_key.py --check` checks
+  every scene.
+- **The people** are drawn by the rig in today's pixel art, and `js/art/look.js` keys their colours for the scene on
+  the stage: `game.js` names the scene as it builds it (`keyScene`), `pix.js` asks for each material's four tones
+  (`tonesOf`: the light ones toward the key's light, the shade ones toward its coloured shadow) and for each exact
+  pixel (`pixelOf`), and the shadow on the ground under each person becomes the key's shadow colour instead of a grey.
+  Shapes, faces and motion are the rig's own. Pictures kept from a scene in another key are let go (`forget` in
+  `cast.js`). **The team portraits are the interface's and are never keyed** (`portrait()` in `cast.js` draws each
+  one inside `withoutKey`, at the size the interface asks for, and keeps it).
+- **The moving things** (`effects.js`): the colours a scene gives its smoke, flames, embers, water and drawn birds, or
+  the engine's own defaults for them, go through the same key (`keyHex`) as each is put on the stage; their painted
+  frames are keyed with the pictures.
+- **Never keyed:** time (the portal, the tunnel: its colour belongs to no place), and the interface (the buttons, the
+  label line, the inventory and its pictures, the title strip, the cards).
+
+**A new scene, or a repainted one** (the four new places in Rome, say):
+
+1. Paint it with its script, into `tools/paint/out/<scene>/`, as ever.
+2. Give it a plan in `tools/paint/postimp_plans.py` (its cut-outs in the scene file's order, the cut-outs of other
+   states, its frames), and a key in `postimp_paints.SCENE_KEY`: a place out of doors takes its era's key (the Forum,
+   the Capitol, across the Tiber: "rome-morning"); a room lit by lamps takes "lamp-interior".
+3. `python3 tools/paint/install.py <scene>` keys it at 50 and installs it.
+4. `python3 tools/paint/postimp_key.py --js` (when the table or a key changed), then `--check`, then `tools/stamp.py`.
+
+A scene missing from the table is drawn with its era's key (`ERA_KEY`) until it is added. A new era gets a key of its
+own in `postimp_paints.KEYS`: copy the nearest, choose its complementary pair, its light and shadow paints by
+lightness, and add it to `GROUND_SHADOW` and `ERA_KEY`. Never key a picture twice: `install.py` always starts from the
+painting in `out/` (the paintings as they were before the paints are in the repository's history).
 
 ---
 
@@ -1300,8 +1371,9 @@ for each way onto it (the stairs, the attic ladder, each room that opens off it)
 of the other four scenes has one way in from the landing.
 
 **A painting.** Write the scene file first and play it as a sketch. Then paint it
-(section 2, and the guide in `tools/paint/`), put the pictures in
-`art/scenes/<scene id>/`, name them in the scene file, and take the numbers from the
+(section 2, and the guide in `tools/paint/`), install the pictures into
+`art/scenes/<scene id>/` with `tools/paint/install.py`, which keys them in the game's paints
+(section 9, "The paints"), name them in the scene file, and take the numbers from the
 painter's `layout.json`. Run `python3 tools/stamp.py` (see "Publishing a new version").
 
 **A character.** Write down who they are first ([CHARACTERS.md](CHARACTERS.md) has the
@@ -1462,7 +1534,7 @@ For cutscenes, which dress the stage themselves:
 | `tools/hooks/pre-commit` | Runs `stamp.py` at every commit, once turned on (two commands, at the top of the file) |
 | `tools/storyboard.html` | The story from the game's own files: acts, chains and beats; the title and every scene as the game builds it, with clickable areas, walkable ground, blocked patches and the base line of each cut-out; the era palettes; the script by character, with a button that exports it as a spreadsheet. It says so at the top if the story has a beat that cannot be reached. |
 | `tools/sprites.html` | Everyone in the game, from the settings in `people.js`: every direction, the walk, every gesture, reaching and sitting, at the sizes they appear in a scene, against a choice of grounds |
-| `tools/paint/` | The scripts that paint the pictures, one for each scene, with their shared library and the painter's guide. `python3 install.py <scene>` copies a painted scene into `art/`. |
+| `tools/paint/` | The scripts that paint the pictures, one for each scene, with their shared library and the painter's guide. `python3 install.py <scene>` keys a painted scene in the game's paints and copies it into `art/` (section 9, "The paints"). |
 | `tools/koine-road/` | The scripts that build the typeface from pen strokes (it has a README of its own) |
 
 Useful addresses while building:

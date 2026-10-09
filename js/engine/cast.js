@@ -22,9 +22,9 @@
 //
 // Positions are picture pixels (grid.js).
 
-import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, PARTS, BASE } from "../art/rig.js";
+import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, BASE } from "../art/rig.js";
+import { withoutKey } from "../art/look.js";
 import { people } from "../art/people.js";
-import { paintedPeople, colourKey, unkeyed } from "../art/paint.js";
 import { props } from "../art/props.js";
 import { DEPTH } from "./walk.js";
 import { picture as fetchPicture, got } from "./assets.js";
@@ -45,8 +45,9 @@ const COMPASS = { S: 0, SE: 45, E: 90, NE: 135, N: 180, NW: 225, W: 270, SW: 315
 // pictures that have gone longest without being used are dropped.
 const cache = new Map();
 const BUDGET = 16_000_000;             // pixels, about 64 MB. A full-size adult, cut down to the paint, is some 13,000 and a big cut-out 200,000: a scene's cut-outs and well over a thousand pictures of people.
-let budget = BUDGET;                   // (painted people at 2 or 3 times the stage's pixels have more of them: Cast.setResolution)
 let stored = 0;
+/** Let every kept picture go (game.js, when a scene in another key of the paints comes on: js/art/look.js). */
+export function forget() { cache.clear(); stored = 0; }
 /** The picture kept under `key`; made by make() the first time. make() gives { canvas, size, ... }, size being its pixels. */
 function keep(key, make) {
   let hit = cache.get(key);
@@ -55,7 +56,7 @@ function keep(key, make) {
   cache.set(key, hit);
   stored += hit.size;
   for (const [old, pic] of cache) {
-    if (stored <= budget || old === key) break;
+    if (stored <= BUDGET || old === key) break;
     cache.delete(old); stored -= pic.size;
   }
   return hit;
@@ -82,112 +83,6 @@ const remember = (key, make) => keep(key, () => {
   canvas.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(out.buffer, out.byteOffset, out.byteLength), w, h), -x0, -y0, x0, y0, canvas.width, canvas.height);
   return { canvas, ox: sf.ox - x0, oy: sf.oy - y0, size: canvas.width * canvas.height };
 });
-
-// ---------- painted people (?people=painted), painted away from the game's own thread ----------
-// Painting one picture of a person (js/art/paint.js) takes some milliseconds: on a slow machine ten to thirty at twice
-// the stage's size, too long for the middle of a frame. So the cast asks a worker (js/art/painter.js) for each picture
-// it does not have yet: the one wanted now first, then those likely to be wanted next (the rest of a walk in that
-// direction, the other breaths, the mouth's other shapes for that gesture, the rest of getting up). Meanwhile the
-// person goes on showing the last picture they showed, and the new one is used the moment it is there (a fraction of
-// a second at most). What nothing could stand in for is painted before it is wanted: everyone's first picture while a
-// scene opens behind its fade (Cast.opened: the scene waits for them), and the first picture of getting up or of
-// sitting down again, when the point someone stands on moves (Figure.ahead). Only what is wanted with nothing to stand
-// in for it all the same (someone put on the stage in the middle of a scene) is painted here and now. With no worker
-// (a browser without module workers), pictures are painted here, one a frame.
-let frameNo = 0;                                                     // (Cast.update counts frames)
-const evenPx = (size) => Math.max(10, Math.round(size / 2) * 2);     // (sizes in steps of two pixels, as picture() has them)
-const painter = {
-  worker: null, failed: false, queue: [], idle: [], pending: new Map(), inFlight: 0, here: { frame: -1, n: 0 },
-  keyed: "",                                                         // the colour key the painter paints in (paint.js colourKey.id: "" is none)
-  /** Can pictures be painted by the painter now? It must be running, and paint in the page's own colour key. */
-  ready() { return !!this.start() && this.keyed === colourKey.id; },
-  start() {
-    if (this.worker || this.failed) return this.worker;
-    try {
-      this.worker = new Worker(new URL("../art/painter.js", import.meta.url), { type: "module" });
-      this.worker.onmessage = (e) => this.done(e.data);
-      this.worker.onerror = (e) => { console.warn("The painter (js/art/painter.js) has stopped; people are painted on the game's own thread from now on.", (e && e.message) || ""); this.stop(); };
-    } catch { this.stop(); }
-    return this.worker;
-  },
-  stop() {
-    this.failed = true; if (this.worker) this.worker.terminate(); this.worker = null;
-    for (const e of this.pending.values()) if (e.then) e.then({ id: e.key, error: "the painter has stopped" });
-    this.queue = []; this.idle = []; this.pending.clear(); this.inFlight = 0;
-  },
-  /** Have a picture painted. job: { kind, up, seat, pose, yaw, size, k, stage } (or { kind, portrait }); urgent: true, it
-      is wanted on the stage now; "soon", it comes after those but before everything asked ahead; "idle", only when the
-      painter has nothing else to do (the most recent first; a guess at what may be wanted, let go when there are too many).
-      then(answer): the painter's answer goes to it, and not to the store (a portrait). */
-  ask(key, job, urgent = false, then = null) {
-    if (cache.has(key) || !this.ready()) return;
-    const had = this.pending.get(key);
-    if (had) {
-      if (urgent === true && !had.sent && !had.urgent) {                 // (wanted now after all: first in the queue)
-        const list = had.idle ? this.idle : this.queue;
-        list.splice(list.indexOf(had), 1); had.urgent = true; had.idle = false; this.queue.unshift(had); this.pump();
-      }
-      return;
-    }
-    if (!urgent && this.queue.length > 240) return;                  // (more than enough ahead already)
-    const entry = { key, job: { ...job, keyId: colourKey.id }, urgent: urgent === true || urgent === "soon", idle: urgent === "idle", sent: false, then };
-    this.pending.set(key, entry);
-    if (entry.idle) { this.idle.push(entry); if (this.idle.length > 48) this.pending.delete(this.idle.shift().key); }
-    else if (urgent === "soon") { const i = this.queue.findIndex((e) => !e.urgent); this.queue.splice(i < 0 ? this.queue.length : i, 0, entry); }
-    else if (urgent) this.queue.unshift(entry); else this.queue.push(entry);
-    this.pump();
-  },
-  pump() {
-    const send = (e) => {
-      const { stage, ...job } = e.job;
-      e.sent = true; this.inFlight++;
-      try { this.worker.postMessage({ id: e.key, ...job }); } catch (err) { console.warn("The painter could not be asked for", e.key, err); this.stop(); }
-    };
-    while (this.worker && this.inFlight < 2 && this.queue.length) send(this.queue.shift());
-    if (this.worker && !this.inFlight && this.idle.length) send(this.idle.pop());      // (nothing else to do: one guess at a time)
-  },
-  done(msg) {
-    if (msg.id == null) { if (msg.keyed != null) this.keyed = msg.keyed; if (msg.error) console.warn(msg.error); return; }     // (a colour key loaded there: keyPainter)
-    this.inFlight = Math.max(0, this.inFlight - 1);
-    const entry = this.pending.get(msg.id);
-    this.pending.delete(msg.id);
-    if (entry && entry.then) entry.then(msg);
-    else if (msg.error) console.warn(`Could not paint ${msg.id}: ${msg.error}`);
-    else if (entry && !msg.stale) keep(msg.id, () => {                // (stale: it was asked for in another colour key than the painter has now)
-      let canvas = msg.bitmap;
-      if (!canvas) { canvas = document.createElement("canvas"); canvas.width = msg.w; canvas.height = msg.h; canvas.getContext("2d").putImageData(new ImageData(msg.data, msg.w, msg.h), 0, 0); }
-      return { canvas, ox: msg.ox, oy: msg.oy, size: msg.w * msg.h, stage: entry.job.stage, k: entry.job.k };
-    });
-    this.pump();
-  },
-  /** A new scene: whatever was still waiting to be painted for the last one is let go (what is being painted now still comes). */
-  forget() {
-    this.queue = this.queue.filter((e) => { if (e.then) return true; this.pending.delete(e.key); return false; });
-    for (const e of this.idle) this.pending.delete(e.key);
-    this.idle = [];
-  },
-  /** May a picture be painted here and now? Always when there is nothing to stand in for it; else only when the painter
-      cannot paint it (there is none, or it is not in the page's colour key yet), and once a frame. */
-  mayPaintHere(needed) {
-    if (needed) return true;
-    if (this.ready()) return false;
-    if (this.here.frame !== frameNo) { this.here.frame = frameNo; this.here.n = 0; }
-    return this.here.n++ < 1;
-  },
-};
-/** How many pictures of people are still being painted (0: everyone on the stage is as they should be). */
-export const stillPainting = () => painter.pending.size;
-/**
- * Painted people in a colour key (paint.js setColourKey, as a middle-ground study keys a scene): the painter paints in
- * a thread of its own, with its own copy of paint.js, so the key has to be set there too. keyPainter(url) loads the
- * module at `url` in the painter's thread, as the page has loaded it (a module that sets the key when it loads), and
- * keyPainter(url, name, ...args) then calls its export `name` with `args` (say, the study's useScene(id)). Give the key
- * the same id on both sides. Until the painter has the page's key, people are painted on the page's own thread (one
- * new picture a frame), so they are never shown in the wrong colours.
- */
-export function keyPainter(url, name = null, ...args) {
-  if (paintedPeople && painter.start()) painter.worker.postMessage({ import: String(url), call: name, args });
-}
 
 // ---------- painted pictures ----------
 // A cut-out is a picture file the size of the whole picture and mostly clear. It is trimmed,
@@ -434,7 +329,7 @@ export class Figure extends Sprite {
     if (!down) {
       const seat = [this.x, this.y], yaw = this.yaw, size = this.sizeNow(), [dx, dy] = standOffset(home, yaw, size), up = upOf(home);
       this.up = { seat, yaw, size, scale: this.scale, sprite: null, stride: this.stride };
-      if (home.sit && home.sit.drawn && this.cast) { const chair = new Seat(`${this.id}.seat`, this.kind, home, yaw, size).place(seat[0], seat[1], this.scale); chair.cast = this.cast; this.up.sprite = this.cast.add(chair); }
+      if (home.sit && home.sit.drawn && this.cast) this.up.sprite = this.cast.add(new Seat(`${this.id}.seat`, this.kind, home, yaw, size).place(seat[0], seat[1], this.scale));
       this.place(seat[0] + dx, seat[1] + dy);
       this.spec = up; this.stride = strideOf(up) * up.height * BASE; this.t = 0;
       if (instant) return Promise.resolve();
@@ -531,7 +426,6 @@ export class Figure extends Sprite {
   }
 
   picture(palette, calm) {
-    if (paintedPeople) return this.painted(calm);
     const full = BASE * this.spec.height, want = full * this.scale, f = this.frame(calm);
     const even = (size) => Math.max(10, Math.round(size / 2) * 2);                              // in steps of two pixels, so pictures can be reused
     const who = this.spec === this.home ? this.kind : this.kind + "^up";                       // (someone found sitting, on their feet)
@@ -543,109 +437,6 @@ export class Figure extends Sprite {
     if (w === pic.canvas.width && h === pic.canvas.height) return pic;
     return { canvas: pic.canvas, ox: pic.ox * k, oy: pic.oy * k, sw: pic.canvas.width, sh: pic.canvas.height, w, h, hard: true };
   }
-
-  /** Painted (?people=painted, js/art/paint.js): the same frames, sizes and rungs as picture(), painted at the cast's
-      resolution (Cast.res painted pixels to a picture pixel), shown smoothly and placed to the painted pixel. A picture
-      not painted yet is asked of the painter (above), and meanwhile the one shown last stands in for it. */
-  painted(calm) {
-    const k = (this.cast && this.cast.res) || 1, f = this.frame(calm), { who, tag, size, key } = this.paintKey(f, k);
-    if (f.moving) this.walked = true;
-    let pic = cache.has(key) ? keep(key) : null;
-    if (!pic) {
-      // What stands in while it is painted: the last picture of them on the same footing; else their calm picture (no
-      // breath, no blink: the one painted first, Cast.opened), or them standing (or sitting) still; else, for someone
-      // put on the stage in place of someone else (a scene showing a man in another pose), the other's last picture.
-      let had = this.shown && this.shown.who === who ? this.shown.pic : null;
-      if (!had) for (const c of [this.frame(true), { key: this.spec.seated ? "sit0.0" : "stand0.0" }]) {
-        const ck = this.paintKey(c, k).key;
-        if (ck !== key && cache.has(ck)) { had = keep(ck); break; }
-      }
-      if (!had && !this.shown && this.inherit) had = this.inherit;
-      if (!had && this.cast && this.cast.opening) return null;                 // (the scene is still opening behind its fade: Cast.opened)
-      if (painter.mayPaintHere(!had)) {
-        pic = remember(key, () => drawFigure(this.spec, f.pose(), this.yaw, Math.round(size * k), { paint: { k } }));
-        pic.stage = size; pic.k = k;
-      } else {
-        painter.ask(key, { kind: this.kind, up: this.spec !== this.home, pose: f.pose(), yaw: this.yaw, size: Math.round(size * k), k, stage: size }, true);
-        pic = had;
-      }
-      this.ahead(f.key, size, k, tag, who);
-    }
-    this.shown = { pic, who };
-    const s = (f.moving ? BASE * this.spec.height * this.scale : size) / pic.stage / pic.k;   // picture pixels to a painted one
-    return { canvas: pic.canvas, ox: pic.ox * s, oy: pic.oy * s, sw: pic.canvas.width, sh: pic.canvas.height, w: pic.canvas.width * s, h: pic.canvas.height * s, snap: k };
-  }
-
-  /** The painted picture of frame `f` (frame()'s) at k painted pixels to a picture pixel: who (themselves, or on their
-      feet), the colour key's tag, its size (picture()'s: walkers from the ladder of sizes) and its key in the store. */
-  paintKey(f, k, yaw = this.yaw) {
-    const full = BASE * this.spec.height, who = this.spec === this.home ? this.kind : this.kind + "^up", tag = colourKey.id ? "|" + colourKey.id : "";
-    const size = f.moving ? evenPx(full * RUNG ** Math.round(Math.log(Math.max(this.scale, 0.01)) / Math.log(RUNG))) : evenPx(full * this.scale);
-    return { who, tag, size, key: `${who}|${f.key}|${yaw}|${size}|p${k}${tag}` };
-  }
-
-  /** Have the painter paint frame `f` (frame()'s, or one like it: { key, pose }) first of all, and the ones likely after
-      it: its key, or null if it is here already (or there is no painter). */
-  prepaint(f) {
-    const k = (this.cast && this.cast.res) || 1, { who, tag, size, key } = this.paintKey(f, k);
-    if (cache.has(key) || !painter.ready()) return null;
-    painter.ask(key, { kind: this.kind, up: this.spec !== this.home, pose: f.pose(), yaw: this.yaw, size: Math.round(size * k), k, stage: size }, true);
-    this.ahead(f.key, size, k, tag, who);
-    return key;
-  }
-
-  /** A scene opening (Cast.opened): the picture they will first show (calm: no breath, no blink), and the one of them
-      standing or sitting still (what stands in for any other till that is painted), asked of the painter: their keys. */
-  first() {
-    const spec = this.spec, still = { key: spec.seated ? "sit0.0" : "stand0.0", pose: () => ({ ...(spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0)), blink: false }) };
-    return [this.prepaint(this.frame(true)), this.prepaint(still)].filter(Boolean);
-  }
-
-  /** Ask the painter for the pictures likely to be wanted next, after the one with frame key `now`: the rest of the walk
-      in this direction, the other breaths, the mouth's other shapes in this gesture, the rest of getting up or of a small
-      movement. (The keys and poses are frame()'s own.) */
-  ahead(now, size, k, tag, who) {
-    if (!painter.ready()) return;
-    const spec = this.spec, up = spec !== this.home, family = (/^[a-zA-Z]+/.exec(now) || [""])[0];
-    const ask = (frameKey, pose) => painter.ask(`${who}|${frameKey}|${this.yaw}|${size}|p${k}${tag}`, { kind: this.kind, up, pose, yaw: this.yaw, size: Math.round(size * k), k, stage: size }, false);
-    if (family === "walk") for (let n = 0; n < WALK_FRAMES; n++) ask(`walk${n}`, poses.walk(spec, n / WALK_FRAMES));
-    else if (family === "stand") {
-      for (let n = 0; n < 8; n++) ask(`stand${n}.0`, { ...poses.stand(spec, n), blink: false });
-      if (this.walked) {                                                     // someone who walks about: the first step of their next walk, whichever way it goes (when the painter is idle)
-        const n = Math.floor(this.phase * WALK_FRAMES) % WALK_FRAMES, step = { key: `walk${n}`, moving: true }, pose = poses.walk(spec, n / WALK_FRAMES);
-        for (let yaw = 0; yaw < 360; yaw += 45) {
-          const { size: rung, key } = this.paintKey(step, k, yaw);
-          painter.ask(key, { kind: this.kind, up, pose, yaw, size: Math.round(rung * k), k, stage: rung }, "idle");
-        }
-      }
-    }
-    else if (family === "sit") {
-      for (let n = 0; n < 8; n++) ask(`sit${n}.0`, { ...poses.sit(spec, n), blink: false });
-      ask("sit0.1", { ...poses.sit(spec, 0), blink: true });                    // (their first picture on sitting down again)
-      if (!up && this.home.seated) {
-        // Getting up, they stand on another point and nothing can stand in for their first picture: painted now, with
-        // the seat they leave behind (Figure.sit).
-        const on = upOf(this.home), at = evenPx(BASE * on.height * this.scale), seat = this.sizeNow();
-        painter.ask(`${this.kind}^up|rise0|${this.yaw}|${at}|p${k}${tag}`, { kind: this.kind, up: true, pose: poses.rise(this.home, 0, false), yaw: this.yaw, size: Math.round(at * k), k, stage: at }, false);
-        if (this.home.sit && this.home.sit.drawn) painter.ask(`${this.kind}|seat|${this.yaw}|${seat}|p${k}${tag}`, { kind: this.kind, up: false, seat: true, yaw: this.yaw, size: Math.round(seat * k), k, stage: seat }, false);
-      }
-    }
-    else if (family === "talk") { const g = this.gesture; for (let n = 0; n < 6; n++) for (const mouth of [0, 1, 2]) ask(`talk${g}.${n}.${mouth}`, { ...poses.talk(spec, n, g), mouth }); }
-    else if (family === "sitT") { const g = this.gesture; for (let n = 0; n < 6; n++) for (const mouth of [0, 1, 2]) ask(`sitT${g}.${n}.${mouth}`, { ...poses.sit(spec, n, { gesture: 1, main: g }), mouth }); }
-    else if (family === "rise" || family === "risei") {
-      const inPlace = family === "risei", u = this.up;
-      for (let q = 0; q <= 12; q++) ask(`rise${inPlace ? "i" : ""}${q / 12}`, poses.rise(this.home, q / 12, inPlace));
-      if (u && this.move && !this.move.up) {                                   // sitting down again: their first pictures back on the seat (seatDown)
-        const at = evenPx(BASE * this.home.height * u.scale);
-        for (const blink of [true, false]) painter.ask(`${this.kind}|sit0.${blink ? 1 : 0}|${u.yaw}|${at}|p${k}${tag}`, { kind: this.kind, up: false, pose: { ...poses.sit(this.home, 0), blink }, yaw: u.yaw, size: Math.round(at * k), k, stage: at }, false);
-      }
-    }
-    else if (family === "fid" && this.fid) { const name = this.fid.name, n = Math.max(6, Math.round(this.fid.ms / 110)); for (let q = 0; q <= n; q++) ask(`fid${name}.${q}`, poses.fidget(spec, name, q / n)); }
-    else if ((family === "act" || family === "sitpray") && this.act) {       // a prayer, a hand shading the eyes, a reach: the rest of it, easing in and out
-      const low = this.act.low, base = low === "pray" ? 2 : low === "shade" ? 4 : 0;
-      for (let q = 0; q <= 5; q++) { const kk = (base * 5 + q) / 5; ask(family === "act" ? `act${low ? 1 : 0}.${kk}` : `sitpray${kk}`, poses.reach(spec, kk, low)); }
-    }
-  }
 }
 
 /** The seat of someone who has got up from it (the goldsmith's stool, the old-timer's lawn chair), left where it stood
@@ -655,12 +446,7 @@ export class Figure extends Sprite {
 export class Seat extends Sprite {
   constructor(id, kind, spec, yaw, size) { super(id); this.kind = kind; this.spec = spec; this.yaw = yaw; this.size = size; }
   place(x, y, scale = this.scale) { super.place(x, y, scale); this.base = y - 0.5; return this; }
-  picture() {
-    if (!paintedPeople) return remember(`${this.kind}|seat|${this.yaw}|${this.size}`, () => drawSeat(this.spec, this.yaw, this.size));
-    const k = (this.cast && this.cast.res) || 1, tag = colourKey.id ? "|" + colourKey.id : "";
-    const pic = remember(`${this.kind}|seat|${this.yaw}|${this.size}|p${k}${tag}`, () => drawSeat(this.spec, this.yaw, Math.round(this.size * k), { k }));
-    return { canvas: pic.canvas, ox: pic.ox / k, oy: pic.oy / k, sw: pic.canvas.width, sh: pic.canvas.height, w: pic.canvas.width / k, h: pic.canvas.height / k, snap: k };
-  }
+  picture() { return remember(`${this.kind}|seat|${this.yaw}|${this.size}`, () => drawSeat(this.spec, this.yaw, this.size)); }
 }
 
 /** A prop: a thing drawn by js/art/props.js. `scale` is its own size; it does not shrink with distance by itself. */
@@ -772,48 +558,15 @@ export class Cast {
     this.calm = false;                   // true: no idle motion
     this.last = "";                      // what is on the layer now, in a few characters (see update)
     this.shots = [];                     // and in full: each picture painted, where, and the box of pixels it touches
-    this.res = 1;                        // painted pixels to one picture pixel (painted people only: see setResolution)
-    this.opening = null;                 // painted people: a scene opening, its first pictures still being painted (see opened)
-    this.gone = null;                    // painted people: the last one taken off the stage, and their last picture (see remove)
-  }
-
-  /**
-   * Painted people (?people=painted) are painted at the stage's real size on the screen: 1, 2 or 3 painted pixels to one
-   * picture pixel (the scene view measures the stage and says which: js/engine/scene.js). The layer itself is then that
-   * many times 800 x 600, and everything else on it (the painted cut-outs, the props, the moving things) is laid on it
-   * with hard pixels, k by k: exactly as the style sheet shows the painting under them, so the two still meet pixel for
-   * pixel. Without painted people this does nothing, and the layer is the 800 x 600 it always was.
-   */
-  setResolution(k) {
-    if (!paintedPeople) return;
-    // Below 2 times the stage is shown smoothly: from 1.5 the layer is made twice the size and the browser brings it down
-    // smoothly, so nothing is lost. From 2 times it is shown with hard pixels, and hard pixels can only repeat a pixel,
-    // never blend two, so the layer is never made bigger than the stage is shown (3 only from 3 times); between, the
-    // people are blown up a little with hard pixels, as the painting under them is. (A stage 1199.98 screen pixels wide
-    // is 1.5 times 800, as one 1599.98 wide is twice: hence 1.48 and 2.98.)
-    k = k >= 2.98 ? 3 : k >= 1.48 ? 2 : 1;
-    if (k === this.res) return;
-    this.res = k;
-    budget = BUDGET * (k === 1 ? 1 : k === 2 ? 2.5 : 4);                // (pictures of people at k times the pixels: room for as many of them)
-    this.canvas.width = W * k; this.canvas.height = H * k;
-    this.ctx.imageSmoothingEnabled = false;
-    this.last = ""; this.shots = [];                                    // (everything is painted again, at the new size)
   }
 
   get(id) { return this.items.get(id); }
-  /** Painted people: how many of their pictures are still being painted (0: everyone shows as they should). */
-  get painting() { return painter.pending.size; }
   add(sprite) {
     if (this.items.has(sprite.id)) console.warn(`Two things on the stage are called "${sprite.id}". The second has taken the place of the first.`);
     this.items.set(sprite.id, sprite);
     return sprite;
   }
-  addFigure(id, kind, x, y, scale = 1) {
-    const f = this.add(new Figure(id, kind).place(x, y, scale));
-    f.cast = this;                                                        // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
-    if (this.gone && this.gone.id === id && this.gone.frame === frameNo) f.inherit = this.gone.pic;   // (painted people: someone put in place of someone else, there and then, shows the other's last picture till their own is painted)
-    return f;
-  }
+  addFigure(id, kind, x, y, scale = 1) { const f = this.add(new Figure(id, kind).place(x, y, scale)); f.cast = this; return f; }      // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
   addThing(id, kind, x, y, scale = 1, options) { return this.add(new Thing(id, kind, options).place(x, y, scale)); }
   /** A painted cut-out from a scene's `planes`. Its pictures are asked for at once; load() says when they are here. */
   addCutout(id, spec) {
@@ -824,54 +577,13 @@ export class Cast {
   /** A painted sprite for a cutscene to move about: addPicture("wagon", { src | frames, fps, foot: [x, y] }, x, y, scale).
       It has place, fade and flag like a prop. `foot` is the point of the picture that is put at (x, y); scale is about that point. */
   addPicture(id, spec, x = 0, y = 0, scale = 1) { return this.addCutout(id, spec).place(x, y, scale); }
-  remove(id) {
-    const s = this.items.get(id);
-    if (s && s.up && s.up.sprite) this.items.delete(s.up.sprite.id);      // (someone up from their seat takes it with them)
-    if (paintedPeople && s instanceof Figure && s.shown && s.shown.pic) this.gone = { id, pic: s.shown.pic, frame: frameNo };
-    this.items.delete(id);
-  }
-  clear() {
-    this.items.clear(); this.last = ""; this.shots = []; this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    if (paintedPeople) { painter.forget(); this.gone = null; this.opening = null; }
-  }
+  remove(id) { const s = this.items.get(id); if (s && s.up && s.up.sprite) this.items.delete(s.up.sprite.id); this.items.delete(id); }     // (someone up from their seat takes it with them)
+  clear() { this.items.clear(); this.last = ""; this.shots = []; this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); }
 
   /** The painted cut-outs on the stage. */
   cutouts() { return [...this.items.values()].filter((s) => s instanceof Cutout); }
-  /** Resolves when every picture any cut-out here can show has arrived (or has failed: it never rejects). With painted
-      people, when the first picture of everyone on the stage is painted too (see opened). */
-  load() {
-    const pictures = Promise.all(this.cutouts().flatMap((s) => s.paths()).map(fetchPicture));
-    return paintedPeople ? Promise.all([pictures, this.opened()]) : pictures;
-  }
-  /**
-   * Painted people: the scene is opening, behind its fade. Its people are put on the stage in the same go as it is
-   * shown (game.js, enterScene), so a moment from now they are all here; the painter then paints the picture each one
-   * first shows (Figure.first), and this resolves when they are all painted: the scene fades in on a finished stage,
-   * with nothing painted on the game's own thread. Meanwhile anyone not painted yet is not shown at all (it is dark).
-   * Five seconds at most: whoever is not painted by then is painted here when next shown.
-   */
-  opened() {
-    if (!painter.ready()) return Promise.resolve();                      // (no painter, or not in this colour key: they are painted here)
-    const token = (this.opening = { since: performance.now() });
-    return new Promise((resolve) => {
-      const people = () => [...this.items.values()].filter((s) => s instanceof Figure && !s.hidden && s.opacity > 0);
-      let keys = null, again = true;
-      const check = () => {
-        if (!keys) keys = people().flatMap((s) => s.first());
-        if (this.opening === token && !painter.failed && performance.now() - token.since < 5000) {
-          if (keys.some((key) => painter.pending.has(key))) { setTimeout(check, 20); return; }
-          if (again) {                                                   // then what they show by now (a prayer under way, a step), if that is not painted yet
-            again = false;
-            keys = people().map((s) => s.prepaint(s.frame(this.calm))).filter(Boolean);
-            if (keys.length) { setTimeout(check, 20); return; }
-          }
-        }
-        if (this.opening === token) this.opening = null;
-        resolve();
-      };
-      setTimeout(check, 0);
-    });
-  }
+  /** Resolves when every picture any cut-out here can show has arrived (or has failed: it never rejects). */
+  load() { return Promise.all(this.cutouts().flatMap((s) => s.paths()).map(fetchPicture)); }
   /** The story has changed: have each cut-out read its `when` and `state` again. */
   refresh(g) { for (const s of this.cutouts()) s.refresh(g); }
 
@@ -898,7 +610,6 @@ export class Cast {
    * walking past a wagon costs a patch the size of the lead, not a screenful of palms and awnings sixty times a second.
    */
   update(dt) {
-    frameNo++;
     const list = this.order();
     let sig = "";
     const shots = [];
@@ -909,10 +620,10 @@ export class Cast {
       // A picture at its own size goes down on whole pixels, hard-edged. One shown at another size says how big
       // (w, h). A painted one is then drawn smoothly, and placed to a fraction of a pixel so that it glides; a
       // drawn one (`hard`: somebody walking) keeps its hard pixels and stays on whole ones.
-      const sized = pic.w != null, soft = sized && !pic.hard, snap = pic.snap || 8;               // (a painted person is placed to the painted pixel)
-      const x = soft ? Math.round((s.x - pic.ox) * snap) / snap : sized ? Math.round(s.x - pic.ox) : Math.round(s.x) - Math.round(pic.ox);
-      const y = soft ? Math.round((s.y - pic.oy) * snap) / snap : sized ? Math.round(s.y - pic.oy) : Math.round(s.y) - Math.round(pic.oy);
-      const w = soft ? Math.round(pic.w * snap) / snap : sized ? pic.w : pic.canvas.width, h = soft ? Math.round(pic.h * snap) / snap : sized ? pic.h : pic.canvas.height;
+      const sized = pic.w != null, soft = sized && !pic.hard;
+      const x = soft ? Math.round((s.x - pic.ox) * 8) / 8 : sized ? Math.round(s.x - pic.ox) : Math.round(s.x) - Math.round(pic.ox);
+      const y = soft ? Math.round((s.y - pic.oy) * 8) / 8 : sized ? Math.round(s.y - pic.oy) : Math.round(s.y) - Math.round(pic.oy);
+      const w = soft ? Math.round(pic.w * 8) / 8 : sized ? pic.w : pic.canvas.width, h = soft ? Math.round(pic.h * 8) / 8 : sized ? pic.h : pic.canvas.height;
       const key = `${nameOf(pic.canvas)}:${x},${y},${w},${h},${s.opacity.toFixed(2)}`;
       // box: the pixels it can touch, [left, top, right, bottom). (Smoothing can spill a pixel over the edge.)
       const box = soft ? [Math.floor(x) - 1, Math.floor(y) - 1, Math.ceil(x + w) + 1, Math.ceil(y + h) + 1] : [x, y, x + w, y + h];
@@ -920,7 +631,7 @@ export class Cast {
       sig += key + ";";
     }
     if (sig === this.last) return;
-    const k = this.res, W = this.canvas.width / k, H = this.canvas.height / k, ctx = this.ctx;
+    const W = this.canvas.width, H = this.canvas.height, ctx = this.ctx;
     const dirty = changed(this.shots, shots, W, H);
     this.last = sig;
     this.shots = shots;
@@ -929,28 +640,6 @@ export class Cast {
       if (s.pic.w == null) ctx.drawImage(s.pic.canvas, s.x, s.y);
       else { ctx.imageSmoothingEnabled = !s.pic.hard; ctx.drawImage(s.pic.canvas, 0, 0, s.pic.sw, s.pic.sh, s.x, s.y, s.w, s.h); ctx.imageSmoothingEnabled = false; }
     };
-    if (k !== 1) {
-      // (painted people at k painted pixels to a picture pixel: the boxes are cleared and clipped on whole pixels of the
-      //  layer, and everything is laid on it k times its picture size)
-      if (!dirty) {
-        ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        ctx.setTransform(k, 0, 0, k, 0, 0);
-        for (const s of shots) paint(s);
-      } else if (dirty.length) {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.beginPath();
-        for (const [l, t, r, b] of dirty) ctx.rect(l * k, t * k, (r - l) * k, (b - t) * k);
-        ctx.clip();
-        for (const [l, t, r, b] of dirty) ctx.clearRect(l * k, t * k, (r - l) * k, (b - t) * k);
-        ctx.setTransform(k, 0, 0, k, 0, 0);
-        for (const s of shots) if (dirty.some(([l, t, r, b]) => s.box[0] < r && l < s.box[2] && s.box[1] < b && t < s.box[3])) paint(s);
-        ctx.restore();
-      }
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.globalAlpha = 1;
-      return;
-    }
     if (!dirty) {                                         // too much has changed to be worth picking over: paint the lot
       ctx.clearRect(0, 0, W, H);
       for (const s of shots) paint(s);
@@ -1006,50 +695,19 @@ let named = 0;
 const nameOf = (canvas) => names.get(canvas) || (names.set(canvas, ++named), named);
 
 // ---------- head-and-shoulders portraits, for the buttons that switch between leads ----------
-const faces = new Map(), addresses = new Map();
+const faces = new Map();
 /**
- * Painted people: the address of someone's portrait (an object URL, or a data URL), as a promise; "" for nobody. A
- * painted portrait is a big picture (256 pixels square, a quarter of a second's painting or more), so it is painted by
- * the painter, after the pictures a scene is waiting for, and the game's own thread never waits for it. Only when the
- * painter cannot (there is none, or it is in another colour key) is it painted here (portrait, below).
+ * A picture of someone's head and shoulders, facing the viewer, `px` pixels square: drawn pixel by pixel at that size
+ * (rig.js portraitOf: the face drawn feature by feature with as many pixels as there are), never a small picture blown
+ * up. The interface asks for the size it shows them at on the screen (ui.js), so they are crisp at any size. Never in a
+ * scene's colour key (the paints: look.js): they belong to the interface. Drawn once for each size and kept.
  */
-export function portraitAddress(kind) {
-  if (!addresses.has(kind)) addresses.set(kind, new Promise((resolve) => {
-    const here = () => { const c = portrait(kind); resolve(c ? c.toDataURL() : ""); };
-    if (!people[kind]) return resolve("");
-    if (!paintedPeople || !painter.ready()) return here();
-    setTimeout(() => {                                                   // (after whatever a scene opening now asks for: Cast.opened)
-      if (!painter.ready()) return here();
-      painter.ask(`portrait|${kind}`, { kind, portrait: 256 }, "soon", (msg) => {
-        if (msg.error || msg.stale || !(msg.blob || msg.data)) return here();
-        if (msg.blob) return resolve(URL.createObjectURL(msg.blob));
-        const c = document.createElement("canvas");
-        c.width = msg.w; c.height = msg.h; c.getContext("2d").putImageData(new ImageData(msg.data, msg.w, msg.h), 0, 0);
-        resolve(c.toDataURL());
-      });
-    }, 0);
-  }));
-  return addresses.get(kind);
-}
-/** A small picture of someone's head, facing the viewer. Drawn once and kept. (Painted people: a painted head and
-    shoulders, turned a little, 256 pixels square: several times the size it is shown at, and shown smoothly: ui.js.) */
-export function portrait(kind) {
-  if (faces.has(kind)) return faces.get(kind);
+export function portrait(kind, px = 42) {
+  const key = kind + "|" + px;
+  if (faces.has(key)) return faces.get(key);
   const spec = people[kind];
   if (!spec) return null;
-  if (paintedPeople) { const canvas = unkeyed(() => portraitOf(spec, 256).toCanvas()); faces.set(kind, canvas); return canvas; }      // (never in a colour key)
-  const size = Math.round(21 / (spec.dim.headR[1] * 2));            // every head comes out about 21 pixels tall, whoever it belongs to
-  const sf = drawFigure(spec, poses.stand(spec, 0), 0, size);
-  const { w, h, m, p: part } = sf, head = new Set([PARTS.HEAD, PARTS.HAIR, PARTS.HAT]);
-  let x0 = w, x1 = 0, y0 = h, y1 = 0;
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    if (!m[y * w + x] || !head.has(part[y * w + x])) continue;
-    if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
-  }
-  const side = Math.max(x1 - x0 + 1, y1 - y0 + 5) + 2;               // a square with a little of the shoulders in it
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = side;
-  canvas.getContext("2d").drawImage(sf.toCanvas(), -(Math.round((x0 + x1 + 1) / 2) - side / 2), -(y0 - 1));
-  faces.set(kind, canvas);
+  const canvas = withoutKey(() => portraitOf(spec, px).toCanvas());
+  faces.set(key, canvas);
   return canvas;
 }

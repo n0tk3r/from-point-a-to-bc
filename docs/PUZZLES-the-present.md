@@ -704,9 +704,10 @@ Needs:        nothing
 Setup:        One witness: an old man who has watched this road for forty years and tells everybody he
               did not see nothing. Men in gray suits have already been asking.
 Wrong tries:  Little Sister asks          -> "Mister! Did you see my daddy? He's THIS tall, he has a
-                                             moustache, and he's EARLY." "Lemonade's a dollar, little
-                                             miss. Stories are extra." "I don't HAVE a dollar. I have a
-                                             loose tooth. But it's not for sale. It's waiting for Daddy."
+                                             scratchy beard, and he's EARLY." "Lemonade's a dollar,
+                                             little miss. Stories are extra." "I don't HAVE a dollar. I
+                                             have a loose tooth. But it's not for sale. It's waiting for
+                                             Daddy."
               Big Sister asks             -> she cross-examines him. "That is a double negative. Technically,
                                              you saw something." "Technically, I'm closed."
               Mom: "A sensible silver sedan."         -> "Nothing sensible came down this road yesterday."

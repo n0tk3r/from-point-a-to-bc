@@ -35,6 +35,7 @@ import * as castKit from "./cast.js";
 import { picture as fetchPicture, got } from "./assets.js";
 import { scaleAt, DEPTH } from "./walk.js";
 import { W } from "./grid.js";
+import { keyHex, keyId } from "../art/look.js";
 
 const { Figure, Cutout } = castKit;
 const TICK = 1000 / 30;                      // the finest step anything here moves by: thirty times a second
@@ -1357,6 +1358,7 @@ export class Effects {
   add(spec, quiet = false) {
     if (!quiet && this.owner !== this.game.scene) this.drop(this.game.scene);
     if (!spec || typeof spec !== "object") return null;
+    spec = keyedSpec(spec);                                         // its colours in the paints of the scene (look.js)
     const Kind = KINDS[spec.type];
     if (!Kind) { console.warn(`A moving thing of a kind the engine does not know: "${spec.type}" (${this.place || "added by a script"}). The kinds are ${Object.keys(KINDS).join(", ")}.`); return null; }
     let e;
@@ -1402,4 +1404,31 @@ export class Effects {
     for (const e of this.list) { if (!e.shown) continue; sprites += e.sprites.filter((s) => !s.hidden).length; specks += e.drawn; }
     return { things: this.list.length, shown: this.list.filter((e) => e.shown).length, sprites, specks, granted: this.granted, deferred: this.deferred };
   }
+}
+
+// ---------------------------------------------------------------- the paints
+// A moving thing's colours go through the key of the scene, as the painted pictures and the people do (js/art/look.js;
+// docs/DESIGN.md, "The paints"): those its description gives, and the engine's own (the defaults in the kinds above)
+// where it gives none. Its painted frames come keyed already (tools/paint/postimp_key.py).
+const DEFAULTS = {
+  smoke: { color: "#d9d5cd" },
+  flame: { color: "#fff0b3", edge: "#ff9a2e", core: "#fffbea", glowColor: "#ffb44d" },
+  embers: { color: "#ffb347", cool: "#7a1d08", glowColor: "#ff8a3d" },
+  ripples: { color: "#ffffff", trough: "#345c70" },
+  stream: { color: "#b9d6e4", light: "#f4fbff" },
+  shimmer: { color: "#fff4d6" },
+};
+/** A moving thing's description with its colours in the key of the scene; the same object when no key is in use. */
+function keyedSpec(spec) {
+  if (!keyId()) return spec;
+  const out = { ...spec }, own = DEFAULTS[spec.type] || {};
+  for (const k of ["color", "edge", "core", "cool", "light", "trough", "glowColor"]) {
+    let v = spec[k];
+    if (v === false || v === "none") continue;
+    if (v === undefined) v = own[k];
+    if (spec.type === "birds" && k === "color" && v === undefined && !spec.frames) v = "#2b2724";      // birds drawn as flyers
+    if (typeof v !== "string") continue;
+    out[k] = keyHex(v);
+  }
+  return out;
 }

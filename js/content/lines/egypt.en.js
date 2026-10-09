@@ -540,7 +540,7 @@ export const lines = {
   "item.shade.look": ["dad", "The windshield shade. Shiny side out. Unlike the map, it folds the way it came."],
   "item.carmirror.look": ["dad", "The door mirror. Things in it are closer than they appear. I wish that worked on home."],
   "item.sunglasses.look": ["dad", "Sunglasses. They make everything look like late afternoon. I do my best work in late afternoon."],
-  "item.coppermirror.look": ["dad", "A hand mirror of polished copper. I look like a penny with a moustache."],
+  "item.coppermirror.look": ["dad", "A hand mirror of polished copper. I look like a penny with a beard."],
   "item.chicken.look": ["dad", "General Feathers. One blue eye, five times through the wash, a medal for bravery. I do what she says."],
 
   // ================= hints: one for each puzzle, in Dad's own voice =================

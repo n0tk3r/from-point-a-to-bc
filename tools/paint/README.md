@@ -4,14 +4,15 @@ Every background in the game, every cut-out that stands in one, and every invent
 Python scripts in this folder. Nothing here runs in the browser: the scripts write PNG files, and the PNG files
 are what the game shows (`art/scenes/<scene>/`, `art/items/`).
 
-They need Python 3 with `numpy` and `Pillow`, and nothing else. The one exception is `people_on.py` (and the
-scripts that call it), which needs the game running and Playwright: see "Painting a room".
+They need Python 3 with `numpy` and `Pillow`, and nothing else. The exceptions: `people_on.py` (and the scripts
+that call it) needs the game running and Playwright (see "Painting a room"), and the paints (`postimp_key.py`, which
+`install.py` runs) need OpenCV as well (`pip install opencv-python-headless`): see "The paints".
 
 ```
 cd tools/paint
 python3 rome_street.py fast     # a quick look: skips the brush pass (about 15 seconds)
 python3 rome_street.py          # the full passes (a minute or two): writes out/rome-street/
-python3 install.py rome-street  # copies out/rome-street/ into art/scenes/rome-street/
+python3 install.py rome-street  # keys out/rome-street/ in the game's paints and copies it into art/scenes/rome-street/
 python3 ../stamp.py             # then stamp the pages, as after any change (see docs/DESIGN.md)
 ```
 
@@ -45,6 +46,42 @@ Pictures are float arrays (height, width, 3), values 0 to 1. Each scene script w
 3. **details()** restates every hard thing crisply over the brushwork, then adds the small crisp things: joints,
    planks, leaves, handles, lettering, highlights, stones on the ground. Most of the work is here.
 4. **finish()** adds pigment grain and reduces the picture to a limited palette with speckle: an 8-bit PNG.
+
+## The paints
+
+Every scene is mixed from one box of paints in a key for its era and hour (the look chosen on 9 October:
+docs/DESIGN.md, "The paints"). A scene's script paints it as before, into `out/`; `install.py` then keys it on the
+way into `art/`, at the game's strength, 50: the picture is kept exactly (every shape, edge and detail), and its colours
+are moved toward the box (shadows a colour instead of grey or brown, lights warmed, a few short marks laid along the
+forms). Every cut-out keeps its exact edge, the frames of things that move keep their shapes, and a scene's files
+share one palette of 255 colours.
+
+- `postimp_paints.py`: the 23 paints, the six keys and every number, and `SCENE_KEY`, the table of which scene uses
+  which key (one table: the game reads it from `js/art/look-data.js`).
+- `postimp_plans.py`: each scene's plan: which of its files are cut-outs (in the scene file's order), other states,
+  unions and frames. Every picture file of a scene must be in its plan, so nothing goes in unkeyed by mistake.
+- `postimp_key.py`: keys a scene (`install.py` calls it); `--js` writes `js/art/look-data.js` for the game's people
+  and moving things (after adding a scene or changing a key); `--check` checks every scene's pictures against
+  `postimp_keyed.json`, which notes what each installed file was keyed from.
+- `postimp_look.py` (the keying itself) and `postimp_oklab.py` (colour arithmetic).
+
+A new scene, or a repainted one:
+
+```
+python3 rome_forum.py              # paints out/rome-forum/, as ever
+#   give it a plan in postimp_plans.py, and its key in postimp_paints.SCENE_KEY
+#   (outdoors: its era's key; a room lit by lamps: "lamp-interior")
+python3 install.py rome-forum      # keys it at 50 and installs it
+python3 postimp_key.py --js        # (a new scene or key) the game's copy of the table
+python3 postimp_key.py --check     # every scene keyed, the table current
+python3 ../stamp.py
+```
+
+Never key a picture twice: `install.py` always starts from the painting in `out/`, and `--check` says if a file in
+`art/` was changed after it was keyed. (`python3 install.py --raw <scene>` installs a painting without the paints, to
+compare; never leave it so.) The paintings as they were before the paints are in the repository's history (before 9
+October). The pictures in the game were keyed with numpy 2.5.3, Pillow 12.3.0 and OpenCV 5.0.0; another version of
+OpenCV may differ in a few pixels.
 
 ## People are not painted in
 
@@ -244,7 +281,9 @@ The library, shared by every scene:
 | `persp.py` | `Camera`: true perspective tied to the game's depth numbers; paved floors |
 | `letter.py` | lettering for signs and inscriptions, with the game's own Koine Road font or Pillow's plain face |
 | `comp.py` | lays a scene's finished pictures together to look at |
-| `install.py` | copies a painted scene into `art/` |
+| `install.py` | keys a painted scene in the game's paints and copies it into `art/` |
+| `postimp_key.py`, `postimp_plans.py`, `postimp_paints.py`, `postimp_look.py`, `postimp_oklab.py` | the paints: see "The paints" |
+| `postimp_keyed.json` | what each installed picture was keyed from, and what it became (`postimp_key.py --check`) |
 
 For the rooms of the house (see "Painting a room"):
 

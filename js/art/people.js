@@ -17,10 +17,6 @@
 //   sit.drawn  their seat is drawn with them (a stool, a lawn chair): it stays where it is when they get up
 //   riseMs     how long getting up takes them, in ms, if not the usual
 //   fidgets    their own small movements, besides everyone's: { stand: [...], sit: [...] } (`only: true`: theirs and no others)
-//   paint      how they are painted when people are painted (paint.js; the address switch ?people=painted):
-//              face: the painted face (eye: size and kind, iris colour, brows, lips, smile, blush, lashes: see faceOf),
-//              shape: the face's own measurements changed a little for the painting (eyeY, mouthY, jaw, chin, nose),
-//              head: a head this much bigger than the skeleton's, its top where it was (a small child's)
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -44,15 +40,35 @@ const WHITE = ramp("#ffffff", "#f0eee6", "#bfbcae", "#858275");
  *   burn    how far a sideburn comes down in front of each ear
  *   crown   a bald patch on top: its size (0 for none)
  *   top     for a bald head with a fringe: the height above which nothing grows
+ *   temples the hairline as a face shows it: level across the middle of the forehead (out to `brow` radians from the
+ *           middle, measured round the head), then down round the corners of the forehead (`temple` at the corner)
+ *           to the level over the ears (`side`), which it reaches `temples` radians round. Seen from in front, the
+ *           hair then frames the forehead and comes down the temples to the ears, as hair does, instead of sitting
+ *           on top of it. (Without it, the hairline is set by how far forward a point is, which from in front leaves
+ *           the whole width of the forehead bare up to the corners.)
  */
-const hairline = ({ front = 0.60, temple = 0.45, side = 0.10, back = -0.50, sweep = 0, recede = 0, burn = 0, crown = 0, top = 9 } = {}) => (x, y, z) => {
+const ease = (t) => t * t * (3 - 2 * t);
+const hairline = ({ front = 0.60, temple = 0.45, side = 0.10, back = -0.50, sweep = 0, recede = 0, burn = 0, crown = 0, top = 9, brow = 0.50, temples = 0 } = {}) => (x, y, z) => {
   if (top < 9 && (z > 0.34 || y > top + 0.25 * Math.max(0, -z))) return false;      // a bald head: only a fringe is left, round the sides and the back
-  let h = z > 0.3 ? front + (temple - front) * (1 - (z - 0.3) / 0.7) : z > 0 ? temple + (side - temple) * (1 - z / 0.3) : side + (back - side) * -z;
+  let h;
+  if (temples > 0 && z > 0) {
+    const a = Math.abs(Math.atan2(x, z)), am = (brow + temples) / 2;             // round the head from the middle of the forehead: 0 there, π/2 over the ears
+    h = a <= brow ? front : a < am ? front + (temple - front) * ease((a - brow) / (am - brow)) : a < temples ? temple + (side - temple) * ease((a - am) / (temples - am)) : side;
+  } else h = z > 0.3 ? front + (temple - front) * (1 - (z - 0.3) / 0.7) : z > 0 ? temple + (side - temple) * (1 - z / 0.3) : side + (back - side) * -z;
   if (z > 0) h -= sweep * Math.max(0, x);
   if (recede && z > 0.35) { const k = 1 - Math.min(1, Math.abs(Math.abs(x) - 0.50) / 0.28); if (k > 0) h += recede * k; }
   if (burn && z > 0.02 && z < 0.42 && Math.abs(x) > 0.80) h -= burn * (1 - Math.abs(z - 0.22) / 0.20);
   if (crown && y > 1 - crown && Math.hypot(x, z + 0.1) < crown * 1.5) return false;
   return y > h;
+};
+
+/** Curly hair: little rings of shade all over it, fixed to the head so they turn and nod with it. `n`: about how many
+    rings fit round the head. (Head directions as `where` has them.) */
+const curl = (x, y, z, n) => {
+  if (y > 0.62) return false;                                           // (smooth on the crown, where it is combed)
+  const a = Math.atan2(x, z) * n / Math.PI, b = (y + 1) * n * 0.9, i = Math.floor(a), j = Math.floor(b), u = a - i - 0.5, v = b - j - 0.5 + ((i & 1) ? 0.5 : 0) % 1;
+  const r = Math.hypot(u, v - Math.round(v));
+  return r > 0.28 && r < 0.46 && v - Math.round(v) > -0.1;
 };
 
 const FLOWERS = [
@@ -61,28 +77,32 @@ const FLOWERS = [
   ramp("#62d2bf", "#2f9c8f", "#1f6f66", "#134843"),      // leaves
 ];
 
-// ---------- Dad: vacation shirt, shorts, socks and sandals ----------
-const DAD_HAIR = ramp("#9a6a40", "#70482a", "#4d301a", "#2f1d10");
+// ---------- Dad: vacation shirt, shorts, socks and sandals; his hair slicked back to the side, green eyes, stubble, a short beard ----------
+const DAD_HAIR = ramp("#a87a4c", "#70482a", "#4d301a", "#2f1d10", { shine: true });      // (combed back with something in it: it catches the light)
+const DAD_BEARD = ramp("#8a6040", "#6a4428", "#4d301a", "#2f1d10");
+const STUBBLE = ramp("#e6c2a2", "#d8b08e", "#b08268", "#7a5440");          // a day or two's growth over the skin
+const DAD_PART = ramp("#70482a", "#4d301a", "#352113", "#2f1d10");
 export const dad = {
   name: "Dad", height: 1.0,
   dim: { ...ADULT, headR: [0.056, 0.066, 0.063], shoulderW: 0.104, trunkTop: [0.108, 0.070], trunkLow: [0.106, 0.080], bellyFwd: 0.016,
          hipY: 0.490, thigh: 0.234, shin: 0.222, legR: [0.053, 0.034, 0.023], armR: [0.032, 0.026, 0.019], handR: 0.024 },
   skin: SKIN,
-  hair: { mat: DAD_HAIR, bulk: [1.06, 1.10, 1.07], where: hairline({ front: 0.62, temple: 0.50, side: 0.16, back: -0.46, sweep: 0.14, recede: 0.10, burn: 0.34 }), puffs: [[-0.22, 0.78, 0.50, 0.62, 0.30, 0.52]] },
-  face: { brows: DAD_HAIR.tones[2], moustache: DAD_HAIR, eye: "#2a1a12", jaw: 0.92, chin: 0.54, nose: 1.1 },
+  hair: { mat: DAD_HAIR, bulk: [1.05, 1.10, 1.07], where: hairline({ front: 0.56, temple: 0.36, side: 0.16, back: -0.46, recede: 0.08, burn: 0.34, temples: 1.15 }),
+          puffs: [[0.14, 0.80, 0.04, 0.80, 0.30, 0.84]],                     // combed back from the forehead and over to his left: high in front, smooth behind
+          texture: (x, y, z) => (Math.abs(x + 0.40) < 0.06 && y > 0.40 && z > -0.30 ? DAD_PART : undefined) },      // the parting, on his right
+  face: { eyes: { at: 1, full: ["--", "#i"], thin: ["-", "#"] }, iris: "#5f9140", eye: "#203018", lid: "#4a3020", brows: DAD_HAIR.tones[2], brow: { full: [0, 0, 0] },
+          short: { mat: DAD_BEARD, stubble: STUBBLE, from: 0.55, chin: 0.90, side: 0.40 }, lip: "#b06a58", noseShade: true,      // stubble, and a short beard along the jaw and over the chin: no moustache
+          jaw: 0.92, chin: 0.54, nose: 1.1, eyeX: 0.43, ear: 1.2, earOut: 1.03, big: { eyeW: 0.46, eyeH: 0.44 } },
   top: { mat: ramp("#ffe582", "#f4c043", "#cf9226", "#8f5d18"), sleeves: 0.62, hem: true, open: true, collar: true, pattern: FLOWERS },
   bottom: { kind: "shorts", mat: ramp("#a9b381", "#7f8d5c", "#59663f", "#39442b"), len: 0.72 },
   socks: { mat: WHITE, from: 0.52, stripes: [ramp("#f08a70", "#d2452f", "#a12f22", "#6e1f19"), ramp("#7fb2e6", "#3f79c2", "#2b5590", "#1b3760")] },
   shoes: { kind: "sandals", mat: ramp("#a8744a", "#7d5030", "#553521", "#332015"), sole: ramp("#6b4a30", "#4d3320", "#332015", "#1f130c") },
   gestures: [0, 1, 2, 3],                               // a nod, a point, a shrug, a hand on the hip
   pray: { high: -0.40, bow: 0.34 },                     // his big hands folded low in front of him, his head well down
-  // painted: a friendly face, blue-grey eyes, strong brows, the moustache, and a smile he cannot quite keep down
-  paint: { face: { eye: { w: 0.215, h: 0.088, iris: 0.50, lid: 0.12 }, iris: "#5d7c9a", browUp: 0.058, browThick: 0.080, browArch: 0.030, stubble: 0.5,
-                   lip: "#b0675a", lipA: 0.55, upper: 0.030, lower: 0.058, smile: 0.60, mouthW: 0.30, blush: 0.07, cheer: 0.30 } },
 };
 
-// ---------- the Son: red cap, blue hoodie, backpack. Zany: he bounces, and his hands never stop. ----------
-const SON_HAIR = ramp("#7a5636", "#553a24", "#382516", "#20140b");
+// ---------- the Son: blonde, blue eyes, red cap, blue hoodie, backpack. Zany: he bounces, and his hands never stop. ----------
+const SON_HAIR = ramp("#fbe7a0", "#e9c867", "#bf9640", "#83611f");          // blonde
 const CAP = ramp("#ff7a62", "#de4a33", "#a93224", "#72201a");
 const PACK = ramp("#b39bf5", "#8463d8", "#5f44a8", "#3d2b72");
 const HOODIE = ramp("#93dcf2", "#4fc0e2", "#2e90b6", "#1f6483");
@@ -90,8 +110,10 @@ export const son = {
   name: "Son", height: 0.74,
   dim: CHILD,
   skin: SKIN,
-  hair: { mat: SON_HAIR, bulk: 1.05, where: hairline({ front: 0.34, temple: 0.26, side: 0.02, back: -0.42 }) },
-  face: { eyes: "bright", eye: "#2a1a12", brows: SON_HAIR.tones[1], lip: "#a5523f", eyeY: -0.06, mouthY: -0.70, jaw: 0.84, chin: 0.46, chinY: -0.80, nose: [0.65, 0.65, 0.75], smile: 1, mouthW: 0.26 },
+  hair: { mat: SON_HAIR, bulk: 1.05, where: hairline({ front: 0.12, temple: 0.08, side: 0.0, back: -0.44, temples: 1.15 }) },      // a blonde mop: a fringe shows under the peak of his cap
+  face: { eyes: { at: 0, full: ["#h", "ii"], thin: ["#", "i"] }, iris: "#4a8ad0", eye: "#1c3358", brows: SON_HAIR.tones[2], brow: { full: [0, -1, -1] }, blush: "#f3a68c",
+          lip: "#a5523f", eyeX: 0.43, eyeY: -0.06, mouthY: -0.70, ear: 1.15, earOut: 1.03, jaw: 0.84, chin: 0.46, chinY: -0.80, nose: [0.65, 0.65, 0.75], smile: 1, mouthW: 0.26,
+          big: { eyeW: 0.48, eyeH: 0.52, arch: 0.30, browUp: 0.70 } },
   top: { mat: HOODIE, sleeves: 2, hem: true },
   bottom: { kind: "shorts", mat: ramp("#5a668f", "#3c4563", "#293049", "#1a1f31"), len: 0.80 },
   socks: { mat: WHITE, from: 0.72 },
@@ -100,9 +122,6 @@ export const son = {
   walk: { swing: 0.50, arm: 0.58, elbow: 0.95, pump: 0.30, lean: 0.10, lift: 1.3, bob: 0.05, wag: 0.10, sway: 0.020 },   // a bounce, fists pumping, head going from side to side
   gestures: [1, 4, 9, 2],                               // a point, both arms up, both hands waving, a shrug
   pray: { high: 0.06, bow: 0.32, out: 0.012 },          // his cap off and held in both hands in front of him (see below), for once standing still
-  // painted: bright blue eyes wide open, brows up, a grin from ear to ear
-  paint: { face: { eye: { w: 0.240, h: 0.118, iris: 0.52 }, iris: "#3f78b8", browUp: 0.092, browThick: 0.062, browArch: 0.040,
-                   lip: "#b8665a", lipA: 0.45, smile: 1.0, mouthW: 0.30, blush: 0.12, expressive: 1.3, cheer: 0.40 } },
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, tw, J, parts, pose }) {
     const hr = d.headR;
     if ((pose.praying || 0) > 0.5) {
@@ -112,7 +131,7 @@ export const son = {
       ball(add(at, J.torso([0, -0.036, 0.006])), [0.038, 0.013, 0.018], shifted(CAP, 1), { part: parts.HELD }, tw);       // its peak, hanging down
     } else {
     // cap: a dome over the top of the head and a peak out in front
-    ball(headPt([0, 0.006, 0]), [hr[0] * 1.12, hr[1] * 1.10, hr[2] * 1.12], CAP, { part: parts.HAT, fn: (ux, uy, uz) => { const o = onHead(ux, uy, uz); return o[1] > 0.36 - 0.06 * o[2] ? undefined : null; } }, hy);
+    ball(headPt([0, 0.006, 0]), [hr[0] * 1.12, hr[1] * 1.10, hr[2] * 1.12], CAP, { part: parts.HAT, fn: (ux, uy, uz) => { const o = onHead(ux, uy, uz); return o[1] > (o[2] > 0 ? 0.30 - 0.10 * o[2] : 0.30 + 0.15 * o[2]) ? undefined : null; } }, hy);
     ball(hp(0, 0.52, 1.44), [0.056, 0.010, 0.046], shifted(CAP, 1), { part: parts.HAT }, hy);
     }
     // hood bunched behind the neck
@@ -126,8 +145,11 @@ export const son = {
   },
 };
 
-// ---------- Mom: an emerald dress, pearls, her hair up. Classy: she stands with her hands clasped and never hurries. ----------
-const MOM_HAIR = ramp("#c47a48", "#96502c", "#683319", "#40200f");
+// ---------- Mom: an emerald dress, pearls, long dark brown curls. Classy: she stands with her hands clasped and never hurries. ----------
+const MOM_HAIR = ramp("#86563a", "#5a3520", "#3d2314", "#24140b");          // dark brown
+const MOM_CURL = shifted(MOM_HAIR, 1);
+/** Curls on a fall of hair: rings of shade fixed to it. u: down the fall (in curls), a: across it (-1 to 1), n: curls across. */
+const curls = (u, a, n) => { const v = (a + 1) * n * 0.5 + (Math.floor(u) % 2) * 0.5, du = u - Math.floor(u) - 0.5, dv = v - Math.floor(v) - 0.5, r = Math.hypot(du, dv * 1.1); return r > 0.26 && r < 0.46 && du > -0.15; };
 const EMERALD = ramp("#63d3a4", "#2aa27a", "#1b7459", "#104a3a");
 const PEARL = ramp("#ffffff", "#f6efe2", "#d2c8b4", "#9c937f");
 const LEATHER = ramp("#d9a877", "#b07a4a", "#7e5430", "#50341d");
@@ -135,8 +157,11 @@ export const mom = {
   name: "Mom", height: 0.93,
   dim: { ...WOMAN, bust: [0.002, 0.030], neckR: 0.84 },
   skin: SKIN,
-  hair: { mat: MOM_HAIR, bulk: [1.08, 1.10, 1.08], where: hairline({ front: 0.58, temple: 0.40, side: 0.00, back: -0.46, sweep: 0.20 }), puffs: [[0, 0.66, -0.66, 0.60, 0.46, 0.52]] },     // pinned up in a knot at the back of the crown
-  face: { eyes: "lash", brows: MOM_HAIR.tones[1], eye: "#33210f", lid: "#4a2a1c", lip: "#b8475c", nose: [0.85, 0.7, 0.8], jaw: 0.80, chin: 0.40, chinY: -0.80, mouthW: 0.20 },
+  hair: { mat: MOM_HAIR, bulk: [1.16, 1.12, 1.14], where: hairline({ front: 0.52, temple: 0.28, side: -0.40, back: -1.0, sweep: 0.22, brow: 0.45, temples: 1.10 }), ears: false,
+          texture: (x, y, z) => curl(x, y, z, 7) ? MOM_CURL : undefined },     // curls all over, falling past her shoulders (and see `extras`)
+  face: { eyes: { at: 1, full: ["==.", "#i="], thin: ["=.", "#="] }, iris: "#8a5a2c", eye: "#2e1b0e", lid: "#2c1a10", brows: MOM_HAIR.tones[2], brow: { full: [0, -1, -1, 0] }, browW: 4, blush: "#f0a08a",
+          lip: "#b8475c", lips: "#d4707e", eyeX: 0.43, nose: [0.65, 0.65, 0.75], noseShade: true, jaw: 0.80, chin: 0.40, chinY: -0.80, mouthW: 0.20, smile: 1,
+          big: { eyeW: 0.46, eyeH: 0.46, lashes: 1, arch: 0.28 } },
   top: { mat: EMERALD, sleeves: 0.42, belt: shifted(EMERALD, 2), open: 0.034 },
   bottom: { kind: "skirt", mat: EMERALD, len: 1.05, flare: 1.20, folds: [[-0.55, 0.15], [0.60, 0.3], [0.15, 0.55]] },
   shoes: { kind: "pumps", mat: ramp("#fffaf0", "#efe2c8", "#c3b596", "#8e8168"), sole: ramp("#c9b99a", "#a39375", "#7a6d55", "#52483a") },
@@ -145,11 +170,15 @@ export const mom = {
   gestures: [0, 5, 8, 0],                               // a nod, a hand to the heart, an open hand
   pray: { high: 0.42, bow: 0.28 },                      // her hands folded at her breast
   pace: 150,
-  // painted: green eyes under arched brows, lashes and a little colour on the lids, rose lips, a warm cheek
-  paint: { shape: { chinY: -0.76, chin: 0.44 },
-           face: { eye: { w: 0.230, h: 0.100, iris: 0.55, lid: 0.14, lash: 1.4 }, iris: "#5c8a4c", eyeshadow: "#9a6676", browUp: 0.085, browThick: 0.052, browArch: 0.050,
-                   lip: "#c24a5e", lipA: 0.92, upper: 0.046, lower: 0.066, smile: 0.45, mouthW: 0.31, blush: 0.16, cheer: 0.15 } },
-  extras({ ball, limb, hp, d, hy, tw, J, S, parts, pose }) {
+  extras({ ball, limb, hp, wide, deep, d, hy, tw, J, S, parts, pose }) {
+    // her hair: long dark curls from the crown down her back, past her shoulders, and a fall of them over each shoulder
+    const fall = [0.078, 0.030], foot = [0.070, 0.024], r0 = wide(fall), r1 = wide(foot);
+    limb(hp(0, -0.02, -0.72), add(J.spine(d.shoulderY - 0.175), J.torso([0, 0, -(d.trunkTop[1] + 0.018)])), r0, r1, MOM_HAIR, { part: parts.HAIR, depth: deep(fall) / r0, bias: S * 0.012, fn: (t, a) => (curls(t * 5, a, 2.4) ? MOM_CURL : undefined) });
+    for (const sd of [1, -1]) {
+      const from = hp(sd * 0.94, -0.18, -0.02), to = add(J.sh, J.torso([sd * 0.072, -0.074, 0.010]));
+      limb(from, to, 0.024, 0.020, MOM_HAIR, { part: parts.HAIR, fn: (t, a) => (curls(t * 4, a, 1.4) ? MOM_CURL : undefined) });
+      ball(to, [0.022, 0.016, 0.018], MOM_HAIR, { part: parts.HAIR }, tw);      // the ends, curling up
+    }
     // pearls: one at each ear, and a string of them at the neck
     for (const sd of [1, -1]) ball(hp(sd * 1.0, -0.34, -0.06), [0.007, 0.008, 0.007], PEARL, { part: parts.EXTRA }, hy);
     ball(add(J.sh, J.torso([0, -0.016, d.trunkTop[1] * 0.50])), [0.046, 0.034, 0.042], PEARL, {
@@ -164,16 +193,20 @@ export const mom = {
   },
 };
 
-// ---------- Big Sister, 13: cardigan, pleated skirt, long hair under a headband. The reader: she stands holding one elbow, thinking. ----------
+// ---------- Big Sister, 13: cardigan, pleated skirt, long flowing hair under a headband (no bangs). The reader: she stands holding one elbow, thinking. ----------
 const BIG_HAIR = ramp("#8a583a", "#5e3824", "#3f2416", "#25150c");
+const BIG_PART = shifted(BIG_HAIR, 1);
 const INDIGO = ramp("#99a0f2", "#666cd6", "#474aa6", "#2e2f72");
 const GRAY = ramp("#a9acba", "#7f8394", "#5b5e6e", "#3c3e4b");
 export const bigsis = {
   name: "Big Sister", height: 0.87,
   dim: { ...blend(CHILD, WOMAN, 0.62), legR: [0.046, 0.030, 0.020], neckR: 0.82 },
   skin: SKIN,
-  hair: { mat: BIG_HAIR, bulk: [1.08, 1.09, 1.08], where: hairline({ front: 0.42, temple: 0.30, side: -0.60, back: -1.2 }) },
-  face: { eyes: "girl", eye: "#2a1a12", lid: "#5a3424", brows: BIG_HAIR.tones[1], lip: "#b55f52", eyeY: 0.0, mouthY: -0.70, jaw: 0.80, chin: 0.40, chinY: -0.78, nose: [0.7, 0.65, 0.75], mouthW: 0.18 },
+  hair: { mat: BIG_HAIR, bulk: [1.08, 1.09, 1.08], where: hairline({ front: 0.58, temple: 0.34, side: -0.60, back: -1.2, brow: 0.45, temples: 1.10 }),          // no fringe: back off her face under the headband
+          texture: (x, y, z) => (Math.abs(x) < 0.05 && y > 0.55 && z > 0.10 ? BIG_PART : undefined) },                                   // parted in the middle
+  face: { eyes: { at: 1, full: ["==", "#i="], thin: ["=", "#"] }, iris: "#8a7038", eye: "#2c2410", lid: "#3a2416", brows: BIG_HAIR.tones[1], brow: { full: [0, 0, 0] }, blush: "#f2aa92",
+          lip: "#b55f52", eyeX: 0.43, eyeY: 0.0, mouthY: -0.70, jaw: 0.80, chin: 0.40, chinY: -0.78, nose: [0.7, 0.65, 0.75], noseShade: true, mouthW: 0.18, smile: 0.5,
+          big: { eyeW: 0.46, eyeH: 0.48, lashes: 1, arch: 0.20, browUp: 0.75 } },
   top: { mat: INDIGO, sleeves: 2, hem: true, band: WHITE, cuffs: WHITE, buttons: "#c9ccf7" },
   bottom: { kind: "skirt", mat: GRAY, len: 0.82, flare: 1.16, pleats: 9 },
   socks: { mat: WHITE, from: 0.10 },
@@ -182,10 +215,6 @@ export const bigsis = {
   walk: { swing: 0.43, arm: 0.30, lean: 0.04 },
   gestures: [0, 11, 6, 10],                             // a nod, a finger in the air, a hand to her chin, pointing ahead
   pray: { high: 0.46, bow: 0.31 },                      // exactly as she was taught: hands together at her breast, head bowed
-  // painted: thoughtful hazel eyes, level brows, lashes, a small composed smile
-  paint: { shape: { chinY: -0.74, chin: 0.44, jaw: 0.82 },
-           face: { eye: { w: 0.235, h: 0.104, iris: 0.55, lid: 0.12, lash: 1.0, line: 0.032, flick: 0.10 }, iris: "#7a5a32", browUp: 0.078, browThick: 0.058, browArch: 0.024,
-                   lip: "#c96a68", lipA: 0.62, upper: 0.038, lower: 0.056, smile: 0.32, mouthW: 0.25, blush: 0.12, cheer: 0.10 } },
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, J, S, parts }) {
     const hr = d.headR;
     // long hair: down the back, and a lock in front of each shoulder
@@ -193,7 +222,7 @@ export const bigsis = {
     limb(hp(0, -0.10, -0.66), add(J.spine(d.shoulderY - 0.150), J.torso([0, 0, -(d.trunkTop[1] + 0.016)])), r0, r1, BIG_HAIR, { part: parts.HAIR, depth: deep(fall) / r0, bias: S * 0.012 });
     for (const sd of [1, -1]) limb(hp(sd * 0.90, -0.30, 0.05), add(J.sh, J.torso([sd * 0.062, -0.050, 0.018])), 0.017, 0.012, BIG_HAIR, { part: parts.HAIR });
     // a headband
-    ball(headPt([0, 0.004, 0]), [hr[0] * 1.13, hr[1] * 1.14, hr[2] * 1.13], INDIGO, { part: parts.HAT, fn: (ux, uy, uz) => { const o = onHead(ux, uy, uz); return o[1] > 0.05 && Math.abs(o[2] - 0.12) < 0.13 ? undefined : null; } }, hy);
+    ball(headPt([0, 0.004, 0]), [hr[0] * 1.13, hr[1] * 1.14, hr[2] * 1.13], INDIGO, { part: parts.HAT, fn: (ux, uy, uz) => { const o = onHead(ux, uy, uz); return o[1] > 0.05 && Math.abs(o[2] - 0.28) < 0.12 ? undefined : null; } }, hy);      // (just behind her hairline)
   },
 };
 
@@ -206,8 +235,10 @@ export const lilsis = {
   name: "Little Sister", height: 0.67,
   dim: SMALL,
   skin: SKIN,
-  hair: { mat: LIL_HAIR, bulk: 1.07, where: hairline({ front: 0.46, temple: 0.36, side: -0.06, back: -0.58 }) },
-  face: { eyes: "bright", freckles: true, eye: "#2a1a12", brows: LIL_HAIR.tones[2], lip: "#c2605a", eyeY: -0.10, mouthY: -0.68, jaw: 0.86, chin: 0.48, chinY: -0.76, nose: [0.55, 0.6, 0.7], smile: 1, mouthW: 0.22 },
+  hair: { mat: LIL_HAIR, bulk: 1.07, where: hairline({ front: 0.26, temple: 0.16, side: -0.06, back: -0.58, brow: 0.55, temples: 1.15 }) },          // a soft fringe: less forehead
+  face: { eyes: { at: 0, full: ["#h=", "ii"], thin: ["#", "i"] }, iris: "#6a9ee0", eye: "#2c4f8a", lid: "#5a3a20", brows: LIL_HAIR.tones[2], brow: { full: [0, 0] }, browW: 2, blush: "#f59a8e",
+          freckles: true, freckle: "#e0a07c", lip: "#c2605a", eyeX: 0.43, eyeY: -0.10, mouthY: -0.68, ear: 1.15, earOut: 1.03, jaw: 0.86, chin: 0.48, chinY: -0.76, nose: [0.55, 0.6, 0.7], smile: 1, mouthW: 0.22,
+          big: { eyeW: 0.50, eyeH: 0.54, lashes: 1, arch: 0.30, browUp: 0.75 } },      // (her portrait: rounder eyes, a lash, brows up)
   top: { mat: WHITE, sleeves: 0.5 },
   bottom: { kind: "shorts", mat: PINK, len: 0.62, rise: 0.085, bib: { top: 0.078, half: 0.60, strap: 0.26 } },     // overalls: a high waist, a bib and two straps
   shoes: { kind: "boots", mat: SUN, sole: shifted(SUN, 2), shaft: 0.52 },     // rain boots
@@ -216,32 +247,18 @@ export const lilsis = {
   gestures: [0, 4, 7, 10],                              // a nod, both arms up, showing her muscles, pointing ahead
   pray: { high: 0.97, bow: 0.15, tight: true },         // with all her might: hands clasped tight under her chin, eyes squeezed shut
   pace: 145,
-  // painted: very much seven. A head a little bigger for her height, big blue eyes set low with long lashes, brows that
-  // go up and down with everything she says, round cheeks with a blush, a small nose and mouth, her freckles
-  paint: { head: 1.08, shape: { eyeY: -0.20, mouthY: -0.66, jaw: 0.94, chin: 0.60, chinY: -0.74, nose: [0.45, 0.55, 0.62] },
-           face: { eye: { w: 0.285, h: 0.168, iris: 0.57, lid: 0.04, lash: 2, line: 0.026, flick: 0.10, glint2: true, socket: 0.06, lower: 0.18 }, eyeX: 0.40, iris: "#4b8bd0",
-                   browUp: 0.100, browThick: 0.058, browArch: 0.055, browColor: "#9a6a36", lip: "#e06a72", lipA: 0.75, upper: 0.032, lower: 0.048,
-                   smile: 0.75, mouthW: 0.17, blush: 0.32, expressive: 1.5, cheer: 0.25 },
-           portrait: { head: 0.27, y: 0.42 } },
-  extras({ sf, P, ball, limb, hp, d, hy, th, J, fine, parts, painted, px }) {
+  extras({ sf, P, ball, limb, hp, d, hy, th, J, fine, parts }) {
     // pigtails: each starts at a yellow band high on the side of her head, puffs out, and hangs to a point beside her cheek
     for (const sd of [1, -1]) {
       const root = hp(sd * 0.90, 0.50, -0.12), off = (out, up, back = 0) => add(root, turn([sd * out, up, -back], hy));
-      if (painted) {
-        // painted: a full bunch, out from the tie and down to a soft point, and a loose lock beside it
-        limb(off(0.014, -0.004), off(0.044, -0.040, 0.004), 0.019, 0.029, LIL_HAIR, { part: parts.HAIR });
-        limb(off(0.044, -0.040, 0.004), off(0.050, -0.104, 0.012), 0.029, 0.009, LIL_HAIR, { part: parts.HAIR });
-        limb(off(0.040, -0.030, -0.010), off(0.064, -0.084, -0.012), 0.012, 0.004, LIL_HAIR, { part: parts.HAIR });
-      } else {
-        limb(off(0.016, -0.004), off(0.046, -0.034, 0.004), 0.018, 0.028, LIL_HAIR, { part: parts.HAIR });
-        limb(off(0.046, -0.034, 0.004), off(0.052, -0.112, 0.014), 0.028, 0.010, LIL_HAIR, { part: parts.HAIR });
-      }
+      limb(off(0.016, -0.004), off(0.046, -0.034, 0.004), 0.018, 0.028, LIL_HAIR, { part: parts.HAIR });
+      limb(off(0.046, -0.034, 0.004), off(0.052, -0.112, 0.014), 0.028, 0.010, LIL_HAIR, { part: parts.HAIR });
       ball(off(0.014, 0.004), [0.024, 0.026, 0.024], SUN, { part: parts.HAT }, hy);
     }
     // a star on the bib of her overalls
     if (fine && Math.cos(th) > 0.5) {
       const c = P(add(J.spine(d.shoulderY - 0.150), J.torso([0, 0, d.trunkTop[1] * 0.98]))), x = Math.round(c[0] - 0.5), y = Math.round(c[1] - 0.5), star = SUN.tones[0];
-      for (const [i, k] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) sf.dot(x + i * px, y + k * px, star, parts.TORSO);
+      for (const [i, k] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) sf.dot(x + i, y + k, star, parts.TORSO);
     }
   },
 };
@@ -267,6 +284,7 @@ const HIDE = ramp("#b98a5e", "#8f6238", "#664424", "#422b16");           // leat
 const CLAY = ramp("#e6a878", "#c57d4d", "#915833", "#5f3921");
 const PAPYRUS = ramp("#f6e2a8", "#e3c47e", "#b59653", "#7d6433");
 const BREAD = ramp("#eac27e", "#c48e4a", "#96662e", "#684418");
+const BROWN_EYES = "#6a4428";                                              // (the iris of a dark brown eye: in Egypt, in Rome and with Lot)
 /** Hair shaved to the skin: only a shadow of it, a little darker than the scalp. */
 const SHAVED = new Map([
   [TAN, ramp("#d19270", "#bc8262", "#935c40", "#6c402a")],
@@ -298,7 +316,7 @@ export const scribe = {
   build: "soft",
   skin: TAN,
   hair: { mat: shaved(TAN), bulk: 1, where: cropped },
-  face: { eyes: "kohl", eye: "#14121c", lid: "#14121c", white: "#f0e4cc", brows: "#2b2a38", browUp: 3, lip: "#7a4530", nose: [1.0, 1.0, 0.9], jaw: 0.86, chin: 0.46, mouthW: 0.15 },
+  face: { eyes: "kohl", eye: "#14121c", lid: "#14121c", white: "#f0e4cc", brows: "#2b2a38", browUp: 3, lip: "#7a4530", nose: [1.0, 1.0, 0.9], noseShade: true, jaw: 0.86, chin: 0.46, mouthW: 0.15 },
   top: {},
   bottom: { kind: "kilt", mat: LINEN, len: 0.92, flare: 1.05, sash: shifted(LINEN, 1) },
   shoes: { kind: "bare" },
@@ -338,7 +356,7 @@ export const carrier = {
   build: "old",
   skin: DARK,
   hair: { mat: GRIZZLE, bulk: 1.03, where: hairline({ front: 0.80, temple: 0.60, side: 0.10, back: -0.40 }) },
-  face: { eyes: "squint", eye: "#1c120c", lid: "#3a2014", brows: GRIZZLE.tones[2], browW: 2, shadow: ramp("#c4a080", "#a68468", "#7a5c46", "#4d382a"), lines: 1, nose: [1.1, 1.15, 1.1], jaw: 0.82, chin: 0.44, lip: "#4f2a1a", ear: 1.15, mouthW: 0.20 },
+  face: { eyes: "squint", eye: "#1c120c", lid: "#3a2014", brows: GRIZZLE.tones[2], browW: 2, shadow: ramp("#c4a080", "#a68468", "#7a5c46", "#4d382a"), shadowFrom: 0.45, lines: 1, nose: [1.1, 1.15, 1.1], noseShade: true, jaw: 0.82, chin: 0.44, lip: "#4f2a1a", ear: 1.15, mouthW: 0.20 },
   top: {},
   bottom: { kind: "kilt", mat: WORN, len: 0.62, flare: 1.02, sash: shifted(WORN, 1), wrap: true },
   shoes: { kind: "bare" },
@@ -380,7 +398,7 @@ export const lot = {
   build: "strong",
   skin: WEATHER,
   hair: { mat: RAVEN, bulk: 1.08, where: hairline({ front: 0.64, temple: 0.48, side: -0.40, back: -0.95, burn: 0.62 }), puffs: [[0, -0.50, -0.56, 0.88, 0.52, 0.54]] },      // thick, to the neck
-  face: { eyes: "deep", eye: "#1c120c", brows: RAVEN.tones[1], browW: 4, beard: RAVEN_BEARD, beardLen: 0.17, beardSquare: true, beardW: 0.70, beardZ: 0.50, beardFrom: [-0.46, 0.10], moustache: RAVEN_BEARD, moustacheW: 0.30, moustacheZ: 0.95, mouthShows: true,
+  face: { eyes: "deep", eye: "#1c120c", iris: BROWN_EYES, noseShade: true, brows: RAVEN.tones[1], browW: 4, beard: RAVEN_BEARD, beardLen: 0.17, beardSquare: true, beardW: 0.70, beardZ: 0.50, beardFrom: [-0.46, 0.10], moustache: RAVEN_BEARD, moustacheW: 0.30, moustacheZ: 0.95, mouthShows: true,
           lip: "#7a3e32", lines: 1, nose: [1.1, 1.15, 1.05], jaw: 0.92, chin: 0.56, chinZ: 0.46, mouthW: 0.20 },
   top: { mat: FLEECE, sleeves: 0.86, cuff: 0.010, trim: MADDER_WOOL, belt: shifted(HIDE, 1),
          bands: [[0.050, 0.088, MADDER_WOOL], [0.088, 0.100, INDIGO_WOOL], [0.150, 0.180, OCHRE_WOOL]] },
@@ -424,7 +442,7 @@ export const overseer = {
   skin: BROWN,
   hair: { mat: BLACK, wig: true, bulk: [1.26, 1.15, 1.20], lift: [0, 0.006, -0.006], where: (x, y, z) => y > (z > 0.36 ? 0.38 : -0.50),
           texture: (ox, oy, oz, x, y) => ((y & 1) === 0 && ((x + ((y >> 1) & 1) * 2) & 3) === 0 ? shifted(BLACK, -1) : undefined) },      // a short round wig, in rows of curls
-  face: { eyes: "kohl", eye: "#14121c", lid: "#14121c", white: "#f0e4cc", brows: "#191822", browTilt: 1, browW: 4, jowl: 0.92, jaw: 0.96, chin: 0.60, nose: [1.0, 1.1, 1.3], lip: "#6a3420", mouthW: 0.26, smile: -1, ears: false },
+  face: { eyes: "kohl", eye: "#14121c", lid: "#14121c", white: "#f0e4cc", brows: "#191822", browTilt: 1, browW: 4, jowl: 0.92, jaw: 0.96, chin: 0.60, nose: [1.0, 1.1, 1.3], noseShade: true, lip: "#6a3420", mouthW: 0.26, smile: -1, ears: false },
   top: {},
   bottom: { kind: "kilt", mat: LINEN, len: 1.50, flare: 1.10, sash: shifted(LINEN, 1), folds: [[-0.9, 0.2], [0.85, 0.35], [-0.45, 0.6]] },
   shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
@@ -434,8 +452,6 @@ export const overseer = {
   pace: 135,
   gestures: [14, 10, 15, 16, 3],                        // a shaken fist, pointing, waving it all away, wiping his brow, a hand on his hip
   fidgets: { stand: ["tap"] },                          // he taps his staff on the ground
-  // painted: the wig's rows of curls laid round the head, each row offset from the one above
-  paint: { hairTexture: (x, y, z) => { const row = Math.floor((y + 1) * 7), a = Math.atan2(x, z) * 7 / Math.PI + (row & 1) * 0.5; return (y + 1) * 7 - row < 0.42 && a - Math.floor(a) < 0.62 ? shifted(BLACK, -1) : undefined; } },
   extras(c) {
     const { limb, skirtAt, J, d, cloth, under, parts } = c;
     wear.collar(c, { rows: [TURQ, GOLD, LAPIS, GOLD] });
@@ -458,7 +474,7 @@ export const hauler1 = {
   dim: { ...ADULT, shoulderW: 0.108, trunkTop: [0.112, 0.070], trunkLow: [0.088, 0.064], armR: [0.034, 0.028, 0.019], legR: [0.053, 0.034, 0.023], neckR: 1.08 },
   skin: BROWN,
   hair: { mat: BLACK, bulk: 1.04, where: hairline({ front: 0.64, temple: 0.54, side: 0.20, back: -0.36 }) },
-  face: { eyes: "plain", eye: "#14121c", brows: "#191822", jaw: 0.94, chin: 0.56, nose: [1.0, 1.0, 1.1], lip: "#6a3420", smile: 1, mouthW: 0.26 },
+  face: { eyes: "plain", eye: "#14121c", iris: BROWN_EYES, brows: "#191822", jaw: 0.94, chin: 0.56, nose: [1.0, 1.0, 1.1], noseShade: true, lip: "#6a3420", smile: 1, mouthW: 0.26 },
   stance: "hip",
   walk: { swing: 0.46, arm: 0.40, lean: 0.05 },
   gestures: [1, 7, 2, 3],                               // making a point, showing his arms, a shrug, a hand on his hip
@@ -479,7 +495,7 @@ export const hauler2 = {
   dim: { ...ADULT, headR: [0.057, 0.064, 0.063], shoulderW: 0.108, trunkTop: [0.118, 0.078], trunkLow: [0.104, 0.076], pelvisR: [0.100, 0.062, 0.078], armR: [0.037, 0.031, 0.021], legR: [0.057, 0.037, 0.025], handR: 0.024, neckR: 1.22, thigh: 0.232, shin: 0.218 },
   skin: DARK,
   hair: { mat: shaved(DARK), bulk: 1, where: cropped },
-  face: { eyes: "deep", eye: "#14121c", brows: "#191822", browW: 4, jaw: 1.0, chin: 0.64, nose: [0.9, 1.0, 1.35], lip: "#4f2a1a", mouthW: 0.22, ear: 1.1 },
+  face: { eyes: "deep", eye: "#14121c", iris: BROWN_EYES, brows: "#191822", browW: 4, jaw: 1.0, chin: 0.64, nose: [0.9, 1.0, 1.35], noseShade: true, lip: "#4f2a1a", mouthW: 0.22, ear: 1.1 },
   stance: "folded",
   walk: { swing: 0.42, arm: 0.34, lean: 0.06, sway: 0.018 },
   gestures: [0, 12, 19, 0],                             // a nod, arms folded, a thumb over his shoulder
@@ -494,11 +510,10 @@ export const hauler3 = {
   skin: TAN,
   hair: { mat: BLACK, bulk: [1.10, 1.12, 1.10], where: hairline({ front: 0.52, temple: 0.40, side: 0.06, back: -0.44 }), puffs: [[0.34, 0.80, 0.34, 0.50, 0.34, 0.48], [-0.36, 0.78, 0.20, 0.50, 0.36, 0.52], [0, 0.90, -0.30, 0.52, 0.30, 0.56], [0.70, 0.36, -0.10, 0.36, 0.40, 0.50], [-0.70, 0.36, -0.10, 0.36, 0.40, 0.50]],
           texture: (ox, oy, oz, x, y) => (((x + y) & 3) === 0 && (y & 1) === 0 ? shifted(BLACK, -1) : undefined) },     // a mop of curls
-  face: { eyes: "wide", eye: "#14121c", brows: "#191822", jaw: 0.84, chin: 0.44, nose: [0.9, 0.9, 0.9], lip: "#7a4530", mouthW: 0.20, ear: 1.1 },
+  face: { eyes: "wide", eye: "#14121c", brows: "#191822", jaw: 0.84, chin: 0.44, nose: [0.9, 0.9, 0.9], noseShade: true, lip: "#7a4530", mouthW: 0.20, ear: 1.1 },
   hold: { R: { hand: [0.036, -0.012, 0.110], bend: [1, -0.8, 0.1], grip: true } },
   walk: { swing: 0.46, arm: 0.44, lean: 0.05, bob: 0.02 },
   gestures: [0, 8, 2, 0],                               // a nod with his mouth full, an open hand, a shrug
-  paint: { hairTexture: (x, y, z) => { const a = Math.atan2(x, z) * 9 / Math.PI, b = (y + 1) * 9; return (Math.floor(a) + Math.floor(b)) % 2 === 0 && (a - Math.floor(a) - 0.5) ** 2 + (b - Math.floor(b) - 0.5) ** 2 < 0.16 ? shifted(BLACK, -1) : undefined; } },     // (painted: the curls, laid round the head)
   extras({ ball, J, parts }) {
     ball(add(J.R.palm, [0, 0.014, 0.008]), [0.030, 0.020, 0.028], BREAD, { part: parts.HELD });       // the loaf
   },
@@ -511,7 +526,7 @@ export const guard = {
   build: "lean",
   skin: BROWN,
   hair: { mat: BLACK, bulk: 1.04, where: hairline({ front: 0.60, temple: 0.50, side: 0.14, back: -0.42 }) },
-  face: { eyes: "heavy", eye: "#14121c", lid: "#3a2014", brows: "#191822", jaw: 0.88, chin: 0.50, chinY: -0.88, nose: [1.15, 1.0, 1.0], lip: "#6a3420", mouthW: 0.20, smile: -1 },
+  face: { eyes: "heavy", eye: "#14121c", iris: BROWN_EYES, lid: "#3a2014", brows: "#191822", jaw: 0.88, chin: 0.50, chinY: -0.88, nose: [1.15, 1.0, 1.0], noseShade: true, lip: "#6a3420", mouthW: 0.20, smile: -1 },
   top: {},
   bottom: { kind: "kilt", mat: LINEN, len: 0.70, flare: 1.02, sash: HIDE, wrap: true },
   shoes: { kind: "bare" },
@@ -559,7 +574,7 @@ export const lampboy = {
   dim: { ...blend(CHILD, ADULT, 0.40), trunkTop: [0.090, 0.058], trunkLow: [0.078, 0.056], pelvisR: [0.084, 0.058, 0.064], armR: [0.022, 0.019, 0.015], legR: [0.040, 0.027, 0.019], neckR: 0.82 },
   skin: BROWN,
   hair: { mat: shaved(BROWN), bulk: 1, where: cropped },
-  face: { eyes: "wide", eye: "#14121c", brows: "#191822", browUp: 3, eyeY: 0.0, mouthY: -0.72, jaw: 0.82, chin: 0.42, chinY: -0.80, nose: [0.7, 0.75, 0.8], lip: "#7a4530", mouthW: 0.18, ear: 1.15 },
+  face: { eyes: "wide", eye: "#14121c", brows: "#191822", browUp: 3, blush: "#d48a62", eyeY: 0.0, mouthY: -0.72, jaw: 0.82, chin: 0.42, chinY: -0.80, nose: [0.7, 0.75, 0.8], noseShade: true, lip: "#7a4530", mouthW: 0.18, ear: 1.15 },
   top: {},
   bottom: { kind: "kilt", mat: WORN, len: 0.60, flare: 1.04, sash: shifted(WORN, 1) },
   shoes: { kind: "bare" },
@@ -592,7 +607,7 @@ export const goldsmith = {
   build: "old",
   skin: TAN,
   hair: { mat: GRIZZLE, bulk: 1.03, where: hairline({ front: 0.30, temple: 0.24, side: 0.06, back: -0.36, top: 0.40 }) },      // bald, with a fringe of white round the back
-  face: { eyes: "squint", eye: "#1c120c", lid: "#4a2a1a", brows: GRIZZLE.tones[2], browUp: 2, lines: 1, nose: [1.1, 1.2, 1.3], jaw: 0.84, chin: 0.46, lip: "#7a4530", mouthW: 0.30, smile: 1, ear: 1.45 },
+  face: { eyes: "squint", eye: "#1c120c", iris: BROWN_EYES, lid: "#4a2a1a", brows: GRIZZLE.tones[2], browUp: 2, lines: 1, nose: [1.1, 1.2, 1.3], noseShade: true, jaw: 0.84, chin: 0.46, lip: "#7a4530", mouthW: 0.30, smile: 1, ear: 1.45 },
   top: {},
   bottom: { kind: "kilt", mat: WORN, len: 0.90, flare: 1.05, sash: shifted(HIDE, 1) },
   apron: { mat: HIDE, half: 0.95, len: 1.0 },           // a leather apron over his knees
@@ -658,7 +673,7 @@ export const keeper = {
          pelvisR: [0.104, 0.064, 0.080], armR: [0.035, 0.030, 0.021], legR: [0.055, 0.036, 0.024], handR: 0.024, neckR: 1.14, thigh: 0.232, shin: 0.218 },
   skin: RUDDY,
   hair: { mat: DARK_HAIR, bulk: [1.10, 1.06, 1.08], where: hairline({ front: 0.30, temple: 0.26, side: 0.06, back: -0.42, top: 0.50 }) },       // bald on top, curls round the sides
-  face: { eyes: "plain", eye: "#2a1a12", brows: DARK_HAIR.tones[2], browW: 4, browUp: 3, jowl: 0.88, jaw: 0.98, chin: 0.62, nose: [0.95, 1.1, 1.45], lip: "#8a3e30", smile: 1, mouthW: 0.30 },
+  face: { eyes: "plain", eye: "#2a1a12", iris: BROWN_EYES, brows: DARK_HAIR.tones[2], browW: 4, browUp: 3, blush: "#e2805e", jowl: 0.88, jaw: 0.98, chin: 0.62, nose: [0.95, 1.1, 1.45], noseShade: true, lip: "#8a3e30", smile: 1, mouthW: 0.30 },
   top: { mat: OCHRE, sleeves: 0.46, cuff: 0.014, belt: shifted(HIDE, 1), beltLow: 0.040 },
   stance: "carry",
   bottom: { kind: "skirt", mat: OCHRE, len: 0.98, flare: 1.08, folds: [[-0.95, 0.2], [1.0, 0.3], [2.4, 0.2], [-2.3, 0.35]] },
@@ -690,7 +705,7 @@ export const washer = {
   dim: { ...WOMAN, shoulderW: 0.092, trunkTop: [0.096, 0.066], trunkLow: [0.084, 0.064], pelvisR: [0.102, 0.062, 0.078], armR: [0.030, 0.026, 0.018], handR: 0.021, legR: [0.050, 0.032, 0.021], bust: [0.004, 0.034], neckR: 0.92 },
   skin: SWARTHY,
   hair: { mat: DARK_HAIR, bulk: 1.05, where: hairline({ front: 0.56, temple: 0.42, side: 0.04, back: -0.40 }) },
-  face: { eyes: "girl", eye: "#2a1a12", lid: "#3a2218", brows: DARK_HAIR.tones[2], lip: "#9a4038", nose: [0.9, 0.85, 0.95], jaw: 0.86, chin: 0.44, chinY: -0.80, smile: 1, mouthW: 0.24 },
+  face: { eyes: "girl", eye: "#2a1a12", iris: BROWN_EYES, lid: "#3a2218", brows: DARK_HAIR.tones[2], blush: "#e08a70", lip: "#9a4038", nose: [0.9, 0.85, 0.95], noseShade: true, jaw: 0.86, chin: 0.44, chinY: -0.80, smile: 1, mouthW: 0.24 },
   top: { mat: WOAD, sleeves: 0.40, cuff: 0.016, belt: shifted(ROPE, 1), blouse: 0.020 },
   bottom: { kind: "skirt", mat: WOAD, len: 1.42, flare: 1.14, folds: [[-0.7, 0.1], [0.75, 0.2], [0.1, 0.5], [2.6, 0.2]] },
   shoes: { kind: "bare" },
@@ -722,7 +737,7 @@ export const urchin = {
   dim: { ...CHILD, trunkTop: [0.090, 0.060], trunkLow: [0.080, 0.058], pelvisR: [0.084, 0.056, 0.064], armR: [0.022, 0.019, 0.015], legR: [0.039, 0.028, 0.020], neckR: 0.86 },
   skin: SWARTHY,
   hair: { mat: DARK_HAIR, bulk: [1.10, 1.12, 1.10], where: hairline({ front: 0.42, temple: 0.30, side: -0.12, back: -0.56 }), puffs: [[0.40, 0.84, 0.30, 0.40, 0.26, 0.40], [-0.30, 0.90, 0.0, 0.44, 0.26, 0.44], [0.10, 0.60, 0.86, 0.50, 0.22, 0.30], [-0.80, 0.50, -0.30, 0.30, 0.34, 0.40]] },       // never seen a comb
-  face: { eyes: "bright", eye: "#2a1a12", brows: DARK_HAIR.tones[2], eyeY: -0.06, mouthY: -0.70, jaw: 0.82, chin: 0.44, chinY: -0.80, nose: [0.6, 0.65, 0.75], lip: "#8a4636", smile: 1, mouthW: 0.28, ear: 1.15 },
+  face: { eyes: "bright", eye: "#2a1a12", iris: BROWN_EYES, brows: DARK_HAIR.tones[2], blush: "#e09070", noseShade: true, eyeY: -0.06, mouthY: -0.70, jaw: 0.82, chin: 0.44, chinY: -0.80, nose: [0.6, 0.65, 0.75], lip: "#8a4636", smile: 1, mouthW: 0.28, ear: 1.15 },
   top: { mat: DUN, sleeves: 0.28, cuff: 0.016, belt: shifted(ROPE, 2) },
   bottom: { kind: "skirt", mat: DUN, len: 0.72, flare: 1.10 },
   shoes: { kind: "bare" },
@@ -731,9 +746,9 @@ export const urchin = {
   gestures: [10, 19, 2, 1],                             // pointing, a thumb over his shoulder, a shrug, making a point
   fidgets: { sit: ["scratch"] },                        // he scratches his head
   sit: { seat: "step", lean: 0.16, knees: 0.22, solid: true },      // the kerb
-  extras({ sf, P, trunkAt, d, fine, parts, px }) {
+  extras({ sf, P, trunkAt, d, fine, parts }) {
     // a patch on his tunic
-    if (fine) { const q = P(trunkAt(d.waistY + 0.060, 0.45)), m = shifted(DUN, 1).tones[1]; for (const [i, j] of [[0, 0], [1, 0], [0, 1], [1, 1], [2, 1], [2, 0]]) sf.dot(q[0] + i * px, q[1] + j * px, m, parts.TORSO); }
+    if (fine) { const q = P(trunkAt(d.waistY + 0.060, 0.45)), m = shifted(DUN, 1).tones[1]; for (const [i, j] of [[0, 0], [1, 0], [0, 1], [1, 1], [2, 1], [2, 0]]) sf.dot(q[0] + i, q[1] + j, m, parts.TORSO); }
   },
 };
 
@@ -743,7 +758,7 @@ export const soothsayer = {
   dim: { ...ADULT, shoulderW: 0.092, trunkTop: [0.094, 0.062], trunkLow: [0.084, 0.062], pelvisR: [0.088, 0.058, 0.068], armR: [0.024, 0.021, 0.016], legR: [0.043, 0.029, 0.020], neckR: 0.86 },
   skin: OLIVE,
   hair: { mat: GRIZZLE, bulk: 1.04, where: hairline({ front: 0.40, temple: 0.30, side: 0.0, back: -0.50, top: 0.62 }) },
-  face: { eyes: "deep", eye: "#2a1a12", brows: GRIZZLE.tones[2], browW: 4, beard: GRIZZLE, beardLen: 0.16, lines: 2, nose: [1.2, 1.25, 1.0], jaw: 0.80, chin: 0.42, chinY: -0.90, lip: "#7a4636", smile: -1, mouthW: 0.20 },
+  face: { eyes: "deep", eye: "#2a1a12", iris: BROWN_EYES, brows: GRIZZLE.tones[2], browW: 4, beard: GRIZZLE, beardLen: 0.16, lines: 2, nose: [1.2, 1.25, 1.0], noseShade: true, jaw: 0.80, chin: 0.42, chinY: -0.90, lip: "#7a4636", smile: -1, mouthW: 0.20 },
   top: { mat: UNDYED, sleeves: 0.46 },
   bottom: { kind: "skirt", mat: OLDWOOL, len: 1.82, flare: 1.10, folds: [[-0.9, 0.3, 1.82, 0.1], [0.6, 0.5, 1.82, -0.1], [0.0, 0.8, 1.82], [2.5, 0.2], [-2.4, 0.4]] },
   shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
@@ -765,7 +780,7 @@ export const senator = {
   dim: { ...ADULT, headR: [0.057, 0.066, 0.063], trunkTop: [0.110, 0.074], trunkLow: [0.106, 0.082], bellyFwd: 0.014, pelvisR: [0.100, 0.064, 0.078], armR: [0.031, 0.027, 0.019], neckR: 1.06 },
   skin: OLIVE,
   hair: { mat: GREY_HAIR, bulk: 1.05, where: hairline({ front: 0.36, temple: 0.30, side: 0.10, back: -0.42, top: 0.56 }) },       // bald on top
-  face: { eyes: "lash", eye: "#2a1a12", lid: "#6a4636", brows: GREY_HAIR.tones[2], browUp: 3, jowl: 0.80, jaw: 0.92, chin: 0.54, nose: [1.2, 1.35, 1.1], lip: "#8a4a3a", smile: -1, mouthW: 0.18 },
+  face: { eyes: "lash", eye: "#2a1a12", iris: BROWN_EYES, lid: "#6a4636", brows: GREY_HAIR.tones[2], browUp: 3, jowl: 0.80, jaw: 0.92, chin: 0.54, nose: [1.2, 1.35, 1.1], noseShade: true, lip: "#8a4a3a", smile: -1, mouthW: 0.18 },
   top: { mat: UNDYED_PALE, sleeves: 0.46, stripe: { mat: PURPLE, at: [0], half: 0.17 } },
   stance: "carry",
   bottom: { kind: "skirt", mat: WOOL, len: 1.76, flare: 1.08, folds: [[-1.0, 0.3, 1.76, 0.1], [0.55, 0.5, 1.76, -0.1], [0.05, 0.9, 1.76, 0.05], [-0.45, 0.2, 1.3], [1.25, 0.3, 1.76], [2.5, 0.2], [-2.4, 0.4], [3.0, 0.6]] },
@@ -776,7 +791,6 @@ export const senator = {
   pace: 185,
   gestures: [1, 11, 15, 14],                            // a point with the scroll, the scroll in the air, waving it all away, shaking it
   fidgets: { stand: ["toga"] },                         // he settles the folds of his toga over his arm
-  paint: { face: { eye: { lash: 0, lid: 0.30, line: 0.034 } } },     // (painted: heavy lids, pleased with himself; no lashes)
   extras(c) {
     const { limb, J, parts } = c;
     wear.toga(c, { mat: WOOL, edge: PURPLE });
@@ -793,7 +807,7 @@ export const doorkeeper = {
   dim: { ...ADULT, headR: [0.057, 0.064, 0.063], shoulderW: 0.112, trunkTop: [0.122, 0.078], trunkLow: [0.104, 0.076], pelvisR: [0.100, 0.064, 0.078], armR: [0.037, 0.031, 0.022], legR: [0.057, 0.037, 0.025], handR: 0.025, neckR: 1.25 },
   skin: SWARTHY,
   hair: { mat: DARK_HAIR, bulk: 1.03, where: hairline({ front: 0.64, temple: 0.54, side: 0.22, back: -0.34 }) },
-  face: { eyes: "deep", eye: "#1c120c", brows: DARK_HAIR.tones[2], browW: 4, browTilt: 1, shadow: ramp("#c49878", "#ac7c5c", "#825a40", "#56382a"), jaw: 1.02, chin: 0.66, nose: [0.95, 1.0, 1.45], lip: "#6a3828", mouthW: 0.24, ear: 1.1 },
+  face: { eyes: "deep", eye: "#1c120c", iris: BROWN_EYES, brows: DARK_HAIR.tones[2], browW: 4, browTilt: 1, shadow: ramp("#c49878", "#ac7c5c", "#825a40", "#56382a"), shadowFrom: 0.45, jaw: 1.02, chin: 0.66, nose: [0.95, 1.0, 1.45], noseShade: true, lip: "#6a3828", mouthW: 0.24, ear: 1.1 },
   top: { mat: MOSS, sleeves: 0.42, cuff: 0.012, belt: HIDE, blouse: 0.006 },
   bottom: { kind: "skirt", mat: MOSS, len: 0.92, flare: 1.08, folds: [[-0.8, 0.2], [0.9, 0.25], [0.2, 0.5]] },
   shoes: { kind: "boots", mat: HIDE, sole: shifted(HIDE, 2), shaft: 0.22 },
@@ -817,7 +831,7 @@ export const clerk = {
   dim: { ...ADULT, shoulderW: 0.088, trunkTop: [0.090, 0.060], trunkLow: [0.080, 0.060], pelvisR: [0.086, 0.058, 0.066], armR: [0.023, 0.020, 0.015], legR: [0.042, 0.028, 0.019], neckR: 0.80, handR: 0.020 },
   skin: SALLOW,
   hair: { mat: DARK_HAIR, bulk: 1.05, where: hairline({ front: 0.48, temple: 0.42, side: 0.12, back: -0.42 }) },       // combed straight forward, as the fashion is
-  face: { eyes: "heavy", eye: "#2a1a12", lid: "#7a5a48", brows: DARK_HAIR.tones[1], browTilt: -1, nose: [1.1, 1.0, 0.85], jaw: 0.80, chin: 0.40, chinY: -0.88, lip: "#8a5a4a", mouthW: 0.16 },
+  face: { eyes: "heavy", eye: "#2a1a12", iris: "#6a5a48", lid: "#7a5a48", brows: DARK_HAIR.tones[1], browTilt: -1, nose: [1.1, 1.0, 0.85], noseShade: true, jaw: 0.80, chin: 0.40, chinY: -0.88, lip: "#8a5a4a", mouthW: 0.16 },
   top: { mat: UNDYED, sleeves: 0.48, belt: shifted(HIDE, 1), stripe: { mat: CLAVUS, at: [0.48, -0.48, Math.PI - 0.48, Math.PI + 0.48], half: 0.07 } },      // two narrow stripes, shoulder to hem, as plain people's tunics have
   bottom: { kind: "skirt", mat: UNDYED, len: 1.0, flare: 1.06, stripe: { mat: CLAVUS, at: [0.48, -0.48, Math.PI - 0.48, Math.PI + 0.48], half: 0.07 } },
   shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
@@ -857,7 +871,7 @@ export const dateseller = {
   skin: SUNNED,
   hair: { mat: PEPPER, bulk: 1.06, where: hairline({ front: 0.58, temple: 0.44, side: 0.10, back: -0.46, recede: 0.06 }),
           texture: (x, y, z) => (Math.abs(x) > 0.70 && y < 0.50 && z > -0.02 ? SALT : undefined) },           // grey at the temples
-  face: { eyes: "plain", eye: "#2a1a12", brows: PEPPER.tones[1], beard: BEARD, beardLen: 0.0, beardGrey: SALT, moustache: BEARD, mouthShows: true, lip: "#96564a", smile: 1, mouthW: 0.20, lines: 1, jaw: 0.90, chin: 0.52 },
+  face: { eyes: "plain", eye: "#2a1a12", iris: BROWN_EYES, noseShade: true, brows: PEPPER.tones[1], beard: BEARD, beardLen: 0.0, beardGrey: SALT, moustache: BEARD, mouthShows: true, lip: "#96564a", smile: 1, mouthW: 0.20, lines: 1, jaw: 0.90, chin: 0.52 },
   top: { mat: OAT, sleeves: 0.84, cuff: 0.012, belt: shifted(ROPE, 1) },
   bottom: { kind: "skirt", mat: OAT, len: 1.62, flare: 1.08, folds: [[-0.85, 0.3, 1.62, 0.08], [0.50, 0.5, 1.62, -0.08], [-0.15, 0.9, 1.62], [2.6, 0.3], [-2.5, 0.4]] },
   shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
@@ -911,7 +925,7 @@ export const oldtimer = {
   dim: { ...ADULT, trunkTop: [0.110, 0.076], trunkLow: [0.110, 0.094], bellyFwd: 0.014 },
   skin: SKIN_WEATHERED,
   hair: { mat: SNOW, where: hairline({ front: 1.3, temple: 1.1, side: 0.20, back: -0.50 }) },
-  face: { beard: SNOW, brows: SNOW.tones[2], eye: "#2a1a12" },
+  face: { beard: SNOW, brows: SNOW.tones[2], eye: "#2a1a12", iris: "#7f9fbf", noseShade: true },      // (eyes of a faded blue)
   top: { mat: DENIM, sleeves: 2, stripe: { mat: BRACES, at: [0.50, -0.50, Math.PI - 0.42, Math.PI + 0.42], half: 0.085 } },      // suspenders over the work shirt, front and back
   bottom: { kind: "trousers", mat: CANVAS },
   shoes: { kind: "boots", mat: ramp("#9a6b45", "#70482a", "#4d301a", "#2f1d10"), sole: ramp("#4d301a", "#372212", "#24160c", "#150d07") },

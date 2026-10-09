@@ -165,8 +165,10 @@ directions: he promised.
 **In play.** He makes tools out of what is in the car and talks his way round people.
 
 **How he looks and moves.** Yellow flowered vacation shirt worn loose over a stomach,
-olive shorts, striped socks, sandals, a moustache. He walks like a man who knows where
-he is going. When he talks he nods, makes a point, shrugs, or puts a hand on his hip.
+olive shorts, striped socks, sandals. Brown hair slicked back and to the side, green
+eyes, stubble and a short beard along the jaw and chin (no moustache). He walks like a
+man who knows where he is going. When he talks he nods, makes a point, shrugs, or puts a
+hand on his hip.
 
 **How he changes (draft).** The last thing he does in the game is ask for directions.
 
@@ -204,9 +206,10 @@ his bedroom door at home, which says NO GIRLS ALLOWED and is booby-trapped: a to
 
 **In play.** He pokes, climbs, trades and befriends. He fits where Dad does not.
 
-**How he looks and moves.** Red cap, blue hoodie, purple backpack, navy shorts,
-sneakers. He walks with a bounce, fists pumping and head going from side to side. When
-he talks he points, throws both arms up, waves both hands, or shrugs.
+**How he looks and moves.** Blonde hair under a red cap, blue eyes, blue hoodie, purple
+backpack, navy shorts, sneakers. He walks with a bounce, fists pumping and head going
+from side to side. When he talks he points, throws both arms up, waves both hands, or
+shrugs.
 
 **How he changes (draft).** He learns to finish one plan before starting the next.
 
@@ -276,10 +279,11 @@ promised on their wedding day, and the year "We the People" got it in writing. S
 the knack of things from before her daughters were born: she can wind a cassette with
 a pencil. She drives. She does not crawl, climb or shout: she has daughters for that.
 
-**How she looks and moves.** An emerald dress with a belt, pearls, her hair up, low
-heels, a handbag on her arm. She stands with her hands lightly clasped and walks
-without hurry, in short steps, her arms hardly moving. When she talks she nods, puts a
-hand to her heart, or holds out an open hand.
+**How she looks and moves.** An emerald dress with a belt, pearls, long dark brown curly
+hair worn down and flowing past her shoulders, brown eyes, low heels, a handbag on her
+arm. She stands with her hands lightly clasped and walks without hurry, in short steps,
+her arms hardly moving. When she talks she nods, puts a hand to her heart, or holds out
+an open hand.
 
 **How she changes (draft).** She learns that there are days when the correct thing to
 do is to make a scene.
@@ -346,11 +350,12 @@ pair of numbers means. She plays any piano she meets. She notices. At home she g
 the batteries out of her sound machine for her sister's flashlight, as a sacrifice she
 intends to mention again: "The Retreat goes dark so that the internet may live."
 
-**How she looks and moves.** Indigo cardigan with a white collar and cuffs, gray
-pleated skirt, white knee socks, long hair down her back under a headband. No glasses,
-and nothing in her hands: the reading shows in how she talks, not in what she carries.
-She stands holding one elbow, thinking, and walks with a small, even swing of both
-arms. When she talks she nods, raises a finger, puts a hand to her chin, or points.
+**How she looks and moves.** Indigo cardigan with a white collar and cuffs, gray pleated
+skirt, white knee socks, long flowing brown hair down her back, parted in the middle
+under a headband, with no bangs. No glasses, and nothing in her hands: the reading shows
+in how she talks, not in what she carries. She stands holding one elbow, thinking, and
+walks with a small, even swing of both arms. When she talks she nods, raises a finger,
+puts a hand to her chin, or points.
 
 **How she changes (draft).** She learns to say "I don't know", and that it is where
 finding out begins. The first step is at the end of Act Four ("...I don't know why.").
@@ -447,9 +452,9 @@ Daddy. And she is right: about the chickens, about the hiding ("Nobody EVER find
 her sister: "That is, regrettably, true."), and about Daddy being EARLY.
 
 **How she looks and moves.** Pink overalls with a star on the bib, yellow rain boots,
-pigtails with yellow ties. She stands with her fists on her hips and stomps when she
-walks, arms straight, like a small soldier. When she talks she throws both arms up,
-shows her muscles, or points.
+pigtails with yellow ties, soft blue eyes and a few freckles. She stands with her fists
+on her hips and stomps when she walks, arms straight, like a small soldier. When she
+talks she throws both arms up, shows her muscles, or points.
 
 **How she changes (draft).** She learns that sometimes the brave thing is to wait.
 

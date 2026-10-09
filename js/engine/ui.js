@@ -4,11 +4,8 @@
 
 import * as saves from "./save.js";
 import { icon } from "../art/kit.js";
-import { portrait, portraitAddress } from "./cast.js";
+import { portrait } from "./cast.js";
 import { url } from "./assets.js";
-import { paintedPeople } from "../art/paint.js";
-
-const CLEAR = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";     // one clear pixel
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -32,7 +29,7 @@ export class UI {
     this.hovered = null;
     this.edge = null;          // the way out whose band the pointer is in, over the floor ("N", "S", "W", "E"): set by the game (game.js, bindInput)
     this.over = null;          // the team portrait the pointer is on
-    this.faces = {};           // portraits, drawn once
+    this.faces = {};           // portraits, drawn once for each size they are shown at ("id|pixels")
 
     this.hudEl.innerHTML = `
       <p class="place" id="place"></p>
@@ -67,6 +64,7 @@ export class UI {
     this.teamEl.addEventListener("focusin", point);
     this.teamEl.addEventListener("pointerleave", leave);
     this.teamEl.addEventListener("focusout", leave);
+    window.addEventListener("resize", () => this.sizeFaces());        // (a bigger window, or the window moved to a sharper screen: portraits drawn again to fit)
     this.invEl.addEventListener("click", (event) => {
       const b = event.target.closest("[data-item]");
       if (b) g.useItem(b.dataset.item);
@@ -174,20 +172,14 @@ export class UI {
       this._team = now;
       this.teamEl.innerHTML = team.map((id, n) => {
         const name = esc(g.cast[id].name), on = id === d.active, has = count(id);
-        if (!this.faces[id] && paintedPeople) {                  // (a painted portrait is painted by the painter, and put in when it comes)
-          this.faces[id] = CLEAR;
-          portraitAddress(g.cast[id].sprite).then((src) => {
-            this.faces[id] = src;
-            const img = this.teamEl.querySelector(`[data-lead="${CSS.escape(id)}"] img`);
-            if (img) img.src = src;
-          });
-        }
-        if (!this.faces[id]) { const face = portrait(g.cast[id].sprite); this.faces[id] = face ? face.toDataURL() : ""; }
+        const key = id + "|" + (this.facePx || 42);
+        if (!this.faces[key]) { const face = portrait(g.cast[id].sprite, this.facePx || 42); this.faces[key] = face ? face.toDataURL() : ""; }
         return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}` +
           ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}">` +
-          `<img src="${this.faces[id]}" alt="" draggable="false"${paintedPeople ? ' style="image-rendering: auto"' : ""}></button>`;      // (a painted portrait is shown smoothly, never in hard pixels)
+          `<img src="${this.faces[key]}" alt="" draggable="false"></button>`;
       }).join("");
     }
+    this.sizeFaces();
     // The inventory is always on screen: whose it is, then what is in it, or "empty".
     const who = g.cast[d.active] || {}, mine = d.inventory[d.active] || [];
     this.invEl.style.setProperty("--who", who.color || "");
@@ -196,6 +188,34 @@ export class UI {
         `<button class="tool item" type="button" data-item="${esc(id)}" aria-pressed="${g.held === id}" aria-label="${esc(g.item(id).name)}" title="${esc(g.item(id).name)}">${pictured(g.item(id)) ? iconOf(g.item(id)) : `<span>${esc(g.item(id).name)}</span>`}</button>`).join("");
     if (inv !== this._inv) { this._inv = inv; this.invEl.innerHTML = inv; }      // rebuilt only when it changes, so a painted icon is not fetched and laid out again at every refresh
     this.label();
+  }
+
+  /**
+   * The team's portraits are pixel art drawn at exactly the size they are shown at, one picture pixel to one pixel of the
+   * screen (cast.js portrait), so that they are crisp whatever the size of the window and however sharp the screen: each
+   * is measured where it is shown and drawn for that many pixels (once for each size; then kept).
+   */
+  sizeFaces() {
+    if (this.teamEl.hidden) return;
+    const dpr = window.devicePixelRatio || 1;
+    for (const img of this.teamEl.querySelectorAll(".tool.face img")) {
+      const b = img.parentElement, id = b.dataset.lead, cs = getComputedStyle(b);
+      const w = b.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
+      if (!(w > 0) || !this.g.cast[id]) continue;
+      // A browser lays a picture out on whole CSS pixels: shown 41.5 wide, an 83-pixel portrait is stretched to 84 and loses
+      // its pixels. So it is given a width that is a whole number of CSS pixels and a whole number of the screen's pixels
+      // (41 at 1x, 82 at 2x, 40 at 1.5x: 60), and drawn for that many.
+      let css = Math.floor(w);
+      for (let c = css; c > css - 4 && c > 0; c--) if (Math.abs(c * dpr - Math.round(c * dpr)) < 0.01) { css = c; break; }
+      const px = Math.max(24, Math.round(css * dpr));
+      if (img.dataset.px === String(px)) continue;
+      const key = id + "|" + px;
+      if (!this.faces[key]) { const face = portrait(this.g.cast[id].sprite, px); this.faces[key] = face ? face.toDataURL() : ""; }
+      img.src = this.faces[key];
+      img.dataset.px = String(px);
+      img.style.width = img.style.height = (px === Math.round(css * dpr) ? css : px / dpr) + "px";
+      this.facePx = px;
+    }
   }
 
   /** The last resort: the start-up panel comes back with a message and a Reload button. */
