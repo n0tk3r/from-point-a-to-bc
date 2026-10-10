@@ -77,10 +77,9 @@ const FLOWERS = [
   ramp("#62d2bf", "#2f9c8f", "#1f6f66", "#134843"),      // leaves
 ];
 
-// ---------- Dad: vacation shirt, shorts, socks and sandals; his hair slicked back to the side, green eyes, stubble, a short beard ----------
+// ---------- Dad: vacation shirt, shorts, socks and sandals; his hair slicked back to the side, green eyes, a five o'clock shadow ----------
 const DAD_HAIR = ramp("#a87a4c", "#70482a", "#4d301a", "#2f1d10", { shine: true });      // (combed back with something in it: it catches the light)
-const DAD_BEARD = ramp("#8a6040", "#6a4428", "#4d301a", "#2f1d10");
-const STUBBLE = ramp("#dcb48f", "#c89c78", "#a07458", "#6e4a36");          // three or four days' growth over the skin
+const STUBBLE = ramp("#e8c3a2", "#d6a583", "#b2785a", "#7c4a37");          // a five o'clock shadow: the skin a shade darker, low on the face
 const DAD_PART = ramp("#70482a", "#4d301a", "#352113", "#2f1d10");
 export const dad = {
   name: "Dad", height: 1.0,
@@ -91,7 +90,7 @@ export const dad = {
           puffs: [[0.14, 0.80, 0.04, 0.80, 0.30, 0.84]],                     // combed back from the forehead and over to his left: high in front, smooth behind
           texture: (x, y, z) => (Math.abs(x + 0.40) < 0.06 && y > 0.40 && z > -0.30 ? DAD_PART : undefined) },      // the parting, on his right
   face: { eyes: { at: 1, full: ["--", "#i"], thin: ["-", "#"] }, iris: "#5f9140", eye: "#203018", lid: "#4a3020", brows: DAD_HAIR.tones[2], brow: { full: [0, 0, 0] },
-          short: { mat: DAD_BEARD, stubble: STUBBLE, dense: true, from: 0.30, lip: 0.55, chin: 1.1, side: 1.1, under: 0.74 }, lip: "#b06a58", noseShade: true,      // stubble over the whole jaw, and a beard only at the point of the chin: no moustache
+          short: { mat: STUBBLE, stubble: STUBBLE, dense: true, from: 0, belowNose: 0.18, lip: 0.55, chin: 1.1, side: 1.1, under: 1.1 }, lip: "#b06a58", noseShade: true,      // a five o'clock shadow from under the nose down over the jaw and chin, the upper lip clean: no beard, no moustache
           jaw: 0.92, chin: 0.62, chinY: -0.56, chinZ: 0.44, mouthY: -0.68, nose: 1.1, eyeX: 0.43, ear: 1.2, earOut: 1.03, big: { eyeW: 0.46, eyeH: 0.44 } },
   top: { mat: ramp("#ffe582", "#f4c043", "#cf9226", "#8f5d18"), sleeves: 0.62, hem: true, open: true, collar: true, pattern: FLOWERS },
   bottom: { kind: "shorts", mat: ramp("#a9b381", "#7f8d5c", "#59663f", "#39442b"), len: 0.72 },
@@ -148,7 +147,7 @@ export const mom = {
   name: "Mom", height: 0.93,
   dim: { ...WOMAN, bust: [0.002, 0.030], neckR: 0.84 },
   skin: SKIN,
-  hair: { mat: MOM_HAIR, bulk: [1.16, 1.12, 1.14], where: hairline({ front: 0.52, temple: 0.28, side: -0.40, back: -1.0, sweep: 0.22, brow: 0.45, temples: 1.10 }), ears: false,
+  hair: { mat: MOM_HAIR, bulk: [1.14, 1.02, 1.12], lift: [0, -0.002, 0], where: hairline({ front: 0.52, temple: 0.28, side: -0.40, back: -1.0, sweep: 0.22, brow: 0.45, temples: 1.10 }), ears: false,      // (close to the head on top, full at the sides: no dome)
           texture: (x, y, z) => curl(x, y, z, 7) ? MOM_CURL : undefined },     // curls all over, falling past her shoulders (and see `extras`)
   face: { eyes: { at: 1, full: ["==.", "#i="], thin: ["=.", "#="] }, iris: "#8a5a2c", eye: "#2e1b0e", lid: "#2c1a10", brows: MOM_HAIR.tones[2], brow: { full: [0, -1, -1, 0] }, browW: 4, blush: "#f0a08a",
           lip: "#b8475c", lips: "#d4707e", eyeX: 0.43, nose: [0.65, 0.65, 0.75], noseShade: true, jaw: 0.80, chin: 0.52, chinY: -0.58, chinZ: 0.44, mouthY: -0.68, mouthW: 0.20, smile: 1,

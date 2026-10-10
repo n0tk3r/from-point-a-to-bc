@@ -18,7 +18,8 @@
 // and says so; if he has ("egypt.heardAbram"), he knows Moses is not born yet, and has the tenses worked out.
 // The card that closes the act: nearly nineteen hundred years later (1921 B.C. to 44 B.C. is 1,877 years).
 //
-// The door and every beam are light, so they are drawn live. Nothing of the door shows until it is opened.
+// Every beam is light, so it is drawn live. The door is the paint itself, bending (the engine's `portal`, in `fx`):
+// nothing of it shows until it is opened.
 //
 // Try it: index.html?scene=egypt-chamber&lead=dad
 // Later states: &flags=egypt.arrived,egypt.inside,egypt.sawChamber,egypt.knowsLight,egypt.shadeSet,egypt.footSet,egypt.topSet
@@ -38,9 +39,13 @@ const pray = (a, on) => a && a.pray && a.pray(on);
 
 // ---------- light: the door, the sunbeam, the flashlight, the lamps ----------
 // The place that hums is a door-sized piece of bare wall between the king's furniture and the sarcophagus, from
-// x 462 to 542, and the air in front of it. The kit draws a door in time as a round thing; the scripts squeeze it to fit.
+// x 462 to 542, and the air in front of it. The door in time is a ripple in the paint (round ten: the engine's `portal`,
+// in `fx` below: the wall itself bends in rings from the door's middle, and nothing is drawn over the painting); it
+// opens round and is squeezed to a doorway as it grows, and the bending is kept to the bare wall, so the king's
+// furniture and the sarcophagus beside it stay straight.
 const DOOR = [500, 338, 96];                                          // the middle of the open door, and half its height: it stands from y 242 down to the floor
 const WIDE = 0.48;                                                    // wide open it is an oval, this much as wide as it is high (92 by 192)
+const WALL = [457, 545];                                              // the bare wall it is in: the paint beyond these columns is left alone
 const PLATE = 0.11;                                                   // the hole a flashlight opens, beside the whole door: round, the size of a dinner plate
 const HOLE = [28, 18];                                                // where that hole opens, from the middle of the door: in the air at (528, 356), just past his hand
 const BEAM = [[98, 380], [104, 404], [502, 310], [498, 290]];         // the soft outer light of the sunbeam: from the middle of the doorway (101, 392) across to the wall (500, 300)
@@ -53,14 +58,17 @@ const points = (shape) => shape.map((p) => p.join(",")).join(" ");
 const lit = (g, id, on) => { const el = g.q("#" + id); if (el) el.setAttribute("opacity", on ? 1 : 0); };
 const glow = (g, id, ms = 900) => { const el = g.q("#" + id); return el ? g.tween(ms, (k) => el.setAttribute("opacity", k)) : Promise.resolve(); };
 
-/** Dress the door. `high` is how much of its full height it has (0 is shut and unseen, 1 is wide open); `wide` is its
-    width beside that height (1 for a round hole); `at` moves its middle (the flashlight's hole is off to one side). */
-function door(g, high, wide = 1, flicker = false, at = [0, 0]) {
-  const whole = g.q("#door"), hole = g.q("#hole");
-  if (!whole || !hole) return;
-  whole.style.display = high > 0 ? "" : "none";
-  hole.style.transform = `translate(${at[0]}px, ${at[1]}px) scale(${Math.max(high * wide, 0.01)}, ${Math.max(high, 0.01)})`;
-  hole.classList.toggle("flicker", flicker);
+/** Dress the door. `high` is how far open it is (0 is shut and unseen, 1 is wide open); `wide` is its width beside its
+    height (1 for a round hole). The flashlight's hole is another thing: round, plate-sized (`scale`), off to one side
+    (`at`, from the door's middle), and it flickers with the batteries. */
+function door(g, high, wide = 1, flicker = false, at = [0, 0], scale = 1) {
+  const d = g.effects.get("door");
+  if (d) d.open(high, { wide, flicker, at, scale });
+}
+/** The light on the wall has changed (the sunbeam has come on, the flashlight is up): the door bends the lit wall. */
+function relight(g) {
+  const d = g.effects.get("door");
+  if (d) d.refresh();
 }
 
 /** Draw someone as another figure from js/art/people.js (the same man, dressed differently), keeping his id, his
@@ -79,6 +87,7 @@ function dress(g) {
   const open = !!g.flag("egypt.doorOpen");
   lit(g, "beam", open);
   lit(g, "flash", false);
+  relight(g);
   door(g, open ? 1 : 0, WIDE);
   if (g.flag("egypt.hasCopper")) redraw(g, "goldsmith", "goldsmith-shades");
 }
@@ -93,25 +102,28 @@ async function shine(g) {
     holdOut(g, true);                                                              // the flashlight, pointed at the place that hums
     if (ray) ray.setAttribute("points", points(FLASH_FAR));
     if (cone) cone.setAttribute("opacity", 1);
+    relight(g);
     await g.wait(350);
     g.sfx("portal");
-    await g.tween(700, (k) => door(g, PLATE * k, 1, true, HOLE), g.ease.out);     // a hole in the air, the size of a dinner plate
+    const plate = (k) => door(g, k, 1, true, HOLE, PLATE);                         // the flashlight's hole: round, plate-sized, in the air past his hand, flickering
+    await g.tween(700, plate, g.ease.out);                                         // a hole in the air, the size of a dinner plate
     await g.say("egypt.hole.look");
     holdOut(g, false);
     await g.walkTo(470, 480);                                                      // he steps nearer...
     g.lead.face("NE");
     holdOut(g, true);
     if (ray) ray.setAttribute("points", points(FLASH_NEAR));
-    await g.tween(500, (k) => door(g, PLATE * (1 - 0.45 * k), 1, true, HOLE));     // ...and it shrinks
+    await g.tween(500, (k) => plate(1 - 0.45 * k));                                // ...and it shrinks
     await g.say("egypt.hole.small");
     for (const level of [0.3, 1, 0.2, 0.7, 0]) {                                   // the batteries give out
       if (cone) cone.setAttribute("opacity", level);
       await g.wait(130);
     }
-    await g.tween(350, (k) => door(g, PLATE * 0.55 * (1 - k), 1, true, HOLE));     // and the hole goes with them
+    await g.tween(350, (k) => plate(0.55 * (1 - k)));                              // and the hole goes with them
   } finally {                                                                      // whatever happens, nothing of it is left on the stage
-    door(g, 0);
+    door(g, 0, WIDE);
     lit(g, "flash", false);
+    relight(g);
     holdOut(g, false);
   }
   await g.say("egypt.flash.dies");
@@ -169,6 +181,7 @@ async function sunrise(g) {
   g.lead.face("E");
   await g.wait(300);
   await glow(g, "beam", 1200);
+  relight(g);
   await g.say("egypt.gate.1");
   g.sfx("portal");
   await g.tween(1600, (k) => door(g, k, 1 - (1 - WIDE) * k), g.ease.out);      // it opens round, and stretches to a doorway as it grows
@@ -231,9 +244,10 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },
   ],
 
-  // Everything here is light. The sunbeam, the flashlight and the door all start hidden: dress() shows what the
-  // facts say, and the scripts above play the moments in between. Nothing of the door is drawn until it is opened.
-  live(kit) {
+  // The sunbeam and the flashlight's light are light, and so are drawn live, over the painting. Both start hidden:
+  // dress() shows what the facts say, and the scripts above play the moments in between. (The door is not drawn here:
+  // it is the paint itself, bending: see `fx`.)
+  live() {
     return `<defs><filter id="sun-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
         <filter id="sun-edge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
       <g id="beam" opacity="0" shape-rendering="geometricPrecision">
@@ -244,15 +258,18 @@ export default {
       <g id="flash" opacity="0" shape-rendering="geometricPrecision">
         <polygon id="flash-ray" points="${points(FLASH_FAR)}" fill="#f4f8ff" opacity="0.3" filter="url(#sun-soft)"/>
         <ellipse cx="${DOOR[0] + HOLE[0]}" cy="${DOOR[1] + HOLE[1]}" rx="18" ry="18" fill="#f4f8ff" opacity="0.5" filter="url(#sun-soft)"/>
-      </g>
-      <g id="door" style="display:none">${kit.portal(DOOR[0], DOOR[1], DOOR[2], "hole")}</g>`;
+      </g>`;
   },
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). The six lamps' painted flames and their six
   // threads of smoke are gone (the bright air round each flame, the lamplight, the oil full of light and the brazier's
   // painted coals stay), and the engine draws them: each flame on its wick, at its lamp's depth (lamp C on the bench, E at
   // the right edge on the front plane), a thread of smoke rising from each in the still air, and the coals breathing.
+  // And the door in time (round ten): a ripple in the paint of the bare wall, shut and unseen until a script opens it.
   fx: [
+    // The door: its middle, half its height, its width beside that (a doorway, not a round hole), the bare wall it is kept
+    // to, and its depth (its foot is on the floor at row 434: whoever walks up to it stands in front of it).
+    { id: "door", type: "portal", at: [DOOR[0], DOOR[1]], r: DOOR[2], wide: WIDE, keep: WALL, base: 440, pale: "#fff4d8", light: true },      // (light: the sunbeam lands on this wall, and the door bends the lit wall)
     // [id, at x, at y, base, size, width; where the smoke starts, how high it goes, where its top ends up]
     ...[["A", 162.3, 282.2, 406, 8.9, 3.9, [159.8, 271.5], 47, -0.6], ["B", 373.7, 287.5, 404, 8.9, 3.9, [371.2, 276.8], 72, 5.4], ["F", 60, 499.3, 504, 10.3, 4.6, [57.9, 488], 70, 4.8],
       ["D", 708.2, 381.3, 467, 9.8, 4.3, [706.3, 367.7], 48, -2.8], ["C", 259.1, 436.2, 512, 10.3, 4.6, [256.4, 423.2], 51, 2.6], ["E", 779.5, 453.3, "front", 11.9, 5.2, [775.2, 442.1], 55, 5]]

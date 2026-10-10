@@ -184,6 +184,21 @@ export class SceneView {
   /** Find a live part of the drawing, for a script to move or fade. */
   q(selector) { return this.liveEl.querySelector(selector); }
 
+  /** The live layer as pixels, as it is at this moment (a canvas the size of the picture; null if it cannot be drawn):
+      for the door in time, which bends the light that falls on the wall along with the paint (effects.js, `portal`).
+      Pictures the live layer shows by address are not in it: a drawing made from markup cannot fetch them. */
+  snapshotLive() {
+    return new Promise((done) => {
+      const svg = this.liveEl.cloneNode(true);
+      svg.setAttribute("width", W); svg.setAttribute("height", H);
+      svg.setAttribute("preserveAspectRatio", "none");
+      const img = new Image();
+      img.onload = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; c.getContext("2d").drawImage(img, 0, 0, W, H); done(c); };
+      img.onerror = () => done(null);
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg));
+    });
+  }
+
   clear() {
     this.drawing++;
     this.backdrop.getContext("2d").clearRect(0, 0, W, H);

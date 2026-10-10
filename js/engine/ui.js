@@ -296,7 +296,22 @@ export class UI {
       <button class="row" type="button" data-act="load"${off}><b>Load game</b></button>
       <button class="row" type="button" data-act="options"><b>Options</b></button>
       <button class="row" type="button" data-act="quit"${off}><b>Quit to the title screen</b></button>
-    </div>${off ? "<p>Saving and loading are back as soon as this moment has played out.</p>" : ""}</div>`);
+    </div>${off ? "<p>Saving and loading are back as soon as this moment has played out.</p>" : ""}${this.testingRow(!!off)}</div>`);
+  }
+
+  // ---- TESTING-9 (temporary): the testers' row at the foot of the pause menu: the part the game is at, and a button to the
+  // part before it and the part after it (game.js: parts, partNow, partStep, goPart; the keys [ and ] do the same). To take it
+  // out: this method, its line in pauseMenu above, its two cases in onClick below, the ".testing" rule in css/game.css, and
+  // the block in game.js. ----
+  testingRow(off) {
+    const g = this.g, now = g.parts[g.partNow()], none = !g.parts.some((p) => p.checkpoint);
+    const button = (act, part, end, label) => {
+      const why = off ? "Back as soon as this moment has played out" : none ? "There are no checkpoints yet: run scratchpad/checkpoints/build.py" : part ? `Go to ${part.name}` : end;
+      return `<button class="row" type="button" data-act="${act}"${off || !part ? " disabled" : ""} title="${esc(why)}"><b>${label}</b></button>`;
+    };
+    return `<div class="testing" role="group" aria-label="Testing"><p><small>Testing: for testers; will be removed</small></p>
+      <p class="part">Part: ${esc(now ? now.title : "the start")}</p>
+      <div class="foot">${button("part-prev", g.partStep(-1), "This is the first part", "&#9664; Previous part")}${button("part-next", g.partStep(1), "This is the last part", "Next part &#9654;")}</div></div>`;
   }
 
   slotRow({ slot, save }, act) {
@@ -365,6 +380,8 @@ export class UI {
       case "save-file": return g.saveFile();
       case "load-slot": { const body = saves.readSlot(slot); if (body) return g.load(body); return; }
       case "load-file": return this.fileInput.click();
+      case "part-prev": return g.goPart(-1);         // TESTING-9 (temporary): the testers' row (testingRow)
+      case "part-next": return g.goPart(1);          // TESTING-9 (temporary)
     }
   }
 }

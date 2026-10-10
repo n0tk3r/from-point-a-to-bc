@@ -29,7 +29,7 @@ them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome
 | Engine | Plain JavaScript modules, no framework, no build step | GitHub Pages serves the files as they are. Nothing to install, nothing to break. |
 | Picture | One painted picture, 800 pixels wide and 600 high, scaled to fit any screen | Room for a hand-painted background in the manner of the classic adventures. Every position in the game is a pixel of that picture, so a number in a scene file can be measured straight off the painting. |
 | Scenery | A painted backdrop for each scene, with painted cut-outs for whatever people walk behind or the story changes | A background can be as rich as a painter can make it and costs the game nothing while it is on screen. |
-| Light | Time travel, beams and glows are drawn by code, never painted | They have to move, grow and stay smooth, and a wormhole should not look like part of the world it has opened in. |
+| Light | Beams and glows are drawn by code, never painted; a door in time is the painting itself, bending | Light has to move, grow and stay smooth. A door in time is a ripple in the paint, as if a stone had been dropped in the picture: the author's choice, round ten (section 2, "The door in time"). |
 | People | Drawn by a jointed figure from a page of settings, not stored as pictures | One description gives all eight directions, every animation and every size. See section 4. |
 | Depth | People, props and cut-outs are painted back to front by where they touch the ground, and people shrink toward the horizon | The lead walks behind the car, in front of it and round it, with no hand-made mask. See section 3. |
 | Movement | One game clock drives anything that matters to the game. CSS runs only the glow of time travel and a few ambient loops. | Each tool does the job it is best at. See section 1. |
@@ -72,7 +72,7 @@ js/engine/              the engine. Knows nothing about this story.
   ui.js                   heads-up display and menus
   game.js                 ties it together; the `g` that scripts use
 js/art/                 everything that is drawn by code
-  kit.js                  the portal, the sketch of an unpainted scene, close-ups, and the old 320x200 drawings
+  kit.js                  the neon rings (the tab icon, the title, the tunnel), the sketch of an unpainted scene, close-ups, and the old 320x200 drawings
   pix.js                  the pixel renderer: solid shapes in, pixel art out
   rig.js                  the jointed figure: poses, eight directions, the walk, stances, gestures, sitting
   people.js               the cast as the rig sees them: proportions, clothes, colors, and how each one stands, walks and talks
@@ -145,10 +145,11 @@ The rule is: **who needs to know about the motion decides the tool.**
   where nothing on it has changed, nothing is painted. When something has (a step, a
   blink, a lid that opens), only the patch it touched is wiped and painted again.
   Sections 3 and 4 explain how those pictures are made and put in order.
-- **Light is drawn live, and CSS animates it.** The spinning rings of a portal, the
-  glow it throws on a road, a beam of sunlight. These are smooth drawings on a layer of
-  their own, and they only ever animate `transform` and `opacity`, the two properties
-  browsers can animate without redrawing the picture.
+- **Light is drawn live, and CSS animates it.** The glow a door in time throws on a
+  road, a beam of sunlight, the spot of sun off a coin. These are smooth drawings on a
+  layer of their own, and they only ever animate `transform` and `opacity`, the two
+  properties browsers can animate without redrawing the picture. (The door itself is
+  not light: it is the paint, bending, drawn among the moving things: section 2.)
 - **A second canvas is used for one effect:** the time tunnel (`js/engine/fx.js`),
   where rings, streaks and flying dates all change every frame.
 - **No WebGL and no game framework.** If a later scene needs a storm of particles,
@@ -265,8 +266,8 @@ The picture is a stack of layers, back to front:
 | Layer | What is on it | How it is made |
 | --- | --- | --- |
 | Backdrop | The scene's painting: everything that is far away or flat on the ground | A picture file, shown as it is |
-| Live | Light: wormholes, the glow they throw, beams, anything that must stay smooth or move by itself | Smooth drawings in picture pixels, animated by CSS or by a script |
-| Cast | People, painted cut-outs and props, and the things that move by nature (smoke, flames, water, birds) | Pixels, sorted by depth and repainted where something has changed |
+| Live | Light: the glow a door throws, beams, the spot of sun off a coin, anything that must stay smooth or move by itself | Smooth drawings in picture pixels, animated by CSS or by a script |
+| Cast | People, painted cut-outs and props, the things that move by nature (smoke, flames, water, birds), and the doors in time | Pixels, sorted by depth and repainted where something has changed |
 | Tunnel | The time tunnel | A canvas effect, only during travel |
 | Outlines | Show: an outline round each thing that can be clicked, and an arrow at each way out at an edge | A canvas, drawn once when Show is turned on, hidden while it is off (section 10, "What Show shows") |
 | Clickable areas | Invisible shapes | Real buttons, so a keyboard or a screen reader can reach them |
@@ -360,6 +361,7 @@ The marks go into the scene file as they are: the field names are the same in bo
 | `birds`, flyers | Small birds crossing the sky now and then along `lanes`, or wheeling round a `circle` (kites): beating their wings in bursts and gliding between, banking at the ends of a circle | `lanes` (lines across the sky, beginning and ending off the picture) or `circle` (`{ at, r: [rx, ry] }`); `every` (`[6, 14]` s between crossings); `group` (`[1, 3]` birds); `count` (2, wheeling); `speed` (70 crossing, 14 wheeling); `size` (7 px across, drawn); `scale` (or `[low, high]`: each bird its own size); `frames` (`glide`, `flap`, `bank`, `middle`, `mirror`); without frames, small dark silhouettes drawn by the engine |
 | `birds`, a flock | Birds on the ground (`area`) or along a ledge (`perch`) that stand, look about, peck, walk a few steps and turn; go up when somebody comes near and land again a little way off, the ones beside them going too; with nowhere clear to land, fly off and come back later | `area` (or `poly`, `rect`) or `perch`; `count` (5); `frames` (below), or birds drawn by the engine: `look` (`pigeon`, `dove`, `sparrow`) and `size` (26 px long where a person is 160 tall); `depth` (smaller farther off: on an area); `moves` (`{ stand: 2, look: 2, peck: 4, walk: 3, turn: 1, away: 0 }`; `away`: one flies off by itself and comes back); `shy` (150 px at full size, about a metre and a half; half that from someone standing still; 0: never startled); `fly`, `turn` (false: never); `back` (`[8, 20]` s away); `treads` (`[y, ...]`) or `tread` (px): birds on steps keep to the treads and hop from one to the next; `walk` (12), `flight` (95) |
 | `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
+| `portal` | The door in time: a ripple in the paint. See "The door in time", below | `at` (its middle, wide open); `r` (half its height, wide open); `wide` (1: a round hole; the chamber's doorway 0.48); `keep` (the bare wall it is in, `[x0, x1]`); `rise`; `under`; `light`; `open` (0); `strength` (0.45); `bend` (0.6); `rate` (1.5); `size` (1.11); `pale` |
 
 Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
 depth among the people exactly as for a cut-out (section 3: a row, a line, `"front"`, `"back"`); `when` (on the stage
@@ -413,6 +415,44 @@ A mark the engine cannot use says so in the console, by its id. `game.effects.ho
 `game.effects.seek(5000)` shows them five seconds in, `game.effects.stats()` counts what is moving, and `?nofx` in the
 page address (or `game.effects.enabled = false`) takes them all away. The engine's own scene shows every kind:
 `index.html?scene=engine-proof&lead=dad&flags=proof.fx`.
+
+### The door in time
+
+The author, 9 October: "Rather than a solid object or rays let's see if we can make it look like a ripple or distortion
+of the paint. The time portal really needs to look good." A design study showed six such looks live on the real
+backdrops (pond rings, a slow vortex, wet paint flowing, a glass lens, heat haze, the paint thinning to light), and he
+chose **pond rings**, with the settings that are now the kind's defaults. So since round ten a door in time is not a
+drawn thing laid over the painting (the neon rings stay the game's mark: in the browser tab icon, on the gate you
+click to begin, and rushing past in the time tunnel; `kit.portal` still draws them, and no scene uses it now): it
+is the painting itself, bending. The `portal` kind reads the paint in the box
+the door can reach, once the scene is up (the backdrop; any cut-out that lies under the door, named in `under`; and,
+with `light: true`, the light the scene draws over the wall, so that the sunbeam that opens the chamber door is bent
+with the wall and not hidden by it), and writes it back displaced thirty times a second: rings travel out from the
+door's middle and the paint bends along each one, a crest catching the lamplight a shade lighter and a trough a shade
+darker, as wet paint does; the rings fade with distance, their strength and phase wander round the circle and across
+the wall from seeded tables (so it is paint, not geometry), and the heart holds a soft light of the paint's own colour
+(`pale`, never keyed). A coin-sized door gets a brighter heart and a wet rim, so it shows on a dark floor and on bright
+sand alike; a coin door is also given more `strength` (0.8) than the walk-in door, or it would not be seen. Where the
+rings do not reach nothing is drawn, so the door sits in the picture at its depth (`base`): whoever walks up to it is
+drawn over it. `keep` fences the bend into the bare wall the chamber door stands in, so the king's furniture beside it
+stays straight.
+
+A door opens and shuts by `open`, 0 to 1: `g.effects.get("door").open(k)`, tweened by the scene's script (1.6 s in
+the chamber; 0.9 s for a coin door). As it opens the radius grows fast and the bending follows, so a small disturbance
+shows at once; shut is the same backwards, and at 0 nothing is drawn. The options a moment may need ride with it and
+hold until given again: `{ wide }` (the chamber door opens round and is squeezed to a doorway as it grows), `{ at,
+scale }` (the flashlight opens a plate-sized round hole off to one side: `at` an offset from the door's middle, `scale`
+0.11 of its size), `{ flicker }` (with the batteries). The coin's wink in Rome is `scale` over 600 ms. `refresh()`
+reads the paint again when the light over it has changed (the beam has come on). On the highway `rise: true` lets
+the hole's middle rise out of the sun's disc as it opens, and `under: [{ src: "...sun.png" }]` reads the sun into the
+paint it bends; the sun stays where it is, part of the picture the hole is in.
+
+What it costs: the chamber door is about 30,000 pixels a picture (one read of the paint, blended from four pixels,
+per pixel), 1.5 to 3 ms here and perhaps three times that on a slow laptop, thirty times a second while it is open;
+the coin doors are under 0.2 ms; making a door (its tables) is about 30 ms, once, as the scene is built. For less
+motion the clock runs at half speed, the bend is 0.6 as big, and it is drawn fifteen times a second: never stopped
+dead, as the author asked. The study, with the six looks and the author's settings, is kept as a private page
+(`claude.ai/artifact/WCRWEAbF2DfeouYApqQewm`).
 
 ### How the pictures are painted
 
@@ -855,6 +895,44 @@ Each save is wrapped in an envelope:
 - Volume and subtitle settings are stored apart from saves, so loading a save from
   a friend never changes your volume.
 
+### Testing: parts
+
+**Temporary, for the testers; it will be taken out.** The pause menu ends with a row
+marked "Testing: for testers; will be removed": the part of the story the game is at, with
+**Previous part** and **Next part** under it. The keys **[** and **]** do the same during
+play (not in a menu, and not while typing in a field). A part is a beat of the story
+(`js/content/acts/*.js`), in story order, the opening of each act included, so a tester can
+go straight to any puzzle, or back to the one before, instead of playing through everything
+again. Next goes to the part after the furthest one done; Previous goes to the one before
+it, so pressing it once undoes the last puzzle, and pressing it again goes back one more.
+At either end the button is greyed, and its tooltip says why.
+
+Going to a part loads a saved game, exactly as **Load game** does: the same checks, the
+same way into the scene, and a note at the top naming the part ("Act One · Take the road
+map from the glovebox"). Those saved games are `js/content/checkpoints.js`: for each beat,
+the game as it stood the first moment the player had control after that beat was done, with
+everything in the pockets, every fact, and everyone where they stood. They are not written
+by hand. They are captured from the scripted playthroughs (the act tests described in
+section 12), which play each act in the real game by real clicks: a hook in each script
+keeps a copy of the game's own autosave whenever a beat's fact has just come true, and
+`python3 scratchpad/checkpoints/build.py` runs the four plays, gathers what they captured,
+writes the file in story order, and loads every checkpoint to see that it opens. It takes
+about half an hour, because the plays are slow by design, and it has to be run again
+whenever an act's beats, scenes or scripts change, or the parts will be yesterday's game.
+
+Three things follow from where the saved games come from. An act's gate and the next act's
+opening are one moment (the player first has control again after the hand-over), so they
+are one and the same saved game, and the buttons treat them as one part, named for the
+opening. The plays do the puzzles of an act in their own order, so a part can have a later
+puzzle of the act done already (Dad has the copper mirror before the shade is up); the row
+names the part that was jumped to until a puzzle is done or undone, and then the furthest
+one done. And the last part is the end of the demo: the door open where the tracks stop,
+and the family at it, as the game stood when the ending went to the title screen.
+
+To take it out: the block marked TESTING-9 in `js/engine/game.js` (and the import at its
+top and one line in `bindInput`), `testingRow` and its three lines in `js/engine/ui.js`,
+the `.testing` rule in `css/game.css`, and the data file.
+
 ---
 
 ## 7. Sound, music and dialogue
@@ -1096,17 +1174,18 @@ nobody else in the game uses (`cast` in `world.js`).
 They are kept apart on purpose, and the contrast is the style:
 
 - **The world is painted, warm and matte.** Earth, stone, water, linen, wood.
-- **Time travel is the only thing that glows, and the only thing drawn smooth.** Neon
-  rings, soft light, dashed lines. A wormhole never looks like part of the world it
-  has opened in, because it is not made of the same stuff: it is drawn by code on the
-  live layer and never painted. Wherever the two meet, the neon lights the scene: the
-  road turns cyan under the portal.
+- **A door in time is the world, bending.** Since round ten it is not a drawn thing
+  over the painting but the painting itself, rippling as if a stone had been dropped
+  in it (section 2, "The door in time"): the paint stays paint, wet and lit. What still
+  glows, drawn smooth on the live layer, is the light it throws: the glow down the road,
+  the spot of sun off a coin, the beam that opens the chamber.
 - **Doors in time are invisible until the puzzle that opens them is solved.** Before
   that there is nothing to see: only what people say about a hum.
 - **The interface is ancient, with neon for "active".** Menus, buttons, cards and
   the title are ink on papyrus, in Koine Road. The selected item or tool turns cyan.
-- **One signature shape.** A wormhole is always the same four dashed rings, turning
-  in opposite directions, in every era and in the browser tab icon (`portal` in `kit.js`).
+- **One signature shape, kept small.** The dashed rings turning in opposite directions
+  remain the game's mark: in the browser tab icon, on the gate you click to begin, and
+  rushing past in the time tunnel between eras. The doors themselves no longer wear them.
 - **A possible motif to grow:** let the eras leak into each other as the story goes
   on. A Roman column with a neon crack. A hieroglyph that is a road sign.
 
@@ -1167,8 +1246,9 @@ it was, with coloured shadows, warmer light and one box of paints shared by the 
 - **The moving things** (`effects.js`): the colours a scene gives its smoke, flames, embers, water and drawn birds, or
   the engine's own defaults for them, go through the same key (`keyHex`) as each is put on the stage; their painted
   frames are keyed with the pictures.
-- **Never keyed:** time (the portal, the tunnel: its colour belongs to no place), and the interface (the buttons, the
-  label line, the inventory and its pictures, the title strip, the cards).
+- **Never keyed:** time (the tunnel, and the pale light at the heart of a door in time: its colour belongs to no
+  place; the paint a door bends is keyed already, being the picture), and the interface (the buttons, the label line,
+  the inventory and its pictures, the title strip, the cards).
 
 **A new scene, or a repainted one** (the four new places in Rome, say):
 
@@ -1222,8 +1302,9 @@ export default {
     { id: "papyrus", src: art + "front.png", plane: "front" },                   // always in front
     { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") },   // (added) there only while the story says so
   ],
-  live(art, g) { return art.portal(500, 300, 40, "door"); },                     // (added) light, drawn and not painted
+  live(art, g) { return `<polygon id="beam" .../>`; },                           // (added) light, drawn and not painted
   fx: [                                         // (added) things that move by nature, drawn moving (section 2, "Things that move by nature")
+    { id: "door", type: "portal", at: [500, 300], r: 40, base: 342 },                                             // a door in time: the paint bending; a script opens it, g.effects.get("door").open(1)
     { id: "fire-smoke", type: "smoke", at: [468, 422], base: 430, height: 130, width: [6, 46], wind: 7 },          // its base: a man behind the fire is behind its smoke
     { id: "doves", type: "birds", look: "dove", count: 6, area: [[268, 372], [318, 334], [372, 338], [392, 372], [330, 402], [282, 400]] },
     { id: "palms-sway", type: "sway", plane: "palms", anchor: "bottom", amount: 1.4 },                            // a cut-out stirring from its feet
@@ -1284,10 +1365,11 @@ A script can also take hold of one: `g.plane("trunk").show(true)`, `.set("login"
 `.fade(0.5)`, `.place(x, y, scale)`. What a script sets by hand holds until the scene is
 built again.
 
-**Light.** A wormhole, a beam, a glow: return it from the scene's `live(art, g)`, as
-drawing markup in picture pixels. `art.portal(x, y, radius, id)` is the door in time.
-Give a part an `id` and a script finds it with `g.q("#door")`, to fade, move or scale it.
-The live layer is under the cast.
+**Light.** A beam, a glow, a spot of sun: return it from the scene's `live(art, g)`, as
+drawing markup in picture pixels. Give a part an `id` and a script finds it with
+`g.q("#beam")`, to fade, move or scale it. The live layer is under the cast. A door in time
+is not light: it is a `portal` among the scene's `fx` (section 2, "The door in time"), and
+a script opens it with `g.effects.get("door").open(k)`.
 
 **A way out at the edge of the picture.** As in the old adventure games, the player can
 walk off the edge of the screen. A scene lists the ways out across the edges of its picture
@@ -1507,7 +1589,7 @@ loads the game, by the plain addresses, with the old risk.
 | `g.assets.url(path)`, `g.assets.picture(path)` | For a script that puts a painted picture on the live layer: its stamped address, and a promise that it has arrived |
 | `g.actor("scribe").face("W")`, `g.lead.look(x, y)` | Turns someone to a compass point, or toward a place |
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
-| `g.actor("scribe")`, `g.lead`, `g.q("#door")` | Reach people, and the parts of the live layer |
+| `g.actor("scribe")`, `g.lead`, `g.q("#beam")`, `g.effects.get("door")` | Reach people, the parts of the live layer, and the moving things (a door in time among them: `.open(k)`) |
 | `g.team(["mom", "bigsis", "lilsis"])` | Says which leads the player can switch between from now on |
 | `await g.switchLead("son")` | Changes who the player controls (they must be on the team) |
 | `g.closeup(drawing, label)`, `g.closeup()` | Shows a close look at something, and puts it away |

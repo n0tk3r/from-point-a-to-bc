@@ -824,7 +824,9 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // The upper lip, as seen: between the nose and the mouth, as wide as the mouth. A short beard keeps clear of it (no moustache).
   const lipBox = sb && !sb.moustache ? (() => { const mw = (face.mouthW ?? 0.22) * 1.25, a = P(hp(-mw, mouthY, 0.90)), b = P(hp(mw, mouthY, 0.90)), m = P(hp(0, mouthY, 0.95)), n = P(noseEnd); return [Math.min(a[0], b[0]) - 1, Math.max(a[0], b[0]) + 1, n[1] - 1, m[1] + 1]; })() : null;
   const stubbly = (x, y) => (S < 200 || (sb.dense ? (x + y) % 3 !== 0 : (x + y) % 2 === 0) ? sb.stubble : undefined);       // (on a portrait's big face, stubble is a stipple over the skin: every other pixel, or two in three when it is `dense`)
+  const noseY = P(noseEnd)[1] + (sb && sb.belowNose ? sb.belowNose * hr[1] * S : 0);           // (belowNose: a shadow that begins this far under the nose, in half-heights: the cheeks beside the nose stay clean)
   const shortBeard = sb ? (t, nx, ny, x, y) => {
+    if (sb.belowNose && y + 0.5 < noseY) return undefined;
     if (lipBox && x + 0.5 > lipBox[0] && x + 0.5 < lipBox[1] && y + 0.5 > lipBox[2] && y + 0.5 < lipBox[3]) return undefined;          // the upper lip and the mouth: clean
     if (Math.abs(fwd) > 0.35 && nx * fwd > 0.30 && t < (sb.chin ?? 0.86)) return t > (sb.lip ?? 0.6) ? stubbly(x, y) : undefined;      // the front of a turned face: lips and upper lip stay clear
     if (t > (sb.chin ?? 0.86) || ny > (sb.under ?? 0.30) || (Math.abs(nx) > 0.74 && t > (sb.side ?? 0.30))) return sb.mat;      // (under: how far round to the underside of the jaw the beard proper begins)

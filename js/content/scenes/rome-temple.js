@@ -24,7 +24,8 @@ const twice = (first, second) => (g) => g.say(heard(g, first) ? second : first);
 
 // ---------- the light ----------
 // Places for the spot of reflected sunlight. It is drawn live (see `live` below): `#glint` is the spot,
-// `#ray` the faint beam from the coin to it, `#door` the door in time and `#hole` its rings.
+// `#ray` the faint beam from the coin to it. The door in time is a ripple in the paint of the floor, the size of a coin
+// (round ten: the engine's `portal`, in `fx` below), shut and unseen until the spark opens it.
 const HAND = [404, 438];                                          // the coin, in the hands of a boy standing on the sunlit patch (he is drawn over it)
 const WRONG = [[720, 240], [603, 381]];                           // the first try: down the right wall, and into the clerk's eyes
 const RIGHT = [[224, 238], [190, 330]];                           // the second: down the left wall and a little left, onto the place that hums (its end is the painter's `hum.at`)
@@ -44,10 +45,9 @@ function shine(g, on) {
 /** Slide the spot from one place to another. */
 const sweep = (g, [from, to], ms) => g.tween(ms, (k) => aim(g, from[0] + (to[0] - from[0]) * k, from[1] + (to[1] - from[1]) * k));
 /** How far open the door is: 0 is shut and not to be seen, 1 is the size of the coin. */
-function openDoor(g, k) {
-  const door = g.q("#door"), hole = g.q("#hole");
-  if (door) door.setAttribute("opacity", k);
-  if (hole) hole.style.transform = `scale(${Math.max(k, 0.01)})`;
+function openDoor(g, k, scale = 1) {
+  const d = g.effects.get("door");
+  if (d) d.open(k, { scale });
 }
 
 // ---------- chain C ends here: the spark ----------
@@ -100,8 +100,7 @@ async function tossCoin(g) {
   await g.reach();
   g.take("coin");                              // it comes out of the sky in Nevada, about two thousand years later
   g.sfx("portal");
-  const hole = g.q("#hole");
-  if (hole) g.tween(600, (k) => { hole.style.transform = `scale(${1 + 0.8 * Math.sin(Math.PI * k)})`; });   // not waited for: the timing stays the old scene's
+  g.tween(600, (k) => openDoor(g, 1, 1 + 0.8 * Math.sin(Math.PI * k)));   // the door winks as the coin goes in. Not waited for: the timing stays the old scene's
   await g.wait(900);
   await g.say("rome.hole.coin2");
   g.flag("rome.tossed", true);
@@ -201,11 +200,11 @@ export default {
 
   // LIGHT, drawn live.
   //   The coals of the two braziers and the flame of the clerk's lamp glow, and breathe a little.
-  //   The other three start out of sight; `setup` and the scripts above bring them on:
+  //   The other two start out of sight; `setup` and the scripts above bring them on:
   //   #ray     the faint beam from the coin to the spot
   //   #glint   the spot of reflected sunlight
-  //   #door    the door in time, the size of a coin. Inside it, #hole is the game's own wormhole, very small.
-  live(art) {
+  //   (The door in time is not drawn here: it is the paint of the floor, bending. See `fx`.)
+  live() {
     return `<defs>
         <radialGradient id="glint-glow"><stop offset="0" stop-color="#fffbe6" stop-opacity="0.95"/><stop offset="0.45" stop-color="#ffe9a8" stop-opacity="0.5"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
         <radialGradient id="ember-glow"><stop offset="0" stop-color="#ffb060" stop-opacity="0.5"/><stop offset="0.5" stop-color="#ff8a3c" stop-opacity="0.2"/><stop offset="1" stop-color="#ff8a3c" stop-opacity="0"/></radialGradient>
@@ -216,8 +215,7 @@ export default {
         <circle class="glow" cx="631" cy="404" r="26" fill="url(#ember-glow)" style="animation-delay:-2.2s;animation-duration:2.7s"/>
       </g>
       <polygon id="ray" points="0,0 0,0 0,0" fill="#ffe9a8" opacity="0" shape-rendering="geometricPrecision"/>
-      <g id="glint" opacity="0" shape-rendering="geometricPrecision"><circle r="17" fill="url(#glint-glow)"/><ellipse rx="5" ry="6.5" fill="#fffdf0"/></g>
-      <g id="door" opacity="0"><g class="flicker">${art.portal(190, 330, 11, "hole")}</g></g>`;
+      <g id="glint" opacity="0" shape-rendering="geometricPrecision"><circle r="17" fill="url(#glint-glow)"/><ellipse rx="5" ry="6.5" fill="#fffdf0"/></g>`;
   },
 
   actors: [{ id: "clerk", kind: "clerk", at: [614, 464], face: "W",
@@ -227,6 +225,9 @@ export default {
   // and the engine draws it; the two braziers' coals breathe, low flames lick up from them and die down now and then
   // (`lull`), and threads of smoke rise. All the light they throw on the room stays painted.
   fx: [
+    // The door in time (round ten): a ripple in the paint, the size of a coin, on the floor by the left wall where the
+    // place hums (the painter's `hum.at`); at its depth, whoever stands at it to look through is drawn in front of it.
+    { id: "door", type: "portal", at: [190, 330], r: 11, base: 331, pale: "#fff6e4", strength: 0.8 },      // (a coin door bends harder than the walk-in door, or it is not seen: the study's advice)
     // the clerk's oil lamp on his table, in still air, and its thread of smoke (base one row in front of the table's)
     { id: "lamp-flame", type: "flame", at: [632.7, 406.7], base: 489, size: 10, width: 4.5, color: "#ffe9a0", edge: "#ff9a2c", glow: 16, glowColor: "#ffb860", glowOpacity: 0.2, flicker: 0.3 },
     { id: "lamp-smoke", type: "smoke", at: [633, 396.7], base: 489, height: 40, width: [1, 4], lean: [2, -40], rise: 10, rate: 2, gust: 0.15, color: "#3a3438", opacity: 0.2 },

@@ -36,8 +36,9 @@ import { Outlines } from "./outline.js";
 import { Life } from "./life.js";
 import { Effects } from "./effects.js";
 import * as art from "../art/kit.js";
+import { checkpoints } from "../content/checkpoints.js";      // TESTING-9 (temporary): the testers' parts. See "parts" below.
 
-const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const esc =(s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const copy = (data) => JSON.parse(JSON.stringify(data));
 
 export class Game {
@@ -921,6 +922,60 @@ export class Game {
     }
   }
 
+  // =============== TESTING-9: parts, for the testers (temporary) ===============
+  // "Previous part" and "Next part" in the pause menu (ui.js, testingRow) and the keys [ and ] (bindInput, below) take a
+  // tester to any beat of the story instead of replaying the puzzles. A part is a beat, in story order. Its checkpoint is
+  // a saved game, captured from the scripted playthroughs at the first moment the player had control after that beat was
+  // done (js/content/checkpoints.js, written by scratchpad/checkpoints/build.py), and it is loaded exactly as a save from
+  // a slot is: unpacked, checked, and through load().
+  // To take all of this out: this block, the import at the top of this file, the line marked TESTING-9 in bindInput,
+  // testingRow and its three lines in ui.js, the ".testing" rule in css/game.css, and js/content/checkpoints.js.
+  /** Every beat of the story in order, each with its checkpoint (or null), its title for the menu and a shorter name for the toast. */
+  get parts() {
+    if (!this._parts) {
+      const saved = Object.fromEntries(checkpoints.map((c) => [c.beat, c]));
+      this._parts = this.story.acts.flatMap((act) => act.beats.map((b) => ({
+        id: b.id, sets: b.sets, checkpoint: saved[b.id] || null, title: `${act.title} · ${b.title}`,
+        name: `${act.title.split(":")[0]} · ${b.title.split(/: | \(/)[0]}`,          // "Act One · Cut a reed by the river"
+      })));
+    }
+    return this._parts;
+  }
+  /** Which beats are done in this game, as a string of 0s and 1s in story order. */
+  partsDone() { return this.parts.map((p) => (this.store.data.flags[p.sets] ? 1 : 0)).join(""); }
+  /** The furthest part whose beat is done: its index, or -1 for the start. */
+  partDone() { return this.partsDone().lastIndexOf("1"); }
+  /** The part the game is at: the one last jumped to, as long as no beat has been done or undone since (the plays that
+      captured the checkpoints did an act's puzzles in their own order, so a checkpoint can have a later beat done already);
+      otherwise the furthest part done. Its index, or -1 for the start. */
+  partNow() {
+    const jump = this._partJump;
+    return jump && jump.done === this.partsDone() ? jump.index : this.partDone();
+  }
+  /** The part that Next (1) or Previous (-1) goes to, or null at that end. A part whose checkpoint is the same saved game
+      as the next part's (an act's gate and the next act's arrival: the player first has control again after both) is passed
+      over, for that next part. */
+  partStep(step) {
+    const parts = this.parts, same = (i) => i + 1 < parts.length && parts[i + 1].checkpoint && parts[i].checkpoint.data.check === parts[i + 1].checkpoint.data.check;
+    for (let i = this.partNow() + step; i >= 0 && i < parts.length; i += step) if (parts[i].checkpoint && !same(i)) return parts[i];
+    return null;
+  }
+  /** Go to the previous (-1) or the next (1) part: its checkpoint is loaded as a save is, and a toast names the part. */
+  async goPart(step) {
+    if (this.mode !== "play" || this.busy) return;
+    const part = this.partStep(step);
+    if (!part) return;
+    this.ui.close();
+    let body;
+    try { body = saves.unpack(copy(part.checkpoint.data)); }
+    catch (err) { this.ui.toast(`That part's checkpoint would not open: ${err.message}`, 4200); return; }
+    const before = this.store.data;
+    await this.load(body);
+    if (this.store.data === before || this.mode !== "play") return;       // (load has said what went wrong)
+    this._partJump = { index: this.parts.indexOf(part), done: this.partsDone() };
+    this.ui.toast(part.name, 3600);
+  }
+
   setOption(key, value) {
     this.settings[key] = value;
     saves.storeSettings(this.settings);
@@ -1034,6 +1089,8 @@ export class Game {
       } else if (key >= "1" && key <= "9" && this.mode === "play" && !this.ui.open) {      // 1, 2, 3: play as that member of the team
         const to = this.ui.team()[Number(key) - 1];
         if (to) this.switchLead(to);
+      } else if ((key === "[" || key === "]") && this.mode === "play" && !this.ui.open) {    // TESTING-9 (temporary): [ and ] go to the previous and the next part, for the testers (goPart)
+        this.goPart(key === "]" ? 1 : -1);
       } else if (key.toLowerCase() === "h") {
         if (!event.repeat) this.reveal(true);          // held down: Show stays on until it is let go
       }

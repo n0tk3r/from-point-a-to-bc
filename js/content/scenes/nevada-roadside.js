@@ -54,9 +54,10 @@ async function connect(g) {
 }
 
 // ---------- the light ----------
-// The door in time is where the tracks stop, in the air over the patch of fused sand. It is drawn live (see `live`
-// below): `#door` is the door and `#hole` its rings; `#glint` is the spot of reflected sunlight, `#ray` the faint
-// beam from the coin to it, and `#spark` the flash of the coin itself.
+// The door in time is where the tracks stop, in the air over the patch of fused sand: a ripple in the paint, the size
+// of a coin (round ten: the engine's `portal`, in `fx` below), shut and unseen until the flash opens it. The light is
+// drawn live (see `live` below): `#glint` is the spot of reflected sunlight, `#ray` the faint beam from the coin to it,
+// and `#spark` the flash of the coin itself.
 const PLACE = [646, 483];                                         // the painter's `over_the_glass`: where it hums
 // Where they stand for the last beat. (The painter's marks "at the glass" put the three of them shoulder to shoulder,
 // which suits one picture and not this scene: words go over a speaker's head, and Little Sister's head is lower than
@@ -88,9 +89,8 @@ function shine(g, { spark = 0, ray = 0, glint = 0 } = {}, from = null) {
 }
 /** How far open the door is: 0 is shut and not to be seen, 1 is the size of the coin. */
 function openDoor(g, k) {
-  const door = g.q("#door"), hole = g.q("#hole-all");
-  if (door) door.setAttribute("opacity", k);
-  if (hole) hole.style.transform = `scale(${Math.max(k, 0.01)})`;
+  const d = g.effects.get("door");
+  if (d) d.open(k);
 }
 
 // ---------- chain A: the witness ----------
@@ -286,18 +286,13 @@ export default {
   //   #ray     the faint beam from the coin to the spot
   //   #glint   the spot of reflected sunlight, on the place
   //   #spark   the flash of the coin itself, in her hand (she is drawn over it: what shows is what sticks out round her fist)
-  //   #door    the door in time, the size of a coin. Inside it, #hole is the game's own wormhole, very small, on a dark
-  //            disc: out here in broad daylight the rings would not show against the sand without it.
-  live(art) {
-    const [x, y] = PLACE;
+  //   (The door in time is not drawn here: it is the paint itself, bending, with a wet rim and a bright heart so that it
+  //   shows on the sand in broad daylight. See `fx`.)
+  live() {
     return `<defs>
         <radialGradient id="glint-glow"><stop offset="0" stop-color="#ffffff" stop-opacity="1"/><stop offset="0.4" stop-color="#fff3c2" stop-opacity="0.75"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
       </defs>
       <polygon id="ray" points="0,0 0,0 0,0" fill="#fffbe6" opacity="0" shape-rendering="geometricPrecision"/>
-      <g id="door" opacity="0"><g id="hole-all" style="transform-origin:${x}px ${y}px">
-        <circle cx="${x}" cy="${y}" r="11.5" fill="#140b2b" opacity="0.78" shape-rendering="geometricPrecision"/>
-        <g class="flicker">${art.portal(x, y, 10, "hole")}</g>
-      </g></g>
       <g id="glint" opacity="0" shape-rendering="geometricPrecision"><circle r="15" fill="url(#glint-glow)"/><ellipse rx="4" ry="5" fill="#ffffff"/></g>
       <g id="spark" opacity="0" shape-rendering="geometricPrecision"><circle r="12" fill="url(#glint-glow)"/><path d="M-16,0 L16,0 M0,-16 L0,16" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/></g>`;
   },
@@ -306,6 +301,9 @@ export default {
   // the sky cross it slowly now and then, and the old-timer has his coffee on: a thread of woodsmoke from the stovepipe,
   // nearly straight up in the still morning (the wind sock hangs slack: there is no wind).
   fx: [
+    // The door in time (round ten): a ripple in the paint, the size of a coin, in the air over the glass where the tracks
+    // stop; at its depth, the three of them at the glass are drawn in front of it, and the man along the fence behind.
+    { id: "door", type: "portal", at: PLACE, r: 10, base: PLACE[1] + 1, pale: "#fffaf0", strength: 0.8 },      // (a coin door bends harder than the walk-in door, or it is not seen on the sand: the study's advice)
     { id: "birds", type: "birds", kind: "flyers", lanes: [[[-20, 168], [820, 128]], [[820, 54], [-20, 92]], [[-20, 112], [820, 70]]], every: [25, 55], group: [1, 2], speed: 34, color: "#2e3a5c", size: [7, 10],
       frames: { glide: "bird-0.png", flap: ["bird-1.png", "bird-0.png", "bird-2.png", "bird-0.png"], bank: "bird-3.png", middle: [7, 5.5] } },
     { id: "stovepipe", type: "smoke", at: [305.2, 279.7], base: 419, color: "#e6e2ea", opacity: 0.3, height: 46, width: [1.5, 7], lean: [4, -46], rate: 2 },

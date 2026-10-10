@@ -13,6 +13,8 @@
 //   birds     flyers that cross the sky now and then, or wheel in it; or a flock on the ground or along a ledge that
 //             pecks and potters and goes up when somebody comes near, and comes back later
 //   sway      a painted cut-out (washing on a line, a streamer, a palm's crown) stirring in the air from a fixed edge
+//   portal    the door in time: a ripple in the paint. The painting itself bends in rings spreading from the door's
+//             middle, as if a stone had been dropped in it; nothing is drawn over it (round ten: see `Portal` below)
 //
 // Every one is drawn on the cast layer among the people (cast.js), at a depth of its own, given as for a cut-out:
 // `base` (a row, or a line) or `plane`. A man who walks behind an altar walks behind its smoke. And every one:
@@ -34,7 +36,7 @@
 import * as castKit from "./cast.js";
 import { picture as fetchPicture, got } from "./assets.js";
 import { scaleAt, DEPTH } from "./walk.js";
-import { W } from "./grid.js";
+import { W, H } from "./grid.js";
 import { keyHex, keyId } from "../art/look.js";
 
 const { Figure, Cutout } = castKit;
@@ -1306,7 +1308,267 @@ function Birds(host, spec, n) {
   return kind === "flyers" ? new Flyers(host, spec, n) : new Flock(host, spec, n);
 }
 
-const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway };
+// ---------------------------------------------------------------- the door in time
+/**
+ * portal: the door in time, as a ripple in the paint (round ten; the author chose it on 9 October from six looks in the
+ * portal study, with the settings that are the defaults below). Nothing is drawn over the painting. Its own pixels, in
+ * the box the door can reach, are read once when the scene is up (from the backdrop, with any cut-out that lies under
+ * the door composited in) and written back displaced each picture: rings travel out from the door's middle and the
+ * paint bends along each one, a crest catching the lamplight a shade lighter and a trough a shade darker (the paint is
+ * wet), the rings fading with distance and the heart holding a soft light of the paint's own colour. The rings' strength
+ * and phase wander round the circle and across the wall from seeded tables, so it is paint, not geometry. A coin-sized
+ * door gets a brighter heart and a wet rim, so it shows on a dark floor and on bright sand alike. Outside the door's
+ * reach the picture is left alone (those pixels are not drawn), so the door sits in the picture at its depth: a man who
+ * walks in front of it is drawn over it, and the paint behind it is its own.
+ *
+ *   at           [x, y]: the middle of the door, wide open
+ *   r            half its height, wide open (the coin doors are 10 or 11; the chamber's doorway 96)
+ *   wide         how wide it is beside its height: 1 for a round hole; the chamber's doorway is 0.48
+ *   keep         [x0, x1]: the bare wall it is in. Paint beyond those columns is left as it is (the bending fades out
+ *                over eight pixels), so the furniture beside a door stays straight.
+ *   rise         true: its middle rises out of `at` as it opens, by its radius (the sun on the highway)
+ *   under        cut-outs that lie behind the door in its box, read into the paint it bends: their ids, or pictures
+ *                laid over the backdrop, { src, x, y }
+ *   light        true: the light the scene draws over the paint (its live layer: a beam on the wall, a spot of sun) is
+ *                read into the paint too, so the door bends the lit wall and does not hide the light. A script calls
+ *                refresh() when that light has changed (the beam has come on). Pictures the live layer shows by
+ *                address are not read this way: name them in `under`.
+ *   open         how far open it starts: 0 (shut: nothing drawn) to 1 (wide). Scripts: g.effects.get("door").open(k)
+ *   strength     how hard the paint bends and shades, 0 to 1 (0.45)
+ *   bend         what share of that goes into the bending (0.6): the author's "less motion" setting on the study page,
+ *                kept as the look; the game's own "less motion" takes it to 0.6 of that again, and halves the clock
+ *   rate         how fast the door's own time runs (1.5: the study page at speed 3 with less motion on)
+ *   size         the door drawn this much bigger than `r` (1.11, the author's setting): the rings reach a little past it
+ *   pale         the colour of its light: the paint's own colours are mixed toward it (never keyed: time's colour
+ *                belongs to no place, as the old rings' did not)
+ *   seed, base or plane (its depth), when: as every kind. It is drawn thirty times a second (fifteen when calm).
+ *
+ * open(k, { wide, at, scale, flicker }) for the moments the scripts play: the chamber door opens round and stretches
+ * to a doorway (`wide` tweened 1 to 0.48); the flashlight opens a plate-sized round hole off to one side (`at` an offset
+ * from the door's middle, `scale` 0.11 of its size); its batteries make it `flicker`; the coin's wink is `scale` over a
+ * moment. The options hold until given again; open(k) alone keeps them.
+ */
+const REACH = 1.32;                                     // how far the rings reach, in radii
+/** How the door opens: `k` 0 (shut) to 1 (wide). The radius grows fast at first (a small disturbance appears at once); the bending follows. */
+const opening = (k) => (k <= 0 ? { k: 0, Rk: 0, amp: 0 } : { k, Rk: 0.07 + 0.93 * Math.pow(k, 0.8), amp: Math.pow(k, 0.55) });
+// A sine table: the loop below asks for a few hundred thousand sines a second.
+const SN = 4096, SIN = new Float32Array(SN), SK = SN / TAU;
+for (let i = 0; i < SN; i++) SIN[i] = Math.sin((i / SN) * TAU);
+const sinT = (ph) => SIN[((ph * SK) | 0) & (SN - 1)], cosT = (ph) => SIN[(((ph * SK) | 0) + 1024) & (SN - 1)];
+/** A smooth function round the circle, -1 to 1: three harmonics with seeded phases, as a table of 256 over the angle. */
+function roundTable(seed, lane, harmonics) {
+  const t = new Float32Array(256);
+  let most = 0;
+  for (let i = 0; i < 256; i++) {
+    const th = (i / 256) * TAU;
+    let v = 0;
+    harmonics.forEach((h, j) => { v += (1 / (j + 1)) * Math.sin(h * th + rnd(seed, lane, j) * TAU); });
+    t[i] = v; most = Math.max(most, Math.abs(v));
+  }
+  for (let i = 0; i < 256; i++) t[i] /= most || 1;
+  return t;
+}
+/** Smooth noise, -1 to 1, over a box of the picture (x0, y0, w by h), in cells about `cell` pixels across, two octaves: the paint's own unevenness. */
+function noiseField(seed, lane, x0, y0, w, h, cell) {
+  const f = new Float32Array(w * h), val = (cx, cy, o) => rnd(seed, lane + o * 7, cx, cy) * 2 - 1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    let v = 0, amp = 1, c = cell;
+    for (let o = 0; o < 2; o++) {
+      const px = (x + x0) / c, py = (y + y0) / c, ix = Math.floor(px), iy = Math.floor(py);
+      const fx = px - ix, fy = py - iy, ex = fx * fx * (3 - 2 * fx), ey = fy * fy * (3 - 2 * fy);
+      const a = val(ix, iy, o), b = val(ix + 1, iy, o), cc = val(ix, iy + 1, o), d = val(ix + 1, iy + 1, o);
+      v += amp * ((a + (b - a) * ex) * (1 - ey) + (cc + (d - cc) * ex) * ey);
+      amp *= 0.5; c *= 0.5;
+    }
+    f[y * w + x] = v / 1.5;
+  }
+  return f;
+}
+class Portal extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    if (!isPoint(s.at)) throw new Error("a portal needs `at`: [x, y], the middle of the door");
+    this.at = [s.at[0], s.at[1]];
+    this.r = Math.max(2, num(s.r, 12)) * Math.max(0.1, num(s.size, 1.11));
+    this.wide0 = clamp(num(s.wide, 1), 0.05, 4);
+    this.keep = Array.isArray(s.keep) && s.keep.length === 2 && s.keep.every((v) => typeof v === "number") ? s.keep : null;
+    this.rise = !!s.rise;
+    this.under = Array.isArray(s.under) ? s.under : [];
+    this.light = !!s.light;
+    this.snap = null; this.snapGen = 0;                    // the live layer as pixels, when `light` asks for it, and which asking it answers
+    this.strength = clamp(num(s.strength, 0.45));
+    this.bend = clamp(num(s.bend, 0.6));
+    this.rate = Math.max(0.05, num(s.rate, 1.5));
+    this.pale = rgbOf(s.pale, [255, 243, 220]);
+    this.openK = clamp(num(s.open, 0));
+    this.opts = { wide: this.wide0, at: [0, 0], scale: 1, flicker: false };
+    this.fps = 30; this.calmFps = 15;
+    this.sprite = this.mote().place(this.at[0], this.at[1]);
+    this.src = null; this.step = null; this.dirty = true; this.go = false; this.drawnCalm = null; this.touched = 0;
+    this.build();
+  }
+  /** The box the door can reach wide open, on the picture, and the per-pixel tables over it. */
+  build() {
+    const R0 = this.r, wide = this.wide0, [cx, cy0] = this.at, cy = this.rise ? cy0 - R0 : cy0;
+    const fx0 = Math.max(0, Math.floor(cx - R0 * REACH * wide) - 2), fx1 = Math.min(W - 1, Math.ceil(cx + R0 * REACH * wide) + 2);
+    const fy0 = Math.max(0, Math.floor(cy - R0 * REACH) - 2), fy1 = Math.min(H - 1, Math.ceil(cy + R0 * REACH + (this.rise ? R0 : 0)) + 2);
+    const fw = fx1 - fx0 + 1, fh = fy1 - fy0 + 1, n = fw * fh;
+    Object.assign(this, { R0, fx0, fy0, fw, fh, cx: cx - fx0, cy: cy - fy0 });         // (cx, cy: the middle, wide open, in the box)
+    const RR = new Float32Array(n), UX = new Float32Array(n), UY = new Float32Array(n), TH = new Uint8Array(n);
+    for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) {
+      const i = y * fw + x, ex = (x - this.cx) / wide, ey = y - this.cy, rr = Math.hypot(ex, ey) || 1e-3;
+      RR[i] = rr; UX[i] = ex / rr; UY[i] = ey / rr; TH[i] = ((Math.atan2(ey, ex) / TAU) * 256 + 256) & 255;
+    }
+    const seed = this.seed;
+    this.N1 = noiseField(seed, 1, fx0, fy0, fw, fh, Math.max(6, R0 * 0.28));    // the paint's own unevenness, broad
+    this.N2 = noiseField(seed, 2, fx0, fy0, fw, fh, Math.max(4, R0 * 0.13));    // and fine: the marks
+    this.ANG = roundTable(seed, 5, [3, 4, 7]);                                     // rings a little stronger here, weaker there
+    this.PHS = roundTable(seed, 6, [2, 5, 6]);                                     // and a little ahead or behind
+    let KX = null;                                                                 // how much of the bend each column gets: 1 inside the bare wall, 0 beyond it
+    if (this.keep) {
+      KX = new Float32Array(fw);
+      const [ka, kb] = this.keep;
+      for (let x = 0; x < fw; x++) { const X = x + fx0; KX[x] = ease(ka - 6, ka + 2, X) * ease(kb + 6, kb - 2, X); }
+    }
+    Object.assign(this, { RR, UX, UY, TH, KX, out: null, pair: new Pair(fw, fh) });        // (`out`, the pixels of one picture, is made with the first)
+  }
+  /** How far open, and the moment's shape: see the top. */
+  open(k, options = null) {
+    this.openK = clamp(num(k, 0));
+    if (options && typeof options === "object") {
+      const o = this.opts;
+      if (typeof options.wide === "number") o.wide = clamp(options.wide, 0.05, 4);
+      if (isPoint(options.at)) o.at = [options.at[0], options.at[1]];
+      if (typeof options.scale === "number") o.scale = clamp(options.scale, 0.01, 4);
+      if (options.flicker !== undefined) o.flicker = !!options.flicker;
+    }
+    this.dirty = true;
+    this.sprite.hidden = !(this.shown && this.openK > 0);
+    this.host.frame(0);
+    return this;
+  }
+  get isOpen() { return this.openK; }
+  /** Read the paint again: the light over it has changed (`light`), or a cut-out under it has. */
+  refresh() { this.src = null; this.snap = null; this.snapGen++; this.dirty = true; this.host.frame(0); return this; }
+  reveal(on) { this.sprite.hidden = !(on && this.openK > 0); }
+  restart() { this.step = null; }
+  update(calm) {
+    if (this.step === null) return;
+    const fps = calm ? this.calmFps : this.fps;
+    this.sprite.want = this.dirty || Math.floor((this.time * fps) / 1000) !== this.step || calm !== this.drawnCalm;
+  }
+  grant() { this.go = true; }
+  /** Read the paint the door bends: the backdrop in its box, and whatever cut-outs lie under it there. Once a scene is up.
+      False until the backdrop has been painted (the pictures come in their own time). */
+  read() {
+    const g = this.game, view = g.view, cast = view.cast, { fx0, fy0, fw, fh } = this;
+    if (!view.backdrop) return false;
+    if (this.light && !this.snap) {                                           // the light over the paint, as pixels: asked for once, answered in its own time
+      if (!this.snapping && view.snapshotLive) {
+        const gen = this.snapGen;
+        this.snapping = view.snapshotLive().then((c) => { this.snapping = null; if (gen !== this.snapGen) return; this.snap = c || false; this.src = null; this.dirty = true; this.host.frame(0); });
+      }
+      if (this.snap !== false) return false;
+    }
+    const tmp = canvasOf(fw, fh), ctx = tmp.getContext("2d", { willReadFrequently: true });
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(view.backdrop, fx0, fy0, fw, fh, 0, 0, fw, fh);
+    const paint = ctx.getImageData(0, 0, fw, fh).data;                            // (nothing painted yet? then not yet: the picture comes in its own time)
+    let painted = false;
+    for (let i = 3; i < paint.length; i += 4) if (paint[i] > 0) { painted = true; break; }
+    if (!painted) return false;
+    if (this.snap) ctx.drawImage(this.snap, fx0, fy0, fw, fh, 0, 0, fw, fh);
+    for (const u of this.under) {
+      if (typeof u === "string") {
+        const cut = cast.get(u);
+        if (!(cut instanceof Cutout) || cut.hidden) continue;
+        const pic = cut.picture(cast.palette, cast.calm);
+        if (!pic) return false;
+        const x = Math.round(cut.x) - Math.round(pic.ox) - fx0, y = Math.round(cut.y) - Math.round(pic.oy) - fy0;
+        if (pic.w == null) ctx.drawImage(pic.canvas, x, y); else ctx.drawImage(pic.canvas, 0, 0, pic.sw, pic.sh, x, y, pic.w, pic.h);
+      } else if (u && typeof u.src === "string") {
+        const img = got(u.src);
+        if (!img) return false;
+        ctx.drawImage(img, num(u.x, 0) - fx0, num(u.y, 0) - fy0);
+      }
+    }
+    this.src = ctx.getImageData(0, 0, fw, fh).data;
+    return true;
+  }
+  picture(sprite, calm) {
+    if (this.openK <= 0) return null;
+    if (!this.src && !this.read()) return null;                             // (the backdrop is not painted yet: next frame)
+    const fps = calm ? this.calmFps : this.fps, step = Math.floor((this.time * fps) / 1000), go = this.go;
+    this.go = false;
+    if (this.step === null || (go && (this.dirty || step !== this.step || calm !== this.drawnCalm))) {    // (the first picture at once; after that, in its turn)
+      this.step = step; this.drawnCalm = calm; this.dirty = false;
+      this.render(step / fps, calm);
+      this.pair.next().putImageData(this.out, 0, 0);
+      this.drawn = 1;
+    }
+    return { canvas: this.pair.canvas, ox: this.at[0] - this.fx0, oy: this.at[1] - this.fy0 };
+  }
+  /** The door at a moment of its own time `t` (seconds), into `out`: the painting bent, where the rings reach; nothing elsewhere. */
+  render(t, calm) {
+    if (!this.out) this.out = new ImageData(this.fw, this.fh);
+    const o = this.out.data, src = this.src, { fw, fh, RR, UX, UY, TH, N1, N2, ANG, PHS, KX, pale } = this, opts = this.opts;
+    o.fill(0);
+    const tau = t * this.rate, ok = opening(this.openK), s0 = this.strength;
+    let flick = 1;
+    if (opts.flicker && !calm) { const ph = (tau % 1.7) / 1.7; flick = ph < 0.4 ? 1 : ph < 0.55 ? 0.55 : ph < 0.7 ? 0.9 : 0.4; }
+    const sAmp = s0 * this.bend * (calm ? 0.6 : 1) * ok.amp * flick;
+    const R = this.R0 * ok.Rk * opts.scale;
+    if (!(R > 0.5) || !(sAmp > 0)) { this.touched = 0; return; }
+    const wide = opts.wide, own = wide === this.wide0 && opts.at[0] === 0 && opts.at[1] === 0;      // (the tables are for the door's own shape; another shape is worked out as it goes)
+    const shift = this.rise ? Math.round(this.R0 - R) : 0;                                            // the middle rises out of the point as it opens
+    const cx = this.cx + opts.at[0], cy = this.cy + shift + opts.at[1];
+    const x0 = Math.max(0, Math.floor(cx - R * REACH * wide) - 1), x1 = Math.min(fw - 1, Math.ceil(cx + R * REACH * wide) + 1);
+    const y0 = Math.max(own ? shift : 0, Math.floor(cy - R * REACH) - 1), y1 = Math.min(fh - 1, Math.ceil(cy + R * REACH) + 1);
+    if (x1 < x0 || y1 < y0) { this.touched = 0; return; }
+    const lam = Math.max(7, 0.3 * R), kl = TAU / lam, om = 2.0, breath = 1 + 0.1 * sinT(0.45 * tau);
+    const small = clamp((34 - R) / 30);                                                               // a coin-sized door: a brighter heart, and a wet rim
+    const A = sAmp * (0.07 * R + 1.2) * breath, Lc = sAmp * (0.14 + 0.7 * small) * (0.8 + 0.2 * sinT(0.45 * tau + 1)), dark = 0.34 * sAmp * small;
+    const shadeK = 0.3 * s0, wm = fw - 1.001, hm = fh - 1.001;
+    const ENV = new Float32Array(257);                                                                // the rings' strength by distance: a calm middle (the stone has sunk), fading out
+    for (let k = 0; k <= 256; k++) { const u = (k / 256) * REACH; ENV[k] = (0.35 + 0.65 * ease(0, 0.3, u)) * Math.pow(1 - u / REACH, 1.5); }
+    let touched = 0;
+    for (let y = y0; y <= y1; y++) {
+      const trow = (y - shift) * fw, orow = y * fw;
+      for (let x = x0; x <= x1; x++) {
+        let rr, ux, uy, th;
+        if (own) { const i = trow + x; rr = RR[i]; ux = UX[i]; uy = UY[i]; th = TH[i]; }
+        else { const ex = (x - cx) / wide, ey = y - cy; rr = Math.hypot(ex, ey) || 1e-3; ux = ex / rr; uy = ey / rr; th = ((Math.atan2(ey, ex) / TAU) * 256 + 256) & 255; }
+        const u = rr / R;
+        if (u >= REACH) continue;
+        const i = orow + x, n1 = N1[i], env = ENV[((u / REACH) * 256) | 0], a = A * env * (1 + 0.3 * ANG[th]) * (1 + 0.25 * n1);
+        const ph = rr * kl - om * tau + 0.8 * PHS[th] + 0.7 * n1, sn = sinT(ph), cs = cosT(ph), d = a * sn;
+        // the paint, read from where the bend brings it (blended from the four pixels round the point)
+        let sx = x + d * ux * wide, sy = y + d * uy;
+        if (sx < 0) sx = 0; else if (sx > wm) sx = wm;
+        if (sy < 0) sy = 0; else if (sy > hm) sy = hm;
+        const sx0 = sx | 0, sy0 = sy | 0, fx = sx - sx0, fy = sy - sy0;
+        const i00 = (sy0 * fw + sx0) << 2, i10 = i00 + 4, i01 = i00 + (fw << 2), i11 = i01 + 4;
+        const w00 = (1 - fx) * (1 - fy), w10 = fx * (1 - fy), w01 = (1 - fx) * fy, w11 = fx * fy;
+        let r = src[i00] * w00 + src[i10] * w10 + src[i01] * w01 + src[i11] * w11;
+        let g = src[i00 + 1] * w00 + src[i10 + 1] * w10 + src[i01 + 1] * w01 + src[i11 + 1] * w11;
+        let b = src[i00 + 2] * w00 + src[i10 + 2] * w10 + src[i01 + 2] * w01 + src[i11 + 2] * w11;
+        let sl = shadeK * a * kl * (1 + 0.4 * N2[i]); if (sl > 0.3) sl = 0.3;
+        if (cs < 0) { const sh = 1 + sl * cs; r *= sh; g *= sh; b *= sh; }                                   // the trough, in shade
+        else { const l = 0.55 * sl * cs, sh = 1 + 0.45 * sl * cs; r = r * sh + l * (pale[0] - r); g = g * sh + l * (pale[1] - g); b = b * sh + l * (pale[2] - b); }   // the crest, catching the light
+        if (dark > 0 && u > 0.45 && u < 1.15) { const sh = 1 - dark * ease(0.45, 0.8, u) * ease(1.15, 0.85, u); r *= sh; g *= sh; b *= sh; }
+        if (u < 0.5) { const l = Lc * (1 - u / 0.5) * (1 - u / 0.5); r += l * (pale[0] - r); g += l * (pale[1] - g); b += l * (pale[2] - b); }
+        const j = i << 2;
+        if (KX) { const k = KX[x]; if (k < 1) { r = src[j] + (r - src[j]) * k; g = src[j + 1] + (g - src[j + 1]) * k; b = src[j + 2] + (b - src[j + 2]) * k; } }
+        o[j] = r; o[j + 1] = g; o[j + 2] = b; o[j + 3] = 255;
+        touched++;
+      }
+    }
+    this.touched = touched;
+  }
+}
+
+const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal };
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**

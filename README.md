@@ -58,9 +58,10 @@ After a push, GitHub Pages takes a minute or two to put the new version up. Relo
 ```
 index.html        the page
 css/              colors (tokens.css) and layout (game.css)
-js/engine/        the engine: clock, saves, sound, dialogue, pictures, scenes, depth and walking, menus
+js/engine/        the engine: clock, saves, sound, dialogue, pictures, scenes, depth and walking, menus,
+                  and the things that move by nature, the doors in time among them (effects.js)
 js/art/           everything that is drawn by code: the pixel renderer (pix.js), the jointed
-                  figure (rig.js), the cast (people.js), the portal, sketches and close-ups (kit.js)
+                  figure (rig.js), the cast (people.js), the neon rings, sketches and close-ups (kit.js)
 js/content/       the game: cast and items (world.js), the lines (one file to an act, in lines/),
                   the story (one file to an act, in acts/), the sound list, cutscenes,
                   and the scenes (one file each)

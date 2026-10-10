@@ -266,6 +266,8 @@ h1 {
 .panel select { font: inherit; padding: 0.3cqw 0.8cqw; background: rgba(255, 244, 214, 0.5); border: 0.22cqw solid rgba(31, 19, 10, 0.55); color: var(--ink); }
 .panel .foot { display: flex; gap: 1.2cqw; margin-top: 1.8cqw; flex-wrap: wrap; }
 .panel .foot .row { width: auto; flex: 1; justify-content: center; }
+/* TESTING-9 (temporary): the testers' row at the foot of the pause menu (js/engine/ui.js, testingRow). Remove with it. */
+.panel .testing { margin-top: 2cqw; padding-top: 1cqw; border-top: 0.22cqw dashed rgba(31, 19, 10, 0.5); font-size: 0.85em; }
 
 /* ---------- small fixed pieces ---------- */
 #skip {
