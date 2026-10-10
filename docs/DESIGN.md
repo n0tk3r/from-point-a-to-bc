@@ -846,8 +846,12 @@ click to begin  ->  studio card  ->  the road at dusk  ->  the sun opens into a 
 
 One small object (`js/engine/state.js`): the act, the scene, which lead the player
 controls, which leads they can switch between (the team), where each lead is standing
-(in picture pixels) and which way they face, each lead's pockets, and the list of story
-facts ("flags"). Nothing else. Every scene rebuilds itself from those facts: its
+(in picture pixels) and which way they face, each lead's pockets, the list of story
+facts ("flags"), the tunnel: things put into a door in time and not yet taken out
+of another (section 8, "The letterbox"; a save with no `tunnel` field is from before
+it, and the field being absent means empty), and what has been asked in dialogue trees,
+and how many times (`asked`, section 7, "Dialogue trees"; absent in an older save, which
+means nothing yet). Nothing else. Every scene rebuilds itself from those facts: its
 cut-outs read them to decide whether they show and in which state, and its `setup`
 function does anything that is left. That is why a save is a few hundred bytes.
 
@@ -1021,6 +1025,91 @@ On screen, each character speaks in their own color, just above their own head, 
 manner of classic adventure games. While a close-up is showing, the words run along the
 bottom of the stage, clear of what is being looked at.
 
+### Dialogue trees
+
+The author, 10 October: the dialogue branches in the LucasArts games "are all enjoyable with funny and cute quips back
+and forth", and they are part of the puzzle: they give clues, they change things, and they are where the jokes are. A
+flat menu in a loop (`g.choose` four times over) cannot fork, forget, or remember. A tree can. The engine has it as
+`await g.talk(tree)` (marked `TALK-11` in the code), with nothing of any one conversation in it: a tree is plain data
+that a scene file holds, and every word in it is a line id as everywhere else.
+
+```js
+const JOE = {
+  id: "joe",                                                   // what the memory is kept under (below)
+  start: "open",                                               // the node to begin at, or a function of the game giving one
+  nodes: {
+    open: {
+      say: ["nevada.joe.look.up"],                             // said on arriving at the node, exactly as g.say says them
+      options: [
+        { id: "morning", line: "nevada.joe.opt.morning", then: "liked" },                            // -> another node
+        { id: "lemonade", line: "nevada.joe.opt.lemonade", say: ["nevada.joe.lemonade.1"], then: "asking" },
+        { id: "raccoon", line: "nevada.joe.opt.raccoon", set: "joe.liked", then: "raccoon" },        // sets a fact, too
+        { id: "vegas", line: "nevada.joe.opt.vegas", then: "vegas", do: (g) => g.sfx("portal") },    // a script, too
+      ],
+    },
+    asking: {
+      options: [
+        { id: "car", line: "nevada.joe.opt.car", when: (g) => g.flag("joe.liked"), then: (g) => witness(g) },   // a script as the reply
+        { id: "gas", line: "nevada.joe.opt.gas", say: { 1: ["nevada.joe.gas.1"], 2: ["nevada.joe.gas.2"], more: ["nevada.joe.gas.3"] } },   // the nth asking
+        { id: "hens", line: "nevada.joe.opt.hens", once: true, say: ["nevada.joe.hens.1", "nevada.joe.hens.2"], set: "nevada.hensTold" },
+        { id: "bye", line: "nevada.ask.bye", say: ["nevada.joe.bye"], then: "exit" },
+      ],
+    },
+  },
+};
+// in the scene:   use: (g) => g.talk(JOE)
+```
+
+**A node** has `say` (line ids, said in order on arriving, by whoever each line belongs to), `options`, and `then`
+(where to go after its lines, for a node that is only a speech: a greeting that leads to the questions). A node with
+nothing to show ends the talk after its lines. Three names are the engine's: `exit` ends the talk, `back` is the node
+this one was reached from, and `root` is the start node (`start` is asked again, so a start that reads the story gives
+today's answer: the greeting the first time, the questions after).
+
+**An option** is one thing the player can say:
+
+| Field | Meaning |
+| --- | --- |
+| `id` | Its name, unique in the tree: what the memory is kept under |
+| `line` | The line id the player picks: its words are the menu button, and it is said when picked, by whoever the line belongs to (the lead) |
+| `when` | A test of the game: the option is offered only while it passes. Read again every time the menu is shown, so an option can come and go with the story |
+| `once` | `true`: gone for good once it has been picked (the memory remembers across saves). Off by default |
+| `say` | The reply: a list of line ids, said after the pick. Or an object keyed by how many times this option has been picked, `1`, `2`, `3`..., with `more` for every time after the last given, so a question asked twice gets a different answer |
+| `set` | A story fact, or a list of them, made true (`g.flag`) |
+| `do` | A script, `(g) => ...`, run after the lines and awaited: anything a script can do (walk somebody, hand something over, open a door) |
+| `then` | Where to go next: a node id, `"exit"`, `"back"`, `"root"`, or a function of the game giving one of those, or nothing. Nothing means stay: the same menu again |
+
+An option with no `say`, no `do` and no `then` just stays. The menu is the same `choose` menu as before, with its
+number keys (1 to 9), and two things more: **Escape** picks the way out, when the node has one (an option whose `then`
+is `"exit"`), and otherwise does nothing; and the menu **remembers**. An option picked before is written lighter (not
+greyed out: it can still be picked, unless it is `once`), and one never picked carries a small round mark in the time
+colour after its words, the completist's tick, as the classic games did it (`.choices .asked` and `.choices .new`).
+
+**The memory.** The game keeps every pick: `asked["joe/car"] = 2` in the save, under the tree's `id` and the option's
+(`g.talk(tree, { id })` names a tree that has none; with no id at all, under the scene's id and the node's:
+`"nevada-roadside/open/car"`). A script reads it with `g.asked("joe/car")`, which is how an option can wait for another
+to have been picked: `when: (g) => g.asked("joe/raccoon") > 0`. `seenLines` goes on counting every line as before; the
+nth-asking replies come from `asked`, which counts the pick and not the words. A save from before trees has no `asked`,
+which means nothing yet, and the save version stays 3. The Hint button and the beats are not touched: the beats are the
+story's, a tree is a scene's.
+
+**Skipping.** While a cutscene is being skipped a tree ends at once and safely: at a node, the way out is picked first
+(an option whose `then` is `"exit"`), else the last option, and the talk ends after that one node, so a tree with no way
+out cannot loop. The picked option's lines still count as seen, its facts are set and its script runs, so the game ends
+up in the same state. A menu that is already up when skipping starts gives way the same way.
+
+**Through the door.** `g.talk(tree, { through: "son" })` is the same tree held through a letterbox (section 8, "The
+letterbox"): every menu is shown as the words of the lead who is off the stage, the picked line goes through the door
+(`g.through`), and so does any reply line that belongs to that lead; everyone else's lines are said as they are. One
+tree serves a talk face to face and the same talk through a door.
+
+**The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.talk`: an old water carrier on the sand by the
+river, with a tree (`CARRIER` in `engine-proof.js`) that uses every piece: a start that reads the story, four ways in,
+a fork two deep (the river, then the fish), his name once and only once, the jars answered differently each time, an
+option that appears only after another was picked, a `do` that walks him to the water and back, `back`, `root`, and a
+goodbye that is a line. The engine test's `talk` part plays all of it, by key and by Escape, through a door, skipped,
+saved and loaded.
+
 ---
 
 ## 8. Story: guided, but not a straight line
@@ -1099,10 +1188,12 @@ lists who they can switch to at this point in the story. A script sets it:
 top left of the screen.
 
 **Apart.** Dad and the Son are in different centuries. Switching to the other one
-travels to wherever he is. The story can also cut between leads by itself, as it does
+travels to wherever he is (by the short tunnel, when the two scenes are in different
+eras). The story can also cut between leads by itself, as it does
 at the end of each act. A strong fit for this premise: something sent through a door
 in one era turns up in another, so people who are apart can still help each other.
-(The coin the Son throws into the door in Rome falls out of the sky in Nevada.)
+(The coin the Son throws into the door in Rome falls out of the sky in Nevada.) The
+engine has this as the letterbox, below.
 
 **Together.** Mom and the girls go through the house as one. Each of its five scenes
 (the living room, the landing, Dad's study, Little Sister's room and Big Sister's attic)
@@ -1132,6 +1223,64 @@ In a party:
 
 The two halves of the family meeting in one scene needs nothing new: put all five in a
 `party`.
+
+### The letterbox
+
+The author, 10 October: the family is split three ways in three times, and "they are able to communicate through the
+portals and pass items through because the portals are small." Later each of them steps through a wide door and lands
+somewhere new, and "they have to communicate with each other to figure out where and when." So a door in time that is
+too small to step through is a letterbox: a thing goes in at one end and comes out at the other, centuries away, and
+voices carry through it. The engine has this generically (marked `LETTERBOX-11` in the code), with nothing of any one
+puzzle in it: which door takes which thing, and every word said, belong to the scenes.
+
+**The tunnel.** A thing put into a door waits in the tunnel until the lead it is for takes it out of a door of theirs.
+The save body keeps the list: `tunnel: [{ item, from, to, at }]`, the thing, who sent it, who it is for (lead ids), and
+the play time it went in. A save from before the letterbox has no such field, and the field being absent means empty:
+`complete()` in `state.js` gives it an empty list, and the save version stays 3 (the note at the top of `save.js`).
+
+**The four calls.** A scene's door does the sending and the receiving with them; the engine keeps the list, marks the
+portrait and draws the arrival.
+
+- `g.send(item, { to })`: the active lead puts a thing they are carrying into the door for another lead. It leaves their
+  pockets, goes on the tunnel list, the HUD refreshes, the game autosaves; true if it went. A thing they are not carrying,
+  or a `to` that is not another lead, gives a console warning and nothing happens. A door's `useWith` calls it, with the
+  scene's own lines: the engine does not decide what fits through.
+- `g.waiting(who = the active lead)`: the tunnel entries for that lead, oldest first.
+- `g.receive(item)`: takes the named entry (or, with no name, the oldest waiting for the active lead) out of the tunnel
+  into their pockets (`g.give`), and returns it; null if nothing of the kind waits for them.
+- `await g.arrive(item, [x, y])`: the thing drawn arriving: its inventory picture pops out of the point (the door) in a
+  small arc, over the shoulder of whoever stands at the door, and lands with a puff at the lead's feet, on the side away
+  from the door (`{ to: [x, y] }` says where instead), then is taken off the stage; about 600 ms, and it resolves when
+  done. In the air it is behind whoever stands in front of the door, on the ground in front of them, as the luggage on
+  the wagon's roof is unpacked. A thing with a drawn icon and no painted picture makes only the puff.
+
+The door's script does the moment: on entering a scene with a door, or on using an open door, it asks `g.waiting()`,
+and for each entry plays `g.arrive`, says its line, and calls `g.receive()`.
+
+**The mark.** When something waits for a lead who is on the team, their portrait in the team bar carries a small round
+mark in the time colour at its top left (`data-post` on the portrait's button; the interface's own colours, never the
+scene's paints), and pointing at the portrait says what waits: "Play as Son. Something has come through for Son: the
+pack of gum". The mark goes when the thing is received. The active lead's own portrait shows it too: something waits for
+them, and the scene's door will give it.
+
+**Voices through the door.** `await g.through(who, "line.id")` is a line from a lead who is not on the stage, at the
+other end of a letterbox: shown top centre, as a line with no speaker on stage is, with that person's portrait beside
+the words (the interface's `portrait`, drawn for the pixels it is shown at, never keyed) in that person's colour, and
+with the `through` style (`.say.through`: lighter and leaning, as from a little way off; no echo gimmicks). It counts
+the line as seen, waits and is skippable like `say`. A `choose` works the same way: `g.choose(options, { through: who })`
+shows the menu as that person's words, their portrait and name at its head and the options in their colour (the options
+are what the lead off stage may say). The lead on stage speaks ordinary `g.say` lines over their own head, so the player
+sees one person on stage talking to a portrait of the other, which is the whole picture of a letterbox.
+
+**Switching across the centuries.** Switching to a lead who is in another scene travels there, as before; when the two
+scenes are in different eras (`scene.era`) the trip is the short tunnel (`g.goto(..., { via: "wormhole" })`), and within
+one era it is a fade, as it always was. Their place and facing are kept. A lead can be switched to only if they are on
+the team; the scenes decide the team.
+
+**The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.letterbox`: Dad on the sand with a pack of gum, the
+Son in the market street sketch in Rome, a small door in the air. The gum goes in the door for the Son, the mark
+appears, switching to him is the tunnel, and coming back as him the door gives it up. The door with nothing in hand is a
+word through it, with a choose through the door. The engine test's `letterbox` part plays all of it.
 
 ---
 
@@ -1566,6 +1715,14 @@ loads the game, by the plain addresses, with the old risk.
 | --- | --- |
 | `await g.say("id", "id2")` | Speaks lines in order |
 | `await g.choose([{ id, line }])` | Offers things to say; gives back the chosen `id` |
+| `await g.through("son", "id")` | A line from a lead who is not on the stage, at the other end of a small door in time: top centre, with their portrait beside the words, in the `through` style (section 8, "The letterbox"). Counted, timed and skippable as `say` is. |
+| `await g.choose([{ id, line }], { through: "son" })` | The same menu as that person's words: their portrait at its head, the options in their colour |
+| `await g.talk(tree)`, `await g.talk(tree, { through: "son" })` | A dialogue tree (section 7, "Dialogue trees"): nodes with lines and options, options with `when`, `once`, a reply (or one for each asking), `set`, `do`, `then` (a node, `"exit"`, `"back"`, `"root"`); remembered in the save, number keys and Escape, ends safely when skipped. Through a door, the same tree as that person's words. Resolves when the talk is over |
+| `g.asked("joe/car")` | How many times that option of that tree has been picked (0 if never): for a `when` that waits on another question |
+| `g.send("gum", { to: "son" })` | The active lead puts a thing they carry into a door in time for another lead: out of their pockets, into the tunnel (the save keeps it), the mark on that lead's portrait; true if it went. A thing they do not carry, or a `to` that is not another lead: a console warning, nothing happens. The scene's door calls it from its `useWith`, with its own lines: the engine never decides what fits. |
+| `g.waiting()`, `g.waiting("son")` | What waits in the tunnel for the active lead, or for another: `[{ item, from, to, at }]`, oldest first |
+| `g.receive()`, `g.receive("gum")` | The active lead takes the oldest thing waiting for them, or the named one, out of the tunnel into their pockets; gives back the entry, or null |
+| `await g.arrive("gum", [x, y])` | The thing drawn arriving: its inventory picture pops out of the point in a small arc and lands with a puff at the lead's feet (`{ to: [x, y] }` elsewhere), then is taken off the stage; about 600 ms. The scene then says its line and calls `g.receive()`. |
 | `g.flag("name")`, `g.flag("name", true)` | Reads or records a story fact. Recording one makes the cut-outs and the clickable areas read their tests again. |
 | `g.give("item")`, `g.take("item")`, `g.has("item")` | Pockets of the current lead |
 | `g.holder("item")`, `g.item("item")`, `g.the("item")` | Which lead is carrying a thing, or `null`; the thing's own entry in `items`; and its name as it goes into a sentence ("the reed", "General Feathers") |
@@ -1591,7 +1748,7 @@ loads the game, by the plain addresses, with the old risk.
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
 | `g.actor("scribe")`, `g.lead`, `g.q("#beam")`, `g.effects.get("door")` | Reach people, the parts of the live layer, and the moving things (a door in time among them: `.open(k)`) |
 | `g.team(["mom", "bigsis", "lilsis"])` | Says which leads the player can switch between from now on |
-| `await g.switchLead("son")` | Changes who the player controls (they must be on the team) |
+| `await g.switchLead("son")` | Changes who the player controls (they must be on the team). One who is in another scene is travelled to: by the short tunnel when the two scenes are in different eras, by a fade within one. |
 | `g.closeup(drawing, label)`, `g.closeup()` | Shows a close look at something, and puts it away |
 | `await g.tap()` | Waits for a click or a key |
 | `g.startTunnel(dates)`, `g.stopTunnel()`, `await g.wormhole()` | The time tunnel, and the short trip between two eras |
@@ -1651,7 +1808,9 @@ beside the game, and their paths have to be changed before they can be run from 
 and live light, the depth system, the things that move by nature (smoke, flames, water,
 birds, cloth), the save format, the sound system, the line-ID
 dialogue system, the story-as-data structure, the pixel renderer and the figure, the
-interface, the Koine Road typeface, the stamping of files.
+interface, the Koine Road typeface, the stamping of files, and the letterbox (things
+and voices through a small door in time, between leads who are centuries apart: section
+8). No act's scene uses the letterbox yet: that is for the story to decide.
 
 **Painted:** the highway of the intro and the title, and thirteen scenes: four in Egypt,
 three in Rome, the five rooms of the house and the Nevada roadside. Twenty-four things to

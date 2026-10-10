@@ -4,6 +4,9 @@
 //    loaded back into the online game from any browser or device.
 // Every save carries a version and a checksum, so old or damaged files are
 // caught and old versions can be upgraded step by step.
+// LETTERBOX-11: the version stays 3 for the tunnel (`tunnel` in the save body: things put into a door in time and not
+// yet taken out of another). A save with no such field is from before it, and the field being absent means empty:
+// complete() in state.js gives it an empty list, so no upgrade step is needed.
 
 import { SAVE_VERSION } from "./state.js";
 

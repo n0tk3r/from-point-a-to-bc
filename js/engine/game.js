@@ -12,6 +12,9 @@
 //     g.team(["mom", "bigsis", "lilsis"]);    who the player can switch between
 //     g.closeup(drawing);  g.closeup();       a close look at a screen or a notice, and putting it away
 //     g.plane("trunk").show(false);           a painted cut-out of the scene: show, set(state), fade, place
+//     g.send("gum", { to: "son" });  g.waiting();  g.receive();  await g.arrive("gum", [x, y]);     LETTERBOX-11: things through a small door in time
+//     await g.through("son", "line.id");  await g.choose([...], { through: "son" });              LETTERBOX-11: a voice from the other end of it
+//     await g.talk(tree);  await g.talk(tree, { through: "son" });  g.asked("joe/car");           TALK-11: a dialogue tree, and what has been asked in one
 //
 // Scripts are ordinary async functions. They read top to bottom like a screenplay.
 // Every position is a pixel on the 800x600 picture (grid.js).
@@ -206,7 +209,16 @@ export class Game {
   wait(ms) { return this.clock.wait(ms); }
   tween(ms, step, easing) { return this.clock.tween(ms, step, easing); }
   async say(...ids) { for (const id of ids) await this.dialogue.say(id); }
-  choose(options) { return this.dialogue.choose(options); }
+  choose(options, opts) { return this.dialogue.choose(options, opts); }       // LETTERBOX-11: opts { through: who } shows the menu as the words of someone off the stage
+  /** LETTERBOX-11: a line from someone who is not on the stage, at the other end of a small door in time: shown top
+      centre with that person's portrait beside the words (dialogue.js). Counts the line as seen and waits, as say does. */
+  async through(who, ...ids) { for (const id of ids) await this.dialogue.say(id, { through: who }); }
+  /** TALK-11: a dialogue tree (dialogue.js talk; docs/DESIGN.md, "Dialogue trees"). { through: who } holds the whole talk
+      through a door in time. Resolves when the talk is over. */
+  talk(tree, opts) { return this.dialogue.talk(tree, opts); }
+  /** TALK-11: how many times an option of a tree has been picked, by its memory key ("joe/car": the tree's id and the
+      option's; with no tree id, the scene's id, the node's and the option's). 0 if never. */
+  asked(key) { return (this.store.data.asked || {})[key] || 0; }
   flag(name, value) { return this.store.flag(name, value); }
   has(item) { return this.store.has(item); }
   take(item) { if (this.held === item) this.held = null; this.store.take(item); }
@@ -232,6 +244,85 @@ export class Game {
   }
   /** Who is carrying a thing: a lead's id, or null. */
   holder(item) { return this.store.holder(item); }
+
+  // =============== LETTERBOX-11: things through a small door in time ===============
+  // A door in time too small to step through still takes a thing. What goes in waits in the tunnel (`tunnel` in the
+  // save: state.js) until the lead it is for takes it out of a door of theirs. The engine keeps the list, marks the
+  // portrait of whoever something waits for (ui.js), and draws the arrival; which things fit which door, and the
+  // words, are the scene's own (a door's `useWith` calls g.send; on entering, or on using an open door, the scene
+  // asks g.waiting(), plays the moment with g.arrive, and calls g.receive).
+  /** The active lead puts a thing they are carrying into a door, for another lead. True if it went. */
+  send(item, { to = null } = {}) {
+    const d = this.store.data, from = d.active;
+    if (!this.store.has(item)) { console.warn(`g.send: ${from} is not carrying "${item}", so it cannot go into the door.`); return false; }
+    if (!to || to === from || !this.leads.includes(to)) { console.warn(`g.send: "${to}" is not another lead; a thing in the door is for one of ${this.leads.filter((id) => id !== from).join(", ")}.`); return false; }
+    this.take(item);
+    d.tunnel.push({ item, from, to, at: Math.round(d.playMs) });
+    this.store.emit();                           // (the mark on the portrait follows the store, like the rest of the HUD)
+    this.autosave();
+    return true;
+  }
+  /** What waits in the tunnel for a lead (the active one, unless another is named), oldest first: [{ item, from, to, at }]. */
+  waiting(who = this.store.data.active) { return (this.store.data.tunnel || []).filter((e) => e.to === who); }
+  /** The active lead takes a thing out of a door: the named one, or the oldest waiting for them, with no name. It goes
+      into their pockets (g.give), and the entry is returned; null if nothing of the kind waits for them. */
+  receive(item = null) {
+    const d = this.store.data, list = d.tunnel || [];
+    const i = list.findIndex((e) => e.to === d.active && (!item || e.item === item));
+    if (i < 0) return null;
+    const [entry] = list.splice(i, 1);
+    this.give(entry.item);
+    this.store.emit();                           // (give says nothing when the thing was there already: the mark must still go)
+    this.autosave();
+    return entry;
+  }
+  /** A thing comes through a door: its inventory picture (as the pockets show it) pops out of the point [x, y] (the
+      door) in a small arc and lands with a puff at the lead's feet, on the side away from the door (or, with nobody on
+      the stage, a little below the door; { to: [x, y] } says where instead), and is taken off the stage again, over
+      about 600 ms. It resolves when done, and the scene then says its line and calls g.receive(). In the air it is
+      behind whoever stands in front of the door, and on the ground in front of them, as the luggage on the wagon's
+      roof is unpacked. A thing with a drawn icon and no picture makes only the puff. Nothing is drawn while a cutscene
+      is being skipped. */
+  async arrive(item, at = [W / 2, H / 2], { to = null, ms = 600 } = {}) {
+    const cast = this.view && this.view.cast, path = iconPath(this.item(item)), me = this.lead;
+    if (!cast || !cast.addPicture || this.clock.skipping) return;
+    const [x0, y0] = at, id = "arrive-" + item;
+    const [x1, y1] = to || (me ? [Math.min(W - 16, Math.max(16, me.x + 34 * me.scale * (me.x < x0 ? -1 : 1))), Math.min(H - 4, me.y + 6)] : [x0 + 26, y0 + 46]);
+    const k = Math.max(0.3, 0.6 * (this.scene ? scaleAt(this.scene, y1) : 1));          // about the size of a thing on the ground beside a person at that depth, and never a speck
+    const SVG = "http://www.w3.org/2000/svg", live = this.view.liveEl;
+    const puff = document.createElementNS(SVG, "g"), motes = [];
+    puff.setAttribute("class", "arrive-puff"); puff.setAttribute("fill", "#fff8e6"); puff.setAttribute("opacity", "0");
+    for (let n = 0; n < 6; n++) motes.push(puff.appendChild(document.createElementNS(SVG, "circle")));
+    let thing = null;
+    try {
+      if (path) {
+        await picture(path);                                                 // (here before it is shown, so it does not pop in late)
+        cast.remove(id);
+        thing = cast.addPicture(id, { src: path, foot: [32, 60] }, x0, y0, k * 0.4);
+        thing.base = y0 + 1;                                                 // in the air: behind whoever stands in front of the door
+      }
+      if (live) live.appendChild(puff);
+      // Out of the door and down to the ground: straight across, and a parabola up and over (gravity), growing as it comes.
+      const rise = Math.max(60, Math.abs(y1 - y0));                        // high enough to come over the shoulder of whoever stands at the door
+      await this.tween(ms * 0.6, (t) => { if (thing) thing.place(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t - 4 * rise * t * (1 - t), k * (0.4 + 0.6 * t)); }, ease.linear);
+      if (thing) thing.base = null;                                          // on the ground it lies where it fell: in front of them
+      // The puff where it lands, and a little bounce.
+      const bounce = thing ? this.tween(ms * 0.25, (t) => thing.place(x1, y1 - 8 * k * 4 * t * (1 - t), k)) : Promise.resolve();
+      await this.tween(ms * 0.3, (t) => {
+        puff.setAttribute("opacity", 0.9 * (1 - t * t));
+        motes.forEach((p, n) => {
+          const a = Math.PI * (0.06 + 0.88 * (n / 5)), r = (8 + 22 * t) * k * 1.6;
+          p.setAttribute("cx", x1 + Math.cos(a) * r * 1.3); p.setAttribute("cy", y1 - Math.sin(a) * r * 0.6 - 2); p.setAttribute("r", (3 + 5 * t) * k * 1.6);
+        });
+      }, ease.out);
+      await bounce;
+      if (thing) await this.tween(ms * 0.15, (t) => thing.fade(1 - t), ease.linear);      // and it is gone: the pockets have it (g.receive)
+    } finally {
+      puff.remove();
+      if (thing) cast.remove(id);
+    }
+  }
+
   /** Say which leads the player can switch between from now on. */
   team(list) { this.store.data.team = list.filter((id) => this.leads.includes(id)); this.store.emit(); }
   music(id) { this.audio.music(id); }
@@ -857,7 +948,11 @@ export class Game {
       return;
     }
     d.active = to;
-    await this.goto(place.scene, { at: place.x != null ? [place.x, place.y] : null });
+    // LETTERBOX-11: the other lead is in another scene. Across the centuries the trip is the short tunnel (the eras of
+    // the two scenes differ); within one era it is a fade, as it always was. Their place and facing are kept.
+    const there = this.scenes[place.scene] ? await this.scenes[place.scene].catch(() => null) : null;
+    const via = there && this.scene && there.era !== this.scene.era ? "wormhole" : "fade";
+    await this.goto(place.scene, { via, at: place.x != null ? [place.x, place.y] : null });
   }
 
   // =============== saving ===============
@@ -1071,7 +1166,9 @@ export class Game {
       // Keys typed into a slider or a tick box belong to it. Esc still closes the menu.
       if (key !== "Escape" && event.target.closest && event.target.closest("input, select, textarea")) return;
       if (key === "Escape") {
-        if (this.mode === "cutscene") this.skip();
+        const tree = this.dialogue.choosing && !this.ui.open ? this.stage.querySelector(".choices.talk") : null;     // TALK-11: a dialogue tree's menu: Esc takes the way out, if this node has one; else nothing
+        if (tree) { const exit = tree.querySelector("button.exit"); if (exit) exit.click(); }
+        else if (this.mode === "cutscene") this.skip();
         else if (this.ui.open) this.ui.back();
         else this.ui.pauseMenu();
       } else if ((key === " " || key === "Enter") && this.cardEl.classList.contains("show")) {

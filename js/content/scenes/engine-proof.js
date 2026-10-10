@@ -17,6 +17,154 @@
 const art = "art/scenes/egypt-crash/";
 const fx = (g) => !!g.flag("proof.fx");          // the things that move by nature (`fx`, below) are on the stage while this is true
 
+// ---------- LETTERBOX-11: the letterbox, the engine's own proof of it (docs/DESIGN.md, "The letterbox") ----------
+// On the stage while "proof.letterbox" is true: index.html?scene=engine-proof&lead=dad&flags=proof.letterbox.
+// Dad is here with a pack of gum, and the Son is in another century (the market street sketch, in Rome), so the two are
+// a team and switching to him is the short tunnel. A small door in time hangs in the air over the sand. Anything small
+// that whoever is here carries can be put in it for the one at the other end (this scene's own choice, SMALL: the engine
+// never decides what fits), and it waits in the tunnel, marking that person's portrait, until they take it out of a door
+// of theirs. The sketch has no door, so the proof lets the Son take it out of this one: come back here as the Son
+// (switch again) and on arrival the door gives it up (g.arrive, a word, g.receive). The door with nothing in hand is a
+// word through it with whoever is at the other end: g.through, and a choose through the door.
+const letterbox = (g) => !!g.flag("proof.letterbox");
+const DOOR = [360, 436];                                                        // the middle of the small door, in the air over the sand (its foot is row 470)
+const OTHER = { dad: "son", son: "dad" };                                       // who is at the other end, for whoever is here
+const SMALL = ["gum", "coin", "quarter", "map", "note", "pencil", "batteries", "studykey", "carkey", "reed", "pass", "sunglasses"];   // what fits through
+const mine = (g, dad, son) => (g.store.data.active === "son" ? son : dad);      // the line for whoever is here
+// The lines are the proof's own, for the tests: added to the game's lines as the scene is built (setup), since no act owns them.
+const LINES = {
+  "proof.door.look": ["dad", "A small door in time. Letterbox-sized. The kind you post things through, not people."],
+  "proof.door.look.son": ["son", "A tiny door in time. If I were a hamster I'd be through it already."],
+  "proof.door.put": ["dad", "In it goes. Special delivery, two thousand years express."],
+  "proof.door.put.son": ["son", "Posting it. No stamp. Let's see if time charges postage."],
+  "proof.door.gone": ["dad", "And it's gone. Somewhere. Somewhen."],
+  "proof.door.gone.son": ["son", "Gone! That is the best mailbox I have ever seen."],
+  "proof.door.came": ["dad", "Something's come through. From the Son, I'd guess. It has his fingerprints on it."],
+  "proof.door.came.son": ["son", "Whoa. Something just came through the door for me. Time mail!"],
+  "proof.door.hello": ["dad", "Hello? Anyone at the other end?"],
+  "proof.door.hello.son": ["son", "Dad? Dad! Are you in there? Say something old."],
+  "proof.door.answer.1": ["son", "Dad? Is that YOU? You sound like you're inside a drainpipe."],
+  "proof.door.answer.2": ["son", "I'm in a street. It's made of rectangles. Nobody here has heard of lunch."],
+  "proof.door.answer.dad": ["dad", "I'm here, buddy. Speak up: this door has a lot of centuries in it."],
+  "proof.door.son.fine": ["son", "I'm fine. Really. The rectangles are very friendly."],
+  "proof.door.son.send": ["son", "Send me something! Anything! A snack would be ideal!"],
+  "proof.door.son.bye": ["son", "Gotta go. Someone's trying to sell me a rectangle."],
+  "proof.door.fine": ["dad", "Rectangles. Right. Stay put, buddy."],
+  "proof.door.send": ["dad", "I'll see what fits through. No promises about snacks."],
+  "proof.door.bye": ["dad", "Don't buy anything. We don't have the exchange rate."],
+  // TALK-11: the water carrier's talk (the tree is CARRIER, below)
+  "proof.carrier.look": ["dad", "An old man with a water-skin, in no hurry at all. Somebody around here has the right idea."],
+  "proof.carrier.hello.1": ["carrier", "Peace, stranger. You came down in the big wooden thing?"],
+  "proof.carrier.hello.2": ["carrier", "I carry water. Up to the stone, down to the river, up to the stone. Forty years. Ask me anything about either."],
+  "proof.carrier.opt.jars": ["dad", "What's in the jars?"],
+  "proof.carrier.jars.1": ["carrier", "Water."],
+  "proof.carrier.jars.2": ["carrier", "Still water. It was water the first time you asked, too."],
+  "proof.carrier.jars.more": ["carrier", "Stranger, I am going to tell you a secret. It is water."],
+  "proof.carrier.opt.river": ["dad", "Tell me about the river."],
+  "proof.carrier.river.1": ["carrier", "The river. She rises, she falls, she feeds everybody and she drowns a few. Like a mother, my wife says."],
+  "proof.carrier.opt.fish": ["dad", "Any fish in it?"],
+  "proof.carrier.fish.1": ["carrier", "Fish, yes. Also crocodiles. The fish are for eating. The crocodiles have the same idea about you."],
+  "proof.carrier.opt.show": ["dad", "Show me where you fill up."],
+  "proof.carrier.show.1": ["carrier", "Come. Watch the water, not the view."],
+  "proof.carrier.show.2": ["carrier", "Here. Upstream of the donkey. That is the whole art of it."],
+  "proof.carrier.opt.enough": ["dad", "That's enough about fish."],
+  "proof.carrier.enough": ["carrier", "Nobody ever says that about water."],
+  "proof.carrier.opt.swim": ["dad", "Can I swim in it?"],
+  "proof.carrier.swim.1": ["carrier", "You can. Once."],
+  "proof.carrier.opt.back": ["dad", "Never mind the river."],
+  "proof.carrier.opt.name": ["dad", "What do they call you?"],
+  "proof.carrier.name.1": ["carrier", "Water Carrier. Before that, Boy. If I live, Old Water Carrier."],
+  "proof.carrier.name.2": ["carrier", "And you are the man who fell out of the sky in a wooden box. Nobody will need to ask twice."],
+  "proof.carrier.opt.pyramid": ["dad", "Who's the big pointy one for?"],
+  "proof.carrier.pyramid.1": ["carrier", "The king. He is in no hurry either. His sons are."],
+  "proof.carrier.opt.bye": ["dad", "I'll let you get on."],
+  "proof.carrier.bye": ["carrier", "Get on. Yes. Up to the stone, down to the river. Mind the crocodiles, sky-man."],
+};
+
+// ---------- TALK-11: a dialogue tree, the engine's own proof of it (docs/DESIGN.md, "Dialogue trees") ----------
+// On the stage while "proof.talk" is true: index.html?scene=engine-proof&lead=dad&flags=proof.talk. An old water carrier
+// stands on the sand by the river; talking to him is `g.talk(CARRIER)`. The tree below uses every piece there is: a start
+// that depends on the story (`start` as a function: his greeting once, then straight to the questions), a node with four
+// ways in, a fork two deep (the river, then the fish), an option gated by `when` that appears only after another was
+// picked (the pyramid, after his name), a `once` (his name), a reply keyed by the nth asking with `more` (the jars), a
+// `set` (his name), an async `do` (he walks to the water and back), `back`, `root`, and an exit that is a line.
+const talk = (g) => !!g.flag("proof.talk");
+const CARRIER_AT = [250, 480];                                                  // where he stands
+/** He shows Dad where he fills up: down to the water's edge, a word there, and back to his place. (A `do` script: run after the option's lines, and awaited.) */
+async function fetchWater(g) {
+  await g.moveTo(200, 455, "carrier");
+  await g.say("proof.carrier.show.2");
+  await g.moveTo(CARRIER_AT[0], CARRIER_AT[1], "carrier");
+  const he = g.actor("carrier");
+  if (he) he.face("E");
+}
+const CARRIER = {
+  id: "proof.carrier",
+  start: (g) => (g.flag("proof.carrierMet") ? "ask" : "hello"),
+  nodes: {
+    hello: { say: ["proof.carrier.hello.1", "proof.carrier.hello.2"], then: (g) => { g.flag("proof.carrierMet", true); return "ask"; } },
+    ask: {
+      options: [
+        { id: "jars", line: "proof.carrier.opt.jars", say: { 1: ["proof.carrier.jars.1"], 2: ["proof.carrier.jars.2"], more: ["proof.carrier.jars.more"] } },
+        { id: "river", line: "proof.carrier.opt.river", say: ["proof.carrier.river.1"], then: "river" },
+        { id: "name", line: "proof.carrier.opt.name", once: true, say: ["proof.carrier.name.1", "proof.carrier.name.2"], set: "proof.carrierNamed" },
+        { id: "pyramid", line: "proof.carrier.opt.pyramid", when: (g) => g.asked("proof.carrier/name") > 0, say: ["proof.carrier.pyramid.1"] },
+        { id: "bye", line: "proof.carrier.opt.bye", say: ["proof.carrier.bye"], then: "exit" },
+      ],
+    },
+    river: {
+      options: [
+        { id: "fish", line: "proof.carrier.opt.fish", then: "fish" },
+        { id: "swim", line: "proof.carrier.opt.swim", say: ["proof.carrier.swim.1"] },
+        { id: "riverback", line: "proof.carrier.opt.back", then: "back" },
+      ],
+    },
+    fish: {
+      say: ["proof.carrier.fish.1"],
+      options: [
+        { id: "show", line: "proof.carrier.opt.show", say: ["proof.carrier.show.1"], do: fetchWater, then: "back" },
+        { id: "enough", line: "proof.carrier.opt.enough", say: ["proof.carrier.enough"], then: "root" },
+      ],
+    },
+  },
+};
+
+/** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
+async function postArrives(g) {
+  for (const entry of g.waiting()) {
+    if (g.lead) g.lead.look(DOOR[0], DOOR[1]);
+    g.sfx("portal");
+    await g.arrive(entry.item, DOOR);
+    await g.say(mine(g, "proof.door.came", "proof.door.came.son"));
+    g.receive(entry.item);
+  }
+}
+
+/** A thing goes into the door, for the one at the other end. */
+async function putIn(g, item) {
+  await g.say(mine(g, "proof.door.put", "proof.door.put.son"));
+  await g.reach();
+  if (!g.send(item, { to: OTHER[g.store.data.active] })) return;             // (not in these pockets after all: the engine has said so in the console)
+  g.sfx("portal");
+  const door = g.effects.get("door");
+  if (door) await g.tween(500, (k) => door.open(1, { scale: 1 + 0.5 * Math.sin(Math.PI * k) }));      // the door winks as it goes in
+  await g.say(mine(g, "proof.door.gone", "proof.door.gone.son"));
+}
+
+/** A word through the door with whoever is at the other end. Anything waiting comes out first. */
+async function talkThrough(g) {
+  if (g.waiting().length) return postArrives(g);
+  if (g.store.data.active === "son") { await g.say("proof.door.hello.son"); return g.through("dad", "proof.door.answer.dad"); }
+  await g.say("proof.door.hello");
+  await g.through("son", "proof.door.answer.1", "proof.door.answer.2");
+  for (;;) {
+    const pick = await g.choose([{ id: "fine", line: "proof.door.son.fine" }, { id: "send", line: "proof.door.son.send" }, { id: "bye", line: "proof.door.son.bye" }], { through: "son" });
+    await g.through("son", `proof.door.son.${pick}`);
+    await g.say(`proof.door.${pick}`);
+    if (pick === "bye") return;
+  }
+}
+
 export default {
   id: "engine-proof",
   era: "egypt",
@@ -85,6 +233,8 @@ export default {
     { id: "papyrus-sway", type: "sway", plane: "papyrus", anchor: "bottom", amount: 1.2, when: fx },
     // water from a spout, splashing where it lands: here, to show it, meltwater pouring off the roof from the cooler
     { id: "spill", type: "stream", path: [[749, 427], [756, 431], [761, 440], [764, 470], [765, 505], [766, 546]], width: [1.5, 2.5], base: 549, when: fx },
+    // LETTERBOX-11: the small door in time, open, in the air over the sand (the paint bending, as the chamber's door is): see the top
+    { id: "door", type: "portal", at: DOOR, r: 34, base: DOOR[1] + 34, open: 1, strength: 0.6, when: letterbox },
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -120,7 +270,26 @@ export default {
       look: "egypt.scribe.look", use: ["egypt.scribe.meet.1"] },
     { id: "overseer", name: "overseer", verb: "Talk to", rect: [279, 364, 44, 114], walkTo: [352, 478], face: "W", when: (g) => !!g.flag("proof.life"),
       look: "egypt.overseer.look", use: ["egypt.overseer.meet.1"] },
+    // LETTERBOX-11: the small door (see the top): a word through it, or a small thing put in it for the one at the other end.
+    // Which things fit is this list's say, with a closure for each, since a `useWith` script is handed only the game.
+    { id: "door", name: "small door in time", verb: "Speak through", circle: [DOOR[0], DOOR[1], 42], walkTo: [360, 536], face: "N", when: letterbox,
+      look: (g) => g.say(mine(g, "proof.door.look", "proof.door.look.son")), use: talkThrough,
+      useWith: Object.fromEntries(SMALL.map((item) => [item, (g) => putIn(g, item)])) },
+    // TALK-11: the water carrier (see the top): a talk with him is the tree
+    { id: "carrier", name: "water carrier", verb: "Talk to", rect: [232, 381, 36, 100], walkTo: [306, 488], face: "W", when: talk,
+      look: "proof.carrier.look", use: (g) => g.talk(CARRIER) },
   ],
+
+  // LETTERBOX-11: what the letterbox proof needs of the story when the scene is built: the two of them a team, the one who is
+  // not here placed in another century, and the pack of gum in Dad's pockets, once. (And the proof's lines, for the tests.)
+  setup(g) {
+    for (const [id, line] of Object.entries(LINES)) if (!g.lines[id]) g.lines[id] = line;
+    if (!letterbox(g)) return;
+    const d = g.store.data;
+    for (const id of ["dad", "son"]) if (!d.where[id]) d.where[id] = { scene: "sketch-example", x: 400, y: 560, face: "S" };
+    g.team(["dad", "son"]);
+    if (!g.flag("proof.gum")) { if (!d.inventory.dad.includes("gum")) d.inventory.dad.push("gum"); g.flag("proof.gum", true); }
+  },
 
   // PEOPLE, AND THEIR OWN LIVES (js/engine/life.js). Two people of the place, on the stage only while the story fact
   // "proof.life" is true (the engine's test turns it on: index.html?scene=engine-proof&lead=dad&flags=proof.life), so
@@ -134,13 +303,17 @@ export default {
       life: { every: [14, 26], spots: [[486, 338, "N"], [660, 356, "E"]], stay: [3, 6] } },
     { id: "overseer", kind: "overseer", at: [300, 470], face: "E", when: (g) => !!g.flag("proof.life"),
       life: { every: [16, 30], spots: [[250, 500, "W"], [380, 420, "N"]], stay: [3, 6] } },
+    // TALK-11: the water carrier, on the sand by the river while "proof.talk" is true (see the top). No walks of his own: the tree walks him.
+    { id: "carrier", kind: "carrier", at: CARRIER_AT, face: "E", when: talk },
   ],
 
   // Runs when the lead arrives. It must be safe to run twice (a save can be loaded in the middle of it), so it checks its own fact.
   async enter(g) {
-    if (g.flag("proof.arrived")) return;
-    await g.wait(400);
-    await g.say("egypt.arrive.1");
-    g.flag("proof.arrived", true);
+    if (!g.flag("proof.arrived")) {
+      await g.wait(400);
+      await g.say("egypt.arrive.1");
+      g.flag("proof.arrived", true);
+    }
+    if (letterbox(g)) await postArrives(g);          // LETTERBOX-11: anything that came through for whoever has just come in, the door gives up
   },
 };

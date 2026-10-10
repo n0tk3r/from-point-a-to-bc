@@ -147,6 +147,14 @@ h1 {
   animation: line-in 0.2s ease-out;
 }
 .say.under { max-width: 92cqw; }      /* while a close-up is showing, lines run along the bottom */
+/* LETTERBOX-11: a voice through a small door in time. The speaker is in another century, so their portrait (drawn by the
+   interface, never in the scene's paints) stands beside the words, and the words are lighter and lean, as from a little
+   way off. The portrait's frame is the speaker's own colour, as their portrait in the team bar is. */
+.say.through { display: flex; align-items: center; gap: 1.2cqw; text-align: left; font-weight: 400; font-style: italic; max-width: 60cqw; }
+.say.through .face { flex: none; display: block; aspect-ratio: 1; image-rendering: crisp-edges; image-rendering: pixelated; background: var(--letterbox); border: 0.3cqw solid currentColor; box-shadow: 0 0 0 0.2cqw var(--ink); }
+.choices.through li.voice { display: flex; align-items: center; gap: 1cqw; padding: 0.2cqw 0.8cqw 0.6cqw; color: var(--who, var(--cream)); font: 400 max(2cqw, 11px)/1.2 var(--font-display); letter-spacing: 0.08em; }
+.choices.through li.voice .face { display: block; image-rendering: pixelated; background: var(--letterbox); border: 0.3cqw solid currentColor; box-shadow: 0 0 0 0.2cqw var(--ink); }
+.choices.through button { color: var(--who, var(--cream)); font-weight: 400; font-style: italic; }
 .choices {
   position: absolute;
   left: 3%;
@@ -173,6 +181,11 @@ h1 {
 .choices button:hover, .choices button:focus-visible { color: var(--time-cyan); outline: none; }
 .choices { counter-reset: choice; }
 .choices button::before { counter-increment: choice; content: counter(choice) ".  "; opacity: 0.7; }
+/* TALK-11: in a dialogue tree, a thing asked before is written lighter (it can still be asked: not greyed out), and a thing
+   never asked carries a small mark after it in the time colour, for the completist, as the classic adventures did it. */
+.choices button.asked { font-weight: 400; opacity: 0.8; }
+.choices button.asked:hover, .choices button.asked:focus-visible { opacity: 1; }
+.choices button.new::after { content: ""; display: inline-block; width: max(0.9cqw, 6px); height: max(0.9cqw, 6px); margin-left: 1cqw; border-radius: 50%; vertical-align: middle; background: var(--time-cyan); box-shadow: 0 0 0 0.15cqw var(--ink), 0 0 0.6cqw var(--time-cyan); }
 
 /* ---------- HUD ---------- */
 .chip, .tool {
@@ -200,6 +213,9 @@ h1 {
 .tool.face { position: relative; }
 .tool.face[data-n]::after { content: attr(data-n); position: absolute; right: 0.5cqw; top: 0.7cqw; min-width: max(1.9cqw, 11px); height: max(1.9cqw, 11px); border-radius: 50%; background: var(--cream); color: var(--ink); font: 700 max(1.3cqw, 8px)/max(1.9cqw, 11px) var(--font-text); text-align: center; box-shadow: 0 0 0 0.15cqw var(--ink); }   /* how many things that person is carrying */
 .tool.face[aria-pressed="true"]::after { display: none; }      /* (the one you are playing has their things along the bottom) */
+/* LETTERBOX-11: something has come through a door in time for this person and waits for them: a small mark at the top left of
+   the portrait, in the time colour, the interface's own and never the scene's paints. Pointing at the portrait says what waits. */
+.tool.face[data-post]::before { content: ""; position: absolute; left: 0.5cqw; top: 0.7cqw; width: max(1.7cqw, 9px); height: max(1.7cqw, 9px); border-radius: 50%; background: var(--time-cyan); box-shadow: 0 0 0 0.15cqw var(--ink), 0 0 0.7cqw var(--time-cyan); }
 .tool.face[aria-pressed="false"] { filter: saturate(0.75) brightness(0.86); }
 .tool.face[aria-pressed="false"]:hover, .tool.face[aria-pressed="false"]:focus-visible { filter: none; }
 .label {

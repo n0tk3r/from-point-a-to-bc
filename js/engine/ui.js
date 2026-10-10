@@ -124,6 +124,13 @@ export class UI {
     return d.team.filter((id) => d.where[id] && d.where[id].scene);
   }
 
+  /** LETTERBOX-11: what waits in the tunnel for a lead, as the end of a sentence: ". Something has come through for Son:
+      the pack of gum", or nothing. (The mark on their portrait says that something does; pointing at it says what.) */
+  post(id) {
+    const g = this.g, list = g.waiting ? g.waiting(id) : [];
+    return list.length ? `. Something has come through for ${g.cast[id].name}: ${list.map((e) => g.the(e.item)).join(", ")}` : "";
+  }
+
   label() {
     const g = this.g;
     let text = "", edge = null;
@@ -135,7 +142,7 @@ export class UI {
       if (this.over) {
         const has = (g.store.data.inventory[this.over] || []).map((id) => g.item(id).name).join(", ");
         if (this.reach(this.over)) text = `Give ${g.item(g.held).name} to ${g.cast[this.over].name}`;
-        else text = (this.over === g.store.data.active ? `${g.cast[this.over].name} (playing now)` : `Play as ${g.cast[this.over].name}`) + (has ? `. Carrying: ${has}` : "");
+        else text = (this.over === g.store.data.active ? `${g.cast[this.over].name} (playing now)` : `Play as ${g.cast[this.over].name}`) + (has ? `. Carrying: ${has}` : "") + this.post(this.over);
       }
       else if (this.thing && g.item(this.thing) && !spot) text = g.lookMode ? `Look at ${g.item(this.thing).name}` : g.held === this.thing ? `Put ${g.the(this.thing)} away` : g.item(this.thing).name[0].toUpperCase() + g.item(this.thing).name.slice(1);
       else if (g.held) text = spot && spot.mate ? `Give ${g.item(g.held).name} to ${name}` : `Use ${g.item(g.held).name} with ${name || "…"}`;
@@ -167,15 +174,17 @@ export class UI {
     const team = this.team();
     this.teamEl.hidden = !free || team.length < 2;
     const count = (id) => (d.inventory[id] || []).length;
-    const now = team.map((id) => `${id}:${count(id)}`).join() + "|" + d.active;
+    const post = (id) => (g.waiting ? g.waiting(id).map((e) => e.item) : []);          // LETTERBOX-11: what waits in the tunnel for that lead
+    const now = team.map((id) => `${id}:${count(id)}:${post(id).join("+")}`).join() + "|" + d.active;
     if (now !== this._team) {                       // rebuilt only when it changes, so a portrait under the pointer stays put
       this._team = now;
       this.teamEl.innerHTML = team.map((id, n) => {
-        const name = esc(g.cast[id].name), on = id === d.active, has = count(id);
+        const name = esc(g.cast[id].name), on = id === d.active, has = count(id), came = post(id).length;
         const key = id + "|" + (this.facePx || 42);
         if (!this.faces[key]) { const face = portrait(g.cast[id].sprite, this.facePx || 42); this.faces[key] = face ? face.toDataURL() : ""; }
-        return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}` +
-          ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}">` +
+        // (LETTERBOX-11: data-post marks the portrait of someone something has come through for; css/game.css draws the mark)
+        return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}${came ? ` data-post="${came}"` : ""}` +
+          ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}${esc(this.post(id))}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}${esc(this.post(id))}">` +
           `<img src="${this.faces[key]}" alt="" draggable="false"></button>`;
       }).join("");
     }

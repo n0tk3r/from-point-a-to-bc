@@ -18,6 +18,8 @@ export function newGame(leads = ["dad", "son"]) {
     inventory: {},            // each lead's pockets
     flags: {},                // story facts: flags["egypt.metScribe"] = true
     seenLines: {},            // dialogue already heard, so repeats can be shortened
+    tunnel: [],               // LETTERBOX-11: things put into a door in time and not yet taken out of another: { item, from, to, at } (lead ids; `at` the play time it went in)
+    asked: {},                // TALK-11: what has been asked in dialogue trees, and how many times: asked["joe/car"] = 2 (the tree's id and the option's; dialogue.js talk)
   }, leads);
 }
 
@@ -32,6 +34,8 @@ export function complete(data, leads) {
   data.team = (Array.isArray(data.team) ? data.team : []).filter((id) => leads.includes(id));
   data.flags = data.flags || {};
   data.seenLines = data.seenLines || {};
+  data.tunnel = Array.isArray(data.tunnel) ? data.tunnel : [];      // LETTERBOX-11: a save from before the letterbox has no tunnel, which means an empty one
+  data.asked = data.asked && typeof data.asked === "object" ? data.asked : {};     // TALK-11: a save from before dialogue trees has nothing asked
   return data;
 }
 
