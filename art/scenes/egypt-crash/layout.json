@@ -19,7 +19,7 @@
   {"id": "wagon", "file": "wagon.png", "base": [[490, 541], [790, 537]], "solid": [[372, 549], [394, 530], [424, 514], [456, 502], [490, 499], [522, 506], [552, 512], [757, 516], [797, 536], [793, 549], [640, 553], [550, 558], [450, 558]], "note": "painted without the door mirror"},
   {"id": "mirror", "file": "mirror.png", "base": [[490, 541.2], [790, 537.2]], "note": "shown until the mirror is taken"},
   {"id": "suitcase-open", "file": "suitcase-open.png", "base": [[490, 541.4], [790, 537.4]], "note": "shown while the suitcase is open; hides the shut one"},
-  {"id": "trunk-open", "file": "trunk-open.png", "base": [[490, 541.6], [790, 537.6]], "note": "shown while the trunk is open; must be laid after suitcase-open"},
+  {"id": "trunk-open", "file": "trunk-open.png", "base": [[490, 541.6], [790, 537.6]], "note": "shown while the trunk is open; must be laid after suitcase-open", "states": {"full": "trunk-open.png", "flashlight-gone": "trunk-open-1.png", "shade-gone": "trunk-open-2.png"}, "states_note": "round twelve: the same cut-out, pixel for pixel, less the flashlight once Dad has taken it, and less the shade too once he has taken that"},
   {"id": "cooler-open", "file": "cooler-open.png", "base": [[490, 541.8], [790, 537.8]], "note": "shown while the cooler is open; must be laid after trunk-open"},
   {"id": "steam", "frames": ["steam-0.png", "steam-1.png", "steam-2.png", "steam-3.png"], "fps": 6, "at": [472, 498], "foot": [30, 104], "base": [[490, 542.0], [790, 538.0]], "note": "cropped RGBA frames, placed by the middle of the bottom edge"},
   {"id": "front", "file": "front.png", "plane": "front"}

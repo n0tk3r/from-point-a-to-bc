@@ -129,7 +129,7 @@ def key_frame(src, dst, key, strength):
 def files_of(scene, src):
     """The scene's picture files in `src`, sorted into the plan's parts. Stops at a file the plan does not know."""
     plan = PLANS[scene]
-    named = {"back"} | set(plan["planes"]) | set(plan["alt"]) | set(plan["union"])
+    named = {"back"} | set(plan["planes"]) | set(plan["alt"]) | set(plan["union"]) | {n for names in plan.get("states", {}).values() for n in names}
     frames = sorted({os.path.basename(f)[:-4] for pat in plan["frames"] for f in glob.glob(os.path.join(src, pat + ".png"))})
     have = sorted(f[:-4] for f in os.listdir(src) if f.endswith(".png"))
     unknown = [f for f in have if f not in named and f not in frames]
@@ -163,12 +163,21 @@ def key_scene(scene, src, dst, strength=STRENGTH, quiet=False):
         pic = picture(src, plan, extra=[alt], without=replaces)
         lab = rgb_to_lab(pic)
         alts[alt] = (pic, lab, read_maps(lab, key), alpha(src, alt))
+    # Further states of an alt (the trunk as the story empties it): keyed from the picture in that state as the alt is,
+    # but left out of the palette's sample (postimp_plans.py, "states"), so that adding one changes no other file.
+    states = {}
+    for base_alt, names in plan.get("states", {}).items():
+        for n in names:
+            pic = picture(src, plan, extra=[n], without=plan["alt"][base_alt])
+            lab = rgb_to_lab(pic)
+            states[n] = (pic, lab, read_maps(lab, key), alpha(src, n))
     unions = {u: np.any([masks[n] for n in parts], axis=0) for u, parts in plan["union"].items()}
     st = strength
     pc = paint(comp, key, st, maps=maps_c, lab0=lab_c)
     pb = paint(back, key, st, maps=maps_b, lab0=lab_b)
     back_out = np.where(covered[..., None], pb, pc)
     painted_alts = {a: paint(p, key, st, maps=m, lab0=l) for a, (p, l, m, _) in alts.items()}
+    painted_states = {n: paint(p, key, st, maps=m, lab0=l) for n, (p, l, m, _) in states.items()}
     # A cut-out that another cut-out lies over (the pencil on the armchair, the door mirror on the wagon, the flashlight
     # in the fort's way in) is keyed from the picture with nothing over it: back and the cut-outs up to itself. Taken from
     # the whole composite, it would carry the thing over it baked into its own pixels, and show it after the game had
@@ -199,6 +208,9 @@ def key_scene(scene, src, dst, strength=STRENGTH, quiet=False):
     for a, pa in painted_alts.items():
         save_indexed(path(dst, a), to_index(pa, pal, seed=st + 2), pal, alts[a][3])
         written.append(a)
+    for n, pn in painted_states.items():
+        save_indexed(path(dst, n), to_index(pn, pal, seed=st + 2), pal, states[n][3])
+        written.append(n)
     for f in frames:
         key_frame(path(src, f), path(dst, f), key, st)
         written.append(f)

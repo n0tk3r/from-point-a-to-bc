@@ -7,10 +7,10 @@
 import { highway, REST } from "./highway.js";
 
 export default async function title(g) {
-  const road = highway(g, "Dusk on a desert highway. A family station wagon heads for a swirling time portal, past a road sign where Point B has been crossed out and B.C. painted in.");
+  const road = highway(g, "Dusk on a desert highway. A family station wagon heads for a swirling time portal, past a road sign that now reads POINT B.C.");
   road.hole(1);
-  road.strike(1);
-  road.bc(1);
+  road.bend(0);
+  road.bc(1);                           // the sign has changed its mind
   road.drive(REST);
   await road.ready;
 }

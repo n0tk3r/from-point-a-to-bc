@@ -96,7 +96,7 @@ export const lines = {
   "rome.gate.3": ["doorkeeper", "...Three out of three."],
   "rome.gate.4": ["son", "YES."],
   "rome.gate.5": ["doorkeeper", "The hair."],
-  "rome.gate.6": ["son", "The hair is load-bearing."],
+  "rome.gate.6": ["son", "It doesn't go down. I've tried. Mom's tried. Gravity's tried."],
   "rome.gate.7": ["doorkeeper", "...Go in. Walk. Touch nothing. The clerk is counting."],
   "rome.gate.8": ["son", "Operation Temple Kid is GO."],
 
@@ -333,7 +333,7 @@ export const lines = {
   "rome.urchin.hi.1": ["urchin", "Your feet are on fire."],
   "rome.urchin.hi.2": ["son", "They light up when I stomp. Watch."],
   "rome.urchin.hi.3": ["urchin", "...Do it again."],
-  "rome.urchin.hi.4": ["son", "Everybody says that. Except teachers."],
+  "rome.urchin.hi.4": ["son", "Okay, but that one was free. From now on it's a walnut a stomp."],
   "rome.urchin.hi.5": ["urchin", "I'm the best at nuts on this street. You're the best at feet. We should be friends."],
   "rome.urchin.hi.6": ["son", "Deal. I'm calling you Walnut."],
   "rome.urchin.ask.game": ["son", "How do you play the walnut game?"],

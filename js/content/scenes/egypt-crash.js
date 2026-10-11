@@ -15,7 +15,10 @@
 // Whatever he takes out of the luggage on the roof POPS OUT: it jumps out of the opened lid in a little arc, lands
 // on the sand at his feet with a bounce and a puff of dust, and lies there while he says what it is; then he bends
 // and picks it up. It is the thing's own inventory picture (art/items/<id>.png), moved on the game's clock, with its
-// shadow and the dust drawn on the live layer (popOut, below).
+// shadow and the dust drawn on the live layer (popOut, below). The moment a thing is out, it is out of the painted
+// lid as well: the open trunk has three pictures (with the flashlight and the shade, without the flashlight, without
+// both), and reads the facts "egypt.out.flashlight" and "egypt.out.shade" to choose (the suitcase and the cooler keep
+// their one picture: the sunglasses and General Feathers lie under the shirts, and there is always another root beer).
 //
 // Under the shirts in the suitcase, with the sunglasses: General Feathers, his youngest's stuffed hen, sent along
 // "to keep an eye on Daddy", and her note in crayon (shown close up). No puzzle needs her. He carries her
@@ -58,6 +61,10 @@ const NILE = [[0, 264], [344, 264], [321, 276], [295, 300], [261, 336], [213, 38
 
 /** How many times a line has been spoken. (The engine counts every line it says.) */
 const count = (g, id) => g.store.data.seenLines[id] || 0;
+/** Whether a thing has come out of its lid on the roof: from the moment it pops out (popOut), or, in a game saved
+    before the lids' pictures followed (round twelve), once it was taken. */
+const TOOK = { flashlight: "egypt.tookFlashlight", shade: "egypt.tookShade" };
+const out = (g, item) => !!(g.flag("egypt.out." + item) || (TOOK[item] && g.flag(TOOK[item])));
 /** A thing worth looking at twice: the first line, then the second, turn about. */
 const twice = (first, second) => (g) => g.say(count(g, first) <= count(g, second) ? first : second);
 /** Someone turns to Dad. */
@@ -88,14 +95,16 @@ function lookAtPyramids(g) {
 }
 
 // ---------- General Feathers ----------
-// Little Sister's note, as the close-up shows it: crayon on a sheet torn from a pad (the kit draws the paper: js/art/kit.js, `paper`).
+// Little Sister's note, as the close-up shows it: crayon on a ruled sheet torn from her school pad, in her own neat
+// print (she is seven and has the best handwriting in the family: every letter the same height, straight on the
+// rule; the kit draws the paper and letters it by hand: js/art/kit.js, `paper` and `print`).
 const NOTE = {
-  tape: false, tilt: -2.5, tint: "#fbf6e6", width: 500,
+  tape: false, tilt: -1.2, tint: "#fdfbf4", width: 560, ruled: true,
   lines: [
-    { text: "DADDY.", size: 46, gap: 18, anchor: "start", fill: "#c8402f", turn: -3 },
-    { text: "GENERAL FEATHERS", size: 40, fill: "#5b3fa0", turn: 2 },
-    { text: "IS IN CHARGE.", size: 40, gap: 22, fill: "#5b3fa0", turn: -1.5 },
-    { text: "DO WHAT SHE SAYS.", size: 40, fill: "#c8402f", turn: 1.5 },
+    { text: "DADDY.", size: 36, gap: 54, anchor: "start", fill: "#d13d2e", hand: true },       // (gap 54: she left a rule empty)
+    { text: "GENERAL FEATHERS", size: 36, fill: "#5a3fa6", hand: true },
+    { text: "IS IN CHARGE.", size: 36, fill: "#5a3fa6", hand: true },
+    { text: "DO WHAT SHE SAYS.", size: 36, fill: "#d13d2e", hand: true },
   ],
 };
 
@@ -262,10 +271,12 @@ async function popOut(g, item, lid) {
   const me = g.lead, [x0, y0] = LIDS[lid];
   const x1 = Math.round((me ? me.x : x0) + 34), y1 = Math.min(Math.round((me ? me.y : 566) + 20), 592);      // on the sand, at his right hand
   const cast = g.view && g.view.cast, spec = ITEM[item], src = `art/items/${item}.png`;
-  if (!cast || !cast.addPicture) return null;
+  const gone = () => g.flag("egypt.out." + item, true);                 // out of the painted lid, too (the trunk's picture follows: see `planes`)
+  if (!cast || !cast.addPicture) { gone(); return null; }
   if (g.assets && g.assets.picture) await g.assets.picture(src);          // (it is here before it is shown, so it does not pop in late)
   const k = spec.size * depth(y1), thing = cast.addPicture("pop-" + item, { src, foot: spec.foot }, x0, y0, k * 0.85);
   thing.base = 560;                               // in the air it is in front of the car and its luggage, and behind him
+  gone();
   const shadow = g.q("#pop-shadow"), dust = g.q("#pop-dust");
   const shade = (x, y, near) => { if (!shadow) return; shadow.setAttribute("cx", x); shadow.setAttribute("cy", y); shadow.setAttribute("rx", 13 * k * (0.5 + 0.5 * near)); shadow.setAttribute("ry", 3.6 * k * (0.5 + 0.5 * near)); shadow.setAttribute("opacity", 0.45 * near); };
   // Up out of the lid and down onto the sand: straight across, and a parabola up and down (gravity).
@@ -526,7 +537,9 @@ export default {
       solid: [[372, 549], [394, 530], [424, 514], [456, 502], [490, 499], [522, 506], [552, 512], [757, 516], [797, 536], [793, 549], [640, 553], [550, 558], [450, 558]] },   // the car, and the sand heaped at its nose
     { id: "mirror", src: art + "mirror.png", base: [[490, 541.2], [790, 537.2]], when: (g) => !g.flag("egypt.tookMirror") },
     { id: "suitcase", src: art + "suitcase-open.png", base: [[490, 541.4], [790, 537.4]], when: (g) => !!g.flag("egypt.suitcaseOpen") },
-    { id: "trunk", src: art + "trunk-open.png", base: [[490, 541.6], [790, 537.6]], when: (g) => !!g.flag("egypt.trunkOpen") },
+    { id: "trunk", states: { full: art + "trunk-open.png", noFlashlight: art + "trunk-open-1.png", noShade: art + "trunk-open-2.png" },
+      state: (g) => (out(g, "shade") ? "noShade" : out(g, "flashlight") ? "noFlashlight" : "full"),
+      base: [[490, 541.6], [790, 537.6]], when: (g) => !!g.flag("egypt.trunkOpen") },
     { id: "cooler", src: art + "cooler-open.png", base: [[490, 541.8], [790, 537.8]], when: (g) => !!g.flag("egypt.coolerOpen") },
     { id: "steam", frames: [art + "steam-0.png", art + "steam-1.png", art + "steam-2.png", art + "steam-3.png"], fps: 6, at: [472, 498], foot: [30, 104], base: [[490, 542], [790, 538]] },
     { id: "papyrus", src: art + "front.png", plane: "front" },

@@ -59,7 +59,9 @@ share one palette of 255 colours.
 - `postimp_paints.py`: the 23 paints, the six keys and every number, and `SCENE_KEY`, the table of which scene uses
   which key (one table: the game reads it from `js/art/look-data.js`).
 - `postimp_plans.py`: each scene's plan: which of its files are cut-outs (in the scene file's order), other states,
-  unions and frames. Every picture file of a scene must be in its plan, so nothing goes in unkeyed by mistake.
+  unions and frames. Every picture file of a scene must be in its plan, so nothing goes in unkeyed by mistake. A
+  further state of a cut-out that is the same painting with less in it (the open trunk as Dad empties it: `states`)
+  is keyed like the cut-out but kept out of the palette's sample, so that adding one changes no other file.
 - `postimp_key.py`: keys a scene (`install.py` calls it); `--js` writes `js/art/look-data.js` for the game's people
   and moving things (after adding a scene or changing a key); `--check` checks every scene's pictures against
   `postimp_keyed.json`, which notes what each installed file was keyed from.

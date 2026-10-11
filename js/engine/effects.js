@@ -1328,7 +1328,9 @@ function Birds(host, spec, n) {
  *                over eight pixels), so the furniture beside a door stays straight.
  *   rise         true: its middle rises out of `at` as it opens, by its radius (the sun on the highway)
  *   under        cut-outs that lie behind the door in its box, read into the paint it bends: their ids, or pictures
- *                laid over the backdrop, { src, x, y }
+ *                laid over the backdrop, { src, x, y, alpha }. `alpha` (1 if not said) is how much of the picture
+ *                shows; a script that changes it calls refresh(), and the door bends the paint as it is now (the road
+ *                sign comes out of the rings saying something else: highway.js)
  *   light        true: the light the scene draws over the paint (its live layer: a beam on the wall, a spot of sun) is
  *                read into the paint too, so the door bends the lit wall and does not hide the light. A script calls
  *                refresh() when that light has changed (the beam has come on). Pictures the live layer shows by
@@ -1490,7 +1492,11 @@ class Portal extends Effect {
       } else if (u && typeof u.src === "string") {
         const img = got(u.src);
         if (!img) return false;
+        const alpha = clamp(num(u.alpha, 1));
+        if (alpha <= 0) continue;
+        ctx.globalAlpha = alpha;
         ctx.drawImage(img, num(u.x, 0) - fx0, num(u.y, 0) - fy0);
+        ctx.globalAlpha = 1;
       }
     }
     this.src = ctx.getImageData(0, 0, fw, fh).data;

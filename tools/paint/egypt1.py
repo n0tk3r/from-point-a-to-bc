@@ -399,7 +399,17 @@ def wagon_pictures(pic, back_rgb):
         c, a, notes = wagon.open_state((H, W), WAGON, name, back=pic)
         assert not notes["bare"].any(), name + ": the open piece leaves a hole where the shut one was"
         sizes[name + "-open"] = finish(c, f"out/egypt1/{name}-open.png", 56, a)
+    # The open trunk as the story empties it (round twelve): Dad takes the flashlight first and the windshield shade
+    # later, and each goes out of the picture as it goes out of the trunk (egypt-crash.js reads the facts and shows the
+    # right one). The suitcase and the cooler keep their one picture: the sunglasses and General Feathers lie under the
+    # shirts, and the cooler is never short of a root beer.
+    for name, gone in TRUNK_STATES:
+        c, a, notes = wagon.open_state((H, W), WAGON, "trunk", back=pic, take=gone)       # (with the shade gone, a corner of the shut lid's outline shows the sand: open_state paints it)
+        sizes[name] = finish(c, f"out/egypt1/{name}.png", 56, a)
     return sizes, (w1, wa)
+
+
+TRUNK_STATES = (("trunk-open-1", ("flashlight",)), ("trunk-open-2", ("flashlight", "shade")))     # the trunk's emptier pictures: without this
 
 
 STEAM = (472, 498)                                          # where the steam leaves the front edge of the hood (the bottom middle of its frames)
@@ -621,7 +631,9 @@ def layout(steam_foot):
             {"id": "wagon", "file": "wagon.png", "base": base, "solid": under_wagon, "note": "painted without the door mirror"},
             {"id": "mirror", "file": "mirror.png", "base": up(0.2), "note": "shown until the mirror is taken"},
             {"id": "suitcase-open", "file": "suitcase-open.png", "base": up(0.4), "note": "shown while the suitcase is open; hides the shut one"},
-            {"id": "trunk-open", "file": "trunk-open.png", "base": up(0.6), "note": "shown while the trunk is open; must be laid after suitcase-open"},
+            {"id": "trunk-open", "file": "trunk-open.png", "base": up(0.6), "note": "shown while the trunk is open; must be laid after suitcase-open",
+             "states": {"full": "trunk-open.png", "flashlight-gone": "trunk-open-1.png", "shade-gone": "trunk-open-2.png"},
+             "states_note": "round twelve: the same cut-out, pixel for pixel, less the flashlight once Dad has taken it, and less the shade too once he has taken that"},
             {"id": "cooler-open", "file": "cooler-open.png", "base": up(0.8), "note": "shown while the cooler is open; must be laid after trunk-open"},
             {"id": "steam", "frames": frames, "fps": 6, "at": list(steam_foot), "foot": [egypt1_steam.W // 2, egypt1_steam.H], "base": up(1.0), "note": "cropped RGBA frames, placed by the middle of the bottom edge"},
             {"id": "front", "file": "front.png", "plane": "front"},

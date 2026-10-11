@@ -7,6 +7,9 @@ same paints. The plan says how the game lays its files together:
            `planes` give them in their first state
   alt      a cut-out of another state of the story (an open lid, the open piano, a mirror once it is set), and which
            first-state cut-outs it replaces when it shows (most simply lie over the picture)
+  states   further states of an alt (the open trunk as the story empties it): each keyed from the picture in that state
+           as the alt is, with the alt's replacements, but left out of the palette's sample: it is the same painting
+           with less in it, so its colours are the alt's, and adding one leaves the scene's other files as they were
   union    a file that is other cut-outs put together (made as their union, from the same painting)
   frames   small pictures of things that move (birds, the cat, steam, the kites, the wagon from behind): keyed colour by
            colour, their shapes untouched (file name patterns)
@@ -23,8 +26,8 @@ from PIL import Image
 from postimp_oklab import F32
 
 PLANS = {
-    "highway": {                                                    # the title's stage: the sign has changed its mind
-        "planes": ["sign-strike", "sign-bc"],
+    "highway": {                                                    # the title's stage: the sign has changed its mind (round twelve: the board saying POINT B.C.)
+        "planes": ["sign-bc"],
         "alt": {},
         "union": {},
         "frames": ["wagon-rear-*", "sun"],                         # (the sun's soft disc: keyed colour by colour, its edge kept)
@@ -33,6 +36,7 @@ PLANS = {
         "folder": "egypt1",                                         # (the painter's working name for it, in out/)
         "planes": ["palm-3", "palm-2", "palm-1", "donkey", "wagon", "mirror", "front"],
         "alt": {"suitcase-open": [], "trunk-open": [], "cooler-open": []},
+        "states": {"trunk-open": ["trunk-open-1", "trunk-open-2"]},   # the trunk without the flashlight, then without the shade too
         "union": {"palms": ["palm-3", "palm-2", "palm-1"]},
         "frames": ["steam-*"],                                      # (the kites over the river are egypt-site's frames)
     },

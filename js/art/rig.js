@@ -1134,7 +1134,9 @@ export function standPose(f = 0, o = {}) {
 }
 
 /**
- * Talking with the hands. g picks the gesture, f counts frames within it.
+ * Talking with the hands. g picks the gesture, f counts frames within it. (Round twelve: the hands are kept lower
+ * and the arms closer, so that a line is said with a small movement, not a performance; the big ones, both arms up
+ * and both hands waving, are only as high as the head now.)
  *   0 a nod            1 one hand up, making a point    2 both palms up: a shrug     3 a hand on the hip
  *   4 both arms up     5 a hand to the heart            6 a hand to the chin         7 showing off muscles
  *   8 an open hand     9 both hands waving              10 pointing straight ahead   11 a finger in the air
@@ -1150,21 +1152,21 @@ export function talkPose(f = 0, g = 0, o = {}) {
   const both = (make) => { p.R = { ...legs("R"), ...make(1) }; p.L = { ...legs("L"), ...make(-1) }; };
   const legs = (side) => { const q = { ...p[side] }; for (const k of ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl", "finger", "point", "flat", "thumb"]) delete q[k]; return q; };   // an arm let go of whatever the stance had it doing
   const free = (side) => ({ ...legs(side), arm: side === "R" ? [0.05, 0.10] : [-0.02, 0.10], elbow: 0.16 });
-  if (g === 1) {                    // one hand up, making a point
-    p[H] = { ...legs(H), arm: [0.42, 0.16], elbow: 1.75 + 0.18 * wob };
+  if (g === 1) {                    // one hand up, making a point: the forearm comes up to the waist, no higher
+    p[H] = { ...legs(H), arm: [0.30, 0.14], elbow: 1.45 + 0.12 * wob };
     p.head = { nod: 0.03 * wob };
-  } else if (g === 2) {             // both palms up: a shrug
-    both(() => ({ arm: [0.22, 0.34], elbow: 1.25 + 0.10 * wob, flat: true }));
+  } else if (g === 2) {             // both palms turned up at the hips: a small shrug, mostly in the head
+    both(() => ({ arm: [0.12, 0.24], elbow: 1.00 + 0.08 * wob, flat: true }));
     p.breath = 1;
-    p.head = { nod: -0.04, turn: 0.10 * wob };
+    p.head = { nod: -0.03, turn: 0.08 * wob };
   } else if (g === 3) {             // hand on hip
     p[O] = { ...legs(O), hand: [-sd * (sp.side + 0.012), sp.hip + 0.085, 0.012], bend: [-sd, 0, -0.55], grip: true };
     p.head = { nod: 0.02 * wob, turn: 0.06 * wob };
-  } else if (g === 4) {             // both arms up
-    p.R = { ...legs("R"), arm: [2.55 + 0.10 * wob, 0.38], elbow: 0.25, flat: true };
-    p.L = { ...legs("L"), arm: [2.55 - 0.10 * wob, 0.38], elbow: 0.25, flat: true };
+  } else if (g === 4) {             // both hands up, open, at the height of the head: "ta-da"
+    p.R = { ...legs("R"), arm: [1.30 + 0.06 * wob, 0.50], elbow: 1.35, flat: true };
+    p.L = { ...legs("L"), arm: [1.30 - 0.06 * wob, 0.50], elbow: 1.35, flat: true };
     p.breath = 1;
-    p.head = { nod: -0.10 };
+    p.head = { nod: -0.06 };
   } else if (g === 5) {             // a hand to the heart
     p[H] = { ...legs(H), hand: [-sd * 0.030, -0.085 + 0.004 * wob, sp.chest + 0.030], bend: [sd, -0.6, 0], flat: true };
     p.head = { nod: 0.04 + 0.02 * wob, turn: 0.05 * wob };
@@ -1175,15 +1177,15 @@ export function talkPose(f = 0, g = 0, o = {}) {
   } else if (g === 7) {             // showing off muscles
     both((k) => ({ arm: [0.05, 1.35], elbow: 0, tuck: 0, fore: [k * (0.18 + 0.06 * wob), 0.96, 0.12], grip: true }));
     p.breath = 1;
-  } else if (g === 8) {             // an open hand, held out
-    p[H] = { ...legs(H), arm: [0.16, 0.14], fore: [sd * 0.50, -0.10 + 0.06 * wob, 0.86], flat: true };
+  } else if (g === 8) {             // an open hand, held out low
+    p[H] = { ...legs(H), arm: [0.14, 0.12], fore: [sd * 0.45, -0.25 + 0.05 * wob, 0.86], flat: true };
     p.head = { nod: 0.02, turn: -sd * 0.08 };
-  } else if (g === 9) {             // both hands waving
-    both((k) => ({ arm: [0.55, 0.75], elbow: 0, tuck: 0, fore: [k * (0.45 + 0.30 * wob * k), 0.85, 0.25], flat: true }));
-    p.head = { nod: -0.04, turn: 0.12 * wob };
-  } else if (g === 10) {            // pointing straight ahead
-    p[H] = { ...legs(H), arm: [1.16 + 0.05 * wob, 0.10], elbow: 0.34, finger: true };
-    p.lean = 0.07;
+  } else if (g === 9) {             // both hands turning in front of the chest: talking with the hands
+    both((k) => ({ arm: [0.36, 0.36], elbow: 0, tuck: 0, fore: [k * (0.22 + 0.14 * wob * k), 0.72, 0.62], flat: true }));
+    p.head = { nod: -0.03, turn: 0.08 * wob };
+  } else if (g === 10) {            // pointing ahead, the arm not quite level
+    p[H] = { ...legs(H), arm: [0.95 + 0.04 * wob, 0.10], elbow: 0.30, finger: true };
+    p.lean = 0.04;
   } else if (g === 11) {            // a finger in the air: "fun fact"
     p[H] = { ...legs(H), arm: [0.35, 0.80], fore: [sd * (-0.10 + 0.05 * wob), 0.98, 0.14], finger: true };
     p.head = { nod: -0.03, turn: 0.04 * wob };
@@ -1209,8 +1211,8 @@ export function talkPose(f = 0, g = 0, o = {}) {
     p[O] = { ...legs(O), hand: [-sd * 0.030, sp.waist + 0.050, sp.belly + 0.070], bend: [-sd, -0.5, -0.2], flat: true };
     p[H] = { ...legs(H), hand: [sd * 0.012, sp.waist + 0.074 + 0.012 * wob, sp.belly + 0.080], bend: [sd, -0.4, -0.2], finger: true, point: [-sd * 0.6, -0.6, 0.2] };
     p.head = { nod: 0.10 };
-  } else if (g === 18) {            // both hands spread wide: "all of it", "everybody"
-    both((k) => ({ arm: [0.25, 0.80], fore: [k * (0.86 + 0.06 * wob), 0.30, 0.40], flat: true }));
+  } else if (g === 18) {            // both hands spread, waist high: "all of it", "everybody"
+    both((k) => ({ arm: [0.20, 0.62], fore: [k * (0.80 + 0.05 * wob), 0.22, 0.45], flat: true }));
     p.breath = 1;
     p.head = { nod: -0.05, turn: 0.10 * wob };
   } else if (g === 19) {            // a thumb jerked back over the shoulder: "up there", "that way"
@@ -1658,7 +1660,9 @@ function risePose(spec, k, inPlace = false) {
 // points from 0 to 1 of its time, eased one into the next. The first and the last are the resting pose itself, so a
 // small movement starts and ends exactly where the person was. `hold`: where a movement that can be held stops, for as
 // long as it is held (Figure.fidget(name, { hold: true })).
-const STAND_FIDGETS = ["shift", "look", "neck", "stretch"], SIT_FIDGETS = ["shift", "look", "knees", "stretch"];
+// Everyone's, standing and sitting: small things (round twelve: the stretch, both arms over the head, is nobody's
+// by default now; a person's own list can still name it).
+const STAND_FIDGETS = ["shift", "look", "neck", "scratch", "sleeve"], SIT_FIDGETS = ["shift", "look", "knees", "scratch"];
 const free = (o) => ["R", "L"].filter((s) => !o.held(s));
 const nodOf = (p) => (p.head && p.head.nod) || 0;
 const FIDGETS = {
@@ -1813,12 +1817,29 @@ const FIDGETS = {
     const b1 = at(0), b2 = at(-0.034);
     return [[0, b], [0.28, b1], [0.46, b2], [0.62, b1], [0.80, b2], [1, b]];
   } },
-  /** the street boy: scratches his head */
+  /** scratching the head (everyone's, since round twelve; it was the street boy's own) */
   scratch: { ms: 1900, make(o) {
     const b = o.base, sp = o.sp, hr = o.d.headR, s = o.held("R") ? "L" : "R", sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
     const at = (dx) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.10, turn: sd * 0.12 } }, s, { hand: [sd * (0.030 + dx), sp.headY + hr[1] * 0.78, -0.010], bend: [sd, 0.6, 0], curl: 0.9 });
     const s1 = at(0), s2 = at(0.012);
     return [[0, b], [0.28, s1], [0.40, s2], [0.52, s1], [0.64, s2], [1, b]];
+  } },
+  /** the masons: the rubbing stone in the free hand goes back and forth across the casing in front of them, the head down to the work */
+  polish: { ms: 2600, make(o) {
+    const b = o.base, s = o.held(o.H) ? o.O : o.H, sd = s === "R" ? 1 : -1, sp = o.sp;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (dx) => withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) + 0.16 } }, s, { hand: [sd * 0.040 + dx, sp.waist + 0.060, sp.belly + 0.150], bend: [sd * 0.8, -0.5, 0.3], grip: true });
+    const r1 = at(-0.060), r2 = at(0.060);
+    return [[0, b], [0.16, r1], [0.30, r2], [0.44, r1], [0.58, r2], [0.72, r1], [0.86, r2], [1, b]];
+  } },
+  /** rubbing the other upper arm with the free hand, the head a little down and toward it (everyone's) */
+  sleeve: { ms: 2000, make(o) {
+    const b = o.base, s = o.held(o.H) ? o.O : o.H, sd = s === "R" ? 1 : -1, d = o.d;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.07, turn: -sd * 0.10 } }, s, { hand: [-sd * (d.shoulderW + 0.014), -0.055 + dy, 0.030], bend: [sd, -0.45, 0.15], curl: 0.65 });
+    const r1 = at(0), r2 = at(-0.030);
+    return [[0, b], [0.26, r1], [0.42, r2], [0.58, r1], [0.74, r2], [1, b]];
   } },
   /** the old-timer, sitting: a hand to the brim of his hat */
   hat: { ms: 2000, make(o) {

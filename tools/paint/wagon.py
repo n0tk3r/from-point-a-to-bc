@@ -132,8 +132,9 @@ def _lid_edges(d, lines, at, x0, x1, depth, thick, light, dark):
     lines.line(d.pts([at(x0, 0, 0), at(x0, depth, 0)]), light, 0.7 * k, 0.6)
 
 
-def suitcase_open(d, lines):
-    """The suitcase with its lid up: loud flowered shirts heaped in it and spilling over the front."""
+def suitcase_open(d, lines, take=()):
+    """The suitcase with its lid up: loud flowered shirts heaped in it and spilling over the front. (`take` names
+    things of it that have gone: it has none that show: the sunglasses and General Feathers lie under the shirts.)"""
     y = RACK_Y + 1
     x0, x1, z0, z1 = 150, 200, 14, 56
     yb = y + 9                                               # the lower shell; the lid was the other 6
@@ -208,9 +209,10 @@ def suitcase_open(d, lines):
         lines.ellipse(cx, cy, 0.9 * k, 0.8 * k, "#3c9a48")
 
 
-def trunk_open(d, lines):
+def trunk_open(d, lines, take=()):
     """The old trunk with its lid thrown back. In it: a silver windshield shade folded like a fan, a
-    flashlight, a coil of rope hung over the front, a folded lawn chair, an old blanket."""
+    flashlight, a coil of rope hung over the front, a folded lawn chair, an old blanket. `take` names what
+    has gone out of it ("flashlight", "shade"): the story takes those two, and the picture follows."""
     y = RACK_Y + 1
     x0, x1, z0, z1, h = 204, 250, 8, 62, 31
     yb = y + h * 0.66                                        # where the lid shut
@@ -238,20 +240,21 @@ def trunk_open(d, lines):
     d.poly([(x0 + 1, yb - 2.5, z0 + 1), (x1 - 1, yb - 2.5, z0 + 1), (x1 - 1, yb - 2.5, z1 - 1), (x0 + 1, yb - 2.5, z1 - 1)], "#6f6a42")       # an army blanket
     d.poly([(x0 + 1, yb - 2.5, z0 + 1), (x1 - 1, yb - 2.5, z0 + 1), (x1 - 1, yb - 2.5, z0 + 17), (x0 + 1, yb - 2.5, z0 + 17)], "#8d8652")
     lines.line(d.pts([(x0 + 2, yb - 2.5, z0 + 17), (x1 - 2, yb - 2.5, z0 + 17)]), "#4c4830", 0.8 * k, 0.8)
-    # the windshield shade stands at the back: silver, folded like a fan
-    folds = 6
-    xs = [lerp(213.5, 251.0, i / folds) for i in range(folds + 1)]
-    zs = [lerp(59.0, 32.5, i / folds) + (2.2 if i % 2 else -1.2) for i in range(folds + 1)]
-    top = [yb + 22.5 + (1.4 if i % 2 else 0.0) for i in range(folds + 1)]
-    for i in range(folds):
-        tone = SILVER["light"] if i % 2 == 0 else SILVER["mid"]
-        d.poly([(xs[i], yb - 3, zs[i]), (xs[i + 1], yb - 3, zs[i + 1]), (xs[i + 1], top[i + 1], zs[i + 1] + 2), (xs[i], top[i], zs[i] + 2)], tone)
-    for i in range(folds + 1):
-        lines.line(d.pts([(xs[i], yb - 1, zs[i]), (xs[i], top[i], zs[i] + 2)]), SILVER["dark"] if i % 2 else SILVER["shine"], 0.8 * k, 0.6 if i % 2 else 0.95)
-    lines.line(d.pts([(xs[i], top[i], zs[i] + 2) for i in range(folds + 1)]), SILVER["shine"], 0.8 * k, 0.9)
-    lines.line(d.pts([(xs[-1], yb - 1, zs[-1]), (xs[-1], top[-1], zs[-1] + 2)]), SILVER["dark"], 1.0 * k, 0.9)   # its shadow-side edge
-    lines.line(d.pts([(xs[0] + 1.5, yb + 9, zs[0] + 0.6), (xs[1] - 1.2, yb + 17, zs[1] + 1.2)]), SILVER["shine"], 1.3 * k, 0.9)                 # the sun in it
-    lines.line(d.pts([(xs[2] + 1.5, yb + 5, zs[2] + 0.6), (xs[3] - 1.2, yb + 13, zs[3] + 1.2)]), SILVER["shine"], 1.1 * k, 0.8)
+    # the windshield shade stands at the back: silver, folded like a fan (until Dad takes it)
+    if "shade" not in take:
+        folds = 6
+        xs = [lerp(213.5, 251.0, i / folds) for i in range(folds + 1)]
+        zs = [lerp(59.0, 32.5, i / folds) + (2.2 if i % 2 else -1.2) for i in range(folds + 1)]
+        top = [yb + 22.5 + (1.4 if i % 2 else 0.0) for i in range(folds + 1)]
+        for i in range(folds):
+            tone = SILVER["light"] if i % 2 == 0 else SILVER["mid"]
+            d.poly([(xs[i], yb - 3, zs[i]), (xs[i + 1], yb - 3, zs[i + 1]), (xs[i + 1], top[i + 1], zs[i + 1] + 2), (xs[i], top[i], zs[i] + 2)], tone)
+        for i in range(folds + 1):
+            lines.line(d.pts([(xs[i], yb - 1, zs[i]), (xs[i], top[i], zs[i] + 2)]), SILVER["dark"] if i % 2 else SILVER["shine"], 0.8 * k, 0.6 if i % 2 else 0.95)
+        lines.line(d.pts([(xs[i], top[i], zs[i] + 2) for i in range(folds + 1)]), SILVER["shine"], 0.8 * k, 0.9)
+        lines.line(d.pts([(xs[-1], yb - 1, zs[-1]), (xs[-1], top[-1], zs[-1] + 2)]), SILVER["dark"], 1.0 * k, 0.9)   # its shadow-side edge
+        lines.line(d.pts([(xs[0] + 1.5, yb + 9, zs[0] + 0.6), (xs[1] - 1.2, yb + 17, zs[1] + 1.2)]), SILVER["shine"], 1.3 * k, 0.9)                 # the sun in it
+        lines.line(d.pts([(xs[2] + 1.5, yb + 5, zs[2] + 0.6), (xs[3] - 1.2, yb + 13, zs[3] + 1.2)]), SILVER["shine"], 1.1 * k, 0.8)
     # a folded lawn chair stands along the left wall: aluminium tube, green and white webbing woven over and under
     xc = x0 + 1.2
     rows = [yb - 3, yb + 2.4, yb + 6.0, yb + 9.6, yb + 13.2]
@@ -292,7 +295,9 @@ def trunk_open(d, lines):
     lines.line(d.pts([(px + 0.5, py - 0.5, pz) for px, py, pz in ring[0:9]]), ROPE["dark"], 0.8 * k, 0.8)
     lines.line(d.pts([(cx - 2.2, cy + 7.6, zc), (cx + 2.2, cy + 6.4, zc)]), ROPE["dark"], 1.6 * k)               # where it is tied
     lines.line(d.pts([(cx + 4.5, cy - 5.5, zc), (cx + 6.0, cy - 10.5, zc), (cx + 5.2, cy - 12.0, zc)]), ROPE["mid"], 1.2 * k)   # the loose end
-    # the flashlight lies on the blanket: yellow, with a black grip and a chrome head
+    # the flashlight lies on the blanket: yellow, with a black grip and a chrome head (until Dad takes it)
+    if "flashlight" in take:
+        return
     a, b = (214.5, yb + 1.0, 15.0), (237.0, yb + 4.2, 21.0)
     along = lambda u: tuple(lerp(a[i], b[i], u) for i in range(3))
     lines.line(d.pts([along(0.0), along(0.70)]), "#a87a18", 5.0 * k)
@@ -308,8 +313,9 @@ def trunk_open(d, lines):
     lines.ellipse(sx, sy - 0.2 * k, 1.7 * k, 1.0 * k, "#e8402c")                                                 # its switch
 
 
-def cooler_open(d, lines):
-    """The cooler with its white lid stood beside it: brown bottles, and ice going to water."""
+def cooler_open(d, lines, take=()):
+    """The cooler with its white lid stood beside it: brown bottles, and ice going to water. (`take`: nothing of
+    it ever shows as gone: there is always another root beer.)"""
     y = RACK_Y + 1
     x0, x1, z0, z1, h = 254, 281, 18, 52, 23
     yb = y + h - 5
@@ -376,13 +382,13 @@ def cooler_open(d, lines):
 OPEN = dict(suitcase=suitcase_open, trunk=trunk_open, cooler=cooler_open)
 
 
-def piece(shape, origin, which, opened=False, scale=1.0, tilt=7.0):
-    """One piece of the luggage alone on clear sheets, exactly where it sits on the wagon, shut or open.
-    -> (color, alpha, line color, line alpha)."""
+def piece(shape, origin, which, opened=False, scale=1.0, tilt=7.0, take=()):
+    """One piece of the luggage alone on clear sheets, exactly where it sits on the wagon, shut or open
+    (`take`: what has gone out of the open piece, by name). -> (color, alpha, line color, line alpha)."""
     base, lines = Sheet(shape), Sheet(shape)
     d = Draft(base, (origin[0] - 232 * scale, origin[1]), scale, tilt, pivot=(232, 0), depth=(-0.50, 0.30))
     if opened:
-        OPEN[which](d, lines)
+        OPEN[which](d, lines, take=take)
     else:
         luggage(d, lines, d, take=tuple(p for p in PIECES if p != which))
     return base.done() + lines.done()
@@ -591,8 +597,9 @@ def render_pair(shape, origin, scale=1.0, seed=4, back=None):
     return painted, without, alpha, (np.abs(painted - without).sum(axis=2) > 0) & (alpha >= 0.5)
 
 
-def open_state(shape, origin, which, scale=1.0, seed=4, back=None, fast=False):
-    """One piece of the luggage standing open, as a cut-out to lay over the wagon that render() paints.
+def open_state(shape, origin, which, scale=1.0, seed=4, back=None, fast=False, take=()):
+    """One piece of the luggage standing open, as a cut-out to lay over the wagon that render() paints
+    (`take`: what the story has taken out of it, by name, left out of the picture).
 
     It is painted where it stands, among the other pieces shut, and brushed like the wagon. Its mask is
     its own shape (less whatever a later-painted piece hides of it) together with every place the shut
@@ -607,7 +614,7 @@ def open_state(shape, origin, which, scale=1.0, seed=4, back=None, fast=False):
     over(over(shut, ca, aa), lca, laa)
     over(over(gone, c0, a0), lc0, la0)
     seen = (np.abs(shut - gone).sum(axis=2) > 0.004) & (np.maximum(aa, laa) > 0.5)      # every place the shut piece shows
-    cx, ax, lcx, lax = piece(shape, origin, which, True, scale)
+    cx, ax, lcx, lax = piece(shape, origin, which, True, scale, take=take)
     later = [piece(shape, origin, p, False, scale) for p in PIECES[i + 1:]]
     canvas = ground.copy()
     over(canvas, c0, a0)
@@ -630,9 +637,10 @@ def open_state(shape, origin, which, scale=1.0, seed=4, back=None, fast=False):
     rest = seen & (own <= 0.5)                                                           # places where we now see past it
     under = np.maximum(a0, la0)
     faint = rest & (under <= 0.5) & (under > 0.15)                                       # ... to thin paint: the ground shows there (see thin())
+    bare = rest & (under <= 0.15)                                                        # ... or to nothing at all: the sand behind the car
     if back is not None:
         painted[faint] = back[faint]
-    bare = rest & (under <= 0.15)                                                        # ... or to nothing at all
+        painted[bare] = back[bare]                                                       # (the trunk with its shade gone looks straight at the sand in one corner of the shut lid's outline)
     return painted, np.clip(alpha, 0, 1), dict(seen=seen, own=own > 0.5, rest=rest, faint=faint, bare=bare)
 
 

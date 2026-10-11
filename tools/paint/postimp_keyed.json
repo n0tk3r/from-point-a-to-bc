@@ -81,6 +81,14 @@
     "raw": "bba5e1cf085a2b4060a84c3ed5d21eefa42950185c8d60ac7c2902dce73bde8d",
     "keyed": "8f8d90e9e0e341029b9051ae92299c4d0714fa6f69813a84bf5f60b2932e962c"
    },
+   "trunk-open-1.png": {
+    "raw": "66db09c13b34828f7a498284ba2faca02215bf49ab501f3ba26829ffc7a11849",
+    "keyed": "d7b8c7029866df39c5345a9c8efd2b13c2a9ee75d8aec82642084968b355438b"
+   },
+   "trunk-open-2.png": {
+    "raw": "c544623b214d1bc3113af279d730dba637a73b534b5de86fedd2e59b2d973df2",
+    "keyed": "0493bb6acda186711fd14de7e2899145528670370ea3e6134a9ddab35caf1e14"
+   },
    "trunk-open.png": {
     "raw": "147ba6efde08d9fece8de4be84fe1e2dc73dfa47e719808103ce7b2e6db1673d",
     "keyed": "1c64953c3501c8ae6a9451e5032f492c41dd2feae4853c37d5293807b305c633"
@@ -165,15 +173,11 @@
   "files": {
    "back.png": {
     "raw": "356e1c9dcaee3850c69e553af093db58afeab1f73f59b275ae01bf9847547e21",
-    "keyed": "fabfa09852f81bd852bac9bd28254a21ca9f0268f67d4b4bd989469c77cae5ba"
+    "keyed": "7d77cc3d569b323f925fd25bc3d2ae08e431f493d42794a7d1b9626a7b716a54"
    },
    "sign-bc.png": {
-    "raw": "8386d45f38618c4a146406e3465e3051ecf478238dffd96dabc1118bcf8c563e",
-    "keyed": "0df4694227355c00b43cb4114c0e3dca6e676a15977a40b511adfc2663e69934"
-   },
-   "sign-strike.png": {
-    "raw": "470e5838576e651d7d8758ac41255f58d18c558bba75318d6a1a181efcbbe322",
-    "keyed": "0c1ac92716e79593dc381cc7b09c89c58b273e0175f7d08a42357e6da60461a9"
+    "raw": "99124a9775fcb3a3abb38e423b11e72e302b84136cfac51ca5db93f29a918de5",
+    "keyed": "5830aa08bec82aaa3ed84331719a3c2d9fe37f0301b5a61bd2c847fc800f2dfb"
    },
    "sun.png": {
     "raw": "de4b1a7aa12b09e157397426fc69db50e3350ddc273d1dc13ba5a39c96e99e3d",

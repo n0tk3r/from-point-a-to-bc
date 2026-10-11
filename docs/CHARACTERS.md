@@ -392,7 +392,9 @@ button eye sewn back on in the wrong color (blue), and a paper medal on a ribbon
 bravery". She is a General because she has been through the wash five times. Little
 Sister sent her on the road trip in Dad's suitcase, "to keep an eye on Daddy", with a
 note in crayon: `DADDY. GENERAL FEATHERS IS IN CHARGE. DO WHAT SHE SAYS.` (Mom found the
-first draft.) So at home there is a place kept on a pillow, with a sign: RESERVED. She is
+first draft.) She has the best handwriting in the family, and the note shows it: block
+capitals all one height, straight on the rules of her school pad; the crayon line under
+her sister's rules is in the same hand. So at home there is a place kept on a pillow, with a sign: RESERVED. She is
 not worried about the General. She is a little worried about Daddy without proper
 supervision, which is why she sent her.
 

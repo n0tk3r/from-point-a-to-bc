@@ -10,7 +10,7 @@
 //   1. Studio card on black.
 //   2. Dusk. The wagon climbs the road toward the setting sun.
 //   3. The sun opens into a portal.
-//   4. The road sign rewrites itself: POINT B becomes B.C.
+//   4. The road sign changes its mind: the paint bends in rings from the B, and POINT B comes out POINT B.C.
 //   5. The wagon drives into the portal. White flash.
 //   6. The time tunnel. Years fly past.
 //   7. White flash. The title screen takes over (see Game.title).
@@ -36,7 +36,7 @@ export default async function intro(g) {
   // ---- 2. the road at dusk ----
   const road = highway(g, "A desert highway at dusk.");
   road.hole(0);                         // the sun is still the sun,
-  road.strike(0);                       // and the sign still says POINT B
+  road.bend(0);                         // and the sign still says POINT B
   road.bc(0);
   // The wagon is right in front of us, astride the middle of an empty road. It pulls over into its lane as it goes.
   const middle = VANISH[0], side = lane(REST);
@@ -52,11 +52,12 @@ export default async function intro(g) {
   await g.tween(1500, (k) => road.hole(k), ease.out);
   await g.say("intro.3", "intro.4");
 
-  // ---- 4. the sign changes its mind ----
-  g.sfx("paint");
-  await g.tween(450, (k) => road.strike(k));
-  await g.tween(350, (k) => road.bc(k));
-  await g.wait(800);
+  // ---- 4. the sign changes its mind: the hole's rings run over it, and the letters come through changed ----
+  g.sfx("portal");
+  await g.tween(500, (k) => road.bend(k), ease.out);
+  await g.tween(650, (k) => road.bc(k));
+  await g.tween(750, (k) => road.bend(1 - k), ease.in);
+  await g.wait(600);
 
   // ---- 5. into the portal ----
   road.bounce(false);

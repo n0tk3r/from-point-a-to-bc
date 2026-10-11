@@ -120,7 +120,7 @@ export const lines = {
   "nevada.agent.lil.3": ["lilsis", "That's not an ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"],
   "nevada.agent.lil.4": ["agent", "I can neither confirm nor deny a dog."],
   "nevada.agent.lil.5": ["lilsis", "Five: what's his NAME? Why are you standing THERE? Is it your turn? Do you get a snack? That's EIGHT fingers. I have TOES too."],
-  "nevada.agent.lil.6": ["agent", "...Sir? It's me. I have a situation. No, sir. She is about seven. And she says she has toes."],
+  "nevada.agent.lil.6": ["agent", "...Sir? It's me. I have a situation. No, sir. She is about seven. She has a list."],
   "nevada.agent.lil.7": ["lilsis", "Who are you talking to? Is it your mommy? Tell her you're not DONE. ...Hi, Mister Gray's mommy!"],
   "nevada.agent.lil.8": ["bigsis", "'It was,' she noted, 'the finest interrogation she had ever witnessed.'"],
   "nevada.agent.busy": ["agent", "Sir, now she wants to know whose side the SUN is on. ...No, sir. I didn't have an answer either."],

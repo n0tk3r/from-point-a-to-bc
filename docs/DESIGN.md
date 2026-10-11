@@ -648,7 +648,7 @@ first drafts, whose place by the river Lot has taken):
 | Where | Who |
 | --- | --- |
 | The family | `dad`, `son`, `mom`, `bigsis`, `lilsis` |
-| Egypt | `lot` (Abram's nephew: sits cross-legged on the sand and prays), `scribe` (sits cross-legged on the ground), `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
+| Egypt | `lot` (Abram's nephew: sits cross-legged on the sand and prays), `scribe` (sits cross-legged on the ground), `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `mason1`, `mason2` (far up the pyramid's faces on the painter's hanging planks, drawn small, rubbing the stone now and then), `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
 | Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table), `dateseller` (a basket of dates on his hip) |
 | Nevada | `oldtimer` (in a lawn chair that is drawn with him), `agent` |
 
@@ -827,16 +827,19 @@ click to begin  ->  studio card  ->  the road at dusk  ->  the sun opens into a 
 - **The movie and the title are the same stage.** `cutscenes/highway.js` puts the painted
   highway up (`art/scenes/highway/`) with the few parts of it that change, and hands back
   what a script does with them: `road.hole(k)` opens the sun into the hole in time,
-  `road.strike(k)` and `road.bc(k)` repaint the sign, `road.drive(row)` puts the wagon
+  `road.bend(k)` runs the hole's rings over the sign and `road.bc(k)` changes what it says
+  (POINT B comes out POINT B.C. while the paint is bent: round twelve; until then a red
+  slash and dripping letters, which read as blood), `road.drive(row)` puts the wagon
   on the road at the right size for that row. Each takes a number from 0 to 1, so a tween
   can run it and a skipped movie lands on the same picture. `intro.js` runs them in
   order. `title.js` sets them all to their ends: the engine calls the cutscene named
   `title` to dress the stage behind the title screen, waits for it, and puts the game's
   name and the menu over it.
 - The wagon is a painted sprite that a cutscene moves about
-  (`g.view.cast.addPicture`, in the table at the end of section 10). The sun and the two
-  changes to the sign are painted too, but lie on the live layer, because the hole has
-  to open over them. The hole and its glow are light, and are drawn.
+  (`g.view.cast.addPicture`, in the table at the end of section 10). The sun and the
+  sign's second board are painted too, but lie on the live layer, because each is paint
+  that a portal bends (it reads them in: `under`). The hole and its glow are light, and
+  are drawn.
 
 ---
 

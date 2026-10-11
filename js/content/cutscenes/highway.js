@@ -5,20 +5,25 @@
 //
 //   back.png              the road, the sky and the sign that says POINT B. The backdrop.
 //   sun.png               the sun's disc, half sunk at the end of the road
-//   sign-strike.png       a slash of red paint through POINT B        }  the road sign
-//   sign-bc.png           "B.C." painted underneath it                }  changing its mind
+//   sign-bc.png           the sign's board again, saying POINT B.C.: what the sign says once the hole in time has
+//                         had its way with it (round twelve: no red slash, no dripping letters)
 //   wagon-rear-0, -1      the family wagon from behind: two pictures, for the bounce of the road
 //
 // and the glow the hole in time throws down the road, which is light, and so is drawn live and never painted. The hole
 // itself is the paint, bending (round ten: the engine's `portal`): rings spread from the sun's middle through the sky
-// and the road, and the hole rises out of the sun's disc as it opens.
+// and the road, and the hole rises out of the sun's disc as it opens. The sign changes its mind the same way: rings
+// spread over the board from the B, and while the paint is bent the letters come through changed (the effect reads
+// sign-bc.png into the paint it bends, a little more each frame: `under` with an alpha, effects.js).
 //
 // highway(g, words) puts all of it on the stage and hands back the few things a script does with it:
 //
 //     const road = highway(g, "A desert highway at dusk.");
-//     road.hole(0);  road.strike(0);  road.bc(0);  road.drive(NEAR);      the start of the movie
+//     road.hole(0);  road.bend(0);  road.bc(0);  road.drive(NEAR);        the start of the movie
 //     await road.ready;                                                   every picture is here: fade in now
 //     await g.tween(1500, (k) => road.hole(k));                           the sun opens into the hole
+//     await g.tween(500, (k) => road.bend(k));                            rings over the sign...
+//     await g.tween(600, (k) => road.bc(k));                              ...and POINT B comes out POINT B.C.
+//     await g.tween(700, (k) => road.bend(1 - k));                        the paint settles
 //
 // Each takes a number from 0 to 1, so a tween can run it and a skipped movie lands on the same picture.
 
@@ -39,26 +44,24 @@ export const FAR = 343;                 // almost at the end of the road: a spec
 
 // ---------- the hole in time ----------
 const HOLE = 64;                        // its radius when it is open (its middle rises out of the sun by as much)
-const EDIT = [596, 300, 156, 32];       // the part of the sign the red slash crosses: the painter's own box for it (600, 306, 147 by 19) and a little over.
-                                        // (The painter's note: "drawn left to right". So it is uncovered from the left.)
+// ---------- the sign ----------
+const BOARD = [599, 287, 752, 377];     // the painter's board (layout.json: sign.board), x0 y0 x1 y1
+const B_AT = [733, 316];                // the middle of the B of POINT B: the rings that change the sign spread from here
+const SIGN_R = 44;                      // their radius, drawn 2.4 times as wide as high: the whole board, and the paint beside it, is in their reach
 
 /**
  * Set the stage. `words` describes the picture for someone who cannot see it.
- * Returns { ready, wagon, drive(row, opacity), bounce(on), hole(k), strike(k), bc(k) }.
+ * Returns { ready, wagon, drive(row, opacity), bounce(on), hole(k), bend(k), bc(k) }.
  */
 export function highway(g, words) {
   const [vx, vy] = VANISH;
-  // LIGHT AND PAINT THAT CHANGE, on the live layer, back to front. The sun and the two edits to the sign are painted
-  // pictures, but they are put here and not among the cut-outs: a cut-out cannot be shown a part at a time, as the
-  // slash of paint must be, and the sun is part of the paint the hole bends (the hole reads it in, `under`).
+  // LIGHT AND PAINT THAT CHANGE, on the live layer, back to front. The sun and the sign's second board are painted
+  // pictures, but they are put here and not among the cut-outs: each is part of the paint a portal bends (the hole
+  // reads the sun in, the sign's rings read the board in: `under`), and shows here, plain, when its rings are gone.
   const painted = (id, file, more = "") => `<image id="${id}" href="${g.assets.url(ART + file)}" width="800" height="600" style="image-rendering:pixelated"${more}/>`;
-  const live = `<defs>
-      <clipPath id="strike-so-far"><rect id="strike-edge" x="${EDIT[0]}" y="${EDIT[1]}" width="0" height="${EDIT[3]}"/></clipPath>
-    </defs>
-    <polygon id="road-glow-shape" fill="url(#road-glow)" points="${vx - 2},${vy + 1} ${vx + 2},${vy + 1} 710,600 90,600" opacity="0" shape-rendering="geometricPrecision"/>
+  const live = `<polygon id="road-glow-shape" fill="url(#road-glow)" points="${vx - 2},${vy + 1} ${vx + 2},${vy + 1} 710,600 90,600" opacity="0" shape-rendering="geometricPrecision"/>
     ${painted("sun", "sun.png")}
-    ${painted("sign-strike", "sign-strike.png", ` clip-path="url(#strike-so-far)"`)}
-    ${painted("sign-bc", "sign-bc.png")}`;
+    ${painted("sign-bc", "sign-bc.png", ` style="opacity:0"`)}`;
   const drawn = g.view.draw("", words, { picture: ART + "back.png", live, grid: [800, 600] });
 
   // The hole in time: the paint bending in rings from the sun's middle, the hole rising out of the sun's disc as it
@@ -66,12 +69,16 @@ export function highway(g, words) {
   // drives in. Shut until hole() opens it. (The stage was cleared for this road: whatever moved on it before goes too.)
   g.effects.drop(g.scene);
   const hole = g.effects.add({ id: "hole", type: "portal", at: [vx, vy], r: HOLE, rise: true, base: vy + 1, pale: "#fff2c8", under: [{ src: ART + "sun.png", x: 0, y: 0 }] });
+  // The sign's own rings (round twelve): from the B, across the board and no farther sideways (`keep`), the paint of
+  // the second board read in as much as bc() says.
+  const board = { src: ART + "sign-bc.png", x: 0, y: 0, alpha: 0 };
+  const sign = g.effects.add({ id: "sign", type: "portal", at: B_AT, r: SIGN_R, wide: 2.4, keep: [BOARD[0], BOARD[2]], base: vy + 2, pale: "#fff2c8", strength: 0.8, under: [board] });
   const wagon = g.view.cast.addPicture("wagon", { frames: [ART + "wagon-rear-0.png", ART + "wagon-rear-1.png"], fps: 4, foot: FOOT });
   const part = (id) => g.q("#" + id);
   const road = {
     wagon,
     /** Resolves when every picture is here and the backdrop is painted. */
-    ready: Promise.all([drawn, g.view.cast.load(), ...["sun.png", "sign-strike.png", "sign-bc.png"].map((file) => g.assets.picture(ART + file))]),
+    ready: Promise.all([drawn, g.view.cast.load(), ...["sun.png", "sign-bc.png"].map((file) => g.assets.picture(ART + file))]),
     /** Put the wagon on the road with its back wheels on a row of the picture, the right size for that row.
         It keeps to its lane, unless it is said how far across the picture it is. */
     drive(row, opacity = 1, x = lane(row)) { wagon.place(x, row, (row - vy) / FULL).fade(opacity); },
@@ -82,10 +89,14 @@ export function highway(g, words) {
       if (hole) hole.open(k);
       part("road-glow-shape").setAttribute("opacity", k);
     },
-    /** The slash through POINT B: how much of it has been painted, from the left. */
-    strike(k) { part("strike-edge").setAttribute("width", EDIT[2] * k); },
-    /** "B.C." under it: how far it has come up. */
-    bc(k) { part("sign-bc").style.opacity = k; },
+    /** The rings over the sign: 0 is the paint still, 1 the rings at their widest. */
+    bend(k) { if (sign) sign.open(k); },
+    /** What the sign says: 0 is POINT B, 1 is POINT B.C.; between, the one coming through the other (under the rings, as a rule). */
+    bc(k) {
+      board.alpha = k;
+      if (sign) sign.refresh();
+      part("sign-bc").style.opacity = k;
+    },
   };
   road.drive(REST);
   return road;

@@ -39,7 +39,7 @@ function light(g) {
 
 // ---------- the rules, on their easel by the hatch ----------
 // The notice as the close-up shows it (the kit draws the sheet of paper: js/art/kit.js, `paper`). The last line is
-// not in Big Sister's lettering.
+// not in Big Sister's lettering: it is her sister's, in red crayon, in the neatest print in the house (`print`).
 const RULES = {
   tape: false, tilt: 0.8, width: 500, tint: "#f6f1e6",
   lines: [
@@ -47,7 +47,7 @@ const RULES = {
     { text: "1. SHOES OFF", size: 36, anchor: "start" },
     { text: "2. VOICES DOWN", size: 36, anchor: "start" },
     { text: "3. NO CHICKENS", size: 36, anchor: "start", gap: 10 },
-    { text: "AN APPEAL HAS BEEN LODGED", size: 21, anchor: "end", fill: "#d2452f", turn: -2.5 },
+    { text: "AN APPEAL HAS BEEN LODGED", size: 21, anchor: "end", fill: "#d2452f", hand: true },
   ],
 };
 async function readRules(g) {

@@ -106,6 +106,7 @@ Egyptian speaks of anybody's God, and nobody is asked what he thinks of anybody'
 - SCRIBE (`scribe`, under his awning at the site): keeps the lists; nothing exists until he has written it down, and his pen has split; keeps the grain account too, so he has the palace gossip (the Egyptian side of Genesis 12, from outside); wants a pen, and then something to write on.
 - OVERSEER (`overseer`, the site): loud, harassed, behind schedule for the first time in twenty years; takes Dad for a specialist somebody sent for; wants the wall to stop humming, today.
 - HAULERS (`hauler1`, `hauler2`, `hauler3`, the site): the gang "Friends of Khufu"; one speaks, one agrees, one eats; paid in bread and beer and proud of it; want their break to go on.
+- MASONS (`mason1`, `mason2`, the site; round twelve): two men far up the faces on planks slung on ropes, polishing the casing: a look line only ("Nothing under them but Egypt."). The planks had a water jar painted on each, which read as a man sitting still; a man stands on each now, and rubs the stone every few seconds.
 - GUARD (`guard`, the foot of the stair): tall, bored, very hot; guards, and does not hold; wants something cold, and believes there is no such thing.
 - LAMP BOY (`lampboy`, the foot of the gallery): twelve; fills every lamp from here to the top, except today; the only one who saw; wants never to go up there again.
 - GOLDSMITH (`goldsmith`, the burial chamber): very old, cheerful, deaf from fifty years of hammering, so the hum does not trouble him; mishears everything; his eyes are tired of shining things; wants never to see his own mirror again.
@@ -742,10 +743,12 @@ the reeds, the pyramids and the open door stands as it was. After it:
 eye, a paper medal "for bravery", five times through the wash. She sent her along in
 Dad's suitcase "to keep an eye on Daddy". The first time he opens the suitcase he takes
 the sunglasses off the top and finds her under the shirts, with her note, which the
-close-up shows in crayon (the kit's `paper`, as the home act uses it):
+close-up shows in crayon on a ruled sheet from her school pad, in her own neat print (the
+kit's `paper` and `print`: she is seven and has the best handwriting in the family, so
+every letter is the same height and stands straight on the rule):
 `DADDY. GENERAL FEATHERS IS IN CHARGE. DO WHAT SHE SAYS.`
 
-> "And under the shirts, General Feathers. With orders. In crayon."
+> "And under the shirts, General Feathers. With orders. In crayon, in the neatest hand in the family."
 > "My youngest sent her to keep an eye on me. She's seven. She has concerns about my driving."
 > "Good to have you aboard, General. The boy's gone on ahead. I'll brief you on the way."
 
@@ -819,7 +822,7 @@ areas, of which one shows at a time.
 **The conversation.** His first words, the first time (the exchange about the horses is
 the old act's, and Dad's line in it is kept word for word):
 
-> LOT: "You came down out of the sky in a red box, and nothing was pulling it."
+> LOT: "You came down out of the sky in a red box. No ox was pulling it. No donkey. Nothing."
 > DAD: "It has a hundred and forty horses. They're resting."
 > LOT: "Then let them rest. Since my uncle left Haran at the word of the LORD, I have stopped asking how anybody arrives."
 
@@ -1238,7 +1241,8 @@ Of the old act's 40 lines (33 `egypt.*`, the two item lines and five hints):
   the sky in a red chariot with no horses"), because Egypt had neither horses nor
   chariots until some nine centuries after Khufu. The man who was there when the wagon
   fell now says it in his own words ("You came down out of the sky in a red box, and
-  nothing was pulling it."), Dad's answer is kept exactly ("It has a hundred and forty
+  nothing was pulling it."; since round twelve "No ox was pulling it. No donkey. Nothing.",
+  so that Dad's horses answer something), Dad's answer is kept exactly ("It has a hundred and forty
   horses. They're resting."), and the reply was the water carrier's ("So is Donkey.
   Nobody calls him a hundred and forty.") until round three, and is now Lot's: "Then let
   them rest. Since my uncle left Haran at the word of the LORD, I have stopped asking how

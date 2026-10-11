@@ -32,7 +32,7 @@ export const lines = {
   "give.dad.1": ["dad", "Here, buddy. Don't say I never gave you anything."],
   "give.son.1": ["son", "Here! Hot potato! It's not a potato."],
   "give.mom.1": ["mom", "Would you take this for me, darling?"],
-  "give.bigsis.1": ["bigsis", "Here. Do not lose it. I have cataloged it."],
+  "give.bigsis.1": ["bigsis", "Here. It is yours now. I will expect a full report."],
   "give.lilsis.1": ["lilsis", "Here! Hold this! It's IMPORTANT!"],
 
 

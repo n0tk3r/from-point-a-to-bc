@@ -752,98 +752,7 @@
    ],
    "note": "On the basin's near rim, between the bronze jug and the corner: it sips (peck), hops along the rim (walk), looks about, and flies off when the boy comes near. It stands ON the fountain, so `base` puts it in front of the fountain's cut-out (501): sorted by its feet (row 440) it would be hidden behind the basin."
   },
-  {
-   "id": "spill",
-   "type": "stream",
-   "what": "the water that spills from the basin, across the sidewalk, down the kerb and away along the gutter",
-   "path": [
-    [
-     554.1,
-     486.1
-    ],
-    [
-     550.5,
-     485.3
-    ],
-    [
-     545.9,
-     484.7
-    ],
-    [
-     540.3,
-     484.2
-    ],
-    [
-     533.9,
-     483.9
-    ],
-    [
-     527.8,
-     483.9
-    ],
-    [
-     522.8,
-     484.0
-    ],
-    [
-     519.2,
-     484.2
-    ],
-    [
-     516.2,
-     484.4
-    ],
-    [
-     512.8,
-     484.5
-    ],
-    [
-     508.2,
-     484.4
-    ],
-    [
-     502.3,
-     484.1
-    ],
-    [
-     501.1,
-     484.6
-    ],
-    [
-     500.9,
-     493.6
-    ],
-    [
-     492.3,
-     491.2
-    ],
-    [
-     480.9,
-     458.9
-    ],
-    [
-     468.4,
-     423.7
-    ],
-    [
-     459.3,
-     397.9
-    ],
-    [
-     451.1,
-     374.7
-    ]
-   ],
-   "width": 1.2,
-   "color": "#8aa4d8",
-   "light": "#d4e4ff",
-   "opacity": 0.45,
-   "speed": 28,
-   "splash": 0,
-   "plane": "back",
-   "note": "On the ground, under everyone. Its wet dark is painted and stays; the glints that were painted on it are taken out, and this runs light along it instead (the painting's glints faded to a quarter far up the gutter)."
-  },
-  {
+{
    "id": "pigeons-roof",
    "type": "birds",
    "kind": "flock",
@@ -2098,5 +2007,5 @@
    "note": "800x600 cut-outs, plane front. To let the washing stir, the scene shows these instead of laundry.png, in this order: laundry-1 .. laundry-12 (back to front), then laundry-lines last (the lines are over everything, as painted). Laid together they are laundry.png pixel for pixel."
   }
  },
- "fx_note": "Round four. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene; `cutouts` are the new cut-outs (the cat with her tail, and the washing in pieces, which replace the plane `laundry`: the laundry-N sways need them). Taken out of the painting: the water falling from the fountain's mouth and its rings, and the sparrow drinking (fountain.png); the four pigeons on the corner house's ridge and the one over the balcony, the four swallows, the cat's tail, the shrine lamp's flame, and the glints on the water spilling from the basin and running down the gutter (back.png). Every other pixel of back.png and fountain.png is as it was, and awning.png, front.png, laundry.png and tunic.png are byte for byte the same. New: the washing in pieces (laundry-*.png) so that it can stir, the cat's frames, the birds' frames. Left as they are, on purpose: the three sparrows sitting on the far washing line (they sit, like the birds on the highway's wire), the songbird in its wicker cage (5 px), the strings of garlic, sausages and loaves under the awning, the hanging sign, the pot plants, the far dabs of people in the square, the clouds."
+ "fx_note": "Round twelve: the spill from the basin (a stream across the sidewalk and along the gutter) is no longer drawn: the author found it looked wrong; the wet stones stay. Round four. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene; `cutouts` are the new cut-outs (the cat with her tail, and the washing in pieces, which replace the plane `laundry`: the laundry-N sways need them). Taken out of the painting: the water falling from the fountain's mouth and its rings, and the sparrow drinking (fountain.png); the four pigeons on the corner house's ridge and the one over the balcony, the four swallows, the cat's tail, the shrine lamp's flame, and the glints on the water spilling from the basin and running down the gutter (back.png). Every other pixel of back.png and fountain.png is as it was, and awning.png, front.png, laundry.png and tunic.png are byte for byte the same. New: the washing in pieces (laundry-*.png) so that it can stir, the cat's frames, the birds' frames. Left as they are, on purpose: the three sparrows sitting on the far washing line (they sit, like the birds on the highway's wire), the songbird in its wicker cage (5 px), the strings of garlic, sausages and loaves under the awning, the hanging sign, the pot plants, the far dabs of people in the square, the clouds."
 }

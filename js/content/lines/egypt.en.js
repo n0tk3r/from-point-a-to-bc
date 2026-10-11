@@ -103,7 +103,7 @@ export const lines = {
   "egypt.suitcase.open": ["dad", "Six more loud shirts. The store had a deal. The store saw me coming."],
   "egypt.suitcase.take": ["dad", "Sunglasses. Right on top of six more shirts, every one of them louder than this."],
   // under the shirts: General Feathers, and a note in crayon (the close-up shows it: egypt-crash.js, NOTE)
-  "egypt.suitcase.general.1": ["dad", "And under the shirts, General Feathers. With orders. In crayon."],
+  "egypt.suitcase.general.1": ["dad", "And under the shirts, General Feathers. With orders. In crayon, in the neatest hand in the family."],
   "egypt.suitcase.general.2": ["dad", "My youngest sent her to keep an eye on me. She's seven. She has concerns about my driving."],
   "egypt.suitcase.general.3": ["dad", "Good to have you aboard, General. The boy's gone on ahead. I'll brief you on the way."],
   "egypt.suitcase.again": ["dad", "Six shirts. I packed for a week of barbecues. I got one pyramid."],
@@ -125,8 +125,8 @@ export const lines = {
   // each statement and its verse). Dad's understanding lands here, the first time Lot has told it.
   "egypt.lot.look": ["dad", "A man sitting in the shade, praying. My car fell out of the sky in front of him, and he didn't lose his place."],
   "egypt.lot.look2": ["dad", "Lot, Abram's nephew, back at his prayers. One of them was for my boy."],                          // (after he has prayed for the boy)
-  "egypt.lot.hello": ["lot", "You came down out of the sky in a red box, and nothing was pulling it."],
-  "egypt.scribe.hello2": ["dad", "It has a hundred and forty horses. They're resting."],                                             // kept
+  "egypt.lot.hello": ["lot", "You came down out of the sky in a red box. No ox was pulling it. No donkey. Nothing."],
+  "egypt.scribe.hello2": ["dad", "It has a hundred and forty horses. They're resting."],                                             // kept (Lot names the ox and the donkey that were not pulling, so that the horses answer him: round twelve)
   "egypt.lot.hello2": ["lot", "Then let them rest. Since my uncle left Haran at the word of the LORD, I have stopped asking how anybody arrives."],
   "egypt.ask.boy": ["dad", "Have you seen a boy? About this tall, asks a lot of questions?"],                                        // kept
   "egypt.lot.boy.1": ["lot", "A small one in strange sandals passed me and went up the track, asking everyone where the 'wy-fy' was."],
@@ -211,6 +211,7 @@ export const lines = {
   "egypt.site.track.look": ["dad", "The track back down to the river, the car, and the only cold drinks in Egypt."],
   "egypt.site.rope.look": ["dad", "Rope as thick as my wrist, lying where they dropped it. I've left a garden hose out for less reason."],
   "egypt.site.scaffold.look": ["dad", "Poles lashed together with rope, four stories up. I get dizzy cleaning the gutters."],
+  "egypt.site.masons.look": ["dad", "Masons on planks hung off the face on two ropes, rubbing the stone smooth. Nothing under them but Egypt."],
   "egypt.site.yard.look": ["dad", "Blocks lined up by the road, waiting their turn. It's the pickup line at school, only heavier."],
   "egypt.site.water.look": ["dad", "Water jars, by the road from the river. Somebody carried those up full. I get winded carrying a cooler."],
   "egypt.site.bricks.look": ["dad", "Mud bricks drying in the sun, beside their mold. Somebody here invented the ice cube tray."],

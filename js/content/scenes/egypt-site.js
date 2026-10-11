@@ -441,6 +441,11 @@ export default {
       life: { every: [32, 58], spots: [[258, 432, "S"], [338, 444, "SE"]], stay: [3, 7] } },
     { id: "hauler1", kind: "hauler1", at: [322, 416], face: "SW", solid: [[312, 408], [332, 408], [332, 421], [312, 421]],
       life: { every: [28, 52], spots: [[372, 440, "SE"], [360, 412, "E"]], stay: [3, 6] } },
+    // Two masons far up the faces, each on a plank slung on ropes (the painter's cradles), facing the stone and rubbing
+    // it smooth now and then: small, and never leaving their planks. Their size is the painter's (the plank on the
+    // shaded face is 48 pixels wide for a man-and-a-half; the one on the sunlit face, far along it, 21).
+    { id: "mason1", kind: "mason1", at: [408, 152], face: "NE", scale: 0.33, life: { still: true, fidget: [4, 9] } },     // (he stands where the painted jar is)
+    { id: "mason2", kind: "mason2", at: [257, 206], face: "N", scale: 0.13, life: { still: true, fidget: [5, 11] } },
     // The guard keeps the stair (and, once he has the shade, holds it up on the sunny spot): small movements only.
     { id: "guard", kind: "guard", at: [690, 420], face: "SW", when: (g) => !g.flag("egypt.shadeSet"),      // at the foot of the stair
       life: { still: true, fidget: [5, 12] } },
@@ -485,6 +490,9 @@ export default {
       id: "track", name: "track to the river", verb: "Walk down", poly: [[108, 548], [152, 538], [178, 566], [182, 600], [104, 600]], walkTo: [130, 590], face: "W",       // the trodden sand past the fence, off the bottom of the picture
       look: "egypt.site.track.look", use: (g) => g.goto("egypt-crash", { spawn: "fromSite" }),
     },
+    // the masons on their planks, far up the faces (round twelve; each stands where the painter's water jar is): a look, nothing more
+    { id: "mason1", name: "mason", poly: [[398, 98], [418, 98], [420, 154], [396, 154]], look: "egypt.site.masons.look" },
+    { id: "mason2", name: "mason", poly: [[250, 183], [264, 183], [265, 208], [249, 208]], look: "egypt.site.masons.look" },
     // the gang: one speaks, one agrees, one eats (one conversation, and each man his own shape)
     { ...HAULERS, id: "hauler3", poly: [[268, 323], [263, 327], [264, 335], [258, 339], [255, 349], [261, 353], [260, 395], [264, 397], [270, 393], [276, 397], [279, 395], [278, 371], [282, 367], [281, 339], [275, 335], [276, 327]] },
     { ...HAULERS, id: "hauler2", poly: [[294, 336], [288, 342], [289, 347], [283, 351], [286, 369], [286, 406], [290, 408], [296, 404], [302, 408], [305, 406], [305, 369], [308, 362], [308, 351], [302, 347], [302, 340]] },

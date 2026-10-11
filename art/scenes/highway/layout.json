@@ -5,7 +5,7 @@
   "light": "the sun is dead ahead, half sunk at the end of the road (400, 330): everything is seen against it, shadows run toward us, clouds are lit from underneath",
   "walk": [],
   "blocked": [],
-  "planes": [{"id": "sun", "file": "sun.png", "plane": "back", "soft": true}, {"id": "sign-strike", "file": "sign-strike.png", "plane": "back", "rect": [600, 306, 147, 19], "drawn": "left to right"}, {"id": "sign-bc", "file": "sign-bc.png", "plane": "back", "rect": [611, 328, 85, 50]}, {"id": "wagon", "frames": ["wagon-rear-0.png", "wagon-rear-1.png"], "fps": 4, "foot": [251, 419], "at": [521, 548], "scale": 0.42}],
+  "planes": [{"id": "sun", "file": "sun.png", "plane": "back", "soft": true}, {"id": "sign-bc", "file": "sign-bc.png", "plane": "back", "rect": [599, 287, 152, 90], "note": "the board saying POINT B.C. (round twelve): the game bends the sign with its `portal` effect and this comes out of it; it replaces the red slash (sign-strike.png) and the dripping B.C. of rounds one to eleven"}, {"id": "wagon", "frames": ["wagon-rear-0.png", "wagon-rear-1.png"], "fps": 4, "foot": [251, 419], "at": [521, 548], "scale": 0.42}],
   "things": [{"id": "sign", "what": "the road sign: POINT B, 40", "shape": {"rect": [599, 286, 153, 92]}}, {"id": "sun", "what": "the sun, going down at the end of the road", "shape": {"rect": [375, 305, 50, 25]}}],
   "exits": [],
   "marks": {},

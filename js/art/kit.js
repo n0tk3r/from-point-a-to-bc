@@ -383,35 +383,134 @@ export function notice() {
  * A sheet of paper with a few lines of lettering on it, close enough to read: a notice taped to a door, the label
  * on a box. Drawn on the 800x600 picture, so it is shown with g.closeup(art.paper({...}), "label", { grid: [800, 600] }).
  * The sheet keeps to the upper part of the picture, because words spoken during a close-up run along the bottom.
- *   lines   [{ text, size, gap, anchor, fill }]: one line of lettering each. `size` is the letter height in pixels
- *           (30 if not said), `gap` the extra space left under the line, `anchor` "middle" (the usual), "start" or "end".
+ *   lines   [{ text, size, gap, anchor, fill, hand }]: one line of lettering each. `size` is the letter height in
+ *           pixels (30 if not said), `gap` the extra space left under the line, `anchor` "middle" (the usual),
+ *           "start" or "end". `hand: true` letters the line by hand, in crayon, in Little Sister's neat print
+ *           (`print`, below) instead of the page's type.
  *   width   of the sheet (540)        tint   the paper's color        ink   the lettering's
  *   tilt    degrees: a notice somebody put up by hand never hangs quite straight
  *   tape    true: a strip of tape across each top corner
+ *   ruled   true: a sheet from a school pad, with its blue rules and red margin; a line lettered by hand sits on a rule
  */
-export function paper({ lines = [], width = 540, tint = "#f4efe0", ink = "#2b2622", tilt = 0, tape = true } = {}) {
+export function paper({ lines = [], width = 540, tint = "#f4efe0", ink = "#2b2622", tilt = 0, tape = true, ruled = false } = {}) {
   const plain = (text) => String(text).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   const pad = 46, lead = 1.5;
   let tall = pad * 2 - 8;
   for (const l of lines) tall += (l.size || 30) * lead + (l.gap || 0);
   const x0 = (W - width) / 2, y0 = Math.max(18, (H - 96 - tall) / 2);
-  let y = y0 + pad, text = "";
+  let y = y0 + pad, text = "", rules = "", wax = false;
   for (const l of lines) {
     const size = l.size || 30, anchor = l.anchor || "middle";
     const x = anchor === "start" ? x0 + pad : anchor === "end" ? x0 + width - pad : W / 2;
     y += size;
     const slant = l.turn ? ` transform="rotate(${l.turn} ${x} ${y})"` : "";      // (a line added by another hand, not quite straight)
-    text += `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="700" fill="${l.fill || ink}"${slant}>${plain(l.text)}</text>`;
+    if (l.hand) {
+      wax = true;
+      text += `<g${slant}>${print(l.text, { x, y, size, fill: l.fill || ink, anchor })}</g>`;
+    } else {
+      text += `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="700" fill="${l.fill || ink}"${slant}>${plain(l.text)}</text>`;
+    }
     y += size * (lead - 1) + (l.gap || 0);
+  }
+  if (ruled) {                                                 // the pad's rules, from under the first line on down the sheet (a line's `gap` of one rule skips one)
+    const size = lines[0] ? lines[0].size || 30 : 30, every = size * lead;
+    for (let r = y0 + pad + size + 3; r < y0 + tall - 14; r += every) rules += `<path d="M${x0 + 10},${r} H${x0 + width - 10}" stroke="#8fb6e2" stroke-width="1.2" opacity="0.55"/>`;
+    rules += `<path d="M${x0 + pad * 0.72},${y0 + 8} V${y0 + tall - 8}" stroke="#e39a9a" stroke-width="1.4" opacity="0.6"/>`;
   }
   const strip = (x, turn) => `<rect x="${x - 34}" y="${y0 - 10}" width="68" height="24" fill="#e9e2c4" opacity="0.82" transform="rotate(${turn} ${x} ${y0 + 2})"/>`;
   return `<g shape-rendering="geometricPrecision" transform="rotate(${tilt} ${W / 2} ${y0 + tall / 2})">
+    ${wax ? WAX : ""}
     <rect x="${x0 + 7}" y="${y0 + 9}" width="${width}" height="${tall}" fill="#07040d" opacity="0.4"/>
     <rect x="${x0}" y="${y0}" width="${width}" height="${tall}" fill="${tint}"/>
     <rect x="${x0}" y="${y0 + tall - 26}" width="${width}" height="26" fill="#000" opacity="0.05"/>
-    <path d="M${x0 + 20},${y0 + tall * 0.47} h${width - 40}" stroke="#000" stroke-width="1" opacity="0.07"/>
-    ${text}${tape ? strip(x0 + 44, -38) + strip(x0 + width - 44, 38) : ""}
+    ${ruled ? "" : `<path d="M${x0 + 20},${y0 + tall * 0.47} h${width - 40}" stroke="#000" stroke-width="1" opacity="0.07"/>`}
+    ${rules}${text}${tape ? strip(x0 + 44, -38) + strip(x0 + width - 44, 38) : ""}
   </g>`;
+}
+
+// ---------- hand lettering: Little Sister's neat print ----------
+// She is seven and has the best handwriting in the family, so every letter is the same height, stands straight on
+// the line, and is spaced like the next one: block capitals, drawn stroke by stroke in crayon. Each letter is a
+// path in a box 100 wide and 140 tall (the baseline at 140), drawn with round strokes; `print` lays them along a
+// line. The letters are this game's own (nobody's typeface).
+const HAND = {
+  A: "M8,140 L50,0 L92,140 M22,96 L78,96",
+  B: "M14,0 V140 M14,0 H52 C86,0 86,66 52,66 H14 M52,66 C92,66 92,140 52,140 H14",
+  C: "M90,34 C80,4 10,-6 10,70 C10,146 80,136 90,106",
+  D: "M14,0 V140 M14,0 H46 C98,0 98,140 46,140 H14",
+  E: "M88,0 H14 V140 H88 M14,70 H74",
+  F: "M88,0 H14 V140 M14,70 H74",
+  G: "M90,32 C78,0 10,-8 10,70 C10,146 88,142 90,88 H56",
+  H: "M14,0 V140 M86,0 V140 M14,70 H86",
+  I: "M30,0 H70 M50,0 V140 M30,140 H70",
+  J: "M30,0 H90 M66,0 V108 C66,148 14,148 12,108",
+  K: "M14,0 V140 M86,0 L14,84 M40,62 L88,140",
+  L: "M14,0 V140 H88",
+  M: "M10,140 V0 L50,92 L90,0 V140",
+  N: "M14,140 V0 L86,140 V0",
+  O: "M50,0 A42,70 0 1 0 50,140 A42,70 0 1 0 50,0",
+  P: "M14,140 V0 H54 C92,0 92,72 54,72 H14",
+  Q: "M50,0 A42,70 0 1 0 50,140 A42,70 0 1 0 50,0 M64,110 L92,142",
+  R: "M14,140 V0 H54 C92,0 92,70 54,70 H14 M54,70 L88,140",
+  S: "M86,30 C76,-6 14,-6 14,36 C14,72 86,70 86,106 C86,146 22,146 12,112",
+  T: "M8,0 H92 M50,0 V140",
+  U: "M14,0 V96 C14,152 86,152 86,96 V0",
+  V: "M8,0 L50,140 L92,0",
+  W: "M4,0 L26,140 L50,48 L74,140 L96,0",
+  X: "M12,0 L88,140 M88,0 L12,140",
+  Y: "M8,0 L50,74 L92,0 M50,74 V140",
+  Z: "M12,0 H88 L12,140 H88",
+  0: "M50,0 A36,70 0 1 0 50,140 A36,70 0 1 0 50,0",
+  1: "M26,26 L50,0 V140 M24,140 H76",
+  2: "M14,34 C14,-10 86,-10 86,40 C86,82 16,98 12,140 H88",
+  3: "M14,26 C22,-8 86,-8 86,36 C86,64 62,70 48,70 C64,70 88,78 88,106 C88,148 20,148 12,112",
+  4: "M66,140 V0 L10,96 H92",
+  5: "M84,0 H20 L14,66 C40,52 88,56 88,98 C88,146 20,146 12,112",
+  6: "M82,22 C66,-10 12,-4 12,76 C12,146 88,146 88,96 C88,50 24,50 14,84",
+  7: "M12,0 H88 L40,140",
+  8: "M50,66 C10,66 10,0 50,0 C90,0 90,66 50,66 C8,66 8,140 50,140 C92,140 92,66 50,66",
+  9: "M86,56 C76,90 12,90 12,44 C12,-6 88,-6 88,64 C88,120 70,142 20,140",
+  ".": "M14,128 l0.1,0.1",
+  ",": "M16,128 l0.1,0.1 M16,130 L4,154",
+  "!": "M50,0 V92 M50,128 l0.1,0.1",
+  "?": "M16,36 C16,-8 84,-8 84,36 C84,66 50,66 50,96 M50,128 l0.1,0.1",
+  "'": "M50,0 V24",
+  "-": "M20,76 H80",
+  ":": "M50,52 l0.1,0.1 M50,118 l0.1,0.1",
+};
+const HAND_ADVANCE = { I: 82, J: 100, ".": 34, ",": 34, "!": 66, "'": 40, ":": 52, " ": 46 };     // in the box's units (the rest advance 110)
+/** The crayon: its waxy edge, and the specks of paper it misses. One filter for the whole close-up. */
+const WAX = `<defs><filter id="hand-wax" x="-4%" y="-8%" width="108%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.14" numOctaves="2" seed="5" result="edge"/>
+    <feDisplacementMap in="SourceGraphic" in2="edge" scale="2.4" xChannelSelector="R" yChannelSelector="G" result="waxy"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="grain"/>
+    <feColorMatrix in="grain" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 2.0 -0.3" result="paper"/>
+    <feComposite in="waxy" in2="paper" operator="in"/>
+  </filter></defs>`;
+
+/**
+ * A line of text lettered by hand (HAND): block capitals in crayon, every letter the same height on one straight
+ * line. `x`, `y` are the line's anchor point on the baseline; `size` the letter height; `anchor` "middle", "start"
+ * or "end"; `fill` the crayon's colour. Lower-case letters are printed as capitals (she prints). Returns markup.
+ */
+export function print(text, { x = 0, y = 0, size = 30, fill = "#2b2622", anchor = "middle" } = {}) {
+  const k = size / 140, chars = [...String(text).toUpperCase()];
+  const advance = (c) => (HAND_ADVANCE[c] ?? (HAND[c] ? 110 : 0)) * k;
+  const wide = chars.reduce((w, c) => w + advance(c), 0) - 20 * k;
+  let cx = anchor === "middle" ? x - wide / 2 : anchor === "end" ? x - wide : x, out = "";
+  for (const c of chars) {
+    const d = HAND[c];
+    if (d) {
+      const tf = `translate(${(cx - 5 * k).toFixed(2)} ${(y - size).toFixed(2)}) scale(${k.toFixed(5)})`;
+      out += `<path d="${d}" transform="${tf}" fill="none" stroke="${fill}" stroke-width="17" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>`
+           + `<path d="${d}" transform="${tf}" fill="none" stroke="${fill}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>`;
+    }
+    cx += advance(c);
+  }
+  // The words themselves, unseen, for whoever reads the page without the picture (and for the tests, which read a
+  // close-up's text).
+  const plain = String(text).replace(/[&<>]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch]));
+  return `<g filter="url(#hand-wax)">${out}</g><text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" fill="none" opacity="0" pointer-events="none">${plain}</text>`;
 }
 
 // ---------- inventory icons, 12x12 ----------

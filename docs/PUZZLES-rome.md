@@ -435,8 +435,9 @@ Wrong tries:  With neither      -> "One out of three. I am not a difficult man. 
                                    have to find out."
               The dead phone    -> "A small black door. It is shut. I approve."
 Solution:     Try the doors, or talk to him, carrying both. "Tunic: ON. It goes over the hoodie. And
-              the backpack. I'm a lumpy Roman." "...Three out of three." "YES." "The hair." "The hair is
-              load-bearing." "...Go in. Walk. Touch nothing. The clerk is counting."
+              the backpack. I'm a lumpy Roman." "...Three out of three." "YES." "The hair." "It doesn't
+              go down. I've tried. Mom's tried. Gravity's tried." "...Go in. Walk. Touch nothing. The
+              clerk is counting."
 Gives:        The inside of the temple, for good. After this he is waved through.
 Teaches:      This is the puzzle of the act, stated in the first minute by the man in the way.
 Hints:        Hint button: "Clean tunic: got it. Something for the god: got it. Time to show the door
@@ -662,7 +663,7 @@ line's id, and the date seller has four: an open hand with a date on it, a finge
 raised, a hand laid on his chest, a small shrug. The ids here were chosen with that in
 mind (the blessing is said with the hand on the chest; "He found no image. Not one."
 with the shrug), so renumbering them changes what his hands do. And the boy's hair,
-which he would not flatten for the doorkeeper ("The hair is load-bearing"), stays up
+which would not go down for the doorkeeper ("I've tried. Mom's tried. Gravity's tried."), stays up
 for the blessing; his head is what goes down. That is the people artist's prayer pose,
 and nobody mentions it.
 
@@ -765,7 +766,7 @@ said, as the engine counts them.
 | B.C. is "before Christ" | The street | Act Four, at the gate: what makes "Daddy's EARLY!" land |
 | The Caesar coin, and whose picture is on it | #7, in the Son's words | Act Four: the same coin, and the verse, in Mom's |
 | "Not yet." | #7 | The senator ("There is no such name."); the road |
-| "The hair is load-bearing." | #6, to the doorkeeper | The date seller's blessing: his head goes down; the hair does not |
+| "It doesn't go down. ...Gravity's tried." | #6, to the doorkeeper | The date seller's blessing: his head goes down; the hair does not |
 | A boy who knows the walls of Jericho | The date seller's first words | Why the man answers his questions; "...That was not a guess." |
 | "Why is the sky DOWN?" | #8 | Act Four, #5: it fell out of the sky and hit his hat |
 | "... It didn't come back down." | #9 (the old line) | Act Four, #5 |

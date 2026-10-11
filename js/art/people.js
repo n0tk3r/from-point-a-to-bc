@@ -96,7 +96,7 @@ export const dad = {
   bottom: { kind: "shorts", mat: ramp("#a9b381", "#7f8d5c", "#59663f", "#39442b"), len: 0.72 },
   socks: { mat: WHITE, from: 0.52, stripes: [ramp("#f08a70", "#d2452f", "#a12f22", "#6e1f19"), ramp("#7fb2e6", "#3f79c2", "#2b5590", "#1b3760")] },
   shoes: { kind: "sandals", mat: ramp("#a8744a", "#7d5030", "#553521", "#332015"), sole: ramp("#6b4a30", "#4d3320", "#332015", "#1f130c") },
-  gestures: [0, 1, 2, 3],                               // a nod, a point, a shrug, a hand on the hip
+  gestures: [0, 1, 0, 3],                               // a nod; a small point; a nod; a hand on the hip (round twelve: half his lines are said with a nod alone)
   pray: { high: -0.40, bow: 0.34 },                     // his big hands folded low in front of him, his head well down
 };
 
@@ -121,7 +121,7 @@ export const son = {
   shoes: { kind: "sneakers", mat: ramp("#ffffff", "#f1efe6", "#c4c0b2", "#8f8b80"), stripe: RED, sole: ramp("#d9d5c8", "#b5b1a4", "#8a867c", "#5f5c55") },
   stance: "straps",                                     // thumbs hooked in the straps of his pack
   walk: { swing: 0.50, arm: 0.58, elbow: 0.95, pump: 0.30, lean: 0.10, lift: 1.3, bob: 0.05, wag: 0.10, sway: 0.020 },   // a bounce, fists pumping, head going from side to side
-  gestures: [1, 4, 9, 2],                               // a point, both arms up, both hands waving, a shrug
+  gestures: [0, 1, 0, 9],                               // a nod (thumbs in his straps); a small point; a nod; his hands turning in front of him (round twelve: no shrug, nothing over his head)
   pray: { high: 0.30, bow: 0.34 },                      // hands folded at his middle and his head down, for once standing still (his hair stays up)
   extras({ ball, limb, wide, deep, d, tw, J, parts }) {
     // hood bunched behind the neck
@@ -203,7 +203,7 @@ export const bigsis = {
   shoes: { kind: "shoes", mat: ramp("#8f5a3c", "#693e27", "#47291a", "#2a180f"), sole: ramp("#4a2e1f", "#332015", "#22150e", "#140c08") },
   stance: "elbow",
   walk: { swing: 0.43, arm: 0.30, lean: 0.04 },
-  gestures: [0, 11, 6, 10],                             // a nod, a finger in the air, a hand to her chin, pointing ahead
+  gestures: [0, 6, 0, 8],                               // a nod (holding her elbow); a hand to her chin; a nod; an open hand, low (round twelve: no finger in the air, no pointing: it read as a smart aleck)
   pray: { high: 0.46, bow: 0.31 },                      // exactly as she was taught: hands together at her breast, head bowed
   extras({ ball, limb, onHead, headPt, hp, wide, deep, d, hy, J, S, parts }) {
     const hr = d.headR;
@@ -238,7 +238,7 @@ export const lilsis = {
   shoes: { kind: "boots", mat: SUN, sole: shifted(SUN, 2), shaft: 0.52 },     // rain boots
   stance: "akimbo",
   walk: { swing: 0.50, arm: 0.72, elbow: 0.12, lean: 0.09, lift: 1.25, bob: 0.03 },     // a stomp: straight arms, like a small soldier
-  gestures: [0, 4, 7, 10],                              // a nod, both arms up, showing her muscles, pointing ahead
+  gestures: [0, 4, 0, 10],                              // a nod (fists on her hips); both hands up, "ta-da"; a nod; pointing ahead (round twelve: her muscles are for the walk and the talk of it, not every line)
   pray: { high: 0.97, bow: 0.15, tight: true },         // with all her might: hands clasped tight under her chin, eyes squeezed shut
   pace: 145,
   extras({ sf, P, ball, limb, hp, wide, deep, d, hy, th, J, S, fine, parts }) {
@@ -513,6 +513,17 @@ export const hauler3 = {
     ball(add(J.R.palm, [0, 0.014, 0.008]), [0.030, 0.020, 0.028], BREAD, { part: parts.HELD });       // the loaf
   },
 };
+
+// ---------- the masons on the cradles: two men far up the faces, on planks slung on ropes, polishing the casing ----------
+// (Round twelve: the planks had a water jar painted on each, which read as a man sitting still; now a man stands on
+// each, facing the stone, and rubs it smooth now and then. Drawn small: `scale` in egypt-site.js.)
+const masonBase = {
+  name: "Mason", height: 1.0, stance: "hip", hold: undefined, extras: undefined, walk: { swing: 0.44, arm: 0.36, lean: 0.05 },
+  fidgets: { only: true, stand: ["polish"] },           // the rubbing stone goes back and forth over the casing
+  gestures: [0, 8, 0, 1],
+};
+export const mason1 = { ...hauler1, ...masonBase, skin: TAN, hair: { mat: shaved(TAN), bulk: 1, where: cropped } };
+export const mason2 = { ...hauler3, ...masonBase, skin: DARK };
 
 // ---------- the guard at the foot of the stair: tall, bored, and very hot ----------
 export const guard = {
@@ -974,7 +985,7 @@ export const agent = {
 
 export const people = {
   dad, son, mom, bigsis, lilsis,
-  scribe, carrier, overseer, hauler1, hauler2, hauler3, guard, lampboy, goldsmith,
+  scribe, carrier, overseer, hauler1, hauler2, hauler3, mason1, mason2, guard, lampboy, goldsmith,
   keeper, washer, urchin, soothsayer, senator, doorkeeper, clerk, dateseller,
   oldtimer, agent,
   lot,

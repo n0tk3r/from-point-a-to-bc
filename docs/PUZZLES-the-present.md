@@ -795,8 +795,8 @@ Solution:     Play as Little Sister and talk to him. She has named him already (
               ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"
               "I can neither confirm nor deny a dog." "Five: what's his NAME? Why are you standing THERE?
               Is it your turn? Do you get a snack? That's EIGHT fingers. I have TOES too." He retreats
-              along the fence with a hand to his ear ("Sir? I have a situation. She is about seven. And
-              she says she has toes.") and she goes with him: "Tell her you're not DONE. ...Hi, Mister
+              along the fence with a hand to his ear ("Sir? I have a situation. She is about seven. She
+              has a list.") and she goes with him: "Tell her you're not DONE. ...Hi, Mister
               Gray's mommy!"
 Gives:        A clear view of the notice. He stays busy for the rest of the act ("You stay RIGHT there.
               Next question. Why is the sky?").

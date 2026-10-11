@@ -35,8 +35,9 @@ WHERE THINGS ARE
   left lying about         a strip of tire and a green bottle (left shoulder), a hubcap (right shoulder),
                            a tumbleweed against the sign's post, a jackrabbit watching from (235, 444)
 
-Cut-outs: sun.png (soft-edged, RGBA), sign-strike.png and sign-bc.png (800x600, laid over the board),
-and the wagon seen from behind (highway_wagon.py): wagon-rear-0.png, wagon-rear-1.png, cropped to
+Cut-outs: sun.png (soft-edged, RGBA), sign-bc.png (800x600: the board again, saying POINT B.C., laid over
+the board; round twelve: the sign no longer gets a red slash and dripping letters, it is bent by the hole in time
+and comes out changed, so the two edits are one plain cut-out), and the wagon seen from behind (highway_wagon.py): wagon-rear-0.png, wagon-rear-1.png, cropped to
 their own box; layout.json says where its foot is and how big to draw it at each row.
 """
 
@@ -745,9 +746,10 @@ def wires(sheet, seed):
     return runs
 
 
-def the_sign(pic, seed, letters=True):
+def the_sign(pic, seed, letters=True, text="POINT B", size=31):
     """The road sign: a green board on two posts. -> its rectangle in the picture (x, y, w, h), and a function
-    that turns a place on the board (0..1 across, 0..1 down) into a place in the picture."""
+    that turns a place on the board (0..1 across, 0..1 down) into a place in the picture. `text` is the first line
+    of it (POINT B; after the hole in time has had its way with it, POINT B.C., in smaller letters to fit)."""
     shape = pic.shape[:2]
     S = SIGN
     s = CAM.F / S["z"]
@@ -808,7 +810,7 @@ def the_sign(pic, seed, letters=True):
     sh.onto(pic)
     if letters:
         cu, cv = at(0.5, 0.0)
-        m1 = fat(letter.mask(shape, "POINT B", at(0.085, 0.31), 31, anchor="lm", rough=0.35, spacing=1.6, slant=S["slant"], seed=seed + 3), 0.9)
+        m1 = fat(letter.mask(shape, text, at(0.085, 0.31), size, anchor="lm", rough=0.35, spacing=1.6, slant=S["slant"], seed=seed + 3), 0.9)
         m2 = fat(letter.mask(shape, "40", at(0.915, 0.70), 37, anchor="rm", rough=0.35, spacing=2.0, slant=S["slant"], seed=seed + 4), 1.0)
         m = np.maximum(m1, m2) * (0.90 + 0.10 * noise(shape, 5, seed + 5, 2))
         over(pic, "#0f4332", np.clip(np.roll(np.roll(m, 1, axis=0), 1, axis=1) - m, 0, 1) * 0.5)
@@ -852,8 +854,23 @@ def red_paint(shape, m, seed):
     return np.clip(body, 0, 1), (m > 0.5).astype(F32)
 
 
+def sign_after(pic, info, seed):
+    """The sign once the hole in time has bent it (round twelve): the board painted again on a copy of the picture,
+    saying POINT B.C. where it said POINT B, cut out along the board's own edge. -> (color, alpha). The game shows it
+    over the backdrop, and the `portal` effect bends the one into the other."""
+    after = pic.copy()
+    the_sign(after, seed, text="POINT B.C.", size=24)
+    board = info["board"]
+    inner = board.copy()
+    for dy in (-1, 0, 1):                                              # a pixel inside the edge, so the cut-out's rim is the board's own paint
+        for dx in (-1, 0, 1):
+            inner = np.minimum(inner, np.roll(np.roll(board, dy, axis=0), dx, axis=1))
+    return after, (inner > 0.5).astype(F32)
+
+
 def sign_edits(info, seed):
-    """The two cut-outs that change the sign's mind: a red stroke through POINT B, and B.C. painted in."""
+    """(Rounds one to eleven: the two cut-outs that changed the sign's mind, a red stroke through POINT B and B.C.
+    painted in red underneath. No longer painted: see sign_after.)"""
     shape = (H, W)
     at = info["at"]
     # the stroke: one angry pass, a little uphill, and a short second touch where it began
@@ -1212,7 +1229,7 @@ def save_soft(color, alpha, name):
 def comp(folder, out, wagon_at):
     """Everything laid together from the finished files, the wagon at a place on its lane: to look at."""
     im = Image.open(f"{folder}/back.png").convert("RGBA")
-    for n in ("sun", "sign-strike", "sign-bc"):
+    for n in ("sun", "sign-bc"):
         im.alpha_composite(Image.open(f"{folder}/{n}.png").convert("RGBA"))
     pic = np.asarray(im.convert("RGB"), dtype=F32) / 255
     w = np.asarray(Image.open(f"{folder}/wagon-rear-0.png").convert("RGBA"), dtype=F32) / 255
@@ -1226,7 +1243,7 @@ def box_of(alpha):
     return [int(xs.min()), int(ys.min()), int(xs.max() - xs.min() + 1), int(ys.max() - ys.min() + 1)]
 
 
-def layout(info, foot, size, title_row, strike_box, bc_box):
+def layout(info, foot, size, title_row, bc_box):
     s = info["sign"]
     rect = [int(round(v)) for v in s["rect"]]
     rows = [600, 570, 540, 510, 480, 450, 420, 400, 380, 360, 345, 336, 330]
@@ -1236,8 +1253,8 @@ def layout(info, foot, size, title_row, strike_box, bc_box):
         "walk": [], "blocked": [],
         "planes": [
             {"id": "sun", "file": "sun.png", "plane": "back", "soft": True},
-            {"id": "sign-strike", "file": "sign-strike.png", "plane": "back", "rect": strike_box, "drawn": "left to right"},
-            {"id": "sign-bc", "file": "sign-bc.png", "plane": "back", "rect": bc_box},
+            {"id": "sign-bc", "file": "sign-bc.png", "plane": "back", "rect": bc_box,
+             "note": "the board saying POINT B.C. (round twelve): the game bends the sign with its `portal` effect and this comes out of it; it replaces the red slash (sign-strike.png) and the dripping B.C. of rounds one to eleven"},
             {"id": "wagon", "frames": ["wagon-rear-0.png", "wagon-rear-1.png"], "fps": 4, "foot": [int(round(foot[0])), int(round(foot[1]))],
              "at": [int(round(px(LANE, title_row))), int(title_row)], "scale": round(wagon_scale(title_row), 3)},
         ],
@@ -1275,16 +1292,14 @@ if __name__ == "__main__":
     pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
     print("brushed", round(time.time() - t0, 1))
     details(pic, info)
-    pic = grade(pic)
+    bc, ba = sign_after(pic, info["sign"], SEED + 400)                # (the sign's own seed: the same board, other letters)
+    pic, bc = grade(pic), grade(bc)
     show(pic, "out/highway-2-back.png")
-    (sc, sa), (bc, ba) = sign_edits(info["sign"], SEED + 600)
-    sc, bc = grade(sc), grade(bc)
     sunc, suna = the_sun(info)
     parts = highway_wagon.layers()
     frames, foot = highway_wagon.frames(parts=parts)
     whole = pic.copy()
     over(whole, sunc, suna)
-    over(whole, sc, sa)
     over(whole, bc, ba)
     row = 548.0
     lay_sprite(whole, frames[0][0], frames[0][1], foot, (px(LANE, row), row), wagon_scale(row))
@@ -1293,13 +1308,14 @@ if __name__ == "__main__":
     if fast:
         sys.exit()
     print("back", finish(pic, "out/highway/back.png", 152))
-    print("strike", finish(sc, "out/highway/sign-strike.png", 24, sa, amount=0.012))
-    print("bc", finish(bc, "out/highway/sign-bc.png", 24, ba, amount=0.012))
+    print("bc", finish(bc, "out/highway/sign-bc.png", 48, ba, amount=0.012))
+    if os.path.exists("out/highway/sign-strike.png"):
+        os.remove("out/highway/sign-strike.png")                     # (the red slash of rounds one to eleven)
     print("sun", save_soft(sunc, suna, "out/highway/sun.png"))
     foot, (w_, h_), sizes = highway_wagon.write(["out/highway/wagon-rear-0.png", "out/highway/wagon-rear-1.png"], 96, parts=parts)
     print("wagon", sizes, "foot", foot, "size", (w_, h_))
     with open("out/highway/layout.json", "w") as f:
-        data = layout(info, foot, (w_, h_), row, box_of(sa), box_of(ba))
+        data = layout(info, foot, (w_, h_), row, box_of(ba))
         f.write("{\n" + ",\n".join(f"  {json.dumps(k)}: {json.dumps(v)}" for k, v in data.items()) + "\n}\n")
     comp("out/highway", "out/highway-comp.png", (row, foot))
     print("done", round(time.time() - t0, 1))
