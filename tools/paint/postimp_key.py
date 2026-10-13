@@ -141,9 +141,20 @@ def files_of(scene, src):
     return frames
 
 
-def key_scene(scene, src, dst, strength=STRENGTH, quiet=False):
+def palette_of(png):
+    """The palette an installed picture was indexed with (OKLab), read back from the file: to key a scene again with
+    the same 255 colours, so that a small repaint changes only the pixels it touched (`install.py --keep-palette`)."""
+    im = Image.open(png)
+    if im.mode != "P":
+        raise SystemExit(f"{png}: not an indexed picture; its palette cannot be kept")
+    pal = np.asarray(im.getpalette(), np.uint8).reshape(-1, 3)[:255].astype(F32) / 255
+    return rgb_to_lab(pal[None, :, :])[0]
+
+
+def key_scene(scene, src, dst, strength=STRENGTH, quiet=False, palette=None):
     """Key every picture file of a painted scene in `src` (the painting as its script left it) into `dst`.
-    Returns the names of the files written."""
+    `palette`: the 255 colours (OKLab) to index with, instead of choosing them afresh (palette_of). Returns the names
+    of the files written."""
     if scene not in PLANS or scene not in SCENE_KEY:
         raise SystemExit(f"{scene}: no plan (postimp_plans.PLANS) or no key (postimp_paints.SCENE_KEY) for it yet: add them first.")
     t0 = time.time()
@@ -192,7 +203,7 @@ def key_scene(scene, src, dst, strength=STRENGTH, quiet=False):
         lab_n = rgb_to_lab(own)
         pcs[n] = paint(own, key, st, maps=read_maps(lab_n, key), lab0=lab_n)
     full = np.ones(back.shape[:2], bool)
-    pal = palette_for([back_out, pc] + list(painted_alts.values()), [full, covered] + [alts[a][3] for a in alts])
+    pal = palette if palette is not None else palette_for([back_out, pc] + list(painted_alts.values()), [full, covered] + [alts[a][3] for a in alts])
     written = ["back"]
     save_indexed(path(dst, "back"), to_index(back_out, pal, seed=st), pal)
     ic = to_index(pc, pal, seed=st + 1)

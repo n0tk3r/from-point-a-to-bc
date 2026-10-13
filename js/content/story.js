@@ -21,6 +21,7 @@ import { act as egypt } from "./acts/egypt.js";
 import { act as rome } from "./acts/rome.js";
 import { act as home } from "./acts/home.js";
 import { act as nevada } from "./acts/nevada.js";
+import { act as limo } from "./acts/limo.js";                    // NEVADA-12SC: Act Five, in the limousine
 
 export const story = {
   // Where a new game begins, and the facts that are already true by then
@@ -35,9 +36,12 @@ export const story = {
     nope: {
       dad: ["nope.dad.1", "nope.dad.2", "nope.dad.3"], son: ["nope.son.1", "nope.son.2", "nope.son.3"],
       mom: ["nope.mom.1", "nope.mom.2", "nope.mom.3"], bigsis: ["nope.bigsis.1", "nope.bigsis.2", "nope.bigsis.3"], lilsis: ["nope.lilsis.1", "nope.lilsis.2", "nope.lilsis.3"],
+      grandpajoe: ["nope.grandpajoe.1", "nope.grandpajoe.2", "nope.grandpajoe.3"], ranger: ["nope.ranger.1", "nope.ranger.2", "nope.ranger.3"],      // NEVADA-12W
     },
-    look: { dad: ["look.dad.1"], son: ["look.son.1"], mom: ["look.mom.1"], bigsis: ["look.bigsis.1"], lilsis: ["look.lilsis.1"] },
-    hint: { dad: ["hint.dad.none"], son: ["hint.son.none"], mom: ["hint.mom.none"], bigsis: ["hint.bigsis.none"], lilsis: ["hint.lilsis.none"] },
+    look: { dad: ["look.dad.1"], son: ["look.son.1"], mom: ["look.mom.1"], bigsis: ["look.bigsis.1"], lilsis: ["look.lilsis.1"],
+      grandpajoe: ["look.grandpajoe.1"], ranger: ["look.ranger.1"] },                                                                  // NEVADA-12W
+    hint: { dad: ["hint.dad.none"], son: ["hint.son.none"], mom: ["hint.mom.none"], bigsis: ["hint.bigsis.none"], lilsis: ["hint.lilsis.none"],
+      grandpajoe: ["hint.grandpajoe.none"], ranger: ["hint.ranger.none"] },                                                            // NEVADA-12W
   },
 
   // What a lead says on looking at a companion, and on handing one of them something.
@@ -45,9 +49,12 @@ export const story = {
     mom: { bigsis: "see.mom.bigsis", lilsis: "see.mom.lilsis" },
     bigsis: { mom: "see.bigsis.mom", lilsis: "see.bigsis.lilsis" },
     lilsis: { mom: "see.lilsis.mom", bigsis: "see.lilsis.bigsis" },
+    grandpajoe: { ranger: "see.grandpajoe.ranger" },                                                                                   // NEVADA-12W
+    ranger: { grandpajoe: "see.ranger.grandpajoe" },                                                                                   // NEVADA-12W
   },
-  give: { dad: ["give.dad.1"], son: ["give.son.1"], mom: ["give.mom.1"], bigsis: ["give.bigsis.1"], lilsis: ["give.lilsis.1"] },
+  give: { dad: ["give.dad.1"], son: ["give.son.1"], mom: ["give.mom.1"], bigsis: ["give.bigsis.1"], lilsis: ["give.lilsis.1"],
+    grandpajoe: ["give.grandpajoe.1"], ranger: ["give.ranger.1"] },                                                                    // NEVADA-12W
 
   // The acts, in order. Each is its own file in js/content/acts/.
-  acts: [prologue, egypt, rome, home, nevada],
+  acts: [prologue, egypt, rome, home, nevada, limo],      // NEVADA-12SC: limo
 };

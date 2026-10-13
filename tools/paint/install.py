@@ -3,13 +3,18 @@
 
     python3 install.py rome-street        one scene
     python3 install.py items              the inventory pictures
+    python3 install.py portraits          the team bar's painted portraits (Ranger's): as painted, never keyed
     python3 install.py                    everything that has been painted
     python3 install.py --raw rome-street  as painted, without the paints (to compare: never leave it so)
+    python3 install.py --keep-palette rome-street
+                                          keyed again with the 255 colours its installed back.png already has, so a
+                                          small repaint (a notice re-lettered) changes only the pixels it touched
 
 A scene's pictures are keyed on the way in (postimp_key.py: the scene's every picture file mixed from the game's paint
-box in its key, at strength 50; see the README, "The paints"), then copied with its layout.json; it says what changed,
-and notes in postimp_keyed.json what each file was keyed from. The inventory pictures are the interface's and go in as
-painted. Run tools/stamp.py afterwards.
+box in its key, at strength 50; see the README, "The paints"), then copied with its layout.json and any other sidecar
+of its own (hens.json, ranger.json: round twelve); it says what changed, and notes in postimp_keyed.json what each file
+was keyed from. The inventory pictures and the portraits are the interface's and go in as painted. Run tools/stamp.py
+afterwards.
 """
 
 import filecmp
@@ -21,19 +26,20 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ART = os.path.join(HERE, "..", "..", "art")
 # out/<folder> -> art/<place>. (The first scene painted kept its working name, egypt1.)
-PLACES = {"egypt1": "scenes/egypt-crash", "items": "items"}
+PLACES = {"egypt1": "scenes/egypt-crash", "items": "items", "portraits": "portraits"}
 # Everything that `python3 install.py` installs, in the order of the story.
 SCENES = [
     "highway",
     "egypt1", "egypt-site", "egypt-gallery", "egypt-chamber",                                 # Act One
     "rome-street", "rome-steps", "rome-temple",                                               # Act Two
     "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",  # Act Three: the house
-    "nevada-roadside",                                                                        # Act Four
-    "items",
+    "nevada-roadside", "nevada-store",                                                        # Act Four (nevada-store: NEVADA-12B)
+    "nevada-limo",                                                                            # Act Five (round twelve)
+    "items", "portraits",
 ]
 
 
-def install(name, raw=False):
+def install(name, raw=False, keep_palette=False):
     folder = {"egypt-crash": "egypt1"}.get(name, name)
     src = os.path.join(HERE, "out", folder)
     if not os.path.isdir(src):
@@ -47,11 +53,12 @@ def install(name, raw=False):
         pictures = src
         if scene and not raw:                          # the game's paints: key the painting on the way in
             import postimp_key
-            postimp_key.key_scene(scene, src, keyed)
+            palette = postimp_key.palette_of(os.path.join(dst, "back.png")) if keep_palette else None
+            postimp_key.key_scene(scene, src, keyed, palette=palette)
             pictures = keyed
         changed = 0
         for f in sorted(os.listdir(src)):
-            if not (f.endswith(".png") or f == "layout.json"):
+            if not (f.endswith(".png") or f.endswith(".json")):          # (a scene's sidecars too: hens.json, ranger.json)
                 continue
             a, b = os.path.join(pictures if f.endswith(".png") else src, f), os.path.join(dst, f)
             if os.path.exists(b) and filecmp.cmp(a, b, shallow=False):
@@ -70,7 +77,8 @@ def install(name, raw=False):
 
 if __name__ == "__main__":
     raw = "--raw" in sys.argv
-    names = [a for a in sys.argv[1:] if a != "--raw"]
-    total = sum(install(n, raw) for n in (names or SCENES))
+    keep = "--keep-palette" in sys.argv
+    names = [a for a in sys.argv[1:] if not a.startswith("--")]
+    total = sum(install(n, raw, keep) for n in (names or SCENES))
     if total:
         print("Now run: python3 tools/stamp.py")

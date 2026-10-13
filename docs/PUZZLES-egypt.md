@@ -227,7 +227,7 @@ onto the wall (4).
 ```
 Cut-Scene: Crash landing by the Nile        (opens the act)
 ```
-The wagon, nose-down in the sand, steaming. "Okay. Nobody panic. The car has landed."
+The wagon, nose-down in the sand, steaming. "Well. That's one expressway I won't be taking again."
 "Buddy? ... Buddy?" He was in the passenger seat a minute ago, or a thousand years from
 now. Then Dad sees them: small sneaker prints, going up the track toward the pyramid.
 "He's gone to see the biggest thing in sight. I'd be annoyed if I hadn't taught him that."
@@ -1127,7 +1127,7 @@ shirts, a folding lawn chair, jumper cables, and whatever is under the hood.
 | "Any one of them could come round that bend." | The river | Lot: Abram is here this week, and is being sent out of Egypt today |
 | "Keep him till I get there." | The first prayer | Lot's prayer: "Keep him, until his father comes to him." And Dad: "I asked Him the same thing when I landed." |
 | Lot, praying for the boy | The river, at parting | Looking at him again ("One of them was for my boy."); the end of the scribe's news |
-| The geese stand facing the Horizon | Lot's news | Not here. Little Sister at home: "Chickens KNOW." Rome's sacred chickens; the old-timer's hens in Nevada |
+| The geese stand facing the Horizon | Lot's news | Not here. Little Sister at home: "Chickens KNOW." Rome's sacred chickens; Grandma Jolene's hens in Nevada |
 | General Feathers, in the suitcase "to keep an eye on Daddy" | The suitcase | The empty place on Little Sister's pillow (Act Three); she misses her in Act Four |
 | "Not yet." | The scribe's news ("It is written nowhere.") | The Son's tag in Rome |
 

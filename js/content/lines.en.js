@@ -15,9 +15,10 @@ import { lines as egypt } from "./lines/egypt.en.js";
 import { lines as rome } from "./lines/rome.en.js";
 import { lines as home } from "./lines/home.en.js";
 import { lines as nevada } from "./lines/nevada.en.js";
+import { lines as limo } from "./lines/limo.en.js";                  // NEVADA-12W: Act Five opens, in the limousine
 
 export const lines = {};
-for (const [act, part] of Object.entries({ common, egypt, rome, home, nevada })) {
+for (const [act, part] of Object.entries({ common, egypt, rome, home, nevada, limo })) {      // NEVADA-12W: limo
   for (const [id, line] of Object.entries(part)) {
     if (lines[id]) console.warn(`Line "${id}" is written twice (the second time in lines/${act}.en.js).`);
     lines[id] = line;

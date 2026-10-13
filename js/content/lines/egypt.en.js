@@ -39,7 +39,7 @@ export const lines = {
   // ================= egypt-crash: where the wagon came down =================
 
   // ---------- arrival ----------
-  "egypt.arrive.1": ["dad", "Okay. Nobody panic. The car has landed."],                                                              // kept
+  "egypt.arrive.1": ["dad", "Well. That's one expressway I won't be taking again."],                                                              // kept (the author's new first line, 10 October: the first line of play answers the movie's shortcut)
   "egypt.arrive.2": ["dad", "Buddy? ... Buddy?"],                                                                                    // kept
   "egypt.arrive.3": ["dad", "He was in the passenger seat a minute ago. Or a thousand years from now. I'm still working out the tenses."],   // kept
   "egypt.arrive.4": ["dad", "Sneaker prints. Small ones, going up that track."],

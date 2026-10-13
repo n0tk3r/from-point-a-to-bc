@@ -8,15 +8,21 @@ Dad's shortcut sends a father and son tumbling through history, and the rest of 
 
 In development. What is here now:
 
-- **The engine**: scenes, walking, clickable areas, inventory, dialogue with choices, cutscenes that can be skipped, close-ups, hints.
-- **Painted scenes**: every scene is one painted picture, 800 pixels by 600, with painted cut-outs for the things people walk behind and the things the story changes. The highway of the intro and all thirteen scenes of the story are painted: four in Egypt, three in Rome, the five rooms of the house, and the roadside in Nevada.
-- **Five playable leads**: Dad and the Son, lost in different centuries, and Mom, Big Sister and Little Sister, who work as a team. You switch between them with their portraits. Each can do something the others cannot, and they talk to each other and hand things over.
-- **Pixel-art people drawn by code**: each of the twenty-four is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people.
+- **The engine**: scenes, walking, clickable areas, inventory, dialogue with choices and talks that branch and remember, cutscenes that can be skipped, close-ups, hints, and a small door in time that things and voices can pass through.
+- **Painted scenes**: every scene is one painted picture, 800 pixels by 600, with painted cut-outs for the things people walk behind and the things the story changes. The highway of the intro and all fifteen scenes of the story are painted: four in Egypt, three in Rome, the five rooms of the house, and in Nevada the roadside, the store and the back of a limousine.
+- **Seven playable leads**: Dad and the Son, lost in different centuries; Mom, Big Sister and Little Sister, who work as a team; and, in Act Five, Grandpa Joe and his raccoon, Ranger, a team of two. You switch between them with their portraits. Each can do something the others cannot, and they talk to each other and hand things over.
+- **Pixel-art people drawn by code**: each of the thirty-one is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people. Ranger, who is a raccoon, is painted frame by frame.
 - **Depth**: people walk behind things and in front of them, round obstacles, and get smaller as they walk away.
 - **An intro movie** that runs into the title screen.
 - **Saved games**: autosave, three slots, and a save file you can download and load on any device.
 - **Sound**: music, effects and voices on separate sliders. The music is synthesized placeholder until real tracks are written. Dialogue is ready for recorded voices.
-- **The story so far**: a prologue and four acts (Egypt, Rome, home in the present, the Nevada desert).
+- **The story so far**: a prologue, four acts, and the opening of a fifth. Each leads into the next, from the intro to the end of the demo:
+  - **Prologue: The Shortcut.** The intro movie: Dad takes a shortcut, and the wagon drives into a hole in time.
+  - **Act One: Scattered** (Egypt, four scenes). Dad, alone by the Nile, gets into the pyramid and brings a sunbeam round three corners to open the humming wall.
+  - **Act Two: Meanwhile** (Rome, three scenes). The Son, on the Ides of March, 44 B.C., gets back into the temple of Saturn and tosses a silver coin through a door its own size.
+  - **Act Three: Five Places Set** (the five rooms of the house). Mom, Big Sister and Little Sister find out where Dad's phone was last seen and what he last said.
+  - **Act Four: The Last Stop Before Nothing** (Nevada: the roadside and the store). Grandpa Joe, Grandma Jolene, Ranger the raccoon and five hens; a door the size of a coin, and the Son's voice through it; a door as wide as a windshield, and the walk through. Then the cut-scene "Backup".
+  - **Act Five: Everybody's Grandpa**, its opening (the back of a limousine). Grandpa Joe and Ranger, taken by the men in gray. The demo ends at the gate of the Office Of Peculiar Sectors.
 
 Read [docs/DESIGN.md](docs/DESIGN.md) for how it all works and why, and [docs/CHARACTERS.md](docs/CHARACTERS.md) for who the people are and how each of them talks. The acts are laid out puzzle by puzzle in [docs/PUZZLES-egypt.md](docs/PUZZLES-egypt.md), [docs/PUZZLES-rome.md](docs/PUZZLES-rome.md) and [docs/PUZZLES-the-present.md](docs/PUZZLES-the-present.md). Open [tools/storyboard.html](tools/storyboard.html) to see the story and every scene laid out, and [tools/sprites.html](tools/sprites.html) to see every character moving.
 
@@ -34,12 +40,12 @@ Useful addresses while building:
 
 - `http://localhost:8000/?intro` plays the intro again.
 - `http://localhost:8000/?scene=rome-street&lead=son` jumps straight to a scene. Add `&flags=rome.arrived,rome.sawStreet` to start with more of the story done.
-- `http://localhost:8000/?scene=home-living-room` starts the present-day chapter, and `?scene=nevada-roadside` its second half.
+- `http://localhost:8000/?scene=home-living-room` starts the present-day chapter, `?scene=nevada-roadside` Act Four (`?scene=nevada-store&lead=mom&flags=nevada.arrived` its store), and `?scene=nevada-limo&lead=grandpajoe` the opening of Act Five.
 - `http://localhost:8000/?scene=engine-proof` is the worked example of a painted scene.
 - `http://localhost:8000/tools/storyboard.html` shows the storyboard.
 - `http://localhost:8000/tools/sprites.html` shows every character and prop, in every direction, moving.
 
-In the game: click to walk, use and talk. Right-click (or press and hold on a touch screen) looks at things. What the person you are playing carries is along the bottom left; click a thing there, then click what to use it with. Click a portrait at the top left (or press **1**, **2**, **3**) to play as someone else. Click one of the others to talk to her; to hand her something, click the thing and then click her, or her portrait. **Esc** opens the menu or skips a cutscene. Hold **H** to see everything you can click.
+In the game: click to walk, use and talk. Right-click (or press and hold on a touch screen) looks at things. What the person you are playing carries is along the bottom left; click a thing there, then click what to use it with. Click a portrait at the top left (or press **1**, **2**, **3**) to play as someone else. Click one of the others to talk to them; to hand them something, click the thing and then click them, or their portrait. **Esc** opens the menu or skips a cutscene. Hold **H** to see everything you can click.
 
 ## Publishing
 
@@ -61,12 +67,14 @@ css/              colors (tokens.css) and layout (game.css)
 js/engine/        the engine: clock, saves, sound, dialogue, pictures, scenes, depth and walking, menus,
                   and the things that move by nature, the doors in time among them (effects.js)
 js/art/           everything that is drawn by code: the pixel renderer (pix.js), the jointed
-                  figure (rig.js), the cast (people.js), the neon rings, sketches and close-ups (kit.js)
+                  figure (rig.js), the cast (people.js), the neon rings, sketches and close-ups
+                  (kit.js); and the list of those painted frame by frame instead (painted.js)
 js/content/       the game: cast and items (world.js), the lines (one file to an act, in lines/),
-                  the story (one file to an act, in acts/), the sound list, cutscenes,
-                  and the scenes (one file each)
-art/              the painted pictures: a folder for each scene (scenes/), and the things
-                  that can be carried (items/)
+                  the story (one file to an act, in acts/), the talks written as dialogue
+                  trees (talk/), the sound list, cutscenes, and the scenes (one file each)
+art/              the painted pictures: a folder for each scene (scenes/), the things
+                  that can be carried (items/), the painted portraits (portraits/), and the
+                  engine's own pictures for its proof scene (proof/)
 fonts/            Koine Road, the game's typeface
 tools/            the storyboard page, the sprite viewer, the local server (serve.py),
                   the stamping tool (stamp.py), the painter (paint/: the scripts that

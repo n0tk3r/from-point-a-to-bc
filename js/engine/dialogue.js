@@ -35,8 +35,9 @@ export class Dialogue {
   face(who) {
     const g = this.g, person = g.cast[who] || {}, img = document.createElement("img");
     const dpr = window.devicePixelRatio || 1, css = Math.max(24, Math.round(g.stage.getBoundingClientRect().width * 0.07)), px = Math.round(css * dpr);
-    const key = person.sprite + "|" + px;
-    if (!(key in this.faces)) { const face = person.sprite ? portrait(person.sprite, px) : null; this.faces[key] = face ? face.toDataURL() : ""; }
+    const on = g.actor(who), variant = on && typeof on.variant === "function" ? on.variant() : null;      // NEVADA-12E: a painted lead's portrait in the variant he is in, if he is on the stage
+    const key = person.sprite + "|" + px + (variant ? "|" + variant : "");
+    if (!this.faces[key]) { const face = person.sprite ? portrait(person.sprite, px, variant) : null; if (face) this.faces[key] = face.toDataURL(); }     // (NEVADA-12E: nothing kept until there is a picture)
     if (this.faces[key]) img.src = this.faces[key];
     img.alt = person.name || who; img.draggable = false; img.className = "face";
     img.style.width = img.style.height = css + "px";
@@ -77,11 +78,14 @@ export class Dialogue {
       if (actor && !near) {
         // Someone taller standing close by, level with the speaker or nearer: lift the words clear of that head too,
         // so a small speaker's words are not written across a tall listener's face. (Not more than 90 pixels: the
-        // words must still belong to the speaker.)
+        // words must still belong to the speaker.) NEVADA-12SB: or farther back, when the scene asks for it with the
+        // sprite flag `clear` (Grandma Jolene behind her counter, whose face is just where the words of everyone at
+        // the counter would go); and for her, anywhere under the words, which can be 400 pixels wide (css: .say), and
+        // up to 110 pixels over the speaker's head.
         for (const other of g.view.cast.items.values()) {
           if (other === actor || !other.h || other.hidden || !(other.opacity > 0)) continue;
-          const head = other.y - other.h * other.scale;
-          if (Math.abs(other.x - x) < 150 && other.y > actor.y - 60 && head < top) top = Math.max(head, top - 90, actor.y - actor.h * actor.scale - 90);
+          const head = other.y - other.h * other.scale, clear = !!(other.flags && other.flags.clear), most = clear ? 110 : 90;
+          if (Math.abs(other.x - x) < (clear ? 210 : 150) && (other.y > actor.y - 60 || clear) && head < top) top = Math.max(head, top - most, actor.y - actor.h * actor.scale - most);
         }
       }
       const y = near ? H - 12 : actor ? Math.max(top - 10, 60) : 150;

@@ -582,6 +582,90 @@ def draw_shack(d, dl, notes=None, rng_seed=5):
     return d
 
 
+# ---------------------------------------------------------------- NEVADA-12A: what changed at the shack in round twelve
+# Three things, each drawn on its own and laid over the finished shack (nevada_roadside.details), so that the shack's own
+# brushwork is the very same as before: a second board over LAST STOP saying GRANDPA JOE'S; a handle on the door and a
+# crack of dark down its opening side, so that it reads as a door one could open (it is the way into the store now);
+# and Jolene's spare hat on a nail beside the door. None of the three throws a shadow on the ground: the board's would
+# fall off the left edge of the picture, the hat's would be a smear on the porch step, and the backdrop under them is
+# kept as it was.
+SIGN2_Z = -74.0                                             # the boards' plane (the first board sits here too)
+SIGN2 = [(28.0, 362.0), (358.0, 356.0), (358.0, 404.0), (28.0, 410.0)]     # the second board: longer, crooked the other way
+HAT_AT = (386.0, 160.0, -112.0)                             # the nail: in the right porch post, at eye height, beside the door
+HAT_R = 24.0                                                # a floppy sun hat: 48 cm across the brim
+
+
+def draw_sign_upper(d, dl, notes=None):
+    """GRANDPA JOE'S: a second board nailed up over LAST STOP, later, in the same hand. It is a longer plank than the
+    first, hung a little crooked the other way, its paint fresher; two new battens behind both boards hold it."""
+    sz = SIGN2_Z
+    for bx in (104.0, 286.0):                                            # the battens, nailed to the back of the old props
+        d.line([(bx, 318, sz + 4), (bx, 400, sz + 4)], "#a88a68", 6.0)
+        dl.line([(bx + 2.0, 320, sz + 4), (bx + 2.0, 398, sz + 4)], "#ead2aa", 1.2, 0.7)
+    board = [(x, y, sz) for x, y in SIGN2]
+    d.poly(board, "#fbf5e4")
+    d.poly([(28, 362, sz), (118, 360.4, sz), (92, 376, sz), (28, 380, sz)], "#eee2c6", 0.55)              # the weather has started on it already
+    d.poly([(296, 404, sz), (358, 404, sz), (358, 384, sz)], "#ffffff", 0.7)
+    dl.line(board + [board[0]], "#8a7458", 1.2, 0.85)
+    dl.line([board[3], board[2]], "#ffffff", 1.0, 0.9)                                                  # its top edge in the sun
+    for nx, ny in ((40, 368), (42, 403), (346, 361), (344, 398), (104, 366), (286, 362), (104, 400), (286, 397)):       # nail heads
+        dl.ball(nx, ny, sz - 0.6, 1.5, "#5a4a44")
+    if not d.shade:
+        a, b = d.pt(28, 386, sz), d.pt(358, 380, sz)
+        slant = (b[1] - a[1]) / (b[0] - a[0])
+        say(notes, d, "GRANDPA JOE'S", (193, 384.5, sz), 42.0, "#c83e2c", slant=-slant, seed=12, rough=0.4)
+    return d
+
+
+def draw_door_bits(d, dl, notes=None):
+    """What makes the screen door a door: it stands ajar a crack on its opening side (a dark gap, and the edge of the
+    door catching the light), and it has a handle: a chrome pull on a plate, at hip height."""
+    dl.poly([(308.6, 18, -0.6), (313.0, 18, -0.6), (313.0, 204, -0.6), (308.6, 204, -0.6)], "#0e0a10")      # the crack: dark inside
+    dl.line([(307.4, 19, -0.8), (307.4, 203, -0.8)], "#d8c4a0", 1.4, 0.9)                                     # the door's own edge, lit
+    dl.poly([(296.0, 92, -1.0), (306.5, 92, -1.0), (306.5, 122, -1.0), (296.0, 122, -1.0)], "#8a8e9a")      # the plate
+    dl.line([(300.0, 94, -1.4), (300.0, 120, -1.4)], "#1e1a24", 5.0)                                        # the pull, with its shadow side
+    dl.line([(301.4, 95, -1.6), (301.4, 119, -1.6)], "#e6e8ee", 3.4)
+    dl.line([(302.4, 98, -1.8), (302.4, 116, -1.8)], "#ffffff", 1.4)
+    return d
+
+
+def draw_hat(d, dl, notes=None):
+    """Jolene's spare hat, on a nail in the porch post beside the door: a floppy straw sun hat with a scarf tied round
+    its crown, hung on the nail by its crown so it sits as it would on a head, tipped back a little, its wide brim
+    drooping at the sides. (The boards right of the door are crossed by the post in the picture, and a hat behind it would be cut in
+    two: so it hangs on the post's face.) In the sun, which comes round from the right; its shadow falls on the boards."""
+    x0, y0, z0 = HAT_AT
+    zf = z0 - 9.0                                                        # it stands out from the post's face
+    r = HAT_R
+    brim, under = [], []
+    for i in range(32):                                                  # the brim: a wide oval, drooping at the sides, its edge wavy
+        a = 2 * math.pi * i / 32
+        w = 1 + 0.05 * math.sin(a * 3 + 0.6) + 0.04 * math.sin(a * 5 + 2.1)
+        droop = 3.5 * abs(math.cos(a)) ** 1.5
+        tilt = math.sin(a) * r * 0.34                                    # it hangs tipped back on its nail: we see the top of the brim
+        brim.append((x0 + math.cos(a) * r * w, y0 - droop + tilt, zf + math.sin(a) * r * 0.62 * w))
+        under.append((x0 + math.cos(a) * r * w, y0 - droop + tilt - 1.8, zf + math.sin(a) * r * 0.62 * w))
+    d.poly([(px - 9.0, py - 8.0, z0 - 5.4) for px, py, pz in brim], SHACK["shade"], 0.58)               # its shadow on the post and the boards
+    d.poly(under, "#6e4422")                                                                            # the brim's edge, its underside
+    d.poly(brim, "#e8b852")                                                                             # the brim, from above
+    d.poly([p for p in brim[16:32]] + [brim[0]], "#c08a36", 0.75)                                       # its far half, turned from the light
+    d.poly([p for p in brim[1:9]] + [(x0 + 2, y0, zf)], "#fcd884", 0.75)                                # its near right, toward it
+    crown = [(x0 + math.cos(a) * 9.0, y0 + 0.5 + max(0.0, math.sin(a)) * 11.0, zf) for a in np.linspace(0, math.pi, 12)]
+    d.poly([(x0 + 9.0, y0, zf), (x0 - 9.0, y0, zf)] + crown[::-1], "#eebd5c")                          # the crown: a dome
+    d.poly([(x0 + math.cos(a) * 9.0, y0 + 0.5 + max(0.0, math.sin(a)) * 11.0, zf) for a in np.linspace(0, math.pi * 0.55, 7)] + [(x0 + 1, y0 + 0.5, zf)], "#fde09a", 0.85)   # its sunny side
+    d.poly([(x0 + math.cos(a) * 9.0, y0 + 0.5 + max(0.0, math.sin(a)) * 11.0, zf) for a in np.linspace(math.pi * 0.62, math.pi, 6)] + [(x0 - 9, y0, zf), (x0 - 3, y0 + 0.5, zf)], "#a87a34", 0.85)
+    dl.poly([(x0 - 9.2, y0 + 0.2, zf - 0.3), (x0 + 9.2, y0 + 0.2, zf - 0.3), (x0 + 9.0, y0 + 4.2, zf - 0.3), (x0 - 9.0, y0 + 4.2, zf - 0.3)], "#2c5cc0")   # the scarf round the crown: Jolene's blue with white dots
+    for sx in (-6.0, -1.5, 3.0, 7.0):                                                                    # its white dots
+        dl.ball(x0 + sx, y0 + 2.2, zf - 0.6, 1.0, "#ffffff")
+    dl.poly([(x0 + 7.5, y0 + 2.0, zf - 0.5), (x0 + 11.5, y0 + 2.5, zf - 0.5), (x0 + 16.0, y0 - 13.0, zf - 0.5), (x0 + 12.0, y0 - 13.5, zf - 0.5)], "#2c5cc0")   # its tails, over the brim
+    dl.poly([(x0 + 10.0, y0 + 1.5, zf - 0.6), (x0 + 12.5, y0 + 2.0, zf - 0.6), (x0 + 20.0, y0 - 9.5, zf - 0.6), (x0 + 17.0, y0 - 10.0, zf - 0.6)], "#5a8ce4")
+    dl.line(brim[0:9], "#fff2c4", 1.1, 0.9)                                                             # the brim's edge where the sun is on it
+    dl.line(brim[9:17], "#7a5028", 1.0, 0.75)
+    dl.line(crown[:6], "#fff4d0", 1.0, 0.8)
+    dl.ball(x0 - 0.5, y0 + 12.5, zf - 0.5, 1.3, "#3a3038")                                              # the nail's head, under the dent in the crown
+    return d
+
+
 def draw_shack_side(d, dl, notes=None):
     """What leans against the sunny side of the shack: a ladder, a gas bottle, two old tires."""
     Wd = SHACK_W
@@ -857,7 +941,8 @@ if __name__ == "__main__":
     bg[...] = rgb("#e2bf98")
     what = sys.argv[1] if len(sys.argv) > 1 else "stand"
     jobs = {"stand": (draw_stand, STAND_AT, 0.0, 0.0), "pump": (draw_pump, PUMP_AT, 0.0, ISLAND[4]), "car": (draw_car, CAR_AT, 0.0, 0.0), "drum": (draw_drum, DRUM_AT, 0.0, 0.0),
-            "shack": (draw_shack, SHACK_AT, SHACK_YAW, 0.0), "side": (draw_shack_side, SHACK_AT, SHACK_YAW, 0.0), "sign": (draw_signpole, SIGN_AT, 0.0, 0.0), "mail": (draw_mailbox, MAIL_AT, 0.0, 0.0)}
+            "shack": (draw_shack, SHACK_AT, SHACK_YAW, 0.0), "side": (draw_shack_side, SHACK_AT, SHACK_YAW, 0.0), "sign": (draw_signpole, SIGN_AT, 0.0, 0.0), "mail": (draw_mailbox, MAIL_AT, 0.0, 0.0),
+            "sign2": (draw_sign_upper, SHACK_AT, SHACK_YAW, 0.0), "doorbits": (draw_door_bits, SHACK_AT, SHACK_YAW, 0.0), "hat": (draw_hat, SHACK_AT, SHACK_YAW, 0.0)}    # NEVADA-12A
     names = list(jobs) if what == "all" else [what]
     box = None
     for name in names:

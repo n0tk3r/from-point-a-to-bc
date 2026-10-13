@@ -79,6 +79,25 @@ const LINES = {
   "proof.carrier.pyramid.1": ["carrier", "The king. He is in no hurry either. His sons are."],
   "proof.carrier.opt.bye": ["dad", "I'll let you get on."],
   "proof.carrier.bye": ["carrier", "Get on. Yes. Up to the stone, down to the river. Mind the crocodiles, sky-man."],
+  // NEVADA-12E: the painted creature (CRITTER, below), the party of two and the strip
+  "proof.critter.dots": ["critter", "..."],
+  "proof.critter.look": ["dad", "A small grey creature in a black mask, turning a pebble over in its hands. Either a raccoon or a very small bandit."],
+  "proof.critter.hello.dad": ["dad", "He says hello. I think. It was a very warm '...'."],
+  "proof.critter.opt.what": ["dad", "What are you, exactly?"],
+  "proof.critter.what.dad": ["dad", "He says he is painted. Frame by frame, by hand. He seems proud of it."],
+  "proof.critter.opt.join": ["dad", "Want to come along?"],
+  "proof.critter.join.dad": ["dad", "That was a yes. I am now on a team with a creature in a mask."],
+  "proof.critter.opt.bye": ["dad", "See you around, little bandit."],
+  "proof.critter.given.dad": ["dad", "He says thank you. It goes in the stash. Everything goes in the stash."],
+  "proof.critter.shades.dad": ["dad", "And on they go. He wears them better than I did."],
+  "proof.cooler.look": ["dad", "The cooler. It fell off the roof in the landing. Nothing in it but ice that has given up."],
+  "proof.cooler.use.dad": ["dad", "There's nothing in it for me. There might be something in it for somebody with smaller hands."],
+  "proof.critter.nibble.dad": ["dad", "He's chewing the lid. That cooler has been through enough today."],
+  "proof.talk.dad.critter.1": ["dad", "How's the stash coming along?"],
+  "proof.talk.dad.critter.1b": ["dad", "Full, he says. Of pebbles. Mostly pebbles."],
+  "proof.talk.critter.dad.1": ["dad", "Yes, all right. I'll carry the heavy things. You carry the pebbles."],
+  "proof.hint.party.dad": ["dad", "Somebody should get into that cooler. Somebody with small hands and no manners. Not me."],
+  "proof.hint.party.critter.dad": ["dad", "He says the cooler is his job and I'm in the way."],
 };
 
 // ---------- TALK-11: a dialogue tree, the engine's own proof of it (docs/DESIGN.md, "Dialogue trees") ----------
@@ -128,6 +147,101 @@ const CARRIER = {
     },
   },
 };
+
+// ---------- NEVADA-12E: a lead drawn from painted frames, the engine's own proof of it (docs/DESIGN.md, section 4, "Painted frame by frame") ----------
+// On the stage while "proof.painted" is true: index.html?scene=engine-proof&lead=dad&flags=proof.painted. A small creature of
+// the engine's own (art/proof/critter-*.png, painted by a script, its sidecar art/proof/critter.json, `critter` in
+// js/art/painted.js and in world.js) sits up on the sand, one of the scene's people with a life of his own: his small
+// movements are sets of his frames (he looks round at us; he turns a pebble over in his hands), and now and then he gets
+// down and goes to one of his spots and back. Look at him, or talk to him: his "..." is over his head, as anyone's words
+// are, and Dad says what he means. Asked along, he joins: Dad and he are a team of two (g.team), switched between by the
+// portraits or the keys 1 and 2. As him, the cooler on the far sand is a thing to nibble (figure.play("nibble")). Dad has a
+// pack of gum and his sunglasses to hand over (by the portrait, or by a click on him): the gum goes in the stash, and the
+// sunglasses go on (figure.variant("shades"), set again from the fact "proof.shades" whenever the scene is built: nothing
+// of it is saved). "proof-critter" is a cutscene he is in, to be skipped.
+const painted = (g) => !!g.flag("proof.painted");
+const party = (g) => !!g.flag("proof.party");
+const joined = (g) => !!g.flag("proof.critterJoined");
+const CRITTER_AT = [520, 470];                                                  // where he sits up, one of the scene's people
+const CRITTER = {
+  id: "proof.critter",
+  start: (g) => (g.flag("proof.critterMet") ? "ask" : "hello"),
+  nodes: {
+    hello: { say: ["proof.critter.dots", "proof.critter.hello.dad"], then: (g) => { g.flag("proof.critterMet", true); return "ask"; } },
+    ask: {
+      options: [
+        { id: "what", line: "proof.critter.opt.what", say: ["proof.critter.dots", "proof.critter.what.dad"] },
+        { id: "join", line: "proof.critter.opt.join", say: ["proof.critter.dots", "proof.critter.join.dad"], do: (g) => join(g), then: "exit" },
+        { id: "bye", line: "proof.critter.opt.bye", say: ["proof.critter.dots"], then: "exit" },
+      ],
+    },
+  },
+};
+/** He comes along: from one of the scene's people to a lead, on a team of two with Dad, where he stands. */
+function join(g) {
+  const c = g.actor("critter"), d = g.store.data;
+  if (!c) return;
+  d.where.critter = { scene: g.scene.id, x: Math.round(c.x), y: Math.round(c.y), face: c.yaw };
+  g.flag("proof.critterJoined", true);
+  g.team(["dad", "critter"]);
+}
+/** As him, at the cooler: a good long nibble at the lid (figure.play, for so long), and what Dad makes of it. */
+async function nibble(g) {
+  await g.lead.play(g.clock, "nibble", { ms: 1800 });
+  await g.say("proof.critter.dots");
+  if (g.actor("dad")) await g.say("proof.critter.nibble.dad");
+  g.flag("proof.nibbled", true);
+}
+/** A cutscene he is in (g.cutscene("proof-critter")): he scampers to the cooler (hurried, he runs), has a go at it, and
+    Dad has his say. Skipped, it ends with him at the cooler and everything said counted. */
+async function critterRun(g) {
+  const c = g.actor("critter");
+  if (!c) return;
+  c.hurry = true;
+  await g.walkTo(690, 380, "critter");
+  await c.play(g.clock, "nibble", { ms: 1500 });
+  await g.say("proof.critter.dots", "proof.critter.nibble.dad");
+  g.flag("proof.scampered", true);
+}
+/** Something handed to him: into the stash, and a word about it; the sunglasses go on. */
+async function given(g, item, to) {
+  if (to !== "critter") return;
+  await g.say("proof.critter.dots");
+  if (item !== "sunglasses") return g.say("proof.critter.given.dad");
+  const stash = g.store.data.inventory.critter;
+  stash.splice(stash.indexOf("sunglasses"), 1);                                // (he wears them)
+  g.flag("proof.shades", true);
+  const c = g.actor("critter");
+  if (c && c.variant) c.variant("shades");
+  await g.say("proof.critter.shades.dad");
+}
+// The party of two (NEVADA-12E): while "proof.party" is true (index.html?scene=engine-proof&lead=dad&flags=proof.party) Dad
+// and the creature are here together, as Mom and the girls are in the house: a mark each when the scene opens with them,
+// and a way in (`fromTrack`) by which they arrive together. They talk (`talk`), hand things over (`given`), and each has a
+// hint for the proof's one beat, whose lead is the two of them (PROOF_ACT): his is "..." and what Dad says it means.
+const PROOF_ACT = { id: "proof", title: "The engine's proof", era: "egypt", summary: "Not part of the story: the proof scene's own beat, for its tests.",
+  beats: [
+    { id: "proof.together", kind: "cutscene", title: "Dad and the creature, a party of two", lead: ["dad", "critter"], scene: "engine-proof", needs: [], sets: "proof.party" },
+    { id: "proof.cooler", kind: "puzzle", chain: "A", title: "Get into the cooler: a job for small hands", lead: ["dad", "critter"], scene: "engine-proof",
+      needs: ["proof.party"], sets: "proof.nibbled", hint: { dad: "proof.hint.party.dad", critter: ["proof.critter.dots", "proof.hint.party.critter.dad"] } },
+  ] };
+/** What the story needs for the creature while he is here: the proof's beat, his stock replies ("..."), and what he and Dad say on looking at each other. */
+function critterStory(g) {
+  const st = g.story;
+  if (!st.acts.some((a) => a.id === PROOF_ACT.id)) st.acts.push(PROOF_ACT);
+  for (const kind of ["nope", "look", "hint"]) if (st.fallbacks[kind] && !st.fallbacks[kind].critter) st.fallbacks[kind].critter = ["proof.critter.dots"];
+  st.see = st.see || {};
+  st.see.dad = { ...(st.see.dad || {}), critter: "proof.critter.look" };
+  st.see.critter = { ...(st.see.critter || {}), dad: "proof.critter.dots" };
+  if (!g.cutscenes["proof-critter"]) g.cutscenes["proof-critter"] = critterRun;
+}
+
+// ---------- NEVADA-12E: a strip of painting going by behind a window (docs/DESIGN.md, section 2, "Things that move by nature") ----------
+// On the stage while "proof.strip" is true: index.html?scene=engine-proof&lead=dad&flags=proof.strip. A panel of the engine's
+// own stands on the far sand (art/proof/window.png, a cut-out with two holes in it), and a strip of desert painted to run on
+// from its right edge into its left (art/proof/strip.png, 480 x 80) goes by behind the holes, to the left, as from a car.
+const strip = (g) => !!g.flag("proof.strip");
+const PANES = [[[452, 318], [531, 318], [531, 363], [452, 363]], [[550, 318], [629, 318], [629, 363], [550, 363]]];     // the holes, pixel for pixel
 
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
@@ -180,7 +294,11 @@ export default {
   // WHERE PEOPLE CAN STAND: the sand. The left edge keeps to the bank, clear of the water and of the palms' feet;
   // the far edge stops under the village and the dunes; the right edge keeps a body's width inside the picture.
   walk: { area: [[352, 300], [640, 300], [780, 326], [780, 596], [60, 596], [150, 470], [240, 384], [312, 322]] },
-  spawn: { default: [420, 572] },
+  spawn: { default: [420, 572], critter: [478, 566], fromTrack: [496, 330] },   // (NEVADA-12E: the creature's own mark, and a way in from the track, for the party below)
+  // NEVADA-12E: a party of two who are not family, while "proof.party" is true (see the top): Dad and the creature. A party
+  // can be a function of the game, for one the story forms. By the way in from the track the creature arrives beside Dad.
+  party: (g) => (party(g) ? ["dad", "critter"] : null),
+  arrive: { fromTrack: [[540, 344]] },
 
   picture: art + "back.png",
 
@@ -196,6 +314,8 @@ export default {
     { id: "wagon", src: art + "wagon.png", base: [[490, 541], [790, 537]],        // along the wheels, nose to tail
       solid: [[470, 528], [790, 522], [796, 548], [470, 556]] },                  // the ground under the car (the sand heaped at its nose can be walked behind)
     { id: "papyrus", src: art + "front.png", plane: "front" },                    // the papyrus at the bottom left corner
+    // NEVADA-12E: the panel with two windows in it, for the strip (see the top); there only while "proof.strip" is true
+    { id: "window", src: "art/proof/window.png", base: 372, solid: [[440, 364], [640, 364], [640, 374], [440, 374]], when: strip },
   ],
   // A cut-out can also follow the story. These are the other forms (none is needed here):
   //   { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") }      a row for a base; shown only while the test passes
@@ -235,6 +355,8 @@ export default {
     { id: "spill", type: "stream", path: [[749, 427], [756, 431], [761, 440], [764, 470], [765, 505], [766, 546]], width: [1.5, 2.5], base: 549, when: fx },
     // LETTERBOX-11: the small door in time, open, in the air over the sand (the paint bending, as the chamber's door is): see the top
     { id: "door", type: "portal", at: DOOR, r: 34, base: DOOR[1] + 34, open: 1, strength: 0.6, when: letterbox },
+    // NEVADA-12E: the desert going by behind the panel's two windows (see the top), behind everybody
+    { id: "desert", type: "strip", src: "art/proof/strip.png", windows: PANES, row: 370, speed: 40, loop: true, plane: "back", when: strip },
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -278,12 +400,34 @@ export default {
     // TALK-11: the water carrier (see the top): a talk with him is the tree
     { id: "carrier", name: "water carrier", verb: "Talk to", rect: [232, 381, 36, 100], walkTo: [306, 488], face: "W", when: talk,
       look: "proof.carrier.look", use: (g) => g.talk(CARRIER) },
+    // NEVADA-12E: the creature, while he is one of the scene's people (see the top); a companion after he joins, and then
+    // the engine gives him the area every companion has
+    { id: "critter", name: "small creature", verb: "Talk to", rect: [503, 441, 34, 32], walkTo: [466, 486], face: "E", when: (g) => painted(g) && !joined(g) && !party(g),
+      look: "proof.critter.look", use: (g) => g.talk(CRITTER) },
+    // NEVADA-12E: the cooler on the far sand, painted in the backdrop: nothing for Dad, a nibble for the creature
+    { id: "cooler", name: "cooler", rect: [706, 322, 40, 30], walkTo: [712, 364], face: "N", when: (g) => painted(g) || party(g),
+      look: { critter: "proof.critter.dots", any: "proof.cooler.look" }, use: { critter: nibble, any: "proof.cooler.use.dad" } },
   ],
+
+  // NEVADA-12E: Dad and the creature, talking (each exchange is what the one clicked on says, then what Dad makes of it)
+  talk: {
+    dad: { critter: [["proof.talk.dad.critter.1", "proof.critter.dots", "proof.talk.dad.critter.1b"]] },
+    critter: { dad: [["proof.critter.dots", "proof.talk.critter.dad.1"]] },
+  },
+  given,
 
   // LETTERBOX-11: what the letterbox proof needs of the story when the scene is built: the two of them a team, the one who is
   // not here placed in another century, and the pack of gum in Dad's pockets, once. (And the proof's lines, for the tests.)
   setup(g) {
     for (const [id, line] of Object.entries(LINES)) if (!g.lines[id]) g.lines[id] = line;
+    // NEVADA-12E: the creature's story, Dad's gum and sunglasses (once), and the creature in his shades if he has them on
+    if (painted(g) || party(g)) {
+      critterStory(g);
+      const d = g.store.data;
+      if (!g.flag("proof.critterThings")) { for (const it of ["gum", "sunglasses"]) if (!d.inventory.dad.includes(it)) d.inventory.dad.push(it); g.flag("proof.critterThings", true); }
+      const c = g.actor("critter");
+      if (c && c.variant) c.variant(g.flag("proof.shades") ? "shades" : null);
+    }
     if (!letterbox(g)) return;
     const d = g.store.data;
     for (const id of ["dad", "son"]) if (!d.where[id]) d.where[id] = { scene: "sketch-example", x: 400, y: 560, face: "S" };
@@ -305,6 +449,10 @@ export default {
       life: { every: [16, 30], spots: [[250, 500, "W"], [380, 420, "N"]], stay: [3, 6] } },
     // TALK-11: the water carrier, on the sand by the river while "proof.talk" is true (see the top). No walks of his own: the tree walks him.
     { id: "carrier", kind: "carrier", at: CARRIER_AT, face: "E", when: talk },
+    // NEVADA-12E: the painted creature, sitting up (`sit: true`: he is found sitting only when the scene says so), with a
+    // life of his own: his small movements are his own sets, and now and then he goes to one of his spots and back
+    { id: "critter", kind: "critter", at: CRITTER_AT, face: "W", sit: true, when: (g) => painted(g) && !joined(g) && !party(g),
+      life: { every: [12, 22], spots: [[600, 440, "E"], [462, 512, "S"]], stay: [3, 6] } },
   ],
 
   // Runs when the lead arrives. It must be safe to run twice (a save can be loaded in the middle of it), so it checks its own fact.

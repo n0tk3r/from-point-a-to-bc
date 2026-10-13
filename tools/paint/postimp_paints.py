@@ -294,6 +294,8 @@ SCENE_KEY = {
     "home-living-room": "home-night", "home-landing": "home-night", "home-study": "home-night",     # Act Three
     "home-lilsis-room": "home-night", "home-bigsis-room": "home-night",
     "nevada-roadside": "nevada-morning",                                          # Act Four
+    "nevada-store": "nevada-morning",                                             # NEVADA-12B: the store, lit by the morning through its window
+    "nevada-limo": "nevada-morning",                                              # Act Five: daylight through smoked glass, the same morning (NEVADA-12C)
 }
 # A scene that is not in the table yet: its era's daylight key (an interior lit by lamps should be put in the table
 # with "lamp-interior").

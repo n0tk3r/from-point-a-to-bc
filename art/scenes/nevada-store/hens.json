@@ -1,0 +1,80 @@
+{
+ "foot": [
+  16,
+  27
+ ],
+ "size": [
+  32,
+  30
+ ],
+ "states": {
+  "guard-a": "hen-<n>-guard-a.png",
+  "guard-b": "hen-<n>-guard-b.png",
+  "turn": "hen-<n>-turn.png",
+  "sit": "hen-<n>-sit.png",
+  "peck": "hen-<n>-peck.png"
+ },
+ "hens": [
+  {
+   "n": 1,
+   "name": "Darlene",
+   "at": [
+    650,
+    341
+   ],
+   "tall_px": 22.5
+  },
+  {
+   "n": 2,
+   "name": "Charlene",
+   "at": [
+    625,
+    337
+   ],
+   "tall_px": 20.9
+  },
+  {
+   "n": 3,
+   "name": "Marlene",
+   "at": [
+    636,
+    334
+   ],
+   "tall_px": 20.0
+  },
+  {
+   "n": 4,
+   "name": "Arlene",
+   "at": [
+    661,
+    337
+   ],
+   "tall_px": 21.4
+  },
+  {
+   "n": 5,
+   "name": "Doreen",
+   "at": [
+    671,
+    340
+   ],
+   "tall_px": 16.5
+  }
+ ],
+ "egg": {
+  "file": "egg-dust.png",
+  "at": [
+   647,
+   342
+  ],
+  "foot": [
+   4,
+   5
+  ],
+  "size": [
+   9,
+   6
+  ]
+ },
+ "note": "Each hen is a cut-out laid with her foot point (`foot`) at her place (`at`), behind the door's frame (doorframe.png) and behind anyone on the step: sort her by her `at` row like a person. Painted at the size they show there (a hen about 40 cm tall is about 20 px; Doreen is the small one); never scaled. The egg is a little bigger than life, so that it reads."
+}

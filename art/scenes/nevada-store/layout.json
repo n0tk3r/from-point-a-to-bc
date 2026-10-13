@@ -1,0 +1,1807 @@
+{
+ "id": "nevada-store",
+ "horizon": 158,
+ "full": 455,
+ "view": {
+  "horizon": 158,
+  "full": 455,
+  "cam": [
+   520,
+   1040
+  ],
+  "yaw": -12,
+  "focal": 680,
+  "centre_x": 400
+ },
+ "eye_cm": 325,
+ "vanishing": [
+  545,
+  158
+ ],
+ "light": "morning: the sun low behind us and to the left comes in at the window's near sash and lies across the floor to the counter (warm); the window is the brightest thing in the picture; cool sky light through the open back door; Harold glows a little; the corners and the tin ceiling fall away into warm dark near us and cool dark far off",
+ "fx_note": "The ceiling fan is painted still, on purpose: it has not turned since 1979. The hot dog roller turns (frames roller-0/1, 2 fps) and the TV shows snow (tv-0/1/2, 6 fps). The cooler's hum is a sound, not paint.",
+ "walk": [
+  [
+   226,
+   374
+  ],
+  [
+   296,
+   379
+  ],
+  [
+   270,
+   402
+  ],
+  [
+   556,
+   425
+  ],
+  [
+   555,
+   392
+  ],
+  [
+   604,
+   395
+  ],
+  [
+   598,
+   370
+  ],
+  [
+   663,
+   375
+  ],
+  [
+   677,
+   400
+  ],
+  [
+   711,
+   402
+  ],
+  [
+   744,
+   452
+  ],
+  [
+   557,
+   436
+  ],
+  [
+   558,
+   474
+  ],
+  [
+   773,
+   494
+  ],
+  [
+   779,
+   502
+  ],
+  [
+   685,
+   502
+  ],
+  [
+   588,
+   502
+  ],
+  [
+   469,
+   502
+  ],
+  [
+   360,
+   502
+  ],
+  [
+   252,
+   503
+  ],
+  [
+   143,
+   502
+  ],
+  [
+   46,
+   502
+  ],
+  [
+   1,
+   499
+  ],
+  [
+   75,
+   453
+  ],
+  [
+   104,
+   456
+  ]
+ ],
+ "walk_note": "one outline: the floor in front of the counter and round the room, through the back doorway onto the step (the step is at floor height; the yard is a step down and not walked on), and to the front door's threshold at the left edge. Its front edge keeps people under about 190 px; it keeps 14 px off the walls except at the two doorways",
+ "blocked": [
+  [
+   [
+    232,
+    421
+   ],
+   [
+    221,
+    426
+   ],
+   [
+    205,
+    429
+   ],
+   [
+    191,
+    427
+   ],
+   [
+    184,
+    423
+   ],
+   [
+    187,
+    417
+   ],
+   [
+    198,
+    412
+   ],
+   [
+    213,
+    410
+   ],
+   [
+    227,
+    411
+   ],
+   [
+    234,
+    415
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "hat-1",
+   "file": "hat-1.png",
+   "plane": "back",
+   "note": "hat 1, the straw cowboy hat: shown on its peg on every visit but the one when Jolene wears it (`when`: the visit count picks today's hat)"
+  },
+  {
+   "id": "hat-2",
+   "file": "hat-2.png",
+   "plane": "back",
+   "note": "hat 2, the sun hat with fruit on it: shown on its peg on every visit but the one when Jolene wears it (`when`: the visit count picks today's hat)"
+  },
+  {
+   "id": "hat-3",
+   "file": "hat-3.png",
+   "plane": "back",
+   "note": "hat 3, the tiara: shown on its peg on every visit but the one when Jolene wears it (`when`: the visit count picks today's hat)"
+  },
+  {
+   "id": "hat-4",
+   "file": "hat-4.png",
+   "plane": "back",
+   "note": "hat 4, the yellow hard hat: shown on its peg on every visit but the one when Jolene wears it (`when`: the visit count picks today's hat)"
+  },
+  {
+   "id": "hat-5",
+   "file": "hat-5.png",
+   "plane": "back",
+   "note": "hat 5, the hat shaped like a hen: shown on its peg on every visit but the one when Jolene wears it (`when`: the visit count picks today's hat)"
+  },
+  {
+   "id": "doorframe",
+   "file": "doorframe.png",
+   "base": [
+    [
+     572,
+     377
+    ],
+    [
+     717,
+     386
+    ]
+   ],
+   "note": "the back wall round the back door, its casing and the screen door, Jolene's chair and the phone: whoever is outside (the hens, Little Sister on the step) is behind it and seen through the opening"
+  },
+  {
+   "id": "cooler",
+   "file": "cooler.png",
+   "base": [
+    [
+     241,
+     370
+    ],
+    [
+     298,
+     374
+    ]
+   ],
+   "solid": [
+    [
+     261,
+     357
+    ],
+    [
+     314,
+     360
+    ],
+    [
+     298,
+     374
+    ],
+    [
+     241,
+     370
+    ]
+   ]
+  },
+  {
+   "id": "counter",
+   "file": "counter.png",
+   "base": [
+    [
+     281,
+     396
+    ],
+    [
+     556,
+     417
+    ]
+   ],
+   "solid": [
+    [
+     299,
+     380
+    ],
+    [
+     555,
+     398
+    ],
+    [
+     556,
+     417
+    ],
+    [
+     336,
+     400
+    ],
+    [
+     325,
+     413
+    ],
+    [
+     275,
+     409
+    ],
+    [
+     288,
+     397
+    ],
+    [
+     281,
+     396
+    ]
+   ],
+   "note": "the counter, the grill and the roller's tray, the register, the jar, the dish, the postcards, the map rack, Ranger's basket at its foot. Jolene stands behind it; the roller's frames lie over it at the same base"
+  },
+  {
+   "id": "spinner",
+   "file": "spinner.png",
+   "base": [
+    [
+     182,
+     425
+    ],
+    [
+     218,
+     428
+    ]
+   ],
+   "solid": [
+    [
+     227,
+     421
+    ],
+    [
+     218,
+     425
+    ],
+    [
+     206,
+     427
+    ],
+    [
+     195,
+     426
+    ],
+    [
+     189,
+     422
+    ],
+    [
+     192,
+     418
+    ],
+    [
+     200,
+     414
+    ],
+    [
+     212,
+     412
+    ],
+    [
+     223,
+     413
+    ],
+    [
+     229,
+     416
+    ]
+   ]
+  },
+  {
+   "id": "mirror-shades",
+   "file": "mirror-shades.png",
+   "alt": true,
+   "base": [
+    [
+     182,
+     425
+    ],
+    [
+     218,
+     428
+    ]
+   ],
+   "note": "an alt: the last pair, on the rack until it is bought (`when: !g.flag(\"nevada.shadesBought\")`); lay it just after the spinner"
+  },
+  {
+   "id": "rockbins",
+   "file": "rockbins.png",
+   "base": [
+    [
+     572,
+     469
+    ],
+    [
+     782,
+     488
+    ]
+   ],
+   "solid": [
+    [
+     570,
+     442
+    ],
+    [
+     760,
+     458
+    ],
+    [
+     782,
+     488
+    ],
+    [
+     572,
+     469
+    ]
+   ]
+  },
+  {
+   "id": "window-shade",
+   "file": "window-shade.png",
+   "alt": true,
+   "plane": "back",
+   "note": "an alt: the sun shade in the window until Jolene gives it (`when: !g.flag(\"nevada.shadeGiven\")`); the window, the DISPLAY ONLY card and the lot are painted complete under it"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the water flats (bottom left), the crate of empty bottles (bottom middle), the tyres (bottom right)"
+  }
+ ],
+ "things": [
+  {
+   "id": "hubcaps",
+   "what": "the hubcap wall: a hundred and twelve, every one off this road; one is a tractor's wheel (the red one with the yellow hub, over the counter)",
+   "shape": {
+    "poly": [
+     [
+      56,
+      111
+     ],
+     [
+      88,
+      106
+     ],
+     [
+      112,
+      114
+     ],
+     [
+      152,
+      115
+     ],
+     [
+      160,
+      120
+     ],
+     [
+      376,
+      125
+     ],
+     [
+      400,
+      121
+     ],
+     [
+      464,
+      120
+     ],
+     [
+      504,
+      121
+     ],
+     [
+      512,
+      125
+     ],
+     [
+      544,
+      119
+     ],
+     [
+      576,
+      122
+     ],
+     [
+      608,
+      117
+     ],
+     [
+      696,
+      121
+     ],
+     [
+      704,
+      151
+     ],
+     [
+      712,
+      151
+     ],
+     [
+      712,
+      243
+     ],
+     [
+      688,
+      243
+     ],
+     [
+      680,
+      215
+     ],
+     [
+      560,
+      216
+     ],
+     [
+      528,
+      214
+     ],
+     [
+      520,
+      188
+     ],
+     [
+      480,
+      192
+     ],
+     [
+      464,
+      183
+     ],
+     [
+      432,
+      178
+     ],
+     [
+      424,
+      190
+     ],
+     [
+      368,
+      191
+     ],
+     [
+      360,
+      211
+     ],
+     [
+      320,
+      209
+     ],
+     [
+      304,
+      214
+     ],
+     [
+      288,
+      234
+     ],
+     [
+      256,
+      231
+     ],
+     [
+      248,
+      190
+     ],
+     [
+      224,
+      188
+     ],
+     [
+      216,
+      211
+     ],
+     [
+      200,
+      211
+     ],
+     [
+      192,
+      189
+     ],
+     [
+      96,
+      201
+     ],
+     [
+      72,
+      199
+     ],
+     [
+      56,
+      134
+     ]
+    ]
+   },
+   "stand": [
+    360,
+    425
+   ],
+   "face": "N"
+  },
+  {
+   "id": "fan",
+   "what": "the ceiling fan: it has not turned since 1979 (painted still, on purpose)",
+   "shape": {
+    "poly": [
+     [
+      314,
+      94
+     ],
+     [
+      317,
+      79
+     ],
+     [
+      389,
+      48
+     ],
+     [
+      395,
+      48
+     ],
+     [
+      484,
+      82
+     ],
+     [
+      484,
+      83
+     ],
+     [
+      398,
+      147
+     ],
+     [
+      396,
+      147
+     ],
+     [
+      314,
+      95
+     ]
+    ]
+   },
+   "stand": [
+    457,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "window",
+   "what": "the front window: two sashes; through the near one the porch post, the back of the rocking chair, the lot and the road; the DISPLAY ONLY card propped on the sill",
+   "shape": {
+    "poly": [
+     [
+      88,
+      252
+     ],
+     [
+      109,
+      247
+     ],
+     [
+      208,
+      228
+     ],
+     [
+      217,
+      315
+     ],
+     [
+      196,
+      327
+     ],
+     [
+      93,
+      377
+     ],
+     [
+      88,
+      369
+     ],
+     [
+      87,
+      321
+     ]
+    ]
+   },
+   "stand": [
+    216,
+    399
+   ],
+   "face": "W"
+  },
+  {
+   "id": "backdoor",
+   "what": "the back door, open: the screen door hooked back inside, the step down, the hen yard in the sun, the five hens facing the fence, the desert past it",
+   "shape": {
+    "poly": [
+     [
+      585,
+      231
+     ],
+     [
+      604,
+      231
+     ],
+     [
+      686,
+      233
+     ],
+     [
+      686,
+      385
+     ],
+     [
+      664,
+      385
+     ],
+     [
+      602,
+      381
+     ],
+     [
+      591,
+      380
+     ],
+     [
+      584,
+      379
+     ]
+    ]
+   },
+   "stand": [
+    626,
+    389
+   ],
+   "face": "N",
+   "note": "the hens are cut-outs the scene lays in the doorway (`hens`); Little Sister goes out onto the step (mark `step`)"
+  },
+  {
+   "id": "bulletin",
+   "what": "the bulletin board: lost dogs with tear-off tabs, and Jolene's card to Jed in big marker: JED: NO CHEESEBURGERS. WE TOLD YOU.",
+   "shape": {
+    "rect": [
+     315,
+     222,
+     86,
+     77
+    ]
+   },
+   "stand": [
+    300,
+    417
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hatrack",
+   "what": "the hat board over the counter: five pegs, today's hat missing from its peg (she is wearing it)",
+   "shape": {
+    "rect": [
+     383,
+     206,
+     143,
+     21
+    ]
+   },
+   "stand": [
+    459,
+    430
+   ],
+   "face": "N",
+   "hats": {
+    "hat-1": [
+     383,
+     206,
+     26,
+     15
+    ],
+    "hat-2": [
+     412,
+     209,
+     30,
+     13
+    ],
+    "hat-3": [
+     448,
+     210,
+     20,
+     13
+    ],
+    "hat-4": [
+     479,
+     209,
+     20,
+     15
+    ],
+    "hat-5": [
+     503,
+     206,
+     23,
+     19
+    ]
+   }
+  },
+  {
+   "id": "payphone",
+   "what": "the pay phone, dead since the eighties (she answers it)",
+   "shape": {
+    "rect": [
+     677,
+     254,
+     40,
+     55
+    ]
+   },
+   "stand": [
+    679,
+    401
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "cooler",
+   "what": "Harold, the drinks cooler: lemonade in big jugs, pop in plain bottles; he hums (cut-out cooler.png)",
+   "shape": {
+    "rect": [
+     240,
+     236,
+     75,
+     138
+    ]
+   },
+   "stand": [
+    258,
+    381
+   ],
+   "face": "N"
+  },
+  {
+   "id": "survival",
+   "what": "the survival shelf: flats and bottles of water (plain blue labels), jerky, space blankets folded in silver packets",
+   "shape": {
+    "rect": [
+     210,
+     251,
+     50,
+     115
+    ]
+   },
+   "stand": [
+    233,
+    379
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tv",
+   "what": "the TV on top of the survival shelf: rabbit ears with foil on one, one channel, snow (frames tv-0..2)",
+   "shape": {
+    "rect": [
+     213,
+     202,
+     41,
+     55
+    ]
+   },
+   "stand": [
+    233,
+    379
+   ],
+   "face": "N"
+  },
+  {
+   "id": "chair",
+   "what": "Jolene's chair by the back door, where she watches her hens; her knitting on the seat: a very small striped sweater (for Doreen)",
+   "shape": {
+    "rect": [
+     681,
+     321,
+     47,
+     70
+    ]
+   },
+   "stand": [
+    675,
+    402
+   ],
+   "face": "E"
+  },
+  {
+   "id": "counter",
+   "what": "the counter: barn-red boards, a laminate top worn through where the money changes hands (cut-out counter.png)",
+   "shape": {
+    "poly": [
+     [
+      295,
+      317
+     ],
+     [
+      313,
+      317
+     ],
+     [
+      473,
+      325
+     ],
+     [
+      492,
+      327
+     ],
+     [
+      489,
+      411
+     ],
+     [
+      484,
+      413
+     ],
+     [
+      279,
+      396
+     ],
+     [
+      277,
+      331
+     ]
+    ]
+   },
+   "stand": [
+    385,
+    424
+   ],
+   "face": "N"
+  },
+  {
+   "id": "grill",
+   "what": "the grill at the counter's right end: cold since 1979 (a card says GRILL CLOSED)",
+   "shape": {
+    "rect": [
+     486,
+     315,
+     71,
+     103
+    ]
+   },
+   "stand": [
+    527,
+    435
+   ],
+   "face": "N"
+  },
+  {
+   "id": "roller",
+   "what": "the hot dog roller on the grill: turning, empty, for company (frames roller-0, roller-1)",
+   "shape": {
+    "rect": [
+     522,
+     320,
+     32,
+     22
+    ]
+   },
+   "stand": [
+    538,
+    436
+   ],
+   "face": "N"
+  },
+  {
+   "id": "register",
+   "what": "the brass register: it rings for Jolene and nobody else",
+   "shape": {
+    "rect": [
+     411,
+     284,
+     54,
+     53
+    ]
+   },
+   "stand": [
+    427,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "eggs",
+   "what": "the jar of pickled eggs: the jar is older than the eggs",
+   "shape": {
+    "rect": [
+     323,
+     285,
+     25,
+     43
+    ]
+   },
+   "stand": [
+    315,
+    418
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pennydish",
+   "what": "the take-a-penny dish: a chipped saucer, a few pennies, a little card (TAKE A PENNY / LEAVE A PENNY)",
+   "shape": {
+    "rect": [
+     387,
+     318,
+     23,
+     17
+    ]
+   },
+   "stand": [
+    385,
+    424
+   ],
+   "face": "N"
+  },
+  {
+   "id": "postcards",
+   "what": "the postcard spinner on the counter: desert views",
+   "shape": {
+    "rect": [
+     299,
+     274,
+     20,
+     51
+    ]
+   },
+   "stand": [
+    289,
+    416
+   ],
+   "face": "N"
+  },
+  {
+   "id": "maprack",
+   "what": "the map rack on the counter's front: road maps of Nevada (it stops here too)",
+   "shape": {
+    "rect": [
+     433,
+     343,
+     48,
+     55
+    ]
+   },
+   "stand": [
+    452,
+    431
+   ],
+   "face": "N"
+  },
+  {
+   "id": "basket",
+   "what": "Ranger's basket at the counter's foot: wicker, the lid half off, a glint inside (his stash)",
+   "shape": {
+    "rect": [
+     281,
+     375,
+     57,
+     39
+    ]
+   },
+   "stand": [
+    307,
+    424
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "autoshelf",
+   "what": "the auto shelf under the window: quarts of oil, wiper fluid, a can of chrome polish from 1987, a squeegee",
+   "shape": {
+    "rect": [
+     93,
+     332,
+     111,
+     110
+    ]
+   },
+   "stand": [
+    166,
+    429
+   ],
+   "face": "W"
+  },
+  {
+   "id": "spinner",
+   "what": "the spinner rack of sunglasses: a few cheap pairs, $3.99 on a card (cut-out spinner.png)",
+   "shape": {
+    "rect": [
+     187,
+     273,
+     43,
+     153
+    ]
+   },
+   "stand": [
+    250,
+    425
+   ],
+   "face": "W"
+  },
+  {
+   "id": "mirrorshades",
+   "what": "the last pair of mirror shades, on the hook toward us (cut-out mirror-shades.png, gone when bought)",
+   "shape": {
+    "rect": [
+     196,
+     341,
+     20,
+     12
+    ]
+   },
+   "stand": [
+    250,
+    425
+   ],
+   "face": "W",
+   "note": "an extra id: the spinner's shape covers it too; drop it if the scene clicks the rack"
+  },
+  {
+   "id": "windowshade",
+   "what": "the sun shade in the far sash: folded silver, its bright side to us, DISPLAY ONLY on the card in front (cut-out window-shade.png)",
+   "shape": {
+    "rect": [
+     153,
+     256,
+     51,
+     77
+    ]
+   },
+   "stand": [
+    232,
+    388
+   ],
+   "face": "W"
+  },
+  {
+   "id": "rockbins",
+   "what": "Grandpa Joe's rock bins: ROCKS $1; a name on tape under each bin: PEBBLE, STONY, ROCKY, THE SENATOR, SHY (DO NOT LOOK AT DIRECTLY)",
+   "shape": {
+    "poly": [
+     [
+      568,
+      379
+     ],
+     [
+      574,
+      379
+     ],
+     [
+      759,
+      391
+     ],
+     [
+      762,
+      392
+     ],
+     [
+      782,
+      420
+     ],
+     [
+      782,
+      489
+     ],
+     [
+      778,
+      489
+     ],
+     [
+      571,
+      469
+     ],
+     [
+      569,
+      444
+     ],
+     [
+      567,
+      389
+     ]
+    ]
+   },
+   "stand": [
+    670,
+    491
+   ],
+   "face": "N"
+  },
+  {
+   "id": "door",
+   "what": "the front door, shut behind the family: its pane bright with the porch, a card CLOSED on our side, the bell over it",
+   "shape": {
+    "poly": [
+     [
+      0,
+      269
+     ],
+     [
+      3,
+      268
+     ],
+     [
+      66,
+      255
+     ],
+     [
+      71,
+      255
+     ],
+     [
+      72,
+      282
+     ],
+     [
+      72,
+      450
+     ],
+     [
+      2,
+      493
+     ],
+     [
+      0,
+      493
+     ]
+    ]
+   },
+   "stand": [
+    99,
+    473
+   ],
+   "face": "W"
+  }
+ ],
+ "marks": {
+  "fromLot": {
+   "mom": [
+    244,
+    447
+   ],
+   "bigsis": [
+    318,
+    471
+   ],
+   "lilsis": [
+    142,
+    460
+   ]
+  },
+  "jolene": {
+   "at": [
+    419,
+    377
+   ],
+   "spots": [
+    [
+     419,
+     377
+    ],
+    [
+     477,
+     381
+    ]
+   ],
+   "face": "S",
+   "note": "behind the counter, standing (1.78 m): the counter's cut-out covers her below the waist; her second spot is by the register"
+  },
+  "step": [
+   610,
+   374
+  ],
+  "step_face": "N",
+  "counter": [
+   385,
+   424
+  ],
+  "counter_face": "N"
+ },
+ "stands": {
+  "mom": {
+   "at": [
+    244,
+    447
+   ],
+   "grownup_px": 156
+  },
+  "bigsis": {
+   "at": [
+    318,
+    471
+   ],
+   "grownup_px": 169
+  },
+  "lilsis": {
+   "at": [
+    142,
+    460
+   ],
+   "grownup_px": 163
+  },
+  "jolene": {
+   "at": [
+    419,
+    377
+   ],
+   "grownup_px": 118
+  },
+  "jolene2": {
+   "at": [
+    477,
+    381
+   ],
+   "grownup_px": 120
+  },
+  "counter": {
+   "at": [
+    385,
+    424
+   ],
+   "grownup_px": 143
+  },
+  "step": {
+   "at": [
+    610,
+    374
+   ],
+   "grownup_px": 116
+  },
+  "atregister": {
+   "at": [
+    427,
+    428
+   ],
+   "grownup_px": 145
+  },
+  "atpennydish": {
+   "at": [
+    385,
+    424
+   ],
+   "grownup_px": 143
+  },
+  "ateggs": {
+   "at": [
+    315,
+    418
+   ],
+   "grownup_px": 140
+  },
+  "atpostcards": {
+   "at": [
+    289,
+    416
+   ],
+   "grownup_px": 139
+  },
+  "atbasket": {
+   "at": [
+    307,
+    424
+   ],
+   "grownup_px": 143
+  },
+  "athatrack": {
+   "at": [
+    459,
+    430
+   ],
+   "grownup_px": 147
+  },
+  "atbulletin": {
+   "at": [
+    300,
+    417
+   ],
+   "grownup_px": 140
+  },
+  "atmaprack": {
+   "at": [
+    452,
+    431
+   ],
+   "grownup_px": 147
+  },
+  "athubcaps": {
+   "at": [
+    360,
+    425
+   ],
+   "grownup_px": 144
+  },
+  "atwindow": {
+   "at": [
+    216,
+    399
+   ],
+   "grownup_px": 130
+  },
+  "atshade": {
+   "at": [
+    232,
+    388
+   ],
+   "grownup_px": 124
+  },
+  "atspinner": {
+   "at": [
+    250,
+    425
+   ],
+   "grownup_px": 144
+  },
+  "atcooler": {
+   "at": [
+    258,
+    381
+   ],
+   "grownup_px": 120
+  },
+  "atsurvival": {
+   "at": [
+    233,
+    379
+   ],
+   "grownup_px": 119
+  },
+  "attv": {
+   "at": [
+    233,
+    379
+   ],
+   "grownup_px": 119
+  },
+  "atgrill": {
+   "at": [
+    527,
+    435
+   ],
+   "grownup_px": 149
+  },
+  "atroller": {
+   "at": [
+    538,
+    436
+   ],
+   "grownup_px": 150
+  },
+  "atchair": {
+   "at": [
+    675,
+    402
+   ],
+   "grownup_px": 132
+  },
+  "atpayphone": {
+   "at": [
+    679,
+    401
+   ],
+   "grownup_px": 131
+  },
+  "atbackdoor": {
+   "at": [
+    626,
+    389
+   ],
+   "grownup_px": 125
+  },
+  "watchleft": {
+   "at": [
+    579,
+    397
+   ],
+   "grownup_px": 129
+  },
+  "watchright": {
+   "at": [
+    695,
+    407
+   ],
+   "grownup_px": 134
+  },
+  "atautoshelf": {
+   "at": [
+    166,
+    429
+   ],
+   "grownup_px": 146
+  },
+  "atrockbins": {
+   "at": [
+    670,
+    491
+   ],
+   "grownup_px": 179
+  },
+  "atfan": {
+   "at": [
+    457,
+    468
+   ],
+   "grownup_px": 167
+  },
+  "atdoor": {
+   "at": [
+    99,
+    473
+   ],
+   "grownup_px": 170
+  },
+  "front": {
+   "at": [
+    418,
+    494
+   ],
+   "grownup_px": 181
+  },
+  "frontright": {
+   "at": [
+    583,
+    495
+   ],
+   "grownup_px": 181
+  }
+ },
+ "fx": [
+  {
+   "id": "roller",
+   "what": "the hot dog roller turning, empty",
+   "at": [
+    538,
+    335
+   ],
+   "foot": [
+    13,
+    11
+   ],
+   "frames": [
+    "roller-0.png",
+    "roller-1.png"
+   ],
+   "fps": 2,
+   "base": [
+    [
+     281,
+     396
+    ],
+    [
+     556,
+     417
+    ]
+   ],
+   "rect": [
+    525,
+    324,
+    26,
+    11
+   ],
+   "note": "lies over counter.png at the counter's base"
+  },
+  {
+   "id": "tv",
+   "what": "snow on the TV's screen",
+   "at": [
+    227,
+    252
+   ],
+   "foot": [
+    9,
+    17
+   ],
+   "frames": [
+    "tv-0.png",
+    "tv-1.png",
+    "tv-2.png"
+   ],
+   "fps": 6,
+   "plane": "back",
+   "rect": [
+    218,
+    235,
+    18,
+    17
+   ]
+  }
+ ],
+ "hens": {
+  "foot": [
+   16,
+   27
+  ],
+  "size": [
+   32,
+   30
+  ],
+  "states": {
+   "guard-a": "hen-<n>-guard-a.png",
+   "guard-b": "hen-<n>-guard-b.png",
+   "turn": "hen-<n>-turn.png",
+   "sit": "hen-<n>-sit.png",
+   "peck": "hen-<n>-peck.png"
+  },
+  "hens": [
+   {
+    "n": 1,
+    "name": "Darlene",
+    "at": [
+     650,
+     341
+    ],
+    "tall_px": 22.5
+   },
+   {
+    "n": 2,
+    "name": "Charlene",
+    "at": [
+     625,
+     337
+    ],
+    "tall_px": 20.9
+   },
+   {
+    "n": 3,
+    "name": "Marlene",
+    "at": [
+     636,
+     334
+    ],
+    "tall_px": 20.0
+   },
+   {
+    "n": 4,
+    "name": "Arlene",
+    "at": [
+     661,
+     337
+    ],
+    "tall_px": 21.4
+   },
+   {
+    "n": 5,
+    "name": "Doreen",
+    "at": [
+     671,
+     340
+    ],
+    "tall_px": 16.5
+   }
+  ],
+  "egg": {
+   "file": "egg-dust.png",
+   "at": [
+    647,
+    342
+   ],
+   "foot": [
+    4,
+    5
+   ],
+   "size": [
+    9,
+    6
+   ]
+  },
+  "note": "Each hen is a cut-out laid with her foot point (`foot`) at her place (`at`), behind the door's frame (doorframe.png) and behind anyone on the step: sort her by her `at` row like a person. Painted at the size they show there (a hen about 40 cm tall is about 20 px; Doreen is the small one); never scaled. The egg is a little bigger than life, so that it reads."
+ },
+ "exits": [
+  {
+   "to": "nevada-roadside",
+   "id": "door",
+   "shape": {
+    "poly": [
+     [
+      0,
+      269
+     ],
+     [
+      3,
+      268
+     ],
+     [
+      66,
+      255
+     ],
+     [
+      71,
+      255
+     ],
+     [
+      72,
+      282
+     ],
+     [
+      72,
+      450
+     ],
+     [
+      2,
+      493
+     ],
+     [
+      0,
+      493
+     ]
+    ]
+   },
+   "stand": [
+    99,
+    473
+   ],
+   "face": "W",
+   "how": "a thing `door` low at the picture's left edge (not the S edge): the shut front door with its bell. Using it takes the party out to the lot; at the roadside they come out of the store's door (its stand place there is [296, 447])."
+  }
+ ],
+ "cutouts": {
+  "hat-1": [
+   384,
+   207,
+   24,
+   14
+  ],
+  "hat-2": [
+   413,
+   210,
+   28,
+   11
+  ],
+  "hat-3": [
+   450,
+   211,
+   18,
+   11
+  ],
+  "hat-4": [
+   481,
+   210,
+   17,
+   14
+  ],
+  "hat-5": [
+   505,
+   207,
+   20,
+   17
+  ],
+  "cooler": [
+   241,
+   237,
+   73,
+   136
+  ],
+  "counter": [
+   278,
+   275,
+   278,
+   142
+  ],
+  "spinner": [
+   188,
+   274,
+   42,
+   151
+  ],
+  "rockbins": [
+   569,
+   380,
+   213,
+   108
+  ],
+  "front": [
+   0,
+   509,
+   800,
+   91
+  ],
+  "window-shade": [
+   154,
+   258,
+   49,
+   74
+  ],
+  "mirror-shades": [
+   200,
+   344,
+   14,
+   6
+  ],
+  "doorframe": [
+   566,
+   224,
+   160,
+   172
+  ]
+ },
+ "lights": {
+  "window": [
+   122,
+   303
+  ],
+  "sun_on_floor": [
+   365,
+   417
+  ],
+  "backdoor": [
+   634,
+   299
+  ],
+  "harold": [
+   270,
+   306
+  ]
+ }
+}

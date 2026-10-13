@@ -1,0 +1,791 @@
+{
+ "id": "nevada-limo",
+ "horizon": 220,
+ "full": 355,
+ "view": {
+  "horizon": 220,
+  "full": 355,
+  "cam": [
+   182.0,
+   530.0
+  ],
+  "yaw": -4.0,
+  "focal": 345.0,
+  "centre_x": 400.0
+ },
+ "eye_cm": 148,
+ "vanishing": [
+  424,
+  220
+ ],
+ "light": "daytime, driving: cool daylight through smoked windows on both sides (soft, no sunbeams); the ceiling's five small lights warm; the divider dim (smoked glass); the near corners and our own seat the darkest",
+ "walk": [
+  [
+   345,
+   326
+  ],
+  [
+   495,
+   329
+  ],
+  [
+   532,
+   385
+  ],
+  [
+   304,
+   381
+  ]
+ ],
+ "maxScale": 1.22,
+ "blocked": [],
+ "planes": [
+  {
+   "id": "divider-up",
+   "file": "divider-up.png",
+   "plane": "back",
+   "note": "the glass up: smoked, the headrests dim through it (first state)"
+  },
+  {
+   "id": "divider-down",
+   "file": "divider-down.png",
+   "plane": "back",
+   "alt": "divider-up",
+   "note": "the glass slid down: the front of the car through the opening; exactly the same pixels as divider-up"
+  },
+  {
+   "id": "ropes",
+   "states": {
+    "4": "ropes-4.png",
+    "3": "ropes-3.png",
+    "2": "ropes-2.png",
+    "1": "ropes-1.png"
+   },
+   "base": 329,
+   "note": "the bow on the cushion beside Joe; gone at 0. Its base is a row just in front of Joe's ground point: Joe is behind it, Ranger on the carpet or on the seat (sorted by the carpet under him) in front"
+  },
+  {
+   "id": "bag",
+   "file": "bag.png",
+   "base": [
+    [
+     500,
+     330
+    ],
+    [
+     699,
+     616
+    ]
+   ],
+   "note": "goes when taken (its shadow with it)"
+  },
+  {
+   "id": "juice",
+   "file": "juice.png",
+   "base": [
+    [
+     500,
+     330
+    ],
+    [
+     699,
+     616
+    ]
+   ],
+   "note": "goes when taken"
+  },
+  {
+   "id": "clipboard",
+   "file": "clipboard.png",
+   "base": [
+    [
+     500,
+     330
+    ],
+    [
+     699,
+     616
+    ]
+   ],
+   "note": "goes when taken"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the seat we sit on (its bolster and cushion) and the two armrests"
+  }
+ ],
+ "things": [
+  {
+   "id": "divider",
+   "what": "the divider: smoked glass in a frame (up), or slid down into the seat back with the front of the car seen through it (down): two cut-outs",
+   "shape": {
+    "rect": [
+     321,
+     202,
+     201,
+     69
+    ]
+   },
+   "stand": [
+    419,
+    329
+   ],
+   "face": "N",
+   "plane": [
+    "divider-up",
+    "divider-down"
+   ]
+  },
+  {
+   "id": "ropes",
+   "what": "the ropes beside Grandpa Joe on the long seat: white regulation rope with a red thread, tied off in a bow, the loose end toward us (states 4, 3, 2, 1)",
+   "shape": {
+    "rect": [
+     287,
+     295,
+     42,
+     27
+    ]
+   },
+   "stand": [
+    344,
+    340
+   ],
+   "face": "W",
+   "plane": "ropes"
+  },
+  {
+   "id": "bag",
+   "what": "the paper bag on the facing seat: brown, folded over at the top, a grease spot (the cheeseburger)",
+   "shape": {
+    "rect": [
+     543,
+     292,
+     30,
+     38
+    ]
+   },
+   "stand": [
+    504,
+    364
+   ],
+   "face": "E",
+   "plane": "bag"
+  },
+  {
+   "id": "clipboard",
+   "what": "the clipboard propped on the facing seat: the office's map in pen, three circles (44, 1921, and one under a smudge), a column of empty boxes",
+   "shape": {
+    "rect": [
+     628,
+     336,
+     58,
+     74
+    ]
+   },
+   "stand": [
+    507,
+    380
+   ],
+   "face": "E",
+   "plane": "clipboard"
+  },
+  {
+   "id": "juice",
+   "what": "a juice box with a straw on the facing seat, a plain apple on its side",
+   "shape": {
+    "rect": [
+     576,
+     325,
+     21,
+     33
+    ]
+   },
+   "stand": [
+    514,
+    378
+   ],
+   "face": "E",
+   "plane": "juice"
+  },
+  {
+   "id": "fridge",
+   "what": "the little fridge in the facing seat's base, at its near end: brushed steel, a chrome handle, a little blue light",
+   "shape": {
+    "rect": [
+     580,
+     388,
+     99,
+     194
+    ]
+   },
+   "stand": [
+    498,
+    381
+   ],
+   "face": "E"
+  },
+  {
+   "id": "phone",
+   "what": "the car phone: a cream handset in its cradle on the bar under the divider, a coiled cord",
+   "shape": {
+    "rect": [
+     366,
+     263,
+     28,
+     53
+    ]
+   },
+   "stand": [
+    376,
+    329
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ashtray",
+   "what": "the ashtray on the bar: cut glass, full of jelly beans",
+   "shape": {
+    "rect": [
+     449,
+     267,
+     20,
+     13
+    ]
+   },
+   "stand": [
+    460,
+    330
+   ],
+   "face": "N"
+  },
+  {
+   "id": "window-l",
+   "what": "the windows on the left: long, low, smoked; the desert going by",
+   "shape": {
+    "rect": [
+     0,
+     177,
+     300,
+     146
+    ]
+   },
+   "stand": [
+    335,
+    352
+   ],
+   "face": "W",
+   "windows": [
+    "window-l-far",
+    "window-l-near"
+   ]
+  },
+  {
+   "id": "window-r",
+   "what": "the windows on the right: long, low, smoked; the desert going by",
+   "shape": {
+    "rect": [
+     544,
+     179,
+     255,
+     140
+    ]
+   },
+   "stand": [
+    502,
+    353
+   ],
+   "face": "E",
+   "windows": [
+    "window-r-far",
+    "window-r-near"
+   ]
+  },
+  {
+   "id": "seat",
+   "what": "the long seat: gray leather, along the left side; Grandpa Joe sits at its far end",
+   "shape": {
+    "rect": [
+     0,
+     252,
+     345,
+     323
+    ]
+   },
+   "stand": [
+    354,
+    330
+   ],
+   "face": "W",
+   "poly": [
+    [
+     145,
+     574
+    ],
+    [
+     345,
+     321
+    ],
+    [
+     345,
+     292
+    ],
+    [
+     301,
+     252
+    ],
+    [
+     0,
+     331
+    ],
+    [
+     145,
+     474
+    ]
+   ]
+  },
+  {
+   "id": "facingseat",
+   "what": "the facing seat: gray leather, along the right side",
+   "shape": {
+    "rect": [
+     500,
+     255,
+     300,
+     345
+    ]
+   },
+   "stand": [
+    504,
+    364
+   ],
+   "face": "E",
+   "poly": [
+    [
+     699,
+     600
+    ],
+    [
+     687,
+     600
+    ],
+    [
+     500,
+     330
+    ],
+    [
+     500,
+     299
+    ],
+    [
+     551,
+     256
+    ],
+    [
+     800,
+     326
+    ],
+    [
+     800,
+     425
+    ],
+    [
+     699,
+     504
+    ]
+   ]
+  },
+  {
+   "id": "belt",
+   "what": "a spare seatbelt's buckle end lying on the long seat's cushion (the belt round Joe is drawn on him)",
+   "shape": {
+    "rect": [
+     271,
+     312,
+     47,
+     11
+    ]
+   },
+   "stand": [
+    332,
+    359
+   ],
+   "face": "W"
+  }
+ ],
+ "marks": {
+  "joe": {
+   "at": [
+    318,
+    327
+   ],
+   "face": "E",
+   "scale": 0.791,
+   "seat_height_px": 31,
+   "seat_cm": 42.0,
+   "note": "the ground point under his hips: it lies under the long seat's cushion; seated there his hips are seat_height_px above it. He faces E, across the car toward the facing seat."
+  },
+  "ranger": {
+   "at": [
+    422,
+    354
+   ],
+   "face": "W",
+   "scale": 0.99,
+   "note": "on the carpet between the seats, near us, facing Joe"
+  },
+  "ropes": {
+   "at": [
+    309,
+    307
+   ],
+   "scale": 0.901,
+   "floor": [
+    309,
+    342
+   ],
+   "face": "W",
+   "note": "where Ranger sits to nibble: ON the long seat's cushion beside the bow. Draw him at `scale` (not the row's), his feet at `at`, sorted as if standing at `floor` (the carpet under him): in front of the ropes and of Joe."
+  },
+  "bag": {
+   "at": [
+    557,
+    326
+   ],
+   "scale": 1.097,
+   "floor": [
+    522,
+    367
+   ],
+   "face": "E",
+   "note": "the point under the bag ON the facing seat's cushion: for anything shown at the thing itself (a look, a little effect). Ranger takes it from the carpet, at his stand `atbag` (reach). `scale`: the size a figure is drawn at there; `floor`: the carpet just in front of the seat's edge, to sort a figure on the seat (in front of the things on it). A figure on the seat here is within the engine's 1.25 for painted frames."
+  },
+  "juice": {
+   "at": [
+    587,
+    354
+   ],
+   "scale": 1.385,
+   "floor": [
+    548,
+    406
+   ],
+   "face": "E",
+   "note": "the point under the juice ON the facing seat's cushion: for anything shown at the thing itself (a look, a little effect). Ranger takes it from the carpet, at his stand `atjuice` (reach). `scale`: the size a figure is drawn at there; `floor`: the carpet just in front of the seat's edge, to sort a figure on the seat (in front of the things on it). Too near us for Ranger to be drawn on the seat here (1.39: the engine draws painted frames at no more than 1.25 of their size)."
+  },
+  "clipboard": {
+   "at": [
+    653,
+    400
+   ],
+   "scale": 1.867,
+   "floor": [
+    590,
+    469
+   ],
+   "face": "E",
+   "note": "the point under the clipboard ON the facing seat's cushion: for anything shown at the thing itself (a look, a little effect). Ranger takes it from the carpet, at his stand `atclipboard` (reach). `scale`: the size a figure is drawn at there; `floor`: the carpet just in front of the seat's edge, to sort a figure on the seat (in front of the things on it). Too near us for Ranger to be drawn on the seat here (1.87: the engine draws painted frames at no more than 1.25 of their size)."
+  }
+ },
+ "stands": {
+  "atropes": {
+   "at": [
+    344,
+    340
+   ],
+   "face": "W",
+   "scale": 0.89
+  },
+  "atjoe": {
+   "at": [
+    354,
+    330
+   ],
+   "face": "W",
+   "scale": 0.818
+  },
+  "atbelt": {
+   "at": [
+    332,
+    359
+   ],
+   "face": "W",
+   "scale": 1.031
+  },
+  "atphone": {
+   "at": [
+    376,
+    329
+   ],
+   "face": "N",
+   "scale": 0.804
+  },
+  "atashtray": {
+   "at": [
+    460,
+    330
+   ],
+   "face": "N",
+   "scale": 0.818
+  },
+  "atdivider": {
+   "at": [
+    419,
+    329
+   ],
+   "face": "N",
+   "scale": 0.804
+  },
+  "atbag": {
+   "at": [
+    504,
+    364
+   ],
+   "face": "E",
+   "scale": 1.068
+  },
+  "atjuice": {
+   "at": [
+    514,
+    378
+   ],
+   "face": "E",
+   "scale": 1.167
+  },
+  "atclipboard": {
+   "at": [
+    507,
+    380
+   ],
+   "face": "E",
+   "scale": 1.187
+  },
+  "atfridge": {
+   "at": [
+    498,
+    381
+   ],
+   "face": "E",
+   "scale": 1.192
+  },
+  "atwindow-l": {
+   "at": [
+    335,
+    352
+   ],
+   "face": "W",
+   "scale": 0.977
+  },
+  "atwindow-r": {
+   "at": [
+    502,
+    353
+   ],
+   "face": "E",
+   "scale": 0.985
+  }
+ },
+ "windows": [
+  {
+   "id": "window-l-far",
+   "side": "L",
+   "poly": [
+    [
+     300.1,
+     250.4
+    ],
+    [
+     242.1,
+     264.5
+    ],
+    [
+     242.1,
+     201.7
+    ],
+    [
+     300.1,
+     207.5
+    ]
+   ]
+  },
+  {
+   "id": "window-l-near",
+   "side": "L",
+   "poly": [
+    [
+     232.2,
+     267.0
+    ],
+    [
+     0.0,
+     323.8
+    ],
+    [
+     0.0,
+     177.4
+    ],
+    [
+     232.2,
+     200.7
+    ]
+   ]
+  },
+  {
+   "id": "window-r-far",
+   "side": "R",
+   "poly": [
+    [
+     544.4,
+     251.9
+    ],
+    [
+     604.9,
+     267.9
+    ],
+    [
+     604.9,
+     200.3
+    ],
+    [
+     544.4,
+     206.9
+    ]
+   ]
+  },
+  {
+   "id": "window-r-near",
+   "side": "R",
+   "poly": [
+    [
+     615.6,
+     270.8
+    ],
+    [
+     800.0,
+     319.7
+    ],
+    [
+     800.0,
+     179.1
+    ],
+    [
+     615.6,
+     199.1
+    ]
+   ]
+  }
+ ],
+ "strip": {
+  "file": "desert-strip.png",
+  "row": 330,
+  "top": 171,
+  "speed": 90,
+  "note": "the strip's bottom edge sits on `row`; it is drawn behind the glass, clipped to `windows`. Driving forward, the world goes by outward from the far end on both sides: to the LEFT in the left windows (speed 90) and to the RIGHT in the right windows (speed -90): two strip effects, one for each side's windows"
+ },
+ "exits": [],
+ "lights": {
+  "ceiling": [
+   [
+    419,
+    196
+   ],
+   [
+    418,
+    191
+   ],
+   [
+    417,
+    183
+   ],
+   [
+    414,
+    170
+   ],
+   [
+    408,
+    141
+   ]
+  ],
+  "note": "the ceiling's small lights (painted, warm): for a live glow if wanted"
+ },
+ "edges": {
+  "long_seat_front": [
+   [
+    345,
+    321
+   ],
+   [
+    145,
+    574
+   ]
+  ],
+  "facing_seat_front": [
+   [
+    500,
+    330
+   ],
+   [
+    699,
+    616
+   ]
+  ]
+ },
+ "cutouts": {
+  "bag": [
+   545,
+   294,
+   39,
+   36
+  ],
+  "juice": [
+   568,
+   318,
+   43,
+   41
+  ],
+  "clipboard": [
+   615,
+   338,
+   70,
+   70
+  ],
+  "ropes-4": [
+   297,
+   297,
+   30,
+   14
+  ],
+  "ropes-3": [
+   299,
+   297,
+   26,
+   17
+  ],
+  "ropes-2": [
+   295,
+   297,
+   27,
+   20
+  ],
+  "ropes-1": [
+   289,
+   297,
+   31,
+   23
+  ],
+  "front": [
+   0,
+   390,
+   800,
+   210
+  ],
+  "divider": [
+   327,
+   208,
+   189,
+   57
+  ]
+ }
+}

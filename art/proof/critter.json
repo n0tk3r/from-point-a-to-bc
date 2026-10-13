@@ -1,0 +1,78 @@
+{
+  "id": "critter",
+  "face": "E",
+  "foot": [
+    24,
+    38
+  ],
+  "tall": {
+    "stand": 30,
+    "sit": 38
+  },
+  "stride": 40,
+  "pace": 120,
+  "frames": {
+    "stand": [
+      "critter-stand-0.png",
+      "critter-stand-1.png"
+    ],
+    "sit": [
+      "critter-sit-0.png",
+      "critter-sit-1.png"
+    ],
+    "walk": [
+      "critter-walk-0.png",
+      "critter-walk-1.png",
+      "critter-walk-2.png",
+      "critter-walk-3.png",
+      "critter-walk-4.png",
+      "critter-walk-5.png"
+    ],
+    "run": [
+      "critter-run-0.png",
+      "critter-run-1.png",
+      "critter-run-2.png",
+      "critter-run-3.png"
+    ],
+    "nibble": [
+      "critter-nibble-0.png",
+      "critter-nibble-1.png",
+      "critter-nibble-2.png",
+      "critter-nibble-3.png"
+    ],
+    "wash": [
+      "critter-wash-0.png",
+      "critter-wash-1.png",
+      "critter-wash-2.png",
+      "critter-wash-3.png"
+    ],
+    "reach": [
+      "critter-reach-0.png",
+      "critter-reach-1.png"
+    ],
+    "look": [
+      "critter-look-0.png"
+    ]
+  },
+  "fps": {
+    "stand": 1.5,
+    "sit": 1.5,
+    "walk": 8,
+    "run": 10,
+    "nibble": 6,
+    "wash": 5,
+    "reach": 2,
+    "look": 1
+  },
+  "fidgets": [
+    "look",
+    "wash"
+  ],
+  "portrait": "critter-face.png",
+  "variants": {
+    "shades": {
+      "prefix": "critter-shades-",
+      "portrait": "critter-shades-face.png"
+    }
+  }
+}

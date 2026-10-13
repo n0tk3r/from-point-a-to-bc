@@ -108,9 +108,28 @@ PLANS = {
     },
     "nevada-roadside": {
         "planes": ["pump", "stand", "car", "front"],
-        "alt": {},
+        "alt": {"shade-held": []},                                  # NEVADA-12A: the sun shade, once Grandpa Joe holds it up
         "union": {},
-        "frames": ["bird-*"],
+        "frames": ["bird-*", "limo-*", "ranger-*-[0-9]"],           # NEVADA-12A: the limousine (PAINT-12A) and Ranger's frames (PAINT-12C; his portraits are the interface's, in art/portraits)
+    },
+    "nevada-store": {                                               # NEVADA-12B: the store's inside (nevada_store.py)
+        # back to front: the five hats on their pegs (the scene hides today's), the back door's frame (the hens and Little
+        # Sister on the step are behind it), Harold, the counter, the spinner, the rock bins; the front plane last
+        "planes": ["hat-1", "hat-2", "hat-3", "hat-4", "hat-5", "doorframe", "cooler", "counter", "spinner", "rockbins", "front"],
+        "alt": {"window-shade": [], "mirror-shades": []},           # the sun shade (until it is given), the last mirror shades (until bought)
+        "union": {},
+        "frames": ["hen-*", "egg-dust", "roller-*", "tv-*"],       # the hens and the egg, the roller turning, the TV's snow
+    },
+    # NEVADA-12C: inside the limousine, driving (Act Five opens here). With nobody on stage the divider is up and our own
+    # seat is the foreground; everything that changes or goes is an alt: the divider slid down (it replaces the glass),
+    # the ropes (four strands; three, two and one are states of it, the same painting with less of the bow in it), and
+    # the bag, the clipboard and the juice box (each goes when taken). The desert strip behind the windows is a frame.
+    "nevada-limo": {
+        "planes": ["divider-up", "front"],
+        "alt": {"divider-down": ["divider-up"], "ropes-4": [], "bag": [], "clipboard": [], "juice": []},
+        "states": {"ropes-4": ["ropes-3", "ropes-2", "ropes-1"]},
+        "union": {},
+        "frames": ["desert-strip"],
     },
 }
 

@@ -1021,14 +1021,297 @@ def batteries(b, l):
         _battery(b, l, (cx, cy), deg, flip)
 
 
+# ---------------------------------------------------------------- NEVADA-12B: the store's things (round twelve)
+# Small capitals and figures set pixel by pixel, for the few words on these pictures that must read at 64 x 64
+# (44 and 1921 on the map, RECEIVED, DISPLAY ONLY). Each is 3 wide and 5 high; nobody's typeface.
+_TINY = {  # NEVADA-12B
+    "0": ["XXX", "X.X", "X.X", "X.X", "XXX"], "1": [".X.", "XX.", ".X.", ".X.", "XXX"], "2": ["XXX", "..X", "XXX", "X..", "XXX"],
+    "4": ["X.X", "X.X", "XXX", "..X", "..X"], "9": ["XXX", "X.X", "XXX", "..X", "XXX"],
+    "A": [".X.", "X.X", "XXX", "X.X", "X.X"], "C": ["XXX", "X..", "X..", "X..", "XXX"], "D": ["XX.", "X.X", "X.X", "X.X", "XX."],
+    "E": ["XXX", "X..", "XX.", "X..", "XXX"], "I": ["XXX", ".X.", ".X.", ".X.", "XXX"], "L": ["X..", "X..", "X..", "X..", "XXX"],
+    "N": ["X.X", "XXX", "XXX", "XXX", "X.X"], "O": ["XXX", "X.X", "X.X", "X.X", "XXX"], "P": ["XXX", "X.X", "XXX", "X..", "X.."],
+    "R": ["XX.", "X.X", "XX.", "X.X", "X.X"], "S": ["XXX", "X..", "XXX", "..X", "XXX"], "V": ["X.X", "X.X", "X.X", "X.X", ".X."],
+    "Y": ["X.X", "X.X", ".X.", ".X.", ".X."],
+}
+
+
+def _tiny(l, text, x, y, color, alpha=1.0, gap=1):
+    """Set capitals 5 pixels high, pixel by pixel, top left at the whole pixel (x, y). NEVADA-12B"""
+    for ch in text:
+        if ch == " ":
+            x += 3
+            continue
+        for j, row in enumerate(_TINY[ch]):
+            for k, bit in enumerate(row):
+                if bit == "X":
+                    l.poly([(x + k, y + j), (x + k + 1, y + j), (x + k + 1, y + j + 1), (x + k, y + j + 1)], color, alpha)
+        x += len(_TINY[ch][0]) + gap
+    return x
+
+
+def _copper_coin(b, l, cx, cy, rx, ry, deg, thick, tones, face="head", seed=0):
+    """One copper coin lying at a tilt: its edge, the raised rim, the field, and on it a plain man's head (nobody) or,
+    on its back, a plain little building with steps; marks round the rim that are not letters. NEVADA-12B"""
+    hi, lit, mid, low, dark = tones
+    T = lambda pts: rot(pts, deg, (cx, cy))
+    rim = oval(cx, cy, rx, ry, deg, 36)
+    b.poly([(x, y + thick) for x, y in rim], dark)                                # its edge, toward us
+    b.poly(rim, lit)
+    b.poly(oval(cx, cy, rx * 0.86, ry * 0.86, deg, 36), mid)
+    k = ry / rx
+    H = lambda pts: T([(cx + x * rx / 18.0, cy + y * k * rx / 18.0) for x, y in pts])
+    if face == "head":
+        head = [(6.0, 11.0), (6.4, 5.0), (8.0, 0.6), (7.6, -4.6), (5.0, -8.6), (0.6, -10.0), (-4.0, -8.8), (-6.0, -5.6), (-6.4, -3.0),
+                (-9.0, 0.6), (-7.2, 1.6), (-7.6, 3.0), (-6.6, 3.8), (-7.0, 5.0), (-6.4, 6.8), (-3.6, 7.6), (-2.0, 8.0), (-2.0, 10.0), (-5.0, 12.6), (0.6, 13.6)]
+        b.poly(H([(x + 0.8, y + 0.9) for x, y in head]), low)
+        b.poly(H(head), mix(lit, mid, 0.4))
+        b.poly(H([(7.6, -4.6), (5.0, -8.6), (0.6, -10.0), (-4.0, -8.8), (-2.4, -6.4), (0.4, -5.6), (1.6, -2.8), (3.6, -0.6), (4.4, 3.6), (6.4, 5.0), (8.0, 0.6)]), mix(mid, low, 0.5))
+        l.line(H(head[6:15]), dark, 0.9, 0.8)
+        l.line(H([(-6.2, -3.2), (-4.2, -3.4)]), dark, 1.0, 0.85)
+    else:
+        bld = [(-8, 6), (8, 6), (8, 4.4), (-8, 4.4)]
+        b.poly(H(bld), mix(lit, mid, 0.4))
+        for xx in (-6, -2.6, 0.8, 4.2):
+            b.poly(H([(xx, 4.4), (xx + 1.6, 4.4), (xx + 1.6, -2.4), (xx, -2.4)]), mix(lit, mid, 0.3))
+        b.poly(H([(-8.6, -2.4), (8.6, -2.4), (0, -7.6)]), mix(lit, mid, 0.45))
+        l.line(H([(-8.6, -2.4), (0, -7.6), (8.6, -2.4)]), low, 0.8, 0.8)
+    for a in range(0, 360, 20):                                                   # marks round the rim that are not letters
+        if 60 < a < 120:
+            continue
+        ca, sa = math.cos(math.radians(a)), math.sin(math.radians(a))
+        p0 = (cx + ca * rx * 0.78, cy + sa * ry * 0.78)
+        p1 = (cx + ca * rx * 0.68, cy + sa * ry * 0.68)
+        l.line(T([p0, p1]), low, 1.1, 0.7)
+    l.line(rim[0:18], dark, 1.0, 0.6)                                             # the near lip
+    l.line(rim[18:32], hi, 1.2, 0.95)                                             # the far lip, in the light
+    inner = oval(cx, cy, rx * 0.86, ry * 0.86, deg, 36)
+    l.line(inner[18:32], low, 0.8, 0.7)
+
+
+COPPER = ("#ffd8b0", "#e8955c", "#c8743e", "#94502a", "#5e2e18")              # NEVADA-12B
+
+
+def penny(b, l):
+    """One penny, copper, for luck: lying at a tilt, a plain man's head on it (nobody), new enough to catch the light. NEVADA-12B"""
+    _copper_coin(b, l, 32, 30, 25.0, 19.6, -10, 4.6, COPPER, "head")
+    sx, sy = 15.0, 15.0                                                           # for luck: it glints
+    l.poly([(sx, sy - 5.6), (sx + 1.1, sy - 1.1), (sx + 5.6, sy), (sx + 1.1, sy + 1.1), (sx, sy + 5.6), (sx - 1.1, sy + 1.1), (sx - 5.6, sy), (sx - 1.1, sy - 1.1)], "#fff6e0")
+
+
+def pennies(b, l):
+    """Three pennies in a small heap: one lying flat on the table showing its back, one leaning on it, one on top
+    showing the head; one newer and brighter, one gone dark. NEVADA-12B"""
+    old = ("#f0c8a0", "#c88050", "#a8643a", "#7a4224", "#4a2616")
+    new = ("#fff0d8", "#f4a874", "#d8844a", "#a05a30", "#62341c")
+    for (cx, cy, rx, ry, deg, th, tones, face) in ((24, 42, 17.0, 11.6, 4, 3.6, old, "back"), (42, 39, 17.0, 12.4, -18, 3.6, COPPER, "back"),
+                                                   (33, 25, 18.0, 13.6, -6, 3.8, new, "head")):
+        cover = oval(cx, cy, rx + 0.6, ry + 0.6, deg, 36)                          # a coin on top hides the marks of those under it
+        l.clear(cover + [(x, y + th + 0.6) for x, y in cover[:18]])
+        _copper_coin(b, l, cx, cy, rx, ry, deg, th, tones, face)
+    l.poly([(49.0, 15.4), (49.8, 18.0), (52.4, 18.8), (49.8, 19.6), (49.0, 22.2), (48.2, 19.6), (45.6, 18.8), (48.2, 18.0)], "#fff6e0")
+
+
+def mirrorshades(b, l):
+    """The last pair of mirror shades off the rack: a thin silver wire frame, and two lenses that are little mirrors with
+    a piece of the desert sky in each (the sun on the sand below, the blue above, a white streak). NEVADA-12B"""
+    wire = ("#ffffff", "#d8dce2", "#9aa2ae", "#5e6674")
+    lens = [(-11.0, -6.0), (-3.0, -8.2), (7.0, -7.8), (11.4, -4.0), (11.6, 3.0), (7.4, 8.6), (0, 10.0), (-7.2, 7.8), (-11.2, 2.0)]
+    c = (32, 33)
+    for k, (cx, cy, flip) in enumerate(((19.4, 34.4, 1), (45.0, 31.8, -1))):
+        pts = rot([(cx + px * flip, cy + py) for px, py in lens], -6, c)
+        ring = loop(pts, 5)
+        b.poly(ring, "#3a5e8a")                                                   # the mirror: the sky, deepest at the top
+        sky = rot([(cx + px * flip * 0.92, cy + 2.4 + py * 0.66) for px, py in lens], -6, c)
+        b.poly(loop(sky, 5), "#6aa2d8")
+        sand = rot([(cx + px * flip * 0.82, cy + 6.0 + py * 0.32) for px, py in lens], -6, c)
+        b.poly(loop(sand, 5), "#e8b878")                                          # and the sand, warm, along the bottom
+        hor = rot([(cx - 10.4 * flip, cy + 3.2), (cx + 10.6 * flip, cy + 2.0)], -6, c)
+        l.line(hor, "#f6e2b8", 1.0, 0.85)                                         # the line where they meet
+        gx, gy = rot([(cx - 4.6, cy - 3.6)], -6, c)[0]
+        l.line([(gx - 3.0, gy + 3.4), (gx + 3.6, gy - 3.2)], "#ffffff", 2.0, 0.95)      # the streak of the sun
+        l.line([(gx + 2.4, gy + 4.6), (gx + 6.2, gy + 1.0)], "#e4f2ff", 1.0, 0.85)
+        l.line(ring + ring[:1], wire[3], 1.6)
+        l.line(ring + ring[:1], wire[1], 0.8)
+        l.line(ring[2:9], wire[0], 0.7, 0.9)
+    l.line(rot([(28.4, 28.6), (32.4, 26.8), (36.4, 27.4)], -6, c), wire[3], 1.4)      # the bridge
+    l.line(rot([(28.4, 28.6), (32.4, 26.8), (36.4, 27.4)], -6, c), wire[0], 0.7)
+    for pad in ((28.6, 33.2), (36.2, 32.4)):                                       # the nose pads
+        l.ellipse(*rot([pad], -6, c)[0], 1.0, 1.4, "#e8eef4", 0.9)
+    arm = rot(curve([(56.4, 27.8), (60.2, 23.6), (61.4, 18.2), (59.2, 13.8)], 5), -6, c)
+    l.line(arm, wire[3], 1.4)
+    l.line(arm, wire[1], 0.7)
+    arm2 = rot(curve([(8.4, 31.6), (4.8, 28.8), (3.6, 24.2)], 4), -6, c)
+    l.line(arm2, wire[3], 1.4)
+    l.line(arm2, wire[0], 0.7)
+
+
+def egg(b, l):
+    """One brown hen's egg, warm from Darlene: lying on its side, a soft shine on its shoulder, a speck of the yard's
+    dust on it and a wisp of a feather stuck to it. NEVADA-12B"""
+    brown = ("#fbe2c4", "#e8b484", "#c88a5a", "#9a6038", "#6a3e22")
+    c = (32, 34)
+    outline = rot([(32 + math.cos(t) * (21.0 if math.cos(t) > 0 else 17.6), 34 + math.sin(t) * 16.0) for t in np.linspace(0, 2 * math.pi, 40, endpoint=False)], -14, c)
+    b.poly([(x + 1.2, y + 1.6) for x, y in outline], brown[4])
+    b.poly(outline, brown[2])
+    b.poly(rot([(32 + math.cos(t) * (17.0 if math.cos(t) > 0 else 14.0), 31 + math.sin(t) * 11.4) for t in np.linspace(0, 2 * math.pi, 32, endpoint=False)], -14, c), brown[1])
+    b.poly(rot([(27 + math.cos(t) * 8.0, 26 + math.sin(t) * 4.6) for t in np.linspace(0, 2 * math.pi, 24, endpoint=False)], -24, (27, 26)), brown[0])
+    b.poly(rot([(34 + math.cos(t) * 15.0, 44 + math.sin(t) * 3.4) for t in np.linspace(0, 2 * math.pi, 24, endpoint=False)], -14, c), brown[3])
+    l.ellipse(24.6, 23.6, 3.0, 1.7, "#fffaf0", 0.95)                              # the shine
+    l.ellipse(22.6, 22.8, 1.0, 0.7, "#ffffff")
+    for (x, y, r) in ((41.0, 30.0, 0.7), (37.4, 38.6, 0.55), (45.6, 37.0, 0.5), (30.0, 41.0, 0.45)):
+        l.ellipse(x, y, r, r, brown[3], 0.8)                                      # its freckles
+    l.ellipse(43.6, 26.6, 1.1, 0.9, "#8a7a62", 0.95)                              # the speck of dust
+    l.ellipse(43.4, 26.2, 0.5, 0.4, "#c8b89a", 0.9)
+    fe = curve([(47.0, 43.0), (51.6, 41.0), (56.4, 42.6), (59.0, 39.6)], 5)       # a wisp of feather
+    l.line(fe, "#f4ece0", 1.6, 0.9)
+    for i in range(2, len(fe) - 2, 2):
+        x, y = fe[i]
+        l.line([(x, y), (x + 1.4, y - 2.0)], "#e8dccc", 0.6, 0.8)
+        l.line([(x, y), (x + 1.8, y + 1.6)], "#e8dccc", 0.6, 0.8)
+    l.line(outline[24:36] + outline[:4], "#ffc890", 1.0, 0.45)                   # it is warm: the light on it is warm all round its top
+
+
+def _bottle(b, l, x, y, h, w, deg=0.0, tone=0.0):
+    """A plastic bottle of water standing (x, y the middle of its foot), a plain blue label, a blue cap. NEVADA-12B"""
+    c = (x, y)
+    R = lambda pts: rot(pts, deg, c)
+    water = mix("#d8ecf8", "#9cc4e2", tone)
+    body = [(x - w, y), (x + w, y), (x + w, y - h * 0.62), (x + w * 0.55, y - h * 0.8), (x + w * 0.38, y - h * 0.9), (x - w * 0.38, y - h * 0.9),
+            (x - w * 0.55, y - h * 0.8), (x - w, y - h * 0.62)]
+    b.poly(R([(px + 1.0, py + 0.8) for px, py in body]), "#5a6e84")
+    b.poly(R(body), water)
+    b.poly(R([(x - w, y), (x - w * 0.3, y), (x - w * 0.3, y - h * 0.62), (x - w, y - h * 0.62)]), mix(water, "#ffffff", 0.45))     # the light down its left
+    b.poly(R([(x + w * 0.45, y), (x + w, y), (x + w, y - h * 0.62), (x + w * 0.45, y - h * 0.62)]), mix(water, "#5a7a9a", 0.4))
+    b.poly(R([(x - w - 0.2, y - h * 0.18), (x + w + 0.2, y - h * 0.18), (x + w + 0.2, y - h * 0.42), (x - w - 0.2, y - h * 0.42)]), "#2f63b8")   # the label: plain blue
+    b.poly(R([(x - w - 0.2, y - h * 0.18), (x - w * 0.3, y - h * 0.18), (x - w * 0.3, y - h * 0.42), (x - w - 0.2, y - h * 0.42)]), "#4a82d0")
+    b.poly(R([(x - w * 0.42, y - h * 0.9), (x + w * 0.42, y - h * 0.9), (x + w * 0.42, y - h), (x - w * 0.42, y - h)]), "#2a56a8")             # the cap
+    l.line(R([(x - w * 0.42, y - h * 0.97), (x + w * 0.2, y - h * 0.97)]), "#7aa8e8", 0.8, 0.9)
+    for f in (0.08, 0.5, 0.56):                                                    # the ridges of the plastic
+        l.line(R([(x - w + 0.4, y - h * f), (x + w - 0.4, y - h * f)]), "#7a9ab8", 0.6, 0.6)
+    l.line(R([(x - w * 0.62, y - h * 0.08), (x - w * 0.62, y - h * 0.6)]), "#ffffff", 0.9, 0.8)
+    l.line(R([(x - w * 0.5, y - h * 0.78), (x - w * 0.2, y - h * 0.88)]), "#ffffff", 0.7, 0.7)
+
+
+def waters(b, l):
+    """Three plastic bottles of water, plain blue labels and no words: two standing, one lying on its side in front
+    of them. NEVADA-12B"""
+    _bottle(b, l, 20.0, 49.0, 40.0, 7.6, -4, 0.3)
+    _bottle(b, l, 39.0, 48.0, 40.0, 7.6, 3, 0.15)
+    _bottle(b, l, 55.0, 56.0, 36.0, 7.4, -80, 0.0)
+
+
+def storeshade(b, l):
+    """The sun shade from the store's window, folded like a fan and strapped: forty summers have bleached the side we
+    see (dull, creamy, a little yellow), and a card tucked in its strap says DISPLAY ONLY. Not Dad's: more pleats, a
+    faded blue strap, no red buckle. NEVADA-12B"""
+    c = (32, 32)
+    pale = ("#fbf6e6", "#e8e0c8", "#c8bea0", "#948a74")
+    n = 8
+    xs = [lerp(6, 58, i / n) for i in range(n + 1)]
+    top = [12 if i % 2 == 0 else 16.0 for i in range(n + 1)]
+    bot = [51 if i % 2 == 0 else 55.0 for i in range(n + 1)]
+    for i in range(n):
+        quad = rot([(xs[i], top[i]), (xs[i + 1], top[i + 1]), (xs[i + 1], bot[i + 1]), (xs[i], bot[i])], 6, c)
+        b.poly(quad, pale[1] if i % 2 == 0 else pale[2])
+        if i % 2 == 0:
+            b.poly(rot([(xs[i], top[i]), (xs[i + 1], top[i + 1]), (xs[i + 1], top[i + 1] + 9), (xs[i], top[i] + 12)], 6, c), pale[0])
+    for i in range(n + 1):
+        l.line(rot([(xs[i], top[i]), (xs[i], bot[i])], 6, c), pale[0] if i % 2 == 0 else pale[3], 1.0, 0.9 if i % 2 == 0 else 0.8)
+    l.line(rot([(xs[i], bot[i]) for i in range(n + 1)], 6, c), pale[3], 1.2, 0.9)
+    l.line(rot([(xs[i], top[i]) for i in range(n + 1)], 6, c), pale[0], 0.9, 0.9)
+    for i in (1, 4, 6):                                                          # where the sun bleached it unevenly: a few tide marks
+        l.line(rot([(xs[i] + 1.4, lerp(top[i], bot[i], 0.62)), (xs[i + 1] - 1.4, lerp(top[i + 1], bot[i + 1], 0.66))], 6, c), "#d8c890", 1.2, 0.5)
+    strap = [(xs[i], lerp(top[i], bot[i], 0.42)) for i in range(n + 1)]
+    l.line(rot(strap, 6, c), "#5a7aa0", 4.4)                                      # the strap: blue, faded
+    l.line(rot([(x, y - 1.3) for x, y in strap], 6, c), "#9ab4d0", 1.0, 0.9)
+    # the card tucked in the strap, its words set pixel by pixel
+    l.poly([(13.0, 31.5), (51.0, 29.5), (52.0, 45.0), (14.0, 47.0)], "#5a4a3a", 0.5)   # its shadow
+    l.poly([(12.0, 30.0), (50.0, 28.0), (51.0, 43.5), (13.0, 45.5)], "#fbf4e2")
+    l.line([(12.0, 30.0), (50.0, 28.0), (51.0, 43.5), (13.0, 45.5), (12.0, 30.0)], "#b8302a", 0.9, 0.9)
+    _tiny(l, "DISPLAY", 18, 31, "#b8302a")
+    _tiny(l, "ONLY", 24, 38, "#b8302a")
+
+
+def sectormap(b, l):
+    """A sheet torn off a clipboard and folded small: a map of desert with three sectors circled in red pen, two
+    numbers that read 44 and 1921, the third under a thumb-sized smudge; down the side a column of empty boxes. NEVADA-12B"""
+    paper = ("#fbf6e4", "#ece2c4", "#c8bc98", "#8a7e64")
+    sheet = [(7, 10), (57, 7), (58, 55), (8, 58)]
+    b.poly([(x + 1.2, y + 1.6) for x, y in sheet], "#4a4038")
+    b.poly(sheet, paper[0])
+    b.poly([(8, 34), (58, 31), (58, 55), (8, 58)], paper[1])                       # folded once across: the lower half in its own light
+    # the map: desert, a road, washes, a range of hills
+    desert = [(9.5, 12.0), (44.0, 9.8), (44.6, 54.6), (10.2, 56.0)]
+    b.poly(desert, "#f0d8a8")
+    l.line(curve([(10.0, 46.0), (18.0, 40.0), (27.0, 36.0), (36.0, 26.0), (44.0, 20.0)], 4), "#c8a070", 1.4, 0.9)       # the road
+    l.line(curve([(14.0, 18.0), (20.0, 24.0), (18.0, 32.0), (24.0, 40.0)], 4), "#a8c8d8", 0.9, 0.8)                     # a dry wash
+    for (x, y) in ((30.0, 14.0), (36.0, 13.0), (40.6, 16.0)):
+        l.poly([(x - 3, y + 2.4), (x, y - 1.6), (x + 3, y + 2.4)], "#c08a5a", 0.9)                                     # hills
+    # the three sectors, ringed in red pen; 44 and 1921; the third under a smudge
+    for (x, y, r) in ((20.0, 22.0, 6.4), (31.0, 41.0, 7.0), (37.0, 27.0, 5.4)):
+        l.line(oval(x, y, r, r * 0.82, 0, 18) + [oval(x, y, r, r * 0.82, 0, 18)[0]], "#d02a24", 1.0, 0.95)
+    _tiny(l, "44", 17, 20, "#2a2a4a")
+    _tiny(l, "1921", 24, 39, "#2a2a4a", gap=1)
+    l.ellipse(37.4, 27.4, 5.6, 4.6, "#8a8296", 0.55)                               # the smudge (a thumb was here)
+    for k in range(3):
+        l.line(oval(37.4, 27.4, 1.6 + k * 1.4, 1.2 + k * 1.2, 20, 16)[2:14], "#6a6276", 0.6, 0.5)
+    # the column of empty boxes down the right side (WHAT OPENS THEM: nobody knows)
+    l.line([(46.6, 9.6), (46.6, 54.4)], paper[3], 0.8, 0.8)
+    for k in range(6):
+        y = 13.0 + k * 6.8
+        l.line([(48.4, y), (54.6, y - 0.3), (54.8, y + 4.6), (48.6, y + 4.9), (48.4, y)], "#5a6a8a", 0.8, 0.9)
+    # the torn top edge, where it came off the clipboard, and the fold
+    tear = [(7, 10)] + [(lerp(7, 57, i / 14), lerp(10, 7, i / 14) + (1.6 if i % 2 else 0.0)) for i in range(1, 14)] + [(57, 7)]
+    l.line(tear, paper[2], 1.0, 0.95)
+    for i in range(2, 13, 3):
+        x, y = tear[i]
+        l.ellipse(x, y + 0.6, 1.0, 1.0, "#d8ccb0", 0.9)                            # the holes the clip's teeth left
+    l.line([(8, 34), (58, 31)], paper[3], 1.0, 0.8)
+    l.line([(8, 33.2), (58, 30.2)], "#ffffff", 0.8, 0.8)
+
+
+def receipt(b, l):
+    """A small printed receipt: RECEIVED, and under it two lines of print too small to read, a torn top and a torn
+    foot, and somebody's thumbprint in grey. NEVADA-12B"""
+    paper = ("#ffffff", "#f2eee4", "#d4cebe", "#9a9486")
+    c = (32, 32)
+    R = lambda pts: rot(pts, 0, c)
+    left, right = 13.5, 50.5
+    top = [(lerp(left, right, i / 14), 6.0 + (1.4 if i % 2 else 0.0)) for i in range(15)]
+    foot = [(lerp(right, left, i / 14), 58.0 + (1.4 if i % 2 else 0.0)) for i in range(15)]
+    b.poly(R([(x + 1.2, y + 1.4) for x, y in top + foot]), "#5a5248")
+    b.poly(R(top + foot), paper[1])
+    b.poly(R([(left, 30), (right, 30), (right, 58), (left, 58)]), paper[0])
+    l.line(R(top), paper[3], 0.9, 0.9)
+    l.line(R(foot), paper[3], 0.9, 0.9)
+    # its print: a rule, RECEIVED, two lines of print too small to read, a rule, a total
+    l.line(R([(left + 2.5, 12.0), (right - 2.5, 12.0)]), "#4a4a52", 0.7, 0.8)
+    _tiny(l, "RECEIVED", 16, 15, "#2a2a32", gap=1)
+    for k, (x0, x1) in enumerate(((left + 2.5, right - 6.0), (left + 2.5, right - 11.0))):
+        y = 25.0 + k * 4.2
+        for x in np.arange(x0, x1, 2.2):
+            l.line(R([(x, y), (x + 1.4, y)]), "#6a6a74", 0.9, 0.85)
+    l.line(R([(left + 2.5, 35.0), (right - 2.5, 35.0)]), "#4a4a52", 0.6, 0.6)
+    for x in np.arange(right - 13.0, right - 3.0, 2.2):
+        l.line(R([(x, 38.6), (x + 1.4, 38.6)]), "#4a4a52", 1.0, 0.85)
+    # the thumbprint: an oval of grey whorls
+    for k in range(5):
+        ring = oval(31.0, 48.0, 2.0 + k * 1.6, 2.6 + k * 1.9, 18, 22)
+        l.line(R(ring[1:20]), "#8a8494", 0.6, 0.55)
+    l.ellipse(*R([(31.0, 48.0)])[0], 1.0, 1.2, "#8a8494", 0.6)
+
+
 ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
              coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
 ITEMS["pass"] = pass_
 ITEMS.update(phone=phone, quarter=quarter, gum=gum)
 ITEMS.update(studykey=studykey, lilflash=lilflash, pencil=pencil, carkey=carkey)
 ITEMS.update(chicken=chicken, batteries=batteries)
+ITEMS.update(penny=penny, pennies=pennies, mirrorshades=mirrorshades, egg=egg, waters=waters, storeshade=storeshade,      # NEVADA-12B
+             sectormap=sectormap, receipt=receipt)
 ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",
-         "phone", "quarter", "gum", "studykey", "lilflash", "pencil", "carkey", "chicken", "batteries"]
+         "phone", "quarter", "gum", "studykey", "lilflash", "pencil", "carkey", "chicken", "batteries",
+         "penny", "pennies", "mirrorshades", "egg", "waters", "storeshade", "sectormap", "receipt"]                    # NEVADA-12B: the store's things
 
 
 # ---------------------------------------------------------------- painting one

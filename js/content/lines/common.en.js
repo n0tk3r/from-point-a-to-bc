@@ -26,6 +26,9 @@ export const lines = {
   "see.bigsis.lilsis": ["bigsis", "My sister. Small, loud, and occasionally useful. Do not tell her I said useful."],
   "see.lilsis.mom": ["lilsis", "Mommy. She smells like the good soap."],
   "see.lilsis.bigsis": ["lilsis", "My sister. She knows EVERYTHING. It's so annoying."],
+  // NEVADA-12W: Grandpa Joe and Ranger, the team of two in Act Five
+  "see.grandpajoe.ranger": ["grandpajoe", "My partner. Don't say much, and ain't never once been wrong."],
+  "see.ranger.grandpajoe": ["ranger", "..."],
 
 
   // ---------- handing something over ----------
@@ -34,6 +37,8 @@ export const lines = {
   "give.mom.1": ["mom", "Would you take this for me, darling?"],
   "give.bigsis.1": ["bigsis", "Here. It is yours now. I will expect a full report."],
   "give.lilsis.1": ["lilsis", "Here! Hold this! It's IMPORTANT!"],
+  "give.grandpajoe.1": ["grandpajoe", "Here, partner. Hold on to that for me."],                      // NEVADA-12W
+  "give.ranger.1": ["ranger", "..."],                                                            // NEVADA-12W
 
 
   // ---------- nothing to suggest ----------
@@ -64,4 +69,15 @@ export const lines = {
   "hint.mom.none": ["mom", "I have no idea, my love. Let us look around properly."],
   "hint.bigsis.none": ["bigsis", "I don't know. ...I am writing that down. It doesn't happen often."],
   "hint.lilsis.none": ["lilsis", "I dunno. Let's ask somebody tall."],
+  // NEVADA-12W: Grandpa Joe's stock lines, and Ranger's (his are dots, and nobody translates a stock line)
+  "nope.grandpajoe.1": ["grandpajoe", "That ain't gonna work. I been around long enough to know a thing that ain't."],
+  "nope.grandpajoe.2": ["grandpajoe", "Nope. And I say that kindly."],
+  "nope.grandpajoe.3": ["grandpajoe", "I'll think on it. ...No."],
+  "nope.ranger.1": ["ranger", "..."],
+  "nope.ranger.2": ["ranger", "......"],
+  "nope.ranger.3": ["ranger", "...!"],
+  "look.grandpajoe.1": ["grandpajoe", "Well. There it is. Ain't much, but it's there."],
+  "look.ranger.1": ["ranger", "..."],
+  "hint.grandpajoe.none": ["grandpajoe", "I ain't got a notion. Let's look around, slow and proper."],
+  "hint.ranger.none": ["ranger", "..."],
 };

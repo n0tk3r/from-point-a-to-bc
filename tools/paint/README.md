@@ -316,8 +316,12 @@ the finished room).
 | `home_study.py` | Dad's study under the roof | `art/scenes/home-study/` |
 | `home_lilsis_room.py` | Little Sister's room under the roof | `art/scenes/home-lilsis-room/` |
 | `home_bigsis_room.py` | Big Sister's room in the attic, the Retreat | `art/scenes/home-bigsis-room/` |
-| `nevada_roadside.py` | the last stop in Nevada | `art/scenes/nevada-roadside/` |
+| `nevada_roadside.py`, `nevada_roadside_held.py`, `nevada_roadside_limo.py` | the last stop in Nevada; the sun shade held up (an alt); the limousine's frames, side on and nose on <!-- NEVADA-12A --> | `art/scenes/nevada-roadside/` |
+| `nevada_ranger.py` | Ranger, Grandpa Joe's raccoon: his painted frames, plain and in the mirror shades, and `ranger.json` (installed with the roadside, keyed as its frames); his two portraits (into `out/portraits/`, installed as painted) | `art/scenes/nevada-roadside/`, `art/portraits/` |
+| `nevada_store.py` | the store inside, one morning, through one camera: its cut-outs, the roller and the TV, the hens in the yard (`nevada_store_hens.py`) | `art/scenes/nevada-store/` <!-- NEVADA-12B --> |
+| `nevada_limo.py` | inside the limousine, driving: the divider up and down, the ropes as they come undone, the bag, the clipboard and the juice box, the window panes; and the desert going by behind them (`nevada_limo_strip.py`) | `art/scenes/nevada-limo/` |
 | `items.py` | the inventory pictures | `art/items/` |
+| `proof_critter.py` | the engine's own painted creature, its strip and its window, for the proof scene (drawn as they are, never keyed) | `art/proof/` |
 
 ## Two things to know before changing anything
 

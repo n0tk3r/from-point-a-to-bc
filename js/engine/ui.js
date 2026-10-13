@@ -175,17 +175,16 @@ export class UI {
     this.teamEl.hidden = !free || team.length < 2;
     const count = (id) => (d.inventory[id] || []).length;
     const post = (id) => (g.waiting ? g.waiting(id).map((e) => e.item) : []);          // LETTERBOX-11: what waits in the tunnel for that lead
-    const now = team.map((id) => `${id}:${count(id)}:${post(id).join("+")}`).join() + "|" + d.active;
+    const now = team.map((id) => `${id}:${count(id)}:${post(id).join("+")}:${this.variantOf(id) || ""}`).join() + "|" + d.active;      // (NEVADA-12E: and the variant a painted lead is in)
     if (now !== this._team) {                       // rebuilt only when it changes, so a portrait under the pointer stays put
       this._team = now;
       this.teamEl.innerHTML = team.map((id, n) => {
         const name = esc(g.cast[id].name), on = id === d.active, has = count(id), came = post(id).length;
-        const key = id + "|" + (this.facePx || 42);
-        if (!this.faces[key]) { const face = portrait(g.cast[id].sprite, this.facePx || 42); this.faces[key] = face ? face.toDataURL() : ""; }
+        const key = this.faceKey(id, this.facePx || 42);
         // (LETTERBOX-11: data-post marks the portrait of someone something has come through for; css/game.css draws the mark)
         return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}${came ? ` data-post="${came}"` : ""}` +
           ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}${esc(this.post(id))}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}${esc(this.post(id))}">` +
-          `<img src="${this.faces[key]}" alt="" draggable="false"></button>`;
+          `<img src="${this.faces[key] || ""}" alt="" draggable="false"></button>`;
       }).join("");
     }
     this.sizeFaces();
@@ -217,14 +216,23 @@ export class UI {
       let css = Math.floor(w);
       for (let c = css; c > css - 4 && c > 0; c--) if (Math.abs(c * dpr - Math.round(c * dpr)) < 0.01) { css = c; break; }
       const px = Math.max(24, Math.round(css * dpr));
-      if (img.dataset.px === String(px)) continue;
-      const key = id + "|" + px;
-      if (!this.faces[key]) { const face = portrait(this.g.cast[id].sprite, px); this.faces[key] = face ? face.toDataURL() : ""; }
+      const key = this.faceKey(id, px);
+      if (img.dataset.key === key || !this.faces[key]) continue;          // (NEVADA-12E: by size and variant; one whose picture is not here yet is asked for again next time)
       img.src = this.faces[key];
-      img.dataset.px = String(px);
+      img.dataset.px = String(px); img.dataset.key = key;
       img.style.width = img.style.height = (px === Math.round(css * dpr) ? css : px / dpr) + "px";
       this.facePx = px;
     }
+  }
+
+  /** NEVADA-12E: the variant a painted lead on the stage is in (the shades: cast.js PaintedFigure.variant), or null. */
+  variantOf(id) { const f = this.g.actor(id); return f && typeof f.variant === "function" ? f.variant() : null; }
+  /** The key a portrait is kept under (`faces`), drawn the first time it is asked for: kept only once there is a picture
+      (a painted one comes with the start of the game). */
+  faceKey(id, px) {
+    const v = this.variantOf(id), key = `${id}|${px}${v ? "|" + v : ""}`;
+    if (!this.faces[key]) { const face = portrait(this.g.cast[id].sprite, px, v); if (face) this.faces[key] = face.toDataURL(); }
+    return key;
   }
 
   /** The last resort: the start-up panel comes back with a message and a Reload button. */

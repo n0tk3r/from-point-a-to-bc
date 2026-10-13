@@ -10,8 +10,9 @@ import { sound } from "./content/sound.js";
 import { sceneIds, loadScene } from "./content/scenes/index.js";
 import intro from "./content/cutscenes/intro.js";
 import title from "./content/cutscenes/title.js";
+import backup from "./content/cutscenes/backup.js";        // NEVADA-12SC: the cut-scene "Backup", which closes Act Four
 
-const cutscenes = { intro, title };      // "title" is not played: it dresses the stage behind the title screen
+const cutscenes = { intro, title, backup };      // "title" is not played: it dresses the stage behind the title screen (NEVADA-12SC: backup)
 
 const game = new Game({ sceneIds, loadScene, cutscenes, cast, eras, items, lines, story, sound });
 window.game = game;      // for the browser console while building the game

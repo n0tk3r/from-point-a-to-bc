@@ -106,7 +106,9 @@ export class Game {
     // Fetch every scene file now, while the start-up panel is showing. After this the game asks the
     // server for no more code, so a new version published in the middle of a session cannot get mixed
     // into this one. (A scene that will not load now is tried again when the player gets there.)
-    await Promise.all(this.sceneIds.map((id) => this.getScene(id).catch(() => { delete this.scenes[id]; })));
+    // NEVADA-12E: and the sidecar and the portraits of every painted figure (js/art/painted.js; cast.js), so that a painted
+    // lead's portrait is here when the team bar first draws it. Their frames come with the pictures of the scenes they are in.
+    await Promise.all([...this.sceneIds.map((id) => this.getScene(id).catch(() => { delete this.scenes[id]; })), castKit.prepareAllPainted()]);
     const loaded = {};
     for (const id of this.sceneIds) if (this.scenes[id]) loaded[id] = await this.scenes[id];
     for (const problem of checkEdges(loaded)) console.warn("Edge check:", problem);
@@ -184,6 +186,7 @@ export class Game {
       for (const id of order) {
         try { files.push(...picturesIn(await this.getScene(id))); } catch { /* a scene file that will not load: its pictures are fetched if the player gets there */ }
       }
+      files.push(...castKit.paintedPictures());                // NEVADA-12E: and every painted figure's frames, wherever the story puts them
       for (const path of new Set(files)) { await spare(); await hold(path, { quiet: true }); }
     })();
     return this.gathering;
@@ -208,7 +211,7 @@ export class Game {
   // =============== the script API ===============
   wait(ms) { return this.clock.wait(ms); }
   tween(ms, step, easing) { return this.clock.tween(ms, step, easing); }
-  async say(...ids) { for (const id of ids) await this.dialogue.say(id); }
+  async say(...ids) { for (const id of ids) if (id != null) await this.dialogue.say(id); }       // (NEVADA-12E: no line at all, as a lead with no stock reply of their own has, says nothing)
   choose(options, opts) { return this.dialogue.choose(options, opts); }       // LETTERBOX-11: opts { through: who } shows the menu as the words of someone off the stage
   /** LETTERBOX-11: a line from someone who is not on the stage, at the other end of a small door in time: shown top
       centre with that person's portrait beside the words (dialogue.js). Counts the line as seen and waits, as say does. */
@@ -556,7 +559,8 @@ export class Game {
     for (const a of scene.actors || []) {
       if (a.when && !a.when(this)) continue;
       const s = a.scale ?? scaleAt(scene, a.at[1]);
-      cast.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], s).face(a.face ?? "S");
+      const f = cast.addFigure(a.id, a.kind || a.id, a.at[0], a.at[1], s).face(a.face ?? "S");
+      if (a.sit && f instanceof castKit.PaintedFigure) f.sit(true, true);     // NEVADA-12E: a painted figure is found sitting up only when the scene says so (`sit: true`)
     }
     this.blocked = blocked;                     // (remap adds the ground under each cut-out and each person, because those come, go and move with the story)
     this.remap(true);                           // where the lead may stand, and how to get around things
@@ -574,7 +578,7 @@ export class Game {
     // (g.goto(id, { spawn: "fromStairs" })), the scene can say where the ones who are NOT leading end up:
     //     arrive: { fromStairs: [[x, y], [x, y]] }      (in the order of `party`, the lead left out)
     const markOf = (id, n) => marks[id] || [x + 55 * (n + 1), y];
-    const party = (scene.party || []).filter((id) => this.leads.includes(id));
+    const party = ((typeof scene.party === "function" ? scene.party(this) : scene.party) || []).filter((id) => this.leads.includes(id));      // (NEVADA-12E: any leads; or a function of the game, for a party the story forms)
     if (party.includes(d.active)) {
       const beside = (scene.arrive && scene.arrive[way]) || [];
       let nth = 0;
@@ -590,7 +594,7 @@ export class Game {
     // (A save from before the picture changed size knows which scene they are in but not where: they go to their marks.)
     d.team.forEach((id, n) => {
       const at = d.where[id];
-      if (id === d.active || !at || at.scene !== scene.id) return;
+      if (id === d.active || !at || at.scene !== scene.id || cast.get(id)) return;      // (NEVADA-12E: cast.get: one who is on the stage already, as one of the scene's people, is not put there twice)
       const mark = at.x != null ? [at.x, at.y] : markOf(id, n);
       const [mx, my] = this.map.nearest(mark[0], mark[1]);
       cast.addFigure(id, this.cast[id].sprite, mx, my, scaleAt(scene, my)).face(at.face ?? (scene.facing || "S"));
@@ -600,7 +604,7 @@ export class Game {
     this.music(this.musicOf(scene));
     this.ui.hud(true);
     this.ui.refresh();
-    await shown;
+    await Promise.all([shown, cast.load()]);     // NEVADA-12E: and every frame of each painted figure on the stage (cast.js), as for frames of birds
     // Once this scene has everything it needs: fetch the pictures of the scenes that can be reached from it
     // (`exits`, and its ways out at the edges), so that walking on does not mean waiting for them.
     const next = new Set([...(scene.exits || []), ...Object.values(scene.edges || {}).map((way) => way && way.to)].filter((id) => this.sceneIds.includes(id)));
@@ -630,9 +634,11 @@ export class Game {
     const solid = cast.cutouts().filter((c) => c.spec.solid && !c.hidden);
     const patch = (x, y, s) => [[x - 32 * s, y - 12], [x + 32 * s, y - 12], [x + 32 * s, y + 8], [x - 32 * s, y + 8]];
     const people = [];
+    const d = this.store.data;
     for (const a of scene.actors || []) {
       const f = cast.get(a.id);
       if (a.id === except || !f || f.hidden || a.solid === false) continue;
+      if (a.id === d.active || (d.team || []).includes(a.id)) continue;   // NEVADA-12E: one of the scene's people who has joined the team is a companion now, and companions do not block
       if (this.life.isAway(a.id)) {
         if (!a.when || a.when(this)) people.push(a.solid || patch(a.at[0], a.at[1], a.scale ?? scaleAt(scene, a.at[1])));
         if (!f.walking) people.push(patch(f.x, f.y, f.scale));
@@ -703,7 +709,11 @@ export class Game {
 
   /** A stock reply for things nobody wrote a line for. */
   fallback(kind) {
-    const table = this.story.fallbacks[kind] || {}, list = table[this.store.data.active] || table.any || [];
+    const table = this.story.fallbacks[kind] || {}, who = this.store.data.active, list = table[who] || table.any || [];
+    if (!list.length) {        // NEVADA-12E: a lead the story has no stock replies for (yet) says nothing; the console says so, once
+      const key = kind + "|" + who;
+      if (!(this._unsaid = this._unsaid || new Set()).has(key)) { this._unsaid.add(key); console.warn(`No stock "${kind}" reply for ${who} in story.fallbacks: nothing is said. Give them one of their own, or an "any".`); }
+    }
     return list.length ? list[this._nope++ % list.length] : null;
   }
 
@@ -716,9 +726,13 @@ export class Game {
     if (!scene) return;
     const people = new Set((scene.actors || []).map((a) => a.id));
     const spots = (scene.hotspots || []).map((h) => (people.has(h.actor || h.id) ? { ...h, home: h } : h));
+    // NEVADA-12SC: a companion the scene gives an area of its own (an area with `mate: "<id>"`, while its `when` holds:
+    // its shape, and its place among the scene's areas) has that one instead of the box round his figure, which would lie
+    // over everything near him (Grandpa Joe on the limousine's seat, with the bow and the seatbelt beside him).
+    const own = new Set((scene.hotspots || []).filter((h) => h.mate && (!h.when || h.when(this))).map((h) => h.mate));
     for (const id of d.team) {
       const a = id === d.active ? null : this.actor(id);
-      if (!a) continue;
+      if (!a || own.has(id)) continue;
       const w = 50 * a.scale, h = a.h * a.scale;
       spots.push({ id: "mate." + id, name: this.cast[id].name, verb: "Talk to", mate: id, rect: [a.x - w / 2, a.y - h, w, h] });
     }
@@ -810,15 +824,15 @@ export class Game {
     spot = spot.home || spot;
     await this.run(async () => {
       const homing = this.life.settle();
-      const lead = this.lead, scene = this.scene, mate = spot.mate ? this.actor(spot.mate) : null;
-      const stand = mate ? this.beside(mate) : this.clearOf(spot.walkTo);
+      const lead = this.lead, scene = this.scene, mate = spot.mate ? this.actor(spot.mate) : null, stays = this.stays();
+      const stand = stays ? null : mate ? this.beside(mate) : this.clearOf(spot.walkTo);      // (NEVADA-12SC: a lead who stays where he is goes nowhere)
       if (stand) await lead.walkPath(this.clock, this.map.path([lead.x, lead.y], stand), (yy) => scaleAt(scene, yy));
       await homing;
-      if (spot.face) lead.face(spot.face); else lead.look(...footOf(spot));       // turn to the thing
+      if (!stays) { if (spot.face) lead.face(spot.face); else lead.look(...footOf(spot)); }       // turn to the thing (NEVADA-12SC: not from where he sits)
       this.rememberPlace();
       const item = this.held;
       if (mate) {                                                                  // a companion: talk, look, or hand something over
-        mate.look(lead.x, lead.y);
+        if (!this.stays(mate.id)) mate.look(lead.x, lead.y);                       // (NEVADA-12SC: one who stays where he is does not turn in his seat)
         if (item) { this.held = null; this.ui.refresh(); await this.handOver(item, spot.mate); }
         else if (verb === "look") { const see = this.story.see && this.story.see[this.store.data.active]; await this.say((see && see[spot.mate]) || this.fallback("look")); }
         else await this.chat(spot.mate);
@@ -835,9 +849,18 @@ export class Game {
     this.autosave();
   }
 
+  /** NEVADA-12SC: does this lead (the one being played, unless another is named) stay where he is in this scene? A scene's
+      `still` lists the leads who never walk there (or is a function of the game and the lead's id): Grandpa Joe, belted
+      to the limousine's long seat. A click on the floor does nothing for him, and he does everything from where he sits,
+      without walking to it or turning. */
+  stays(who = this.store.data.active) {
+    const s = this.scene && this.scene.still;
+    return !!s && (typeof s === "function" ? !!s(this, who) : Array.isArray(s) && s.includes(who));
+  }
+
   walk(x, y) {
     const lead = this.lead, scene = this.scene;
-    if (!lead || !scene || this.busy) return;
+    if (!lead || !scene || this.busy || this.stays()) return;      // (NEVADA-12SC: a lead who stays where he is)
     this._leaving = null;
     lead.walkPath(this.clock, this.map.path([lead.x, lead.y], [x, y]), (yy) => scaleAt(scene, yy)).then(() => this.rememberPlace());
   }
@@ -864,7 +887,7 @@ export class Game {
    */
   leave(side, x = W / 2, y = H / 2) {
     const scene = this.scene, lead = this.lead, way = scene && scene.edges && scene.edges[side];
-    if (!lead || !way || this.busy || this.mode !== "play" || !open(way, this)) return;
+    if (!lead || !way || this.busy || this.mode !== "play" || !open(way, this) || this.stays()) return;      // (NEVADA-12SC: nor out by an edge)
     const target = way.walkTo || this.map.toward(side, x, y) || [lead.x, lead.y];
     const route = this.map.path([lead.x, lead.y], target), end = route[route.length - 1];
     const trip = (this._leaving = { side, end });
@@ -924,7 +947,7 @@ export class Game {
     const open = openBeats(this.story, d.flags).filter((b) => hintFor(this.story, b, who));
     const beat = open.find((b) => leadsOf(this.story, b).includes(who)) || open[0];
     const line = beat ? hintFor(this.story, beat, who) : this.fallback("hint");
-    if (line) await this.run(() => this.say(line), { settle: false });
+    if (line) await this.run(() => this.say(...[].concat(line)), { settle: false });      // (NEVADA-12E: or a list of lines, said in turn)
   }
 
   /** Change which lead the player controls. Each lead keeps their own place and pockets. */

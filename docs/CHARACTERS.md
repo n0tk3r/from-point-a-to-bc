@@ -6,8 +6,8 @@ look and move. Anyone writing a line, a puzzle or a picture for the game starts 
 The five members of the family and their traits come from the game's author. The
 details hung on those traits (the wants, the fears, the running gags, how each one
 changes) are a first draft, marked **draft** where they are invention, to be kept,
-changed or thrown out. Every quoted line is in the game now, in
-`js/content/lines.en.js`.
+changed or thrown out. Every quoted line is in the game now, in the files of
+`js/content/lines/`.
 
 Nobody has a name yet. On screen they are Dad, Son, Mom, Big Sister and Little Sister,
 and they call each other what families call each other.
@@ -26,7 +26,9 @@ Two stories run side by side. **Dad and the Son** are lost in the past, apart fr
 each other, and their puzzles reach across time. **Mom and the girls** are in the
 present, together, working out what happened. Their puzzles are detective work, and
 each one needs the right person: find the fact, get the grown-up to talk, get into the
-small place.
+small place. Since round twelve a third runs beside them: in Act Five the game is played as
+Grandpa Joe of the Last Stop and his raccoon, Ranger, taken away in a limousine by the men in
+gray (their pages are under "The Last Stop, and the men in gray").
 
 ## Rules for every line
 
@@ -67,8 +69,8 @@ themselves: warm, natural and unselfconscious.
   their hands (the pose `actor.pray` in a script).
 - No catechism lines yet: the author will say which one his family uses.
 - God's care over time is the family's quiet answer to the whole story: "My times are
-  in thy hand" (Psalm 31:15). That line belongs to Mom at the end of Act Four
-  (`nevada.gate.5b`). At home, the psalm for a journey is Psalm 121.
+  in thy hand" (Psalm 31:15). That line belongs to Mom in "Some when", in the middle
+  of Act Four (`nevada.gate.5b`). At home, the psalm for a journey is Psalm 121.
 - The Bible's history is history, on the same timeline the family is scattered along.
   Big Sister's wall timeline (in her attic, the Retreat) is where the game says how it
   counts the years, and what B.C. and A.D. mean: see the next section.
@@ -121,7 +123,7 @@ The years (these, and no others, for anything before Christ):
   years". Nobody says "about 2560", "four and a half thousand years", or anything about
   millions of years.
 - **The doors in time open on years that matter.** 44 B.C. is the Ides of March. 1921
-  B.C. is Abram in Egypt. Big Sister notices it once, at the end of Act Four ("The Ides
+  B.C. is Abram in Egypt. Big Sister notices it once, in "Some when", in Act Four ("The Ides
   of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why.",
   `nevada.gate.2f`). Nobody explains it yet.
 - **Where the game says it.** Big Sister made her timeline with Ussher's dates, and says
@@ -204,7 +206,9 @@ Are The Wind. "Are we when yet?" The dog he is hoping for (it is also the passwo
 his bedroom door at home, which says NO GIRLS ALLOWED and is booby-trapped: a toy alarm,
 "Operation No Girls", and a toy blaster in the slot over the door).
 
-**In play.** He pokes, climbs, trades and befriends. He fits where Dad does not.
+**In play.** He pokes, climbs, trades and befriends. He fits where Dad does not. In Act
+Four he is a voice through the coin door, with his portrait: he tells his sister what he can
+smell and hear, warns his mother not to go through, and asks for a snack.
 
 **How he looks and moves.** Blonde hair that sticks up in tufts and has never met a comb,
 blue eyes, blue hoodie, purple backpack, navy shorts, sneakers. He walks with a bounce, fists pumping and head going
@@ -358,7 +362,7 @@ walks with a small, even swing of both arms. When she talks she nods, raises a f
 puts a hand to her chin, or points.
 
 **How she changes (draft).** She learns to say "I don't know", and that it is where
-finding out begins. The first step is at the end of Act Four ("...I don't know why.").
+finding out begins. The first step is in "Some when", in Act Four ("...I don't know why.").
 
 > "Fun fact: sliced bread was first sold on the seventh of July, 1928, in Chillicothe, Missouri."
 > "We don't have a destination. A journey without a destination is just Dad."
@@ -402,8 +406,15 @@ supervision, which is why she sent her.
 notices a door in time before any person does: the birds go quiet, will not eat, will
 not lay, and all stand facing it. Nobody explains this. She says it first at home, of
 her own flock, and it pays off in every other act: the geese in Egypt, the sacred
-chickens in Rome, the old-timer's hens in Nevada (`nevada.old.saw.3b`, `.3c`). Keep it
+chickens in Rome, Grandma Jolene's hens in Nevada (`nevada.old.saw.3b`, `.3c`). Keep it
 light: a thread, not a lecture.
+<!-- NEVADA-12W -->
+Since round twelve the hens in Nevada are Grandma Jolene's (Darlene, Charlene, Marlene,
+Arlene and Doreen, named for her sisters), and they are seen: out behind the store, in a
+row, facing the fence. Little Sister is the only one at the Last Stop who knows that they
+will not be ordered, stands in the row with them, looks where they look, and sees that they
+are not scared and not waiting: they are GUARDING ("Chickens KNOW when somebody needs
+minding"). Two of them sit down when she tells them to stand down, and one lays her an egg.
 
 **Wants.** To help, right now. To be big. A snack. The front seat.
 
@@ -442,6 +453,15 @@ flock under the blanket until the batteries ran out.
 **In play.** She goes where nobody else fits: behind, under and through. She distracts
 people by asking them things until they give up, so that her mother and sister can do
 what needs doing.
+
+**In Act Four (round twelve).** <!-- NEVADA-12W --> The old-timer is Grandpa Joe now, and she
+asks him whether he is HER grandpa ("I'm everybody's, little miss. Says so on the
+sign." "...I have one of those already. But he lives far away."), and keeps him as a SPARE
+one: "Grandpa Joe the Rock Wizard. That's your WHOLE name now." She is the only one Grandma
+Jolene's hens will listen to; she talks to Ranger in conversations in which she does both
+parts; she takes four pennies from a dish that says take a penny, and posts one through a
+door the size of a coin to her brother, for luck. She cannot do Ranger's trade, and it is
+the first time in the game that she minds: "I would have been GOOD at that. If he'd let me."
 
 **In Act Four (round three).** She names everything: the old-timer is the Rock Wizard
 ("I just decided"), the man in gray is Mister Gray, the place where the tracks stop is the
@@ -506,8 +526,240 @@ head of their own acts: [PUZZLES-egypt.md](PUZZLES-egypt.md) and
 
 **The middle of Nevada, the present (draft)**
 
-- THE OLD-TIMER: sells rocks and lemonade at the last stop before nothing, and keeps hens out back; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
-- THE MAN IN GRAY: stands in front of a government notice in the desert; can neither confirm nor deny the fence, a dog, or General Washington; wants nobody to read what is behind him, and is no match for a seven-year-old.
+<!-- NEVADA-12W: the two of them grew in round twelve, and there are more of them. Their pages are below,
+under "The Last Stop, and the men in gray". -->
+- GRANDPA JOE (he was the old-timer): sells rocks and lemonade from a rocking chair in front of his porch, a banjo across his knees and his raccoon sitting on the ground beside him; saw the low sun flash off the wagon and the sky open where the flash fell, and has told everyone he saw nothing; wants to be asked nicely.
+- GRANDMA JOLENE: his wife, behind the counter of the store under a different hat every visit (she says she changes them on the hour); certain and wrong about every fact, and right about every person; wants her hens to lay again.
+- RANGER: his raccoon; never says a word; does not steal, trades; wants something shinier than what he has.
+- JED (he was the man in gray): stands in front of a government notice in the desert; can neither confirm nor deny the fence, a dog, General Washington or a cheeseburger; wants nobody to read what is behind him, and lunch, and is no match for a seven-year-old.
+- THE BACKUP: four men in gray in one limousine; say sir to everybody; follow the regulations to the letter.
+- HOUSTON: a voice on Jed's earpiece; dispatch; wants to know if that is the child again.
+
+---
+
+## The Last Stop, and the men in gray (round twelve)
+
+<!-- NEVADA-12W: new pages, in the pattern of the family's. Their lines are in js/content/lines/nevada.en.js and limo.en.js;
+the design is briefs/out/nevada-expansion-design.md, and the act is written out in PUZZLES-the-present.md. -->
+
+The author's own words for them (9 October): the old man at the Last Stop is Grandpa Joe, with a
+pet raccoon called Ranger, a rocking chair, a banjo and a Southern accent; his wife is Grandma
+Jolene, kooky and zany, who bonds with Little Sister over chickens; the gray suit is Jed, who
+calls for a cheeseburger and backup; four gray suits with black sunglasses and earpieces come
+in a big gray limousine; and Grandpa Joe becomes a playable character, with Ranger. The men in
+gray are never scary: fun and silly. The rest of each page is invention (**draft**).
+
+### Grandpa Joe
+
+**Who he is.** The old man at the Last Stop: GRANDPA JOE'S LAST STOP, says the board over his porch.
+He came west in 1974 from a good deal further east, for the dry air, and never got around to
+leaving. He sells rocks and lemonade from a rocking chair in front of the porch, with a banjo across
+his knees and his raccoon sitting on the ground beside him. He has watched this road for forty
+years, saw the low sun flash off the wagon and the sky open where the flash fell, and tells
+everybody he saw nothing. Everybody's grandpa: it says so on the sign. From Act Five he is a lead,
+with Ranger.
+
+**Wants.** To be asked nicely. A quiet porch, Jolene's lemonade, and somebody who will ask to
+hear the Last Stop Rag twice. (A seven-year-old does.)
+
+**Fears.** Nothing that has ever come down that road: not men in suits, not limousines. (Draft:
+that Jolene really will sell his rocks.)
+
+**Gets wrong.** He thinks his banjo is why the hens stopped laying. He thinks nobody wants to hear
+his tune twice.
+
+**How he talks.**
+- Slow and Southern, and the kinder he is the slower he talks. He drops his g's ("mornin'",
+  "holdin'"), says ain't, and calls Mom "ma'am", the girls "little miss" and "miss", and every
+  man in a suit "son".
+- His lines from the old act that the design keeps are exactly as they were, with no accent
+  added ("Technically, I'm closed."; "That's what the gray suits drive. Try again.").
+- He tells a story without knowing which part of it matters (the flash).
+- He says what Ranger means: "He says..."
+- Never unkind. He hits a man with a banjo once in his life, and it is a once.
+
+**Running gags.** Lemonade's a dollar; stories are extra; it ain't the road to Vegas (ask twice,
+and it is two dollars). The pump quit in '79, and so did the grill and the ceiling fan. He has
+been holding things for Jolene since 1974. The Last Stop Rag, which nobody has ever asked to hear
+twice. "Mind the hat."
+
+**In play.** Act Four: the witness (#5, a talk with four ways in): he tells the story to someone
+who says good morning, tells of the hens, and says where the coin is (Ranger has it); he plays the
+banjo, which flashes in the low sun (the half-answer of #12); he holds the sun shade at the glass
+(#12); then, in the cut-scene, he lets it down. Act Five: a lead with his hands tied, belted to
+the long seat, which he never leaves. He can talk to anybody (the suits through the divider, and
+Ranger), hums the Last Stop Rag to get the divider up, and, once Ranger has his hands free, reads
+the clipboard and eats the cheeseburger, which Ranger fetches across the car for him.
+
+**How he looks and moves.** Bib overalls over a red plaid shirt, a straw hat with a dent in the
+crown where the coin hit, a full white beard and moustache, white hair, boots. He leans back in
+his chair, rocks a little, touches his hat, and strums. Slow, with a hand to the small of his
+back when he gets up. The banjo: a white round head in a chrome rim, a chrome back, and a long
+dark neck; it is the chrome pegs at the end of the neck that catch the low sun.
+
+**How he changes (draft).** From the man who saw nothing to the keeper of the door: he and Jolene
+hold the light at the Nevada end.
+
+> "Lemonade's a dollar, little miss. Stories are extra."
+> "Technically, I'm closed."
+> "Well, good MORNIN'. Ma'am. Nobody's said good mornin' to me out here in forty years."
+> "He don't steal. He trades. You just weren't there for your half."
+> "I been holdin' things for Jolene since 1974, ma'am. I can hold a sun shade."
+> "You ain't goin' nowhere flat foot!" (the author's line)
+> "Son, I been questioned by a seven-year-old this mornin'. You ain't got anything she didn't."
+> "Can't, son. It's a medical condition."
+
+### Grandma Jolene
+
+**Who she is.** Grandpa Joe's wife, behind the counter of the store, under a different hat every
+time you come back in: a straw cowboy hat, a sun hat with fruit on it, a tiara, a hard hat, and a
+hen hat she made herself, the hen sitting on her hair as if on a nest, in turn ("I change 'em on the
+hour, sugar. Keeps the day from running together."). Kooky and zany in a particular way: certain,
+cheerful and wrong about every fact, and right about every person. Keeps five hens out back, named
+for her sisters ("The hens are nicer."), who quit laying the day the sky opened. She and Little
+Sister are colleagues within about four seconds: two people who are certain about chickens.
+
+**Wants.** Her girls to lay again. A window with something in it ("A store with an empty window
+is a shed.").
+
+**Fears (draft).** An empty window.
+
+**Gets wrong.** Every fact, one a visit, four in all, each false beyond argument, and each put
+right by Big Sister, which delights her every time. Never a person.
+
+**How she talks.**
+- "Sugar" to everybody. Southern, like her husband, with fewer g's dropped.
+- She names everything: the bell over the door is Bernice, the cooler is Harold, the register is
+  "her" ("She don't ring for just anybody.").
+- A wrong fact is delivered with total confidence. Once she borrows Big Sister's own formula for
+  it ("Fun fact, sugar: a hen's got teeth."), and Big Sister does not speak to her for a minute.
+- She answers the pay phone, which has not worked since the eighties: "Keeps it hopeful."
+
+**Running gags.** The hat of the visit (Little Sister notices it every time; Big Sister refuses to).
+Her facts. The register rings for her alone. "I'll sell every one of 'em, Joe!"
+
+**In play.** #11 is hers: her hens have quit laying and stand facing the fence, and nothing she has
+tried has helped; Little Sister talks to them, and then the run of the store is the family's, the
+window too (#12). She rings up what Mom buys: the mirror shades for #10, and three waters.
+
+**How she looks and moves.** Tall and thin; a tower of gray hair with a pencil through it;
+teal cat-eye glasses on a chain; a yellow cardigan with a hen brooch, over a flowered blouse; a
+pale blue apron; and the hat. One fist on her hip, quick small gestures, a brisk walk; she
+pushes the pencil back into her hair and sets her hat straight.
+
+**How she changes (draft).** She does not. She is the one person in the game who is always and
+entirely herself, and right about everyone in it.
+
+> "Fun fact, sugar: a hen's got teeth. She just don't smile at strangers." "That is not a fact. No bird alive has teeth. Not one." "It's fun and I said it, so it's a fun fact."
+> "Twenty-two years I've kept hens. Nobody ever TOLD them anything."
+> "Take the window. The window likes you."
+> "It's a weather channel, sugar. The weather's snow."
+> "Well. I'd better change my hat."
+
+**Her four facts, and why each is wrong.** They are jokes, and the joke is that she is wrong:
+nothing of hers may be true by accident, or Big Sister's correction would be the mistake. So each
+is false beyond argument, and Big Sister's answer to it is in her table below.
+
+| Jolene says (wrong on purpose) | Line | Big Sister says (true) |
+| --- | --- | --- |
+| A hen has teeth | `nevada.jolene.fact.1` | No bird alive has teeth (`nevada.jolene.fact.1b`) |
+| A raccoon has a pocket ("where d'you think Ranger keeps his change?") | `nevada.jolene.fact.2` | Raccoons have no pocket; the Virginia opossum's mothers have a pouch (`.2b`) |
+| A good hen lays an egg every hour | `nevada.jolene.fact.3` | It takes a hen about a day to make one egg (`.3b`) |
+| The rooster lays the eggs on Tuesdays | `nevada.jolene.fact.4` | A rooster never lays an egg (`.4b`) |
+
+(The design's first list, "a hen can count to five", "hens dream in colour" and "a rooster will
+crow at a mirror", was not used: chicks have been shown to tell small numbers apart, nobody knows
+what hens dream, and roosters do answer their reflections, so each might be true by accident.)
+
+### Ranger
+
+**Who he is.** Grandpa Joe's raccoon. He never says a word: his line is always "..." (or "...!"),
+and Grandpa Joe, or Jolene, says what he means, or Little Sister does both parts of the
+conversation. He sits on the ground beside the rocking chair, washes pebbles in the lemonade, and
+keeps a stash in a basket under the store counter: bottle caps, a spoon, a watch with no hands, and,
+since the evening the sky opened, a silver coin that came down out of a clear sky and hit Grandpa
+Joe's hat. He does not steal. He trades. From #10 he wears the mirror shades, for the rest of the
+game. A lead from Act Five, with Grandpa Joe: the first lead in the game who is not family. (Little
+Sister would say that is not true.)
+
+**Wants.** Something shinier than what he has. A fair trade, properly offered. Grandpa Joe,
+wherever he goes, even into a limousine.
+
+**Fears.** Grabbers.
+
+**Gets wrong.** Nothing. Pickles are always his.
+
+**How he talks.** "...". Whoever is near says what he means: "He says he knows, miss. He just
+don't like to brag."
+
+**In play.** #10: the coin is his, and only a fair trade will get it: something shinier, held out
+flat on both hands, by someone who keeps still (Big Sister, with the mirror shades). Act Five #14:
+the ropes, four strands and a bow, nibbled only while nobody is looking; #15: the pickle; and the
+map, into Grandpa Joe's bib pocket.
+
+**How he looks and moves.** Painted frames, not a figure of the rig: gray, with the black mask and
+the ringed tail. He sits up with his hands folded, walks and scampers on all fours, nibbles, and
+turns things over in his hands. With the shades on he is the same raccoon in mirror shades, every
+frame, and in his portrait.
+
+> "..." (Grandpa Joe: "He says you're welcome. He's shy with strangers and bold with their sandwiches.")
+> "..." (Grandpa Joe: "He says he knows exactly what to do and I'm in the way.")
+
+### Jed, the man in gray
+
+**Who he is.** The man in gray at the fence, grown. He stands in front of the notice and can
+neither confirm nor deny the fence, a dog, General Washington, or now a cheeseburger. He has not
+had a snack since 0500, and says so once, to himself. Little Sister named him Mister Gray; his
+colleagues call him Jed, and the family never hears it (the one time it is said before the
+cut-scene, Houston says it in his ear). He works for the Office Of Peculiar Sectors.
+
+**Wants.** Nobody to read what is behind him. Lunch.
+
+**Gets wrong.** He thinks "they figured it out" is news for the office. The office has not: its
+clipboard has a column headed WHAT OPENS THEM, blank all the way down.
+
+**How he talks.** "I can neither confirm nor deny..." Short official sentences that a seven-year-old
+takes apart. Into his earpiece: "Sir? It's me. I have a situation."
+
+**In play.** #7 and #8, as before. Then the cut-scene "Backup": the call, in the author's words
+("Houston, we have a problem...they figured it out. I need a cheeseburger and backup...
+immediately."), the banjo, the hoop round his neck, and "...I would still like the cheeseburger."
+
+**How he looks and moves.** As before (gray suit, gray tie, dark glasses); after the banjo, its
+hoop round his neck like a collar, his glasses crooked and dust on his knees, sitting in the dust
+with his legs out, leaning back on his hands.
+
+### The backup
+
+Four men in gray suits, black sunglasses and earpieces (`suit1` to `suit4`), who arrive in one
+gray limousine and move as one row: identical at a distance; up close one has a clipboard, one a
+tape measure, one a juice box, and one the paper bag with the cheeseburger in it. They say "sir"
+to everybody, apologize while they do things, and follow regulations to the letter, which is their
+whole weakness. They tie Grandpa Joe up with a bow, and two of them carry him to the car upright
+between them, hat on, his boots off the ground. Their words are all one color. They are
+never frightening: nobody is pushed, pulled or shouted at, and "Sir. We are going to need you to
+come with us." is answered on the spot by "Mind the hat." "We are minding the hat, sir."
+
+> "Who ordered a cheese burger? Jed? JED?" (the author's line)
+> "I can neither confirm nor deny the raccoon."
+> "Sir, please stop singing."
+
+### Houston
+
+A voice on Jed's earpiece: Houston Pruitt, dispatch, thirty-one years of service (the design's:
+in the game she is "Houston", and nobody says her surname or her years). "Houston, we have a
+problem" is not a quotation in this game: it is her name. She has one line so far, small
+and far off, when Little Sister says hello to Mister Gray's mommy: "Jed, is that the child again?"
+Little Sister does not hear it. The player does.
+
+### The hens
+
+Darlene, Charlene, Marlene, Arlene and Doreen: Jolene's, named for her sisters. Five small hens
+seen through the store's open back door, with their backs to us; each is a cut-out of the store's
+painting, with a picture for each thing she does: on guard (two ways), turning round, pecking,
+sitting. After #11 Darlene and Charlene sit, and the other three keep guarding and peck now and
+then; in "Backup", seen close, all five turn round to watch the limousine go, and then turn back
+to the fence. They never speak, and Little Sister is always right about them.
 
 ---
 
@@ -562,7 +814,16 @@ say about their own times is in the tables at the end of
 | 1921 B.C.: the year Abram went down into Egypt (Genesis 12:10). It is on her timeline | `nevada.gate.2b`; and `nevada.gate.2f` ("Abram in Egypt") | The Bible's count (Ussher), as `home.timeline.5`. Told in her own words; the verse's exact text is `kjv.gen12.10` in `briefs/out/facts-home.md` |
 | From 1921 B.C. to A.D. 2026 is "nearly four thousand years" (3,946: there is no year 0) | `nevada.gate.5` ("...Nearly four thousand years early.") | The sum given in `briefs/DATING.md`, done again by `briefs/out/nevada-check.mjs` |
 | John Adams and Thomas Jefferson died on the same day, 4 July 1826 | `home.talk.landing.bigsis.mom.2a` (Mom caps it: see her table) | **Checked** (the fact-check of 7 October) |
-| Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (The old-timer says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
+| No bird alive has teeth <!-- NEVADA-12W: the rows to the next comment are round twelve's --> | `nevada.jolene.fact.1b` (Jolene has just said a hen has teeth) | **Checked**: Live Science, "Why Birds Don't Have Teeth": "Birds ... don't have teeth." https://www.livescience.com/49109-bird-teeth-common-ancestor.html |
+| Raccoons have no pocket; the Virginia opossum is a marsupial, and the mothers have a pouch | `nevada.jolene.fact.2b` | **Checked**: Wikipedia, Virginia opossum ("Infraclass: Marsupialia"; newborns "climb up into the female opossum's pouch"); the raccoon is a placental mammal of the family Procyonidae, "of the order Carnivora" (Wikipedia, Procyonidae). She names the Virginia opossum because not every opossum has a pouch. |
+| It takes a hen about a day to make one egg | `nevada.jolene.fact.3b`, `nevada.through.bigsis.1`, `item.egg.bigsis` | **Checked**: Ohio State University Extension, Ohioline VME-0021: "In a hen, it takes approximately 24-26 hours to produce an egg." https://ohioline.osu.edu/factsheet/vme-0021 |
+| A rooster never lays an egg | `nevada.jolene.fact.4b` | **Checked**: extension.org (poultry): "A hen (female chicken) does not need the help of a rooster (male chicken) in order to lay an egg"; the rooster's part is to fertilize, and to guard. https://poultry.extension.org/articles/poultry-related-youth-programs/do-you-need-a-rooster-for-a-hen-to-lay-an-egg/ |
+| A hen lays less when she is frightened | `nevada.jolene.opt.hens.big` | **Checked**: Oregon State University Extension, PNW 565, "Why did my chickens stop laying?": "Moving, handling, overheating, fright, and lack of food or water are stresses that can be detrimental to egg production." https://extension.oregonstate.edu/catalog/pnw-565-why-did-my-chickens-stop-laying |
+| The raccoon's Latin name is Procyon lotor, and "lotor" means "washer" | `nevada.ranger.opt.latin` | **Checked**, through a tool that fetches a page and quotes it: Wikipedia, Raccoon: "lotor is Latin for 'washer'". https://en.wikipedia.org/wiki/Raccoon |
+| A raccoon's most important sense is touch, and water is thought to make his front paws feel even more | `nevada.ranger.fact` (it solves #10); `hint.nevada.ranger.bigsis` ("A raccoon feels with his front paws") | **Checked**: Wikipedia, Raccoon: "The most important sense for the raccoon is its sense of touch"; the front paws' tactile sensitivity "is increased if this rubbing action is performed underwater, since the water softens the hard layer covering the paws". Northern Woodlands, "Raccoons' Hands": "it's thought that water contact increases a raccoon's tactile ability". Worded with "is thought to", as the second source is. She does not say that he is "washing" or that he is not: in the method line ("Let him read it") that is her way of putting it, not a fact. https://northernwoodlands.org/outside_story/article/raccoons-hands |
+| "No, thank you", in French and in German: "Non, merci." "Nein, danke." | `nevada.store.eggs.bigsis` | To check (written from knowledge) |
+| The Son is in Rome, in 44 B.C. (she pins it through the coin door, from a new coin of 44 B.C., sector 44 on the notice, and what he can smell and hear) | `nevada.letterbox.big.pin.1`, `.pin.2` | Rome's own date, the same in every count (the row for `nevada.gate.2`); the game's story <!-- NEVADA-12W: end of round twelve's rows --> |
+| Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (Grandpa Joe says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
 
 What the words mean:
 
@@ -634,6 +895,7 @@ same rule as for her daughter: every one is true, and nothing goes on this list 
 | Julius Caesar's coins bore his own portrait; American money bears the motto "In God We Trust" | `nevada.talk.mom.bigsis.quarter.a` | **Checked**: the portrait as in Big Sister's table (the coin); the motto `us.in.god.we.trust` (its sources are in Big Sister's table). She does not say whose face is on the quarter: "on the quarter since 1932" is no longer true of every quarter (`us.quarter`). |
 | B.C. means "before Christ" | `nevada.gate.2d` (she tells Little Sister) | **Checked** (`time.bc.ad`). https://www.britannica.com/topic/Christian-Era |
 | Genesis 12 is the chapter in which Abram goes down into Egypt | `nevada.gate.2e` ("Genesis 12. I have known that chapter all my life, darling.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She names the chapter and quotes nothing of it. |
+| Nevada is the driest state in the Union <!-- NEVADA-12W --> | `nevada.store.survival.mom` ("A matter of record:", at the survival shelf, before she buys three waters) | **Checked**: NOAA National Centers for Environmental Information / NCICS, State Climate Summaries 2022, Nevada: "Nevada is the driest state in the United States" (statewide annual average precipitation 10.2 inches, 1895-2020). https://statesummaries.ncics.org/chapter/nv/ |
 
 Four are worded with care on purpose.
 
@@ -662,7 +924,8 @@ that each can be checked word for word, capitals and punctuation included.
 | Psalm 46:1 | "God is our refuge and strength, a very present help in trouble." | `home.piano.use.mom2` | Mom, at the piano, after the hymn | **Checked** (the fact-check of 7 October) |
 | Matthew 23:37, nine words from the middle of the verse | "even as a hen gathereth her chickens under her wings" | `home.nest.mom` | Mom, at the nest in Little Sister's room. (No full stop inside the quotation marks: the verse goes on.) | Given as exact King James in the editor's brief; to check against a printed text |
 | Matthew 22:21, its second sentence | "Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." | `nevada.coin.read.2d` (the reference, "Matthew 22:21.", is in the same line) | Mom, when Big Sister reads the coin, in Nevada | **Checked** (`kjv.matt22.19-21`): https://www.bibleserver.com/KJV/Matthew22 ; https://biblehub.com/kjv/matthew/22.htm |
-| Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` (the reference, "Psalm 31, verse 15.", is in the same line) | Mom, at the end of Act Four, the second line after "Daddy's EARLY" | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close before the line's own colon and there is no full stop inside them. |
+| Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` (the reference, "Psalm 31, verse 15.", is in the same line) | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close before the line's own colon and there is no full stop inside them. |
+| Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it, and gives the reference: "Psalm 121, verse 8.") | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
 
 Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5` and
 `nevada.gate.2b`, in Big Sister's own words; in Act Four her mother names the chapter,

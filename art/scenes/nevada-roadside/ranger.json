@@ -1,0 +1,99 @@
+{
+  "id": "ranger",
+  "face": "E",
+  "foot": [
+    68,
+    56
+  ],
+  "tall": {
+    "stand": 34,
+    "sit": 49
+  },
+  "stride": {
+    "walk": 32.0,
+    "run": 70.0
+  },
+  "pace": 100.0,
+  "frames": {
+    "stand": [
+      "ranger-stand-0.png",
+      "ranger-stand-1.png"
+    ],
+    "sit": [
+      "ranger-sit-0.png",
+      "ranger-sit-1.png"
+    ],
+    "walk": [
+      "ranger-walk-0.png",
+      "ranger-walk-1.png",
+      "ranger-walk-2.png",
+      "ranger-walk-3.png",
+      "ranger-walk-4.png",
+      "ranger-walk-5.png"
+    ],
+    "run": [
+      "ranger-run-0.png",
+      "ranger-run-1.png",
+      "ranger-run-2.png",
+      "ranger-run-3.png"
+    ],
+    "nibble": [
+      "ranger-nibble-0.png",
+      "ranger-nibble-1.png",
+      "ranger-nibble-2.png",
+      "ranger-nibble-3.png"
+    ],
+    "wash": [
+      "ranger-wash-0.png",
+      "ranger-wash-1.png",
+      "ranger-wash-2.png",
+      "ranger-wash-3.png"
+    ],
+    "reach": [
+      "ranger-reach-0.png",
+      "ranger-reach-1.png"
+    ],
+    "look": [
+      "ranger-look-0.png"
+    ],
+    "walkN": [
+      "ranger-walkN-0.png",
+      "ranger-walkN-1.png",
+      "ranger-walkN-2.png",
+      "ranger-walkN-3.png",
+      "ranger-walkN-4.png",
+      "ranger-walkN-5.png"
+    ],
+    "walkS": [
+      "ranger-walkS-0.png",
+      "ranger-walkS-1.png",
+      "ranger-walkS-2.png",
+      "ranger-walkS-3.png",
+      "ranger-walkS-4.png",
+      "ranger-walkS-5.png"
+    ]
+  },
+  "fps": {
+    "stand": 1.5,
+    "sit": 1.5,
+    "walk": 8,
+    "run": 10,
+    "nibble": 6,
+    "wash": 5,
+    "reach": 2,
+    "look": 1,
+    "walkN": 8,
+    "walkS": 8
+  },
+  "fidgets": [
+    "look",
+    "wash"
+  ],
+  "portrait": "art/portraits/ranger-face.png",
+  "variants": {
+    "shades": {
+      "prefix": "ranger-shades-",
+      "portrait": "art/portraits/ranger-shades-face.png"
+    }
+  }
+}

@@ -148,6 +148,13 @@
    "id": "front",
    "file": "front.png",
    "plane": "front"
+  },
+  {
+   "id": "shade-held",
+   "file": "shade-held.png",
+   "base": 561,
+   "alt": true,
+   "note": "round twelve: the sun shade from the store's window, held up by Grandpa Joe standing at marks.shade_holder [572, 560] facing E (his hands at marks.shade_hands); show it only while he holds it. Its base is a row below his feet, so it lies over him"
   }
  ],
  "things": [
@@ -170,7 +177,7 @@
   },
   {
    "id": "shack",
-   "what": "the shack: LAST STOP",
+   "what": "the shack: GRANDPA JOE'S LAST STOP",
    "shape": {
     "rect": [
      131,
@@ -182,6 +189,52 @@
    "stand": [
     254,
     449
+   ],
+   "face": "N"
+  },
+  {
+   "id": "store",
+   "what": "the store's door: the way in",
+   "shape": {
+    "poly": [
+     [
+      245,
+      415
+     ],
+     [
+      281,
+      417
+     ],
+     [
+      281,
+      337
+     ],
+     [
+      245,
+      337
+     ]
+    ]
+   },
+   "stand": [
+    261,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hat-nail",
+   "what": "Jolene's spare hat, a floppy straw sun hat with a scarf round it, on a nail in the porch post beside the door",
+   "shape": {
+    "rect": [
+     277,
+     356,
+     25,
+     15
+    ]
+   },
+   "stand": [
+    291,
+    466
    ],
    "face": "N"
   },
@@ -425,6 +478,28 @@
     524,
     574
    ]
+  },
+  "ranger": [
+   352,
+   512
+  ],
+  "ranger_stand": [
+   424,
+   506
+  ],
+  "shade_holder": [
+   572,
+   560
+  ],
+  "shade_hands": {
+   "R": [
+    598,
+    482
+   ],
+   "L": [
+    602,
+    437
+   ]
   }
  },
  "glass": [
@@ -479,6 +554,90 @@
   ]
  ],
  "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here.",
+ "limo": {
+  "files": [
+   "limo-side-0.png",
+   "limo-side-1.png"
+  ],
+  "size": [
+   722,
+   156
+  ],
+  "foot": [
+   438,
+   155
+  ],
+  "length": 579,
+  "stop": {
+   "at": [
+    345,
+    530
+   ],
+   "scale": 0.8
+  },
+  "foot_is": "the middle of the ground line under the car's near side, half way between its wheels (the same in both frames)",
+  "scale_rule": "drawn at (foot_y - 290) / 300 of its size: 1 with its foot on row 590, 0.8 on row 530",
+  "note": "round twelve: the gray stretch limousine of the Office Of Peculiar Sectors, side view, nose to the right, drawn at full size (as on row 590: 6.3 m, 575 px from end to end of the body; 'length' is bumper to bumper) through the roadside's camera exactly as it sees the car standing at its stop: laid with its foot on [345, 530] at 0.8, it is that picture. In the second frame the wheels have turned and the body rides a pixel lower; the long shadow out to the left (and the dark under the car) is part of each frame and does not move. At the stop its body runs from x 108 to x 571, and its back end is behind Mom's car (its base, 530, is above the car's). The plate on the rear bumper says O.O.P.S. Read with cast.addPicture as the wagon's frames are; the scene decides the drive.",
+  "front": {
+   "files": [
+    "limo-front-0.png",
+    "limo-front-1.png"
+   ],
+   "size": [
+    467,
+    147
+   ],
+   "foot": [
+    294,
+    145
+   ],
+   "foot_is": "the ground under the middle of the front bumper (the same in both frames)",
+   "seen_at": [
+    17.4,
+    343.8
+   ],
+   "scale_there": 0.179,
+   "lane": [
+    [
+     139.4,
+     294.3,
+     0.014
+    ],
+    [
+     129.1,
+     298.5,
+     0.028
+    ],
+    [
+     111.7,
+     305.6,
+     0.052
+    ],
+    [
+     84.5,
+     316.6,
+     0.089
+    ],
+    [
+     56.0,
+     328.2,
+     0.127
+    ],
+    [
+     17.4,
+     343.8,
+     0.179
+    ],
+    [
+     0.0,
+     350.9,
+     0.203
+    ]
+   ],
+   "lane_is": "the middle of the lane toward us (the road's far half), [x, row, scale], from the horizon to the picture's left edge (row 351), which it leaves there: the car keeps to its own side of the road",
+   "note": "coming down the far road toward us, before it turns in: nose on, a sliver of its left side (in the sun) on the right, head lamps on. Drawn as the roadside's camera sees it with its foot at 'seen_at' (0.18 of full size), at the size it would have on row 590, and scaled by row as the side frames are. Its shadow lies out to the left, on the road. The wheels turn between the frames and the body rides a pixel lower in the second."
+  }
+ },
  "fx": [
   {
    "type": "birds",

@@ -212,10 +212,8 @@ def everything(R, pic, pic_was, ungraded, cut, fountain_was, info):
          "note": "On the basin's near rim, between the bronze jug and the corner: it sips (peck), hops along the rim (walk), looks about, and "
                  "flies off when the boy comes near. It stands ON the fountain, so `base` puts it in front of the fountain's cut-out (501): "
                  "sorted by its feet (row 440) it would be hidden behind the basin."},
-        {"id": "spill", "type": "stream", "what": "the water that spills from the basin, across the sidewalk, down the kerb and away along the gutter",
-         "path": spill, "width": 1.2, "color": "#8aa4d8", "light": "#d4e4ff", "opacity": 0.45, "speed": 28, "splash": 0, "plane": "back",
-         "note": "On the ground, under everyone. Its wet dark is painted and stays; the glints that were painted on it are taken out, "
-                 "and this runs light along it instead (the painting's glints faded to a quarter far up the gutter)."},
+        # (round twelve: the spill, a stream across the sidewalk and along the gutter, is no longer a mark: the author found it
+        #  looked wrong. Its wet dark stays painted; `spill` above still shapes it.)
         {"id": "pigeons-roof", "type": "birds", "kind": "flock", "what": "pigeons on the ridge of the corner house's roof, in the sun",
          "perch": ridge, "count": 3, "frames": flock("pigeon", pbox), "scale": round(34 * kk / 20.4, 2), "plane": "back", "shy": 0,
          "moves": {"stand": 4, "look": 2, "peck": 0.5, "walk": 1.5, "turn": 1},
@@ -279,7 +277,8 @@ def everything(R, pic, pic_was, ungraded, cut, fountain_was, info):
                             "laundry-1 .. laundry-12 (back to front), then laundry-lines last (the lines are over everything, as painted). "
                             "Laid together they are laundry.png pixel for pixel" + ("" if laundry_same else " (NOT: see the painter)") + "."},
     }
-    note = ("Round four. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene; `cutouts` are the new "
+    note = ("Round twelve: the spill from the basin (a stream across the sidewalk and along the gutter) is no longer drawn: the author found it looked wrong; the wet stones stay. "
+            "Round four. `fx` is in the engine's own fields (briefs/out/fx-4-ready.md), ready to copy into the scene; `cutouts` are the new "
             "cut-outs (the cat with her tail, and the washing in pieces, which replace the plane `laundry`: the laundry-N sways need them). "
             "Taken out of the painting: the water falling from the fountain's mouth and its rings, and the sparrow drinking "
             "(fountain.png); the four pigeons on the corner house's ridge and the one over the balcony, the four swallows, the cat's "

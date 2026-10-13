@@ -1,7 +1,8 @@
 // The cast layer: everyone and everything that stands on the ground.
 //
 // It is one canvas, 800x600, pixel for pixel over the painted backdrop. Three kinds
-// of thing are on it: people, drawn by the rig; painted cut-outs (a palm, a wagon, a
+// of thing are on it: people, drawn by the rig (or, NEVADA-12E, from painted frames: an
+// animal, PaintedFigure below); painted cut-outs (a palm, a wagon, a
 // table: picture files with a clear background); and props drawn by code. Every frame
 // they are sorted by depth, back to front, so the lead walks behind the wagon when his
 // feet are higher on the screen than its wheels and in front of it when they are lower.
@@ -25,9 +26,10 @@
 import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, BASE } from "../art/rig.js";
 import { withoutKey } from "../art/look.js";
 import { people } from "../art/people.js";
+import { painted } from "../art/painted.js";          // NEVADA-12E: the figures that are painted frames, not the rig's (see PaintedFigure)
 import { props } from "../art/props.js";
 import { DEPTH } from "./walk.js";
-import { picture as fetchPicture, got } from "./assets.js";
+import { picture as fetchPicture, got, hold, listed } from "./assets.js";      // NEVADA-12E: hold and listed, for the painted figures' sidecars
 import { W, H } from "./grid.js";
 
 export const WALK_FRAMES = 12;         // pictures in one walk cycle (two steps). The rig can draw any number; more is smoother.
@@ -449,6 +451,386 @@ export class Seat extends Sprite {
   picture() { return remember(`${this.kind}|seat|${this.yaw}|${this.size}`, () => drawSeat(this.spec, this.yaw, this.size)); }
 }
 
+// ---------- NEVADA-12E: painted figures ----------
+// A person who is painted, frame by frame, and not drawn by the rig: an animal who is a lead. The frames are
+// painted as the birds' are (one picture a frame, a clear background, every frame on one canvas with the feet at one
+// point, every frame facing E), and a sidecar file beside them says what is there. js/art/painted.js lists the kinds
+// that are painted and where each one's sidecar is; addFigure makes a PaintedFigure for those and a Figure for the rest.
+//
+//   { id: "<kind>", face: "E", foot: [x, y], tall: { stand: 34, sit: 46 }, stride: 44, pace: 120,
+//     frames: { stand: [...], sit: [...], walk: [...], run: [...], nibble: [...], wash: [...], reach: [...], look: [...] },
+//     fps: { stand: 1.5, sit: 1.5, walk: 8, run: 10, nibble: 6, wash: 5, reach: 2, look: 1 }, fidgets: ["look", "wash"],
+//     portrait: "<kind>-face.png", variants: { shades: { prefix: "<kind>-shades-", portrait: "<kind>-shades-face.png" } } }
+//
+//   foot        the ground point under him, in every frame's pixels
+//   tall        ground to the top of the head, on all fours and sitting up, at full size: for his words, and for the
+//               outline. A set may have a height of its own (tall.nibble); without one, the sets drawn sitting up (sit,
+//               nibble, wash, reach, look, and any the sidecar lists under `sitUp`) take `sit`, and the rest `stand`
+//   stride      the pixels one walk cycle covers at full size (or { walk, run }: a scamper covers twice a walk's if not
+//               said); `pace`, pixels a second at full size (120 if not said)
+//   frames      the sets, each a list of files (in the sidecar's own folder unless a name begins art/). Only `stand` is
+//               needed: a missing set falls back (walk and sit to stand, run to walk, the sitting-up sets to sit, walkN
+//               and walkS, seen from behind and from the front, to walk)
+//   fps         pictures a second for each set (stand and sit 1.5, run 10, the rest 4 if not said; a walk goes by the
+//               ground covered, as a person's does); `sitMs`, how long sitting up or settling back takes (300)
+//   fidgets     the sets that are his small movements, for his own life (look and wash if not said)
+//   variants    the same frames in another state (the mirror shades): `prefix` stands in for the frames' own prefix
+//               ("<id>-", or the sidecar's `prefix`) in every file name, and `portrait` is the portrait in that state.
+//               figure.variant("shades") puts it on; nothing of it is saved: the scene sets it from a fact
+//
+// The frames are painted at the size they show where a person is 160 tall, and shrink with the depth as a person does:
+// nearest-neighbour, in steps of two pixels, and never larger than a quarter over their painted size. E is the frames,
+// W their mirror, and the other six ways the nearer of the two (walkN and walkS, if painted, for N and S). He cannot
+// gesture, pray or shade his eyes: talk() moves nothing (his "..." is written over his head as anyone's words are), and
+// pray() and shade() do nothing and break nothing. The sidecars and the portraits are read when the game starts
+// (preparePainted, from game.js), so a portrait is here when the team bar first wants it; the frames are fetched with
+// the pictures of the scene he stands in (Cast.load waits for them).
+const SIT_UP = ["sit", "nibble", "wash", "reach", "look"];
+const FALLBACK = { walk: "stand", run: "walk", sit: "stand", nibble: "sit", wash: "sit", reach: "sit", look: "sit", walkN: "walk", walkS: "walk", pick: "reach" };
+const FPS = { stand: 1.5, sit: 1.5, run: 10 };
+const isPoint = (p) => Array.isArray(p) && p.length >= 2 && Number.isFinite(p[0]) && Number.isFinite(p[1]);
+const sidecars = new Map();              // kind -> the sidecar, read
+const reading = new Map();               // kind -> a promise of it
+const told = new Set();                  // what has been said in the console already (once each)
+const warnOnce = (key, text) => { if (!told.has(key)) { told.add(key); console.warn(text); } };
+/** Is this kind a painted figure: listed in js/art/painted.js? */
+export const isPainted = (kind) => typeof kind === "string" && Object.prototype.hasOwnProperty.call(painted, kind);
+/** The sidecar of a painted kind as the engine reads it, once preparePainted has read it; null until then, and for any other kind. */
+export const sidecarOf = (kind) => sidecars.get(kind) || null;
+
+/** The sidecar as written, made into what the figure needs: every file a path from the top of the site, every set filled in. */
+function readSidecar(kind, raw, path) {
+  if (!raw || typeof raw !== "object") return null;
+  const dir = path.slice(0, path.lastIndexOf("/") + 1), file = (f) => (typeof f !== "string" ? null : f.startsWith("art/") ? f : dir + f);
+  const list = (v) => (Array.isArray(v) ? v : v != null ? [v] : []).map(file).filter(Boolean);
+  const frames = {};
+  for (const [set, v] of Object.entries(raw.frames || {})) { const l = list(v); if (l.length) frames[set] = l; }
+  if (!frames.stand) { console.warn(`The painted figure "${kind}" (${path}) has no "stand" frames, so it cannot be drawn.`); return null; }
+  const prefix = typeof raw.prefix === "string" ? raw.prefix : `${raw.id || kind}-`, variants = {};
+  for (const [name, v] of Object.entries(raw.variants || {})) {
+    if (!v || typeof v !== "object") continue;
+    const swap = (p) => (typeof v.prefix === "string" && p.startsWith(dir + prefix) ? dir + v.prefix + p.slice(dir.length + prefix.length) : p);
+    const own = {};
+    for (const [set, l] of Object.entries(frames)) own[set] = l.map(swap);
+    for (const [set, l] of Object.entries(v.frames || {})) { const mine = list(l); if (mine.length) own[set] = mine; }      // (or frames of its own for a set)
+    variants[name] = { frames: own, portrait: file(v.portrait) || file(raw.portrait) };
+  }
+  const tall = typeof raw.tall === "number" ? { stand: raw.tall, sit: raw.tall } : { stand: 34, sit: 46, ...(raw.tall && typeof raw.tall === "object" ? raw.tall : {}) };
+  const stride = typeof raw.stride === "object" && raw.stride ? raw.stride : { walk: raw.stride };
+  const walk = Number.isFinite(stride.walk) && stride.walk > 0 ? stride.walk : 40;
+  return { kind, path, dir, foot: isPoint(raw.foot) ? [raw.foot[0], raw.foot[1]] : [0, 0], tall, frames, variants,
+    sitUp: new Set([...SIT_UP, ...(Array.isArray(raw.sitUp) ? raw.sitUp : [])]),
+    fps: { ...FPS, ...(raw.fps && typeof raw.fps === "object" ? raw.fps : {}) },
+    fidgets: (Array.isArray(raw.fidgets) ? raw.fidgets : ["look", "wash"]).filter((n) => frames[n]),
+    stride: walk, run: Number.isFinite(stride.run) && stride.run > 0 ? stride.run : walk * 2,
+    pace: Number.isFinite(raw.pace) && raw.pace > 0 ? raw.pace : 120,
+    sitMs: Number.isFinite(raw.sitMs) ? raw.sitMs : 300, portrait: file(raw.portrait), face: raw.face === "W" ? -1 : 1 };
+}
+/** Every picture a painted kind can show: its frames and (unless `portraits` is false) its portraits, in every variant,
+    for fetching ahead and gathering. Of every kind, with no kind named. */
+export function paintedPictures(kind = null, portraits = true) {
+  const out = new Set();
+  for (const k of kind ? [kind] : Object.keys(painted)) {
+    const s = sidecars.get(k);
+    if (!s) continue;
+    for (const v of [s, ...Object.values(s.variants)]) { for (const l of Object.values(v.frames)) for (const p of l) out.add(p); if (portraits && v.portrait) out.add(v.portrait); }
+  }
+  return [...out];
+}
+/** Every painted kind's sidecar and portraits, read: for the start of the game (game.js), and for a tool page. */
+export const prepareAllPainted = () => Promise.all(Object.keys(painted).map(preparePainted));
+/**
+ * Read a painted kind's sidecar (once; held for the session like a picture) and fetch its portraits. Resolves with the
+ * sidecar, or null. A sidecar that is not among the page's files (assets.js, listed: not painted yet, or the pages not
+ * stamped since) is not asked for at all, so that no missing file is reported by the browser: the figure is then not
+ * drawn, and the console says why, once.
+ */
+export function preparePainted(kind) {
+  if (!isPainted(kind)) return Promise.resolve(null);
+  let wait = reading.get(kind);
+  if (wait) return wait;
+  const path = painted[kind];
+  if (!listed(path)) { warnOnce("none|" + kind, `The painted figure "${kind}" has no sidecar yet (${path} is not among this page's files): it is not drawn until it is painted and the pages are stamped (tools/stamp.py).`); return Promise.resolve(null); }
+  wait = hold(path).then(async (address) => {
+    let raw = null;
+    try { raw = address ? await (await fetch(address)).json() : null; } catch (err) { console.warn(`The sidecar of the painted figure "${kind}" (${path}) could not be read:`, err); }
+    const spec = raw && readSidecar(kind, raw, path);
+    if (!spec) { reading.delete(kind); return null; }                 // (asked for again the next time something wants it)
+    sidecars.set(kind, spec);
+    await Promise.all([spec.portrait, ...Object.values(spec.variants).map((v) => v.portrait)].filter(Boolean).map(fetchPicture));
+    return spec;
+  });
+  reading.set(kind, wait);
+  return wait;
+}
+/** A frame at size q (turned the other way if `mirror`), hard-edged, placed by the foot point: drawn once for each size and kept in the store. */
+function paintedFrame(path, img, q, mirror, foot) {
+  return keep(`painted|${path}|${q}|${mirror ? 1 : 0}`, () => {
+    const w = Math.max(1, Math.round(img.naturalWidth * q)), h = Math.max(1, Math.round(img.naturalHeight * q));
+    const canvas = document.createElement("canvas");
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    if (mirror) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+    ctx.drawImage(img, 0, 0, w, h);
+    const k = w / img.naturalWidth;
+    return { canvas, ox: (mirror ? img.naturalWidth - foot[0] : foot[0]) * k, oy: foot[1] * (h / img.naturalHeight), size: w * h };
+  });
+}
+
+/** A person drawn from painted frames: what the engine uses of a Figure, answered from the sets of a sidecar (above). */
+export class PaintedFigure extends Sprite {
+  constructor(id, kind) {
+    super(id);
+    this.kind = kind;
+    this.yaw = 90;
+    this.side = 1;                      // which of the two painted ways he faces: 1 the frames (E), -1 their mirror (W)
+    this.t = 0;                         // time in the current set, for its pictures in turn
+    this.phase = 0;                     // where in the walk cycle
+    this.walking = false; this.talking = false; this.hurry = false;
+    this.act = null;                    // a set played by a script (play), or held (hold): { name, k, t, reach, held, end }
+    this.move = null;                   // sitting up or settling back, under way
+    this.fid = null;                    // a small movement under way
+    this.sitting = false;               // sitting up (the sit set), or on all fours (stand)
+    this.var = null;                    // the variant he is in (the shades), or null
+    const me = this;
+    // What the engine asks of a person's `spec`: their height in heights of 160 (on all fours), whether they sit, their
+    // pace; and `painted`, his small movements, so that the rig's fidgetsOf answers for him (js/art/rig.js).
+    this.spec = { get height() { return (me.sheet ? me.sheet.tall.stand : 34) / BASE; }, get seated() { return me.seated; },
+      get pace() { return me.sheet ? me.sheet.pace : 120; }, get painted() { return me.sheet ? me.sheet.fidgets : []; }, kind };
+  }
+  /** The sidecar, once it has been read (at the start of the game: preparePainted). */
+  get sheet() { return sidecarOf(this.kind); }
+  get home() { return this.spec; }
+  /** How far the top of the head is above the ground, in pixels at scale 1, as he is (sitting up is taller than all fours),
+      or as he will be in a moment: a small movement under way is not counted, since talking ends it. */
+  get h() {
+    const s = this.sheet;
+    return s ? this.tallOf(this.act ? this.setFor(this.act.name) : this.restSet()) : 0;
+  }
+  /** Sitting up, and not on the way up or down (as for someone who sits with no drawn seat: he sits and stands where he is). */
+  get seated() { return this.sitting && !this.move; }
+  get sitMs() { return this.sheet ? this.sheet.sitMs : 300; }
+  get seatAt() { return [this.x, this.y]; }
+  get standAt() { return [this.x, this.y]; }
+  sizeNow() { return Math.max(4, Math.round((this.h * this.scale) / 2) * 2); }
+
+  /** Turn to face a compass point ("N", "SE"), an angle, or -1 (left) and 1 (right). E and every way nearer E is the frames,
+      W and every way nearer W their mirror; facing straight toward us or away he stays the way round he was. */
+  face(dir) {
+    if (typeof dir === "string") this.yaw = COMPASS[dir] ?? this.yaw;
+    else if (dir === 1) this.yaw = 90;
+    else if (dir === -1) this.yaw = 270;
+    else if (typeof dir === "number") this.yaw = ((Math.round(dir / 45) * 45) % 360 + 360) % 360;
+    if (this.yaw > 0 && this.yaw < 180) this.side = 1; else if (this.yaw > 180) this.side = -1;
+    return this;
+  }
+  head(dx, dy, firm = false) {
+    const want = ((Math.atan2(dx, dy * DEPTH) * 180) / Math.PI + 360) % 360;
+    const off = Math.abs(((want - this.yaw + 540) % 360) - 180);
+    if (firm || off > 28) this.face(want);
+  }
+  look(x, y) { if (Math.hypot(x - this.x, y - this.y) > 5) this.head(x - this.x, y - this.y, true); return this; }
+
+  /** No gesture and no mouth: the stand (or sit) pictures go on while his words are over his head. */
+  talk(on) { if (on && !this.talking) { this.t = 0; this.endFidget(); } this.talking = on; return this; }
+
+  /** Walk through a list of points in turn, as a Figure does, at his own pace: the walk cycle goes by the ground covered
+      (stride). Hurried (a double click), he scampers: the run set, with its own stride. A walk ends whatever he was playing. */
+  walkPath(clock, points, scaleOf) {
+    if (this._stop) this._stop();
+    if (!points.length) return Promise.resolve();
+    const end = points[points.length - 1];
+    this.stop();
+    if (this.act && this.act.held) this.act = null;
+    if (clock.skipping) { this.place(end[0], end[1], scaleOf(end[1])); return Promise.resolve(); }
+    return new Promise((resolve) => {
+      let i = 0;
+      this.endFidget();
+      if (this.move) this.endMove();
+      this.sitting = false;                                              // (nobody walks sitting up)
+      this.walking = true; this.t = 0;
+      const finish = () => { stop(); this._stop = null; this.walking = false; this.hurry = false; this.t = 0; resolve(); };
+      const stop = clock.every((dt) => {
+        if (clock.skipping) { this.place(end[0], end[1], scaleOf(end[1])); return finish(); }
+        const s = this.sheet, running = this.hurry && !!(s && s.frames.run), stride = s ? (running ? s.run : s.stride) : 40;
+        let budget = this.spec.pace * Math.max(this.scale, 0.5) * (dt / 1000) * (this.hurry ? 3.5 : 1);
+        while (budget > 0 && i < points.length) {
+          const dx = points[i][0] - this.x, dy = points[i][1] - this.y, dist = Math.hypot(dx, dy * DEPTH);
+          if (dist < 0.01) { i++; continue; }
+          this.head(dx, dy);
+          const step = Math.min(budget, dist), k = step / dist;
+          this.x += dx * k; this.y += dy * k; budget -= step;
+          this.phase = (this.phase + step / (stride * this.scale)) % 1;
+          if (step >= dist) i++;
+        }
+        this.scale = scaleOf(this.y);
+        if (i >= points.length) finish();
+      });
+      this._stop = finish;
+    });
+  }
+
+  /** Hold both hands out (the reach set, held: a thing held up while people talk) until hold(false). */
+  hold(on = true, low = false) {
+    if (on) { this.stop(); this.endFidget(); this.act = { name: "reach", low, k: 1, held: true }; }
+    else if (this.act && this.act.held) { this.act = null; this.t = 0; }
+    return this;
+  }
+  /** He cannot pray, or shade his eyes: nothing happens, and nothing breaks. */
+  pray() { return this; }
+  shade() { return this; }
+
+  /**
+   * An animation by name from his sets: play(clock, "nibble"), "wash", "run" (a scamper where he is), "look". It runs
+   * until it is stopped (stop(), play(clock, null), another play, a walk) or, with { ms }, for that long, and resolves
+   * when it ends; at once while a cutscene is being skipped. "reach" and "pick" are a reach as a person's (out, held a
+   * moment, and back), which g.reach() asks for. A name he has no frames for plays what stands in for it (FALLBACK).
+   */
+  play(clock, name, { ms = null } = {}) {
+    if (name == null) { this.stop(); return Promise.resolve(); }
+    const s = this.sheet, set = s && this.setFor(name), reach = name === "reach" || name === "pick";
+    if (!set || clock.skipping) return Promise.resolve();
+    this.endFidget();
+    this.stop();
+    if (this.act && this.act.held) this.act = null;
+    const span = reach ? 630 : ms;
+    return new Promise((resolve) => {
+      let t = 0;
+      const act = { name: set, low: name === "pick", k: reach ? 0 : 1, t: 0, reach, held: false };
+      const done = () => { stopIt(); if (this.act === act) { this.act = null; this.t = 0; } resolve(); };
+      const stopIt = clock.every((dt) => {
+        t += dt; act.t += dt;
+        if (reach) { const out = 230, kept = 170; act.k = Math.max(0, Math.min(1, t < out ? t / out : t < out + kept ? 1 : 1 - (t - out - kept) / out)); }
+        if ((span != null && t >= span) || clock.skipping || this.act !== act) done();
+      });
+      act.end = done;
+      this.act = act;
+      this.t = 0;
+    });
+  }
+  /** End whatever play() is playing (not a hold). */
+  stop() { if (this.act && this.act.end) this.act.end(); return this; }
+  /** What play() is playing, or null. */
+  get playing() { return this.act && !this.act.held ? this.act.name : null; }
+
+  /** Sit up (sit(true)) or settle back on all fours (sit(false)): the sit set, or the stand set, from now on, after a
+      moment (sitMs) that the promise waits for. `now` (true, or a clock that is skipping): at once. */
+  sit(down = true, now = false) {
+    const instant = now === true || !!(now && now.skipping);
+    if (this.move) this.endMove();
+    if (!!down === this.sitting) return Promise.resolve();
+    this.endFidget();
+    this.sitting = !!down; this.t = 0;
+    if (instant) return Promise.resolve();
+    return new Promise((resolve) => { this.move = { down: !!down, t: 0, ms: this.sitMs, resolve }; });
+  }
+  endMove() { const m = this.move; this.move = null; if (m) { this.t = 0; m.resolve(); } }
+
+  /** The small movements that suit him: the sets his sidecar lists as fidgets (look and wash). None while he is busy. */
+  get fidgets() { return this.act || this.move || !this.sheet ? [] : [...this.sheet.fidgets]; }
+  get fidgeting() { return this.fid ? this.fid.name : null; }
+  /** One of his small movements: the set played through (twice, for one of several pictures; a still one for a moment
+      and a half). It ends by itself, and at once if he walks or talks or a script gives him something else to do. */
+  fidget(name, { hold = false } = {}) {
+    if (name == null || name === false) { if (this.fid) this.fid.release = true; return Promise.resolve(); }
+    const s = this.sheet, set = s && s.frames[name] ? name : null;
+    if (!set || this.move || this.act || this.walking || this.talking) return Promise.resolve();
+    this.endFidget();
+    const n = s.frames[set].length, fps = s.fps[set] || 4;
+    return new Promise((resolve) => { this.fid = { name: set, t: 0, ms: Math.max(1500, (n / fps) * 1000 * (n > 1 ? 2 : 1)), hold, release: false, resolve }; });
+  }
+  endFidget() { const f = this.fid; this.fid = null; if (f) f.resolve(); }
+
+  /** variant(): the variant he is in, or null. variant("shades") puts it on (every set and the portrait); variant(null) takes it off. */
+  variant(name) {
+    if (name === undefined) return this.var;
+    if (name && this.sheet && !this.sheet.variants[name]) warnOnce(`var|${this.kind}|${name}`, `The painted figure "${this.kind}" has no variant called "${name}" in its sidecar: he is shown as he is.`);
+    this.var = name || null;
+    return this;
+  }
+
+  tick(dt) {
+    this.t += dt;
+    const m = this.move;
+    if (m && (m.t += dt) >= m.ms) this.endMove();
+    const f = this.fid;
+    if (f) {
+      const stop = f.hold && !f.release ? f.ms * 0.5 : Infinity;
+      f.t = Math.min(f.t + dt, Math.max(stop, f.t));
+      if (f.t >= f.ms) this.endFidget();
+    }
+  }
+
+  /** The set to show for a name: its own, or what stands in for it (FALLBACK); null for one nothing stands in for. */
+  setFor(name) {
+    const s = this.sheet;
+    for (let n = name, k = 0; s && n && k < 8; n = FALLBACK[n], k++) if (s.frames[n]) return n;
+    return null;
+  }
+  /** The set he rests in: sitting up, or on all fours. */
+  restSet() { return this.setFor(this.sitting ? "sit" : "stand") || "stand"; }
+  /** How tall he is in a set, at full size. */
+  tallOf(set) { const s = this.sheet; return s.tall[set] ?? (s.sitUp.has(set) ? s.tall.sit : s.tall.stand); }
+  /** Which set and which picture of it to show right now: { set, i }, or null before the sidecar is here. */
+  frame(calm = false) {
+    const s = this.sheet;
+    if (!s) return null;
+    const n = (set) => s.frames[set].length, at = (set, ms) => Math.floor((ms * (s.fps[set] || 4)) / 1000) % n(set);
+    const a = this.act;
+    if (a) {
+      const set = this.setFor(a.name) || this.restSet();
+      if (!(a.held || a.reach)) return { set, i: at(set, a.t) };
+      const i = Math.round(a.k * n(set)) - 1;                            // out of his resting pose and back into it
+      return i < 0 ? { set: this.restSet(), i: 0 } : { set, i: Math.min(i, n(set) - 1) };
+    }
+    if (this.move) return { set: this.restSet(), i: 0 };
+    const f = this.fid;
+    if (f) {
+      if (this.walking || this.talking) this.endFidget();
+      else return { set: f.name, i: at(f.name, f.t) };
+    }
+    if (this.walking) {
+      const set = (this.hurry && s.frames.run && "run") || (this.yaw === 180 && s.frames.walkN && "walkN") || (this.yaw === 0 && s.frames.walkS && "walkS") || this.setFor("walk");
+      return { set, i: Math.floor(this.phase * n(set)) % n(set), moving: true };
+    }
+    const set = this.restSet();
+    return { set, i: calm ? 0 : at(set, this.t) };
+  }
+  /** Every picture he can show (every set, every variant, the portraits): fetched with the scene's pictures (Cast.load). */
+  paths() { return paintedPictures(this.kind); }
+
+  picture(palette, calm) {
+    const s = this.sheet, f = this.frame(calm);
+    if (!s || !f) return null;
+    const v = this.var && s.variants[this.var], path = ((v && v.frames[f.set]) || s.frames[f.set])[f.i], img = got(path);
+    if (!img || !img.naturalWidth) return null;                          // not here yet
+    const mirror = this.side * s.face < 0 && f.set !== "walkN" && f.set !== "walkS";
+    const h = Math.max(4, Math.round((img.naturalHeight * this.scale) / 2) * 2), q = Math.min(1.25, h / img.naturalHeight);     // in steps of two pixels, as a person; never much over painted size
+    return paintedFrame(path, img, q, mirror, s.foot);
+  }
+}
+/**
+ * A painted figure's portrait from its sidecar's picture (64 x 64), `px` pixels square, in a variant or not: drawn with
+ * hard pixels at a whole multiple of its size where that fills most of the square (64 for 64 to 80 pixels, 128 for 128
+ * to 160), centred; with hard pixels at the size asked when that is bigger; and smoothly when it is smaller, where hard
+ * pixels would drop whole rows of the face. Never keyed (a picture is drawn as it is). Null until the picture is here.
+ */
+function paintedPortrait(kind, px, variant = null) {
+  const s = sidecarOf(kind);
+  if (!s) return null;
+  const v = variant && s.variants[variant], path = (v && v.portrait) || s.portrait, img = path && got(path);
+  if (!img || !img.naturalWidth) return null;
+  const iw = img.naturalWidth, ih = img.naturalHeight, big = Math.max(iw, ih), m = Math.floor(px / big);
+  const k = m >= 1 && m * big >= px * 0.8 ? m : px / big, w = Math.round(iw * k), h = Math.round(ih * k);
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = px;
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = k < 1; ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, Math.floor((px - w) / 2), Math.floor((px - h) / 2), w, h);
+  return canvas;
+}
+
 /** A prop: a thing drawn by js/art/props.js. `scale` is its own size; it does not shrink with distance by itself. */
 export class Thing extends Sprite {
   constructor(id, kind, options = {}) {
@@ -483,6 +865,7 @@ export const picturesOf = (spec) => [spec.src, ...Object.values(spec.states || {
  *   when                shown only while this test of the story passes
  *   base, plane         where it sorts among the people (see the top of this file)
  *   at, foot, scale     a small cropped picture: the point `foot` of the picture is put at `at` on the stage
+ *   flag("mirror", true)  (NEVADA-12SC) a script turns it left for right, about its foot point
  *
  * With no `at` the picture is the size of the stage and is laid over it at (0, 0).
  * `when` and `state` are read again whenever the story changes (refresh), so a scene never has to
@@ -537,15 +920,29 @@ export class Cutout extends Sprite {
       console.warn(`The cut-out "${this.id}" (${path}) is ${cut.full[0]}x${cut.full[1]}. A cut-out with no "at" is laid over the whole ${W}x${H} picture and should be that size.`);
     }
     if (!cut || !cut.canvas || !(k > 0.005)) return null;
-    const ox = (this.foot[0] - cut.dx) * k, oy = (this.foot[1] - cut.dy) * k;        // from the foot point to the corner of the paint
-    if (k === 1) return { canvas: cut.canvas, ox, oy };
+    // NEVADA-12SC: flag("mirror", true) draws it turned the other way round, left for right about its foot point (a car
+    // that drove in nose first drives out the way it came). The turned copy is made once and kept, as the halved ones are.
+    const flip = !!this.flags.mirror, canvas = flip ? flipped(path, cut.canvas) : cut.canvas, tag = flip ? "m" : "";
+    const ox = (flip ? cut.dx + cut.canvas.width - this.foot[0] : this.foot[0] - cut.dx) * k, oy = (this.foot[1] - cut.dy) * k;        // from the foot point to the corner of the paint
+    if (k === 1) return { canvas, ox, oy };
     // At another size: start from the kept copy nearest in size (`size` is how big that copy is beside the
     // original), and say which part of it to draw (sw, sh) and how big on the stage (w, h).
-    const w = cut.canvas.width, h = cut.canvas.height;
-    let from = cut.canvas, size = 1;
-    for (let n = 2; k <= size / 2 && from.width > 2 && from.height > 2; n *= 2, size /= 2) from = halved(`cut|${path}|/${n}`, from);
+    const w = canvas.width, h = canvas.height;
+    let from = canvas, size = 1;
+    for (let n = 2; k <= size / 2 && from.width > 2 && from.height > 2; n *= 2, size /= 2) from = halved(`cut|${path}|${tag}/${n}`, from);
     return { canvas: from, ox, oy, sw: w * size, sh: h * size, w: w * k, h: h * k };
   }
+}
+
+/** NEVADA-12SC: a cut-out's trimmed picture turned left for right (Cutout, flag "mirror"), made once and kept. */
+function flipped(path, canvas) {
+  return keep("cut|" + path + "|mirror", () => {
+    const c = document.createElement("canvas");
+    c.width = canvas.width; c.height = canvas.height;
+    const ctx = c.getContext("2d");
+    ctx.translate(c.width, 0); ctx.scale(-1, 1); ctx.drawImage(canvas, 0, 0);
+    return { canvas: c, size: c.width * c.height };
+  }).canvas;
 }
 
 export class Cast {
@@ -566,7 +963,17 @@ export class Cast {
     this.items.set(sprite.id, sprite);
     return sprite;
   }
-  addFigure(id, kind, x, y, scale = 1) { const f = this.add(new Figure(id, kind).place(x, y, scale)); f.cast = this; return f; }      // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
+  /** A person: drawn by the rig, or (NEVADA-12E) from painted frames when their kind is in js/art/painted.js, whose
+      pictures are then asked for at once (load() waits for them). */
+  addFigure(id, kind, x, y, scale = 1) {
+    if (isPainted(kind)) {                                                 // NEVADA-12E
+      const f = this.add(new PaintedFigure(id, kind).place(x, y, scale));
+      f.cast = this;
+      preparePainted(kind).then(() => { for (const path of f.paths()) fetchPicture(path); });
+      return f;
+    }
+    const f = this.add(new Figure(id, kind).place(x, y, scale)); f.cast = this; return f;      // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
+  }
   addThing(id, kind, x, y, scale = 1, options) { return this.add(new Thing(id, kind, options).place(x, y, scale)); }
   /** A painted cut-out from a scene's `planes`. Its pictures are asked for at once; load() says when they are here. */
   addCutout(id, spec) {
@@ -582,8 +989,13 @@ export class Cast {
 
   /** The painted cut-outs on the stage. */
   cutouts() { return [...this.items.values()].filter((s) => s instanceof Cutout); }
-  /** Resolves when every picture any cut-out here can show has arrived (or has failed: it never rejects). */
-  load() { return Promise.all(this.cutouts().flatMap((s) => s.paths()).map(fetchPicture)); }
+  /** Resolves when every picture any cut-out here can show has arrived, and every frame of each painted figure here
+      (NEVADA-12E), or has failed: it never rejects. */
+  load() {
+    const painted = [...this.items.values()].filter((s) => s instanceof PaintedFigure);
+    return Promise.all([...this.cutouts().flatMap((s) => s.paths()).map(fetchPicture),
+      ...painted.map((f) => preparePainted(f.kind).then(() => Promise.all(f.paths().map(fetchPicture))))]);
+  }
   /** The story has changed: have each cut-out read its `when` and `state` again. */
   refresh(g) { for (const s of this.cutouts()) s.refresh(g); }
 
@@ -591,7 +1003,7 @@ export class Cast {
   order() {
     const back = [], floor = [], front = [];
     for (const s of this.items.values()) if (!s.hidden && s.opacity > 0) (s.plane === "back" ? back : s.plane === "front" ? front : floor).push(s);
-    const person = (s) => s instanceof Figure;
+    const person = (s) => s instanceof Figure || s instanceof PaintedFigure;        // (NEVADA-12E: a painted figure stands on a point, as a person does)
     const depth = (a, b) => {
       // Two things are compared where the one that stands on a single point is standing: a person against
       // a wall is in front or behind according to the side of the wall's base line that their feet are on.
@@ -701,10 +1113,13 @@ const faces = new Map();
  * (rig.js portraitOf: the face drawn feature by feature with as many pixels as there are), never a small picture blown
  * up. The interface asks for the size it shows them at on the screen (ui.js), so they are crisp at any size. Never in a
  * scene's colour key (the paints: look.js): they belong to the interface. Drawn once for each size and kept.
+ * NEVADA-12E: a painted figure's portrait is its sidecar's picture (paintedPortrait), in the `variant` he is in (the
+ * shades); null, and not kept, until the picture is here (it comes at the start of the game: preparePainted).
  */
-export function portrait(kind, px = 42) {
-  const key = kind + "|" + px;
+export function portrait(kind, px = 42, variant = null) {
+  const key = kind + "|" + px + (variant ? "|" + variant : "");
   if (faces.has(key)) return faces.get(key);
+  if (isPainted(kind)) { const canvas = paintedPortrait(kind, px, variant); if (canvas) faces.set(key, canvas); return canvas; }      // NEVADA-12E
   const spec = people[kind];
   if (!spec) return null;
   const canvas = withoutKey(() => portraitOf(spec, px).toCanvas());

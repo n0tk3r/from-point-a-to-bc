@@ -34,6 +34,19 @@ export const cast = {
   // Nevada
   oldtimer: { name: "Old-Timer", color: "#e6d3a0", sprite: "oldtimer" },
   agent:    { name: "Man in Gray", color: "#c9ced6", sprite: "agent" },
+  // NEVADA-12P: the Last Stop's people (round twelve). Each colour is one nobody else uses, chosen by its distance from every
+  // other colour here (in CIE Lab: 21 or more from each of the family's five, 13 or more from everyone else; the nearest
+  // are people of Egypt and Rome, who never share a scene with them). Grandpa Joe and Ranger are the leads of Act Five.
+  grandpajoe: { name: "Grandpa Joe", color: "#ffa86b", sprite: "grandpajoe", lead: true, keeps: "bib pocket" },
+  jolene:   { name: "Grandma Jolene", color: "#def547", sprite: "jolene" },       // (jolene-2 .. jolene-5 in js/art/people.js: the same woman under her other hats)
+  ranger:   { name: "Ranger", color: "#c4b6ab", sprite: "ranger", lead: true, keeps: "stash" },      // painted frames, not a rig person (ENGINE-12); he says "...", and Grandpa Joe translates
+  suit1:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit1" },         // the backup: four men, one voice (as the haulers share theirs), and not Jed's
+  suit2:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit2" },
+  suit3:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit3" },
+  suit4:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit4" },
+  houston:  { name: "Houston", color: "#66ffff" },                              // dispatch: a voice on Jed's earpiece, never seen
+  // NEVADA-12E: the engine's own painted creature, for the proof scene only (js/content/scenes/engine-proof.js)
+  critter:  { name: "Critter", color: "#d6ef8a", sprite: "critter", lead: true, keeps: "stash" },
   narrator: { name: "Narrator", color: "#f6e3b8" },
 };
 
@@ -77,4 +90,18 @@ export const items = {
   pencil: { name: "Dad's pencil", icon: "pencil.png", look: { mom: "item.pencil.mom", bigsis: "item.pencil.bigsis", lilsis: "item.pencil.lilsis", any: "item.pencil.mom" } },
   carkey: { name: "spare car key", icon: "carkey.png", look: { mom: "item.carkey.mom", bigsis: "item.carkey.bigsis", lilsis: "item.carkey.lilsis", any: "item.carkey.mom" } },
   batteries: { name: "batteries", icon: "batteries.png", look: { mom: "item.batteries.mom", bigsis: "item.batteries.bigsis", lilsis: "item.batteries.lilsis", any: "item.batteries.bigsis" } },
+  // NEVADA-12W: Act Four, expanded (the Last Stop), and Act Five's opening (the limousine). The looks are in
+  // lines/nevada.en.js and lines/limo.en.js. Little Sister takes four pennies from the dish: one is `penny` (for luck:
+  // it goes through the coin door to her brother) and three are `pennies` (she will not give them up). Ranger's look at a
+  // thing is "..." and then what Grandpa Joe says he means, so his `look` is a list of two.
+  penny: { name: "lucky penny", icon: "penny.png", look: { mom: "item.penny.mom", bigsis: "item.penny.bigsis", lilsis: "item.penny.lilsis", any: "item.penny.lilsis" } },
+  pennies: { name: "three pennies", icon: "pennies.png", look: { mom: "item.pennies.mom", bigsis: "item.pennies.bigsis", lilsis: "item.pennies.lilsis", any: "item.pennies.lilsis" } },
+  mirrorshades: { name: "mirror shades", icon: "mirrorshades.png", look: { mom: "item.mirrorshades.mom", bigsis: "item.mirrorshades.bigsis", lilsis: "item.mirrorshades.lilsis", any: "item.mirrorshades.mom" } },
+  egg: { name: "warm egg", icon: "egg.png", look: { mom: "item.egg.mom", bigsis: "item.egg.bigsis", lilsis: "item.egg.lilsis", any: "item.egg.lilsis" } },
+  waters: { name: "three waters", icon: "waters.png", look: { mom: "item.waters.mom", bigsis: "item.waters.bigsis", lilsis: "item.waters.lilsis", any: "item.waters.mom" } },
+  storeshade: { name: "Jolene's sun shade", proper: true, icon: "storeshade.png", look: { mom: "item.storeshade.mom", bigsis: "item.storeshade.bigsis", lilsis: "item.storeshade.lilsis", any: "item.storeshade.mom" } },
+  sectormap: { name: "map of the sectors", icon: "sectormap.png", look: { grandpajoe: "item.sectormap.grandpajoe", ranger: ["item.sectormap.ranger", "item.sectormap.ranger.joe"],
+    mom: "item.sectormap.mom", bigsis: "item.sectormap.bigsis", lilsis: "item.sectormap.lilsis", any: "item.sectormap.grandpajoe" } },
+  receipt: { name: "receipt for a banjo", icon: "receipt.png", look: { grandpajoe: "item.receipt.grandpajoe", ranger: ["item.receipt.ranger", "item.receipt.ranger.joe"],
+    mom: "item.receipt.mom", bigsis: "item.receipt.bigsis", lilsis: "item.receipt.lilsis", any: "item.receipt.grandpajoe" } },
 };

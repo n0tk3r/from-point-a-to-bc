@@ -21,7 +21,7 @@
 // scene drawings were made on a 320x200 grid, so they are shown in a band across the
 // middle of the stage.
 
-import { Cast, picturesOf } from "./cast.js";
+import { Cast, picturesOf, isPainted, paintedPictures } from "./cast.js";      // (NEVADA-12E: isPainted, paintedPictures)
 import { picture, url } from "./assets.js";
 import { fxPictures } from "./effects.js";
 import { W, H, OLD, fit } from "./grid.js";
@@ -262,8 +262,12 @@ export class SceneView {
   }
 }
 
+/** NEVADA-12E: the frames of the painted figures a scene has (cast.js, PaintedFigure): its people's, and its party's when
+    the party is a list (a lead whose id is the kind of their frames). Known once their sidecars are read, at the start. */
+const paintedIn = (scene) => [...new Set([...(scene.actors || []).map((a) => a.kind || a.id), ...(Array.isArray(scene.party) ? scene.party : [])])]
+  .filter(isPainted).flatMap((kind) => paintedPictures(kind, false));
 /** Every picture file a scene can show: its backdrop, and each cut-out's picture, states and frames. */
-export const picturesIn = (scene) => [scene.picture, ...(scene.planes || []).flatMap(picturesOf), ...fxPictures(scene)].filter(Boolean);      // (fxPictures: the painted frames of its birds)
+export const picturesIn = (scene) => [scene.picture, ...(scene.planes || []).flatMap(picturesOf), ...fxPictures(scene), ...paintedIn(scene)].filter(Boolean);      // (fxPictures: the painted frames of its birds, and a strip's picture; paintedIn: NEVADA-12E)
 
 /** Where a clickable area meets the ground: the middle of its bottom edge. The lead turns to face this. */
 export function footOf(spot) {

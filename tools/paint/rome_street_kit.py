@@ -199,8 +199,14 @@ def join(*layers):
     return np.where(alpha[..., None] > 1e-4, color / np.maximum(alpha[..., None], 1e-4), 0).astype(F32), alpha.astype(F32)
 
 
-def words_flat(words, size, hand=True, pad=6, rough=0.6, seed=0):
-    """Lettering as a small flat mask of its own (for bending onto a wall). -> mask, (width, height)"""
+def words_flat(words, size, hand=True, pad=6, rough=0.6, seed=0, roman=False):
+    """Lettering as a small flat mask of its own (for bending onto a wall). -> mask, (width, height). `roman`: the
+    sign-painter's capitals (letter.roman_mask; `size` is then the letter height), as the painted notices are."""
+    if roman:
+        wd, ht = letter.roman_size(words, size)
+        w, h = int(wd + pad * 2), int(ht + pad * 2)
+        m = letter.roman_mask((h, w), words, (w / 2, h / 2), size, anchor="mm", rough=min(rough, 0.3), seed=seed)
+        return m, (w, h)
     f = letter.face(size * 3, hand)
     box = f.getbbox(words)
     w, h = int((box[2] - box[0]) / 3 + pad * 2), int((box[3] - box[1]) / 3 + pad * 2)

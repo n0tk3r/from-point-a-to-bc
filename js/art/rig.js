@@ -404,8 +404,12 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const win = opt && opt.window, ox = win ? -win[0] : W / 2, oy = win ? -win[1] : H - 6 - below;
   const sf = new Surface(win ? win[2] : W, win ? win[3] : H, ox, oy);
   const th = yawDeg * DEG, c = Math.cos(th), s = Math.sin(th), TILT = 0.22;
+  // NEVADA-12P: pose.pitch tips the whole figure, and whatever is drawn with it, forward (positive) or back about the
+  // point on the ground under the hips: a man rocking in a rocking chair, chair and all. Nothing else is tipped by it.
+  const pitch = pose.pitch || 0, cpt = Math.cos(pitch), spt = Math.sin(pitch);
+  const tipped0 = pitch ? (v) => [v[0], v[1] * cpt - v[2] * spt, v[1] * spt + v[2] * cpt] : (v) => v;
   // character space to picture space. The camera looks slightly down, so nearer things sit lower.
-  const P = (v) => { const dp = (v[0] * s + v[2] * c) * S; return [ox + (-v[0] * c + v[2] * s) * S, oy - v[1] * S + dp * TILT, dp]; };
+  const P = (v0) => { const v = tipped0(v0), dp = (v[0] * s + v[2] * c) * S; return [ox + (-v[0] * c + v[2] * s) * S, oy - v[1] * S + dp * TILT, dp]; };
   const R = (r) => Math.max(0.85, r * S);
   const J = skeleton(d, pose);
   const fine = S >= 84, coarse = S < 52;
@@ -682,8 +686,8 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     if (u < -1 || u > 1) return undefined;                              // plain cloth out past the trunk's own width
     const round = roundAt(u, psi);
     if (bibTop != null && !coarse && Math.abs(round) < (apron.half ?? 1.0) * 0.72 && TA[1] + (chestY - bibTop) * S < y) return apron.mat;
+    if (bib) { const m = bibAt(u, y); if (m) return m; }                 // (NEVADA-12P: the bib of overalls lies over a striped shirt: Grandpa Joe's plaid)
     if (stripe) for (const at of stripe.at) if (Math.abs(wrap(round - at)) < stripe.half) return stripe.mat;
-    if (bib) { const m = bibAt(u, y); if (m) return m; }
     if (tBands) { const below = rT * 0.80 - high(y); for (const [a, b, m] of tBands) if (below >= a && below < b) return m; }
     return printed ? flowers(round * 0.115, high(y), top.pattern) : undefined;
   } : null;
@@ -765,9 +769,14 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     const [r0, r1, r2] = d.armR, ease = longSleeves ? (top.ease ?? 0.004) : 0;
     const swell = mix(A.elbow, A.wrist, 0.28);                          // the forearm is thickest just below the elbow
     if (longSleeves) {
-      limb(A.shoulder, A.elbow, r0 + ease * 0.5, r1 + ease, armMat, { part });
-      limb(A.elbow, swell, r1 + ease, r1 * 1.10 + ease, foreMat, { part });
-      limb(swell, A.wrist, r1 * 1.10 + ease, r2 + ease * 1.6, foreMat, { part, hem: true });
+      // NEVADA-12P: top.check { mat, every, band, stripe }: a check woven into a long sleeve, so a plaid shirt is plaid down
+      // its arms too: bands of `mat` across the sleeve every `every` (in heights, from the shoulder), `band` wide, and a
+      // line of it down the middle of the sleeve, `stripe` of its width. (The body of the shirt takes top.stripe and top.bands.)
+      const ck = top.check && !coarse ? top.check : null, ckUp = ck && far(k, ck.mat), ckFore = ck && (across ? ck.mat : ckUp);
+      const checked = (from, len, m) => (ck ? (t, nx) => (((from + t * len) / ck.every) % 1 < ck.band / ck.every || Math.abs(nx) < (ck.stripe ?? 0) ? m : undefined) : null);
+      limb(A.shoulder, A.elbow, r0 + ease * 0.5, r1 + ease, armMat, { part, fn: checked(0, d.upperArm, ckUp) });
+      limb(A.elbow, swell, r1 + ease, r1 * 1.10 + ease, foreMat, { part, fn: checked(d.upperArm, d.foreArm * 0.28, ckFore) });
+      limb(swell, A.wrist, r1 * 1.10 + ease, r2 + ease * 1.6, foreMat, { part, hem: true, fn: checked(d.upperArm + d.foreArm * 0.28, d.foreArm * 0.72, ckFore) });
     } else {
       // A bare arm is not a tube: it narrows to the elbow, swells again just below it and is narrowest at the
       // wrist. Bent, the elbow comes to a point on the outside of the bend.
@@ -881,6 +890,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // hats, hair that hangs, packs, bags and whatever else this character wears or carries
   const ctx = {
     sf, J, P, R, limb, ball, own, onHead, headPt, hp, wide, deep, widthAt, depthAt, roundAt, fold, trunkAt, trunkFacing, skirtAt, far, d, S, th, hy, tw, ht, fine, coarse, pose, spec, skin, cloth, under, farSide: farK,
+    seatOnly: !!only,                                                   // (NEVADA-12P: only the seat is being drawn: anything drawn straight on `sf` should be left out)
     parts: { HEAD, HAIR, TORSO, PELVIS, SKIRT, EXTRA, EXTRA2, EXTRA3, HAT, NECK, ARM, HAND, LEG, FOOT, SLEEVE, DRAPE, DRAPE2, BELT, COLLAR, HELD, NOSE, EAR },
   };
   if (spec.extras) spec.extras(ctx);
@@ -909,14 +919,16 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     if (vis < 0.20) continue;
     const q = scr(sd * eyeX, eyeY, 0.80), w = faceFull && vis > 0.70 ? 2 : 1;
     const right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;                    // which way is "away from the nose", as seen
-    eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis });
+    eyes.push({ x: right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, y: Math.round(q[1] - 0.5), out: right ? 1 : -1, w, vis, sd });
   }
   if (frontOn && eyes.length === 2) { eyes[1].x = mirror(eyes[0].x); eyes[1].y = eyes[0].y; }   // seen straight on, a face is the same on both sides
   for (const e of eyes) {
     const put = (i, j, color) => sf.dot(e.x + e.out * i, e.y + j, color, HEAD);
     if (shade) {                                                                          // dark glasses: a lens over each eye
-      if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j, shade);
-      else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j, shade); }
+      // (NEVADA-12P: face.shadesTilt, 1 or -1: the glasses knocked crooked, the lens over the left eye a pixel lower, or higher)
+      const dj = face.shadesTilt && e.sd < 0 && faceFine ? Math.sign(face.shadesTilt) : 0;
+      if (faceFull) for (let i = -1; i <= e.w; i++) for (let j = -1; j <= 0; j++) put(i, j + dj, shade);
+      else if (faceFine) for (let i = -1; i <= 1; i++) for (let j = -1; j <= 0; j++) { if (i >= 0 || j < 0) put(i, j + dj, shade); }
       else { put(0, 0, shade); put(1, 0, shade); }
       continue;
     }
@@ -1314,7 +1326,7 @@ export function shadePose(o = {}) {
     (the second). A hand travels from where it was to where it will be and the elbow follows; the rest goes in step. */
 function between(d, a, b, e) {
   const A = skeleton(d, a), B = skeleton(d, b), num = (x, y) => lerp(x || 0, y || 0, e), late = e >= 0.5, p = { ...(late ? b : a) };
-  for (const name of ["lean", "twist", "hipTwist", "sway", "rise", "shift", "breath"]) if (a[name] != null || b[name] != null) p[name] = num(a[name], b[name]);
+  for (const name of ["lean", "twist", "hipTwist", "sway", "rise", "shift", "breath", "pitch"]) if (a[name] != null || b[name] != null) p[name] = num(a[name], b[name]);      // (pitch: NEVADA-12P)
   p.head = { nod: num(a.head && a.head.nod, b.head && b.head.nod), turn: num(a.head && a.head.turn, b.head && b.head.turn) };
   for (const k of ["R", "L"]) {
     const qa = a[k] || {}, qb = b[k] || {}, q = { ...(late ? qb : qa) };
@@ -1341,6 +1353,7 @@ const ARM_KEYS = ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl"
  *   "bench"   on something a little higher: a child's feet hang
  *   "stool"   on something low, knees high and apart
  *   "step"    on a kerb or a step, feet on the ground below it, knees drawn up
+ *   "floor"   on the ground, the legs out in front and leaning back on both hands, like a man who has been sat down (NEVADA-12P)
  *   or a number: the height of the seat, as a fraction of a grown person's height.
  * o.gesture: 0 at rest; 1 talking, with this person's own main gesture (o.main); any other number is that
  * gesture from talkPose, made sitting down. o.dim is the build and o.height the sitter's height (1 for an adult).
@@ -1353,7 +1366,7 @@ export function sitPose(f = 0, o = {}) {
   const d = o.dim || ADULT, sp = spots(d);
   const seat = o.chair ? "chair" : o.seat || "ground";
   let p;
-  if (seat !== "ground") {
+  if (seat !== "ground" && seat !== "floor") {                         // (floor: NEVADA-12P, below)
     // The hips are at the height of the seat and the feet flat on the floor in front: the knees go where they must.
     const h = (typeof seat === "number" ? seat : SEATS[seat] ?? SEATS.chair) / (o.height || 1), low = h < 0.21, lowest = h < 0.15;
     const hipH = h + d.pelvisR[1] * 0.62, tilt = o.feet ?? (lowest ? 0.30 : low ? 0.14 : 0.05);          // how far the feet are set out in front of the knees
@@ -1365,6 +1378,14 @@ export function sitPose(f = 0, o = {}) {
       hand: [sd * (d.hipW + Math.sin(roll) * d.thigh * 0.80), sp.hip - Math.cos(pitch) * d.thigh * 0.80 + 0.042, Math.sin(pitch) * d.thigh * 0.80 + 0.012], bend: [sd, -0.3, -0.6], curl: 0.6,     // a hand resting on each knee
     });
     p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.62 - h, breath: br, lean: o.lean ?? (low ? 0.10 : -0.08), R: side(1), L: side(-1), head: { nod: o.nod ?? (low ? -0.02 : 0.06) } };
+  } else if (seat === "floor") {
+    // NEVADA-12P: sat down on the ground like a man who has been sat down: the legs out in front of him, the knees a
+    // little up and the heels on the ground, the toes up, leaning back on his two hands flat on the ground behind him.
+    const side = (sd) => ({
+      leg: [1.40, 0.30], shin: [sd * 0.16, -0.10, 0.98], foot: 0.95, footYaw: 0.30,
+      hand: [sd * 0.150, sp.hip - 0.070, -(sp.back + 0.085)], bend: [sd * 0.8, -0.1, -0.6], flat: true, point: [sd * 0.2, -0.3, -0.9], thumb: [0, 1, 0],
+    });
+    p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.70, breath: br, lean: o.lean ?? -0.24, R: side(1), L: side(-1), head: { nod: o.nod ?? 0.04 } };
   } else {
     const side = (sd) => ({
       leg: [1.42, 0.86], shin: [-sd * 0.9, -0.12, -0.36], footYaw: -1.35, foot: 0,
@@ -1400,7 +1421,9 @@ export function sitPrayPose(o = {}) {
   for (const [k, sd] of [["R", 1], ["L", -1]]) {
     const q = { ...p[k] };
     for (const name of ARM_KEYS) delete q[name];
-    p[k] = { ...q, hand: [sd * x, y, z], bend: [sd * 0.6, -1, -0.1], flat: true, point: [sd * 0.40, 0.75, 0.55], thumb: [sd, 0, 0] };
+    // (NEVADA-12P: `fold: true`, the hands folded together as a standing prayer folds them, low in the lap: Grandpa Joe's, on his banjo)
+    p[k] = how.fold ? { ...q, hand: [sd * 0.024, y, z], grip: true, bend: [sd * 0.70, -1, -0.45], point: [-sd * 0.80, -0.10, 0.16] }
+      : { ...q, hand: [sd * x, y, z], bend: [sd * 0.6, -1, -0.1], flat: true, point: [sd * 0.40, 0.75, 0.55], thumb: [sd, 0, 0] };
   }
   p.breath = 0;
   p.lean = (p.lean || 0) + (how.lean ?? 0.04);
@@ -1413,9 +1436,10 @@ export function sitPrayPose(o = {}) {
 // ---------- each character's own way of doing these ----------
 const DEFAULT_GESTURES = [0, 1, 2, 3];
 /** An arm that is holding something keeps hold of it whatever else the body is doing. */
-const holding = (spec, p) => {
+const holding = (spec, p, praying = false) => {
   if (spec.hold) for (const k of ["R", "L"]) if (spec.hold[k]) {
     const q = { ...p[k] }, h = spec.hold[k];
+    if (praying && h.loose) continue;                                    // (NEVADA-12P: `loose: true`: a prayer may take this hand, and the thing held hangs from the folded hands)
     for (const name of ARM_KEYS) delete q[name];
     p[k] = { ...q, ...h };
     // `still: true`: the thing held is fixed in the picture (painted there by the scene), so the hand must not ride
@@ -1452,11 +1476,11 @@ export const poses = {
       k eases from standing, or sitting, (0) into the pose (1). */
   pray: (spec, k = 1) => {
     const seated = !!spec.seated;
-    const full = holding(spec, seated ? sitPrayPose({ ...sitHow(spec), pray: spec.pray }) : prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray }));
+    const full = holding(spec, seated ? sitPrayPose({ ...sitHow(spec), pray: spec.pray }) : prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray }), true);      // (true: a `loose` hold joins the prayer: NEVADA-12P)
     if (k >= 1) return full;
     const from = seated ? poses.sit(spec, 0) : poses.stand(spec, 0);
     if (!(k > 0)) return from;
-    const e = k * k * (3 - 2 * k), p = holding(spec, between(spec.dim, from, full, e));
+    const e = k * k * (3 - 2 * k), p = holding(spec, between(spec.dim, from, full, e), true);
     p.blink = e > 0.5; p.squeeze = !!full.squeeze && e > 0.5; p.praying = e;
     return p;
   },
@@ -1517,7 +1541,7 @@ const RISES = new WeakMap();
 export function riseOf(spec) {
   let r = RISES.get(spec);
   if (r) return r;
-  const how = sitHow(spec), ground = how.seat === "ground";
+  const how = sitHow(spec), ground = how.seat === "ground" || how.seat === "floor";       // (floor: NEVADA-12P)
   const J0 = skeleton(spec.dim, poses.sit(spec, 0));
   const feet = (J0.R.ankle[2] + J0.L.ankle[2]) / 2 - J0.hipC[2];
   r = { ground, feet, forward: ground ? 0 : Math.max(0, feet * 0.55), ms: spec.riseMs ?? (ground ? 1250 : spec.height < 0.85 ? 760 : 1000) };
@@ -1841,16 +1865,39 @@ const FIDGETS = {
     const r1 = at(0), r2 = at(-0.030);
     return [[0, b], [0.26, r1], [0.42, r2], [0.58, r1], [0.74, r2], [1, b]];
   } },
-  /** the old-timer, sitting: a hand to the brim of his hat */
+  /** the old-timer, sitting: a hand to the brim of his hat (spec.hatAt, NEVADA-12P: how high the brim is, in half-heights of the head,
+      for a hat worn on top of a tower of hair; and the free hand does it when the right is busy) */
   hat: { ms: 2000, make(o) {
-    const b = o.base, sp = o.sp, hr = o.d.headR;
-    const p = withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.06 } }, "R", { hand: [0.026, sp.headY + hr[1] * 0.42, hr[2] + 0.048], bend: [1, -0.4, 0.2], curl: 0.6, point: [-0.3, 0.3, 1] });
+    const b = o.base, sp = o.sp, hr = o.d.headR, at = o.spec.hatAt ?? 0.42, s = o.held("R") ? "L" : "R", sd = s === "R" ? 1 : -1;
+    const p = withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.06 } }, s, { hand: [sd * 0.026, sp.headY + hr[1] * at, hr[2] + 0.048 - Math.max(0, at - 0.5) * 0.02], bend: [sd, -0.4, 0.2], curl: 0.6, point: [-sd * 0.3, 0.3, 1] });
     return [[0, b], [0.34, p], [0.66, p], [1, b]];
+  } },
+  // ---- round twelve (NEVADA-12P) ----
+  /** Grandpa Joe, sitting: his right hand strums over the banjo's head, three strokes down and up, his head keeping time.
+      Held (figure.fidget("strum", { hold: true })) it stops mid-stroke, the hand over the strings. */
+  strum: { ms: 2400, hold: 0.52, make(o) {
+    const b = o.base, sp = o.sp, pot = o.spec.banjoPot || [0.070, -0.250, 0.170];
+    const at = (dy, nod) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + nod, turn: 0.06 } }, "R", { hand: [pot[0] + 0.040, pot[1] + 0.052 + dy, pot[2] + 0.058], bend: [1, -0.5, -0.3], curl: 0.5, point: [-0.5, -0.5, 0.7] });
+    const up = at(0.018, 0.02), down = at(-0.040, 0.05);
+    return [[0, b], [0.14, up], [0.26, down], [0.40, up], [0.52, down], [0.66, up], [0.78, down], [1, b]];
+  } },
+  /** Grandpa Joe, sitting: a slow rock in the rocking chair, chair and all, back and forward a few degrees (pose.pitch) */
+  rock: { ms: 3600, make(o) {
+    const b = o.base, back = { ...cloneP(b), pitch: -0.07, head: { nod: nodOf(b) + 0.02 } }, fwd = { ...cloneP(b), pitch: 0.045, head: { nod: nodOf(b) - 0.02 } };
+    return [[0, b], [0.28, back], [0.50, b], [0.72, fwd], [1, b]];
+  } },
+  /** Grandma Jolene: she pushes the pencil back into her tower of hair, with the hand that is free */
+  pencil: { ms: 2000, make(o) {
+    const b = o.base, sp = o.sp, hr = o.d.headR, s = o.held("R") ? "L" : "R", sd = s === "R" ? 1 : -1, high = o.spec.pencilAt ?? 1.7;
+    const at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.04, turn: -sd * 0.10 } }, s, { hand: [sd * (hr[0] * 1.5 + dx), sp.headY + hr[1] * high + dy, -hr[2] * 0.30], bend: [sd, 0.4, 0.1], curl: 0.8, point: [-sd, 0.1, 0] });
+    const p1 = at(0.030, 0.006), p2 = at(0.004, 0.000);
+    return [[0, b], [0.30, p1], [0.44, p2], [0.58, p1], [0.70, p2], [1, b]];
   } },
 };
 
 /** The small movements that suit someone, as they are now (sitting or standing): everyone's, and their own (spec.fidgets). */
 export function fidgetsOf(spec) {
+  if (spec && Array.isArray(spec.painted)) return [...spec.painted];      // NEVADA-12E: a painted figure (js/engine/cast.js, PaintedFigure) has no rig to move: its small movements are sets of its frames, which its spec lists
   const own = spec.fidgets || {}, mine = (spec.seated ? own.sit : own.stand) || [];
   const list = own.only ? mine : [...(spec.seated ? SIT_FIDGETS : STAND_FIDGETS), ...mine];
   return list.filter((n, i) => FIDGETS[n] && list.indexOf(n) === i && !(own.not || []).includes(n));
@@ -1924,7 +1971,7 @@ export function headPoint(spec, pose, yawDeg, size) {
 
 export function tallOf(spec) {
   const J = skeleton(spec.dim, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0));
-  return J.head[1] + spec.dim.headR[1] * 1.2;
+  return J.head[1] + spec.dim.headR[1] * 1.2 + (spec.crown || 0);        // (crown, NEVADA-12P: how much higher than the head a hairdo or a hat rises, in heights: Grandma Jolene's tower)
 }
 
 // =====================================================================================

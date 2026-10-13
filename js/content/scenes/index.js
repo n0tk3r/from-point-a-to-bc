@@ -10,7 +10,8 @@ export const sceneIds = [
   "egypt-crash", "egypt-site", "egypt-gallery", "egypt-chamber",     // Act One
   "rome-steps", "rome-street", "rome-temple",                        // Act Two
   "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",   // Act Three
-  "nevada-roadside",                                                 // Act Four
+  "nevada-roadside", "nevada-store",                                 // Act Four (NEVADA-12SB: the store)
+  "nevada-limo",                                                     // Act Five (NEVADA-12SC)
   "engine-proof",        // not part of the story: the worked example of a painted scene
   "sketch-example",      // not part of the story: shows how to storyboard a scene before it is painted
 ];

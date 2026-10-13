@@ -335,13 +335,67 @@
    }
   }
  },
+ "nevada-limo": {
+  "key": "nevada-morning",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "cef2531187da516ca8fae2a329dd3fabbdf81046b10e6bf07966d975c980e415",
+    "keyed": "90fba7da341a400da02bcfe681880ac8e6e4248e5aece08b596d73f2d19fe827"
+   },
+   "bag.png": {
+    "raw": "a37432d286e051046363a7acf30b33b0bc4cc91406ee79236a6d919512921593",
+    "keyed": "31128eb018fb16a1411d747a8c09cf758584e2c6865ac0299a3f68b832dfde94"
+   },
+   "clipboard.png": {
+    "raw": "5107a15bfaea6db1d68e5ab84564b8475d3fa22714f572875888ba09526cd0d2",
+    "keyed": "f0af29c9b80aaefb7aef7dacdeaa41a0fc91ae7fbb7629453f0d7d569426c297"
+   },
+   "desert-strip.png": {
+    "raw": "ca09608a1dd0bcd1b9b875c14ff2780b895b2bbdfc6d55ecd37490a6e633946c",
+    "keyed": "26bd844c20cf1d4c79f5e1fb383da55c79fcd96b4924b82fb48088ddca0ebb10"
+   },
+   "divider-down.png": {
+    "raw": "c3eade6108171e909ba6e05b272e31f633ef4f3b2ebf13e6cecb077c8abc703e",
+    "keyed": "167245969a76a735571d189a153f34a50189211936218201118119a73f4223f4"
+   },
+   "divider-up.png": {
+    "raw": "646d38fbbc42d87b3cc8c7b6d406513e50c4cddfac0fb3f17ab144a3b1da714e",
+    "keyed": "9f6fbeb27c9e812dd3cf32fd866509f64b6fdf18e9bc724983733fd731c7c07d"
+   },
+   "front.png": {
+    "raw": "c59ffda5ee9b609008a3b7b439793aa86193875a7125aae85f37ea7faf479b6b",
+    "keyed": "b184d671c438c6f5bfcec80475a027083d67011e2b7efc3f9fefcdfdb3f61097"
+   },
+   "juice.png": {
+    "raw": "f0bd09e964fcad2fa1e9c5098aa59670a120ef859a3c61c3ea688ad8cfced28c",
+    "keyed": "e5aab238fd60655e07e31e8024dbc7d48e6a87908eeed918d9ec6fe9df46d9ec"
+   },
+   "ropes-1.png": {
+    "raw": "eae778eb9fe9efb6c8e34bd901f0696006d3e6d1fa37efb90fccbe47418590c1",
+    "keyed": "63e955d0602ac5e4422ad1a54f48e3d90c8448d1f8ba622dccf503af25dd1594"
+   },
+   "ropes-2.png": {
+    "raw": "538e73c7acec69bfe8cf77e2f6e657a3d16388da51fc6b95f4d36ccbf86972f6",
+    "keyed": "cde21c85b2f3362110389dcc631f90027531fa895a6652a8f909c95bc0d8921a"
+   },
+   "ropes-3.png": {
+    "raw": "7bdb1f75210e08caf5509223021540b7481ede5bd7bd6b3595d6b8c2c29de134",
+    "keyed": "4a4ceac3dbec35e6e705281f15faec6bce33ff2938c97df99b8d1df17eac1fc8"
+   },
+   "ropes-4.png": {
+    "raw": "c82118fd63a1289e961742b27ff1326823ac0ed152a0b0e72825d431285bce8f",
+    "keyed": "55a7f25be26eb91c7b102dbaa1c46be79055d5cb90ab8d470183cfb00c62d3e6"
+   }
+  }
+ },
  "nevada-roadside": {
   "key": "nevada-morning",
   "strength": 50,
   "files": {
    "back.png": {
-    "raw": "974335aedf02c2add5b82751ab590ee06b9296a81513097bbd1838a237f8a766",
-    "keyed": "616e98ec5ad39e80096ad308b1aa2678b14e71f74e0f451f4a43573ab20bce16"
+    "raw": "73ef989f24e08b7d49bdf49337742a33a3db78c5ab9df7e7aabf567c4e1ba677",
+    "keyed": "facc43af8c612faa2533b3c12dc0a5dfeb88990b6c4358df1ed42b905b595392"
    },
    "bird-0.png": {
     "raw": "04453795155d361bfb00e377c04d1d407276700163594a4d220542c46f8b209f",
@@ -361,19 +415,521 @@
    },
    "car.png": {
     "raw": "6798795b7bc4475f45869de886564a3a96773dde80f6e6f16e9c0877265c43bc",
-    "keyed": "1c2c7fc00fd71ac852eb9aec758fc78ed5593a1c66e5409452f2e06ed9dbc9f1"
+    "keyed": "ff25400d1847052e7bc78eb8d9ab4ab2699cc88e25a845a2cbebb6dcc0b71f9d"
    },
    "front.png": {
     "raw": "161cd64aebfe8b52657ebd9f0ea2775b2818df4adea92c9d67a59016c5882f0b",
-    "keyed": "8a8b840b6cd7add4a78c174382916098fd20eedf55420bec45009e8ddd8ea831"
+    "keyed": "ae95f5f892467db85632af15b9ac1b148bf5a8a3eae846e374a94e41d0b45c2f"
+   },
+   "limo-front-0.png": {
+    "raw": "d1cff810a895305c3c680ae65321a8f6d14292a86e3b394c68e332e4227cec78",
+    "keyed": "9ae93eb1d5a67d840e9b5cd1231c85658583f2e09a8ecad00ee93a69b9fcce4d"
+   },
+   "limo-front-1.png": {
+    "raw": "f22c8ba6bc74e3e7dc5a12d7ba50e3f7ce4a398b92b1d27b8aa8d4308d9ed5e5",
+    "keyed": "55c210457fa84621d1373b2921d47156d1d0a1d87b42deb0e53c7eb59965c043"
+   },
+   "limo-side-0.png": {
+    "raw": "71e136ea568c3c0cee88f1420c7bdf0474a0bcb5ce617852e14d973ef827ae32",
+    "keyed": "037fd8a4224d20eca44d02caf7bc9f291f92b001daafe11b9dadbd42a7e2164a"
+   },
+   "limo-side-1.png": {
+    "raw": "5d1bea73ddc587c0f8346e84ddf68ebf1b9382c05dbb7264b52f71a4dd5ace7f",
+    "keyed": "3d4615148f332e1a555ff9e648142825bfd1fd94d2869d7903f95922cfadede9"
    },
    "pump.png": {
     "raw": "6acafaa512ca11f6dd805ea3c8cfacf9434c60ac66fee7c210d9bcf13ea177ae",
-    "keyed": "da2995178b26316d2cb648979e1b6dca3aade3467b77d350faeda0c3ff541ad0"
+    "keyed": "a0265c2ba1fc2a280c6822bb8cfd5c8c983fddaf9d10ea68fad6b744abed5be6"
+   },
+   "ranger-look-0.png": {
+    "raw": "84b429517231eab61202c147ce60f02b0b4be4a516f5080e3134f1676e63587f",
+    "keyed": "6ea33f96b1b98915d5c7795b24aa4ac2f46c758ae74709f9f64bb0ec3a74bfdd"
+   },
+   "ranger-nibble-0.png": {
+    "raw": "b7bd8613c31f3e90f0e1e790fa25e6b276a437726c81879c84d3e81c41bbec7b",
+    "keyed": "2e33f7aa4a0738eb3d49d6d693442ed23623f1680ee6637a9ac8bfa96c03652d"
+   },
+   "ranger-nibble-1.png": {
+    "raw": "79b3de4f67bea7b0a5163cbe1986821a21e1c576534660a0cce76b48946c0838",
+    "keyed": "e4b0897bd43db07762747a57c32f0a4b6929471ce900b443a6b721d3c7f7c1ab"
+   },
+   "ranger-nibble-2.png": {
+    "raw": "4d81320d88790c0bb02626d25c4224a7b6b504b3f6d6765c4c9b49c5a03f2617",
+    "keyed": "3b641b8b38ef58b933a730afe5c8f96b7cfaefb08541b84ffb120f44872b5827"
+   },
+   "ranger-nibble-3.png": {
+    "raw": "fca5dbb0c2c4cee427376549e62c1aa1c200f1b7311a436b37c2f4c9666977ae",
+    "keyed": "cc3166a429d5b5bf074bf6dbb1d0e3c654ade0758fb30cd760b58f3e3ce63086"
+   },
+   "ranger-reach-0.png": {
+    "raw": "fe24cc00eb82041a136393bc14a91384461031a094c998a9d8b4f3f6f8cc9526",
+    "keyed": "34b725dc83b963b189c25822e806b25810a77718708ea502d034f9aeff5a68eb"
+   },
+   "ranger-reach-1.png": {
+    "raw": "0850064bf3424d14fa81822bdc8f61f557f3f570ef90fe0fe139a25f6c64eacf",
+    "keyed": "f31bfb06a1b0fc8fad79397fbb1209eaabcc24a9ff308e78f58a169ee72c5756"
+   },
+   "ranger-run-0.png": {
+    "raw": "dede3d3802e51583fd3ea9bec6e1a59920b2ae3fd376d3d72404cef86f82dc5e",
+    "keyed": "271d665c7c2489329a930bbed733978f072b125fe3d8264fb2f666bc848fc25d"
+   },
+   "ranger-run-1.png": {
+    "raw": "45a5895e1a3c5f8f7d135719a435d411bf683e0b742572929e4c0f8a254096c0",
+    "keyed": "6307c6a035444c48eb0c00784cd08322ba12efb9e607c5809b60e11d4444c9aa"
+   },
+   "ranger-run-2.png": {
+    "raw": "ab0563781441b16f70138cb7893f9a85ffb0c5b0a29eb8015f1dc8c017542679",
+    "keyed": "746e770df05592de47dc0c41de9c3dd998a74aeb7ade4605a0976474f662cf29"
+   },
+   "ranger-run-3.png": {
+    "raw": "1d3c2f0330204f475830ecaa84d0fb429cbba08bba0e48b49c606b9c1aaa2a52",
+    "keyed": "b15d274da456f9e8424fc27ef5b9f5e59293a3373217e8ac22ac91980f9af32e"
+   },
+   "ranger-shades-look-0.png": {
+    "raw": "0d057556f4169ce8a6d8182e477b75947c89363987fd0a2f41382f02949c84d0",
+    "keyed": "5a110cd74e9084df632317721b8cf80e92f8e74708d34895f3aa50d90d14a95a"
+   },
+   "ranger-shades-nibble-0.png": {
+    "raw": "e4846ae799f06ee22fc3a35619461c7f7379f10dc37cf20f170db6c501ef31ce",
+    "keyed": "b385e97efa17d9a81d8be2675f1adf0e2979f81ca4cebfdf83d93f1f57b18ad8"
+   },
+   "ranger-shades-nibble-1.png": {
+    "raw": "0933ee05991e2ec85d3ba4ba0f4712e7087c35a877e1eb057978bbcc3b2b1698",
+    "keyed": "e1701ca4a33e057d84968cbbe9a95387c09d132b0e095609acba7c71f56e4520"
+   },
+   "ranger-shades-nibble-2.png": {
+    "raw": "78186eaea467f947ef310871f7913023509a36756fa59816e62ed50bcc5dd907",
+    "keyed": "c2143bdce0f438b2151d856b90011d7e3d33a7b87c2b1812b64096b6fd1fce68"
+   },
+   "ranger-shades-nibble-3.png": {
+    "raw": "b8e8bd11a96be086cf5d3f06af277b8d704630903be4d98ccb5c29569be28b74",
+    "keyed": "69001350ff487822eb60b55d43daaac6b1d3d51c82519435bcd28d5fc463b9b6"
+   },
+   "ranger-shades-reach-0.png": {
+    "raw": "b29d21af8aa3a8d13cdf7908198fd120870c01b95a6086565d880c4026e5241d",
+    "keyed": "c340b205709a9b6b90f593eb45a6fd20bbafc35a3530193a540834ae19be1915"
+   },
+   "ranger-shades-reach-1.png": {
+    "raw": "728c0db40dabe845c9bb446503227d80adef4c80aa34ef3e288c8ee7ad980d86",
+    "keyed": "fdcf8b4d1c7eafdd7c39a543f489db323cfd9f0be154ce6c295d09162b9ce226"
+   },
+   "ranger-shades-run-0.png": {
+    "raw": "5a6dc9c2c6a539f98826b81c72f3d0d3659410a13c22732515300142da345877",
+    "keyed": "fb6788f4b38c7679c8c9301e77b02ed456f1753122900855f22101bf120397b7"
+   },
+   "ranger-shades-run-1.png": {
+    "raw": "b86bdcd5effb292879d652c8ef67afc643594982776149fe677fd226a4fa161d",
+    "keyed": "f675f23181e3134a14c47e5ef6916c976ba0623e8dc237673d6925ba89882105"
+   },
+   "ranger-shades-run-2.png": {
+    "raw": "9c1df2a228add20721168e8b569076900f348d4c07a992dcfadfa2edc6562533",
+    "keyed": "6da990ecfca429ac8c42a6cd861f1432ecb9dd57d8afa79aeaa01c98c8f7364d"
+   },
+   "ranger-shades-run-3.png": {
+    "raw": "63e490edb2ee5ef52e943a01a34f3d90d4ad284676e06ec58cf6fac89611d81d",
+    "keyed": "5f534c53ef969a3819376d1274fd95dc377205ca6b419e5d3341700f49588f3b"
+   },
+   "ranger-shades-sit-0.png": {
+    "raw": "25a8176a5c886d1d178722941a5f016311f1b2a1248db311a20320ef19ac1d8d",
+    "keyed": "45182a7bc3bf07f969e0393061897c875c0c55891205750973ca59aa813b8a19"
+   },
+   "ranger-shades-sit-1.png": {
+    "raw": "25a8176a5c886d1d178722941a5f016311f1b2a1248db311a20320ef19ac1d8d",
+    "keyed": "45182a7bc3bf07f969e0393061897c875c0c55891205750973ca59aa813b8a19"
+   },
+   "ranger-shades-stand-0.png": {
+    "raw": "89545742ff758823b99db27a13f02b3ed6ff61de86d8b61ae00116a1c799a78f",
+    "keyed": "db24afab575b60ea63c527ee790364b5689f755fc2dd31317bd640aa34422283"
+   },
+   "ranger-shades-stand-1.png": {
+    "raw": "4746e1492d7af50478c7a87fc91e23367cd54ba4dd22cad6863e256552600ad9",
+    "keyed": "c261fe80f5a20e099dc5a363b40d458785651eca0ade01ae4ecb8014dcfc9ce9"
+   },
+   "ranger-shades-walk-0.png": {
+    "raw": "4c0bed2926fff1b7278b5fa6706363feea24d8c15b154e44a1b750ef6e472e6f",
+    "keyed": "223b6ad48d65a9d18571dd05aca4c14b4ef0f469125f12485a66f7152637c7c2"
+   },
+   "ranger-shades-walk-1.png": {
+    "raw": "2580aa80c3bdd5ffdea5f3bdbfd6e623ea3a0b6748f782f80578766cf411a46f",
+    "keyed": "615caf8d898316023fa221dccb9a9b4f345f9d7e857937e284f6cb11ed93822e"
+   },
+   "ranger-shades-walk-2.png": {
+    "raw": "dfd9688140fe9812cd65c0e268c06b94156c9627a73c13707a66f3eaa7018c18",
+    "keyed": "a41a7d20893e04b310c6986ceb351a16dcd4947934a349f459cf3861394ebcc1"
+   },
+   "ranger-shades-walk-3.png": {
+    "raw": "1f0a5a7867e47b938484884e56cf39bab379c5392581504749fc907de0873958",
+    "keyed": "2bec66368b3ed64f1d37489964d22112ba79fd489fdcfa0c4319e64322f4ddc8"
+   },
+   "ranger-shades-walk-4.png": {
+    "raw": "c0462c082137d91060012a3d40b7e417d9d301eb82c0d5e06a905d7fb4da70cf",
+    "keyed": "c68a7f64040507e1468548593429853e44dd3331cc13fa03d50ac9c5943950d5"
+   },
+   "ranger-shades-walk-5.png": {
+    "raw": "5be2d13197ffc51113759028754a1c41bd84fe5270a9f147c9a9019212e75e0e",
+    "keyed": "074f82aeedf54a98c46c64b4808a3a43d9c0214780b0221d8a12e9957103d127"
+   },
+   "ranger-shades-walkN-0.png": {
+    "raw": "e50e592d0a5aca8479fdce0908840e460b53bf4b1a976ab62c96eb4289fd4bab",
+    "keyed": "0d82db00087ec6f8e9854f27a66074d9db27a2c028bc2f8155af5284226c1902"
+   },
+   "ranger-shades-walkN-1.png": {
+    "raw": "14d038770a459ceb26bc225392990db3d6db42fd50b2b2cfcabf160d837e28a9",
+    "keyed": "e0293cb6ad28f97c9b4a8367410f611449a1732c24190688e331c18a401ab9f1"
+   },
+   "ranger-shades-walkN-2.png": {
+    "raw": "14d038770a459ceb26bc225392990db3d6db42fd50b2b2cfcabf160d837e28a9",
+    "keyed": "e0293cb6ad28f97c9b4a8367410f611449a1732c24190688e331c18a401ab9f1"
+   },
+   "ranger-shades-walkN-3.png": {
+    "raw": "e50e592d0a5aca8479fdce0908840e460b53bf4b1a976ab62c96eb4289fd4bab",
+    "keyed": "0d82db00087ec6f8e9854f27a66074d9db27a2c028bc2f8155af5284226c1902"
+   },
+   "ranger-shades-walkN-4.png": {
+    "raw": "831ef141717f0171d446584d9181dc5a2a967b8aecd3fac4490377a9b2d7bef0",
+    "keyed": "088d6695a0604df603b1fa9250721be96cb927ee4bae3694ec117b943541f1aa"
+   },
+   "ranger-shades-walkN-5.png": {
+    "raw": "831ef141717f0171d446584d9181dc5a2a967b8aecd3fac4490377a9b2d7bef0",
+    "keyed": "088d6695a0604df603b1fa9250721be96cb927ee4bae3694ec117b943541f1aa"
+   },
+   "ranger-shades-walkS-0.png": {
+    "raw": "0e495605ec8da54577a452bb98f86f9459658e0e078817be0fa23c395ffa40e8",
+    "keyed": "1aa60b8dee2f64a4b89506111cfd4deddc42ee42b6bbdd967f15607509f9758d"
+   },
+   "ranger-shades-walkS-1.png": {
+    "raw": "1ee3ce772798b06b38943b85d16edffd84f9a3f172433d9974c2e315b555fab1",
+    "keyed": "fb7e69331a2993c13eb21c0b48809a40e638d5cbb181fc568c1de4e6bff48582"
+   },
+   "ranger-shades-walkS-2.png": {
+    "raw": "1ee3ce772798b06b38943b85d16edffd84f9a3f172433d9974c2e315b555fab1",
+    "keyed": "fb7e69331a2993c13eb21c0b48809a40e638d5cbb181fc568c1de4e6bff48582"
+   },
+   "ranger-shades-walkS-3.png": {
+    "raw": "0e495605ec8da54577a452bb98f86f9459658e0e078817be0fa23c395ffa40e8",
+    "keyed": "1aa60b8dee2f64a4b89506111cfd4deddc42ee42b6bbdd967f15607509f9758d"
+   },
+   "ranger-shades-walkS-4.png": {
+    "raw": "8bdeeeff273cde42b1a641dd4017e1834b3aa7e9f24ee3585e30e742ea240d17",
+    "keyed": "a244df9ebb4af540eec237cd53eb20356ad425201d51dfd958397ceea7a4b73c"
+   },
+   "ranger-shades-walkS-5.png": {
+    "raw": "8bdeeeff273cde42b1a641dd4017e1834b3aa7e9f24ee3585e30e742ea240d17",
+    "keyed": "a244df9ebb4af540eec237cd53eb20356ad425201d51dfd958397ceea7a4b73c"
+   },
+   "ranger-shades-wash-0.png": {
+    "raw": "1dab363e3811a68395685d86236bd34d3f8d4422f1c531c79dca3303fd845c91",
+    "keyed": "d76431003f19032d064fa7cfbde932aeb8c43e52135e3352521c56eb1210baa9"
+   },
+   "ranger-shades-wash-1.png": {
+    "raw": "938aa4dd2398bc2b494fcdecaed319547edb9bc3cabf8eae92a02ae5b0a835f9",
+    "keyed": "1fbf4fb1142d570525b38a8378b1338a0ba6fad5b0ab248e5d7e78f65068b265"
+   },
+   "ranger-shades-wash-2.png": {
+    "raw": "3055109a0a28a566aee47a58745d3c7bdbe2f9fb2673c4c27b0d8c942aa992ab",
+    "keyed": "66839c83a78df2d4b6a79f11116051f26ed40689c140de0b7a698989dbbacf22"
+   },
+   "ranger-shades-wash-3.png": {
+    "raw": "161fd5abaecc56f5e2543bdfcb94221d88a562897a636560a9e710d32f5e0933",
+    "keyed": "c85e3c73bf98fc4fa14717791891454925a02d1638977db5f6a6b7bc1b1bbee1"
+   },
+   "ranger-sit-0.png": {
+    "raw": "db3b7b0a9dfe71c085ae515f181daa32771ebb30e862f1bbc30e4e10d9ffe0aa",
+    "keyed": "6e3658d151a4752a6d7e0ed26fae2af083e7b0a4b41840fc80bf7d024c47d415"
+   },
+   "ranger-sit-1.png": {
+    "raw": "10e77f67c9e3d1200923c09a3409f5a5242e1572f17dee01ee15944b2ac21452",
+    "keyed": "d144cc20d2c93b9d2e9618a9cb00d62f79ff91cf3146407897b3b4ac88017048"
+   },
+   "ranger-stand-0.png": {
+    "raw": "8d6b29004099e4b29535be4da8a1dae29b333101e550b9b5a017ab57e5d27770",
+    "keyed": "606f757a8ebbfee4e9e8689c2e81a3484fa91b8bf7f6fc13b9b0f3ec394ae4ce"
+   },
+   "ranger-stand-1.png": {
+    "raw": "fff98d9d45dbc358053bebf7d21cde72ea4aed99998ed315b887b6cb0a3b696b",
+    "keyed": "53ed43f72eb1922838545a496ed75110aa57c15fd219718b19329e46916e5b43"
+   },
+   "ranger-walk-0.png": {
+    "raw": "2b1cc99562d040eda05fc24e58801b42a8b460a3fef84755a8cdc3826471165d",
+    "keyed": "d025d93c5b78d4efa241bcc20fccedc6a56d7649610fc4c09511404fcc293911"
+   },
+   "ranger-walk-1.png": {
+    "raw": "012ede36d139b8a0ff96ed71bdba08fa37d39ca95132d3987999dd46189d7276",
+    "keyed": "4ccfb7efa141f3157dd591be8a25a6617a02eab0506ad57582caa7f2904dcc55"
+   },
+   "ranger-walk-2.png": {
+    "raw": "e2cafc4c1c4def793c5178ebb375bc50839241b4d67ecc6a6a745287fe809855",
+    "keyed": "a440e9065c6d56a6813b7fc18ebfd8e491afc3892b6a647a9162662cf5da1951"
+   },
+   "ranger-walk-3.png": {
+    "raw": "01de78cf6fd97b371512f699651fd76e20be1cabc314182147fc3360e3ec0a5c",
+    "keyed": "4dbe25fa9bd99bebf71d3ee88613c7166c4fae16e8ba649c1e8616b1b9c11c45"
+   },
+   "ranger-walk-4.png": {
+    "raw": "5cd82a41851d392ea0459b585e0908863a8f39e882de8ccd1a5b77dd884c76b3",
+    "keyed": "7d75ce1932ae6359399ace3d595060fd3f2a1cf8277372e893532c938ba3b53e"
+   },
+   "ranger-walk-5.png": {
+    "raw": "5b1ef0206955d1535ecc9ef9e7fd8b3e5974b4927ca83b2b744eaadba47aed02",
+    "keyed": "f0216153d1d97472a0d86fb6fed7e37647b7d3203bdc6f367f33f04ab17cdc6d"
+   },
+   "ranger-walkN-0.png": {
+    "raw": "e50e592d0a5aca8479fdce0908840e460b53bf4b1a976ab62c96eb4289fd4bab",
+    "keyed": "0d82db00087ec6f8e9854f27a66074d9db27a2c028bc2f8155af5284226c1902"
+   },
+   "ranger-walkN-1.png": {
+    "raw": "14d038770a459ceb26bc225392990db3d6db42fd50b2b2cfcabf160d837e28a9",
+    "keyed": "e0293cb6ad28f97c9b4a8367410f611449a1732c24190688e331c18a401ab9f1"
+   },
+   "ranger-walkN-2.png": {
+    "raw": "14d038770a459ceb26bc225392990db3d6db42fd50b2b2cfcabf160d837e28a9",
+    "keyed": "e0293cb6ad28f97c9b4a8367410f611449a1732c24190688e331c18a401ab9f1"
+   },
+   "ranger-walkN-3.png": {
+    "raw": "e50e592d0a5aca8479fdce0908840e460b53bf4b1a976ab62c96eb4289fd4bab",
+    "keyed": "0d82db00087ec6f8e9854f27a66074d9db27a2c028bc2f8155af5284226c1902"
+   },
+   "ranger-walkN-4.png": {
+    "raw": "831ef141717f0171d446584d9181dc5a2a967b8aecd3fac4490377a9b2d7bef0",
+    "keyed": "088d6695a0604df603b1fa9250721be96cb927ee4bae3694ec117b943541f1aa"
+   },
+   "ranger-walkN-5.png": {
+    "raw": "831ef141717f0171d446584d9181dc5a2a967b8aecd3fac4490377a9b2d7bef0",
+    "keyed": "088d6695a0604df603b1fa9250721be96cb927ee4bae3694ec117b943541f1aa"
+   },
+   "ranger-walkS-0.png": {
+    "raw": "e9f0f45b1027e3c89be6e521de626cbeec65807d810b3937b87fe6780bbc2ece",
+    "keyed": "50d4ef2463ffe2e39cff2d5cb202784d31678a21018f181277af8fc346c7b6d5"
+   },
+   "ranger-walkS-1.png": {
+    "raw": "4e57c729550a48af074b3809252f123113b8a48d98f7f5e0866440e8f28eed5c",
+    "keyed": "aa57ad0f8e43cda4a65bf4899ae06170ede369071c8bda453fe906c10d59f233"
+   },
+   "ranger-walkS-2.png": {
+    "raw": "4e57c729550a48af074b3809252f123113b8a48d98f7f5e0866440e8f28eed5c",
+    "keyed": "aa57ad0f8e43cda4a65bf4899ae06170ede369071c8bda453fe906c10d59f233"
+   },
+   "ranger-walkS-3.png": {
+    "raw": "e9f0f45b1027e3c89be6e521de626cbeec65807d810b3937b87fe6780bbc2ece",
+    "keyed": "50d4ef2463ffe2e39cff2d5cb202784d31678a21018f181277af8fc346c7b6d5"
+   },
+   "ranger-walkS-4.png": {
+    "raw": "74d24d5aa495181712da2004d178b7c476b2accfc80b6221cfeaa4719effa756",
+    "keyed": "45471860b79cabb461bcd6c08514841036d3fc26b83c0defa4b5939e45630e2b"
+   },
+   "ranger-walkS-5.png": {
+    "raw": "74d24d5aa495181712da2004d178b7c476b2accfc80b6221cfeaa4719effa756",
+    "keyed": "45471860b79cabb461bcd6c08514841036d3fc26b83c0defa4b5939e45630e2b"
+   },
+   "ranger-wash-0.png": {
+    "raw": "c5fa37c84e1513cb274c554253fb5586e63aa89203324e05cf57d43be4c2dcfa",
+    "keyed": "fa5a42817f7910ce06949f24f6ea202ba9669d62cf97266edd1c441dcfb0ecf1"
+   },
+   "ranger-wash-1.png": {
+    "raw": "f80729f6321ae4916b08cb6685039339b541777f98711fd894f5f6474d16ae9b",
+    "keyed": "56396840ba3d3e39cd8af8ca8e4fc64490634c4098662edc90408c82e0b09fa3"
+   },
+   "ranger-wash-2.png": {
+    "raw": "ef0817297ba2dd25be6fda83927542dd525e5ba71eb965aa24d431d90566e744",
+    "keyed": "0d0b5664fd1fcc5adb0a9273d72cf90d2f6d306b519fedc8d1e908bdb228fe9c"
+   },
+   "ranger-wash-3.png": {
+    "raw": "91094ba7fb0020a82add7624f63d33c9ce28249985c8b56da7f75ce06d7aac68",
+    "keyed": "a497dbdf91bb6d016d13588e884959c6feb993cb752bbc04fc0d96cc8b51099c"
+   },
+   "shade-held.png": {
+    "raw": "0e43de6d671fb9bb6b96971201cbbe34891b11b59faaa9e6812268ac6f4710b1",
+    "keyed": "fa5b757df268e2d3f143e3198f9dd77577ef4821b7acb6d53dbd28e766d44a4a"
    },
    "stand.png": {
     "raw": "3507f978952d9cc10d5e98ad41e19fbc5b2408c5ba330cb1fa4569db2ce6d350",
-    "keyed": "21c868054393b5f4fe734a2cf9c95fd28825652682032f6a364aa3d300579e3b"
+    "keyed": "4c8357dedf4663ee11df6a18edce077c2b298d5066fcf2c2a66b12c445aa6ca2"
+   }
+  }
+ },
+ "nevada-store": {
+  "key": "nevada-morning",
+  "strength": 50,
+  "files": {
+   "back.png": {
+    "raw": "dc83e8dcd604305630431e2a49a9693d511dfd1411a621e54da06c4483f3753f",
+    "keyed": "f9748dad3a06dcb0a7a9402b64fa3ec36ce5fa60f27ad94a64fcc079031e5cf6"
+   },
+   "cooler.png": {
+    "raw": "9ef907060cd22712bc3e867b46a7746aef8ff8d8aee2f05b6830e7736e0f8aa3",
+    "keyed": "46298171121df1a544a71844c371692e585c364f155a7a25de85ef6ee9f49472"
+   },
+   "counter.png": {
+    "raw": "d9f1e60ce9882a9fe477dd1ecbcb2d241de25f6e0155b70d395c237f3939e93e",
+    "keyed": "3dcc3a3fe8075fc26aefe93196883f4771390480801763e0fb3c67ee2f5edef1"
+   },
+   "doorframe.png": {
+    "raw": "cba1120366f6ca6a97d91289929499d8f9117607db159f70c9d4a481a16b3603",
+    "keyed": "3b81e19c93a6eb0d704c3d3326386c9c6bac8470fc681ed472f252700c6314d9"
+   },
+   "egg-dust.png": {
+    "raw": "6980dfa7d2ddf9bc7892aa1f66c565eb1ebe36b3e05ee6ae35a8d541e75b22c3",
+    "keyed": "f25b289c73725cc5f848df22d2184b9bdbfcea36b2045f42ab530c1748e0ad2e"
+   },
+   "front.png": {
+    "raw": "9e1b159e8324cdacd9a4a5a8f4f16fc944108b4d523e2c1d37207a1fe3a4e240",
+    "keyed": "62d808a2862a8ef6f8cb2fe983c8109c3bf46d054ee4bf310a80f39e6c1e8a36"
+   },
+   "hat-1.png": {
+    "raw": "b5a82b9696e15eb31ca453d7b96fcf1186116df88c525147f08da4d10ca4bd27",
+    "keyed": "83bd5ec39bc98c1bd75d30b3be623d7b38ee6d6b96225a261c4700da35ea6c40"
+   },
+   "hat-2.png": {
+    "raw": "60f7eacca604d5dcbe4fb6f0e90dd20e197d285fbf80d5b029e74666fe681e33",
+    "keyed": "5baad74fd6c564b837ed6ad8f226971970e6d1fe89eaa11946a180996a1c19cc"
+   },
+   "hat-3.png": {
+    "raw": "ec164a187f7aa06398f1b5508f66ddf1f0d5aff015754b3670626c95f99c0deb",
+    "keyed": "b37765c4a8be4525f7d1f8c1e05421db12466b5fd9bf36d9af8ac57c36226eb9"
+   },
+   "hat-4.png": {
+    "raw": "250d6aed3c35f75bb0e09094fb04fead98db68a59db7a72868ef60056f265119",
+    "keyed": "46243d9b619e572256f573b6472a5dc20e73593420b3fbffb4cf7d46aaf1af37"
+   },
+   "hat-5.png": {
+    "raw": "2b6c52daa44f6695e2862674693a98f09c7890e815dbce2d899248a48d1f5ed8",
+    "keyed": "2588a90f252ed794d700b2477c4a443d3964dd0dc94f903d8022d6ed23798045"
+   },
+   "hen-1-guard-a.png": {
+    "raw": "e56a73d2ad59393e7aaa89ca15041e61e40c06a43fe1e65cf46356ca5103d99e",
+    "keyed": "161e7dd07112be43174a627900be2583ee759b68c31c7bea61459686f3f7e8a2"
+   },
+   "hen-1-guard-b.png": {
+    "raw": "39ba78efa3d4bca06cfdbfe090336459f1b57b0cfc17a8bb64ae9d252c0143f4",
+    "keyed": "3b3c802068de03b2525979f15df7d052cf402635bc287b35b8fb13e70a4d4acc"
+   },
+   "hen-1-peck.png": {
+    "raw": "ef24ef7381b6fd72d89485617b5a42b11c20ae4aaee858db0abd4c56139f4855",
+    "keyed": "a5bbe4fc6c8f04b1e1d3f2f41d1ab05278769253666ac41119d91b69bd63811d"
+   },
+   "hen-1-sit.png": {
+    "raw": "9c492e6b3b4989e9538db370c260061b68ab4c0dae8ab510c56961701de3d73c",
+    "keyed": "afe71ac28cd4430af0d3a2aea36168df5f53ac36d89b3c7d645ee3261d8aaa3b"
+   },
+   "hen-1-turn.png": {
+    "raw": "61682b7b39efd58f60c856c0cc2aee088122f2040ded370c31ba5515a0425200",
+    "keyed": "2670df28778789d74bf4c1ba52dde48319bae977b13bf687d2d916f77bafbc3c"
+   },
+   "hen-2-guard-a.png": {
+    "raw": "dace5fbe3d21ed18c380c490b8d09889e161b3d97b428900afe05fd4e2d3630c",
+    "keyed": "c5461863b171d6c6caf8fcea527511145c7a67943ff0b392a088e5917eee21d6"
+   },
+   "hen-2-guard-b.png": {
+    "raw": "a91cd48f6aec65bd80beec030b147132c3d46d6b8acf6a6ed8c2f104314db466",
+    "keyed": "6dba63c8d0cf3c331f7613d83774a4ee30855471ec75e38f4b8a4426f0e40006"
+   },
+   "hen-2-peck.png": {
+    "raw": "495645f5f015e45a7dcc652532e84d9e550489332d8412fdee884d13a8b7c873",
+    "keyed": "4c7db64d66254b5966792cb97662f882dec57bf2ced29f655ba073718ef7e593"
+   },
+   "hen-2-sit.png": {
+    "raw": "6902b4feb9a51e525445bfbd27b26e27827cf7be5a1bd815eab45c3316a992de",
+    "keyed": "8316d8827d8390b9c04e6410e4bb1e454d4a3b95ccaefbf0026b0a36a800901c"
+   },
+   "hen-2-turn.png": {
+    "raw": "834b4f951163d64fd605d74b31828fe5a6856c59051c39c8a85bdc96ef980e6d",
+    "keyed": "ae7c19c9d7a38adc1be7b35e28c02d2df57beb6a01304d0cbb4cb5602d62d144"
+   },
+   "hen-3-guard-a.png": {
+    "raw": "3a361f361597e4fbae0ccc9ee278306215866404f343a1e1866cb60bb44443e3",
+    "keyed": "531759a613b9e409274ee9515d66d4f363c144b4b5edd5c5a53f7684875c105f"
+   },
+   "hen-3-guard-b.png": {
+    "raw": "1a1f2a21ebae3aac84027a1731c8290fec731d72b7612ebd145356250ae9c8f8",
+    "keyed": "5df5ad61c5f616b3238a9aa4ee319879dfe4f2a25fb31a920ef868465e65ebb7"
+   },
+   "hen-3-peck.png": {
+    "raw": "79226307ed2b660fae8725e7205694d8731b8eb6c8532fb6e416adce18289796",
+    "keyed": "7a28a10c24ea29002362d2476a5776f3a7d75d051c40470b4635053faa5db4cd"
+   },
+   "hen-3-sit.png": {
+    "raw": "6cdc5b9966779bd9f363f7dbc612b7f9c9a5d33fcb89e3afba00681282b2bde8",
+    "keyed": "d41de6d30d832fdb86c0f30fea3634d21f12ca97cba7007be11f692351c50704"
+   },
+   "hen-3-turn.png": {
+    "raw": "e6f9a04602521cf5c180c67f04f6be7ec55008ee6dc52c32448e4ca3d1ed39fb",
+    "keyed": "38f9099b2044a60d2d1f9e89adc315ecf6259313904d424b396b029ad9b0d866"
+   },
+   "hen-4-guard-a.png": {
+    "raw": "a696d66c054f1d9be646c3824d7fbbc05938da1a5e5a97a3c8ff90844dd3526c",
+    "keyed": "7b77bd55165b7f6d578f17926851b132c5b98c09f90e77e8ea78d6e01227359f"
+   },
+   "hen-4-guard-b.png": {
+    "raw": "709068cc5c55850fb11e3642abd29c9f67f6a48486c715fbb6c94fd5e5f46607",
+    "keyed": "877fa0e1d4e7f706e99fc4a8209fa1786a33ee6d2b3ea4aeeb9570e16edc55b8"
+   },
+   "hen-4-peck.png": {
+    "raw": "ac0c06a4453415bed04bd06913e5d6c629d1f80f9d4169bc08b25c87398631ea",
+    "keyed": "d17b1fd535abaa929c5708b363fff01ec9da6a3b5255cee3b6c5e65816e1498b"
+   },
+   "hen-4-sit.png": {
+    "raw": "fe7b8dcd157f42f2335e7c8b1ebf697647790b2d4703b2e61c2d303a752e4de9",
+    "keyed": "29d4c41e17676996cb241174948b5c2c214dd2ef7292360b0784069fe110393d"
+   },
+   "hen-4-turn.png": {
+    "raw": "3bfd436f2cc352381d3745ad226ff15b99e98bf835f07b5ef2f28e2b006edaca",
+    "keyed": "e57fda166c13e0056c4521a56c8b44a58c2e85631a20e4b8a8c610efb405a9b9"
+   },
+   "hen-5-guard-a.png": {
+    "raw": "6a978bf441bdf16edbf1b825b72c386767033f0da26b7679811b44ec3741ddd6",
+    "keyed": "18ad00195fb9c46f7cfb3a07eac4b4f24a745b227b1626f6d925e52a440eb09b"
+   },
+   "hen-5-guard-b.png": {
+    "raw": "27da2583833b8943f5f4d547a5e7d7c4c49e8c28639fd8414ae8a7174543cac9",
+    "keyed": "cd2f85b6b4610dd2548540a0578f03980027043f917155e7720e4f1e49e1d593"
+   },
+   "hen-5-peck.png": {
+    "raw": "25ff51ae08857d5f39351c28c2292473ba4d38eddb3fb4dd58fdd6ff4bc8f0f8",
+    "keyed": "e3b19cd57ff860b00e79722f6efa7a58baf2acaea37372566b8ac9f72028bacb"
+   },
+   "hen-5-sit.png": {
+    "raw": "00ac5a6a65efd854d9c403d142eaca3afe4e8f69ba63190f2215cbfe80ec3c29",
+    "keyed": "6aad948bdcec5402378f8a3885e6152bb1bf361332adc1938b7e6c1815d41662"
+   },
+   "hen-5-turn.png": {
+    "raw": "b711d9cffa3da51423ab1322c09f05879b3f2a4e9572495a33ff1904d2b520fb",
+    "keyed": "7a5d0906739b8e6618578368b236a79e3ebc14d9beaa3ccc9ad97a245597c92a"
+   },
+   "mirror-shades.png": {
+    "raw": "8ed69427e87056e6e4f0892927b77df43f565ab1a12e8eb279361de46e0ee1ae",
+    "keyed": "509e6a899c5af43450285c4a0263fd7cf6f95a6818c7f005f1a3a4d0b9d1623a"
+   },
+   "rockbins.png": {
+    "raw": "fca3017fd25597c3899811b7982c87557a5b612833d62d8cada3d25fd508540a",
+    "keyed": "d108c9a2678a80021ed58c66dc8e42749b024ad5ed5190681402fde1f368e57c"
+   },
+   "roller-0.png": {
+    "raw": "8f1f09fd13dba8b460da6dd588b1262b9f104be0420346377f8d36683f9286d3",
+    "keyed": "64d0746e78c309337ba1dfcbca6c31ed5f41beff97b149e14f0eb44d353f75d1"
+   },
+   "roller-1.png": {
+    "raw": "1ead21ffcec02989386628a9bc0ba3d23f749252c09e5fdbf0bcf8284276da3c",
+    "keyed": "9dd49f86f2fe90e52c07a04865a22acdd8037a6cb96708369bc89652860a83ba"
+   },
+   "spinner.png": {
+    "raw": "b74d7bcfd78d5a399c62c2c90e03d51d290382d7e406fdcd74c7371ce850e765",
+    "keyed": "1798aadbbf04d30d69746c8d3b24fada37dde9adb5d7f17e49cc58b9816f910c"
+   },
+   "tv-0.png": {
+    "raw": "b725842d62734146f496a64122841d4b453b38bfb973f4ce79677a1a0bc41946",
+    "keyed": "1b6277e64f0d434444a89c7c50b62f47c477d97dbb58685f104f2e883568a196"
+   },
+   "tv-1.png": {
+    "raw": "9600889d80cb3ee97dcc6e5084541ddc63cde0a829140867bfb1b05802efaba8",
+    "keyed": "d9af8c254c6934d1a370979efd2943b67d72984988d7f4a4496a21a17a2c75b0"
+   },
+   "tv-2.png": {
+    "raw": "c30ef9860f4cff38fa5a3800bfd5c92af0d5c62aac59b64c850d4e32852b7894",
+    "keyed": "9934e237c718f069e189e5bdbd20ab7ead7dc80dbc05c960b13148bcb8c31a88"
+   },
+   "window-shade.png": {
+    "raw": "db98284b42b7a7426c4cc687af3c51004af62925fda37e38ea2be2cca0c7c6b6",
+    "keyed": "a03a3399701e034eeecd976cce4fd28b22c5d9ffabf4e1c869fa22e869b10352"
    }
   }
  },
@@ -717,11 +1273,11 @@
   "files": {
    "awning.png": {
     "raw": "fd1b8827077ba4c4ccc3b6cb318ecfc473bc6643f918c65eafb0a30184ef509f",
-    "keyed": "a3996f362d9cc65fbc60e23b269f5119821de1495d58f6c841bb187b5091a405"
+    "keyed": "0095b674ef415f23c33fde08e4c35f02a359a659211f18f351ef71c74119257d"
    },
    "back.png": {
-    "raw": "2830a8764c57bb4579dec27aea76e303ffa2c3655297cfd137cf8babc7f6fad9",
-    "keyed": "3e4c7426c95d877b9a2cbc47c3c583e10b1583fd6e5e12a5571a3cbfd08e4e14"
+    "raw": "3120007ca77868018ddaa5bbe9a8c9bc5b7a193ceed46740f14603d91f5a0aad",
+    "keyed": "8ceb7c69be194b9f012451b4bd4fc281dd94c7bc398604c1609f8e827460bc13"
    },
    "cat-1.png": {
     "raw": "844328688b10ff03dcb3467c3a77d2122418a0a65b4d32924c19e688be27921b",
@@ -745,67 +1301,67 @@
    },
    "fountain.png": {
     "raw": "d4761f2822d8ba2a5280f4b6923f423cecb4e44f552426867c52896423008a45",
-    "keyed": "27add75907f13217e4c81f6e6185eac4e0dc8bf7328e356afa8c3082e8e2a4b9"
+    "keyed": "98725e7aac7e0e0dbd9fd6d9609e907936edaeb0a3fa9780a9b7957f94653cf5"
    },
    "front.png": {
     "raw": "adefa991458977680624494618af672f1d5b87a689811d618c15f6a5eea4715c",
-    "keyed": "342ac21a518d458711f1d3dcc8447e7aa96f6b4480a7ab23d627c46cf7e394af"
+    "keyed": "fb05fefcff9237da73b987084e47d298d6d9424d820925954e2ed8adfa6e5449"
    },
    "laundry-1.png": {
     "raw": "62443f71982129d1012051e05fcf053b6950490b0b6f34370b75f6075076ec63",
-    "keyed": "2b7cfab9a86205433d0d8478556811530d111ccacce12334014e6456b04672e9"
+    "keyed": "5c3af33ed2638c9a5a1d9bf150abdb640bc9877bc2c22f96cbc1e80d489f85dc"
    },
    "laundry-10.png": {
     "raw": "08ed1dc69aca0fe39e4ff2f59f3e589c2ec2b0d63b46889afc548b89e56ba013",
-    "keyed": "568162289c20fd6818e9c9a6962d2b83d68f2e100e606309612a756274002a9a"
+    "keyed": "134698ec474c351b2ff5215ea20aa50e12d73bb9a9d063f370fec69e08d715a6"
    },
    "laundry-11.png": {
     "raw": "7319347d6278eb34d5cf1dd9ff266c2975851912a5fd9030e54ad38c67567550",
-    "keyed": "3c4ce98566018d9c8fb4b82652d72a83abc8ad97f59318425b5bdf8c8bc61e81"
+    "keyed": "53e69624f056eec31b22779b20a9f16f02aabd0c135dee20a7cd64385bf658c3"
    },
    "laundry-12.png": {
     "raw": "d1b0be455fae642d1e4b07b38014bc0944a839c8bab3ead8f232e4d069c41757",
-    "keyed": "83a00625ca3f446252594f861d0fb2bda3b08f1f7fc7844042c985c73403589e"
+    "keyed": "264d51be6cf7d6af14571fdfc8515c2598f98074b656e29703f5486b2162f5df"
    },
    "laundry-2.png": {
     "raw": "5ceb7faf284702d196ef54ca42d6225dc50fa7843a3c1cd2d08af7fd951137fa",
-    "keyed": "8d95edc333448ced962889c3aedf99c8e41a0919eb4bfc25bd0b1013ce6a757a"
+    "keyed": "988ab5368c34a849bed47905432ed88aad5678bf878d74ce209ec7485f6524e8"
    },
    "laundry-3.png": {
     "raw": "9f7a47c68440c2ab0b00018556b11cabfb1b586bd269660f2be81c3035221937",
-    "keyed": "7ca3ee902e3fa2a6e3ae7afa08334089bda31f709fb921fd6d107ea4803ef495"
+    "keyed": "57a0291704f96118039a35989e15d78cf8e6f870d51e31e730d6568e4fbe7a78"
    },
    "laundry-4.png": {
     "raw": "1432337316449a61c54ea3aa1ab638c8580edfa53fe0b6f6716c7d4e03ace0f6",
-    "keyed": "4de2c66289fcaf231223165f109fbef7e6eaf264c74064735ee1d6b9088dcf8f"
+    "keyed": "1098978c148a8bb67a3ba9fcc9fde56851d97cbb944dfc8cf520c29b24e7fcef"
    },
    "laundry-5.png": {
     "raw": "a72d06dfb6918125b10fc8be5aae498f3be1f5cf5a0f49255bb00286a0ab7aed",
-    "keyed": "c76a43870a6e95a8cf49d779a06d129cd687189f4d6212c9c5d4ddf16a9233b7"
+    "keyed": "9561e18b9cb67c3d928aafd2512333faa64d1a89a68c69b16c821c3c72929e35"
    },
    "laundry-6.png": {
     "raw": "dc30202381a9c05a9a57db73822bc61412e8a250b4e22fd88fb283da79658b9c",
-    "keyed": "9070b4be6909482e4cbac9355a75403c2e8c4660681ce342c4b3e1a6be9001b5"
+    "keyed": "aa571448030b30556e4dd5ebf4fd5603e03f6a7c5993354159215f8de8326ea7"
    },
    "laundry-7.png": {
     "raw": "2b4b03561a744a1d34afcd039cd3464fc279f348ee0b47a162c237940120476b",
-    "keyed": "01f556fa4f0ff35d249a1bdf177674a69c63a515e43b04b9b4be24166d6b5321"
+    "keyed": "8f724b2e3845e1fb21d3ad8047c9b481b35bf2ef44b6f9230c7a7ddfdee597b4"
    },
    "laundry-8.png": {
     "raw": "d06d4a1172e7f19e16ca9326dd1d79ddb708733afe1e53319536deaa4933f78f",
-    "keyed": "a5e9f42c4b2f3ec9320f98970d97181927a18dc2cb9077b24cdb3822c3ba24d9"
+    "keyed": "9488ddfb85cec7fd88f4f21c0a65a4ce8411211d2b979f411c50084ab0d58233"
    },
    "laundry-9.png": {
     "raw": "5f51065a704d98ef43794687839695d49345c985bcd27861530368ee5b32d891",
-    "keyed": "1a3565491a290edc546b2cde29383571b4cf97b018c1b35bb1faff2e79d38fc1"
+    "keyed": "eb370b104fdea483c03981c58771340a76f8771de8a523d7a26160cfcfe920bd"
    },
    "laundry-lines.png": {
     "raw": "0377ee8e4c699fe3a77b3ee1c6ee0d69d6955f06e4b4e852c1467f18dcd5fea5",
-    "keyed": "5cbcbc16ead3fd01134018dfa53f374bb670d05b76743f26a2d64c24c3e6d891"
+    "keyed": "206c818683f460346b2081139b72b4252fbc31e7b3b9e0ecdabb8b937fd7a7a1"
    },
    "laundry.png": {
     "raw": "7194b695f85e493d0cfee8ce01bd7f461348e69565e6b69a8c3b8841c7bf9594",
-    "keyed": "11b816627996a86a73664c50c829931f25612a658c71814aa389bf00308fcf4c"
+    "keyed": "bc16042e61589fe4891be780d249074e4dad8ab9704921eef01ac8423de70383"
    },
    "pigeon-1.png": {
     "raw": "3285551ef77043c00b632a5e2a7c46afa86818cec7ed53da4225d4323c2e4833",
@@ -1113,7 +1669,7 @@
    },
    "tunic.png": {
     "raw": "73525400644acc0c0db2b899dd8654656a8e15cb626976f33ade38a42efc47aa",
-    "keyed": "7ffd66487ee8d4d584fc5c0f2c3beffcd49a1a5747b7c781df07c8449a58a1c1"
+    "keyed": "c2c712283bd9a6c889715925aa540c6f7e3af3d6a533596d3c1bd9ad44bec502"
    }
   }
  },

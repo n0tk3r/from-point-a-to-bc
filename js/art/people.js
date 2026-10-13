@@ -17,6 +17,15 @@
 //   sit.drawn  their seat is drawn with them (a stool, a lawn chair): it stays where it is when they get up
 //   riseMs     how long getting up takes them, in ms, if not the usual
 //   fidgets    their own small movements, besides everyone's: { stand: [...], sit: [...] } (`only: true`: theirs and no others)
+//   (NEVADA-12P, round twelve:)
+//   crown      how far a hat or a hairdo rises over the head, in heights, so that words are put over it (tallOf in rig.js)
+//   hatAt, pencilAt   for the `hat` and `pencil` movements: how high the brim, or the pencil, is, in half-heights of the head
+//   banjoPot   for `strum`: where the banjo's head is, in the space of the shoulders (as hands are placed)
+//   sit.seat "floor": sat on the ground with the legs out in front, leaning back on both hands
+//   pray.fold  someone sitting folds the hands together, as standing, instead of lifting them open
+//   hold.loose a prayer may take this hand (the thing held then hangs from the folded hands: Grandpa Joe's banjo)
+//   face.shadesTilt   dark glasses knocked crooked: the left lens a pixel lower (1) or higher (-1)
+//   top.check  a check woven down long sleeves too: { mat, every, band, stripe } (with top.stripe and top.bands: a plaid)
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -24,7 +33,7 @@
 // docs/CHARACTERS.md says who these people are. To change someone, change the numbers
 // and colors here; every view and every animation follows. tools/sprites.html shows the result.
 
-import { ADULT, CHILD, WOMAN, blend, ramp, shifted, add, mix, turn, wear, upOf } from "./rig.js";
+import { ADULT, CHILD, WOMAN, blend, ramp, pack, shifted, add, sub, mul, mix, turn, unit, wear, upOf } from "./rig.js";      // (pack, sub, mul, unit: NEVADA-12P)
 
 // Skin: the plain color, the shade, and a deeper line. (The first tone is kept for things that shine.)
 const SKIN = ramp("#fbdcc0", "#f0bc9a", "#c98664", "#8c5440");
@@ -982,6 +991,710 @@ export const agent = {
   },
 };
 
+// =====================================================================================
+// NEVADA-12P (round twelve): Grandpa Joe, Grandma Jolene and her hats, the backup, and Jed's collar
+// =====================================================================================
+// Who they are: briefs/out/nevada-expansion-design.md ("Characters"). All of them people of our own: nobody's likeness,
+// no film's costume, no brand.
+
+/** One centimetre in the rig's measure, for seats: a grown person 1.0 high is 1.75 m (the stage's own scale: a stretch
+    limousine 6.3 m long is 575 pixels where a grown man is 160). A seat is as high for whoever sits on it. */
+const CM = 1 / 175;
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const smooth01 = (k) => { const t = Math.max(0, Math.min(1, k)); return t * t * (3 - 2 * t); };
+/** One pixel of ink at a point on (or just over) the figure, where something is drawn and nothing nearer stands in front of
+    it: a chain on a neck, a flower on a blouse. (A pixel stamped with no depth would show through from the far side.) */
+function inkAt(cx, p, ink, tol = 0.012) {
+  const { P, sf, S } = cx, q = P(p), x = Math.round(q[0] - 0.5), y = Math.round(q[1] - 0.5);
+  if (x < 0 || y < 0 || x >= sf.w || y >= sf.h || q[2] < sf.z[y * sf.w + x] - tol * S) return;
+  sf.dot(x, y, ink, null);
+}
+/** A thread through the points given (a loose string, hanging in the air or over a coat): a line one pixel wide, drawn as a
+    shape so that whatever is in front of it hides it. (Its part throws no shadow: a string is too thin to.) */
+const STRING = ramp("#f8f4ea", "#eee8da", "#dcd6c6", "#c4beae");
+function thread(cx, pts, mat = STRING) {
+  const o = { part: cx.parts.FOOT.R, fn: (t, nx, ny) => (nx * nx + ny * ny > 0.36 ? null : undefined) };
+  for (let i = 0; i + 1 < pts.length; i++) cx.limb(pts[i], pts[i + 1], 0.0001, 0.0001, mat, o);
+}
+
+// ---------- Grandpa Joe: came west in 1974 and never got round to leaving; forty years on this porch ----------
+// Bib overalls over a red plaid shirt, a straw hat with a dent in the crown where the coin came down on it, a full white
+// beard, white hair, boots; faded blue eyes. Slow, and the kinder he is the slower he goes. He is found sitting in his
+// rocking chair (drawn with him: it stays where it is when he gets up) with the banjo across his knees; on his feet he
+// carries it in his right hand by the neck, the head down, and hooks his other thumb in the strap of his overalls.
+const JOE_PLAID = ramp("#ff8c74", "#dc4632", "#a32e22", "#6a1c16");      // his shirt: red,
+const JOE_CHECK = ramp("#a83c30", "#6c2420", "#4a1714", "#2e0e0c");      // checked with dark red: coarse, so that it reads small
+const OVERALLS = ramp("#a6c2ea", "#6a8fc4", "#4b6a98", "#30476a");       // denim, washed a few hundred times
+const BRASS = ramp("#fff3b8", "#e6c46c", "#ad8d3c", "#725a22", { shine: true });
+const HATBAND = ramp("#97603e", "#6a3f26", "#4a2b19", "#2c190e");
+const DENT = ramp("#c9a95c", "#9c7e3c", "#76602c", "#4e3f1c");           // the shadow in the dent
+const ROCKER = ramp("#eab474", "#c4863f", "#8f5c29", "#5e3a17");         // the rocking chair: honey-colored wood
+const CUSHION = ramp("#f8de8e", "#e0b44c", "#aa842e", "#72581b");        // a cushion Jolene made: mustard calico
+const BANJO_HEAD = ramp("#ffffff", "#f5f2e8", "#d4cebd", "#9c9684");
+const CHROME = ramp("#ffffff", "#d0d5de", "#9097a3", "#565c67", { shine: true });
+const NECK_WOOD = ramp("#b47e4e", "#805232", "#5a3720", "#382214");
+const SPLINTER = ramp("#f4dcb0", "#dcb880", "#a8864e", "#705830");
+const INK_STRING_HEAD = pack("#aaa79d"), INK_STRING_NECK = pack("#f0e6d0"), INK_PEG = pack("#fffaf0"), INK_GLINT = pack("#ffffff"), INK_BRIDGE = pack("#4a2c18");
+
+/** The height of his rocking chair's seat, and of the limousine's long seat (PAINT-12C confirms the painted seat: set
+    LIMO_SEAT from S/work-paintC/ready.md). In the rig's measure: see CM. */
+export const ROCKER_SEAT = 42 * CM;
+export const LIMO_SEAT = 42 * CM;
+
+/** A ring (a banjo's rim, a hoop) as short tubes round a circle: `c` the middle, `a` and `b` two unit vectors across it. */
+function ring(cx, c, a, b, r, tube, mat, o, n = 20, from = 0, to = 2 * Math.PI) {
+  const at = (t) => add(c, add(mul(a, Math.cos(t) * r), mul(b, Math.sin(t) * r)));
+  for (let i = 0; i < n; i++) cx.limb(at(from + ((to - from) * i) / n), at(from + ((to - from) * (i + 1)) / n), tube, tube, mat, o);
+  return at;
+}
+
+/**
+ * Grandpa Joe's banjo: a round pot (a white head in a chrome rim, the back of it chrome, which catches the sun), a long
+ * dark neck with its headstock and pegs, and the strings as a line of light. `b`: { c: the middle of the pot, u: up the
+ * neck, n: the way the head faces }, in the figure's own space. All of it is HELD.
+ */
+function banjo(cx, b) {
+  const { limb, sf, P, parts, S, th, seatOnly } = cx;
+  if (seatOnly) return;
+  const R = 0.085, u = unit(b.u), n0 = unit(b.n), n = unit(sub(n0, mul(u, dot3(n0, u)))), w = cross(u, n), c = b.c, held = { part: parts.HELD };
+  const facing = dot3(n, [Math.sin(th), 0.22, Math.cos(th)]) > 0;
+  // the rim, round the middle of the pot's depth
+  const mid = along(c, n, -0.010), rimAt = ring(cx, mid, w, u, R, 0.0125, CHROME, held, 22);
+  // the head (or, from behind, the back), flat, at the face it is on
+  const face = along(c, n, facing ? 0.004 : -0.024), pts = [];
+  for (let i = 0; i < 22; i++) { const t = (2 * Math.PI * i) / 22; pts.push(P(add(face, add(mul(w, Math.cos(t) * R * 0.93), mul(u, Math.sin(t) * R * 0.93))))); }
+  const ctr = P(face), rpx = R * S;
+  sf.poly(pts.map((q) => [q[0], q[1]]), ctr[2], facing ? BANJO_HEAD : CHROME, 1, { part: parts.HELD,
+    fn: (x, y) => ((x + 0.5 - ctr[0]) * 0.60 + (y + 0.5 - ctr[1]) * 0.80 > rpx * (facing ? 0.52 : 0.30) ? 2 : facing ? undefined : (x + 0.5 - ctr[0]) ** 2 + (y + 0.5 - ctr[1]) ** 2 < (rpx * 0.45) ** 2 ? 2 : undefined) });
+  // the neck and the headstock, angled back a little, and its pegs
+  const neck0 = along(c, u, R * 0.90), neck1 = along(c, u, R + 0.370), hs = add(along(neck1, u, 0.052), mul(n, -0.012));
+  limb(neck0, neck1, 0.0105, 0.0085, NECK_WOOD, held);
+  limb(neck1, hs, 0.0135, 0.0125, NECK_WOOD, { ...held, squareEnd: true });
+  const dotAt = (p, ink) => { const q = P(p); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), ink, parts.HELD); };
+  if (S >= 84) for (const k of [0.014, 0.036]) for (const sd of [1, -1]) dotAt(add(along(neck1, u, k), mul(w, sd * 0.018)), INK_PEG);
+  if (S >= 84) dotAt(add(along(c, u, R + 0.11), mul(w, 0.012)), INK_PEG);                // the fifth string's peg, part way up the neck
+  if (facing) {
+    // the strings: a line of light from the tailpiece over the head and up the neck; a bridge across them
+    const from = P(along(along(c, u, -R * 0.78), n, 0.008)), to = P(along(along(neck1, u, -0.004), n, 0.010)), j = P(along(c, u, R * 0.95));
+    const steps = Math.ceil(Math.hypot(to[0] - from[0], to[1] - from[1]));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / Math.max(1, steps), x = from[0] + (to[0] - from[0]) * t, y = from[1] + (to[1] - from[1]) * t;
+      const onHead = (x - from[0]) * (j[0] - from[0]) + (y - from[1]) * (j[1] - from[1]) < (j[0] - from[0]) ** 2 + (j[1] - from[1]) ** 2;
+      sf.dot(Math.round(x - 0.5), Math.round(y - 0.5), onHead ? INK_STRING_HEAD : INK_STRING_NECK, parts.HELD);
+    }
+    if (S >= 84) for (const k of [-0.016, 0, 0.016]) dotAt(add(along(along(c, u, -R * 0.32), n, 0.008), mul(w, k)), INK_BRIDGE);
+    limb(along(c, u, -R * 0.98), add(along(c, u, -R * 0.66), mul(n, 0.010)), 0.006, 0.005, CHROME, held);       // the tailpiece
+  }
+  // the chrome catching the sun: a glint on the rim, on its side toward the light
+  let best = null;
+  for (let i = 0; i < 22; i++) { const q = P(rimAt((2 * Math.PI * i) / 22)); if (!best || q[0] + q[1] * 1.3 < best[0] + best[1] * 1.3) best = q; }
+  if (best) { sf.dot(Math.round(best[0] + 0.5), Math.round(best[1] + 0.5), INK_GLINT, parts.HELD); if (S >= 120) sf.dot(Math.round(best[0] + 1.5), Math.round(best[1] + 0.5), INK_GLINT, parts.HELD); }
+}
+
+/** What is left of the banjo once it has come down on Jed: the neck and the headstock, the broken end splintered, a few
+    strings trailing from it. `top` is the headstock end, `dir` the way the neck runs from it. */
+function brokenBanjo(cx, top, dir) {
+  const { limb, sf, P, parts, S, seatOnly } = cx;
+  if (seatOnly) return;
+  const d = unit(dir), side = unit(cross(d, [0, 1, 0.0001])), held = { part: parts.HELD }, end = along(top, d, 0.300);
+  limb(top, along(top, d, -0.052), 0.0135, 0.0125, NECK_WOOD, { ...held, squareEnd: true });     // the headstock
+  limb(top, end, 0.0090, 0.0105, NECK_WOOD, held);
+  // the break: splinters of pale wood
+  for (const [k, s2, len] of [[0, 0.010, 0.030], [0.6, -0.012, 0.022], [-0.5, 0.004, 0.040]]) limb(along(end, side, s2 * 0.6), add(along(end, d, len), mul(side, s2 + k * 0.006)), 0.0040, 0.0016, SPLINTER, held);
+  // the strings, trailing loose from the end and curling
+  for (const [s2, len, wob] of [[-0.006, 0.150, 0.9], [0.002, 0.110, 1.3], [0.008, 0.170, 0.7]]) {
+    const pts = [];
+    for (let i = 0; i <= 8; i++) { const t = i / 8; pts.push(add(along(along(end, side, s2 + 0.012 * Math.sin(t * 7 * wob)), d, 0.010 * t), [0, -len * t, 0.020 * Math.sin(t * 5 * wob)])); }
+    thread(cx, pts);
+  }
+  if (S >= 84) for (const k of [0.014, 0.036]) for (const sd of [1, -1]) { const q = P(add(along(top, d, -k), mul(side, sd * 0.018))); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), INK_PEG, parts.HELD); }
+}
+
+/** His straw hat: a wide brim, a crown with a dark band, and the dent in the crown where the coin came down on it (on
+    top, toward the front, on his right). */
+function joeHat(cx) {
+  const { ball, hp, onHead, hy, d, parts, S } = cx, hr = d.headR;
+  ball(hp(0, 0.60, 0.05), [0.126, 0.012, 0.124], STRAW, { part: parts.HAT, fn: (ux, uy) => (ux * ux + uy * uy > 0.80 ? shifted(STRAW, 1) : undefined) }, hy);      // the brim, its edge a shade darker
+  // the crown: tall enough to read, a dark band round its foot, and on his right the dent: the top knocked in (a notch out
+  // of its outline as we see it) and the shadow inside it
+  const deep = S >= 120 ? 0.34 : 0.40;
+  ball(hp(0, 1.02, -0.02), [hr[0] * 0.98, hr[1] * 0.74, hr[2] * 0.96], STRAW, { part: parts.HAT, fn: (ux, uy, uz) => {
+    const o = onHead(ux, uy, uz), right = o[0] > 0.04 && o[0] < 0.98;
+    if (right && uy < -1 + deep && Math.abs(o[2]) < 0.88) return null;
+    if (right && uy < -1 + deep + 0.30 && Math.abs(o[2]) < 0.95) return DENT;
+    return uy > 0.42 ? HATBAND : undefined;
+  } }, hy);
+}
+
+// Where the banjo is when he sits: across his knees, the pot on his right thigh, the neck over to his left; given in the
+// space of his shoulders (as hands are), so it leans with him and his hands rest on it.
+const JOE_LAP = { c: [0.060, -0.214, 0.172], u: [-0.92, 0.30, 0.20], n: [0.10, 0.36, 0.93] };
+const JOE_REST = {
+  R: { hand: [0.106, -0.170, 0.214], bend: [1, -0.6, -0.4], curl: 0.5, point: [-0.55, -0.45, 0.70] },       // his right hand over the head, where it strums
+  L: { hand: [-0.176, -0.130, 0.208], bend: [-1, -0.7, -0.2], curl: 1.0, point: [0.30, 0.10, 0.95] },       // his left round the neck
+};
+const JOE_CARRY = { hand: [0.162, -0.296, 0.040], bend: [0.6, -1, -0.5], grip: true, loose: true };        // on his feet: the banjo by the neck, at his side
+/** Where the banjo is now: on his lap, in his right hand, between the two while he gets up or sits down, or hanging from
+    his folded hands while he prays standing. */
+function joeBanjo(cx) {
+  const { J, pose } = cx, T = (v) => add(J.sh, J.torso(v)), D = (v) => J.torso(v);
+  const lap = { c: T(JOE_LAP.c), u: D(JOE_LAP.u), n: D(JOE_LAP.n) };
+  const hand = (g) => { const u = D([0.10, 1, 0.12]); return { c: along(g, unit(u), -0.215), u, n: D([0.82, 0, 0.57]) }; };
+  if (pose.seated && !(pose.rising > 0)) return banjo(cx, lap);
+  if ((pose.praying || 0) > 0.5 && !pose.seated) return banjo(cx, hand(mix(J.R.palm, J.L.palm, 0.5)));
+  const up = hand(J.R.palm);
+  if (!(pose.rising > 0)) return banjo(cx, up);
+  const e = smooth01((pose.rising - 0.20) / 0.70);                                            // (as the hand travels: risePose)
+  return banjo(cx, { c: mix(lap.c, up.c, e), u: mix(lap.u, up.u, e), n: mix(lap.n, up.n, e) });
+}
+
+/** The rocking chair, drawn with him (sit.drawn): a seat and its cushion, a back of turned spindles under a broad top rail,
+    two arms, four legs and two long curved rockers, the curve touching the ground under his hips. */
+function rockingChair(cx) {
+  const { J, limb, ball, parts, pose } = cx;
+  if (!pose.seated || pose.noSeat) return;
+  const hip = J.hipC, sy = J.seatY, at = (x, y, z) => [hip[0] + x, y, hip[2] + z], F = { part: parts.EXTRA3 };
+  const arc = (z) => 0.78 - Math.sqrt(0.78 * 0.78 - z * z), rk = 0.012, X = 0.122;
+  const back = (h) => -0.112 - h * 0.17;                               // the back leans back as it rises: where it is, h above the seat
+  for (const sd of [1, -1]) {
+    const zs = [-0.34, -0.26, -0.17, -0.08, 0.01, 0.10, 0.18, 0.25];
+    for (let i = 0; i + 1 < zs.length; i++) limb(at(sd * X, arc(zs[i]) + rk, zs[i]), at(sd * X, arc(zs[i + 1]) + rk, zs[i + 1]), rk, rk, ROCKER, F);      // a rocker
+    limb(at(sd * 0.114, sy - 0.020, 0.122), at(sd * X, arc(0.124) + rk * 1.6, 0.124), 0.0105, 0.0105, ROCKER, F);           // a front leg
+    limb(at(sd * 0.114, sy - 0.020, -0.100), at(sd * X, arc(-0.124) + rk * 1.6, -0.124), 0.0105, 0.0105, ROCKER, F);        // a back leg
+    limb(at(sd * 0.118, sy - 0.024, back(0)), at(sd * 0.128, sy + 0.500, back(0.50)), 0.0125, 0.0115, ROCKER, F);          // an upright of the back
+    limb(at(sd * 0.120, sy - 0.010, 0.128), at(sd * 0.126, sy + 0.150, 0.132), 0.0100, 0.0100, ROCKER, F);                 // the post under the arm
+    limb(at(sd * 0.124, sy + 0.165, back(0.165) + 0.010), at(sd * 0.130, sy + 0.158, 0.160), 0.0125, 0.0135, ROCKER, F);   // the arm
+  }
+  // the back: a broad top rail, a low rail, and five turned spindles between them, each with a bead turned in it
+  limb(at(0.128, sy + 0.478, back(0.478)), at(0, sy + 0.500, back(0.500)), 0.0175, 0.0175, ROCKER, F);
+  limb(at(0, sy + 0.500, back(0.500)), at(-0.128, sy + 0.478, back(0.478)), 0.0175, 0.0175, ROCKER, F);
+  limb(at(0.118, sy + 0.090, back(0.090)), at(-0.118, sy + 0.090, back(0.090)), 0.0090, 0.0090, ROCKER, F);
+  for (const x of [-0.078, -0.039, 0, 0.039, 0.078]) {
+    limb(at(x, sy + 0.090, back(0.090)), at(x, sy + 0.470, back(0.470)), 0.0058, 0.0058, ROCKER, F);
+    ball(at(x, sy + 0.26, back(0.26)), [0.0095, 0.012, 0.0095], ROCKER, F);
+  }
+  // the seat, and the cushion on it
+  ball(at(0, sy - 0.020, 0.012), [0.132, 0.011, 0.136], ROCKER, F);
+  ball(at(0, sy - 0.004, 0.010), [0.120, 0.016, 0.124], CUSHION, { part: parts.EXTRA2, fn: (ux, uy) => ((Math.floor((ux + 1) * 5) + Math.floor((uy + 1) * 2)) % 2 ? shifted(CUSHION, 1) : undefined) });
+}
+
+/** His rope (grandpajoe-tied): white twine with a red thread twisted in, regulation issue. */
+const TWINE = ramp("#ffffff", "#f3f0e8", "#ccc6b6", "#908a7a");
+const TWINE_RED = ramp("#ff8c80", "#e23a2c", "#aa281e", "#701812");
+const twined = (t, nx, ny, x, y) => ((x + y) % 4 === 0 ? TWINE_RED : undefined);
+/** The rope, as the suits tie it: his wrists bound together in front of him, a turn round his chest over the overalls and
+    his arms, finished with a bow at the front. */
+function ropes(cx) {
+  const { J, limb, ball, d, parts, S, cloth, seatOnly } = cx;
+  if (seatOnly) return;
+  const T = (v) => add(J.sh, J.torso(v)), rope = { part: parts.EXTRA, bias: cloth * 2.4, fn: twined };
+  // round the chest, over the arms: high enough to lie over the bib, wide enough to take in the upper arms
+  const y = -0.082, hw = d.shoulderW + d.armR[0] + 0.016, hd = d.trunkTop[1] + d.bellyFwd * 0.3 + 0.018, rr = 0.0068;
+  const pt = (a) => T([Math.sin(a) * hw, y, Math.cos(a) * hd]);
+  for (let i = 0; i < 18; i++) limb(pt((2 * Math.PI * i) / 18), pt((2 * Math.PI * (i + 1)) / 18), rr, rr, TWINE, rope);
+  // the bow, at the front
+  const knot = T([0, y, hd + 0.004]), bow = { ...rope, bias: cloth * 3.2 };
+  for (const sd of [1, -1]) {
+    ball(T([sd * 0.024, y + 0.010, hd + 0.006]), [0.020, 0.013, 0.010], TWINE, { ...bow, fn: (ux, uy, uz, x, yy) => (S >= 110 && ux * ux * 0.9 + uy * uy < 0.16 ? null : twined(0, 0, 0, x, yy)) });
+    limb(knot, T([sd * 0.016, y - 0.056, hd + 0.010]), 0.0060, 0.0050, TWINE, bow);           // the two ends, hanging
+  }
+  ball(knot, [0.010, 0.010, 0.010], TWINE, bow);
+  // the wrists: bound together, a few turns, and the end left hanging
+  const a = J.R.wrist, b = J.L.wrist, m = mix(a, b, 0.5);
+  limb(a, b, d.armR[2] + 0.010, d.armR[2] + 0.010, TWINE, { ...rope, part: parts.HELD });
+  for (const k of [-0.012, 0.012]) limb(add(a, [0, k, 0]), add(b, [0, k, 0]), 0.0055, 0.0055, TWINE, { ...rope, part: parts.HELD, bias: cloth * 3 });
+  limb(m, add(m, [0.006, -0.060, 0.016]), 0.0055, 0.0045, TWINE, { ...rope, part: parts.HELD });
+}
+
+/** The seatbelt in the limousine: a gray band from his left shoulder down across him to his right hip, and its buckle
+    ("Regulations."). Over the ropes, when there are ropes. */
+const BELT_GRAY = ramp("#b8bcc4", "#8a8f99", "#636873", "#43474f");
+function seatbelt(cx) {
+  const { J, limb, d, parts, trunkAt, cloth, seatOnly, pose } = cx;
+  if (seatOnly || !pose.seated) return;                                // (on his feet, it is unbuckled)
+  const T = (v) => add(J.sh, J.torso(v)), from = T([-d.shoulderW + 0.010, 0.020, -0.012]), over = T([-d.shoulderW * 0.70, 0.004, d.trunkTop[1] * 0.70]);
+  const to = trunkAt(d.waistY - 0.050, 1.05, 0.020), o = { part: parts.EXTRA2, bias: cloth * 4, depth: 0.35 };
+  limb(from, over, 0.012, 0.013, BELT_GRAY, o);
+  limb(over, to, 0.013, 0.013, BELT_GRAY, o);
+  limb(add(to, J.torso([-0.010, 0.010, 0.006])), add(to, J.torso([0.014, -0.014, 0.008])), 0.012, 0.012, CHROME, { ...o, bias: cloth * 5, squareStart: true, squareEnd: true });      // the buckle
+}
+
+const JOE_FACE = { beard: SNOW, beardLen: 0.12, beardW: 0.74, beardZ: 0.52, beardFrom: [-0.40, 0.34], moustache: SNOW, moustacheW: 0.38, moustacheZ: 1.0,
+  brows: SNOW.tones[2], browW: 3, eyes: "plain", eye: "#2a1a12", iris: "#86a6c4", lid: "#6a4a3a", noseShade: true, nose: [1.1, 1.15, 1.25], blush: "#e88d78", lines: 1, ear: 1.15, jaw: 0.90, chin: 0.56, smile: 1, mouthW: 0.24 };      // faded blue eyes; a full white beard and a moustache over it
+const JOE_STAND = { swing: 0.32, arm: 0.20, lean: 0.07, lift: 0.85, bob: 0.010 };       // slow: the old-timer's walk, slower
+/** Grandpa Joe's body, whatever he is doing: everything but what is in his hands. */
+const joeBase = {
+  name: "Grandpa Joe", height: 0.97, crown: 0.045,                     // (crown: the hat, for his words over it)
+  dim: { ...ADULT, trunkTop: [0.110, 0.076], trunkLow: [0.110, 0.094], bellyFwd: 0.014, neckR: 1.04 },
+  skin: SKIN_WEATHERED,
+  hair: { mat: SNOW, bulk: 1.09, where: hairline({ front: 1.3, temple: 1.1, side: 0.06, back: -0.58 }) },      // white, round the sides and the back, under the hat
+  face: JOE_FACE,
+  top: { mat: JOE_PLAID, sleeves: 2, stripe: { mat: JOE_CHECK, at: [0.62, -0.62, 1.35, -1.35, Math.PI, Math.PI - 0.70, Math.PI + 0.70], half: 0.075 },
+         bands: [[0.035, 0.052, JOE_CHECK], [0.100, 0.117, JOE_CHECK], [0.165, 0.182, JOE_CHECK], [0.230, 0.247, JOE_CHECK], [0.295, 0.312, JOE_CHECK]],
+         check: { mat: JOE_CHECK, every: 0.062, band: 0.016, stripe: 0.22 } },          // a plaid: lines down it and across it, and down and across the sleeves
+  bottom: { kind: "trousers", mat: OVERALLS, rise: 0.105, bib: { top: 0.092, half: 0.56, strap: 0.20, back: 0.60 } },      // bib overalls
+  shoes: { kind: "boots", mat: ramp("#a2724a", "#76492b", "#50301b", "#301c10"), sole: ramp("#4d301a", "#372212", "#24160c", "#150d07") },
+  stance: "straps",                                                     // a thumb hooked in the strap of his overalls
+  walk: JOE_STAND, pace: 100,
+  gestures: [0, 8, 0, 1, 5],                                            // a nod; one open hand, low; a nod; a point; a hand to his heart (small, all of them)
+  fidgets: { stand: ["back"] },                                         // a hand to the small of his back
+  pray: { high: -0.30, bow: 0.34 },                                     // on his feet: hands folded low, his head bowed, his hat on
+};
+/** The parts of him that go everywhere he goes: the hat, and two brass buttons on the bib. */
+function joeGear(cx) {
+  const { sf, P, J, d, parts, fine, th, trunkFacing } = cx;
+  joeHat(cx);
+  if (fine) for (const sd of [1, -1]) {
+    const f = trunkFacing(sd * 0.40);
+    if (f[0] * Math.sin(th) + f[2] * Math.cos(th) < 0.3) continue;
+    const q = P(add(J.sh, J.torso([sd * 0.052, -0.098, d.trunkTop[1] + 0.006])));
+    sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), BRASS.tones[1], parts.TORSO);
+  }
+}
+/** Him standing, as he is when he gets up out of the rocking chair: the banjo by the neck in his right hand. */
+const joeOnFeet = { hold: { R: JOE_CARRY }, rest: undefined, walk: JOE_STAND, pace: 100, span: 1.12, shadow: 0.18, pray: { high: -0.30, bow: 0.34 } };
+export const grandpajoe = {
+  ...joeBase,
+  seated: "chair", sit: { seat: ROCKER_SEAT, lean: -0.13, knees: 0.16, feet: 0.12, drawn: true }, shadow: 0.27, span: 1.30, seatShadow: 0.21,      // he leans back in it a little
+  rest: JOE_REST, banjoPot: JOE_LAP.c,                                  // (banjoPot: where his right hand strums: `strum` in rig.js)
+  riseMs: 1350,                                                         // (slowly: forty years in that chair)
+  stood: joeOnFeet,
+  fidgets: { stand: ["back"], sit: ["hat", "rock", "strum"], not: ["knees"] },      // sitting: a touch to his hat, a slow rock, and a strum (figure.fidget("strum", { hold: true }) while he plays)
+  pray: { fold: true, high: -0.22, out: 0.10, bow: 0.36 },              // sitting: his hat on, his head bowed, his hands folded on the banjo
+  extras(c) { rockingChair(c); joeGear(c); joeBanjo(c); },
+};
+
+// ---------- NEVADA-12SA: Grandpa Joe on his feet, playing (the roadside's #12, the banjo's half-answer) ----------
+// "I'll stand where you tell me and play what you like": he stands at the glass in the low sun and plays. Standing, he
+// otherwise carries the banjo by the neck, and `strum` moves the hand that holds it; so, for playing on his feet, the
+// banjo is held across him as it lies on his knees (JOE_LAP, in the space of his shoulders), his hands where they rest on
+// it sitting (JOE_REST), and `strum` is his one small movement. The scene swaps him into this state at the glass and out
+// of it again before he walks back to his chair (js/content/scenes/nevada-roadside.js).
+export const grandpajoePlay = {
+  ...joeBase, name: "Grandpa Joe, playing", span: 1.12, shadow: 0.18,
+  rest: JOE_REST, banjoPot: JOE_LAP.c,
+  fidgets: { only: true, stand: ["strum"] },
+  extras(c) {
+    joeGear(c);
+    const { J } = c, T = (v) => add(J.sh, J.torso(v)), D = (v) => J.torso(v);
+    banjo(c, { c: T(JOE_LAP.c), u: D(JOE_LAP.u), n: D(JOE_LAP.n) });
+  },
+};
+
+// ---------- Grandpa Joe holding the sun shade up to the sun (PAINT-12A paints it: shade-held.png) ----------
+/** Where his hands hold the sun shade (grandpajoe-shade), in the rig's own measure: the wrist, in the space of his shoulders
+    (x to his right, y up, z ahead, from the middle of his shoulders), as guardShade.hold has them. Set from
+    S/work-paintA/ready.md (the painter's `shade_hands`, in picture pixels, for him standing at [572, 560] facing E, drawn
+    140 pixels tall: R [598, 482], the panel's near lower corner; L [602, 437], its near upper corner). If those points
+    change, S/work-people/shade-hands.mjs works the numbers out again and checks them; S/work-people/ready.md gives the
+    rule by hand. (SCENES-12 sets them.) */
+export const SHADE_HANDS = { R: [0.030, -0.249, 0.155], L: [-0.010, 0.032, 0.198] };
+// As the guard with the shade: his hands are where the painted panel's corners are when he stands at [572, 560] facing E
+// (SHADE_HANDS, above), and nothing moves them. He talks with his head; the banjo leans on the rocking chair meanwhile.
+export const grandpajoeShade = {
+  ...joeBase, name: "Grandpa Joe, holding the shade", span: 1.2,
+  hold: {
+    R: { hand: SHADE_HANDS.R, bend: [0.55, -1, -0.35], grip: true, still: true },
+    L: { hand: SHADE_HANDS.L, bend: [-0.55, -1, -0.35], grip: true, still: true },
+  },
+  gestures: [0, 2, 0, 4],                                               // a nod, a shake of the head and a lift of the shoulders, a nod, his head up: the arms never move
+  fidgets: { only: true, stand: ["look"] },
+  extras(c) { joeGear(c); },
+};
+
+// ---------- Grandpa Joe with what is left of the banjo: the neck in his right hand, strings trailing, no head ----------
+const JOE_SWUNG = { hand: [0.150, -0.235, 0.110], bend: [0.5, -1, -0.5], grip: true };
+export const grandpajoeBroken = {
+  ...joeBase, name: "Grandpa Joe, with the broken banjo", span: 1.15,
+  hold: { R: JOE_SWUNG },
+  extras(c) {
+    joeGear(c);
+    const { J } = c, top = add(J.R.palm, J.torso([0.006, 0.034, -0.012]));
+    brokenBanjo(c, top, J.torso([0.32, -0.78, 0.54]));
+  },
+};
+
+// ---------- Grandpa Joe, tied up by the backup: cheerful about it ----------
+const JOE_TIED = {
+  R: { hand: [0.020, -0.214, 0.140], bend: [0.80, -1, -0.20], grip: true, still: true },
+  L: { hand: [-0.020, -0.214, 0.140], bend: [-0.80, -1, -0.20], grip: true, still: true },
+};
+const joeTiedLife = {
+  hold: JOE_TIED,
+  gestures: [0, 2, 16, 4],                                              // his head and his shoulders: his hands stay where they are tied
+  fidgets: { only: true, stand: ["shift", "look"] },
+  walk: { swing: 0.29, arm: 0.0, lean: 0.05, lift: 0.80, bob: 0.010 }, pace: 90,       // slowly: it is hard to hurry tied up, and he is not trying
+};
+export const grandpajoeTied = {
+  ...joeBase, ...joeTiedLife, name: "Grandpa Joe, tied up",
+  extras(c) { joeGear(c); ropes(c); },
+};
+
+// ---------- the same, in the limousine: found sitting on the long seat (painted), the ropes, and a seatbelt over them ----------
+export const grandpajoeSeatTied = {
+  ...joeBase, ...joeTiedLife, name: "Grandpa Joe, tied up in the limousine",
+  seated: "chair", sit: { seat: LIMO_SEAT, lean: -0.06, knees: 0.12 }, shadow: 0.24, span: 1.2,
+  hold: {
+    R: { hand: [0.022, -0.236, 0.190], bend: [0.80, -1, -0.30], grip: true, still: true },
+    L: { hand: [-0.022, -0.236, 0.190], bend: [-0.80, -1, -0.30], grip: true, still: true },
+  },
+  fidgets: { only: true, sit: ["shift", "look"], stand: ["shift", "look"] },
+  stood: { hold: JOE_TIED, span: 1.12, shadow: 0.18 },
+  extras(c) { joeGear(c); ropes(c); seatbelt(c); },
+};
+// ---------- and loose: Ranger has had the ropes; the seatbelt stays on ("Regulations.") ----------
+export const grandpajoeSeatLoose = {
+  ...joeBase, name: "Grandpa Joe, in the limousine",
+  seated: "chair", sit: { seat: LIMO_SEAT, lean: -0.06, knees: 0.12 }, shadow: 0.24, span: 1.2,
+  fidgets: { stand: ["back"], sit: ["hat"] },
+  pray: { fold: true, high: 0.0, out: 0.05, bow: 0.36 },                // sitting: his hands folded in his lap, his head bowed
+  stood: { span: 1.1, shadow: 0.18, pray: { high: -0.30, bow: 0.34 } },
+  extras(c) { joeGear(c); seatbelt(c); },
+};
+
+// ---------- Grandma Jolene: his wife, fifty-one years; certain, cheerful, wrong about every fact and right about every person ----------
+// Tall and thin; a tower of gray hair with a yellow pencil through it; cat-eye glasses on a chain; a yellow cardigan with a
+// hen brooch over a flowered blouse; an apron with a pocket; flat shoes. And a different hat each time the store is
+// entered: `jolene` (a straw cowboy hat), `jolene-2` (a wide sun hat with fruit on it), `jolene-3` (a tiara), `jolene-4`
+// (a yellow hard hat), `jolene-5` (a hen). The same woman under each.
+const SILVER = ramp("#eceef2", "#c4c8d0", "#989ca8", "#686c78");
+const SILVER_COIL = shifted(SILVER, 1);
+const CARDIGAN = ramp("#ffec9a", "#f2c642", "#c6951e", "#86630f");
+const BLOUSE = ramp("#ffffff", "#f6f2fa", "#cfc8dc", "#968ea8");
+const SKIRT_PLUM = ramp("#b886a8", "#8c5c80", "#66405c", "#43283c");
+const APRON = ramp("#e4f2ff", "#b4d4f0", "#88a8cc", "#5c7a9c");
+const PENCIL = ramp("#fff2a0", "#ffd23f", "#d09a1c", "#8f6410");
+const ERASER = ramp("#ffc4cc", "#f08a9a", "#c0606e", "#8a3e4a");
+const JOLENE_SKIN = ramp("#fbe0cc", "#efc2a6", "#c8927a", "#8c5e4c");
+const INK_FRAME = pack("#17808a"), INK_LENS = pack("#ffffff"), INK_CHAIN = pack("#f0d27a"), INK_HEN = pack("#ffffff"), INK_COMB = pack("#e4302a"), INK_BEAK = pack("#ffc02a"), INK_BLOSSOM = pack("#f0708c"), INK_FORGET = pack("#6a9ee8");
+// The tower: from the crown of her head up and a little back, in her head's own half-sizes; and its top, where a hat goes.
+const TOWER = { y0: 0.70, z0: -0.22, y1: 2.10, z1: -0.40, r0: 0.86, r1: 0.70 };
+/** The top of her tower of hair, where the hat sits, and how to place a thing on it (turned and nodded with her head). */
+function towerTop(cx) {
+  const { headPt, d, hy } = cx, hr = d.headR, top = headPt([0, hr[1] * TOWER.y1 + hr[0] * TOWER.r1 * 0.92, hr[2] * TOWER.z1]);
+  return { top, at: (v) => add(top, turn(v, hy)) };
+}
+/** Everything about her but the hat. */
+function joleneBody(cx) {
+  const { limb, hp, headPt, J, P, sf, d, S, th, hy, parts, fine, coarse, trunkAt, trunkFacing, skirtAt, cloth, under, pose, seatOnly } = cx, hr = d.headR;
+  // the tower of gray hair, coiled
+  limb(hp(0, TOWER.y0, TOWER.z0), hp(0, TOWER.y1, TOWER.z1), hr[0] * TOWER.r0, hr[0] * TOWER.r1, SILVER, { part: parts.HAIR,
+    fn: (t, nx) => (((t * 4.2 + nx * 0.55 + 4) % 1) < 0.24 ? SILVER_COIL : undefined) });
+  // the pencil, through it: the eraser end out on her right, where her hand pushes it back in
+  const pm = (x, y, z) => headPt([x, hr[1] * (TOWER.y0 + (TOWER.y1 - TOWER.y0) * 0.55) + y, hr[2] * (TOWER.z0 + (TOWER.z1 - TOWER.z0) * 0.55) + z]);
+  const pa = pm(0.078, -0.010, 0.020), pb = pm(-0.074, 0.018, -0.022);
+  limb(pa, pb, 0.0052, 0.0052, PENCIL, { part: parts.HAT });
+  limb(pa, along(pa, unit(sub(pa, pb)), 0.010), 0.0052, 0.0050, ERASER, { part: parts.HAT, squareEnd: true });
+  limb(pb, along(pb, unit(sub(pb, pa)), 0.012), 0.0050, 0.0012, ramp("#f8e8c8", "#e8d0a0", "#b89c70", "#806a48"), { part: parts.HAT });
+  if (seatOnly) return;
+  // cat-eye glasses: a frame over each eye with a wing at the outer corner, placed where the rig puts the eyes
+  const eyeX = cx.spec.face.eyeX ?? 0.36, eyeY = cx.spec.face.eyeY ?? 0.06, headPx = 2 * hr[0] * S, full = headPx >= 13.3, fineFace = headPx >= 10.0;
+  const look = (v) => { const w = turn(v, hy); return w[0] * Math.sin(th) + w[2] * Math.cos(th); }, sideways = Math.sin(th + hy);
+  const mid = P(hp(0, eyeY, 0.80))[0];
+  for (const sd of [1, -1]) {
+    const vis = look([sd * 0.25, 0, 0.97]);
+    if (vis < 0.20) continue;
+    const q = P(hp(sd * eyeX, eyeY, 0.80)), w = full && vis > 0.70 ? 2 : 1, right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;
+    const ex = right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, ey = Math.round(q[1] - 0.5), out = right ? 1 : -1, put = (i, j, ink = INK_FRAME) => sf.dot(ex + out * i, ey + j, ink, parts.HEAD);
+    if (full) {
+      // a frame all round the eye, the upper outer corner swept up into a point, and a glint on the lens
+      for (let i = -1; i <= w; i++) { put(i, -2); put(i, 1); }
+      put(-1, -1); put(-1, 0); put(w, 0); put(w + 1, -2); put(w + 1, -3); put(w, -1);
+      if (out < 0) put(0, -1, INK_LENS);
+    } else {
+      // small: the top of the frame over the eye, its wing, and its outer side
+      for (let i = -1; i <= w; i++) put(i, -1);
+      put(w + 1, -2);
+      if (fineFace) put(w, 0);
+    }
+  }
+  // the chain: hanging from the arms of the glasses at her temples, down past her jaw, and in a loop over her chest
+  if (fine) {
+    const ends = [1, -1].map((sd) => hp(sd * 1.00, eyeY - 0.02, 0.18)), low = add(J.sh, J.torso([0, -0.104, d.trunkTop[1] + 0.012]));
+    for (const [n, e] of ends.entries()) {
+      const sd = n === 0 ? 1 : -1, c1 = add(J.sh, J.torso([sd * 0.074, -0.020, d.trunkTop[1] * 0.80]));
+      for (let i = 0; i <= 24; i++) {
+        const t = i / 24;
+        inkAt(cx, mix(mix(e, c1, t), mix(c1, low, t), t), INK_CHAIN);
+      }
+    }
+  }
+  // the hen brooch on her cardigan, over her heart
+  const bf = trunkFacing(-0.46);
+  if (!coarse && bf[0] * Math.sin(th) + bf[2] * Math.cos(th) > 0.25) {
+    const q = P(trunkAt(d.shoulderY - 0.086, -0.46, 0.004)), x = Math.round(q[0] - 0.5), y = Math.round(q[1] - 0.5);
+    sf.dot(x, y, INK_HEN, parts.TORSO); sf.dot(x, y - 1, INK_COMB, parts.TORSO);
+    if (fine) { sf.dot(x + 1, y, INK_HEN, parts.TORSO); sf.dot(x, y + 1, INK_HEN, parts.TORSO); sf.dot(x + 1, y + 1, INK_HEN, parts.TORSO); sf.dot(x + (Math.sin(th) > 0 ? 2 : -1), y, INK_BEAK, parts.TORSO); }
+  }
+  // the blouse's flowers, in the opening of the cardigan
+  if (fine) for (const [k, ink] of [[0.40, INK_BLOSSOM], [0.70, INK_FORGET], [0.92, INK_BLOSSOM]]) inkAt(cx, add(mix(add(J.sh, J.torso([0, 0.006, d.trunkTop[1] * 0.40])), add(J.sh, J.torso([0, -0.074, d.trunkTop[1] * 0.98])), k), J.torso([0, 0, 0.004])), ink, 0.03);
+  // the apron's pocket
+  if (skirtAt && !pose.seated) limb(skirtAt(0.20, 0.34, 0.006), skirtAt(0.44, 0.34, 0.006), 0.030, 0.030, shifted(APRON, 1), { part: parts.DRAPE, squareStart: true, squareEnd: true, depth: 0.3, bias: cloth, over: { [parts.SKIRT]: under } });
+}
+// ---- her hats: each one sits on the top of the tower ----
+const COWBOY_STRAW = ramp("#fff4c4", "#f0d88e", "#c4a85c", "#86703a");
+const TURQ_BAND = ramp("#9ee8e0", "#3fb4aa", "#2a807a", "#1a5450");
+/** 1. A straw cowboy hat: the brim turned up at the sides, a crown pinched along the top, a turquoise band. */
+function hatCowboy(cx) {
+  const { ball, limb, hy, parts, S } = cx, { at } = towerTop(cx), H = { part: parts.HAT };
+  ball(at([0, 0.004, 0.006]), [0.098, 0.010, 0.088], COWBOY_STRAW, H, hy);
+  for (const sd of [1, -1]) limb(at([sd * 0.080, 0.008, 0.002]), at([sd * 0.100, 0.034, -0.002]), 0.0145, 0.0080, COWBOY_STRAW, H);      // the brim, curling up
+  // the crown: tall, pinched along the top from front to back (a dip in the middle of its outline, and the crease's shadow), a band round its foot
+  ball(at([0, 0.040, -0.004]), [0.046, 0.044, 0.052], COWBOY_STRAW, { ...H, bias: S * 0.05, fn: (ux, uy) => {
+    const pinch = Math.abs(ux) < (S >= 120 ? 0.16 : 0.24);
+    if (pinch && uy < -0.62) return null;
+    if (pinch && uy < -0.30) return shifted(COWBOY_STRAW, 2);
+    return uy > 0.50 ? TURQ_BAND : undefined;
+  } }, hy);
+}
+const SUNHAT = ramp("#ffffff", "#fbf3e2", "#d6c8a8", "#9c8e70");
+const RIBBON = ramp("#c4f0a8", "#78c860", "#4e9440", "#30602a");
+/** 2. A wide sun hat with fruit on it: cherries, an orange, a lemon, a bunch of grapes, and a leaf. */
+function hatFruit(cx) {
+  const { ball, limb, hy, parts, S } = cx, { at } = towerTop(cx), H = { part: parts.HAT };
+  ball(at([0, 0.002, 0.006]), [0.138, 0.020, 0.126], SUNHAT, { ...H, fn: (ux, uy) => (ux * ux + uy * uy > 0.80 ? shifted(SUNHAT, 1) : undefined) }, hy);      // the brim, wide (seen a little from above)
+  ball(at([0, 0.034, -0.004]), [0.054, 0.038, 0.054], SUNHAT, { ...H, bias: S * 0.06, fn: (ux, uy) => (uy > 0.36 ? RIBBON : undefined) }, hy);
+  const fruit = { part: parts.HAT, bias: S * 0.08 };
+  ball(at([-0.044, 0.030, 0.034]), [0.022, 0.010, 0.014], RIBBON, fruit, hy);                                                // the leaf
+  ball(at([0.036, 0.026, 0.040]), [0.0135, 0.0135, 0.0135], ramp("#ffc48a", "#ff8a1c", "#c8600e", "#8a3e06"), fruit);       // an orange
+  ball(at([0.004, 0.022, 0.050]), [0.0130, 0.0100, 0.0105], ramp("#fffaa8", "#ffe63a", "#d0b414", "#8a760a"), fruit);       // a lemon
+  for (const [x, z] of [[-0.024, 0.044], [-0.012, 0.050]]) ball(at([x, 0.018, z]), [0.0090, 0.0090, 0.0090], ramp("#ff8c8c", "#e8202a", "#a8141c", "#6e0c12"), fruit);      // cherries
+  limb(at([-0.024, 0.026, 0.044]), at([-0.016, 0.044, 0.040]), 0.0025, 0.0025, RIBBON, fruit);
+  for (const [x, y, z] of [[0.060, 0.024, 0.020], [0.068, 0.018, 0.010], [0.060, 0.012, 0.016], [0.070, 0.028, 0.002]]) ball(at([x, y, z]), [0.0075, 0.0075, 0.0075], ramp("#d8a8ff", "#9a52d8", "#6c3498", "#442062"), fruit);      // grapes
+}
+const TIARA = ramp("#ffffff", "#e8e0f0", "#a8a0b8", "#6c6478", { shine: true });
+/** 3. A tiara: small, and glinting (the glints move as she breathes). */
+function hatTiara(cx) {
+  const { limb, ball, hp, sf, P, parts, pose, S, fine } = cx, H = { part: parts.HAT, bias: 1 };
+  const on = (x, y) => hp(x, TOWER.y0 + 0.40 + y, TOWER.z0 + 1.02 - Math.abs(x) * 0.55);       // on the front of the tower, low
+  const xs = [-0.82, -0.40, 0, 0.40, 0.82];
+  for (let i = 0; i + 1 < xs.length; i++) limb(on(xs[i], -0.04 * Math.abs(xs[i])), on(xs[i + 1], -0.04 * Math.abs(xs[i + 1])), 0.0050, 0.0050, TIARA, H);
+  for (const [x, hgt] of [[-0.52, 0.30], [0, 0.48], [0.52, 0.30]]) limb(on(x, 0), on(x, hgt), 0.0055, 0.0030, TIARA, H);         // its three points
+  ball(on(0, 0.16), [0.0085, 0.0085, 0.0060], ramp("#a0d0ff", "#3a7ce8", "#2652a8", "#16306a", { shine: true }), { ...H, bias: 2 });      // a jewel
+  if (!cx.seatOnly && S >= 52) {
+    const k = Math.floor(((pose.breath || 0) * 2.99 + (pose.mouth || 0)) % 3), [x, hgt] = [[-0.52, 0.30], [0, 0.48], [0.52, 0.30]][k], q = P(on(x, hgt));
+    sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), INK_GLINT, parts.HAT);
+    if (fine) { sf.dot(Math.round(q[0] - 1.5), Math.round(q[1] - 0.5), INK_GLINT, parts.HAT); sf.dot(Math.round(q[0] + 0.5), Math.round(q[1] - 0.5), INK_GLINT, parts.HAT); }
+  }
+}
+const HARDHAT = ramp("#fff6a0", "#ffd21e", "#d4a00c", "#8c6806", { shine: true });
+/** 4. A yellow hard hat, a peak in front and a ridge along the top. */
+function hatHard(cx) {
+  const { ball, limb, hy, parts, S } = cx, { at } = towerTop(cx), H = { part: parts.HAT };
+  ball(at([0, 0.006, 0.024]), [0.078, 0.012, 0.096], HARDHAT, { ...H, fn: (ux, uy) => (uy > 0.15 ? shifted(HARDHAT, 1) : undefined) }, hy);       // the brim, its peak out in front
+  ball(at([0, 0.014, 0.000]), [0.068, 0.058, 0.074], HARDHAT, { ...H, bias: S * 0.04, fn: (ux, uy) => (uy > 0.12 ? null : undefined) }, hy);   // the dome
+  limb(at([0, 0.066, 0.052]), at([0, 0.070, -0.054]), 0.0100, 0.0100, shifted(HARDHAT, -1), { ...H, bias: S * 0.06 });                     // the ridge
+}
+const HEN = ramp("#ffd8a0", "#f0a85a", "#c07832", "#80501c");            // a buff hen, plump as a cushion
+const HEN_TAIL = ramp("#e0a868", "#a8682e", "#784818", "#4c2c0c");
+const COMB = ramp("#ff8a7c", "#e8302a", "#a81c18", "#6e100e");
+/** 5. A hen: a plump hen sitting on the top of the tower as if it were her nest, comb, wattle, beak, tail and all. When
+    Jolene talks the hen pecks; when Jolene blinks, so does the hen. */
+function hatHen(cx) {
+  const { ball, limb, hy, parts, P, sf, pose, S, th, seatOnly } = cx, { at } = towerTop(cx), H = { part: parts.HAT };
+  const peck = (pose.mouth || 0) === 2 ? 1 : 0;
+  ball(at([0, 0.044, -0.006]), [0.066, 0.046, 0.082], HEN, H, hy);                                        // her body
+  for (const sd of [1, -1]) ball(at([sd * 0.050, 0.048, -0.014]), [0.020, 0.028, 0.054], shifted(HEN, 1), { ...H, bias: 1 }, hy);      // the wings, folded
+  for (const [x, a] of [[-0.016, 0.10], [0, 0.02], [0.016, -0.08]]) limb(at([x, 0.060, -0.066]), at([x + a * 0.10, 0.118, -0.098]), 0.0150, 0.0075, HEN_TAIL, H);      // her tail, up
+  const head = at([0, 0.104 - 0.012 * peck, 0.060 + 0.010 * peck]);
+  limb(at([0, 0.070, 0.040]), head, 0.022, 0.020, HEN, H);                                                // her neck
+  ball(head, [0.024, 0.026, 0.026], HEN, H, hy);
+  for (const [z, y, r] of [[0.024, 0.026, 0.0085], [0.010, 0.030, 0.0095], [-0.006, 0.026, 0.0085]]) ball(add(head, turn([0, y, z], hy)), [r * 0.8, r, r], COMB, { ...H, bias: 1 });      // the comb
+  limb(add(head, turn([0, -0.002, 0.020], hy)), add(head, turn([0, -0.008 - 0.004 * peck, 0.042], hy)), 0.0072, 0.0020, ramp("#fff0a0", "#ffc21e", "#c8900c", "#805c06"), { ...H, bias: 2 });      // the beak
+  ball(add(head, turn([0, -0.022, 0.018], hy)), [0.0060, 0.0090, 0.0060], COMB, { ...H, bias: 1 });      // the wattle
+  if (!seatOnly && S >= 52) for (const sd of [1, -1]) {
+    const e = turn([sd * 0.80, 0.25, 0.55], hy);
+    if (e[0] * Math.sin(th) + e[2] * Math.cos(th) < 0.15) continue;
+    const q = P(add(head, turn([sd * 0.018, 0.006, 0.010], hy)));
+    sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pose.blink ? HEN.tones[2] : pack("#1a1210"), parts.HAT);
+  }
+}
+const joleneOf = (n, hat, crown, hatAt) => ({
+  name: "Grandma Jolene", height: 1.02, crown, tall: 1.42, span: 1.10, hatAt, pencilAt: TOWER.y0 + (TOWER.y1 - TOWER.y0) * 0.55,
+  dim: { ...WOMAN, headR: [0.052, 0.063, 0.060], shoulderW: 0.080, trunkTop: [0.082, 0.056], trunkLow: [0.064, 0.050], pelvisR: [0.084, 0.056, 0.066],
+         armR: [0.022, 0.019, 0.0135], handR: 0.018, legR: [0.042, 0.026, 0.017], footR: 0.017, bust: [0.000, 0.024], neckR: 0.84 },
+  skin: JOLENE_SKIN,
+  hair: { mat: SILVER, bulk: [1.07, 1.05, 1.07], where: hairline({ front: 0.54, temple: 0.36, side: 0.02, back: -0.36, brow: 0.45, temples: 1.10 }) },      // all of it swept up into the tower
+  face: { eyes: "girl", eye: "#2a2030", iris: "#6a7a5a", lid: "#4a3040", brows: SILVER.tones[2], browUp: 4, blush: "#f09a8a", lip: "#c04a5a", lips: "#d86a78", lines: 1,
+          nose: [1.0, 1.0, 1.05], noseShade: true, jaw: 0.82, chin: 0.48, chinY: -0.84, smile: 1, mouthW: 0.24, big: { eyeW: 0.44, eyeH: 0.44, lashes: 1, arch: 0.30 } },
+  top: { mat: CARDIGAN, sleeves: 2, hem: 0.020, open: 0.072, under: BLOUSE, band: BLOUSE, cuffs: shifted(CARDIGAN, 1) },         // the cardigan over the blouse, and the blouse's round collar
+  bottom: { kind: "skirt", mat: SKIRT_PLUM, len: 1.42, flare: 1.10, folds: [[-0.75, 0.2], [0.80, 0.25], [2.6, 0.2]] },
+  apron: { mat: APRON, half: 0.86, len: 1.30 },
+  shoes: { kind: "pumps", mat: ramp("#ff9a8a", "#d8483a", "#9a2e26", "#621c18"), sole: ramp("#7a3a2e", "#5a281e", "#3e1a14", "#240e0a") },      // flat shoes, red
+  stance: "hip",                                                        // a fist on her hip
+  walk: { swing: 0.46, arm: 0.34, lean: 0.05, sway: 0.016, twist: 0.10, bob: 0.010 }, pace: 178,          // brisk
+  gestures: [0, 11, 9, 5],                                              // a nod; a finger in the air; her hands going; a hand to her heart: small and quick
+  fidgets: { stand: ["pencil", "hat"] },                                // she pushes the pencil back into her hair; she sets her hat straight
+  pray: { high: 0.50, bow: 0.26 },
+  extras(c) { joleneBody(c); hat(c); },
+  hatNo: n,
+});
+// (crown: how far the hat rises over the top of her head, for her words; hatAt: the height of its brim, in half-heights of
+//  her head, for her hand when she sets it straight)
+export const jolene = joleneOf(1, hatCowboy, 0.176, 3.35);
+export const jolene2 = joleneOf(2, hatFruit, 0.166, 3.30);
+export const jolene3 = joleneOf(3, hatTiara, 0.096, 2.50);
+export const jolene4 = joleneOf(4, hatHard, 0.186, 3.30);
+export const jolene5 = joleneOf(5, hatHen, 0.248, 3.40);
+
+// ---------- the backup: four men in gray, the man in gray's spec four times over ----------
+// Each a hair different in height and build, the hair a little different; all of them in black sunglasses, with an earpiece
+// (a pale coil behind the right ear, a dot in it); the same walk, so that they walk in step; hands behind their backs. One
+// has a clipboard, one a tape measure on his belt, one a juice box, and one the paper bag with the cheeseburger in it.
+const EARPIECE = ramp("#fffdf2", "#ebe6d6", "#c0baa6", "#8a8676");
+const SUIT_WALK = { swing: 0.42, arm: 0.26, lean: 0.03 };
+/** The earpiece: a pale coil from behind the right ear down into the collar, and the bud in the ear. */
+function earpiece(cx) {
+  const { ball, hp, J, hy, parts } = cx;
+  ball(hp(1.03, -0.10, -0.04), [0.0070, 0.0075, 0.0070], EARPIECE, { part: parts.EAR, bias: 2 }, hy);
+  const from = hp(0.95, -0.32, -0.34), to = add(J.sh, J.torso([0.044, 0.016, -0.036])), pts = [from];
+  for (let i = 1; i <= 7; i++) pts.push(add(mix(from, to, i / 7), J.torso([(i % 2 ? 0.006 : -0.004), 0, (i % 2 ? -0.004 : 0.004)])));
+  thread(cx, pts, EARPIECE);
+}
+const CLIPBOARD = ramp("#d8a874", "#b07c48", "#80562e", "#54381c"), PAPER = ramp("#ffffff", "#f6f4ee", "#d0ccc0", "#9a968a");
+const suitOf = (o) => ({
+  ...agent, name: "Man in Gray", stance: "behind", walk: SUIT_WALK, gestures: [0, 8, 0, 10],
+  ...o,
+  face: { shades: "#15161c", ...(o.face || {}) },
+  extras(c) { agent.extras(c); earpiece(c); if (o.gear) o.gear(c); },
+});
+export const suit1 = suitOf({
+  height: 0.97,
+  dim: { ...ADULT, shoulderW: 0.098, trunkTop: [0.108, 0.072], trunkLow: [0.096, 0.076] },
+  hair: { mat: ramp("#bcb8b4", "#928e8a", "#6a6664", "#484644"), where: hairline({ front: 0.72, temple: 0.64, side: 0.24, back: -0.42, recede: 0.16 }) },      // going gray, and going
+  face: { mouthW: 0.16, nose: [1.0, 1.05, 1.1] },
+  hold: { L: { hand: [-0.060, -0.196, 0.120], bend: [-1, -0.5, -0.4], grip: true } },          // the clipboard
+  fidgets: { stand: ["watch", "tie"] },
+  gear(c) {
+    const { limb, J, wide, deep, parts, sf, P, fine } = c, g = J.L.palm, w = [0.066, 0.006], r = wide(w), b0 = add(g, [0.022, -0.020, 0.016]), b1 = add(g, [0.034, 0.150, 0.004]);
+    limb(b0, b1, r, r, CLIPBOARD, { part: parts.HELD, depth: deep(w) / r, squareStart: true, squareEnd: true });
+    const p0 = add(mix(b0, b1, 0.05), [0, 0, 0.004]), p1 = add(mix(b0, b1, 0.86), [0, 0, 0.004]), rp = wide([0.056, 0.004]);
+    limb(p0, p1, rp, rp, PAPER, { part: parts.HELD, depth: deep([0.056, 0.004]) / rp, squareStart: true, squareEnd: true, bias: 1 });
+    limb(add(mix(b0, b1, 0.90), [-0.020, 0, 0.006]), add(mix(b0, b1, 0.90), [0.020, 0, 0.006]), 0.0085, 0.0085, CHROME, { part: parts.HELD, bias: 2 });      // the clip
+    if (fine) for (const k of [0.30, 0.45, 0.60]) { const q = P(add(mix(b0, b1, k), [0, 0, 0.008])); sf.dot(Math.round(q[0] - 1.5), Math.round(q[1] - 0.5), pack("#9aa0b0"), parts.HELD); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pack("#9aa0b0"), parts.HELD); }
+  },
+});
+export const suit2 = suitOf({
+  height: 1.0,
+  dim: { ...ADULT, shoulderW: 0.108, trunkTop: [0.120, 0.078], trunkLow: [0.104, 0.080] },
+  skin: ramp("#dcae86", "#bf8c60", "#8f6040", "#603e28"),
+  hair: { mat: ramp("#8e6a4c", "#664830", "#46321f", "#2c1e12"), where: hairline({ front: 0.58, temple: 0.46, side: 0.20, back: -0.44, sweep: 0.12 }),
+          texture: (x, y, z) => (Math.abs(x + 0.36) < 0.05 && y > 0.40 && z > -0.30 ? ramp("#46321f", "#2c1e12", "#2c1e12", "#2c1e12") : undefined) },      // parted on the side
+  face: { nose: [0.95, 1.0, 1.2], jaw: 0.96, chin: 0.60 },
+  fidgets: { stand: ["watch", "tie"] },
+  gear(c) {                                                             // the tape measure, clipped at his right hip
+    const { limb, ball, trunkAt, d, parts, cloth, sf, P, fine } = c, at = trunkAt(d.hipY - 0.030, 1.30, 0.018), o = { part: parts.EXTRA, bias: cloth * 3 };
+    limb(add(at, [0, 0.020, 0]), add(at, [0, -0.020, 0]), 0.022, 0.022, ramp("#fff2a0", "#ffd21e", "#c89a0c", "#806006"), { ...o, squareStart: true, squareEnd: true, depth: 0.8 });
+    ball(add(at, [0, -0.002, 0]), [0.008, 0.008, 0.024], ramp("#5a5a60", "#2c2c32", "#1a1a1e", "#0c0c0e"), { ...o, bias: cloth * 3.5 });
+    if (fine) { const q = P(add(at, [0, 0.022, 0])); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pack("#e8eaf0"), parts.EXTRA); }
+  },
+});
+export const suit3 = suitOf({
+  height: 1.02,
+  dim: { ...ADULT, shoulderW: 0.102, trunkTop: [0.110, 0.072], trunkLow: [0.094, 0.070], neckR: 0.96 },
+  skin: ramp("#f2cca6", "#dcaa80", "#ad7a56", "#744e36"),
+  hair: { mat: ramp("#5c514c", "#3e3632", "#2a2420", "#181412"), bulk: 1, where: hairline({ front: 0.70, temple: 0.60, side: 0.26, back: -0.34 }) },      // cropped close
+  face: { smile: 0, mouthW: 0.18, jaw: 0.86, chin: 0.48 },
+  hold: { R: { hand: [0.110, -0.232, 0.120], bend: [0.6, -1, -0.4], grip: true } },           // the juice box
+  fidgets: { stand: ["watch"] },
+  gear(c) {
+    const { limb, J, parts, sf, P, fine } = c, g = J.R.palm, box = ramp("#d8f6a0", "#8ccf3e", "#5e9a24", "#3a6414");
+    limb(add(g, [0, -0.020, 0.004]), add(g, [0, 0.044, 0.004]), 0.020, 0.020, box, { part: parts.HELD, squareStart: true, squareEnd: true, depth: 0.7 });
+    limb(add(g, [0.006, 0.044, 0.000]), add(g, [0.010, 0.074, -0.004]), 0.0030, 0.0030, ramp("#ffffff", "#f4f0f0", "#d0caca", "#9a9494"), { part: parts.HELD });      // the straw
+    if (fine) { const q = P(add(g, [0, 0.012, 0.024])); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pack("#e8302a"), parts.HELD); }      // an apple on it
+  },
+});
+export const suit4 = suitOf({
+  height: 0.99,
+  dim: { ...ADULT, shoulderW: 0.104, trunkTop: [0.118, 0.080], trunkLow: [0.112, 0.090], bellyFwd: 0.012 },
+  skin: ramp("#ffd6c0", "#f4b49a", "#c88068", "#8c5444"),
+  hair: { mat: ramp("#ecd296", "#c8a462", "#98783a", "#664e22"), where: hairline({ front: 0.56, temple: 0.46, side: 0.22, back: -0.42 }), puffs: [[0.12, 0.88, 0.42, 0.44, 0.24, 0.36]] },      // sandy, a little wave in front
+  face: { smile: 1, mouthW: 0.22, nose: [0.9, 0.95, 1.0], jaw: 0.94, chin: 0.58 },
+  hold: { R: { hand: [0.150, -0.330, 0.040], bend: [0.4, -1, -0.5], grip: true } },          // the paper bag
+  fidgets: { stand: ["watch"] },
+  gear(c) {
+    const { limb, J, parts, sf, P, fine } = c, g = J.R.palm, kraft = ramp("#ecc890", "#c89a5e", "#987040", "#664a28");
+    limb(add(g, [0, 0.008, 0]), add(g, [0, -0.034, 0]), 0.024, 0.026, kraft, { part: parts.HELD, squareStart: true, depth: 0.25 });                   // the top of it, rolled down, in his fist
+    limb(add(g, [0, -0.030, 0]), add(g, [0, -0.130, 0]), 0.042, 0.044, kraft, { part: parts.HELD, squareStart: true, squareEnd: true, depth: 0.62 });
+    if (fine) { const q = P(add(g, [-0.010, -0.090, 0.040])); for (const [i, j] of [[0, 0], [1, 0], [0, 1]]) sf.dot(Math.round(q[0] - 0.5) + i, Math.round(q[1] - 0.5) + j, pack("#b08250"), parts.HELD); }      // a spot of grease
+  },
+});
+
+// ---------- Jed, after the banjo: the hoop round his neck like a collar, his sunglasses crooked, dust on his knees ----------
+// Found sitting in the dust where the banjo sat him down: his legs out in front of him, leaning back on his hands (sit.seat
+// "floor", in rig.js). `stood`: on his feet again, the hoop still on.
+const HOOP_WOOD = ramp("#f0c890", "#d09a5c", "#a06a34", "#68421c");
+function hoop(cx) {
+  const { J, limb, parts, cloth, seatOnly } = cx;
+  if (seatOnly) return;
+  const ctr = add(J.sh, J.torso([0, -0.004, 0.006])), tilt = 0.32, ax = J.torso([1, 0, 0]), az = J.torso([0, -Math.sin(tilt), Math.cos(tilt)]), R = 0.090;
+  const o = { part: parts.COLLAR, bias: cloth * 2 };
+  const at = ring(cx, ctr, az, ax, R, 0.0120, HOOP_WOOD, o, 22);
+  ring(cx, add(ctr, [0, 0.008, 0]), az, ax, R + 0.006, 0.0060, CHROME, { ...o, bias: cloth * 2.6 }, 22);           // the chrome round its top edge
+  // the drum head's broken edge, in tatters, round the inside
+  for (let i = 0; i < 16; i++) {
+    const a = (2 * Math.PI * i) / 16 + 0.17, len = 0.010 + 0.014 * (((i * 7) % 5) / 4), p = at(a), q = add(ctr, mul(sub(p, ctr), (R - 0.012 - len) / R));
+    limb(add(mix(p, ctr, 0.10), [0, 0.006, 0]), add(q, [0, 0.004, 0]), 0.0058, 0.0025, BANJO_HEAD, { ...o, bias: cloth * 2.2 });
+  }
+  // two strings hanging from it, down his front
+  for (const [a, len, sw] of [[0.30, 0.150, 1], [-0.42, 0.110, -1]]) {
+    const top = at(a), pts = [];
+    for (let i = 0; i <= 6; i++) { const t = i / 6; pts.push(add(top, [0.010 * sw * Math.sin(t * 4), -len * t, 0.012 + 0.006 * t])); }
+    thread(cx, pts);
+  }
+}
+/** Dust on the knees of his trousers: a lighter patch on each. */
+function dusty(cx) {
+  const { J, sf, P, parts, S, th, seatOnly } = cx;
+  if (seatOnly || S < 52) return;
+  for (const k of ["R", "L"]) {
+    const L = J[k], front = mul(L.calfBack, -1), kn = add(mix(L.knee, L.ankle, 0.06), mul(front, 0.030));
+    if (front[0] * Math.sin(th) + front[2] * Math.cos(th) < -0.2) continue;
+    const q = P(kn), x = Math.round(q[0] - 0.5), y = Math.round(q[1] - 0.5);
+    for (const [i, j] of S >= 110 ? [[-1, 0], [0, 0], [1, 0], [0, 1], [-1, -1], [0, -1], [1, 1]] : [[0, 0], [1, 0], [0, 1]]) sf.mark(x + i, y + j, -1, parts.LEG[k]);
+  }
+}
+export const agentCollar = {
+  ...agent, name: "Man in Gray, with the banjo's hoop",
+  seated: "ground", sit: { seat: "floor", nod: -0.03 }, shadow: 0.28, span: 1.40, under: 0.04,       // sat down in the dust
+  face: { ...agent.face, shadesTilt: 1 },                                                                   // his sunglasses knocked crooked
+  riseMs: 1500,
+  stood: { span: 1.05, under: 0, shadow: 0.18 },
+  fidgets: { stand: ["watch", "tie"], sit: [] },
+  extras(c) { agent.extras(c); hoop(c); dusty(c); },
+};
+
+
+// =====================================================================================
+// NEVADA-12SC (round twelve, the cut-scene "Backup": js/content/cutscenes/backup.js): Grandpa Joe at three more moments,
+// and two of the backup carrying him. Each is someone above at another moment of the story, as `lot-standing` is Lot.
+// =====================================================================================
+/** Grandpa Joe on his feet with no rocking chair: the man who has just let the sun shade down, the banjo by the neck in
+    his right hand (what Figure.sit(false) makes of him, put in his place by a scene). */
+export const grandpajoeStanding = { ...upOf(grandpajoe), name: "Grandpa Joe, standing" };
+/** The banjo up over his head, by the neck, the pot high and the strings to the sky: the moment before it comes down on
+    Jed (and, a moment later, `grandpajoe-broken`). His other thumb stays in his strap: he is not in a hurry even now. */
+const JOE_RAISED = { hand: [0.120, 0.300, 0.120], bend: [1, 0.2, -0.6], grip: true };
+export const grandpajoeSwing = {
+  ...grandpajoeStanding, name: "Grandpa Joe, the banjo raised", hold: { R: JOE_RAISED }, tall: 1.55, span: 1.2,
+  fidgets: { only: true, stand: [] },
+  extras(c) {
+    joeGear(c);
+    const { J } = c, u = J.torso([0.18, -1, 0.30]);                     // up the neck: down from the pot, through his hand
+    banjo(c, { c: along(J.R.palm, unit(u), -0.215), u, n: J.torso([0.82, 0, 0.57]) });
+  },
+};
+/** Tied up, and lifted off his feet by two of the backup ("Lifting on three, sir"): carried to the limousine with his hat
+    on and his boots off the ground. The same man as `grandpajoe-tied`, with no shadow of his own (he is in the air: the
+    scene draws him a few pixels above where his feet would be, between the two who carry him). */
+export const grandpajoeCarried = { ...grandpajoeTied, name: "Grandpa Joe, tied up and carried", shadow: 0, fidgets: { only: true, stand: [] } };
+/** Two of the backup carrying him between them: both hands out in front at the height of his elbows, holding on (politely). */
+const CARRY = {
+  R: { hand: [0.070, -0.150, 0.230], bend: [0.7, -1, -0.2], grip: true },
+  L: { hand: [-0.070, -0.150, 0.230], bend: [-0.7, -1, -0.2], grip: true },
+};
+export const suit2Carry = { ...suit2, name: "Man in Gray, carrying", hold: CARRY, fidgets: { only: true, stand: [] } };
+export const suit3Carry = { ...suit3, name: "Man in Gray, carrying (with the juice box)", hold: CARRY, fidgets: { only: true, stand: [] } };
 
 export const people = {
   dad, son, mom, bigsis, lilsis,
@@ -991,4 +1704,14 @@ export const people = {
   lot,
   // the same people at another moment of the story (a scene puts one in the other's place):
   "guard-shade": guardShade, "goldsmith-shades": goldsmithShades, "lot-standing": lotStanding,
+  // NEVADA-12P: the Last Stop, round twelve (Grandpa Joe takes the old-timer's place; the old-timer stays for the older tests)
+  grandpajoe, jolene, suit1, suit2, suit3, suit4,
+  "grandpajoe-shade": grandpajoeShade, "grandpajoe-broken": grandpajoeBroken, "grandpajoe-tied": grandpajoeTied,
+  "grandpajoe-seat-tied": grandpajoeSeatTied, "grandpajoe-seat-loose": grandpajoeSeatLoose,
+  "jolene-2": jolene2, "jolene-3": jolene3, "jolene-4": jolene4, "jolene-5": jolene5,
+  "agent-collar": agentCollar,
+  "grandpajoe-play": grandpajoePlay,                                    // NEVADA-12SA: on his feet at the glass, playing
+  // NEVADA-12SC: the cut-scene "Backup" (above)
+  "grandpajoe-standing": grandpajoeStanding, "grandpajoe-swing": grandpajoeSwing, "grandpajoe-carried": grandpajoeCarried,
+  "suit2-carry": suit2Carry, "suit3-carry": suit3Carry,
 };

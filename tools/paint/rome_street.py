@@ -1868,33 +1868,38 @@ def details(pic, base, info, solids, seed=5, moving=None):
         w.line([Fw(-296.0 + j * 5, 100.0), Fw(-297.0 + j * 5, 86.0)], sc2, 0.7, 0.8)
     put(pic, w.s)
 
-    # ---- 5. lettering: election notices in red on the whitewashed bands
+    # ---- 5. lettering: election notices in red on the whitewashed bands. Round twelve: a sign-painter's work, not a
+    # scrawl: tall, even brush capitals on a straight line (letter.roman_mask), as the painted notices of a Roman street
+    # were; the scratched words (FELIX) stay scratched.
     xw, yw, kw, sunf = info["xw"], info["yw"], info["kw"], info["sun_front"]
 
-    def front_words(words, x_mid, y_mid, cap, tone, hand=True, squash=1.0, sd=0, amount=0.92, spacing=0):
+    def front_words(words, x_mid, y_mid, cap, tone, hand=True, squash=1.0, sd=0, amount=0.92, spacing=0, roman=False):
         cx_, cy_ = P(x_mid, y_mid, ZF)
-        m = letter.mask(shape, words, (cx_, cy_), cap * kw / 0.72, hand=hand, anchor="mm", rough=0.6, squash=squash, seed=sd, spacing=spacing)
+        if roman:
+            m = letter.roman_mask(shape, words, (cx_, cy_), cap * kw, anchor="mm", rough=0.25, seed=sd)
+        else:
+            m = letter.mask(shape, words, (cx_, cy_), cap * kw / 0.72, hand=hand, anchor="mm", rough=0.6, squash=squash, seed=sd, spacing=spacing)
         wear = (0.66 + 0.34 * step(0.22, 0.55, wn(xw, yw, 10, seed + sd + 1, 3))) * (1 - 0.45 * step(0.74, 0.86, wn(xw, yw, 70, seed + sd + 2, 3)))
         local = np.empty(shape + (3,), dtype=F32)
         local[...] = col(tone)
         over(pic, light(local, sunf, "front"), (m * wear * amount * info["mf"]).astype(F32))
-    front_words("MARCVS", -470.0, 386.0, 43.0, "#b3282a", sd=1, spacing=1)
-    front_words("VOTA", -302.0, 384.0, 30.0, "#b3282a", sd=2)
+    front_words("MARCVS", -470.0, 386.0, 40.0, "#b3282a", sd=1, roman=True)
+    front_words("VOTA", -302.0, 386.0, 30.0, "#b3282a", sd=2, roman=True)
 
     zr, yr, kr = info["zr"], info["yr"], info["kr"]
 
-    def right_words(words, z_far, y_mid, cap, tone, hand=True, sd=0, amount=0.9):
+    def right_words(words, z_far, y_mid, cap, tone, hand=True, sd=0, amount=0.9, roman=False):
         res = 2.0                                                                                           # the lettering is set flat, 2 pixels to the centimetre, then laid along the wall
-        m, (wd_, ht_) = words_flat(words, cap * res / 0.72, hand=hand, seed=sd)
+        m, (wd_, ht_) = words_flat(words, cap * res if roman else cap * res / 0.72, hand=hand, seed=sd, roman=roman)
         u = (z_far - zr) * res
         v = (y_mid - yr) * res + ht_ / 2
         inside = (u > 0) & (u < wd_ - 1) & (v > 0) & (v < ht_ - 1)
         mm = sample(blur(m, 0.6), np.clip(u, 0, wd_ - 1.01), np.clip(v, 0, ht_ - 1.01)) * inside
         wear = (0.50 + 0.50 * step(0.22, 0.55, wn(zr, yr, 10, seed + sd + 1, 3))) * (1 - 0.7 * step(0.72, 0.84, wn(zr, yr, 70, seed + sd + 2, 3)))
         over(pic, in_shade(tone, "warm"), (mm * wear * amount * info["m_RA"]).astype(F32))
-    right_words("RVFVS", 172.0, 218.0, 46.0, "#b3282a", sd=4)
+    right_words("RVFVS", 172.0, 218.0, 42.0, "#b3282a", sd=4, roman=True)
     right_words("FELIX", 150.0, 164.0, 20.0, "#4a3038", hand=False, sd=5, amount=0.8)
-    right_words("VOTA", 440.0, 260.0, 34.0, "#b3282a", sd=6, amount=0.8)
+    right_words("VOTA", 440.0, 260.0, 32.0, "#b3282a", sd=6, amount=0.8, roman=True)
 
     # ---- 6. the corner house's roof: lines of curved tiles, the eave, the ridge, pigeons
     xt, zt, kt, mroof, ra, rb = info["roof"]

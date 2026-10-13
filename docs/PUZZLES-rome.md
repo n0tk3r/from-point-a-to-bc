@@ -763,7 +763,7 @@ said, as the engine counts them.
 | Caesar's face on a new coin | The keeper's cry; the coin, read at the fountain; the keeper, shown it | Act Four, #6: Big Sister reads it |
 | "The new has Caesar's nose on it" | The keeper's cry, the first time in the street | The street: "Caesar? JULIUS Caesar?"; #7: "So that's the nose the snack guy yells about." |
 | The red mark on Big Sister's timeline | The street: "Before the red mark. That whole side is B.C." | Act Three: the timeline is on her wall, and she says what the mark is |
-| B.C. is "before Christ" | The street | Act Four, at the gate: what makes "Daddy's EARLY!" land |
+| B.C. is "before Christ" | The street | Act Four, in "Some when": what makes "Daddy's EARLY!" land |
 | The Caesar coin, and whose picture is on it | #7, in the Son's words | Act Four: the same coin, and the verse, in Mom's |
 | "Not yet." | #7 | The senator ("There is no such name."); the road |
 | "It doesn't go down. ...Gravity's tried." | #6, to the doorkeeper | The date seller's blessing: his head goes down; the hair does not |
@@ -777,7 +777,7 @@ said, as the engine counts them.
 | "Chickens always know." | The first call of the chickens | The same moment: they are all facing the temple doors. "Chickens KNOW." |
 | "Chickens KNOW.", and General Feathers, who outranks him | The cage: his little sister's saying, and her chicken | Act Three: Little Sister says it herself, and the General's place on her pillow is kept. (Act One: the General is in Dad's suitcase. The Son does not know.) |
 | "Bring it back clean." | #3 | Not yet. He still has the tunic. |
-| A door the size of a coin, left open | #8 | Not yet. He is still in the temple, and now has no coin. |
+| A door the size of a coin, left open | #8 | Act Four: his family speaks into the Nevada end of it, and he answers (the letterbox), holding it open, he says, with Dad's keys in the sun; Little Sister posts a penny through it for him. Not yet: his end of it, which this act does not show. |
 | A boy who would like to see the shoes light up again | The street | Not yet. Walnut is owed two nuts. |
 
 ---
@@ -917,18 +917,21 @@ line says how long before or after anything in the Old Testament this morning is
 needs to, and if one ever does, the count is the Bible's (`briefs/DATING.md`). Nobody
 explains the chickens.
 
-**One fact outside this act that these sources bear on.** Big Sister says in Act Four
-(`nevada.coin.read.2`, marked "To check" in CHARACTERS.md) that Caesar "was the first
-living Roman to put his own face on Rome's coins". The Roman currency page says the
-opposite: "living Romans had appeared on coinage before", and that Caesar's portrait
-"marked the third instance in Roman history where a living individual was depicted".
-(Her line is being reworded by whoever writes Act Four.)
+**One fact outside this act that these sources bear on.** Big Sister used to say in Act
+Four (`nevada.coin.read.2`) that Caesar "was the first living Roman to put his own face on
+Rome's coins". The Roman currency page says the opposite: "living Romans had appeared on
+coinage before", and that Caesar's portrait "marked the third instance in Roman history
+where a living individual was depicted". Her line was reworded on 7 October, and says only
+that in 44 B.C. coins were struck in Rome with Caesar's own portrait, while he was alive
+(Checked, in CHARACTERS.md).
 
 ---
 
 ## What comes next (not written)
 
 - The Son is still in the temple. The door is open, the size of a coin, and he has
-  nothing left to send through it. Something could come back the other way.
+  nothing left to send through it. Something could come back the other way. (Round
+  twelve: in Act Four his family speaks into the Nevada end of it and he answers, and
+  Little Sister posts a penny through it for him, which waits in the tunnel for this end.)
 - The tunic has to go back clean, and Walnut is owed two nuts.
 - Whether Dad's door in Egypt, opened as wide as a whole sun, comes out here.

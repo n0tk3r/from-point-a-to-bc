@@ -64,6 +64,15 @@ export const sound = {
       lead: [0, null, null, 2, 4, null, null, null, 4, null, 2, null, 0, null, null, null, 3, null, null, 4, 3, null, 2, null, 0, null, null, null, null, null, null, null],
       bass: [5, null, null, null, 5, null, null, 5, 8, null, null, null, 8, null, null, null],
     },
+    // NEVADA-12SC: the Last Stop Rag, Grandpa Joe's own tune, hummed (no words) under his breath in the limousine
+    // (js/content/scenes/nevada-limo.js, while "limo.singing"). The notes are the phrase his banjo plays on the porch (the
+    // sfx "banjo", NEVADA-12SA: B D G E D B C E D B A G over G, D, C, D, a note every fifth of a second), so it is the
+    // same tune, round and round. The game's own, not any real song's.
+    rag: {
+      bpm: 150, root: 55, scale: [0, 2, 4, 5, 7, 9, 11], wave: "triangle", hold: 1.2, volume: 0.7,
+      lead: [2, 4, 7, 5, 4, 2, 3, 5, 4, 2, 1, 0],
+      bass: [7, null, null, 11, null, null, 10, null, null, 11, null, null],
+    },
     tunnel: {
       bpm: 150, root: 57, scale: [0, 2, 4, 6, 8, 10], wave: "square", hold: 0.9, volume: 0.5,
       lead: [0, 2, 4, 5, 4, 2, 0, 2, 1, 3, 5, 6, 5, 3, 1, 3],
@@ -110,5 +119,17 @@ export const sound = {
     hiss: { noise: [5200, 2800], len: 1.4, q: 0.5, level: 0.08 },                                                        // tape, with nothing more on it
     dial: { notes: [[82, 0, 0.02], [82, 0.09, 0.02], [82, 0.18, 0.02], [82, 0.27, 0.02], [82, 0.36, 0.02], [82, 0.45, 0.02], [78, 0.56, 0.03]], level: 0.05 },   // a combination dial
     clunk: { noise: [520, 110], len: 0.2, q: 2, notes: [[36, 0, 0.18], [43, 0.02, 0.1]], level: 0.16, wave: "sine" },    // a cash box letting go
+
+    // ---- the Last Stop, Act Four (NEVADA-12SA) ----
+    // A phrase of the Last Stop Rag on Grandpa Joe's banjo: plucked notes over a bass on the beat. The tune is the game's own
+    // (it is not any real song). One phrase lasts one pass of his strum (2.4 seconds: `strum` in js/art/rig.js), so the
+    // roadside plays it once a pass while he plays.
+    banjo: { notes: [[55, 0, 0.5], [71, 0, 0.2], [74, 0.2, 0.2], [79, 0.4, 0.28], [62, 0.6, 0.45], [76, 0.6, 0.2], [74, 0.8, 0.2], [71, 1.0, 0.28],
+      [60, 1.2, 0.5], [72, 1.2, 0.2], [76, 1.4, 0.2], [74, 1.6, 0.28], [62, 1.8, 0.45], [71, 1.8, 0.2], [69, 2.0, 0.2], [67, 2.2, 0.4]], level: 0.07, wave: "triangle" },
+
+    // ---- NEVADA-12SC: the cut-scene "Backup" ----
+    // Grandpa Joe's banjo coming down over Jed's head: one twang, every string at once (the five of a banjo tuned to G),
+    // and the thump of the head going through. Nobody is hurt: it is a banjo.
+    twang: { noise: [900, 180], len: 0.16, q: 1.6, notes: [[67, 0, 0.8], [50, 0, 0.95], [55, 0, 0.9], [59, 0, 0.85], [62, 0, 0.8]], level: 0.045, wave: "sawtooth" },
   },
 };

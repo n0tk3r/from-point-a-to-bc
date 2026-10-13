@@ -30,7 +30,7 @@ them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome
 | Picture | One painted picture, 800 pixels wide and 600 high, scaled to fit any screen | Room for a hand-painted background in the manner of the classic adventures. Every position in the game is a pixel of that picture, so a number in a scene file can be measured straight off the painting. |
 | Scenery | A painted backdrop for each scene, with painted cut-outs for whatever people walk behind or the story changes | A background can be as rich as a painter can make it and costs the game nothing while it is on screen. |
 | Light | Beams and glows are drawn by code, never painted; a door in time is the painting itself, bending | Light has to move, grow and stay smooth. A door in time is a ripple in the paint, as if a stone had been dropped in the picture: the author's choice, round ten (section 2, "The door in time"). |
-| People | Drawn by a jointed figure from a page of settings, not stored as pictures | One description gives all eight directions, every animation and every size. See section 4. |
+| People | Drawn by a jointed figure from a page of settings, not stored as pictures (an animal is painted frame by frame instead) | One description gives all eight directions, every animation and every size. See section 4. |
 | Depth | People, props and cut-outs are painted back to front by where they touch the ground, and people shrink toward the horizon | The lead walks behind the car, in front of it and round it, with no hand-made mask. See section 3. |
 | Movement | One game clock drives anything that matters to the game. CSS runs only the glow of time travel and a few ambient loops. | Each tool does the job it is best at. See section 1. |
 | Intro movie | A script that moves the game's own art. Not a video file. | A few KB of script and six pictures instead of tens of MB, identical in style to the game, skippable, subtitled. |
@@ -38,12 +38,14 @@ them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome
 | Sound | Web Audio with separate volume for music, effects and voices | Standard, works everywhere, lets music duck under speech. |
 | Dialogue | Every line has an ID. Text now, a sound file with the same name later. | Voices can be added one line at a time without touching any script. |
 | Story | Acts and beats listed as data, with a checker and a storyboard page | Parallel puzzle chains inside an act, one gate at the end of it. |
-| Leads | Five people the player can control. Apart, each has scenes of their own. Together, the player switches between them with their portraits. | A father and son lost in different centuries, and a mother and two daughters working as a team. See section 8. |
+| Leads | Seven people the player can control: the five of the family, and in Act Five Grandpa Joe and Ranger the raccoon. Apart, each has scenes of their own. Together, the player switches between them with their portraits. | A father and son lost in different centuries, a mother and two daughters working as a team, and an old man and his raccoon as a team of two. See section 8. |
 | Look | One way of painting, one figure and one light for every person, one typeface, and time travel in neon | Each era changes what is painted, never the rules. See section 9. |
 | Updates | Every code file, style file and picture is fetched by an address that changes when the file changes, and a game in progress keeps what it has fetched | A push can never leave a browser running old files next to new ones, or put a new painting behind an old script. See "Publishing a new version" in section 10. |
 
-Size today: 57 code and style files, about 1 MB (about 350 KB when the server compresses
-it); 106 pictures, 4.7 MB in all; and a 49 KB font. Nothing else is downloaded.
+Size today: 69 code and style files, about 2.3 MB (about 620 KB when the server compresses
+it; the testers' saved games, `checkpoints.js`, are about 430 KB of that); 487 pictures,
+7.0 MB in all (54 of them the engine's own, for its proof scene); and a 49 KB font.
+Nothing else is downloaded.
 
 ## Where things are
 
@@ -61,13 +63,13 @@ js/engine/              the engine. Knows nothing about this story.
   audio.js                music, effects, voices
   dialogue.js             spoken lines and choices
   scene.js                the stage: backdrop, live light, clickable areas
-  cast.js                 people, painted cut-outs and props: depth order, animation, the store of finished pictures
+  cast.js                 people (drawn by the rig, or painted frame by frame), painted cut-outs and props: depth order, animation, the store of finished pictures
   walk.js                 where the lead can stand, routes round obstacles, size by distance
   life.js                 the scene's people living their own lives: small movements, and a walk now and then
   edges.js                ways out at the edges of the picture: the bands, what the label says, a check of every scene's
   outline.js              Show: an outline round each thing that can be clicked
   fx.js                   canvas effects (the time tunnel)
-  effects.js              things that move by nature: smoke, flames and embers, water, birds, cloth that stirs
+  effects.js              things that move by nature: smoke, flames and embers, water, birds, cloth that stirs, the country going by a car's windows
   story.js                reads the story data: open beats, checks
   ui.js                   heads-up display and menus
   game.js                 ties it together; the `g` that scripts use
@@ -76,26 +78,33 @@ js/art/                 everything that is drawn by code
   pix.js                  the pixel renderer: solid shapes in, pixel art out
   rig.js                  the jointed figure: poses, eight directions, the walk, stances, gestures, sitting
   people.js               the cast as the rig sees them: proportions, clothes, colors, and how each one stands, walks and talks
+  painted.js              the people who are painted frame by frame and not drawn by the rig (Ranger, and the proof's critter), and where each one's sidecar is
   props.js                things drawn by code that stand on the ground (kept for scenes that are not painted yet)
   look.js                 the paints: the people and the moving things in the key of the scene on stage (section 9)
   look-data.js            the paint box, the six keys and which scene uses which (written by tools/paint/postimp_key.py)
 js/content/             the game itself. Knows nothing about the engine's insides.
   world.js                cast, eras, items
   lines.en.js             gathers the spoken lines
-  lines/*.en.js             the lines, one file to an act: common, egypt, rome, home, nevada
+  lines/*.en.js             the lines, one file to an act: common, egypt, rome, home, nevada (with the cut-scene "Backup"), limo
+  talk/nevada.js          the talks of Act Four and Act Five, as dialogue trees: Grandpa Joe, Grandma Jolene, Ranger, the hens, the letterbox, the divider
   story.js                where a game starts, stock replies, and the list of acts
-  acts/*.js                 the acts and their beats, one file to an act: prologue, egypt, rome, home, nevada
+  acts/*.js                 the acts and their beats, one file to an act: prologue, egypt, rome, home, nevada, limo
+  checkpoints.js          the testers' saved games, one for each beat (section 6, "Testing: parts"): written by a script, not by hand
   sound.js                music, effects and the list of recorded lines
   cutscenes/highway.js    the painted highway at dusk, and the parts of it that change
   cutscenes/intro.js      the intro movie
   cutscenes/title.js      what is behind the title screen
+  cutscenes/backup.js     the cut-scene "Backup", on the Nevada roadside: it closes Act Four and hands the game to Act Five
   scenes/index.js         the list of scenes
   scenes/*.js             one file per scene, all fetched while the start-up panel shows
   scenes/engine-proof.js    the worked example of a painted scene: the pattern to copy
   scenes/sketch-example.js  a scene with no painting yet, to show storyboarding
-art/scenes/<scene id>/  a scene's pictures: back.png, its cut-outs, and layout.json (the painter's measurements)
+art/scenes/<scene id>/  a scene's pictures: back.png, its cut-outs, and layout.json (the painter's measurements); and the
+                        frames and sidecar of anyone painted frame by frame who belongs there (Ranger's, in nevada-roadside/)
 art/scenes/highway/     the pictures of the intro and the title
 art/items/              the pictures of things that can be carried
+art/portraits/          the painted portraits of the painted people (Ranger, with and without his mirror shades): never keyed
+art/proof/              the engine's own pictures for its proof scene: a small painted creature, a strip of country and a window
 fonts/                  Koine Road, the game's typeface
 tools/storyboard.html   the story, drawn out, straight from the data, with every scene as the game builds it
 tools/sprites.html      every character and prop, moving, in every direction
@@ -361,6 +370,7 @@ The marks go into the scene file as they are: the field names are the same in bo
 | `birds`, flyers | Small birds crossing the sky now and then along `lanes`, or wheeling round a `circle` (kites): beating their wings in bursts and gliding between, banking at the ends of a circle | `lanes` (lines across the sky, beginning and ending off the picture) or `circle` (`{ at, r: [rx, ry] }`); `every` (`[6, 14]` s between crossings); `group` (`[1, 3]` birds); `count` (2, wheeling); `speed` (70 crossing, 14 wheeling); `size` (7 px across, drawn); `scale` (or `[low, high]`: each bird its own size); `frames` (`glide`, `flap`, `bank`, `middle`, `mirror`); without frames, small dark silhouettes drawn by the engine |
 | `birds`, a flock | Birds on the ground (`area`) or along a ledge (`perch`) that stand, look about, peck, walk a few steps and turn; go up when somebody comes near and land again a little way off, the ones beside them going too; with nowhere clear to land, fly off and come back later | `area` (or `poly`, `rect`) or `perch`; `count` (5); `frames` (below), or birds drawn by the engine: `look` (`pigeon`, `dove`, `sparrow`) and `size` (26 px long where a person is 160 tall); `depth` (smaller farther off: on an area); `moves` (`{ stand: 2, look: 2, peck: 4, walk: 3, turn: 1, away: 0 }`; `away`: one flies off by itself and comes back); `shy` (150 px at full size, about a metre and a half; half that from someone standing still; 0: never startled); `fly`, `turn` (false: never); `back` (`[8, 20]` s away); `treads` (`[y, ...]`) or `tread` (px): birds on steps keep to the treads and hop from one to the next; `walk` (12), `flight` (95) |
 | `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
+| `strip` | The country going by the windows of a car on the move: one long painting, painted to run on from its right edge into its left, scrolling past behind the windows and drawn only inside them, with hard edges, over the backdrop. In the proof the car is a cut-out with its windows cut clear, laid over it; in the limousine (`nevada-limo`) the windows are the backdrop's own, and two strips go by, outward on each side | `src` (the picture, in the scene's folder unless its name begins `art/`); `windows` (the glass of each window, the shapes it shows through; or `clip`; with neither, the whole width of the stage); `row` (the row of the stage its bottom edge is on: needed); `speed` (0 px a second; more than 0, the world goes by to the left, as from a car driving right; `set({ speed })` from a script, and it goes on from where it is); `loop` (true: drawn twice where the seam is in a window; false: it goes by once); `offset` (0: the column of the picture at the stage's left edge when it begins); `fps` (20) |
 | `portal` | The door in time: a ripple in the paint. See "The door in time", below | `at` (its middle, wide open); `r` (half its height, wide open); `wide` (1: a round hole; the chamber's doorway 0.48); `keep` (the bare wall it is in, `[x0, x1]`); `rise`; `under`; `light`; `open` (0); `strength` (0.45); `bend` (0.6); `rate` (1.5); `size` (1.11); `pale` |
 
 Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
@@ -369,8 +379,8 @@ only while the story says so, read again whenever the story changes); `scale` (e
 `opacity`, `color`; `clip` (a shape it is kept inside: rings that must not run onto the sand); `behind` (shapes where it
 passes behind something painted nearer, and is not drawn, or only at `behindOpacity`: smoke rising behind a pyramid);
 `seed`. A smoke, a flame, embers or a stream sits by default at the row of its own point, so give the `base` of the thing
-it belongs to (an altar's smoke has the altar's base: a man behind the altar is behind its smoke); water on the ground
-and birds in the sky lie behind everybody; birds on the ground sort by their own feet, each one, like people. A sway is
+it belongs to (an altar's smoke has the altar's base: a man behind the altar is behind its smoke); water on the ground,
+birds in the sky and a strip lie behind everybody; birds on the ground sort by their own feet, each one, like people. A sway is
 its cut-out: the cut-out keeps its depth, its states and everything a script does to it.
 
 **Painted frames for birds.** One picture a frame, clear background, every frame of a bird on the same size of canvas
@@ -391,8 +401,8 @@ time. The only exception is a flock that somebody has startled, since what it do
 For less motion, each one's time runs at half speed or less, it changes its picture less often, flames flicker less,
 flyers glide, and a flock never flies: a startled bird walks off instead.
 
-**Cheap.** Each kind changes its picture only as often as its motion needs: a bird thirty times a second, smoke, rings
-and a stream twenty, a flame fifteen, embers ten, a sway six, light on water five. In any one frame only four of them
+**Cheap.** Each kind changes its picture only as often as its motion needs: a bird thirty times a second, smoke, rings,
+a stream and a strip twenty, a flame fifteen, embers ten, a sway six, light on water five. In any one frame only four of them
 may change (`game.effects.budget`): the ones that have waited longest go first, and a bird on the move before them all,
 so the others wait a frame or two, which nobody sees. The cast then repaints a few small patches, never the whole layer
 (it does that when more than six things change at once: `Cast.update`). Each picture is cut to the box the thing can
@@ -401,7 +411,11 @@ keep sways to the things that need them. The engine's own scene, with twelve mov
 some 120 puffs, glints, coals and birds on the stage, has the cast layer repaint about 3 million pixels a second, all in
 patches (with none of them, 0.2 million). Measured as in section 1 ("What a frame costs"), with the processor slowed four
 times over: a frame's main-thread work while the lead walks across it goes from 3.5 to 6.2 ms, and while he stands from
-0.8 to 6.0 ms, every frame still on time. A scene with a few moving things costs a fraction of that.
+0.8 to 6.0 ms, every frame still on time. A scene with a few moving things costs a fraction of that. A strip is a
+picture for each window, cut to the window's box, drawn again only when it has gone by a whole pixel (a parked one costs
+nothing): the proof's two windows, 79 by 45 pixels each, going by at 40 pixels a second, are some 140,000 pixels a
+second, at 0.04 ms a picture; slowed four times over, a frame of the proof scene goes from 1.6 to 3.1 ms while the lead
+stands, and from 3.3 to about 4 ms while he walks.
 
 **Never clickable, never outlined.** They are on the cast layer, which takes no clicks: a click on smoke is a click on
 whatever is under it, the floor or a clickable area. None of them is a clickable area, and their ids on the stage begin
@@ -414,7 +428,8 @@ before any scene file has them:
 A mark the engine cannot use says so in the console, by its id. `game.effects.hold(true)` stops their time,
 `game.effects.seek(5000)` shows them five seconds in, `game.effects.stats()` counts what is moving, and `?nofx` in the
 page address (or `game.effects.enabled = false`) takes them all away. The engine's own scene shows every kind:
-`index.html?scene=engine-proof&lead=dad&flags=proof.fx`.
+`index.html?scene=engine-proof&lead=dad&flags=proof.fx`; and a strip, behind the two windows of a cut-out laid over the
+sand, with `flags=proof.strip` (`g.effects.get("desert").set({ speed: 0 })` parks it).
 
 ### The door in time
 
@@ -640,23 +655,87 @@ hand-drawn frames, the cast layer does not care where a picture comes from. It a
 `tools/sprites.html` shows every person in every direction, moving, with the single
 pictures underneath.
 
+**Painted frame by frame: an animal.** The rig draws people, and an animal is not one. Ranger, the raccoon who is a lead
+in Act Five, is painted frame by frame, as the birds and the donkey are, and to the engine he is a person in every other
+way: he walks, is clicked on, has words over his head (his "..."), a life of his own, a place, pockets and a portrait,
+and the player can switch to him. `js/art/painted.js` lists the kinds that are painted and where each one's sidecar is;
+`cast.addFigure` makes a `PaintedFigure` (in `cast.js`) for those and a `Figure` for everyone else, so a scene puts him
+in its `actors` or its `party`, and a script on the team (`g.team`), like anyone. His pictures are one picture a frame, on a clear background,
+every frame on one canvas with his feet at one point and every frame facing east, in the folder of the scene he belongs
+to, painted at the size he shows where a person is 160 pixels tall. The sidecar beside them says what is there:
+
+```
+art/scenes/nevada-roadside/ranger.json
+{ "id": "ranger", "face": "E", "foot": [68, 56], "tall": { "stand": 34, "sit": 49 }, "stride": { "walk": 32, "run": 70 }, "pace": 100,
+  "frames": { "stand": [...], "sit": [...], "walk": [...], "run": [...], "nibble": [...], "wash": [...], "reach": [...], "look": [...],
+              "walkN": [...], "walkS": [...] },
+  "fps": { "stand": 1.5, "sit": 1.5, "walk": 8, "run": 10, "nibble": 6, "wash": 5, "reach": 2, "look": 1, "walkN": 8, "walkS": 8 },
+  "fidgets": ["look", "wash"], "portrait": "art/portraits/ranger-face.png",
+  "variants": { "shades": { "prefix": "ranger-shades-", "portrait": "art/portraits/ranger-shades-face.png" } } }
+```
+
+| Field | What it is |
+| --- | --- |
+| `foot` | The point on the ground under him, in every frame's pixels |
+| `tall` | Ground to the top of his head at full size, on all fours (`stand`) and sitting up (`sit`), for his words. A set may have a height of its own (`"nibble": 44`); without one, the sets drawn sitting up (`sit`, `nibble`, `wash`, `reach`, `look`, and any the sidecar lists in `sitUp`) take `sit`, and the rest `stand`. One number does for both. |
+| `stride`, `pace` | The ground one walk cycle covers at full size (or `{ "walk": 44, "run": 96 }`: a scamper covers twice a walk's if not said), and how fast he walks, in pixels a second at full size (120). His walk goes by the ground covered, as a person's does, so his feet do not slide. |
+| `frames` | The sets, each a list of files, in the sidecar's folder unless a name begins `art/`. Only `stand` is needed: a set that is not there is shown by another (`walk` and `sit` by `stand`, `run` by `walk`, the sets drawn sitting up by `sit`). `walkN` and `walkS` (from behind and from the front), if painted, are his walk to the north and to the south. |
+| `fps` | Pictures a second for each set when it is not a walk: `stand` and `sit` 1.5, `run` 10, any other 4 if not said |
+| `fidgets` | The sets that are his small movements, for his life (`look` and `wash` if not said) |
+| `portrait` | His face, 64 by 64, for the team bar and for words through a door: drawn as it is (never keyed), with hard pixels at a whole multiple of its size where that nearly fills the square, and at the size asked where it does not |
+| `variants` | Him in another state, every set and the face: `prefix` stands in for the frames' own (the id and a hyphen, or the sidecar's `prefix`) in every file name, and `portrait` is the face in that state; `frames` can give a set pictures of its own. `figure.variant("shades")` puts it on and `variant(null)` takes it off. It is not saved: the scene puts it on from a fact, in `setup` and at the moment it happens. |
+| `sitMs` | How long sitting up or settling back takes (300 ms) |
+
+What he cannot do, having no joints: gesture (while he talks his `stand` or `sit` pictures go on as they were), move his
+mouth, pray or shade his eyes (asked to, nothing happens and nothing breaks), or be seen from eight ways. He is painted
+from two: east is the frames, west their mirror, and the other six ways are the nearer of the two (facing straight
+toward us or away he stays the way round he was, and walks with `walkN` and `walkS` if they are painted). Nor has he a
+stance or a walk of his own from a page of settings: whatever he does is a set that was painted. He is sized by the
+depth as a person is, from the size he was painted at: with hard pixels, in steps of two, and never more than a quarter
+bigger. A script plays a set by name: `await g.lead.play(g.clock, "nibble", { ms: 1800 })` runs for that long, or with
+no `ms` until `stop()`; `g.reach()` is his `reach` out and back, `hold()` holds it out; a hurried walk is a scamper
+(`run`).
+
+The sidecars and the portraits are read as the game starts, so a portrait is there when the team bar first draws it;
+the frames come with the pictures of the scene he is in, which does not show until they are here. A sidecar must be
+among the page's files: once it is painted, run `tools/stamp.py`. Until then the engine does not ask for it (so the
+browser reports no missing file), he is not drawn, and the console says why, once. `tools/sprites.html` shows him too,
+from his sets. The proof: `index.html?scene=engine-proof&lead=dad&flags=proof.painted` has a small creature of the
+engine's own (`art/proof/critter.json`) sitting up on the sand, living, looked at and talked to (Dad says what he
+means), joining Dad as a team of two, put in his shades by a pair of sunglasses and nibbling at the cooler; the engine
+test's `painted` part plays all of it.
+
 ### Who is in the cast
 
-Twenty-four people in the story, all in `js/art/people.js` (which also keeps `carrier`, the water carrier of the
-first drafts, whose place by the river Lot has taken):
+Thirty-one people in the story, all in `js/art/people.js` (which also keeps two whom no scene uses now: `carrier`, the
+water carrier of the first drafts, whose place by the river Lot has taken, and `oldtimer`, the old man of the Last Stop
+in his lawn chair, whose place Grandpa Joe has taken):
 
 | Where | Who |
 | --- | --- |
 | The family | `dad`, `son`, `mom`, `bigsis`, `lilsis` |
 | Egypt | `lot` (Abram's nephew: sits cross-legged on the sand and prays), `scribe` (sits cross-legged on the ground), `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `mason1`, `mason2` (far up the pyramid's faces on the painter's hanging planks, drawn small, rubbing the stone now and then), `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
 | Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table), `dateseller` (a basket of dates on his hip) |
-| Nevada | `oldtimer` (in a lawn chair that is drawn with him), `agent` |
+| Nevada | `agent` (Jed, the man in gray), `grandpajoe` (in his rocking chair, which is drawn with him, the banjo across his knees), `jolene` (under her straw cowboy hat), `suit1`, `suit2`, `suit3`, `suit4` (the backup, with a clipboard, a tape measure, a juice box and a paper bag) |
 
-Three more figures are the same men in another state: `goldsmith-shades` (the goldsmith
+Nineteen more figures are the same people in another state: `goldsmith-shades` (the goldsmith
 with the sunglasses on), `guard-shade` (the guard holding the windshield shade up, his
-staff laid on the sand) and `lot-standing` (Lot on his feet, his staff in his hand). A
-scene swaps one for the other in place, under the same id, so the man keeps his name and
-the color of his words.
+staff laid on the sand) and `lot-standing` (Lot on his feet, his staff in his hand); Grandpa
+Joe holding up the sun shade (`grandpajoe-shade`), playing on his feet (`grandpajoe-play`),
+standing with the banjo by its neck (`grandpajoe-standing`), with it raised over his head
+(`grandpajoe-swing`), with what is left of it (`grandpajoe-broken`), tied (`grandpajoe-tied`),
+carried (`grandpajoe-carried`), and on the limousine's seat in the ropes and the seatbelt, and
+then loose (`grandpajoe-seat-tied`, `grandpajoe-seat-loose`); Jolene under her other four hats
+(`jolene-2` to `jolene-5`); Jed in the dust with the banjo's hoop round his neck
+(`agent-collar`); and two of the backup carrying Grandpa Joe (`suit2-carry`, `suit3-carry`). A
+scene swaps one for the other in place, under the same id, so the person keeps their name and
+the color of their words.
+
+Grandma Jolene's five hens are not people: each is a cut-out of the store's painting, with a
+picture for each thing she does (on guard, two ways; turning; sitting; pecking).
+
+The painted ones are in `js/art/painted.js`, not in `people.js`: `ranger`, the raccoon (his frames are painted with the
+Nevada roadside), and `critter`, the engine's own, for its proof scene.
 
 ### Making someone themselves
 
@@ -671,7 +750,7 @@ Colors and clothes say who a person is when they stand still. These settings in
 | `gestures` | What their hands do when they talk, as a short list of numbers | Dad nods, makes a point, shrugs, puts a hand on his hip. The Son throws both arms up. The clerk wipes his brow and counts on his fingers. |
 | `hold` | An arm that is always busy with something | The overseer's staff, the youngest hauler's loaf |
 | `pray` | How they stand to pray: how high the folded hands are, how far the head bows, and whether the hands are clasped tight and the eyes squeezed shut | Dad folds his big hands low in front of him, his head well down. The Son folds his hands at his middle and bows his head; his hair stays up. Mom folds her hands at her breast, and her handbag slides down to the crook of her elbow. Big Sister prays exactly as she was taught, hands together at her breast. Little Sister prays with all her might: hands clasped tight under her chin, eyes squeezed shut. |
-| `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, or a height) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, the old-timer |
+| `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, a height, or the `"floor"`: legs out, leaning back on the hands) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, Grandpa Joe (in his rocking chair, and on the limousine's seat), and Jed in the dust (`"floor"`) |
 | `rest` | Where an arm lies when a pose leaves it alone | The scribe's pen hand |
 
 The twenty gestures: a nod, one hand making a point, a shrug, a hand on the hip, both
@@ -693,7 +772,12 @@ Three things a scene writer needs to know:
 - **Words sit just above the head.** The rig says how tall each person is as they are
   found, sitting or standing (`tallOf` in `rig.js`), and a speaker's words are put ten
   pixels above that, for a seated scribe far away and a standing father close by alike.
-  (A staff that rises above its owner's head is not counted.)
+  (A staff that rises above its owner's head is not counted.) When a taller head stands
+  level with the speaker or nearer us, the words go up over it too, by up to 90 pixels.
+  Someone standing farther back whose face is just where everybody's words would go
+  (Grandma Jolene behind her counter) can be marked with the sprite flag `clear`
+  (`g.actor("jolene").flag("clear", true)`): words are then lifted over her head
+  wherever she is under them, by up to 110 pixels.
 - **A person's place goes with them.** On their mark they block their `solid` (or a small
   patch at their feet); walked somewhere else by a script, a patch at their feet there.
   `solid: false` lets the lead walk through them. (On a walk of their own, below, their
@@ -741,6 +825,10 @@ actors: [
 | `stand` | `true` | `false`: someone seated never gets up |
 | `when` | always | A test of the story: nothing happens while it is false |
 | `still` | `false` | `true`: small movements only |
+
+A painted figure ("Painted frame by frame", above) lives the same way. His small movements are the sets his sidecar
+names as `fidgets`, and he is found sitting up only if his entry says `sit: true` (`{ id: "ranger", kind: "ranger", at:
+[...], sit: true, life: { ... } }`): then he settles back on all fours to go to a spot, and sits up again on coming home.
 
 What the engine sees to, so that a scene never has to:
 
@@ -899,6 +987,10 @@ Each save is wrapped in an envelope:
   is nowhere until the story puts them somewhere, and cannot be switched to. A carried
   thing that is gone is left out of the pockets. A save whose own scene is gone is turned
   away in words, and the game carries on.
+- A save can also lack a lead this version has: one who joined the cast after it was made
+  (Grandpa Joe and Ranger, in Act Five). `complete()` in `state.js` gives such a lead no
+  place (nowhere, until the story puts him somewhere) and empty pockets, and the save
+  version stays 3.
 - Volume and subtitle settings are stored apart from saves, so loading a save from
   a friend never changes your volume.
 
@@ -922,10 +1014,18 @@ everything in the pockets, every fact, and everyone where they stood. They are n
 by hand. They are captured from the scripted playthroughs (the act tests described in
 section 12), which play each act in the real game by real clicks: a hook in each script
 keeps a copy of the game's own autosave whenever a beat's fact has just come true, and
-`python3 scratchpad/checkpoints/build.py` runs the four plays, gathers what they captured,
+`python3 scratchpad/checkpoints/build.py` runs the plays, gathers what they captured,
 writes the file in story order, and loads every checkpoint to see that it opens. It takes
 about half an hour, because the plays are slow by design, and it has to be run again
 whenever an act's beats, scenes or scripts change, or the parts will be yesterday's game.
+
+**Today they are.** The file was made on 9 October, for the 42 beats the story had then.
+Act Four has eleven beats now, and only the six it had then have a saved game
+(`nevada.arrive`, `nevada.witness`, `nevada.coin`, `nevada.distract`, `nevada.notice`,
+`nevada.tracks`), saved from the act as it was; none of Act Five's five has one. A beat with
+no saved game is passed over, so Next goes no further than the coin door, and the engine
+test's checks of the parts ("every beat has a checkpoint" and the rest) fail until the file
+is made again, from plays of Act Four and Act Five as they are now.
 
 Three things follow from where the saved games come from. An act's gate and the next act's
 opening are one moment (the player first has control again after the hand-over), so they
@@ -933,8 +1033,9 @@ are one and the same saved game, and the buttons treat them as one part, named f
 opening. The plays do the puzzles of an act in their own order, so a part can have a later
 puzzle of the act done already (Dad has the copper mirror before the shade is up); the row
 names the part that was jumped to until a puzzle is done or undone, and then the furthest
-one done. And the last part is the end of the demo: the door open where the tracks stop,
-and the family at it, as the game stood when the ending went to the title screen.
+one done. And the last part is the end of the demo, as the game stood when the ending went
+to the title screen (in the file as it is, the end of the old Act Four: the coin door open
+where the tracks stop, and the family at it).
 
 To take it out: the block marked TESTING-9 in `js/engine/game.js` (and the import at its
 top and one line in `bindInput`), `testingRow` and its three lines in `js/engine/ui.js`,
@@ -971,7 +1072,9 @@ has just changed the story asks at once: `g.music(g.musicOf(g.scene))`.
 
 Until music is written, each theme is a **short pattern played by a built-in
 synthesizer**, so the game already has a different sound for the title, the road,
-Egypt, Rome, home in the evening, Big Sister's attic, the Nevada desert and the tunnel.
+Egypt, Rome, home in the evening, Big Sister's attic, the Nevada desert and the tunnel,
+and the Last Stop Rag that Grandpa Joe hums in the limousine (`rag`: the limousine names it
+with `music` while he sings; its notes are the phrase his banjo plays on the porch).
 To use a real recording, add one line:
 
 ```js
@@ -998,16 +1101,17 @@ await g.say("egypt.river.look");
 ```
 
 The words are kept one file to an act, in `js/content/lines/`: `egypt.en.js`,
-`rome.en.js`, `home.en.js` and `nevada.en.js`, and `common.en.js` for the lines that
-belong to no one act (the opening movie, what the family say when they look at one
-another or hand something over, and the stock replies for things nobody wrote a line
-for). So an act can be written, read aloud and recorded as a piece.
+`rome.en.js`, `home.en.js`, `nevada.en.js` (Act Four, and the cut-scene "Backup") and
+`limo.en.js` (Act Five), and `common.en.js` for the lines that belong to no one act (the
+opening movie, what the family say when they look at one another or hand something over,
+and the stock replies for things nobody wrote a line for). So an act can be written, read
+aloud and recorded as a piece.
 
 ```js
 "egypt.river.look": ["dad", "Either that's the Nile or a very committed car wash."],
 ```
 
-`js/content/lines.en.js` gathers the five files into the one list the engine uses, and
+`js/content/lines.en.js` gathers the six files into the one list the engine uses, and
 warns in the console if the same ID is written twice.
 
 That one decision is what makes a "talkie" version cheap later:
@@ -1034,7 +1138,8 @@ The author, 10 October: the dialogue branches in the LucasArts games "are all en
 and forth", and they are part of the puzzle: they give clues, they change things, and they are where the jokes are. A
 flat menu in a loop (`g.choose` four times over) cannot fork, forget, or remember. A tree can. The engine has it as
 `await g.talk(tree)` (marked `TALK-11` in the code), with nothing of any one conversation in it: a tree is plain data
-that a scene file holds, and every word in it is a line id as everywhere else.
+that a scene file holds, and every word in it is a line id as everywhere else. In outline (a sketch: its line ids
+are made up for the example; the game's own trees are at the end of this section):
 
 ```js
 const JOE = {
@@ -1113,6 +1218,13 @@ option that appears only after another was picked, a `do` that walks him to the 
 goodbye that is a line. The engine test's `talk` part plays all of it, by key and by Escape, through a door, skipped,
 saved and loaded.
 
+**The game's own.** The talks of Act Four and Act Five are trees, in `js/content/talk/nevada.js`: Grandpa Joe
+(`joeTree`), Grandma Jolene (`joleneTree`), Ranger (`rangerTree`: he says "...", and Grandpa Joe says what he means),
+the hens (`hensTree`), the Son through the coin door (`letterboxTree`, held with `{ through: "son" }`) and the
+limousine's divider (`dividerTree`). Each is a function of the scripts its scene hands in, the moments a branch needs
+staged (`joeTree({ lemonade, witness, coinTold, play, banjo, banjoDone, hold })`); a script that is not handed in is
+passed over, and the talk still says every line and sets every fact. The head of the file says what each must do.
+
 ---
 
 ## 8. Story: guided, but not a straight line
@@ -1142,7 +1254,7 @@ Act:   opening cutscene
 ### The story is data
 
 Each act is a file in `js/content/acts/` (`prologue.js`, `egypt.js`, `rome.js`,
-`home.js`, `nevada.js`) that lists its beats. `js/content/story.js` puts the acts in
+`home.js`, `nevada.js`, `limo.js`) that lists its beats. `js/content/story.js` puts the acts in
 order and holds what belongs to no single act: where a new game starts, the stock
 replies, and what the leads say about one another. A beat says what it needs and what
 it sets:
@@ -1165,9 +1277,11 @@ From that list the game gets three things for free:
 - **A storyboard.** `tools/storyboard.html` draws every act, chain and scene from
   the same data. Plan there, and the plan cannot drift from the game.
 
-Today there are a prologue and four acts: Egypt (four scenes), Rome (three), home (five,
-the rooms of the house), and the Nevada desert. The puzzle documents in `docs/` say what
-happens in each.
+Today there are a prologue and five acts: Egypt (four scenes), Rome (three), home (five,
+the rooms of the house), the Nevada desert (two: the roadside and the store; the cut-scene
+"Backup" is played on the roadside), and Act Five, of which only the opening is built (one
+scene, the back of a limousine), whose last card is the end of the demo. The puzzle
+documents in `docs/` say what happens in each.
 
 ### Storyboarding before the art exists
 
@@ -1182,13 +1296,14 @@ colors. So the order of work can be:
    (`layout.json`), and the numbers in the scene file are changed to match. If a picture
    and a script disagree about where something is, the picture wins.
 
-### Five leads, apart and together
+### Seven leads, apart and together
 
-Dad, the Son, Mom, Big Sister and Little Sister can each be played. Every lead has a
+Dad, the Son, Mom, Big Sister and Little Sister can each be played, and in Act Five
+Grandpa Joe and Ranger, his raccoon (below, "A party is any leads"). Every lead has a
 place and pockets of their own; `state.active` says who the player is, and `state.team`
-lists who they can switch to at this point in the story. A script sets it:
-`g.team(["mom", "bigsis", "lilsis"])`. Each member of the team has a portrait at the
-top left of the screen.
+lists who they can switch to at this point in the story. A script sets it: `g.team(["mom",
+"bigsis", "lilsis"])`. Each member of the team has a portrait at the top left of the
+screen.
 
 **Apart.** Dad and the Son are in different centuries. Switching to the other one
 travels to wherever he is (by the short tunnel, when the two scenes are in different
@@ -1198,14 +1313,15 @@ in one era turns up in another, so people who are apart can still help each othe
 (The coin the Son throws into the door in Rome falls out of the sky in Nevada.) The
 engine has this as the letterbox, below.
 
-**Together.** Mom and the girls go through the house as one. Each of its five scenes
-(the living room, the landing, Dad's study, Little Sister's room and Big Sister's attic)
-says so with `party: ["mom", "bigsis", "lilsis"]`: when the one being played takes the
-stairs, a door or the attic ladder, or walks off the edge of the picture, the other two
-come too and arrive beside her, each on a place of her own, and switching between them
-is instant because nobody has to go anywhere. ("A scene for several leads" in section 10
-shows how a scene says where each of them arrives.)
-In a party:
+**Together.** Mom and the girls go through the house as one. Each of its five scenes (the
+living room, the landing, Dad's study, Little Sister's room and Big Sister's attic) says
+so with `party: ["mom", "bigsis", "lilsis"]`: when the one being played takes the stairs,
+a door or the attic ladder, or walks off the edge of the picture, the other two come too
+and arrive beside her, each on a place of her own, and switching between them is instant
+because nobody has to go anywhere. So do the Nevada roadside and the store, which the
+three go in and out of together (the store's `party` is a function of the game, which
+names nobody once the family has gone through the door). ("A scene for several leads" in
+section 10 shows how a scene says where each of them arrives.) In a party:
 
 - **Each can do what the others cannot.** A clickable thing can answer each lead
   differently: `use: { lilsis: intoCloset, mom: "home.closet.use.mom", bigsis: "home.closet.use.bigsis" }`.
@@ -1226,6 +1342,36 @@ In a party:
 
 The two halves of the family meeting in one scene needs nothing new: put all five in a
 `party`.
+
+**A party is any leads.** Nothing in the engine knows who the leads are, or that a party is the family, or three: a
+party is whichever leads (`lead: true` in `cast`) the scene names, two or more, and everything above works for them.
+Grandpa Joe and Ranger are a party of two in the limousine (`party: ["grandpajoe", "ranger"]`), each with his own
+pockets ("Grandpa Joe's bib pocket", "Ranger's stash"), handing things over and talking to each other, keys 1 and 2 for
+the two portraits. A scene's `party` can also be a function of the game, for a scene that is shared only after
+something has happened (the proof's: `party: (g) => (g.flag("proof.party") ? ["dad", "critter"] : null)`); a beat's
+`lead` is any list of leads (`lead: ["grandpajoe", "ranger"]`); and a hint for one of them can be a list of lines, said
+in turn, so that a lead who cannot talk says "..." and the one with him says what he means (the proof's: `hint: { dad:
+"proof.hint.party.dad", critter: ["proof.critter.dots", "proof.hint.party.critter.dad"] }`). The stock replies (`story.fallbacks`), what a lead says looking at a companion (`story.see`) and
+handing a thing over (`story.give`) are found by the id of the lead who is playing, so a new lead needs entries of his
+own there (or a stock reply under `any`): without one he says nothing, and for a stock reply the console says so, once.
+The proof: `index.html?scene=engine-proof&lead=dad&flags=proof.party`:
+Dad and the critter arriving together by a way in, each on a mark, switching, handing, talking, a hint for each and a
+beat for both (`proof.cooler`); the engine test's `party2` part plays it.
+
+**A lead who stays in his seat** (NEVADA-12SC). Grandpa Joe rides the whole of Act Five belted to the limousine's long
+seat. A scene says so with `still: ["grandpajoe"]` (or a function of the game and a lead's id, `still: (g, who) => ...`):
+for a lead it names, a click on the floor does nothing, a way out at an edge does not take him, and he does everything
+from where he sits: an area is looked at, used, or has a thing used on it without his walking to its `walkTo` or
+turning to it, and a word with his companion is had across the car. Nor does he turn round in his seat when his
+companion comes over to talk to him. What is out of his reach is the scene's to decide (in the limousine, Ranger fetches
+it for him). Scripts can ask: `g.stays()` for the one being played, `g.stays("ranger")` for anyone.
+
+**A companion's own area** (NEVADA-12SC). A companion standing in a scene gets a box round his figure to be clicked
+(section 10, "What Show shows": it is outlined by his figure). Where that box would lie over other things (Grandpa Joe on
+the long seat, with the bow of his ropes, the seatbelt and the divider beside him), the scene can give him an area of
+its own: one of its `hotspots` with `mate: "<id>"`, while its `when` holds, is his in place of the box (its shape, and its
+place among the scene's areas). A click on it is a word with him, a right click a look at him, a thing used on it is
+handed to him, all as on the box. The engine test's `limo12` part proves both on the proof scene.
 
 ### The letterbox
 
@@ -1284,6 +1430,12 @@ the team; the scenes decide the team.
 Son in the market street sketch in Rome, a small door in the air. The gum goes in the door for the Son, the mark
 appears, switching to him is the tunnel, and coming back as him the door gives it up. The door with nothing in hand is a
 word through it, with a choose through the door. The engine test's `letterbox` part plays all of it.
+
+**In the game.** Act Four's coin door is the first letterbox in the story. From #9 until #12 the little door over the
+glass is a thing to click, "Talk into": a talk with the Son, in Rome, held through it
+(`g.talk(letterboxTree(...), { through: "son" })`, `js/content/scenes/nevada-roadside.js`); and Little Sister's lucky
+penny goes into it for him (`g.send("penny", { to: "son" })`, or, when the penny is in one of the others' pockets,
+straight onto the tunnel list from there). It waits in the tunnel for the Rome end of the door, which is not built yet.
 
 ---
 
@@ -1373,7 +1525,7 @@ The six keys (numbers in `tools/paint/postimp_paints.py`; the game reads them fr
 | Rome in the morning | rome-steps, rome-street | naples yellow / cobalt violet | lead white, naples yellow | lilac, cobalt violet, toward ultramarine |
 | The house at night | home-living-room, home-landing, home-study, home-lilsis-room, home-bigsis-room | lamplight / ultramarine | naples and chrome yellow, chrome orange | ultramarine, deep violet; viridian on greens |
 | Lamplit rooms | egypt-gallery, egypt-chamber, rome-temple | chrome orange / ultramarine | chrome yellow, chrome orange (the lamps are lights, not lit walls) | ultramarine, deep violet |
-| Nevada in the morning | nevada-roadside | chrome orange / cobalt blue | lead white, naples and chrome yellow | lilac, cobalt violet |
+| Nevada in the morning | nevada-roadside, nevada-store, nevada-limo | chrome orange / cobalt blue | lead white, naples and chrome yellow | lilac, cobalt violet |
 | The highway at dusk | highway (the title screen and the opening movie) | chrome orange / ultramarine | chrome yellow to orange and geranium | cobalt violet, deep violet |
 
 **Strength 50.** The keys run from 0 (the painting as painted) to 100 (the paints at their clearest); the game uses 50
@@ -1580,7 +1732,7 @@ area that has keyboard focus (Tab) gets the same outline, by itself.
 copy. On top of the above it has:
 
 ```js
-party: ["mom", "bigsis", "lilsis"],                         // they are here together
+party: ["mom", "bigsis", "lilsis"],                         // they are here together (any leads; or a function of the game)
 spawn: { default: [...], mom: [...], bigsis: [...], lilsis: [...],       // a mark each, for when the act opens here
          fromLanding: [...] },                              // a way in: where the lead arrives, down the stairs
 arrive: { fromLanding: [[...], [...]] },                    // where the other two arrive by it: in the order of `party`, the lead left out
@@ -1593,6 +1745,8 @@ hotspots: [
 ],
 talk: { mom: { bigsis: [["line.a", "line.b"], { when: (g) => g.has("coin"), say: ["line.c", "line.d"] }] } },   // what Mom and Big Sister say when Mom clicks her
 async given(g, item, to, from) { /* something was handed over */ },
+still: ["grandpajoe"],          // (NEVADA-12SC; seldom) leads who never walk here, but do everything from where they are (section 8)
+// (NEVADA-12SC; seldom) a companion's own area, in place of the box round his figure: { id, name, mate: "grandpajoe", poly, when } in hotspots
 ```
 
 All five scenes of the house are built this way. A way in is a name. The scene that is
@@ -1618,7 +1772,9 @@ their own (section 4). Give them an entry in `cast` in `world.js` with
 with `kind: "that-name"`. Add `lead: true` in `cast` if the player can control them: they
 then get a place, pockets and a portrait. Open `tools/sprites.html` to see them from
 every side, moving. Anything the standard figure does not have (a hat, a backpack, a
-staff) goes in the entry's `extras` function.
+staff) goes in the entry's `extras` function. An animal is painted frame by frame instead
+(section 4, "Painted frame by frame"): its frames and sidecar go in its scene's folder, a
+line in `js/art/painted.js` names the sidecar, and the `cast` entry is the same.
 
 **A thing to carry.** Add it to `items` in `world.js` with a name, a `look` line and an
 `icon`. An icon whose name ends in `.png` is a painted picture in `art/items/` (64x64);
@@ -1739,6 +1895,7 @@ loads the game, by the plain addresses, with the old risk.
 | `g.effects.get("altar-smoke").show(false)`, `.show(true)`, `.auto()` | One of the scene's moving things (`fx`) taken away, or shown, whatever its `when` says; `auto()` hands it back to its `when` (section 2, "Things that move by nature"). |
 | `g.effects.get("pigeons").scare([x, y])`, `.scare()` | The birds of a flock near that place go up (all of them, with no place), as if somebody had rushed at them, and keep clear of it for a moment: a "Chase". |
 | `g.effects.add({ type: "flame", at: [x, y], size: 10 })` | Puts another moving thing on the stage, until the scene changes (a fire the story lights). |
+| `g.effects.get("desert").set({ speed: 0 })` | A strip goes on at another speed from where it is (0: parked). Tweened, the car slows to a stop: `await g.tween(3000, (k) => g.effects.get("desert").set({ speed: 160 * (1 - k) }))`. |
 | `await g.settle()`, `await g.settle("scribe")` | Brings everyone of the scene's people who is away on a walk of their own home (or one of them), briskly, sitting down if they sit (section 4, "Their own lives"). Every script already gets this before it starts. |
 | `await g.walkTo(x, y)`, `await g.walkTo(x, y, "scribe")` | Walks the lead, or someone else, to a place, round whatever is in the way |
 | `await g.moveTo(x, y)`, `await g.moveTo(x, y, "agent")` | Walks in a straight line to a place the player could not click on (into a closet) |
@@ -1746,6 +1903,8 @@ loads the game, by the plain addresses, with the old risk.
 | `g.lead.hold()`, `g.lead.hold(false)` | Someone keeps an arm held out while people talk (holding a thing up), until told to let it drop |
 | `g.actor("mom").pray()`, `g.actor("mom").pray(false)` | Someone prays, in their own way (section 4), through whatever is said, until told to stop: standing still, or sitting where they sit. End it before they walk. |
 | `g.lead.shade()`, `g.lead.shade(false)` | Someone standing shades their eyes from a glare (section 4) until told to stop |
+| `await g.actor("ranger").play(g.clock, "nibble", { ms: 1800 })`, `.stop()` | Someone painted frame by frame plays one of his sets by name (section 4, "Painted frame by frame"): for `ms`, or until stopped; resolves when it ends. Praying and shading the eyes do nothing for him. |
+| `g.actor("ranger").variant("shades")`, `.variant(null)`, `.variant()` | Someone painted frame by frame in another state his sidecar has (every set, and his portrait), back as he was, or which one he is in. Not saved: the scene puts it on from a fact in `setup`. |
 | `g.assets.url(path)`, `g.assets.picture(path)` | For a script that puts a painted picture on the live layer: its stamped address, and a promise that it has arrived |
 | `g.actor("scribe").face("W")`, `g.lead.look(x, y)` | Turns someone to a compass point, or toward a place |
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
@@ -1762,7 +1921,7 @@ For cutscenes, which dress the stage themselves:
 | --- | --- |
 | `g.view.clear()`, `g.view.setEra("present")` | Empties the stage; sets the era |
 | `await g.view.draw("", words, { picture, live, grid: [800, 600] })` | Puts up a painted backdrop and its light. `words` describes the picture for someone who cannot see it. |
-| `g.view.cast.addPicture(id, { src }, x, y, scale)` | A painted sprite to move about: `{ src }` or `{ frames, fps }`, with `foot: [x, y]`, the point of the picture that is put at (x, y). It has `.place(x, y, scale)`, `.fade(opacity)` and `.flag("still", true)`. Shown smaller than it was painted, it is drawn smoothly. |
+| `g.view.cast.addPicture(id, { src }, x, y, scale)` | A painted sprite to move about: `{ src }` or `{ frames, fps }`, with `foot: [x, y]`, the point of the picture that is put at (x, y). It has `.place(x, y, scale)`, `.fade(opacity)` and `.flag("still", true)`, and (NEVADA-12SC) `.flag("mirror", true)`, which draws it turned left for right about its foot point: a car that came in nose first goes out the way it came. Shown smaller than it was painted, it is drawn smoothly. |
 | `await g.view.cast.load()` | Waits until every picture on the stage has arrived. Do this before fading in. |
 
 ---
@@ -1775,7 +1934,7 @@ For cutscenes, which dress the stage themselves:
 | `python3 tools/stamp.py` | Gives every code file, style file and picture an address that changes when the file does ("Publishing a new version" in section 10). `--check` changes nothing and says whether a page is out of date. |
 | `tools/hooks/pre-commit` | Runs `stamp.py` at every commit, once turned on (two commands, at the top of the file) |
 | `tools/storyboard.html` | The story from the game's own files: acts, chains and beats; the title and every scene as the game builds it, with clickable areas, walkable ground, blocked patches and the base line of each cut-out; the era palettes; the script by character, with a button that exports it as a spreadsheet. It says so at the top if the story has a beat that cannot be reached. |
-| `tools/sprites.html` | Everyone in the game, from the settings in `people.js`: every direction, the walk, every gesture, reaching and sitting, at the sizes they appear in a scene, against a choice of grounds |
+| `tools/sprites.html` | Everyone in the game, from the settings in `people.js`: every direction, the walk, every gesture, reaching and sitting, at the sizes they appear in a scene, against a choice of grounds; and anyone painted frame by frame, from his sidecar: every set moving both ways round, every picture, each variant, the portrait |
 | `tools/paint/` | The scripts that paint the pictures, one for each scene, with their shared library and the painter's guide. `python3 install.py <scene>` keys a painted scene in the game's paints and copies it into `art/` (section 9, "The paints"). |
 | `tools/koine-road/` | The scripts that build the typeface from pen strokes (it has a README of its own) |
 
@@ -1795,8 +1954,10 @@ clicked and walked to), how the cast layer repaints, how people are sized, seate
 talking, words over heads, the ways out at the edges of the picture, the outlines of
 Show, the names of things with and without "the", the fetching of every picture behind
 the title (and that nothing is asked of the server afterwards), hard and smooth pixels,
-the interface at two sizes and in three other window shapes, the storyboard page, the
-intro and the stamping tools: some 250 checks, in about four minutes. It takes screenshots, which
+a lead painted frame by frame, a strip going by behind windows, a party of two who are
+not family, a lead who stays in his seat, a companion's own area and a cut-out turned
+left for right, the interface at two sizes and in three other window shapes, the storyboard
+page, the intro and the stamping tools: some 400 checks, in about five minutes. It takes screenshots, which
 have to be looked at: a picture that is wrong throws no error. Three more scripts
 measure what a frame costs (the table in section 1), take the pictures that the choice
 between hard and smooth pixels was made from, and take pictures of seated people
@@ -1810,48 +1971,63 @@ beside the game, and their paths have to be changed before they can be run from 
 **Built, and meant to stay:** the engine, the 800x600 painted stage with its cut-outs
 and live light, the depth system, the things that move by nature (smoke, flames, water,
 birds, cloth), the save format, the sound system, the line-ID
-dialogue system, the story-as-data structure, the pixel renderer and the figure, the
-interface, the Koine Road typeface, the stamping of files, and the letterbox (things
-and voices through a small door in time, between leads who are centuries apart: section
-8). No act's scene uses the letterbox yet: that is for the story to decide.
+dialogue system and its dialogue trees, the story-as-data structure, the pixel renderer and
+the figure, the interface, the Koine Road typeface, the stamping of files, and the letterbox
+(things and voices through a small door in time, between leads who are centuries apart:
+section 8), which Act Four's coin door is the first to use. Since round twelve: people
+painted frame by frame (an animal who is a lead: section 4), a strip of country going by a
+car's windows (section 2), a party of any leads, a lead who stays in his seat and a
+companion's own area (section 8), a cut-out turned left for right (section 10, "What scripts
+can do"), and words lifted over a face that is in their way (`clear`, section 4).
 
-**Painted:** the highway of the intro and the title, and thirteen scenes: four in Egypt,
-three in Rome, the five rooms of the house and the Nevada roadside. Twenty-four things to
-carry.
+**Painted:** the highway of the intro and the title, and fifteen scenes: four in Egypt,
+three in Rome, the five rooms of the house, and in Nevada the roadside, the store inside and
+the back of the limousine. Ranger, frame by frame. Thirty-two things to carry.
 
-**Drawn:** twenty-four people.
+**Drawn:** thirty-one people, and nineteen more states of them (section 4).
 
-**Written:** a prologue and four acts. Act One (Egypt) and Act Two (Rome) have puzzle
-documents; the two acts in the present are a first draft, as their puzzle document says.
-None of it has been signed off by the author yet: Acts One and Two were rewritten in
-October 2026 from his brief, and are waiting to be played.
+**Written:** a prologue and five acts, the fifth only as far as its opening: Egypt, Rome,
+home, the Nevada desert, and the limousine of Act Five, whose last card is the end of the
+demo. Each part has its puzzle document (the present's has Acts Three and Four and the
+opening of Act Five). None of it has been signed off by the author yet: Acts One and Two
+were rewritten in October 2026 from his brief, Act Three was remade on 7 October, and Act
+Four was expanded and Act Five begun on 10 to 12 October; all of it is waiting to be played.
 
 **Placeholder:** the music, which is synthesized. There are no recorded voices yet.
 
 **Not built yet:**
 
-- Light on people that changes with the scene. Every person is lit from the upper left
-  in their own colors, by lamplight and at noon alike, whatever the light in the painting.
-- More acting. There is no turning between directions (he snaps round), no running,
-  climbing or carrying, no sitting down or getting up as an action, and faces cannot yet
-  show a feeling.
-- Other people walking about by themselves. Anyone can be walked by a script, and the
-  patch of ground they block follows them when the script ends; nobody wanders unasked.
+- Light on people that changes with the scene. Every person is lit from the upper left,
+  by lamplight and at noon alike, whatever the light in the painting; only their colors
+  follow the scene's paints (section 9).
+- More acting. There is no turning between directions (he snaps round), no running for
+  the rig's people (Ranger's scamper is painted), no climbing, and faces cannot yet show a
+  feeling. Carrying someone is a pose drawn for one moment (two of the backup carrying
+  Grandpa Joe), not something anybody can do.
+- Other people going wherever they like. Everyone lives a little by themselves (section 4,
+  "Their own lives"), and some walk out and back now and then, but only to the places their
+  scene names; nobody wanders unasked.
 - Companions who follow the lead about a scene. In a party the others come along from one
   scene to the next, but inside a scene they stay where they were left.
 - Close-ups the player can click inside. A close-up is a picture to read, not a
   small scene of its own.
 - Scrolling scenes wider than the screen.
-- The moving things in the acts' own scenes. The engine draws them (section 2, "Things that move by nature") and the
-  painters have taken them out of the pictures and marked them in each scene's `layout.json`; the scene files list them
-  under `fx` next round. Not built: a startled bird landing in another flock's place (the gutter, say), and sound for
-  any of them (a fountain's splash, the crackle of a brazier).
+- Sound for the things that move by nature (a fountain's splash, the crackle of a brazier), and a startled bird
+  landing in another flock's place (the gutter, say). The acts' scenes list their moving things now (section 2).
 - Touch polish: larger targets and a bigger inventory on phones.
 - Layered music, ambient sound loops, per-scene reverb.
 - Translations (the line files are ready for them) and a caption option for sounds.
 - Saving in the middle of a conversation. Esc pauses at any time, but Save and Load
   wait until the current moment has played out.
-- Painted close-ups. The computer screen and the notice are still the kit's drawings.
+- Painted close-ups. The computer screen, the notice and the office's clipboard are drawn by code.
+- The rest of Act Five, and where the family comes out of the door.
+
+**Known faults** (round twelve):
+
+- The testers' saved games are older than the expanded Act Four and Act Five (section 6,
+  "Testing: parts").
+- A long line said near the glass can lie across the face of the man in gray, when he
+  stands at the far end of the fence.
 
 **How the engine was tested.** By the test described in section 11, in Chromium, at
 800x600 and 1440x1080 and in three window shapes that are not 4:3. Depth was tested by
@@ -1869,24 +2045,38 @@ companion in a band winning over it, a way that is not there yet, a click that c
 mind on the way, look mode, a thing in hand, a double click, and the party arriving
 together on the other side. Show's outlines were read off the screen: nothing inside any
 area is filled, and every pixel of the line round the wagon, and round a companion, lies
-within three pixels of their own paint. And with the title up and the pictures gathered,
+within three pixels of their own paint. A painted lead was read off the screen at two
+depths (smaller farther off, in steps of two pixels, turned for the west), by his outline
+and by his portrait at 42 pixels; a strip was watched going by, across its seam with no
+line, never a pixel outside its windows, parked at speed 0 and at half speed for less
+motion. And with the title up and the pictures gathered,
 the server was made to refuse every picture: the game was continued, and a scene never
 yet shown was entered, with every painting, cut-out and inventory picture in place.
 
 **How the acts were tested.** Each act has two checks of its own. One is a script that
 plays the act in the real game by real mouse clicks on the real clickable areas (walk,
-look, use, a carried thing on a target, a choice of what to say, the Hint button),
-more than one way round where the puzzles allow it, and fails on any error in the
-browser's console: Egypt in 349 clicks (the three reflectors in two orders), Rome in 268
-(its three chains in two orders), the living room in 191 (each of the three trying every
-job), Nevada in 209 (a different one of them flashing the coin each time), and the
-opening movie and the title watched at two sizes. The other reads the act's files
-against one another and against the painters' measurements: every line a scene uses
-exists and every line written is used, every beat's fact is set by some script, every
-thing given is in the list of things, every place someone is sent to stand can be walked
-to, and every number that differs from the painter's `layout.json` is a difference
-somebody meant, with its reason. Like the engine's test, these scripts were written
-beside the game and are not in the repository yet.
+look, use, a carried thing on a target, a choice of what to say, the Hint button), more
+than one way round where the puzzles allow it, and fails on any error in the browser's
+console: Egypt in 349 clicks (the three reflectors in two orders), Rome in 268 (its
+three chains in two orders), the living room in 191 (each of the three trying every
+job), the Nevada roadside as it was before round twelve in 209 (a different one of them
+flashing the coin each time), and the opening movie and the title watched at two sizes.
+The other reads the act's files against one another and against the painters'
+measurements: every line a scene uses exists and every line written is used, every
+beat's fact is set by some script, every thing given is in the list of things, every
+place someone is sent to stand can be walked to, and every number that differs from the
+painter's `layout.json` is a difference somebody meant, with its reason. Like the
+engine's test, these scripts were written beside the game and are not in the repository
+yet.
+
+Round twelve's three parts were each built with a play of its own, and all three were run
+again on the merged game: the roadside in 357, 74 and 63 clicks (a different one of the
+three holding the coin at the walk through each time), the store in 263 and 12, and the
+cut-scene "Backup" and the limousine in 102 (watched, and Act Five the long way round) and
+21 (skipped, and the short way). The store's play and the limousine's find nothing wrong;
+the roadside's still expects the stand-in it had for the cut-scene, and says so after the
+walk through. The old Nevada play and its check of the act's files are to be rewritten for
+the act as it is now.
 
 It has not yet been played by a person on a real phone, or in Firefox or Safari. Two
 things deserve a look there. Hard pixels at two times and over rely on the browser's
@@ -1931,9 +2121,10 @@ The game makes choices so that it runs. These are yours to keep or change:
 3. **How strong the perspective is,** scene by scene. It is the painter's `horizon` and
    `full`, and the scene's `minScale`.
 4. **In-engine cutscenes** instead of video.
-5. **Five leads:** free switching, alternating chapters, or a mix. At present the story
-   decides when to cut from one half of the family to the other, and Mom and the girls
-   can be switched between at any time.
+5. **The leads:** free switching, alternating chapters, or a mix. At present the story
+   decides when to cut from one half of the family to the other, and from the family to
+   Grandpa Joe and Ranger; Mom and the girls can be switched between at any time, and so
+   can Grandpa Joe and Ranger.
 6. **Passing things between eras through wormholes** as a core puzzle idea.
 7. **Verbs:** one main action plus Look. Classic games had a verb list; a third
    verb such as Talk could be added.
@@ -1944,13 +2135,81 @@ The game makes choices so that it runs. These are yours to keep or change:
 9. **Hints:** a Hint button that has the lead think aloud. Keep it, limit it, or
    drop it.
 10. **Voices:** from the start or later. The engine handles either.
-11. **Who the leads are.** [CHARACTERS.md](CHARACTERS.md) describes all five. Nobody has
-    a name yet: on screen they are Dad, Son, Mom, Big Sister and Little Sister.
+11. **Who the leads are.** [CHARACTERS.md](CHARACTERS.md) describes all seven. Nobody in
+    the family has a name yet: on screen they are Dad, Son, Mom, Big Sister and Little
+    Sister. Grandpa Joe and Ranger are named.
 12. **Where the present-day chapter goes.** It plays after Rome. It could open the game
     instead, or be cut in between the scenes in the past.
 13. **The puzzles.** The three puzzle documents lay them out so they are easy to change.
 14. **Big Sister's facts.** Every fact she states has to be true. The list, and which
     of them have been checked against a source, is at the end of CHARACTERS.md.
+
+**From round twelve** (Nevada expanded, and Act Five begun, 10 to 12 October). Where the
+design left something open, or could not be built as written, the builders chose; each is
+yours to keep or change, and says what the game does meanwhile. The puzzle document
+(PUZZLES-the-present.md) tells each where it happens.
+
+15. **Grandpa Joe's rocking chair** stands on the ground in front of the porch, where the
+    lawn chair stood; the design put it up on the porch boards. To move it, the scene changes
+    his place and his area; nothing in his drawing changes.
+16. **Where Ranger sits.** On the ground beside the chair, as the scene draws him; Mom's look at him
+    (`nevada.ranger.look.mom`) now says so ("A raccoon beside the chair..."). If he should ride on the chair's
+    arm, as the design had him, the scene moves his place and the line goes back.
+17. **Mom's car is painted teal**, so her lines now say "a sensible teal sedan" (`nevada.car.sedan`,
+    `nevada.shade.car.mom.1`), and her third guess at Dad's car is "A gray car with dark windows." (the
+    gray suits drive a gray limousine). If the car should be silver, it is repainted and the lines go back.
+18. **#6 is read at the trade.** Big Sister reads the coin the moment Ranger puts it in her
+    hand (#10): a carried thing's look cannot call the scene. So Mom's two lines for a coin
+    nobody has read (`nevada.talk.mom.bigsis.coin.*`) and the three hints of the beat
+    `nevada.coin` are never heard. For the read to wait for a look, the coin's look in
+    `world.js` would have to call the scene.
+19. **The banjo's flash** comes off the chrome pegs at the end of its neck (he hides the
+    white head himself). Meanwhile, the pegs.
+20. **The wide door** is a second door in time over the coin's, drawn over the sun shade he
+    holds and bending it with the sand, so that the whole doorway shows; the banjo's door is
+    the same, round, at a third of the size.
+21. **Where they stand for #9:** the two who are not holding the coin watch from a row
+    further back than the design's, because Grandpa Joe sits behind the front row.
+22. **Jolene's hat** goes round the five, one a visit, and the visit is counted as the store
+    is built, so that her hat is right from the first picture.
+23. **The sun shade** is lifted out of the window by Jolene, who comes out from behind the
+    counter, and whoever asked comes to meet her. The asker taking it down would be shorter.
+24. **The pay phone.** Jolene says her two lines at the phone and reaches toward it: there
+    is no pose with the receiver at her ear.
+25. **The egg.** Little Sister hops down into the yard for it, and back onto the step: from
+    the step it was out of her reach.
+26. **Mom's dollar in the dish** on the way out (the design's) has no line, and is not done.
+27. **The first look round the store is talky:** Jolene has a word after eleven of the
+    things, once each.
+28. **The hens in "Backup"** are a close look, drawn from the store's own pictures at two
+    and a half times their size, over the lot for three seconds; the cut-scene does not go
+    into the store.
+29. **The limousine has no pictures with its doors open.** The four suits step out from
+    behind it, and get in by stepping behind it. Its plate (O.O.P.S.) is hidden behind Mom's
+    car while it stands, and reads backwards as it drives out (it is drawn mirrored). A view
+    from behind would show the plate best; none was painted.
+30. **The carry:** two of the backup carry Grandpa Joe upright between them, not laid
+    across them like a sofa. Jolene has no spatula, and there is no knitting pose.
+31. **The four suits share one color** for their words (`#abc8ed`), as the three haulers
+    do. Each could have his own.
+32. **Grandpa Joe never walks in the limousine,** loose or tied (the seatbelt stays on), so
+    Ranger fetches across the car what he wants, and eats the pickle on the way.
+33. **The looks at the map and the receipt** are written and not heard in the demo: both
+    come into his pocket in #15's last script, which runs on to the card and the title.
+34. **Jolene's four facts are new** (a hen has teeth; a raccoon has a pocket; a good hen
+    lays one on the hour; the rooster lays on Tuesdays): the design's could each be true by
+    accident. So Big Sister's goodbye at the door is about the egg, and not "A hen cannot
+    count to five."
+35. **Through the coin door the menus are the Son's lines:** the player chooses what he
+    says, and the family answer.
+36. **Jed's name** is heard once before "Backup", in his earpiece; Jolene calls him "the
+    gray fella", and the card on her board that says JED is not read aloud.
+37. **Big Sister's "Non, merci. Nein, danke."** is written from knowledge, and not yet
+    checked against a source.
+38. **Houston** is Houston Pruitt in the design, thirty-one years in dispatch; nobody in the
+    game says her surname or her years, and she has one line.
+39. **Jolene's spare hat,** on the nail in the porch post (straw, with a blue scarf),
+    matches none of her five.
 
 ---
 

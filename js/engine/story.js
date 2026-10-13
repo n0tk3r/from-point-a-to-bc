@@ -18,7 +18,8 @@ export function leadsOf(story, beat) {
 
 /** The hint one lead gives for a beat, or null. A beat carries one hint, spoken by whoever does it,
     or one for each lead: { mom: "...", bigsis: "...", lilsis: "..." }, so that a job that is somebody else's
-    can still be pointed at ("that is one for your sister"). */
+    can still be pointed at ("that is one for your sister"). NEVADA-12E: a lead's hint can be a list of lines, said in
+    turn: a lead who cannot talk says "..." and the one with him says what he means. */
 export function hintFor(story, beat, who) {
   const h = beat.hint;
   if (!h) return null;
@@ -52,7 +53,7 @@ export function checkStory({ story, scenes, cutscenes = {}, lines = {} }) {
     if (!b.sets) problems.push(`Beat "${b.id}" does not set a fact, so the game cannot tell when it is done.`);
     for (const n of b.needs || []) if (!set.has(n)) problems.push(`Beat "${b.id}" needs "${n}", which no beat sets.`);
     if (b.scene && !scenes[b.scene] && !cutscenes[b.scene]) problems.push(`Beat "${b.id}" happens in "${b.scene}", which does not exist yet.`);
-    for (const h of !b.hint ? [] : typeof b.hint === "string" ? [b.hint] : Object.values(b.hint)) {
+    for (const h of (!b.hint ? [] : typeof b.hint === "string" ? [b.hint] : Object.values(b.hint)).flat()) {      // (NEVADA-12E: a lead's hint can be a list of lines)
       if (!lines[h]) problems.push(`Beat "${b.id}" has the hint "${h}", which is not in the lines file.`);
     }
     if (b.kind !== "cutscene" && !leadsOf(story, b).length) problems.push(`Beat "${b.id}" does not say who does it.`);

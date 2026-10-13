@@ -26,6 +26,12 @@ PLACE   (left to right, in the old scene's order)
                  thread), in under the fence right below the notice, and stop at the glass, front
                  right, (646, 535). The glass lies in the sun.
         front    bottom right corner: sagebrush and a rusty oil drum                  cut-out, front plane
+ROUND TWELVE (NEVADA-12A): the old-timer is Grandpa Joe, and the shack is his store. A second board over LAST STOP says
+        GRANDPA JOE'S; the door has a handle and stands open a crack (it is the way in: `store`); Jolene's spare hat
+        hangs on a nail in the porch post beside it (`hat-nail`). New pictures: shade-held.png (an alt: the sun
+        shade from the store's window held up by Grandpa Joe, nevada_roadside_held.py) and the limousine's frames,
+        limo-side-0.png and limo-side-1.png, and nose on for the far road limo-front-0.png and limo-front-1.png
+        (cropped, with a foot point: nevada_roadside_limo.py).
 
 Three things in the shared library are worked round here, not changed (see nevada_roadside_kit):
 land.texture leaves straight seams across a big floor (ground_tex, desert); brush.Sheet punches half-clear
@@ -40,6 +46,8 @@ from brush import *
 import sky, land, letter
 from nevada_roadside_kit import *
 import nevada_roadside_props as P
+import nevada_roadside_held as held                                 # NEVADA-12A: the sun shade, held up (an alt)
+import nevada_roadside_limo as limo                                 # NEVADA-12A: the limousine (frames)
 
 SEED = 21
 OUT = "out/nevada-roadside"
@@ -561,6 +569,16 @@ def details(pic, info, seed=SEED, fast=False, as_approved=False):
     lay(pic, P.draw_shack_side, P.SHACK_AT, P.SHACK_YAW, fast=fast, seed=6)
     lay(pic, P.draw_mailbox, P.MAIL_AT, fast=fast, seed=7, sizes=(3, 2), keep=0.5)
     lay(pic, P.draw_signpole, P.SIGN_AT, fast=fast, seed=8, sizes=(4, 2), keep=0.5)
+    # NEVADA-12A: round twelve's changes at the shack, each laid on its own over the finished shack (so the shack's own
+    # brushwork is as it was): the board over the board (GRANDPA JOE'S), the door's handle and the crack it stands open,
+    # and Jolene's hat on the nail in the porch post beside the door. None is in the ground's shadow pass (see the props).
+    # The picture "as approved" (round four's palette) is left without them, so the palette is the one it always was and
+    # only the new paint is reduced again: every other pixel of back.png is as it was.
+    if not as_approved:
+        info["sign2"] = lay(pic, P.draw_sign_upper, P.SHACK_AT, P.SHACK_YAW, fast=fast, seed=14, sizes=(4, 2), keep=0.5)
+        lay(pic, P.draw_door_bits, P.SHACK_AT, P.SHACK_YAW, fast=fast, seed=15, sizes=(3, 2), keep=0.6)
+        info["hat"] = lay(pic, P.draw_hat, P.SHACK_AT, P.SHACK_YAW, fast=fast, seed=16, sizes=(3, 2), keep=0.55)
+        info["shack"] = np.maximum(info["shack"], info["sign2"])        # the shack's shape takes in the new board
 
     clutter(pic, info, seed)
 
@@ -699,7 +717,38 @@ def fx_marks():
     ]
 
 
-def layout(planes, info):
+def limo_marks(m, mf):
+    """NEVADA-12A: the limousine's numbers (nevada_roadside_limo.py), for layout.json. `m`: the side frames' common crop
+    (x0, x1, y0, y1) on the sheet they are painted on, the length bumper to bumper and where the body runs at the stop;
+    `mf`: the nose-on frames' crop, and where on the road they are drawn as seen."""
+    x0, x1, y0, y1 = m["box"]
+    fx, fy = limo.FOOT[0] - x0, limo.FOOT[1] - y0
+    f0, f1, g0, g1 = mf["box"]
+    front = {"files": ["limo-front-0.png", "limo-front-1.png"], "size": [int(f1 - f0), int(g1 - g0)],
+             "foot": [int(round(limo.FOOT_F[0] - f0)), int(round(limo.FOOT_F[1] - g0))],
+             "foot_is": "the ground under the middle of the front bumper (the same in both frames)",
+             "seen_at": mf["at"], "scale_there": mf["scale"],
+             "lane": limo.front_lane(), "lane_is": "the middle of the lane toward us (the road's far half), [x, row, scale], from the horizon to the "
+                                                  "picture's left edge (row 351), which it leaves there: the car keeps to its own side of the road",
+             "note": "coming down the far road toward us, before it turns in: nose on, a sliver of its left side (in the sun) on the right, head lamps on. "
+                     "Drawn as the roadside's camera sees it with its foot at 'seen_at' (0.18 of full size), at the size it would have on row 590, and "
+                     "scaled by row as the side frames are. Its shadow lies out to the left, on the road. The wheels turn between the frames and the body "
+                     "rides a pixel lower in the second."}
+    return {"files": ["limo-side-0.png", "limo-side-1.png"], "size": [int(x1 - x0), int(y1 - y0)],
+            "foot": [int(round(fx)), int(round(fy))], "length": int(m["length"]), "stop": {"at": list(limo.STOP), "scale": 0.8},
+            "foot_is": "the middle of the ground line under the car's near side, half way between its wheels (the same in both frames)",
+            "scale_rule": "drawn at (foot_y - 290) / 300 of its size: 1 with its foot on row 590, 0.8 on row 530",
+            "note": "round twelve: the gray stretch limousine of the Office Of Peculiar Sectors, side view, nose to the right, drawn at full size "
+                    "(as on row 590: 6.3 m, 575 px from end to end of the body; 'length' is bumper to bumper) through the roadside's camera exactly as it "
+                    "sees the car standing at its stop: laid with its foot on [345, 530] at 0.8, it is that picture. In the second frame the wheels have "
+                    "turned and the body rides a pixel lower; the long shadow out to the left (and the dark under the car) is part of each frame and does "
+                    f"not move. At the stop its body runs from x {m['stop_x'][0]} to x {m['stop_x'][1]}, and its back end is behind Mom's car (its base, "
+                    "530, is above the car's). The plate on the rear bumper says O.O.P.S. Read with cast.addPicture as the wagon's frames are; the scene "
+                    "decides the drive.",
+            "front": front}
+
+
+def layout(planes, info, limo_m, limo_mf):
     """The numbers the game needs, taken from the picture as painted."""
     r = lambda p: [int(round(p[0])), int(round(p[1]))]
     shack = Solid(None, P.SHACK_AT, P.SHACK_YAW)
@@ -725,10 +774,21 @@ def layout(planes, info):
             {"id": "stand", "file": "stand.png", "base": 493},
             {"id": "car", "file": "car.png", "base": car_base},
             {"id": "front", "file": "front.png", "plane": "front"},
+            # NEVADA-12A: an alt, not shown at the start (postimp_plans: "alt")
+            {"id": "shade-held", "file": "shade-held.png", "base": 561, "alt": True,
+             "note": "round twelve: the sun shade from the store's window, held up by Grandpa Joe standing at marks.shade_holder [572, 560] facing E "
+                     "(his hands at marks.shade_hands); show it only while he holds it. Its base is a row below his feet, so it lies over him"},
         ],
         "things": [
             {"id": "car", "what": "Mom's car", "shape": {"rect": box_of(planes["car"][1])}, "stand": [int(nose_near[0]) + 36, 588], "face": "W"},
-            {"id": "shack", "what": "the shack: LAST STOP", "shape": {"rect": box_of(info["shack"])}, "stand": [254, 449], "face": "N"},
+            {"id": "shack", "what": "the shack: GRANDPA JOE'S LAST STOP", "shape": {"rect": box_of(info["shack"])}, "stand": [254, 449], "face": "N"},    # NEVADA-12A: its sign
+            # NEVADA-12A: the door is the way into the store now, and Jolene's spare hat hangs beside it. (The brief put the door
+            # at x 286 to 308 and its stand at [296, 447]: the door is painted where it always was, x 245 to 281, and
+            # [296, 447] is off the walk outline, in front of the porch post; these stand places are the door's and the hat's own.)
+            {"id": "store", "what": "the store's door: the way in", "shape": {"poly": [r(shack.pt(x, y, 0)) for x, y in ((222, 16), (318, 16), (318, 212), (222, 212))]},
+             "stand": [261, 450], "face": "N"},
+            {"id": "hat-nail", "what": "Jolene's spare hat, a floppy straw sun hat with a scarf round it, on a nail in the porch post beside the door",
+             "shape": {"rect": box_of(info["hat"], 1)}, "stand": [291, 466], "face": "N"},
             {"id": "pump", "what": "the gas pump", "shape": {"rect": box_of(planes["pump"][1], 2)}, "stand": [346, 466], "face": "N"},
             {"id": "oldtimer", "what": "the old-timer in his lawn chair (drawn by the game)", "shape": {"rect": [OLDTIMER[0] - 26, OLDTIMER[1] - 86, 52, 90]}, "stand": [432, 528], "face": "NW"},
             {"id": "stand", "what": "the lemonade stand", "shape": {"rect": box_of(planes["stand"][1])}, "stand": [486, 522], "face": "N"},
@@ -744,7 +804,11 @@ def layout(planes, info):
         ],
         "exits": [],
         "marks": {"oldtimer": list(OLDTIMER), "agent": agent, "agent2": agent2, "mom": [268, 572], "bigsis": [318, 588], "lilsis": [232, 554],
-                  "at_the_glass": {"mom": [548, 548], "bigsis": [574, 572], "lilsis": [524, 574]}},
+                  "at_the_glass": {"mom": [548, 548], "bigsis": [574, 572], "lilsis": [524, 574]},
+                  # NEVADA-12A: Ranger on the ground beside the chair, and at the lemonade stand; Grandpa Joe holding the shade
+                  # up (where the coin was held), and his two hands on it: R the near lower corner, L the upper one, higher
+                  "ranger": [352, 512], "ranger_stand": [424, 506],
+                  "shade_holder": [572, 560], "shade_hands": {k: list(v) for k, v in held.HANDS.items()}},
         "glass": glass,
         "over_the_glass": [glass[0], glass[1] - 52],
         "over_the_glass_is": "a place in the air above the glass, for whatever the game opens there",
@@ -752,6 +816,7 @@ def layout(planes, info):
         "fence_side": {"poly": fence_a, "what": "the whole of the fence's near side, to the right edge"},
         "tracks_run": [r(gp(*TRACK[0])), r(gp(*TRACK[1])), r(gp(*TRACK[2])), r(gp(*TRACK[3]))],
         "old_grid": "the old 320x200 scene put its things, left to right: car, shack, pump, oldtimer, stand, fence, tracks, notice, agent, agent2. The same order holds here.",
+        "limo": limo_marks(limo_m, limo_mf),                                      # NEVADA-12A
         "fx": fx_marks(),
         "fx_note": "round four: the two birds that were painted still in the sky are gone from back.png (every other pixel is as it was); 'fx' flies them, and adds "
                    "a thread of smoke from the stovepipe (new). Left still on purpose: the wind sock, the umbrella, the hanging GAS sign and the tumbleweed in the "
@@ -824,12 +889,17 @@ if __name__ == "__main__":
     planes["stand"] = cut(pic, P.draw_stand, P.STAND_AT, fast=fast, seed=12, sizes=(5, 3, 2), keep=0.45)
     planes["car"] = cut(pic, P.draw_car, P.CAR_AT, fast=fast, seed=13, sizes=(7, 4, 2))
     planes["front"] = front_plane(pic, fast=fast)
+    held_c, held_a = held.shade_held(pic, fast=fast)                   # NEVADA-12A: the shade held up (an alt: not in the composite)
+    limo_parts = limo.layers(fast=fast)                                # NEVADA-12A: the limousine's layers
+    limo_m = limo.measure(limo_parts)
+    front_parts = limo.layers_front(fast=fast)                         # NEVADA-12A: and nose on, for the far road
+    limo_mf = limo.measure_front(front_parts)
     whole = pic.copy()
     for name in ("pump", "stand", "car", "front"):
         c, a = planes[name]
         over(whole, c, (a > 0.5).astype(F32))
     Image.fromarray((np.clip(whole, 0, 1) * 255).astype(np.uint8)).save(OUT + "-2-all.png")
-    lay_ = layout(planes, info)
+    lay_ = layout(planes, info, limo_m, limo_mf)
     check(whole, lay_)
     with open(OUT + "/layout.json", "w") as f:
         json.dump(lay_, f, indent=1)
@@ -841,8 +911,15 @@ if __name__ == "__main__":
     print("stand", finish(planes["stand"][0], OUT + "/stand.png", 80, planes["stand"][1]))
     print("car", finish(planes["car"][0], OUT + "/car.png", 64, planes["car"][1]))
     print("front", finish(planes["front"][0], OUT + "/front.png", 40, planes["front"][1]))
+    print("shade-held", finish(held_c, OUT + "/shade-held.png", 40, held_a))                                       # NEVADA-12A
+    foot, size, sizes, _ = limo.write([OUT + "/limo-side-0.png", OUT + "/limo-side-1.png"], limo_parts)            # NEVADA-12A
+    print("limo", sizes, "foot", foot, "size", size, "length", limo_m["length"])
+    foot, size, sizes, _ = limo.write([OUT + "/limo-front-0.png", OUT + "/limo-front-1.png"], front_parts, sheet=limo.SHEET_F, foot=limo.FOOT_F)
+    print("limo front", sizes, "foot", foot, "size", size)
     comp = Image.open(OUT + "/back.png").convert("RGBA")                               # (what comp.py does)
     for name in ("pump", "stand", "car", "front"):
         comp.alpha_composite(Image.open(f"{OUT}/{name}.png").convert("RGBA"))
     comp.convert("RGB").save(OUT + "-comp.png")
+    comp.alpha_composite(Image.open(OUT + "/shade-held.png").convert("RGBA"))          # NEVADA-12A: and with the shade held up
+    comp.convert("RGB").save(OUT + "-comp-held.png")
     print("done", round(time.time() - t0, 1))

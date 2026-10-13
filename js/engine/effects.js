@@ -15,6 +15,7 @@
 //   sway      a painted cut-out (washing on a line, a streamer, a palm's crown) stirring in the air from a fixed edge
 //   portal    the door in time: a ripple in the paint. The painting itself bends in rings spreading from the door's
 //             middle, as if a stone had been dropped in it; nothing is drawn over it (round ten: see `Portal` below)
+//   strip     a painted strip of country going by behind a window (the desert past a car's windows): NEVADA-12E, `Strip` below
 //
 // Every one is drawn on the cast layer among the people (cast.js), at a depth of its own, given as for a cut-out:
 // `base` (a row, or a line) or `plane`. A man who walks behind an altar walks behind its smoke. And every one:
@@ -39,7 +40,7 @@ import { scaleAt, DEPTH } from "./walk.js";
 import { W, H } from "./grid.js";
 import { keyHex, keyId } from "../art/look.js";
 
-const { Figure, Cutout } = castKit;
+const { Figure, Cutout, PaintedFigure } = castKit;      // (NEVADA-12E: PaintedFigure, a person drawn from painted frames: birds take fright at him too)
 const TICK = 1000 / 30;                      // the finest step anything here moves by: thirty times a second
 const TAU = Math.PI * 2;
 
@@ -256,6 +257,8 @@ class Effect {
   seek(ms) { this.time = ms * (this.calm ? this.slow : 1); this.restart(); this.update(!!this.calm, []); if (!this.shown) this.reveal(false); }
   restart() {}
   picture() { return null; }
+  /** NEVADA-12E: the painted pictures it shows, fetched with the scene's: a flock's or flyers' frames, a strip's picture. */
+  pics() { const f = this.frames; return f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []; }
 }
 
 /**
@@ -922,7 +925,8 @@ function framesOf(frames, scene) {
 /** Every painted picture a scene's moving things can show (for fetching them ahead: scene.js, picturesIn). */
 export function fxPictures(scene) {
   const list = scene && Array.isArray(scene.fx) ? scene.fx : [];
-  return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []; }))];
+  const strip = (spec) => (spec && spec.type === "strip" && typeof spec.src === "string" ? [spec.src.startsWith("art/") ? spec.src : folderOf(scene) + spec.src] : []);      // (NEVADA-12E: a strip's picture)
+  return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return [...(f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []), ...strip(spec)]; }))];
 }
 
 /** Birds in the air: across the sky now and then along `lanes`, or wheeling round a `circle`. */
@@ -1308,6 +1312,114 @@ function Birds(host, spec, n) {
   return kind === "flyers" ? new Flyers(host, spec, n) : new Flock(host, spec, n);
 }
 
+// ---------------------------------------------------------------- NEVADA-12E: a strip of painting that goes by a window
+/**
+ * strip: a painted strip of country (the desert, going by a limousine's windows) scrolling past behind the windows of
+ * the scene, the world going by to the left as it does from a car driving right. It is one picture, wide and painted to
+ * run on from its right edge into its left; only what lies behind a window is ever drawn: one picture for each window,
+ * cut to the window's own shape, so the cast repaints those boxes and nothing else.
+ *   src        the picture (a path from the top of the site, or a name in the scene's own folder)
+ *   windows    the shapes it shows through (polys, rects or circles), each a picture of its own; or `clip`, the same.
+ *              With neither: the width of the stage, over the strip's own rows
+ *   row        the row of the stage at which the strip's bottom edge sits
+ *   speed      pixels a second (of the picture, at its own size): the world goes by to the LEFT; negative, to the right;
+ *              0, parked. A script changes it with set({ speed }), and the car slows as the script tweens it
+ *   loop       true (the default): its right edge runs on into its left, so where the seam is in a window it is drawn
+ *              twice; false: it goes by once and is gone
+ *   offset     the column of the picture at the stage's left edge when its time begins (0)
+ *   fps        pictures a second of its time (20). Less motion: its time runs at half speed, so it goes by at half the pace,
+ *              drawn half as often, each picture the same step on from the last
+ *   base, plane, when, scale, opacity, seed: as every kind. Its depth, given neither base nor plane: "back", behind everybody.
+ * Where it is at a moment is worked out from its time alone (the offset, and the speed since the last set()), so a scene
+ * opened twice shows the same picture at the same moment. At its own size it is drawn on whole pixels, and a window's
+ * edge is hard: a pixel is in the window when its middle is, as for the ground in walk.js. A window's picture is drawn
+ * again only when the strip has gone by a whole pixel since the last (so a parked one costs nothing).
+ */
+class Strip extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    if (typeof s.src !== "string") throw new Error("a strip needs a picture: src");
+    this.row = num(s.row, null);
+    if (this.row == null) throw new Error("a strip needs `row`: the row of the stage its bottom edge sits on");
+    this.src = s.src.startsWith("art/") ? s.src : folderOf(host.scene) + s.src;
+    this.plane = "back";                                             // (behind everybody, unless it is given a base or a plane)
+    this.speed = num(s.speed, 0);
+    this.loop = s.loop !== false;
+    this.offset = num(s.offset, 0);
+    this.fps = Math.max(1, num(s.fps, 20)); this.calmFps = this.fps;    // (for less motion its time runs at half speed: drawn half as often, each picture as far on as at full speed, never jumpier)
+    this.alpha = clamp(num(s.opacity, 1));
+    this.d0 = 0; this.t0 = 0;                                        // the distance gone (picture pixels) at t0 (ms of its own time): since the last change of speed
+    const shapes = polysOf(s.windows).length ? polysOf(s.windows) : polysOf(s.clip);
+    this.wins = (shapes.length ? shapes : [null]).map((poly, i) => {
+      const win = { poly, box: null, mask: null, pair: null, step: null, pos: null, calm: null, go: false, tiles: 0, sprite: this.mote(":" + i) };
+      win.sprite.win = win;
+      if (poly) this.frame(win, boxOf(poly));
+      return win;
+    });
+  }
+  /** Where a window's picture lies on the stage ([x0, y0, x1, y1), whole pixels), and its shape on that picture: a mask with
+      hard edges, made once (a pixel is in it when its middle is). */
+  frame(win, [x0, y0, x1, y1]) {
+    const box = [Math.max(0, Math.floor(x0)), Math.max(0, Math.floor(y0)), Math.min(W, Math.ceil(x1)), Math.min(H, Math.ceil(y1))];
+    const w = Math.max(1, box[2] - box[0]), h = Math.max(1, box[3] - box[1]);
+    win.box = box;
+    win.pair = new Pair(w, h);
+    win.mask = canvasOf(w, h);
+    const img = win.mask.getContext("2d").createImageData(w, h), d = img.data;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (!win.poly || inside(win.poly, box[0] + x + 0.5, box[1] + y + 0.5)) d[(y * w + x) * 4 + 3] = 255;
+    win.mask.getContext("2d").putImageData(img, 0, 0);
+    win.sprite.place(box[0], box[1]);
+  }
+  pics() { return [this.src]; }
+  slots() { return this.sprites; }
+  restart() { this.d0 = 0; this.t0 = 0; for (const w of this.wins) w.step = null; }
+  /** Picture pixels gone by at a moment of its own time (ms), from where it began. */
+  gone(t) { return this.d0 + (this.speed * Math.max(0, t - this.t0)) / 1000; }
+  /** For scripts: { speed } (pixels a second; 0 parks it), { opacity }. It goes on from where it is. */
+  set(o = {}) {
+    if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }
+    if (o && typeof o.opacity === "number") { this.alpha = clamp(o.opacity); for (const w of this.wins) w.step = null; }
+    return this;
+  }
+  /** Where the strip is on the stage at a step of its time: the whole pixels it has gone by. */
+  pos(step, fps) { return Math.round((this.offset + this.gone((step / fps) * 1000)) * this.k); }
+  /** Each window's next picture is due when the strip has gone by a whole pixel since the last; it is drawn in its turn (grant). */
+  update(calm) {
+    const fps = calm ? this.calmFps : this.fps, at = this.pos(Math.floor((this.time * fps) / 1000), fps);
+    for (const w of this.wins) if (w.step !== null) w.sprite.want = at !== w.pos || calm !== w.calm;
+  }
+  grant(sprite) { if (sprite.win) sprite.win.go = true; }
+  picture(sprite, calm) {
+    const w = sprite.win, img = got(this.src);
+    if (!w || !img || !img.naturalWidth) return null;                // (not here yet)
+    if (!w.box) this.frame(w, [0, this.row - img.naturalHeight * this.k, W, this.row]);
+    const fps = calm ? this.calmFps : this.fps, step = Math.floor((this.time * fps) / 1000), at = this.pos(step, fps), go = w.go;
+    w.go = false;
+    if (w.step === null || (go && (at !== w.pos || calm !== w.calm))) {           // (the first picture at once; after that, in its turn)
+      w.step = step; w.pos = at; w.calm = calm;
+      this.paint(w.pair.next(), w, img, at);
+    }
+    return { canvas: w.pair.canvas, ox: 0, oy: 0 };
+  }
+  /** One window's picture with the strip gone by `pos` pixels: drawn twice where the seam is in the window, then cut to its mask. */
+  paint(ctx, w, img, pos) {
+    const k = this.k, iw = Math.max(1, Math.round(img.naturalWidth * k)), ih = Math.max(1, Math.round(img.naturalHeight * k));
+    const top = Math.round(this.row - ih) - w.box[1], wide = w.box[2] - w.box[0];
+    let x = -pos - w.box[0];                                         // the strip's left edge on this picture: the column `offset` at the stage's left edge, gone `pos` pixels
+    if (this.loop) { const m = ((x % iw) + iw) % iw; x = m === 0 ? 0 : m - iw; }       // (the copy that covers the picture's left edge)
+    ctx.globalAlpha = this.alpha;
+    ctx.imageSmoothingEnabled = iw !== img.naturalWidth;            // (at its own size: hard pixels on whole pixels)
+    let n = 0;
+    for (let at = x; at < wide; at += iw) { if (at + iw > 0) { ctx.drawImage(img, at, top, iw, ih); n++; } if (!this.loop) break; }
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = "destination-in";
+    ctx.drawImage(w.mask, 0, 0);                                     // (nothing outside the window)
+    ctx.globalCompositeOperation = "source-over";
+    w.tiles = n;
+    this.drawn = this.wins.reduce((sum, v) => sum + v.tiles, 0);
+  }
+}
+
 // ---------------------------------------------------------------- the door in time
 /**
  * portal: the door in time, as a ripple in the paint (round ten; the author chose it on 9 October from six looks in the
@@ -1574,7 +1686,7 @@ class Portal extends Effect {
   }
 }
 
-const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal };
+const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal, strip: Strip };      // (strip: NEVADA-12E)
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**
@@ -1618,7 +1730,7 @@ export class Effects {
     if (typeof specs === "function") { try { specs = specs(this.game); } catch (err) { console.warn(`The moving things of ${this.place} could not be worked out:`, err); specs = []; } }
     for (const spec of Array.isArray(specs) ? specs : []) this.add(spec, true);
     this.frame(0);
-    return Promise.all(this.list.flatMap((e) => (e.frames ? [...Object.values(e.frames.lists).flat(), ...(e.frames.shadow ? [e.frames.shadow] : [])] : [])).map(fetchPicture));
+    return Promise.all(this.list.flatMap((e) => e.pics()).map(fetchPicture));          // (NEVADA-12E: pics(), which a strip has too)
   }
   drop(scene = null) { this.list = []; this.time = 0; this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }
 
@@ -1636,7 +1748,7 @@ export class Effects {
     for (const s of e.sprites) this.game.view.cast.add(s);
     if (e.attach) e.attach();
     this.list.push(e);
-    if (!quiet) { if (e.frames) [...Object.values(e.frames.lists).flat(), ...(e.frames.shadow ? [e.frames.shadow] : [])].forEach(fetchPicture); this.frame(0); }
+    if (!quiet) { e.pics().forEach(fetchPicture); this.frame(0); }          // (NEVADA-12E: pics())
     return e;
   }
   get(id) { return this.list.find((e) => e.id === id) || null; }
@@ -1650,7 +1762,7 @@ export class Effects {
     this.time += step;
     let people = null;
     for (const e of this.list) {
-      if (e instanceof Flock && !people) { people = []; for (const s of cast.items.values()) if (s instanceof Figure && !s.hidden && s.opacity > 0) people.push(s); }
+      if (e instanceof Flock && !people) { people = []; for (const s of cast.items.values()) if ((s instanceof Figure || (PaintedFigure && s instanceof PaintedFigure)) && !s.hidden && s.opacity > 0) people.push(s); }      // (NEVADA-12E: and painted figures)
       e.advance(step, calm, people);
     }
     // Whose picture changes this frame: no more than the budget, a bird on the move first, then whoever has waited longest.

@@ -54,6 +54,11 @@ export function hold(path, { quiet = false } = {}) {
 /** Is this file held already? */
 export const holding = (path) => held.has(path);
 
+/** NEVADA-12E: is this file among the page's files (its list of stamps)? A page with no list at all (never stamped) is
+    taken to have everything. For a file that may not have been made yet (a painted figure's sidecar: cast.js), so that
+    it is not asked for at all: a file the server does not have is reported by the browser as an error. */
+export const listed = (path) => !Object.keys(stamps).length || Object.prototype.hasOwnProperty.call(stamps, path);
+
 /**
  * A picture, ready to paint: fetched (or taken from what is held), decoded, and kept. Resolves with the image.
  * It never rejects: a picture that will not load resolves with null, with a warning in the console,
