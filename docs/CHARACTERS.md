@@ -520,9 +520,11 @@ they want.
 
 **Ancient Egypt** and **Rome**
 
-The eight people of Egypt and the seven of Rome are written out, in this form, at the
-head of their own acts: [PUZZLES-egypt.md](PUZZLES-egypt.md) and
-[PUZZLES-rome.md](PUZZLES-rome.md).
+The eight people of Egypt and the people of Rome are written out, in this form, at the head
+of their own acts: [PUZZLES-egypt.md](PUZZLES-egypt.md) and
+[PUZZLES-rome.md](PUZZLES-rome.md). <!-- ROME-13W --> Rome has fifteen since round thirteen:
+the eight of the first draft, and seven more, who also have pages of their own below, under
+"Rome's new people (round thirteen)".
 
 **The middle of Nevada, the present (draft)**
 
@@ -761,6 +763,392 @@ sitting. After #11 Darlene and Charlene sit, and the other three keep guarding a
 then; in "Backup", seen close, all five turn round to watch the limousine go, and then turn back
 to the fence. They never speak, and Little Sister is always right about them.
 
+## Rome's new people (round thirteen)
+
+<!-- ROME-13W: new pages, in the pattern of the family's. Their lines are in js/content/lines/rome.en.js, their talk in
+js/content/talk/rome.js; the design is briefs/out/rome2-design.md (section 3.3), and the act is written out in
+PUZZLES-rome.md. -->
+
+The author chose the bigger Rome's four places and asked for a devout Jew of Rome who prays
+toward Jerusalem and waits for the Messiah; the design (round thirteen) made the people, and
+the author's decisions on it chose seven of them for this stage: the Gaul, Phyllis, Titus,
+the goose-keeper, Eleazar, Mariam and Felix. Their names are true to 44 B.C. (three names for
+a citizen; a freed slave's old master's names and his own; a few Hebrew names for the Jews of
+Rome); over their heads the game shows plain roles. None of them is a real person of the
+time. Everything on these pages is the design's, or invention (**draft**). The Son names
+them all, as he names everyone: Big Senator, the flower lady, Mister Goose, mister and then
+Mister Eleazar.
+
+What the game calls each one (the label line, "Talk to Gaulish senator", names the person's
+clickable area; the cast's own name is what the storyboard's script and the voice actors'
+spreadsheet use), the colour of their words (`cast` in `js/content/world.js`: the design's
+colours, each moved the least that keeps it clear of everyone else's in the game, but
+Mariam's, which was clear already), and the figures they are drawn as (`js/art/people.js`;
+the second is the same person in another state, swapped in under the same id):
+
+| Who | The label line | The cast's name | Words | Drawn as |
+| --- | --- | --- | --- | --- |
+| The Gaul | Gaulish senator | Gaulish Senator | `#ff9f8f` | `gaul` (in the Roman senator's toga); `gaul-own` (in his own) |
+| Phyllis | garland seller | Garland Seller | `#f1acdf` | `phyllis` (the lamp in her lap); `phyllis-free` (a garland instead) |
+| Titus | keeper's boy | Keeper's Boy | `#ffca8a` | `titus` (on the base, the breakfast in his lap); `titus-free` (on his feet, empty-handed) |
+| The goose-keeper | goose-keeper | Goose-Keeper | `#b3cc7b` | `anser` |
+| Eleazar | old man | Old Man | `#ebe698` | `eleazar-window` (at his window); `eleazar` (on his bench, and on his feet) |
+| Mariam | girl | Girl | `#ffb8c8` | `mariam` |
+| Felix | boatman | Boatman | `#70c79d` | `felix` (a bale on his shoulder); `felix-free` (the bale set down) |
+
+### The Gaul (Gaius Iulius Litumarus)
+
+**Who he is.** About forty-five: a Gaul of the Province, a nobleman of Nemausus, given the
+citizenship and the dictator's own names, and lately made a senator of Rome. This is his
+first meeting, and nobody will tell him where it is: somebody has put up a notice that no one
+is to show a new senator the way to the House. Proud, dignified, lonely in Rome, and wryly
+aware of what Rome says about him. He is wearing, by mistake, the Roman senator's best toga,
+which stops above his shins: the laundress handed it to him in the dark. Over his head:
+"Gaulish senator". The Son calls him Big Senator ("It's a compliment.").
+
+**Wants.** Somebody, anybody, to tell him where the Senate meets today. Then his own toga,
+so as not to cross Rome with his knees out.
+
+**Fears.** Arriving first ("It looks keen."). Being the joke, which he is; so he tells it
+first.
+
+**Gets wrong.** Nothing about Rome: he knows exactly what it thinks of him. He had decided
+Roman togas were made to be ridiculous.
+
+**How he talks.**
+- Careful, correct, slightly old-fashioned, every word chosen, like a man walking on ice. No
+  contractions.
+- Dry, never bitter for long. He tells the Roman joke about himself before anyone else can:
+  "It is a joke. I am it." The city's song about Gauls he tells in his own words; the verses
+  are never quoted.
+- He says what matters over to himself: "Pompey's hall, by the theater. I say it to myself
+  as I walk. It is the Latin I am surest of."
+- He calls the boy "child", and thanks him properly.
+
+**Running gags.** Twelve Romans smiled, and walked faster. Along the fence, and back ("I am
+becoming very good at it."). The song he has heard nine times; ten. His knees.
+
+**In play.** #10, Nobody Will Show Him: his question is answered by what the senator said
+about his speech, or by Walnut; then the togas are swapped behind the hoarding. He can be met
+before the boy has his toga, and then the swap waits. After it he goes off up the square
+toward the plain, and is not seen again. Nothing he says looks ahead to what happens in
+Pompey's hall today.
+
+**How he looks and moves.** Big and tall, broad-shouldered; fair-red hair worn longer than a
+Roman's and combed back; a long drooping moustache and a shaven chin; fair skin reddened by
+the sun; a gold ring round his right wrist. A senator's tunic with the broad purple stripe,
+and a senator's red shoes; grey-blue eyes, and a moustache darker than his hair, so that it
+reads on his face. Two togas: the Roman senator's, far too short, the wrap stopping above
+his knees and its folds pulled tight (`gaul`); after the swap, his own, very large, falling
+properly to his ankles (`gaul-own`). He stands upright, a little back, and walks with short
+careful steps, his arms still: a man on ice. He walks along the hoarding and back, and out
+toward the middle of the square, asking the way of nobody (no passers-by are drawn in this
+stage), asks the air and shrugs, tugs the short toga down, looks up at the crane, folds his
+arms; for the boy he points at the hole where the House was, and bows, deep and formal, his
+hand to his heart.
+
+**How he changes (draft).** From the joke to the man who spoiled it: "Someone has shown a new
+senator the way. The joke is spoiled, and I thank you for spoiling it."
+
+> "It is a joke. I am it."
+> "I do not know that word. I am a Gaul. For Rome, that is usually enough."
+> "There is the senate house. It is a hole with men in it."
+> "...I had decided Roman togas were made to be ridiculous."
+> "If anyone asks, a Roman showed me the way." "I'm not a Roman." "Then nobody will be blamed."
+
+### Phyllis (Fannia Phyllis)
+
+**Who she is.** About fifty-five: a Greek freedwoman, born in Asia and freed long ago (her
+names are her old master's family's and her own); a widow. She sells violets, laurel, myrtle
+and garlands from her baskets at the foot of Castor's temple in the Forum, and this is the
+busiest morning of her spring: Anna Perenna's feast, when half the city goes out to picnic
+by the river and every one of them wants a garland. Her one son, Felix, loads the barges
+across the river, and his name is down for Corinth. At first light she threw a new silver
+coin into the street's fountain with a wish for him: the coin the boy borrows. Over her
+head: "garland seller". The Son calls her the flower lady.
+
+**Wants.** To give Felix the little clay lamp in her lap, "to light his new house in
+Corinth", and to hear him say he will come and say goodbye before he sails.
+
+**Fears (draft).** That he will go without coming.
+
+**Gets wrong.** Nothing, but how far a wish can carry: she thought new silver would carry it
+far. It did.
+
+**How she talks.**
+- A seller's patter, fast and warm: "Violets! Laurel for your doorpost! Myrtle for your
+  sweetheart! A garland for Anna Perenna!"
+- Sharp with fools and with customers who only look; soft about her son ("Felix, Corinth,
+  Corinth, Felix. You're as bad as I am, child. I talk of nothing else.").
+- One-word verdicts: "Child."
+- What she has given, she does not take back: "A wish once thrown is not mine to take back."
+
+**Running gags.** "Child." The bees, who never buy. Selling twice as fast once the wish is
+answered.
+
+**In play.** #12, Interest Is Extra Wishes: she tells whose wish the coin was, gives the boy
+her lamp to carry to her son, and, when he brings back Felix's word, lets him keep the coin
+("It has done its work, and it was borrowed honestly."). The toss (#9) waits for her leave.
+
+**How she looks and moves.** Small, quick, sun-browned; gray hair under a dark plum mantle
+drawn over her head; a faded red tunic to the ankles, sandals. She sits on a low three-legged
+stool among her baskets (it is drawn with her, and stays where it is when she gets up), the
+lamp wrapped in a white cloth in her lap, its clay top and nozzle showing (`phyllis`); once
+she has given it, a half-made garland of myrtle and violets instead (`phyllis-free`). She
+gets up to hang a garland on her pole, shoos a pigeon, calls to the square; sitting, she
+weaves stems, sniffs a violet, counts coins in her palm, and shades her eyes to look across
+the square. For the boy she unwraps the lamp and holds it out in both hands.
+
+**How she changes (draft).** From a wish thrown away to a wish answered: "Then the wish is
+answered, and it was a good one."
+
+> "Hands off the merchandise, child. Smell with your nose. That part's free."
+> "No dog and no sweetheart. Then violets for your mother. Every boy has one of those."
+> "A bird? For a wish? Child."
+> "Keep the coin, child. It has done its work, and it was borrowed honestly."
+
+### Titus
+
+**Who he is.** About eleven: the snack-bar keeper's son, born free, and his father's son in
+every word. Every Ides he runs after the white ewe that goes up to Jupiter, every single
+Ides. This morning he was taking the soothsayer's breakfast to him at first light, went
+after the ewe instead, and is now sitting on top of a statue's base among the kings on
+the Capitol, the breakfast in his lap and the sacred geese all round the base's foot. He is
+not stuck. He is sitting. (The goose-keeper is a Titus too: Rome has very few first names.)
+Over his head: "keeper's boy".
+
+**Wants.** To get down without saying he is stuck. To get home before his father sends the
+geese after him.
+
+**Fears.** Putting a foot down among the geese ("They bite like Father's creditors."). His
+father talking at him for a WEEK.
+
+**Gets wrong.** That nobody can tell he is stuck.
+
+**How he talks.**
+- Like his father: in one breath, commas and no stops ("Stuck? Me? I'm SITTING, I like
+  sitting, I can see the whole city from up here, you can't, you're down there.").
+- Boasting, then honest: "I've been sitting since first light. On purpose. Mostly on purpose."
+- "Father", who knows everything and worries loud.
+
+**Running gags.** "I'm not stuck. I'm sitting." The ewe, every single Ides. Not looking at the
+sausage.
+
+**In play.** #11, Juno's Geese: he says whose boy he is and whose breakfast it is, shows the
+boy what the geese do when he puts a foot down, and sends him to old Anser. After the stomp
+he hops down ("I wasn't scared. I was SITTING."), hands over the breakfast, and runs home
+down the hill.
+
+**How he looks and moves.** Skinny, dark curls, a big grin, ears that stick out; his
+father's ochre tunic, washed thin and too big for him, sandals; round his neck a small
+leather amulet on a cord. Seated on top of the base, his legs hanging down its front, with
+the breakfast knotted in its checked cloth in his lap (`titus`); he gets down with a hop, the
+bundle clutched to his chest, and holds it out by its knot; then on his feet with nothing in
+his hands, quick, ready to run home (`titus-free`). On the base he waves at the boy, peeks
+into the cloth, and holds a king's pose, chin up; asked about the geese, he draws his knees
+up to his chin. He is small up there (about 67 pixels): the bundle and the amulet read, the
+grin hardly.
+
+**How he changes (draft).** From sitting to running.
+
+> "I'm not a statue, statues don't have breakfasts, I've got a breakfast. ...Not mine. But I've got it."
+> "She had ribbons. She went up the hill like a senator."
+> "Over THEM? They bite like Father's creditors."
+> "I wasn't scared. I was SITTING."
+> "Your shoes are the best thing on this hill, and I've seen the gold roof!"
+
+### The goose-keeper (Titus Rubrius Anser)
+
+**Who he is.** About sixty. He holds the Republic's contract to feed the sacred geese of Juno
+on the Capitol, and has for thirty years. His surname, Anser, means goose: it was his
+grandfather's name before it was his job, and nobody believes it. He tells the story of the
+night the geese saved the city to anybody, at any excuse, and nobody listens. Over his head:
+"goose-keeper". The Son calls him Mister Goose.
+
+**Wants.** Nothing to happen to his geese. Somebody to listen.
+
+**Fears.** His geese. He has never once won an argument with them.
+
+**Gets wrong.** That nobody ever listens. Today somebody USED it.
+
+**How he talks.**
+- Mournful, slow and devoted.
+- Every answer comes round to the night the geese saved the city: "These are no ordinary
+  geese, child. These geese saved the city."
+- He tells the tale the way an old man tells it, the same every time, and always "Long ago":
+  no year.
+
+**Running gags.** "Long ago..." Thirty years. The dogs, which sleep; the geese, which never
+do. Counting the geese on his fingers, and getting a different number.
+
+**In play.** #11, Juno's Geese: the clue. His tale ends "They cannot abide anything strange.
+They shout at it, and then they run.", and the boy puts it to the test. His last word: "That
+is the most noise they have made since the Gauls."
+
+**How he looks and moves.** Heavy and slow; gray hair going at the temples, heavy lids, a
+long mournful face, a big nose; a brown work tunic and a leather apron up over his chest; a
+basket of grain on his left hip and a long stick in his right hand, planted beside him (he
+has never once poked a goose); big hands. Both hands busy, he talks with his head. He stands
+behind his pen, walks a few steps along the back of it and back, shakes the basket (a little
+grain jumps), leans on his stick, counts his geese, his head going goose to goose and his
+lips moving, and sighs. In this stage he does not walk out among the geese round the base:
+see DESIGN.md, section 14.
+
+**How he changes (draft).** From the man nobody listens to, to the man whose story worked:
+"Thirty years I have told that story. Today somebody USED it."
+
+> "Sacred birds. I feed them. I do not argue with them."
+> "...Attack chickens. I will not tell them you said that."
+> "It was my grandfather's name before it was my job. Nobody believes it."
+> "Between you and me, the dogs sleep. The geese never do."
+> "That is the most noise they have made since the Gauls."
+
+### Eleazar
+
+**Who he is.** About sixty-five: a Jew of Jerusalem, a grown man there when Pompey took the
+city nineteen years ago; carried to Italy with many others, bought, and in time freed by his
+master. A widower. He lives across the Tiber, where his people live, with his daughter, her
+husband Yose (the date seller in the street) and their girl Mariam, and reads the Law and the
+Prophets in the house of prayer next door. He prays at his open window toward Jerusalem,
+where the Temple is, evening, morning and midday, and waits for the one God has promised: a
+son of David, a king who will rule in righteousness, to whose light the nations will come.
+He is the heart of the faith thread, and part of no puzzle. Over his head: "old man". The
+Son calls him mister, and then Mister Eleazar.
+
+**Wants.** Jerusalem's peace. To see the promised one; and if not, that his grandchildren
+will, or theirs: "The promise does not depend on an old man's eyes."
+
+**Fears.** Nothing that he says. He is in no hurry.
+
+**Gets wrong.** Nothing. The boy knows something he does not, and keeps it: "It wasn't mine
+to tell."
+
+**How he talks.**
+- Slow, warm and grave, with a dry humor ("Twice. But very politely."). He listens more than
+  he talks.
+- "Child." "Peace to you, child." "Go in peace, child. And find your father."
+- The Scriptures in his own words, and once, from Isaiah, exactly, with the boy naming it.
+- He never preaches, argues or hurries; says nothing against anybody's gods; never names
+  who is coming, or when; and is not converted, and nobody tries.
+
+**Running gags.** None: his is the quiet scene. His son-in-law "always says so".
+
+**In play.** Not a puzzle: the act does not wait for him. The first sight across the river
+is the old man at his window, praying; the boy waits ("I'm getting good at waiting."); then,
+on his bench, the talk: the window, how he came to Rome, what he prays for, the tassels on
+his mantle; then "What if he doesn't come in time? For you, I mean."; Isaiah 40:31; the
+prayer side by side; and the blessing that goes three ways (Numbers 6:24 from his
+son-in-law, 6:25 from him, and 6:26 given back to him by the boy). It is all in
+PUZZLES-rome.md, under "Eleazar, across the river".
+
+**How he looks and moves.** Lean, a little stooped; a full white beard, gray hair, dark
+deep-set eyes, weathered hands. A long undyed tunic to the calf, and over it a dark brown
+mantle with a tassel at each of its four corners, each with a thread of blue; sandals. At his
+window his head is bare and he stands at his prayer, his hands folded at his breast over the
+sill, his head bowed, his eyes shut; now and then he lifts his head a while, his lips
+moving (`eleazar-window`: his way of standing is his prayer). On his bench, his scroll open
+between his hands, which he unrolls a little and reads with a finger (`eleazar`). He looks up
+across the river, strokes his beard, rests his hands on the scroll and is still. He gets up
+slowly; praying on his feet, his hands are folded low, the scroll in them; blessing the boy,
+his right hand rests on the boy's bowed head.
+
+**How he changes (draft).** He is still waiting, and it is easier this morning: "I will
+remember the day the blessing came back to me."
+
+> "Peace to you, child."
+> "A house of prayer."
+> "Then you have been well taught."
+> "Even these. Even, perhaps, a boy in strange shoes."
+> "Then we are both waiting, child. Shall we wait together a little?"
+> "I am still waiting. It is easier this morning."
+
+### Mariam
+
+**Who she is.** About eight: the date seller's daughter, born in Rome, and Eleazar's
+granddaughter. Boss of the yard, the hens, the water dish, and Grandfather ("Mostly
+Grandfather."). Her hens have stood in a row since first light, all facing the same way,
+over the river, at the city, and will not eat and will not lay; she takes it seriously,
+because hens are sensible. She calls the boy Lights-on-his-feet. Part of no puzzle. Over her
+head: "girl".
+
+**Wants.** Her hens to finish looking.
+
+**Fears (draft).** Somebody poking the case on the doorpost. Everybody wants to poke it.
+
+**Gets wrong.** Nothing about hens. She does not know what a fridge is.
+
+**How she talks.**
+- Certain about everything, especially hens: short declarations, one word in capitals
+  ("They're in a ROW.").
+- Bossy and fond, and quick to laugh: "I'm not bossy. I'm in CHARGE. It's different."
+- Her grandfather's sayings, passed on exactly: "Grandfather says hens don't pray. They only
+  look."
+
+**Running gags.** The hens, still looking. Counting them again: the same number. Figs, which
+even the hens would not eat today.
+
+**In play.** The chickens' one more place: she tells of her hens, of her grandfather ("He
+comes down when he has finished, and he does not hurry for anybody."), of her father's dates
+from Jericho, and of the words of the Law on the doorpost. The boy: "My little sister would
+LOVE you. You'd be bossy at each other."
+
+**How she looks and moves.** Small and quick; olive skin, brown eyes, dark hair drawn back
+into a plait brought over her right shoulder, with a red tie near its end; a long plain
+pale-green tunic, bare feet; a clay dish of grain on her left hip. Her own girl, not Little
+Sister's double. She stands in the yard behind its fence (the boy talks to her from the lane
+outside it), crouches to look a hen in the eye, puts a fist on her hip with her chin up,
+scatters grain that nobody eats, and counts the hens, pointing at each. Seen from where we
+stand she is about 70 pixels tall: the design reckoned the yard nearer.
+
+**How she changes (draft).** She does not need to.
+
+> "They won't eat. They won't lay. Hens are sensible. Something over there is not."
+> "Grandfather says hens don't pray. They only look."
+> "You don't ASK a hen. You look her in the eye."
+> "That's the stone, silly. It's a tree that hasn't started yet. He ought to charge you for the tree."
+
+### Felix (Gaius Fannius Felix)
+
+**Who he is.** About twenty-six: Phyllis's son, born free; a boatman and porter on the river
+barges, carrying bales of papyrus and linen that come up from Ostia, where the big ships
+wait. His name is down for the dictator's new colony at Corinth, and he cannot talk about it
+without getting like this. He keeps looking at the bridge. Over his head: "boatman".
+
+**Wants.** To sail for Corinth: a house of his own, in a city with a sea on each side.
+
+**Fears (draft).** Ending up in the river, and having to explain.
+
+**Gets wrong.** That his mother never throws anything. (She keeps string. She threw a coin in
+a fountain, for him.)
+
+**How he talks.**
+- Cheerful and impatient; he talks while he walks.
+- Short lists when he is happy: "Ostia. Sea. Ships. Barges. Me. Up and down. That's the whole
+  of it." "Corinth! A house! TWO seas! ...Sorry. I get like this."
+- Soft about his mother: "So I wave at the Forum. She can't see me. I wave anyway."
+
+**Running gags.** Busy. Telling the bales things. The ninth hour ("Tell her again, in case!").
+
+**In play.** #12, Interest Is Extra Wishes: the lamp is from his mother; he sets his bale
+down, and gives his word, to come over the bridge at the ninth hour and to light it in
+Corinth. At "Corinth" the boy turns to us and stops himself.
+
+**How he looks and moves.** Strong, sunburnt, short dark hair; a short work tunic tied on
+his left shoulder, his right shoulder and arm bare; a rope belt, bare legs and feet, a coil
+of rope on his right shoulder. He works between the landing and the barge's side with a big
+corded bale on his left shoulder, his left hand up over it (`felix`); to talk, he sets it down
+on the pile and stands with a fist on his hip, both hands free (`felix-free`), and after the
+talk takes it up again. He rolls his shoulders, whistles (his lips only: no tune is heard),
+and shades his eyes toward the bridge.
+
+**How he changes (draft).** From a man in a hurry to be gone, to a man who will come and say
+goodbye first.
+
+> "It's a barge. A table doesn't go down to Ostia and back."
+> "...She never throws anything. She keeps string."
+> "Tell her I'll come over the bridge at the ninth hour, before the barge goes down."
+> "And tell her I'll light it in Corinth. The first night. In the first window."
+
 ---
 
 ## For whoever draws them
@@ -926,10 +1314,19 @@ that each can be checked word for word, capitals and punctuation included.
 | Matthew 22:21, its second sentence | "Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." | `nevada.coin.read.2d` (the reference, "Matthew 22:21.", is in the same line) | Mom, when Big Sister reads the coin, in Nevada | **Checked** (`kjv.matt22.19-21`): https://www.bibleserver.com/KJV/Matthew22 ; https://biblehub.com/kjv/matthew/22.htm |
 | Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` (the reference, "Psalm 31, verse 15.", is in the same line) | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close before the line's own colon and there is no full stop inside them. |
 | Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it, and gives the reference: "Psalm 121, verse 8.") | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
+| Micah 5:2, its first clause <!-- ROME-13W: Rome's five, the first two in the game since 7 October --> | "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | `rome.dateseller.ans.pray.2` (the reference is the Son's next line, `rome.dateseller.ans.pray.3`) | The date seller, in the street in Rome | **Checked** (`kjv.mic5.2`). The verse runs on: the quotation ends on its comma |
+| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` (the reference is the Son's, `rome.dateseller.bless.2`) | The date seller, blessing the boy | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
+| Isaiah 40:31, its first clause | "But they that wait upon the LORD shall renew their strength;" | `rome.eleazar.heart.2` (the reference is the Son's, `rome.eleazar.heart.son.1`: "Isaiah 40:31! It's on our fridge.") | Eleazar, across the Tiber (round thirteen) | **Checked**: Bible Hub and Bibleserver, King James Version, read 13 October: https://biblehub.com/kjv/isaiah/40.htm ; https://www.bibleserver.com/KJV/Isaiah40 . The verse runs on: the quotation ends on its semicolon |
+| Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` (the reference is the Son's, `rome.eleazar.bless.son`) | Eleazar, his hand on the boy's head (round thirteen) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
+| Numbers 6:26 | "The LORD lift up his countenance upon thee, and give thee peace." | `rome.eleazar.last.son` (the reference, "Numbers 6:26.", is in the same line) | The Son, giving the old man the last part of the blessing (round thirteen) | **Checked** (the same) |
 
 Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5` and
 `nevada.gate.2b`, in Big Sister's own words; in Act Four her mother names the chapter,
 `nevada.gate.2e`, and quotes nothing of it).
+Told and not quoted, in Rome (round thirteen; PUZZLES-rome.md has each): Daniel 6:10 (and
+the lions' story, 6:16), Psalm 55:17 and 122:6, Isaiah 9:7, 32:1 and 60:3 (with 11:10 and
+49:6), Numbers 15:38-39, Deuteronomy 6:9, Acts 18:1-3 and 18:11, each in the speaker's own
+words; and Genesis 48:14, shown and not told (the old man's hand on the boy's head).
 Named and not quoted: the hymn "A Mighty Fortress Is Our God" (`home.piano.use.mom`); and
 the hymn "O God, Our Help in Ages Past" (`nevada.talk.lilsis.mom.3b`: Mom is humming it
 in Nevada; the title is to confirm, under "To confirm" at the end of

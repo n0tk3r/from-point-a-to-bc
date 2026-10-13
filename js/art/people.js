@@ -26,6 +26,13 @@
 //   hold.loose a prayer may take this hand (the thing held then hangs from the folded hands: Grandpa Joe's banjo)
 //   face.shadesTilt   dark glasses knocked crooked: the left lens a pixel lower (1) or higher (-1)
 //   top.check  a check woven down long sleeves too: { mat, every, band, stripe } (with top.stripe and top.bands: a plaid)
+//   (ROME-13P, round thirteen:)
+//   holds      their own holds, kept through whatever is said: { name(o) { return a pose } } (figure.hold(true, "bless"))
+//   sit.clutch the hand that holds what they carry to their chest as they hop down from a seat higher than their knees
+//   stance "prayer"   their way of standing is their own prayer (`pray`): Eleazar at his window
+//   top.bare   "R" or "L": a tunic fastened on one shoulder only, that shoulder bare (Felix's)
+//   and, in rig.js, wear.toga's `scant` and `hang` (a toga too small, or very large) and wear.mantle's `tassels` and `thread`
+//   Their own small movements are added to the rig's with addMoves (after the Rome people, below).
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -34,6 +41,7 @@
 // and colors here; every view and every animation follows. tools/sprites.html shows the result.
 
 import { ADULT, CHILD, WOMAN, blend, ramp, pack, shifted, add, sub, mul, mix, turn, unit, wear, upOf } from "./rig.js";      // (pack, sub, mul, unit: NEVADA-12P)
+import { poses, addMoves, moveKit, lerp } from "./rig.js";              // ROME-13P: the bigger Rome's people, and their own small movements
 
 // Skin: the plain color, the shade, and a deeper line. (The first tone is kept for things that shine.)
 const SKIN = ramp("#fbdcc0", "#f0bc9a", "#c98664", "#8c5440");
@@ -808,7 +816,7 @@ export const senator = {
   fidgets: { stand: ["toga"] },                         // he settles the folds of his toga over his arm
   extras(c) {
     const { limb, J, parts } = c;
-    wear.toga(c, { mat: WOOL, edge: PURPLE });
+    wear.toga(c, { mat: WOOL });                        // ROME-13P (decision 12): plain white, as a senator's was; the broad stripe of his rank is on his tunic
     // the scroll in his right hand
     const up = upFromFist(J.R), g = J.R.palm;
     limb(along(g, up, -0.040), along(g, up, 0.070), 0.011, 0.011, PAPYRUS, { part: parts.HELD, squareStart: true, squareEnd: true });
@@ -1696,6 +1704,722 @@ const CARRY = {
 export const suit2Carry = { ...suit2, name: "Man in Gray, carrying", hold: CARRY, fidgets: { only: true, stand: [] } };
 export const suit3Carry = { ...suit3, name: "Man in Gray, carrying (with the juice box)", hold: CARRY, fidgets: { only: true, stand: [] } };
 
+// =====================================================================================
+// ROME-13P (round thirteen): the bigger Rome's seven people, and their other states
+// =====================================================================================
+// Who they are: briefs/out/rome2-design.md (3.3; and 6.1 for Eleazar). All of them people of our own: nobody's likeness,
+// no film's costume. Dressed as 44 B.C. dressed (the design's 7.7): a man's tunic belted at the knee; a citizen's toga plain
+// white, a senator's mark the broad purple stripe down his tunic; a woman's tunic long, and a mantle over her head out of
+// doors; Romans clean-shaven, Greeks, Jews and Gauls often bearded. Each one's own small movements are written after them
+// (addMoves: rig.js), and their holds (`holds`, kept through whatever is said: figure.hold(true, "bless") in a scene).
+const { cloneP, withArm, nodOf, free, skeleton, torsoOf } = moveKit;
+
+/** The seats the Rome scenes paint, in the rig's measure (CM), set from the painters' reports as LIMO_SEAT was. A seated
+    person's place (`at`) is the ground under their hips, and the top of the seat is this far above it. */
+export const CAPITOL_BASE_SEAT = 120 * CM;     // Titus's statue base on the Capitol (PAINT-13R2's marks.titus_seat.cm)
+export const TIBER_BENCH_SEAT = 45 * CM;       // the bench by the house of prayer (PAINT-13R3's marks.bench_seat.cm)
+/** The blessing: Eleazar facing E, the boy facing him (W) on the same row, the boy's feet this many of Eleazar's drawn
+    heights in front of Eleazar's (to the right on the screen). Eleazar's `bless` hold lays his right hand on the crown of
+    the boy's head there, bowed (the boy in his own prayer, as at the date seller's blessing). */
+export const BLESS_STEP = 0.30;
+
+/** A point of a seated person's lap in the space of their shoulders (as hands are placed): `along` from the hips toward
+    the knees, `up` above the thighs. For resting their hands on what lies in it. */
+function lapAt(spec, along = 0.5, up = 0.04) {
+  const J = skeleton(spec.dim, poses.sit({ ...spec, rest: undefined, hold: undefined }, 0));
+  return torsoOf(J)(lapOf(J, along, up));
+}
+/** The same point of a drawn figure's lap (its joints J), for drawing what lies there. */
+const lapOf = (J, along = 0.5, up = 0.04) => add(mix(J.hipC, mix(J.R.knee, J.L.knee, 0.5), along), [0, up, 0]);
+/** A direction given in a figure's own space, turned into the space of its shoulders (torsoOf turns points). */
+const dirIn = (toT, J, v) => toT(add(J.sh, v));
+const held = (cx) => ({ part: cx.parts.HELD });
+
+// ---------- the Gaul: Gaius Iulius Litumarus of Nemausus, made a senator by the dictator, lost in the Forum ----------
+// About forty-five; big, broad and proud; fair-red hair combed back and worn longer than a Roman's, a long drooping
+// moustache and a shaven chin (a Gaulish nobleman's fashion), fair skin the Italian sun has reddened, a gold ring round his
+// right wrist; a senator's tunic with the broad stripe, and a senator's shoes. `gaul` wears the Roman senator's best
+// toga, taken by mistake: far too short for him, stopping above his knees, its folds skimpy and pulled tight. `gaul-own`,
+// after the swap, is the same man in his own new toga, very large, falling properly. Both plain white. He stands, and
+// walks, like a man walking on ice: upright, short careful steps, his arms kept still.
+const GAUL_SKIN = ramp("#ffdcc8", "#f6b8a0", "#d0846a", "#934e3e");
+const GAUL_HAIR = ramp("#f7be7a", "#dd8c47", "#ad5d29", "#723b17");
+const GAUL_TACHE = ramp("#cf7c3c", "#a95c28", "#7e401c", "#552810");     // his moustache: a shade deeper than his hair, so that it reads on his face
+const gaulBase = {
+  name: "Gaulish Senator", height: 1.08, lean: -0.03,
+  dim: { ...ADULT, headR: [0.056, 0.066, 0.064], shoulderW: 0.112, trunkTop: [0.120, 0.078], trunkLow: [0.104, 0.080], bellyFwd: 0.008, pelvisR: [0.100, 0.064, 0.078],
+         armR: [0.034, 0.029, 0.020], legR: [0.055, 0.036, 0.024], handR: 0.024, neckR: 1.12 },
+  skin: GAUL_SKIN,
+  hair: { mat: GAUL_HAIR, bulk: [1.09, 1.08, 1.12], where: hairline({ front: 0.66, temple: 0.50, side: -0.34, back: -1.05, brow: 0.50, temples: 1.12 }),
+          puffs: [[0, -0.66, -0.70, 0.86, 0.44, 0.46]],                 // down to his collar behind
+          texture: (x, y, z) => (y > 0.20 && z > -0.5 && Math.abs(Math.sin(x * 9.4)) < 0.17 ? shifted(GAUL_HAIR, 1) : undefined) },      // combed straight back: the comb's lines
+  face: { eyes: "plain", eye: "#202838", iris: "#6f8fae", brows: GAUL_HAIR.tones[2], browW: 4, lines: 1, nose: [1.1, 1.15, 1.1], noseShade: true, jaw: 0.96, chin: 0.62, chinZ: 0.50, lip: "#b0604e", mouthW: 0.22, ear: 1.05 },
+  top: { mat: UNDYED_PALE, sleeves: 0.46, stripe: { mat: PURPLE, at: [0], half: 0.17 } },       // a senator's tunic, the broad stripe down it, as the senator's
+  shoes: { kind: "shoes", mat: RED_LEATHER, sole: shifted(RED_LEATHER, 2) },                       // and a senator's shoes, as his
+  hold: { L: { hand: [-0.104, -0.214, 0.090], bend: [-0.6, -0.5, -0.6], curl: 0.9 } },           // his left arm carries the folds
+  hand: "R",
+  walk: { swing: 0.30, arm: 0.14, elbow: 0.20, lean: -0.02, lift: 0.75, twist: 0.04, sway: 0.008 },
+  pace: 132,
+  gestures: [0, 8, 11, 2],                              // a nod; an open hand; a finger raised (every word chosen); a shrug
+};
+/** His moustache, long, drooping past the corners of his mouth; and the gold ring round his right wrist. */
+function gaulGear(c) {
+  const { limb, hp, J, d, parts, spec } = c, my = spec.face.mouthY ?? -0.74;
+  for (const sd of [1, -1]) {
+    const a = hp(sd * 0.04, my + 0.22, 1.00), b = hp(sd * 0.28, my + 0.08, 0.92), e = hp(sd * 0.34, my - 0.42, 0.78);
+    limb(a, b, 0.0064, 0.0060, GAUL_TACHE, { part: parts.HAIR });
+    limb(b, e, 0.0060, 0.0040, GAUL_TACHE, { part: parts.HAIR });
+  }
+  limb(mix(J.R.elbow, J.R.wrist, 0.84), mix(J.R.elbow, J.R.wrist, 0.97), d.armR[2] + 0.0055, d.armR[2] + 0.0050, GOLD, { part: parts.EXTRA2, squareStart: true, squareEnd: true });
+}
+export const gaul = {
+  ...gaulBase,
+  bottom: { kind: "skirt", mat: WOOL, len: 0.94, flare: 1.03, folds: [[-0.9, 0.3, 0.94, 0.12], [0.55, 0.45, 0.94, -0.12], [0.05, 0.6, 0.94]] },      // the toga's wrap: it stops short of his knees
+  fidgets: { stand: ["tug", "crane", "fold", "ask"] },  // tugs it down; looks up at the crane; folds his arms; asks the air, and shrugs
+  extras(c) { wear.toga(c, { mat: WOOL, scant: 0.62, hang: 0.18 }); gaulGear(c); },
+};
+export const gaulOwn = {
+  ...gaulBase, name: "Gaulish Senator, in his own toga",
+  bottom: { kind: "skirt", mat: WOOL, len: 1.88, flare: 1.12, folds: [[-1.0, 0.3, 1.88, 0.1], [0.55, 0.5, 1.88, -0.1], [0.05, 0.9, 1.88, 0.05], [-0.45, 0.2, 1.4], [1.25, 0.3, 1.88], [2.5, 0.2], [-2.4, 0.4], [3.0, 0.6]] },
+  fidgets: { stand: ["crane", "fold", "ask"] },
+  extras(c) { wear.toga(c, { mat: WOOL, scant: 1.16, hang: -0.06 }); gaulGear(c); },
+};
+
+// ---------- Phyllis: Fannia Phyllis, a Greek freedwoman and a widow, who sells garlands at the foot of Castor's temple ----------
+// About fifty-five; small, quick, sun-browned; grey hair under a dark mantle drawn over her head; a long tunic to the ankles;
+// sandals. She is found sitting on a low stool that is drawn with her (it stays where it is when she gets up, as the
+// goldsmith's does), among her baskets (painted). `phyllis` has the little clay lamp, wrapped in a cloth, in her lap: her
+// present for her son. `phyllis-free` has given it away, and has a half-made garland in her hands. On her feet she hangs a
+// garland on her pole, shoos a pigeon, calls to the square, and sits again. Fast and warm; soft about her son.
+const BROWNED = ramp("#eab48c", "#d2946a", "#a36846", "#6b4430");
+const PALLA = ramp("#80687a", "#5a4654", "#3e3039", "#271d24");          // her mantle: dark wool
+const ROSE_WOOL = ramp("#ecb4a2", "#cc8a78", "#9e6052", "#6c3e34");      // her tunic: a red long since faded
+const VIOLET = ramp("#dab2f8", "#a46ede", "#7648ae", "#4c2c74");
+const MYRTLE = ramp("#a2d07c", "#68a04c", "#467034", "#2c4a22");
+const LAMP_CLOTH = ramp("#fffaf0", "#f0e6cf", "#c8ba9a", "#90846a");
+const COIN = ramp("#ffffff", "#dde1e8", "#a0a6b0", "#666b74");
+/** A mantle worn over the head, as a woman wore hers out of doors: round the body as a mantle is, and drawn up over the back
+    of her head, a little clear of the brow, falling to the shoulders at each side. */
+function palla(c, mat) {
+  const { ball, limb, onHead, headPt, hp, J, d, hy, parts } = c, hr = d.headR, T = (x, y, z) => add(J.sh, J.torso([x, y, z]));
+  wear.mantle(c, { mat, len: 0.46, front: 0.22 });
+  ball(headPt([0, 0.006, -0.006]), [hr[0] * 1.20, hr[1] * 1.15, hr[2] * 1.18], mat, { part: parts.HAT, fn: (ux, uy, uz) => { const q = onHead(ux, uy, uz); return q[2] < 0.20 + 0.42 * Math.max(0, q[1]) ? undefined : null; } }, hy);
+  for (const sd of [1, -1]) limb(hp(sd * 1.04, -0.30, 0.02), T(sd * (d.shoulderW - 0.012), 0.012, 0.006), 0.030, 0.038, mat, { part: parts.HAT });
+  limb(hp(0, -0.45, -0.82), T(0, -0.060, -(d.trunkTop[1] + 0.012)), 0.054, 0.062, mat, { part: parts.HAT });
+}
+/** The little clay lamp in its cloth: the cloth wrapped up round it, the lamp's top and nozzle showing out of it (or, `open`,
+    the cloth turned back under it): `at` its middle, `fw` the way its nozzle points. */
+function clayLamp(cx, at, fw, open = false) {
+  const { ball, limb } = cx, o = held(cx), f = unit([fw[0], 0, fw[2]]);
+  if (!open) ball(add(at, [0, -0.004, 0]), [0.048, 0.024, 0.040], LAMP_CLOTH, { ...o, fn: (ux, uy) => (uy < -0.25 ? null : undefined) });     // the cloth, wrapped up round it
+  else ball(add(at, [0, -0.012, 0]), [0.046, 0.008, 0.040], LAMP_CLOTH, o);                                                                 // the cloth, turned back
+  ball(add(at, [0, open ? 0 : 0.008, 0]), [0.032, 0.017, 0.029], CLAY, o);                                                                   // the lamp: round and low
+  limb(add(at, mul(f, 0.018)), add(add(at, mul(f, 0.048)), [0, open ? 0.004 : 0.011, 0]), 0.0110, 0.0090, CLAY, o);                        // its nozzle
+  ball(add(at, [0, open ? 0.015 : 0.023, 0]), [0.0095, 0.0042, 0.0095], shifted(CLAY, 2), o);                                              // the hole in its top, dark
+  if (open) limb(add(at, mul(f, -0.020)), add(add(at, mul(f, -0.030)), [0, 0.010, 0]), 0.0048, 0.0042, shifted(CLAY, 1), o);             // and the little handle
+}
+/** A garland between two points: myrtle threaded with violets, hanging in a curve (`sag`: how far it dips; `out`: how far
+    it comes forward as it dips, in the figure's own space, so that one lying across a lap shows over the knees). */
+function garland(cx, a, b, sag = 0.030, n = 9, out = 0) {
+  const { ball } = cx, o = held(cx), fw = cx.J.torso([0, 0, 1]);
+  for (let i = 0; i <= n; i++) {
+    const k = 4 * (i / n) * (1 - i / n), t = i / n, p = add(add(mix(a, b, t), [0, -sag * k, 0]), mul(fw, out * k)), flower = i % 3 === 1;
+    ball(p, flower ? [0.0110, 0.0110, 0.0110] : [0.0140, 0.0112, 0.0140], flower ? VIOLET : MYRTLE, o);
+  }
+}
+const phyllisBody = {
+  name: "Garland Seller", height: 0.88, seated: "chair", shadow: 0.20, span: 1.25,
+  dim: { ...WOMAN, headR: [0.055, 0.066, 0.063], shoulderW: 0.082, trunkTop: [0.086, 0.060], trunkLow: [0.072, 0.056], pelvisR: [0.094, 0.060, 0.072], armR: [0.024, 0.020, 0.0145], handR: 0.019, legR: [0.045, 0.029, 0.018], bust: [0.002, 0.026], neckR: 0.86 },
+  skin: BROWNED,
+  hair: { mat: GREY_HAIR, bulk: 1.04, where: hairline({ front: 0.58, temple: 0.44, side: 0.0, back: -0.50, brow: 0.45, temples: 1.10 }), texture: (x, y, z) => (Math.abs(x) < 0.05 && y > 0.50 && z > 0.10 ? shifted(GREY_HAIR, 1) : undefined) },
+  face: { eyes: "girl", eye: "#2a1a12", iris: BROWN_EYES, lid: "#3a2218", brows: GREY_HAIR.tones[2], blush: "#d98a6c", lip: "#9a4a40", lines: 1, nose: [1.0, 0.95, 1.0], noseShade: true, jaw: 0.84, chin: 0.46, chinY: -0.82, smile: 1, mouthW: 0.22 },
+  top: { mat: ROSE_WOOL, sleeves: 0.80, cuff: 0.012, belt: shifted(ROSE_WOOL, 2), blouse: 0.012 },
+  bottom: { kind: "skirt", mat: ROSE_WOOL, len: 1.92, flare: 1.10, folds: [[-0.8, 0.3, 1.92, 0.06], [0.7, 0.4, 1.92, -0.06], [0.1, 0.8, 1.92], [2.5, 0.3], [-2.5, 0.3]] },
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  sit: { seat: "stool", lean: 0.12, knees: 0.12, drawn: true },        // a low stool, drawn with her: it stays where it is when she gets up
+  riseMs: 900,
+  walk: { swing: 0.44, arm: 0.36, lean: 0.06, sway: 0.014, twist: 0.08 }, pace: 172,      // small quick steps
+  gestures: [8, 9, 5, 0],                               // an open hand (her patter); her hands going; a hand to her heart (her son); a nod
+  pray: { high: 0.50, bow: 0.28 },
+};
+const PH_LAP = lapAt(phyllisBody, 0.72, 0.086);
+const PH_REST = {                                       // her hands round what is in her lap
+  R: { hand: add(PH_LAP, [0.054, -0.012, -0.016]), bend: [1, -0.4, -0.4], curl: 0.8, point: [-0.7, -0.1, 0.7] },
+  L: { hand: add(PH_LAP, [-0.054, -0.012, -0.016]), bend: [-1, -0.4, -0.4], curl: 0.8, point: [0.7, -0.1, 0.7] },
+};
+/** Her stool and her mantle; and what she has in her hands or her lap, by what she is doing: `lap` "lamp" or "garland". */
+function phyllisGear(c, lap) {
+  const { J, pose, seatOnly } = c;
+  wear.stool(c, { mat: WOOD, r: 0.062 });
+  palla(c, PALLA);
+  if (seatOnly) return;
+  const sitting = pose.seated && !(pose.rising > 0), f = pose.fidget, u = pose.fu || 0, mid = mix(J.R.palm, J.L.palm, 0.5), fw = J.torso([0, 0, 1]);
+  if (sitting && f === "offer" && u > 0.18 && lap === "lamp") return clayLamp(c, add(mid, [0, 0.016, 0]), fw, true);                         // unwrapped, and held out
+  if (sitting && (f === "weave" && u > 0.10 && u < 0.90)) garland(c, J.L.palm, J.R.palm, 0.034, 7);
+  if (sitting && f === "count" && u > 0.16 && u < 0.86) for (const [x, z] of [[-0.006, 0.006], [0.008, -0.004], [0.000, -0.012]]) c.ball(add(J.L.palm, J.torso([x, 0.010, z])), [0.0062, 0.0030, 0.0062], COIN, held(c));
+  if (f === "sniff" && u > 0.22 && u < 0.80) { const s = J.R; c.limb(s.tip, add(s.tip, [0, -0.026, 0]), 0.0022, 0.0022, MYRTLE, held(c)); c.ball(add(s.tip, [0, 0.006, 0]), [0.0090, 0.0080, 0.0090], VIOLET, held(c)); }
+  if (f === "hang" && u > 0.12 && u < 0.88) return garland(c, J.L.palm, J.R.palm, 0.050, 9);
+  if (lap === "lamp") {
+    if (sitting) clayLamp(c, lapOf(J, 0.72, 0.086), fw);
+    else clayLamp(c, add(J.L.palm, [0, -0.010, 0.006]), fw);         // on her feet: held against her in her left hand
+  } else if (!(f === "weave" && sitting)) {
+    if (sitting) garland(c, add(J.L.palm, J.torso([-0.020, 0.006, 0.004])), add(J.R.palm, J.torso([0.020, 0.006, 0.004])), 0.020, 11, 0.050);      // across her knees, in her hands
+    else garland(c, J.L.palm, add(J.L.palm, [0, -0.090, 0.020]), 0.010, 6);      // on her feet: hanging from her left hand
+  }
+}
+export const phyllis = {
+  ...phyllisBody, rest: PH_REST,
+  stood: { hold: { L: { hand: [-0.050, -0.190, 0.098], bend: [-1, -0.5, -0.4], curl: 1.0 } }, rest: undefined },     // on her feet: the lamp held against her
+  fidgets: { sit: ["weave", "sniff", "count", "peer"], stand: ["hang", "shoo", "call", "peer"] },
+  extras(c) { phyllisGear(c, "lamp"); },
+};
+export const phyllisFree = {
+  ...phyllisBody, name: "Garland Seller, the lamp given", rest: PH_REST,
+  stood: { rest: undefined },
+  fidgets: { sit: ["weave", "sniff", "count", "peer"], stand: ["hang", "shoo", "call", "peer"] },
+  extras(c) { phyllisGear(c, "garland"); },
+};
+
+// ---------- Titus: the keeper's boy, about eleven, born free, found up on a statue's base on the Capitol ----------
+// Skinny, dark curls, a big grin, a tunic too big for him (it was his father's), sandals, and round his neck a small
+// leather amulet on a cord (the freeborn boy's charm, the poor boy's kind). `titus` is found sitting on top of a statue's
+// base among the kings (painted, not drawn with him: CAPITOL_BASE_SEAT), his legs hanging down its front, the soothsayer's
+// breakfast knotted in a cloth in his lap; on his feet he has it in his hand. Getting down is a hop (figure.sit(false):
+// about 400 ms, onto his feet on the ground in front of the base). `titus-free` is him on his feet with nothing in his
+// hands, ready to run home. He talks like his father, without stopping for breath; boasting, then honest.
+const OCHRE_THIN = ramp("#f8dcaa", "#e4bb82", "#b48c56", "#7a5c36");     // his tunic: his father's colour, washed thin
+const CHECK = ramp("#ffffff", "#f1efe8", "#c8c6bd", "#8c8a84");           // the cloth the breakfast is knotted in, as its picture has it (art/items/breakfast.png):
+const CHECK_LINE = ramp("#b2cbf4", "#7898d6", "#5470a8", "#344a72");      // white, checked with blue
+const CORD = ramp("#7c5a3c", "#5a3e28", "#3e2a1a", "#28180e");
+const titusBase = {
+  name: "Keeper's Boy", height: 0.78,
+  dim: { ...blend(CHILD, ADULT, 0.30), trunkTop: [0.084, 0.056], trunkLow: [0.074, 0.054], pelvisR: [0.080, 0.054, 0.062], armR: [0.021, 0.018, 0.0135], legR: [0.037, 0.026, 0.018], handR: 0.021, neckR: 0.80 },
+  skin: OLIVE,
+  hair: { mat: DARK_HAIR, bulk: [1.12, 1.12, 1.12], where: hairline({ front: 0.42, temple: 0.28, side: -0.12, back: -0.52, brow: 0.50, temples: 1.12 }),
+          texture: (x, y, z) => (curl(x, y, z, 8) ? shifted(DARK_HAIR, 1) : undefined),
+          puffs: [[0.30, 0.86, 0.36, 0.30, 0.24, 0.28], [-0.34, 0.84, 0.30, 0.30, 0.24, 0.28], [0, 0.96, -0.10, 0.36, 0.22, 0.40], [0.66, 0.50, 0.10, 0.24, 0.30, 0.30], [-0.66, 0.50, 0.10, 0.24, 0.30, 0.30], [0, 0.40, -0.80, 0.50, 0.40, 0.30]] },      // dark curls, all over
+  face: { eyes: "bright", eye: "#2a1a12", iris: BROWN_EYES, brows: DARK_HAIR.tones[2], blush: "#e89a7a", noseShade: true, eyeY: -0.04, mouthY: -0.70, jaw: 0.82, chin: 0.44, chinY: -0.80, nose: [0.7, 0.75, 0.85], lip: "#9a4a3c", smile: 1, mouthW: 0.32, ear: 1.20 },      // a big grin, and ears that stick out
+  top: { mat: OCHRE_THIN, sleeves: 0.74, cuff: 0.020, belt: shifted(ROPE, 1), beltLow: 0.020, blouse: 0.026 },       // too big: the sleeves to his elbows, a roll of it over the belt
+  bottom: { kind: "skirt", mat: OCHRE_THIN, len: 1.22, flare: 1.18, folds: [[-0.8, 0.2], [0.85, 0.3], [0.1, 0.5]] },  // and too long: below his knees
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  gestures: [9, 1, 18, 4],                              // his hands going; making a point; "everybody"; "ta-da" (boasting)
+};
+/** The amulet: a small leather pouch on a cord round his neck, on his chest. */
+function amulet(c) {
+  const { J, ball, d, parts, seatOnly } = c;
+  if (seatOnly) return;
+  const T = (x, y, z) => add(J.sh, J.torso([x, y, z])), at = T(0, -0.074, d.trunkTop[1] + 0.012);
+  thread(c, [T(0.030, 0.016, 0.014), T(0.020, -0.034, d.trunkTop[1] * 0.80), at], CORD);
+  thread(c, [T(-0.030, 0.016, 0.014), T(-0.020, -0.034, d.trunkTop[1] * 0.80), at], CORD);
+  ball(at, [0.0115, 0.0130, 0.0080], HIDE, { part: parts.EXTRA, bias: 2 });
+}
+/** The breakfast, knotted in its checked cloth: in his lap on the base, at his chest while he hops down or draws his feet
+    up, and by its knot in his left hand on his feet. Peeking, he has the knot open, and there is the loaf. */
+function breakfast(c) {
+  const { J, pose, ball, seatOnly } = c;
+  if (seatOnly) return;
+  const sitting = pose.seated && !(pose.rising > 0), f = pose.fidget, u = pose.fu || 0, chest = sitting && f === "feet" && u > 0.06 && u < 0.88;
+  const at = sitting && !chest ? lapOf(J, 0.42, 0.040) : chest || pose.rising > 0 ? add(J.L.palm, J.torso([0.010, 0.000, 0.016])) : add(J.L.palm, [0, -0.038, 0]);
+  const peek = f === "peek" && u > 0.30 && u < 0.80;
+  ball(at, [0.040, 0.030, 0.034], CHECK, { ...held(c), fn: (ux, uy) => (Math.abs(((ux * 2.6 + 9) % 1) - 0.5) < 0.13 || Math.abs(((uy * 2.6 + 9) % 1) - 0.5) < 0.13 ? CHECK_LINE : undefined) });
+  if (peek) ball(add(at, [0, 0.022, 0]), [0.026, 0.012, 0.024], BREAD, held(c));                                           // the loaf, under the opened knot
+  else for (const sd of [1, -1]) ball(add(at, J.torso([sd * 0.010, 0.028, 0])), [0.010, 0.010, 0.009], CHECK, held(c));      // the knot's two ears
+}
+export const titus = {
+  ...titusBase, seated: "chair", tall: 1.5, shadow: 0.0001, span: 1.15,          // (tall: room in his picture for the base he sits on top of; no shadow of his own up there)
+  sit: { seat: CAPITOL_BASE_SEAT, lean: 0.05, knees: 0.10, feet: 0.06, clutch: "L" },     // his legs hanging down the base's front; hopping down, he clutches the bundle (rig.js hopPose)
+  rest: { L: { hand: add(lapAt({ ...titusBase, seated: "chair", sit: { seat: CAPITOL_BASE_SEAT, lean: 0.05, knees: 0.10, feet: 0.06 } }, 0.42, 0.040), [-0.034, 0.008, -0.030]), bend: [-1, -0.4, -0.4], curl: 0.8, point: [0.6, -0.3, 0.7] } },
+  riseMs: 420,
+  stood: { hand: "L", rest: undefined, shadow: 0.17, walk: { swing: 0.54, arm: 0.60, lean: 0.10, lift: 1.25, bob: 0.04 }, pace: 200 },     // on his feet: the bundle by its knot in his left hand (the one he holds out)
+  fidgets: { only: true, sit: ["wave", "peek", "statue"], stand: ["shift", "look"] },     // on the base, his own only: he waves at the boy, peeks into the cloth, is a statue
+  extras(c) { amulet(c); breakfast(c); },
+};
+export const titusFree = {
+  ...titusBase, name: "Keeper's Boy, empty-handed", shadow: 0.17,
+  walk: { swing: 0.56, arm: 0.66, elbow: 0.40, pump: 0.30, lean: 0.12, lift: 1.30, bob: 0.05 }, pace: 215,      // ready to run home
+  fidgets: { stand: [] },
+  extras(c) { amulet(c); },
+};
+
+// ---------- the goose-keeper: Titus Rubrius Anser, about sixty, who holds the Republic's contract to feed Juno's geese ----------
+// Heavy, slow, a leather apron over his tunic, a basket of grain on his hip, a long stick in his other hand, big hands.
+// Among the geese he carries the stick held flat and low, never raised. Mournful and devoted, and full of the story of the
+// Gauls, which he tells to anyone. His hands are busy (the basket, the stick): he talks with his head.
+const ANSER_SKIN = ramp("#f2be98", "#da9c74", "#aa6e4e", "#724634");
+const GOOSE_WOOL = ramp("#ccb89e", "#ab967c", "#7c6a56", "#524636");     // a brown work tunic
+const GRAIN = ramp("#fcecb4", "#e8cd82", "#b89c52", "#7c682e");
+/** The basket of grain on his left hip: wide and shallow, woven, heaped with grain; shaken, a little of it jumps. */
+function grainBasket(c, r0 = 0.084) {
+  const { ball, J, pose } = c, g = J.L.palm, axis = [J.hipC[0], g[1], J.hipC[2]], inward = norm([axis[0] - g[0], 0, axis[2] - g[2]]);
+  const at = [g[0] + inward[0] * r0 * 0.94, g[1] - 0.022, g[2] + inward[2] * r0 * 0.94];
+  ball(add(at, [0, 0.020, 0]), [r0 * 0.90, 0.020, r0 * 0.90], GRAIN, { ...held(c), fn: (ux, uy) => (cell(Math.floor(ux * 7 + 40), Math.floor(uy * 4 + 40)) % 5 === 0 ? shifted(GRAIN, 1) : undefined) });
+  ball(at, [r0, 0.034, r0], WICKER, { ...held(c), fn: (ux, uy) => (uy < -0.12 ? null : uy < 0.12 ? undefined : Math.floor((uy + 1) * 5.0) % 2 ? shifted(WICKER, 1) : undefined) });
+  if (pose.fidget === "shake" && pose.fu > 0.10 && pose.fu < 0.80) {
+    const k = Math.floor(pose.fu * 10);
+    for (let i = 0; i < 4; i++) ball(add(at, [(((i * 37 + k * 13) % 9) - 4) * 0.012, 0.050 + ((i + k) % 3) * 0.018, ((i * 23 + k * 7) % 7 - 3) * 0.010]), [0.0060, 0.0060, 0.0060], GRAIN, held(c));
+  }
+}
+/** His stick: planted at his side; walking among the geese, held flat and low, pointing ahead of him. */
+function gooseStick(c) {
+  const { J, limb, pose, parts } = c;
+  if (!pose.gait) return wear.staff(c, "R", { mat: STAFF, top: 1.12, r: 0.0072 });
+  const g = J.R.palm, dir = unit(J.torso([-0.30, -0.04, 0.95]));
+  limb(along(g, dir, -0.30), along(g, dir, 0.86), 0.0080, 0.0064, STAFF, { part: parts.HELD });
+}
+export const anser = {
+  name: "Goose-Keeper", height: 1.0, lean: 0.04,
+  dim: { ...ADULT, headR: [0.058, 0.066, 0.064], shoulderW: 0.108, trunkTop: [0.116, 0.078], trunkLow: [0.116, 0.088], bellyFwd: 0.018, paunch: [0.108, 0.060, 0.078, 0.020],
+         pelvisR: [0.104, 0.064, 0.080], armR: [0.036, 0.031, 0.022], legR: [0.056, 0.036, 0.024], handR: 0.027, neckR: 1.16, thigh: 0.232, shin: 0.218 },
+  skin: ANSER_SKIN,
+  hair: { mat: GREY_HAIR, bulk: 1.05, where: hairline({ front: 0.64, temple: 0.40, side: 0.06, back: -0.44, recede: 0.20 }) },      // grey, and going at the temples
+  face: { eyes: "heavy", eye: "#2a1a12", iris: BROWN_EYES, lid: "#5a3a2a", brows: GREY_HAIR.tones[2], browW: 4, browTilt: -1, jowl: 0.84, jaw: 0.96, chin: 0.60, nose: [1.25, 1.3, 1.45], noseShade: true, lip: "#8a4a3a", smile: -1, mouthW: 0.22, lines: 2, ear: 1.2 },      // mournful: heavy lids, a long face, a big nose
+  top: { mat: GOOSE_WOOL, sleeves: 0.44, cuff: 0.014, belt: shifted(HIDE, 1) },
+  bottom: { kind: "skirt", mat: GOOSE_WOOL, len: 0.98, flare: 1.08, folds: [[-0.9, 0.2], [1.0, 0.3], [2.4, 0.2], [-2.3, 0.35]] },
+  apron: { mat: HIDE, half: 0.90, len: 0.94, bib: 0.11 },               // a leather apron, up over his chest
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  hold: { L: { hand: [-0.202, -0.236, 0.136], bend: [-1, -0.3, -0.75], grip: true }, R: { hand: [0.208, -0.190, 0.110], bend: [0.25, -1, -0.45], grip: true } },     // the basket on his hip; the stick
+  walk: { swing: 0.34, arm: 0.16, lean: 0.06, sway: 0.026, twist: 0.06, lift: 0.80 },
+  pace: 105,
+  gestures: [0, 2, 0, 16],                              // with his hands full: a nod, a shrug of the shoulders, a nod, his head down
+  fidgets: { only: true, stand: ["shift", "look", "shake", "stick", "tally", "sigh"] },     // shakes the basket; leans on his stick; counts his geese; sighs
+  extras(c) { grainBasket(c); gooseStick(c); },
+};
+
+// ---------- Eleazar: the devout Jew of Rome, about sixty-five, the date seller's father-in-law ----------
+// Born in Jerusalem; a grown man there when Pompey took it, carried to Rome a captive, long since freed. Lean, a little
+// stooped, a full white beard, grey hair, dark deep-set eyes, weathered hands; a long tunic of undyed wool to the calf, and
+// over it a mantle with a tassel at each of its four corners, each tassel with a thread of blue (Numbers 15:38: the rig's
+// mantle, `tassels` and `thread`); sandals. (The small leather cases of the commandments, only probable for this date, are
+// left off.) He calls the boy "child", and never hurries.
+// - `eleazar-window`: standing at his upper window, head bare, at his morning prayer, facing the river (W): his way of
+//   standing is his prayer (stance "prayer": his hands folded at his breast, so that they show over the sill; his head
+//   bowed; his eyes shut), and his one small movement is `lift` (his head lifted a while, his lips moving, then bowed again)
+//   and `murmur` (his lips moving): his life plays them. Drawn at the window's own scale (PAINT-13R3's marks.window).
+// - `eleazar`: found sitting on the bench before the house of prayer (painted: TIBER_BENCH_SEAT), his scroll open in his
+//   hands. On his feet (`stood`) he has it rolled in his left hand, which a prayer takes (hold.loose); his prayer standing,
+//   hands folded low and his head bowed; and the hold `bless`: his right hand laid on the crown of the boy standing facing
+//   him at BLESS_STEP, the boy's head bowed.
+const ELEAZAR_SKIN = ramp("#ecc49e", "#d0a078", "#a07050", "#6a4634");    // weathered
+const ELEAZAR_MANTLE = ramp("#8c7a6a", "#645444", "#46392e", "#2b231c");  // his mantle: dark brown wool
+const TASSEL = ramp("#fffdf6", "#f4ecdc", "#d0c6ae", "#9a907a");         // its tassels: white wool,
+const TEKHELET = ramp("#a4beff", "#3462e2", "#2446a8", "#16296c");       // a thread of blue in each
+const PARCHMENT = ramp("#fcf2d8", "#ecdcb2", "#c4ae82", "#8c7856");      // his scroll
+const WRIT = ramp("#a08c70", "#7c6a54", "#5a4c3c", "#3c3228");           // and the lines of its writing
+const ELEAZAR_FACE = { eyes: "deep", eye: "#1a120c", iris: "#3c2a1e", brows: GRIZZLE.tones[2], browW: 4, beard: SNOW, beardLen: 0.30, beardW: 0.72, beardZ: 0.42, beardFrom: [-0.42, 0.24],
+  moustache: SNOW, moustacheW: 0.34, moustacheZ: 1.0, lip: "#8a4e40", lines: 2, nose: [1.15, 1.2, 1.05], noseShade: true, jaw: 0.84, chin: 0.48, ear: 1.15 };
+const eleazarBody = {
+  name: "Old Man", height: 0.96, lean: 0.07,
+  dim: { ...ADULT, headR: [0.055, 0.066, 0.063], shoulderW: 0.094, trunkTop: [0.096, 0.064], trunkLow: [0.084, 0.064], pelvisR: [0.088, 0.058, 0.068], armR: [0.025, 0.022, 0.016], legR: [0.044, 0.029, 0.020], handR: 0.023, neckR: 0.88 },
+  build: "old",
+  skin: ELEAZAR_SKIN,
+  hair: { mat: GREY_HAIR, bulk: 1.06, where: hairline({ front: 0.70, temple: 0.50, side: -0.22, back: -0.70, recede: 0.10, burn: 0.50 }) },
+  face: ELEAZAR_FACE,
+  top: { mat: UNDYED, sleeves: 0.88, cuff: 0.012, belt: shifted(ROPE, 1) },
+  bottom: { kind: "skirt", mat: UNDYED, len: 1.56, flare: 1.06, folds: [[-0.85, 0.3, 1.56, 0.08], [0.50, 0.5, 1.56, -0.08], [-0.15, 0.9, 1.56], [2.6, 0.3], [-2.5, 0.4]] },
+  shoes: { kind: "sandals", mat: HIDE, sole: shifted(HIDE, 1) },
+  walk: { swing: 0.32, arm: 0.18, lean: 0.06, lift: 0.85, bob: 0.008 },
+  pace: 100,
+  gestures: [0, 8, 5, 0],                               // few and slow: a nod; an open hand, low; a hand to his heart; a nod
+  pray: { high: -0.25, bow: 0.36 },                     // standing: his hands folded low, his head bowed
+};
+const eleazarMantle = (c) => wear.mantle(c, { mat: ELEAZAR_MANTLE, len: 0.42, front: 0.24, tassels: TASSEL, thread: TEKHELET });
+/** His scroll: open between his hands as he reads (two rolls, and the sheet between them with its lines of writing), or
+    rolled up, in one hand on his feet, or in his folded hands at prayer. */
+function scroll(c) {
+  const { J, pose, limb, ball, seatOnly, wide } = c;
+  if (seatOnly) return;
+  const o = held(c), up = unit(J.torso([0, 1, 0.30])), sitting = pose.seated && !(pose.rising > 0);
+  const roll = (at, len = 0.080) => { limb(along(at, up, -len / 2), along(at, up, len / 2), 0.0118, 0.0118, PARCHMENT, { ...o, squareStart: true, squareEnd: true }); for (const k of [-1, 1]) ball(along(at, up, k * (len / 2 + 0.004)), [0.0060, 0.0050, 0.0060], WOOD, o); };
+  const apart = Math.hypot(J.R.palm[0] - J.L.palm[0], J.R.palm[1] - J.L.palm[1], J.R.palm[2] - J.L.palm[2]);
+  if (sitting && apart < 0.20 && pose.fidget !== "beard") {
+    const a = add(J.R.palm, J.torso([-0.010, 0.012, 0.006])), b = add(J.L.palm, J.torso([0.010, 0.012, 0.006])), w = [0.038, 0.002], r = wide(w);
+    limb(a, b, 0.036, 0.036, PARCHMENT, { ...o, depth: 0.10, squareStart: true, squareEnd: true, fn: (t, nx, ny) => (t > 0.12 && t < 0.88 && Math.abs(ny) < 0.62 && Math.floor(t * 9) % 2 === 0 ? WRIT : undefined) });
+    void r;
+    roll(a); roll(b);
+    return;
+  }
+  const g = (pose.praying || 0) > 0.5 && !sitting ? mix(J.R.palm, J.L.palm, 0.5) : J.L.palm;
+  roll(add(g, J.torso([0, 0.006, 0.010])), 0.090);
+}
+export const eleazarWindow = {
+  ...eleazarBody, name: "Old Man, at his window", stance: "prayer",
+  pray: { high: 0.74, bow: 0.30, out: -0.012 },         // at the window: his hands folded at his breast (they show over the sill), his head bowed
+  face: { ...ELEAZAR_FACE, eyes: "shut" },
+  gestures: [0],
+  fidgets: { only: true, stand: ["lift", "murmur"] },   // his life: his head lifted a while, his lips moving; and bowed again
+  extras(c) { eleazarMantle(c); },
+};
+const ELEAZAR_SIT = { seat: TIBER_BENCH_SEAT, lean: 0.10, knees: 0.08, solid: true };
+const EL_LAP = lapAt({ ...eleazarBody, seated: "chair", sit: ELEAZAR_SIT }, 0.52, 0.090);
+export const eleazar = {
+  ...eleazarBody, seated: "chair", shadow: 0.22, span: 1.2,
+  sit: ELEAZAR_SIT,                                     // the bench by the house of prayer, as it is painted
+  rest: { R: { hand: add(EL_LAP, [0.040, 0.010, -0.026]), bend: [1, -0.4, -0.4], grip: true, point: [-0.5, 0.2, 0.8] }, L: { hand: add(EL_LAP, [-0.040, 0.010, -0.026]), bend: [-1, -0.4, -0.4], grip: true, point: [0.5, 0.2, 0.8] } },      // his scroll open between his hands
+  pray: { fold: true, high: 0.0, out: 0.06, bow: 0.36 },                     // sitting: his hands folded on the scroll in his lap
+  riseMs: 1250,
+  stood: { hold: { L: { hand: [-0.140, -0.300, 0.060], bend: [-0.4, -1, -0.4], grip: true, loose: true } }, rest: undefined, span: 1.1, shadow: 0.18, pray: { high: -0.25, bow: 0.36 },
+           holds: { bless: (o) => blessPose(o) } },     // on his feet: the scroll rolled in his left hand (which a prayer takes); and the blessing
+  fidgets: { sit: ["unroll", "read", "beard", "still"], stand: ["beard"], not: ["knees", "scratch"] },     // unrolls his scroll a little; reads, a finger following; strokes his beard; is still
+  extras(c) { eleazarMantle(c); scroll(c); },
+};
+
+// ---------- Mariam: Eleazar's granddaughter, about eight, born in Rome, in the hen yard ----------
+// Small and quick, dark hair in a plait (brought over her shoulder, so that it shows), a long plain tunic, bare feet, a dish
+// of grain on her hip. Certain about everything, especially hens; bossy, fond, quick to laugh. Her own girl: not Little
+// Sister's double (dark, olive, plaited, barefoot, in a long tunic, a dish on her hip).
+const MARIAM_SKIN = ramp("#f0c8a2", "#d8a67e", "#a8765a", "#704c38");
+const MARIAM_HAIR = ramp("#5c463a", "#3a2a22", "#271c16", "#150e0b");
+const SAGE = ramp("#d8e6c4", "#b2c69c", "#849872", "#5a6a4c");           // her tunic: plain, a pale green
+const MARIAM_DIM = { ...CHILD, headR: [0.075, 0.085, 0.081], neckY: 0.794, shoulderY: 0.764, waistY: 0.568, hipY: 0.466, shoulderW: 0.086, trunkTop: [0.090, 0.060], trunkLow: [0.080, 0.058],
+  pelvisR: [0.088, 0.058, 0.068], thigh: 0.216, shin: 0.206, legR: [0.044, 0.030, 0.021], armR: [0.024, 0.020, 0.015], handR: 0.020, neckR: 0.86 };
+/** Her plait, brought forward over her right shoulder: the braid's plies, a red tie near the end, and the tuft below it. */
+function plait(c) {
+  const { J, hp, limb, ball, d, parts } = c, T = (x, y, z) => add(J.sh, J.torso([x, y, z]));
+  const pts = [hp(0.42, -0.30, -0.72), T(0.058, 0.020, -0.008), T(0.056, -0.040, d.trunkTop[1] * 0.86), T(0.050, -0.110, d.trunkTop[1] + 0.010)];
+  const ply = shifted(MARIAM_HAIR, 1);
+  for (let i = 0; i + 1 < pts.length; i++) limb(pts[i], pts[i + 1], 0.0150 - i * 0.0012, 0.0140 - i * 0.0012, MARIAM_HAIR, { part: parts.HAIR, bias: 2, fn: (t) => (Math.floor((i + t) * 4) % 2 ? ply : undefined) });
+  const end = pts[pts.length - 1];
+  ball(end, [0.0110, 0.0080, 0.0100], MADDER, { part: parts.HAIR, bias: 3 });
+  ball(add(end, [0, -0.018, 0.002]), [0.0115, 0.0140, 0.0100], MARIAM_HAIR, { part: parts.HAIR, bias: 2 });
+}
+/** The dish of grain on her left hip: shallow clay, heaped; scattering, a little flies from her hand. */
+function grainDish(c) {
+  const { ball, J, pose } = c, g = J.L.palm, axis = [J.hipC[0], g[1], J.hipC[2]], inward = norm([axis[0] - g[0], 0, axis[2] - g[2]]), r0 = 0.066;
+  const at = [g[0] + inward[0] * r0 * 0.90, g[1] - 0.016, g[2] + inward[2] * r0 * 0.90];
+  ball(add(at, [0, 0.016, 0]), [r0 * 0.84, 0.016, r0 * 0.84], GRAIN, { ...held(c), fn: (ux, uy) => (cell(Math.floor(ux * 6 + 40), Math.floor(uy * 4 + 40)) % 5 === 0 ? shifted(GRAIN, 1) : undefined) });
+  ball(at, [r0, 0.022, r0], CLAY, { ...held(c), fn: (ux, uy) => (uy < -0.10 ? null : undefined) });
+  if (pose.fidget === "scatter" && pose.fu > 0.42 && pose.fu < 0.74) {
+    const h = J.R.tip;
+    for (let i = 0; i < 5; i++) ball(add(h, J.torso([((i * 3) % 5 - 2) * 0.014, -0.010 - (i % 3) * 0.016, 0.020 + i * 0.012])), [0.0055, 0.0055, 0.0055], GRAIN, held(c));
+  }
+}
+export const mariam = {
+  name: "Girl", height: 0.69,
+  dim: MARIAM_DIM,
+  skin: MARIAM_SKIN,
+  hair: { mat: MARIAM_HAIR, bulk: [1.06, 1.05, 1.08], where: hairline({ front: 0.50, temple: 0.36, side: -0.24, back: -0.72, brow: 0.50, temples: 1.12 }),
+          texture: (x, y, z) => (Math.abs(x) < 0.05 && y > 0.45 && z > 0.05 ? shifted(MARIAM_HAIR, 1) : undefined) },     // parted in the middle and drawn back smooth into the plait
+  face: { eyes: "bright", eye: "#2a1a12", iris: BROWN_EYES, brows: MARIAM_HAIR.tones[2], blush: "#ec9a80", lip: "#b05a4c", eyeX: 0.43, eyeY: -0.08, mouthY: -0.64, jaw: 0.84, chin: 0.54, chinY: -0.52, chinZ: 0.44, nose: [0.6, 0.62, 0.72], smile: 1, mouthW: 0.22, ear: 1.1 },
+  top: { mat: SAGE, sleeves: 0.58, cuff: 0.012 },
+  bottom: { kind: "skirt", mat: SAGE, len: 1.78, flare: 1.14, folds: [[-0.7, 0.2], [0.75, 0.3], [0.1, 0.6], [2.6, 0.2]] },
+  shoes: { kind: "bare" },
+  hold: { L: { hand: [-0.150, -0.214, 0.112], bend: [-1, -0.3, -0.75], grip: true } },          // her left arm round the dish on her hip
+  hand: "R",
+  walk: { swing: 0.50, arm: 0.56, lean: 0.07, lift: 1.20, bob: 0.03 },
+  pace: 168,
+  gestures: [10, 11, 0, 8],                             // pointing (at a hen); a finger in the air (she is certain); a nod; an open hand
+  pray: { high: 0.80, bow: 0.22 },
+  fidgets: { stand: ["scatter", "hips", "hens", "crouch"] },     // scatters grain nobody eats; her hand on her hip; counts the hens; crouches to look one in the eye
+  holds: { crouch: (o) => crouchPose(o) },              // (crouched through whatever is said: figure.hold(true, "crouch"))
+  extras(c) { plait(c); grainDish(c); },
+};
+
+// ---------- Felix: Gaius Fannius Felix, Phyllis's son, about twenty-six, a boatman, his name down for Corinth ----------
+// Strong, sunburnt, short hair, a short work tunic tied at one shoulder (the right shoulder and arm bare), bare legs, bare
+// feet, a coil of rope over his right shoulder. `felix` carries a bale on his left shoulder, steadied with his left hand (he
+// works between the landing and the barge); `felix-free` has set it down, his hands free to talk and to take the lamp.
+// Cheerful, impatient, soft about his mother, full of Corinth.
+const SUNBURNT = ramp("#f4ba94", "#dc946e", "#ac684c", "#724234");
+const FELIX_HAIR = ramp("#7c5c46", "#54392a", "#37261b", "#21160f");
+const EXOMIS = ramp("#e8d8ba", "#cab692", "#9a8664", "#6a5a40");         // his work tunic: undyed, and well worn
+const BALE = ramp("#f0deb6", "#d6bc8a", "#a48c5e", "#6e5e3e");
+/** The knot on his left shoulder, where his work tunic is tied (the tunic itself is his `top`, with the rig's `bare`). */
+function shoulderKnot(c) {
+  const { J, ball, d, cloth, parts } = c;
+  ball(add(J.sh, J.torso([-(d.shoulderW - 0.020), 0.020, 0.018])), [0.013, 0.012, 0.012], shifted(EXOMIS, 1), { part: parts.DRAPE, bias: cloth * 2 });
+}
+/** A coil of rope hung on his right shoulder, down to his hip at that side (as the hauler's on his left). */
+function ropeCoil(c) {
+  const { J, limb, d, cloth, under, parts } = c, T = (x, y, z) => add(J.sh, J.torso([x, y, z])), back = d.trunkTop[1];
+  const lie = { [parts.TORSO]: under, [parts.SKIRT]: under, [parts.BELT]: under, [parts.ARM.R]: under };
+  for (const [dx, r, m] of [[0, 0.011, ROPE], [-0.013, 0.009, shifted(ROPE, 1)], [0.012, 0.009, shifted(ROPE, 1)]]) {
+    const loop = [T(0.080 + dx, 0.024, 0), T(0.066 + dx, -0.040, back * 0.80), T(0.060 + dx, -0.150, back + 0.014), T(0.070 + dx, -0.250, back * 0.60), T(0.084 + dx, -0.290, 0),
+                  T(0.070 + dx, -0.250, -back * 0.60), T(0.060 + dx, -0.150, -(back + 0.014)), T(0.066 + dx, -0.040, -back * 0.80), T(0.080 + dx, 0.024, 0)];
+    for (let i = 0; i + 1 < loop.length; i++) limb(loop[i], loop[i + 1], r, r, m, { part: parts.EXTRA, over: lie, bias: cloth * 2 });
+  }
+}
+/** The bale on his left shoulder: a long bundle wrapped in sacking and corded round, lying fore and aft. */
+function bale(c) {
+  const { J, ball, own, tw } = c, at = add(J.L.shoulder, J.torso([0.004, 0.086, -0.034]));
+  ball(at, [0.078, 0.066, 0.150], BALE, { ...held(c), fn: (ux, uy, uz) => { const z = own(ux, uy, uz, tw + 0.40)[2]; return Math.abs(z) < 0.09 || Math.abs(Math.abs(z) - 0.58) < 0.08 ? shifted(ROPE, 1) : undefined; } }, tw + 0.40);      // (turned a little across him)
+}
+const felixBase = {
+  name: "Boatman", height: 1.03,
+  dim: { ...ADULT, shoulderW: 0.110, trunkTop: [0.114, 0.072], trunkLow: [0.088, 0.064], pelvisR: [0.092, 0.062, 0.072], armR: [0.035, 0.029, 0.020], legR: [0.054, 0.035, 0.023], handR: 0.024, neckR: 1.10 },
+  build: "strong",
+  skin: SUNBURNT,
+  hair: { mat: FELIX_HAIR, bulk: 1.03, where: hairline({ front: 0.66, temple: 0.56, side: 0.20, back: -0.36 }) },       // cut short
+  face: { eyes: "plain", eye: "#2a1a12", iris: BROWN_EYES, brows: FELIX_HAIR.tones[2], blush: "#e48a6a", jaw: 0.94, chin: 0.56, nose: [1.0, 1.05, 1.0], noseShade: true, lip: "#9a4a3c", smile: 1, mouthW: 0.24 },
+  top: { mat: EXOMIS, sleeves: 0, bare: "R", belt: shifted(ROPE, 1) },         // tied on the left shoulder: the right shoulder and arm bare
+  bottom: { kind: "skirt", mat: EXOMIS, len: 0.62, flare: 1.08, folds: [[-0.7, 0.2], [0.8, 0.3], [0.1, 0.5]] },
+  shoes: { kind: "bare" },
+  walk: { swing: 0.48, arm: 0.44, lean: 0.06, bob: 0.02 },
+  pace: 175,
+  gestures: [8, 9, 1, 19],                              // an open hand; his hands going (Corinth!); making a point; a thumb over his shoulder, at the barge
+  fidgets: { stand: ["roll", "whistle", "peer"] },      // rolls his shoulders; whistles (no tune is heard); shades his eyes toward the bridge
+};
+export const felix = {
+  ...felixBase,
+  hold: { L: { hand: [-0.176, 0.050, 0.030], bend: [-1, -0.5, 0.0], curl: 0.8, point: [0.55, 0.55, 0.30] } },       // his hand up over its side, steadying it
+  extras(c) { shoulderKnot(c); ropeCoil(c); bale(c); },
+};
+export const felixFree = {
+  ...felixBase, name: "Boatman, the bale set down", stance: "hip",
+  extras(c) { shoulderKnot(c); ropeCoil(c); },
+};
+
+// ---------- their holds ----------
+/** Eleazar's blessing: his right hand laid flat on the crown of the boy standing facing him at BLESS_STEP, the boy's head
+    bowed in his own prayer; leaning a little toward him, looking down at him. The wrist is in the space of his shoulders
+    (as SHADE_HANDS is), solved with the rig by tools/bless-hand.mjs in S/work-rome-people, which draws the Son there. */
+export const BLESS_HAND = { hand: [0.020, 0.018, 0.182], point: [0.10, -0.30, 0.95], bend: [0.7, -0.6, -0.3] };      // (for the boy upright, [0.020, 0.022, 0.217])
+function blessPose(o) {
+  const b = o.base, p = withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.05, head: { nod: nodOf(b) + 0.16 } }, "R", { hand: BLESS_HAND.hand, bend: BLESS_HAND.bend, flat: true, point: BLESS_HAND.point, thumb: [-0.6, 0.2, 0.5] });
+  return p;
+}
+/** Mariam crouched down, to look a hen in the eye: her knees right down, her free hand on her knee, her head up and forward. */
+function crouchPose(o) {
+  const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.32, lap: true, head: { nod: nodOf(b) - 0.18 } };
+  for (const s of ["R", "L"]) p[s] = { ...p[s], leg: [1.32, 0.24], knee: 2.30, foot: 0, footYaw: 0.30 };
+  if (!o.held("R")) withArm(p, "R", { hand: [0.084, -0.330, 0.196], bend: [1, -0.3, -0.4], curl: 0.6 });
+  return p;
+}
+
+// ---------- their own small movements (figure.fidget(name); each person's `fidgets` says which are theirs for their life) ----------
+// Each is a few key poses made from the person's resting pose, at points from 0 to 1 of its time, the first and the last
+// the resting pose itself, as the rig's own are (FIDGETS in rig.js: `ms`, `hold` for one that can be held, `make(o)`).
+/** The free hand: the one a movement uses (the other may be carrying something). */
+const freeOf = (o) => (o.held(o.H) ? o.O : o.H);
+/** Where a hand lies flat across the brow, shading the eyes (as shadePose finds it), for a pose `p` whose head is turned as it will be. */
+function browHand(o, p, s) {
+  const sd = s === "R" ? 1 : -1, J = skeleton(o.d, p), hr = o.d.headR, cpi = Math.cos(J.headPitch), spi = Math.sin(J.headPitch);
+  const headDir = (v) => turn([v[0], v[1] * cpi - v[2] * spi, v[1] * spi + v[2] * cpi], J.headYaw), toT = torsoOf(J);
+  return { hand: toT(add(J.head, headDir([sd * hr[0] * 1.02, hr[1] * 0.66, hr[2] * 0.78]))), bend: [sd, -0.25, 0.35], flat: true, point: dirIn(toT, J, headDir([-sd * 0.80, 0.02, 0.60])), thumb: dirIn(toT, J, headDir([0, -1, 0])) };
+}
+addMoves({
+  // ---- the Gaul ----
+  /** the Gaul (`gaul`): tugs the short toga down at his thigh with his free hand, twice, looking down at it */
+  tug: { ms: 1900, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (dy) => withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.10, sway: sd * 0.010, head: { nod: nodOf(b) + 0.24, turn: sd * 0.10 } }, s, { hand: [sd * (o.d.shoulderW + 0.012), o.sp.hip - 0.020 + dy, 0.052], bend: [sd, -0.2, -0.3], grip: true });
+    const t1 = at(0), t2 = at(-0.030);
+    return [[0, b], [0.22, t1], [0.38, t2], [0.54, t1], [0.70, t2], [1, b]];
+  } },
+  /** the Gaul: looks up at the crane (or anything tall) a long while, his mouth a little open (holdable) */
+  crane: { ms: 2600, hold: 0.5, make(o) {
+    const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.03, mouth: 1, head: { nod: nodOf(b) - 0.34, turn: 0.18 } };
+    return [[0, b], [0.28, p], [0.78, p], [1, b]];
+  } },
+  /** the Gaul: asks the air a question, his free hand open and lifted to it, and shrugs */
+  ask: { ms: 2800, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, sp = o.sp;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const asking = (m, up) => withArm({ ...cloneP(b), mouth: m, head: { nod: nodOf(b) - 0.16, turn: sd * 0.20 } }, s, { hand: [sd * 0.150, -0.120 + up, sp.chest + 0.120], bend: [sd, -0.6, -0.3], flat: true, point: [sd * 0.4, 0.5, 0.75], thumb: [sd, 0, 0] });
+    const shrug = { ...cloneP(b), breath: 1, head: { nod: nodOf(b) - 0.02, turn: -sd * 0.12 } };
+    for (const k of free(o)) withArm(shrug, k, { arm: [0.12, 0.24], elbow: 1.0, flat: true });
+    return [[0, b], [0.22, asking(1, 0)], [0.40, asking(2, 0.025)], [0.58, shrug], [0.80, shrug], [1, b]];
+  } },
+  /** the Gaul: bows, deep and formal, from the hips, his free hand to his heart (holdable) */
+  bow: { ms: 2400, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, p = { ...cloneP(b), lean: (b.lean || 0) + 0.46, head: { nod: nodOf(b) + 0.22 } };
+    if (!o.held(s)) withArm(p, s, { hand: [-sd * 0.030, -0.085, o.sp.chest + 0.030], bend: [sd, -0.6, 0], flat: true });
+    return [[0, b], [0.34, p], [0.70, p], [1, b]];
+  } },
+  /** the Gaul: points ahead with his free arm, at what he is facing (the hole where the House was), his head with it (holdable) */
+  point: { ms: 2200, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o);
+    if (o.held(s)) return [[0, b], [1, b]];
+    const p = withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.03, head: { nod: nodOf(b) + 0.02 } }, s, { arm: [1.05, 0.12], elbow: 0.22, finger: true });
+    return [[0, b], [0.30, p], [0.76, p], [1, b]];
+  } },
+  // ---- Phyllis (and Felix: `peer` is his too) ----
+  /** Phyllis, sitting: works a stem into the garland in her hands, her head bent to it */
+  weave: { ms: 2600, make(o) {
+    const b = o.base, sp = o.sp, at = (dx) => {
+      const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.20, turn: -0.06 } };
+      withArm(p, "L", { hand: [-0.050, -0.190, sp.chest + 0.110], bend: [-1, -0.5, -0.3], curl: 0.8 });
+      return withArm(p, "R", { hand: [0.030 + dx, -0.175, sp.chest + 0.130], bend: [1, -0.5, -0.3], grip: true, point: [-0.7, 0.2, 0.5] });
+    };
+    const w1 = at(0.030), w2 = at(-0.006);
+    return [[0, b], [0.20, w1], [0.36, w2], [0.52, w1], [0.68, w2], [1, b]];
+  } },
+  /** Phyllis: a violet to her nose, her eyes shut */
+  sniff: { ms: 2200, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    const p = withArm({ ...cloneP(b), blink: true, head: { nod: nodOf(b) + 0.06, turn: sd * 0.06 } }, s, { hand: [sd * 0.016, o.sp.chinY - 0.016, hr[2] + 0.052], bend: [sd, -0.6, 0.1], grip: true, point: [-sd * 0.3, 0.8, 0.5] });
+    return [[0, b], [0.30, p], [0.70, p], [1, b]];
+  } },
+  /** Phyllis: counts the coins in her palm, a finger going over them */
+  count: { ms: 2600, make(o) {
+    const b = o.base, sp = o.sp, at = (dx) => {
+      const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.22 } };
+      withArm(p, "L", { hand: [-0.020, sp.waist + 0.040, sp.belly + 0.110], bend: [-1, -0.5, -0.2], flat: true, thumb: [-1, 0, 0], point: [0.3, -0.1, 0.95] });
+      return withArm(p, "R", { hand: [0.024 + dx, sp.waist + 0.070, sp.belly + 0.120], bend: [1, -0.4, -0.2], finger: true, point: [-0.5, -0.6, 0.4] });
+    };
+    return [[0, b], [0.20, at(0)], [0.36, at(-0.014)], [0.52, at(-0.028)], [0.68, at(-0.014)], [1, b]];
+  } },
+  /** Phyllis, and Felix: a hand flat to the brow, looking a long way off across the square or up the river (holdable) */
+  peer: { ms: 2800, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const p = { ...cloneP(b), head: { nod: nodOf(b) - 0.08, turn: sd * 0.26 } };
+    withArm(p, s, browHand(o, p, s));
+    return [[0, b], [0.26, p], [0.78, p], [1, b]];
+  } },
+  /** Phyllis, sitting: unwraps the lamp from her lap and holds it out in both hands (holdable: until the boy takes it) */
+  offer: { ms: 1500, hold: 0.62, make(o) {
+    const b = o.base, sp = o.sp, p = { ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) + 0.06 } };
+    withArm(p, "R", { hand: [0.034, -0.150, sp.chest + 0.215], bend: [1, -0.5, -0.4], curl: 0.6, point: [-0.5, 0.1, 0.85] });
+    withArm(p, "L", { hand: [-0.034, -0.150, sp.chest + 0.215], bend: [-1, -0.5, -0.4], curl: 0.6, point: [0.5, 0.1, 0.85] });
+    return [[0, b], [0.40, p], [0.90, p], [1, b]];
+  } },
+  /** Phyllis, on her feet: hangs a garland on her pole, her hands up (one that holds something keeps it) */
+  hang: { ms: 2400, make(o) {
+    const b = o.base, sp = o.sp, up = (dy) => {
+      const p = { ...cloneP(b), breath: 1, lean: (b.lean || 0) - 0.04, head: { nod: nodOf(b) - 0.22 } };
+      for (const s of free(o)) { const sd = s === "R" ? 1 : -1; withArm(p, s, { hand: [sd * 0.060, sp.headY + 0.040 + dy, 0.140], bend: [sd, -0.3, -0.4], grip: true }); }
+      return p;
+    };
+    return [[0, b], [0.30, up(0)], [0.50, up(-0.020)], [0.66, up(0)], [1, b]];
+  } },
+  /** Phyllis, on her feet: shoos a pigeon off her baskets with the back of her free hand, twice */
+  shoo: { ms: 1600, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (a) => withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) + 0.16, turn: sd * 0.20 } }, s, { arm: [0.60, 0.30], fore: [sd * (0.20 + a), -0.40, 0.85], flat: true });
+    return [[0, b], [0.20, at(0.30)], [0.36, at(-0.10)], [0.52, at(0.30)], [0.68, at(-0.10)], [1, b]];
+  } },
+  /** Phyllis, on her feet: calls to the square, her free hand by her mouth (holdable) */
+  call: { ms: 2200, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const p = withArm({ ...cloneP(b), mouth: 2, breath: 1, head: { nod: nodOf(b) - 0.12, turn: -sd * 0.18 } }, s, { hand: [sd * (hr[0] + 0.012), o.sp.chinY - 0.004, hr[2] * 0.60], bend: [sd, -0.7, 0.3], flat: true, point: [0, 1, 0.3] });
+    return [[0, b], [0.26, p], [0.76, p], [1, b]];
+  } },
+  // ---- Titus, on his base ----
+  /** Titus: waves at the boy, his whole arm going */
+  wave: { ms: 1800, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    const at = (w) => withArm({ ...cloneP(b), mouth: 1, head: { nod: nodOf(b) - 0.04, turn: sd * 0.06 } }, s, { arm: [1.70, 0.55], elbow: 0, tuck: 0, fore: [sd * (0.20 + w), 0.96, 0.10], flat: true });
+    const w1 = at(0.30), w2 = at(-0.25);
+    return [[0, b], [0.20, w1], [0.35, w2], [0.50, w1], [0.65, w2], [0.80, w1], [1, b]];
+  } },
+  /** Titus: peeks into the cloth in his lap, lifting its knot (and there is the loaf) */
+  peek: { ms: 2400, make(o) {
+    const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.24, head: { nod: nodOf(b) + 0.30 } }, J = skeleton(o.d, p), toT = torsoOf(J), lap = lapOf(J, 0.42, 0.040);
+    const at = (dy) => { const q = cloneP(p); withArm(q, "R", { hand: toT(add(lap, [0.006, 0.050 + dy, -0.006])), bend: [1, -0.3, -0.4], grip: true }); return withArm(q, "L", { hand: toT(add(lap, [-0.036, 0.006, -0.024])), bend: [-1, -0.4, -0.4], curl: 0.8 }); };
+    return [[0, b], [0.28, at(0)], [0.46, at(0.024)], [0.66, at(0.024)], [1, b]];
+  } },
+  /** Titus: pretends to be a statue, an arm raised as the kings' statues raise theirs, chin up, quite still (holdable) */
+  statue: { ms: 4200, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    const p = withArm({ ...cloneP(b), breath: 1, lean: (b.lean || 0) - 0.06, head: { nod: nodOf(b) - 0.14, turn: sd * 0.20 } }, s, { arm: [1.55, 0.32], elbow: 0.25, flat: true, point: [sd * 0.15, 0.55, 0.85], thumb: [0, 1, 0] });
+    return [[0, b], [0.16, p], [0.84, p], [1, b]];
+  } },
+  /** Titus: draws his feet up out of reach, as if a goose had looked at him, the bundle clutched to him; and lets them down
+      again (a scene calls it: the hook `feet`) */
+  feet: { ms: 1700, hold: 0.40, make(o) {
+    const b = o.base, sp = o.sp;
+    const legs = (pitch, shin, lean, nod) => {
+      const p = { ...cloneP(b), lean: (b.lean || 0) + lean, mouth: 1, head: { nod: nodOf(b) + nod } };
+      for (const s of ["R", "L"]) { const sd = s === "R" ? 1 : -1; p[s] = { ...p[s], leg: [pitch, 0.14], shin: [sd * 0.06, shin[0], shin[1]] }; }
+      withArm(p, "L", { hand: [-0.012, -0.150, sp.chest + 0.060], bend: [-0.55, -0.60, -0.25], grip: true });
+      return withArm(p, "R", { hand: [0.030, -0.215, sp.chest + 0.120], bend: [1, -0.5, -0.3], curl: 0.8 });
+    };
+    const mid = legs(1.75, [-0.92, -0.38], -0.02, 0.14), up = legs(2.15, [-0.66, -0.75], -0.06, 0.18);
+    return [[0, b], [0.08, mid], [0.16, up], [0.64, up], [0.80, mid], [1, b]];
+  } },
+  // ---- the goose-keeper ----
+  /** the goose-keeper: shakes the basket on his hip, three quick shakes, and a little grain jumps */
+  shake: { ms: 1500, make(o) {
+    const b = o.base, s = o.held("L") ? "L" : o.O, q = b[s];
+    if (!q || !q.hand) return [[0, b], [1, b]];
+    const at = (dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.10, turn: -0.22 } }, s, { ...q, hand: add(q.hand, [0.006, dy, 0.012]) });
+    const u = at(0.034), d0 = at(-0.004);
+    return [[0, b], [0.14, u], [0.26, d0], [0.38, u], [0.50, d0], [0.62, u], [0.74, d0], [1, b]];
+  } },
+  /** the goose-keeper: leans his weight on his stick, his head down (holdable) */
+  stick: { ms: 3400, hold: 0.5, make(o) {
+    const b = o.base, q = b.R || {}, p = withArm({ ...cloneP(b), sway: 0.018, hipTwist: -0.05, lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) + 0.12, turn: -0.10 } }, "R", { ...q, hand: [0.150, -0.070, 0.120], bend: [0.6, -1, -0.3] });
+    p.L = { ...p.L, leg: [0.14, 0.06], knee: 0.26 };
+    return [[0, b], [0.30, p], [0.76, p], [1, b]];
+  } },
+  /** the goose-keeper: counts his geese, his head going from one to the next, his lips moving, a finger off the stick at each */
+  tally: { ms: 3200, make(o) {
+    const b = o.base, step = (turn, m, fing) => { const p = { ...cloneP(b), mouth: m, head: { nod: nodOf(b) + 0.10, turn } }; if (b.R && b.R.hand) p.R = { ...p.R, finger: fing, grip: !fing }; return p; };
+    return [[0, b], [0.14, step(0.50, 1, true)], [0.28, step(0.50, 0, false)], [0.42, step(0.22, 1, true)], [0.56, step(0.22, 0, false)], [0.70, step(-0.06, 1, true)], [0.84, step(-0.06, 0, false)], [1, b]];
+  } },
+  /** the goose-keeper: a long sigh: the shoulders up, and down further than they started */
+  sigh: { ms: 2600, make(o) {
+    const b = o.base, inn = { ...cloneP(b), breath: 1, lean: (b.lean || 0) - 0.03, head: { nod: nodOf(b) - 0.10 } }, out = { ...cloneP(b), breath: 0, lean: (b.lean || 0) + 0.06, mouth: 1, head: { nod: nodOf(b) + 0.18 } };
+    return [[0, b], [0.34, inn], [0.50, inn], [0.76, out], [1, b]];
+  } },
+  // ---- Eleazar ----
+  /** Eleazar at his window: lifts his head a while, his lips moving, and bows it again */
+  lift: { ms: 3000, make(o) {
+    const b = o.base, up = (m) => ({ ...cloneP(b), mouth: m, head: { nod: nodOf(b) - 0.42 } });
+    return [[0, b], [0.24, up(1)], [0.40, up(0)], [0.56, up(2)], [0.72, up(1)], [1, b]];
+  } },
+  /** Eleazar at his window: his head still bowed, his lips moving (no words are heard) */
+  murmur: { ms: 2400, make(o) {
+    const b = o.base, m = (k) => ({ ...cloneP(b), mouth: k, head: { nod: nodOf(b) + 0.03 } });
+    return [[0, b], [0.16, m(1)], [0.32, m(0)], [0.48, m(1)], [0.64, m(2)], [0.80, m(1)], [1, b]];
+  } },
+  /** Eleazar on his bench: unrolls his scroll a little, his hands drawing apart, and bends to it */
+  unroll: { ms: 3000, make(o) {
+    const b = o.base, lap = lapOf(o.J, 0.52, 0.090), toT = o.toTorso;
+    const at = (w, nod) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + nod } }; withArm(p, "R", { ...b.R, hand: toT(add(lap, [w, 0.010, -0.026])) }); return withArm(p, "L", { ...b.L, hand: toT(add(lap, [-w, 0.010, -0.026])) }); };
+    return [[0, b], [0.34, at(0.072, 0.16)], [0.70, at(0.072, 0.22)], [1, b]];
+  } },
+  /** Eleazar on his bench: reads, a finger of his right hand following the lines down the sheet, his head following it */
+  read: { ms: 3200, make(o) {
+    const b = o.base, lap = lapOf(o.J, 0.52, 0.090), toT = o.toTorso;
+    const at = (dy, turn) => { const p = { ...cloneP(b), mouth: 0, head: { nod: nodOf(b) + 0.20 + dy * 1.5, turn } }; return withArm(p, "R", { ...b.R, hand: toT(add(lap, [0.026, 0.020 + dy, -0.018])), grip: false, finger: true, point: [-0.6, -0.5, 0.6] }); };
+    return [[0, b], [0.18, at(0.010, 0.06)], [0.38, at(-0.006, 0.02)], [0.58, at(-0.020, -0.02)], [0.78, at(-0.032, -0.05)], [1, b]];
+  } },
+  /** Eleazar on his bench: rests his hands on the scroll in his lap and is still a while, his eyes closed (holdable) */
+  still: { ms: 4000, hold: 0.5, make(o) {
+    const b = o.base, p = { ...cloneP(b), breath: 0.2, blink: true, lean: (b.lean || 0) + 0.02, head: { nod: nodOf(b) + 0.16 } };
+    for (const s of ["R", "L"]) if (p[s].hand) p[s] = { ...p[s], hand: add(p[s].hand, [0, -0.018, -0.010]), curl: 0.5, grip: false };
+    return [[0, b], [0.24, p], [0.80, p], [1, b]];
+  } },
+  // ---- Mariam ----
+  /** Mariam: takes a pinch of grain from the dish on her hip and throws it to the hens, who will not eat it */
+  scatter: { ms: 1900, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const dip = withArm({ ...cloneP(b), twist: -sd * 0.10, head: { nod: nodOf(b) + 0.16, turn: -sd * 0.20 } }, s, { hand: [-sd * 0.080, -0.215, 0.100], bend: [sd, -0.5, -0.3], grip: true });
+    const fling = (a) => withArm({ ...cloneP(b), twist: sd * 0.08, lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) + 0.14 } }, s, { arm: [0.95 + a, 0.25], elbow: 0.15, flat: true, point: [sd * 0.3, -0.3, 0.9] });
+    return [[0, b], [0.24, dip], [0.44, fling(0)], [0.60, fling(0.15)], [1, b]];
+  } },
+  /** Mariam: her free fist on her hip, her chin up: certain (holdable) */
+  hips: { ms: 2600, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const p = withArm({ ...cloneP(b), lean: (b.lean || 0) - 0.03, head: { nod: nodOf(b) - 0.08, turn: sd * 0.12 } }, s, { hand: [sd * (o.sp.side + 0.012), o.sp.hip + 0.085, 0.012], bend: [sd, 0, -0.55], grip: true });
+    return [[0, b], [0.24, p], [0.78, p], [1, b]];
+  } },
+  /** Mariam: counts the hens, pointing at each in turn, her lips moving */
+  hens: { ms: 3200, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (x, m) => withArm({ ...cloneP(b), mouth: m, head: { nod: nodOf(b) + 0.10, turn: x * 0.6 } }, s, { arm: [0.75, 0.10], elbow: 0.20, fore: [x, -0.30, 0.90], finger: true });
+    return [[0, b], [0.16, at(sd * 0.40, 1)], [0.32, at(sd * 0.20, 0)], [0.48, at(0, 1)], [0.64, at(-sd * 0.20, 0)], [0.80, at(-sd * 0.36, 1)], [1, b]];
+  } },
+  /** Mariam: crouches to look a hen in the eye, a while, and up again (holdable; figure.hold(true, "crouch") keeps her down through what is said) */
+  crouch: { ms: 2600, hold: 0.5, make(o) {
+    const b = o.base, c = crouchPose(o);
+    return [[0, b], [0.30, c], [0.72, c], [1, b]];
+  } },
+  // ---- Felix ----
+  /** Felix: whistles to himself (his lips only: no tune is heard), his head keeping time */
+  whistle: { ms: 2400, make(o) {
+    const b = o.base, at = (k) => ({ ...cloneP(b), mouth: 1, head: { nod: nodOf(b) - 0.06 + k, turn: 0.10 } });
+    return [[0, b], [0.16, at(0.05)], [0.30, at(-0.03)], [0.44, at(0.05)], [0.58, at(-0.03)], [0.72, at(0.05)], [1, b]];
+  } },
+});
+
 export const people = {
   dad, son, mom, bigsis, lilsis,
   scribe, carrier, overseer, hauler1, hauler2, hauler3, mason1, mason2, guard, lampboy, goldsmith,
@@ -1714,4 +2438,7 @@ export const people = {
   // NEVADA-12SC: the cut-scene "Backup" (above)
   "grandpajoe-standing": grandpajoeStanding, "grandpajoe-swing": grandpajoeSwing, "grandpajoe-carried": grandpajoeCarried,
   "suit2-carry": suit2Carry, "suit3-carry": suit3Carry,
+  // ROME-13P: the bigger Rome, round thirteen; and the same people in another state, which a scene swaps in under the same id
+  gaul, phyllis, titus, anser, eleazar, mariam, felix,
+  "gaul-own": gaulOwn, "phyllis-free": phyllisFree, "titus-free": titusFree, "eleazar-window": eleazarWindow, "felix-free": felixFree,
 };

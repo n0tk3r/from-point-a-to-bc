@@ -1,0 +1,3374 @@
+{
+ "id": "rome-forum",
+ "horizon": 235,
+ "full": 590,
+ "minScale": 0.15,
+ "light": "the sun low in the east-south-east, behind our left shoulder: faces toward us lit and warm, the fronts down the left of the square in cool shade, the colonnade on the right lit at a slant; long shadows run away from us and to the right (Castor's columns stripe the square)",
+ "camera": {
+  "horizon": 235,
+  "full": 590,
+  "eye_cm": 388.3,
+  "focal": 800.0,
+  "vanish_x": 400.0,
+  "note": "persp.Camera(235, 590): the lens 3.9 m up on the rise of the Sacred Way. The square is told shorter than it is (some 60 m to the foot of Saturn's steps), the Capitol at its true distance, far beyond."
+ },
+ "walk": [
+  [
+   0,
+   597
+  ],
+  [
+   797,
+   597
+  ],
+  [
+   770,
+   446
+  ],
+  [
+   527,
+   342
+  ],
+  [
+   528,
+   341
+  ],
+  [
+   590,
+   294
+  ],
+  [
+   560,
+   285
+  ],
+  [
+   547,
+   284
+  ],
+  [
+   520,
+   285
+  ],
+  [
+   491,
+   285
+  ],
+  [
+   462,
+   285
+  ],
+  [
+   433,
+   285
+  ],
+  [
+   403,
+   285
+  ],
+  [
+   375,
+   284
+  ],
+  [
+   370,
+   284
+  ],
+  [
+   367,
+   280
+  ],
+  [
+   315,
+   281
+  ],
+  [
+   283,
+   282
+  ],
+  [
+   250,
+   295
+  ],
+  [
+   124,
+   297
+  ],
+  [
+   122,
+   320
+  ],
+  [
+   184,
+   329
+  ],
+  [
+   173,
+   392
+  ],
+  [
+   152,
+   477
+  ],
+  [
+   0,
+   488
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    108,
+    500
+   ],
+   [
+    148,
+    500
+   ],
+   [
+    156,
+    492
+   ],
+   [
+    118,
+    492
+   ]
+  ],
+  [
+   [
+    154,
+    471
+   ],
+   [
+    193,
+    471
+   ],
+   [
+    200,
+    464
+   ],
+   [
+    162,
+    464
+   ]
+  ],
+  [
+   [
+    236,
+    471
+   ],
+   [
+    255,
+    471
+   ],
+   [
+    258,
+    466
+   ],
+   [
+    238,
+    466
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "statue-3",
+   "file": "statue-3.png",
+   "base": 294.3,
+   "solid": [
+    [
+     350,
+     294
+    ],
+    [
+     370,
+     294
+    ],
+    [
+     371,
+     293
+    ],
+    [
+     351,
+     293
+    ]
+   ]
+  },
+  {
+   "id": "statue-2",
+   "file": "statue-2.png",
+   "base": 308.3,
+   "solid": [
+    [
+     520,
+     308
+    ],
+    [
+     545,
+     308
+    ],
+    [
+     540,
+     306
+    ],
+    [
+     516,
+     306
+    ]
+   ]
+  },
+  {
+   "id": "statue-1",
+   "file": "statue-1.png",
+   "base": 330.9,
+   "solid": [
+    [
+     245,
+     331
+    ],
+    [
+     278,
+     331
+    ],
+    [
+     283,
+     327
+    ],
+    [
+     251,
+     327
+    ]
+   ]
+  },
+  {
+   "id": "crane-wheel",
+   "frames": [
+    "crane-0.png",
+    "crane-1.png",
+    "crane-2.png",
+    "crane-3.png",
+    "crane-4.png",
+    "crane-5.png"
+   ],
+   "fps": 3,
+   "at": [
+    645,
+    354
+   ],
+   "foot": [
+    34,
+    152
+   ],
+   "size": [
+    69,
+    155
+   ],
+   "base": 340.1,
+   "what": "the crane's great wheel, turning slowly: frames crane-0 to crane-5 in a loop (frame 0 is the wheel as back.png has it)",
+   "note": "Behind the hoarding (its base is a row just above the hoarding's far end, so that it sorts behind everyone in front of the boards). The block hanging from the crane is painted and does not rise, so the wheel is best turned now and then, for a few seconds, and stopped: the dust (crane-dust) can follow it."
+  },
+  {
+   "id": "castor",
+   "file": "castor.png",
+   "base": [
+    [
+     133.7,
+     473.4
+    ],
+    [
+     156.4,
+     392.5
+    ]
+   ]
+  },
+  {
+   "id": "puteal",
+   "file": "puteal.png",
+   "base": [
+    [
+     338,
+     394.4
+    ],
+    [
+     415,
+     394.4
+    ]
+   ],
+   "solid": [
+    [
+     417,
+     387
+    ],
+    [
+     409,
+     382
+    ],
+    [
+     390,
+     380
+    ],
+    [
+     366,
+     380
+    ],
+    [
+     346,
+     382
+    ],
+    [
+     336,
+     387
+    ],
+    [
+     342,
+     391
+    ],
+    [
+     362,
+     394
+    ],
+    [
+     388,
+     394
+    ],
+    [
+     409,
+     391
+    ]
+   ]
+  },
+  {
+   "id": "table",
+   "file": "table.png",
+   "base": [
+    [
+     412,
+     399.8
+    ],
+    [
+     489,
+     399.8
+    ]
+   ],
+   "solid": [
+    [
+     411,
+     400
+    ],
+    [
+     490,
+     400
+    ],
+    [
+     483,
+     386
+    ],
+    [
+     410,
+     386
+    ]
+   ]
+  },
+  {
+   "id": "awning",
+   "file": "awning.png",
+   "base": [
+    [
+     411,
+     399.8
+    ],
+    [
+     491,
+     399.8
+    ]
+   ]
+  },
+  {
+   "id": "hoarding",
+   "file": "hoarding.png",
+   "base": [
+    [
+     543.4,
+     342.1
+    ],
+    [
+     620.8,
+     373.1
+    ]
+   ]
+  },
+  {
+   "id": "hoarding-near",
+   "file": "hoarding-near.png",
+   "base": [
+    [
+     654.7,
+     386.7
+    ],
+    [
+     850.4,
+     465.1
+    ]
+   ]
+  },
+  {
+   "id": "basin",
+   "file": "basin.png",
+   "base": 507.5,
+   "solid": [
+    [
+     -175,
+     507
+    ],
+    [
+     112,
+     507
+    ],
+    [
+     142,
+     479
+    ],
+    [
+     -116,
+     479
+    ]
+   ]
+  },
+  {
+   "id": "front-base",
+   "file": "front-base.png",
+   "base": 511.8,
+   "solid": [
+    [
+     737,
+     512
+    ],
+    [
+     862,
+     512
+    ],
+    [
+     812,
+     482
+    ],
+    [
+     700,
+     482
+    ]
+   ]
+  }
+ ],
+ "things": [
+  {
+   "id": "table",
+   "what": "the moneychanger's table by the Puteal, set out and waiting for him: his scales and stacks of coin under a striped cloth, his stool, the little awning",
+   "shape": {
+    "poly": [
+     [
+      409,
+      303
+     ],
+     [
+      410,
+      331
+     ],
+     [
+      413,
+      332
+     ],
+     [
+      413,
+      355
+     ],
+     [
+      410,
+      356
+     ],
+     [
+      410,
+      376
+     ],
+     [
+      413,
+      377
+     ],
+     [
+      414,
+      400
+     ],
+     [
+      421,
+      400
+     ],
+     [
+      421,
+      378
+     ],
+     [
+      423,
+      376
+     ],
+     [
+      431,
+      376
+     ],
+     [
+      433,
+      378
+     ],
+     [
+      433,
+      392
+     ],
+     [
+      437,
+      392
+     ],
+     [
+      439,
+      389
+     ],
+     [
+      440,
+      376
+     ],
+     [
+      453,
+      376
+     ],
+     [
+      454,
+      389
+     ],
+     [
+      456,
+      389
+     ],
+     [
+      457,
+      392
+     ],
+     [
+      462,
+      391
+     ],
+     [
+      463,
+      376
+     ],
+     [
+      476,
+      376
+     ],
+     [
+      477,
+      394
+     ],
+     [
+      479,
+      396
+     ],
+     [
+      479,
+      400
+     ],
+     [
+      486,
+      400
+     ],
+     [
+      486,
+      378
+     ],
+     [
+      491,
+      376
+     ],
+     [
+      491,
+      361
+     ],
+     [
+      487,
+      356
+     ],
+     [
+      483,
+      355
+     ],
+     [
+      483,
+      332
+     ],
+     [
+      493,
+      331
+     ],
+     [
+      493,
+      318
+     ],
+     [
+      488,
+      303
+     ],
+     [
+      484,
+      303
+     ],
+     [
+      483,
+      301
+     ],
+     [
+      477,
+      301
+     ],
+     [
+      476,
+      303
+     ],
+     [
+      420,
+      303
+     ],
+     [
+      419,
+      301
+     ],
+     [
+      413,
+      301
+     ],
+     [
+      412,
+      303
+     ]
+    ]
+   },
+   "stand": [
+    518,
+    401
+   ],
+   "face": "W"
+  },
+  {
+   "id": "puteal",
+   "what": "the Puteal: a round kerb of white stone, carved with garlands and lyres, round a spot struck by lightning",
+   "shape": {
+    "poly": [
+     [
+      336,
+      353
+     ],
+     [
+      336,
+      361
+     ],
+     [
+      338,
+      362
+     ],
+     [
+      338,
+      380
+     ],
+     [
+      336,
+      382
+     ],
+     [
+      336,
+      387
+     ],
+     [
+      417,
+      387
+     ],
+     [
+      417,
+      382
+     ],
+     [
+      415,
+      380
+     ],
+     [
+      415,
+      362
+     ],
+     [
+      417,
+      361
+     ],
+     [
+      417,
+      353
+     ],
+     [
+      414,
+      351
+     ],
+     [
+      391,
+      348
+     ],
+     [
+      364,
+      348
+     ],
+     [
+      345,
+      350
+     ]
+    ]
+   },
+   "stand": [
+    308,
+    391
+   ],
+   "face": "E"
+  },
+  {
+   "id": "spring",
+   "what": "Juturna's spring: a square stone basin of clear water, fed at its back by the spring",
+   "shape": {
+    "poly": [
+     [
+      144,
+      440
+     ],
+     [
+      0,
+      441
+     ],
+     [
+      0,
+      509
+     ],
+     [
+      114,
+      509
+     ],
+     [
+      143,
+      481
+     ]
+    ]
+   },
+   "stand": [
+    64,
+    524
+   ],
+   "face": "N"
+  },
+  {
+   "id": "garlands",
+   "what": "Phyllis's baskets of violets, laurel and myrtle, and the pole hung with her finished garlands",
+   "shape": {
+    "poly": [
+     [
+      216,
+      355
+     ],
+     [
+      215,
+      361
+     ],
+     [
+      221,
+      363
+     ],
+     [
+      221,
+      374
+     ],
+     [
+      214,
+      379
+     ],
+     [
+      214,
+      388
+     ],
+     [
+      219,
+      392
+     ],
+     [
+      219,
+      397
+     ],
+     [
+      223,
+      397
+     ],
+     [
+      225,
+      392
+     ],
+     [
+      229,
+      393
+     ],
+     [
+      228,
+      399
+     ],
+     [
+      230,
+      405
+     ],
+     [
+      234,
+      408
+     ],
+     [
+      234,
+      413
+     ],
+     [
+      238,
+      413
+     ],
+     [
+      239,
+      408
+     ],
+     [
+      242,
+      408
+     ],
+     [
+      241,
+      426
+     ],
+     [
+      215,
+      426
+     ],
+     [
+      210,
+      429
+     ],
+     [
+      210,
+      440
+     ],
+     [
+      213,
+      450
+     ],
+     [
+      220,
+      452
+     ],
+     [
+      242,
+      452
+     ],
+     [
+      241,
+      454
+     ],
+     [
+      233,
+      454
+     ],
+     [
+      230,
+      462
+     ],
+     [
+      222,
+      466
+     ],
+     [
+      222,
+      471
+     ],
+     [
+      244,
+      476
+     ],
+     [
+      271,
+      475
+     ],
+     [
+      281,
+      472
+     ],
+     [
+      281,
+      465
+     ],
+     [
+      263,
+      462
+     ],
+     [
+      259,
+      454
+     ],
+     [
+      250,
+      453
+     ],
+     [
+      250,
+      392
+     ],
+     [
+      260,
+      387
+     ],
+     [
+      260,
+      394
+     ],
+     [
+      266,
+      400
+     ],
+     [
+      266,
+      405
+     ],
+     [
+      270,
+      405
+     ],
+     [
+      271,
+      401
+     ],
+     [
+      278,
+      400
+     ],
+     [
+      281,
+      395
+     ],
+     [
+      281,
+      389
+     ],
+     [
+      272,
+      382
+     ],
+     [
+      272,
+      363
+     ],
+     [
+      277,
+      361
+     ],
+     [
+      277,
+      356
+     ],
+     [
+      251,
+      356
+     ],
+     [
+      249,
+      346
+     ],
+     [
+      242,
+      347
+     ],
+     [
+      241,
+      356
+     ]
+    ]
+   },
+   "stand": [
+    232,
+    492
+   ],
+   "face": "W"
+  },
+  {
+   "id": "statues",
+   "what": "an honorary statue on a tall column: a man in a toga, bronze gone green, one arm raised (nobody in particular)",
+   "shape": {
+    "poly": [
+     [
+      267,
+      112
+     ],
+     [
+      261,
+      112
+     ],
+     [
+      258,
+      116
+     ],
+     [
+      256,
+      113
+     ],
+     [
+      250,
+      113
+     ],
+     [
+      250,
+      118
+     ],
+     [
+      258,
+      128
+     ],
+     [
+      257,
+      153
+     ],
+     [
+      248,
+      154
+     ],
+     [
+      248,
+      160
+     ],
+     [
+      251,
+      160
+     ],
+     [
+      253,
+      165
+     ],
+     [
+      256,
+      167
+     ],
+     [
+      255,
+      287
+     ],
+     [
+      253,
+      292
+     ],
+     [
+      244,
+      292
+     ],
+     [
+      244,
+      332
+     ],
+     [
+      278,
+      332
+     ],
+     [
+      283,
+      329
+     ],
+     [
+      283,
+      290
+     ],
+     [
+      275,
+      291
+     ],
+     [
+      273,
+      287
+     ],
+     [
+      273,
+      167
+     ],
+     [
+      276,
+      164
+     ],
+     [
+      275,
+      154
+     ],
+     [
+      271,
+      153
+     ],
+     [
+      270,
+      148
+     ],
+     [
+      270,
+      119
+     ]
+    ]
+   },
+   "stand": [
+    316,
+    334
+   ],
+   "face": "W"
+  },
+  {
+   "id": "statues-2",
+   "what": "an honorary statue on a tall column: a man in a toga, bronze gone green, one arm raised (nobody in particular)",
+   "shape": {
+    "poly": [
+     [
+      520,
+      133
+     ],
+     [
+      519,
+      138
+     ],
+     [
+      525,
+      146
+     ],
+     [
+      524,
+      164
+     ],
+     [
+      521,
+      165
+     ],
+     [
+      521,
+      174
+     ],
+     [
+      523,
+      176
+     ],
+     [
+      523,
+      275
+     ],
+     [
+      521,
+      277
+     ],
+     [
+      515,
+      277
+     ],
+     [
+      515,
+      307
+     ],
+     [
+      517,
+      309
+     ],
+     [
+      545,
+      309
+     ],
+     [
+      545,
+      278
+     ],
+     [
+      540,
+      278
+     ],
+     [
+      538,
+      276
+     ],
+     [
+      537,
+      176
+     ],
+     [
+      542,
+      170
+     ],
+     [
+      542,
+      165
+     ],
+     [
+      537,
+      165
+     ],
+     [
+      535,
+      163
+     ],
+     [
+      534,
+      134
+     ],
+     [
+      527,
+      133
+     ],
+     [
+      525,
+      135
+     ],
+     [
+      524,
+      133
+     ]
+    ]
+   },
+   "stand": [
+    500,
+    312
+   ],
+   "face": "E"
+  },
+  {
+   "id": "statues-3",
+   "what": "an honorary statue on a tall column: a man in a toga, bronze gone green, one arm raised (nobody in particular)",
+   "shape": {
+    "poly": [
+     [
+      351,
+      161
+     ],
+     [
+      351,
+      166
+     ],
+     [
+      356,
+      172
+     ],
+     [
+      356,
+      186
+     ],
+     [
+      351,
+      187
+     ],
+     [
+      351,
+      192
+     ],
+     [
+      355,
+      197
+     ],
+     [
+      354,
+      268
+     ],
+     [
+      349,
+      269
+     ],
+     [
+      349,
+      295
+     ],
+     [
+      371,
+      295
+     ],
+     [
+      372,
+      269
+     ],
+     [
+      367,
+      267
+     ],
+     [
+      367,
+      196
+     ],
+     [
+      369,
+      194
+     ],
+     [
+      369,
+      187
+     ],
+     [
+      365,
+      186
+     ],
+     [
+      364,
+      161
+     ]
+    ]
+   },
+   "stand": [
+    395,
+    295
+   ],
+   "face": "W"
+  },
+  {
+   "id": "crane",
+   "what": "the big treadwheel crane in the site: its leaning frame, the great wheel at its foot, a block of white stone hanging from it",
+   "shape": {
+    "poly": [
+     [
+      605,
+      35
+     ],
+     [
+      599,
+      42
+     ],
+     [
+      599,
+      53
+     ],
+     [
+      603,
+      59
+     ],
+     [
+      609,
+      62
+     ],
+     [
+      599,
+      160
+     ],
+     [
+      592,
+      161
+     ],
+     [
+      588,
+      168
+     ],
+     [
+      588,
+      195
+     ],
+     [
+      636,
+      195
+     ],
+     [
+      636,
+      168
+     ],
+     [
+      631,
+      161
+     ],
+     [
+      625,
+      160
+     ],
+     [
+      620,
+      96
+     ],
+     [
+      650,
+      202
+     ],
+     [
+      649,
+      204
+     ],
+     [
+      638,
+      204
+     ],
+     [
+      627,
+      213
+     ],
+     [
+      619,
+      229
+     ],
+     [
+      614,
+      248
+     ],
+     [
+      612,
+      294
+     ],
+     [
+      619,
+      327
+     ],
+     [
+      619,
+      364
+     ],
+     [
+      626,
+      364
+     ],
+     [
+      626,
+      343
+     ],
+     [
+      631,
+      350
+     ],
+     [
+      640,
+      355
+     ],
+     [
+      650,
+      355
+     ],
+     [
+      656,
+      352
+     ],
+     [
+      662,
+      345
+     ],
+     [
+      663,
+      360
+     ],
+     [
+      670,
+      360
+     ],
+     [
+      669,
+      331
+     ],
+     [
+      677,
+      302
+     ],
+     [
+      695,
+      362
+     ],
+     [
+      704,
+      361
+     ],
+     [
+      704,
+      352
+     ],
+     [
+      691,
+      308
+     ],
+     [
+      693,
+      306
+     ],
+     [
+      701,
+      309
+     ],
+     [
+      701,
+      304
+     ],
+     [
+      688,
+      297
+     ],
+     [
+      674,
+      240
+     ],
+     [
+      692,
+      240
+     ],
+     [
+      737,
+      340
+     ],
+     [
+      743,
+      350
+     ],
+     [
+      748,
+      350
+     ],
+     [
+      751,
+      347
+     ],
+     [
+      751,
+      342
+     ],
+     [
+      634,
+      79
+     ],
+     [
+      642,
+      86
+     ],
+     [
+      797,
+      286
+     ],
+     [
+      799,
+      286
+     ],
+     [
+      799,
+      279
+     ],
+     [
+      648,
+      85
+     ],
+     [
+      662,
+      96
+     ],
+     [
+      795,
+      227
+     ],
+     [
+      799,
+      227
+     ],
+     [
+      799,
+      223
+     ],
+     [
+      625,
+      52
+     ],
+     [
+      625,
+      42
+     ],
+     [
+      619,
+      35
+     ]
+    ]
+   },
+   "stand": [
+    610,
+    420
+   ],
+   "face": "E"
+  },
+  {
+   "id": "site",
+   "what": "the site of the new senate house: its hoarding with the gateway, and over it the new wall rising out of the pit, blocks of tufa and white stone, a timber scaffold",
+   "shape": {
+    "poly": [
+     [
+      563,
+      221
+     ],
+     [
+      563,
+      224
+     ],
+     [
+      575,
+      225
+     ],
+     [
+      575,
+      270
+     ],
+     [
+      563,
+      272
+     ],
+     [
+      563,
+      276
+     ],
+     [
+      574,
+      276
+     ],
+     [
+      575,
+      282
+     ],
+     [
+      568,
+      283
+     ],
+     [
+      560,
+      280
+     ],
+     [
+      556,
+      282
+     ],
+     [
+      553,
+      279
+     ],
+     [
+      537,
+      277
+     ],
+     [
+      537,
+      340
+     ],
+     [
+      615,
+      371
+     ],
+     [
+      618,
+      376
+     ],
+     [
+      625,
+      375
+     ],
+     [
+      647,
+      384
+     ],
+     [
+      651,
+      390
+     ],
+     [
+      662,
+      390
+     ],
+     [
+      799,
+      445
+     ],
+     [
+      799,
+      274
+     ],
+     [
+      760,
+      274
+     ],
+     [
+      759,
+      259
+     ],
+     [
+      723,
+      258
+     ],
+     [
+      723,
+      272
+     ],
+     [
+      721,
+      273
+     ],
+     [
+      720,
+      259
+     ],
+     [
+      711,
+      258
+     ],
+     [
+      711,
+      262
+     ],
+     [
+      747,
+      341
+     ],
+     [
+      748,
+      346
+     ],
+     [
+      745,
+      347
+     ],
+     [
+      705,
+      259
+     ],
+     [
+      676,
+      259
+     ],
+     [
+      702,
+      358
+     ],
+     [
+      698,
+      360
+     ],
+     [
+      695,
+      356
+     ],
+     [
+      677,
+      289
+     ],
+     [
+      675,
+      289
+     ],
+     [
+      673,
+      309
+     ],
+     [
+      667,
+      328
+     ],
+     [
+      667,
+      357
+     ],
+     [
+      665,
+      357
+     ],
+     [
+      665,
+      337
+     ],
+     [
+      653,
+      350
+     ],
+     [
+      643,
+      353
+     ],
+     [
+      634,
+      348
+     ],
+     [
+      626,
+      336
+     ],
+     [
+      623,
+      335
+     ],
+     [
+      622,
+      362
+     ],
+     [
+      621,
+      324
+     ],
+     [
+      615,
+      300
+     ],
+     [
+      614,
+      271
+     ],
+     [
+      604,
+      271
+     ],
+     [
+      603,
+      269
+     ],
+     [
+      614,
+      239
+     ],
+     [
+      615,
+      250
+     ],
+     [
+      617,
+      250
+     ],
+     [
+      619,
+      226
+     ],
+     [
+      625,
+      224
+     ],
+     [
+      625,
+      221
+     ],
+     [
+      619,
+      219
+     ],
+     [
+      619,
+      212
+     ],
+     [
+      615,
+      213
+     ],
+     [
+      614,
+      221
+     ],
+     [
+      581,
+      221
+     ],
+     [
+      579,
+      219
+     ],
+     [
+      579,
+      212
+     ],
+     [
+      575,
+      212
+     ],
+     [
+      574,
+      221
+     ]
+    ]
+   },
+   "stand": [
+    596,
+    378
+   ],
+   "face": "E"
+  },
+  {
+   "id": "tuscan",
+   "what": "the mouth of the Tuscan street, in the long shadow of the temple of Castor: the way to the river",
+   "shape": {
+    "poly": [
+     [
+      174,
+      111
+     ],
+     [
+      243,
+      169
+     ],
+     [
+      243,
+      295
+     ],
+     [
+      238,
+      298
+     ],
+     [
+      180,
+      321
+     ],
+     [
+      174,
+      329
+     ]
+    ]
+   },
+   "stand": [
+    214,
+    318
+   ],
+   "face": "W"
+  },
+  {
+   "id": "castor",
+   "what": "the temple of Castor: its high podium, its broad flight of steps, the columns of its front",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      483
+     ],
+     [
+      134,
+      474
+     ],
+     [
+      174,
+      332
+     ],
+     [
+      174,
+      214
+     ],
+     [
+      159,
+      202
+     ],
+     [
+      159,
+      0
+     ]
+    ]
+   },
+   "stand": [
+    196,
+    420
+   ],
+   "face": "N"
+  },
+  {
+   "id": "scaffold",
+   "what": "timber scaffolding and a small crane at the far end of Caesar's basilica: it is not finished",
+   "shape": {
+    "poly": [
+     [
+      270,
+      156
+     ],
+     [
+      267,
+      157
+     ],
+     [
+      267,
+      176
+     ],
+     [
+      261,
+      175
+     ],
+     [
+      261,
+      288
+     ],
+     [
+      266,
+      286
+     ],
+     [
+      267,
+      288
+     ],
+     [
+      271,
+      288
+     ],
+     [
+      285,
+      282
+     ],
+     [
+      285,
+      165
+     ]
+    ]
+   },
+   "stand": [
+    290,
+    292
+   ],
+   "face": "W"
+  },
+  {
+   "id": "julia",
+   "what": "Caesar's basilica: two storeys of arches, white and new, its near end in Castor's shadow",
+   "shape": {
+    "poly": [
+     [
+      262,
+      175
+     ],
+     [
+      244,
+      167
+     ],
+     [
+      233,
+      167
+     ],
+     [
+      226,
+      165
+     ],
+     [
+      225,
+      167
+     ],
+     [
+      103,
+      167
+     ],
+     [
+      103,
+      295
+     ],
+     [
+      244,
+      295
+     ],
+     [
+      262,
+      288
+     ]
+    ]
+   },
+   "stand": [
+    232,
+    312
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rostra",
+   "what": "the new speakers' platform, long and low and curved, faced with pale stone, the bronze beaks of old ships along its front, statues on it; unfinished",
+   "shape": {
+    "poly": [
+     [
+      373,
+      233
+     ],
+     [
+      373,
+      235
+     ],
+     [
+      381,
+      236
+     ],
+     [
+      381,
+      243
+     ],
+     [
+      373,
+      245
+     ],
+     [
+      374,
+      284
+     ],
+     [
+      485,
+      286
+     ],
+     [
+      507,
+      284
+     ],
+     [
+      545,
+      284
+     ],
+     [
+      546,
+      244
+     ],
+     [
+      538,
+      245
+     ],
+     [
+      531,
+      243
+     ],
+     [
+      532,
+      235
+     ],
+     [
+      545,
+      235
+     ],
+     [
+      545,
+      233
+     ],
+     [
+      495,
+      233
+     ],
+     [
+      494,
+      230
+     ],
+     [
+      491,
+      229
+     ],
+     [
+      491,
+      217
+     ],
+     [
+      494,
+      211
+     ],
+     [
+      491,
+      212
+     ],
+     [
+      489,
+      208
+     ],
+     [
+      486,
+      209
+     ],
+     [
+      485,
+      229
+     ],
+     [
+      482,
+      230
+     ],
+     [
+      481,
+      233
+     ],
+     [
+      469,
+      233
+     ],
+     [
+      468,
+      230
+     ],
+     [
+      465,
+      229
+     ],
+     [
+      465,
+      216
+     ],
+     [
+      468,
+      211
+     ],
+     [
+      465,
+      211
+     ],
+     [
+      463,
+      208
+     ],
+     [
+      461,
+      208
+     ],
+     [
+      459,
+      212
+     ],
+     [
+      459,
+      229
+     ],
+     [
+      455,
+      230
+     ],
+     [
+      454,
+      233
+     ],
+     [
+      432,
+      233
+     ],
+     [
+      430,
+      223
+     ],
+     [
+      433,
+      214
+     ],
+     [
+      431,
+      214
+     ],
+     [
+      428,
+      218
+     ],
+     [
+      427,
+      208
+     ],
+     [
+      423,
+      209
+     ],
+     [
+      424,
+      217
+     ],
+     [
+      420,
+      220
+     ],
+     [
+      420,
+      229
+     ],
+     [
+      418,
+      233
+     ]
+    ]
+   },
+   "stand": [
+    452,
+    290
+   ],
+   "face": "N"
+  },
+  {
+   "id": "saturn",
+   "what": "the temple of Saturn, the act's own, from across the square: six columns on a high base, the bronze doors open (the way back to the steps)",
+   "shape": {
+    "poly": [
+     [
+      438,
+      168
+     ],
+     [
+      375,
+      145
+     ],
+     [
+      364,
+      143
+     ],
+     [
+      290,
+      165
+     ],
+     [
+      271,
+      176
+     ],
+     [
+      268,
+      180
+     ],
+     [
+      293,
+      173
+     ],
+     [
+      294,
+      182
+     ],
+     [
+      270,
+      192
+     ],
+     [
+      270,
+      245
+     ],
+     [
+      266,
+      246
+     ],
+     [
+      266,
+      270
+     ],
+     [
+      289,
+      278
+     ],
+     [
+      301,
+      278
+     ],
+     [
+      308,
+      281
+     ],
+     [
+      448,
+      279
+     ],
+     [
+      447,
+      274
+     ],
+     [
+      440,
+      264
+     ],
+     [
+      440,
+      249
+     ],
+     [
+      436,
+      248
+     ],
+     [
+      435,
+      187
+     ],
+     [
+      436,
+      171
+     ]
+    ]
+   },
+   "stand": [
+    329,
+    281
+   ],
+   "face": "N"
+  },
+  {
+   "id": "paullus",
+   "what": "the basilica of Paullus: a long two-storey colonnade, shops under it",
+   "shape": {
+    "poly": [
+     [
+      799,
+      100
+     ],
+     [
+      729,
+      120
+     ],
+     [
+      721,
+      120
+     ],
+     [
+      538,
+      184
+     ],
+     [
+      539,
+      277
+     ],
+     [
+      725,
+      332
+     ],
+     [
+      725,
+      130
+     ],
+     [
+      798,
+      106
+     ]
+    ]
+   },
+   "stand": [
+    505,
+    352
+   ],
+   "face": "E"
+  },
+  {
+   "id": "records",
+   "what": "the record office on the slope of the Capitol: a long front of arches",
+   "shape": {
+    "poly": [
+     [
+      296,
+      124
+     ],
+     [
+      296,
+      131
+     ],
+     [
+      298,
+      132
+     ],
+     [
+      298,
+      245
+     ],
+     [
+      561,
+      245
+     ],
+     [
+      561,
+      133
+     ],
+     [
+      564,
+      131
+     ],
+     [
+      562,
+      123
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    440
+   ],
+   "face": "N"
+  },
+  {
+   "id": "moneta",
+   "what": "Juno's temple on the other summit, where the money is struck",
+   "shape": {
+    "poly": [
+     [
+      624,
+      65
+     ],
+     [
+      603,
+      57
+     ],
+     [
+      601,
+      53
+     ],
+     [
+      596,
+      53
+     ],
+     [
+      593,
+      57
+     ],
+     [
+      573,
+      62
+     ],
+     [
+      556,
+      71
+     ],
+     [
+      553,
+      78
+     ],
+     [
+      553,
+      113
+     ],
+     [
+      561,
+      112
+     ],
+     [
+      576,
+      105
+     ],
+     [
+      623,
+      106
+     ],
+     [
+      622,
+      74
+     ],
+     [
+      624,
+      73
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    440
+   ],
+   "face": "N"
+  },
+  {
+   "id": "jupiter",
+   "what": "the temple of Jupiter Best and Greatest on the Capitol, its roof of gilt bronze blazing in the sun, a bronze chariot on its peak",
+   "shape": {
+    "poly": [
+     [
+      174,
+      107
+     ],
+     [
+      174,
+      114
+     ],
+     [
+      179,
+      114
+     ],
+     [
+      180,
+      118
+     ],
+     [
+      190,
+      116
+     ],
+     [
+      191,
+      124
+     ],
+     [
+      196,
+      124
+     ],
+     [
+      219,
+      113
+     ],
+     [
+      221,
+      117
+     ],
+     [
+      225,
+      117
+     ],
+     [
+      227,
+      113
+     ],
+     [
+      232,
+      114
+     ],
+     [
+      234,
+      110
+     ],
+     [
+      239,
+      111
+     ],
+     [
+      241,
+      108
+     ],
+     [
+      379,
+      119
+     ],
+     [
+      379,
+      105
+     ],
+     [
+      374,
+      103
+     ],
+     [
+      374,
+      75
+     ],
+     [
+      379,
+      73
+     ],
+     [
+      381,
+      61
+     ],
+     [
+      346,
+      54
+     ],
+     [
+      217,
+      39
+     ],
+     [
+      215,
+      37
+     ],
+     [
+      217,
+      29
+     ],
+     [
+      213,
+      29
+     ],
+     [
+      210,
+      32
+     ],
+     [
+      209,
+      27
+     ],
+     [
+      205,
+      27
+     ],
+     [
+      205,
+      41
+     ],
+     [
+      188,
+      69
+     ],
+     [
+      191,
+      80
+     ],
+     [
+      194,
+      81
+     ],
+     [
+      194,
+      107
+     ],
+     [
+      184,
+      113
+     ],
+     [
+      183,
+      107
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    440
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pigeons",
+   "what": "where the pigeons potter about the square",
+   "shape": {
+    "poly": [
+     [
+      300,
+      440
+     ],
+     [
+      520,
+      420
+     ],
+     [
+      690,
+      468
+     ],
+     [
+      712,
+      540
+     ],
+     [
+      420,
+      544
+     ],
+     [
+      250,
+      536
+     ]
+    ]
+   },
+   "stand": [
+    470,
+    520
+   ],
+   "face": "N"
+  }
+ ],
+ "marks": {
+  "toSteps": [
+   329,
+   281
+  ],
+  "fromSteps": [
+   341,
+   284,
+   "S"
+  ],
+  "toTiber": [
+   136,
+   306
+  ],
+  "fromTiber": [
+   214,
+   318,
+   "E"
+  ],
+  "toHouse": [
+   600,
+   596
+  ],
+  "fromHouse": [
+   600,
+   556,
+   "N"
+  ],
+  "default": [
+   420,
+   470,
+   "S"
+  ],
+  "gaul": [
+   650,
+   401,
+   "E"
+  ],
+  "gaul_spots": [
+   [
+    577,
+    368,
+    "NE"
+   ],
+   [
+    685,
+    418,
+    "E"
+   ],
+   [
+    528,
+    452,
+    "W"
+   ]
+  ],
+  "gate": [
+   641,
+   379
+  ],
+  "behind": [
+   690,
+   389
+  ],
+  "phyllis": [
+   181,
+   481,
+   "SE"
+  ],
+  "phyllis_stand": [
+   214,
+   478,
+   "E"
+  ],
+  "paetus": [
+   448,
+   389,
+   "S"
+  ],
+  "vibius": [
+   637,
+   380,
+   "W"
+  ],
+  "demetrius": [
+   299,
+   330,
+   "W"
+  ]
+ },
+ "exits": [
+  {
+   "side": "N",
+   "to": "rome-steps",
+   "walkTo": [
+    329,
+    281
+   ],
+   "arrive": "fromSteps",
+   "name": "back to the steps of Saturn's temple",
+   "note": "the top band (rows 0 to 60) is open sky right of the temple of Jupiter; the far temple (saturn) is also the way"
+  },
+  {
+   "side": "W",
+   "to": "rome-tiber",
+   "walkTo": [
+    136,
+    306
+   ],
+   "arrive": "fromTiber",
+   "name": "down the Tuscan street, over the river",
+   "note": "the left band (columns 0 to 44) is floor below row 508, in front of Juturna's basin; toTiber is behind Castor's corner, out of sight; the street's mouth (tuscan) is also the way"
+  },
+  {
+   "side": "S",
+   "to": null,
+   "walkTo": [
+    600,
+    596
+   ],
+   "arrive": "fromHouse",
+   "name": "(later: along the Sacred Way to the chief priest's house)",
+   "note": "not a way in this stage: plain floor; the paving runs off the bottom edge clear of things from x 0 to 800"
+  }
+ ],
+ "sizes": {
+  "adult_px_at_fromSteps": 24.0,
+  "adult_px_at_toSteps": 24.0,
+  "adult_px_at_gaul": 74.8,
+  "gaul_px_at_gaul": 80.8,
+  "adult_px_at_phyllis": 110.9,
+  "adult_px_at_bottom": 162.7,
+  "boy_px_at_toSteps": 17.8,
+  "hoarding_cm": 230.0,
+  "hoarding_px_at_gaul": 98.3
+ },
+ "fx": [
+  {
+   "id": "hill-smoke",
+   "type": "smoke",
+   "plane": "back",
+   "what": "the thread of smoke from the Ides offering at the altar before the temple of Jupiter, far up on the Capitol",
+   "at": [
+    179,
+    112
+   ],
+   "height": 46,
+   "width": [
+    1,
+    6
+   ],
+   "lean": [
+    14,
+    -46
+   ],
+   "rise": 6,
+   "rate": 2,
+   "gust": 0.2,
+   "color": "#f4ecde",
+   "opacity": 0.35,
+   "note": "Tiny and slow, far behind everything: the same smoke the steps' picture marks as hill-smoke. It leans a little right, away from Castor's corner, which hides the altar's left side."
+  },
+  {
+   "id": "spring-stream",
+   "type": "stream",
+   "what": "the spring coming into Juturna's basin from the spout in its back wall",
+   "path": [
+    [
+     43.0,
+     437.1
+    ],
+    [
+     35.2,
+     441.1
+    ],
+    [
+     29.4,
+     455.0
+    ]
+   ],
+   "width": [
+    2.0,
+    3.0
+   ],
+   "speed": 40,
+   "splash": 3,
+   "opacity": 0.55,
+   "base": 508.0,
+   "note": "Short: the water falls a hand's breadth from the spout's mouth to the surface. Its base is half a row in front of the basin's, so it lies over the basin's water and behind anyone standing in front of the basin."
+  },
+  {
+   "id": "spring-ripples",
+   "type": "ripples",
+   "what": "rings where the spring falls into the basin",
+   "at": [
+    29,
+    455
+   ],
+   "radius": [
+    1,
+    12
+   ],
+   "flat": 0.3,
+   "every": [
+    0.9,
+    1.6
+   ],
+   "rings": 2,
+   "speed": 10,
+   "opacity": 0.5,
+   "base": 508.0,
+   "clip": [
+    [
+     0,
+     469
+    ],
+    [
+     105,
+     469
+    ],
+    [
+     129,
+     450
+    ],
+    [
+     0,
+     450
+    ]
+   ]
+  },
+  {
+   "id": "spring-shimmer",
+   "type": "shimmer",
+   "what": "light coming and going on the basin's still water",
+   "poly": [
+    [
+     0,
+     469
+    ],
+    [
+     105,
+     469
+    ],
+    [
+     129,
+     450
+    ],
+    [
+     0,
+     450
+    ]
+   ],
+   "clip": [
+    [
+     0,
+     469
+    ],
+    [
+     105,
+     469
+    ],
+    [
+     129,
+     450
+    ],
+    [
+     0,
+     450
+    ]
+   ],
+   "count": 5,
+   "size": 5,
+   "flow": [
+    3,
+    0
+   ],
+   "life": 2.0,
+   "opacity": 0.4,
+   "base": 508.0
+  },
+  {
+   "id": "pigeons",
+   "type": "birds",
+   "kind": "flock",
+   "what": "pigeons pottering on the square, in the sun, off the walkers' line up the middle",
+   "area": [
+    [
+     300,
+     440
+    ],
+    [
+     520,
+     420
+    ],
+    [
+     690,
+     468
+    ],
+    [
+     712,
+     540
+    ],
+    [
+     420,
+     544
+    ],
+    [
+     250,
+     536
+    ]
+   ],
+   "count": 5,
+   "frames": {
+    "dir": "art/scenes/rome-steps/",
+    "set": "pigeon",
+    "foot": [
+     23,
+     40
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     1,
+     3
+    ],
+    "look": [
+     2
+    ],
+    "peck": [
+     4,
+     5
+    ],
+    "walk": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "turn": [
+     10
+    ],
+    "takeoff": [
+     11,
+     12
+    ],
+    "fly": [
+     13,
+     14,
+     15
+    ],
+    "glide": [
+     17
+    ],
+    "land": [
+     18
+    ],
+    "shadow": null
+   },
+   "note": "The steps' own painted pigeons (rome-steps/pigeon-*), at their size at row 590 and smaller farther off. Their painted shadow (pigeon-shadow-1) lies to the left, for the steps' sun; here the sun is behind-left of us and shadows fall away and to the right, so they go without it."
+  },
+  {
+   "id": "pigeons-dark",
+   "type": "birds",
+   "kind": "flock",
+   "area": [
+    [
+     300,
+     440
+    ],
+    [
+     520,
+     420
+    ],
+    [
+     690,
+     468
+    ],
+    [
+     712,
+     540
+    ],
+    [
+     420,
+     544
+    ],
+    [
+     250,
+     536
+    ]
+   ],
+   "count": 2,
+   "frames": {
+    "dir": "art/scenes/rome-steps/",
+    "set": "pigeon-dark",
+    "foot": [
+     23,
+     40
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     1,
+     3
+    ],
+    "look": [
+     2
+    ],
+    "peck": [
+     4,
+     5
+    ],
+    "walk": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "turn": [
+     10
+    ],
+    "takeoff": [
+     11,
+     12
+    ],
+    "fly": [
+     13,
+     14,
+     15
+    ],
+    "glide": [
+     17
+    ],
+    "land": [
+     18
+    ],
+    "shadow": null
+   },
+   "seed": 2
+  },
+  {
+   "id": "pigeons-far",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a few more far up the square, small",
+   "area": [
+    [
+     300,
+     330
+    ],
+    [
+     500,
+     320
+    ],
+    [
+     560,
+     360
+    ],
+    [
+     300,
+     372
+    ]
+   ],
+   "count": 3,
+   "frames": {
+    "dir": "art/scenes/rome-steps/",
+    "set": "pigeon",
+    "foot": [
+     23,
+     40
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     1,
+     3
+    ],
+    "look": [
+     2
+    ],
+    "peck": [
+     4,
+     5
+    ],
+    "walk": [
+     6,
+     7,
+     8,
+     9
+    ],
+    "turn": [
+     10
+    ],
+    "takeoff": [
+     11,
+     12
+    ],
+    "fly": [
+     13,
+     14,
+     15
+    ],
+    "glide": [
+     17
+    ],
+    "land": [
+     18
+    ],
+    "shadow": null
+   },
+   "seed": 3
+  },
+  {
+   "id": "swallows",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "swallows over the Capitol, back for the spring, now and then",
+   "lanes": [
+    [
+     [
+      380,
+      -12
+     ],
+     [
+      420,
+      30
+     ],
+     [
+      470,
+      60
+     ],
+     [
+      560,
+      64
+     ],
+     [
+      660,
+      40
+     ],
+     [
+      812,
+      30
+     ]
+    ],
+    [
+     [
+      812,
+      90
+     ],
+     [
+      700,
+      72
+     ],
+     [
+      600,
+      86
+     ],
+     [
+      500,
+      70
+     ],
+     [
+      420,
+      30
+     ],
+     [
+      400,
+      -12
+     ]
+    ]
+   ],
+   "frames": {
+    "dir": "art/scenes/rome-steps/",
+    "flap": [
+     "swallow-1.png",
+     "swallow-2.png",
+     "swallow-3.png",
+     "swallow-2.png"
+    ],
+    "glide": "swallow-4.png",
+    "middle": [
+     8,
+     5
+    ]
+   },
+   "scale": 0.7,
+   "every": [
+    7,
+    16
+   ],
+   "group": [
+    1,
+    3
+   ],
+   "speed": 90,
+   "note": "Only in the open sky right of the temple of Jupiter, over the hill and the record office; the crane's frame crosses the right-hand lane (it is in back.png, so a bird simply passes it: they are far behind it)."
+  },
+  {
+   "id": "awning-sway",
+   "type": "sway",
+   "plane": "awning",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.6,
+   "lean": 0.2,
+   "what": "the moneychanger's little awning stirring over his table"
+  },
+  {
+   "id": "crane-dust",
+   "type": "smoke",
+   "what": "a little pale dust where the crane sets a block down on the new wall, now and then",
+   "at": [
+    612,
+    276
+   ],
+   "base": 338.1,
+   "height": 26,
+   "width": [
+    6,
+    26
+   ],
+   "lean": [
+    10,
+    -20
+   ],
+   "rise": 8,
+   "rate": 3,
+   "gust": 0.4,
+   "color": "#e8d4a8",
+   "opacity": 0.3,
+   "note": "Meant to come and go: the scene can put it on the stage for six or eight seconds every thirty to fifty (a `when` on a timer, or g.effects.add / remove), best just after the wheel has turned, as if the block had been set down. Its base is just above the crane wheel's (which is just above the hoarding's far end): it lies behind the hoarding and the wheel, and behind anyone on the square."
+  }
+ ],
+ "frames": {
+  "crane": {
+   "files": "crane-<n>.png, n 0 to 5",
+   "size": [
+    69,
+    155
+   ],
+   "foot": [
+    34,
+    152
+   ],
+   "at": [
+    645,
+    354
+   ],
+   "note": "the crane's great wheel, a sixth of a spoke further round in each; cut from the finished picture"
+  }
+ },
+ "fx_note": "Nothing that moves by nature is painted: the smoke of the Ides offering before the temple of Jupiter, Juturna's spring (the water coming in at the back of its basin, rings, light on the water), the pigeons (the steps' own frames), the swallows over the Capitol (the steps' frames), the moneychanger's awning (its own cut-out, a sway), the dust where the crane sets a block down (now and then), and the crane's wheel (painted frames, crane-0 to crane-5, as a plane: see `planes`). Left painted, on purpose: the clouds, the garlands on Phyllis's pole (wreaths hanging still), the far people (dabs of a few pixels), the stone block hanging from the crane (it is lifted slowly; it does not swing), the statues."
+}

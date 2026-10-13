@@ -73,6 +73,16 @@ export const sound = {
       lead: [2, 4, 7, 5, 4, 2, 3, 5, 4, 2, 1, 0],
       bass: [7, null, null, 11, null, null, 10, null, null, 11, null, null],
     },
+    // ROME-13S3: across the Tiber (js/content/scenes/rome-tiber.js), the act's own quiet: Rome's mode (D dorian, as `rome`),
+    // one soft voice, slow, and more rests than notes, like water going by under a bridge. The game's own tune, written for
+    // it: not any real song or hymn. (It drops while the old man talks with the boy, and the river is heard instead.)
+    tiber: {
+      bpm: 60, root: 50, scale: [0, 2, 3, 5, 7, 9, 10], wave: "sine", hold: 3.2, volume: 0.55,
+      lead: [4, null, null, 3, null, null, 2, null, 3, null, null, null, null, null, null, null, 2, null, null, 1, null, null, 0, null, 1, null, null, null, null, null, null, null,
+        0, null, null, 2, null, null, 4, null, 5, null, null, 4, null, null, null, null, 3, null, null, 2, null, null, 1, null, 0, null, null, null, null, null, null, null],
+      bass: [7, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 11, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+        10, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 11, null, null, null, null, null, null, null, 7, null, null, null, null, null, null, null],
+    },
     tunnel: {
       bpm: 150, root: 57, scale: [0, 2, 4, 6, 8, 10], wave: "square", hold: 0.9, volume: 0.5,
       lead: [0, 2, 4, 5, 4, 2, 0, 2, 1, 3, 5, 6, 5, 3, 1, 3],
@@ -131,5 +141,24 @@ export const sound = {
     // Grandpa Joe's banjo coming down over Jed's head: one twang, every string at once (the five of a banjo tuned to G),
     // and the thump of the head going through. Nobody is hurt: it is a banjo.
     twang: { noise: [900, 180], len: 0.16, q: 1.6, notes: [[67, 0, 0.8], [50, 0, 0.95], [55, 0, 0.9], [59, 0, 0.85], [62, 0, 0.8]], level: 0.045, wave: "sawtooth" },
+
+    // ---- CAR-13E: inside the wagon, Act One (the car also has latch, clunk, hiss and click, above) ----
+    // The wagon's horn: two square-wave notes a major third apart (E and G sharp), dying away over half a second, not loud. A
+    // touch sour is in character. (At 0.08 it was as loud as the hiss, the loudest of the car's sounds: 0.06 puts it between
+    // the hiss and the clunk.)
+    horn: { notes: [[64, 0, 0.5], [68, 0, 0.5]], level: 0.06, wave: "square" },
+    // The starter, grinding and giving up: a low sweep of noise with four short pulses under it, about a second. (Quieter
+    // than the clunk and louder than the latch: as it was designed.)
+    starter: { noise: [180, 700], len: 0.9, q: 2, notes: [[38, 0, 0.08], [38, 0.16, 0.08], [38, 0.32, 0.08], [38, 0.48, 0.08]], level: 0.12, wave: "sawtooth" },
+
+    // ---- ROME-13S2: Juno's geese, on the Capitol (js/content/scenes/rome-capitol.js) ----
+    honk: { notes: [[62, 0, 0.09], [60, 0.1, 0.12]], level: 0.07, wave: "square" },                                       // one goose: two short nasal notes
+    // The flock running for their pen after the stomp: a flurry of honks over the beat of wings. Nobody is hurt.
+    geese: { noise: [3000, 900], len: 0.9, q: 1.5, notes: [[62, 0, 0.08], [60, 0.09, 0.1], [65, 0.22, 0.08], [63, 0.31, 0.1], [61, 0.45, 0.08], [59, 0.54, 0.12], [64, 0.7, 0.08], [62, 0.79, 0.12]], level: 0.08, wave: "square" },
+    goosehiss: { noise: [4200, 2600], len: 0.5, q: 0.7, level: 0.05 },                                                     // a goose's hiss, short: every neck out at once
+
+    // ---- ROME-13S3: across the Tiber ----
+    // The river, as the music drops for the old man's talk: a soft rush of water, a few seconds, and gone.
+    river: { noise: [500, 900], len: 3, q: 0.8, level: 0.025 },
   },
 };

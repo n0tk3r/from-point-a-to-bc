@@ -29,7 +29,9 @@ export const act = {
   beats: [
     { id: "egypt.arrive", kind: "cutscene", title: "Crash landing by the Nile: small sneaker prints go up the track (and a prayer)", lead: "dad", scene: "egypt-crash", needs: ["seen.intro"], sets: "egypt.arrived" },
 
-    { id: "egypt.map", kind: "puzzle", chain: "A", title: "Take the road map from the glovebox", lead: "dad", scene: "egypt-crash", needs: ["egypt.arrived"], sets: "egypt.hasMap", hint: "hint.egypt.map" },
+    // CAR-13S: since round thirteen the glovebox is inside the wagon (the scene egypt-car, seen through Dad's own eyes): he
+    // gets in by the rolled-down window or the wagon, and the glovebox drops open on the map. Only the scene and the title changed.
+    { id: "egypt.map", kind: "puzzle", chain: "A", title: "Get into the wagon and take the road map from the glovebox", lead: "dad", scene: "egypt-car", needs: ["egypt.arrived"], sets: "egypt.hasMap", hint: "hint.egypt.map" },
     { id: "egypt.reed", kind: "puzzle", chain: "A", title: "Cut a reed by the river", lead: "dad", scene: "egypt-crash", needs: ["egypt.arrived"], sets: "egypt.hasReed", hint: "hint.egypt.reed" },
     { id: "egypt.pen", kind: "puzzle", chain: "A", title: "Give the scribe the reed: he can write again", lead: "dad", scene: "egypt-site", needs: ["egypt.hasReed"], sets: "egypt.penGiven", hint: "hint.egypt.pen" },
     { id: "egypt.pass", kind: "puzzle", chain: "A", title: "Give the scribe the map to write on: he writes a pass", lead: "dad", scene: "egypt-site", needs: ["egypt.hasMap", "egypt.penGiven"], sets: "egypt.hasPass", hint: "hint.egypt.mark" },

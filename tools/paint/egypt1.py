@@ -389,6 +389,17 @@ def wagon_pictures(pic, back_rgb):
     idx0 = to_palette(grain(w0, 7, 0.02), pal, speckle=0.014)        # the same grain and palette, without it
     solid = ~(wa < 0.5)
     mirror = (mirror | (idx != idx0)) & solid
+    # CAR-13P (round thirteen): the driver's window is rolled down. The same wagon from the same brushing with the inside
+    # of the car laid into the opening (wagon.render_pair, window="open"), reduced with the palette the wagon as approved
+    # gives (the window shut, above), so that every pixel the window does not touch keeps its index; the door mirror
+    # keeps its mask. window_report() says what changed.
+    o1, o0, oa, _ = wagon.render_pair((H, W), WAGON, 1.0, back=pic, window="open")
+    assert np.array_equal(oa, wa), "the open window changed the wagon's outline"
+    opened = (np.abs(o1 - w1).max(axis=2) > 0) | (np.abs(o0 - w0).max(axis=2) > 0)
+    WINDOW_NOTES.update(opened=opened, mirror_was=idx[mirror].copy())
+    idx = np.where(opened, to_palette(grain(o1, 7, 0.02), pal, speckle=0.014), idx)
+    idx0 = np.where(opened, to_palette(grain(o0, 7, 0.02), pal, speckle=0.014), idx0)
+    WINDOW_NOTES.update(mirror_now=idx[mirror], pal=pal, picture=o0)
     faint, _ = wagon.thin((H, W), WAGON)
     sand, which = np.unique(back_rgb[faint], axis=0, return_inverse=True)
     out = idx0.copy()
@@ -410,6 +421,8 @@ def wagon_pictures(pic, back_rgb):
 
 
 TRUNK_STATES = (("trunk-open-1", ("flashlight",)), ("trunk-open-2", ("flashlight", "shade")))     # the trunk's emptier pictures: without this
+WINDOW_NOTES = {}                                                   # CAR-13P: what wagon_pictures found when it rolled the window down (printed at the end)
+WINDOW_BOX = (618, 455, 663, 493)                                   # CAR-13P: x0, y0, x1, y1 (x1, y1 not included): the only pixels the open window may change
 
 
 STEAM = (472, 498)                                          # where the steam leaves the front edge of the hood (the bottom middle of its frames)
@@ -593,12 +606,12 @@ def layout(steam_foot):
     stand = lambda x: [int(x), 563]                                  # on the sand in front of the car, on our side
     things = [
         {"id": "mirror", "what": "the door mirror", "shape": {"rect": mirror}, "stand": stand(622), "face": "N"},
-        {"id": "glovebox", "what": "the glovebox, through the driver's window", "shape": {"poly": r(window)}, "stand": stand(642), "face": "N"},
+        {"id": "inside", "what": "the driver's window, rolled down: the way into the wagon", "shape": {"poly": r(window)}, "stand": stand(642), "face": "N"},     # CAR-13P (was the glovebox, through the window)
         {"id": "suitcase", "what": "the suitcase on the roof (left)", "shape": {"poly": r(suitcase)}, "stand": stand(648), "face": "N"},
         {"id": "trunk", "what": "the old trunk on the roof (middle)", "shape": {"poly": r(trunk)}, "stand": stand(692), "face": "N"},
         {"id": "cooler", "what": "the cooler on the roof (right)", "shape": {"poly": r(cooler)}, "stand": stand(730), "face": "N"},
         {"id": "hood", "what": "the hood, nose down in the sand, steaming", "shape": {"poly": r(hood)}, "stand": stand(566), "face": "N"},
-        {"id": "wagon", "what": "the family wagon as a whole", "shape": {"poly": r(car)}, "stand": stand(604), "face": "N"},
+        {"id": "wagon", "what": "the family wagon as a whole", "shape": {"poly": r(car)}, "stand": stand(642), "face": "N"},     # CAR-13P: at his door (it was 604)
         {"id": "donkey", "what": "Lot's donkey, head down, drinking at the water's edge, two water jars slung on it", "plane": "donkey",
          "shape": {"poly": hug((da > 0.5) | (dla > 0.5))}, "stand": [244, 440], "face": "W"},
         {"id": "reeds", "what": "the reed bed in the shallows", "shape": {"rect": [212, 334, 30, 42]}, "stand": [244, 392], "face": "W"},
@@ -641,7 +654,9 @@ def layout(steam_foot):
         "palms_split": {"note": "palms.png cut into its three palms, pixel for pixel (any order): use these three in place of 'palms' so that somebody standing between two palms is sorted rightly with each",
                         "planes": [{"id": f"palm-{i + 1}", "file": f"palm-{i + 1}.png", "base": int(p[1])} for i, p in enumerate(PALMS)]},
         "things": things, "exits": exits,
-        "marks": {"dad": [420, 570], "lot": list(LOT), "talkToLot": list(LOT_TALK), "muzzle": [round(v, 1) for v in egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)]},
+        "marks": {"dad": [420, 570], "lot": list(LOT), "talkToLot": list(LOT_TALK), "muzzle": [round(v, 1) for v in egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)],
+                  "fromCar": stand(642)},                                                          # CAR-13P: out of the wagon, at his door
+
         "lot": lot,
         "steam": list(steam_foot),
         "fx": fx_marks(),
@@ -652,7 +667,14 @@ def layout(steam_foot):
                   "gone from back.png, and Lot's bundle is painted at his place; nothing else in back.png moved",
                   "round four: nothing that moves by nature is painted still. The village's two threads of cooking smoke are gone from back.png and the "
                   "rings round the donkey's muzzle from donkey.png (every other pixel of both is as it was); 'fx' says where the game draws them moving, "
-                  "and where the river shimmers"],
+                  "and where the river shimmers",
+                  # CAR-13P
+                  "round thirteen: the driver's window is rolled down (wagon.png: the glass wound down into the door, a bright sliver of its top edge "
+                  "at the sill, and through the opening the inside of the car in warm shade: the bench's back and the driver's headrest, the top of "
+                  "the wheel, the far windows' daylight along the top). Only pixels inside x 618..662, y 455..492 changed: in wagon.png, and "
+                  f"{mirror_edge()} pixels of mirror.png's edge where it lies over the opening (its shape is the same); the door mirror keeps its "
+                  "cut-out over the opening's lower front corner. The thing 'glovebox' is now 'inside', the way into the wagon (the glovebox is "
+                  "inside it: egypt-car); the wagon and the window stand him at his door, (642, 563), and 'fromCar' is where he comes out"],
     }
     one = lambda v: json.dumps(v, separators=(", ", ": "))             # (written so that a person can read it: one thing to a line)
     rows = []
@@ -705,6 +727,27 @@ def check_layout(doc, comp, out):
     dr.line([(sx * k - 8, sy * k), (sx * k + 8, sy * k)], fill=(255, 255, 255, 255), width=2)
     dr.line([(sx * k, sy * k - 8), (sx * k, sy * k + 8)], fill=(255, 255, 255, 255), width=2)
     im.save(out)
+
+
+def mirror_edge():
+    """CAR-13P: how many of the door mirror's pixels the open window changed (at its edge, over the opening)."""
+    n = WINDOW_NOTES
+    return int((n["mirror_was"] != n["mirror_now"]).sum()) if n else 0
+
+
+def window_report():
+    """CAR-13P: what rolling the driver's window down changed in the wagon (wagon_pictures). Nothing may change outside
+    WINDOW_BOX; the door mirror keeps its mask, and a pixel of it may change only where its edge lies over the opening."""
+    n = WINDOW_NOTES
+    if not n:
+        return True
+    ys, xs = np.nonzero(n["opened"])
+    x0, y0, x1, y1 = WINDOW_BOX
+    inside = (xs >= x0) & (xs < x1) & (ys >= y0) & (ys < y1)
+    mirror = int((n["mirror_was"] != n["mirror_now"]).sum())
+    print(f"window: {len(xs)} pixels of the wagon repainted, x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()}; "
+          f"{int((~inside).sum())} of them outside x {x0}..{x1 - 1}, y {y0}..{y1 - 1}; the door mirror: {mirror} of its pixels changed")
+    return not (~inside).any()
 
 
 def whole_picture(pic, planes, name="out/egypt1-2-all.png"):
@@ -760,6 +803,7 @@ if __name__ == "__main__":
     egypt1_steam.save("out/egypt1")
     print("palms split, bases", split_palms())
     doc = layout(STEAM)
+    window_report()                                                  # CAR-13P
     steam = ("steam-0", STEAM[0] - egypt1_steam.W // 2, STEAM[1] - egypt1_steam.H)
     lay(["back", "palms", "donkey", "wagon", "mirror", steam, "front"], "out/egypt1-comp.png")
     lay(["back", "palms", "donkey", "wagon", "suitcase-open", "trunk-open", "cooler-open", steam, "front"], "out/egypt1-open-comp.png")

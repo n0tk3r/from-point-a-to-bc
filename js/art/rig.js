@@ -681,9 +681,13 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const stripe = top.stripe && !coarse ? top.stripe : null;             // stripes down the cloth, each at its own place round the body
   const tBands = top.bands || null;                                     // bands woven across it: [from, to, material], measured down from the line of the shoulders
   const bibTop = apron && apron.bib ? d.shoulderY - apron.bib : null;   // an apron with a bib comes up the chest
-  const dressed = printed || bib || stripe || bibTop != null || !!tBands;
+  // ROME-13P: top.bare ("R" or "L"): a tunic fastened on one shoulder only (a working man's), that shoulder and that side
+  // of the chest and back bare: the cloth's top edge runs from the fastened shoulder down across him to under the bare arm
+  const bareSide = top.mat && (top.bare === "R" ? 1 : top.bare === "L" ? -1 : 0);
+  const dressed = printed || bib || stripe || bibTop != null || !!tBands || !!bareSide;          // (ROME-13P: bareSide)
   const clothAt = dressed ? (u, x, y) => {
     if (u < -1 || u > 1) return undefined;                              // plain cloth out past the trunk's own width
+    if (bareSide) { const t = (1 + bareSide * Math.sin(roundAt(u, psi))) / 2; if (rT * 0.80 - high(y) < lerp(-0.07, 0.13, t * t)) return skin; }      // (ROME-13P)
     const round = roundAt(u, psi);
     if (bibTop != null && !coarse && Math.abs(round) < (apron.half ?? 1.0) * 0.72 && TA[1] + (chestY - bibTop) * S < y) return apron.mat;
     if (bib) { const m = bibAt(u, y); if (m) return m; }                 // (NEVADA-12P: the bib of overalls lies over a striped shirt: Grandpa Joe's plaid)
@@ -716,8 +720,9 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   const capR = d.armR[0] + (top.mat ? 0.008 : 0.003);
   for (const k of ["R", "L"]) {
     const sd = k === "R" ? 1 : -1;
-    limb(add(J.sh, J.torso([sd * 0.034, 0.002, -0.004])), add(J[k].shoulder, J.torso([-sd * 0.008, capR - 0.022, 0])), 0.020, 0.022, topMat, { part: TORSO, bias: cover, fn: offTrunk });
-    ball(J[k].shoulder, [capR, capR, capR], topMat, { part: TORSO, bias: cover, fn: offTrunk && ((ux, uy, uz, x, y) => offTrunk(0, 0, 0, x, y)) });
+    const capMat = bareSide === sd ? skin : topMat;                     // (ROME-13P: the bare shoulder)
+    limb(add(J.sh, J.torso([sd * 0.034, 0.002, -0.004])), add(J[k].shoulder, J.torso([-sd * 0.008, capR - 0.022, 0])), 0.020, 0.022, capMat, { part: TORSO, bias: cover, fn: offTrunk });      // (ROME-13P: capMat)
+    ball(J[k].shoulder, [capR, capR, capR], capMat, { part: TORSO, bias: cover, fn: offTrunk && ((ux, uy, uz, x, y) => offTrunk(0, 0, 0, x, y)) });      // (ROME-13P: capMat)
   }
   // Cloth is drawn too: a fold from each armpit toward the waist, and small gathers where a belt pulls it in.
   if (top.mat && fine && top.folds !== false && !printed) {
@@ -1463,15 +1468,20 @@ const seatOf = (spec) => (spec.seated === true ? "ground" : spec.seated || "chai
 const mainGesture = (spec) => (spec.gestures || DEFAULT_GESTURES).find((g) => g !== 0) ?? 1;
 /** Standing, walking, talking, reaching and sitting the way one particular character does them. */
 export const poses = {
-  stand: (spec, f) => holding(spec, resting(spec, standPose(f, { stance: spec.stance, dim: spec.dim, lean: spec.lean }))),
+  stand: (spec, f) => spec.stance === "prayer" ? holding(spec, prayerStand(spec, f)) : holding(spec, resting(spec, standPose(f, { stance: spec.stance, dim: spec.dim, lean: spec.lean }))),      // (ROME-13P: "prayer")
   walk: (spec, ph) => holding(spec, walkPose(ph, spec.walk)),
   /** `seed` is any whole number; the same seed always gives this character the same gesture. */
   gesture: (spec, seed) => { const list = spec.gestures || DEFAULT_GESTURES; return list[seed % list.length]; },
-  talk: (spec, f, g) => { const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o))); },
+  talk: (spec, f, g) => {
+    if (spec.stance === "prayer") { const p = prayerStand(spec, f); p.head = { nod: (p.head ? p.head.nod : 0) - 0.06 + 0.03 * Math.sin((2 * Math.PI * f) / 6) }; return holding(spec, p); }     // ROME-13P: at prayer, only the head moves as they speak
+    const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o)));
+  },
   /** (A figure in the game is in prayer when its "act" is one called "pray", counted from 2 to 3 so that it is never
       taken for a reach: see Figure.pray in js/engine/cast.js.) */
   /** (A figure in the game is shading its eyes when its "act" is one called "shade", counted from 4 to 5: see Figure.shade.) */
-  reach: (spec, k, low) => low === "pray" ? poses.pray(spec, k >= 2 ? k - 2 : k) : low === "shade" ? poses.shade(spec, k >= 4 ? k - 4 : k) : holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
+  reach: (spec, k, low) => low === "pray" ? poses.pray(spec, k >= 2 ? k - 2 : k) : low === "shade" ? poses.shade(spec, k >= 4 ? k - 4 : k)
+    : typeof low === "string" && spec.holds && spec.holds[low] ? heldPose(spec, low, k)          // ROME-13P: one of their own holds (figure.hold(true, "bless"))
+    : holding(spec, reachPose(k, low, { stance: spec.stance, dim: spec.dim, soft: !!spec.bottom && (spec.bottom.kind === "skirt" || spec.bottom.kind === "kilt"), hand: freeHand(spec), keep: spec.hold })),
   /** In prayer, the way this character prays (spec.pray: see prayPose, and sitPrayPose for someone found sitting).
       k eases from standing, or sitting, (0) into the pose (1). */
   pray: (spec, k = 1) => {
@@ -1504,6 +1514,37 @@ export const poses = {
 /** How this character sits: their own `sit` settings, with whatever `o` changes. */
 function sitHow(spec, o = {}) {
   return { ...(spec.sit || {}), ...o, dim: spec.dim, height: spec.height, seat: o.seat || (spec.sit && spec.sit.seat) || seatOf(spec), main: o.main ?? mainGesture(spec), hand: freeHand(spec) };
+}
+
+// ---------- ROME-13P (round thirteen): standing at prayer, and a person's own holds ----------
+/** Someone whose way of standing is at prayer (stance "prayer": Eleazar at his window): their own prayer (spec.pray, as
+    prayPose has it), breathing slowly, so that their small movements (his `lift`) start from it and end in it. The eyes
+    are their face's own (people.js gives his shut); and a prayer let go (pray(false)) leaves them as they were: at prayer. */
+function prayerStand(spec, f = 0) {
+  const p = prayPose({ dim: spec.dim, lean: spec.lean, pray: spec.pray });
+  p.breath = 0.5 - 0.5 * Math.cos((2 * Math.PI * f) / 8);
+  delete p.blink; delete p.squeeze;
+  return p;
+}
+/** One of a person's own holds (spec.holds in people.js: { name(o) { return a pose } }, made from their resting pose as
+    a small movement's key poses are, with moveKit): kept through whatever is said, as a hand held out is
+    (figure.hold(true, "bless") in a scene, until hold(false)). k eases from their resting pose (0) into it (1). */
+const HOLD_POSES = new WeakMap();
+function heldPose(spec, name, k) {
+  let m = HOLD_POSES.get(spec);
+  if (!m) HOLD_POSES.set(spec, (m = new Map()));
+  let full = m.get(name);
+  if (!full) { full = spec.holds[name](kitOf(spec)); m.set(name, full); }
+  if (k >= 1) return cloneP(full);
+  const base = restOf(spec);
+  if (!(k > 0)) return base;
+  return between(spec.dim, base, full, k * k * (3 - 2 * k));
+}
+/** What a small movement's make(o), and a hold, is given (as fidgetKeys gives it): the person, their build, the usual
+    places on a body, their resting pose and its joints, and which hands are busy. */
+function kitOf(spec) {
+  const d = spec.dim, base = restOf(spec), H = freeHand(spec), J = skeleton(d, base);
+  return { spec, d, sp: spots(d), base, seated: !!spec.seated, H, O: H === "R" ? "L" : "R", J, toTorso: torsoOf(J), held: (s) => !!(spec.hold && spec.hold[s]), still: !!(spec.hold && Object.values(spec.hold).some((h) => h && h.still)) };
 }
 
 // =====================================================================================
@@ -1545,9 +1586,15 @@ export function riseOf(spec) {
   const J0 = skeleton(spec.dim, poses.sit(spec, 0));
   const feet = (J0.R.ankle[2] + J0.L.ankle[2]) / 2 - J0.hipC[2];
   r = { ground, feet, forward: ground ? 0 : Math.max(0, feet * 0.55), ms: spec.riseMs ?? (ground ? 1250 : spec.height < 0.85 ? 760 : 1000) };
+  // ROME-13P: a seat higher than the knees, the feet hanging clear of the floor (Titus on his statue base): getting down
+  // is a hop (hopPose), quick, and they land on their feet a step in front of where the knees were, clear of the seat
+  const hang = ground || !spec.seated ? 0 : Math.min(J0.R.heel[1], J0.L.heel[1], J0.R.ball[1], J0.L.ball[1], J0.R.toe[1], J0.L.toe[1]);      // (someone found sitting)
+  if (hang > HOP_HANG) Object.assign(r, { hop: true, hang, forward: (J0.R.knee[2] + J0.L.knee[2]) / 2 - J0.hipC[2] + spec.dim.foot * 0.95, ms: spec.riseMs ?? 420 });
   RISES.set(spec, r);
   return r;
 }
+/** ROME-13P: how high the feet must hang (in the sitter's own heights) for getting down to be a hop, not a rise. */
+const HOP_HANG = 0.06;
 
 /** Where someone stands once up, from the point they sat on: [right, down] in picture pixels, for a figure `size` pixels tall facing `yawDeg`. */
 export function standOffset(spec, yawDeg, size) {
@@ -1583,6 +1630,7 @@ function legTo(d, s, hip, ankle, hint) {
  * back to their seat and sits down on it).
  */
 function risePose(spec, k, inPlace = false) {
+  if (riseOf(spec).hop) return hopPose(spec, k, inPlace);              // ROME-13P: down from a high seat, a hop
   const R = riseOf(spec), up = upOf(spec), d = spec.dim, Fs = inPlace ? 0 : R.forward;
   const S0 = poses.sit(spec, 0), S4 = poses.stand(up, 0);
   if (!(k > 0)) return { ...S0, shift: (S0.shift || 0) - Fs, noSeat: true, rising: 0 };
@@ -1673,6 +1721,76 @@ function risePose(spec, k, inPlace = false) {
       if (k < seatK) { const e = smooth(span(k, onK, seatK)); hand = mix(a0.wLoc, knee, e); bend = mix(sub(a0.eLoc, a0.sLoc), kneeBend, e); f = e < 0.5 ? flags(q0) : { curl: 0.75 }; }
       else if (k < offK) { hand = knee; bend = kneeBend; f = { curl: 0.75 }; }
       else { const e = smooth(span(k, offK, 1)); hand = mix(knee, a4.wLoc, e); bend = mix(kneeBend, sub(a4.eLoc, a4.sLoc), e); f = e < 0.5 ? { curl: 0.75 } : flags(q4); }
+    }
+    p[s] = { ...p[s], hand, bend, ...f };
+  }
+  return p;
+}
+
+/**
+ * ROME-13P: getting down from a seat higher than the knees (riseOf's `hop`: Titus on his statue base), k from 0 (sitting,
+ * as they sit) to 1 (standing, as they stand); played backwards, a jump back up. Quick: the hands to the seat's edge and
+ * the weight forward, the hips to the edge; off, the legs reaching down for the ground as the body drops, a free arm out
+ * for balance; down on bent knees; and up. Anchored as risePose is, where the feet land (standOffset). A hand that carries
+ * something (`sit.clutch`, "L" or "R") holds it to the chest all the way down; one with a `hold` keeps to it.
+ */
+function hopPose(spec, k, inPlace = false) {
+  const R = riseOf(spec), up = upOf(spec), d = spec.dim, Fs = inPlace ? 0 : R.forward;
+  const S0 = poses.sit(spec, 0), S4 = poses.stand(up, 0);
+  if (!(k > 0)) return { ...S0, shift: (S0.shift || 0) - Fs, noSeat: true, rising: 0 };
+  if (k >= 1) return S4;
+  const J0 = skeleton(d, S0), J4 = skeleton(d, S4), less = (v) => [v[0], v[1], v[2] - Fs];
+  const L0 = S0.lean || 0, L4 = S4.lean || 0, hip0 = less(J0.hipC), hip4 = J4.hipC, seatY = hip0[1] - d.pelvisR[1] * 0.62;
+  const edge = hip0[2] + 0.05, low = hip4[1] - d.thigh * 0.40;            // the hips at the edge of the seat; how low they go, landing
+  const READY = 0.24, OFF = 0.58, DOWN = 0.76;                           // on the edge; in the air; down on bent knees; and up
+  const hung = (s) => { const a = less(J0[s].ankle); return [a[0], a[1] + 0.020, a[2] - 0.050 + (edge - hip0[2])]; };     // (the feet swing back a little under the edge)
+  let hc, lean, seated, ankleOf, hintOf, footOf;
+  if (k < READY) {
+    const e = smooth(k / READY);
+    seated = true; hc = [hip0[0], hip0[1], lerp(hip0[2], edge, e)]; lean = lerp(L0, 0.30, e);
+    ankleOf = (s) => mix(less(J0[s].ankle), hung(s), e); hintOf = (s) => unit(sub(J0[s].knee, J0[s].hip));
+    footOf = (s) => ({ foot: lerp(S0[s].foot || 0, -0.30, e), footYaw: S0[s].footYaw ?? 0.24 });
+  } else if (k < OFF) {
+    const e = (k - READY) / (OFF - READY);                                 // off the edge: forward at once, and down faster and faster
+    seated = false; lean = lerp(0.30, 0.16, e);
+    hc = [lerp(hip0[0], hip4[0], e), lerp(hip0[1], low + 0.05, e * e), lerp(edge, hip4[2] + 0.02, smooth(Math.min(1, e * 1.5)))];
+    ankleOf = (s) => { const a4 = J4[s].ankle; return mix(hung(s), [a4[0], Math.max(a4[1], hc[1] - (d.thigh + d.shin) * 0.97), a4[2]], smooth(e)); };
+    hintOf = (s) => [s === "R" ? 0.15 : -0.15, 0.1, 1]; footOf = (s) => ({ foot: lerp(-0.30, -0.06, e), footYaw: lerp(S0[s].footYaw ?? 0.24, S4[s].footYaw ?? 0.24, e) });
+  } else {
+    const e = smooth(k < DOWN ? (k - OFF) / (DOWN - OFF) : (k - DOWN) / (1 - DOWN));
+    seated = false;
+    if (k < DOWN) { hc = [hip4[0], lerp(low + 0.05, low, e), lerp(hip4[2] + 0.02, hip4[2] - 0.010, e)]; lean = lerp(0.16, 0.36, e); }
+    else { hc = [hip4[0], lerp(low, hip4[1], e), lerp(hip4[2] - 0.010, hip4[2], e)]; lean = lerp(0.36, L4, e); }
+    ankleOf = (s) => J4[s].ankle; hintOf = (s) => [s === "R" ? 0.22 : -0.22, 0.2, 1]; footOf = (s) => ({ foot: 0, footYaw: S4[s].footYaw ?? 0.24 });
+  }
+  const p = { seated, noSeat: true, rising: k, ground: 0, breath: 0, lean, twist: 0, hipTwist: 0, sway: hc[0], rise: hc[1] - d.hipY, shift: hc[2],
+    head: { nod: lerp(nodOf(S0), nodOf(S4), smooth(k)) + 0.14 * Math.sin(Math.PI * k), turn: 0 } };     // (looking down at where he will land)
+  let flat = 0;
+  for (const s of ["R", "L"]) {
+    const sd = s === "R" ? 1 : -1, leg = legTo(d, sd, add(hc, [sd * d.hipW, 0, 0]), ankleOf(s), hintOf(s));
+    flat += leg.leg[0] / 2;
+    p[s] = { leg: leg.leg, shin: leg.shin, knee: 0, ...footOf(s) };
+  }
+  if (seated || flat > 0.80 + lean * 0.3) p.lap = true;                   // (a skirt lies on thighs that are still nearly level)
+  // the arms: a thing carried to the chest, a held one kept, and a free hand to the seat's edge, out for balance, forward, and down
+  const sh = add(hc, [0, (d.shoulderY - d.hipY) * Math.cos(lean), (d.shoulderY - d.hipY) * Math.sin(lean)]), toT = torsoOf({ lean, twist: 0, sh });
+  const clutch = spec.sit && spec.sit.clutch, flags = (q) => { const f = {}; for (const n of ["grip", "curl", "finger", "point", "flat", "thumb"]) if (q[n] !== undefined) f[n] = q[n]; return f; };
+  for (const s of ["R", "L"]) {
+    const sd = s === "R" ? 1 : -1, a0 = J0[s], a4 = J4[s], q0 = S0[s] || {}, q4 = S4[s] || {}, held = !!((spec.hold && spec.hold[s]) || (up.hold && up.hold[s]));
+    const b0 = sub(a0.eLoc, a0.sLoc), b4 = sub(a4.eLoc, a4.sLoc);
+    let hand, bend, f;
+    if (clutch === s) {
+      const chest = [-sd * 0.012, -0.150, d.trunkTop[1] + 0.055], e1 = smooth(span(k, 0, 0.18)), e2 = smooth(span(k, DOWN, 1));
+      hand = mix(mix(a0.wLoc, chest, e1), a4.wLoc, e2); bend = mix(mix(b0, [sd * 0.55, -0.60, -0.25], e1), b4, e2); f = e2 > 0.5 ? flags(q4) : { grip: true };
+    } else if (held) {
+      const e = smooth(span(k, 0.10, 0.90));
+      hand = mix(a0.wLoc, a4.wLoc, e); bend = mix(b0, b4, e); f = flags(e < 0.5 ? q0 : q4);
+    } else {
+      const push = toT([sd * (d.pelvisR[0] + 0.030), seatY + 0.012, hc[2] - 0.006]), out = [sd * 0.200, -0.080, 0.110], fwd = [sd * 0.090, -0.200, 0.200];
+      if (k < READY) { const e = smooth(span(k, 0, READY * 0.85)); hand = mix(a0.wLoc, push, e); bend = mix(b0, [sd * 0.6, 0.2, -0.8], e); f = e < 0.5 ? flags(q0) : { flat: true }; }
+      else if (k < OFF) { const e = smooth((k - READY) / (OFF - READY)); hand = mix(push, out, e); bend = [sd * 0.8, -0.3, -0.4]; f = { curl: 0.5 }; }
+      else if (k < DOWN) { const e = smooth((k - OFF) / (DOWN - OFF)); hand = mix(out, fwd, e); bend = [sd * 0.7, -0.4, -0.3]; f = { curl: 0.5 }; }
+      else { const e = smooth((k - DOWN) / (1 - DOWN)); hand = mix(fwd, a4.wLoc, e); bend = mix([sd * 0.7, -0.4, -0.3], b4, e); f = e < 0.5 ? { curl: 0.5 } : flags(q4); }
     }
     p[s] = { ...p[s], hand, bend, ...f };
   }
@@ -1929,6 +2047,19 @@ export function fidgetStep(spec, name, u, n) {
   return keys[i][1] === keys[i + 1][1] ? Math.round(keys[i][0] * n) : Math.round(u * n);
 }
 
+// ---------- ROME-13P (round thirteen): a person's own small movements, written beside them in people.js ----------
+/** Adds small movements to the rig's own (FIDGETS, above), each { ms, hold, make(o) } as those are, so that a person's
+    own can be written beside them in people.js (the bigger Rome's are). A name the rig already has is not replaced: the
+    console says so, and the rig's own stays. */
+export function addMoves(table) {
+  for (const [name, m] of Object.entries(table)) {
+    if (FIDGETS[name]) { console.error(`rig.js: there is already a small movement called "${name}"; the new one is left out`); continue; }
+    FIDGETS[name] = m;
+  }
+}
+/** What a movement's make(o), or a hold (spec.holds), builds its key poses with, besides `o` itself (see kitOf). */
+export const moveKit = { cloneP, withArm, nodOf, free, smooth, span, spots, skeleton, torsoOf, between, legTo, STANCES, standPose, prayPose, ARM_KEYS };
+
 Object.assign(poses, {
   /** Getting up from their seat (k 0 to 1), or, backwards, sitting down: see risePose. */
   rise: (spec, k, inPlace = false) => risePose(spec, k, inPlace),
@@ -2027,17 +2158,20 @@ function headcloth(c, o) {
  * The Roman toga: one great length of white wool, over the left shoulder, round the back, under the right
  * arm, across the chest and up over the left shoulder again, so that the right arm is free and the left
  * carries the folds. (The wrap round the legs is the character's own long skirt, in the same cloth.)
- * o: mat, hood (true: pulled up over the head, as a man did who was about a god's business), edge (a border color).
+ * o: mat, hood (true: pulled up over the head, as a man did who was about a god's business), edge (a border color);
+ * (ROME-13P) scant: how much cloth there is, against an ordinary toga's 1 (less: one far too small for the man in it, its
+ * folds skimpy and pulled tight; more: a very large one), and hang: how much higher its ends and folds stop (in heights;
+ * less than 0: lower).
  */
 function toga(c, o) {
   const { J, limb, ball, fold, onHead, headPt, hp, trunkAt, trunkFacing, wide, deep, d, S, hy, tw, fine, under, cloth, parts } = c;
   const mat = o.mat, T = (x, y, z) => add(J.sh, J.torso([x, y, z])), chest = d.trunkTop[1], lie = { [parts.TORSO]: under, [parts.BELT]: under, [parts.SKIRT]: under, [parts.PELVIS]: under, [parts.COLLAR]: under };
-  const sw = d.shoulderW;
+  const sw = d.shoulderW, q = o.scant ?? 1;                             // (ROME-13P: q, the cloth there is)
   // the sweep across the chest, from under the right arm up to the left shoulder, and the same across the back
   for (const face of [1, -1]) {
     const a = trunkAt(d.waistY - 0.030, face > 0 ? 1.20 : Math.PI - 1.20, 0.006), m = trunkAt(d.waistY + 0.070, face > 0 ? 0.10 : Math.PI - 0.10, 0.012), b = T(-(sw - 0.016), 0.014, face * 0.022);
-    limb(a, m, 0.046, 0.043, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });
-    limb(m, b, 0.043, 0.034, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });
+    limb(a, m, 0.046 * q, 0.043 * q, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });      // (ROME-13P: * q)
+    limb(m, b, 0.043 * q, 0.034 * q, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: 0.5 });      // (ROME-13P: * q)
     if (fine) for (const dy of [0.022, 0.002, -0.018]) {
       const facing = trunkFacing(face > 0 ? 0 : Math.PI);
       fold(add(a, [0, dy + 0.016, 0]), add(m, [0, dy, 0]), parts.DRAPE, facing);
@@ -2050,15 +2184,15 @@ function toga(c, o) {
     }
   }
   // the weight of it on the left shoulder, and round the left arm, which holds the folds up
-  ball(add(J.L.shoulder, J.torso([0.010, 0.014, 0])), [0.046, 0.040, 0.052], mat, { part: parts.DRAPE }, tw);
+  ball(add(J.L.shoulder, J.torso([0.010, 0.014, 0])), [0.046 * q, 0.040 * q, 0.052 * q], mat, { part: parts.DRAPE }, tw);      // (ROME-13P: * q)
   const A = J.L, r = d.armR;
-  limb(A.shoulder, A.elbow, r[0] + 0.016, r[1] + 0.018, mat, { part: parts.DRAPE2 });
-  limb(A.elbow, mix(A.elbow, A.wrist, 0.80), r[1] + 0.018, r[2] + 0.018, mat, { part: parts.DRAPE2, hem: true });
+  limb(A.shoulder, A.elbow, r[0] + 0.016 * q, r[1] + 0.018 * q, mat, { part: parts.DRAPE2 });      // (ROME-13P: * q)
+  limb(A.elbow, mix(A.elbow, A.wrist, 0.80), r[1] + 0.018 * q, r[2] + 0.018 * q, mat, { part: parts.DRAPE2, hem: true });      // (ROME-13P: * q)
   // what hangs from the arm, and the two ends: one down the front from the left shoulder, one down the back
-  const hang = mix(A.elbow, A.wrist, 0.45), low = Math.min(J.L.knee[1], J.R.knee[1]) - 0.050;
-  limb(add(hang, [0, -0.010, 0]), [hang[0], Math.max(0.10, low + 0.040), hang[2]], 0.032, 0.040, mat, { part: parts.DRAPE2, hem: true, depth: 0.6 });
+  const hang = mix(A.elbow, A.wrist, 0.45), low = Math.min(J.L.knee[1], J.R.knee[1]) - 0.050 + (o.hang ?? 0);     // (ROME-13P: o.hang)
+  limb(add(hang, [0, -0.010, 0]), [hang[0], Math.max(0.10, low + 0.040), hang[2]], 0.032 * q, 0.040 * q, mat, { part: parts.DRAPE2, hem: true, depth: 0.6 });      // (ROME-13P: * q)
   for (const face of [1, -1]) {
-    const fall = [0.038, 0.020], foot = [0.046, 0.022], r0 = wide(fall), r1 = wide(foot);
+    const fall = [0.038 * q, 0.020], foot = [0.046 * q, 0.022], r0 = wide(fall), r1 = wide(foot);      // (ROME-13P: * q)
     const from = T(-(sw - 0.022), -0.020, face * (chest * 0.80)), to = [from[0] - 0.006, Math.max(0.08, low - (face > 0 ? 0 : 0.050)), from[2] + face * 0.016];
     limb(from, to, r0, r1, mat, { part: parts.DRAPE, over: lie, bias: cloth * 2.6, depth: deep(fall) / r0, hem: true });
     if (fine) for (const dx of [0.012, -0.012]) fold(add(from, [dx, -0.030, 0]), add(to, [dx * 1.4, 0.012, 0]), parts.DRAPE, trunkFacing(face > 0 ? -0.5 : Math.PI + 0.5));
@@ -2099,7 +2233,8 @@ function cloak(c, o) {
  * shoulder and the other behind.
  * o: mat; band (a material: dark bands woven across the cloth near each end, and a line along its edge);
  *    len and front (how far below the shoulders the end behind, and the end in front, hang); fringe (a material: a
- *    fringe of threads on each end).
+ *    fringe of threads on each end); (ROME-13P) tassels and thread (materials: a tassel at each of the four corners, and
+ *    a thread of the other color down each; tasselLen, how long).
  */
 function mantle(c, o) {
   const { J, limb, ball, fold, trunkAt, trunkFacing, wide, deep, d, tw, fine, under, cloth, parts } = c;
@@ -2134,6 +2269,14 @@ function mantle(c, o) {
       const by = c.S >= 64 ? 1 : 0, low = [to[0], to[1] - 0.026, to[2]];
       limb(add(to, [0, 0.004, 0]), low, r1, r1 * 0.96, o.fringe, { part: parts.DRAPE, over: lie, bias: cloth * 2.6, depth: deep(foot) / r1, squareStart: true, squareEnd: true,
         fn: (t, nx, ny, x) => (t > 0.25 && (x + by) % 2 ? null : undefined) });
+    }
+    // ROME-13P: o.tassels (a material) and o.thread (another): a tassel at each corner of each end, four in all, each with a
+    // thread of that color down it (Numbers 15:38). A thread is a line of one pixel, so it shows at any size.
+    if (o.tassels) for (const sd of [1, -1]) {
+      const at = add(to, J.torso([sd * foot[0] * 0.92, 0.004, face * 0.004])), tip = add(at, [sd * 0.003, -(o.tasselLen ?? 0.050), face * 0.006]);
+      limb(at, tip, 0.0062, 0.0050, o.tassels, { part: parts.DRAPE, over: lie, bias: cloth * 3.2 });
+      ball(add(at, [0, -0.004, 0]), [0.0085, 0.0070, 0.0085], o.tassels, { part: parts.DRAPE, over: lie, bias: cloth * 3.2 });      // (bound at the top)
+      if (o.thread) limb(add(at, [0, -0.008, face * 0.004]), add(tip, [0, 0.004, face * 0.004]), 0.0001, 0.0001, o.thread, { part: parts.FOOT.R, bias: cloth * 4, fn: (t, nx, ny) => (nx * nx + ny * ny > 0.36 ? null : undefined) });     // (as a string is drawn: one pixel, no shadow)
     }
   }
 }

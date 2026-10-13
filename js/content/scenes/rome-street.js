@@ -6,8 +6,18 @@
 //
 //   chain A   the washerwoman hands him the senator's clean toga to run up to the Forum, and
 //             lends him a small tunic when he has done it (the tunic comes off the low line).
-//   chain B   the snack-bar keeper feeds him, and hands him the soothsayer's breakfast to take up.
+//   chain B   the snack-bar keeper feeds him, and sends him up the Capitol after his boy, who has the soothsayer's
+//             breakfast (ROME-13S2: he used to hand it over himself).
 //   chain C   the fountain: one new silver coin, borrowed. Inside the temple it is his mirror.
+//
+// ROME-13S2 (round thirteen, the bigger Rome: briefs/ROME-13.md, "What changes in the act as built", 1, 3 and 5; and
+// SCENES-13R2.md). Chain B: the keeper still feeds him, every line, but no longer hands over the breakfast: his boy Titus
+// took it up the Capitol at first light, after the Ides ewe, and has not come back (rome.knowsBoy); Titus hands it over,
+// on the Capitol (rome-capitol.js). Chain A: shown the Gaul's toga (the senator's turn, on the steps), the washerwoman is
+// briefly mortified. Chain C: at the fountain Walnut says whose wish the coin was: Phyllis's, the garland woman's
+// (rome.knowsWish); the toss now waits for her leave. Walnut's tips follow the bigger act's beats, and his tip for the
+// Gaul says where the Senate meets today (rome.knowsSenate). The date seller sends a greeting to his wife's father across
+// the river, once. And a game saved before all this goes on (setup, enter).
 //
 // The street boy is the act's hint-giver: ask him what to do and his answer follows the story.
 //
@@ -36,6 +46,15 @@ const heard = (g, id) => !!g.store.data.seenLines[id];
 const twice = (first, second) => (g) => g.say(heard(g, first) ? second : first);
 /** Someone who can stand turns to the boy. */
 const turnTo = (g, who) => { const a = g.actor(who), me = g.lead; if (a && me) a.look(me.x, me.y); };
+/** ROME-13T: from the place to stand for the writing over the snack bar, his words would lie just where the keeper's face is,
+    behind his counter (farther back than the boy, so the engine does not lift them): for these lines they go over the
+    keeper's head (the sprite flag `clear`, as the date seller has it always), and then as before. */
+async function overKeeper(g, id) {
+  const k = g.actor("keeper"), lift = !!(k && k.flag), was = lift && !!(k.flags && k.flags.clear);
+  if (lift) k.flag("clear", true);
+  await g.say(id);
+  if (lift) k.flag("clear", was);
+}
 /** Two poses from the people's rig, asked for through a guard, so that a figure without them simply stands. */
 const hold = (a, on) => a && a.hold && a.hold(on);                // a hand kept held out
 const pray = (a, on) => a && a.pray && a.pray(on);                // head bowed, hands folded
@@ -55,23 +74,33 @@ async function stomp(g) {
 
 // ---------- chain B starts here: the snack bar ----------
 
-/** The first visit: the keeper feeds him (step one of Operation Find Dad), and gives him the errand. */
+/** ROME-13S2: is the keeper's boy home? (Titus has handed the breakfast over, on the Capitol, and run home.) */
+const titusHome = (g) => !!g.flag("rome.metTitus") && !!g.flag("rome.hasBreakfast");
+
+/** The first visit: the keeper feeds him (step one of Operation Find Dad), and gives him the errand.
+    ROME-13S2: the errand is his boy now (#4, The Keeper's Boy): Titus took the soothsayer's breakfast up the hill at first
+    light, after the Ides ewe, and has not come back. No breakfast is handed over. If the boy has been up the hill already,
+    he says so: he has met Titus (and the keeper sends him back up), or he walks in carrying the cloth itself. */
 async function firstHelping(g) {
   turnTo(g, "keeper");
   await g.say("rome.keeper.hi.1");
   await g.reach();
-  await g.say("rome.keeper.hi.2", "rome.keeper.hi.3", "rome.keeper.hi.4", "rome.keeper.hi.5", "rome.keeper.hi.6",
-    "rome.keeper.errand.1", "rome.keeper.errand.2", "rome.keeper.errand.3");
-  await g.reach();
-  g.give("breakfast");
-  g.flag("rome.hasBreakfast", true);
+  await g.say("rome.keeper.hi.2", "rome.keeper.hi.3", "rome.keeper.hi.4", "rome.keeper.hi.5", "rome.keeper.hi.6");
+  if (g.has("breakfast")) return g.say("rome.keeper.carrying.1", "rome.keeper.carrying.2", "rome.keeper.carrying.3");      // ROME-13S2
+  if (titusHome(g)) return g.say("rome.keeper.titus.1", "rome.keeper.titus.2");                                           // ROME-13S2 (and taken up the street already)
+  if (g.flag("rome.metTitus")) return g.say("rome.keeper.met.1", "rome.keeper.met.2");                                    // ROME-13S2
+  await g.say("rome.keeper.errand.1", "rome.keeper.errand.2", "rome.keeper.errand.ewe", "rome.keeper.errand.3");          // ROME-13S2 (the errand re-worded: his boy)
+  g.flag("rome.knowsBoy", true);                                                                                          // ROME-13S2
   await g.say("rome.keeper.errand.4");
 }
 
 const payWithQuarter = ["rome.keeper.ask.pay", "rome.keeper.ans.pay.1", "rome.keeper.ans.pay.2", "rome.keeper.ans.pay.3", "rome.keeper.ans.pay.4"];
 
 async function talkToKeeper(g) {
-  if (!g.flag("rome.hasBreakfast")) await firstHelping(g);       // the errand first; then whatever else there is to say
+  // ROME-13S2: the first visit is the one that feeds him (it no longer hands over the breakfast, so it is known by its
+  // first line); and once his boy is home, the first visit after that has his word about it
+  if (!heard(g, "rome.keeper.hi.1")) await firstHelping(g);      // the errand first; then whatever else there is to say
+  else if (titusHome(g) && !heard(g, "rome.keeper.titus.1")) { turnTo(g, "keeper"); await g.say("rome.keeper.titus.1", "rome.keeper.titus.2"); }
   turnTo(g, "keeper");
   for (;;) {
     const pick = await g.choose([
@@ -132,6 +161,20 @@ async function talkToWasher(g) {
   }
 }
 
+/** ROME-13S2: the Gaul's toga shown to her (the senator unfolded it on the steps: decision 2). The first time, her mix-up,
+    and she is mortified, briefly: she turns away for a moment, and back, brisk again. After that, once is enough. */
+async function showWasherGaulsToga(g) {
+  const washer = g.actor("washer");
+  turnTo(g, "washer");
+  if (heard(g, "rome.washer.gaultoga.1")) return g.say("rome.washer.gaultoga.again");
+  await g.say("rome.washer.gaultoga.1", "rome.washer.gaultoga.2");
+  if (washer) washer.face("SW");                                  // away from him, for a moment: she gave the wrong first
+  await g.say("rome.washer.gaultoga.3");
+  await g.wait(350);
+  turnTo(g, "washer");                                            // and round again: standing here will not swap them
+  await g.say("rome.washer.gaultoga.4");
+}
+
 /** Reaching for the small tunic on the low line. */
 async function reachForTunic(g) {
   turnTo(g, "washer");
@@ -149,6 +192,12 @@ async function borrowWish(g) {
   g.give("coin");
   g.flag("rome.hasCoin", true);
   await g.say("rome.fountain.shiny", "rome.fountain.wish.1", "rome.fountain.wish.2");    // new, and shiny: that is what it is for
+  // ROME-13S2: and whose wish it was (NEW 4, Interest Is Extra Wishes): Walnut, from his kerb, and the boy, turned to him.
+  const me = g.lead, walnut = g.actor("urchin");
+  if (me && walnut) me.look(walnut.x, walnut.y);
+  await g.say("rome.fountain.wish.3", "rome.fountain.wish.4");
+  g.flag("rome.knowsWish", true);
+  if (me) me.face("E");                                           // ROME-13S2: back to the coin in his hand, by the water
   // His first hard look at it. It is the coin of the story he knows (Matthew 22:17-21, in his own words), and it
   // is not: he has known since he walked into this street that he is on the wrong side of that story. "Not yet."
   await g.wait(450);
@@ -167,14 +216,18 @@ async function meetUrchin(g) {
   g.flag("rome.metUrchin", true);
 }
 
-/** What the boy asks him for help with, and what he answers: both follow the story. */
+/** What the boy asks him for help with, and what he answers: both follow the story.
+    ROME-13S2: in the order of the bigger act's beats (the Hint's order): the door the size of a coin waits for Phyllis's
+    leave (her wish, her lamp to Felix, his word back to her); chain A has the senator's turn (the Gaul's toga, the swap,
+    the right toga run back up); chain B has the keeper's boy, up the hill with the breakfast, and Juno's geese. */
 function askForHelp(g) {
-  if (g.flag("rome.doorOpen")) return ["rome.urchin.ask.tiny", "rome.urchin.tip.toss"];
-  if (g.flag("rome.inside")) return g.flag("rome.hasCoin") ? ["rome.urchin.ask.light", "rome.urchin.tip.spark"] : ["rome.urchin.ask.light", "rome.urchin.tip.shiny.1", "rome.urchin.tip.shiny.2"];
-  if (!g.flag("rome.knowsRule")) return ["rome.urchin.ask.help", "rome.urchin.tip.rule"];
-  if (!g.flag("rome.hasTunic")) return ["rome.urchin.ask.help", !g.flag("rome.hasToga") ? "rome.urchin.tip.toga" : !g.flag("rome.delivered") ? "rome.urchin.tip.deliver" : "rome.urchin.tip.tunic"];
-  if (!g.flag("rome.hasIncense")) return g.flag("rome.hasBreakfast") ? ["rome.urchin.ask.help", "rome.urchin.tip.incense"] : ["rome.urchin.ask.help", "rome.urchin.tip.breakfast.1", "rome.urchin.tip.breakfast.2"];
-  return ["rome.urchin.ask.help", "rome.urchin.tip.inside"];
+  const f = (fact) => !!g.flag(`rome.${fact}`), tip = (...ids) => ids.map((id) => `rome.urchin.tip.${id}`);
+  if (f("doorOpen")) return ["rome.urchin.ask.tiny", ...(!f("wishGranted") ? tip(!f("hasLamp") ? "wish" : !f("felixWord") ? "felix" : "granted") : tip("toss"))];
+  if (f("inside")) return ["rome.urchin.ask.light", ...(f("hasCoin") ? tip("spark") : tip("shiny.1", "shiny.2"))];
+  if (!f("knowsRule")) return ["rome.urchin.ask.help", ...tip("rule")];
+  if (!f("hasTunic")) return ["rome.urchin.ask.help", ...tip(!f("hasToga") ? "toga" : !f("wrongToga") ? "deliver" : !f("swapped") ? "gaul" : !f("delivered") ? "redeliver" : "tunic")];
+  if (!f("hasIncense")) return ["rome.urchin.ask.help", ...(f("hasBreakfast") ? tip("incense") : f("knowsBoy") ? tip("geese") : tip("breakfast.1", "breakfast.2"))];
+  return ["rome.urchin.ask.help", ...tip("inside")];
 }
 
 async function talkToUrchin(g) {
@@ -187,8 +240,10 @@ async function talkToUrchin(g) {
       { id: "temple", line: "rome.urchin.ask.temple" },
       { id: "bye", line: "rome.urchin.ask.bye" },
     ]);
-    if (pick === "help") await g.say(...help);
-    else if (pick === "game") {
+    if (pick === "help") {
+      await g.say(...help);
+      if (help.includes("rome.urchin.tip.gaul")) g.flag("rome.knowsSenate", true);       // ROME-13S2: it says where the Senate meets today
+    } else if (pick === "game") {
       await g.say("rome.urchin.ask.game", "rome.urchin.ans.game.1", "rome.urchin.ans.game.2");
       await g.reach(true);                                        // his throw
       await g.say("rome.urchin.ans.game.3", "rome.urchin.ans.game.4", "rome.urchin.ans.game.5");
@@ -242,6 +297,15 @@ async function whatHePraysFor(g, seller) {
   pray(me, false);
   await g.wait(350);
   await g.say("rome.dateseller.bless.2");
+  await greetEleazar(g);                                          // ROME-13S2
+}
+
+/** ROME-13S2: his one new line, once: after his blessing, or at his goodbye, whichever comes first. His wife's father
+    reads in the house of prayer across the river (across the Tiber: rome-tiber.js). He is in no puzzle. */
+async function greetEleazar(g) {
+  if (heard(g, "rome.dateseller.eleazar")) return;
+  await g.wait(300);
+  await g.say("rome.dateseller.eleazar");
 }
 
 async function talkToDateSeller(g) {
@@ -261,10 +325,31 @@ async function talkToDateSeller(g) {
     else if (pick === "pray") await whatHePraysFor(g, seller);
     else {
       await g.say("rome.dateseller.ask.bye", "rome.dateseller.ans.bye");
+      await greetEleazar(g);                                      // ROME-13S2
       if (seller) seller.face(SELLER_FACES);                      // and he goes back to his watching
       return;
     }
   }
+}
+
+/** ROME-13S: a game saved before the bigger Rome. The steps it never had to take count as taken. Safe to run every time. */
+function fromOldSave(g) {
+  const heard = (id) => !!g.store.data.seenLines[id];
+  if (g.flag("rome.delivered") && !g.flag("rome.swapped")) { g.flag("rome.wrongToga", true); g.flag("rome.swapped", true); }
+  if (g.flag("rome.hasBreakfast") && !g.flag("rome.knowsBoy")) { g.flag("rome.knowsBoy", true); g.flag("rome.geeseGone", true); }
+  if (heard("rome.senator.ans.late.1") && !g.flag("rome.knowsSenate")) g.flag("rome.knowsSenate", true);
+}
+
+/** ROME-13S2: a game saved with the coin before Walnut said whose wish it was (before the bigger Rome): the next time the
+    boy walks into the street, Walnut calls it out from his kerb, and the boy turns to him. Then the toss waits for
+    Phyllis's leave, as in a new game. */
+async function whoseWish(g) {
+  if (!g.flag("rome.hasCoin") || g.flag("rome.knowsWish") || g.flag("rome.wishGranted") || g.flag("rome.tossed")) return;
+  const me = g.lead, walnut = g.actor("urchin");
+  await g.wait(300);
+  if (me && walnut) me.look(walnut.x, walnut.y);
+  await g.say("rome.urchin.wish.1", "rome.urchin.wish.2");
+  g.flag("rome.knowsWish", true);
 }
 
 /** The three stepping stones are three things to click on, and all say the same. The second look is at the road itself. */
@@ -400,7 +485,7 @@ export default {
     { id: "stepping-stones-2", ...stones, poly: [[312, 448], [353, 448], [354, 479], [311, 479]] },      // the one by the washerwoman
     { id: "stepping-stones-3", ...stones, poly: [[447, 450], [485, 450], [486, 479], [446, 479]] },      // the one by the date seller's feet
     { id: "laundry", name: "washing lines", poly: [[247, 136], [248, 140], [260, 143], [263, 179], [285, 215], [303, 229], [324, 237], [331, 231], [341, 229], [354, 218], [369, 196], [372, 182], [385, 179], [385, 156], [401, 158], [406, 155], [404, 136], [407, 134], [449, 134], [451, 160], [456, 169], [457, 192], [462, 195], [475, 193], [480, 190], [482, 180], [490, 180], [493, 211], [498, 214], [522, 212], [530, 207], [531, 200], [541, 202], [540, 221], [547, 226], [560, 220], [572, 222], [578, 218], [598, 215], [603, 212], [602, 135], [613, 131], [614, 128], [610, 125], [572, 133], [571, 123], [589, 118], [590, 114], [587, 112], [534, 119], [571, 108], [568, 103], [502, 117], [406, 120], [347, 113], [293, 100], [290, 102], [291, 106], [319, 113], [320, 118], [267, 108], [264, 114], [274, 118], [275, 137], [264, 138], [251, 134]], walkTo: [387, 481], face: "N", look: twice("rome.laundry.look", "rome.laundry.look2") },      // the sheets on the two high lines, and the lines between them (not the low line: the tunic hangs on that). Since round four the washing is in pieces, so Show outlines this shape, which hugs it.
-    { id: "notices", name: "writing on the wall", poly: [[10, 215], [165, 215], [168, 221], [235, 221], [235, 245], [165, 248], [10, 248]], walkTo: [166, 537], face: "N", look: twice("rome.notices.look", "rome.notices.look2") },   // the red letters over the snack bar: MARCVS, and VOTA
+    { id: "notices", name: "writing on the wall", poly: [[10, 215], [165, 215], [168, 221], [235, 221], [235, 245], [165, 248], [10, 248]], walkTo: [166, 537], face: "N", look: (g) => overKeeper(g, heard(g, "rome.notices.look") ? "rome.notices.look2" : "rome.notices.look") },   // the red letters over the snack bar: MARCVS, and VOTA (ROME-13T: over the keeper's head)
     {
       id: "snack-bar", name: "snack bar", verb: "Order at", poly: [[0, 261], [203, 261], [206, 268], [200, 302], [203, 330], [204, 406], [207, 410], [205, 425], [197, 428], [197, 481], [52, 481], [51, 424], [47, 409], [50, 331], [34, 328], [33, 349], [15, 349], [14, 328], [0, 328]], walkTo: [139, 488], face: "N",      // the awning, the garlic, the shelves, the stove and the counter
       look: twice("rome.snackbar.look", "rome.snackbar.look2"), use: talkToKeeper,
@@ -438,12 +523,14 @@ export default {
         coin: ["rome.keeper.coin.1", "rome.keeper.coin.2", "rome.keeper.coin.3", "rome.keeper.coin.4"],
         gum: ["rome.keeper.gum.1", "rome.keeper.gum.2"],
         toga: "rome.keeper.toga", breakfast: "rome.keeper.breakfast",
+        gaultoga: "rome.keeper.gaultoga", lamp: "rome.keeper.lamp",          // ROME-13S2: the bigger Rome's two new things
       },
     },
     {
       id: "washer", name: "washerwoman", verb: "Talk to", poly: [[332, 387], [325, 389], [321, 394], [324, 407], [302, 427], [302, 432], [316, 441], [314, 485], [318, 489], [318, 505], [324, 509], [328, 509], [333, 505], [341, 506], [344, 504], [344, 501], [340, 498], [340, 489], [344, 486], [343, 443], [348, 420], [347, 414], [338, 406], [340, 403], [339, 392]], walkTo: [392, 512], face: "W",
       look: twice("rome.washer.look", "rome.washer.look2"), use: talkToWasher,
-      useWith: { toga: "rome.washer.toga", coin: "rome.washer.coin", breakfast: "rome.washer.breakfast", tunic: "rome.washer.tunic.back" },
+      useWith: { toga: "rome.washer.toga", coin: "rome.washer.coin", breakfast: "rome.washer.breakfast", tunic: "rome.washer.tunic.back",
+        gaultoga: showWasherGaulsToga, lamp: "rome.washer.lamp" },                   // ROME-13S2: the bigger Rome's two new things
     },
     {
       id: "urchin", name: "street boy", verb: "Talk to", poly: [[520, 468], [514, 468], [507, 473], [506, 483], [513, 491], [512, 501], [497, 512], [493, 531], [485, 535], [485, 542], [490, 545], [498, 545], [502, 542], [502, 537], [508, 525], [527, 530], [533, 524], [534, 518], [529, 493], [525, 489], [528, 484], [528, 475]], walkTo: [452, 538], face: "E",
@@ -454,6 +541,7 @@ export default {
         phone: ["rome.urchin.phone.1", "rome.urchin.phone.2", "rome.urchin.phone.3", "rome.urchin.phone.4"],
         quarter: ["rome.urchin.quarter.1", "rome.urchin.quarter.2"],
         toga: "rome.urchin.toga", breakfast: "rome.urchin.breakfast",
+        gaultoga: "rome.urchin.gaultoga", lamp: "rome.urchin.lamp",          // ROME-13S2: the bigger Rome's two new things
       },
     },
     {
@@ -464,15 +552,28 @@ export default {
         quarter: showSeller("rome.dateseller.quarter.1", "rome.dateseller.quarter.2"),
         phone: showSeller("rome.dateseller.phone"), toga: showSeller("rome.dateseller.toga"), coin: showSeller("rome.dateseller.coin.1", "rome.dateseller.coin.2"),
         breakfast: showSeller("rome.dateseller.breakfast"),      // the soothsayer's, and so his hens (briefs/DATING.md): not by hens, thank you
+        gaultoga: showSeller("rome.dateseller.gaultoga"), lamp: showSeller("rome.dateseller.lamp"),     // ROME-13S2: the bigger Rome's two new things
       },
     },
   ],
+
+  // ROME-13S2: runs as the scene is built, and after a save is loaded: a game saved before the bigger Rome goes on.
+  setup(g) {
+    fromOldSave(g);
+    // ROME-13S2: the date seller stands in the middle of the street, farther back than everybody who talks to the boy, and
+    // his face is just where the words of Walnut on his kerb (the bigger Rome's long new tips, and Phyllis's wish at the
+    // fountain), of the boy beside him, and of the boy in the roadway, would go. The engine lifts their words over his head
+    // (the sprite flag `clear`, as for Grandma Jolene behind her counter, and Titus on his base on the Capitol).
+    const seller = g.actor("dateseller");
+    if (seller && seller.flag) seller.flag("clear", true);
+  },
 
   // Runs when the lead arrives. It must be safe to run twice, so each remark checks its own fact.
   // The first time, the keeper is crying his wares, and the name he cries tells the boy when he is: before Christ.
   // (Two facts, so that a game saved in this street before that was written still gets it, the next time he comes.)
   async enter(g, from) {
     if (from === "rome-steps") await g.walkTo(404, 494);          // he comes down the street toward us, between the stepping stones
+    await whoseWish(g);                                           // ROME-13S2: a game saved with the coin before the bigger Rome
     const first = !g.flag("rome.sawStreet");
     if (!first && g.flag("rome.knowsBC")) return;
     await g.wait(300);

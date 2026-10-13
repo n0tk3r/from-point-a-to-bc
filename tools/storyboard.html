@@ -1,10 +1,13 @@
 <!doctype html>
-<html lang="en" data-build="d3a35b6434">
+<html lang="en" data-build="363971fc62">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storyboard: From Point A to B.C.</title>
 <meta name="robots" content="noindex">
+<!-- EMBLEM-13: the game's emblem in the tab, as on the game's own page -->
+<link rel="icon" type="image/png" sizes="32x32" href="../art/emblem/icon-32.png">
+<link rel="apple-touch-icon" href="../art/emblem/icon-180.png">
 <link rel="stylesheet" href="../css/tokens.css?v=cb303b498b">
 <style>
   /* A working page for the people making the game. It reads the same files the game
@@ -62,68 +65,89 @@
   button:hover, button:focus-visible { background: #5ef2ff; outline: none; }
   /* so the drawings look as they do in the game, minus the motion */
   .ring, .glow, .tw, .ripple, .sway, .flicker { animation: none; }
+  /* ROME-13E: the maps of the acts' ways */
+  .map { margin-top: 20px; padding: 16px; background: #221a15; border-top: 3px solid #5ef2ff; }
+  .map .board { position: relative; margin-top: 12px; overflow-x: auto; max-width: 100%; }
+  .map .plane { position: relative; }
+  .map .plane > svg { position: absolute; inset: 0; overflow: visible; }
+  .map .place { position: absolute; margin: 0; width: 160px; background: #2e231b; }
+  .map .place img, .map .place .none { display: block; width: 160px; height: 120px; object-fit: cover; image-rendering: auto; }
+  .map .place .none { display: grid; place-items: center; padding: 8px; text-align: center; color: #c9b48a; font-size: 13px; border: 1px dashed #6b5f72; }
+  .map .place figcaption { padding: 3px 6px; font-size: 12px; line-height: 1.3; }
+  .map .way { position: absolute; transform: translate(-50%, -50%); max-width: 136px; font-size: 11px; line-height: 1.25; text-align: center; color: #e8f9ff; text-shadow: 0 0 3px #17120f, 0 0 3px #17120f; pointer-events: none; }
+  .map .way.door { color: #f1d9a2; }
+  .map .way.away { color: #dcc8ff; max-width: 150px; }
+  .map table.ways { font-size: 13px; }
+  .map table.ways td { vertical-align: top; }
+  .map .bad { margin: 8px 0 0; color: #ff5ec8; }
+  .map .gone { color: #ff5ec8; }
 </style>
 <!-- files: written by tools/stamp.py. Each address changes when its file changes, so a browser cannot mix old files with new. -->
 <script type="importmap">
 {
   "imports": {
     "../js/art/kit.js": "../js/art/kit.js?v=d13709e29d",
-    "../js/art/look-data.js": "../js/art/look-data.js?v=e7220757af",
+    "../js/art/look-data.js": "../js/art/look-data.js?v=2f908c99ad",
     "../js/art/look.js": "../js/art/look.js?v=d79dc1514b",
     "../js/art/painted.js": "../js/art/painted.js?v=9d8ca7d403",
-    "../js/art/people.js": "../js/art/people.js?v=f6aaccc08a",
+    "../js/art/people.js": "../js/art/people.js?v=f7a7989c65",
     "../js/art/pix.js": "../js/art/pix.js?v=cc956c7242",
     "../js/art/props.js": "../js/art/props.js?v=f1a88e489d",
-    "../js/art/rig.js": "../js/art/rig.js?v=95e9a1f577",
-    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=f6c68f4596",
+    "../js/art/rig.js": "../js/art/rig.js?v=0307b4ae8e",
+    "../js/content/acts/egypt.js": "../js/content/acts/egypt.js?v=95774048ed",
     "../js/content/acts/home.js": "../js/content/acts/home.js?v=fb878f4e85",
     "../js/content/acts/limo.js": "../js/content/acts/limo.js?v=07ea29d6e0",
     "../js/content/acts/nevada.js": "../js/content/acts/nevada.js?v=00d6174842",
     "../js/content/acts/prologue.js": "../js/content/acts/prologue.js?v=e657c02ab6",
-    "../js/content/acts/rome.js": "../js/content/acts/rome.js?v=11dc5b9891",
-    "../js/content/checkpoints.js": "../js/content/checkpoints.js?v=f7d604673c",
+    "../js/content/acts/rome.js": "../js/content/acts/rome.js?v=462e4cb363",
+    "../js/content/checkpoints.js": "../js/content/checkpoints.js?v=34a4e4f868",
     "../js/content/cutscenes/backup.js": "../js/content/cutscenes/backup.js?v=59f3c9408c",
     "../js/content/cutscenes/highway.js": "../js/content/cutscenes/highway.js?v=b693935cd2",
     "../js/content/cutscenes/intro.js": "../js/content/cutscenes/intro.js?v=b58eb5180c",
     "../js/content/cutscenes/title.js": "../js/content/cutscenes/title.js?v=66416c94db",
     "../js/content/lines.en.js": "../js/content/lines.en.js?v=12993cb3aa",
     "../js/content/lines/common.en.js": "../js/content/lines/common.en.js?v=756f42c212",
-    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=30994977a5",
+    "../js/content/lines/egypt.en.js": "../js/content/lines/egypt.en.js?v=50cb84b0a6",
     "../js/content/lines/home.en.js": "../js/content/lines/home.en.js?v=6978cefc85",
     "../js/content/lines/limo.en.js": "../js/content/lines/limo.en.js?v=3fe5953e2e",
     "../js/content/lines/nevada.en.js": "../js/content/lines/nevada.en.js?v=85f244e986",
-    "../js/content/lines/rome.en.js": "../js/content/lines/rome.en.js?v=a469fe59f0",
+    "../js/content/lines/rome.en.js": "../js/content/lines/rome.en.js?v=91f69d8ac6",
+    "../js/content/scenes/egypt-car.js": "../js/content/scenes/egypt-car.js?v=ba761cfc9b",
     "../js/content/scenes/egypt-chamber.js": "../js/content/scenes/egypt-chamber.js?v=fe0a691ed5",
-    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=c952f9e885",
+    "../js/content/scenes/egypt-crash.js": "../js/content/scenes/egypt-crash.js?v=378b30c852",
     "../js/content/scenes/egypt-gallery.js": "../js/content/scenes/egypt-gallery.js?v=e951e3ba04",
     "../js/content/scenes/egypt-site.js": "../js/content/scenes/egypt-site.js?v=2a57673e44",
-    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=5a5069905a",
+    "../js/content/scenes/engine-proof.js": "../js/content/scenes/engine-proof.js?v=0ffe847509",
     "../js/content/scenes/home-bigsis-room.js": "../js/content/scenes/home-bigsis-room.js?v=0b538db4d9",
     "../js/content/scenes/home-landing.js": "../js/content/scenes/home-landing.js?v=ff66d03df2",
     "../js/content/scenes/home-lilsis-room.js": "../js/content/scenes/home-lilsis-room.js?v=148d1d6f79",
     "../js/content/scenes/home-living-room.js": "../js/content/scenes/home-living-room.js?v=1008526237",
     "../js/content/scenes/home-study.js": "../js/content/scenes/home-study.js?v=5b22b148dc",
-    "../js/content/scenes/index.js": "../js/content/scenes/index.js?v=543bc8235b",
+    "../js/content/scenes/index.js": "../js/content/scenes/index.js?v=9b043bf3b0",
     "../js/content/scenes/nevada-limo.js": "../js/content/scenes/nevada-limo.js?v=1bbb413c4a",
     "../js/content/scenes/nevada-roadside.js": "../js/content/scenes/nevada-roadside.js?v=765bf90de8",
     "../js/content/scenes/nevada-store.js": "../js/content/scenes/nevada-store.js?v=da2def3ee8",
-    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=69f8c9c9dc",
-    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=846d230e2a",
-    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=1a866aea09",
+    "../js/content/scenes/rome-capitol.js": "../js/content/scenes/rome-capitol.js?v=a6f6de4659",
+    "../js/content/scenes/rome-forum.js": "../js/content/scenes/rome-forum.js?v=7ec7e4c1a5",
+    "../js/content/scenes/rome-steps.js": "../js/content/scenes/rome-steps.js?v=97b4a1e896",
+    "../js/content/scenes/rome-street.js": "../js/content/scenes/rome-street.js?v=905f7f3057",
+    "../js/content/scenes/rome-temple.js": "../js/content/scenes/rome-temple.js?v=6a16a8bbe9",
+    "../js/content/scenes/rome-tiber.js": "../js/content/scenes/rome-tiber.js?v=726414d794",
     "../js/content/scenes/sketch-example.js": "../js/content/scenes/sketch-example.js?v=51e81ac160",
-    "../js/content/sound.js": "../js/content/sound.js?v=006a07c55b",
+    "../js/content/sound.js": "../js/content/sound.js?v=e295978ebc",
     "../js/content/story.js": "../js/content/story.js?v=4eb7fc1463",
     "../js/content/talk/nevada.js": "../js/content/talk/nevada.js?v=034ccaff4d",
-    "../js/content/world.js": "../js/content/world.js?v=228fdf47c8",
+    "../js/content/talk/rome.js": "../js/content/talk/rome.js?v=c8bf5eb460",
+    "../js/content/world.js": "../js/content/world.js?v=18c0f6497c",
     "../js/engine/assets.js": "../js/engine/assets.js?v=16940f3d58",
     "../js/engine/audio.js": "../js/engine/audio.js?v=6159df06e2",
-    "../js/engine/cast.js": "../js/engine/cast.js?v=658997cfa1",
+    "../js/engine/cast.js": "../js/engine/cast.js?v=b041938ec6",
     "../js/engine/clock.js": "../js/engine/clock.js?v=6108df5801",
-    "../js/engine/dialogue.js": "../js/engine/dialogue.js?v=e195750fd9",
+    "../js/engine/dialogue.js": "../js/engine/dialogue.js?v=f2361d20e7",
     "../js/engine/edges.js": "../js/engine/edges.js?v=9b47be934e",
-    "../js/engine/effects.js": "../js/engine/effects.js?v=2a327687cf",
+    "../js/engine/effects.js": "../js/engine/effects.js?v=b3b57e3028",
     "../js/engine/fx.js": "../js/engine/fx.js?v=04bfeb4b61",
-    "../js/engine/game.js": "../js/engine/game.js?v=1ad94b3f75",
+    "../js/engine/game.js": "../js/engine/game.js?v=b1771a6a9c",
     "../js/engine/grid.js": "../js/engine/grid.js?v=701c0b36ab",
     "../js/engine/life.js": "../js/engine/life.js?v=66eea0aa58",
     "../js/engine/outline.js": "../js/engine/outline.js?v=80797bf388",
@@ -139,6 +163,15 @@
 </script>
 <script type="application/json" id="art-stamps">
 {
+  "art/emblem/icon-180.png": "03b9fba9ce",
+  "art/emblem/icon-32.png": "c3c4f106e1",
+  "art/emblem/timer-2x.png": "398f0d9384",
+  "art/emblem/timer-sky-2x.png": "107b064ec4",
+  "art/emblem/timer-sky.png": "4578026b42",
+  "art/emblem/timer-top-2x.png": "e26c9c8f90",
+  "art/emblem/timer-top.png": "30ce7330d8",
+  "art/emblem/timer-turn.png": "947a423afc",
+  "art/emblem/timer.png": "a281ceb0e7",
   "art/items/batteries.png": "9a3147e583",
   "art/items/breakfast.png": "c35a87bef9",
   "art/items/carkey.png": "804f175eed",
@@ -148,8 +181,10 @@
   "art/items/coppermirror.png": "e3520ec4d6",
   "art/items/egg.png": "742aa55d45",
   "art/items/flashlight.png": "e0bed70580",
+  "art/items/gaultoga.png": "648d22efe5",
   "art/items/gum.png": "90d1830697",
   "art/items/incense.png": "78e349e960",
+  "art/items/lamp.png": "94e0419ea2",
   "art/items/lilflash.png": "0769a9ea57",
   "art/items/map.png": "ea8bfbf629",
   "art/items/mirrorshades.png": "b5ee84c727",
@@ -168,11 +203,12 @@
   "art/items/storeshade.png": "2d15131be6",
   "art/items/studykey.png": "37326dd931",
   "art/items/sunglasses.png": "fb20ed6164",
-  "art/items/toga.png": "c6b5a40078",
+  "art/items/toga.png": "dddd097ef2",
   "art/items/tunic.png": "d582f05040",
   "art/items/waters.png": "60385893c0",
   "art/portraits/ranger-face.png": "ba73490578",
   "art/portraits/ranger-shades-face.png": "b10925fb98",
+  "art/proof/boat.png": "3362c5fb97",
   "art/proof/critter-face.png": "31701afcc8",
   "art/proof/critter-look-0.png": "bab2314d2e",
   "art/proof/critter-nibble-0.png": "11bb91e39d",
@@ -226,19 +262,48 @@
   "art/proof/critter-wash-2.png": "28bcb07a53",
   "art/proof/critter-wash-3.png": "851c17d414",
   "art/proof/critter.json": "791e4148a4",
+  "art/proof/goose-flap-0.png": "5ad3ee9d9c",
+  "art/proof/goose-flap-1.png": "b60a303ab8",
+  "art/proof/goose-look-0.png": "af48800052",
+  "art/proof/goose-look-1.png": "91bdf5855b",
+  "art/proof/goose-peck-0.png": "b2c019c25c",
+  "art/proof/goose-peck-1.png": "693ddb40e2",
+  "art/proof/goose-run-0.png": "457d5d8fc4",
+  "art/proof/goose-run-1.png": "0ea1e01141",
+  "art/proof/goose-run-2.png": "04c00245c6",
+  "art/proof/goose-run-3.png": "c98a0d7543",
+  "art/proof/goose-stand-0.png": "5d17bf16b0",
+  "art/proof/goose-stand-1.png": "04c8f79b5d",
+  "art/proof/goose-turn-0.png": "eac32fd616",
+  "art/proof/goose-walk-0.png": "7da90b4951",
+  "art/proof/goose-walk-1.png": "8e46960954",
+  "art/proof/goose-walk-2.png": "6747d254c3",
+  "art/proof/goose-walk-3.png": "a285be875f",
+  "art/proof/pen-back.png": "28b2791c7f",
+  "art/proof/pen.png": "989b04fde6",
+  "art/proof/room.png": "35892e7290",
   "art/proof/strip.png": "447c88b241",
+  "art/proof/wall.png": "51aedd0d7e",
   "art/proof/window.png": "91dc46f92a",
+  "art/scenes/egypt-car/back.png": "fb2051ff14",
+  "art/scenes/egypt-car/freshener.png": "253fe41433",
+  "art/scenes/egypt-car/glovebox-empty.png": "514cfaebd0",
+  "art/scenes/egypt-car/glovebox-map.png": "600a851601",
+  "art/scenes/egypt-car/glovebox-shut.png": "c73034d48e",
+  "art/scenes/egypt-car/layout.json": "49bb55aa65",
+  "art/scenes/egypt-car/visor-down.png": "ce80de2af8",
+  "art/scenes/egypt-car/visor-up.png": "40ac0bbe4a",
   "art/scenes/egypt-chamber/back.png": "ef91991374",
   "art/scenes/egypt-chamber/bench.png": "4a9ba57580",
   "art/scenes/egypt-chamber/front.png": "d377e66ed9",
   "art/scenes/egypt-chamber/layout.json": "80112047b6",
   "art/scenes/egypt-chamber/mirror.png": "f909ff7b44",
-  "art/scenes/egypt-crash/back.png": "99c00cdd9c",
-  "art/scenes/egypt-crash/cooler-open.png": "ffe8ecd337",
+  "art/scenes/egypt-crash/back.png": "dfe146b759",
+  "art/scenes/egypt-crash/cooler-open.png": "c4e379baf8",
   "art/scenes/egypt-crash/donkey.png": "833e31ecb8",
   "art/scenes/egypt-crash/front.png": "ded02344d0",
-  "art/scenes/egypt-crash/layout.json": "9463fc2291",
-  "art/scenes/egypt-crash/mirror.png": "92c0866958",
+  "art/scenes/egypt-crash/layout.json": "b46e6e3488",
+  "art/scenes/egypt-crash/mirror.png": "0711755858",
   "art/scenes/egypt-crash/palm-1.png": "b418d9acab",
   "art/scenes/egypt-crash/palm-2.png": "e15a916b67",
   "art/scenes/egypt-crash/palm-3.png": "d100dd4e5d",
@@ -247,11 +312,11 @@
   "art/scenes/egypt-crash/steam-1.png": "746324d7d1",
   "art/scenes/egypt-crash/steam-2.png": "b447096130",
   "art/scenes/egypt-crash/steam-3.png": "28a65cc818",
-  "art/scenes/egypt-crash/suitcase-open.png": "3dea9d5042",
-  "art/scenes/egypt-crash/trunk-open-1.png": "f71ce6a3a4",
-  "art/scenes/egypt-crash/trunk-open-2.png": "4b5ffdb873",
-  "art/scenes/egypt-crash/trunk-open.png": "d67204655d",
-  "art/scenes/egypt-crash/wagon.png": "0e924b7b29",
+  "art/scenes/egypt-crash/suitcase-open.png": "e0eeb13e9c",
+  "art/scenes/egypt-crash/trunk-open-1.png": "58dc700e7f",
+  "art/scenes/egypt-crash/trunk-open-2.png": "07988d8950",
+  "art/scenes/egypt-crash/trunk-open.png": "f1307b7287",
+  "art/scenes/egypt-crash/wagon.png": "fd9fa2a31c",
   "art/scenes/egypt-gallery/back.png": "1a41637d92",
   "art/scenes/egypt-gallery/front.png": "0de1c6953d",
   "art/scenes/egypt-gallery/layout.json": "1f1940d324",
@@ -457,6 +522,68 @@
   "art/scenes/nevada-store/tv-1.png": "d9af8c254c",
   "art/scenes/nevada-store/tv-2.png": "9934e237c7",
   "art/scenes/nevada-store/window-shade.png": "a03a339970",
+  "art/scenes/rome-capitol/altar.png": "25344ac850",
+  "art/scenes/rome-capitol/back.png": "61315a70ff",
+  "art/scenes/rome-capitol/chariot.png": "a7ff8045bc",
+  "art/scenes/rome-capitol/goose-1.png": "439a36431e",
+  "art/scenes/rome-capitol/goose-10.png": "dde35041b2",
+  "art/scenes/rome-capitol/goose-11.png": "592f443e84",
+  "art/scenes/rome-capitol/goose-12.png": "01207001cf",
+  "art/scenes/rome-capitol/goose-13.png": "4af4a7373a",
+  "art/scenes/rome-capitol/goose-14.png": "5dee28b8ce",
+  "art/scenes/rome-capitol/goose-15.png": "9dcf85ec68",
+  "art/scenes/rome-capitol/goose-16.png": "9f0b0548c2",
+  "art/scenes/rome-capitol/goose-17.png": "a94f2744d9",
+  "art/scenes/rome-capitol/goose-2.png": "b2396f3641",
+  "art/scenes/rome-capitol/goose-3.png": "79b2c71254",
+  "art/scenes/rome-capitol/goose-4.png": "94f2cf85fc",
+  "art/scenes/rome-capitol/goose-5.png": "1e7c57682d",
+  "art/scenes/rome-capitol/goose-6.png": "5e2576732a",
+  "art/scenes/rome-capitol/goose-7.png": "4c89c2c6da",
+  "art/scenes/rome-capitol/goose-8.png": "01020d51a8",
+  "art/scenes/rome-capitol/goose-9.png": "2eaaf4272d",
+  "art/scenes/rome-capitol/goose-grey-1.png": "5c722b1a68",
+  "art/scenes/rome-capitol/goose-grey-10.png": "a8ebfb8d6a",
+  "art/scenes/rome-capitol/goose-grey-11.png": "fd0f9c04b5",
+  "art/scenes/rome-capitol/goose-grey-12.png": "c20ba73d03",
+  "art/scenes/rome-capitol/goose-grey-13.png": "22b8819111",
+  "art/scenes/rome-capitol/goose-grey-14.png": "51e7b82127",
+  "art/scenes/rome-capitol/goose-grey-15.png": "fa12a5cce6",
+  "art/scenes/rome-capitol/goose-grey-16.png": "1522111957",
+  "art/scenes/rome-capitol/goose-grey-17.png": "73b3c4da5d",
+  "art/scenes/rome-capitol/goose-grey-2.png": "5bd4417247",
+  "art/scenes/rome-capitol/goose-grey-3.png": "89f6fc31dd",
+  "art/scenes/rome-capitol/goose-grey-4.png": "7ec86e7600",
+  "art/scenes/rome-capitol/goose-grey-5.png": "e177fe8abd",
+  "art/scenes/rome-capitol/goose-grey-6.png": "cc0f12ea25",
+  "art/scenes/rome-capitol/goose-grey-7.png": "3cee6448e3",
+  "art/scenes/rome-capitol/goose-grey-8.png": "b17c4a4c1a",
+  "art/scenes/rome-capitol/goose-grey-9.png": "7c433aea92",
+  "art/scenes/rome-capitol/hut.png": "16ead33c52",
+  "art/scenes/rome-capitol/layout.json": "d6be123261",
+  "art/scenes/rome-capitol/parapet.png": "2f282df8ec",
+  "art/scenes/rome-capitol/pen.png": "349945f714",
+  "art/scenes/rome-capitol/tablets.png": "d14399b037",
+  "art/scenes/rome-capitol/world.png": "9165ff9bb8",
+  "art/scenes/rome-forum/awning.png": "641312cb5c",
+  "art/scenes/rome-forum/back.png": "56e7f2ed55",
+  "art/scenes/rome-forum/basin.png": "87f4085244",
+  "art/scenes/rome-forum/castor.png": "a5ed8ccbc5",
+  "art/scenes/rome-forum/crane-0.png": "1efe75e443",
+  "art/scenes/rome-forum/crane-1.png": "5341da3809",
+  "art/scenes/rome-forum/crane-2.png": "f09dace34a",
+  "art/scenes/rome-forum/crane-3.png": "ee148543c1",
+  "art/scenes/rome-forum/crane-4.png": "5f9749825f",
+  "art/scenes/rome-forum/crane-5.png": "08f777bada",
+  "art/scenes/rome-forum/front-base.png": "30eca3e63f",
+  "art/scenes/rome-forum/hoarding-near.png": "44b09cd2b9",
+  "art/scenes/rome-forum/hoarding.png": "5ae23f400d",
+  "art/scenes/rome-forum/layout.json": "97f249eb12",
+  "art/scenes/rome-forum/puteal.png": "78cfe2bfd5",
+  "art/scenes/rome-forum/statue-1.png": "f31b7ac3c8",
+  "art/scenes/rome-forum/statue-2.png": "135948e55f",
+  "art/scenes/rome-forum/statue-3.png": "79782e1ec3",
+  "art/scenes/rome-forum/table.png": "ea9bd8f31a",
   "art/scenes/rome-steps/altar.png": "d3380a7c46",
   "art/scenes/rome-steps/back.png": "bfcb181339",
   "art/scenes/rome-steps/cage-front.png": "8dedbbf5c4",
@@ -644,7 +771,35 @@
   "art/scenes/rome-temple/back.png": "6f847547a8",
   "art/scenes/rome-temple/front.png": "335a3f493e",
   "art/scenes/rome-temple/layout.json": "2981565152",
-  "art/scenes/rome-temple/table.png": "f6a6735b37"
+  "art/scenes/rome-temple/table.png": "f6a6735b37",
+  "art/scenes/rome-tiber/back.png": "32cc7bde28",
+  "art/scenes/rome-tiber/barge.png": "24e3f99787",
+  "art/scenes/rome-tiber/curb.png": "59e9506ce1",
+  "art/scenes/rome-tiber/fence-corner.png": "9bfe503a81",
+  "art/scenes/rome-tiber/fence.png": "2b35e36a07",
+  "art/scenes/rome-tiber/hen-brown-1.png": "cc5b7a2789",
+  "art/scenes/rome-tiber/hen-brown-2.png": "099605bcad",
+  "art/scenes/rome-tiber/hen-brown-3.png": "ae244bee22",
+  "art/scenes/rome-tiber/hen-brown-4.png": "cad926890f",
+  "art/scenes/rome-tiber/hen-brown-5.png": "452c045e54",
+  "art/scenes/rome-tiber/hen-brown-6.png": "c2d6781e66",
+  "art/scenes/rome-tiber/hen-speckled-1.png": "a354c0d5e3",
+  "art/scenes/rome-tiber/hen-speckled-2.png": "c14307545d",
+  "art/scenes/rome-tiber/hen-speckled-3.png": "3f7676e1bb",
+  "art/scenes/rome-tiber/hen-speckled-4.png": "d3b8f4e198",
+  "art/scenes/rome-tiber/hen-speckled-5.png": "31958d9d2e",
+  "art/scenes/rome-tiber/hen-speckled-6.png": "72d441ed68",
+  "art/scenes/rome-tiber/hen-white-1.png": "21d1a6f643",
+  "art/scenes/rome-tiber/hen-white-2.png": "6bf081e4f8",
+  "art/scenes/rome-tiber/hen-white-3.png": "46f33d0a63",
+  "art/scenes/rome-tiber/hen-white-4.png": "5f047be3ca",
+  "art/scenes/rome-tiber/hen-white-5.png": "34798d3b2d",
+  "art/scenes/rome-tiber/hen-white-6.png": "bf61a00514",
+  "art/scenes/rome-tiber/landing-edge.png": "e4016c5102",
+  "art/scenes/rome-tiber/layout.json": "f8a1d5b8ce",
+  "art/scenes/rome-tiber/washing.png": "cfc1c5b190",
+  "art/scenes/rome-tiber/well.png": "07439a182d",
+  "art/scenes/rome-tiber/window-wall.png": "f0a4a2b660"
 }
 </script>
 <!-- /files -->
@@ -659,6 +814,11 @@
   <h2>Acts and beats</h2>
   <p class="dim">Beats in different chains can be done in any order. The gate needs all of them. <span style="color:#b58cff">Violet</span> is a cutscene, <span style="color:#5ef2ff">cyan</span> a puzzle, <span style="color:#ff5ec8">magenta</span> the gate.</p>
   <div id="acts"></div>
+
+  <!-- ROME-13E: the map of each act's ways -->
+  <h2>Maps</h2>
+  <p class="dim">Each act's places, laid out by the ways between them, from the same files the game reads (each scene's <code>edges</code>, its <code>exits</code> and its <code>spawn</code> marks): what a scene's bottom edge leads to is drawn below it, its top edge above it, its left edge to its left and its right edge to its right. A <span style="color:#5ef2ff">solid line</span> is a way out at an edge of the picture, with what the label line says over it; a <span style="color:#d6ae62">dashed line</span> is a door or a thing to click (what its label says, when a script there names the place); a <span style="color:#ffe36b">diamond</span> marks a way that is there only some of the time (its <code>when</code>); a <span style="color:#b58cff">violet arrow</span> leaves the map for another act's place. Under each map, every way, and where it arrives.</p>
+  <div id="maps"></div>
 
   <h2>Scenes</h2>
   <p class="dim">Each scene as it is when the story first gets there: its painted backdrop with its cut-outs laid over it and its people in place (a scene with no painting yet is sketched in its era's colors). Cyan shapes are clickable areas. The dashed magenta outline is where the lead can walk; solid magenta patches are ground something stands on, to walk around. A yellow line is the base of a painted cut-out: people whose feet are above it are drawn behind that cut-out. All the numbers are pixels on the 800x600 picture.</p>
@@ -688,8 +848,11 @@
   import { url, picture } from "../js/engine/assets.js";
   import { scaleAt } from "../js/engine/walk.js";
   import { W, H } from "../js/engine/grid.js";
+  import { edgeLabel } from "../js/engine/edges.js";            // ROME-13E: what the label line says over a way out (the maps)
 
-  const sceneList = await Promise.all(sceneIds.map(loadScene));
+  // ROME-13E: a scene file that will not load is left out (and said so in red, under "Maps"), and the page goes on
+  const unloaded = {};
+  const sceneList = (await Promise.all(sceneIds.map((id) => loadScene(id).catch((err) => { console.error(`Storyboard: the scene "${id}" could not be loaded:`, err); unloaded[id] = err; return null; })))).filter(Boolean);
   const scenes = Object.fromEntries(sceneList.map((s) => [s.id, s]));
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const $ = (id) => document.getElementById(id);
@@ -716,6 +879,181 @@
       <p>${esc(act.summary)}</p>
       <div class="lanes">${lanes.map(([name, beats]) => `<div class="lane"><b>${name}</b>${beats.map(beat).join("")}</div>`).join("")}</div></section>`;
   }).join("");
+
+  // ---- ROME-13E: maps ----
+  // Each act's places, laid out by their ways, from the scenes' own data (each scene's `edges`, its `exits`, and the `spawn`
+  // marks they arrive at): a scene's bottom edge leads below it, its top edge above it, its left edge to its left and its
+  // right edge to its right. The first place laid out stays put; a place whose cell is taken goes to the next free one that
+  // way. A place reached only by a door or a thing to click (in `exits`, with no edge between the two) goes beside, its line
+  // dashed; a way to another act's place is an arrow off the map. Under each map, a table of every way. Nothing here stops the
+  // page: a scene that will not load, or a way to a scene that is not there, is said in red.
+  {
+    const CW = 160, CH = 154, GX = 150, GY = 96;                               // a place (its picture, 160 x 120, and its name on up to two lines), and the gaps between
+    const STEP = { N: [0, -1], S: [0, 1], W: [-1, 0], E: [1, 0] };
+    const cutscenes = new Set(["intro", "title"]);
+    const nameOf = (id) => (scenes[id] ? scenes[id].name : id);
+    const actNaming = (id) => story.acts.find((a) => a.beats.some((b) => b.scene === id)) || null;
+    const source = (f) => (typeof f === "function" ? String(f) : f && typeof f === "object" && !Array.isArray(f) ? Object.values(f).map(source).join("\n") : "");
+    /** The spawn marks of `to` that a script names (the marks it arrives at), or null. */
+    const spawnIn = (f, to) => {
+      const marks = Object.keys((scenes[to] && scenes[to].spawn) || {}), said = [...source(f).matchAll(/["'`](\w+)["'`]/g)].map((m) => m[1]);
+      const found = [...new Set(said.filter((w) => marks.includes(w)))];
+      return found.length ? found.join(" / ") : null;
+    };
+    /** A door or a thing to click whose script names `to`: what the label line says over it, where it arrives, whether it is there only sometimes. */
+    const doorTo = (s, to) => {
+      const named = new RegExp(`["'\`]${to}["'\`]`), h = (s.hotspots || []).find((spot) => named.test(source(spot.use)));
+      return h ? { label: `${h.verb || (h.use ? "Use" : "Look at")} ${h.name}`, spawn: spawnIn(h.use, to), when: !!h.when } : { label: "(by a script)", spawn: null, when: false };
+    };
+    /** Every way out of a scene: its edges, then the scenes in its exits that no edge of its leads to. */
+    const waysOf = (s) => {
+      const out = [];
+      for (const [side, way] of Object.entries(s.edges || {})) {
+        if (!way || typeof way !== "object") continue;
+        out.push({ from: s.id, side, to: way.to || null, edge: true, label: edgeLabel(way, way.to ? nameOf(way.to) : ""), spawn: way.spawn || (way.use ? spawnIn(way.use, way.to) : null), when: !!way.when });
+      }
+      for (const to of s.exits || []) if (!out.some((w) => w.to === to)) out.push({ from: s.id, side: "door", to, edge: false, ...doorTo(s, to) });
+      return out;
+    };
+    const named = (act) => [...new Set(act.beats.map((b) => b.scene).filter(Boolean))];
+    const tabled = new Set();                 // scenes whose ways are in a table already: a scene in two acts' maps is tabled once
+    for (const act of story.acts) {
+      const section = document.createElement("section");
+      section.className = "map"; section.dataset.act = act.id;
+      section.innerHTML = `<header><h3>${esc(act.title)}</h3></header>`;
+      $("maps").appendChild(section);
+      try { drawMap(act, section); }
+      catch (err) { console.error(`Storyboard: the map of "${act.title}" could not be drawn:`, err); section.insertAdjacentHTML("beforeend", `<p class="bad">Could not be drawn: ${esc(err.message)}</p>`); }
+    }
+
+    function drawMap(act, section) {
+      const others = new Set(story.acts.filter((a) => a !== act).flatMap(named)), bad = [];
+      // its places: the scenes its beats name, and the places of its era they lead to that no other act's beats name
+      const places = named(act).filter((id) => scenes[id] || cutscenes.has(id) || unloaded[id] || (bad.push(`A beat names "${id}", which is not a scene in js/content/scenes/index.js.`), false));
+      for (let i = 0; i < places.length; i++) {
+        const s = scenes[places[i]];
+        if (s) for (const w of waysOf(s)) if (w.to && scenes[w.to] && !places.includes(w.to) && scenes[w.to].era === act.era && !others.has(w.to)) places.push(w.to);
+      }
+      for (const id of places) if (unloaded[id]) bad.push(`The scene "${id}" could not be loaded: ${unloaded[id].message || unloaded[id]}`);
+      const ways = places.flatMap((id) => (scenes[id] ? waysOf(scenes[id]) : []));
+      for (const w of ways) if (!w.to) bad.push(`${nameOf(w.from)}: its way at the ${w.side} edge goes nowhere (no \`to\`).`);
+      else if (!scenes[w.to] && !unloaded[w.to]) bad.push(`${nameOf(w.from)}: its way ${w.edge ? "at the " + w.side + " edge" : "through a door"} goes to "${w.to}", which is not a scene in js/content/scenes/index.js.`);
+
+      // lay them out on a grid of cells
+      const at = new Map(), taken = new Set(), key = (c, r) => c + "," + r, queue = [];
+      const put = (id, c, r, dc = 1, dr = 0) => { while (taken.has(key(c, r))) { c += dc; r += dr; } at.set(id, [c, r]); taken.add(key(c, r)); };
+      // ROME-13T: a place whose edge leads to a place laid out, when the cell that edge asks for is taken, goes first to a free
+      // cell beside that one (across the way: left, then right, of a way up or down; above, then below, of a way across), so
+      // that its line stays short and clear; only then on, the way it was going. (Act One: the wagon's inside, whose bottom
+      // edge leads to the river, was put a whole place above the pyramid's foot, with one long curve down to the river.)
+      const putBy = (id, c, r, dc, dr) => { const free = [[c - Math.abs(dr), r - Math.abs(dc)], [c + Math.abs(dr), r + Math.abs(dc)]].find(([x, y]) => !taken.has(key(x, y))); if (taken.has(key(c, r)) && free) [c, r] = free; put(id, c, r, dc, dr); };
+      while (at.size < places.length) {
+        if (!queue.length) {                    // the first place; then one reached by a door from a place laid out (beside it); then any other, to the right
+          const door = ways.find((w) => !w.edge && at.has(w.from) && places.includes(w.to) && !at.has(w.to)), next = door ? door.to : places.find((id) => !at.has(id));
+          if (!at.size) put(next, 0, 0);
+          else if (door) { const [c, r] = at.get(door.from), [dc, dr] = [[1, 0], [-1, 0], [0, 1], [0, -1]].find(([x, y]) => !taken.has(key(c + x, r + y))) || [1, 0]; put(next, c + dc, r + dr, dc, dr); }
+          else put(next, Math.max(...[...at.values()].map(([c]) => c)) + 1, 0);
+          queue.push(next);
+        }
+        const id = queue.shift(), [c, r] = at.get(id);
+        for (const w of ways) {
+          if (!w.edge || !STEP[w.side]) continue;
+          const [dc, dr] = STEP[w.side];
+          if (w.from === id && places.includes(w.to) && !at.has(w.to)) { put(w.to, c + dc, r + dr, dc, dr); queue.push(w.to); }                   // where its edge leads
+          else if (w.to === id && places.includes(w.from) && !at.has(w.from)) { putBy(w.from, c - dc, r - dr, -dc, -dr); queue.push(w.from); }    // a place whose edge leads here (ROME-13T: putBy)
+        }
+      }
+      // ways to another act's place (or another era's): an arrow off the map, from a side of the place that has room
+      const away = [], used = new Set();
+      for (const w of ways) {
+        if (!w.to || !scenes[w.to] || at.has(w.to) || away.some((v) => v.w.from === w.from && v.w.to === w.to)) continue;
+        const [c, r] = at.get(w.from), dir = [[1, 0], [0, 1], [-1, 0], [0, -1]].find(([x, y]) => !taken.has(key(c + x, r + y)) && !used.has(`${w.from}${x}${y}`)) || [1, 0];
+        used.add(`${w.from}${dir[0]}${dir[1]}`); away.push({ w, dir });
+      }
+      // Everything is laid out first, in cells of the grid, then the board is made big enough for all of it.
+      const [c0, r0] = [Math.min(...[...at.values()].map(([c]) => c)), Math.min(...[...at.values()].map(([, r]) => r))];
+      const box = (id) => { const [c, r] = at.get(id); return [(c - c0) * (CW + GX), (r - r0) * (CH + GY), CW, CH]; };
+      const mid = (b) => [b[0] + b[2] / 2, b[1] + b[3] / 2];
+      /** Where a line from the middle of a box toward (tx, ty) leaves the box. */
+      const rim = (b, tx, ty) => { const [cx, cy] = mid(b), dx = tx - cx, dy = ty - cy, k = Math.min(dx ? b[2] / 2 / Math.abs(dx) : Infinity, dy ? b[3] / 2 / Math.abs(dy) : Infinity); return [cx + dx * k, cy + dy * k]; };
+      const ext = [Infinity, Infinity, -Infinity, -Infinity], grow = (x0, y0, x1, y1) => { ext[0] = Math.min(ext[0], x0); ext[1] = Math.min(ext[1], y0); ext[2] = Math.max(ext[2], x1); ext[3] = Math.max(ext[3], y1); };
+      const svg = [], labels = [], blocks = places.map(box);             // (`blocks`: what a bent line must keep clear of)
+      const label = (text, x, y, nx, ny, cls) => {             // beside a line, on the side (nx, ny) points to
+        const across = Math.abs(nx) < Math.abs(ny), w = 140, h = 30;
+        labels.push({ text, x, y, cls, shift: across ? `translate(-50%, ${ny < 0 ? "-100%" : "0"})` : `translate(${nx < 0 ? "-100%" : "0"}, -50%)` });
+        grow(across ? x - w / 2 : nx < 0 ? x - w : x, across ? (ny < 0 ? y - h : y) : y - h / 2, across ? x + w / 2 : nx < 0 ? x : x + w, across ? (ny < 0 ? y : y + h) : y + h / 2);
+      };
+      for (const b of blocks) grow(b[0], b[1], b[0] + b[2], b[1] + b[3]);
+      for (const { w, dir: [dc, dr] } of away) {
+        const b = box(w.from), [cx, cy] = mid(b), [sx, sy] = rim(b, cx + dc * 1000, cy + dr * 1000), ex = sx + dc * 70, ey = sy + dr * 44, there = actNaming(w.to);
+        svg.push(`<path d="M${sx} ${sy} L${ex} ${ey}" stroke="#b58cff" stroke-width="2"${w.edge ? "" : ' stroke-dasharray="7 5"'} marker-end="url(#m${act.id}a)"/>`);
+        if (w.when) svg.push(`<path d="M${(sx + ex) / 2} ${(sy + ey) / 2 - 6} l6 6 l-6 6 l-6 -6 z" fill="#ffe36b" stroke="#17120f"/>`);
+        label(`${w.label}: to ${there && there !== act ? there.title.split(":")[0] + ", " : ""}${nameOf(w.to)}`, ex + dc * 6, ey + dr * 6, dc || 0.01, dr, "away");
+        blocks.push([Math.min(sx, ex) - (dr ? 75 : 0) - (dc < 0 ? 146 : 0), Math.min(sy, ey) - (dc ? 15 : 0), Math.abs(ex - sx) + (dr ? 150 : 146), Math.abs(ey - sy) + (dc ? 30 : 36)]);
+      }
+      // the ways between two places here: a line for each from, to and label (a scene's W and S edges that both go "down the
+      // stairs" are one line), side by side when there are several between the same two; a line that would cross another
+      // place (or an arrow off the map) is bent round it, its labels spread along it on the outside of the bend
+      const lines = new Map();
+      for (const w of ways) {
+        if (!w.to || !at.has(w.to) || w.from === w.to) continue;
+        const pair = [w.from, w.to].sort().join("|"), k = `${w.from}>${w.to}>${w.label}`;
+        if (!lines.has(pair)) lines.set(pair, new Map());
+        if (!lines.get(pair).has(k)) lines.get(pair).set(k, []);
+        lines.get(pair).get(k).push(w);
+      }
+      for (const [pair, group] of lines) {
+        const [a, b] = pair.split("|"), [ax, ay] = mid(box(a)), [bx, by] = mid(box(b)), len = Math.hypot(bx - ax, by - ay) || 1, nx = -(by - ay) / len, ny = (bx - ax) / len;     // across the line from a to b
+        const [ox, oy] = [(ax + bx) / 2, (ay + by) / 2], others = blocks.filter((q, i) => !(i < places.length && (places[i] === a || places[i] === b)));
+        const bez = (cx, cy, u) => [(1 - u) ** 2 * ax + 2 * (1 - u) * u * cx + u * u * bx, (1 - u) ** 2 * ay + 2 * (1 - u) * u * cy + u * u * by];
+        const clear = (cx, cy) => { for (let u = 0.08; u < 0.93; u += 0.02) { const [x, y] = bez(cx, cy, u); if (others.some((q) => x > q[0] - 8 && x < q[0] + q[2] + 8 && y > q[1] - 8 && y < q[1] + q[3] + 8)) return false; } return true; };
+        const bend = [0, -1, 1, -1.6, 1.6, -2.4, 2.4].map((k) => k * (CH + GY) * 0.55).find((k) => clear(ox + nx * k * 2, oy + ny * k * 2)) ?? 0;
+        const all = [...group.values()];
+        all.forEach((list, i) => {
+          const w = list[0], off = (i - (all.length - 1) / 2) * 7, side = off < 0 ? -1 : 1, when = list.some((v) => v.when);
+          const cx = ox + nx * bend * 2, cy = oy + ny * bend * 2, fb = box(w.from), tb = box(w.to), [fx, fy] = mid(fb), [tx, ty] = mid(tb);
+          const [sx, sy] = rim(fb, bend ? cx : tx, bend ? cy : ty), [ex, ey] = rim(tb, bend ? cx : fx, bend ? cy : fy);
+          const x1 = sx + nx * off, y1 = sy + ny * off, x2 = ex + nx * off, y2 = ey + ny * off, qx = cx + nx * off, qy = cy + ny * off;
+          svg.push(`<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} ${bend ? `Q${qx.toFixed(1)} ${qy.toFixed(1)}` : "L"} ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${w.edge ? "#5ef2ff" : "#d6ae62"}" stroke-width="2"${w.edge ? "" : ' stroke-dasharray="7 5"'} marker-end="url(#m${act.id}${w.edge ? "e" : "d"})"><title>${esc(nameOf(w.from))} to ${esc(nameOf(w.to))}: ${esc(w.label)}</title></path>`);
+          const point = (t) => (bend ? [(1 - t) ** 2 * x1 + 2 * (1 - t) * t * qx + t * t * x2, (1 - t) ** 2 * y1 + 2 * (1 - t) * t * qy + t * t * y2] : [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t]);
+          if (bend) for (let u = 0; u <= 1; u += 0.05) { const [x, y] = point(u); grow(x - 4, y - 4, x + 4, y + 4); }
+          // its label: straight, at its middle on its own side; bent, on the outside of the bend, each a little further along it the way it goes
+          const mates = bend ? all.filter((l) => l[0].from === w.from) : all.filter((l, j) => ((j - (all.length - 1) / 2) < 0 ? -1 : 1) === side), rank = mates.indexOf(list);
+          const t = bend ? (all.length > 1 ? Math.min(0.7, 0.3 + 0.2 * rank) : 0.5) : 0.5 + 0.26 * (rank - (mates.length - 1) / 2);
+          const [lx, ly] = point(t), out = bend ? Math.sign(bend) : side;
+          if (when) svg.push(`<path d="M${lx.toFixed(1)} ${(ly - 6).toFixed(1)} l6 6 l-6 6 l-6 -6 z" fill="#ffe36b" stroke="#17120f"><title>there only some of the time (its when)</title></path>`);
+          label(w.label, lx + nx * out * 9, ly + ny * out * 9, nx * out, ny * out, w.edge ? "edge" : "door");
+        });
+      }
+      // the board, big enough for all of it
+      const PAD = 12, dx = PAD - ext[0], dy = PAD - ext[1];
+      const board = document.createElement("div"), plane = document.createElement("div");
+      board.className = "board"; plane.className = "plane";
+      plane.style.width = `${Math.ceil(ext[2] - ext[0] + PAD * 2)}px`; plane.style.height = `${Math.ceil(ext[3] - ext[1] + PAD * 2)}px`;
+      const tip = (id, color) => `<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="${color}"/></marker>`;
+      plane.innerHTML = `<svg width="100%" height="100%"><defs>${tip(`m${act.id}e`, "#5ef2ff")}${tip(`m${act.id}d`, "#d6ae62")}${tip(`m${act.id}a`, "#b58cff")}</defs><g transform="translate(${dx.toFixed(1)} ${dy.toFixed(1)})">${svg.join("")}</g></svg>` +
+        labels.map((l) => `<span class="way ${l.cls}" style="left:${(l.x + dx).toFixed(1)}px;top:${(l.y + dy).toFixed(1)}px;transform:${l.shift}">${esc(l.text)}</span>`).join("");
+      for (const id of places) {
+        const s = scenes[id], [x, y] = box(id), fig = document.createElement("figure");
+        fig.className = "place"; fig.dataset.scene = id; fig.style.left = `${(x + dx).toFixed(1)}px`; fig.style.top = `${(y + dy).toFixed(1)}px`;
+        const pic = s && s.picture ? `<img src="${esc(url(s.picture))}" alt="">` : `<div class="none">${esc(s ? s.name : cutscenes.has(id) ? "a cut-scene" : id)}</div>`;
+        fig.innerHTML = `${pic}<figcaption>${esc(s ? s.name : cutscenes.has(id) ? `${id} (a cut-scene: no places)` : id)}${unloaded[id] ? ` <span class="gone">could not be loaded</span>` : ""}</figcaption>`;
+        plane.appendChild(fig);
+      }
+      board.appendChild(plane);
+      section.appendChild(board);
+      // the table: every way of the places here (a place tabled under an earlier act is not tabled again)
+      const rows = ways.filter((w) => !tabled.has(w.from));
+      for (const id of places) tabled.add(id);
+      const where = (w) => (w.spawn ? esc(w.spawn) : w.edge ? "its usual mark" : "&mdash;");
+      section.insertAdjacentHTML("beforeend", rows.length
+        ? `<table class="ways"><tr><th>From</th><th>The way</th><th>To</th><th>Arriving at</th><th>The label</th></tr>${rows.map((w) => `<tr data-from="${esc(w.from)}" data-side="${esc(w.side)}" data-to="${esc(w.to || "")}">
+            <td>${esc(nameOf(w.from))}</td><td>${w.edge ? `its ${{ N: "top", S: "bottom", W: "left", E: "right" }[w.side] || esc(w.side)} edge (${esc(w.side)})` : "a door, or a thing to click"}${w.when ? ", sometimes" : ""}</td>
+            <td>${esc(w.to ? nameOf(w.to) : "nowhere")}${w.to && !at.has(w.to) && actNaming(w.to) ? ` <span class="dim">(${esc(actNaming(w.to).title.split(":")[0])})</span>` : ""}</td><td>${where(w)}</td><td>${esc(w.label)}</td></tr>`).join("")}</table>`
+        : `<p class="dim">${places.every((id) => cutscenes.has(id)) ? "No places: it is a cut-scene." : "No ways that are not in an earlier act's table."}</p>`);
+      for (const text of bad) section.insertAdjacentHTML("beforeend", `<p class="bad">${esc(text)}</p>`);
+    }
+  }
 
   // ---- scenes ----
   // Each picture is built the way the game builds it (SceneView.show): the backdrop, the live light, the painted

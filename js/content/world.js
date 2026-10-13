@@ -31,6 +31,18 @@ export const cast = {
   doorkeeper: { name: "Doorkeeper", color: "#c9b08a", sprite: "doorkeeper" },
   clerk:    { name: "Clerk", color: "#e0b0a4", sprite: "clerk" },
   dateseller: { name: "Date Seller", color: "#e9c46a", sprite: "dateseller" },
+  // ROME-13P: the bigger Rome's seven (round thirteen). Names are plain roles (decision 11); each sprite is the kind a scene
+  // finds them as, and swaps for their other state under the same id (gaul-own, phyllis-free, titus-free, eleazar-window,
+  // felix-free in js/art/people.js). Colours: the design's proposals, moved the least that keeps each 21 or more (CIE Lab)
+  // from the Son's blue and 14 or more from everyone else (Mariam's is kept; the others stood within 4.6 to 9.8 of the
+  // narrator, the overseer, Little Sister, the date seller, the haulers and Mom).
+  gaul:     { name: "Gaulish Senator", color: "#ff9f8f", sprite: "gaul" },
+  phyllis:  { name: "Garland Seller", color: "#f1acdf", sprite: "phyllis" },
+  titus:    { name: "Keeper's Boy", color: "#ffca8a", sprite: "titus" },
+  anser:    { name: "Goose-Keeper", color: "#b3cc7b", sprite: "anser" },
+  eleazar:  { name: "Old Man", color: "#ebe698", sprite: "eleazar" },
+  mariam:   { name: "Girl", color: "#ffb8c8", sprite: "mariam" },
+  felix:    { name: "Boatman", color: "#70c79d", sprite: "felix" },
   // Nevada
   oldtimer: { name: "Old-Timer", color: "#e6d3a0", sprite: "oldtimer" },
   agent:    { name: "Man in Gray", color: "#c9ced6", sprite: "agent" },
@@ -81,6 +93,10 @@ export const items = {
   phone:     { name: "dead phone", icon: "phone.png", look: "item.phone.look" },
   quarter:   { name: "quarter", icon: "quarter.png", look: "item.quarter.look" },
   gum:       { name: "pack of gum", icon: "gum.png", look: "item.gum.look" },
+  // ROME-13W: the bigger Rome (round thirteen). The senator gives the Gaul's toga at his turn on the steps, and the Gaul
+  // takes it back at the swap; Phyllis gives the lamp, and Felix takes it. Their looks are in lines/rome.en.js.
+  gaultoga:  { name: "Gaul's toga", icon: "gaultoga.png", look: "item.gaultoga.look" },
+  lamp:      { name: "little clay lamp", icon: "lamp.png", look: "item.lamp.look" },
   // The coin goes on from the Son to Mom and the girls, so each of them has a line for it.
   coin: { name: "silver coin", icon: "coin.png", look: { son: "item.coin.look", mom: "item.coin.mom", bigsis: "item.coin.bigsis", lilsis: "item.coin.lilsis", any: "item.coin.look" } },
   // Act Three: each of the three has her own line for each thing

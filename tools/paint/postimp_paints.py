@@ -288,9 +288,13 @@ def people_key(key):
 SCENE_KEY = {
     "highway": "highway-dusk",                                                    # the title screen and the opening movie
     "egypt-crash": "egypt-noon", "egypt-site": "egypt-noon",                      # Act One
+    "egypt-car": "egypt-noon",                                                    # CAR-13P: inside the wagon, by the river's own light
     "egypt-gallery": "lamp-interior", "egypt-chamber": "lamp-interior",
     "rome-steps": "rome-morning", "rome-street": "rome-morning",                  # Act Two
     "rome-temple": "lamp-interior",
+    "rome-forum": "rome-morning",                                                 # ROME-13R1: the Forum, the same morning
+    "rome-capitol": "rome-morning",                                               # ROME-13R2: the Capitol, the same morning
+    "rome-tiber": "rome-morning",                                                 # ROME-13R3: across the Tiber, the same morning
     "home-living-room": "home-night", "home-landing": "home-night", "home-study": "home-night",     # Act Three
     "home-lilsis-room": "home-night", "home-bigsis-room": "home-night",
     "nevada-roadside": "nevada-morning",                                          # Act Four

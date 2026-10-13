@@ -4,13 +4,20 @@
 // The wagon is nose-down in the sand with the holiday luggage still tied to its roof, and his son's
 // sneaker prints go up the track to the pyramid. Nearly everything Dad will need is in or on the car:
 //
-//   the road map (glovebox)        any time    the scribe writes his pass on the back of it       chain A
+//   the road map (in the wagon)    any time    the scribe writes his pass on the back of it       chain A   (CAR-13S)
 //   a reed (the reed bed)          any time    the scribe's new pen                                chain A
 //   the flashlight (trunk)         any time    shows him that light opens the door                 chain B
 //   a root beer (cooler)           any time    the guard's price for holding the shade             chain C
 //   the sunglasses (suitcase)      any time    traded to the goldsmith for his copper mirror       chain C
 //   the windshield shade (trunk)   only once he knows the door wants light ("egypt.knowsLight")    chain C
 //   the door mirror (the wagon)    only then, too                                                  chain C
+//
+// CAR-13S: THE MAP IS INSIDE THE WAGON since round thirteen (briefs/CAR-13.md; the author asked for it on 8 October). The
+// driver's window is rolled down, and through it the inside of the car shows in warm shade. A click on the window ("Get
+// into driver's seat") or on the wagon ("Get in wagon") walks him to his door, he reaches for the handle, the latch, and
+// he is in the driver's seat: the scene egypt-car (egypt-car.js), seen through his own eyes, where the glovebox drops
+// open on the map. He comes out at his door here (the mark fromCar), facing out. The key, and the wagon's old "Start" and
+// its line, are in there too. The glovebox's area and its script (searchGlovebox) are gone from this scene.
 //
 // Whatever he takes out of the luggage on the roof POPS OUT: it jumps out of the opened lid in a little arc, lands
 // on the sand at his feet with a bounce and a puff of dust, and lies there while he says what it is; then he bends
@@ -25,7 +32,8 @@
 // (`chicken`), talks to her, and shows her to people; nobody he meets here has ever seen a chicken.
 //
 // THE DOOR MIRROR announces itself. Now and then a glint runs across it; and the first time Dad comes up to the car
-// (to look at any part of it, or to work at it: the glovebox is the first puzzle, so nobody misses it), the low sun
+// (to look at any part of it, or to work at it: the glovebox is the first puzzle, and the way to it is the window by the
+// mirror, CAR-13S, so nobody misses it), the low sun
 // off the mirror catches him in the eye: a flash at his face, he flinches and shades his eyes, and says so. Once.
 // It is the hint that the mirror is very reflective, long before he needs it. Both are light, drawn by code, and laid
 // in the cast just in front of the mirror and of him (glint, dazzle, below).
@@ -243,12 +251,13 @@ async function cutReed(g) {
   await g.say("egypt.reeds.basket.1", g.flag("egypt.heardAbram") ? "egypt.reeds.basket.3" : "egypt.reeds.basket.2");     // (once he knows, he knows Moses is still to come)
 }
 
-async function searchGlovebox(g) {
-  if (g.flag("egypt.hasMap")) return g.say("egypt.wagon.empty");
+// CAR-13S: the map is inside the wagon now (egypt-car.js: the glovebox drops open on it). The window and the wagon both
+// get him in: he has walked to his door (642, 563) and faces it; he reaches for the handle, the latch, the fade, and he is
+// in the driver's seat. The same era: no card. The door is never seen open.
+async function getIn(g) {
   await g.reach();
-  await g.say("egypt.wagon.use");
-  g.give("map");
-  g.flag("egypt.hasMap", true);
+  g.sfx("latch");
+  await g.goto("egypt-car", { spawn: "default" });
 }
 
 // ---------- what comes out of the luggage: it jumps out, lands on the sand, and lies there a moment ----------
@@ -516,8 +525,9 @@ export default {
   spawn: {
     default: [420, 570],            // where he climbs out
     fromSite: [500, 372],           // coming down the track (its far end is a long walk off, and he is a dot there)
+    fromCar: [642, 563],            // CAR-13S: out of the wagon, at his door (the painter's mark; he faces out, S)
   },
-  exits: ["egypt-site"],
+  exits: ["egypt-site", "egypt-car"],          // (CAR-13S: and into the wagon, by the window or the wagon itself)
   // The top of the picture is the way up the track: a click anywhere along it takes him to the foot of the track and on up.
   edges: {
     N: { to: "egypt-site", spawn: "fromCrash", name: "up the track", walkTo: [500, 372] },
@@ -626,8 +636,10 @@ export default {
     // Lot: a stranger on the screen until he has said who he is (one shape, one of the two showing at a time)
     { ...LOT, name: "herdsman", when: (g) => !g.flag("egypt.knowsLot") },
     { ...LOT, name: "Lot", when: (g) => !!g.flag("egypt.knowsLot") },
+    // CAR-13S: the wagon gets him in, as the window does (its "Start" and its line are the key's, inside), from his door:
+    // the painter's stand (642, 563), where it was (604, 563)
     atCar({
-      id: "wagon", name: "wagon", verb: "Start", plane: "wagon", walkTo: [604, 563], face: "N", look: "egypt.wagon.look", use: "egypt.wagon.try",
+      id: "wagon", name: "wagon", verb: "Get in", plane: "wagon", walkTo: [642, 563], face: "N", look: "egypt.wagon.look", use: getIn,
       poly: [[455, 494], [505, 480], [553, 473], [557, 469], [572, 443], [580, 437], [592, 432], [760, 433], [775, 463], [782, 500], [786, 508], [783, 514], [747, 518], [744, 531], [732, 539], [705, 540], [693, 531], [640, 530], [622, 533], [611, 525], [600, 521], [580, 513], [566, 507], [531, 504], [470, 499]],     // the car, up to its roof rack (not the sand heaped at its nose)
     }),
     atCar({
@@ -635,9 +647,11 @@ export default {
       look: twice("egypt.hood.look", "egypt.hood.look2"), use: "egypt.hood.use",
       useWith: { flashlight: (g) => g.say(g.flag("egypt.knowsLight") ? "egypt.flash.dead" : "egypt.hood.flashlight"), rootbeer: "egypt.hood.rootbeer" },
     }),
+    // CAR-13S: the driver's window, rolled down: the way into the wagon (the painter's thing "inside", where the glovebox's
+    // area was; the door mirror's area, last in this list, lies over its lower front corner, as the mirror does)
     atCar({
-      id: "glovebox", name: "glovebox", verb: "Search", poly: [[621, 488], [627, 463], [656, 458], [659, 483]], walkTo: [642, 563], face: "N",       // through the driver's window
-      look: (g) => g.say(g.flag("egypt.hasMap") ? "egypt.wagon.empty" : "egypt.glovebox.look"), use: searchGlovebox,
+      id: "inside", name: "driver's seat", verb: "Get into", poly: [[621, 488], [627, 463], [656, 458], [659, 483]], walkTo: [642, 563], face: "N",
+      look: (g) => g.say(g.flag("egypt.hasMap") ? "egypt.inside.look2" : "egypt.inside.look"), use: getIn,
     }),
     ...lidded({ id: "suitcase", name: "suitcase", verb: "Open", walkTo: [648, 563], face: "N", look: nearCar((g) => g.say(g.flag("egypt.suitcaseOpen") ? "egypt.suitcase.open" : "egypt.suitcase.look")), use: nearCar(searchSuitcase) },
       "egypt.suitcaseOpen", [[600, 434], [599, 419], [648, 413], [651, 426], [671, 438], [671, 440], [621, 446]], [[586, 381], [639, 375], [670, 424], [672, 441], [656, 451], [620, 447], [600, 434]]),

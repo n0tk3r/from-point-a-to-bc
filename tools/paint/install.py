@@ -30,8 +30,11 @@ PLACES = {"egypt1": "scenes/egypt-crash", "items": "items", "portraits": "portra
 # Everything that `python3 install.py` installs, in the order of the story.
 SCENES = [
     "highway",
-    "egypt1", "egypt-site", "egypt-gallery", "egypt-chamber",                                 # Act One
+    "egypt1", "egypt-car", "egypt-site", "egypt-gallery", "egypt-chamber",                    # Act One (egypt-car: CAR-13P)
     "rome-street", "rome-steps", "rome-temple",                                               # Act Two
+    "rome-forum",                                                                             # ROME-13R1: the bigger Rome's Forum
+    "rome-capitol",                                                                           # ROME-13R2: the Capitol (Act Two)
+    "rome-tiber",                                                                             # ROME-13R3: across the Tiber
     "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",  # Act Three: the house
     "nevada-roadside", "nevada-store",                                                        # Act Four (nevada-store: NEVADA-12B)
     "nevada-limo",                                                                            # Act Five (round twelve)

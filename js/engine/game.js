@@ -599,6 +599,12 @@ export class Game {
       const [mx, my] = this.map.nearest(mark[0], mark[1]);
       cast.addFigure(id, this.cast[id].sprite, mx, my, scaleAt(scene, my)).face(at.face ?? (scene.facing || "S"));
     });
+    // CAR-13E: a scene seen through the lead's own eyes (`unseen`: true, or a function of the game, read now, as `party` is).
+    // He is on the stage for everything that reaches for him (his place and facing, g.reach, what is saved), but never drawn:
+    // faded to nothing, which the cast does not draw and nothing in the engine sets back. Nor is anyone of the team who stands
+    // here. He walks and turns to nothing (stays), leaves by an edge at once (leave), and speaks from off the stage (dialogue.js).
+    this._unseen = (typeof scene.unseen === "function" ? scene.unseen(this) : scene.unseen) ? scene : null;
+    if (this._unseen) for (const id of new Set([d.active, ...d.team])) { const f = cast.get(id); if (f) f.fade(0); }
     if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts
     this.rebuildSpots();
     this.music(this.musicOf(scene));
@@ -638,6 +644,7 @@ export class Game {
     for (const a of scene.actors || []) {
       const f = cast.get(a.id);
       if (a.id === except || !f || f.hidden || a.solid === false) continue;
+      if (a.when && !a.when(this)) continue;      // ROME-13E: one person under two entries (at his window; down on the sand): only the entry the story has now takes up ground
       if (a.id === d.active || (d.team || []).includes(a.id)) continue;   // NEVADA-12E: one of the scene's people who has joined the team is a companion now, and companions do not block
       if (this.life.isAway(a.id)) {
         if (!a.when || a.when(this)) people.push(a.solid || patch(a.at[0], a.at[1], a.scale ?? scaleAt(scene, a.at[1])));
@@ -733,6 +740,7 @@ export class Game {
     for (const id of d.team) {
       const a = id === d.active ? null : this.actor(id);
       if (!a || own.has(id)) continue;
+      if (this.unseen && (a.hidden || !(a.opacity > 0))) continue;      // CAR-13E: no box round a companion the scene does not draw (give him a `mate:` area where the picture shows him)
       const w = 50 * a.scale, h = a.h * a.scale;
       spots.push({ id: "mate." + id, name: this.cast[id].name, verb: "Talk to", mate: id, rect: [a.x - w / 2, a.y - h, w, h] });
     }
@@ -854,9 +862,14 @@ export class Game {
       to the limousine's long seat. A click on the floor does nothing for him, and he does everything from where he sits,
       without walking to it or turning. */
   stays(who = this.store.data.active) {
+    if (this.unseen && this.leads.includes(who)) return true;     // CAR-13E: and every lead, in a scene seen through his own eyes
     const s = this.scene && this.scene.still;
     return !!s && (typeof s === "function" ? !!s(this, who) : Array.isArray(s) && s.includes(who));
   }
+
+  /** CAR-13E: is the scene on the stage seen through the lead's own eyes (its `unseen`, as it was read when the scene was
+      entered)? Then he is on the stage but not drawn, stays where he is, and leaves by an edge at once. */
+  get unseen() { return !!this.scene && this._unseen === this.scene; }
 
   walk(x, y) {
     const lead = this.lead, scene = this.scene;
@@ -887,6 +900,13 @@ export class Game {
    */
   leave(side, x = W / 2, y = H / 2) {
     const scene = this.scene, lead = this.lead, way = scene && scene.edges && scene.edges[side];
+    // CAR-13E: in a scene seen through the lead's own eyes nobody is seen walking, so there is no walk to wait for: a click in
+    // the band takes him out at once, by the way's `use` or g.goto(to, { spawn }), as below when the walk is done
+    if (this.unseen && lead && way && !this.busy && this.mode === "play" && open(way, this)) {
+      this._leaving = null;
+      this.run(async () => { if (way.use) await way.use(this); else await this.goto(way.to, { spawn: way.spawn }); }, { settle: !!way.use }).then(() => this.autosave());
+      return;
+    }
     if (!lead || !way || this.busy || this.mode !== "play" || !open(way, this) || this.stays()) return;      // (NEVADA-12SC: nor out by an edge)
     const target = way.walkTo || this.map.toward(side, x, y) || [lead.x, lead.y];
     const route = this.map.path([lead.x, lead.y], target), end = route[route.length - 1];

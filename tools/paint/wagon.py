@@ -394,9 +394,12 @@ def piece(shape, origin, which, opened=False, scale=1.0, tilt=7.0, take=()):
     return base.done() + lines.done()
 
 
-def wagon(shape, origin, scale=1.0, tilt=7.0, take=(), mirror=True, buried=True, seed=4):
+def wagon(shape, origin, scale=1.0, tilt=7.0, take=(), mirror=True, buried=True, seed=4, window="shut"):
     """-> (color, alpha) of the wagon on a clear sheet the size of the picture. `origin` is where its
-    rear wheel meets the ground."""
+    rear wheel meets the ground. CAR-13P: `window="open"` is the driver's window rolled down (round thirteen): the
+    base sheet is the same either way (the brush pass must not move: see render_pair), and the lines sheet gains the
+    top edge of the glass, wound down into the door, as a bright sliver at the sill; the inside of the car that shows
+    through the opening is window_inside()'s, laid in by render_pair between the brushing and these lines."""
     base, lines = Sheet(shape), Sheet(shape)
     d = Draft(base, (origin[0] - 232 * scale, origin[1]), scale, tilt, pivot=(232, 0), depth=(-0.50, 0.30))
     dl = Draft(lines, d.o, scale, tilt, pivot=(232, 0), depth=(-0.50, 0.30))
@@ -492,6 +495,8 @@ def wagon(shape, origin, scale=1.0, tilt=7.0, take=(), mirror=True, buried=True,
         d.poly([(x0 + 3, 72), (x1 - 2, 72), (x1 - 2, 86), (x0 + 9, 86)], GLASS["mid"])                # the far windows, seen through
         d.poly([(x0 + 4, 66), (x0 + 12, 66), (x0 + 24, 87), (x0 + 16, 87)], GLASS["sky"], 0.55)       # a slant of sky
         dl.line([w[0], w[1], w[2], w[3], w[0]], CHROME["light"], 0.9, 0.9)
+    if window == "open":                                                                   # CAR-13P: the glass wound down into the door: its top edge at the sill
+        dl.line([(139.4, 64.9), (175.6, 64.9)], "#eef6fa", 0.8, 0.95)
     d.poly([(194, 64), (212, 64), (212, 76), (208, 80), (198, 80), (194, 76)], "#0e1422")             # a seat back
     # seams, handles, the long bright line under the windows
     for px, y0 in ((136, 20), (179, 20), (225, 50)):                                       # (the rear door's seam stops at the wheel arch)
@@ -574,14 +579,100 @@ def thin(shape, origin, scale=1.0, take=()):
     return ((laid > 0.15) & ~solid & _inside((laid > 0.15) | solid)), solid
 
 
-def render_pair(shape, origin, scale=1.0, seed=4, back=None):
+# ---------------------------------------------------------------- CAR-13P: the driver's window, rolled down (round thirteen)
+WINDOW = [(138, 64), (147, 88), (176, 89), (176, 64)]       # the front door's window on our side, the driver's: bottom front, top front, top back, bottom back
+FAR_SILL = 7.0                                              # how much lower the far windows' sill is drawn, through the opening (window_inside)
+WHEEL_TURN = 40.0                                           # how far the wheel's rim is drawn turned toward us, so that it reads as a wheel (window_inside)
+INSIDE = dict(day="#fff7e6", sill="#3a2a20",                                               # the far windows, bright with daylight; the far sill
+              panel="#4e3828", panel_top="#634732", pillar="#3c2b20",                      # the passenger's door across the car, in shade
+              back="#a07850", back_top="#d2a870", back_end="#62452f", pleat="#7c5a3a",     # the front bench's back: tan cloth, its end darker tan vinyl
+              head="#86603e", head_top="#e6c08a", head_end="#56402c",                      # the driver's headrest, against the daylight
+              wheel="#171316", wheel_lit="#7a6252")                                        # the steering wheel: a dark, thin rim
+
+
+def window_inside(shape, origin, scale=1.0, tilt=7.0, seed=4):
+    """CAR-13P. The inside of the wagon as it shows through the driver's window, rolled down: a few clear shapes, not
+    detail, in warm shade, so that the opening reads as a hole into the car and not as glass. They are drawn in the car's
+    own measure through the same cabinet drawing as the car (a thing farther across the car is drawn up and to the left),
+    so they agree with it: far to near, the passenger's door across the car (its panel in deep shade, and above its sill
+    the foot of its windows, bright with daylight, along the top of the opening), the front bench's back in tan cloth
+    with the driver's headrest on it, against that daylight, and the steering wheel in front of the bench, a dark thin
+    rim seen nearly edge on. Looked at as the cabinet drawing looks, from in front of the car and above: the dashboard
+    and the windshield are hidden by the door's front edge, and the far windows' sill falls just above the top of the
+    opening (by a pixel: the far side is 21 pixels up and the car's tilt adds 4 more), so it is drawn FAR_SILL units
+    lower than the near sill, and their daylight shows along the top as the brief asks. Brushed lightly on its own seed,
+    so the wagon's own brushing is untouched; the daylight and the edges are said again crisply over the brushwork.
+    -> (color, alpha): alpha the opening, 0 everywhere else."""
+    base, lines = Sheet(shape), Sheet(shape)
+    d = Draft(base, (origin[0] - 232 * scale, origin[1]), scale, tilt, pivot=(232, 0), depth=(-0.50, 0.30))
+    dl = Draft(lines, d.o, scale, tilt, pivot=(232, 0), depth=(-0.50, 0.30))
+    I = INSIDE
+    s = 64 - FAR_SILL                                                                                   # the far sill, as drawn
+    # ---- across the car (z = D): the passenger's door panel, its sill, its two windows and the pillar between
+    d.poly([(100, 10, D), (250, 10, D), (250, s, D), (100, s, D)], I["panel"])
+    d.poly([(100, s - 6, D), (250, s - 6, D), (250, s, D), (100, s, D)], I["panel_top"])                # the padded top of the door, under the sill
+    d.poly([(100, s, D), (250, s, D), (250, 100, D), (100, 100, D)], I["day"])
+    d.poly([(176, s, D), (181, s, D), (181, 100, D), (176, 100, D)], I["pillar"])
+    # ---- the front bench's back, across the car, and the driver's headrest on it
+    x0, x1, y0, y1, z0, z1 = 164, 172, 30, 66, 3, 67
+    face = [(x0, y0, z0), (x0, y0, z1), (x0, y1, z1), (x0, y1, z0)]
+    d.poly(face, I["back"])                                                                              # its face, toward the windshield
+    d.poly([(x0, y1, z0), (x1, y1, z0), (x1, y1, z1), (x0, y1, z1)], I["back_top"])                     # its top
+    d.poly([(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0)], I["back_end"])                     # its end, toward us
+    hx0, hx1, hy0, hy1, hz0, hz1 = 165, 171, y1, y1 + 10, 8, 24
+    corner = lambda u0, u1, v0, v1, k=2.6: [(u0 + k * (1 - math.cos(a)), v1 - k * (1 - math.sin(a))) for a in np.linspace(0, math.pi / 2, 5)][::-1] + \
+        [(u1 - k * (1 - math.sin(a)), v1 - k * (1 - math.cos(a))) for a in np.linspace(0, math.pi / 2, 5)] + [(u1, v0), (u0, v0)]
+    head = [(hx0, v, u) for u, v in corner(hz0, hz1, hy0, hy1)]                                         # its face, rounded at the top
+    d.poly([(hx0, hy0, hz0), (hx1, hy0, hz0), (hx1, hy1 - 2.6, hz0), (hx0, hy1 - 2.6, hz0)], I["head_end"])
+    d.poly([(hx0, hy1 - 0.4, hz0 + 2.6), (hx1, hy1 - 0.4, hz0 + 2.6), (hx1, hy1 - 0.4, hz1 - 2.6), (hx0, hy1 - 0.4, hz1 - 2.6)], I["head_top"])
+    d.poly(head, I["head"])
+    # ---- the steering wheel in front of the bench: a thin dark rim. Its true plane (square to the column, its top toward
+    #      the windshield) is seen nearly edge on in this drawing, a thin sliver that reads as two sticks; so it is drawn
+    #      turned WHEEL_TURN degrees toward us, and only the top of it clears the sill: an arc across the lower middle
+    cx, cy, cz, r = 160.0, 55.0, 13.0, 11.0
+    ux, uy = -math.sin(math.radians(25)), math.cos(math.radians(25))
+    hx, hz = -math.sin(math.radians(WHEEL_TURN)), math.cos(math.radians(WHEEL_TURN))
+    rim = [(cx + r * (math.sin(a) * ux + math.cos(a) * hx), cy + r * math.sin(a) * uy, cz + r * math.cos(a) * hz) for a in np.linspace(0, 2 * math.pi, 73)]
+    d.line(rim, I["wheel"], 1.4)
+    # ---- brushed lightly, on its own, in its own corner of the picture only
+    color, alpha = base.done()
+    hole = mask_poly(shape, d.pts(WINDOW))
+    ys, xs = np.nonzero(hole > 0)
+    y0_, y1_, x0_, x1_ = max(ys.min() - 8, 0), min(ys.max() + 9, shape[0]), max(xs.min() - 8, 0), min(xs.max() + 9, shape[1])
+    pic = np.zeros(shape + (3,), dtype=F32)
+    over(pic, color, alpha)
+    pic[y0_:y1_, x0_:x1_] = strokes(pic[y0_:y1_, x0_:x1_], sizes=(2,), seed=seed + 97, density=1.4, jitter=0.03, keep=0.62)
+    # ---- the daylight and the edges said again crisply over the brushwork, near to far as they lie over one another
+    dl.poly([(100, s + 0.6, D), (250, s + 0.6, D), (250, 100, D), (100, 100, D)], I["day"])              # the far windows' daylight
+    dl.poly([(176, s, D), (181, s, D), (181, 100, D), (176, 100, D)], I["pillar"])
+    dl.line([(100, s + 0.2, D), (250, s + 0.2, D)], I["sill"], 0.9, 0.9)                                 # the far sill
+    lines.clear(d.pts(face))                                                                             # (the bench hides what is beyond it)
+    dl.line([(x0, y1, z0), (x0, y1, z1)], I["back_top"], 0.9, 0.9)                                       # the bench's top edge, in the light
+    dl.line([(x0, y0, z0), (x0, y1, z0)], I["back_end"], 0.8, 0.7)                                       # its near corner
+    lines.clear(d.pts(head))
+    dl.line(head[:10], I["head_top"], 0.8, 0.9)                                                        # the headrest's rounded top, against the light
+    dl.line(rim, I["wheel"], 1.3, 1.0)
+    dl.line([p for p in rim if p[1] > cy + 7.5], I["wheel_lit"], 0.6, 0.8)                               # the light along the top of the rim
+    lc, la = lines.done()
+    over(pic, lc, la)
+    return pic, hole
+
+
+def render_pair(shape, origin, scale=1.0, seed=4, back=None, window="shut"):
     """The wagon from one brushing, with its door mirror and without it: render() done twice over, so the
-    two pictures differ only where the mirror is. -> (with, without, alpha, mask of the mirror)."""
-    color, alpha, lc, la = wagon(shape, origin, scale, mirror=True, seed=seed)
-    _, _, lc0, la0 = wagon(shape, origin, scale, mirror=False, seed=seed)
+    two pictures differ only where the mirror is. -> (with, without, alpha, mask of the mirror).
+    CAR-13P: `window="open"` rolls the driver's window down. The brushing is the same stroke for stroke (the brush draws
+    its random numbers as the picture it repaints leads it, so a change painted into the base sheet would move every
+    stroke after it): the inside of the car (window_inside) is laid into the opening over the brushed picture, and the
+    crisp lines (the chrome round the window, the glass's edge at the sill, the mirror) over that, as before."""
+    color, alpha, lc, la = wagon(shape, origin, scale, mirror=True, seed=seed, window=window)
+    _, _, lc0, la0 = wagon(shape, origin, scale, mirror=False, seed=seed, window=window)
     flat = _ground(shape, origin, back)
     over(flat, color, alpha)
     painted = strokes(flat, sizes=(7, 4, 2), seed=seed, density=1.8, jitter=0.03, keep=0.42)
+    if window == "open":                                                                   # CAR-13P
+        ic, ia = window_inside(shape, origin, scale, seed=seed)
+        over(painted, ic, ia)
     without = painted.copy()
     over(painted, lc, la)
     over(without, lc0, la0)

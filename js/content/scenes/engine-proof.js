@@ -14,6 +14,8 @@
 // This scene is not part of the story. It stays as the pattern to copy, the way
 // sketch-example.js is the pattern for a scene that has no painting yet.
 
+import { scaleAt } from "../../engine/walk.js";          // ROME-13E: the size of a row, for the man who comes down from his window
+
 const art = "art/scenes/egypt-crash/";
 const fx = (g) => !!g.flag("proof.fx");          // the things that move by nature (`fx`, below) are on the stage while this is true
 
@@ -243,6 +245,110 @@ function critterStory(g) {
 const strip = (g) => !!g.flag("proof.strip");
 const PANES = [[[452, 318], [531, 318], [531, 363], [452, 363]], [[550, 318], [629, 318], [629, 363], [550, 363]]];     // the holes, pixel for pixel
 
+// ---------- ROME-13E: round thirteen's three proofs: a flock herded into a pen, a boat riding the water, a man at a window ----------
+// The lines are the proof's own, added to the game's as the scene is built (setup), as the others are.
+const LINES13 = {
+  "proof.geese.look": ["dad", "Six white geese with orange bills, standing about on the sand as if they owned it. They might."],
+  "proof.geese.stomp": ["dad", "HUP! Go on, the lot of you! Into the pen!"],
+  "proof.geese.herded": ["dad", "And in they go. Let the record show that I never touched a single goose."],
+  "proof.geese.penned": ["dad", "Six geese in a pen, looking at me as if it was their idea."],
+  "proof.pen.look": ["dad", "A little pen of posts and rails, with a gap in the front for geese. Built by an optimist."],
+  "proof.pen.use": ["dad", "In you go, geese. Into the nice pen. Please?"],
+  "proof.geese.hiss": ["dad", "They hissed at me. All six of them. In harmony."],
+  "proof.pen.full": ["dad", "They're in. I'm not going in there after them."],
+  "proof.boat.look": ["dad", "A little rowing boat, tied up at the bank. It isn't going anywhere. It just goes up and down."],
+  "proof.house.look": ["dad", "A plain plastered house. One door, one window, and somebody at the window."],
+  "proof.housedoor.look": ["dad", "His front door, standing open. Polite people knock anyway."],
+  "proof.housedoor.knock": ["dad", "Knock, knock."],
+  "proof.watcher.look": ["dad", "A man at his upper window, praying. He knows I'm here. He's finishing first."],
+  "proof.watcher.hello.dad": ["dad", "Hello up there!"],
+  "proof.watcher.hello": ["watcher", "Peace to you, friend. I am at my prayers. Knock, and I will come down."],
+  "proof.watcher.coming": ["watcher", "I am coming."],
+  "proof.watcher.down": ["watcher", "Here I am, friend. My stairs get steeper every year."],
+  "proof.watcher.look.down": ["dad", "The man from the window, down here with the rest of us."],
+  "proof.watcher.down.2": ["watcher", "A fine morning for standing about. You do it well."],
+};
+
+// The geese (docs/DESIGN.md, section 2, "Things that move by nature": the flock, herded). On the stage while "proof.herd" is
+// true: index.html?scene=engine-proof&lead=dad&flags=proof.herd. Six white geese of the engine's own (art/proof/goose-*.png,
+// painted frames: every set the Capitol's geese have, `run` and `flap` among them, drawn by tools/proof13.py beside the game)
+// stand about round a spot on the sand. A little pen of posts and rails stands further up it: its front fence, with a gap
+// in it, is a cut-out whose base is that front (art/proof/pen.png); its back fence is behind everybody (pen-back.png), as a
+// backdrop would have it. Shoo the geese and Dad stomps: they flap and run, the nearest to him first, through the gap into
+// the pen (g.effects.get("geese").herd(...)), and the fact "proof.herded" is set. The scene's `fx` is a function of the game
+// (below), which gives the flock the pen for its area from that fact: entered again, they are in it at once. Asked nicely
+// into the pen (the pen: Use), every goose stretches its neck out and hisses (pose("look", 1.2)).
+const herdProof = (g) => !!g.flag("proof.herd");
+const herded = (g) => !!g.flag("proof.herded");
+const GOOSE = { dir: "art/proof/", foot: [46, 68], face: "E", sizeAt: 590,
+  stand: ["goose-stand-0.png", "goose-stand-1.png"], look: ["goose-look-0.png", "goose-look-1.png"], walk: [0, 1, 2, 3].map((i) => `goose-walk-${i}.png`),
+  run: [0, 1, 2, 3].map((i) => `goose-run-${i}.png`), turn: ["goose-turn-0.png"], peck: ["goose-peck-0.png", "goose-peck-1.png"], flap: ["goose-flap-0.png", "goose-flap-1.png"] };
+const GEESE_AT = [[262, 482], [400, 478], [426, 504], [396, 532], [282, 534], [250, 508]];       // their spot on the sand
+const PEN_IN = [[452, 409], [550, 409], [554, 437], [448, 437]];                                  // inside the pen: their area once they are herded
+const PEN_GAP = [501, 447];                                                                        // the gap in its front fence (its middle, on its front row)
+/** Dad stomps (two stamps of the foot), and the geese run for the pen, through its gap, the nearest to him first. */
+async function stomp(g) {
+  const geese = g.effects.get("geese"), me = g.lead, y0 = me.y;
+  await g.say("proof.geese.stomp");
+  for (let i = 0; i < 2; i++) await g.tween(150, (k) => me.place(me.x, y0 - 5 * Math.sin(Math.PI * k)));
+  if (geese) await geese.herd(PEN_IN, { from: [me.x, me.y], via: PEN_GAP });
+  g.flag("proof.herded", true);
+  await g.say("proof.geese.herded");
+}
+/** Asked nicely into the pen, every goose stretches its neck out and hisses, for a moment. */
+async function shoo(g) {
+  const geese = g.effects.get("geese");
+  await g.say("proof.pen.use");
+  const hiss = geese ? geese.pose("look", 1.2) : null;
+  await g.say("proof.geese.hiss");
+  await hiss;
+}
+
+// The boat (docs/DESIGN.md, section 2: `bob`). On the stage while "proof.bob" is true: index.html?scene=engine-proof&lead=dad&
+// flags=proof.bob. A little rowing boat of the engine's own (art/proof/boat.png, a cut-out, its base its waterline) lies on
+// the river by the bank, rising and falling on the swell and rocking a little (`bob`, among the moving things below). The
+// papyrus in the corner is cleared away while it is there (a script's show(false) on that cut-out: setup), or it would hide it.
+const bobProof = (g) => !!g.flag("proof.bob");
+
+// The man at the window (docs/DESIGN.md, section 3, "Someone above the floor"). On the stage while "proof.window" is true:
+// index.html?scene=engine-proof&lead=dad&flags=proof.window. A plastered house front of the engine's own stands on the sand
+// (art/proof/wall.png, a cut-out, its base its foot, its upper window's opening cut clear; art/proof/room.png, the dark room
+// seen through the window, behind everybody, as a backdrop would have it), and a man (`watcher`, the date seller's figure)
+// stands at the upper window, praying: one of the scene's people whose feet are on the floor of the upper room, above the
+// wall's base and so behind it, drawn at a `scale` of his own (a man a step back from the window: the sill at his waist),
+// `solid: false`, his life still, his area the opening. Knock at his door and he comes down: he turns from the window and
+// is gone, and steps out of his doorway onto the sand under the same id, at the size of that row, and goes to a spot of his.
+// The fact "proof.windowDown" says where he is whenever the scene is built: two entries under `actors` with the same id and
+// opposite `when`s, and two areas likewise.
+const windowProof = (g) => !!g.flag("proof.window");
+const down = (g) => !!g.flag("proof.windowDown");
+const UPSTAIRS = [373, 307];               // under his feet, on the floor of the upper room, a step back from the window
+const UPSTAIRS_SCALE = 0.5;                // the size of a man standing there (the row's own size, 0.3, would make him tiny)
+const OPENING = [[352, 205], [394, 205], [394, 261], [352, 261]];          // the window's opening, pixel for pixel
+const HOUSE = [[250, 173], [430, 173], [430, 430], [250, 430]];            // the house front
+const DOORWAY = [[270, 331], [310, 331], [310, 430], [270, 430]];          // its door
+const OUT_DOOR = [290, 440];               // where he steps out of it, onto the sand
+const DOWNSTAIRS = [236, 492];             // and where he goes to stand
+/** At the window: a word up to him, and his answer over his head. His prayer goes on. */
+const hello = (g) => g.say("proof.watcher.hello.dad", "proof.watcher.hello");
+/** A knock at his door: he finishes, turns from the window and goes in, and comes out of his door onto the sand. */
+async function comeDown(g) {
+  await g.say("proof.housedoor.knock", "proof.watcher.coming");
+  const w = g.actor("watcher");
+  if (!w) return;
+  w.pray(false);
+  await g.wait(320);
+  w.face("N");
+  await g.tween(300, (k) => w.fade(1 - k));                                         // back from the window, and out of sight
+  await g.wait(700);                                                                 // (down the stairs inside)
+  w.place(OUT_DOOR[0], OUT_DOOR[1], scaleAt(g.scene, OUT_DOOR[1])).face("S");       // out of his door, at the size of that row
+  w.fade(1);
+  g.flag("proof.windowDown", true);
+  await g.walkTo(DOWNSTAIRS[0], DOWNSTAIRS[1], "watcher");
+  w.face("E");
+  await g.say("proof.watcher.down");
+}
+
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
   for (const entry of g.waiting()) {
@@ -299,6 +405,13 @@ export default {
   // can be a function of the game, for one the story forms. By the way in from the track the creature arrives beside Dad.
   party: (g) => (party(g) ? ["dad", "critter"] : null),
   arrive: { fromTrack: [[540, 344]] },
+  // CAR-13E: the scene seen through the lead's own eyes, while "proof.unseen" is true (index.html?scene=engine-proof&lead=dad&
+  // flags=proof.unseen), as the inside of the wagon is: Dad is on the stage and never drawn (nor is anyone of the team here);
+  // a click on the sand moves nobody; the river, the reeds and the wagon are looked at and used from where he stands, without
+  // his walking or turning; his words are written off the stage, at the top middle; and a click in the band of a way out
+  // takes him out at once (docs/DESIGN.md, section 8, "A scene seen through the lead's own eyes"). Read as the scene is entered.
+  unseen: (g) => !!g.flag("proof.unseen"),
+  //   wordsAt: [400, 120],          (CAR-13E) where the words of anyone off the stage go, in place of the top middle (the engine's test gives it one)
 
   picture: art + "back.png",
 
@@ -316,6 +429,14 @@ export default {
     { id: "papyrus", src: art + "front.png", plane: "front" },                    // the papyrus at the bottom left corner
     // NEVADA-12E: the panel with two windows in it, for the strip (see the top); there only while "proof.strip" is true
     { id: "window", src: "art/proof/window.png", base: 372, solid: [[440, 364], [640, 364], [640, 374], [440, 374]], when: strip },
+    // ROME-13E: the geese's pen (see the top): its back fence behind everybody; its front, with the gap, a cut-out on its front row
+    { id: "pen-back", src: "art/proof/pen-back.png", plane: "back", when: herdProof },
+    { id: "pen", src: "art/proof/pen.png", base: 446, solid: [[436, 400], [566, 400], [566, 448], [436, 448]], when: herdProof },
+    // ROME-13E: the boat on the river (see the top), its base its waterline: it bobs (`fx`, below)
+    { id: "boat", src: "art/proof/boat.png", base: 456, when: bobProof },
+    // ROME-13E: the house front (see the top): the dark room behind its window, behind everybody; the wall, its base its foot
+    { id: "room", src: "art/proof/room.png", plane: "back", when: windowProof },
+    { id: "wall", src: "art/proof/wall.png", base: 430, solid: [[250, 400], [430, 400], [430, 432], [250, 432]], when: windowProof },
   ],
   // A cut-out can also follow the story. These are the other forms (none is needed here):
   //   { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") }      a row for a base; shown only while the test passes
@@ -331,7 +452,9 @@ export default {
   // moving, on the game clock, among the people at its own depth (`base` or `plane`, as for a cut-out). They are on the
   // stage only while the story fact "proof.fx" is true (index.html?scene=engine-proof&lead=dad&flags=proof.fx), so that
   // everything else here is as it was. Every kind, every field and its default: docs/DESIGN.md, "Things that move by nature".
-  fx: [
+  // ROME-13E: a function of the game, as a scene whose moving things follow the story has it: the geese's area is their spot,
+  // or the pen once they have been herded into it (a fact), as the scene is built.
+  fx: (g) => [
     // the builders' village, far off: a cooking fire's smoke, a thin pale thread that rises a little and bends away with the air
     { id: "village-smoke", type: "smoke", at: [392, 286], base: 296, color: "#f4ecdc", opacity: 0.38, height: 36, width: [1.5, 10], lean: [34, -34], when: fx },
     // a fire on the sand: a bed of coals, a flame, and a column of smoke a man can walk behind or in front of (base: where it stands)
@@ -357,6 +480,10 @@ export default {
     { id: "door", type: "portal", at: DOOR, r: 34, base: DOOR[1] + 34, open: 1, strength: 0.6, when: letterbox },
     // NEVADA-12E: the desert going by behind the panel's two windows (see the top), behind everybody
     { id: "desert", type: "strip", src: "art/proof/strip.png", windows: PANES, row: 370, speed: 40, loop: true, plane: "back", when: strip },
+    // ROME-13E: the geese (see the top): round their spot, or in the pen once herded; sacred enough not to be shy of anybody
+    { id: "geese", type: "birds", count: 6, area: herded(g) ? PEN_IN : GEESE_AT, frames: GOOSE, shy: 0, fly: false, walk: 28, moves: { stand: 3, look: 2, peck: 3, walk: 2, turn: 1 }, when: herdProof },
+    // ROME-13E: the boat (see the top) rising and falling a pixel on the swell, and rocking a little
+    { id: "boat-bob", type: "bob", plane: "boat", amount: 1, period: 5, tilt: 0.75, when: bobProof },
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -407,6 +534,26 @@ export default {
     // NEVADA-12E: the cooler on the far sand, painted in the backdrop: nothing for Dad, a nibble for the creature
     { id: "cooler", name: "cooler", rect: [706, 322, 40, 30], walkTo: [712, 364], face: "N", when: (g) => painted(g) || party(g),
       look: { critter: "proof.critter.dots", any: "proof.cooler.look" }, use: { critter: nibble, any: "proof.cooler.use.dad" } },
+    // ROME-13E: the geese and their pen (see the top). Shoo the geese: Dad stomps, and they are herded into the pen. The pen,
+    // asked of them nicely, makes them hiss. Herded, the geese are clicked in the pen (an area listed after the pen's, so on top)
+    { id: "geese", name: "geese", verb: "Shoo", poly: [[240, 428], [440, 426], [444, 540], [240, 542]], walkTo: [290, 568], face: "N", when: (g) => herdProof(g) && !herded(g),
+      look: "proof.geese.look", use: stomp },
+    { id: "pen", name: "pen", verb: "Use", poly: [[434, 368], [568, 368], [568, 450], [434, 450]], walkTo: [470, 482], face: "N", when: herdProof,
+      look: "proof.pen.look", use: (g) => (herded(g) ? g.say("proof.pen.full") : shoo(g)) },
+    { id: "geese-penned", name: "geese", poly: [[444, 380], [560, 380], [560, 440], [444, 440]], walkTo: [470, 482], face: "N", when: (g) => herdProof(g) && herded(g),
+      look: "proof.geese.penned" },
+    // ROME-13E: the boat (see the top): outlined by its own picture, bobbing
+    { id: "boat", name: "boat", rect: [32, 432, 100, 26], walkTo: [168, 476], face: "W", when: bobProof, look: "proof.boat.look" },
+    // ROME-13E: the house front and the man at its window (see the top). Its door and its window are listed after it: where
+    // two areas overlap, the one listed later is on top, and is what a click finds. The man's area is the window's opening
+    // (`actor: "watcher"`: Show outlines his own figure inside it); come down, he has an area of his own on the sand.
+    { id: "house", name: "house", poly: HOUSE, walkTo: [340, 452], face: "N", when: windowProof, look: "proof.house.look" },
+    { id: "housedoor", name: "door", verb: "Knock at", poly: DOORWAY, walkTo: [330, 450], face: "NW", when: (g) => windowProof(g) && !down(g),
+      look: "proof.housedoor.look", use: comeDown },
+    { id: "atwindow", name: "man at the window", verb: "Talk to", actor: "watcher", poly: OPENING, walkTo: [372, 452], face: "N", when: (g) => windowProof(g) && !down(g),
+      look: "proof.watcher.look", use: hello },
+    { id: "watcher", name: "man", verb: "Talk to", rect: [212, 378, 48, 116], walkTo: [290, 496], face: "W", when: (g) => windowProof(g) && down(g),
+      look: "proof.watcher.look.down", use: ["proof.watcher.hello.dad", "proof.watcher.down.2"] },
   ],
 
   // NEVADA-12E: Dad and the creature, talking (each exchange is what the one clicked on says, then what Dad makes of it)
@@ -420,6 +567,9 @@ export default {
   // not here placed in another century, and the pack of gum in Dad's pockets, once. (And the proof's lines, for the tests.)
   setup(g) {
     for (const [id, line] of Object.entries(LINES)) if (!g.lines[id]) g.lines[id] = line;
+    for (const [id, line] of Object.entries(LINES13)) if (!g.lines[id]) g.lines[id] = line;          // ROME-13E: round thirteen's
+    if (windowProof(g) && !down(g) && g.actor("watcher")) g.actor("watcher").pray(true);              // ROME-13E: the man at the window, at his prayers
+    if (bobProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                             // ROME-13E: the papyrus cleared away, so that the boat can be seen
     // NEVADA-12E: the creature's story, Dad's gum and sunglasses (once), and the creature in his shades if he has them on
     if (painted(g) || party(g)) {
       critterStory(g);
@@ -453,6 +603,10 @@ export default {
     // life of his own: his small movements are his own sets, and now and then he goes to one of his spots and back
     { id: "critter", kind: "critter", at: CRITTER_AT, face: "W", sit: true, when: (g) => painted(g) && !joined(g) && !party(g),
       life: { every: [12, 22], spots: [[600, 440, "E"], [462, 512, "S"]], stay: [3, 6] } },
+    // ROME-13E: the man at the upper window (see the top): his feet on the upper floor behind the wall, a scale of his own, no
+    // ground of ours taken up, no small movements while he prays; and the same man on the sand once he has come down
+    { id: "watcher", kind: "dateseller", at: UPSTAIRS, scale: UPSTAIRS_SCALE, face: "W", solid: false, life: { fidget: false }, when: (g) => windowProof(g) && !down(g) },
+    { id: "watcher", kind: "dateseller", at: DOWNSTAIRS, face: "E", when: (g) => windowProof(g) && down(g) },
   ],
 
   // Runs when the lead arrives. It must be safe to run twice (a save can be loaded in the middle of it), so it checks its own fact.

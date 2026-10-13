@@ -58,11 +58,28 @@ puts the sun in his eye. Every way out at the side of a picture is now an edge t
 be clicked anywhere along, and every clickable area follows the shape of its thing.
 Forty-nine lines added, eight changed, twenty-nine dropped (the carrier's): the act has
 457. No puzzle changed. Lot's own figure is still being drawn: until it comes, the old
-figure from the river stands in his place, at his prayers (see "Not done"). See "Round
-three", below.
+figure from the river stands in his place, at his prayers (it is drawn now: see the end of
+"Not done"). See "Round three", below.
+
+**13 October, round thirteen: the car's inside** (`briefs/CAR-13.md`, on the author's
+own request of 8 October; the design is `briefs/out/car-interior-design.md`).
+<!-- CAR-13W --> Getting the map out of the glovebox, through the window from outside,
+was not intuitive, the author said: the car's window should be rolled down to show the
+inside of the car, and a click there should take Dad in, to click around the inside and
+open the glove compartment. So the driver's window is down, a click on it or on the
+wagon walks Dad to his door and in, and the inside of the wagon is a place of its own
+(`egypt-car`, off the river), seen through his own eyes from the driver's seat: every
+part of the car is a thing to click, the glovebox drops open on the map, and the door or
+the bottom of the picture takes him out again. One puzzle is reached differently (#1,
+The Road Map); its beat, fact, map and hint are as they were, and nothing outside the
+car changed. Thirty-six lines added, all Dad's; one rewritten (the glovebox's look); one
+moved (the key's, from the wagon outside); and the author's two at the glovebox are said
+inside now, word for word: the act has 494. See "Round thirteen", below.
 
 Play it: a new game starts here. `index.html?scene=egypt-crash&lead=dad` starts the act
 directly; the other three scenes are `egypt-site`, `egypt-gallery` and `egypt-chamber`,
+<!-- CAR-13S --> with the inside of the wagon, `egypt-car`, off the first
+(`index.html?scene=egypt-car&lead=dad&flags=egypt.arrived`),
 and each scene file gives the `&flags=` to start it at a later moment
 (`&flags=egypt.arrived,egypt.metLot,egypt.knowsLot,egypt.heardAbram` is the river after
 Lot has said who he is).
@@ -113,13 +130,15 @@ Egyptian speaks of anybody's God, and nobody is asked what he thinks of anybody'
 
 ## Puzzle structure
 
+<!-- CAR-13W: #1's glovebox is inside the wagon since round thirteen. -->
 ```
                    Cut-scene: Crash landing by the Nile
                                    |
                  +-----------------+------------------+
                  |                                    |
          #1 The Road Map                        #2 A Reed
-         (the glovebox)                         (the reed bed)
+         (the glovebox,                         (the reed bed)
+         inside the wagon)                            |
                  |                                    |
                  |                         #3 A Pen For The Scribe
                  |                                    |
@@ -164,6 +183,7 @@ wall without talking to the lamp boy is rewarded for it (see "Where the scripts 
 
 ## Location layout
 
+<!-- CAR-13W: the driver's window, and the inside of the wagon (1a), since round thirteen. -->
 ```
 +--------------------------------------------------------------------------+
 | 1. WHERE THE WAGON CAME DOWN  (egypt-crash)       the top edge: up to 2  |
@@ -172,9 +192,20 @@ wall without talking to the lamp boy is rewarded for it (see "Where the scripts 
 |  a boat      REEDS      the far end of the TRACK  -> to 2                |
 |                         SNEAKER PRINTS going up it                       |
 |  LOT, praying in the shade of the near palm,                             |
-|  and his DONKEY,        THE WAGON: hood (steaming), GLOVEBOX, DOOR       |
-|  drinking               MIRROR (it glints); on the roof SUITCASE,        |
+|  and his DONKEY,        THE WAGON: hood (steaming), the DRIVER'S         |
+|  drinking               WINDOW (rolled down: the way in  -> to 1a),      |
+|                         DOOR MIRROR (it glints); on the roof SUITCASE,   |
 |                         TRUNK, COOLER                                    |
++--------------------------------------------------------------------------+
+| 1a. INSIDE THE WAGON  (egypt-car), off 1                                 |
+|                                                                          |
+|  seen through Dad's own eyes, from the driver's seat (he is not drawn)   |
+|  the windshield (sand; the river beyond), the sun visor (a drawing       |
+|  behind it), the rearview mirror, the air freshener                      |
+|  <- the DOOR, out to 1    the steering wheel, its horn, the gauges,      |
+|  the owner's manual,      the key, the gear lever, the radio, the        |
+|  in the door pocket       slushie, THE GLOVEBOX, the passenger seat      |
+|                           the bottom edge: out to 1                      |
 +--------------------------------------------------------------------------+
 | 2. AT THE FOOT OF THE PYRAMID  (egypt-site)                              |
 |                                                                          |
@@ -206,6 +237,9 @@ wall without talking to the lamp boy is rewarded for it (see "Where the scripts 
 
 Four places in a row: river, site, gallery, chamber. There is no map and no shortcut.
 The player walks the row several times, and it is short.
+<!-- CAR-13W --> Since round thirteen the inside of the wagon (1a) opens off the first:
+in by the driver's window or the wagon, and out by its door or the bottom of the
+picture, back to Dad's door outside.
 
 **The edges** (since round three). Every way out that leads off the side of a picture
 is an edge as well: a click on the floor anywhere in the band along that side walks Dad
@@ -216,6 +250,8 @@ outside, and its top edge up the ramp to the chamber; the chamber's left edge go
 into the gallery. The old ways out (the track, the way out, the doorways) are all still
 there to click, and a clickable thing that lies in a band is still that thing. See
 "Round three".
+<!-- CAR-13W --> Since round thirteen the bottom of the picture inside the wagon is one
+too: "Go out of the wagon", back to his door (see "Round thirteen").
 
 The sunbeam, when it is whole, runs through three of them: sun, shade (2), up the stair
 and in at the entrance, across the foot of the gallery to the door mirror (3), up the
@@ -239,29 +275,56 @@ while his donkey drinks. The wagon came down in front of him, and he has not loo
 *Plants:* the prints (the boy went up, and in). That the car is all Dad has. That he
 does not know when he is, and Who does. The man under the palm (Lot: see "Round three").
 
+<!-- CAR-13W: rewritten in round thirteen (the glovebox is inside the wagon). -->
 ```
-Puzzle #1: The Road Map        (Egypt · Lead: Dad · the wagon's glovebox)
+Puzzle #1: The Road Map        (Egypt · Lead: Dad · the glovebox, inside the wagon)
 Needs:        nothing
-Setup:        The wagon is the one familiar thing in sight, and it is full of his own stuff.
-Wrong tries:  The wagon itself       -> "I turned the key. She made the noise she makes when I bring
-                                        up the transmission."
+Setup:        The wagon is the one familiar thing in sight, and it is full of his own stuff. The
+              driver's window is rolled down, and through it the inside of the car shows: "The
+              window's down. Wheel, dash, and the glovebox, where my map is being wrong in private."
+Wrong tries:  Outside, at the car:
               The hood               -> "She's just thinking it over."
               The door mirror        -> "I'm not taking my own car apart without a reason. I usually
                                         have at least a bad one."
-Solution:     Search the glovebox. "There's a road map in the glovebox. Three states, zero centuries."
+              Inside, in the driver's seat:
+              The key                -> the starter grinds and gives up. "I turned the key. She made
+                                        the noise she makes when I bring up the transmission."
+              The horn               -> "I don't raise my voice. That's what the horn is for." The
+                                        second time: "Once is hello. Twice is rude. There's a man
+                                        sitting quietly out there."
+              The rearview mirror    -> "I tipped it down. Sky. I tipped it up. More sky. I'm leaving
+                                        it."
+Solution:     Get into the wagon: the window ("Get into driver's seat") or the wagon ("Get in
+              wagon") walks him to his door, and he is in the driver's seat. "The driver's seat. Hot
+              as a skillet, and still the only seat in Egypt that fits me." Then open the glovebox: it
+              drops open with a clunk, and there is the map, on a drift of ketchup packets. "There's
+              a road map in the glovebox. Three states, zero centuries."
 Gives:        The road map.
-Teaches:      That the car is a store of things, and each part of it is its own thing to click.
-              The player who opens everything now has the flashlight, a root beer and the sunglasses
-              before they know what any of them is for. (Since round three each of them jumps out of
-              its lid onto the sand, and lies there while he says what it is, before he picks it up.)
-Hints:        Hint button: "I should check what's still in the wagon."
+Teaches:      That the car is a store of things, and each part of it is its own thing to click,
+              outside and in. The player who opens everything now has the flashlight, a root beer
+              and the sunglasses before they know what any of them is for. (Since round three each
+              of them jumps out of its lid onto the sand, and lies there while he says what it is,
+              before he picks it up.)
+Hints:        Hint button: "I should check what's still in the wagon." (Kept: with the window down
+              and the label reading "Get into driver's seat" it is enough, and said inside, before
+              the glovebox is opened, it still fits.)
 Plants/pays:  The ketchup packets he is saving. The shade and the mirror that he will not take yet.
               The mirror's hint (#9): the first time he comes to the car, before he does anything
-              there, the low sun off the door mirror catches him in the eye.
+              there, the low sun off the door mirror catches him in the eye; it is still the first
+              thing at the car, whether he clicks the window, the wagon or anything else on it.
+              Inside, the slushie pays off the first minute of the game ("The sky is doing the thing
+              my slushie does." "Weather. Probably."), and the gum under the Son's seat plants the
+              half of the pack the Son carries in Rome. Little Sister's drawing in the visor, the
+              musical on the tape, "a little flat" and the manual read to the middle are the
+              family's own, at home and in Nevada.
 Notes:        Afterwards: "Nothing left in there but ketchup packets. I'm saving those."
+              The glovebox, shut: "The glovebox. The map's in there, with a few things I'm saving."
+              The map, put back: "It's never gone back in the way it came out. I'm not starting now."
               The dazzle, once (round three): "Ow. The door mirror just put the sun in my eye.
-              Objects in mirror are brighter than they appear." The glovebox is part of the car,
-              so nobody reaches #1 without it.
+              Objects in mirror are brighter than they appear." The window and the wagon are parts
+              of the car, so nobody gets in without it. He gets out by the door or the bottom of the
+              picture, and stands at his door outside. Everything else in the car: "Round
+              thirteen", below.
 ```
 
 ```
@@ -539,6 +602,9 @@ Everything the painters put in a picture and listed in its `layout.json` has a l
 Thirteen of them have a second thing to say when looked at again. Three have more than
 that since 7 October: the river (once, with the second look), the pyramids from the
 bank (a third look) and the mud bricks (which can be lifted). The next section says what.
+<!-- CAR-13W --> Inside the wagon, since round thirteen, every part of the car but the
+glovebox is there for character too, and the windshield has two things to say, in turn:
+see "Round thirteen".
 
 Dad asks six people the same question, in the same words: "Have you seen a boy? About
 this tall, asks a lot of questions?" Each answer is a different piece of where the boy
@@ -921,7 +987,8 @@ and the play script see that he is at his prayers whenever nobody is talking to 
 he lowers his hands for a word, and that he is back at them afterwards. His own figure,
 seated, is being drawn by the person who draws people; until it is in `js/art/people.js`
 the old figure from the river stands in for him, in his place and at his prayers, and the
-scene draws him as himself the moment the figure exists (see "Not done").
+scene draws him as himself the moment the figure exists (it is drawn now: see the end of
+"Not done").
 
 ### The Abram moment, moved to the river
 
@@ -951,6 +1018,8 @@ sand, in front of him. The General lies on the sand a moment longer, and then he
 comes up close, as before. The road map stays in the glovebox (it is not luggage) and
 comes out as it always did. Nothing is left lying on the sand: by the time the player
 has the mouse again, it is in his pockets.
+<!-- CAR-13W --> Since round thirteen the glovebox is inside the wagon, and drops open
+on the map: see "Round thirteen".
 
 **The door mirror announces itself.** Now and then a glint runs across the door mirror:
 a bright bar sweeping the glass for about half a second, at irregular times (between
@@ -966,9 +1035,10 @@ so, once (`egypt.dazzled`):
 
 Then he turns back to the car and does what he came to do. The glovebox is part of the
 car and the first puzzle, so nobody misses it; and it comes long before #9 needs the
-mirror. (He should shade his eyes with his hand: the pose `shade(true)` is being added by
-the person who draws people. The scene asks for it if the figure has it, and until then
-he turns away. See "Not done".)
+mirror. <!-- CAR-13W --> (Since round thirteen the window and the wagon, which get him
+in to the glovebox, are where the first puzzle starts, and the flash comes there.)
+(He shades his eyes with his hand, `shade(true)`: the pose the person who draws people
+was adding then is in the game.)
 
 ### The edges, and the shapes
 
@@ -1062,6 +1132,208 @@ stage, and always back on their marks before anyone talks to them:
   **the goldsmith** gets up from his stool (it stays where it is) and goes along behind his
   bench to his brazier or to the other end of it, and back.
 
+## Round thirteen: the car's inside
+
+<!-- CAR-13W: new in round thirteen. -->
+Added on 13 October (`briefs/CAR-13.md`, `briefs/WRITE-13C.md`; the design is
+`briefs/out/car-interior-design.md`), on the author's message of 8 October, word for
+word:
+
+> "Getting the map out of the glovebox is not intuitive, the car's window should be rolled down to show the inside of
+> the car and if you press on the the inside of the car, take the dad to the next scene where he can click around the
+> inside of the car and open the glove compartment to find the map"
+
+One puzzle is reached differently: #1, The Road Map, whose glovebox is inside the wagon
+now. Its beat (`egypt.map`), its fact (`egypt.hasMap`), the map and the hint are what
+they were, and every fact the other scenes and the Hint button read is set as before.
+Nothing else in the act changed: no other puzzle, beat, fact, area or line outside the
+car.
+
+### At the window
+
+The driver's window, the front door's on the side we see, is rolled down: the glass has
+gone down into the door, and through the opening the inside of the wagon shows in warm
+shade <!-- CAR-13S: as painted (PAINT-13C) --> (the bench's back and the driver's
+headrest in tan, the dark top of the wheel, and along the top the far windows, bright
+with daylight; the dashboard is behind the door's front edge from where the river is
+seen). The thing to click there is `inside`, "driver's seat", and
+the label reads "Get into driver's seat"; it is where the glovebox's area was, and the
+door mirror's area lies over its lower front corner, as the mirror does. Looked at,
+before he has the map and after it:
+
+> "The window's down. Wheel, dash, and the glovebox, where my map is being wrong in private."
+> "Window's down to let the heat out. The heat has other plans."
+
+The wagon itself does what the window does ("Get in wagon"), so that no click on the car
+body is wasted. Its look is the author's, as before, and the key, with the wagon's old
+"Start" and its line, is inside now. The first click on any part of the car, the window
+and the wagon among them, is still the door mirror's flash in his eye.
+
+### Getting in, and out
+
+He walks to the driver's door (642, 563), faces it and reaches for the handle; the latch
+sounds, the picture fades, and he is in the driver's seat. It is the same era, so there
+is no card, and the door is never seen open. The first time (`egypt.sawCar`):
+
+> "The driver's seat. Hot as a skillet, and still the only seat in Egypt that fits me."
+
+He gets out by the door ("Open door") or by the bottom of the picture, anywhere along it
+("Go out of the wagon"): the latch, the fade, and he is standing at his door outside, on
+the mark `fromCar` (642, 563), facing out. Nothing is said, and when he gets in again
+nothing is said either.
+
+### Dad's view
+
+The inside of the wagon (`egypt-car`, "Inside the wagon") is seen through Dad's own eyes
+from the driver's seat, looking ahead and a little to the right, so that the whole
+dashboard is in the picture, from the wheel to the glovebox. Dad is not drawn in it. The
+car is the subject, and a man in the driver's seat would cover the wheel, the key and
+half the dash; it is how the old adventures showed a close look at a dashboard or a
+desk, and how the game already shows the General's note. The scene says so (`unseen`,
+new in the engine this round): Dad is on the stage but never drawn, he walks nowhere and
+turns to nothing, and a click in the band of the way out takes him out at once. His
+words go where the words of somebody not drawn go: at the top of the picture, in the
+middle (their bottom edge on row 150), unless the scene gives them a place of its own
+(`wordsAt`). <!-- CAR-13S --> The car gives none: there they lie over the sky, the far
+bank and the river, and read. Measured in the game, every one of the 38 lines said in
+the car is centred on x 400 with its bottom on row 150, in two or three lines at most
+400 pixels wide (x 200 to 600), the highest top on row 72 (the arrival line, and nine
+others of three lines). The rearview mirror and the air freshener hang behind them, and
+the visor, once it is down, lies under their left end; the dark outline carries them
+over all three.
+
+The dashboard runs level across the picture, and the world outside the glass is what is
+tilted: the wagon is nose-down, so the windshield is full of the mound of sand in front
+of the nose, with the back of the red hood sloping into it and a strip of river and sky
+at the top. It is afternoon, as it is by the river: the sun is low and ahead, a little
+to the right, its glare at the top right corner of the windshield and a shaft of it
+across the passenger seat. Nobody is in sight through the glass (Lot, his palm and the
+donkey are off to the right, behind the pillar), and there is no maker's name anywhere.
+
+### Every thing to click
+
+Fifteen, each traced round the thing as painted; none sends him anywhere. Where two
+touch, the one lower in the list lies over the other: the gauges, the horn, the gear
+lever, the key and the radio over the wheel, and the visor over the glass. The wheel and
+the passenger seat stop at the top of the bottom band (row 548), so that the way out can
+be clicked along it.
+
+| Thing | Label | Look | Use, and things tried on it |
+| --- | --- | --- | --- |
+| `windshield` | Wipe windshield | "A windshield full of sand. She parked nose first. I've parked worse." and "Past the sand, a river and no traffic. Best parking space I've ever found.", in turn | "I gave the glass a wipe. The sand's on the other side. It always is." |
+| `visor` | Pull down sun visor; once down, Look at sun visor | Up: "The sun visor. My youngest tucked something behind it. I'm not to look while I'm driving." Down: "And the registration. Paid up through next spring. I'll explain the gap." | Up: a click, and it is down and stays down (`egypt.visorDown`), the drawing showing: "Her drawing. The five of us, the wagon, and the General up on the roof." "She drew me the biggest. Hang on, you three. We're making good time." Down: as the look |
+| `rearview` | Adjust rearview mirror | "The rearview mirror. It's all sky back there. She's standing on her nose." | "I tipped it down. Sky. I tipped it up. More sky. I'm leaving it." Once he knows what light does (`egypt.knowsLight`): "It's glued to the windshield. It's the one on the door that comes off." |
+| `freshener` | air freshener (looked at only) | "'New Car Smell.' She's older than two of my kids. Nobody's fooled." | A click looks |
+| `door` | Open door | "My door. Out there, Egypt. In here, the one thing in Egypt I understand." | He gets out (the latch; nothing is said) |
+| `manual` | Read owner's manual | "The owner's manual, in the door pocket. Read to the middle, like all my manuals." | "I've read the first half. Time travel must be in the second." |
+| `seat` | Look under passenger seat | "His seat. Six wrappers, one sock, no boy. He travels light and leaves heavy." | "Half a pack of gum under his seat, stuck to the carpet. That's a problem for later." (He leaves it there.) General Feathers on it: "I sat the General in his seat. She says it's sticky. She's right." |
+| `glovebox` | Open glovebox; once open, Search glovebox | <!-- CAR-13S --> While the map is in it: "The glovebox. The map's in there, with a few things I'm saving." Once the map is in his pockets, shut or open: "Nothing left in there but ketchup packets. I'm saving those." (So a game saved before round thirteen with the map already taken never hears "The map's in there".) | Shut: a clunk, the door drops open on the map (`egypt.gloveOpen`), a beat, "There's a road map in the glovebox. Three states, zero centuries.", and the map is his (`egypt.hasMap`). Open: "Nothing left in there but ketchup packets. I'm saving those." The map on it: "It's never gone back in the way it came out. I'm not starting now." |
+| `cupholder` | Pick up slushie | "His slushie. He said the sky was doing the thing his slushie does. I said weather. I stand by weather." | "I'm leaving it for him. He's never finished one. He likes to be asked." The root beer on it: "That holder's his. Mine rides in my shorts." |
+| `wheel` | Turn steering wheel | "Both hands on the wheel, the whole way. I'd like that on the record." | "I turned the wheel. The front end's in a dune. It didn't get the message." |
+| `radio` | Turn on radio | "A tape in the deck: a musical my wife taped off the radio, with the traffic report in the big song." | A hiss of static, then "Static from one end of the dial to the other. It's a quiet century." |
+| `gauges` | Tap gauges | "Two hundred thousand and six miles on her. The last one was a long one." | "I tapped the temperature gauge. It stayed in the red. So it isn't the gauge." |
+| `horn` | Honk horn | "The horn. It's a little flat. My wife says the same about me." | The first time, the horn, then "I don't raise my voice. That's what the horn is for." After that, no sound: "Once is hello. Twice is rude. There's a man sitting quietly out there." |
+| `gears` | Shift gear lever | "P, R, N, D and L. Nothing marked B.C. I'd have noticed." | A click, then "It's in Park, and it's staying in Park. Park has never once let me down." |
+| `key` | Turn car key | "The key's in. I'm not worried. Car thieves haven't been invented." | The starter grinds and gives up, then "I turned the key. She made the noise she makes when I bring up the transmission." (the wagon's old line, moved here) |
+
+Anything else tried on anything in the car gets Dad's stock reply, as everywhere in the
+act. The driver's seat is under him and out of the picture: the arrival line is his word
+on it. The way out at the bottom is the bench's bare middle, and the rest of the band
+that no thing covers.
+
+### What moves, and what is heard
+
+Drawn by the game, not painted: the steam rising off the hood outside, kept within the
+glass; the air freshener turning a little on its string from the mirror's stem; dust
+drifting in the sun over the passenger seat; and, quietly, the light on the strip of
+river. The sounds: the latch (in and out), the clunk of the glovebox door, the radio's
+hiss, and the click of the visor and of the gear lever are the game's own; two are new,
+the horn (two notes, a touch sour) and the starter (grinding, and giving up). Each plays
+out before Dad speaks.
+
+### The facts
+
+The beat `egypt.map` is finished inside the wagon now: its scene is `egypt-car` and its
+title "Get into the wagon and take the road map from the glovebox"; what it needs and
+sets, its hint, its chain and its lead are as they were. Three facts are new, and none
+of them is a beat: `egypt.sawCar` (the arrival line has been said), `egypt.gloveOpen`
+(the glovebox door has dropped open; it stays open) and `egypt.visorDown` (it stays
+down). The car reads `egypt.knowsLight` (the rearview mirror) and `egypt.hasMap`, and
+the river's `egypt.dazzled` still comes first. A game saved before this round loads as
+it was; if it already has the map, the glovebox is shut until he opens it, and then
+empty. <!-- CAR-13S --> (Looked at, shut, it says the packets' line, not "The map's in
+there"; opened, the clunk, and the packets' line.)
+
+### The lines
+
+Thirty-six added, all Dad's; one rewritten; one moved; none dropped. The act had 458
+lines (Dad 308: after round three's 457, round twelve gave him one more, for the masons
+on their planks), and has 494: Dad 344, Lot 29, the overseer 23, the scribe 24, the
+haulers 18, the guard 19, the lamp boy 15, the goldsmith 22.
+
+- **Added** (marked `CAR-13W` in the lines file): Dad's two looks in at the window, by
+  the river (`egypt.inside.look`, `.look2`); inside, the arrival (`egypt.car.arrive`)
+  and thirty-three for the things to click (`egypt.car.<thing>.<what>`), every one of
+  them in the table above, in the design's words.
+- **Rewritten**: `egypt.glovebox.look`, said inside now. It said "The glovebox. Home of
+  the map, the manual, and something that used to be mints." and says "The glovebox. The
+  map's in there, with a few things I'm saving." The manual is in the door pocket now
+  and the mints are gone, so that the author's "Nothing left in there but ketchup
+  packets. I'm saving those." stays true.
+- **Moved**: `egypt.wagon.try`, word for word, from the wagon outside (its "Start") to
+  the key inside.
+- **Said inside now**, word for word: the author's two at the glovebox,
+  `egypt.wagon.use` and `egypt.wagon.empty`.
+- **One word of the design changed**: the horn's second honk was "Once is hello. Twice
+  is rude. There's a man praying out there." A line of Dad's that speaks of prayer is
+  one of the lines written for the family's faith, listed in the act check and held to
+  its rules, and the car has none of those (no Scripture, no prayer); so the man under
+  the palm is "sitting quietly". If the author wants "praying", the check's list takes
+  the line, and it reads as the design wrote it.
+
+No line in the car states history, quotes Scripture, prays or names a year ("Nothing
+marked B.C." names none), so "Historical statements" has nothing new. Nothing in it
+speaks of light, of mirrors as tools, of the shade, of cold drinks or of sunglasses, and
+none of those is in the car; the one line that names a mirror's use ("It's glued to the
+windshield. It's the one on the door that comes off.") is said only once he knows what
+light does, when the Hint button already says "The car has a mirror it isn't using."
+
+What the lines lean on is the game's own story, and each was found in the game's files:
+the slushie (`intro.3`, `intro.4`) and "making good time" (`intro.6`), from the first
+minute of the game; the other half of the gum, which the Son carries in Rome
+(`item.gum.look`: in play the car comes first, so the car plants it and Rome pays it);
+the family drawing with Dad the biggest, which hangs on Little Sister's wall at home
+(`home.drawings.mom`, `.lilsis`: the one in the visor is a second, drawn for the car);
+the musicals Mom taped off the radio (`home.tape.wind.1`); "a little flat", as Mom hears
+him (`home.door.look.mom`, `nevada.hum.mom.1`); the manuals read to the middle
+(`home.shelves.mom`, `nope.dad.3`); two hundred thousand miles (the author's
+`egypt.wagon.look`; the odometer reads 200006); and the children's ages (13, about ten
+and 7, in `docs/CHARACTERS.md`), under "She's older than two of my kids".
+
+### What was decided, and what was left out
+
+The design left five points open, and the round took them so (`briefs/CAR-13.md`):
+
+- Afternoon, as the river is painted, not noon.
+- The wagon gets him in as well as the window, and "Start" moves to the key inside, with
+  its line.
+- "Nothing marked B.C." stays: it names no year.
+- The drawing in the visor is painted only, at the size the visor shows it: no close-up
+  this round.
+- Left out: the wipers moving (he wipes the glass by hand), birds through the glass, and
+  Dad's phone.
+
+And small ones: the door is never seen open; the key in the ignition is the car's alone,
+on a plain fob (Dad's own ring, the house keys, is in his pocket); the drawing in the
+visor is a second one; the bottom of the picture is a way out, so the wheel's and the
+seat's areas stop above its band; the door's verb is "Open" ("Open door"); and there is
+no talk and no small door in time in the car, because Dad is alone with it. Two things
+the author may want once he has played it, each a picture and a few lines: the driver's
+door seen swinging open as Dad gets in and out, and a close-up of the drawing.
+
+Play it: `index.html?scene=egypt-car&lead=dad&flags=egypt.arrived` (and
+`,egypt.knowsLight` for the rearview mirror's second line).
+
 ## Ledger
 
 **Things that are carried** (all Dad's)
@@ -1069,7 +1341,7 @@ stage, and always back on their marks before anyone talks to them:
 | Thing | Comes from | When | Used for |
 | --- | --- | --- | --- |
 | `reed` reed | the reed bed, scene 1 | any time | #3: the scribe's new pen |
-| `map` road map | the glovebox, scene 1 | any time | #4: the scribe writes on the back of it |
+| `map` road map | the glovebox, inside the wagon (1a, off scene 1) <!-- CAR-13W --> | any time | #4: the scribe writes on the back of it |
 | `pass` work pass | the scribe, in place of the map | #4 | #5: gets Dad past the guard; kept |
 | `flashlight` flashlight | the trunk, scene 1 | any time | #7: opens a plate-sized hole, then dies; the lamp boy will take it dead |
 | `rootbeer` root beer | the cooler, scene 1 | any time, one at a time | #8: the guard's price |
@@ -1083,6 +1355,9 @@ Everything that comes out of the luggage on the roof (the flashlight, the root b
 sunglasses, the windshield shade, General Feathers) pops out onto the sand first, and is
 his when he picks it up. Looked at and never taken: the ketchup packets, six more loud
 shirts, a folding lawn chair, jumper cables, and whatever is under the hood.
+<!-- CAR-13W --> Since round thirteen the ketchup packets are in the glovebox inside the
+wagon, and the wagon has four more things looked at and never taken: the Son's slushie,
+the gum under his seat, the drawing in the visor and the owner's manual.
 
 **Facts the scripts keep** (besides the thirteen the beats set)
 
@@ -1103,6 +1378,9 @@ shirts, a folding lawn chair, jumper cables, and whatever is under the hood.
 | `egypt.climbed`, `egypt.cameDown` | the stair has been shown whole, going up; coming down (after that it is cut short). The prayer at the doorway is said on that first climb, so it needs no fact of its own |
 | `egypt.tookGeneral` | General Feathers has come out of the suitcase |
 | `egypt.heardAbram` | Lot has told his story: Dad knows when he is (the river, the reeds, the pyramids, the scribe's news and the open door follow it) |
+| `egypt.sawCar` <!-- CAR-13W --> | he has been inside the wagon, and has said so (the arrival line, once) |
+| `egypt.gloveOpen` <!-- CAR-13W --> | the glovebox door has dropped open: it stays open, on the map and then on the ketchup packets alone |
+| `egypt.visorDown` <!-- CAR-13W --> | the driver's sun visor is down, the drawing showing: it stays down |
 
 **Plants and payoffs**
 
@@ -1130,6 +1408,10 @@ shirts, a folding lawn chair, jumper cables, and whatever is under the hood.
 | The geese stand facing the Horizon | Lot's news | Not here. Little Sister at home: "Chickens KNOW." Rome's sacred chickens; Grandma Jolene's hens in Nevada |
 | General Feathers, in the suitcase "to keep an eye on Daddy" | The suitcase | The empty place on Little Sister's pillow (Act Three); she misses her in Act Four |
 | "Not yet." | The scribe's news ("It is written nowhere.") | The Son's tag in Rome |
+| "The sky is doing the thing my slushie does." "Weather. Probably." <!-- CAR-13W --> | The opening (`intro.3`, `.4`), in the car on the road | The car's inside, the slushie in its holder: "I said weather. I stand by weather." |
+| Half a pack of gum under the Son's seat: "That's a problem for later." <!-- CAR-13W --> | The car's inside | Act Two: the Son's half of the pack ("The other half is under the car seat. That's a problem for later. Or earlier.") |
+| Little Sister's drawing in the visor: the five of them, the wagon, the General on the roof, "She drew me the biggest." <!-- CAR-13W --> | The car's inside, behind the sun visor | Act Three: the first drawing, on her wall at home ("She drew your father the biggest. He was so pleased.") |
+| "A musical my wife taped off the radio" <!-- CAR-13W --> | The car's inside, the tape in the deck | Act Three: Mom winds a cassette with a pencil ("I recorded entire musicals off the radio with one of these.") |
 
 ## Where the scripts differ from the design, and why
 
@@ -1196,6 +1478,9 @@ shirts, a folding lawn chair, jumper cables, and whatever is under the hood.
 13. **The dazzle comes with the first click on the car**, not with walking near it. A
    walk is not always toward the car, and a click on any part of it is; the glovebox is
    part of it, and the first puzzle. It comes before whatever he came to do there.
+   <!-- CAR-13W --> Since round thirteen the glovebox is inside the wagon, and the
+   window and the wagon, which get him in, are the parts of the car the first puzzle
+   starts at.
 
 ## Where a scene's numbers are not the painter's
 
@@ -1226,7 +1511,8 @@ boat, the reeds and the river) are the painter's own (`briefs/out/paint-3a-ready
 Of the old act's 40 lines (33 `egypt.*`, the two item lines and five hints):
 
 - **31 are kept word for word, with their ids.** Most stay where they were. Moved: the
-  two glovebox lines keep their old ids (`egypt.wagon.use`, `egypt.wagon.empty`);
+  two glovebox lines keep their old ids (`egypt.wagon.use`, `egypt.wagon.empty`), and
+  since round thirteen are said inside the wagon <!-- CAR-13W -->;
   `egypt.ask.boy` is now asked of everybody; `egypt.ask.door` is asked of the lamp boy;
   the two dinner-plate lines are the flashlight scene; the three door lines are the
   gate; `hint.egypt.mark` is the hint of the beat that is now called `egypt.pass`.
@@ -1282,6 +1568,19 @@ gone; Lot sits where he stood), forty-nine were added and eight changed: "Round 
 above has every one. Of the old act's lines, Dad's "It has a hundred and forty horses.
 They're resting." keeps its id (`egypt.scribe.hello2`) and is said to Lot. Eight of Dad's
 lines to the carrier are said to Lot word for word, under new ids. The act has 457.
+
+**13 October, round thirteen.** <!-- CAR-13W --> Thirty-six lines were added, all Dad's,
+for the inside of the wagon ("Round thirteen" above has every one), and none was
+dropped. `egypt.wagon.try` ("I turned the key. She made the noise she makes when I bring
+up the transmission.") moved, word for word and with its id, from the wagon outside (its
+old "Start") to the key inside. `egypt.glovebox.look` was rewritten: it said "The
+glovebox. Home of the map, the manual, and something that used to be mints.", and says
+"The glovebox. The map's in there, with a few things I'm saving.", so that the author's
+"Nothing left in there but ketchup packets. I'm saving those." stays true (the manual is
+in the door pocket now, and the mints are gone). The author's two glovebox lines,
+`egypt.wagon.use` and `egypt.wagon.empty`, are said inside the wagon now, at the
+glovebox, word for word. Round twelve had added one line, Dad's, for the masons on their
+planks: the act had 458. It has 494.
 
 ## Historical statements
 
@@ -1477,10 +1776,9 @@ either, nor the meeting, has a word of judgment in it; his prayer is to "the God
 father's brother Abram", and Dad's Amen follows it. Dad's own prayers are still three
 (the arrival, the doorway, the open door); the river scene bows his head twice, once for
 his own prayer and once for Lot's, and Lot's is not counted among his. The water
-carrier is used nowhere in the act's files (only the stand-in for Lot borrows his
-figure, until Lot's own is drawn). What waits on Lot's own figure (his cast entry in
-`world.js`, his traced area) it lists apart, as waiting, while `js/art/people.js` has no
-figure `lot`, and as problems the moment it has. No clickable area is a rectangle or a circle: each is
+carrier is used nowhere in the act's files: Lot's own figure is drawn, and the stand-in that
+borrowed the carrier's is gone, with his cast entry in `world.js` and his area traced from
+him as the game draws him. No clickable area is a rectangle or a circle: each is
 a polygon that hugs its thing (an oval is drawn as one), an area that names a cut-out (`plane`) names one the scene has, and the
 cut-outs that the painters made are named by their areas; it lists the 36 areas
 drawn more closely than the painters' shapes. Every way out at an edge of a picture
@@ -1605,36 +1903,65 @@ river by the top of the picture (`site`), down from the site by the bottom
 (`chamber`), back by the chamber's left, out by the gallery's left (`coming-down`), and
 down the site's bottom to the river. Way B says hello and goodbye to Lot and no more
 (no story, no prayer), is dazzled at the glovebox, the first thing it does at the car
-(`dazzle`), and then must never hear Lot's story, the news, or anything Dad says
+(`dazzle`; <!-- CAR-13S --> since round thirteen, at the window), and then must never hear Lot's story, the news, or anything Dad says
 because of them.
+
+**Round thirteen.** <!-- CAR-13W --> The numbers above are from the runs before the
+inside of the wagon was built; the car's rows (its scene and its fifteen things, the
+ways in and out, its 36 lines heard, and the act's new totals) are SCENES-13C's to fill
+in, from the runs it makes once the scene is built.
+<!-- CAR-13S --> Filled in from those runs (13 October). The act check now reads five
+scenes and 83 hotspots (the river 19, the car 15, the site 23, the gallery 15, the
+chamber 11), 494 lines (Dad 344), all of them spoken in its dry run, 339 routes and 40
+things that move by nature. The car is seen through Dad's own eyes, so it has no places
+to stand and no routes: instead none of its fifteen areas sends him anywhere, its way
+out at the bottom has his own mark for its walkTo, his mark is under no area, and only
+the door, the manual in its pocket and the key's ring reach into the band of that way
+out (93% of the band can be clicked). Its glovebox, visor and air freshener say they
+are cut-outs, so that Show outlines their own silhouettes; its seven pictures are on
+disk; its numbers are the painter's. The 36 new lines are all Dad's and all said (the
+window's two by the river, the rest in the car), and the four that moved in (the
+author's two at the glovebox, the key's, and the glovebox's look) are said in the car
+and no longer by the river. The check's stand-in for the engine keeps Dad on the stage
+in the car, undrawn and on his mark, and leaves by the bottom edge at once, as the engine
+does. Its row for the map gets in by the window (his word on the seat, once), turns the
+key, honks twice, adjusts the rearview mirror, pulls the visor down on the drawing,
+looks at the glass twice, opens the glovebox (the author's line, the map, its facts),
+searches it again, tries the map on it, and gets out by the door to stand at his door
+(642, 563); then in again by the wagon (nothing said) and out by the bottom edge. The
+side roads get in by the window first thing (the mirror in his eye, then the seat), and
+the bottom edge of the car is among the edges walked. Sixteen mistakes planted one at a
+time in a copy of the game (an area that sends him somewhere, the way out's walkTo off
+his mark, Dad drawn or walked by a script, the scene not seen through his eyes, the
+wheel reaching into the band, an area over his mark, the key's line still by the river,
+the arrival line every time, a way out with no mark to arrive on, a glovebox that gives
+no map, a horn that always honks, the glovebox's look at the window, no mark at his
+door, the visor without its cut-out, the car missing from the river's exits) were all
+caught. CLEAN.
+
+The play, way A, looks in at the window from outside, gets in by it and hears the
+arrival line once, at the top middle of the picture (measured: centred on x 400, its
+bottom on row 150); finds Dad on his mark and undrawn; checks every area can be clicked;
+asks for the hint; looks at all fifteen things (two long lines measured at the top
+middle too, with pictures, `car-slushie-look`, `car-radio-look`); uses everything (the
+key, the horn twice, the wheel, the gears, the gauges, the radio, the rearview mirror,
+the glass, the manual, the seat, the slushie, the visor and its drawing,
+`visor-drawing`, and the glovebox, `wagon-use` and `glovebox-open`); turns Show on
+(`show-car`: three silhouettes, and the arrow at the bottom); saves and loads in the car
+(the glovebox open, the visor down, Dad still undrawn, nobody speaks); and gets out by
+the door to stand at his door facing out (`out-by-the-door`). After the suitcase it gets
+in by the wagon for General Feathers on the seat and the root beer at the slushie, and
+out by the bottom of the picture; and when it comes back for the shade and the mirror,
+in once more for the rearview mirror, which is glued, now that he knows what light does.
+Way B's first thing at the car is the window (the mirror in his eye, then the seat), the
+glovebox, and out by the bottom of the picture. Both hear the arrival line once, and the
+car's four moving things are watched alive. NO PROBLEMS; and the testers' checkpoints,
+fifteen of fifteen, take the map's inside the wagon.
 
 What neither can tell is whether it is funny.
 
 ## Not done
 
-- **Lot's own figure is not drawn yet.** The person who draws people is drawing him
-  (`briefs/out/lot-ready.md` was to say how a scene declares him: `kind: "lot"`, seated,
-  `pray(true)` when idle); it had not come when this round was finished, an hour after
-  it was first needed. Until it comes:
-  - the old figure from the river stands in his place, at his prayers, standing and not
-    seated (`STAND_IN` in `egypt-crash.js`). The scene draws Lot as himself the moment
-    `js/art/people.js` has a figure `lot`, without a change to the scene;
-  - his clickable area is a placeholder of the size the painter gave for him seated,
-    (384..424, 386..432), marked PLACE-LOT in the scene: it is to be traced from his
-    figure as the game draws him, as every other person's was;
-  - his words are drawn in the default colour, because `js/content/world.js` has no
-    cast entry `lot` yet (the person drawing him adds it, with his colour; nobody else
-    may touch that file).
-  The check lists these two apart, under "WAITING for Lot's own figure", and ends
-  "CLEAN, but for what waits on Lot's own figure". The moment `js/art/people.js` has a
-  figure `lot`, they are problems again, and so is the stand-in, until the scene has
-  caught up. When the figure comes, the scene wants: `kind: "lot"` and whatever
-  `lot-ready.md` says to declare (seated) in its actor; `STAND_IN` and `drawLot` taken
-  out; his area traced and the PLACE-LOT mark gone; and a look, in the real game, at him
-  praying, lowering his hands, and lifting them for the boy.
-- **Dad shading his eyes.** At the dazzle he should shade his eyes with his hand
-  (`shade(true)`, which the person drawing people is adding). The scene asks for it if
-  the figure has it; until then he turns away from the flash.
 - **Two statements from the Bible are not in the checker's file**: that Joseph was
   sold into Egypt (Genesis 37:36) and that Moses was born there (Exodus 2:1-2). Both
   are in the brief's list of true things and Dad says them in his own words, without
@@ -1663,4 +1990,7 @@ What neither can tell is whether it is funny.
 Settled since the second pass: the camels (Genesis 12:16 puts them among the king's
 gifts, Lot has never seen one, and nobody says they are unknown here), and the General's
 notice (the engine leaves out "the" before a proper name, so it reads "You have General
-Feathers").
+Feathers"). Settled since round three: Lot's own figure is drawn (`lot`, sitting
+cross-legged on the sand at his prayers, and `lot-standing`, the same man on his feet),
+the stand-in from the river is gone, his area is traced from him and his words have his
+own colour; and Dad shades his eyes with his hand at the dazzle (`shade`).

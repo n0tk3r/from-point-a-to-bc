@@ -312,7 +312,75 @@ h1 {
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 #gate { display: grid; place-content: center; justify-items: center; gap: 2.4cqw; background: var(--letterbox); text-align: center; }
-#gate svg { width: 14cqw; height: 14cqw; }
+/* EMBLEM-13: the emblem, the Timer (the author's pick, 13 October): a sunset bow drawn as a 1950s kitchen-timer dial,
+   reading from A through notches to B.C., in the place and at the size of the neon rings it replaces. Three pictures
+   laid together (art/emblem/): the sky; the bow, which turns about the middle of the horizon; and over them the
+   ground, the road, the rim and its index. The bow turns from A to B.C. and back, notch by notch, a click at each,
+   in a 10.36-second round: the layers and the keyframes are those of the page the author chose it from (made by
+   fxwork/emblem/logo5.py). Sharp screens get the sky, the top and the still at 512 (-2x); the bow is 512 for both.
+   With less motion, the system's or the game's own (the page puts .calm on the stage before the game starts), the
+   still shows instead and nothing turns. Interface pictures: never keyed. */
+#gate .emblem { position: relative; width: 14cqw; height: 14cqw; }
+#gate .emblem > span { position: absolute; inset: 0; display: block; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; }
+#gate .emblem .sky { background-image: url("../art/emblem/timer-sky.png"); background-image: image-set(url("../art/emblem/timer-sky.png") 1x, url("../art/emblem/timer-sky-2x.png") 2x); }
+#gate .emblem .turn { background-image: url("../art/emblem/timer-turn.png"); transform-origin: 50% 58.59375%; animation-duration: 10.36s; animation-timing-function: linear; animation-iteration-count: infinite; will-change: transform; animation-name: turn-timer; }
+#gate .emblem .top { background-image: url("../art/emblem/timer-top.png"); background-image: image-set(url("../art/emblem/timer-top.png") 1x, url("../art/emblem/timer-top-2x.png") 2x); }
+#gate .emblem .still { display: none; background-image: url("../art/emblem/timer.png"); background-image: image-set(url("../art/emblem/timer.png") 1x, url("../art/emblem/timer-2x.png") 2x); }
+.stage.calm #gate .emblem .still { display: block; }
+.stage.calm #gate .emblem > span:not(.still) { display: none; }
+.stage.calm #gate .emblem .turn { animation: none; }
+@media (prefers-reduced-motion: reduce) { #gate .emblem .still { display: block; } #gate .emblem > span:not(.still) { display: none; } #gate .emblem .turn { animation: none; } }
+@keyframes turn-timer {
+  0% { transform: rotate(48.000deg); animation-timing-function: linear; }
+  10.618% { transform: rotate(48.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  12.548% { transform: rotate(34.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  13.514% { transform: rotate(36.000deg); animation-timing-function: linear; }
+  15.83% { transform: rotate(36.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  17.761% { transform: rotate(22.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  18.726% { transform: rotate(24.000deg); animation-timing-function: linear; }
+  21.042% { transform: rotate(24.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  22.973% { transform: rotate(10.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  23.938% { transform: rotate(12.000deg); animation-timing-function: linear; }
+  26.255% { transform: rotate(12.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  28.185% { transform: rotate(-1.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  29.151% { transform: rotate(-0.000deg); animation-timing-function: linear; }
+  31.467% { transform: rotate(-0.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  33.398% { transform: rotate(-13.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  34.363% { transform: rotate(-12.000deg); animation-timing-function: linear; }
+  36.68% { transform: rotate(-12.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  38.61% { transform: rotate(-25.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  39.575% { transform: rotate(-24.000deg); animation-timing-function: linear; }
+  41.892% { transform: rotate(-24.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  43.822% { transform: rotate(-37.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  44.788% { transform: rotate(-36.000deg); animation-timing-function: linear; }
+  47.104% { transform: rotate(-36.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  49.035% { transform: rotate(-49.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  50% { transform: rotate(-48.000deg); animation-timing-function: linear; }
+  60.618% { transform: rotate(-48.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  62.548% { transform: rotate(-34.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  63.514% { transform: rotate(-36.000deg); animation-timing-function: linear; }
+  65.83% { transform: rotate(-36.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  67.761% { transform: rotate(-22.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  68.726% { transform: rotate(-24.000deg); animation-timing-function: linear; }
+  71.042% { transform: rotate(-24.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  72.973% { transform: rotate(-10.800deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  73.938% { transform: rotate(-12.000deg); animation-timing-function: linear; }
+  76.255% { transform: rotate(-12.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  78.185% { transform: rotate(1.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  79.151% { transform: rotate(-0.000deg); animation-timing-function: linear; }
+  81.467% { transform: rotate(-0.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  83.398% { transform: rotate(13.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  84.363% { transform: rotate(12.000deg); animation-timing-function: linear; }
+  86.68% { transform: rotate(12.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  88.61% { transform: rotate(25.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  89.575% { transform: rotate(24.000deg); animation-timing-function: linear; }
+  91.892% { transform: rotate(24.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  93.822% { transform: rotate(37.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  94.788% { transform: rotate(36.000deg); animation-timing-function: linear; }
+  97.104% { transform: rotate(36.000deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.5); }
+  99.035% { transform: rotate(49.200deg); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  100% { transform: rotate(48.000deg); animation-timing-function: linear; }
+}
 #gate p { margin: 0; max-width: 70cqw; font-size: max(1.8cqw, 12px); color: rgba(246, 227, 184, 0.75); line-height: 1.5; }
 #gate code { color: var(--time-cyan); }
 .copyright { display: none; position: fixed; right: 10px; bottom: 6px; margin: 0; font-size: 11px; color: rgba(255, 255, 255, 0.4); pointer-events: none; }

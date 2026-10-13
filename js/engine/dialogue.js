@@ -56,6 +56,14 @@ export class Dialogue {
     // in their colour, top centre as for anyone not on the stage, and nobody here moves their mouth for it.
     const person = g.cast[through || who] || {};
     const actor = through ? null : g.view.cast.get(who);
+    // CAR-13E: in a scene seen through the lead's own eyes (game.js, `unseen`) whoever is not drawn (the lead himself, or anyone
+    // hidden or faded to nothing) is placed as one off the stage, not over an invisible head (his mouth and hands may move: nobody
+    // sees them). Off the stage is the scene's `wordsAt` ([x, y]: the middle of the words' bottom edge, x kept 210 pixels from
+    // either side, as a speaker's is), or the top middle. (Elsewhere someone a script has put out of sight still speaks from
+    // where he is, as those scripts mean: Little Sister inside the closet, Grandpa Joe inside the limousine.)
+    const seen = actor && (!g.unseen || (!actor.hidden && actor.opacity > 0)) ? actor : null;
+    const at = g.scene && g.scene.wordsAt;
+    const off = Array.isArray(at) && at.length === 2 && at.every(Number.isFinite) ? [Math.min(Math.max(at[0], 210), W - 210), at[1]] : [W / 2, 150];
     let seed = 0;
     for (let i = 0; i < id.length; i++) seed = (seed * 31 + id.charCodeAt(i)) >>> 0;       // which gesture goes with this line
     const voiced = g.settings.voices ? g.audio.voice(id) : null;
@@ -63,17 +71,18 @@ export class Dialogue {
 
     let p = null, fit = () => {};
     {
+      const actor = seen;                                  // CAR-13E: the words go by the speaker as seen (above)
       p = document.createElement("p");
       p.className = "say";
       p.hidden = !showText;
       p.style.color = person.color || "#fff";
       if (through) { p.classList.add("through"); p.append(this.face(through), Object.assign(document.createElement("span"), { textContent: text })); }      // LETTERBOX-11
       else p.textContent = text;
-      // Above the speaker's head when they are on stage, otherwise top center.
+      // Above the speaker's head when they are on stage, otherwise top center (CAR-13E: or the scene's `wordsAt`).
       // While a close-up is showing, along the bottom, clear of whatever is being looked at.
       // (x, y) is where the middle of the bottom edge of the words goes, in picture pixels.
       const near = g.near;
-      const x = near ? W / 2 : actor ? Math.min(Math.max(actor.x, 210), W - 210) : W / 2;
+      const x = near ? W / 2 : actor ? Math.min(Math.max(actor.x, 210), W - 210) : off[0];          // (CAR-13E: off, above)
       let top = actor ? actor.y - actor.h * actor.scale : 0;
       if (actor && !near) {
         // Someone taller standing close by, level with the speaker or nearer: lift the words clear of that head too,
@@ -88,7 +97,7 @@ export class Dialogue {
           if (Math.abs(other.x - x) < (clear ? 210 : 150) && (other.y > actor.y - 60 || clear) && head < top) top = Math.max(head, top - most, actor.y - actor.h * actor.scale - most);
         }
       }
-      const y = near ? H - 12 : actor ? Math.max(top - 10, 60) : 150;
+      const y = near ? H - 12 : actor ? Math.max(top - 10, 60) : off[1];                            // (CAR-13E: off, above)
       if (near) p.classList.add("under");
       p.style.left = `${(x / W) * 100}%`;
       p.style.top = `${(y / H) * 100}%`;

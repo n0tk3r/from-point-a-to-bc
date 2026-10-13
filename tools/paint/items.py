@@ -375,19 +375,62 @@ def _folded(b, l, a, u, v, drop, tones, layers=3):
 
 
 def toga(b, l):
-    """The senator's toga, folded: white wool with a purple stripe along its edge."""
+    """The senator's toga, folded: plain white wool. (ROME-13R1: plain white now, its purple stripe taken away, as the
+    senator's line says: "One clean bedsheet. Plain white." Nothing else changed.)"""
     tones = ("#fdf9ee", "#dfd9d2", "#b4adc4", "#8a84a2")
     top = _folded(b, l, (6, 24), (26, -12), (27, 14), 15, tones)
-    purple = ("#8a44a4", "#5c2876", "#b876cc")
-    s0, s1 = 0.56, 0.78
-    b.poly([top(s0, 0), top(s1, 0), top(s1, 1), top(s0, 1)], purple[0])                    # the stripe across the top ...
-    b.poly([top(s0, 1), top(s1, 1), top(s1, 1, 15.3), top(s0, 1, 15.9)], purple[1])        # ... and down over the edge
-    l.line([top(s0, 0), top(s0, 1), top(s0, 1, 15.8)], purple[1], 0.9, 0.8)
-    l.line([top(s1, 0.02), top(s1, 1)], purple[2], 0.9, 0.9)
-    for d in (5, 10):
-        l.line([top(s0, 1, d + 0.5), top(s1, 1, d + 0.3)], "#3c1650", 0.9, 0.7)
     b.poly(loop([top(0.06, 0.16), top(0.46, 0.1), top(0.48, 0.5), top(0.28, 0.86), top(0.05, 0.8)], 4), "#ffffff")       # the light on the top fold
     l.line([top(0.06, 0.55), top(0.5, 0.5)], tones[1], 1.0, 0.8)                           # a soft crease
+
+
+def gaultoga(b, l):
+    """The Gaul's toga (ROME-13R1): plain white wool, new and a little creamier than the senator's, folded thick and long,
+    plainly much bigger than his: a long deep pile right across the picture, its many folds showing down its front, and
+    one end of it escaping from the fold and trailing out over the front and down."""
+    tones = ("#fbf5e4", "#e4d9c2", "#bbadb2", "#8c8090")
+    top = _folded(b, l, (9, 19), (37, -13), (17, 10), 21, tones, layers=6)
+    b.poly(loop([top(0.05, 0.14), top(0.55, 0.06), top(0.62, 0.5), top(0.30, 0.84), top(0.04, 0.78)], 4), "#fffdf6")      # the light on the top fold
+    l.line([top(0.08, 0.52), top(0.62, 0.46)], tones[1], 1.0, 0.8)                         # soft creases across the top
+    l.line([top(0.30, 0.20), top(0.86, 0.18)], tones[1], 0.9, 0.6)
+    # the loose end: it comes out from between the folds low on the pile's left side, falls to the ground and trails
+    # along it in front of the pile, a long strip of white with its tip turned over
+    ex, ey = top(0, 0.45, 13)
+    strip = [(ex + 1, ey - 3.5), (ex - 5.5, ey + 2), (ex - 7.5, ey + 10), (ex - 5, ey + 16.6), (ex + 4, ey + 20.6), (ex + 16, ey + 23), (ex + 28, ey + 22.4),
+             (ex + 35, ey + 19.8), (ex + 30, ey + 16.4), (ex + 17, ey + 16.4), (ex + 7, ey + 13.6), (ex + 2.5, ey + 9), (ex + 2.4, ey + 3), (ex + 4.4, ey - 0.6)]
+    b.poly(loop(strip, 3), tones[1])
+    b.poly(loop([(ex - 3.6, ey + 2.6), (ex - 5.4, ey + 10), (ex - 2.8, ey + 15.4), (ex + 4.6, ey + 18.8), (ex + 16, ey + 20.6), (ex + 28, ey + 19.8),
+                 (ex + 17, ey + 18.2), (ex + 6, ey + 15.6), (ex + 0.4, ey + 10.4), (ex + 0.2, ey + 3.6)], 3), tones[0])
+    l.line([(ex - 7.5, ey + 10), (ex - 5, ey + 16.6), (ex + 4, ey + 20.6), (ex + 16, ey + 23), (ex + 28, ey + 22.4)], tones[3], 1.0, 0.85)       # its shaded underside
+    l.line([(ex + 30, ey + 16.6), (ex + 35, ey + 19.8), (ex + 32, ey + 22.0)], tones[2], 1.1, 0.85)                                         # its turned-over tip
+    l.line([(ex - 0.4, ey - 2.4), (ex + 1.6, ey + 0.4)], tones[3], 1.3, 0.9)                                                               # the fold it comes out of
+
+
+def lamp(b, l):
+    """Phyllis's gift for her son (ROME-13R1): a little clay oil lamp, plain and round, its nozzle and a small handle,
+    sitting on a folded cloth of soft blue wool."""
+    cloth = ("#a8c0e0", "#7f9cc6", "#5c74a2", "#3e5078")
+    top = _folded(b, l, (4, 40), (30, -11), (28, 12), 6, cloth, layers=2)
+    b.line([top(0.1, 0.5), top(0.9, 0.5)], cloth[1], 0.9, 0.6)                             # its fold across
+    # the lamp: a round body seen from above and to the side, the filling hole in its sunk top, the nozzle toward the right
+    cx, cy = 29.0, 34.0
+    b.ellipse(cx + 5.0, cy + 8.0, 19.0, 5.4, cloth[2])                                      # its shadow on the cloth
+    nozzle = loop([(cx + 9, cy - 4.4), (cx + 22, cy - 3.6), (cx + 26.4, cy - 0.6), (cx + 25.6, cy + 3.2), (cx + 21, cy + 5.4), (cx + 9, cy + 6.2)], 3)
+    b.poly(nozzle, "#b8603a")
+    b.poly(loop([(cx + 10, cy - 3.6), (cx + 21.6, cy - 3.0), (cx + 25.4, cy - 0.6), (cx + 21.0, cy + 0.6), (cx + 10, cy + 0.8)], 3), "#e08a54")
+    b.poly(oval(cx, cy + 3.2, 15.6, 9.2), "#9a4a2c")                                        # the body: its side, in shade below
+    b.poly(oval(cx, cy, 15.6, 8.4), "#c86a40")                                               # its top, the shoulder
+    b.poly(oval(cx - 2.0, cy - 1.6, 9.4, 4.6), "#e9935a")                                    # the shoulder lit from the upper left
+    b.poly(oval(cx + 0.6, cy + 0.2, 7.4, 4.0), "#a8522e")                                   # the sunk top (the discus)
+    b.poly(oval(cx + 1.4, cy + 0.9, 5.6, 2.8), "#c8683e")
+    l.ellipse(cx + 2.0, cy + 1.0, 1.9, 1.2, "#3a1e14")                                       # the filling hole
+    l.ellipse(cx + 22.6, cy - 0.4, 1.9, 1.2, "#2e1a12")                                      # the wick hole in the nozzle
+    l.line([(cx + 10.4, cy - 3.0), (cx + 21.0, cy - 2.6)], "#f6b884", 0.9, 0.9)             # light along the nozzle's top
+    h0 = (cx - 15.4, cy - 1.2)                                                               # the small handle, a ring at the back
+    b.poly(loop([(h0[0] + 2.0, h0[1] - 3.0), (h0[0] - 3.4, h0[1] - 5.2), (h0[0] - 6.6, h0[1] - 2.6), (h0[0] - 6.0, h0[1] + 1.8), (h0[0] - 2.2, h0[1] + 3.0), (h0[0] + 1.8, h0[1] + 1.4)], 3), "#a8522e")
+    l.ellipse(h0[0] - 2.6, h0[1] - 0.8, 1.7, 1.6, "#5e78a8")                                 # the cloth seen through the ring
+    l.line([(h0[0] - 4.8, h0[1] - 4.2), (h0[0] - 6.0, h0[1] - 0.4)], "#e9935a", 0.9, 0.9)
+    l.line(oval(cx, cy, 15.6, 8.4)[3:12], "#f2a670", 0.9, 0.8)                               # the rim of the shoulder catching the light
+    l.line(oval(cx, cy + 3.2, 15.6, 9.2)[0:8], "#6a2e1a", 1.0, 0.7)                          # and the far side of its belly in shade
 
 
 def tunic(b, l):
@@ -1309,9 +1352,11 @@ ITEMS.update(studykey=studykey, lilflash=lilflash, pencil=pencil, carkey=carkey)
 ITEMS.update(chicken=chicken, batteries=batteries)
 ITEMS.update(penny=penny, pennies=pennies, mirrorshades=mirrorshades, egg=egg, waters=waters, storeshade=storeshade,      # NEVADA-12B
              sectormap=sectormap, receipt=receipt)
+ITEMS.update(gaultoga=gaultoga, lamp=lamp)                                                  # ROME-13R1: the Gaul's toga, Phyllis's lamp
 ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",
          "phone", "quarter", "gum", "studykey", "lilflash", "pencil", "carkey", "chicken", "batteries",
          "penny", "pennies", "mirrorshades", "egg", "waters", "storeshade", "sectormap", "receipt"]                    # NEVADA-12B: the store's things
+ORDER += ["gaultoga", "lamp"]                                                               # ROME-13R1: the bigger Rome's two
 
 
 # ---------------------------------------------------------------- painting one

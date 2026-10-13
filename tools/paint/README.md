@@ -304,13 +304,17 @@ the finished room).
 | Script | Paints | Into |
 | --- | --- | --- |
 | `highway.py` | the highway at dusk, the sun, the sign's two changes, the wagon from behind | `art/scenes/highway/` |
-| `egypt1.py`, `wagon.py`, `egypt1_donkey.py`, `egypt1_steam.py` | where the wagon came down: backdrop, palms, the wagon and its states, the donkey, steam | `art/scenes/egypt-crash/` |
+| `egypt1.py`, `wagon.py`, `egypt1_donkey.py`, `egypt1_steam.py` | where the wagon came down: backdrop, palms, the wagon and its states (the driver's window rolled down, the inside of the car seen through it: round thirteen <!-- CAR-13P -->), the donkey, steam | `art/scenes/egypt-crash/` |
+| `egypt_car.py` | inside the wagon, from the driver's seat, one afternoon, through one camera (nobody drawn): the glovebox shut, open with the map and empty, the visor up and down, the air freshener; the sand, the river and the sky through the glass (`egypt_car_world.py`); its model, kit, things, painted props, layout and check in `egypt_car_*.py` <!-- CAR-13P --> | `art/scenes/egypt-car/` |
 | `egypt_site.py` | the foot of the pyramid | `art/scenes/egypt-site/` |
 | `egypt_gallery.py` | the great gallery | `art/scenes/egypt-gallery/` |
 | `egypt_chamber.py` | the burial chamber | `art/scenes/egypt-chamber/` |
 | `rome_street.py` | the street to the Forum | `art/scenes/rome-street/` |
 | `rome_steps.py` | the steps of the temple | `art/scenes/rome-steps/` |
 | `rome_temple.py` | inside the temple | `art/scenes/rome-temple/` |
+| `rome_forum.py` (with `rome_forum_model.py`, `_kit`, `_far`, `_things`, `_layout`, `_frames`, `_check`, `_people`, `_mock`) | the Forum from its east end: the temple of Castor's corner, Juturna's basin, the Puteal, the moneychanger's table and its awning, the hoarding of the senate house's site, statues on their columns, the crane's wheel in frames <!-- ROME-13R1 --> | `art/scenes/rome-forum/` |
+| `rome_capitol.py`, `rome_capitol_temple.py`, `rome_capitol_things.py`, `rome_capitol_geese.py` | the Capitol: the precinct before the temple of Jupiter, its cut-outs, and the sacred geese's frames (`_kit` the measurements, `_layout` writes `layout.json`, `_check` and `_walk.mjs` check it, `_plan` the blocks, `_people` the game's people in it) <!-- ROME-13R2 --> | `art/scenes/rome-capitol/` |
+| `rome_tiber.py` | across the Tiber: the right bank below the stone bridge, the barge, Eleazar's house and window, the house of prayer and its bench, the hen yard; with `rome_tiber_model.py` (the place measured), `rome_tiber_kit.py`, `rome_tiber_things.py`, `rome_tiber_hens.py` (the hens' frames), `rome_tiber_layout.py` (layout.json), `rome_tiber_plan.py` (the skeleton), `rome_tiber_check.py`, `rome_tiber_walk.mjs` and `rome_tiber_order.py` (the check picture, the engine's walk map, the engine's back-to-front order with the boy anywhere), `rome_tiber_people.py` (the game's people stood in it, the man at the window at his own scale) <!-- ROME-13R3 --> | `art/scenes/rome-tiber/` |
 | `home_living_room.py` | the living room at night, two storeys high, with the stairs up to the landing | `art/scenes/home-living-room/` |
 | `home_landing.py` | the landing upstairs, seen from out over the living room | `art/scenes/home-landing/` |
 | `home_study.py` | Dad's study under the roof | `art/scenes/home-study/` |

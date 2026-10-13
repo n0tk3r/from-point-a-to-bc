@@ -58,15 +58,18 @@ say(len(same) == 14, f"{len(same)} pictures are pixel-identical to the round-two
 old, new, mir, back = rgba(f"{OLD}/wagon.png"), rgba(f"{NEW}/wagon.png"), rgba(f"{NEW}/mirror.png"), rgba(f"{NEW}/back.png")
 both = np.where(mir[..., 3:] > 0, mir, new)
 was = old[..., 3] > 0
-say(not np.any(both[was] != old[was]), f"wagon.png + mirror.png = the approved wagon on all {int(was.sum())} of its pixels")
+window = np.zeros(was.shape, dtype=bool)                    # CAR-13P: round thirteen rolled the driver's window down: only inside this box
+window[455:493, 618:663] = True
+say(not np.any((both != old).any(axis=2) & was & ~window), f"wagon.png + mirror.png = the approved wagon on all {int(was.sum())} of its pixels, "
+    f"but in the driver's window, rolled down in round thirteen ({int(((both != old).any(axis=2) & was & window).sum())} pixels in x 618..662, y 455..492)")
 extra = (both[..., 3] > 0) & ~was
 say(not np.any(both[extra][:, :3] != back[extra][:, :3]), f"the {int(extra.sum())} pixels now filled in the wagon (thin paint: it was see-through) show exactly the backdrop")
 gone = (mir[..., 3] > 0)
 ys, xs = np.nonzero(gone)
 print(f"      mirror.png: {int(gone.sum())} pixels, x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()}")
 say(not np.any((new[..., 3] == 0) & gone), "wagon.png is solid under the mirror")
-changed = np.any(new != old, axis=2) & was
-say(not np.any(changed & ~gone), f"wagon.png differs from the approved one only under the mirror ({int(changed.sum())} pixels) and in the filled places")
+changed = np.any(new != old, axis=2) & was & ~window       # CAR-13P: (and in the window)
+say(not np.any(changed & ~gone), f"wagon.png differs from the approved one only under the mirror ({int(changed.sum())} pixels), in the filled places and in the window")
 
 shape = old.shape[:2]
 ca, aa, lca, laa = wagon.wagon(shape, WAGON)
@@ -190,7 +193,7 @@ keep_clear = {"the wagon": [p for p in doc["planes"] if p["id"] == "wagon"][0]["
               "the boy's prints": [t for t in doc["things"] if t["id"] == "footprints"][0]["shape"]["poly"], "the track": doc["exits"][0]["shape"]["poly"]}
 hit = [k for k, poly in keep_clear.items() if any(inside((x + 0.5, y + 0.5), poly) for y, x in zip(*np.nonzero(dk)))]
 say(not hit, "the donkey is clear of the wagon, the boy's prints and the track" if not hit else f"the donkey overlaps {hit}")
-wanted = ["river", "reeds", "footprints", "pyramid", "boat", "wagon", "hood", "glovebox", "mirror", "suitcase", "trunk", "cooler", "donkey", "block"]
+wanted = ["river", "reeds", "footprints", "pyramid", "boat", "wagon", "hood", "inside", "mirror", "suitcase", "trunk", "cooler", "donkey", "block"]     # CAR-13P: "inside" (was "glovebox")
 have = [t["id"] for t in doc["things"]]
 say(all(w in have for w in wanted) and doc["exits"][0]["id"] == "track", "layout.json names every thing in the brief, and the track as an exit")
 files = [p["file"] for p in doc["planes"] if "file" in p] + [f for p in doc["planes"] for f in p.get("frames", [])] + [p["file"] for p in doc["palms_split"]["planes"]]

@@ -16,9 +16,24 @@
 // birds will not touch their grain, which the soothsayer takes for the worst of omens, and they all stand facing the
 // temple doors. The boy notices that himself at the cage, and thinks of his little sister. Nobody explains it.
 //
+// ROME-13S1 (round thirteen, the bigger Rome: briefs/ROME-13.md, "What changes in the act as built"; SCENES-13R1.md). The
+// same picture, and three changes:
+//   the ways   two new ways off the picture: the bottom edge into the Forum (rome-forum), the right edge round the back of
+//              the temple and up the hill to the Capitol (rome-capitol). The far view at the left is two things now, the
+//              hill with Jupiter's temple on it (`hill`) and the Forum below it (`forum`), each the same way as an edge.
+//              All four wait until he has been to the street and worked out that it is B.C. (rome.knowsBC): before that
+//              his nose says the street first ("Snacks first."), and he stays where the walk left him.
+//   chain A    the senator stays on the steps (decision 1 is held), and his turn happens here (decision 2): the first toga
+//              the boy brings him is a Gaul's (`wrongToga`): he holds it up, it reaches the ground twice, and the Gaul in
+//              the Forum has his. Brought the right one (rome.swapped), he takes it as he always did, every line.
+//              His answer to "Late for what?" says where the Senate meets today (rome.knowsSenate): the Gaul's question.
+//   chain B    the soothsayer's breakfast comes down the hill from the keeper's boy now, and the boy says so.
+// And a game saved before the bigger Rome goes on (`fromOldSave`, in `setup`).
+//
 // Try it: index.html?scene=rome-steps&lead=son
 // Later states: &flags=rome.arrived,rome.knowsRule,rome.hasToga,rome.hasBreakfast   (the things themselves are
 // handed over by the people in rome-street, so start there to carry them).
+// ROME-13S1: the new ways open with &flags=rome.arrived,rome.knowsBC; the senator's turn: rome.hasToga, and game.give("toga").
 
 const art = "art/scenes/rome-steps/";
 
@@ -39,6 +54,47 @@ const heard = (g, id) => !!g.store.data.seenLines[id];
 const twice = (first, second) => (g) => g.say(heard(g, first) ? second : first);
 /** Someone who can stand turns to the boy. */
 const turnTo = (g, who) => { const a = g.actor(who), me = g.lead; if (a && me) a.look(me.x, me.y); };
+/** ROME-13S1: a hand kept held out (the people's rig), asked for through a guard, so that a figure without it simply stands. */
+const hold = (a, on) => a && a.hold && a.hold(on);
+
+/** ROME-13S: a game saved before the bigger Rome. The steps it never had to take count as taken. Safe to run every time. */
+function fromOldSave(g) {
+  const heard = (id) => !!g.store.data.seenLines[id];
+  if (g.flag("rome.delivered") && !g.flag("rome.swapped")) { g.flag("rome.wrongToga", true); g.flag("rome.swapped", true); }
+  if (g.flag("rome.hasBreakfast") && !g.flag("rome.knowsBoy")) { g.flag("rome.knowsBoy", true); g.flag("rome.geeseGone", true); }
+  if (heard("rome.senator.ans.late.1") && !g.flag("rome.knowsSenate")) g.flag("rome.knowsSenate", true);
+}
+
+// ---------- ROME-13S1: the two new ways, and the far view in two ----------
+// The bottom edge goes into the Forum (it lies behind us: the picture looks across its far end at the temple), the right
+// edge round the back of the temple and up the hill to the Capitol (briefs/ROME-13.md, "The steps", measured on this
+// picture and this walk outline). Each one's `walkTo` is on the open pavement at its edge, and the way back in at the
+// other end is a step in from the same place (`spawn`; `enter` walks him out from under the inventory bar, and clear of
+// the carved stone). Both are closed until he has been to the street and worked out that it is B.C.
+const TO_FORUM = [520, 592], TO_CAPITOL = [788, 478];
+/** He says a line. At the right edge of the picture (the way up to the Capitol, where the hill's looks are said too) his
+    words would lie across the soothsayer's face, up on his step: there, for that line, they go over the old man's head
+    (the sprite flag `clear`, js/engine/dialogue.js). */
+async function sayHere(g, id) {
+  const old = g.lead && g.lead.x > 700 ? g.actor("soothsayer") : null, lift = !!(old && old.flag), was = lift && !!(old.flags && old.flags.clear);
+  if (lift) old.flag("clear", true);
+  await g.say(id);
+  if (lift) old.flag("clear", was);
+}
+/** A way on: once he knows when he is (rome.knowsBC), off he goes; before that, his nose has spoken, and he stays. */
+const onward = (to) => async (g) => {
+  if (!g.flag("rome.knowsBC")) return sayHere(g, "rome.steps.closed");
+  await g.goto(to, { spawn: "fromSteps" });
+};
+// The far view at the left, split at the hill's foot (traced on the picture: the line where the Forum's roofs meet the
+// hill, from [0, 220] to [240, 236]). Above it, the hill and the temple of Jupiter on its top, against the sky (its top
+// edge is the old far view's); below it, the Forum's buildings and its far pavement, and the honorary column standing in
+// front of the hill, statue and all, which belongs to the Forum (a notch out of the hill, joined over the statue's head).
+const HILL = [[0, 212], [14, 186], [22, 174], [31, 175], [34, 195], [54, 187], [55, 144], [97, 118], [101, 118], [137, 143], [138, 181], [148, 182], [160, 183],
+  [200, 201], [238, 209], [240, 236], [225, 234], [209, 230], [208, 222], [200, 222], [199, 229], [190, 227], [186, 214], [170, 214], [166, 220], [160, 226],
+  [160, 184], [148, 183], [148, 230], [138, 230], [125, 225], [108, 221], [86, 229], [78, 226], [75, 218], [61, 218], [60, 222], [45, 223], [0, 220]];
+const FORUM = [[0, 220], [45, 223], [60, 222], [61, 218], [75, 218], [78, 226], [86, 229], [108, 221], [125, 225], [138, 230], [148, 230], [148, 183], [160, 184],
+  [160, 226], [166, 220], [170, 214], [186, 214], [190, 227], [199, 229], [200, 222], [208, 222], [209, 230], [225, 234], [240, 236], [240, 288], [236, 304], [0, 304]];
 
 // ---------- the pigeons ----------
 // Since round four the pigeons are the engine's (`fx`, below: the flocks on the pavement and the two by the cart): they
@@ -183,11 +239,15 @@ async function meetSoothsayer(g) {
   g.flag("rome.metSoothsayer", true);
 }
 
+/** ROME-13S1: what the boy says as he hands the breakfast over. It came down the hill from the keeper's boy, past the geese
+    (rome.metTitus: Titus handed it over); in a game saved before the bigger Rome it came from the keeper, as it always did. */
+const fedLine = (g) => (g.flag("rome.metTitus") ? "rome.soothsayer.fed.geese" : "rome.soothsayer.fed.1");
+
 /** His breakfast arrives. The crumbs go to the sacred chickens, they feed, and that is a good omen:
     now he will send his incense in to the god, by the boy. */
 async function feedSoothsayer(g) {
   await meetSoothsayer(g);
-  await g.say("rome.soothsayer.fed.1");
+  await g.say(fedLine(g));                                        // ROME-13S1 (was rome.soothsayer.fed.1 always)
   await g.reach();
   g.take("breakfast");
   await g.say("rome.soothsayer.fed.2", "rome.soothsayer.fed.3", "rome.soothsayer.fed.4", "rome.soothsayer.fed.5");
@@ -202,7 +262,7 @@ async function talkToSoothsayer(g) {
   for (;;) {
     const fed = !!g.flag("rome.hasIncense");
     const pick = await g.choose([
-      { id: "feed", line: "rome.soothsayer.fed.1", when: (g) => g.has("breakfast") },
+      { id: "feed", line: fedLine(g), when: (g) => g.has("breakfast") },      // ROME-13S1
       { id: "birds", line: "rome.soothsayer.ask.birds" },
       { id: "temple", line: "rome.soothsayer.ask.temple" },
       { id: "future", line: "rome.soothsayer.ask.future" },
@@ -249,6 +309,34 @@ async function meetSenator(g) {
   g.flag("rome.metSenator", true);
 }
 
+/** ROME-13S1 (decision 2: #2 Deliver It, the first time; briefs/ROME-13.md, "What changes in the act as built", 1). The
+    toga from the laundry is not his. He takes it, shakes it out and holds it up to the light, turned from the boy: it is
+    new, and it reaches the ground twice. He turns back: the laundress has given him a Gaul's toga, and the Gaul has his.
+    He hands the enormous one back (the boy carries the Gaul's toga now: rome.wrongToga), and stays, pacing, as before. */
+async function wrongToga(g) {
+  await meetSenator(g);
+  const senator = g.actor("senator"), me = g.lead;
+  await g.say("rome.senator.wrong.1");
+  await g.reach();                                                // he holds it out, and the senator takes it
+  g.take("toga");
+  await g.say("rome.senator.wrong.2");
+  if (senator) senator.face("W");                                 // he turns from the boy to shake it out
+  hold(senator, true);                                            // and holds it up, at arm's length
+  await g.wait(600);
+  await g.say("rome.senator.wrong.3", "rome.senator.wrong.4");
+  hold(senator, false);
+  await g.wait(250);
+  if (senator && me) senator.look(me.x, me.y);                    // and turns back to him
+  await g.say("rome.senator.wrong.5", "rome.senator.wrong.6");
+  hold(senator, true);                                            // the enormous one, held out to the boy
+  await g.say("rome.senator.wrong.7");
+  await g.reach();                                                // and taken
+  hold(senator, false);
+  g.give("gaultoga");
+  g.flag("rome.wrongToga", true);
+  await g.say("rome.senator.wrong.8");
+}
+
 /** The toga arrives, and the senator leaves for the Senate. (He is not on the steps again: see `actors`.) */
 async function deliverToga(g) {
   await meetSenator(g);
@@ -263,11 +351,15 @@ async function deliverToga(g) {
   await g.say("rome.senator.toga.6");
 }
 
+/** ROME-13S1: the toga given to him: the Gaul's the first time (the boy does not know it), his own once the togas have
+    been swapped in the Forum (rome.swapped). */
+const giveToga = (g) => (g.flag("rome.swapped") ? deliverToga(g) : wrongToga(g));
+
 async function talkToSenator(g) {
   await meetSenator(g);
   for (;;) {
     const pick = await g.choose([
-      { id: "give", line: "rome.senator.toga.1", when: (g) => g.has("toga") },
+      { id: "give", line: g.flag("rome.swapped") ? "rome.senator.toga.1" : "rome.senator.wrong.1", when: (g) => g.has("toga") },      // ROME-13S1
       { id: "late", line: "rome.senator.ask.late" },
       { id: "toga", line: "rome.senator.ask.toga" },
       // Once he has heard whose nose is on the new money (the keeper cries it, the first time he walks into the street),
@@ -277,9 +369,11 @@ async function talkToSenator(g) {
       { id: "dad", line: "rome.senator.ask.dad" },
       { id: "bye", line: "rome.senator.ask.bye" },
     ]);
-    if (pick === "give") return deliverToga(g);
-    if (pick === "late") await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");
-    else if (pick === "toga") await g.say("rome.senator.ask.toga", "rome.senator.ans.toga.1", "rome.senator.ans.toga.2", "rome.senator.ans.toga.3", "rome.senator.ans.toga.4");
+    if (pick === "give") return giveToga(g);                     // ROME-13S1
+    if (pick === "late") {
+      await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");
+      g.flag("rome.knowsSenate", true);                           // ROME-13S1: where the Senate meets today (the Gaul's question)
+    } else if (pick === "toga") await g.say("rome.senator.ask.toga", "rome.senator.ans.toga.1", "rome.senator.ans.toga.2", "rome.senator.ans.toga.3", "rome.senator.ans.toga.4");
     else if (pick === "caesar") await g.say("rome.senator.ask.caesar", "rome.senator.ans.caesar.1", "rome.senator.ans.caesar.2", "rome.senator.ans.caesar.3", "rome.senator.ans.caesar.4", "rome.senator.ans.caesar.5");
     else if (pick === "dad") await g.say("rome.senator.ask.dad", "rome.senator.ans.dad.1", "rome.senator.ans.dad.2");
     else return g.say("rome.senator.ask.bye", "rome.senator.ans.bye");
@@ -323,14 +417,22 @@ export default {
     default: [470, 508],                                          // the foot of the steps: where the doorkeeper put him down
     fromStreet: [52, 472],                                        // coming in from the street, at the left edge, behind the laurel (see `enter`)
     fromTemple: [517, 295],                                       // coming out of the doors (the same place as the doors' walkTo, below)
+    fromForum: TO_FORUM,                                          // ROME-13S1: back from the Forum, at the bottom edge (see `enter`)
+    fromCapitol: TO_CAPITOL,                                      // ROME-13S1: back down the hill, at the right edge (see `enter`)
   },
-  exits: ["rome-street", "rome-temple"],
+  exits: ["rome-street", "rome-temple", "rome-forum", "rome-capitol"],      // ROME-13S1: the Forum, the Capitol
   // The way out across the edge of the picture (round three): the street is off the left edge, behind the laurel, so a
   // click anywhere down the left side, where there is nothing else, walks him to the painter's way out and on into the
   // street, as the way out there does ("to-street", below). The temple's doors are in the middle of its front wall: they
   // stay a thing to click on, and are not an edge.
+  // ROME-13S1: and two more. The bottom edge is the Forum: its band is open pavement from x 160 to 797 (the statue base at
+  // the bottom left is blocked ground). The right edge is the way round the back of the temple, up to the Capitol: its
+  // band is the pavement from row 440 down (above that the steps' own area, `stairs`, wins). Both are there from the
+  // first (a band and an arrow), and closed until rome.knowsBC: see `onward`.
   edges: {
     W: { to: "rome-street", spawn: "fromForum", name: "to the street", walkTo: [34, 470] },
+    S: { to: "rome-forum", spawn: "fromSteps", name: "into the Forum", walkTo: TO_FORUM, use: onward("rome-forum") },                  // ROME-13S1
+    E: { to: "rome-capitol", spawn: "fromSteps", name: "up the hill to the Capitol", walkTo: TO_CAPITOL, use: onward("rome-capitol") },   // ROME-13S1
   },
 
   picture: art + "back.png",
@@ -397,7 +499,12 @@ export default {
   // the far right of the flight were traced from the picture before, and were already tight. The five pigeons by the
   // puddle are five things to click, and all say the same.
   hotspots: [
-    { id: "forum", name: "Forum", poly: [[0, 212], [14, 186], [22, 174], [31, 175], [34, 195], [54, 187], [55, 144], [97, 118], [101, 118], [137, 143], [138, 181], [152, 182], [158, 186], [200, 201], [238, 209], [240, 288], [236, 304], [0, 304]], walkTo: [140, 470], face: "N", look: twice("rome.forum.look", "rome.forum.look2") },      // the hill and its great temple, against the sky, and the Forum below it
+    // ROME-13S1: the far view in two (it was one area, "forum", the hill and the Forum together, looked at from [140, 470]).
+    // Each half is a way now, the same as its edge: a click walks him to that edge, and on (or, before rome.knowsBC, says
+    // that his nose has spoken). With no `face`, he turns toward the half he clicked.
+    { id: "hill", name: "Capitol", verb: "Walk to", poly: HILL, walkTo: TO_CAPITOL,
+      look: (g) => sayHere(g, g.flag("rome.sawCapitol") ? "rome.hill.look2" : "rome.hill.look"), use: onward("rome-capitol") },      // the hill, and Jupiter's temple on it
+    { id: "forum", name: "Forum", verb: "Walk to", poly: FORUM, walkTo: TO_FORUM, look: twice("rome.forum.look", "rome.forum.look2"), use: onward("rome-forum") },      // the Forum below it
     // The temple itself, traced from the picture: the side wall, the six columns and everything above them.
     { id: "temple", name: "temple", verb: "Climb", poly: [[240, 96], [345, 0], [800, 0], [800, 292], [326, 292], [244, 286]], look: "rome.temple.look", use: "rome.temple.use" },
     { id: "stairs", name: "temple steps", poly: [[700, 306], [797, 306], [797, 430], [700, 440]], look: "rome.stairs.look" },      // the far right of the flight: the rest is for walking on
@@ -445,13 +552,15 @@ export default {
         toga: "rome.soothsayer.toga",
         coin: ["rome.soothsayer.coin.1", "rome.soothsayer.coin.2", "rome.soothsayer.coin.3"],
         quarter: "rome.soothsayer.quarter", incense: "rome.soothsayer.incense",
+        gaultoga: "rome.soothsayer.gaultoga", lamp: "rome.soothsayer.lamp",      // ROME-13S1
       },
     },
     {
       id: "senator", name: "senator", verb: "Talk to", poly: [[197, 401], [188, 407], [189, 420], [180, 444], [180, 452], [184, 459], [183, 515], [184, 527], [193, 531], [193, 543], [208, 545], [213, 541], [213, 534], [209, 531], [214, 528], [214, 465], [216, 461], [219, 462], [223, 459], [222, 454], [225, 451], [234, 454], [237, 450], [229, 440], [217, 438], [210, 423], [210, 419], [213, 417], [210, 408], [204, 402]], walkTo: [264, 540], face: "W",
       when: (g) => !g.flag("rome.delivered"),
       look: twice("rome.senator.look", "rome.senator.look2"), use: talkToSenator,
-      useWith: { toga: deliverToga, breakfast: "rome.senator.breakfast", incense: "rome.senator.incense" },
+      useWith: { toga: giveToga, breakfast: "rome.senator.breakfast", incense: "rome.senator.incense",
+        gaultoga: "rome.senator.gaultoga", lamp: "rome.senator.lamp" },      // ROME-13S1: the toga the first time is the wrong one (giveToga); the Gaul's toga, shown him again; the lamp
     },
     {
       // He is small up there (68 pixels), and his area is his figure, with the staff he holds. All round him is the
@@ -463,6 +572,7 @@ export default {
         toga: "rome.doorkeeper.toga",
         breakfast: ["rome.doorkeeper.breakfast.1", "rome.doorkeeper.breakfast.2", "rome.doorkeeper.breakfast.3"],
         coin: "rome.doorkeeper.coin", quarter: "rome.doorkeeper.quarter", phone: "rome.doorkeeper.phone",
+        gaultoga: "rome.doorkeeper.gaultoga", lamp: "rome.doorkeeper.lamp",      // ROME-13S1
       },
     },
     {
@@ -474,15 +584,23 @@ export default {
   ],
 
   // Runs as the scene is built, and after a save is loaded: the pigeons' areas go with the pigeons.
+  // ROME-13S1: and first, a game saved before the bigger Rome is brought up to date (briefs/SCENES-13R.md).
   setup(g) {
+    fromOldSave(g);
     followPigeons(g);
   },
 
   // Runs when the lead arrives. It must be safe to run twice, so it checks its own fact.
   async enter(g, from) {
     if (from === "rome-street") await g.walkTo(160, 474);         // out from behind the laurel at the left edge, onto the open pavement
+    if (from === "rome-forum") await g.walkTo(520, 528);          // ROME-13S1: up from the bottom edge, out from under the inventory bar
+    if (from === "rome-capitol") await g.walkTo(760, 492);        // ROME-13S1: in from the right edge, clear of the carved stone (any further left at this row, he would be behind it)
     if (g.flag("rome.arrived")) return;
     const me = g.lead, doorkeeper = g.actor("doorkeeper");
+    // ROME-13T: from the foot of the steps, the arrival's words lie just where the soothsayer's face is, up on his step: for
+    // these lines they go over his head (the sprite flag `clear`, as `sayHere` does at the right edge), and then as before.
+    const old = g.actor("soothsayer"), lift = !!(old && old.flag), was = lift && !!(old.flags && old.flags.clear);
+    if (lift) old.flag("clear", true);
     await g.wait(400);
     if (me) me.face("N");
     if (doorkeeper && me) doorkeeper.look(me.x, me.y);
@@ -493,6 +611,7 @@ export default {
     await g.say("rome.arrive.4", "rome.arrive.5", "rome.arrive.3", "rome.arrive.6");
     if (me) me.face("W");                                         // the street is off the left edge, behind the laurel: his nose says so
     await g.say("rome.arrive.7");
+    if (lift) old.flag("clear", was);                             // ROME-13T
     for (const thing of ["phone", "quarter", "gum"]) g.store.give(thing);   // what was in his pockets all along (no "You have..." for these)
     g.flag("rome.arrived", true);
     g.team(["son"]);                                              // he plays this act alone: Dad is still in Egypt, at his door

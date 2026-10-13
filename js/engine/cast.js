@@ -21,6 +21,12 @@
 // corner); people are then behind or in front according to which side of the line their
 // feet are on.
 //
+// SORT-13. Only two things whose pictures overlap on the screen are ever compared: a person
+// with a cut-out at the person's feet, two things that each have a base where their pictures
+// overlap. The floor is then put in an order that keeps every one of those answers (see
+// Cast.sorted), so a slanted base never puts anyone on the wrong side of a cut-out because
+// of how some third thing, far off across the picture, happened to compare with them.
+//
 // Positions are picture pixels (grid.js).
 
 import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, BASE } from "../art/rig.js";
@@ -999,20 +1005,65 @@ export class Cast {
   /** The story has changed: have each cut-out read its `when` and `state` again. */
   refresh(g) { for (const s of this.cutouts()) s.refresh(g); }
 
-  /** Back to front. */
-  order() {
+  /** What is shown on each of the three planes, each in the order it was put on the stage. */
+  planes() {
     const back = [], floor = [], front = [];
     for (const s of this.items.values()) if (!s.hidden && s.opacity > 0) (s.plane === "back" ? back : s.plane === "front" ? front : floor).push(s);
-    const person = (s) => s instanceof Figure || s instanceof PaintedFigure;        // (NEVADA-12E: a painted figure stands on a point, as a person does)
-    const depth = (a, b) => {
-      // Two things are compared where the one that stands on a single point is standing: a person against
-      // a wall is in front or behind according to the side of the wall's base line that their feet are on.
-      const x = person(a) ? a.x : person(b) ? b.x : a.base == null ? a.x : b.base == null ? b.x : (a.mid + b.mid) / 2;
-      return a.baseAt(x) - b.baseAt(x) || person(a) - person(b);          // feet exactly on a base line are in front of it
-    };
-    // (things that tie keep the order they were put on the stage in: a scene's later cut-outs lie over its earlier ones)
-    floor.sort(depth);
-    return [...back, ...floor, ...front];
+    return { back, floor, front };
+  }
+
+  /** Back to front: everything shown, the floor in depth order (sorted) by where each picture is now. */
+  order() {
+    const { back, floor, front } = this.planes();
+    const laid = this.sorted(floor.map((s) => shotOf(s, this.palette, this.calm) || { s, box: null }));      // SORT-13
+    return [...back, ...laid.map((t) => t.s), ...front];
+  }
+
+  /**
+   * SORT-13. The floor plane, back to front. `list` is [{ s, box }] in the order the things were put on the stage; `box`
+   * is the pixels the thing's picture covers now ([left, top, right, bottom), as update has it), or null when it has
+   * nothing to show.
+   * Two things are compared only when their boxes overlap, since only then does it matter which is painted first, and
+   * they are compared by the rule at the top of this file (Floor.facing): a person with a cut-out at the person's feet,
+   * two things that each have a base where their pictures overlap; feet exactly on a base are in front of it, and a tie
+   * after that goes to the one put on the stage first. The order is one that keeps every one of those answers (a
+   * topological sort of them): of the things free to be painted next, the one the plain comparison (Floor.plain) puts
+   * farthest back goes first. Where three or more things overlap round a steep or slanted base, the answers can go
+   * round in a circle that no order keeps. Then the circle is looked at closely, pixel by pixel, and the answers between
+   * things whose paint does not in fact meet are let go; a circle that is still there is true, and one of its things
+   * goes out of turn, chosen to break as few answers as can be (circle, below). Every step is fixed, so the answer comes
+   * from the things themselves, never from how a sort happens to go about its work.
+   * With no slanted base on the floor (most scenes) the plain comparison is itself a true order that every answer
+   * agrees with, and the floor is simply sorted by it: the same order, at the cost of an ordinary sort.
+   * Thirty things with slanted bases among them take a few tens of microseconds a frame (docs/DESIGN.md, section 3).
+   */
+  sorted(list) {
+    const n = list.length;
+    if (n < 2) return list;
+    const f = new Floor(list);
+    if (!f.slanted) return [...list.keys()].sort((i, j) => f.plain(i, j)).map((i) => list[i]);        // (stable: ties keep the order put on the stage)
+    const first = new Uint8Array(n * n), waits = new Int32Array(n), done = new Uint8Array(n), out = [];   // first[i * n + j]: i is painted before j; waits[j]: how many of those are still to paint
+    for (let i = 0; i < n; i++) {
+      const A = list[i].box;
+      if (!A) continue;
+      for (let j = i + 1; j < n; j++) {
+        const B = list[j].box;
+        if (!B || A[0] >= B[2] || B[0] >= A[2] || A[1] >= B[3] || B[1] >= A[3]) continue;            // apart on the screen: either order paints the same
+        if (f.facing(i, j, A, B) > 0) { first[j * n + i] = 1; waits[i]++; }
+        else { first[i * n + j] = 1; waits[j]++; }
+      }
+    }
+    const looked = new Uint8Array(n * n);                                                        // pairs looked at closely (circle)
+    for (let k = 0; k < n; k++) {
+      let pick = -1;
+      while (pick < 0) {
+        for (let i = 0; i < n; i++) if (!done[i] && !waits[i] && (pick < 0 || f.plain(i, pick) < 0)) pick = i;
+        if (pick < 0) pick = circle(list, first, done, waits, looked, f);                        // nothing is free: the answers go round
+      }
+      done[pick] = 1; out.push(list[pick]);
+      for (let j = 0, row = pick * n; j < n; j++) if (first[row + j]) waits[j]--;
+    }
+    return out;
   }
 
   /**
@@ -1022,26 +1073,13 @@ export class Cast {
    * walking past a wagon costs a patch the size of the lead, not a screenful of palms and awnings sixty times a second.
    */
   update(dt) {
-    const list = this.order();
+    // SORT-13: each thing's picture first, and then the order, which goes by where the pictures are. (Something with
+    // nothing to show, a cut-out whose picture has not arrived, is sorted with the rest, as order() has it, and not painted.)
+    const { back, floor, front } = this.planes();
+    const take = (list) => list.map((s) => { s.tick(dt); return shotOf(s, this.palette, this.calm) || { s, box: null }; });
+    const shots = [...take(back), ...this.sorted(take(floor)), ...take(front)].filter((shot) => shot.pic);
     let sig = "";
-    const shots = [];
-    for (const s of list) {
-      s.tick(dt);
-      const pic = s.picture(this.palette, this.calm);
-      if (!pic) continue;                                 // a cut-out with nothing to show, or whose picture has not arrived
-      // A picture at its own size goes down on whole pixels, hard-edged. One shown at another size says how big
-      // (w, h). A painted one is then drawn smoothly, and placed to a fraction of a pixel so that it glides; a
-      // drawn one (`hard`: somebody walking) keeps its hard pixels and stays on whole ones.
-      const sized = pic.w != null, soft = sized && !pic.hard;
-      const x = soft ? Math.round((s.x - pic.ox) * 8) / 8 : sized ? Math.round(s.x - pic.ox) : Math.round(s.x) - Math.round(pic.ox);
-      const y = soft ? Math.round((s.y - pic.oy) * 8) / 8 : sized ? Math.round(s.y - pic.oy) : Math.round(s.y) - Math.round(pic.oy);
-      const w = soft ? Math.round(pic.w * 8) / 8 : sized ? pic.w : pic.canvas.width, h = soft ? Math.round(pic.h * 8) / 8 : sized ? pic.h : pic.canvas.height;
-      const key = `${nameOf(pic.canvas)}:${x},${y},${w},${h},${s.opacity.toFixed(2)}`;
-      // box: the pixels it can touch, [left, top, right, bottom). (Smoothing can spill a pixel over the edge.)
-      const box = soft ? [Math.floor(x) - 1, Math.floor(y) - 1, Math.ceil(x + w) + 1, Math.ceil(y + h) + 1] : [x, y, x + w, y + h];
-      shots.push({ pic, x, y, w, h, opacity: s.opacity, key, box });
-      sig += key + ";";
-    }
+    for (const shot of shots) sig += shot.key + ";";
     if (sig === this.last) return;
     const W = this.canvas.width, H = this.canvas.height, ctx = this.ctx;
     const dirty = changed(this.shots, shots, W, H);
@@ -1056,6 +1094,18 @@ export class Cast {
       ctx.clearRect(0, 0, W, H);
       for (const s of shots) paint(s);
     } else if (dirty.length) {
+      // ROME-13E: a picture shown at another size (somebody walking: drawn at a rung of the ladder) is painted whole or not
+      // at all. Cut by the clip, the browser can take the next pixel of it where a column falls exactly between two (52
+      // shown as 50: its 13th and 38th), and the patch would not match the rest of him, nor a frame painted afresh.
+      for (let grew = true; grew; ) {
+        grew = false;
+        for (const s of shots) {
+          if (s.pic.w == null) continue;
+          const [l0, t0, r0, b0] = [Math.max(0, s.box[0]), Math.max(0, s.box[1]), Math.min(W, s.box[2]), Math.min(H, s.box[3])];
+          if (l0 >= r0 || t0 >= b0 || !dirty.some(([l, t, r, b]) => l0 < r && l < r0 && t0 < b && t < b0) || dirty.some(([l, t, r, b]) => l <= l0 && t <= t0 && r0 <= r && b0 <= b)) continue;
+          dirty.push([l0, t0, r0, b0]); grew = true;
+        }
+      }
       ctx.save();
       ctx.beginPath();
       for (const [l, t, r, b] of dirty) ctx.rect(l, t, r - l, b - t);
@@ -1066,6 +1116,149 @@ export class Cast {
     }
     ctx.globalAlpha = 1;
   }
+}
+
+/**
+ * Where one thing's picture goes on the layer now: { s, pic, x, y, w, h, opacity, key, box }, or null when it has
+ * nothing to show (a cut-out whose picture has not arrived, or that shows nothing). (SORT-13: taken out of update, so
+ * that order can have the boxes too.)
+ */
+function shotOf(s, palette, calm) {
+  const pic = s.picture(palette, calm);
+  if (!pic) return null;
+  // A picture at its own size goes down on whole pixels, hard-edged. One shown at another size says how big
+  // (w, h). A painted one is then drawn smoothly, and placed to a fraction of a pixel so that it glides; a
+  // drawn one (`hard`: somebody walking) keeps its hard pixels and stays on whole ones.
+  const sized = pic.w != null, soft = sized && !pic.hard;
+  const x = soft ? Math.round((s.x - pic.ox) * 8) / 8 : sized ? Math.round(s.x - pic.ox) : Math.round(s.x) - Math.round(pic.ox);
+  const y = soft ? Math.round((s.y - pic.oy) * 8) / 8 : sized ? Math.round(s.y - pic.oy) : Math.round(s.y) - Math.round(pic.oy);
+  const w = soft ? Math.round(pic.w * 8) / 8 : sized ? pic.w : pic.canvas.width, h = soft ? Math.round(pic.h * 8) / 8 : sized ? pic.h : pic.canvas.height;
+  const key = `${nameOf(pic.canvas)}:${x},${y},${w},${h},${s.opacity.toFixed(2)}`;
+  // box: the pixels it can touch, [left, top, right, bottom). (Smoothing can spill a pixel over the edge.)
+  const box = soft ? [Math.floor(x) - 1, Math.floor(y) - 1, Math.ceil(x + w) + 1, Math.ceil(y + h) + 1] : [x, y, x + w, y + h];
+  return { s, pic, x, y, w, h, opacity: s.opacity, key, box };
+}
+
+// ---------- SORT-13: which of two things on the floor is farther back ----------
+const person = (s) => s instanceof Figure || s instanceof PaintedFigure;        // (NEVADA-12E: a painted figure stands on a point, as a person does)
+/**
+ * The things on the floor as plain numbers, read once for each sort (Cast.sorted) as Sprite.baseAt and mid read them,
+ * so that comparing two of them costs a few arithmetic steps. Thing i is list[i]. Each comparison answers with a number
+ * below zero when i is to be painted before j (farther back), above zero when after.
+ */
+class Floor {
+  constructor(list) {
+    const n = list.length;
+    this.person = new Uint8Array(n); this.x = new Float64Array(n); this.mid = new Float64Array(n);
+    this.kind = new Uint8Array(n);                 // 0: no base of its own (it stands on a point), 1: a row, 2: a slanted line
+    this.base = new Float64Array(n * 4);           // the y it stands at, the row, or the line's x1, y1, x2, y2
+    this.slanted = false;
+    for (let i = 0; i < n; i++) {
+      const s = list[i].s, b = s.base, o = i * 4;
+      this.person[i] = person(s) ? 1 : 0; this.x[i] = s.x; this.mid[i] = s.x;
+      if (b == null) this.base[o] = s.y;
+      else if (!Array.isArray(b)) { this.kind[i] = 1; this.base[o] = b; }
+      else { this.kind[i] = 2; this.slanted = true; this.mid[i] = (b[0][0] + b[1][0]) / 2; this.base.set([b[0][0], b[0][1], b[1][0], b[1][1]], o); }
+    }
+  }
+  /** Where thing i meets the ground at x (Sprite.baseAt): a slanted line is held level beyond its ends. */
+  at(i, x) {
+    const o = i * 4, b = this.base;
+    if (this.kind[i] < 2) return b[o];
+    const x1 = b[o], y1 = b[o + 1], x2 = b[o + 2], y2 = b[o + 3], t = x2 === x1 ? 0.5 : Math.min(1, Math.max(0, (x - x1) / (x2 - x1)));
+    return y1 + (y2 - y1) * t;
+  }
+  /** i and j compared at x. Feet exactly on a base line are in front of it. */
+  near(i, j, x) { return this.at(i, x) - this.at(j, x) || this.person[i] - this.person[j]; }
+  /** Where to compare i and j when one of them stands on a single point: where a person stands, or else where whatever
+      has no base of its own stands (a person against a wall is in front or behind according to the side of the wall's
+      base line that their feet are on). Null when both have a base. */
+  point(i, j) { return this.person[i] ? this.x[i] : this.person[j] ? this.x[j] : !this.kind[i] ? this.x[i] : !this.kind[j] ? this.x[j] : null; }
+  /** The plain comparison, the engine's from the start: two things that each have a base are compared at the middle of
+      their two bases. Between things that do not overlap it is only a preference: who goes first of those free to. */
+  plain(i, j) { const x = this.point(i, j); return this.near(i, j, x ?? (this.mid[i] + this.mid[j]) / 2); }
+  /** Two things whose pictures overlap, in the boxes A and B: two that each have a base are compared where the pictures
+      overlap (the middle of the stretch of x the two boxes share), since that is where one covers the other. */
+  facing(i, j, A, B) { const x = this.point(i, j); return this.near(i, j, x ?? (Math.max(A[0], B[0]) + Math.min(A[2], B[2])) / 2); }
+}
+
+/**
+ * SORT-13: what Cast.sorted paints next when nothing left is free to go, because the answers go round in a circle
+ * (`list`, `first`, `done`, `waits` as there; `looked`, the pairs looked at closely already). The things left are taken
+ * in groups that each go round among themselves (strongly connected, found by Tarjan's way of walking back through what
+ * has to be painted first), and the first group found is one that nothing outside it has to be painted before.
+ * First the group is looked at closely. Boxes are only the outline of a picture: two whose boxes overlap may have no
+ * pixel of paint in common (a man beside a palm, inside the box its fronds make), and then their answer was never
+ * needed. Such answers are let go, and -1 says to look for something free again. A circle that is still there is true:
+ * one of its things has to go out of turn, and the one the fewest answers hold back goes, the farthest back by the plain
+ * comparison among equals. So a circle costs as few answers as it can, and only answers inside it.
+ */
+function circle(list, first, done, waits, looked, f) {
+  const n = list.length, index = new Int32Array(n).fill(-1), low = new Int32Array(n), on = new Uint8Array(n), stack = [];
+  let count = 0, group = null;
+  const visit = (v) => {
+    index[v] = low[v] = count++; stack.push(v); on[v] = 1;
+    for (let u = 0; u < n && !group; u++) {
+      if (done[u] || !first[u * n + v]) continue;                                              // u has to be painted before v
+      if (index[u] < 0) { visit(u); low[v] = Math.min(low[v], low[u]); }
+      else if (on[u]) low[v] = Math.min(low[v], index[u]);
+    }
+    if (!group && low[v] === index[v]) { group = []; let u; do { u = stack.pop(); on[u] = 0; group.push(u); } while (u !== v); }
+  };
+  for (let v = 0; v < n && !group; v++) if (!done[v] && index[v] < 0) visit(v);
+  group.sort((a, b) => a - b);
+  let loose = false;
+  for (const u of group) for (const v of group) {
+    if (!first[u * n + v] || looked[u * n + v]) continue;
+    looked[u * n + v] = 1;
+    if (!meet(list[u], list[v])) { first[u * n + v] = 0; waits[v]--; loose = true; }
+  }
+  if (loose) return -1;
+  let pick = -1;
+  for (const i of group) if (pick < 0 || waits[i] < waits[pick] || (waits[i] === waits[pick] && f.plain(i, pick) < 0)) pick = i;
+  return pick;
+}
+
+/** SORT-13: do two shots' pictures have a pixel of paint in common, where their boxes overlap? Looked at in cells of
+    four pixels square (paintOf). A thing whose picture can be drawn over again in place (one of the moving things of
+    effects.js) is taken to touch wherever its box does. The answer is kept for the two pictures where they are (their
+    keys, as update has them), since people standing in a circle ask it again on every frame. */
+const met = new Map();
+function meet(A, B) {
+  const kept = (s) => s instanceof Cutout || s instanceof Figure || s instanceof PaintedFigure || s instanceof Seat || s instanceof Thing;
+  if (!kept(A.s) || !kept(B.s)) return true;
+  const key = A.key < B.key ? A.key + "|" + B.key : B.key + "|" + A.key;
+  let yes = met.get(key);
+  if (yes !== undefined) return yes;
+  const l = Math.max(A.box[0], B.box[0], 0), t = Math.max(A.box[1], B.box[1], 0), r = Math.min(A.box[2], B.box[2], W), b = Math.min(A.box[3], B.box[3], H);
+  const a = paintAt(A), c = paintAt(B);
+  yes = false;
+  for (let y = t; y < b && !yes; y += 2) for (let x = l; x < r; x += 2) if (a(x, y) && c(x, y)) { yes = true; break; }
+  if (met.size > 500) met.clear();
+  met.set(key, yes);
+  return yes;
+}
+/** Has a shot paint at the stage's pixel (x, y), to the nearest cell? */
+function paintAt(shot) {
+  const m = paintOf(shot.pic.canvas), kx = (shot.pic.sw ?? shot.pic.canvas.width) / shot.w, ky = (shot.pic.sh ?? shot.pic.canvas.height) / shot.h;
+  return (x, y) => {
+    const cx = Math.floor(((x - shot.x) * kx) / 4), cy = Math.floor(((y - shot.y) * ky) / 4);
+    return cx >= 0 && cy >= 0 && cx < m.cols && cy < m.rows && m.cells[cy * m.cols + cx] === 1;
+  };
+}
+/** Where a finished picture has paint, in cells of four pixels square: worked out the first time it is asked for (only
+    when answers go round, which is seldom), and kept with the picture. */
+const paints = new WeakMap();
+function paintOf(canvas) {
+  let m = paints.get(canvas);
+  if (m) return m;
+  const w = canvas.width, h = canvas.height, cols = Math.ceil(w / 4), rows = Math.ceil(h / 4), cells = new Uint8Array(cols * rows);
+  try {
+    const d = canvas.getContext("2d").getImageData(0, 0, w, h).data;
+    for (let y = 0, i = 3; y < h; y++) for (let x = 0; x < w; x++, i += 4) if (d[i]) cells[(y >> 2) * cols + (x >> 2)] = 1;
+  } catch { cells.fill(1); }                                                                     // (a picture that will not hand back its pixels: paint all over)
+  paints.set(canvas, m = { cols, rows, cells });
+  return m;
 }
 
 /**

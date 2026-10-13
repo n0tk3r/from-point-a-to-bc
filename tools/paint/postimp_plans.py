@@ -40,6 +40,11 @@ PLANS = {
         "union": {"palms": ["palm-3", "palm-2", "palm-1"]},
         "frames": ["steam-*"],                                      # (the kites over the river are egypt-site's frames)
     },
+    # CAR-13P: inside the wagon (egypt_car.py). Nobody is drawn; with the story at its start the glovebox is shut, the
+    # visor up and the freshener on its string; the glovebox dropped open with the map in it replaces the shut one (and
+    # emptied, without the map, is a state of it: the same painting with less in it), the visor pulled down the one up.
+    "egypt-car": {"planes": ["glovebox-shut", "visor-up", "freshener"], "alt": {"glovebox-map": ["glovebox-shut"], "visor-down": ["visor-up"]},
+                  "states": {"glovebox-map": ["glovebox-empty"]}, "union": {}, "frames": []},
     "egypt-site": {
         "planes": ["awning", "sledge", "streamers", "front"],
         "alt": {"shade": []},                                       # the windshield shade, once the guard holds it
@@ -75,6 +80,27 @@ PLANS = {
         "alt": {},
         "union": {},
         "frames": [],
+    },
+    # ROME-13R1: the Forum (rome_forum.py): back to front, as the scene lays them; the awning is its own cut-out so that it
+    # can stir (a sway), the hoarding is two (cut at its gateway, each with its own base), and the crane's great wheel
+    # turns in painted frames
+    "rome-forum": {
+        "planes": ["statue-3", "statue-2", "statue-1", "castor", "puteal", "table", "awning", "hoarding", "hoarding-near", "basin", "front-base"],
+        "alt": {},
+        "union": {},
+        "frames": ["crane-*"],
+    },
+    "rome-capitol": {                                               # ROME-13R2: the Capitol (rome_capitol.py): back to front, as the scene lists them
+        "planes": ["altar", "chariot", "world", "parapet", "hut", "pen", "tablets"],
+        "alt": {},
+        "union": {},
+        "frames": ["goose-*"],                                      # ROME-13R2: the sacred geese (goose-<n>, goose-grey-<n>)
+    },
+    "rome-tiber": {                                                 # ROME-13R3: across the Tiber (rome_tiber.py); the hens are frames
+        "planes": ["well", "window-wall", "washing", "barge", "curb", "fence-corner", "fence", "landing-edge"],
+        "alt": {},
+        "union": {},
+        "frames": ["hen-*"],
     },
     "home-living-room": {
         "planes": ["piano", "armchair", "pencil", "table"],

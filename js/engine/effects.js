@@ -16,6 +16,10 @@
 //   portal    the door in time: a ripple in the paint. The painting itself bends in rings spreading from the door's
 //             middle, as if a stone had been dropped in it; nothing is drawn over it (round ten: see `Portal` below)
 //   strip     a painted strip of country going by behind a window (the desert past a car's windows): NEVADA-12E, `Strip` below
+//   bob       a painted cut-out (a boat, a barge) riding the water: rising and falling on the swell. ROME-13E, `Bob` below
+//
+// ROME-13E: a flock can also be sent somewhere by a script (`herd`: the geese into their pen) and made to strike a pose
+// all at once (`pose`: the geese hissing): see Flock.herd.
 //
 // Every one is drawn on the cast layer among the people (cast.js), at a depth of its own, given as for a cut-out:
 // `base` (a row, or a line) or `plane`. A man who walks behind an altar walks behind its smoke. And every one:
@@ -777,6 +781,83 @@ class Sway extends Effect {
   }
 }
 
+// ---------------------------------------------------------------- ROME-13E: a cut-out that rides the water
+/**
+ * bob: a cut-out of the scene's (`plane`: its id under `planes`; a boat, a barge) rises and falls on the swell, as it is
+ * drawn (its state, its frame, where a script has put it): `amount` pixels up and down (1), over `period` seconds (5), as
+ * two slow waves added together, so that it never ticks like a clock; seeded, on the game clock, and drawn on whole pixels,
+ * as a cut-out at its own size always is. `tilt` (degrees; 0, none) rocks it as well, about the middle of its base line:
+ * a turned copy of its picture for each step of a quarter of a degree, made once and kept (not for a cut-out a script shows
+ * at another size, nor for one that also sways: those rise and fall without rocking). Its base, and so who is in front of
+ * it and who behind, does not move; nor does its clickable area, nor its `solid` ground, nor anything a script does to it.
+ * Cheap: its own picture is used as it is (no pixel is drawn again unless it rocks); only its place changes, a few times a
+ * second at most, in its turn (Effects.budget), and the cast repaints its box. For less motion: half the amount (a bob of
+ * one pixel then stays still) at half the pace. With a `sway` on the same cut-out both apply: it rises and falls as it stirs.
+ */
+const turnedOf = new WeakMap();                  // the turned copies of a cut-out's picture, by its canvas: Map(turn -> { canvas, pad })
+class Bob extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    this.target = typeof s.plane === "string" ? s.plane : typeof s.of === "string" ? s.of : null;
+    if (!this.target) throw new Error('bob needs the id of a cut-out: plane: "<its id>"');
+    this.amount = Math.max(0, num(s.amount, 1)); this.period = Math.max(0.5, num(s.period, 5)); this.tilt = Math.abs(num(s.tilt, 0));
+    this.fps = 10; this.calmFps = 5; this.slow = 0.5;          // (its swell is looked at ten times a second; its place changes far less often)
+    const r = sequence(this.seed);
+    this.phase = [r() * TAU, r() * TAU, r() * TAU]; this.beat = 1.53 + 0.14 * r();          // the second wave: a little quicker, never in step
+    this.now = { lift: 0, turn: 0 }; this.due = this.now; this.fresh = true;                // what is drawn, and what its time asks for
+    this.slot = { want: false, waits: 0, urgent: false, grant: () => { this.slot.want = false; this.now = this.due; } };
+  }
+  slots() { return [this.slot]; }
+  restart() { this.fresh = true; }
+  attach() {
+    const cut = this.game.view.cast.get(this.target);
+    if (!(cut instanceof Cutout)) { console.warn(`Bob "${this.id}": there is no cut-out called "${this.target}" in this scene's planes.`); return; }
+    this.cut = cut;
+    const own = cut.picture;                                         // (the cut-out's own way of making its picture, or a sway's)
+    cut.picture = (palette, calm) => { const pic = own.call(cut, palette, calm); return this.ride(pic) || pic; };
+  }
+  /** Where the swell has it at t (seconds of its own time): how far it is lifted, in whole pixels, and how far it is
+      turned, in quarter degrees. The two waves together reach 0.98 of the amount: half a pixel never makes a whole one. */
+  at(t, calm) {
+    const w = TAU / this.period, k = calm ? 0.5 : 1, [p0, p1, p2] = this.phase;
+    const lift = Math.round(this.amount * k * (0.6 * Math.sin(w * t + p0) + 0.38 * Math.sin(w * this.beat * t + p1))) || 0;
+    const turn = this.tilt ? Math.round(this.tilt * k * (0.7 * Math.sin(w * t + p0 + 1.3) + 0.28 * Math.sin(w * 1.27 * t + p2)) * 4) / 4 || 0 : 0;
+    return { lift, turn };
+  }
+  update(calm) {
+    const fps = calm ? this.calmFps : this.fps, due = this.at(Math.floor((this.time * fps) / 1000) / fps, calm);
+    this.due = due;
+    if (this.fresh) { this.fresh = false; this.now = due; this.slot.want = false; return; }       // (the first picture at once; after that, in its turn)
+    this.slot.want = due.lift !== this.now.lift || due.turn !== this.now.turn;
+    this.drawn = 1;
+  }
+  /** The cut-out's picture where the swell has it now (null: as it is). */
+  ride(pic) {
+    if (!pic || !pic.canvas || !this.shown) return null;
+    const lift = this.now.lift;
+    let turn = this.now.turn;
+    if (turn && (pic.w != null || this.host.list.some((e) => e instanceof Sway && e.target === this.target))) turn = 0;     // (rocking only at its own size, and not while it sways)
+    if (!turn) return lift ? { ...pic, oy: pic.oy + lift } : null;
+    let kept = turnedOf.get(pic.canvas);
+    if (!kept) turnedOf.set(pic.canvas, (kept = new Map()));
+    let r = kept.get(turn);
+    if (!r) kept.set(turn, (r = this.turned(pic, turn)));
+    return { canvas: r.canvas, ox: pic.ox + r.pad, oy: pic.oy + r.pad + lift };
+  }
+  /** Its picture turned by `turn` degrees about the middle of its base line, hard-edged, on a canvas `pad` bigger all round. */
+  turned(pic, turn) {
+    const src = pic.canvas, cut = this.cut, left = Math.round(cut.x) - Math.round(pic.ox), top = Math.round(cut.y) - Math.round(pic.oy), b = cut.base;
+    const [bx, by] = Array.isArray(b) ? [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2] : [left + src.width / 2, typeof b === "number" ? b : top + src.height];
+    const th = (turn * Math.PI) / 180, pad = Math.ceil(Math.hypot(src.width, src.height) * Math.abs(Math.sin(th))) + 2;
+    const c = canvasOf(src.width + pad * 2, src.height + pad * 2), ctx = c.getContext("2d"), px = bx - left + pad, py = by - top + pad;
+    ctx.imageSmoothingEnabled = false;
+    ctx.translate(px, py); ctx.rotate(th); ctx.translate(-px, -py);
+    ctx.drawImage(src, pad, pad);
+    return { canvas: c, pad };
+  }
+}
+
 // ---------------------------------------------------------------- birds
 // Birds drawn by code, for a flock that has no painted frames (and for the engine's own scene): side on, facing right,
 // standing on the point (0, 0). One unit is a sixteenth of the bird's length.
@@ -898,7 +979,7 @@ function paintedBird(path, k, mirror, foot, shadow = null) {
   });
 }
 
-const FRAME_NAMES = ["stand", "look", "peck", "walk", "turn", "fly", "takeoff", "land", "glide", "flap", "bank", "shadow"];
+const FRAME_NAMES = ["stand", "look", "peck", "walk", "turn", "fly", "takeoff", "land", "glide", "flap", "bank", "shadow", "run"];     // (ROME-13E: run, a dash: a herded flock's)
 /** The folder a scene's own pictures are in: where a mark's frames are, when it does not say. */
 const folderOf = (scene) => (scene && typeof scene.picture === "string" && scene.picture.includes("/") ? scene.picture.slice(0, scene.picture.lastIndexOf("/") + 1) : "");
 /**
@@ -922,9 +1003,23 @@ function framesOf(frames, scene) {
   const foot = isPoint(frames.foot) ? frames.foot : isPoint(frames.middle) ? frames.middle : null;
   return { lists, foot, shadow, face: frames.face === "W" ? -1 : 1, mirror: frames.mirror !== false, sizeAt: num(frames.sizeAt, null) };
 }
+/**
+ * ROME-13E: a scene's `fx` as a list. It may be a function of the game, for a scene whose moving things follow the story
+ * (a flock that has been herded into its pen is given the pen as its area from a fact, as the scene is entered: Effects.enter
+ * asks it of the game). Asked here of a stand-in that knows nothing yet (every fact false, nothing carried), as the
+ * storyboard asks its scenes, it says which pictures they can show; if that throws, nothing is fetched ahead, and the scene
+ * still waits for its frames as it is entered.
+ */
+const NOBODY = { flag: () => false, has: () => false, holder: () => null, asked: () => 0, actor: () => null, plane: () => null, q: () => null,
+  store: { data: { active: null, team: [], flags: {}, inventory: {}, where: {}, seenLines: {}, asked: {} } } };
+function fxListOf(scene) {
+  const fx = scene && scene.fx;
+  if (typeof fx !== "function") return Array.isArray(fx) ? fx : [];
+  try { const list = fx(NOBODY); return Array.isArray(list) ? list : []; } catch { return []; }
+}
 /** Every painted picture a scene's moving things can show (for fetching them ahead: scene.js, picturesIn). */
 export function fxPictures(scene) {
-  const list = scene && Array.isArray(scene.fx) ? scene.fx : [];
+  const list = fxListOf(scene);           // (ROME-13E: a list, or a function of the game)
   const strip = (spec) => (spec && spec.type === "strip" && typeof spec.src === "string" ? [spec.src.startsWith("art/") ? spec.src : folderOf(scene) + spec.src] : []);      // (NEVADA-12E: a strip's picture)
   return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return [...(f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []), ...strip(spec)]; }))];
 }
@@ -1084,12 +1179,14 @@ class Flock extends Effect {
     this.restart();
   }
   restart() {
+    for (const run of [this.herding, this.posing]) if (run) run.resolve();      // ROME-13E: a herd or a pose under way is over (its promise kept): the flock starts afresh in its area as it is now
+    this.herding = this.posing = null;
     this.simT = 0;
     this.fresh = true;
     for (const b of this.birds) {
       b.rand = sequence(this.seed + b.i * 7919);
       const p = this.place(b) || this.center();
-      Object.assign(b, { x: p[0], y: p[1], s: p[2], alt: 0, dir: this.turns ? (b.rand() < 0.5 ? -1 : 1) : this.frames ? this.frames.face : 1, act: null, startle: null, away: false });
+      Object.assign(b, { x: p[0], y: p[1], s: p[2], alt: 0, dir: this.turns ? (b.rand() < 0.5 ? -1 : 1) : this.frames ? this.frames.face : 1, act: null, startle: null, away: false, herd: null });      // (ROME-13E: herd)
       b.act = { kind: "stand", t0: 0, until: 0.3 + b.rand() * 2.5 };
     }
   }
@@ -1172,6 +1269,7 @@ class Flock extends Effect {
     if (at) this.chaser = { x: at[0], y: at[1], walking: true, until: t + 1.5 };
     for (const b of this.birds) {
       if (b.away || b.act.kind === "fly" || b.act.kind === "leave" || b.act.kind === "arrive" || b.act.kind === "away") continue;
+      if (b.herd || b.act.kind === "pose") continue;                    // ROME-13E: nothing startles a bird that is being herded, or holding a pose
       if (!at || this.gap(b, at[0], at[1]) < r) b.startle = t + 0.02 + b.rand() * 0.25;
     }
     return this;
@@ -1210,6 +1308,8 @@ class Flock extends Effect {
     if (this.chaser) { if (t < this.chaser.until) people = [...people, this.chaser]; else this.chaser = null; }
     for (const b of this.birds) {
       const a = b.act;
+      if (a.kind === "flap" || a.kind === "run") { this.herded(b, t, calm); continue; }     // ROME-13E: herded (nothing startles it)
+      if (a.kind === "pose") { if (t >= a.until) this.unpose(b, t); continue; }             // ROME-13E: holding a pose, then on as it was
       if (a.kind === "away") {
         if (t < a.until) continue;
         const to = this.refuge(b, people, 0, Infinity);
@@ -1246,7 +1346,7 @@ class Flock extends Effect {
     if (!moved) return;                                              // (nothing changes between the steps of thirty a second)
     const t = this.simT / 1000;
     for (const b of this.birds) {
-      this.show(b, t);
+      this.sight(b, t);                                                  // (ROME-13E: was show(b, t), which hid every moving thing's show(on): a script's flock.show(false) threw)
       const s = b.sprite, n = b.next;
       if (n.hidden) { s.hidden = true; s.want = false; continue; }      // (flown off: gone at once)
       s.want = s.hidden || s.pic !== n.pic || Math.round(s.x) !== Math.round(n.x) || Math.round(s.y) !== Math.round(n.y) || Math.round(s.alt || 0) !== Math.round(n.alt);
@@ -1260,7 +1360,7 @@ class Flock extends Effect {
   grant(s) { const n = s.bird.next; if (!n || n.hidden) return; s.place(n.x, n.y); s.alt = n.alt; s.pic = n.pic; s.hidden = false; }
   reveal(on) { for (const b of this.birds) b.sprite.hidden = !on || b.away || !b.sprite.pic; }
   /** Where the bird is at t, and its picture (b.next): what it is doing (`pose`) and how far through it (`n`, a count of frames). */
-  show(b, t) {
+  sight(b, t) {      // (ROME-13E: was show(b, t), which hid every moving thing's show(on) and threw when a script hid a flock)
     const a = b.act;
     if (b.away || a.kind === "away") { b.next = { hidden: true }; return; }
     let x = b.x, y = b.y, alt = 0, pose = "stand", n = 0;
@@ -1283,20 +1383,27 @@ class Flock extends Effect {
       if (m < 0.38) { pose = "peck"; n = m < 0.12 || m >= 0.28 ? 0 : 1; }
     } else if (a.kind === "look") pose = "look";
     else if (a.kind === "turn") pose = "turn";
+    else if (a.kind === "flap") {                                       // ROME-13E: herded: a flap where it stands (its neck up at the noise until its beat comes)
+      if (t < a.t0) pose = "look"; else { pose = "flap"; n = Math.floor((t - a.t0) * 10); }
+    } else if (a.kind === "run") {                                      // ROME-13E: and a dash to its place (for less motion, a brisk walk)
+      if (!this.frames || this.frames.lists.run || this.frames.lists.walk) { pose = a.walk ? "walk" : "run"; n = Math.floor(since * (a.walk ? 10 : 12)); }
+      else alt = Math.abs(Math.sin(since * Math.PI * 6)) * 1.5;      // (painted, with frames neither to run nor to walk: it hops, as it walks)
+    } else if (a.kind === "pose") { pose = a.name; n = Math.floor(since * (a.name === "flap" ? 10 : 5)); }      // ROME-13E: a pose a script asked for
     else n = Math.floor((since + b.i) / 1.7);                         // standing: a painted bird with two stand frames shifts now and then
     const ground = a.kind === "leave" ? a.from[1] : a.kind === "arrive" ? a.to[1] : y;
-    b.next = { hidden: false, x, y, alt, pic: this.picFor(pose, n, b.dir, ground, alt), moving: a.kind !== "stand" && a.kind !== "look" && a.kind !== "peck" && a.kind !== "turn" };
+    b.next = { hidden: false, x, y, alt, pic: this.picFor(pose, n, b.dir, ground, alt), pose, moving: a.kind !== "stand" && a.kind !== "look" && a.kind !== "peck" && a.kind !== "turn" && a.kind !== "pose" };     // (ROME-13E: `pose`, what it shows, for tests)
   }
   picFor(pose, n, dir, ground, alt = 0) {
     const f = this.frames;
     if (f) {
-      const L = f.lists, list = { takeoff: L.takeoff || L.land || L.fly, land: L.land || L.takeoff || L.fly, glide: L.glide || L.fly, fly: L.fly, peck: L.peck, walk: L.walk, look: L.look, turn: L.turn }[pose] || L.stand;
+      const L = f.lists, list = { takeoff: L.takeoff || L.land || L.fly, land: L.land || L.takeoff || L.fly, glide: L.glide || L.fly, fly: L.fly, peck: L.peck, walk: L.walk, look: L.look, turn: L.turn,
+        run: L.run || L.walk, flap: L.flap || L.look }[pose] || L[pose] || L.stand;      // (ROME-13E: run, or its walk; flap, or its look; or any set a pose names)
       const i = pose === "peck" ? Math.min(n, list.length - 1) : pose === "fly" && list.length === 3 ? [0, 1, 2, 1][n % 4] : n % list.length;
       const k = (f.sizeAt != null && this.scene ? this.sizeAt(ground) / Math.max(0.05, scaleAt(this.scene, f.sizeAt)) : 1) * this.k;
       const pic = paintedBird(list[i], k, f.mirror && dir * f.face < 0, f.foot, alt < 0.5 ? f.shadow : null);       // (its shadow only while it is on the ground)
       if (pic) return pic;
     }
-    const drawn = pose === "land" || pose === "takeoff" ? "fly0" : pose === "glide" ? "fly1" : pose === "fly" ? ["fly0", "fly1", "fly2", "fly1"][n % 4] : pose === "walk" ? `walk${n % 2}` : pose === "peck" ? `peck${n}` : pose;
+    const drawn = pose === "land" || pose === "takeoff" ? "fly0" : pose === "glide" ? "fly1" : pose === "fly" ? ["fly0", "fly1", "fly2", "fly1"][n % 4] : pose === "walk" || pose === "run" ? `walk${n % 2}` : pose === "peck" ? `peck${Math.min(n, 1)}` : pose === "flap" ? "look" : pose;      // (ROME-13E: run and flap, drawn; a peck held on its second picture, as a long pose's would run past it)
     return drawnBird(this.kind, drawn, this.length * this.sizeAt(ground) * this.k, dir < 0);
   }
   picture(sprite) {
@@ -1305,6 +1412,179 @@ class Flock extends Effect {
     return sprite.alt ? { canvas: p.canvas, ox: p.ox, oy: p.oy + sprite.alt } : p;
   }
   seek(ms) { this.time = ms * (this.calm ? this.slow : 1); this.restart(); this.update(!!this.calm, []); if (!this.shown) this.reveal(false); }
+
+  // ---------------------------------------------------------------- ROME-13E: a flock that a script sends somewhere, and a pose
+  /**
+   * For scripts: herd(area, { from, via, pace }): every bird runs into `area` (a shape on the ground: a poly, a rect or a
+   * circle, as a flock's own), which is the flock's area from then on: there they stand, look, peck, walk and turn as they
+   * did in the old one, keeping their `shy`, `fly`, `turn` and `moves` (the sacred geese, into their pen). Each is given a
+   * place of its own in it, the places spread out (no two nearer than about a bird's length, where it has room for that).
+   * The bird nearest `from` (where the boy stomped) sets off first, each of the others a beat (about a tenth of a second)
+   * after the one before: it flaps where it stands, facing the way it will run (its `flap` frames, a third of a second),
+   * then runs (its `run` frames) to its place, by `via` first if it is given (a point, or a list of points: the gap in the
+   * pen's fence, so that nobody runs through the fence), at `pace` pixels a second at full size (110: a man is 160 tall
+   * there), smaller and slower farther off, as a person walks. The first to set off goes deepest in. A running bird faces
+   * the way it runs, whatever its `turn`. Nothing startles a bird that is being herded; one that is up and away (flown
+   * off) is put at its place. It resolves when the last of them is there. At once, every bird at its place, while a
+   * cut-scene is being skipped, and when the flock is not on the stage (?nofx, game.effects.enabled = false, its `when`
+   * false). For less motion there is no flap, and they walk there briskly (their `walk` frames, at twice the flock's
+   * walking pace, `walk`). Nothing of it is saved: a scene whose flock has been herded gives it its area from a fact as it
+   * is entered (its `fx` a function of the game: Effects.enter). A flock on a perch cannot be herded: it says so, once.
+   */
+  herd(area, { from = null, via = null, pace = 110 } = {}) {
+    if (this.perch) {
+      if (!this.toldPerch) { this.toldPerch = true; console.warn(`The flock "${this.id}" is on a perch, and a flock on a perch cannot be herded: it stays where it is.`); }
+      return Promise.resolve();
+    }
+    const poly = polyOf(area);
+    if (!poly) { console.warn(`The flock "${this.id}" was sent to an area that is not a shape (a poly, a rect or a circle): it stays where it is.`); return Promise.resolve(); }
+    this.endHerd(); this.endPose();
+    this.setArea(poly);
+    const t = this.simT / 1000, ways = (isPoint(via) ? [via] : Array.isArray(via) ? via.filter(isPoint) : []).map((p) => [p[0], p[1]]);
+    const near = isPoint(from) ? (b) => this.gap(b, from[0], from[1]) : () => 0;
+    const order = this.birds.slice().sort((a, b) => near(a) - near(b) || a.i - b.i);
+    const places = this.spread(order.length, ways.length ? ways[ways.length - 1] : null);
+    const run = { pace: Math.max(1, num(pace, 110)), left: 0, resolve: null };
+    const done = new Promise((resolve) => { run.resolve = resolve; });
+    order.forEach((b, n) => {
+      const at = places[n];
+      if (b.away || ["fly", "leave", "arrive", "away"].includes(b.act.kind)) { this.settleAt(b, at, t); return; }      // (one that is up and away is simply put there)
+      b.startle = null;
+      b.herd = { path: [...ways, at], to: at, run };
+      const go = t + n * 0.1 + b.rand() * 0.02;
+      b.act = { kind: "flap", t0: go, until: go + 0.33 };
+      run.left++;
+    });
+    this.herding = run;
+    this.fresh = true;                                                 // (their pictures follow at once)
+    if (!run.left || this.quick()) this.endHerd();
+    return done;
+  }
+  /**
+   * For scripts: pose(name, seconds): every bird of the flock on the ground takes that pose at once ("look": the geese's
+   * necks stretched out low, hissing; "flap"; "stand"; or any set of its frames), for about that long (each a little more
+   * or less), then carries on as it was, from where it was. It resolves when they have all carried on; at once while a
+   * cut-scene is being skipped, and when the flock is not on the stage. A bird up and away, or being herded, is left as
+   * it is; nothing startles a bird that holds a pose. With no frames for it: `flap` shows `look`, anything else `stand`.
+   */
+  pose(name = "look", seconds = 1) {
+    this.endPose();
+    if (this.quick()) return Promise.resolve();
+    const t = this.simT / 1000, run = { left: 0, resolve: null };
+    const done = new Promise((resolve) => { run.resolve = resolve; });
+    for (const b of this.birds) {
+      if (b.away || b.herd || !["stand", "look", "peck", "walk", "turn", "hop"].includes(b.act.kind)) continue;
+      b.act = { kind: "pose", name: String(name), t0: t, until: t + Math.max(0.1, num(seconds, 1)) * (0.85 + 0.3 * b.rand()), was: b.act };
+      b.startle = null;
+      run.left++;
+    }
+    this.posing = run;
+    this.fresh = true;
+    if (!run.left) this.endPose();
+    return done;
+  }
+  /** Is it all to be done at once: the flock off the stage (no moving things, or its `when` false), or a cut-scene being skipped? */
+  quick() { const g = this.game; return !(this.host.on && this.wanted()) || !!(g && g.clock && g.clock.skipping); }
+  /** Off the stage, or a cut-scene skipped, while a herd or a pose is under way: it is over at once. */
+  advance(dt, calm, people) {
+    if ((this.herding || this.posing) && this.quick()) { this.endHerd(); this.endPose(); }
+    super.advance(dt, calm, people);
+  }
+  /** The scene has gone (Effects.drop): whatever a script waits for is over. */
+  end() { this.endHerd(); this.endPose(); }
+  /** The area it keeps to from now on (and, on steps, the treads that are in it). */
+  setArea(poly) {
+    const s = this.spec;
+    this.area = poly; this.box = boxOf(poly);
+    this.span = Math.max(this.box[2] - this.box[0], this.box[3] - this.box[1]);
+    if (this.treads) this.treads = num(s.tread, 0) > 0 ? Array.from({ length: Math.floor((this.box[3] - this.box[1]) / s.tread) + 1 }, (_, i) => this.box[3] - i * s.tread) : this.treads.filter((y) => y >= this.box[1] && y <= this.box[3]);
+    if (this.treads && !this.treads.length) this.treads = null;
+  }
+  /** How long a bird is, standing at row y (for keeping them a bird's length apart). */
+  lengthAt(y) {
+    const f = this.frames, img = f && got(f.lists.stand[0]);
+    if (img && img.naturalWidth) return img.naturalWidth * 0.75 * (f.sizeAt != null && this.scene ? this.sizeAt(y) / Math.max(0.05, scaleAt(this.scene, f.sizeAt)) : 1) * this.k;
+    return this.length * this.sizeAt(y) * this.k;
+  }
+  /** n places in the area, spread out: each as far from the others as forty tries find (a bird's length apart, or more,
+      where there is room). The farthest from `gate` (the way in) first. [x, y, 0] each. */
+  spread(n, gate) {
+    this.herds = (this.herds || 0) + 1;
+    const rand = sequence(this.seed + this.herds * 104729), [x0, y0, x1, y1] = this.box, out = [];
+    for (let k = 0; k < n; k++) {
+      let best = null, far = -1;
+      for (let tries = 0; tries < 40; tries++) {
+        const x = x0 + rand() * (x1 - x0), y = y0 + rand() * (y1 - y0);
+        if (!inside(this.area, x, y)) continue;
+        const d = out.length ? Math.min(...out.map((p) => Math.hypot(p[0] - x, (p[1] - y) * 1.5) / this.lengthAt((p[1] + y) / 2))) : Infinity;
+        if (d > far) { far = d; best = [x, y]; }
+        if (d === Infinity) break;
+      }
+      out.push(best || this.center());
+    }
+    if (gate) out.sort((a, b) => Math.hypot(b[0] - gate[0], (b[1] - gate[1]) * DEPTH) - Math.hypot(a[0] - gate[0], (a[1] - gate[1]) * DEPTH));
+    return out.map((p) => [p[0], p[1], 0]);
+  }
+  /** A bird at its place, standing: there, and done with any herd. */
+  settleAt(b, at, t) {
+    b.herd = null; b.away = false; b.alt = 0; b.startle = null;
+    b.x = at[0]; b.y = at[1]; b.s = 0;
+    b.act = { kind: "stand", t0: t, until: t + 0.4 + b.rand() * 0.8 };
+    if (!this.turns) b.dir = this.frames ? this.frames.face : 1;      // (a flock that never turns faces its own way again)
+  }
+  /** One step of a herded bird: waiting for its beat, its flap, then its run along its way (via, then its own place), and there. */
+  herded(b, t, calm) {
+    const a = b.act, h = b.herd;
+    if (!h) { b.act = { kind: "stand", t0: t, until: t + 0.5 }; return; }
+    if (a.kind === "flap") {
+      if (t < a.t0) return;                                          // (its beat has not come)
+      b.dir = Math.sign(h.path[0][0] - b.x) || b.dir;               // facing the way it will run
+      if (calm || t >= a.until) b.act = { kind: "run", t0: t, walk: !!calm };     // (for less motion: no flap, and a brisk walk)
+      return;
+    }
+    const pace = a.walk ? Math.min(h.run.pace, this.walkSpeed * 2) : h.run.pace;
+    let budget = pace * Math.max(0.35, this.sizeAt(b.y)) * (TICK / 1000);
+    while (budget > 0 && h.path.length) {
+      const [px, py] = h.path[0], dx = px - b.x, dy = py - b.y, dist = Math.hypot(dx, dy * DEPTH);
+      if (dist < 0.01) { h.path.shift(); continue; }
+      if (Math.abs(dx) > 0.5) b.dir = Math.sign(dx);
+      const step = Math.min(budget, dist), k = step / dist;
+      b.x += dx * k; b.y += dy * k; budget -= step;
+      if (step >= dist) h.path.shift();
+    }
+    if (h.path.length) return;
+    const run = h.run;
+    this.settleAt(b, h.to, t);
+    if (run === this.herding && --run.left <= 0) { this.herding = null; run.resolve(); }
+  }
+  /** The herd under way, done at once: every bird still on its way put at its place, and the promise kept. */
+  endHerd() {
+    const run = this.herding;
+    if (!run) return;
+    this.herding = null;
+    const t = this.simT / 1000;
+    for (const b of this.birds) if (b.herd && b.herd.run === run) this.settleAt(b, b.herd.to, t);
+    this.fresh = true;
+    run.resolve();
+  }
+  /** A bird's pose is over: it carries on as it was, from where it was (its time moved on by the pose's). */
+  unpose(b, t, count = true) {
+    const a = b.act, was = a.was, d = t - a.t0;
+    if (was) { if (was.t0 != null) was.t0 += d; if (was.until != null) was.until += d; b.act = was; }
+    else b.act = { kind: "stand", t0: t, until: t + 0.5 };
+    const run = this.posing;
+    if (count && run && --run.left <= 0) { this.posing = null; run.resolve(); }
+  }
+  /** The pose under way, over at once: every bird carries on, and the promise is kept. */
+  endPose() {
+    const run = this.posing;
+    if (!run) return;
+    this.posing = null;
+    const t = this.simT / 1000;
+    for (const b of this.birds) if (b.act && b.act.kind === "pose") this.unpose(b, t, false);
+    this.fresh = true;
+    run.resolve();
+  }
 }
 
 function Birds(host, spec, n) {
@@ -1687,6 +1967,7 @@ class Portal extends Effect {
 }
 
 const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal, strip: Strip };      // (strip: NEVADA-12E)
+KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rides the water
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**
@@ -1732,7 +2013,7 @@ export class Effects {
     this.frame(0);
     return Promise.all(this.list.flatMap((e) => e.pics()).map(fetchPicture));          // (NEVADA-12E: pics(), which a strip has too)
   }
-  drop(scene = null) { this.list = []; this.time = 0; this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }
+  drop(scene = null) { for (const e of this.list) if (e.end) e.end(); this.list = []; this.time = 0; this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }      // (ROME-13E: end(): a herd or a pose a script waits for is over)
 
   /** Another moving thing, on the stage now. It goes when the scene does. */
   add(spec, quiet = false) {

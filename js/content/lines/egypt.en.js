@@ -34,6 +34,29 @@
 // The lines marked "kept" are the author's own, from the first version of the act. They are the standard the rest
 // was written to: leave them word for word. The two marked "changed" are his with a word or two altered, on purpose.
 // (docs/PUZZLES-egypt.md says which of the first version's lines were dropped, and why.)
+//
+// THE CAR'S INSIDE (round thirteen, 13 October: the author's own request of 8 October; briefs/CAR-13.md, briefs/WRITE-13C.md
+// and the design in briefs/out/car-interior-design.md. Every line added, moved or changed in this round is marked CAR-13W.)
+//   - The driver's window is rolled down, and the window or the wagon gets Dad in: the inside of the wagon is a scene of
+//     its own (egypt-car), and the picture is his own view from the driver's seat. Nobody is drawn in it, and every line
+//     in it is his. His two looks in at the window (egypt.inside.look, .look2) are said outside, by the river.
+//   - No exclamation mark, no Scripture, no prayer and no year: his three prayers are where they were, and none is in the
+//     car. "Nothing marked B.C." names no year.
+//   - Nothing in the car speaks of light, of mirrors as tools, of the shade, of cold drinks or of sunglasses, and none of
+//     those is in the car: they are the later puzzles'. The one line that names a mirror's use, the rearview mirror's
+//     "glued" (egypt.car.rearview.glued), is said only once he knows what light does ("egypt.knowsLight"), when the hint
+//     itself already says "The car has a mirror it isn't using."
+//   - The tender touch is the visor: his youngest's drawing of the five of them, the wagon and the General on the roof,
+//     and Dad talking to the three at home. It is a second drawing, which she made for the car: the first hangs on her
+//     wall at home (home.drawings.*). The joke is the slushie, which pays off the first minute of the game (intro.3, .4).
+//   - The car states no history and no date. It leans only on the game's own story: the slushie and "making good time"
+//     (the opening), the other half of the gum (the Son's item.gum.look: the car plants it, Rome pays it), the drawing,
+//     the musical taped off the radio and "a little flat" (Mom's, at home and in Nevada), the manuals read to the middle,
+//     the two hundred thousand miles (the author's egypt.wagon.look), and the children's ages.
+//   - The glovebox holds the map and the ketchup packets and nothing else, so that the author's "Nothing left in there but
+//     ketchup packets. I'm saving those." stays true: the manual is in the door pocket now, and the mints are gone. His
+//     egypt.wagon.use and egypt.wagon.empty are said inside now, word for word, and egypt.wagon.try, word for word, at the
+//     key.
 
 export const lines = {
   // ================= egypt-crash: where the wagon came down =================
@@ -85,15 +108,17 @@ export const lines = {
 
   // ---------- the wagon, and what is still in it ----------
   "egypt.wagon.look": ["dad", "Two hundred thousand miles and she still runs. Not right now. But in general."],                      // kept
-  "egypt.wagon.try": ["dad", "I turned the key. She made the noise she makes when I bring up the transmission."],
   "egypt.hood.look": ["dad", "She's just thinking it over."],
   "egypt.hood.look2": ["dad", "Steam. That's her way of saying 'not now'. I get the same from the lawnmower."],
   "egypt.hood.use": ["dad", "I don't open the hood. Whatever's under there, we have an understanding."],
   "egypt.hood.flashlight": ["dad", "I looked under her with it. Sand. More sand. That's the full report."],
   "egypt.hood.rootbeer": ["dad", "She doesn't take root beer. I've never checked. I'm fairly sure."],
-  "egypt.glovebox.look": ["dad", "The glovebox. Home of the map, the manual, and something that used to be mints."],
-  "egypt.wagon.use": ["dad", "There's a road map in the glovebox. Three states, zero centuries."],                                   // kept
-  "egypt.wagon.empty": ["dad", "Nothing left in there but ketchup packets. I'm saving those."],                                      // kept
+  // CAR-13W: the driver's window is rolled down (round thirteen), and through it he looks into the wagon; a click on it,
+  // or on the wagon, gets him in (egypt-car, below). Said outside, at the window: before he has the map, and after it.
+  "egypt.inside.look": ["dad", "The window's down. Wheel, dash, and the glovebox, where my map is being wrong in private."],
+  "egypt.inside.look2": ["dad", "Window's down to let the heat out. The heat has other plans."],
+  // CAR-13W: the key (egypt.wagon.try) and the glovebox (egypt.glovebox.look, egypt.wagon.use, egypt.wagon.empty) are
+  // inside the wagon now, and their lines with them: see egypt-car, below.
   "egypt.mirror.look": ["dad", "The door mirror. It's shown me every wrong turn I ever made, only smaller."],
   // the first time he comes up to the car, the low sun off the door mirror catches him in the eye (once: the mirror's hint)
   "egypt.mirror.dazzle": ["dad", "Ow. The door mirror just put the sun in my eye. Objects in mirror are brighter than they appear."],
@@ -181,6 +206,70 @@ export const lines = {
   "egypt.lot.map.2": ["dad", "There isn't one. It's Nevada."],
   "egypt.lot.map.3": ["lot", "A land with no river. Then I will pray that it has wells."],
   "egypt.lot.chicken": ["lot", "I keep flocks and herds, and I would not know whether to shear her, milk her, or follow her."],
+
+  // ================= egypt-car: inside the wagon =================
+  // CAR-13W: new in round thirteen. Dad's own view from the driver's seat: nobody is drawn here, and every line is his.
+  // The ids, the words and when each is said are the design's (briefs/out/car-interior-design.md, section 4).
+
+  // ---------- getting in ----------
+  "egypt.car.arrive": ["dad", "The driver's seat. Hot as a skillet, and still the only seat in Egypt that fits me."],                // (the first time only)
+
+  // ---------- the glovebox: the road map (puzzle #1) ----------
+  // CAR-13W: new words, and said inside now (the glovebox, shut). It said "The glovebox. Home of the map, the manual, and
+  // something that used to be mints." The manual has moved to the door pocket and the mints are gone, so that the
+  // author's "Nothing left in there but ketchup packets. I'm saving those." stays true.
+  "egypt.glovebox.look": ["dad", "The glovebox. The map's in there, with a few things I'm saving."],
+  // CAR-13W: the author's two, moved here word for word with their ids: said as the glovebox drops open and the map is
+  // his, and then whenever he looks in.
+  "egypt.wagon.use": ["dad", "There's a road map in the glovebox. Three states, zero centuries."],                                   // kept
+  "egypt.wagon.empty": ["dad", "Nothing left in there but ketchup packets. I'm saving those."],                                      // kept
+  "egypt.car.glovebox.map": ["dad", "It's never gone back in the way it came out. I'm not starting now."],                           // (the map, tried on it)
+
+  // ---------- the windshield, the rearview mirror, the air freshener ----------
+  "egypt.car.windshield.look": ["dad", "A windshield full of sand. She parked nose first. I've parked worse."],                      // (the two looks, in turn)
+  "egypt.car.windshield.look2": ["dad", "Past the sand, a river and no traffic. Best parking space I've ever found."],
+  "egypt.car.windshield.use": ["dad", "I gave the glass a wipe. The sand's on the other side. It always is."],
+  "egypt.car.rearview.look": ["dad", "The rearview mirror. It's all sky back there. She's standing on her nose."],
+  "egypt.car.rearview.use": ["dad", "I tipped it down. Sky. I tipped it up. More sky. I'm leaving it."],                             // (before he knows what light does)
+  "egypt.car.rearview.glued": ["dad", "It's glued to the windshield. It's the one on the door that comes off."],                     // (after it: "egypt.knowsLight")
+  "egypt.car.freshener.look": ["dad", "'New Car Smell.' She's older than two of my kids. Nobody's fooled."],
+
+  // ---------- the sun visor: his youngest's drawing ----------
+  "egypt.car.visor.look": ["dad", "The sun visor. My youngest tucked something behind it. I'm not to look while I'm driving."],      // (up)
+  "egypt.car.visor.down.1": ["dad", "Her drawing. The five of us, the wagon, and the General up on the roof."],                      // (pulled down: once)
+  "egypt.car.visor.down.2": ["dad", "She drew me the biggest. Hang on, you three. We're making good time."],
+  "egypt.car.visor.look2": ["dad", "And the registration. Paid up through next spring. I'll explain the gap."],                      // (down)
+
+  // ---------- the wheel, the gauges, the horn, the gear lever, the key ----------
+  "egypt.car.wheel.look": ["dad", "Both hands on the wheel, the whole way. I'd like that on the record."],
+  "egypt.car.wheel.use": ["dad", "I turned the wheel. The front end's in a dune. It didn't get the message."],
+  "egypt.car.gauges.look": ["dad", "Two hundred thousand and six miles on her. The last one was a long one."],
+  "egypt.car.gauges.use": ["dad", "I tapped the temperature gauge. It stayed in the red. So it isn't the gauge."],
+  "egypt.car.horn.look": ["dad", "The horn. It's a little flat. My wife says the same about me."],
+  "egypt.car.horn.use": ["dad", "I don't raise my voice. That's what the horn is for."],                                             // (the first honk, after the horn)
+  // CAR-13W: the design has "There's a man praying out there." Nothing in the car speaks of prayer (the head, above), and
+  // the act's check holds every line of Dad's that does to the list of lines written for the faith: so, "sitting quietly".
+  "egypt.car.horn.again": ["dad", "Once is hello. Twice is rude. There's a man sitting quietly out there."],                         // (every honk after: no sound)
+  "egypt.car.gears.look": ["dad", "P, R, N, D and L. Nothing marked B.C. I'd have noticed."],
+  "egypt.car.gears.use": ["dad", "It's in Park, and it's staying in Park. Park has never once let me down."],
+  "egypt.car.key.look": ["dad", "The key's in. I'm not worried. Car thieves haven't been invented."],
+  // CAR-13W: moved here word for word, with its id, from the wagon outside (its "Start"): said after the starter.
+  "egypt.wagon.try": ["dad", "I turned the key. She made the noise she makes when I bring up the transmission."],
+
+  // ---------- the radio, the slushie, his seat ----------
+  "egypt.car.radio.look": ["dad", "A tape in the deck: a musical my wife taped off the radio, with the traffic report in the big song."],
+  "egypt.car.radio.use": ["dad", "Static from one end of the dial to the other. It's a quiet century."],                             // (after the hiss)
+  "egypt.car.slushie.look": ["dad", "His slushie. He said the sky was doing the thing his slushie does. I said weather. I stand by weather."],
+  "egypt.car.slushie.use": ["dad", "I'm leaving it for him. He's never finished one. He likes to be asked."],
+  "egypt.car.slushie.rootbeer": ["dad", "That holder's his. Mine rides in my shorts."],                                              // (the root beer, tried on it)
+  "egypt.car.seat.look": ["dad", "His seat. Six wrappers, one sock, no boy. He travels light and leaves heavy."],
+  "egypt.car.seat.use": ["dad", "Half a pack of gum under his seat, stuck to the carpet. That's a problem for later."],              // (the gum is not taken)
+  "egypt.car.seat.chicken": ["dad", "I sat the General in his seat. She says it's sticky. She's right."],                            // (General Feathers, tried on it)
+
+  // ---------- the owner's manual, the door ----------
+  "egypt.car.manual.look": ["dad", "The owner's manual, in the door pocket. Read to the middle, like all my manuals."],
+  "egypt.car.manual.use": ["dad", "I've read the first half. Time travel must be in the second."],
+  "egypt.car.door.look": ["dad", "My door. Out there, Egypt. In here, the one thing in Egypt I understand."],
 
   // ================= egypt-site: the foot of the pyramid =================
 

@@ -11,6 +11,9 @@
 //               while he counts.)
 //   the toss    the coin goes through. It does not come back down. That ends the act: the story
 //               moves to the rest of the family, two thousand years later, where the coin lands.
+//               (ROME-13S3, round thirteen: the toss waits for Phyllis's leave. The coin was her wish, and until she
+//               has let him keep it (rome.wishGranted: the Forum's garland seller, once her son across the Tiber has
+//               given his word) the boy will not throw it through a door: one line, and the coin stays in his pockets.)
 //
 // Try it: index.html?scene=rome-temple&lead=son&flags=rome.arrived,rome.inside,rome.sawInside
 // (he has no coin that way: fetch one from the fountain, or start at rome-street.)
@@ -94,6 +97,13 @@ async function spark(g) {
 
 // ---------- the gate: the toss ----------
 
+/** ROME-13S3: the coin used on the coin-sized door. Without Phyllis's leave he stops himself (he keeps the coin, the door
+    stays open, and the Hint button now steers him to her); with it, the old ending, every line as it was. */
+async function tossOrAsk(g) {
+  if (!g.flag("rome.wishGranted")) return g.say("rome.hole.wish");
+  return tossCoin(g);
+}
+
 /** The old ending, kept as it was. (The one addition is the wink of the door as the coin goes in.) */
 async function tossCoin(g) {
   await g.say("rome.hole.coin");
@@ -157,9 +167,27 @@ async function talkToClerk(g) {
   }
 }
 
+/** ROME-13S: a game saved before the bigger Rome. The steps it never had to take count as taken. Safe to run every time. */
+function fromOldSave(g) {
+  const heard = (id) => !!g.store.data.seenLines[id];
+  if (g.flag("rome.delivered") && !g.flag("rome.swapped")) { g.flag("rome.wrongToga", true); g.flag("rome.swapped", true); }
+  if (g.flag("rome.hasBreakfast") && !g.flag("rome.knowsBoy")) { g.flag("rome.knowsBoy", true); g.flag("rome.geeseGone", true); }
+  if (heard("rome.senator.ans.late.1") && !g.flag("rome.knowsSenate")) g.flag("rome.knowsSenate", true);
+}
+
 const clerkAndCoin = ["rome.clerk.coin.1", "rome.clerk.coin.2", "rome.clerk.coin.3"];
 const handsOff = ["rome.chests.use.1", "rome.chests.use.2", "rome.chests.use.3"];
-const chests = { name: "treasure chests", verb: "Open", look: twice("rome.chests.look", "rome.chests.look2"), use: handsOff };
+/** ROME-13T: from the place to stand for the chest by the door on the right, his words would lie just where the clerk's face
+    is, behind his table (farther back than the boy, so the engine does not lift them): for a look at the chests they go
+    over the clerk's head (the sprite flag `clear`), and then as before. (From the other chests he is too far off for it to
+    change anything.) */
+async function overClerk(g, id) {
+  const c = g.actor("clerk"), lift = !!(c && c.flag), was = lift && !!(c.flags && c.flags.clear);
+  if (lift) c.flag("clear", true);
+  await g.say(id);
+  if (lift) c.flag("clear", was);
+}
+const chests = { name: "treasure chests", verb: "Open", look: (g) => overClerk(g, heard(g, "rome.chests.look") ? "rome.chests.look2" : "rome.chests.look"), use: handsOff };      // ROME-13T: over the clerk's head
 const tablets = { name: "bronze tablets", look: "rome.tablets.look" };
 const brazier = { name: "brazier", verb: "Touch", look: "rome.brazier.look", use: "rome.brazier.use" };
 const wayOut = {
@@ -246,6 +274,7 @@ export default {
 
   // Make the light match the story facts. Runs on arrival and after loading a save.
   setup(g) {
+    fromOldSave(g);                                               // ROME-13S3: a game saved before the bigger Rome (see the function)
     shine(g, false);
     openDoor(g, g.flag("rome.doorOpen") ? 1 : 0);
   },
@@ -278,12 +307,12 @@ export default {
       // The seated god, his throne, and the pedestal they stand on.
       id: "statue", name: "statue of the god", verb: "Untie", poly: [[356, 160], [364, 148], [371, 141], [392, 127], [401, 127], [423, 140], [430, 145], [433, 180], [432, 262], [449, 268], [452, 272], [452, 332], [348, 332], [348, 272], [352, 268], [366, 262], [365, 215], [356, 190]], walkTo: [400, 354], face: "N",
       look: twice("rome.statue.look", "rome.statue.look2"), use: "rome.statue.use",
-      useWith: { incense: offerIncense, coin: "rome.statue.coin", gum: "rome.statue.gum" },
+      useWith: { incense: offerIncense, coin: "rome.statue.coin", gum: "rome.statue.gum", lamp: "rome.statue.lamp" },      // ROME-13S3: the lamp
     },
     {
       id: "altar", name: "offering bowl", poly: [[388, 298], [412, 298], [414, 301], [425, 303], [424, 332], [421, 346], [378, 346], [375, 332], [375, 303], [386, 301]], walkTo: [400, 354], face: "N",                   // the small altar table before the god, and its bowl
       look: (g) => g.say(g.flag("rome.offered") ? "rome.bowl.done" : "rome.bowl.look"),
-      useWith: { incense: offerIncense },
+      useWith: { incense: offerIncense, lamp: "rome.statue.lamp" },      // ROME-13S3: the lamp (at the god's feet: the statue's line)
     },
     { id: "brazier2", ...brazier, poly: [[462, 299], [488, 299], [489, 307], [482, 312], [486, 350], [463, 350], [467, 312], [461, 307]], walkTo: [469, 354], face: "N" },                          // the one by the altar
     { id: "chests", ...chests, poly: [[54, 546], [54, 482], [72, 467], [73, 447], [84, 433], [104, 430], [106, 419], [114, 413], [115, 396], [126, 392], [154, 392], [155, 385], [214, 383], [216, 396], [214, 436], [209, 445], [207, 466], [189, 474], [188, 500], [136, 524], [135, 548]], walkTo: [214, 482], face: "W" },   // down the left wall: the chests, the box of silver and the sacks
@@ -301,7 +330,7 @@ export default {
       id: "sunpatch", name: "sunlight on the floor", verb: "Stand in", poly: [[303, 598], [368, 430], [482, 430], [478, 598]], walkTo: [404, 500], face: "NW",
       look: (g) => (g.flag("rome.doorOpen") ? g.say("rome.sun.done") : twice("rome.sun.look", "rome.sun.look2")(g)),
       use: (g) => (g.flag("rome.doorOpen") ? g.say("rome.sun.done") : g.say("rome.sun.use.1", "rome.sun.use.2")),
-      useWith: { coin: spark, phone: "rome.sun.phone", gum: "rome.sun.gum", quarter: "rome.sun.quarter" },
+      useWith: { coin: spark, phone: "rome.sun.phone", gum: "rome.sun.gum", quarter: "rome.sun.quarter", lamp: "rome.sun.lamp" },      // ROME-13S3: the lamp
     },
     // The place that hums is one patch of bare wall. Shut, it is a thing to touch; open, it is a door. (The door itself is drawn at 190, 330.)
     // Nothing is painted there, so its shape is a ring round the spot (Show outlines it); the open door's is a little ring round the door.
@@ -312,24 +341,24 @@ export default {
       id: "hum", name: "place that hums", verb: "Touch", circle: [190, 330, 20], walkTo: [264, 384], face: "W",
       when: (g) => !g.flag("rome.doorOpen"),
       look: "rome.hole.look", use: tryTheHum,
-      useWith: { phone: "rome.hum.try.3", coin: "rome.hum.coin", gum: "rome.hum.gum", incense: "rome.hum.incense" },
+      useWith: { phone: "rome.hum.try.3", coin: "rome.hum.coin", gum: "rome.hum.gum", incense: "rome.hum.incense", lamp: "rome.hum.lamp" },      // ROME-13S3: the lamp
     },
     {
       id: "hole", name: "coin-sized door", verb: "Go through", circle: [190, 330, 16], walkTo: [264, 384], face: "W",
       when: (g) => !!g.flag("rome.doorOpen"),
       look: "rome.door.look", use: ["rome.hole.use", "rome.hole.use2"],
-      useWith: { coin: tossCoin, quarter: "rome.hole.quarter", phone: "rome.hole.phone", gum: "rome.hum.gum" },
+      useWith: { coin: tossOrAsk, quarter: "rome.hole.quarter", phone: "rome.hole.phone", gum: "rome.hum.gum", lamp: "rome.hole.lamp" },      // ROME-13S3: the toss waits for Phyllis's leave; the lamp
     },
     {
       id: "table", name: "clerk's table", plane: "table", poly: [[502, 464], [502, 475], [506, 484], [525, 486], [528, 489], [554, 489], [557, 477], [642, 477], [643, 487], [650, 489], [653, 441], [657, 439], [657, 433], [641, 414], [648, 404], [644, 401], [637, 403], [633, 395], [629, 399], [628, 407], [634, 410], [635, 414], [598, 415], [598, 406], [589, 415], [567, 414], [567, 389], [579, 389], [575, 399], [579, 404], [586, 404], [590, 399], [584, 383], [568, 385], [563, 381], [557, 387], [542, 389], [537, 406], [541, 411], [552, 409], [548, 393], [561, 391], [560, 414], [536, 415], [540, 429], [540, 461], [524, 442], [519, 446], [513, 445], [515, 451], [509, 454]], walkTo: [515, 509], face: "NE",      // its balance, its lamp, and the sack against it
       look: "rome.table.look", use: ["rome.table.use.1", "rome.table.use.2", "rome.table.use.3"],
-      useWith: { coin: clerkAndCoin, quarter: "rome.clerk.quarter" },
+      useWith: { coin: clerkAndCoin, quarter: "rome.clerk.quarter", lamp: "rome.clerk.lamp" },      // ROME-13S3: the lamp (the clerk answers for his table)
     },
     {
       id: "clerk", name: "clerk", verb: "Talk to", poly: [[612, 371], [604, 370], [599, 373], [596, 385], [603, 392], [600, 400], [587, 410], [580, 408], [579, 417], [583, 419], [590, 417], [595, 419], [619, 419], [622, 417], [619, 394], [614, 387], [617, 378]], walkTo: [515, 509], face: "NE",         // what shows of him above his table
       look: twice("rome.clerk.look", "rome.clerk.look2"), use: talkToClerk,
       useWith: {
-        coin: clerkAndCoin, quarter: "rome.clerk.quarter", incense: "rome.clerk.incense",
+        coin: clerkAndCoin, quarter: "rome.clerk.quarter", incense: "rome.clerk.incense", lamp: "rome.clerk.lamp",      // ROME-13S3: the lamp
         phone: ["rome.clerk.phone.1", "rome.clerk.phone.2", "rome.clerk.phone.3"],
       },
     },

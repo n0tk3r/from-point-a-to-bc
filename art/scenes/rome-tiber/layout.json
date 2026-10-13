@@ -1,0 +1,2016 @@
+{
+ "id": "rome-tiber",
+ "horizon": 250,
+ "full": 590,
+ "light": "the sun low, ahead and to the left over the far bank: the river shines, the far bank stands against the light, faces toward us are in shade, the two near house fronts take the sun at a slant; shadows fall toward us and to the right",
+ "walk": [
+  [
+   29,
+   598
+  ],
+  [
+   131,
+   497
+  ],
+  [
+   0,
+   497
+  ],
+  [
+   1,
+   497
+  ],
+  [
+   1,
+   462
+  ],
+  [
+   22,
+   452
+  ],
+  [
+   174,
+   452
+  ],
+  [
+   287,
+   341
+  ],
+  [
+   410,
+   341
+  ],
+  [
+   422,
+   377
+  ],
+  [
+   416,
+   379
+  ],
+  [
+   541,
+   418
+  ],
+  [
+   549,
+   418
+  ],
+  [
+   602,
+   434
+  ],
+  [
+   507,
+   446
+  ],
+  [
+   513,
+   448
+  ],
+  [
+   532,
+   456
+  ],
+  [
+   552,
+   464
+  ],
+  [
+   574,
+   473
+  ],
+  [
+   599,
+   482
+  ],
+  [
+   625,
+   492
+  ],
+  [
+   653,
+   504
+  ],
+  [
+   685,
+   516
+  ],
+  [
+   719,
+   530
+  ],
+  [
+   758,
+   545
+  ],
+  [
+   798,
+   561
+  ],
+  [
+   798,
+   598
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    542,
+    415
+   ],
+   [
+    491,
+    399
+   ],
+   [
+    470,
+    401
+   ],
+   [
+    520,
+    417
+   ]
+  ],
+  [
+   [
+    0,
+    477
+   ],
+   [
+    16,
+    477
+   ],
+   [
+    58,
+    451
+   ],
+   [
+    5,
+    451
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "well",
+   "file": "well.png",
+   "base": 413,
+   "solid": [
+    [
+     356,
+     409
+    ],
+    [
+     353,
+     406
+    ],
+    [
+     343,
+     404
+    ],
+    [
+     330,
+     404
+    ],
+    [
+     317,
+     404
+    ],
+    [
+     307,
+     406
+    ],
+    [
+     302,
+     409
+    ],
+    [
+     304,
+     411
+    ],
+    [
+     313,
+     413
+    ],
+    [
+     327,
+     414
+    ],
+    [
+     341,
+     413
+    ],
+    [
+     352,
+     411
+    ]
+   ],
+   "what": "the well's curb and its bucket"
+  },
+  {
+   "id": "window-wall",
+   "file": "window-wall.png",
+   "base": [
+    [
+     800,
+     490
+    ],
+    [
+     558,
+     417
+    ]
+   ],
+   "solid": null,
+   "what": "the front of Eleazar's house round his upper window, everything of it within a man's height of the opening, the opening clear: cut from back.png itself. A man standing in the room behind it shows only through the opening."
+  },
+  {
+   "id": "washing",
+   "file": "washing.png",
+   "base": [
+    [
+     800,
+     490
+    ],
+    [
+     558,
+     417
+    ]
+   ],
+   "solid": null,
+   "what": "the washing on its line (it sways: fx washing-sway); its base is the house front's, and it comes after window-wall"
+  },
+  {
+   "id": "barge",
+   "file": "barge.png",
+   "base": 439,
+   "solid": null,
+   "what": "the barge (it rides the water: fx barge-bob). Its base is a row: the quay's edge level with its bow. Everyone on the landing (row 452 and lower) is in front of it, and nobody on the quay beyond comes near it on the screen (the strip of water between it and the quay's edge lies between). A row, not the quay's slanted edge, so that the engine's back-to-front order is the same whoever stands where (rome_tiber_order.py)."
+  },
+  {
+   "id": "curb",
+   "file": "curb.png",
+   "base": 443,
+   "solid": null,
+   "what": "the landing's edge stones along its far side and its river side, and the bollard at its far corner: in front of the barge (they hide the foot of its bow, so that it can ride the water behind them), behind everyone on the landing"
+  },
+  {
+   "id": "fence-corner",
+   "file": "fence-corner.png",
+   "base": 451,
+   "solid": [
+    [
+     517,
+     445
+    ],
+    [
+     524,
+     445
+    ],
+    [
+     533,
+     451
+    ],
+    [
+     517,
+     451
+    ]
+   ],
+   "what": "the hen yard's fence by the door: its side, its corner post, and its front as far as the stake where the near run begins. Its base is a row (see fence): the hens and Mariam are behind it; its solid keeps the lane clear just in front of the corner, above that row"
+  },
+  {
+   "id": "fence",
+   "file": "fence.png",
+   "base": 490,
+   "solid": [
+    [
+     599,
+     474
+    ],
+    [
+     627,
+     474
+    ],
+    [
+     627,
+     490
+    ],
+    [
+     599,
+     490
+    ]
+   ],
+   "what": "the near run of the hen yard's wattle fence, from the picture's right edge to the stake where fence-corner begins. Its base is a row below everyone in the yard (Mariam, her spots, every hen's perch) and above everyone on the lane who comes in front of it on the screen; its solid keeps the lane clear where it meets fence-corner"
+  },
+  {
+   "id": "landing-edge",
+   "file": "landing-edge.png",
+   "base": 501,
+   "solid": [
+    [
+     130,
+     501
+    ],
+    [
+     130,
+     498
+    ],
+    [
+     123,
+     496
+    ],
+    [
+     112,
+     496
+    ],
+    [
+     102,
+     498
+    ],
+    [
+     95,
+     501
+    ],
+    [
+     94,
+     505
+    ],
+    [
+     101,
+     507
+    ],
+    [
+     112,
+     507
+    ],
+    [
+     123,
+     505
+    ]
+   ],
+   "what": "the landing's near edge stones each side of the steps, the bollard at its near corner and a coil of rope (bottom left): in front of everyone on the landing; people on the quay nearer us pass in front of it (so not the front plane). Its base is the bollard's foot; its solid, the bollard"
+  }
+ ],
+ "things": [
+  {
+   "id": "doorpost",
+   "what": "the little case fixed upright on the right-hand post of Eleazar's door (words of the Law: not seen)",
+   "shape": {
+    "rect": [
+     600,
+     351,
+     12,
+     20
+    ]
+   },
+   "stand": [
+    576,
+    434
+   ],
+   "face": "E"
+  },
+  {
+   "id": "window",
+   "what": "Eleazar's upper window, open, its shutter folded back (in the first scene he stands in it, praying)",
+   "shape": {
+    "poly": [
+     [
+      637,
+      171
+     ],
+     [
+      726,
+      168
+     ],
+     [
+      726,
+      237
+     ],
+     [
+      638,
+      238
+     ]
+    ]
+   },
+   "stand": [
+    528,
+    474
+   ],
+   "face": "E"
+  },
+  {
+   "id": "washing",
+   "what": "the washing on the line between his two upper windows: a small tunic, a blue cloth",
+   "shape": {
+    "poly": [
+     [
+      591,
+      192
+     ],
+     [
+      622,
+      190
+     ],
+     [
+      630,
+      190
+     ],
+     [
+      633,
+      192
+     ],
+     [
+      633,
+      205
+     ],
+     [
+      632,
+      228
+     ],
+     [
+      627,
+      231
+     ],
+     [
+      625,
+      232
+     ],
+     [
+      619,
+      233
+     ],
+     [
+      611,
+      233
+     ],
+     [
+      593,
+      223
+     ],
+     [
+      592,
+      222
+     ],
+     [
+      591,
+      209
+     ]
+    ]
+   },
+   "stand": [
+    491,
+    450
+   ],
+   "face": "E"
+  },
+  {
+   "id": "figtree",
+   "what": "a fig tree in first leaf, in the hen yard",
+   "shape": {
+    "poly": [
+     [
+      651,
+      256
+     ],
+     [
+      654,
+      255
+     ],
+     [
+      665,
+      252
+     ],
+     [
+      691,
+      252
+     ],
+     [
+      799,
+      320
+     ],
+     [
+      799,
+      426
+     ],
+     [
+      799,
+      524
+     ],
+     [
+      799,
+      527
+     ],
+     [
+      796,
+      530
+     ],
+     [
+      794,
+      531
+     ],
+     [
+      784,
+      531
+     ],
+     [
+      782,
+      530
+     ],
+     [
+      780,
+      528
+     ],
+     [
+      779,
+      526
+     ],
+     [
+      651,
+      262
+     ]
+    ]
+   },
+   "stand": [
+    674,
+    526
+   ],
+   "face": "E"
+  },
+  {
+   "id": "bench",
+   "what": "the stone bench before the house of prayer",
+   "shape": {
+    "poly": [
+     [
+      470,
+      401
+     ],
+     [
+      486,
+      380
+     ],
+     [
+      534,
+      394
+     ],
+     [
+      542,
+      415
+     ],
+     [
+      520,
+      417
+     ]
+    ]
+   },
+   "stand": [
+    520,
+    427
+   ],
+   "face": "N"
+  },
+  {
+   "id": "well",
+   "what": "the well: a round stone curb, a bucket on its rim",
+   "shape": {
+    "poly": [
+     [
+      302,
+      368
+     ],
+     [
+      303,
+      367
+     ],
+     [
+      305,
+      366
+     ],
+     [
+      338,
+      356
+     ],
+     [
+      344,
+      356
+     ],
+     [
+      346,
+      357
+     ],
+     [
+      348,
+      359
+     ],
+     [
+      356,
+      369
+     ],
+     [
+      356,
+      378
+     ],
+     [
+      355,
+      413
+     ],
+     [
+      353,
+      414
+     ],
+     [
+      349,
+      415
+     ],
+     [
+      343,
+      416
+     ],
+     [
+      316,
+      416
+     ],
+     [
+      309,
+      415
+     ],
+     [
+      306,
+      414
+     ],
+     [
+      304,
+      413
+     ],
+     [
+      303,
+      412
+     ],
+     [
+      302,
+      375
+     ]
+    ]
+   },
+   "stand": [
+    339,
+    419
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bales",
+   "what": "bales of papyrus rolled in mats, a bolt of linen and two tall jars, waiting on the landing to go aboard",
+   "shape": {
+    "poly": [
+     [
+      0,
+      407
+     ],
+     [
+      58,
+      397
+     ],
+     [
+      58,
+      451
+     ],
+     [
+      16,
+      477
+     ],
+     [
+      0,
+      477
+     ]
+    ]
+   },
+   "stand": [
+    36,
+    487
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "landing",
+   "what": "the stone landing: its steps down into the river, a bollard and a coil of rope",
+   "shape": {
+    "poly": [
+     [
+      0,
+      497
+     ],
+     [
+      96,
+      497
+     ],
+     [
+      98,
+      457
+     ],
+     [
+      128,
+      457
+     ],
+     [
+      130,
+      505
+     ],
+     [
+      105,
+      505
+     ],
+     [
+      3,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    85,
+    483
+   ],
+   "face": "S"
+  },
+  {
+   "id": "barge",
+   "what": "the barge moored off the quay: a towing mast, a steering oar, piled with bales and jars and linen",
+   "shape": {
+    "poly": [
+     [
+      0,
+      403
+     ],
+     [
+      83,
+      271
+     ],
+     [
+      92,
+      271
+     ],
+     [
+      202,
+      307
+     ],
+     [
+      204,
+      309
+     ],
+     [
+      234,
+      350
+     ],
+     [
+      234,
+      354
+     ],
+     [
+      228,
+      368
+     ],
+     [
+      226,
+      370
+     ],
+     [
+      200,
+      390
+     ],
+     [
+      150,
+      428
+     ],
+     [
+      130,
+      443
+     ],
+     [
+      124,
+      447
+     ],
+     [
+      2,
+      453
+     ],
+     [
+      0,
+      453
+     ]
+    ]
+   },
+   "stand": [
+    140,
+    457
+   ],
+   "face": "W"
+  },
+  {
+   "id": "doorway",
+   "what": "Eleazar's door, standing open",
+   "shape": {
+    "poly": [
+     [
+      603,
+      430
+     ],
+     [
+      573,
+      421
+     ],
+     [
+      573,
+      319
+     ],
+     [
+      603,
+      322
+     ]
+    ]
+   },
+   "stand": [
+    561,
+    429
+   ],
+   "face": "E"
+  },
+  {
+   "id": "house",
+   "what": "Eleazar's house: plastered, two storeys, its door and window to the river",
+   "shape": {
+    "poly": [
+     [
+      824,
+      497
+     ],
+     [
+      558,
+      417
+     ],
+     [
+      558,
+      130
+     ],
+     [
+      824,
+      72
+     ]
+    ]
+   },
+   "stand": [
+    551,
+    433
+   ],
+   "face": "E"
+  },
+  {
+   "id": "prayerhouse",
+   "what": "the house of prayer: plain, a broad door, two small windows high up; no statue, picture or carving",
+   "shape": {
+    "poly": [
+     [
+      551,
+      418
+     ],
+     [
+      423,
+      378
+     ],
+     [
+      423,
+      175
+     ],
+     [
+      551,
+      152
+     ]
+    ]
+   },
+   "stand": [
+    431,
+    392
+   ],
+   "face": "E"
+  },
+  {
+   "id": "hens",
+   "what": "the hen yard: a wattle fence, a coop, a dish of water, and the hens standing in a row looking over the river",
+   "shape": {
+    "poly": [
+     [
+      549,
+      458
+     ],
+     [
+      799,
+      554
+     ],
+     [
+      799,
+      466
+     ],
+     [
+      650,
+      420
+     ],
+     [
+      650,
+      444
+     ]
+    ]
+   },
+   "stand": [
+    562,
+    480
+   ],
+   "face": "E"
+  },
+  {
+   "id": "gardens",
+   "what": "Caesar's gardens, far down the road where the river bends: a long wall, a gateway, pines and cypresses over it",
+   "shape": {
+    "poly": [
+     [
+      300,
+      214
+     ],
+     [
+      442,
+      206
+     ],
+     [
+      442,
+      262
+     ],
+     [
+      300,
+      262
+     ]
+    ]
+   },
+   "stand": [
+    374,
+    366
+   ],
+   "face": "N"
+  },
+  {
+   "id": "road",
+   "what": "the road on south along the river, toward Caesar's gardens",
+   "shape": {
+    "poly": [
+     [
+      252,
+      375
+     ],
+     [
+      429,
+      375
+     ],
+     [
+      392,
+      280
+     ],
+     [
+      348,
+      280
+     ]
+    ]
+   },
+   "stand": [
+    374,
+    366
+   ],
+   "face": "N"
+  },
+  {
+   "id": "farbank",
+   "what": "the far bank: the Aventine, its houses and temples, the quays and long warehouses along the shore",
+   "shape": {
+    "poly": [
+     [
+      0,
+      148
+     ],
+     [
+      40,
+      146
+     ],
+     [
+      90,
+      154
+     ],
+     [
+      140,
+      168
+     ],
+     [
+      190,
+      186
+     ],
+     [
+      240,
+      212
+     ],
+     [
+      290,
+      234
+     ],
+     [
+      330,
+      244
+     ],
+     [
+      370,
+      250
+     ],
+     [
+      372,
+      256
+     ],
+     [
+      240,
+      260
+     ],
+     [
+      120,
+      266
+     ],
+     [
+      0,
+      272
+     ]
+    ]
+   },
+   "stand": [
+    213,
+    418
+   ],
+   "face": "W"
+  },
+  {
+   "id": "river",
+   "what": "the river, brown and quick, shining toward the sun",
+   "shape": {
+    "poly": [
+     [
+      0,
+      271
+     ],
+     [
+      120,
+      265
+     ],
+     [
+      240,
+      258
+     ],
+     [
+      300,
+      255
+     ],
+     [
+      370,
+      262
+     ],
+     [
+      314,
+      311
+     ],
+     [
+      169,
+      446
+     ],
+     [
+      10,
+      446
+     ],
+     [
+      0,
+      448
+     ]
+    ]
+   },
+   "stand": [
+    237,
+    393
+   ],
+   "face": "W"
+  }
+ ],
+ "marks": {
+  "fromBridge": [
+   520,
+   562
+  ],
+  "toBridge": [
+   520,
+   596
+  ],
+  "default": [
+   470,
+   528
+  ],
+  "mariam": {
+   "at": [
+    646,
+    474
+   ],
+   "face": "W"
+  },
+  "mariam_spots": [
+   [
+    702,
+    486,
+    "W"
+   ],
+   [
+    640,
+    458,
+    "SW"
+   ]
+  ],
+  "mariam_talk": [
+   547,
+   474
+  ],
+  "felix": {
+   "at": [
+    82,
+    463
+   ],
+   "face": "W"
+  },
+  "felix_spots": [
+   [
+    75,
+    453,
+    "NW"
+   ],
+   [
+    54,
+    475,
+    "E"
+   ]
+  ],
+  "petosiris": [
+   152,
+   452
+  ],
+  "door": [
+   573,
+   427
+  ],
+  "wait": [
+   520,
+   427
+  ],
+  "window": {
+   "at": [
+    659.9,
+    286.9
+   ],
+   "scale": 0.561,
+   "face": "W"
+  },
+  "window_opening": [
+   [
+    680,
+    234
+   ],
+   [
+    640,
+    234
+   ],
+   [
+    640,
+    178
+   ],
+   [
+    680,
+    173
+   ]
+  ],
+  "bench_seat": {
+   "at": [
+    500,
+    408
+   ],
+   "cm": 45.0,
+   "px": 19.1
+  },
+  "pray_eleazar": [
+   455,
+   404,
+   "W"
+  ],
+  "pray_son": [
+   486,
+   418,
+   "W"
+  ],
+  "bless": [
+   439,
+   403,
+   "E"
+  ],
+  "hens": [
+   [
+    709,
+    483
+   ],
+   [
+    645,
+    452
+   ]
+  ]
+ },
+ "exits": [
+  {
+   "to": "rome-forum",
+   "edge": "S",
+   "name": "back over the stone bridge",
+   "walkTo": [
+    520,
+    596
+   ],
+   "spawn": "fromBridge",
+   "arrive": [
+    520,
+    562
+   ],
+   "band": "rows 548 to 600; from x 60 to 782 no thing to click covers it, and the floor there is open"
+  }
+ ],
+ "fx": [
+  {
+   "id": "river-shimmer",
+   "type": "shimmer",
+   "what": "the sun on the river: glints that come and drift downstream and go",
+   "poly": [
+    [
+     0,
+     271
+    ],
+    [
+     120,
+     265
+    ],
+    [
+     240,
+     258
+    ],
+    [
+     300,
+     255
+    ],
+    [
+     370,
+     262
+    ],
+    [
+     314,
+     311
+    ],
+    [
+     169,
+     446
+    ],
+    [
+     10,
+     446
+    ],
+    [
+     0,
+     448
+    ]
+   ],
+   "holes": [
+    [
+     [
+      0,
+      403
+     ],
+     [
+      83,
+      271
+     ],
+     [
+      92,
+      271
+     ],
+     [
+      202,
+      307
+     ],
+     [
+      204,
+      309
+     ],
+     [
+      234,
+      350
+     ],
+     [
+      234,
+      354
+     ],
+     [
+      228,
+      368
+     ],
+     [
+      226,
+      370
+     ],
+     [
+      200,
+      390
+     ],
+     [
+      150,
+      428
+     ],
+     [
+      130,
+      443
+     ],
+     [
+      124,
+      447
+     ],
+     [
+      2,
+      453
+     ],
+     [
+      0,
+      453
+     ]
+    ]
+   ],
+   "count": 46,
+   "size": 7,
+   "flow": [
+    3.5,
+    -1.8
+   ],
+   "life": 1.6,
+   "color": "#fff4d8",
+   "opacity": 0.55,
+   "note": "The painting's own glints and its broad shine toward the sun (left) stay; this adds the moving ones. The barge is a hole."
+  },
+  {
+   "id": "barge-ripples",
+   "type": "ripples",
+   "what": "the water lapping along the barge's side, between it and the quay",
+   "at": [
+    175,
+    406
+   ],
+   "radius": [
+    3,
+    14
+   ],
+   "flat": 0.22,
+   "every": [
+    1.2,
+    3.0
+   ],
+   "rings": 1,
+   "speed": 10,
+   "color": "#e8e4d8",
+   "trough": "#3e4a4a",
+   "opacity": 0.45
+  },
+  {
+   "id": "barge-ripples-2",
+   "type": "ripples",
+   "at": [
+    208,
+    381
+   ],
+   "radius": [
+    2,
+    10
+   ],
+   "flat": 0.22,
+   "every": [
+    1.6,
+    3.5
+   ],
+   "rings": 1,
+   "speed": 8,
+   "color": "#e8e4d8",
+   "trough": "#3e4a4a",
+   "opacity": 0.4,
+   "seed": 2
+  },
+  {
+   "id": "steps-ripples",
+   "type": "ripples",
+   "what": "where the river laps the lowest step down from the landing (bottom left)",
+   "at": [
+    5,
+    590
+   ],
+   "radius": [
+    2,
+    9
+   ],
+   "flat": 0.22,
+   "every": [
+    1.4,
+    3.2
+   ],
+   "rings": 2,
+   "speed": 8,
+   "color": "#f0ead8",
+   "trough": "#4a4a40",
+   "opacity": 0.5,
+   "clip": [
+    [
+     [
+      0,
+      505
+     ],
+     [
+      105,
+      505
+     ],
+     [
+      3,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   ],
+   "note": "In the very corner, below the quay's edge (the clip is the stair and the water seen past the quay): under the inventory bar while the game waits for a click, seen in the cut-scenes."
+  },
+  {
+   "id": "barge-bob",
+   "type": "bob",
+   "plane": "barge",
+   "amount": 1,
+   "period": 5,
+   "what": "the barge riding the water at its moorings",
+   "note": "The water is painted complete under it, and the landing's edge stones (the cut-out curb, in front of it) cover the foot of its bow where it lies behind the landing, so a pixel up or down shows nothing but water and stone."
+  },
+  {
+   "id": "hen-1",
+   "type": "birds",
+   "kind": "flock",
+   "what": "one of Mariam's hens (brown), standing in the row with the others, looking over the river",
+   "perch": [
+    [
+     714,
+     485
+    ],
+    [
+     705,
+     482
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     24,
+     42
+    ],
+    "face": "W",
+    "sizeAt": 590,
+    "stand": [
+     "hen-brown-1.png",
+     "hen-brown-2.png",
+     "hen-brown-1.png",
+     "hen-brown-3.png"
+    ],
+    "look": [
+     "hen-brown-4.png"
+    ],
+    "walk": [
+     "hen-brown-5.png",
+     "hen-brown-6.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 4,
+   "moves": {
+    "stand": 3,
+    "look": 2,
+    "walk": 0.5,
+    "peck": 0,
+    "turn": 0
+   },
+   "seed": 1
+  },
+  {
+   "id": "hen-2",
+   "type": "birds",
+   "kind": "flock",
+   "what": "one of Mariam's hens (speckled), standing in the row with the others, looking over the river",
+   "perch": [
+    [
+     697,
+     477
+    ],
+    [
+     689,
+     474
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     24,
+     42
+    ],
+    "face": "W",
+    "sizeAt": 590,
+    "stand": [
+     "hen-speckled-1.png",
+     "hen-speckled-2.png",
+     "hen-speckled-1.png",
+     "hen-speckled-3.png"
+    ],
+    "look": [
+     "hen-speckled-4.png"
+    ],
+    "walk": [
+     "hen-speckled-5.png",
+     "hen-speckled-6.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 4,
+   "moves": {
+    "stand": 3,
+    "look": 2,
+    "walk": 0.5,
+    "peck": 0,
+    "turn": 0
+   },
+   "seed": 2
+  },
+  {
+   "id": "hen-3",
+   "type": "birds",
+   "kind": "flock",
+   "what": "one of Mariam's hens (white), standing in the row with the others, looking over the river",
+   "perch": [
+    [
+     682,
+     468
+    ],
+    [
+     674,
+     465
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     24,
+     42
+    ],
+    "face": "W",
+    "sizeAt": 590,
+    "stand": [
+     "hen-white-1.png",
+     "hen-white-2.png",
+     "hen-white-1.png",
+     "hen-white-3.png"
+    ],
+    "look": [
+     "hen-white-4.png"
+    ],
+    "walk": [
+     "hen-white-5.png",
+     "hen-white-6.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 4,
+   "moves": {
+    "stand": 3,
+    "look": 2,
+    "walk": 0.5,
+    "peck": 0,
+    "turn": 0
+   },
+   "seed": 3
+  },
+  {
+   "id": "hen-4",
+   "type": "birds",
+   "kind": "flock",
+   "what": "one of Mariam's hens (brown), standing in the row with the others, looking over the river",
+   "perch": [
+    [
+     665,
+     460
+    ],
+    [
+     657,
+     457
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     24,
+     42
+    ],
+    "face": "W",
+    "sizeAt": 590,
+    "stand": [
+     "hen-brown-1.png",
+     "hen-brown-2.png",
+     "hen-brown-1.png",
+     "hen-brown-3.png"
+    ],
+    "look": [
+     "hen-brown-4.png"
+    ],
+    "walk": [
+     "hen-brown-5.png",
+     "hen-brown-6.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 4,
+   "moves": {
+    "stand": 3,
+    "look": 2,
+    "walk": 0.5,
+    "peck": 0,
+    "turn": 0
+   },
+   "seed": 4
+  },
+  {
+   "id": "hen-5",
+   "type": "birds",
+   "kind": "flock",
+   "what": "one of Mariam's hens (speckled), standing in the row with the others, looking over the river",
+   "perch": [
+    [
+     648,
+     453
+    ],
+    [
+     641,
+     451
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     24,
+     42
+    ],
+    "face": "W",
+    "sizeAt": 590,
+    "stand": [
+     "hen-speckled-1.png",
+     "hen-speckled-2.png",
+     "hen-speckled-1.png",
+     "hen-speckled-3.png"
+    ],
+    "look": [
+     "hen-speckled-4.png"
+    ],
+    "walk": [
+     "hen-speckled-5.png",
+     "hen-speckled-6.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 4,
+   "moves": {
+    "stand": 3,
+    "look": 2,
+    "walk": 0.5,
+    "peck": 0,
+    "turn": 0
+   },
+   "seed": 5
+  },
+  {
+   "id": "washing-sway",
+   "type": "sway",
+   "plane": "washing",
+   "anchor": "top",
+   "amount": 1,
+   "period": 3.6,
+   "wave": 40,
+   "lean": 0.3,
+   "what": "the washing on the line between Eleazar's two upper windows, stirring"
+  },
+  {
+   "id": "cooking-smoke",
+   "type": "smoke",
+   "plane": "back",
+   "what": "a thin smoke from a cooking fire, rising behind the houses beyond the house of prayer",
+   "at": [
+    492,
+    128
+   ],
+   "height": 70,
+   "width": [
+    2,
+    14
+   ],
+   "lean": [
+    -22,
+    -70
+   ],
+   "rise": 10,
+   "rate": 2.5,
+   "gust": 0.3,
+   "color": "#f2ede6",
+   "opacity": 0.32
+  },
+  {
+   "id": "birds-river",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "swallows over the river, back for the spring",
+   "lanes": [
+    [
+     [
+      -12,
+      132
+     ],
+     [
+      90,
+      112
+     ],
+     [
+      200,
+      128
+     ],
+     [
+      300,
+      96
+     ],
+     [
+      412,
+      -12
+     ]
+    ],
+    [
+     [
+      -12,
+      60
+     ],
+     [
+      80,
+      86
+     ],
+     [
+      170,
+      70
+     ],
+     [
+      260,
+      40
+     ],
+     [
+      330,
+      -12
+     ]
+    ]
+   ],
+   "frames": {
+    "flap": [
+     "swallow-1.png",
+     "swallow-2.png",
+     "swallow-3.png",
+     "swallow-2.png"
+    ],
+    "glide": "swallow-4.png",
+    "middle": [
+     8,
+     5
+    ]
+   },
+   "dir": "art/scenes/rome-steps/",
+   "scale": 1,
+   "every": [
+    7,
+    16
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "speed": 110,
+   "note": "The temple steps' swallow frames (rome_steps_birds.py), from that scene's folder. The lanes keep over the river and the far bank, clear of the houses' roofs (which are in back.png)."
+  },
+  {
+   "id": "birds-far",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "more of them far off over the far bank",
+   "lanes": [
+    [
+     [
+      -12,
+      168
+     ],
+     [
+      100,
+      150
+     ],
+     [
+      210,
+      176
+     ],
+     [
+      330,
+      140
+     ],
+     [
+      360,
+      -12
+     ]
+    ]
+   ],
+   "frames": {
+    "flap": [
+     "swallow-1.png",
+     "swallow-2.png",
+     "swallow-3.png",
+     "swallow-2.png"
+    ],
+    "glide": "swallow-4.png",
+    "middle": [
+     8,
+     5
+    ]
+   },
+   "dir": "art/scenes/rome-steps/",
+   "scale": 0.55,
+   "every": [
+    8,
+    18
+   ],
+   "group": [
+    1,
+    3
+   ],
+   "speed": 70,
+   "seed": 3
+  }
+ ],
+ "fx_note": "Nothing that moves by nature is in the paint; these move it. The river: river-shimmer, glints that come and drift downstream (up the picture and to the right, toward the bend) over the painting's own still sparkle, the barge a hole in it; barge-ripples (two) where the water laps along the barge between it and the quay; steps-ripples at the foot of the landing's steps, in the very corner (clipped to the stair and the water seen past the quay's edge; under the inventory bar while the game waits for a click). The barge rides at its moorings: barge-bob (ENGINE-13R's bob, as the brief gives it), the water painted whole under it, and the curb cut-out in front of the foot of its bow, so that a pixel up or down shows only water and stone. The five hens: one flock of one each (so that each keeps her own colouring and her place in the row, which runs from in front of the coop back toward the house), depth true (sized by their row from frames sizeAt 590), shy 0, never flying, turning or pecking: they stand, look up and shuffle, facing west over the river at the city. The washing sways on its line (washing-sway, its cut-out hung from the top). A thin cooking smoke rises behind the houses beyond the house of prayer (plane back). Swallows over the river and the far bank: the temple steps' swallow frames (rome_steps_birds.py), from that scene's folder.",
+ "frames": {
+  "brown": {
+   "foot": [
+    24,
+    42
+   ],
+   "face": "W",
+   "sizeAt": 590,
+   "stand": [
+    "hen-brown-1.png",
+    "hen-brown-2.png",
+    "hen-brown-1.png",
+    "hen-brown-3.png"
+   ],
+   "look": [
+    "hen-brown-4.png"
+   ],
+   "walk": [
+    "hen-brown-5.png",
+    "hen-brown-6.png"
+   ],
+   "files": "hen-brown-<n>.png, n 1 to 6",
+   "acts": {
+    "stand": [
+     1,
+     2,
+     1,
+     3
+    ],
+    "look": [
+     4
+    ],
+    "walk": [
+     5,
+     6
+    ]
+   },
+   "note": "1-3 stand (the head as it is, turned a little toward us, a little lower), 4 look (the head up, still), 5-6 walk (a shuffle). Facing west, as painted. No peck: they will not eat."
+  },
+  "speckled": {
+   "foot": [
+    24,
+    42
+   ],
+   "face": "W",
+   "sizeAt": 590,
+   "stand": [
+    "hen-speckled-1.png",
+    "hen-speckled-2.png",
+    "hen-speckled-1.png",
+    "hen-speckled-3.png"
+   ],
+   "look": [
+    "hen-speckled-4.png"
+   ],
+   "walk": [
+    "hen-speckled-5.png",
+    "hen-speckled-6.png"
+   ],
+   "files": "hen-speckled-<n>.png, n 1 to 6",
+   "acts": {
+    "stand": [
+     1,
+     2,
+     1,
+     3
+    ],
+    "look": [
+     4
+    ],
+    "walk": [
+     5,
+     6
+    ]
+   },
+   "note": "1-3 stand (the head as it is, turned a little toward us, a little lower), 4 look (the head up, still), 5-6 walk (a shuffle). Facing west, as painted. No peck: they will not eat."
+  },
+  "white": {
+   "foot": [
+    24,
+    42
+   ],
+   "face": "W",
+   "sizeAt": 590,
+   "stand": [
+    "hen-white-1.png",
+    "hen-white-2.png",
+    "hen-white-1.png",
+    "hen-white-3.png"
+   ],
+   "look": [
+    "hen-white-4.png"
+   ],
+   "walk": [
+    "hen-white-5.png",
+    "hen-white-6.png"
+   ],
+   "files": "hen-white-<n>.png, n 1 to 6",
+   "acts": {
+    "stand": [
+     1,
+     2,
+     1,
+     3
+    ],
+    "look": [
+     4
+    ],
+    "walk": [
+     5,
+     6
+    ]
+   },
+   "note": "1-3 stand (the head as it is, turned a little toward us, a little lower), 4 look (the head up, still), 5-6 walk (a shuffle). Facing west, as painted. No peck: they will not eat."
+  }
+ },
+ "sizes": {
+  "grown_man_px_at_fromBridge": 146.8,
+  "grown_man_px_at_bench": 74.4,
+  "grown_man_px_at_felix": 100.2,
+  "grown_man_px_at_window": 89.8,
+  "hen_px_in_yard": 25.4,
+  "hen_px_in_yard_far_end": 22.0
+ }
+}

@@ -7,8 +7,8 @@
 // (A scene's pictures are another matter: once the title is up they are all fetched quietly in the background.)
 
 export const sceneIds = [
-  "egypt-crash", "egypt-site", "egypt-gallery", "egypt-chamber",     // Act One
-  "rome-steps", "rome-street", "rome-temple",                        // Act Two
+  "egypt-crash", "egypt-car", "egypt-site", "egypt-gallery", "egypt-chamber",     // Act One (CAR-13S: egypt-car, the inside of the wagon)
+  "rome-steps", "rome-street", "rome-temple", "rome-forum", "rome-capitol", "rome-tiber",   // Act Two (ROME-13S: the Forum, the Capitol, across the Tiber)
   "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",   // Act Three
   "nevada-roadside", "nevada-store",                                 // Act Four (NEVADA-12SB: the store)
   "nevada-limo",                                                     // Act Five (NEVADA-12SC)
