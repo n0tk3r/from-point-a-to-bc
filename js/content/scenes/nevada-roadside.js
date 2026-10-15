@@ -794,6 +794,7 @@ export default {
   id: "nevada-roadside",
   era: "nevada",
   name: "The last stop before nothing",
+  travel: (g) => !g.flag("nevada.left"),                   // MAP-15: not by the map once the act has ended (whatever a save catches it in)
 
   // Every place in this file is the painter's own measurement of the finished picture (art/scenes/nevada-roadside/layout.json),
   // or was set by eye against the picture with the people standing in it; where the two differ the comment says why.

@@ -242,6 +242,7 @@ export default {
   id: "home-living-room",
   era: "home",
   name: "The living room, 9:40 p.m.",
+  travel: (g) => !g.flag("home.left"),                     // MAP-15: not by the map once the act has ended (whatever a save catches it in)
 
   // DEPTH, from the room's camera (layout.json).
   horizon: 150, full: 455,

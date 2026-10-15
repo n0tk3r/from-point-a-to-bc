@@ -199,6 +199,7 @@ export default {
   id: "rome-temple",
   era: "rome",
   name: "Inside the temple: the treasury",
+  travel: (g) => !g.flag("rome.tossed"),                   // MAP-15: not by the map once the act has ended (the coin has gone through: the way out is the way home)
 
   horizon: 120, full: 585,
 

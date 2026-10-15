@@ -349,9 +349,9 @@ const showFelix = (id) => async (g) => {
 // ---------- the way out: back over the bridge ----------
 /** Once the boy has seen the old man at his prayer, he has finished by the time the boy comes back: he is on his bench
     (rome.eleazarDown: set as the boy goes, before the scene changes, because the scene's people are placed when it is
-    built). A game saved and loaded during the first visit still has him at his window. */
+    built). A game saved and loaded during the first visit still has him at his window. MAP-15: that is done by the
+    scene's `leaving` (below), which runs however the boy leaves, over the bridge or by the map; the way only goes. */
 function overTheBridge(g) {
-  if (g.flag("rome.sawTiber")) g.flag("rome.eleazarDown", true);
   return g.goto("rome-forum", { spawn: "fromTiber" });
 }
 
@@ -364,6 +364,8 @@ export default {
   id: "rome-tiber",
   era: "rome",
   name: "Across the Tiber",
+  // MAP-15: as the boy leaves, by the bridge or by the map, the old man has finished his prayer, once the boy has seen him at it
+  leaving(g) { if (g.flag("rome.sawTiber")) g.flag("rome.eleazarDown", true); },
   music: "tiber",                                                 // the act's own quiet (js/content/sound.js)
 
   // DEPTH (fixed by the master brief, and the painter's camera): no minScale or maxScale is needed here. The farthest stand,

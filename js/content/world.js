@@ -62,13 +62,19 @@ export const cast = {
   narrator: { name: "Narrator", color: "#f6e3b8" },
 };
 
-/** Time periods. The id matches a palette in css/tokens.css and a track in sound.js. */
+/** Time periods. The id matches a palette in css/tokens.css and a track in sound.js.
+    MAP-15: `dial` is the time's stop on the Timer (the emblem's dial: A, seven notches, B.C.; js/engine/atlas.js turns it
+    when the player switches across the centuries, and on the map). A is stop 0, today; B.C. is stop 8, the furthest back
+    the game goes (Egypt, about 1920 B.C.: some 3,945 years back, there being no year nought). A new time gets the notch
+    its years put it at, rounded: 8 x (years back) / 3,945. Rome, 44 B.C., is 2,069 years back: 4.2, the middle notch
+    (MAP-15M: the count as docs/DESIGN.md makes it). A time with no `dial` (the
+    tunnel, which is between whens) is on no map. */
 export const eras = {
-  present: { name: "The present", date: "", music: "road" },
-  egypt:   { name: "Ancient Egypt", date: "about 1920 B.C.", music: "egypt" },      // by the Bible's own count of years (Ussher): see docs/CHARACTERS.md, "How the game counts the years"
-  rome:    { name: "Rome", date: "44 B.C.", music: "rome" },
-  home:    { name: "Home", date: "The present", music: "home" },
-  nevada:  { name: "The Middle of Nevada", date: "The next morning", music: "nevada" },
+  present: { name: "The present", date: "", music: "road", dial: 0 },                    // (MAP-15: dial)
+  egypt:   { name: "Ancient Egypt", date: "about 1920 B.C.", music: "egypt", dial: 8 },      // by the Bible's own count of years (Ussher): see docs/CHARACTERS.md, "How the game counts the years"
+  rome:    { name: "Rome", date: "44 B.C.", music: "rome", dial: 4 },                      // (MAP-15: dial)
+  home:    { name: "Home", date: "The present", music: "home", dial: 0 },                   // (MAP-15: dial)
+  nevada:  { name: "The Middle of Nevada", date: "The next morning", music: "nevada", dial: 0 },     // (MAP-15: dial)
   tunnel:  { name: "Between whens", date: "", music: "tunnel" },
 };
 

@@ -42,11 +42,13 @@ them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome
 | Look | One way of painting, one figure and one light for every person, one typeface, and time travel in neon | Each era changes what is painted, never the rules. See section 9. |
 | Updates | Every code file, style file and picture is fetched by an address that changes when the file changes, and a game in progress keeps what it has fetched | A push can never leave a browser running old files next to new ones, or put a new painting behind an old script. See "Publishing a new version" in section 10. |
 
-Size today (round thirteen): 74 code and style files, about 2.8 MB (about 760 KB when the
-server compresses it; the testers' saved games, `checkpoints.js`, are about half a megabyte
-of that, and compress to some 25 KB); 614 pictures, 9.5 MB in all (76 of them the engine's
-own, for its proof scene, and 9 the game's emblem); and a 49 KB font. Nothing else is
-downloaded.
+Size today (round fifteen): 76 code and style files, about 2.9 MB (about 790 KB when the
+server compresses it; the testers' saved games, `checkpoints.js`, are about 0.7 MB of that,
+and compress to under 30 KB); 652 pictures, 11.5 MB in all (76 of them the engine's own, for
+its proof scene, 12 the game's emblem, and 35 the four maps); a 49 KB font; and a few small
+files of measurements (the maps' `layout.json`, the painted figures' sidecars). Nothing else
+is downloaded. <!-- MAP-15D: it was, at round thirteen, 74 files, about 2.8 MB (760 KB
+compressed), and 614 pictures, 9.5 MB -->
 
 ## Where things are
 
@@ -73,6 +75,7 @@ js/engine/              the engine. Knows nothing about this story.
   effects.js              things that move by nature: smoke, flames and embers, water, birds, cloth that stirs, the country going by a car's windows
   story.js                reads the story data: open beats, checks
   ui.js                   heads-up display and menus
+  atlas.js                the map screen and the Timer: travel on the map, switching through it, the maps' check (MAP-15)
   game.js                 ties it together; the `g` that scripts use
 js/art/                 everything that is drawn by code
   kit.js                  the neon rings (the title, the tunnel; the tab icon is the emblem since EMBLEM-13), the sketch of an unpainted scene, close-ups, and the old 320x200 drawings
@@ -93,6 +96,7 @@ js/content/             the game itself. Knows nothing about the engine's inside
   acts/*.js                 the acts and their beats, one file to an act: prologue, egypt, rome, home, nevada, limo
   checkpoints.js          the testers' saved games, one for each beat (section 6, "Testing: parts"): written by a script, not by hand
   sound.js                music, effects and the list of recorded lines
+  maps.js                 the maps: each time's places and the ways between them, the marks they arrive on, a sketch of each (MAP-15)
   cutscenes/highway.js    the painted highway at dusk, and the parts of it that change
   cutscenes/intro.js      the intro movie
   cutscenes/title.js      what is behind the title screen
@@ -111,7 +115,10 @@ art/proof/              the engine's own pictures for its proof scene: a small p
                         since round thirteen a flock of geese (their frames) with their pen, a boat, and a house front with a room
                         behind its upper window
 art/emblem/             the game's emblem, the Timer (EMBLEM-13): the begin screen's sky, turning bow, top and still, and the
-                        tab and home-screen icons: interface pictures, never keyed
+                        tab and home-screen icons: interface pictures, never keyed; since round fifteen the same three pieces at
+                        1024, for the large dial of the switch across the centuries (MAP-15D)
+art/maps/<map>/         a map's pictures (MAP-15): the sheet, a picture for each place and each way, and layout.json (the
+                        painters' measurements, which the engine reads): interface pictures, never keyed
 fonts/                  Koine Road, the game's typeface
 tools/storyboard.html   the story, drawn out, straight from the data, with every scene as the game builds it
 tools/sprites.html      every character and prop, moving, in every direction
@@ -154,7 +161,9 @@ The rule is: **who needs to know about the motion decides the tool.**
   single `requestAnimationFrame` loop. Walking, cutscene beats, line timing, fades
   and the tunnel all ask this one clock for `wait(ms)` or `tween(ms, step)`. Because
   there is one clock, pausing the game pauses all of it, and skipping a cutscene is
-  one switch (see section 5).
+  one switch (see section 5). <!-- MAP-15D --> The one exception is the map screen, which
+  pauses the game while it is up, as the menu does: its dials, the portraits walking on it
+  and its fades run on a small timer of its own (section 8, "The map, and the Timer").
 - **Scenery is a painted picture, shown as it is.** The backdrop is the picture file
   itself, in a picture element. Nothing that happens afterwards touches it.
 - **People, painted cut-outs and props share one canvas above the scenery.** On a frame
@@ -179,7 +188,8 @@ Players who ask their system for less motion (`prefers-reduced-motion`), or tick
 **Less motion and no flashes** in Options, get still decoration, people who stand
 quite still, cut-outs that hold their first picture, plain fades in place of white
 flashes, a slow tunnel, and smoke, flames, water and birds that move gently, at half
-speed or less (no bird flaps up: they walk off instead).
+speed or less (no bird flaps up: they walk off instead). <!-- MAP-15D --> On the map
+nothing moves: the dials show their notch at once, and a portrait is where it is going.
 
 ### Keeping it fast
 
@@ -559,6 +569,8 @@ The inventory pictures (`art/items/`, 64x64) are painted the same way.
 
 Then the paints: a scene's pictures are mixed from the game's one box of paints in its key, on their way into
 `art/` (section 9, "The paints"). The inventory pictures belong to the interface and are not.
+<!-- MAP-15D --> Nor are the maps (since round fifteen): four sheets painted by the same passes with the same kit, each
+the kind of map its own time would make, their colours mixed from the box by name (section 9, "The maps").
 
 ---
 
@@ -1041,7 +1053,8 @@ facts ("flags"), the tunnel: things put into a door in time and not yet taken ou
 of another (section 8, "The letterbox"; a save with no `tunnel` field is from before
 it, and the field being absent means empty), and what has been asked in dialogue trees,
 and how many times (`asked`, section 7, "Dialogue trees"; absent in an older save, which
-means nothing yet). Nothing else. Every scene rebuilds itself from those facts: its
+means nothing yet), and the scenes the player has entered, in order (`visited`, which the map
+reads: section 8, "The map, and the Timer"). <!-- MAP-15 --> Nothing else. Every scene rebuilds itself from those facts: its
 cut-outs read them to decide whether they show and in which state, and its `setup`
 function does anything that is left. That is why a save is a few hundred bytes.
 
@@ -1086,6 +1099,12 @@ Each save is wrapped in an envelope:
   is nowhere until the story puts them somewhere, and cannot be switched to. A carried
   thing that is gone is left out of the pockets. A save whose own scene is gone is turned
   away in words, and the game carries on.
+- A save from before the map has no `visited` (every one made before round fifteen). It is <!-- MAP-15T: it said "(every one
+  made before round fifteen, and the testers' saved games)": they carry the list since they were made again, 14 October -->
+  given one as it is loaded (`visitedOf` in `game.js`): the scenes of every beat of every act whose gate is done, the
+  scenes of the beats done in the act under way, and the scenes where the team stands. The `?scene=` shortcut does the
+  same. A save with a list keeps it (`complete()` in `state.js` keeps a list and leaves anything else for the game to
+  fill), and the save version stays 3. <!-- MAP-15 -->
 - A save can also lack a lead this version has: one who joined the cast after it was made
   (Grandpa Joe and Ranger, in Act Five). `complete()` in `state.js` gives such a lead no
   place (nowhere, until the story puts him somewhere) and empty pockets, and the save
@@ -1118,11 +1137,18 @@ writes the file in story order, and loads every checkpoint to see that it opens.
 about half an hour, because the plays are slow by design, and it has to be run again
 whenever an act's beats, scenes or scripts change, or the parts will be yesterday's game.
 
-**Today they are.** The file was last made on 13 October, at the end of round thirteen,
-from the game with both of the round's builds merged: 58 saved games, one for each beat of
-the story, and every one loaded again to see that it opens. Act One's are captured from its
-play with the inside of the wagon (the road map's part opens inside the wagon), and Act
-Two's sixteen from its new play of the act as it is now.
+**Today they are.** The file was last made on 14 October, at the end of round fifteen, from
+the game with the map merged: 58 saved games, one for each beat of the story, and every one
+loaded again to see that it opens. Act One's are captured from its play with the inside of
+the wagon (the road map's part opens inside the wagon), and Act Two's sixteen from its play
+of the act as it is now. Each carries the scenes its play had entered (`visited`, which the
+map reads). And Dad and the Son stand where the story left them: the plays of the later acts
+begin from the `?scene=` shortcut, which knows nothing of them, so the script gives every
+saved game after Act One's gate Dad's place at his door, as the Egypt play left him, and every
+one after Act Two's the Son's in the treasury, as the Rome play left him (43 and 27 saved
+games), and packs those again with the game's own `pack`, so that each checksum is the game's.
+<!-- MAP-15T: it said the file was last made on 13 October, at the end of round thirteen, from
+the game with both of the round's builds merged, and Act Two's sixteen from "its new play" -->
 
 Three things follow from where the saved games come from. An act's gate and the next act's
 opening are one moment (the player first has control again after the hand-over), so they
@@ -1431,8 +1457,8 @@ lists who they can switch to at this point in the story. A script sets it: `g.te
 screen.
 
 **Apart.** Dad and the Son are in different centuries. Switching to the other one
-travels to wherever he is (by the short tunnel, when the two scenes are in different
-eras). The story can also cut between leads by itself, as it does
+goes to wherever he is through his map, and across the centuries the Timer turns first
+(below, "The map, and the Timer"). <!-- MAP-15 --> The story can also cut between leads by itself, as it does
 at the end of each act. A strong fit for this premise: something sent through a door
 in one era turns up in another, so people who are apart can still help each other.
 (The coin the Son throws into the door in Rome falls out of the sky in Nevada.) The
@@ -1573,21 +1599,178 @@ shows the menu as that person's words, their portrait and name at its head and t
 are what the lead off stage may say). The lead on stage speaks ordinary `g.say` lines over their own head, so the player
 sees one person on stage talking to a portrait of the other, which is the whole picture of a letterbox.
 
-**Switching across the centuries.** Switching to a lead who is in another scene travels there, as before; when the two
-scenes are in different eras (`scene.era`) the trip is the short tunnel (`g.goto(..., { via: "wormhole" })`), and within
-one era it is a fade, as it always was. Their place and facing are kept. A lead can be switched to only if they are on
-the team; the scenes decide the team.
+**Switching across the centuries.** Switching to a lead who is in another scene goes there, and their place and facing
+are kept. Since round fifteen it goes through their map, and when the two scenes are in different eras (`scene.era`) the
+Timer turns first (below, "The map, and the Timer"). <!-- MAP-15 --> The old way is still there for scripts
+(`g.switchLead(to, { map: false })`): the short tunnel across the eras (`g.goto(..., { via: "wormhole" })`), and within one
+era a fade. A lead can be switched to only if they are on the team; the scenes decide the team.
 
 **The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.letterbox`: Dad on the sand with a pack of gum, the
 Son in the market street sketch in Rome, a small door in the air. The gum goes in the door for the Son, the mark
-appears, switching to him is the tunnel, and coming back as him the door gives it up. The door with nothing in hand is a
-word through it, with a choose through the door. The engine test's `letterbox` part plays all of it.
+appears, switching to him is the Timer and his map (MAP-15; before, the tunnel), and coming back as him the door gives it
+up. The door with nothing in hand is a word through it, with a choose through the door. The engine test's `letterbox` part
+plays all of it.
 
 **In the game.** Act Four's coin door is the first letterbox in the story. From #9 until #12 the little door over the
 glass is a thing to click, "Talk into": a talk with the Son, in Rome, held through it
 (`g.talk(letterboxTree(...), { through: "son" })`, `js/content/scenes/nevada-roadside.js`); and Little Sister's lucky
 penny goes into it for him (`g.send("penny", { to: "son" })`, or, when the penny is in one of the others' pockets,
 straight onto the tunnel list from there). It waits in the tunnel for the Rome end of the door, which is not built yet.
+
+<!-- MAP-15 -->
+### The map, and the Timer
+
+The author, 14 October, on what "the map" in his notes meant: "maybe if we switch back and forth between players it can use
+the dial we created and load a map with a map button". Of the ways put to him he chose three things: switching to someone
+in another century is the Timer (the game's emblem, section 9) turning notch by notch from one time to the other, and then
+that time's map with them on it, a click on them dropping into their scene; the Map button shows the places of the time
+the lead is in, the visited ones drawn in, everyone of the family where they stand, and travel back to any place already
+visited; and each time has its own kind of map (a papyrus sketch for Egypt, a wax-tablet plan for Rome, a pencil floor plan
+of the house, a fold-out road map of Nevada). The engine has this as the map screen (`js/engine/atlas.js`, the game's
+`g.atlas`, marked `MAP-15` in the code); the maps themselves are data (`js/content/maps.js`); the pictures are the
+painters' (`art/maps/<map>/`). The tunnel stays for falling through doors in the story, and the story's own cuts between
+leads (the ends of the acts) keep their own transitions.
+
+**What the player sees.** The **Map** button, in the row of tools after Show, or the key **M**, opens the map of the place
+the lead is in. It is a screen of its own over the scene (a layer, `#atlas`, over the HUD and under the fade, the cards and
+the menu, built of ordinary buttons and pictures as the HUD is, and scaled with the stage). At the top (rows 0 to 127): the
+time and its date at the left, in the game's face ("Rome", "44 B.C."); the small dial in the middle, the Timer at that
+time's notch; at the right a chip for each map the player knows (one of its places visited, or someone standing on it), in
+the dial's order, A first, the one shown pressed; and Close, which lies exactly over the HUD's Map button (measured as the
+map comes up), so that a second click where the map was opened puts it away again, as a toggle does, with the chips a row
+lower, under it. <!-- MAP-15M --> In the middle (the sheet, x 32 to 768, y 128 to 572), the map.
+At the bottom (rows 572 to 599), the label line: what the pointer or the keyboard's focus is on, and what a click there does.
+M again, Esc or Close puts it away. While it is up the world stops, as under the menu: the game clock is paused and the game
+is busy, so nothing in the scene moves, the tools, the pockets and the team bar are put away, nothing is saved, the testers'
+`[` and `]` do nothing and the pause menu does not open. The map's own motion (the dials, a portrait walking, its fades)
+runs on a timer of its own (`tween` in `atlas.js`, on the browser's frames, since the clock is stopped), and a click or a
+key hurries a turning dial, the Timer or a walk to its end; the short fades as the map comes up, goes away or gives way to
+the dark take no clicks and no keys, a fifth to a third of a second each. <!-- MAP-15D -->
+A rustle of paper (`rustle`) as it opens and as it is put away. (The map's three sounds are in
+`sound.js`: `notch`, short and dry, quieter than the vault's `dial`; `ding`, a small bell, softer than `pickup`; and `rustle`.)
+
+**Places and ways.** A map is a sheet of places joined by ways, in one time. A place is one scene or several (the wagon's
+inside is part of "By the river"); the map of a scene is the one with a place that lists it, and a scene on no map has no
+Map button. A place the player has been to (any of its scenes in the save's `visited`, or one of the team standing in it)
+is drawn in, with its name; a place not visited yet that a way joins to one that has been is drawn faint (its picture at
+0.28), with no name ("Somewhere you haven't been yet"); any other is not shown. A way between two visited places is drawn,
+between a visited place and a faint one faint, and otherwise not shown. The names are the engine's, written in Koine Road
+over the painting in the map's own style (`label` in its layout: colour, a halo or none, capitals or not, spacing, size),
+each at its place's anchor; a name wider than its box is drawn narrower to fit.
+
+**The portraits.** Every lead whose place (`where` in the save) is on a map has a portrait there, at their <!-- MAP-15D -->
+place's pin: a row of discs centred on the pin, 4 pixels apart, the team first (in the team's order) and then anyone else.
+The team's are buttons 36 pixels across ("Play as Mom"; "Mom, playing now" for the one being played, who has a ring in
+their colour); anyone else's are 28, faded, and not buttons ("Dad is here. Not playable just now."). A lead who is not on
+the team is left out where he is one of his scene's own people (its `actors`): Ranger and Grandpa Joe at the Last Stop in
+Act Four are part of the place, not leads left there, and the pins have room for three. The portraits are drawn as the
+team bar's are (`portrait()`, for the pixels they are shown at, never keyed).
+
+**Travel.** On the lead's own map, a click on a place they have been to, other than their own, sends them there. The route
+is the fewest ways through visited places only (with none, the place is not a way to go). Their portrait (and their
+party's, standing with them) walks along the ways drawn on the map (each way's `via`, turned round where it is walked from
+its far end), at about 220 pixels a second and never more than 2.5 seconds for the whole trip, a soft click (`notch`) at
+each place passed through; then the map fades out to the stage's own fade, is put away, and the game goes to the place's
+first scene: `g.goto(id, { via: "map", spawn, came })`, arriving on the mark of the last way (as the scenes' own ways out
+name it) as if they had walked in from the place before it (that place's first scene is what the scene's `enter` is told
+they came from). The party comes along by the scene's own `party` and `arrive`, keyed by that mark, and the game saves, as
+after any way out. A script can do the same: `await g.travel("forum")`, true when the new scene is up, or false at once
+with nothing done (and the console says why) when it may not be. `g.mapOf("rome-forum")` is the map and the place a
+scene is on.
+
+**Leaving, and travel.** Two fields a scene can have. `leaving(g, to)` runs whenever the lead leaves the scene for
+another, by any way (an edge, a door, the map), before anything changes; not when the player switches to a lead in another
+scene, not when a script has handed the controls to a lead who is not in it (as the end of an act does), and not on loading
+a save. Across the Tiber, the old man has finished his prayer as the boy goes (`rome.eleazarDown`, once `rome.sawTiber`), and
+leaving the store they are not inside any more (`nevada.inStore` false, so the next time in is a new visit): both were done by
+a way's script, and are done by `leaving` now, so that they happen on the map's travel too; the ways still do the rest (the
+bell, the walk, the goto). `travel` says whether the lead may leave the scene by the map: `false` never, or a function of
+the game. The limousine never (Grandpa Joe is belted in, and it has no way out); a scene whose act has ended, whatever a
+save catches it in: the burial chamber once `egypt.ready`, the treasury once `rome.tossed`, the living room once
+`home.left`, the Last Stop and the store once `nevada.left`. A refusal is a plain line on the map, "Not from here.", and
+nothing is said.
+
+**Switching through the map.** To a lead in the same scene, the controls change hands at once, as always. To a lead in
+another scene (a click on their portrait in the team bar, or their number key), their map opens with their portrait
+breathing; a click on it, or Enter, drops into their scene, where they stand (`g.dropInto`: the old lead's place
+remembered and their walk stopped, nothing held, and `g.goto(their scene, { via: "map", at: their place, switching:
+true })`: no tunnel, no era card, since the map has said where and when, and no `leaving`, since nobody leaves); Esc goes
+back, and nothing has changed. <!-- MAP-15D --> A click on a portrait of the
+team on any map is the same switch, and while the map is up the number keys do what a click on that portrait does.
+`g.switchLead(to, { map: false })`, or a lead whose scene is on no map, keeps the old way: a fade within one time, the short
+tunnel across the centuries.
+
+**The Timer.** When the other lead's scene is in another time, the switch begins with the Timer: the emblem's three pieces
+(the sky, the bow that turns and the top, laid as the begin screen lays them; at 1024 pixels once the page lists all three,
+else the 512s the begin screen gives a sharp screen; the 1024s were made in round fifteen: section 9, "The Timer at 1024"
+<!-- MAP-15D -->), 440 pixels across in the middle of the dark, come in from a little smaller with
+a fade (0.25 s), and the bow turns from the active lead's time to theirs, notch by notch: each a snap of 0.12 s into the
+notch, a tenth of a notch past it, a settle of 0.06 s back and a hold of 0.08 s, with a click (`notch`) as it lands, and a
+small bell (`ding`) at the end. Then the dial shrinks and rises into the small dial's place at the top of their map (0.4 s)
+as the map fades in under it. A click or a key hurries it to its end. Each time's notch is `dial` in `eras` (`world.js`):
+A, today, is 0 (the present, home and Nevada), B.C., the furthest back the game goes, is 8 (Egypt, about 1920 B.C.), and Rome
+is 4; the bow is at `rotate(48deg)` at A and 12 degrees less at each notch, about the point 50% across and 58.59375% down,
+as on the begin screen. Two times on one notch (home and Nevada) have no turn: a fade to the map. On the map, the chips, a
+click on the small dial (the next map) and the Left and Right keys turn the small dial the same way, notch by notch from the
+shown map's time to the chosen one's, a click at each and the bell at the end (two maps on one notch: one click, no turn),
+and the sheet changes with a short cross-fade.
+
+**Less motion.** With less motion (the system's or the game's own), nothing on the map moves: a dial is shown at its notch
+at once (with the bell), a portrait is where it is going at once, the one being switched to has a steady thick ring instead
+of a breathing one, and one screen gives way to the next by a fade.
+
+**The pictures.** A map's pictures are in `art/maps/<map>/`: `back.png`, the sheet on clear ground (its material, and the
+lie of the land anyone would know before setting foot there, never a place or a way); `place-<id>.png` for each place and
+`path-<a>-<b>.png` for each way, clear but for that thing's own drawing; and `layout.json`, the painters' measurements: the
+`sheet`'s box, the names' `label` style, and for each place its `picture`, its `shape` (what is clicked), its `pin` (where
+the portraits stand) and its `label` anchor with `label_max`, and for each way its `picture` and its `via`, a line along
+its drawing from one pin to the other. Each is 800x600, laid over the whole stage, as painted and never keyed: the map is
+the interface's, as the inventory pictures are. They are fetched with the rest of the game's pictures behind the title,
+quietly and last (`gather`): a map's `layout.json` only when it is among the page's files (its stamp), so that a map not
+painted yet asks the server for nothing, and then its pictures. A map with no `layout.json`, or one that will not load or
+does not fit the map (the console says so, once), is drawn as a sketch from the pins in `maps.js`, as a scene with no
+painting is sketched: the interface's own papyrus, a box at each place's pin with its name inside, the ways dashed in ink,
+and the same three states. <!-- MAP-15D --> The four maps of the story are painted (section 9, "The maps"); the proof's two
+are sketches.
+
+**At every start** the engine checks the maps against the scenes and the eras, beside the edge check ("Map check: ..."): a
+place's scene that is not in `index.js`, on two maps or listed twice; a way whose places are not on its map; a way's mark
+that its scene has no spawn for (a mark that is a function of the game is asked which mark it gives); a map whose time is
+not in `eras` or has no notch; and any scene of the list that is on no map.
+
+**The proof.** The engine's proof scene and the sketch of a market street are on two maps of their own, drawn as sketches
+(`proof-sand`, in Egypt, and `proof-street`, in Rome). With the letterbox proof (Dad on the sand, the Son in the street),
+`index.html?scene=engine-proof&lead=dad&flags=proof.letterbox,proof.arrived` and then 2: the Timer turns from B.C. to the
+middle notch, four notches, then the street's map opens with the Son breathing, and a click on him drops into his scene.
+
+<!-- MAP-15D -->
+**In the game.** No act has the team in two times at once yet: Dad and the Son are apart in Acts One and Two, but each
+plays his act alone, and the family, then Grandpa Joe and Ranger, are together. So in the story the Map button works in
+every act, travel and the maps of the other times are there, and the small dial turns as the player turns from one map to
+another; but the switch across the centuries, the Timer turning and then the other's map, is seen only in the proof. It
+will first be seen in the story with Round One's step (Act Six in `briefs/out/story-redesign.md`: Dad and the Son at their
+doors). In a game played through, Dad stays where Act One leaves him, at his door in the burial chamber, and the Son where
+Act Two leaves him, in the treasury, and their maps show them there, smaller and faded, from then on. The testers' saved
+games are each captured from a play of one act, which knows nothing of the leads left behind before it, so the script that
+makes them gives those after Act One's gate Dad's place at his door and those after Act Two's the Son's in the treasury, as
+the plays that passed the acts on left them: their maps show them there too. <!-- MAP-15T: it said that from the second
+part of Act Two on Dad had no place in them, nor the Son from the second part of Act Three, and that on those the Egypt
+and Rome maps showed nobody: so they were until round fifteen's testers made them again -->
+Within one time, switching to someone
+in another scene is the map with them breathing (a fade, no turn), then the drop: in the house, a sister in another room,
+when one is.
+
+**The test.** The engine test's part `map` (in its quick run) checks all of this, reading every position from the maps'
+data and the maps' layouts (`g.atlas.layout(id)`: the painters' `layout.json`, or the sketch's), so that it passes on the
+paintings as on the sketches: the button and M, the world stopped and nothing saved while the map is up; the four maps on
+the act's checkpoints (what is drawn, faint and absent, the names and their style, the places to click, the portraits at
+their pins, the band); travel two ways off (the mark, the scene `enter` is told, the walk along the ways, the party, the
+save, `leaving` by the map and by the bridge, the store's visits); the refusals; the chips, the dial's clicks and its
+angles; the letterbox proof's switch (the Timer's four notches and the bell, Esc, the drop with no tunnel and no card, a
+click and a key hurrying it); the number keys; the keyboard alone; less motion; the save's `visited` and the shortcut's; a
+painted map from throw-away stand-in pictures, and a broken `layout.json` drawn as the sketch; and the three sounds (each
+heard; the click quieter than the vault's dial; the bell and the paper no louder than `pickup`). It takes screenshots of each
+map open, of the Timer, and of the stand-in (`shots/map-*.png`), which have to be looked at.
 
 ---
 
@@ -1645,6 +1828,9 @@ They are kept apart on purpose, and the contrast is the style:
   notch by notch (holding still for less motion), its still is the browser tab icon
   (`art/emblem/`, `css/game.css`), and the dashed rings turning in opposite directions
   still rush past in the time tunnel between eras. The doors themselves no longer wear them.
+  <!-- MAP-15D --> Since round fifteen the Timer is also the small dial of the map screen, and the large one that turns
+  from one time's notch to another's when the player switches across the centuries (section 8, "The map, and the
+  Timer"; below, "The Timer at 1024").
 - **A possible motif to grow:** let the eras leak into each other as the story goes
   on. A Roman column with a neon crack. A hieroglyph that is a road sign.
 
@@ -1731,6 +1917,51 @@ thousands of pixels nobody touched fall to the next paint (17,000 of the river's
 of the car's inside installed the river with the exact palette instead, by a script kept beside the game and not in it;
 keeping the exact palette in the ledger, `postimp_keyed.json`, would mend the tool.
 
+<!-- MAP-15D -->
+### The maps
+
+The author's choice of 14 October: **each time its own kind of map.** A map is a thing of its world, made the way people
+there made such things, so each of the four is a different object, and the rule above still holds: what changes is what is
+painted (the material, and the hand that drew on it), never how. Each is what somebody in the story would have had to hand:
+a scribe's papyrus where the pyramid is being finished, a writing tablet such as a Roman boy did his lessons on, Dad's own
+plan of his house, and a road map from the rack on Grandpa Joe's counter ("A road map of Nevada. It stops here too.").
+All four are painted by scripts with the scene painters' kit, in the four passes (the brush at sizes 7, 4 and 2, kept calm
+enough to read names on), every colour mixed from the box of paints by name; and they are the interface's pictures, like
+the inventory's, never keyed: what is painted is what the map screen shows. Nothing on them is copied from any real map,
+papyrus, tablet or plan, and none of them names a year B.C. or a real company.
+
+| Map | What it is | Its names (drawn by the engine) |
+| --- | --- | --- |
+| Egypt | A scribe's sketch on papyrus, two sheets joined, the edges frayed and browned, an old fold, two stains, three pen trials in the margin. The land as a scribe draws it, side-on: the Nile along the bottom (zigzag water, fish, lotus), the edge of the desert, three small pyramids far off, and the pyramid itself in section, as seen from the river, with the great gallery and the burial chamber drawn inside it. Black ink for the places, red for the ways (the track up from the river with the boy's small prints, dots up the stair and the ramp), and a few thin washes: the river's blue-green, the palms' green, the red wagon (all four wheels in a row), the king's gold. Lot's donkey drinks by the wagon. | Dark ink-brown, not in capitals, with a halo of the papyrus's palest straw |
+| Rome | A writing tablet: a raised frame of plain wood round a panel of dark beeswax, the plan scratched into the wax with a stylus, each scratch pale where it reaches the wood, its walls lit and shaded by a light from the upper left; old writing rubbed out under it, none of it legible. Saturn's steps in the middle (the temple's front), the street to the left, the treasury behind the temple's doors, the Forum's long square below, the Capitol up its hill to the right, and across the Tiber at the lower left, beyond the river's bend and over the stone bridge. No lettering, nothing in Latin. | Capitals in the scratch's pale, spaced, with a halo of the dark wax |
+| The house | Dad's pencil plan on squared paper (a square is two feet), folded into a pocket, creased, a corner turned over, an eraser smudge or two: the ground floor on the left, upstairs on the right with the attic above it, each titled and underlined; the walls, doors and stairs on the sheet, each room that is a place in plan with its things, the rooms that are not places left empty. Dad's arrow "up" runs from the foot of the stairs to the landing. | Pencil grey, not in capitals, with a faint halo of the paper |
+| Nevada | Grandpa Joe's own fold-out road map, opened flat: thin paper gone yellow, creased into panels and worn at the folds, printed in a few flat inks a little out of register. The highway in red through LAST GAS and "37 MI." on to the east edge, TO NOTHING; ranges, dry lakes, a cover panel ("Compliments of GRANDPA JOE'S LAST STOP"), a legend, and a detail panel ("DETAIL · 37 MILES PAST LAST GAS", "NOT TO SCALE") in which the Last Stop's lot is in plan, with the store drawn inside the shack's walls and the hens out back; the No Gas sign marks the Last Stop on the highway. Once Act Five has begun, a small printed gray limousine on the road beyond it. | Printed blue-black capitals, spaced, knocked out of the paper |
+
+**The pictures** (`tools/paint/README.md`, "Maps", has them whole; section 8 says how the engine reads them). Each is 800x600,
+a palette with one clear colour and hard edges, one palette for all of a map's files (208 colours for Egypt and the house,
+200 for Rome and Nevada), the sheet within x 32 to 768 and y 128 to 572 so that the band at the top and the label line stay
+clear, and no more than 1.5 MB to a map (the four are 0.25 to 0.31 MB). `back.png` is the sheet and the lie of the land,
+never a place or a way; each place and each way is a picture of its own, laid over it; `layout.json`, measured from the
+finished pictures by each map's own script, gives the sheet's box, the names' style, and for each place what is clicked,
+where the portraits stand and where its name goes. The rows of portraits were laid out for two on the maps of Egypt and
+Rome, where one person plays the act, and three on the house's and Nevada's. A place not visited yet, next to one that has
+been, is drawn at 0.28: each painter looked at theirs so, and it reads as "not yet"; and a place not shown at all is
+plainly gone, since nothing of a place is in the sheet.
+
+**The Timer at 1024.** The switch across the centuries shows the emblem 440 pixels across, which a sharp screen draws with
+880 of its own, and the begin screen's pieces are 512 at most. So the three pieces (the sky, the bow that turns, the top)
+were drawn again at 1024 (DIAL-15), not enlarged: the same drawing sampled twice as finely, every length kept in the 512
+drawing's own pixels. Its circles keep their exact centres, its edges along whole rows stay on the same rows, the letters
+and the notches are drawn at twice the size, and the grain is the same field drawn finer; brought down to 512, each piece
+matches the begin screen's but for where a hard edge falls on a pixel, and each stop still sits under the index.
+They are made by DIAL-15's copies of the emblem's scripts (`logo4.py`, `logo5.py` and `brush.py`, every change marked),
+kept beside the game in the scratch folder (`scratchpad/work-map-dial/emblem/make1024.py`) and not in the repository; the
+same copies make the three 512 pieces again, pixel for pixel (the script that put the pieces together in round thirteen,
+`make_emblem.py`, is gone). The three come to 873 KB, fetched quietly behind the title with everything else, and the engine
+lays them only once the page lists all three (`tools/stamp.py`). Where the dial itself is drawn 1,600 or more device pixels
+across (a large window on a sharp screen), the 1024 is enlarged in its turn, and the rim's edges show faint steps
+(section 14, decision 86).
+
 ---
 
 ## 10. How to add things
@@ -1755,6 +1986,8 @@ export default {
   facing: "S",                                  // (added) which way the lead faces on arriving. This is the usual way.
   unseen: true,                                 // (CAR-13E; seldom) the picture is the lead's own view: he is on the stage, never drawn, walks nowhere, leaves by an edge at once (section 8)
   wordsAt: [400, 120],                          // (CAR-13E; seldom) where the words of anyone off the stage go, in place of the top middle (section 8)
+  travel: (g) => !g.flag("egypt.ready"),        // (MAP-15; seldom) may the lead leave by the map now? false: never (section 8, "The map, and the Timer")
+  leaving(g, to) { /* ... */ },                 // (MAP-15; seldom) what happens as the lead leaves for another scene, by any way: an edge, a door, the map
   exits: ["egypt-site"],                        // (added) scenes that can be walked to from here: their pictures are made ready ahead of time
   edges: {                                      // ways out at the edges of the picture (below)
     N: { to: "sketch-example", name: "up the track", walkTo: [496, 302] },
@@ -1964,7 +2197,26 @@ a `draw` function, and list it in the scene's `props` with a place (`at`), a `sc
 and if wanted a `solid`, a `plane`, a `base` and a `when`.
 
 **An era.** Add an entry in `eras` in `world.js`, a theme in `sound.js`, and a palette
-block in `css/tokens.css` (for its sketches).
+block in `css/tokens.css` (for its sketches). Give it its notch on the Timer, `dial` (MAP-15):
+the stop its years put it at, rounded, A being today (0) and B.C. the furthest back the game
+goes (8: Egypt, about 1920 B.C., some 3,945 years back): 8 x (years back) / 3,945. Rome, 44 B.C.,
+is 2,069 years back (there is no year nought: the count PUZZLES-rome.md makes for the act's last
+card), 4.2: the middle notch. <!-- MAP-15D: the years counted as the game counts them; js/content/world.js's comment says 2,070 and 3,947 --> A time with no notch (the tunnel) is on no map.
+
+**A map** (MAP-15). Give it an entry in `js/content/maps.js`: its time (`era`), the word on its
+chip (`name`), its folder of pictures (`art`), its places (each one's scenes, the first the one
+travel goes to, and the `label` the engine writes on the map; `go` for the words after "Go" on
+the label line, when "Go to" and the name would not read well), its ways (`a`, `b`, and for each
+end the mark of that end's scene where a lead arrives along it, as the scenes' own ways out name
+them, or a function of the game that says it), and a pin for each place in its `sketch`, laid
+out as the ways run. It is drawn as a sketch until its pictures and `layout.json` are in
+`art/maps/<map>/` (section 8, "The map, and the Timer"); run `python3 tools/stamp.py` so the page
+lists them. <!-- MAP-15D --> The pictures are painted as the painter's guide says (`tools/paint/README.md`,
+"Maps": a script of the map's own, with its `_layout` and its `_check`), and installed as painted by
+`python3 tools/paint/install.py map-<map>` (its line in `install.py`'s `PLACES`: `"map-<map>": "maps/<map>"`).
+A new place on an old map: its scenes, label, ways and pin, and the painters' picture
+of it. At every start the engine checks the maps against the scenes and the eras, and says in the
+console what does not fit ("Map check: ...").
 
 **A cutscene.** Add a function in `js/content/cutscenes/` and list it in `main.js`.
 Play it with `await g.cutscene("its-name")`.
@@ -2050,7 +2302,7 @@ loads the game, by the plain addresses, with the old risk.
 | `g.flag("name")`, `g.flag("name", true)` | Reads or records a story fact. Recording one makes the cut-outs and the clickable areas read their tests again. |
 | `g.give("item")`, `g.take("item")`, `g.has("item")` | Pockets of the current lead |
 | `g.holder("item")`, `g.item("item")`, `g.the("item")` | Which lead is carrying a thing, or `null`; the thing's own entry in `items`; and its name as it goes into a sentence ("the reed", "General Feathers") |
-| `await g.goto("scene", { via: "wormhole" })` | Changes scene by fade, cut or time tunnel. `{ spawn: "name" }` arrives on that mark of the scene's `spawn`, and the rest of a `party` on its `arrive` places of that name ("A scene for several leads", above). |
+| `await g.goto("scene", { via: "wormhole" })` | Changes scene by fade, cut or time tunnel. `{ spawn: "name" }` arrives on that mark of the scene's `spawn`, and the rest of a `party` on its `arrive` places of that name ("A scene for several leads", above). (MAP-15) `{ via: "map" }` after the map has faded out to the dark: no fade out and no era card; `{ came: "id" }`: the scene its `enter` is told the lead came from. The scene left runs its `leaving` first. |
 | `g.leave("N")` | Leaves by the scene's way out at that edge, as a click in the middle of its band does: the lead walks there, and on. `g.edgeAt(x, y)` says which way out a place of the picture lies in the band of (`"N"`, `"S"`, `"W"`, `"E"` or `null`), and `g.leaving` which one the lead is on his way out by. |
 | `g.reveal(true)`, `g.reveal(false)`, `g.reveal(true, 2400)` | Show: turns the outlines on until told otherwise, off, or on for a while (as the button does). `g.outlines.drawn` lists what was outlined, and how. |
 | `await g.card("Ancient Egypt", "about 1920 B.C.")` | Shows a title card. (Egypt is about 1920 B.C. because the game counts the years before Christ from the Bible's own genealogies, as Archbishop Ussher counted them: see "How the game counts the years" in [CHARACTERS.md](CHARACTERS.md#how-the-game-counts-the-years).) |
@@ -2075,7 +2327,8 @@ loads the game, by the plain addresses, with the old risk.
 | `g.plane("trunk")` | One of the scene's cut-outs, or `null`: `.show(true)`, `.set("open")`, `.fade(0.5)`, `.place(x, y, scale)` |
 | `g.actor("scribe")`, `g.lead`, `g.q("#beam")`, `g.effects.get("door")` | Reach people, the parts of the live layer, and the moving things (a door in time among them: `.open(k)`) |
 | `g.team(["mom", "bigsis", "lilsis"])` | Says which leads the player can switch between from now on |
-| `await g.switchLead("son")` | Changes who the player controls (they must be on the team). One who is in another scene is travelled to: by the short tunnel when the two scenes are in different eras, by a fade within one. |
+| `await g.switchLead("son")` | Changes who the player controls (they must be on the team). One who is in another scene is switched to through their map, the Timer first when the two scenes are in different eras (section 8, "The map, and the Timer"); `g.switchLead("son", { map: false })` keeps the old way: the short tunnel across the eras, a fade within one. <!-- MAP-15 --> |
+| `await g.travel("forum")`, `g.mapOf("rome-forum")`, `g.atlas.show()` | (MAP-15) The lead travels to a place of their own map as a click on it does (true when the new scene is up; false, and nothing done, when they may not go); the map and the place a scene is on (`{ id, map, place }`, or null); the map screen comes up, as the Map button brings it (section 8, "The map, and the Timer"). |
 | `g.closeup(drawing, label)`, `g.closeup()` | Shows a close look at something, and puts it away |
 | `await g.tap()` | Waits for a click or a key |
 | `g.startTunnel(dates)`, `g.stopTunnel()`, `await g.wormhole()` | The time tunnel, and the short trip between two eras |
@@ -2100,7 +2353,7 @@ For cutscenes, which dress the stage themselves:
 | `tools/hooks/pre-commit` | Runs `stamp.py` at every commit, once turned on (two commands, at the top of the file) |
 | `tools/storyboard.html` | The story from the game's own files: acts, chains and beats; a map of each act's places joined by their ways, with a table of every way (section 8, "The map") <!-- ROME-13E -->; the title and every scene as the game builds it, with clickable areas, walkable ground, blocked patches and the base line of each cut-out; the era palettes; the script by character, with a button that exports it as a spreadsheet. It says so at the top if the story has a beat that cannot be reached. |
 | `tools/sprites.html` | Everyone in the game, from the settings in `people.js`: every direction, the walk, every gesture, reaching and sitting, at the sizes they appear in a scene, against a choice of grounds; and anyone painted frame by frame, from his sidecar: every set moving both ways round, every picture, each variant, the portrait |
-| `tools/paint/` | The scripts that paint the pictures, one for each scene, with their shared library and the painter's guide. `python3 install.py <scene>` keys a painted scene in the game's paints and copies it into `art/` (section 9, "The paints"). |
+| `tools/paint/` | The scripts that paint the pictures, one for each scene, with their shared library and the painter's guide. `python3 install.py <scene>` keys a painted scene in the game's paints and copies it into `art/` (section 9, "The paints"). <!-- MAP-15D --> Since round fifteen, one for each map as well (`map_<map>.py`): `python3 install.py map-<map>` copies a map into `art/maps/<map>/` as painted (section 9, "The maps"). |
 | `tools/koine-road/` | The scripts that build the typeface from pen strokes (it has a README of its own) |
 
 Useful addresses while building:
@@ -2124,9 +2377,11 @@ not family, a lead who stays in his seat, a companion's own area and a cut-out t
 left for right; since round thirteen a flock herded into a pen and posed, a cut-out riding
 the water, a man at an upper window, the depth order where bases slant (and the same stage
 put on in the reverse order painting the same pixels), and a scene seen through the lead's
-own eyes, with its two new sounds; the interface at two sizes and in three other window
-shapes, the storyboard page and its maps, the intro and the stamping tools: some 510 checks
-in its quick run, in eight or nine minutes on the test machine. It takes screenshots, which
+own eyes, with its two new sounds; since round fifteen the map screen, the Timer, travel on the map and
+switching through it (the part `map`: section 8, "The map, and the Timer"); <!-- MAP-15 --> the interface at two sizes and in three other window
+shapes, the storyboard page and its maps, the intro and the stamping tools: some 630 checks
+in its quick run (629 at the end of round fifteen, 116 of them the part `map`'s), in about eleven minutes on the test
+machine. <!-- MAP-15D: it was some 510, in eight or nine minutes, before the map --> It takes screenshots, which
 have to be looked at: a picture that is wrong throws no error. Three more scripts
 measure what a frame costs (the table in section 1), take the pictures that the choice
 between hard and smooth pixels was made from, and take pictures of seated people
@@ -2155,12 +2410,20 @@ pictures overlap are ordered against each other, and the order is the old one wh
 one was right: section 3, "Nearer things cover farther things"), a scene seen through the lead's
 own eyes (`unseen` and `wordsAt`, section 8), the storyboard's map of each act's ways (section 8,
 "The map"), and the game's emblem on the begin screen and in the browser tab (the Timer, section 9).
+Since round fifteen: the map screen, with travel to the places already visited, and switching between
+leads through the map, with the Timer turning across the centuries first (section 8, "The map, and the
+Timer"). <!-- MAP-15 --> With it, the save's list of the scenes the player has entered (`visited`,
+section 6), and each map drawn from its painters' pictures and measurements, or as a sketch until it is
+painted. <!-- MAP-15D -->
 
 **Painted:** the highway of the intro and the title, and nineteen scenes: five in Egypt (the
 inside of the wagon among them), six in Rome, the five rooms of the house, and in Nevada the
 roadside, the store inside and the back of the limousine. Ranger, frame by frame; and the birds
 of the Capitol and across the Tiber, the geese and Mariam's hens, frame by frame as the pigeons
-are. Thirty-four things to carry. The game's emblem, in nine pictures of the interface's own.
+are. Thirty-four things to carry. The game's emblem, in nine pictures of the interface's own
+(twelve since round fifteen, with the Timer's three pieces at 1024). <!-- MAP-15D --> Since round
+fifteen, the four maps of the story, each its own kind of map (section 9, "The maps"): thirty-five
+pictures, with their measurements.
 
 **Drawn:** thirty-eight people, and twenty-four more states of them (section 4).
 
@@ -2207,8 +2470,6 @@ all of it is waiting to be played.
 - The rest of the bigger Rome: Caesar's house on the Sacred Way and its puzzle, Nine Hundred Senators; the optional
   speakers and the people without lines; Titus at his father's counter; the act's old conversations as trees; the
   Rome end of the letterbox (section 14, and PUZZLES-rome.md, "What comes next").
-- A map the player opens. The places of an act join by ways at the edges of their pictures, and only the storyboard
-  page draws them as a map (section 8, "The map"; section 14).
 
 **Known faults** (round thirteen):
 
@@ -2263,6 +2524,17 @@ on in the reverse order painting the same pixels); every story scene opened in s
 arrangements of its people, painted with the new depth order and the old, and every pair
 whose paint meets judged (the new order laid none against the rule; the old, three); and Dad
 in a scene seen through his own eyes, not drawn, his words measured at the top middle.
+<!-- MAP-15D --> Since round fifteen: the map screen with the world stopped under it (the clock's time,
+the lead and two of the proof's people unchanged for a second and a half, nothing saved); the four maps,
+as sketches, on two of each act's saved games, what is drawn, faint and absent read against the save;
+travel watched on the map (every place the portrait was seen lies on the ways it walked, at 216 to 219
+pixels a second, the whole trip never over two and a half seconds) and arriving on the way's mark, the
+scene told where the lead came from; the Timer's notches counted by their clicks, and its bow read at
+the angle of the stop it ends on; the switch dropping into the other's scene with no tunnel and no card, and Esc going
+back with nothing changed; and a painted map drawn from stand-in pictures. Then, once the four
+paintings were in (in a throw-away copy, DOCS-15), each was opened in the game on the saved games of its
+act: every name inside its box as the browser draws it, the Timer laying its 1024 pieces, and nothing
+said in the console.
 
 **How the acts were tested.** Each act has two checks of its own. One is a script that
 plays the act in the real game by real mouse clicks on the real clickable areas (walk,
@@ -2306,6 +2578,29 @@ finds nothing wrong. Then every check and play there is ran again on the final g
 check clean, every play without a problem, and the engine's test passing all 512 of its
 checks.
 
+<!-- MAP-15D -->
+Round fifteen changed two ways out, across the Tiber the bridge and in the store the front door:
+what each did as the lead left is done by the scene's `leaving` now. So the plays of those two
+parts were run again on the engine with the map: across the Tiber all 210 of the part's lines
+said, and its record of every way and every fact byte for byte what it was; in the store all
+246, going out of the front door and in again five times. The house's play (814 clicks) and the
+limousine's (all 148 lines) were run again too, every one without a problem; and the four acts'
+checks give exactly what they gave before the round (Rome's once its own stand-in for the
+engine runs a scene's `leaving` in its `goto`, as the engine does now: one line in
+`check-rome.mjs`).
+
+<!-- MAP-15T -->
+Then the round's testers took the merged game as a whole. They made the testers' saved games again from the four acts'
+plays, each without a problem: every one carries the scenes its play had entered, and Dad and the Son stand where the story
+left them (section 6, "Testing: parts"). The engine test's part `map` now checks the rule for a save from before the map on
+saves made so (a saved game with its list taken out), and that a save of this version keeps its own. A new play beside the
+others, `map-sweep.py`, plays the map through all 58 saved games by real clicks: every place the map offers, there and back,
+each from a fresh load (103 places), checking where the lead and the party arrive, the save and the console; the limousine's
+refusals; a click on every portrait on every map the player knows; and less motion, with the game's own setting ticked in
+Options. It found nothing wrong. Then every check and play there is ran again on the final game, the sweep with them: every
+check clean, every play without a problem, the engine's test passing all 630 of its quick checks (688 in the full run), and
+the intro's watch and the emblem's check passing.
+
 It has not yet been played by a person on a real phone, or in Firefox or Safari. Two
 things deserve a look there. Hard pixels at two times and over rely on the browser's
 `image-rendering: pixelated`. And the sketch of an unpainted scene is made by handing the
@@ -2324,7 +2619,7 @@ to showing the drawing itself.
 | Use, talk, pick up | Click the thing | Tap the thing | Tab to it, Enter |
 | Look | Right-click, or **Look** then click | Press and hold, or **Look** then tap | Tab to it, L |
 | Use a carried thing | Click it, then click the target | Tap it, then tap the target | |
-| Play as someone else | Click their portrait | Tap their portrait | 1, 2, 3 |
+| Play as someone else | Click their portrait (someone in another scene: their map comes up, with the Timer first across the centuries; click them on it) | Tap their portrait | 1, 2, 3 (then Enter, for someone in another scene) |
 | Talk to a companion | Click them | Tap them | Tab to them, Enter |
 | Give a companion something | Click the thing, then click them or their portrait | Tap the thing, then tap them or their portrait | |
 | Next line | Click | Tap | Space or Enter |
@@ -2332,6 +2627,7 @@ to showing the drawing itself.
 | Skip a cutscene | **Skip** | **Skip** | Esc |
 | Menu | **Menu** | **Menu** | Esc |
 | Show what can be clicked (an outline round each thing, an arrow at each way out) | **Show** | **Show** | Hold H |
+| See the map, go back to a place already visited, play as someone elsewhere (MAP-15) | **Map**, then click the place or the portrait (a map's name at the top, or the dial, turns to another map) <!-- MAP-15D --> | **Map**, then tap | M; Tab and Enter; Left and Right for the other maps; M or Esc to put it away |
 | Move past a title card | Click | Tap | Space or Enter |
 
 ---
@@ -2479,6 +2775,10 @@ questions the round's plans left open:
     the river, and each way back), and the storyboard page draws each act's ways as a map,
     from the scenes' own data (section 8, "The map"). Do you want an in-game map screen? It
     would be a new feature, for a round of its own.
+    <!-- MAP-15D --> **Answered** on 14 October: by "the map" you meant the scene edges for the
+    expanded parts (as round thirteen built them), and you asked for a map screen besides, with
+    the dial for switching between leads. Built in round fifteen (section 8, "The map, and the
+    Timer"); what its builders chose is 74 to 86, below.
 
 Then what the builders chose, where the design left a choice open or could not be built as
 written. **The inside of the wagon:**
@@ -2606,6 +2906,90 @@ keeper's boy and the goose-keeper, who is called Anser but for his full name, sa
 73. **The emblem keeps turning** while the begin screen is up, A to B.C. and back, notch by
     notch, as you saw it on the review page. It could instead turn once, A to B.C., when Begin
     is pressed, which would hold the begin screen up for about four seconds after the click.
+
+<!-- MAP-15D: the decisions of round fifteen, 74 to 86 -->
+**From round fifteen** (the map, and the Timer, 14 October). You chose the switch, the Map button
+and each time's own kind of map (section 8, "The map, and the Timer"; section 9, "The maps").
+Where that left something open, the builders chose; each is yours to keep or change, and says what
+the game does meanwhile. Nothing in the story changed. The one you are most likely to want to see
+first is 74; then the four maps themselves, 82 to 85.
+
+74. **The switch across the centuries is seen only in the proof, for now.** No act has the team in
+    two times at once yet (Dad and the Son each play their act alone), so in the story the Timer
+    turns only as you look from one map to another. To see the switch you chose, Timer and then
+    map, open `index.html?scene=engine-proof&lead=dad&flags=proof.letterbox,proof.arrived` and
+    press the key 2. It comes into the story with Round One's step (Act Six in
+    `briefs/out/story-redesign.md`: Dad and the Son at their doors), and needs nothing more of the
+    engine.
+75. **After the Timer, a click drops you in**, as you chose: the other's map comes up with their
+    portrait breathing, and a click on them (or Enter) drops into their scene; Esc goes back. The
+    other way is to drop in by itself after a beat, Esc still able to stop it: a few lines in
+    `switchTo` (`js/engine/atlas.js`).
+76. **Travel is a shortcut, back and never ahead.** A click on a place already visited takes the
+    lead there along the ways, where Act One's design said "There is no map and no shortcut"
+    (PUZZLES-egypt.md now says so). A place is there to go to only once it has been walked into,
+    so the map passes no gate (the guard, the doorkeeper, the study's key, "Snacks first"). For
+    less of it (only to the next place, say, or none in Act One), a rule in `cannot` in
+    `atlas.js`; with none at all, the map only shows.
+77. **Who is on a map.** Leads not on the team are shown where they stand, smaller and faded, not
+    to be clicked ("Dad is here. Not playable just now."). A place where one of the team stands
+    counts as visited. Grandpa Joe and Ranger have no portrait at the Last Stop in Act Four, where
+    they are its people (and a pin has room for three). To hide the faded ones, or show those two
+    in Act Four, is a line in `facesOn` in `atlas.js`.
+78. **The place names are the engine's**, written over each painting in Koine Road in the map's
+    own style (ink-brown on the papyrus, pale capitals on the wax, pencil grey on the plan, printed
+    capitals on the road map), not painted: they come and go with their places and read at any
+    size. Painted names would be truer to each hand (a scribe's letters, a stylus's), and would
+    need a picture for each name, laid with its place, and the engine's names off for that map.
+79. **Old saves show a few places faint.** A save from before the map is given its list of places
+    visited from the story's facts (section 6), so a place that is no beat's (Little Sister's room)
+    or whose beat is not done yet (the store before the hens, the Capitol before the geese) is faint
+    on it until walked into again, even if the player had been there. A game started now counts
+    every scene as it is entered; the testers' saved games carry the list, as their plays played it, since
+    they were made again on 14 October. <!-- MAP-15T: it said they "will carry the list when next made" -->
+80. **The three new sounds were set by measuring, not by ear**: the dial's click (`notch`) quieter
+    than the vault's dial, the bell (`ding`) and the paper (`rustle`) no louder than picking a thing
+    up. They want listening to; each is a line in `js/content/sound.js`.
+81. **The place name at the top of the screen is narrower** (from 26% to 66% of the stage's width,
+    to 23% to 59%), to make room for the fifth tool, Map. The longest, "The steps of the temple of
+    Saturn", still fits. Wider again would mean smaller tools, or the name on a line of its own
+    (`.place` in `css/game.css`).
+82. **Egypt's map.** Black ink and red, as designed, and thin washes besides where a scribe's brush
+    would lay them (the river, the palms, the red wagon, the king's gold, the lotus), to help a
+    child find each place: `pen.wash` in `tools/paint/map_egypt_things.py`, easy to take out. The
+    pyramid is drawn side-on, in section, from the river, its gallery steeper than true and its
+    chamber larger, so that both read with a portrait on them: the game's layout, not the real
+    pyramid's. Two portraits at the gallery at once (rare) put one over the doorway, which is the
+    site's; the wagon has all four wheels in a row (the scribe's "neat, a little wrong").
+83. **Rome's map.** The Capitol is to the right of Saturn's steps, as the act's ways put it (it is
+    the steps' right edge); in Rome it rises behind the temple. The hill's rings run off the
+    tablet's edges; across the Tiber is the tightest corner (one portrait, as in Act Two, leaves
+    its little square readable; two cover it); the frame's honey wood is the brightest thing at the
+    edge of the dark screen (`WOOD` and `WOOD_LIGHT` in `map_rome_kit.py` tone it down); and the
+    names are 15 pixels, since at 16 "Saturn's steps" would reach the hill's rings.
+84. **The house's map.** It is turned half round, as plans usually are (the street at the bottom),
+    so each room faces the other way from its picture (the living room's stairs are on the right
+    of its plan); that lets Dad's arrow run straight from the stairs to the landing, and the ladder
+    straight up to the attic. The five rooms' models do not fit together as one house, so the
+    joins are invented (a passage to Little Sister's door, a lobby inside the study's, the study
+    over a covered porch, the Son's room, the ground floor's back rooms), every room at its true
+    size. No sofa (the scene has none); two sizes are guesses (the Retreat's length, the Son's room);
+    and the rows of portraits are big for these rooms, covering a room's middle when all three are
+    in it.
+85. **Nevada's map.** Its printed jokes are the act's own; please confirm them: "TO NOTHING", LAST
+    GAS printed as a town, "37 MI.", the legend's "No gas", "DETAIL · 37 MILES PAST LAST GAS", "NOT
+    TO SCALE"; no real company, publisher or highway number, and no place but NEVADA. The store is
+    drawn inside the shack's walls in the detail (not as a plan beside the lot), turned as the
+    shack stands, so the shop's door is one short arrow. The limousine's stretch of road is east of
+    the Last Stop, toward NOTHING; if it drove back west, the way it came, the stretch moves to the
+    other side of the No Gas sign. Mom's car is printed blue-grey (the inks have no green), and
+    three portraits in the store cover its front third.
+86. **The Timer at its very largest** (DIAL-15). Where the large dial is drawn 1,600 or more device
+    pixels across, the 1024 is itself enlarged and the cream rim's edges show faint steps (much
+    smaller than the 512's would). Its edges are hard because the drawing is the emblem's own, at
+    twice the size; drawing them soft is a small change to the drawing. The scripts that make the
+    emblem are kept beside the game (`scratchpad/work-map-dial/emblem/`), not in it; they could go
+    into the repository with the painter's.
 
 ---
 

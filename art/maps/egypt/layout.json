@@ -1,0 +1,19 @@
+{
+  "map": "egypt",
+  "size": [800, 600],
+  "sheet": [37, 136, 761, 562],
+  "material": "a sheet of papyrus drawn with a reed pen: black ink for the places, red ochre for the ways and marks",
+  "label": {"color": "#32201d", "halo": "#f4e0b0", "upper": false, "spacing": 0.03, "size": 15},
+  "places": [
+    {"id": "river", "picture": "place-river.png", "shape": [[53, 402], [63, 389], [102, 391], [113, 404], [134, 406], [142, 419], [147, 469], [159, 444], [216, 443], [228, 453], [235, 479], [266, 478], [277, 498], [277, 511], [231, 512], [230, 503], [223, 500], [202, 506], [169, 505], [160, 514], [144, 517], [55, 515], [53, 489]], "pin": [264, 454], "label": [184, 425], "label_max": 92},
+    {"id": "site", "picture": "place-site.png", "shape": [[237, 388], [241, 376], [264, 374], [265, 362], [296, 361], [297, 354], [346, 353], [347, 364], [376, 364], [380, 374], [397, 353], [410, 349], [411, 326], [439, 288], [458, 286], [463, 290], [463, 302], [435, 340], [434, 355], [429, 357], [426, 367], [415, 371], [396, 400], [237, 401]], "pin": [363, 419], "label": [306, 351], "label_max": 173},
+    {"id": "gallery", "picture": "place-gallery.png", "shape": [[437, 369], [454, 368], [455, 341], [519, 277], [528, 276], [531, 280], [531, 312], [524, 320], [521, 321], [520, 324], [517, 325], [509, 333], [508, 336], [492, 352], [485, 357], [484, 360], [468, 376], [454, 378], [437, 377]], "pin": [452, 366], "label": [564, 360], "label_max": 129},
+    {"id": "chamber", "picture": "place-chamber.png", "shape": [[533, 258], [626, 257], [644, 258], [646, 260], [646, 307], [543, 307], [539, 304], [538, 292], [533, 292]], "pin": [545, 286], "label": [604, 330], "label_max": 143}
+  ],
+  "paths": [
+    {"a": "river", "b": "site", "picture": "path-river-site.png", "via": [[264, 454], [353, 425], [363, 419]]},
+    {"a": "site", "b": "gallery", "picture": "path-site-gallery.png", "via": [[363, 419], [370, 396], [373, 390], [405, 360], [410, 357], [417, 357], [439, 367], [452, 366]]},
+    {"a": "gallery", "b": "chamber", "picture": "path-gallery-chamber.png", "via": [[452, 366], [467, 357], [521, 299], [545, 286]]}
+  ],
+  "note": "Painted by tools/paint/map_egypt.py (MAP-15E), every number measured from the pictures by map_egypt_layout.py. The Horizon (the pyramid) is drawn in back.png as its outline only, seen from the river; the gallery and the chamber are drawn inside it, so they show only once visited (faint once a neighbour is). Pins are where each place's ways end on the paint: the river's beside the wagon, the site's in front of the works, the gallery's at its foot inside the entrance, the chamber's at its doorway."
+}

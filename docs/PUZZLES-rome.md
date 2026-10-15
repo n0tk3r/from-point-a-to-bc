@@ -101,6 +101,25 @@ the act and its card. A game saved before round thirteen goes on: the steps it n
 take count as taken (the three old scenes see to it as they are built), and a coin borrowed
 in such a game is named Phyllis's by Walnut the next time the boy walks into the street.
 
+<!-- MAP-15D -->
+**Round fifteen: the map** (14 October; `briefs/MAP-15.md`). The game has a map screen now
+(DESIGN.md, section 8, "The map, and the Timer"), and Act Two's map is a plan scratched with a
+stylus into a wax tablet in its wooden frame: Saturn's steps in the middle, the street to the
+left, the treasury behind the temple's doors, the Forum below, the Capitol up its hill to the
+right, and across the Tiber at the lower left, beyond the river's bend and over the stone
+bridge. A click on a place the boy has already been to takes him there, his portrait walking the
+ways between, and he arrives as if he had walked in from the place before it; a place is there
+to go to only once he has walked into it, so the map passes neither the doorkeeper nor the
+steps' "Snacks first". Nothing in the act changed, but where one way out did something as he
+left: across the Tiber, the old man's finishing his prayer while the boy is gone
+(`rome.eleazarDown`, once `rome.sawTiber`) is set now by the scene's `leaving`, which runs
+however he leaves, over the bridge or by the map, and the way over the bridge only goes. The
+treasury does not let him go by the map once the coin has gone through (`rome.tossed`): the way
+out is the way home. The act's check does in its stand-in for the engine what the engine's
+`goto` does now (the scene's `leaving` first: one line in `check-rome.mjs`), and says exactly
+what it said before; `play-tiber.py` says all 210 of the part's lines, and its record of every
+way and every fact, `rome.eleazarDown` among them, is what it was, byte for byte.
+
 Play it: `index.html?scene=rome-steps&lead=son` starts the act. In the full game it
 follows Egypt, on a card that reads "Meanwhile, nearly nineteen hundred years later":
 Dad's Egypt is about 1920 B.C. by the Bible's count, and 1921 B.C. to 44 B.C. is 1,877
@@ -438,6 +457,9 @@ the edges of the act are drawn as a map on the storyboard page (`tools/storyboar
 "Maps"), from the scenes' own data: the treasury above the steps, the street to the left,
 the Capitol to the right, the Forum below, and across the Tiber below the street. The game
 itself has no map screen (DESIGN.md, section 14, asks the author whether he wants one).
+<!-- MAP-15D --> It has one since round fifteen (above, "Round fifteen: the map"): the wax
+tablet, laid out as the storyboard's map is, with the Capitol up its hill and across the Tiber
+beyond the river's bend.
 
 ### The ways between the scenes: the edges of the picture (round three)
 
@@ -1150,7 +1172,9 @@ the bench and sits down on it; the boy comes back to its near end, and the talk 
 (`rome.eleazarDown`). *If the boy does not wait*: once he has seen the old man at his prayer,
 whenever he leaves by the bridge the old man finishes while he is gone, and is on his bench
 when he comes back (a game saved and loaded during that first visit still has him at his
-window). What follows is under "The family's faith" below: it gives and needs nothing, and
+window). <!-- MAP-15D --> Since round fifteen the same when he leaves by the map: it is the
+scene's `leaving` that sets it, however he goes.
+What follows is under "The family's faith" below: it gives and needs nothing, and
 the act does not wait for it.
 
 ```
@@ -1457,7 +1481,7 @@ corners of his mantle; words of the Law are in a little case on his doorpost. Hi
 | | What is said | Notes |
 | --- | --- | --- |
 | First sight | The arrival across the river (above): "He's praying. With his window open. Like Daniel." "I'll wait till he's done. ...I'm getting good at waiting." Mariam, if he asks her about the window first: "He's praying. He comes down when he has finished, and he does not hurry for anybody." | He is at his window until the boy has waited |
-| The wait | The first click on him at his window, his house or door, his window, or the bench. The boy stands at the bench's near end facing the house (he cannot sit), and, a few seconds on, to us: "Waiting. I'm doing it. Look at me doing it." The old man steps back from the window, comes out of his door with his scroll (the boy steps aside), walks along the front of the bench and sits. | `rome.eleazarDown`. If the boy leaves by the bridge without waiting, the old man is on his bench when he comes back |
+| The wait | The first click on him at his window, his house or door, his window, or the bench. The boy stands at the bench's near end facing the house (he cannot sit), and, a few seconds on, to us: "Waiting. I'm doing it. Look at me doing it." The old man steps back from the window, comes out of his door with his scroll (the boy steps aside), walks along the front of the bench and sits. | `rome.eleazarDown`. If the boy leaves by the bridge without waiting, the old man is on his bench when he comes back (since round fifteen, by the map as well) <!-- MAP-15D --> |
 | Greeting | "Peace to you, child." Four ways in: "Peace to you too, mister."; "I waited the WHOLE time. I didn't fidget once. ...I fidgeted once." "Twice. But very politely."; "Is that your church? The one with the bench?" "A house of prayer." (and that is all); and, if he has met the date seller, "Do you know the date seller in the city? Beard, basket, VERY calm?" "Yose. My daughter's husband. Does he say the dates are selling?" "He says Rome always wants dates." "He always says so." Then: "I am Eleazar. And who are you, child, who waits so well?" "I'm lost. Well, my dad's lost. One of us is. I'm waiting for him to find me." "He always comes. He's late sometimes. He calls it making good time." "A father who always comes. That is a good thing to wait for." | `rome.metEleazar` |
 | The window | "Praying, child. Toward Jerusalem, where the Temple is. In the evening, in the morning, and at midday." "Like Daniel! In the lions' story. He prayed with his windows open toward Jerusalem. Three times a day." "Then you have been well taught." | Daniel 6:10 and Psalm 55:17, told |
 | How he came to Rome | "I was a grown man in Jerusalem when Pompey took the city, nineteen years ago. Many of us were brought here." "I was bought, and I worked, and in time my master set me free." "...Now I live where my people live, across the river. And I pray toward home." "That's a long way from home. ...Me too. A REALLY long way." "Then we are neighbors in that, child." | Told without bitterness, and a pause |

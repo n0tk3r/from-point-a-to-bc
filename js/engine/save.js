@@ -7,6 +7,9 @@
 // LETTERBOX-11: the version stays 3 for the tunnel (`tunnel` in the save body: things put into a door in time and not
 // yet taken out of another). A save with no such field is from before it, and the field being absent means empty:
 // complete() in state.js gives it an empty list, so no upgrade step is needed.
+// MAP-15: and it stays 3 for `visited` (the ids of the scenes the player has entered, in order, which the map reads). A save
+// made before the map has none, and is given one as it is loaded (game.js, load and visitedOf): the scenes of every beat of
+// every act whose gate is done, those of the beats done in the act under way, and the scenes where the team stands.
 
 import { SAVE_VERSION } from "./state.js";
 

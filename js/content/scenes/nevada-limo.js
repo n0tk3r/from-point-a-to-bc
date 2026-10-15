@@ -363,6 +363,7 @@ export default {
   id: "nevada-limo",
   era: "nevada",
   name: "The back of a limousine",
+  travel: false,                                           // MAP-15: nobody leaves by the map: Grandpa Joe is belted in, and the limousine has no way out
 
   // DEPTH. The painter's camera: a seated eye, the cartoon's roomy car (layout.json "view"). maxScale 1.22, so that Ranger
   // keeps growing to the near edge of the carpet (the engine's default is 1.12).

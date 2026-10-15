@@ -22,12 +22,17 @@ const fx = (g) => !!g.flag("proof.fx");          // the things that move by natu
 // ---------- LETTERBOX-11: the letterbox, the engine's own proof of it (docs/DESIGN.md, "The letterbox") ----------
 // On the stage while "proof.letterbox" is true: index.html?scene=engine-proof&lead=dad&flags=proof.letterbox.
 // Dad is here with a pack of gum, and the Son is in another century (the market street sketch, in Rome), so the two are
-// a team and switching to him is the short tunnel. A small door in time hangs in the air over the sand. Anything small
+// a team and switching to him is the Timer and his map (MAP-15, below; before, the short tunnel). A small door in time hangs in the air over the sand. Anything small
 // that whoever is here carries can be put in it for the one at the other end (this scene's own choice, SMALL: the engine
 // never decides what fits), and it waits in the tunnel, marking that person's portrait, until they take it out of a door
 // of theirs. The sketch has no door, so the proof lets the Son take it out of this one: come back here as the Son
 // (switch again) and on arrival the door gives it up (g.arrive, a word, g.receive). The door with nothing in hand is a
 // word through it with whoever is at the other end: g.through, and a choose through the door.
+// MAP-15: the two scenes are on two sketch maps of the proof's own (js/content/maps.js: "proof-sand", in Egypt, and
+// "proof-street", in Rome), so switching to the Son is the Timer turning from B.C. to the middle notch (four notches, a
+// click at each and the bell), then the street's map with the Son breathing; a click on him (or Enter) drops into his
+// scene, and Esc goes back with nothing changed. To see it: index.html?scene=engine-proof&lead=dad&flags=proof.letterbox,proof.arrived,
+// then press 2.
 const letterbox = (g) => !!g.flag("proof.letterbox");
 const DOOR = [360, 436];                                                        // the middle of the small door, in the air over the sand (its foot is row 470)
 const OTHER = { dad: "son", son: "dad" };                                       // who is at the other end, for whoever is here

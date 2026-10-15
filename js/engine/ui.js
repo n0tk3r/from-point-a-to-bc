@@ -37,6 +37,7 @@ export class UI {
       <div class="tools" id="tools">
         <button class="tool" id="t-look" type="button" aria-pressed="false" title="Look at something. Right-click does the same.">Look</button>
         <button class="tool" id="t-show" type="button" title="Show what can be clicked. Holding H does the same.">Show</button>
+        <button class="tool" id="t-map" type="button" title="The map (M)">Map</button>
         <button class="tool" id="t-hint" type="button" title="Ask for a hint">Hint</button>
         <button class="tool" id="t-menu" type="button" title="Menu (Esc)">Menu</button>
       </div>
@@ -44,11 +45,13 @@ export class UI {
       <div class="inv" id="inv" aria-label="Inventory"></div>`;
     this.placeEl = q("#place"); this.toolsEl = q("#tools"); this.labelEl = q("#label"); this.invEl = q("#inv");
     this.teamEl = q("#team"); this.lookEl = q("#t-look");
+    this.mapEl = q("#t-map");          // MAP-15: the Map button (the key M does the same): the map of the place the lead is in (atlas.js)
 
     this.lookEl.addEventListener("click", () => { g.lookMode = !g.lookMode; this.refresh(); });
     q("#t-hint").addEventListener("click", () => g.hint());
     q("#t-show").addEventListener("click", () => g.reveal(true, 2400));       // an outline round everything that can be clicked, for a moment (outline.js)
     q("#t-menu").addEventListener("click", () => this.pauseMenu());
+    this.mapEl.addEventListener("click", () => { if (g.atlas) g.atlas.show(); });      // MAP-15
     // The team: a portrait for each lead the player can switch to.
     const faceOf = (event) => { const b = event.target.closest ? event.target.closest("[data-lead]") : null; return b ? b.dataset.lead : null; };
     const point = (event) => { this.over = faceOf(event); this.label(); };
@@ -169,6 +172,7 @@ export class UI {
     const free = g.mode === "play" && !g.busy && !g.dialogue.choosing;
     this.toolsEl.hidden = !free;
     this.invEl.hidden = !free;
+    this.mapEl.hidden = !(g.scene && g.atlas && g.mapOf(g.scene.id));      // MAP-15: only where the lead's scene is on a map
     this.placeEl.textContent = g.scene && g.mode === "play" ? g.scene.name : "";
     this.lookEl.setAttribute("aria-pressed", String(g.lookMode));
     const team = this.team();

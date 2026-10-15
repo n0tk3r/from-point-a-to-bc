@@ -113,6 +113,61 @@ needs (depth, the walk outline, blocked ground, each cut-out's baseline, the sha
 thing, exits, marks for people). The scene file in `js/content/scenes/` is the authority once the scene is wired;
 where it differs from `layout.json` on purpose, the act's puzzle document says why.
 
+<!-- MAP-15D -->
+## Maps
+
+The map screen (docs/DESIGN.md, section 8, "The map, and the Timer") shows one map for each place the story goes, each
+the kind of map its own time would make (section 9, "The maps"). A map is painted like a scene, by a script of its own
+with this kit and in the four passes, but it belongs to the interface, as the inventory pictures do: every colour is
+mixed from the paint box by name (`postimp_paints.PAINTS[name]["hex"]`, with `brush.rgb` and `lerp`), and it is never
+keyed. What is painted is what the map screen shows.
+
+- **The pictures.** Each is 800x600, the whole stage, which the map screen lies over. The sheet lies within x 32 to 768
+  and y 128 to 572; rows 0 to 127 (the band: the time, the small dial, the maps' names, Close) and 572 to 599 (the label
+  line) are clear in every file. Each is an 8-bit palette with one clear colour and hard edges (`brush.save`, its alpha a
+  mask), and one palette serves all of a map's files (`brush.palette_of` over the sheet with every place and way laid on
+  it, then `to_palette` for each file), so that a place's paper is the sheet's exactly. A map's files come to 1.5 MB at
+  most.
+- **The files**, in `out/map-<map>/`, installed into `art/maps/<map>/`: `back.png`, the sheet and the lie of the land
+  that anyone would know before setting foot there (a river, a hill, the walls of the house, the highway), never a place
+  or a way; `place-<id>.png` for each place and `path-<a>-<b>.png` for each way (a and b in the order of
+  `js/content/maps.js`), clear but for that thing's drawing; and `layout.json`.
+- **`layout.json`**, measured from the finished pictures by the map's `_layout` script: `sheet`, the material's box;
+  `label`, how the engine writes the place names in Koine Road (`color`, `halo` or null, `upper`, `spacing` in em, `size`
+  13 to 18); for each place its `picture`, its `shape` (at most 24 points round its drawing: what is clicked), its `pin`
+  (where the portraits stand, a row of discs 36 across and 4 apart centred on it: room for two on Egypt's and Rome's maps,
+  three on the house's and Nevada's) and its `label`, the middle of the name's baseline, with `label_max` (the name's box:
+  that wide, 20 above the baseline, 5 below); for each way its `picture` and its `via`, a line along its drawing from a's
+  pin to b's, which the portrait walks. The engine draws a place not visited yet at 0.28 opacity: see that it reads as
+  "not yet" at that, and is plainly gone at 0. A map with no `layout.json`, or one the page does not list yet, is drawn
+  by the engine as a sketch.
+
+The four, each with its `_kit`, `_layout` and `_check` beside it (their rows in "The files" say more):
+
+- `map_egypt.py`: Egypt, a scribe's sketch on papyrus with a reed pen (black ink, red, thin washes).
+- `map_rome.py`: Rome, a wax tablet in its wooden frame, the plan scratched with a stylus.
+- `map_home.py`: the house, Dad's pencil floor plan on squared paper.
+- `map_nevada.py`: Nevada, Grandpa Joe's fold-out road map, printed in a few flat inks.
+
+```
+python3 map_rome.py fast         # a quick look: no brush pass
+python3 map_rome.py              # the full passes: out/map-rome/ and its layout.json, then its check (the house's: run it)
+python3 map_rome_check.py        # the checks again, and the four pictures to look at
+python3 install.py map-rome      # copies out/map-rome/ into art/maps/rome/, as painted
+python3 ../stamp.py              # until the page lists a map's files, the engine draws its sketch
+```
+
+A new map needs its entry in `install.py` (`"map-<map>": "maps/<map>"` in `PLACES`, and `"map-<map>"` in `SCENES`).
+What a map's `_check` holds: exactly the places and ways of `js/content/maps.js`, every file there, 800x600, a palette
+with a clear colour; the clear rows, the sheet's box, the size; each shape at most 24 points, on the sheet, holding at
+least 90 per cent of its drawing's painted pixels, no two overlapping; each pin row on the sheet, no two within 8 pixels;
+each name's box on the sheet, clear of every pin row, every other name, every other place's drawing and every way, and the
+name fitting it (Koine Road at the label's size and spacing, as Pillow measures it); each `via` from a's pin to b's,
+within 6 pixels of its drawing. Some hold more (no two drawings overlapping, in Rome's and the house's; how plainly each
+place shows at 0.28, in Nevada's). Each writes, into `out/map-<map>-check/`, `all.png` (everything, the names in the
+label's style, grey discs at the pins), `none.png` (the sheet alone), `first.png` (the act's first place visited, its
+neighbours faint) and `layout.png` (`all.png` with every shape, pin row, name box and via drawn over it). Look at all four.
+
 ## Painting a room
 
 The five scenes of the house (`home-living-room`, `home-landing`, `home-study`, `home-lilsis-room`,
@@ -326,6 +381,10 @@ the finished room).
 | `nevada_limo.py` | inside the limousine, driving: the divider up and down, the ropes as they come undone, the bag, the clipboard and the juice box, the window panes; and the desert going by behind them (`nevada_limo_strip.py`) | `art/scenes/nevada-limo/` |
 | `items.py` | the inventory pictures | `art/items/` |
 | `proof_critter.py` | the engine's own painted creature, its strip and its window, for the proof scene (drawn as they are, never keyed) | `art/proof/` |
+| `map_egypt.py` (with `map_egypt_kit.py`: the measurements, the paints, the papyrus and the reed pen; `_things`: the drawings; `_layout`: `layout.json`, measured from the pictures; `_check`: the checks and the four check pictures) | the map of Egypt for the map screen: a scribe's sketch on papyrus, the sheet with the lie of the land (`back.png`), each place and each way its own picture; installed as painted, never keyed (`python3 install.py map-egypt`) <!-- MAP-15E --> | `art/maps/egypt/` |
+| `map_rome.py` (with `map_rome_kit.py` the tablet's measures, paints and stylus, `_sheet` the tablet, `_places` the plan, `_layout` writes `layout.json` from the pictures, `_check` checks it and draws its four check pictures) | the map of Rome for the map screen: a wax tablet in its wooden frame, the Tiber's bend and the Capitol's hill scratched in (`back.png`), the six places and the five ways each its own picture, the plan scratched with a stylus; installed as painted, never keyed <!-- MAP-15R --> | `art/maps/rome/` |
+| `map_home.py` (with `map_home_house.py`, the house measured from the five rooms' models; `_kit`, the squared paper and the pencil; `_things`, what is drawn; `_layout`, which measures `layout.json`; `_check`) | the map of the house: Dad's pencil floor plan on squared paper (ground floor, upstairs, the attic), its places and ways (as painted, never keyed) <!-- MAP-15H --> | `art/maps/home/` |
+| `map_nevada.py` (with `map_nevada_kit.py`: the sheet's measures, its inks mixed from the paint box, the plates, the paper and its folds, the ranges' hachures; `_layout`: `layout.json`, measured from the pictures; `_check`: the checks and the four check pictures) | the map of Nevada for the map screen: Grandpa Joe's own fold-out road map from his counter's rack, opened flat (`back.png`: the creased, yellowed sheet, the main map with the highway TO NOTHING, the cover panel, the legend and the empty detail panel), the Last Stop, the store and the road each its own picture, printed on it; installed as painted, never keyed (`python3 install.py map-nevada`) <!-- MAP-15N --> | `art/maps/nevada/` |
 
 ## Two things to know before changing anything
 

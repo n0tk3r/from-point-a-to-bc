@@ -76,6 +76,15 @@ car changed. Thirty-six lines added, all Dad's; one rewritten (the glovebox's lo
 moved (the key's, from the wagon outside); and the author's two at the glovebox are said
 inside now, word for word: the act has 494. See "Round thirteen", below.
 
+<!-- MAP-15D -->
+**14 October, round fifteen: the map** (`briefs/MAP-15.md`, on the author's choice of that
+day). The game has a map screen now (DESIGN.md, section 8, "The map, and the Timer"), and
+Act One's map is a scribe's sketch on papyrus: the Nile along the bottom, the wagon among the
+reeds, the works at the foot of the pyramid, and the great gallery and the burial chamber
+drawn inside the pyramid, which is shown in section, as from the river. Nothing in the act
+changed: no puzzle, beat, line or way out, and the act's check, run again on the engine with
+the map, says exactly what it said before. See "Location layout".
+
 Play it: a new game starts here. `index.html?scene=egypt-crash&lead=dad` starts the act
 directly; the other three scenes are `egypt-site`, `egypt-gallery` and `egypt-chamber`,
 <!-- CAR-13S --> with the inside of the wagon, `egypt-car`, off the first
@@ -235,8 +244,18 @@ wall without talking to the lamp boy is rewarded for it (see "Where the scripts 
 +--------------------------------------------------------------------------+
 ```
 
-Four places in a row: river, site, gallery, chamber. There is no map and no shortcut.
-The player walks the row several times, and it is short.
+Four places in a row: river, site, gallery, chamber. <!-- MAP-15D: until round fifteen, "There is no map and no shortcut." -->
+There is no shortcut ahead: the player walks the row, several times, and it is short.
+Since round fifteen there is a map (the Map button, or M: a scribe's sketch on papyrus;
+DESIGN.md, section 8, "The map, and the Timer"), and it is a shortcut back. A click on a
+place Dad has already been to takes him there, his portrait walking the ways between, and
+he arrives as if he had walked in from the place before it: the first time he comes out of
+the gallery to the foot of the pyramid he still comes down the long stair whole, and the
+overseer still calls out when he sees him come back. A place is there to go to only once he
+has walked into it, so the map never takes him past the guard. The places are in a row as
+before, and the inside of the wagon is part of "By the river" (travel there goes to the
+river). The burial chamber does not let him go by the map once the act has ended
+(`egypt.ready`): he waits at the door.
 <!-- CAR-13W --> Since round thirteen the inside of the wagon (1a) opens off the first:
 in by the driver's window or the wagon, and out by its door or the bottom of the
 picture, back to Dad's door outside.
@@ -1985,7 +2004,9 @@ What neither can tell is whether it is funny.
   of the track is not walked to, and since round three a click anywhere along the top
   of the river scene, or the bottom of the site, goes straight on). The engine has done
   the rest: a double click hurries a walk, and a figure that is far off keeps at least
-  half his pace.
+  half his pace. <!-- MAP-15D --> Since round fifteen the map does more: a click on a place
+  he has been to takes him back there, his portrait walking the way on the map in two and
+  a half seconds at most (DESIGN.md, section 8).
 
 Settled since the second pass: the camels (Genesis 12:16 puts them among the king's
 gifts, Lot has never seen one, and nobody says they are unknown here), and the General's

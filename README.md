@@ -11,6 +11,7 @@ In development. What is here now:
 - **The engine**: scenes, walking, clickable areas, inventory, dialogue with choices and talks that branch and remember, cutscenes that can be skipped, close-ups, hints, and a small door in time that things and voices can pass through.
 - **Painted scenes**: every scene is one painted picture, 800 pixels by 600, with painted cut-outs for the things people walk behind and the things the story changes. The highway of the intro and all nineteen scenes of the story are painted: five in Egypt (the inside of the wagon among them, seen through Dad's own eyes), six in Rome, the five rooms of the house, and in Nevada the roadside, the store and the back of a limousine.
 - **Seven playable leads**: Dad and the Son, lost in different centuries; Mom, Big Sister and Little Sister, who work as a team; and, in Act Five, Grandpa Joe and his raccoon, Ranger, a team of two. You switch between them with their portraits. Each can do something the others cannot, and they talk to each other and hand things over.
+- **A map of each place the story goes**, each the kind of map its own time would make: a scribe's sketch on papyrus for Egypt, a plan scratched in a wax tablet for Rome, Dad's pencil floor plan of the house, and Grandpa Joe's fold-out road map of Nevada. It shows where you have been and where everyone is, takes you back to any place you have already been, and is the way to switch to someone in another scene: across the centuries the game's emblem, a kitchen-timer dial, first turns notch by notch from one time to the other. <!-- MAP-15D -->
 - **Pixel-art people drawn by code**: each of the thirty-eight is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people. Ranger, who is a raccoon, is painted frame by frame.
 - **Depth**: people walk behind things and in front of them, round obstacles, and get smaller as they walk away.
 - **An intro movie** that runs into the title screen.
@@ -45,7 +46,7 @@ Useful addresses while building:
 - `http://localhost:8000/tools/storyboard.html` shows the storyboard.
 - `http://localhost:8000/tools/sprites.html` shows every character and prop, in every direction, moving.
 
-In the game: click to walk, use and talk. Right-click (or press and hold on a touch screen) looks at things. What the person you are playing carries is along the bottom left; click a thing there, then click what to use it with. Click a portrait at the top left (or press **1**, **2**, **3**) to play as someone else. Click one of the others to talk to them; to hand them something, click the thing and then click them, or their portrait. **Esc** opens the menu or skips a cutscene. Hold **H** to see everything you can click.
+In the game: click to walk, use and talk. Right-click (or press and hold on a touch screen) looks at things. What the person you are playing carries is along the bottom left; click a thing there, then click what to use it with. Click a portrait at the top left (or press **1**, **2**, **3**) to play as someone else. Click one of the others to talk to them; to hand them something, click the thing and then click them, or their portrait. **Esc** opens the menu or skips a cutscene. Hold **H** to see everything you can click. **Map** (or **M**) opens the map: click a place you have been to go there, or someone's portrait to play as them, or a map's name at the top (or the **Left** and **Right** keys) for another time's map; **M** or **Esc** puts it away. <!-- MAP-15D -->
 
 ## Publishing
 
@@ -61,21 +62,25 @@ After a push, GitHub Pages takes a minute or two to put the new version up. Relo
 
 ## Layout
 
+<!-- MAP-15D: the map screen (atlas.js), the maps (maps.js) and their pictures (maps/), below -->
 ```
 index.html        the page
 css/              colors (tokens.css) and layout (game.css)
 js/engine/        the engine: clock, saves, sound, dialogue, pictures, scenes, depth and walking, menus,
-                  and the things that move by nature, the doors in time among them (effects.js)
+                  and the things that move by nature, the doors in time among them (effects.js);
+                  the map screen and the Timer (atlas.js)
 js/art/           everything that is drawn by code: the pixel renderer (pix.js), the jointed
                   figure (rig.js), the cast (people.js), the neon rings, sketches and close-ups
                   (kit.js); and the list of those painted frame by frame instead (painted.js)
 js/content/       the game: cast and items (world.js), the lines (one file to an act, in lines/),
                   the story (one file to an act, in acts/), the talks written as dialogue
-                  trees (talk/), the sound list, cutscenes, and the scenes (one file each)
+                  trees (talk/), the sound list, cutscenes, the scenes (one file each), and the
+                  maps: each time's places and the ways between them (maps.js)
 art/              the painted pictures: a folder for each scene (scenes/), the things
                   that can be carried (items/), the painted portraits (portraits/), the
-                  engine's own pictures for its proof scene (proof/), and the game's emblem,
-                  a sunset kitchen-timer dial, for the begin screen and the browser tab (emblem/)
+                  engine's own pictures for its proof scene (proof/), the game's emblem,
+                  a sunset kitchen-timer dial, for the begin screen, the browser tab and the
+                  map (emblem/), and a folder for each map (maps/)
 fonts/            Koine Road, the game's typeface
 tools/            the storyboard page (the story, a map of each act's ways, every scene),
                   the sprite viewer, the local server (serve.py),

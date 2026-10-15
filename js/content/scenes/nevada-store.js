@@ -183,7 +183,8 @@ async function jolSay(g, ...ids) {
 // ---------- the front door, and Bernice the bell over it ----------
 async function goOut(g) {
   g.sfx("beep");                                             // Bernice
-  g.flag("nevada.inStore", false);                           // (the next time they come in is a new visit: `setup`)
+  // (MAP-15: they are not inside any more, so the next time they come in is a new visit: `leaving`, below, which runs
+  // however they leave, by the door or by the map)
   await g.goto("nevada-roadside", { spawn: "fromStore" });
 }
 
@@ -503,6 +504,9 @@ export default {
   id: "nevada-store",
   era: "nevada",
   name: "Grandpa Joe's store",
+  // MAP-15: as they leave, by the front door or by the map, they are not inside any more: the next time in is a new visit (`setup`)
+  leaving(g) { g.flag("nevada.inStore", false); },
+  travel: (g) => !g.flag("nevada.left"),                   // MAP-15: not by the map once the act has ended (whatever a save catches it in)
 
   // DEPTH, from the room's camera (layout.json: `room.View`, the eye 325 cm up, as the house's rooms are painted).
   horizon: HORIZON, full: FULL, maxScale: MAX_SCALE,
@@ -570,7 +574,8 @@ export default {
   // Make the picture match the story. Runs on arrival and after loading a save.
   // A visit is counted here, as they come in (and not after the picture is up), so that Jolene is under the hat of this
   // visit from the first moment she is seen, and the gap on the board is the right one: `nevada.inStore` says they are
-  // inside already (a game saved in here, and loaded), and the front door clears it as they go out.
+  // inside already (a game saved in here, and loaded), and the scene's `leaving` clears it as they go out (MAP-15M: by the
+  // front door or by the map).
   setup(g) {
     hen.pose = {}; hen.sat = new Set(); hen.twitch = {}; hen.egg = false; hen.jolene = null;
     arriving = false;

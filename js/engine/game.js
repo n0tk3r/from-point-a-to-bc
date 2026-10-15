@@ -15,6 +15,7 @@
 //     g.send("gum", { to: "son" });  g.waiting();  g.receive();  await g.arrive("gum", [x, y]);     LETTERBOX-11: things through a small door in time
 //     await g.through("son", "line.id");  await g.choose([...], { through: "son" });              LETTERBOX-11: a voice from the other end of it
 //     await g.talk(tree);  await g.talk(tree, { through: "son" });  g.asked("joe/car");           TALK-11: a dialogue tree, and what has been asked in one
+//     g.mapOf("rome-forum");  await g.travel("forum");  g.atlas.show();                          MAP-15: the map, and travel on it (atlas.js)
 //
 // Scripts are ordinary async functions. They read top to bottom like a screenplay.
 // Every position is a pixel on the 800x600 picture (grid.js).
@@ -40,6 +41,7 @@ import { Life } from "./life.js";
 import { Effects } from "./effects.js";
 import * as art from "../art/kit.js";
 import { checkpoints } from "../content/checkpoints.js";      // TESTING-9 (temporary): the testers' parts. See "parts" below.
+import { Atlas, checkMaps } from "./atlas.js";                 // MAP-15: the map screen, the Timer, travel and switching through the map
 
 const esc =(s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const copy = (data) => JSON.parse(JSON.stringify(data));
@@ -72,6 +74,8 @@ export class Game {
     this.outlines = new Outlines(this);   // what Show draws (outline.js)
     this.life = new Life(this);           // the scene's people living their own lives: small movements, and a walk now and then (life.js)
     this.effects = new Effects(this);     // the things in a scene that move by nature: smoke, flames, water, birds, cloth (effects.js)
+    this.maps = this.maps || {};          // MAP-15: the maps (js/content/maps.js), and the map screen that shows them (atlas.js)
+    this.atlas = new Atlas(this);
     this.names = {};                      // each scene's name, by its id, once its file is in (for the label over a way out)
 
     this.mode = "boot";      // boot, cutscene, title or play
@@ -112,6 +116,10 @@ export class Game {
     const loaded = {};
     for (const id of this.sceneIds) if (this.scenes[id]) loaded[id] = await this.scenes[id];
     for (const problem of checkEdges(loaded)) console.warn("Edge check:", problem);
+    // MAP-15: and the maps' (atlas.js checkMaps): every place's scene there, on one map only; every way's places on its map,
+    // and the mark it arrives on a mark of that scene; every map's time on the Timer; every scene on a map.
+    this.atlas.scenes = loaded;
+    for (const problem of checkMaps({ maps: this.maps, scenes: loaded, eras: this.eras, sceneIds: this.sceneIds, game: this })) console.warn("Map check:", problem);
     // No pictures yet. The title fetches its own; the rest are fetched behind it, once it is up (see gather),
     // and a scene that is entered before its turn has come fetches its own first (see enterScene).
 
@@ -129,6 +137,7 @@ export class Game {
       const first = at < 0 ? null : acts[at].beats.find((b) => b.scene === jump);
       const lead = params.get("lead") || (first && leadsOf(this.story, first)[0]);
       if (this.leads.includes(lead)) data.active = lead;
+      data.visited = this.visitedOf(data);         // MAP-15: the scenes counted as visited, as for a save from before the map (visitedOf)
       this.store.reset(data);
       return this.goto(jump, { via: "cut" });
     }
@@ -188,6 +197,7 @@ export class Game {
       }
       files.push(...castKit.paintedPictures());                // NEVADA-12E: and every painted figure's frames, wherever the story puts them
       for (const path of new Set(files)) { await spare(); await hold(path, { quiet: true }); }
+      await this.atlas.gather(spare);                          // MAP-15: and last, the Timer's pictures and every painted map's layout and pictures
     })();
     return this.gathering;
   }
@@ -480,16 +490,26 @@ export class Game {
     return this.scenes[id];
   }
 
-  /** Go to a scene. via: "fade" (default), "wormhole" or "cut". */
-  async goto(id, { via = "fade", spawn = "default", at = null } = {}) {
+  /** Go to a scene. via: "fade" (default), "wormhole" or "cut".
+      MAP-15: and "map": the map screen has faded out to the dark already, so there is no fade out, and on arrival no era
+      card (the map has said where and when). `came` is the scene the new one's `enter` is told the lead came from, in place
+      of the scene left (travel on the map: the place before it on the way). `switching`: the player is switching to a lead
+      who stands in that scene, and nobody leaves this one. Before anything changes, the scene being left runs its
+      `leaving(g, to)` when the lead leaves it for another, by any way: an edge, a door, the map (not on switching, not when
+      a script has handed the controls to a lead who is not in it, as the end of an act does, and not on loading a save). */
+  async goto(id, { via = "fade", spawn = "default", at = null, came = undefined, switching = false } = {}) {
     const from = this.scene;
     this.busy++;
     try {
       const loading = this.getScene(id);         // fetch during the fade, not after it
       loading.catch(() => {});
+      const here = this.store.data.where[this.store.data.active];                              // MAP-15: leaving
+      if (from && from.leaving && from.id !== id && !switching && here && here.scene === from.id) {
+        try { await from.leaving(this, id); } catch (err) { console.error(`Scene "${from.id}": leaving stopped:`, err); }
+      }
       if (via === "wormhole") await this.wormhole();
       else if (via === "fade") await this.fade(1, 300);
-      else { this._fade = 1; this.fadeEl.style.opacity = 1; }
+      else { this._fade = 1; this.fadeEl.style.opacity = 1; }        // "cut"; and MAP-15's "map", where the map has faded out to the dark
       let scene;
       try { scene = await loading; }
       catch (err) {                                // the file would not load: come back to where we were
@@ -510,11 +530,11 @@ export class Game {
         return await this.trouble(err, `Scene "${id}"`);
       }
       await this.fade(0, via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");
-      if (!from || from.era !== scene.era) {
+      if ((!from || from.era !== scene.era) && via !== "map") {        // (MAP-15: none after the map, which has said where and when)
         const era = this.eras[scene.era];
         await this.card(era.name, era.date);
       }
-      if (scene.enter) await scene.enter(this, from ? from.id : null);
+      if (scene.enter) await scene.enter(this, came !== undefined ? came : from ? from.id : null);     // (MAP-15: came)
     } finally {
       this.busy--;
       this.tidy();
@@ -571,6 +591,7 @@ export class Game {
     const was = d.where[d.active], facing = was && was.scene === scene.id && was.face != null && pos ? was.face : scene.facing || "S";
     cast.addFigure(d.active, this.cast[d.active].sprite, x, y, scaleAt(scene, y)).face(facing);
     d.scene = scene.id;
+    if (!(d.visited = d.visited || []).includes(scene.id)) d.visited.push(scene.id);      // MAP-15: the scenes the player has entered, in order (the map's)
     d.where[d.active] = { scene: scene.id, x: Math.round(x), y: Math.round(y), face: this.lead.yaw };
 
     // A scene can name a party: leads who are here together. They arrive with whoever is leading,
@@ -970,8 +991,12 @@ export class Game {
     if (line) await this.run(() => this.say(...[].concat(line)), { settle: false });      // (NEVADA-12E: or a list of lines, said in turn)
   }
 
-  /** Change which lead the player controls. Each lead keeps their own place and pockets. */
-  async switchLead(to) {
+  /** Change which lead the player controls. Each lead keeps their own place and pockets.
+      MAP-15: one standing in another scene is switched to through the map (atlas.js switchTo): their map opens with their
+      portrait breathing (and first, when their scene is in another time, the Timer turns from this lead's notch to
+      theirs), and a click on them drops into their scene (dropInto). `{ map: false }`, or a scene that is on no map, keeps
+      the old way: a fade, or the short tunnel across the centuries. */
+  async switchLead(to, { map = true } = {}) {
     const d = this.store.data;
     if (this.busy || this.mode !== "play" || d.active === to || !d.team.includes(to)) return;
     this._leaving = null;
@@ -990,12 +1015,50 @@ export class Game {
       this.autosave();
       return;
     }
+    if (map && this.mapOf(place.scene) && this.atlas.el) { await this.atlas.switchTo(to); return; }      // MAP-15: through the map
     d.active = to;
     // LETTERBOX-11: the other lead is in another scene. Across the centuries the trip is the short tunnel (the eras of
     // the two scenes differ); within one era it is a fade, as it always was. Their place and facing are kept.
     const there = this.scenes[place.scene] ? await this.scenes[place.scene].catch(() => null) : null;
     const via = there && this.scene && there.era !== this.scene.era ? "wormhole" : "fade";
-    await this.goto(place.scene, { via, at: place.x != null ? [place.x, place.y] : null });
+    await this.goto(place.scene, { via, at: place.x != null ? [place.x, place.y] : null, switching: true });     // (MAP-15: switching: nobody leaves)
+  }
+
+  /** MAP-15: drop into the scene of a lead on the team, from the map (atlas.js pick), which has faded out to the dark: the old
+      lead's place is remembered and their walk stopped, nothing is held, and the game goes to the other's scene, where they
+      stand, as the one being played. */
+  async dropInto(to) {
+    const d = this.store.data, place = d.where[to];
+    if (!place || !place.scene || !d.team.includes(to)) return;
+    this.rememberPlace();
+    const old = this.lead;
+    if (old && old._stop) old._stop();
+    this.held = null;
+    this.lookMode = false;
+    this._leaving = null;
+    d.active = to;
+    await this.goto(place.scene, { via: "map", at: place.x != null ? [place.x, place.y] : null, switching: true });
+  }
+
+  // =============== MAP-15: the maps (js/content/maps.js; the map screen is atlas.js) ===============
+  /** The map and the place a scene is on: { id, map, place } (the map's id, the map, the place's id), or null. */
+  mapOf(sceneId) { return this.atlas.mapOf(sceneId); }
+  /** The active lead goes to a place of their own map, as a click on it on the map does: the map comes up if it is not up,
+      their portrait walks the ways, and the scene changes. Resolves true when the new scene is up; false at once, with
+      nothing done, if they may not go there now (the console says why). */
+  travel(placeId) { return this.atlas.travel(placeId, { script: true }); }
+  /** The scenes a save from before the map is taken to have visited (and the ?scene= shortcut's): the scenes of every beat
+      of every act whose gate is done, those of the beats done in the act under way, and the scenes where the team stands
+      (the one being played among them); only scenes this game has. */
+  visitedOf(data) {
+    const out = [], flags = data.flags || {}, add = (id) => { if (id && this.sceneIds.includes(id) && !out.includes(id)) out.push(id); };
+    const under = this.story.acts.find((act) => !flags[act.gate]);
+    for (const act of this.story.acts) {
+      if (flags[act.gate]) act.beats.forEach((b) => add(b.scene));
+      else if (act === under) act.beats.forEach((b) => { if (flags[b.sets]) add(b.scene); });
+    }
+    for (const id of [data.active, ...(data.team || [])]) add(data.where && data.where[id] && data.where[id].scene);
+    return out;
   }
 
   // =============== saving ===============
@@ -1039,6 +1102,9 @@ export class Game {
       const lost = data.inventory[id].filter((item) => !this.items[item]);
       if (lost.length) { console.warn(`This save has things the game does not know (${lost.join(", ")}). They were left out.`); data.inventory[id] = data.inventory[id].filter((item) => this.items[item]); }
     }
+    // MAP-15: the scenes visited; a save from before the map has none, and is given them by the rule (visitedOf)
+    data.visited = Array.isArray(data.visited) ? data.visited.filter((id) => this.sceneIds.includes(id)) : this.visitedOf(data);
+    if (this.atlas.open) this.atlas.exit();             // (MAP-15: a save file dropped on the game while the map is up)
     this.ui.close();
     this.busy++;
     try {
@@ -1208,6 +1274,7 @@ export class Game {
       const key = event.key;
       // Keys typed into a slider or a tick box belong to it. Esc still closes the menu.
       if (key !== "Escape" && event.target.closest && event.target.closest("input, select, textarea")) return;
+      if (this.atlas.open) return this.atlas.key(event);        // MAP-15: while the map is up, it takes every key (atlas.js key)
       if (key === "Escape") {
         const tree = this.dialogue.choosing && !this.ui.open ? this.stage.querySelector(".choices.talk") : null;     // TALK-11: a dialogue tree's menu: Esc takes the way out, if this node has one; else nothing
         if (tree) { const exit = tree.querySelector("button.exit"); if (exit) exit.click(); }
@@ -1231,6 +1298,8 @@ export class Game {
         if (to) this.switchLead(to);
       } else if ((key === "[" || key === "]") && this.mode === "play" && !this.ui.open) {    // TESTING-9 (temporary): [ and ] go to the previous and the next part, for the testers (goPart)
         this.goPart(key === "]" ? 1 : -1);
+      } else if (key.toLowerCase() === "m" && !event.repeat && this.mode === "play" && !this.ui.open && !this.busy) {     // MAP-15: M, the map, as the Map button
+        this.atlas.show();
       } else if (key.toLowerCase() === "h") {
         if (!event.repeat) this.reveal(true);          // held down: Show stays on until it is let go
       }

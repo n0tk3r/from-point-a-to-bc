@@ -39,6 +39,18 @@ expanded and Act Five begun, on the author's instructions of 9 and 10 October; a
 it is built, and its part of this document was brought up to the game as built on 12
 October.
 
+<!-- MAP-15D -->
+**Round fifteen** (14 October; `briefs/MAP-15.md`): the game has a map screen (DESIGN.md,
+section 8, "The map, and the Timer"). Act Three's map is Dad's pencil floor plan of the house,
+and Act Four's and Act Five's is Grandpa Joe's road map of Nevada: each act's "Location layout"
+has a note on its own. The one change in the acts' files is the store's: what its front door
+did as the three went out (they are not inside any more, `nevada.inStore`) is done by the
+scene's `leaving` now, so that going out by the map does it too. No puzzle, beat or line
+changed. The plays of the house, the store and the limousine were run again on the engine with
+the map, each without a problem (the house in 814 clicks; all 246 of the store's lines, going
+out and in again five times; all 148 of the cut-scene's and Act Five's), and the acts' checks
+say exactly what they said before.
+
 Play it: `index.html?scene=home-living-room` starts Act Three and
 `index.html?scene=nevada-roadside` starts Act Four. In the full game it follows Rome,
 on a card that reads "Meanwhile, about two thousand years later". The other four rooms
@@ -217,6 +229,18 @@ in the living room, is a way up too. The front door of the living room is a door
 wall, not an edge: it is the only way out of the house, and it leads to Act Four. The Retreat has its own music (one slow tune in D major, from
 the sound machine) until its batteries are taken: after that the house's tune is heard
 up there too.
+
+<!-- MAP-15D -->
+**The map (round fifteen).** The Map button (or M) shows the house as Dad's pencil floor plan
+on squared paper: the ground floor on the left, upstairs on the right with the attic above it,
+each room that is a place drawn in plan with its things, and Dad's arrow "up" from the foot of
+the stairs to the landing (DESIGN.md, sections 8 and 9). The plan is turned half round, as
+plans are, the street at the bottom, so each room faces the other way from its picture. A click
+on a room the family has been in takes the one being played there, the other two coming along
+and arriving as they would by the stairs, a door or the ladder. The study is there to go to only
+once it has been opened and walked into, and the living room does not let them go by the map
+once they have left for Nevada (`home.left`). A click on a sister's portrait on the plan is
+playing as her, as her portrait in the team bar is.
 
 **What moves (round four).** Nothing that moves by nature is painted still any more: in the
 Retreat the little fountain on the sound table runs (a thread of water off the bamboo
@@ -788,6 +812,21 @@ back. The hen yard is seen through the open back door, a step down: the five hen
 picture, with their backs to us, and Little Sister can go out to them onto the step (the yard is
 not a scene of its own). The other two watch from the doorway. The way out is the front door, at
 the left edge, and its bell, Bernice, rings as they come in and go out.
+
+<!-- MAP-15D -->
+**The front door, and the map (round fifteen).** As the three leave the store, by its front door
+or by the map, they are not inside any more (`nevada.inStore` false), so the next time they come
+in is a new visit, and Jolene is under her next hat. That is done by the store's `leaving` now,
+which runs however they leave; the front door only rings Bernice and goes. Coming in by the map
+is a visit like any other: Bernice rings, and Jolene says hello. The Map button (or M) shows
+Grandpa Joe's own road map from the rack on his counter, opened flat: the highway through LAST
+GAS, "37 MI." on to the Last Stop and TO NOTHING, and in its detail panel the lot in plan, with
+the store drawn inside the shack's walls and the hens out back (DESIGN.md, sections 8 and 9). A
+click on the lot or the store takes the three there by the one short way between, the shop's
+door. Neither lets them go by the map once the family has gone through (`nevada.left`), and
+nobody leaves the limousine by it: Grandpa Joe is belted in. Grandpa Joe and Ranger have no
+portrait at the Last Stop in Act Four (they are its people); from Act Five theirs are on the
+road beyond it, with a small printed limousine.
 
 ```
 THE LIMOUSINE (nevada-limo), new, Act Five's: the back of it, from our end, driving:

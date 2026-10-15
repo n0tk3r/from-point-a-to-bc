@@ -160,5 +160,10 @@ export const sound = {
     // ---- ROME-13S3: across the Tiber ----
     // The river, as the music drops for the old man's talk: a soft rush of water, a few seconds, and gone.
     river: { noise: [500, 900], len: 3, q: 0.8, level: 0.025 },
+
+    // ---- MAP-15: the map, and the Timer (js/engine/atlas.js) ----
+    notch: { noise: [2600, 1500], len: 0.035, q: 3, notes: [[88, 0, 0.016]], level: 0.03 },           // the dial clicking into a notch: short and dry, quieter than `dial` (the vault's)
+    ding: { notes: [[93, 0, 1.1], [100, 0, 0.45], [105, 0, 0.18]], level: 0.026, wave: "sine" },      // the dial arriving at its time: a small bell, once (softer than `pickup` and `found`)
+    rustle: { noise: [1800, 5200], len: 0.3, q: 0.9, level: 0.06 },                                     // the map opened, or put away: paper
   },
 };

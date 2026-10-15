@@ -27,6 +27,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ART = os.path.join(HERE, "..", "..", "art")
 # out/<folder> -> art/<place>. (The first scene painted kept its working name, egypt1.)
 PLACES = {"egypt1": "scenes/egypt-crash", "items": "items", "portraits": "portraits"}
+PLACES["map-egypt"] = "maps/egypt"                # MAP-15E: the map of Egypt, a papyrus sketch (installed as painted, never keyed)
+PLACES["map-rome"] = "maps/rome"                  # MAP-15R: the map of Rome, a wax tablet (installed as painted, never keyed)
+PLACES["map-home"] = "maps/home"                  # MAP-15H: the map of the house, a pencil floor plan (installed as painted, never keyed)
+PLACES["map-nevada"] = "maps/nevada"              # MAP-15N: the map of Nevada, a fold-out road map (installed as painted, never keyed)
 # Everything that `python3 install.py` installs, in the order of the story.
 SCENES = [
     "highway",
@@ -39,6 +43,7 @@ SCENES = [
     "nevada-roadside", "nevada-store",                                                        # Act Four (nevada-store: NEVADA-12B)
     "nevada-limo",                                                                            # Act Five (round twelve)
     "items", "portraits",
+    "map-egypt", "map-rome", "map-home", "map-nevada",                                        # MAP-15E/R/H/N: the four maps
 ]
 
 

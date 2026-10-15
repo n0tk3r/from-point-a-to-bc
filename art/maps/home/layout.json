@@ -1,0 +1,82 @@
+{
+  "map": "home",
+  "size": [800, 600],
+  "sheet": [40, 136, 760, 564],
+  "material": "A sheet of squared paper, folded into a pocket, with the house drawn on it in pencil by Dad: three plans, ground floor, upstairs, the attic.",
+  "label": {
+    "color": "#5a5e70",
+    "halo": "#f0ebd8",
+    "upper": false,
+    "spacing": 0.02,
+    "size": 14
+  },
+  "places": [
+    {
+      "id": "living",
+      "picture": "place-living.png",
+      "shape": [[203, 149], [352, 149], [354, 151], [354, 369], [352, 371], [230, 371], [230, 390], [203, 390], [203, 370], [201, 369], [201, 151]],
+      "pin": [278, 196],
+      "label": [278, 166],
+      "label_max": 103
+    },
+    {
+      "id": "landing",
+      "picture": "place-landing.png",
+      "shape": [[644, 317], [649, 317], [649, 324], [668, 324], [670, 326], [670, 360], [668, 362], [579, 362], [579, 380], [573, 380], [573, 362], [555, 362], [555, 380], [548, 380], [548, 362], [518, 361], [517, 360], [517, 326], [519, 324], [644, 324]],
+      "pin": [625, 296],
+      "label": [625, 345],
+      "label_max": 80
+    },
+    {
+      "id": "study",
+      "picture": "place-study.png",
+      "shape": [[420, 362], [515, 362], [518, 365], [536, 365], [536, 392], [539, 392], [539, 365], [544, 365], [544, 392], [553, 392], [555, 394], [555, 504], [553, 506], [420, 506], [418, 504], [418, 364]],
+      "pin": [491, 427],
+      "label": [479, 379],
+      "label_max": 79
+    },
+    {
+      "id": "lilsis",
+      "picture": "place-lilsis.png",
+      "shape": [[571, 408], [708, 408], [710, 410], [710, 543], [708, 545], [571, 545], [569, 543], [569, 410]],
+      "pin": [646, 515],
+      "label": [644, 462],
+      "label_max": 130
+    },
+    {
+      "id": "bigsis",
+      "picture": "place-bigsis.png",
+      "shape": [[600, 146], [605, 146], [605, 150], [674, 150], [676, 152], [676, 267], [674, 269], [529, 269], [527, 267], [527, 152], [529, 150], [600, 150]],
+      "pin": [590, 227],
+      "label": [582, 176],
+      "label_max": 87
+    }
+  ],
+  "paths": [
+    {
+      "a": "living",
+      "b": "landing",
+      "picture": "path-living-landing.png",
+      "via": [[278, 196], [340, 264], [341, 330], [345, 336], [361, 338], [369, 337], [377, 337], [384, 336], [392, 335], [400, 335], [407, 335], [415, 335], [422, 334], [430, 334], [438, 334], [445, 335], [453, 335], [460, 336], [467, 337], [475, 338], [482, 339], [490, 340], [497, 341], [505, 342], [512, 343], [625, 296]]
+    },
+    {
+      "a": "landing",
+      "b": "study",
+      "picture": "path-landing-study.png",
+      "via": [[625, 296], [544, 361], [544, 367], [543, 373], [533, 373], [523, 373], [491, 427]]
+    },
+    {
+      "a": "landing",
+      "b": "lilsis",
+      "picture": "path-landing-lilsis.png",
+      "via": [[625, 296], [587, 361], [587, 386], [586, 408], [646, 515]]
+    },
+    {
+      "a": "landing",
+      "b": "bigsis",
+      "picture": "path-landing-bigsis.png",
+      "via": [[625, 296], [563, 335], [563, 298], [563, 261], [590, 227]]
+    }
+  ],
+  "note": "The house is drawn turned half round, as a plan usually is (the street at the bottom): the ground floor left, upstairs right, the attic over it (drawn as one comes up its ladder). Every room is its model (tools/paint/home_*_model.py) at one scale; map_home_house.py says how they fit together. Each via runs along its way's own pencil between the two pins; the first and last steps go from a pin to the way's end."
+}

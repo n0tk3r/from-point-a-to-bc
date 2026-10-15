@@ -20,6 +20,7 @@ export function newGame(leads = ["dad", "son"]) {
     seenLines: {},            // dialogue already heard, so repeats can be shortened
     tunnel: [],               // LETTERBOX-11: things put into a door in time and not yet taken out of another: { item, from, to, at } (lead ids; `at` the play time it went in)
     asked: {},                // TALK-11: what has been asked in dialogue trees, and how many times: asked["joe/car"] = 2 (the tree's id and the option's; dialogue.js talk)
+    visited: [],              // MAP-15: the ids of the scenes the player has entered, in order (the map draws the places they are in)
   }, leads);
 }
 
@@ -36,6 +37,10 @@ export function complete(data, leads) {
   data.seenLines = data.seenLines || {};
   data.tunnel = Array.isArray(data.tunnel) ? data.tunnel : [];      // LETTERBOX-11: a save from before the letterbox has no tunnel, which means an empty one
   data.asked = data.asked && typeof data.asked === "object" ? data.asked : {};     // TALK-11: a save from before dialogue trees has nothing asked
+  // MAP-15: a list of the scenes entered is kept as it is; anything else (a save from before the map has none) is left out,
+  // for the game to fill when the save is loaded (game.js visitedOf: from the story's facts and where the team stands)
+  if (Array.isArray(data.visited)) data.visited = data.visited.filter((id) => typeof id === "string");
+  else delete data.visited;
   return data;
 }
 

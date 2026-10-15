@@ -217,6 +217,7 @@ export default {
   id: "egypt-chamber",
   era: "egypt",
   name: "The burial chamber",
+  travel: (g) => !g.flag("egypt.ready"),                   // MAP-15: not by the map once the act has ended: he waits at the door (whatever a save catches it in)
 
   // Every number below is a pixel of the painting, measured by the painter (art/scenes/egypt-chamber/layout.json).
   // DEPTH: a room, so people shrink only a little toward the back wall.
