@@ -51,6 +51,15 @@ the map, each without a problem (the house in 814 clicks; all 246 of the store's
 out and in again five times; all 148 of the cut-scene's and Act Five's), and the acts' checks
 say exactly what they said before.
 
+<!-- DRIVE-16M -->
+**Round sixteen** (16 October; `briefs/DRIVE-16.md`): the limousine's windows. The author found
+them "weird, the outside needs to go past not look like mirrors": the desert outside is now the
+world itself going by in perspective, each side its own country (Act Five's "Location layout" has
+a note). The one change in the act's files is the limousine scene's two moving things in its
+windows; no puzzle, beat or line changed. The limousine's play and the act's integration play were
+run again on it, each without a problem (all 148 of the cut-scene's and Act Five's lines), and the
+act's check, which looks at the two drives now where it looked at the two strips, is clean.
+
 Play it: `index.html?scene=home-living-room` starts Act Three and
 `index.html?scene=nevada-roadside` starts Act Four. In the full game it follows Rome,
 on a card that reads "Meanwhile, about two thousand years later". The other four rooms
@@ -851,6 +860,19 @@ The back of a gray limousine, driving, seen from our end. The desert goes by in 
 both sides (a strip of painting, scrolling: outward on each side, as it does from a car going
 forward), and the divider at the far end slides down and up. Grandpa Joe is belted to the long seat
 and never leaves it; Ranger has the carpet between the seats.
+
+<!-- DRIVE-16M -->
+**The windows (round sixteen).** The strip of painting is gone: it showed the same picture on both
+sides, moving apart like a mirror. Now the world outside is drawn as it is seen from the moving car,
+from the scene's own camera, and each side is its own country (DESIGN.md, section 2, "The world
+going by a car's side windows"). Everything comes out of the far end of the windows small and slow
+and sweeps out past the near edge large and fast: the far ranges hardly move, the middle distance
+drifts, the ground and the posts rush by. On the left, the far edge of the oncoming lane (its white
+line rushing by under the glass), the open desert, the long ranges across the valley and a ranch in
+the middle distance, white reflector posts, a mile marker, the backs of signs; on the right, a wire
+fence along the road, the telephone line far out with its wires, low hills, an OPEN RANGE sign now
+and then and one NEXT SERVICES sign. When the limousine slows at the gate, the desert slows with it
+to a stop, as before. No puzzle, beat or line changed.
 
 ## Cut-scenes and puzzles
 

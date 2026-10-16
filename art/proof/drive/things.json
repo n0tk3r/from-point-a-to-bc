@@ -1,0 +1,84 @@
+{
+ "ppm": 24,
+ "note": "DRIVE-16E: the proof's upright things, painted from the side at 24 pixels a metre; foot: in the box",
+ "sprites": {
+  "post": {
+   "box": [
+    2,
+    2,
+    4,
+    29
+   ],
+   "foot": [
+    2.0,
+    29
+   ],
+   "height": 1.2
+  },
+  "pole": {
+   "box": [
+    10,
+    2,
+    41,
+    192
+   ],
+   "foot": [
+    20.5,
+    192
+   ],
+   "height": 8.0
+  },
+  "marker": {
+   "box": [
+    55,
+    2,
+    12,
+    48
+   ],
+   "foot": [
+    6.0,
+    48
+   ],
+   "height": 2.0
+  },
+  "bush": {
+   "box": [
+    71,
+    2,
+    24,
+    19
+   ],
+   "foot": [
+    12.0,
+    19
+   ],
+   "height": 0.8
+  },
+  "cone": {
+   "box": [
+    99,
+    2,
+    14,
+    22
+   ],
+   "foot": [
+    7.0,
+    22
+   ],
+   "height": 0.9
+  },
+  "board": {
+   "box": [
+    117,
+    2,
+    31,
+    55
+   ],
+   "foot": [
+    15.5,
+    55
+   ],
+   "height": 2.3
+  }
+ }
+}

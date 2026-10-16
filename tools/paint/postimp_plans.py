@@ -155,7 +155,7 @@ PLANS = {
         "alt": {"divider-down": ["divider-up"], "ropes-4": [], "bag": [], "clipboard": [], "juice": []},
         "states": {"ropes-4": ["ropes-3", "ropes-2", "ropes-1"]},
         "union": {},
-        "frames": ["desert-strip"],
+        "frames": ["desert-strip", "drive-*"],                     # DRIVE-16P: and the world outside for the `drive` kind (nevada_limo_drive.py)
     },
 }
 

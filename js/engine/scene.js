@@ -102,7 +102,7 @@ export class SceneView {
   /** Ask for a scene's pictures ahead of time, without showing anything: for the scenes that can be walked to from
       the one on stage, so that going there does not mean waiting for them. */
   warm(scene) {
-    for (const path of picturesIn(scene)) picture(path);
+    for (const path of picturesIn(scene)) if (!path.endsWith(".json")) picture(path);      // (DRIVE-16E: a drive's sheet of things is among its files, and is no picture: gathered and held, never decoded)
   }
 
   /**

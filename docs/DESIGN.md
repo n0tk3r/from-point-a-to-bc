@@ -113,7 +113,9 @@ art/items/              the pictures of things that can be carried
 art/portraits/          the painted portraits of the painted people (Ranger, with and without his mirror shades): never keyed
 art/proof/              the engine's own pictures for its proof scene: a small painted creature, a strip of country, a window, and
                         since round thirteen a flock of geese (their frames) with their pen, a boat, and a house front with a room
-                        behind its upper window
+                        behind its upper window; since round sixteen, in art/proof/drive/, the world outside a car's side windows
+                        for the `drive` (a car's side, a sky, two grounds of squares and stripes, ranges of plain triangles,
+                        posts, poles and a marker: tools/paint/proof_drive.py) <!-- DRIVE-16E -->
 art/emblem/             the game's emblem, the Timer (EMBLEM-13): the begin screen's sky, turning bow, top and still, and the
                         tab and home-screen icons: interface pictures, never keyed; since round fifteen the same three pieces at
                         1024, for the large dial of the switch across the centuries (MAP-15D)
@@ -392,7 +394,8 @@ The marks go into the scene file as they are: the field names are the same in bo
 | `birds`, a flock | Birds on the ground (`area`) or along a ledge (`perch`) that stand, look about, peck, walk a few steps and turn; go up when somebody comes near and land again a little way off, the ones beside them going too; with nowhere clear to land, fly off and come back later. A script can send the flock running to another place on the ground (`herd`), and give every bird one pose at once (`pose`): "A flock that is sent somewhere", below <!-- ROME-13E --> | `area` (or `poly`, `rect`) or `perch`; `count` (5); `frames` (below), or birds drawn by the engine: `look` (`pigeon`, `dove`, `sparrow`) and `size` (26 px long where a person is 160 tall); `depth` (smaller farther off: on an area); `moves` (`{ stand: 2, look: 2, peck: 4, walk: 3, turn: 1, away: 0 }`; `away`: one flies off by itself and comes back); `shy` (150 px at full size, about a metre and a half; half that from someone standing still; 0: never startled); `fly`, `turn` (false: never); `back` (`[8, 20]` s away); `treads` (`[y, ...]`) or `tread` (px): birds on steps keep to the treads and hop from one to the next; `walk` (12), `flight` (95) |
 | `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
 | `bob` | A cut-out of the scene (a boat, a barge at its mooring) riding the water: it rises and falls on the swell, as two slow waves added together so that it never ticks like a clock, and with a `tilt` it rocks as well, about the middle of its base line. It is drawn on whole pixels from its own picture (a turned copy for each quarter of a degree it rocks, made once and kept), only its place changing, a few times a second at most; its base (who is in front of it and who behind), its clickable area, its `solid` ground and anything a script does to it are as they were. One that also sways does both: it rises and falls as it stirs, without rocking. For less motion half the amount (a bob of one pixel is then still) at half the pace <!-- ROME-13E --> | `plane` (the cut-out's id); `amount` (1 px up and down); `period` (5 s); `tilt` (0 degrees: none) |
-| `strip` | The country going by the windows of a car on the move: one long painting, painted to run on from its right edge into its left, scrolling past behind the windows and drawn only inside them, with hard edges, over the backdrop. In the proof the car is a cut-out with its windows cut clear, laid over it; in the limousine (`nevada-limo`) the windows are the backdrop's own, and two strips go by, outward on each side | `src` (the picture, in the scene's folder unless its name begins `art/`); `windows` (the glass of each window, the shapes it shows through; or `clip`; with neither, the whole width of the stage); `row` (the row of the stage its bottom edge is on: needed); `speed` (0 px a second; more than 0, the world goes by to the left, as from a car driving right; `set({ speed })` from a script, and it goes on from where it is); `loop` (true: drawn twice where the seam is in a window; false: it goes by once); `offset` (0: the column of the picture at the stage's left edge when it begins); `fps` (20) |
+| `strip` | The country going by the windows of a car on the move: one long painting, painted to run on from its right edge into its left, scrolling past behind the windows and drawn only inside them, with hard edges, over the backdrop. In the proof the car is a cut-out with its windows cut clear, laid over it; in the limousine (`nevada-limo`) the windows are the backdrop's own, and two strips went by, outward on each side, until round sixteen: two drives now (below) <!-- DRIVE-16M --> | `src` (the picture, in the scene's folder unless its name begins `art/`); `windows` (the glass of each window, the shapes it shows through; or `clip`; with neither, the whole width of the stage); `row` (the row of the stage its bottom edge is on: needed); `speed` (0 px a second; more than 0, the world goes by to the left, as from a car driving right; `set({ speed })` from a script, and it goes on from where it is); `loop` (true: drawn twice where the seam is in a window; false: it goes by once); `offset` (0: the column of the picture at the stage's left edge when it begins); `fps` (20) |
+| `drive` | The world outside a car's side windows as a pinhole camera that is moving forward sees it, drawn from the scene's own camera: the ground in perspective, panoramas standing at their distances, upright things beside the road growing and sweeping past, wires; each side of the road its own place. See "The world going by a car's side windows", below <!-- DRIVE-16E --> And each thing's shadow laid on the ground in perspective, from the sun the scene gives <!-- DRIVE-16F --> | `side` (`"L"`, `"R"`); `windows` (or `clip`); `vanish`, `focal`, `eye` (1.6 m); `speed` (0 m a second; `set({ speed })`); `start` (0 m); `sky`; `bands` (`[{ src, distance, ppm }]`); `ground` (`{ src, from, ppm }`); `things` (`{ src, rows }`); `haze` (`#d9dde6`), `haze_far` (4000 m); `streak` (0.6); `slices` (2); `wire` (`#2f2a26`); `phase` (0 on the left, 0.5 on the right); `fps` (30); `sun` (`[forward, left]`; none: no shadows), `shade` (`#6664ac`), `shade_k` (0.6) <!-- DRIVE-16F --> |
 | `portal` | The door in time: a ripple in the paint. See "The door in time", below | `at` (its middle, wide open); `r` (half its height, wide open); `wide` (1: a round hole; the chamber's doorway 0.48); `keep` (the bare wall it is in, `[x0, x1]`); `rise`; `under`; `light`; `open` (0); `strength` (0.45); `bend` (0.6); `rate` (1.5); `size` (1.11); `pale` |
 
 Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
@@ -470,7 +473,9 @@ times over: a frame's main-thread work while the lead walks across it goes from 
 picture for each window, cut to the window's box, drawn again only when it has gone by a whole pixel (a parked one costs
 nothing): the proof's two windows, 79 by 45 pixels each, going by at 40 pixels a second, are some 140,000 pixels a
 second, at 0.04 ms a picture; slowed four times over, a frame of the proof scene goes from 1.6 to 3.1 ms while the lead
-stands, and from 3.3 to about 4 ms while he walks.
+stands, and from 3.3 to about 4 ms while he walks. A drive works every pixel of its panes out afresh, thirty times a second
+while it moves: the limousine's four panes are about 7 ms a moment (<!-- DRIVE-16M --> with the painter's pictures), one side's on a frame and the other's on the next (its
+own section, below <!-- DRIVE-16F: it is below again, moved after these paragraphs -->). <!-- DRIVE-16E -->
 
 **Never clickable, never outlined.** They are on the cast layer, which takes no clicks: a click on smoke is a click on
 whatever is under it, the floor or a clickable area. None of them is a clickable area, and their ids on the stage begin
@@ -486,7 +491,172 @@ page address (or `game.effects.enabled = false`) takes them all away. The engine
 `index.html?scene=engine-proof&lead=dad&flags=proof.fx`; and a strip, behind the two windows of a cut-out laid over the
 sand, with `flags=proof.strip` (`g.effects.get("desert").set({ speed: 0 })` parks it). A boat riding the water by the bank
 is `flags=proof.bob` (the papyrus in the corner is cleared away while it is there), and a flock herded into a pen
-`flags=proof.herd`. <!-- ROME-13E -->
+`flags=proof.herd`. <!-- ROME-13E --> The world going by a car's side windows is `flags=proof.drive`
+(`g.effects.get("drive-l").set({ speed: 0 })` parks one side). <!-- DRIVE-16E -->
+
+<!-- DRIVE-16E --> <!-- DRIVE-16F: this section moved here, after the paragraphs about every moving thing ("On the game clock" to "Trying marks out"), which had come after it -->
+### The world going by a car's side windows
+
+The author, 15 October, of the limousine's windows: "the outside needs to go past not look like mirrors". A strip
+(above) is one flat painting pulled past the glass: drawn behind both sides' windows at one speed, the same picture on
+both sides, it moved apart from the middle like a mirror, and nothing had depth. Seen from a seat in the back of a car
+driving into the picture, the world outside the side windows comes toward us: everything comes out of the far end of the
+windows small and slow, near the vanishing point, and grows and speeds up as it comes nearer, sweeping out past the near
+edge of the near pane; the mountains hardly move, the desert in the middle distance drifts, the ground and the posts
+beside the road rush by; lines along the road (a fence, the road's edge, wires) run to the vanishing point; and the two
+sides are different places. That is one thing, the view through a pinhole camera that is moving forward, and `drive`
+draws it that way: a small renderer, run from the scene's own camera, of a world the painter paints.
+
+**The camera** is the scene's, level: `vanish` is the point the line of travel runs to (its row is the horizon), `focal`
+its focal length in pixels, `eye` how high the eye is above the road in metres (the limousine's: `[424, 220]`, 345 and
+1.83, its floor taken as 35 cm above the road). A point X metres out to the side of the line of travel, z metres ahead and
+Y metres up is on the stage at `x = vanish x - focal * X / z` (on the left; `+` on the right) and `y = vanish y + focal *
+(eye - Y) / z`, and as the car goes s metres forward every z is s smaller. Each pane (as a strip's windows: a picture of
+its own, cut to its shape with hard edges, a pixel in it when its middle is) is drawn far to near:
+
+- **the sky**, a picture the stage's size, as it is (still), wherever the pane shows sky;
+- **the ground** beside the road, seen from straight above: each pixel below the horizon shows the patch of ground it
+  sees (`z = focal * eye / (y - horizon)`, `X = |x - vanish x| * z / focal`), read from the ground's picture at
+  `(z + s) * ppm` along the road (looping end to end) and `(X - from) * ppm` across it; beyond its last row, the colour of
+  its last rows; fading into the haze with distance (`haze`, half covered at `haze_far` metres);
+- **the bands**, panoramas seen from the side, far to near, each a wall `distance` metres out: the stage's column at `u =
+  |x - vanish x|` looks at it `z = focal * distance / u` ahead and shows its column `(z + s) * ppm` (looping), standing on
+  its foot (`y = horizon + eye * u / distance`) at `u / (distance * ppm)` of its own size. A band hides the ground beyond
+  it; the ground nearer than it lies below its foot, and none of it is drawn over;
+- **the things**, upright beside the road (posts, poles, bushes, a sign), far to near, each at its place and its size
+  there, from a sheet of pictures painted from the side; and wires from each to the next of its row, one pixel, dark
+  (`wire`), fainter far off, sagging in the middle. A thing nearer than 1.5 m ahead, or smaller than a pixel, is not drawn.
+  Given a `sun`, every thing's shadow is laid on the ground first, and the things stand on their shadows ("The things'
+  shadows", below). <!-- DRIVE-16F -->
+
+**No shimmer.** A picture drawn smaller than its own size is never one pixel picked from many. The ground's pictures and
+the bands' are summed once, as they arrive (sums of their pixels along the road, from which the average of any stretch is
+a few steps), and each pixel of a pane is the average of the very patch of the picture it sees: for a band, the stretch its
+column looks at and the rows its pixel covers; for the ground, the slanting strip between the lines of sight at the pixel's
+edges (the farther along the road, the farther across it), taken in up to `slices` slices along the road, each averaged
+over its stretch and then across over the stretch its pixel sees there. Each is a copy of the picture made smaller for that
+pixel alone, averaged. A thing drawn smaller than its own size is drawn from a copy of itself halved, and halved again (each
+pixel the average of four, made once). Drawn larger, a picture's pixels stay hard, as the game's are (a pixel that straddles
+two of them takes a share of each). **Speed reads as speed**: a row of ground that goes by faster than it is long (its
+picture's travel, times `streak`, more than its own patch) is averaged along the road over that much, so the near ground
+streaks along its motion; a slower row is drawn as it would be parked; for less motion, nothing streaks.
+
+**Its time** is the strip's: where it is (s, metres gone) is worked out from its time alone and the speeds since each
+`set()`, so a scene opened twice shows the same picture at the same moment. `speed` is metres a second, read and set by a
+script (`g.effects.get("desert-l").set({ speed: 0 })`: it goes on from where it is; tweened, the car slows to a stop, as the
+limousine's ending does), and a parked drive draws nothing new. For less motion its time runs at half speed, and nothing
+streaks. Each pane's picture is drawn again thirty times a second while it moves (`fps`), the right side's half way between
+the left side's (`phase`), so that a frame of the game draws one side's panes and the next frame the other's.
+
+<!-- DRIVE-16M: the limousine's right side as merged (js/content/scenes/nevada-limo.js; the left side is its own, beside it) -->
+```js
+{ id: "desert-r", type: "drive", side: "R",              // "L" or "R": the side of the line of travel its world is on
+  windows: [ ...the side's panes, as polys... ],          // where it is seen, as a strip's windows (layout.json `windows`)
+  vanish: [424, 220], focal: 345, eye: 1.83,              // the camera (the scene's)
+  speed: 16,                                              // metres a second (a calm 36 mph: a post can be seen going by)
+  sky: "drive-sky.png",                                   // the sky, drawn still: the stage's size
+  bands: [                                                // far to near, each looping along the road
+    { src: "drive-far-r.png", distance: 3000, ppm: 0.14 },        // `distance` metres out; `ppm` its pixels a metre
+    { src: "drive-mid-r.png", distance: 850, ppm: 0.5 } ],
+  ground: { src: "drive-ground-r.png", from: 6, ppm: 16 },        // columns along the road (looping), rows outward from `from` m
+  things: { src: "drive-things.png", rows: [                      // its sheet's JSON beside it (drive-things.json), or `sheet`
+    { sprite: ["post-r", "post-r", "tpost-r"], every: 4.6, at: 9.5, wires: [1.25, 0.95, 0.65] },  // the fence: a list to pick from
+    { sprite: "pole-r", every: 55, at: 70, wires: [8.6, 8.1] },   // one every 55 m, 70 m out, wired pole to pole at those heights
+    { sprite: "sign-range-r", every: [600, 1300], at: [7, 8] },   // [min, max]: placed from the seed
+    { sprite: ["sage-1-r", "sage-2-r", "sage-3-r", "sage-2-r", "rabbitbrush-r", "creosote-r"], every: [3, 16], at: [10.4, 24] },
+    { sprite: ["sage-1-r", "sage-2-r", "sage-3-r", "creosote-r"], every: [3, 14], at: [24, 70] },
+    { sprite: ["joshua-r", "joshua-2-r"], every: [80, 240], at: [17, 90] },
+    { sprite: "rock-r", every: [60, 180], at: [11, 45] },
+    { sprite: "sign-services-r", every: 9000, at: 7.4, offset: 300 } ] },   // one, about 18 s in: `offset` puts it there
+  haze: "#b6bee0", haze_far: 3000, wire: "#2c2a32",       // the air's colour and the wires' (through the scene's key); half hazed at 3 km
+  sun: [0.36, 1.95], shade: "#6664ac", shade_k: 0.62,     // DRIVE-16F: the things' shadows: a metre of height throws one 0.36 m ahead
+                                                          //   and 1.95 m to the car's left; the ground under it multiplied by `shade`
+  seed: 7,
+}
+```
+
+**The pictures** (in the scene's folder unless a name begins `art/`; 8-bit, keyed as the scene's frames): the sky, the
+stage's size (only its rows down to the horizon and a little below are seen); each band wide and short, clear above its
+ridges, its bottom row the ground at its foot, looping end to end, in the haze of its distance (a far one pale and blue);
+the ground, 1024 x 512 at 16 pixels a metre (64 m of road, looping; 32 m outward from `from`), a map seen from straight
+above with nothing standing up in it; and the sheet of things, each painted from the side at 24 pixels a metre in its box,
+its foot on the ground at the middle of its bottom row, with its JSON: `{ "ppm": 24, "sprites": { "<name>": { "box": [x,
+y, w, h], "foot": [fx, fy], "height": <metres> } } }` (`foot` in the box, or on the sheet: whichever lies in the box).
+<!-- DRIVE-16F --> A sheet of things is painted **without shadows**, each box only as wide as the thing itself: the shadows
+are the engine's (below).
+
+**The things' rows.** Each row is placed from the seed, the same every time: a thing in each cell of `every` metres along
+the road (with `[min, max]`, each moved by up to a quarter of the range either way, so that from one to the next is within
+it), `at` metres out (or anywhere in `[min, max]`), its picture `sprite` (or one picked from a list); `offset` is where the
+first stands (from the seed if not given). The road never repeats unless a row says `loop` (metres): to keep upright posts
+on footings painted in the ground, give it the ground's length (64 m) and an `every` that divides it. `wires` are heights
+in metres, from each thing to the next, sagging `sag` metres in the middle (1.5% of the span).
+
+<!-- DRIVE-16F -->
+**The things' shadows** are the engine's. A shadow painted along the bottom rows of a thing's picture stands up with the
+picture: near the car it was a brown bar in the air beside each post, and was left alone in the pane once its post had gone
+(decision 92). So a sheet of things has none, and with `sun: [forward, left]` (metres of shadow for a metre of a thing's
+height, ahead along the line of travel and to the car's left; the car's left is outward on the left side and toward the road
+on the right) the engine lays every thing's shadow on the ground, all of them before any thing, the things then far to
+near over them. A shadow runs from the thing's foot along the sun, as long as the light makes it, and is as wide at each
+point as the thing is at the height that throws it: the solid pixels of each row of its picture counted, so a post's or a
+pole's is a thin band (with the crossarm across it near its end), a bush's a rounded blob narrowing toward its tip, an open
+bush's thinner than its span, a sign's its posts and then its board. Its middle line is worked out on the ground in metres
+and put on the stage with the camera, as the ground is, and its width by the camera's rates of change there. A pane's
+shadows are one shape (where two overlap, the ground is shaded once), laid over the ground multiplied by `shade` (through
+the scene's key) at `shade_k`, its edges a pixel soft as any filled shape's, and cut to the pane with everything else. The
+ground is seen very aslant from a car's seat: a fence post's shadow 10 m away is about half a pixel thick, and as a shade
+spread over two rows of the streaking ground it could not be seen. So no shadow is drawn thinner, across the way it runs,
+than 10 cm would be seen face on at its distance, up to a pixel and a half: near the car (within some 23 m in the
+limousine) a pixel and a half at least, as a wire is never thinner than a pixel; farther off less, as the things themselves
+grow smaller, so that a far telephone pole's long shadow is a faint line. A thing gone out past the edge of a pane takes its shadow
+with it, unless the shadow itself still lies in the pane, on the ground. A drive without `sun` draws no shadows. The
+limousine's two sides have the painter's sun, `[0.36, 1.95]` (low on the car's right and a little behind:
+`tools/paint/nevada_limo_drive_kit.py`), so the shadows run out across the desert on the left and in toward the road on the
+right; `shade` is the painter's colour for a morning shadow on the sand (`#6664ac`, the roadside's and the ground pictures'),
+at the roadside's strength for its standing things' shadows (0.62).
+
+**What a side window sees.** The panes look out between about 20 and 50 degrees from straight ahead. In the limousine the
+nearest ground any pane shows is about 7.4 m out on the left and 6.8 m on the right (the bottom edge of a pane is a line
+along the road), and the top of the glass, 18 cm above the eye, sees no higher than `1.83 + 0.107 * X` metres at X out (on
+the right; `0.099` on the left): a pole 14 m out shows only its lowest 3.3 m going by, and wires 8.6 m up are in view only
+from about 63 m out.
+
+<!-- DRIVE-16M -->
+**In the limousine** each side is its own country, painted for it (PAINT-16, `tools/paint/nevada_limo_drive.py`; every
+upright thing twice, `-l` and `-r`, lit for its side: the sun low on the car's right and a little behind, as the roadside's
+light). On the left, across the oncoming lane (its white edge line 8 m out rushing by along the bottom of the panes, then
+its gravel shoulder), the open desert runs to the long ranges across the valley (6000 m out, at 0.07 pixels a metre), with
+a ranch in the middle distance (850 m out: it comes into the far pane about half a minute in and leaves the near pane at
+about two and a half minutes); beside the road, white reflector posts every 38 to 70 m, a mile marker every mile, the backs
+of the oncoming lane's signs every 600 to 1300 m, brush, rocks and now and then a Joshua tree. On the right, straight onto
+the desert: a wire fence 9.5 m out, its posts rushing past below the eye (about three a second), the telephone line 70 m
+out with its poles and sagging wires along the top of the panes (nearer, the glass would show only their feet), low hills
+3000 m out (painted at 0.14 pixels a metre, so that they are never drawn larger than painted) and, in the middle distance,
+buttes and a far line of power poles; an OPEN RANGE sign every 600 to 1300 m, one NEXT SERVICES sign about 18 seconds in,
+brush, rocks and Joshua trees. So something goes by in each near pane every few seconds (on the left a reflector post every
+three or four, the brush between; on the right the fence all the time), and a sign about every half minute on one side or
+the other. `start` and `streak` are the engine's (0 and 0.6). The pictures come to some 770 KB, the limousine's folder to
+1.4 MB (section 14).
+
+**Cost.** Each picture's sums are made once a session, while the scene is being entered (the limousine's, some 21 MB
+for its two grounds, four bands and sky, in about 90 to 140 ms for the left side and 30 to 90 for the right, which shares
+the sky and the sheet). On the test machine a moment's four panes in the limousine (some 51,000 pixels) take about 6.5 to
+8 ms, at most about 4 ms in any one frame; with the processor slowed four times over, 11 to 15 ms for a side's panes.
+(Measured with the painter's pictures, at the merge; the engine's stand-ins had taken about 60 and 30 ms, and 6 ms.)
+<!-- DRIVE-16M --> `cost` on a drive keeps what its pictures took. <!-- DRIVE-16F --> The things' shadows add about 0.3 ms to
+a moment's four panes (their outlines and the fill); the engine test's whole quick run measured the limousine at 6 to 7 ms
+a moment with them, and 11 to 16 ms for a side's panes slowed four times over (that last varies from run to run).
+
+**The proof**: `index.html?scene=engine-proof&lead=dad&flags=proof.drive`. A car's side of the engine's own seen from the
+back seat (`art/proof/drive/car.png`, a cut-out behind everybody: a grey band with a window cut clear on each side of the
+vanishing point, a small cross on the vanishing point between them; the palms and the papyrus are cleared away while it is
+there) and, through its windows, two drives from the proof's camera (`[400, 226]`, 320, 1.6 m) and its own plain pictures
+(tools/paint/proof_drive.py): grounds of two-metre squares with stripes along the road 6, 10, 16 and 24 m out (they run to
+the cross) and bands across it every 16 m, ranges of plain triangles 3000 and 400 m out (the far ones hardly move, the near
+ones drift), red posts with wires and brown poles on the left, a magenta marker and a yellow board on the right, each on
+its shadow (the limousine's sun: out across the ground on the left, in toward the road on the right). <!-- DRIVE-16F --> The engine
+test's part `drive` reads the geometry back from the pixels.
 
 ### The door in time
 
@@ -2313,6 +2483,7 @@ loads the game, by the plain addresses, with the old risk.
 | `g.effects.get("pigeons").scare([x, y])`, `.scare()` | The birds of a flock near that place go up (all of them, with no place), as if somebody had rushed at them, and keep clear of it for a moment: a "Chase". |
 | `g.effects.add({ type: "flame", at: [x, y], size: 10 })` | Puts another moving thing on the stage, until the scene changes (a fire the story lights). |
 | `g.effects.get("desert").set({ speed: 0 })` | A strip goes on at another speed from where it is (0: parked). Tweened, the car slows to a stop: `await g.tween(3000, (k) => g.effects.get("desert").set({ speed: 160 * (1 - k) }))`. |
+| `g.effects.get("desert-l").set({ speed: 0 })`, `.speed` | A drive likewise, in metres a second (section 2, "The world going by a car's side windows"). <!-- DRIVE-16E --> |
 | `await g.settle()`, `await g.settle("scribe")` | Brings everyone of the scene's people who is away on a walk of their own home (or one of them), briskly, sitting down if they sit (section 4, "Their own lives"). Every script already gets this before it starts. |
 | `await g.walkTo(x, y)`, `await g.walkTo(x, y, "scribe")` | Walks the lead, or someone else, to a place, round whatever is in the way |
 | `await g.moveTo(x, y)`, `await g.moveTo(x, y, "agent")` | Walks in a straight line to a place the player could not click on (into a closet) |
@@ -2378,9 +2549,10 @@ left for right; since round thirteen a flock herded into a pen and posed, a cut-
 the water, a man at an upper window, the depth order where bases slant (and the same stage
 put on in the reverse order painting the same pixels), and a scene seen through the lead's
 own eyes, with its two new sounds; since round fifteen the map screen, the Timer, travel on the map and
-switching through it (the part `map`: section 8, "The map, and the Timer"); <!-- MAP-15 --> the interface at two sizes and in three other window
-shapes, the storyboard page and its maps, the intro and the stamping tools: some 630 checks
-in its quick run (629 at the end of round fifteen, 116 of them the part `map`'s), in about eleven minutes on the test
+switching through it (the part `map`: section 8, "The map, and the Timer"); <!-- MAP-15 --> since round sixteen the world
+going by a car's side windows (the part `drive`: section 2); <!-- DRIVE-16E --> the interface at two sizes and in three other window
+shapes, the storyboard page and its maps, the intro and the stamping tools: some 650 checks
+in its quick run (655 at the end of round sixteen, 25 of them the part `drive`'s <!-- DRIVE-16E --> <!-- DRIVE-16F: four of them the things' shadows: 651 and 21 at the merge -->; 629 at the end of round fifteen, 116 of them the part `map`'s), in about twelve minutes on the test
 machine. <!-- MAP-15D: it was some 510, in eight or nine minutes, before the map --> It takes screenshots, which
 have to be looked at: a picture that is wrong throws no error. Three more scripts
 measure what a frame costs (the table in section 1), take the pictures that the choice
@@ -2409,7 +2581,8 @@ at an upper window: section 3), a depth order that holds where bases slant (only
 pictures overlap are ordered against each other, and the order is the old one wherever the old
 one was right: section 3, "Nearer things cover farther things"), a scene seen through the lead's
 own eyes (`unseen` and `wordsAt`, section 8), the storyboard's map of each act's ways (section 8,
-"The map"), and the game's emblem on the begin screen and in the browser tab (the Timer, section 9).
+"The map"), and the game's emblem on the begin screen and in the browser tab (the Timer, section 9). Since round
+sixteen: the world going by a car's side windows, drawn from the scene's camera (`drive`, section 2). <!-- DRIVE-16E -->
 Since round fifteen: the map screen, with travel to the places already visited, and switching between
 leads through the map, with the Timer turning across the centuries first (section 8, "The map, and the
 Timer"). <!-- MAP-15 --> With it, the save's list of the scenes the player has entered (`visited`,
@@ -2423,7 +2596,9 @@ of the Capitol and across the Tiber, the geese and Mariam's hens, frame by frame
 are. Thirty-four things to carry. The game's emblem, in nine pictures of the interface's own
 (twelve since round fifteen, with the Timer's three pieces at 1024). <!-- MAP-15D --> Since round
 fifteen, the four maps of the story, each its own kind of map (section 9, "The maps"): thirty-five
-pictures, with their measurements.
+pictures, with their measurements. Since round sixteen, the world outside the limousine's windows for the `drive`:
+a sky, each side's far ranges, middle distance and ground, and a sheet of seventeen things beside the road, each in two lights (section 2,
+"The world going by a car's side windows"). <!-- DRIVE-16M -->
 
 **Drawn:** thirty-eight people, and twenty-four more states of them (section 4).
 
@@ -2534,7 +2709,18 @@ the angle of the stop it ends on; the switch dropping into the other's scene wit
 back with nothing changed; and a painted map drawn from stand-in pictures. Then, once the four
 paintings were in (in a throw-away copy, DOCS-15), each was opened in the game on the saved games of its
 act: every name inside its box as the browser draws it, the Timer laying its 1024 pieces, and nothing
-said in the console.
+said in the console. <!-- DRIVE-16E --> Since round sixteen: the world going by a car's side windows read off
+the screen in the proof's car: a marker at a known distance out and ahead found where the projection puts it and at its
+size there, to half a pixel, near and far; stripes along the road on lines through the vanishing point; a post followed out
+of the far end of a window and out at its near edge, always further out, larger and quicker; each band's ridges a second on
+where the projection carries them, as its distance says; a band hiding the ground beyond it and not a pixel nearer; no seam
+in a ground or a band of one colour with their seams in view; parked, half speed and streaks; the far ground and the bands
+from one picture to the next with no shimmer; and the limousine with the painter's pictures (<!-- DRIVE-16M --> the engine's
+stand-ins until the merge), its two sides different and going outward, slowed to a stop by its ending's way. <!-- DRIVE-16F -->
+Since the round's fix, the things' shadows: a marker's shadow read back from the pixels where the sun puts it on each side
+of the road, every column's middle on its line to half a pixel, as thick as the marker is wide, the ground multiplied by the
+shade; far off no thinner than the least the engine draws; still on the ground in the pane when its marker has gone past
+the edge; none at all without a sun; and the limousine's things on the painter's sun, its sheet painting no shadow.
 
 **How the acts were tested.** Each act has two checks of its own. One is a script that
 plays the act in the real game by real mouse clicks on the real clickable areas (walk,
@@ -2990,6 +3176,37 @@ first is 74; then the four maps themselves, 82 to 85.
     twice the size; drawing them soft is a small change to the drawing. The scripts that make the
     emblem are kept beside the game (`scratchpad/work-map-dial/emblem/`), not in it; they could go
     into the repository with the painter's.
+87. **The sun outside the limousine** is the roadside's morning, a few miles on: low on the car's right and a little
+    behind it. So the left windows are bright and warm, their shadows lying away from the road, and the right ones look
+    toward the light (shaded faces with bright rims, a paler sky low down), their shadows toward the road. If the limousine
+    drives east into the morning, as Nevada's map has it (toward NOTHING), the sun would be ahead: every picture relit, and
+    the shadows along the road, which reads less well than across it (`tools/paint/nevada_limo_drive_kit.py`). <!-- DRIVE-16M -->
+88. **The telephone line stands far out, with its wires.** The side glass sees no higher than about 1.8 m plus a tenth of
+    the distance out, so a line beside the road (14 m) would show only its poles' feet flicking past; with its crossarms and
+    sagging wires in view it must stand far out, where the poles are small. It is 70 m out on the right (`every: 55, at:
+    70`); the other way is `at: 14`. The camera cannot give both. <!-- DRIVE-16M -->
+89. **The ground repeats every 64 m** (four seconds at 36 mph), so it is kept free of anything to remember, and the
+    landmarks are the things the engine places, which never repeat. A wash or a cattle guard crossing the road would need
+    a longer ground picture (2048 pixels wide is 128 m) or a picture of its own. <!-- DRIVE-16M -->
+90. **The far hills on the right are at 0.14 pixels a metre**, where the brief said 0.07: "nearer, lower hills" at 0.07
+    would be drawn up to twice their painted size, with blocky pixels. They stand 3000 m out, the left side's ranges 6000;
+    the middle distance 850 m (each band is at its own size at the near pane's outer edge). <!-- DRIVE-16M -->
+91. **The limousine's folder is now 1.4 MB** (the nine new files 770 KB, the two grounds 600 KB of it; it was 0.65 MB,
+    and the next largest scene is the roadside's, 0.55 MB). The old strip (`desert-strip.png`, 210 KB) is no longer shown
+    but stays, since the painting kit's limousine scripts read it; taking it out of the game saves that. <!-- DRIVE-16M -->
+92. **The things' painted shadows lie as bars near the car.** Each upright thing has its long morning shadow painted along
+    its bottom rows, three rows (12 cm) thick in the side view. Far off that is right, but near the car (the fence posts,
+    the signs) a shadow on the ground would be foreshortened to a pixel or so, and it shows as a brown bar 3 to 6 pixels
+    thick; the shadow of a post just past a pane's near edge lies in the pane by itself. Shadows one row thick on the sheet,
+    or the engine squashing a thing's shadow rows by how far below the eye they lie, would mend it. <!-- DRIVE-16M -->
+    Mended in the round's fix (FIX-16): the sheet is painted without shadows, and the engine lays each thing's shadow on
+    the ground in perspective (the drive's `sun`, section 2, "The things' shadows"); no bar stands in the air, and every
+    post and bush stands on its shadow. <!-- DRIVE-16F -->
+93. **What stands beside the road is the scene's to choose** (the rows in `nevada-limo.js`): an OPEN RANGE sign every 600
+    to 1300 m on the right and the backs of the oncoming lane's signs as often on the left (a sign about every half
+    minute, one side or the other); one NEXT SERVICES 112 MI sign about 18 s in (and nine kilometres on); a mile marker
+    every mile (its plate says MILE 41 every time); and a Joshua tree on each side every 80 to 240 m, though the roadside
+    a few miles back has none. Fewer, more, or none is a number in a row. <!-- DRIVE-16M -->
 
 ---
 

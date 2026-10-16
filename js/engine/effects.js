@@ -17,6 +17,9 @@
 //             middle, as if a stone had been dropped in it; nothing is drawn over it (round ten: see `Portal` below)
 //   strip     a painted strip of country going by behind a window (the desert past a car's windows): NEVADA-12E, `Strip` below
 //   bob       a painted cut-out (a boat, a barge) riding the water: rising and falling on the swell. ROME-13E, `Bob` below
+//   drive     the world going by a car's side windows, as a pinhole camera moving forward sees it: the ground in perspective,
+//             panoramas at their distances, posts and poles growing and sweeping past. DRIVE-16E, `Drive` below
+//             (DRIVE-16F: and each thing's shadow laid on the ground in perspective, from the sun the scene gives)
 //
 // ROME-13E: a flock can also be sent somewhere by a script (`herd`: the geese into their pen) and made to strike a pose
 // all at once (`pose`: the geese hissing): see Flock.herd.
@@ -39,7 +42,7 @@
 // A script reaches them through g.effects: g.effects.get("altar-smoke").show(false), g.effects.add({ type: "flame", ... }).
 
 import * as castKit from "./cast.js";
-import { picture as fetchPicture, got } from "./assets.js";
+import { picture as fetchPicture, got, hold } from "./assets.js";      // (DRIVE-16E: hold, for a drive's sheet of things)
 import { scaleAt, DEPTH } from "./walk.js";
 import { W, H } from "./grid.js";
 import { keyHex, keyId } from "../art/look.js";
@@ -1017,11 +1020,15 @@ function fxListOf(scene) {
   if (typeof fx !== "function") return Array.isArray(fx) ? fx : [];
   try { const list = fx(NOBODY); return Array.isArray(list) ? list : []; } catch { return []; }
 }
-/** Every painted picture a scene's moving things can show (for fetching them ahead: scene.js, picturesIn). */
+/** Every painted picture a scene's moving things can show (for fetching them ahead: scene.js, picturesIn); and a drive's
+    sheet of things (DRIVE-16E: its JSON, gathered and held as a picture is, though it is none). */
 export function fxPictures(scene) {
   const list = fxListOf(scene);           // (ROME-13E: a list, or a function of the game)
   const strip = (spec) => (spec && spec.type === "strip" && typeof spec.src === "string" ? [spec.src.startsWith("art/") ? spec.src : folderOf(scene) + spec.src] : []);      // (NEVADA-12E: a strip's picture)
-  return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return [...(f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []), ...strip(spec)]; }))];
+  const at = (p) => (typeof p !== "string" ? [] : [p.startsWith("art/") ? p : folderOf(scene) + p]);
+  const sheetOf = (t) => (t && typeof t.src === "string" ? (typeof t.sheet === "string" ? t.sheet : t.src.replace(/\.png$/i, "") + ".json") : null);
+  const drive = (spec) => (spec && spec.type === "drive" ? [spec.sky, ...(Array.isArray(spec.bands) ? spec.bands : []).map((b) => b && b.src), spec.ground && spec.ground.src, spec.things && spec.things.src, sheetOf(spec.things)].flatMap(at) : []);      // DRIVE-16E: a drive's pictures, and its sheet
+  return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return [...(f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []), ...strip(spec), ...drive(spec)]; }))];
 }
 
 /** Birds in the air: across the sky now and then along `lanes`, or wheeling round a `circle`. */
@@ -1700,6 +1707,716 @@ class Strip extends Effect {
   }
 }
 
+// ---------------------------------------------------------------- DRIVE-16E: the world going by a car's side windows
+/**
+ * drive: the world outside a car's side windows, as a pinhole camera that is moving forward sees it (round sixteen: the
+ * limousine's windows, where one flat strip going by at one speed on both sides looked like mirrors). The camera is the
+ * scene's own, level: `vanish` is where the line of travel runs to (its row is the horizon), `focal` how far the picture
+ * is from the eye in pixels, `eye` how high the eye is above the road in metres. A point X metres out to the side of the
+ * line of travel, z metres ahead and Y metres up is on the stage at
+ *     x = vanish x - focal * X / z  (side "L"; + on side "R")          y = vanish y + focal * (eye - Y) / z
+ * and as the car goes forward s metres every z is s smaller: everything comes out of the far end of the windows small and
+ * slow, and grows and speeds up as it comes nearer; how fast depends on how far out it is. Each pane (as the strip's
+ * windows: a picture of its own, cut to its shape with hard edges, a pixel in it when its middle is) is drawn far to near:
+ *   sky      a picture the stage's size, drawn as it is (still) wherever the pane shows sky
+ *   ground   the ground beside the road seen from straight above, columns along the road (looping end to end), rows
+ *            outward from `from` metres, `ppm` pixels a metre both ways: each pixel below the horizon shows the patch of
+ *            ground it sees (z = focal * eye / (y - horizon), X = |x - vanish x| * z / focal: the picture read at
+ *            ((z + s) * ppm) along and (X - from) * ppm across); beyond its last row the colour of its last rows; fading
+ *            into the haze with distance
+ *   bands    panoramas seen from the side, far to near, each standing `distance` metres out: the stage's column at
+ *            u = |x - vanish x| looks at it z = focal * distance / u ahead and shows its column ((z + s) * ppm), looping,
+ *            from its foot (y = horizon + focal * eye / z) up, at focal / z / ppm of its own size. A band hides the ground
+ *            beyond it; the ground nearer than it lies below its foot
+ *   things   upright things beside the road (posts, poles, bushes, a sign), from a sheet of pictures painted from the side,
+ *            far to near, each at its place and its size there, with wires from each to the next (one pixel, dark, sagging)
+ *            DRIVE-16F: given a `sun`, first every thing's shadow, lying on the ground: from its foot along the sun, as long
+ *            as the light makes it, as wide as the thing is at each height of it (its picture's solid pixels counted, row
+ *            by row: a post's a thin band, a bush's a rounded blob narrowing to its tip), its middle line worked out on the
+ *            ground in metres and put on the stage with the camera, as the ground is, its width by the camera's rates of
+ *            change there (and never thinner than `shade` says, below); all of them one shape, laid over the ground in
+ *            `shade`, multiplied (overlapping shadows are no darker), its edges a pixel soft as a filled shape's. Then the
+ *            things over them, far to near. A sheet of things is painted without shadows: they are the engine's
+ * No shimmer: a picture drawn smaller than its own size shows, in each pixel, the average of the patch of it that pixel
+ * sees (the picture's pixels are summed once, as it arrives, and any patch's average is then a few steps), never one pixel
+ * picked from many; drawn larger, its pixels stay hard (a pixel that straddles two of them takes some of each). The rows
+ * of ground going by faster than their own pixels in a picture are averaged along their motion over `streak` of a
+ * picture's travel, so speed reads as speed; for less motion, not. A thing drawn smaller than its own size comes from a
+ * copy of itself halved, and halved again (each pixel the average of four, made once); larger, with hard pixels.
+ *   side       "L" or "R": the side of the line of travel its world is on (needed)
+ *   windows    the panes it is seen through (polys, rects or circles), each a picture of its own; or `clip` (needed)
+ *   vanish     [x, y]: the vanishing point of the line of travel (needed). Each pane lies wholly on its side of it
+ *   focal      the camera's focal length in pixels (needed); eye: metres above the road (1.6)
+ *   speed      metres a second (0: parked). set({ speed }) goes on from where it is; tweened, the car slows
+ *   start      metres gone when its time begins (0)
+ *   sky        the sky (a picture the stage's size; may be opaque); none: clear where it would show
+ *   bands      [{ src, distance, ppm }]: `distance` metres out, `ppm` its pixels a metre at its own size; each loops end to
+ *              end, its bottom row the ground at its foot, clear above
+ *   ground     { src, from, ppm } (above)
+ *   things     { src, rows }: `src` a sheet of pictures painted from the side, and beside it (its name with .json, or
+ *              `sheet`) { ppm, sprites: { name: { box: [x, y, w, h], foot: [fx, fy], height } } }, `foot` the point on the
+ *              ground, in the box (or on the sheet: whichever lies in the box). Each row: `sprite` a name, or a list to
+ *              pick from; `every` metres from one to the next, or [min, max]; `at` metres out, or [min, max]; `wires`
+ *              heights (metres) of wires from each to the next, sagging `sag` metres in the middle (1.5% of the span);
+ *              `offset` where the first stands along the road (metres; from the seed); `loop` metres after which the row
+ *              repeats (none: it never does; give the ground's length to keep posts on footings painted in the ground).
+ *              Placed from the seed: the same every time. A thing nearer than 1.5 m ahead, or less than a pixel, is not drawn
+ *   haze       the air's colour (#d9dde6), through the scene's key; haze_far: the distance at which it has half covered the
+ *              ground (4000 m). Only the ground is hazed by the engine: the bands are painted in the haze of their distance,
+ *              and the things are near
+ *   streak     the share of a picture's travel the fast ground is averaged over (0.6; 0: none)
+ *   slices     the most slices a pixel's patch of ground is taken in (2; 1 to 6): more, sharper far ground, and slower
+ *   wire       the wires' colour (#2f2a26), through the scene's key
+ *   sun        DRIVE-16F: [forward, left], the things' shadows: metres of shadow for a metre of a thing's height, ahead
+ *              along the line of travel and to the car's left (the limousine's morning: [0.36, 1.95]; on the left side the
+ *              car's left is outward, on the right toward the road). None: no shadows
+ *   shade      DRIVE-16F: the colour the shadows multiply the ground by (#6664ac: the painter's for a morning shadow on the
+ *              sand, the roadside's and the ground pictures' own), through the scene's key; shade_k how much of it (0.6: 0,
+ *              none; 1, all of it). A shadow is never drawn thinner than 10 cm would be seen face on at its distance, up to a
+ *              pixel and a half (a fence post's is about half a pixel, seen from 1.8 m up: it would not be seen)
+ *   fps        pictures a second (30). Less motion: its time runs at half speed, no streaks
+ *   phase      where its pictures fall between the steps of its time (0 on the left, 0.5 on the right: see below)
+ *   base, plane, when, opacity, seed: as every kind (`scale` is not used: the camera says every size). Its depth, given
+ *   neither base nor plane: "back", behind everybody.
+ * Its time is the strip's: where it is (s, metres gone) is worked out from its time alone and the speeds since each set(),
+ * so a scene opened twice shows the same thing at the same moment; parked, it draws nothing new. Each pane's picture is
+ * drawn again only when s has changed (or less motion has come or gone). `cost` keeps what its pictures took.
+ */
+const driveKept = new WeakMap();              // the tables made from each picture (by the picture held for the session): made once
+const DRIVE_SLICES = 2;                       // the most slices a pixel's patch of ground is taken in, unless the spec says (planGround)
+function driveTables(img, kind, make) {
+  let m = driveKept.get(img);
+  if (!m) driveKept.set(img, (m = {}));
+  if (!m[kind]) {
+    const w = img.naturalWidth, h = img.naturalHeight, ctx = canvasOf(w, h).getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0);
+    m[kind] = make({ w, h, d: ctx.getImageData(0, 0, w, h).data });
+  }
+  return m[kind];
+}
+/** The ground's sums, from which any patch's average is a few steps: P[(a * h + b) * 3 + c] is the sum of colour c of the
+    picture's row b (outward) over its columns (along the road) before a, for a = 0 to w; F the same for its last rows' colour. */
+function groundSums({ w, h, d }) {
+  const P = new Float32Array((w + 1) * h * 3), F = new Float32Array((w + 1) * 3), K = Math.min(h, 8);
+  for (let a = 0; a < w; a++) {
+    const o = a * h * 3, n = o + h * 3;
+    let fr = 0, fg = 0, fb = 0;
+    for (let b = 0; b < h; b++) {
+      const i = (b * w + a) * 4, k = b * 3;
+      P[n + k] = P[o + k] + d[i]; P[n + k + 1] = P[o + k + 1] + d[i + 1]; P[n + k + 2] = P[o + k + 2] + d[i + 2];
+      if (b >= h - K) { fr += d[i]; fg += d[i + 1]; fb += d[i + 2]; }
+    }
+    F[a * 3 + 3] = F[a * 3] + fr / K; F[a * 3 + 4] = F[a * 3 + 1] + fg / K; F[a * 3 + 5] = F[a * 3 + 2] + fb / K;
+  }
+  return { w, h, P, F };
+}
+/** A band's sums, the same way, its colours weighted by how solid they are: P[(a * h + t) * 4 + c], t its row from the top;
+    and the row of each column's ridge (its first row with any paint), so that the clear sky above it is passed over. */
+function bandSums({ w, h, d }) {
+  const P = new Float32Array((w + 1) * h * 4), top = new Int16Array(w).fill(h);
+  for (let a = 0; a < w; a++) {
+    const o = a * h * 4, n = o + h * 4;
+    for (let t = 0; t < h; t++) {
+      const i = (t * w + a) * 4, k = t * 4, q = d[i + 3] / 255;
+      P[n + k] = P[o + k] + d[i] * q; P[n + k + 1] = P[o + k + 1] + d[i + 1] * q; P[n + k + 2] = P[o + k + 2] + d[i + 2] * q; P[n + k + 3] = P[o + k + 3] + d[i + 3];
+      if (d[i + 3] && t < top[a]) top[a] = t;
+    }
+  }
+  return { w, h, P, top };
+}
+/** The weights that read a sum at a + its loops, for the average over [lo, hi] of a picture `w` wide that loops end to end. */
+function spanOf(lo, hi, w) {
+  const iH = Math.floor(hi), iL = Math.floor(lo), mH = ((iH % w) + w) % w, mL = ((iL % w) + w) % w;
+  return { mH, fH: hi - iH, mL, fL: lo - iL, loops: (iH - mH) / w - (iL - mL) / w, inv: 1 / Math.max(1e-6, hi - lo) };
+}
+/** A thing's picture and copies of it halved, and halved again (each pixel the average of four, weighted by how solid they
+    are), with its foot point on each: [{ canvas, w, h, fx, fy }]. `foot` is in its box, or on the sheet: whichever lies in the box. */
+function spriteLevels({ w: sw, h: sh, d }, box, foot) {
+  const bx = Math.max(0, Math.round(box[0])), by = Math.max(0, Math.round(box[1])), bw = Math.max(1, Math.min(sw - bx, Math.round(box[2]))), bh = Math.max(1, Math.min(sh - by, Math.round(box[3])));
+  let fx = bw / 2, fy = bh;
+  if (isPoint(foot)) {
+    const inBox = (x, y) => x >= -0.5 && x <= bw + 0.5 && y >= -0.5 && y <= bh + 0.5, rel = inBox(foot[0], foot[1]), abs = inBox(foot[0] - bx, foot[1] - by);
+    const off = (x, y) => Math.hypot(x - bw / 2, y - bh);
+    [fx, fy] = rel && abs ? (off(foot[0], foot[1]) <= off(foot[0] - bx, foot[1] - by) ? foot : [foot[0] - bx, foot[1] - by]) : abs ? [foot[0] - bx, foot[1] - by] : foot;
+  }
+  let lw = bw, lh = bh, px = new Uint8ClampedArray(bw * bh * 4);
+  for (let y = 0; y < bh; y++) px.set(d.subarray(((by + y) * sw + bx) * 4, ((by + y) * sw + bx + bw) * 4), y * bw * 4);
+  const levels = [];
+  for (let k = 1; ; k *= 2) {
+    const c = canvasOf(lw, lh);
+    c.getContext("2d").putImageData(new ImageData(px, lw, lh), 0, 0);
+    levels.push({ canvas: c, w: lw, h: lh, fx: fx / k, fy: fy / k });
+    if ((lw <= 2 && lh <= 2) || levels.length >= 9) return levels;
+    const nw = Math.ceil(lw / 2), nh = Math.ceil(lh / 2), np = new Uint8ClampedArray(nw * nh * 4);
+    for (let y = 0; y < nh; y++) for (let x = 0; x < nw; x++) {
+      let r = 0, g = 0, b = 0, a = 0;
+      for (let q = 0; q < 4; q++) {
+        const sx = x * 2 + (q & 1), sy = y * 2 + (q >> 1);
+        if (sx >= lw || sy >= lh) continue;
+        const i = (sy * lw + sx) * 4, al = px[i + 3];
+        r += px[i] * al; g += px[i + 1] * al; b += px[i + 2] * al; a += al;
+      }
+      const o = (y * nw + x) * 4;
+      if (a > 0) { np[o] = r / a; np[o + 1] = g / a; np[o + 2] = b / a; np[o + 3] = a / 4; }
+    }
+    px = np; lw = nw; lh = nh;
+  }
+}
+/** DRIVE-16F: what a thing's shadow is made from: how wide the thing is at each height above its foot (its picture's solid
+    pixels counted row by row: a sign's two posts are two posts' width, an open bush less than its span), from its foot to
+    its top, in pixels of its sheet, as few points as keep that outline to half a pixel (a post's straight sides are two).
+    -> { pts: [[height, width], ...] from the foot (0) up, top (its height), area (the sum of its widths: its side's area) },
+    or null for a picture with nothing solid above its foot. `foot` as for spriteLevels. */
+function shadowShape({ w: sw, h: sh, d }, box, foot) {
+  const bx = Math.max(0, Math.round(box[0])), by = Math.max(0, Math.round(box[1])), bw = Math.max(1, Math.min(sw - bx, Math.round(box[2]))), bh = Math.max(1, Math.min(sh - by, Math.round(box[3])));
+  let fy = bh;
+  if (isPoint(foot)) {
+    const inBox = (x, y) => x >= -0.5 && x <= bw + 0.5 && y >= -0.5 && y <= bh + 0.5, rel = inBox(foot[0], foot[1]), abs = inBox(foot[0] - bx, foot[1] - by);
+    const off = (x, y) => Math.hypot(x - bw / 2, y - bh);
+    fy = rel && abs ? (off(foot[0], foot[1]) <= off(foot[0] - bx, foot[1] - by) ? foot[1] : foot[1] - by) : abs ? foot[1] - by : foot[1];
+  }
+  const rows = [];                                                   // [height of the row's middle above the foot, its solid pixels], from the foot up
+  let top = -1, area = 0;
+  for (let y = Math.min(bh, Math.floor(fy)) - 1; y >= 0; y--) {
+    let n = 0;
+    for (let x = 0, i = ((by + y) * sw + bx) * 4 + 3; x < bw; x++, i += 4) if (d[i] >= 128) n++;
+    rows.push([fy - y - 0.5, n]);
+    if (n) { top = rows.length - 1; area += n; }
+  }
+  if (top < 0) return null;
+  const line = [[0, rows[0][1]], ...rows.slice(0, top + 1), [rows[top][0] + 0.5, rows[top][1]]];
+  const keep = new Uint8Array(line.length); keep[0] = keep[line.length - 1] = 1;
+  for (const stack = [[0, line.length - 1]]; stack.length;) {        // (the outline simplified: Ramer, Douglas and Peucker, to half a pixel)
+    const [a, b] = stack.pop(), [ax, ay] = line[a], dx = line[b][0] - ax, dy = line[b][1] - ay, len = Math.hypot(dx, dy) || 1;
+    let far = -1, most = 0.5;
+    for (let i = a + 1; i < b; i++) { const off = Math.abs((line[i][0] - ax) * dy - (line[i][1] - ay) * dx) / len; if (off > most) { most = off; far = i; } }
+    if (far > 0) { keep[far] = 1; stack.push([a, far], [far, b]); }
+  }
+  return { pts: line.filter((p, i) => keep[i]), top: line[line.length - 1][0], area };
+}
+
+class Drive extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, folder = folderOf(host.scene), path = (p) => (typeof p !== "string" ? null : p.startsWith("art/") ? p : folder + p);
+    this.side = s.side === "L" ? -1 : s.side === "R" ? 1 : 0;
+    if (!this.side) throw new Error('a drive needs `side`: "L" or "R", the side of the line of travel its world is on');
+    if (!isPoint(s.vanish)) throw new Error("a drive needs `vanish`: [x, y], where the line of travel runs to (its row is the horizon)");
+    this.focal = num(s.focal, 0);
+    if (!(this.focal > 0)) throw new Error("a drive needs `focal`: the camera's focal length, in pixels");
+    this.vx = s.vanish[0]; this.hz = s.vanish[1];
+    this.eye = Math.max(0.05, num(s.eye, 1.6));
+    this.plane = "back";                                             // (behind everybody, unless it is given a base or a plane)
+    this.speed = num(s.speed, 0);
+    this.start = num(s.start, 0); this.d0 = this.start; this.t0 = 0;     // metres gone at t0 (ms of its own time): since the last change of speed
+    this.fps = Math.max(1, num(s.fps, 30)); this.calmFps = this.fps;    // (for less motion its time runs at half speed, as the strip's)
+    // Its pictures are due at its steps, shifted by `phase` of a step: the right side's fall half way between the left's (0
+    // and 0.5), so that a frame of the game draws one side's panes and the next frame the other's, never all four at once.
+    this.phase = clamp(num(s.phase, this.side > 0 ? 0.5 : 0), 0, 0.999);
+    this.alpha = clamp(num(s.opacity, 1));
+    this.streak = Math.max(0, num(s.streak, 0.6));
+    this.slices = Math.round(clamp(num(s.slices, DRIVE_SLICES), 1, 6));     // the most slices a pixel's patch of ground is taken in (planGround)
+    this.haze = rgbOf(s.haze, [217, 221, 230]); this.hazeFar = Math.max(1, num(s.haze_far, num(s.hazeFar, 4000)));
+    this.wire = rgbOf(s.wire, [47, 42, 38]);
+    // DRIVE-16F: the things' shadows (none without `sun`). A metre of a thing's height throws its shadow sun[0] m ahead and
+    // sun[1] m to the car's left: outward on the left side, toward the road on the right. On the ground (z ahead, X out):
+    // along (dz, dX) a metre of height, across it the unit (az, aX).
+    this.sun = isPair(s.sun) && (s.sun[0] || s.sun[1]) ? [s.sun[0], s.sun[1]] : null;
+    this.shade = rgbOf(s.shade, [102, 100, 172]); this.shadeK = clamp(num(s.shade_k, num(s.shadeK, 0.6)));
+    if (this.sun) { const dz = this.sun[0], dX = -this.side * this.sun[1], L = Math.hypot(dz, dX); this.sunWay = { dz, dX, L, az: -dX / L, aX: dz / L }; }
+    this.shadeMin = 1.5; this.shadeFace = 0.1;                       // (the least a shadow is drawn on the stage: 10 cm face on, up to 1.5 px: shadowOf)
+    this.skySrc = path(s.sky);
+    this.bands = (Array.isArray(s.bands) ? s.bands : []).filter((b) => b && typeof b.src === "string")
+      .map((b) => ({ src: path(b.src), D: Math.max(1, num(b.distance, 1000)), ppm: Math.max(1e-4, num(b.ppm, 0.1)), tab: null }))
+      .sort((a, b) => b.D - a.D);                                      // (far to near, in whatever order they are given)
+    const g = s.ground;
+    this.ground = g && typeof g.src === "string" ? { src: path(g.src), from: num(g.from, 0), ppm: Math.max(1e-3, num(g.ppm, 16)) } : null;
+    const th = s.things;
+    this.thingsSrc = th && typeof th.src === "string" ? path(th.src) : null;
+    this.sheetPath = this.thingsSrc ? (typeof th.sheet === "string" ? path(th.sheet) : this.thingsSrc.replace(/\.png$/i, "") + ".json") : null;
+    this.rows = this.thingsSrc && Array.isArray(th.rows) ? th.rows.map((r, i) => this.rowOf(r, i)).filter(Boolean) : [];
+    this.sheet = null;                                               // the sheet's JSON once read (false: it would not come)
+    const shapes = polysOf(s.windows).length ? polysOf(s.windows) : polysOf(s.clip);
+    if (!shapes.length) throw new Error("a drive needs `windows`: the panes it is seen through");
+    this.wins = shapes.map((poly, i) => {
+      const win = { poly, step: null, s: null, calm: null, go: false, sprite: this.mote(":" + i) };
+      win.sprite.win = win;
+      this.frame(win);
+      return win;
+    });
+    const us = this.wins.flatMap((w) => [...w.U0, ...w.U1]);
+    this.uMin = Math.min(...us); this.uMax = Math.max(...us);         // the directions the panes see, all of them
+    this.world = null;                                               // the things and wires as seen from one s, for all the panes
+    this.tabs = null;                                                // the pictures' tables, once they are all here
+    this.cost = { pictures: 0, ms: 0, last: 0, most: 0, tables: 0 };  // what its pictures took (ms), and its pictures' tables, for the tests
+    this.ready();
+  }
+  /** A row of things, as the engine places them: from the seed, a thing in each cell of `cell` metres along the road. */
+  rowOf(r, i) {
+    if (!r || typeof r !== "object") return null;
+    const names = (Array.isArray(r.sprite) ? r.sprite : [r.sprite]).filter((v) => typeof v === "string");
+    if (!names.length) return null;
+    const every = isPair(r.every) ? [Math.max(0.1, Math.min(...r.every)), Math.max(0.1, ...r.every)] : Math.max(0.1, num(r.every, 10));
+    const mean = isPair(every) ? (every[0] + every[1]) / 2 : every, loop = num(r.loop, 0);
+    const n = loop > 0 ? Math.max(1, Math.round(loop / mean)) : 0, cell = n ? loop / n : mean;
+    const seed = mix(this.seed, i + 1) >>> 0, at = isPair(r.at) ? [Math.min(...r.at), Math.max(...r.at)] : num(r.at, 10);
+    return { names, n, cell, jit: isPair(every) ? (every[1] - every[0]) / 4 : 0, seed, offset: num(r.offset, rnd(seed, 7) * cell), at,
+      Xs: isPair(at) ? at : [at, at], wires: (Array.isArray(r.wires) ? r.wires : []).filter((v) => typeof v === "number" && Number.isFinite(v)), sag: num(r.sag, null) };
+  }
+  /** Thing i of a row: where it stands along the road (metres from where the road begins), how far out, which picture. In a
+      row that loops, thing i + n is thing i again, a loop further on. (A range for `every`: each in its cell, moved by up to
+      a quarter of the range either way, so that from one to the next is within it.) */
+  thing(row, i) {
+    const k = row.n ? ((i % row.n) + row.n) % row.n : i;
+    return { w: row.offset + i * row.cell + (row.jit ? (rnd(row.seed, k, 1) * 2 - 1) * row.jit : 0), X: within(row.at, rnd(row.seed, k, 2)),
+      name: row.names[Math.min(row.names.length - 1, Math.floor(rnd(row.seed, k, 3) * row.names.length))] };
+  }
+  /** A pane's picture, its place on the stage, its hard-edged shape (a pixel is in it when its middle is), and the tables
+      that do not change: for each column of it, the directions its edges look in (u, from the vanishing point). */
+  frame(win) {
+    const [x0, y0, x1, y1] = boxOf(win.poly), box = [Math.max(0, Math.floor(x0)), Math.max(0, Math.floor(y0)), Math.min(W, Math.ceil(x1)), Math.min(H, Math.ceil(y1))];
+    const w = Math.max(1, box[2] - box[0]), h = Math.max(1, box[3] - box[1]);
+    Object.assign(win, { box, w, h, pair: new Pair(w, h), mask: canvasOf(w, h), inside: new Uint8Array(w * h) });
+    const img = win.mask.getContext("2d").createImageData(w, h), d = img.data;
+    win.rowA = new Int32Array(h).fill(-1); win.rowB = new Int32Array(h); win.colA = new Int32Array(w).fill(-1); win.colB = new Int32Array(w);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      if (!inside(win.poly, box[0] + x + 0.5, box[1] + y + 0.5)) continue;
+      win.inside[y * w + x] = 1; d[(y * w + x) * 4 + 3] = 255;
+      if (win.rowA[y] < 0) win.rowA[y] = x;
+      win.rowB[y] = x + 1;
+      if (win.colA[x] < 0) win.colA[x] = y;
+      win.colB[x] = y + 1;
+    }
+    win.mask.getContext("2d").putImageData(img, 0, 0);
+    win.U0 = new Float32Array(w); win.U1 = new Float32Array(w); win.KD = new Float32Array(w);
+    for (let x = 0; x < w; x++) {
+      const c = box[0] + x, u = this.side < 0 ? this.vx - c - 1 : c - this.vx;          // (its nearer edge to the vanishing point)
+      win.U0[x] = Math.max(0.25, u); win.U1[x] = Math.max(0.5, u + 1);
+      const uc = (win.U0[x] + win.U1[x]) / 2;
+      win.KD[x] = (Math.LN2 * Math.sqrt(1 + (uc / this.focal) ** 2)) / this.hazeFar;      // the haze, a metre ahead in this column
+    }
+    win.hazeK = new Float32Array(w * h);                             // and how much of each pixel of ground it covers (as far off as the middle of its patch)
+    for (let y = 0; y < h; y++) { const dy = box[1] + y + 0.5 - this.hz; if (dy > 0) for (let x = 0; x < w; x++) win.hazeK[y * w + x] = 1 - Math.exp(-((this.focal * this.eye) / dy) * win.KD[x]); }
+    win.rowU0 = new Float32Array(h); win.rowU1 = new Float32Array(h);
+    for (let y = 0; y < h; y++) {
+      let lo = Infinity, hi = 0;
+      for (let x = Math.max(0, win.rowA[y]); x < win.rowB[y]; x++) if (win.inside[y * w + x]) { lo = Math.min(lo, win.U0[x]); hi = Math.max(hi, win.U1[x]); }
+      win.rowU0[y] = lo; win.rowU1[y] = hi;
+    }
+    win.out = new ImageData(w, h); win.out32 = new Uint32Array(win.out.data.buffer);
+    win.sprite.place(box[0], box[1]);
+  }
+  pics() { return [this.skySrc, ...this.bands.map((b) => b.src), this.ground && this.ground.src, this.thingsSrc].filter(Boolean); }
+  /** Its pictures here, the sheet that says where each thing is on its sheet read (held for the session, as a picture is),
+      and, if it is on the stage as the scene opens, the tables made from them: so that a scene does not show (Effects.enter
+      waits for this) until its first picture can be drawn without a pause (the tables of the limousine's pictures take some
+      60 ms a side, once a session). One that is not on the stage yet (its `when`) makes them as it is first shown. */
+  ready() {
+    if (this.waiting) return this.waiting;
+    const sheet = !this.sheetPath ? null : hold(this.sheetPath).then(async (address) => {
+      let json = null;
+      try { json = address ? await (await fetch(address)).json() : null; } catch { /* below */ }
+      this.sheet = json && json.sprites && typeof json.sprites === "object" ? json : false;
+      if (!this.sheet) console.warn(`The drive "${this.id}" (${this.host.place || "added by a script"}) has no sheet for its things (${this.sheetPath}): they are left out.`);
+    });
+    return (this.waiting = Promise.all([sheet, ...this.pics().map(fetchPicture)]).then(() => { if (this.host.on && this.wanted()) this.here(); }));
+  }
+  /** Every picture here and its tables made (once a picture, for good): false until then. */
+  here() {
+    if (this.tabs) return true;
+    const got_ = (p) => { const i = got(p); return i && i.naturalWidth ? i : null; };
+    if (this.pics().some((p) => !got_(p)) || (this.sheetPath && this.sheet === null)) return false;
+    const t0 = performance.now();
+    const sky = this.skySrc ? driveTables(got_(this.skySrc), "sky", ({ w, h, d }) => ({ w, h, u32: new Uint32Array(d.buffer, d.byteOffset, w * h) })) : null;
+    for (const b of this.bands) b.tab = driveTables(got_(b.src), "band", bandSums);
+    const ground = this.ground ? driveTables(got_(this.ground.src), "ground", groundSums) : null;
+    let sprites = {};
+    if (this.thingsSrc && this.sheet) {
+      const sheet = this.sheet, img = got_(this.thingsSrc), all = driveTables(img, "sheet", (px) => ({ px, levels: new Map() }));
+      this.sheetPpm = Math.max(1e-3, num(sheet.ppm, 24));
+      for (const [name, sp] of Object.entries(sheet.sprites)) {
+        if (!sp || !Array.isArray(sp.box) || sp.box.length !== 4) continue;
+        const key = JSON.stringify([sp.box, sp.foot]);
+        if (!all.levels.has(key)) all.levels.set(key, spriteLevels(all.px, sp.box, sp.foot));
+        const shapes = all.shapes || (all.shapes = new Map());                    // DRIVE-16F: what its shadow is made from, made once
+        if (this.sun && !shapes.has(key)) shapes.set(key, shadowShape(all.px, sp.box, sp.foot));
+        sprites[name] = { levels: all.levels.get(key), height: num(sp.height, null), shape: this.sun ? shapes.get(key) : null };
+      }
+      for (const r of this.rows) {
+        for (const nm of r.names) if (!sprites[nm]) warnDrive(this, `has no picture called "${nm}" on its sheet: those are left out`);
+        r.half = Math.max(0.5, ...r.names.filter((nm) => sprites[nm]).map((nm) => sprites[nm].levels[0].w / 2 / this.sheetPpm));     // (metres: the widest of its pictures, half)
+        r.tall = Math.max(0, ...r.names.filter((nm) => sprites[nm]).map((nm) => sprites[nm].levels[0].fy / this.sheetPpm));          // DRIVE-16F: (metres: the tallest, for how far its shadows reach)
+      }
+    }
+    const most = Math.max(1, ...this.bands.map((b) => b.tab.h));
+    const gs = ((ground ? ground.h : 0) + 3) * 3 * 6;
+    this.tabs = { sky, ground, sprites, R: new Float64Array(gs), Q: new Float64Array(gs), SL: new Float64Array(16 * 6),
+      C: new Float64Array((most + 2) * 4), CQ: new Float64Array((most + 3) * 4) };
+    this.cost.tables = performance.now() - t0;                       // (ms: no time at all for pictures whose sums another drive has made)
+    return true;
+  }
+  slots() { return this.sprites; }
+  restart() { this.d0 = this.start; this.t0 = 0; this.world = null; for (const w of this.wins) w.step = null; }
+  /** Metres gone at a moment of its own time (ms). */
+  gone(t) { return this.d0 + (this.speed * Math.max(0, t - this.t0)) / 1000; }
+  /** For scripts: { speed } (metres a second; 0 parks it), { opacity }. It goes on from where it is. */
+  set(o = {}) {
+    if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }
+    if (o && typeof o.opacity === "number") { this.alpha = clamp(o.opacity); for (const w of this.wins) w.step = null; }
+    return this;
+  }
+  /** Its step at a moment of its time (ms), and where it is (metres gone) at a step. */
+  stepAt(t) { return Math.floor((t * this.fps) / 1000 + this.phase); }
+  at(step) { return this.gone(((step - this.phase) / this.fps) * 1000); }
+  /** Each pane's next picture is due when it has gone on since the last (or less motion has come or gone); drawn in its turn. */
+  update(calm) {
+    const s = this.at(this.stepAt(this.time));
+    for (const w of this.wins) if (w.step !== null) w.sprite.want = s !== w.s || calm !== w.calm;
+  }
+  grant(sprite) { if (sprite.win) sprite.win.go = true; }
+  picture(sprite, calm) {
+    const w = sprite.win;
+    if (!w || !this.here()) return null;                             // (not here yet)
+    const step = this.stepAt(this.time), s = this.at(step), go = w.go;
+    w.go = false;
+    if (w.step === null || (go && (s !== w.s || calm !== w.calm))) {           // (the first picture at once; after that, in its turn)
+      w.step = step; w.s = s; w.calm = calm;
+      const t0 = performance.now();
+      this.paint(w, s, calm);
+      const ms = performance.now() - t0, c = this.cost;
+      c.pictures++; c.ms += ms; c.last = ms; c.most = Math.max(c.most, ms);
+    }
+    return { canvas: w.pair.canvas, ox: 0, oy: 0 };
+  }
+  /** One pane's picture with the car gone s metres: the sky and the ground, the bands, the things; cut to the pane. */
+  paint(w, s, calm) {
+    const travel = calm ? 0 : (this.streak * Math.abs(this.speed)) / this.fps;     // metres the ground is averaged over along its motion
+    this.base(w, s, travel);
+    for (const band of this.bands) this.band(w, band, s);
+    const ctx = w.pair.next();
+    ctx.putImageData(w.out, 0, 0);
+    w.shadows = this.sun ? this.shadows(ctx, w, s) : 0;              // DRIVE-16F: the things' shadows on the ground, then the things
+    w.things = this.things(ctx, w, s);
+    ctx.globalCompositeOperation = "destination-in"; ctx.globalAlpha = this.alpha;
+    ctx.drawImage(w.mask, 0, 0);                                     // (nothing outside the pane)
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+    this.drawn = this.wins.reduce((sum, v) => sum + 1 + (v.things || 0), 0);
+  }
+  /**
+   * What a pane's ground sees that never changes (the pane and the camera are fixed): each row below the horizon (z from
+   * zBot, its lower edge, to zTop, its upper edge; at the horizon, endless) sees columns [aLo, aLo + foot] of the picture
+   * along the road, aLo going on with the car. A pixel's patch is the slanting strip between the lines of sight at its edges
+   * (the further along the road, the further across it), so it is taken in K slices along the road (one for each four
+   * pixels of the picture it is long, up to `slices`): each slice averaged along the road over its own stretch (R, for each
+   * pixel of the picture across the road), then across, over the stretch its pixel sees there. Made once for each pane: for
+   * each row its slices, and the pixels of the picture across the road its sums must cover (k0 and n).
+   */
+  planGround(w) {
+    const G = this.tabs.ground, gr = this.ground, f = this.focal, e = this.eye, hz = this.hz, ppm = gr.ppm, from = gr.from, gh = G.h, rows = [];
+    for (let j = 0; j < w.h; j++) {
+      const x0 = w.rowA[j], x1 = w.rowB[j], r = w.box[1] + j;
+      if (x0 < 0 || r + 0.5 <= hz) continue;
+      const zBot = (f * e) / (r + 1 - hz), zTop = r > hz ? (f * e) / (r - hz) : Infinity, foot = zTop === Infinity ? G.w : (zTop - zBot) * ppm;
+      const K = zTop === Infinity ? 1 : Math.max(1, Math.min(this.slices, Math.ceil(foot / 4)));
+      const bFirst = ((w.rowU0[j] * zBot) / f - from) * ppm, bLast = zTop === Infinity ? Infinity : ((w.rowU1[j] * zTop) / f - from) * ppm;
+      const k0 = Math.max(0, Math.min(gh, Math.floor(bFirst))), k1 = Math.max(k0, Math.min(gh, Math.ceil(Math.min(bLast, gh))));
+      // for each slice, what its stretch across the road is for a pixel looking along u: [u0 * zl[k] - kb, u1 * zh[k] - kb]
+      const zl = [], zh = [];
+      for (let k = 0; k < K; k++) { zl.push(((zBot + (foot * k) / K / ppm) / f) * ppm); zh.push(((zBot + (foot * (k + 1)) / K / ppm) / f) * ppm); }
+      rows.push({ j, x0, x1, zBot, zTop, foot, K, k0, n: k1 - k0, beyond: k1 >= gh, zl, zh, kb: k0 + from * ppm });
+    }
+    return { rows };
+  }
+  /** The sky (as painted, still) above the horizon, and the ground below it, into the pane's pixels. */
+  base(w, s, travel) {
+    const T = this.tabs, out = w.out32, ins = w.inside, pw = w.w, bx = w.box[0], by = w.box[1], hz = this.hz;
+    const sky = T.sky, s32 = sky && sky.u32, sw = sky ? sky.w : 0, sh = sky ? sky.h : 0, G = T.ground;
+    for (let j = 0; j < w.h; j++) {                                  // the sky
+      const x0 = w.rowA[j], r = by + j, o = j * pw;
+      if (x0 < 0 || (G && r + 0.5 > hz)) continue;
+      for (let x = x0, x1 = w.rowB[j]; x < x1; x++) { if (!ins[o + x]) continue; const c = bx + x; out[o + x] = s32 && c < sw && r < sh ? s32[r * sw + c] : 0; }
+    }
+    if (!G) return;
+    const plan = w.plan || (w.plan = this.planGround(w)), U0 = w.U0, U1 = w.U1;
+    const gr = this.ground, ppm = gr.ppm, gw = G.w, gh = G.h, P = G.P, F = G.F, R = T.R, Q = T.Q, SL = T.SL, stride = (gh + 3) * 3, tot = gw * gh * 3, ft = gw * 3;
+    const hr = this.haze[0], hg = this.haze[1], hb = this.haze[2], HZ = w.hazeK, long = travel * ppm;
+    for (const row of plan.rows) {
+      const { j, x0, x1, K, k0, n, foot } = row, o = j * pw, aLo = (row.zBot + s) * ppm;
+      // A row going by faster than it is long (its picture's travel, times the streak, longer than its patch) is averaged
+      // along the road over that much: the streak. A slower row is as it is parked.
+      const ext = long > foot ? (long - foot) / 2 : 0;
+      if (K > 1 && !ext) this.sums(G, R, Q, SL, aLo, foot, K, k0, n, row.beyond, stride);       // (slices that meet end to end: summed together)
+      else for (let k = 0; k < K; k++) {
+        const sp = spanOf(aLo + (foot * k) / K - ext, aLo + (foot * (k + 1)) / K + ext, gw), fH = sp.fH, fL = sp.fL, gH = 1 - fH, gL = 1 - fL, loops = sp.loops, inv = sp.inv;
+        const h0 = sp.mH * gh * 3, h1 = h0 + gh * 3, l0 = sp.mL * gh * 3, l1 = l0 + gh * 3, sl = k * 16, off = k * stride, mH = sp.mH * 3, mL = sp.mL * 3;
+        SL[sl + 4] = (F[mH] * gH + F[mH + 3] * fH + loops * F[ft] - F[mL] * gL - F[mL + 3] * fL) * inv;          // the colour beyond its last row
+        SL[sl + 5] = (F[mH + 1] * gH + F[mH + 4] * fH + loops * F[ft + 1] - F[mL + 1] * gL - F[mL + 4] * fL) * inv;
+        SL[sl + 6] = (F[mH + 2] * gH + F[mH + 5] * fH + loops * F[ft + 2] - F[mL + 2] * gL - F[mL + 5] * fL) * inv;
+        if (row.zTop === Infinity) continue;
+        // R: each pixel of the picture across the road, averaged along this slice's stretch of it; Q: R summed outward from k0
+        Q[off] = Q[off + 1] = Q[off + 2] = 0;
+        for (let b3 = k0 * 3, q = off, end = (k0 + n) * 3; b3 < end; b3 += 3, q += 3) {
+          const vr = (P[h0 + b3] * gH + P[h1 + b3] * fH + loops * P[tot + b3] - P[l0 + b3] * gL - P[l1 + b3] * fL) * inv;
+          const vg = (P[h0 + b3 + 1] * gH + P[h1 + b3 + 1] * fH + loops * P[tot + b3 + 1] - P[l0 + b3 + 1] * gL - P[l1 + b3 + 1] * fL) * inv;
+          const vb = (P[h0 + b3 + 2] * gH + P[h1 + b3 + 2] * fH + loops * P[tot + b3 + 2] - P[l0 + b3 + 2] * gL - P[l1 + b3 + 2] * fL) * inv;
+          R[q] = vr; R[q + 1] = vg; R[q + 2] = vb; Q[q + 3] = Q[q] + vr; Q[q + 4] = Q[q + 1] + vg; Q[q + 5] = Q[q + 2] + vb;
+        }
+        this.ends(SL, R, k, off, n, row.beyond);
+      }
+      if (row.zTop === Infinity) {                                   // the horizon: all of it beyond the picture, far off
+        for (let x = x0; x < x1; x++) {
+          if (!ins[o + x]) continue;
+          const hk = HZ[o + x], cr = SL[4] + (hr - SL[4]) * hk, cg = SL[5] + (hg - SL[5]) * hk, cb = SL[6] + (hb - SL[6]) * hk;
+          out[o + x] = 0xff000000 | ((cb < 0 ? 0 : cb > 255 ? 255 : cb + 0.5) << 16) | ((cg < 0 ? 0 : cg > 255 ? 255 : cg + 0.5) << 8) | (cr < 0 ? 0 : cr > 255 ? 255 : cr + 0.5);
+        }
+        continue;
+      }
+      const kb = row.kb, zl = row.zl, zh = row.zh;
+      for (let x = x0; x < x1; x++) {
+        if (!ins[o + x]) continue;
+        const u0 = U0[x], u1 = U1[x];
+        let cr = 0, cg = 0, cb = 0;
+        for (let k = 0, sl = 0, off = 0; k < K; k++, sl += 16, off += stride) {
+          // the sum of R over the stretch this pixel's slice sees ([lo, hi], from k0): before k0 the first pixel's colour, after
+          // k0 + n the colour after it
+          const lo = u0 * zl[k] - kb, hi = u1 * zh[k] - kb;
+          let a = off, f0 = 0, c = off + n * 3, f1 = 0, ws = 0, we = 0;
+          if (lo < 0) ws = -lo; else if (lo >= n) { we = n - lo; a = c; } else { const i = lo | 0; a += i * 3; f0 = lo - i; }
+          if (hi >= n) we += hi - n; else if (hi < 0) { c = off; ws += hi; } else { const i = hi | 0; c = off + i * 3; f1 = hi - i; }
+          const inv = 1 / (hi - lo);
+          cr += (Q[c] + f1 * R[c] - Q[a] - f0 * R[a] + ws * SL[sl + 7] + we * SL[sl + 10]) * inv;
+          cg += (Q[c + 1] + f1 * R[c + 1] - Q[a + 1] - f0 * R[a + 1] + ws * SL[sl + 8] + we * SL[sl + 11]) * inv;
+          cb += (Q[c + 2] + f1 * R[c + 2] - Q[a + 2] - f0 * R[a + 2] + ws * SL[sl + 9] + we * SL[sl + 12]) * inv;
+        }
+        if (K > 1) { cr /= K; cg /= K; cb /= K; }
+        const hk = HZ[o + x];                                        // the haze, as far off as the middle of the patch is
+        cr += (hr - cr) * hk; cg += (hg - cg) * hk; cb += (hb - cb) * hk;
+        out[o + x] = 0xff000000 | ((cb < 0 ? 0 : cb > 255 ? 255 : cb + 0.5) << 16) | ((cg < 0 ? 0 : cg > 255 ? 255 : cg + 0.5) << 8) | (cr < 0 ? 0 : cr > 255 ? 255 : cr + 0.5);
+      }
+    }
+  }
+  /** A slice's colours before the first pixel of its sums (the first's), and after the last (beyond the picture, the colour
+      beyond it; else the last's): SL[k * 16 + 7..9] and [10..12], beside the colour beyond at [4..6]. */
+  ends(SL, R, k, off, n, beyond) {
+    const sl = k * 16;
+    R[off + n * 3] = R[off + n * 3 + 1] = R[off + n * 3 + 2] = 0;
+    for (let c = 0; c < 3; c++) {
+      SL[sl + 7 + c] = n > 0 ? R[off + c] : SL[sl + 4 + c];
+      SL[sl + 10 + c] = beyond || n === 0 ? SL[sl + 4 + c] : R[off + (n - 1) * 3 + c];
+    }
+  }
+  /** The K slices of a row whose stretches meet end to end (no streak): the sums along the road read once at each of the
+      K + 1 edges, for each pixel of the picture across the road that the row needs, and each slice's R and Q from them. */
+  sums(G, R, Q, SL, aLo, foot, K, k0, n, beyond, stride) {
+    const gw = G.w, gh = G.h, P = G.P, F = G.F, tot = gw * gh * 3, ft = gw * 3, E = this.edges || (this.edges = new Float64Array(8 * 6)), inv = K / foot;
+    for (let k = 0; k <= K; k++) {                                   // each edge: its two columns of sums, their weights, its loops
+      const a = aLo + (foot * k) / K, i = Math.floor(a), m = ((i % gw) + gw) % gw, o = k * 6;
+      E[o] = m * gh * 3; E[o + 1] = E[o] + gh * 3; E[o + 2] = a - i; E[o + 3] = (i - m) / gw; E[o + 4] = m * 3;
+    }
+    for (let k = 0; k < K; k++) {                                   // the colour beyond the picture, along each slice's stretch
+      const a = k * 6, b = a + 6;
+      for (let c = 0; c < 3; c++) {
+        const lo = F[E[a + 4] + c] * (1 - E[a + 2]) + F[E[a + 4] + 3 + c] * E[a + 2] + E[a + 3] * F[ft + c], hi = F[E[b + 4] + c] * (1 - E[b + 2]) + F[E[b + 4] + 3 + c] * E[b + 2] + E[b + 3] * F[ft + c];
+        SL[k * 16 + 4 + c] = (hi - lo) * inv;
+      }
+      Q[k * stride] = Q[k * stride + 1] = Q[k * stride + 2] = 0;
+    }
+    const V = this.edgeSums || (this.edgeSums = new Float64Array(8 * 3));
+    for (let b3 = k0 * 3, q = 0, end = (k0 + n) * 3; b3 < end; b3 += 3, q += 3) {
+      for (let k = 0, o = 0, v = 0; k <= K; k++, o += 6, v += 3) {   // the sums at each edge, here
+        const r0 = E[o] + b3, r1 = E[o + 1] + b3, fk = E[o + 2], gk = 1 - fk, lp = E[o + 3];
+        V[v] = P[r0] * gk + P[r1] * fk + lp * P[tot + b3]; V[v + 1] = P[r0 + 1] * gk + P[r1 + 1] * fk + lp * P[tot + b3 + 1]; V[v + 2] = P[r0 + 2] * gk + P[r1 + 2] * fk + lp * P[tot + b3 + 2];
+      }
+      for (let k = 0, v = 0, off = q; k < K; k++, v += 3, off += stride) {
+        const vr = (V[v + 3] - V[v]) * inv, vg = (V[v + 4] - V[v + 1]) * inv, vb = (V[v + 5] - V[v + 2]) * inv;
+        R[off] = vr; R[off + 1] = vg; R[off + 2] = vb; Q[off + 3] = Q[off] + vr; Q[off + 4] = Q[off + 1] + vg; Q[off + 5] = Q[off + 2] + vb;
+      }
+    }
+    for (let k = 0; k < K; k++) this.ends(SL, R, k, k * stride, n, beyond);
+  }
+  /** A band laid over the pane's pixels, column by column: its column for what the stage's column looks at, averaged over the
+      stretch of it the column sees, from its foot up at its size there; each pixel the average of what it covers. */
+  band(w, band, s) {
+    const T = this.tabs, B = band.tab, bw = B.w, bh = B.h, P = B.P, C = T.C, CQ = T.CQ, out = w.out32, ins = w.inside, pw = w.w, by = w.box[1];
+    const f = this.focal, e = this.eye, hz = this.hz, D = band.D, ppm = band.ppm;
+    for (let x = 0; x < pw; x++) {
+      if (w.colA[x] < 0) continue;
+      const u0 = w.U0[x], u1 = w.U1[x], uc = (u0 + u1) / 2, foot = hz + (e * uc) / D, k = uc / (D * ppm), top = foot - bh * k;
+      const rA = Math.max(by + w.colA[x], Math.floor(top)), rB = Math.min(by + w.colB[x], Math.ceil(foot));
+      if (rA >= rB) continue;
+      const lo = ((f * D) / u1 + s) * ppm, hi = ((f * D) / u0 + s) * ppm;
+      let ridge = bh;                                                // the highest ridge in the stretch of the band this column sees
+      for (let a = Math.floor(lo), last = Math.min(Math.floor(hi), a + bw - 1); a <= last; a++) { const t = B.top[((a % bw) + bw) % bw]; if (t < ridge) ridge = t; }
+      const tA = Math.max(ridge, Math.floor(bh - (foot - rA) / k)), tB = Math.min(bh, Math.ceil(bh - (foot - rB) / k));
+      if (tA >= tB) continue;
+      const { mH, fH, mL, fL, loops, inv } = spanOf(lo, hi, bw);
+      const h0 = mH * bh * 4, h1 = h0 + bh * 4, l0 = mL * bh * 4, l1 = l0 + bh * 4, tot = bw * bh * 4;
+      CQ[0] = CQ[1] = CQ[2] = CQ[3] = 0;
+      for (let t = tA, q = 0; t < tB; t++, q += 4) {
+        const t4 = t * 4;
+        for (let c = 0; c < 4; c++) {
+          const v = (P[h0 + t4 + c] * (1 - fH) + P[h1 + t4 + c] * fH + loops * P[tot + t4 + c] - P[l0 + t4 + c] * (1 - fL) - P[l1 + t4 + c] * fL) * inv;
+          C[q + c] = v; CQ[q + 4 + c] = CQ[q + c] + v;
+        }
+      }
+      const n = tB - tA;
+      C[n * 4] = C[n * 4 + 1] = C[n * 4 + 2] = C[n * 4 + 3] = 0;
+      for (let r = rA; r < rB; r++) {
+        const i = (r - by) * pw + x;
+        if (!ins[i]) continue;
+        const t0 = bh - (foot - r) / k, t1 = bh - (foot - r - 1) / k, c0 = Math.max(t0, tA), c1 = Math.min(t1, tB);
+        if (c1 <= c0) continue;
+        const p0 = c0 - tA, p1 = c1 - tA, i0 = Math.floor(p0), i1 = Math.min(n, Math.floor(p1)), g0 = (p0 - i0), g1 = p1 - i1, a4 = i0 * 4, b4 = i1 * 4, sp = (t1 - t0);
+        const sa = (CQ[b4 + 3] + g1 * C[b4 + 3] - CQ[a4 + 3] - g0 * C[a4 + 3]) / sp;      // how solid, over the whole pixel
+        if (sa < 0.5) continue;
+        const sr = (CQ[b4] + g1 * C[b4] - CQ[a4] - g0 * C[a4]) / sp, sg = (CQ[b4 + 1] + g1 * C[b4 + 1] - CQ[a4 + 1] - g0 * C[a4 + 1]) / sp, sb = (CQ[b4 + 2] + g1 * C[b4 + 2] - CQ[a4 + 2] - g0 * C[a4 + 2]) / sp;
+        const v = out[i], da = v >>> 24, keep = 1 - Math.min(255, sa) / 255;
+        let rr, gg, bb, aa;
+        if (da === 255) { rr = sr + (v & 255) * keep; gg = sg + ((v >>> 8) & 255) * keep; bb = sb + ((v >>> 16) & 255) * keep; aa = 255; }
+        else {                                                      // (over a sky with clear pixels: as it is laid over the backdrop)
+          const q = (da / 255) * keep;
+          aa = Math.min(255, sa + da * keep);
+          rr = aa > 0 ? ((sr + (v & 255) * q) * 255) / aa : 0; gg = aa > 0 ? ((sg + ((v >>> 8) & 255) * q) * 255) / aa : 0; bb = aa > 0 ? ((sb + ((v >>> 16) & 255) * q) * 255) / aa : 0;
+        }
+        out[i] = ((Math.round(aa) << 24) | (Math.max(0, Math.min(255, Math.round(bb))) << 16) | (Math.max(0, Math.min(255, Math.round(gg))) << 8) | Math.max(0, Math.min(255, Math.round(rr)))) >>> 0;
+      }
+    }
+  }
+  /** The things and the wires as seen with the car gone s metres, far to near: worked out once for each s, for every pane. */
+  sights(s) {
+    if (this.world && this.world.s === s) return this.world.items;
+    const items = [], f = this.focal, e = this.eye, sprites = this.tabs.sprites, sppm = this.sheetPpm || 24, near = 1.5, sw = this.sunWay;
+    for (const [ri, row] of this.rows.entries()) {
+      // the things of this row any pane can see: from where the nearest touches the panes' widest look, to where the farthest
+      // touches their narrowest (a thing X out and z ahead spans u from focal * (X - half) / z to focal * (X + half) / z).
+      // DRIVE-16F: and those whose shadows can lie in a pane: as far out or in, and ahead or back, as the tallest one's reaches
+      const half = row.half || 0.5, out = sw ? sw.dX * (row.tall || 0) : 0, fwd = sw ? sw.dz * (row.tall || 0) : 0, wide = sw ? half : 0;
+      const zLo = Math.max(near, (f * (row.Xs[0] - half + Math.min(0, out))) / this.uMax - Math.max(0, fwd) - wide), zHi = (f * (row.Xs[1] + half + Math.max(0, out))) / Math.max(0.5, this.uMin) - Math.min(0, fwd) + wide;
+      const iA = Math.floor((s + zLo - row.offset - row.jit) / row.cell) - 1, iB = Math.ceil((s + zHi - row.offset + row.jit) / row.cell) + 1;
+      if (iB - iA > 4000) { warnDrive(this, `has a row of "${row.names[0]}" too close together to draw (every ${row.cell.toFixed(2)} m)`); continue; }
+      let prev = null;
+      for (let i = iA; i <= iB; i++) {
+        const t = this.thing(row, i), z = t.w - s, sp = sprites[t.name];
+        if (sp && z >= near) {
+          const k = f / (z * sppm), L = k >= 1 ? 0 : Math.min(sp.levels.length - 1, Math.floor(Math.log2(1 / k))), lv = sp.levels[L], rel = k * 2 ** L;
+          if (lv.h * rel >= 1) items.push({ z, wire: false, x: this.vx + (this.side * f * t.X) / z, y: this.hz + (f * e) / z, lv, rel, hard: k >= 1, key: `${ri}:${i}`, name: t.name,
+            shadow: sw && sp.shape ? this.shadowOf(sp.shape, t.X, z) : null });          // (DRIVE-16F)
+        }
+        if (prev && row.wires.length) this.wires(row, prev, t, s, items);
+        prev = t;
+      }
+    }
+    items.sort((a, b) => b.z - a.z);
+    this.world = { s, items };
+    return items;
+  }
+  /** The wires from one thing of a row to the next, at each of the row's heights: a line through points along the span,
+      sagging in the middle, cut where it comes nearer than 1.5 m. Each at the depth of its far end. */
+  wires(row, a, b, s, items) {
+    const f = this.focal, e = this.eye, near = 1.5, za = a.w - s, zb = b.w - s;
+    if (zb < near) return;
+    const span = Math.hypot(b.w - a.w, b.X - a.X), sag = row.sag != null ? row.sag : 0.015 * span, N = 10;
+    const tA = za >= near ? 0 : (near - za) / (zb - za);
+    for (const h of row.wires) {
+      const pts = [];
+      for (let q = 0; q <= N; q++) {
+        const t = tA + ((1 - tA) * q) / N, z = za + (zb - za) * t, X = a.X + (b.X - a.X) * t, Y = h - sag * 4 * t * (1 - t);
+        pts.push(this.vx + (this.side * f * X) / z, this.hz + (f * (e - Y)) / z);
+      }
+      items.push({ z: zb, wire: true, pts, alpha: clamp(0.25 + 6 / Math.max(1, (za + zb) / 2), 0.3, 0.9) });
+    }
+  }
+  /** DRIVE-16F: a thing's shadow, the thing standing X out and z ahead: a band on the ground from its foot along the sun, as
+      long as the light makes it, its width at each point the thing's width at the height that throws it (shadowShape); its
+      middle line worked out on the ground in metres and put on the stage with the camera, and its width there by the
+      camera's rates of change at each point (the ground is seen aslant: a metre across the band is drawn mostly along it,
+      and a little across). -> { pts: [x, y, ...], x0, y0, x1, y1 } on the stage, one side of the band up and the other
+      back; or null when it would be too faint to see. */
+  shadowOf(shape, X, z) {
+    const f = this.focal, e = this.eye, sd = this.side, ppm = this.sheetPpm || 24, S = this.sunWay, P = shape.pts, n = P.length;
+    if ((((shape.area / (ppm * ppm)) * S.L * f * f * e) / (z * z * z)) * this.shadeK < 0.04) return null;      // (its area on the stage, times its strength: under a 25th of a pixel)
+    const pts = new Float32Array(n * 4);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < n; i++) {
+      const Y = P[i][0] / ppm, hw = P[i][1] / ppm / 2, bz = z + S.dz * Y, bX = X + S.dX * Y;
+      if (bz < 0.25) return null;                                    // (beside the camera: never in a pane)
+      const zz2 = bz * bz, Az = -(sd * f * bX) / zz2, Ay = -(f * e) / zz2, Bx = (sd * f) / bz;            // d(x, y)/dz = (Az, Ay); d(x, y)/dX = (Bx, 0)
+      const mx = this.vx + (sd * f * bX) / bz, my = this.hz + (f * e) / bz;                                // the band's middle here, on the stage
+      const lx = S.dz * Az + S.dX * Bx, ly = S.dz * Ay, ll = Math.hypot(lx, ly) || 1, ux = lx / ll, uy = ly / ll;   // the way it runs there
+      const ax = S.az * Az + S.aX * Bx, ay = S.az * Ay, along = (ax * ux + ay * uy) * hw, across = ax * -uy + ay * ux;   // a metre across it, there
+      // Never thinner on the stage than 10 cm seen face on at its distance (shadeFace), up to a pixel and a half (shadeMin): a
+      // fence post's shadow seen from 1.8 m up is about half a pixel, and as a shade spread over two rows of the streaking
+      // ground it would not be seen; at a pixel and a half some row is always at least three quarters in it. So near the car
+      // (within some 23 m in the limousine) a shadow is a pixel and a half at least; farther off the least falls as the things
+      // themselves grow smaller, not as fast as the ground's foreshortening would have it (a far telephone pole's long
+      // shadow a faint line, not a dark one). Thickened across the way it runs on the stage, not along it.
+      const least = Math.min(this.shadeMin, (this.shadeFace * f) / bz) / 2;
+      const half = Math.max(Math.abs(across) * hw, least) * (across < 0 ? -1 : 1), ox = along * ux - half * uy, oy = along * uy + half * ux;
+      for (let q = 0; q < 2; q++) {                                  // its two sides: one going out from the foot, the other back
+        const k = q ? 2 * n - 1 - i : i, px = q ? mx + ox : mx - ox, py = q ? my + oy : my - oy;
+        pts[k * 2] = px; pts[k * 2 + 1] = py;
+        if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py;
+      }
+    }
+    return { pts, x0, y0, x1, y1 };
+  }
+  /** DRIVE-16F: the shadows of the things that fall in a pane, laid on its ground before the things are drawn: one shape (far
+      to near, all turning the same way, so where two overlap the ground is shaded once), the ground multiplied by `shade`
+      at `shade_k`. -> how many. */
+  shadows(ctx, w, s) {
+    if (!this.rows.length) return 0;
+    const items = this.sights(s), [bx, by, bx1, by1] = w.box;
+    let n = 0;
+    ctx.save();
+    ctx.translate(-bx, -by);
+    ctx.beginPath();
+    for (const it of items) {
+      const sh = it.shadow;
+      if (!sh || sh.x0 > bx1 || sh.x1 < bx || sh.y0 > by1 || sh.y1 < by) continue;
+      const p = sh.pts;
+      ctx.moveTo(p[0], p[1]);
+      for (let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]);
+      ctx.closePath();
+      n++;
+    }
+    if (n) { ctx.globalCompositeOperation = "multiply"; ctx.fillStyle = rgba(this.shade, this.shadeK); ctx.fill("nonzero"); }
+    ctx.restore();
+    return n;
+  }
+  /** The things and wires that fall in a pane, drawn over its ground and bands, far to near. */
+  things(ctx, w, s) {
+    if (!this.rows.length) return 0;
+    const items = this.sights(s), [bx, by, bx1, by1] = w.box;
+    let n = 0;
+    ctx.save();
+    ctx.translate(-bx, -by);
+    ctx.lineWidth = 1; ctx.lineCap = "round";
+    for (const it of items) {
+      if (it.wire) {
+        const p = it.pts;
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (let i = 0; i < p.length; i += 2) { x0 = Math.min(x0, p[i]); x1 = Math.max(x1, p[i]); y0 = Math.min(y0, p[i + 1]); y1 = Math.max(y1, p[i + 1]); }
+        if (x1 < bx || x0 > bx1 || y1 < by || y0 > by1) continue;
+        ctx.strokeStyle = rgba(this.wire, it.alpha);
+        ctx.beginPath(); ctx.moveTo(p[0], p[1]);
+        for (let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]);
+        ctx.stroke();
+        n++;
+        continue;
+      }
+      const lv = it.lv, dw = lv.w * it.rel, dh = lv.h * it.rel, x = it.x - lv.fx * it.rel, y = it.y - lv.fy * it.rel;
+      if (x > bx1 || x + dw < bx || y > by1 || y + dh < by) continue;
+      ctx.imageSmoothingEnabled = !it.hard;
+      ctx.drawImage(lv.canvas, x, y, dw, dh);
+      n++;
+    }
+    ctx.restore();
+    return n;
+  }
+}
+const warnedDrive = new Set();
+function warnDrive(e, text) { const k = `${e.id}|${text}`; if (!warnedDrive.has(k)) { warnedDrive.add(k); console.warn(`The drive "${e.id}" (${e.host.place || "added by a script"}) ${text}.`); } }
+
 // ---------------------------------------------------------------- the door in time
 /**
  * portal: the door in time, as a ripple in the paint (round ten; the author chose it on 9 October from six looks in the
@@ -1968,6 +2685,7 @@ class Portal extends Effect {
 
 const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal, strip: Strip };      // (strip: NEVADA-12E)
 KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rides the water
+KINDS.drive = Drive;                             // DRIVE-16E: the world going by a car's side windows
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**
@@ -2011,7 +2729,7 @@ export class Effects {
     if (typeof specs === "function") { try { specs = specs(this.game); } catch (err) { console.warn(`The moving things of ${this.place} could not be worked out:`, err); specs = []; } }
     for (const spec of Array.isArray(specs) ? specs : []) this.add(spec, true);
     this.frame(0);
-    return Promise.all(this.list.flatMap((e) => e.pics()).map(fetchPicture));          // (NEVADA-12E: pics(), which a strip has too)
+    return Promise.all([...this.list.flatMap((e) => e.pics()).map(fetchPicture), ...this.list.map((e) => (e.ready ? e.ready() : null))]);          // (NEVADA-12E: pics(), which a strip has too; DRIVE-16E: and ready(), a drive's sheet of things)
   }
   drop(scene = null) { for (const e of this.list) if (e.end) e.end(); this.list = []; this.time = 0; this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }      // (ROME-13E: end(): a herd or a pose a script waits for is over)
 
@@ -2029,7 +2747,7 @@ export class Effects {
     for (const s of e.sprites) this.game.view.cast.add(s);
     if (e.attach) e.attach();
     this.list.push(e);
-    if (!quiet) { e.pics().forEach(fetchPicture); this.frame(0); }          // (NEVADA-12E: pics())
+    if (!quiet) { e.pics().forEach(fetchPicture); this.frame(0); }          // (NEVADA-12E: pics(); a drive reads its sheet of things by itself: DRIVE-16E)
     return e;
   }
   get(id) { return this.list.find((e) => e.id === id) || null; }
@@ -2078,12 +2796,13 @@ const DEFAULTS = {
   ripples: { color: "#ffffff", trough: "#345c70" },
   stream: { color: "#b9d6e4", light: "#f4fbff" },
   shimmer: { color: "#fff4d6" },
+  drive: { haze: "#d9dde6", wire: "#2f2a26", shade: "#6664ac" },              // DRIVE-16E (DRIVE-16F: shade, the things' shadows)
 };
 /** A moving thing's description with its colours in the key of the scene; the same object when no key is in use. */
 function keyedSpec(spec) {
   if (!keyId()) return spec;
   const out = { ...spec }, own = DEFAULTS[spec.type] || {};
-  for (const k of ["color", "edge", "core", "cool", "light", "trough", "glowColor"]) {
+  for (const k of ["color", "edge", "core", "cool", "light", "trough", "glowColor", "haze", "wire", "shade"]) {      // (DRIVE-16E: a drive's haze and wires; DRIVE-16F: and its shadows' shade)
     let v = spec[k];
     if (v === false || v === "none") continue;
     if (v === undefined) v = own[k];

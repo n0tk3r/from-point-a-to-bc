@@ -35,6 +35,13 @@ import { dividerTree } from "../talk/nevada.js";
 import { scaleAt } from "../../engine/walk.js";
 
 const art = "art/scenes/nevada-limo/";
+const DRIVE_CAM = { vanish: [424, 220], focal: 345, eye: 1.83 };          // DRIVE-16M: the scene's camera (layout.json `vanishing`, `view.focal`); the eye 1.83 m above the road
+// DRIVE-16F: the things' shadows, laid on the ground by the engine (the sheet has none): the painter's sun, low on the car's
+// right and a little behind (a metre of height throws its shadow 0.36 m ahead and 1.95 m to the car's left: out across the
+// desert on the left, in toward the road on the right; tools/paint/nevada_limo_drive_kit.py), multiplying the ground by
+// the painter's colour for a morning shadow on the sand, as strong as the roadside's standing things' (nevada_roadside.py:
+// SHADE at 0.62)
+const DRIVE_SUN = { sun: [0.36, 1.95], shade: "#6664ac", shade_k: 0.62 };
 const DOTS = "limo.ranger.dots";
 const who = (g) => g.store.data.active;
 const loose = (g) => !!g.flag("limo.loose");
@@ -301,7 +308,7 @@ async function juice(g) {
   await g.say("limo.lunch.juice");
 }
 
-/** The gate: the limousine slows (the desert going by slows with it: both strips, tweened to nothing), a gate, a very small
+/** The gate: the limousine slows (the desert going by slows with it: both drives, tweened to nothing: DRIVE-16M), a gate, a very small
     building with a very long name on it; the card; "limo.done" and "demo.done"; the title (as the old end did). On the
     way, the two of them have the last word, about the map. */
 async function ending(g) {
@@ -394,13 +401,44 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },                      // the seat we sit on, and its two armrests
   ],
 
-  // THINGS THAT MOVE BY NATURE: the desert going by the windows. Driving forward, the world goes by outward on both sides:
-  // to the left in the windows on the left, to the right in those on the right (two strips: PAINT-12C).
+  // THINGS THAT MOVE BY NATURE: the desert going by the windows. DRIVE-16M: the world outside as the scene's own camera sees
+  // it from the moving car (two drives, js/engine/effects.js; the pictures PAINT-16's, DRIVE-16P), each side its own country:
+  // the left looks across the oncoming lane, its white edge line rushing by under the panes, to the long ranges across the
+  // valley and a ranch in the middle distance; the right straight onto the desert, a fence along the road, the telephone
+  // line far out with its wires, and nearer, lower hills. Everything comes out of the far end of the windows small and slow
+  // and goes out past the near edge large and fast: the ranges hardly move, the middle distance drifts, the fence rushes.
+  // Each side has its own pictures (`-l` and `-r`: lit for their side, the sun low on the car's right and a little behind).
+  // The ending's script reads and sets their `speed` (metres a second) as it did the strips'.
   fx: [
-    { id: "desert-l", type: "strip", src: "desert-strip.png", row: 330, speed: 90,
-      windows: [[[300.1, 250.4], [242.1, 264.5], [242.1, 201.7], [300.1, 207.5]], [[232.2, 267.0], [0.0, 323.8], [0.0, 177.4], [232.2, 200.7]]] },
-    { id: "desert-r", type: "strip", src: "desert-strip.png", row: 330, speed: -90,
-      windows: [[[544.4, 251.9], [604.9, 267.9], [604.9, 200.3], [544.4, 206.9]], [[615.6, 270.8], [800.0, 319.7], [800.0, 179.1], [615.6, 199.1]]] },
+    { id: "desert-l", type: "drive", side: "L", ...DRIVE_CAM, speed: 16, ...DRIVE_SUN,           // (DRIVE-16F: the things' shadows)
+      windows: [[[300.1, 250.4], [242.1, 264.5], [242.1, 201.7], [300.1, 207.5]], [[232.2, 267.0], [0.0, 323.8], [0.0, 177.4], [232.2, 200.7]]],
+      sky: "drive-sky.png",
+      bands: [{ src: "drive-far-l.png", distance: 6000, ppm: 0.07 }, { src: "drive-mid-l.png", distance: 850, ppm: 0.5 }],
+      ground: { src: "drive-ground-l.png", from: 6, ppm: 16 },
+      things: { src: "drive-things.png", rows: [
+        { sprite: "reflector-l", every: [38, 70], at: [9.9, 10.3] },                 // white posts past the shoulder: one every three or four seconds
+        { sprite: "marker-l", every: 1609, at: 10.4, offset: 1200 },               // a mile marker every mile (`offset`: clear of the signs)
+        { sprite: ["sign-back-l", "sign-back-2-l"], every: [600, 1300], at: [10.5, 11.5] },   // the oncoming lane's signs, from behind
+        { sprite: ["sage-1-l", "sage-2-l", "sage-3-l", "sage-1-l", "rabbitbrush-l", "creosote-l"], every: [3, 16], at: [10.8, 24] },
+        { sprite: ["sage-1-l", "sage-2-l", "sage-3-l", "creosote-l"], every: [3, 14], at: [24, 70] },
+        { sprite: ["joshua-l", "joshua-2-l"], every: [80, 240], at: [16, 90] },
+        { sprite: "rock-l", every: [60, 180], at: [11, 45] }] },
+      haze: "#b6bee0", haze_far: 3000, wire: "#2c2a32", seed: 8 },
+    { id: "desert-r", type: "drive", side: "R", ...DRIVE_CAM, speed: 16, ...DRIVE_SUN,           // (DRIVE-16F: the things' shadows)
+      windows: [[[544.4, 251.9], [604.9, 267.9], [604.9, 200.3], [544.4, 206.9]], [[615.6, 270.8], [800.0, 319.7], [800.0, 179.1], [615.6, 199.1]]],
+      sky: "drive-sky.png",
+      bands: [{ src: "drive-far-r.png", distance: 3000, ppm: 0.14 }, { src: "drive-mid-r.png", distance: 850, ppm: 0.5 }],
+      ground: { src: "drive-ground-r.png", from: 6, ppm: 16 },
+      things: { src: "drive-things.png", rows: [
+        { sprite: ["post-r", "post-r", "tpost-r"], every: 4.6, at: 9.5, wires: [1.25, 0.95, 0.65] },   // the fence, rushing past below the eye
+        { sprite: "pole-r", every: 55, at: 70, wires: [8.6, 8.1] },               // far out, so that its wires show (beside the road: only its feet)
+        { sprite: "sign-range-r", every: [600, 1300], at: [7, 8] },
+        { sprite: ["sage-1-r", "sage-2-r", "sage-3-r", "sage-2-r", "rabbitbrush-r", "creosote-r"], every: [3, 16], at: [10.4, 24] },
+        { sprite: ["sage-1-r", "sage-2-r", "sage-3-r", "creosote-r"], every: [3, 14], at: [24, 70] },
+        { sprite: ["joshua-r", "joshua-2-r"], every: [80, 240], at: [17, 90] },
+        { sprite: "rock-r", every: [60, 180], at: [11, 45] },
+        { sprite: "sign-services-r", every: 9000, at: 7.4, offset: 300 }] },      // one, some 18 s in
+      haze: "#b6bee0", haze_far: 3000, wire: "#2c2a32", seed: 7 },
   ],
 
   // LIGHT AND THE DIVIDER, on the light layer: the divider down, under; over it the glass, cut to the opening, which

@@ -354,6 +354,36 @@ async function comeDown(g) {
   await g.say("proof.watcher.down");
 }
 
+// ---------- DRIVE-16E: the world going by a car's side windows (docs/DESIGN.md, section 2, "The world going by a car's side windows") ----------
+// On the stage while "proof.drive" is true: index.html?scene=engine-proof&lead=dad&flags=proof.drive. A car's side of the engine's
+// own, seen from the back seat (art/proof/drive/car.png, a cut-out behind everybody: a grey band with a window cut clear each
+// side of the vanishing point, a small cross on the vanishing point between them), and through the windows the world goes by
+// as from a car driving into the picture (`drive`, among the moving things below), drawn by the engine from the proof's own
+// camera (DRIVE_CAM) and pictures (art/proof/drive/, painted by tools/paint/proof_drive.py: squares and stripes for the ground,
+// plain triangles for the ranges, posts, poles and a marker of plain colours). The stripes along the road run to the cross;
+// a post comes out of the far end of a window small and slow and goes out at its near edge large and fast; the far triangles
+// hardly move and the near ones drift; the two sides are different places. `g.effects.get("drive-l").set({ speed: 0 })` parks it.
+// DRIVE-16F: and each thing's shadow lies on the ground, laid by the engine from `sun` (the limousine's morning: a metre of
+// height throws its shadow 0.36 m ahead and 1.95 m to the car's left: out across the ground on the left, in toward the road
+// on the right).
+const driveProof = (g) => !!g.flag("proof.drive");
+const DRIVE_CAM = { vanish: [400, 226], focal: 320, eye: 1.6 };            // level; the eye 1.6 m above the road
+const DRIVE_PANES = {                                                      // the windows, their tops and bottoms running to the vanishing point
+  L: [[[40, 120], [300, 196.56], [300, 254.89], [40, 330]]],
+  R: [[[760, 120], [500, 196.56], [500, 254.89], [760, 330]]],
+};
+const DRIVE_ART = "art/proof/drive/";
+/** One side of the proof's road: its own ground, ranges and things. */
+const proofDrive = (side) => ({ id: `drive-${side.toLowerCase()}`, type: "drive", side, windows: DRIVE_PANES[side], ...DRIVE_CAM, speed: 12,
+  sky: DRIVE_ART + "sky.png",
+  bands: [{ src: `${DRIVE_ART}far-${side.toLowerCase()}.png`, distance: 3000, ppm: 0.1 }, { src: `${DRIVE_ART}mid-${side.toLowerCase()}.png`, distance: 400, ppm: 0.5 }],
+  ground: { src: `${DRIVE_ART}ground-${side.toLowerCase()}.png`, from: 4, ppm: 16 },
+  things: { src: DRIVE_ART + "things.png", rows: side === "L"
+    ? [{ sprite: "pole", every: 45, at: 26, wires: [7.7, 7.4] }, { sprite: "post", every: 5, at: 8, wires: [1.0, 0.6] }, { sprite: ["bush", "cone"], every: [6, 24], at: [9, 40] }]
+    : [{ sprite: "marker", every: 30, at: 10 }, { sprite: "board", every: 90, at: 7 }, { sprite: "bush", every: [5, 18], at: [12, 50] }] },
+  haze: "#dfe7f0", haze_far: 3000, seed: side === "L" ? 16 : 61, when: driveProof,
+  sun: [0.36, 1.95] });                                                    // DRIVE-16F: the things' shadows on the ground (the limousine's sun)
+
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
   for (const entry of g.waiting()) {
@@ -442,6 +472,8 @@ export default {
     // ROME-13E: the house front (see the top): the dark room behind its window, behind everybody; the wall, its base its foot
     { id: "room", src: "art/proof/room.png", plane: "back", when: windowProof },
     { id: "wall", src: "art/proof/wall.png", base: 430, solid: [[250, 400], [430, 400], [430, 432], [250, 432]], when: windowProof },
+    // DRIVE-16E: the car's side, seen from the back seat, with a window each side of the vanishing point (see the top)
+    { id: "car", src: DRIVE_ART + "car.png", plane: "back", when: driveProof },
   ],
   // A cut-out can also follow the story. These are the other forms (none is needed here):
   //   { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") }      a row for a base; shown only while the test passes
@@ -489,6 +521,8 @@ export default {
     { id: "geese", type: "birds", count: 6, area: herded(g) ? PEN_IN : GEESE_AT, frames: GOOSE, shy: 0, fly: false, walk: 28, moves: { stand: 3, look: 2, peck: 3, walk: 2, turn: 1 }, when: herdProof },
     // ROME-13E: the boat (see the top) rising and falling a pixel on the swell, and rocking a little
     { id: "boat-bob", type: "bob", plane: "boat", amount: 1, period: 5, tilt: 0.75, when: bobProof },
+    // DRIVE-16E: the world going by the car's windows (see the top), one each side of the road, behind everybody
+    proofDrive("L"), proofDrive("R"),
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -575,6 +609,7 @@ export default {
     for (const [id, line] of Object.entries(LINES13)) if (!g.lines[id]) g.lines[id] = line;          // ROME-13E: round thirteen's
     if (windowProof(g) && !down(g) && g.actor("watcher")) g.actor("watcher").pray(true);              // ROME-13E: the man at the window, at his prayers
     if (bobProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                             // ROME-13E: the papyrus cleared away, so that the boat can be seen
+    if (driveProof(g)) for (const id of ["palms", "papyrus"]) if (g.plane(id)) g.plane(id).show(false);    // DRIVE-16E: the palms and the papyrus cleared away, so that the windows can be seen
     // NEVADA-12E: the creature's story, Dad's gum and sunglasses (once), and the creature in his shades if he has them on
     if (painted(g) || party(g)) {
       critterStory(g);
