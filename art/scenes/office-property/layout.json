@@ -1,0 +1,1870 @@
+{
+ "id": "office-property",
+ "horizon": 290,
+ "full": 436,
+ "view": {
+  "horizon": 290,
+  "full": 436,
+  "cam": [
+   262,
+   706
+  ],
+  "yaw": -12,
+  "focal": 500,
+  "centre_x": 400
+ },
+ "eye_cm": 160,
+ "vanishing": [
+  [
+   506,
+   290
+  ],
+  [
+   -1952,
+   290
+  ]
+ ],
+ "light": "fluorescent: three light panels down the aisle, pale and a little green; the shelves' bays darker under each shelf; the hall beyond Opal's window brighter than the room, a little of its light on her counter",
+ "walk": [
+  [
+   357,
+   409
+  ],
+  [
+   537,
+   418
+  ],
+  [
+   536,
+   412
+  ],
+  [
+   611,
+   416
+  ],
+  [
+   635,
+   444
+  ],
+  [
+   585,
+   452
+  ],
+  [
+   593,
+   474
+  ],
+  [
+   278,
+   472
+  ]
+ ],
+ "walk_note": "the aisle from the window and the door to where a grown-up is about 200 px tall (its front edge slants: the camera is turned); clear of both runs of shelving by 17 cm and more, so that nobody needs a shelf's cut-out",
+ "blocked": [
+  [
+   [
+    454,
+    418
+   ],
+   [
+    447,
+    421
+   ],
+   [
+    434,
+    421
+   ],
+   [
+    422,
+    419
+   ],
+   [
+    419,
+    416
+   ],
+   [
+    426,
+    413
+   ],
+   [
+    439,
+    413
+   ],
+   [
+    450,
+    414
+   ]
+  ],
+  [
+   [
+    500,
+    419
+   ],
+   [
+    495,
+    421
+   ],
+   [
+    483,
+    422
+   ],
+   [
+    471,
+    420
+   ],
+   [
+    467,
+    417
+   ],
+   [
+    473,
+    415
+   ],
+   [
+    484,
+    414
+   ],
+   [
+    495,
+    416
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "vent",
+   "file": "vent.png",
+   "plane": "back",
+   "note": "the grille, plain (the backdrop has it too): show it, or vent-eyes"
+  },
+  {
+   "id": "vent-eyes",
+   "file": "vent-eyes.png",
+   "plane": "back",
+   "alt": "vent",
+   "note": "the same grille, two eyes in a black mask shining between its slats: while Ranger is at the grille over this room"
+  },
+  {
+   "id": "wall",
+   "file": "wall.png",
+   "base": [
+    [
+     364,
+     399
+    ],
+    [
+     618,
+     411
+    ]
+   ],
+   "note": "the far wall round the window and the door, the window's frame, the counter and everything on it, the door's casing, the sign: whoever is in the hall (feet above this line) is behind it, seen through the glass or the doorway; Opal on her stool is in front of it"
+  },
+  {
+   "id": "door",
+   "file": "door.png",
+   "base": [
+    [
+     364,
+     399
+    ],
+    [
+     618,
+     411
+    ]
+   ],
+   "note": "the leaf, shut. Hidden, the doorway shows the hall (painted in the backdrop)"
+  },
+  {
+   "id": "door-open",
+   "file": "door-open.png",
+   "base": [
+    [
+     364,
+     399
+    ],
+    [
+     618,
+     411
+    ]
+   ],
+   "alt": "door",
+   "note": "the leaf swung out into the hall (it opens out), seen past the jamb"
+  },
+  {
+   "id": "receipt",
+   "file": "receipt.png",
+   "base": [
+    [
+     364,
+     399
+    ],
+    [
+     618,
+     411
+    ]
+   ],
+   "alt": true,
+   "note": "the receipt lying on the counter where it lands (#18): show it after the wall; absent before, and after Opal picks it up"
+  },
+  {
+   "id": "banjo",
+   "file": "banjo.png",
+   "base": [
+    [
+     276,
+     457
+    ],
+    [
+     222,
+     496
+    ]
+   ],
+   "note": "the banjo in its bay (until Opal takes it: then hide it; the backdrop has the bay empty). Its base is the left run's face along the bay: everybody in the aisle is in front of it"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the cart, the kick stool and the boxes on the floor near us: everybody passes behind"
+  }
+ ],
+ "things": [
+  {
+   "id": "shelves-left",
+   "what": "the left run of shelving: gray steel, floor to ceiling, every thing on it tagged",
+   "shape": {
+    "poly": [
+     [
+      0,
+      145
+     ],
+     [
+      133,
+      169
+     ],
+     [
+      340,
+      235
+     ],
+     [
+      340,
+      411
+     ],
+     [
+      224,
+      497
+     ],
+     [
+      68,
+      600
+     ],
+     [
+      53,
+      600
+     ],
+     [
+      0,
+      555
+     ]
+    ]
+   },
+   "stand": [
+    333,
+    444
+   ],
+   "face": "W"
+  },
+  {
+   "id": "shelves-right",
+   "what": "the right run of shelving, seen along its edge: archive boxes by the decade",
+   "shape": {
+    "poly": [
+     [
+      623,
+      215
+     ],
+     [
+      774,
+      122
+     ],
+     [
+      800,
+      128
+     ],
+     [
+      800,
+      474
+     ],
+     [
+      784,
+      600
+     ],
+     [
+      733,
+      600
+     ],
+     [
+      727,
+      593
+     ],
+     [
+      623,
+      401
+     ]
+    ]
+   },
+   "stand": [
+    570,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "boxes",
+   "what": "archive boxes, labelled FORM 7 by the decade (1971-1979, 1980-1989, and so on), on both runs",
+   "shape": {
+    "poly": [
+     [
+      625,
+      196
+     ],
+     [
+      630,
+      192
+     ],
+     [
+      717,
+      125
+     ],
+     [
+      781,
+      76
+     ],
+     [
+      796,
+      65
+     ],
+     [
+      800,
+      63
+     ],
+     [
+      800,
+      600
+     ],
+     [
+      741,
+      600
+     ],
+     [
+      737,
+      595
+     ],
+     [
+      625,
+      402
+     ]
+    ]
+   },
+   "stand": [
+    580,
+    470
+   ],
+   "face": "E",
+   "note": "the right run's boxes; the left run's are `boxes-left`"
+  },
+  {
+   "id": "boxes-left",
+   "what": "archive boxes on the left run: FORM 7 (1971-1979) and the rest",
+   "shape": {
+    "poly": [
+     [
+      0,
+      101
+     ],
+     [
+      29,
+      98
+     ],
+     [
+      86,
+      121
+     ],
+     [
+      129,
+      210
+     ],
+     [
+      131,
+      366
+     ],
+     [
+      130,
+      442
+     ],
+     [
+      128,
+      481
+     ],
+     [
+      89,
+      576
+     ],
+     [
+      53,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W",
+   "note": "the near unit's (left-4)"
+  },
+  {
+   "id": "window",
+   "what": "Opal's window onto the hall: a sliding glass window in an aluminium frame, the hall's light beyond it (its corkboard, its notices)",
+   "shape": {
+    "poly": [
+     [
+      388,
+      265
+     ],
+     [
+      404,
+      263
+     ],
+     [
+      499,
+      262
+     ],
+     [
+      507,
+      263
+     ],
+     [
+      507,
+      334
+     ],
+     [
+      435,
+      334
+     ],
+     [
+      388,
+      333
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    416
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sign",
+   "what": "the small sign over the window: THIS WINDOW CLOSES AT 1700",
+   "shape": {
+    "rect": [
+     423,
+     245,
+     47,
+     18
+    ]
+   },
+   "stand": [
+    454,
+    422
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bell",
+   "what": "the bell, on the hall's side of the glass (RING FOR SERVICE): out of reach from in here",
+   "shape": {
+    "rect": [
+     472,
+     322,
+     24,
+     12
+    ]
+   },
+   "stand": [
+    400,
+    416
+   ],
+   "face": "N"
+  },
+  {
+   "id": "door",
+   "what": "the door to the hall: gray steel, a slit of wired glass, a card: PROPERTY & EFFECTS: STAFF (cut-outs door, door-open)",
+   "shape": {
+    "poly": [
+     [
+      530,
+      251
+     ],
+     [
+      573,
+      250
+     ],
+     [
+      606,
+      250
+     ],
+     [
+      606,
+      411
+     ],
+     [
+      599,
+      411
+     ],
+     [
+      530,
+      408
+     ]
+    ]
+   },
+   "stand": [
+    572,
+    417
+   ],
+   "face": "N",
+   "planes": [
+    "door",
+    "door-open"
+   ]
+  },
+  {
+   "id": "cabinet",
+   "what": "a filing cabinet in the corner: four drawers (forty-one statements of nothing, filed)",
+   "shape": {
+    "poly": [
+     [
+      313,
+      312
+     ],
+     [
+      339,
+      308
+     ],
+     [
+      359,
+      308
+     ],
+     [
+      360,
+      400
+     ],
+     [
+      346,
+      410
+     ],
+     [
+      328,
+      406
+     ],
+     [
+      314,
+      391
+     ],
+     [
+      312,
+      354
+     ]
+    ]
+   },
+   "stand": [
+    366,
+    415
+   ],
+   "face": "NW",
+   "note": "an extra: not in the brief's list"
+  },
+  {
+   "id": "counter",
+   "what": "Opal's counter along the window: a wood-grain top, a steel cabinet under it; claim forms, a wire tray, a pencil cup",
+   "shape": {
+    "poly": [
+     [
+      356,
+      338
+     ],
+     [
+      364,
+      334
+     ],
+     [
+      520,
+      325
+     ],
+     [
+      527,
+      346
+     ],
+     [
+      525,
+      408
+     ],
+     [
+      524,
+      414
+     ],
+     [
+      512,
+      414
+     ],
+     [
+      371,
+      407
+     ],
+     [
+      360,
+      406
+     ],
+     [
+      359,
+      401
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    416
+   ],
+   "face": "N",
+   "plane": "wall"
+  },
+  {
+   "id": "stamp",
+   "what": "her date stamp on its ink pad (THUNK)",
+   "shape": {
+    "rect": [
+     416,
+     324,
+     22,
+     16
+    ]
+   },
+   "stand": [
+    399,
+    415
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stool",
+   "what": "Opal's stool: a round seat in green vinyl on four chrome legs",
+   "shape": {
+    "poly": [
+     [
+      421,
+      363
+     ],
+     [
+      428,
+      361
+     ],
+     [
+      443,
+      361
+     ],
+     [
+      448,
+      362
+     ],
+     [
+      452,
+      364
+     ],
+     [
+      452,
+      368
+     ],
+     [
+      449,
+      416
+     ],
+     [
+      446,
+      421
+     ],
+     [
+      423,
+      420
+     ],
+     [
+      421,
+      368
+     ]
+    ]
+   },
+   "stand": [
+    465,
+    425
+   ],
+   "face": "N"
+  },
+  {
+   "id": "knitting",
+   "what": "her knitting basket, two balls of gray wool and the needles in it, and the scarf she has been knitting since about 1990 in the regulation colour, trailing out of it and away down the aisle (all of it is on the floor: people walk over it)",
+   "shape": {
+    "poly": [
+     [
+      428,
+      429
+     ],
+     [
+      465,
+      396
+     ],
+     [
+      485,
+      381
+     ],
+     [
+      491,
+      382
+     ],
+     [
+      498,
+      395
+     ],
+     [
+      497,
+      419
+     ],
+     [
+      496,
+      420
+     ],
+     [
+      459,
+      430
+     ],
+     [
+      449,
+      432
+     ],
+     [
+      436,
+      432
+     ]
+    ]
+   },
+   "stand": [
+    506,
+    426
+   ],
+   "face": "N"
+  },
+  {
+   "id": "oillamp",
+   "what": "a clay oil lamp, its nozzle black with soot, tagged",
+   "shape": {
+    "poly": [
+     [
+      263,
+      352
+     ],
+     [
+      269,
+      347
+     ],
+     [
+      289,
+      355
+     ],
+     [
+      292,
+      358
+     ],
+     [
+      292,
+      367
+     ],
+     [
+      290,
+      367
+     ],
+     [
+      266,
+      356
+     ],
+     [
+      263,
+      354
+     ]
+    ]
+   },
+   "stand": [
+    333,
+    444
+   ],
+   "face": "W"
+  },
+  {
+   "id": "cup",
+   "what": "a tin cup, dented, tagged",
+   "shape": {
+    "poly": [
+     [
+      279,
+      342
+     ],
+     [
+      288,
+      342
+     ],
+     [
+      305,
+      351
+     ],
+     [
+      306,
+      354
+     ],
+     [
+      306,
+      362
+     ],
+     [
+      305,
+      362
+     ],
+     [
+      279,
+      352
+     ]
+    ]
+   },
+   "stand": [
+    333,
+    444
+   ],
+   "face": "W"
+  },
+  {
+   "id": "hat",
+   "what": "a cowboy hat bleached white, tagged",
+   "shape": {
+    "poly": [
+     [
+      211,
+      302
+     ],
+     [
+      234,
+      296
+     ],
+     [
+      256,
+      302
+     ],
+     [
+      257,
+      303
+     ],
+     [
+      257,
+      328
+     ],
+     [
+      254,
+      329
+     ],
+     [
+      214,
+      314
+     ],
+     [
+      209,
+      309
+     ]
+    ]
+   },
+   "stand": [
+    322,
+    463
+   ],
+   "face": "W"
+  },
+  {
+   "id": "feather",
+   "what": "a goose feather in a small jar, tagged",
+   "shape": {
+    "poly": [
+     [
+      146,
+      246
+     ],
+     [
+      150,
+      212
+     ],
+     [
+      152,
+      202
+     ],
+     [
+      154,
+      201
+     ],
+     [
+      185,
+      263
+     ],
+     [
+      185,
+      275
+     ],
+     [
+      179,
+      275
+     ],
+     [
+      146,
+      258
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "sandal",
+   "what": "a Roman sandal, tagged 1951 (the first thing ever entered into Property & Effects)",
+   "shape": {
+    "poly": [
+     [
+      172,
+      289
+     ],
+     [
+      181,
+      288
+     ],
+     [
+      186,
+      291
+     ],
+     [
+      211,
+      325
+     ],
+     [
+      211,
+      336
+     ],
+     [
+      207,
+      336
+     ],
+     [
+      188,
+      322
+     ],
+     [
+      172,
+      294
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "horseshoe",
+   "what": "a horseshoe, rusty, tagged",
+   "shape": {
+    "poly": [
+     [
+      117,
+      310
+     ],
+     [
+      120,
+      305
+     ],
+     [
+      126,
+      304
+     ],
+     [
+      163,
+      326
+     ],
+     [
+      167,
+      329
+     ],
+     [
+      165,
+      343
+     ],
+     [
+      161,
+      343
+     ],
+     [
+      117,
+      327
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "gnome",
+   "what": "a garden gnome, tagged (nobody knows)",
+   "shape": {
+    "poly": [
+     [
+      163,
+      378
+     ],
+     [
+      167,
+      353
+     ],
+     [
+      173,
+      339
+     ],
+     [
+      175,
+      339
+     ],
+     [
+      205,
+      387
+     ],
+     [
+      205,
+      398
+     ],
+     [
+      201,
+      399
+     ],
+     [
+      163,
+      384
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "cassette",
+   "what": "a cassette tape in its case, somebody's writing on the label, tagged",
+   "shape": {
+    "poly": [
+     [
+      142,
+      390
+     ],
+     [
+      162,
+      392
+     ],
+     [
+      166,
+      393
+     ],
+     [
+      170,
+      397
+     ],
+     [
+      170,
+      405
+     ],
+     [
+      169,
+      410
+     ],
+     [
+      163,
+      411
+     ],
+     [
+      139,
+      391
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "lantern",
+   "what": "a kerosene lantern, tagged (an extra)",
+   "shape": {
+    "poly": [
+     [
+      49,
+      322
+     ],
+     [
+      53,
+      296
+     ],
+     [
+      65,
+      282
+     ],
+     [
+      73,
+      288
+     ],
+     [
+      109,
+      336
+     ],
+     [
+      109,
+      350
+     ],
+     [
+      102,
+      353
+     ],
+     [
+      50,
+      334
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "ball",
+   "what": "a bowling ball, tagged (an extra)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      391
+     ],
+     [
+      11,
+      382
+     ],
+     [
+      33,
+      381
+     ],
+     [
+      45,
+      389
+     ],
+     [
+      71,
+      428
+     ],
+     [
+      70,
+      445
+     ],
+     [
+      62,
+      447
+     ],
+     [
+      0,
+      420
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "W"
+  },
+  {
+   "id": "cone",
+   "what": "a traffic cone on the right run's lowest shelf, tagged (an extra)",
+   "shape": {
+    "poly": [
+     [
+      630,
+      368
+     ],
+     [
+      660,
+      326
+     ],
+     [
+      665,
+      326
+     ],
+     [
+      670,
+      327
+     ],
+     [
+      676,
+      345
+     ],
+     [
+      676,
+      348
+     ],
+     [
+      668,
+      373
+     ],
+     [
+      630,
+      377
+     ]
+    ]
+   },
+   "stand": [
+    570,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "banjo",
+   "what": "the banjo (damaged), tagged No. 3117: standing in the tall bay on the lowest shelf, its head broken right through, the rim, the neck and the strings whole (cut-out banjo.png; gone once Opal takes it)",
+   "shape": {
+    "poly": [
+     [
+      234,
+      437
+     ],
+     [
+      241,
+      357
+     ],
+     [
+      248,
+      352
+     ],
+     [
+      254,
+      352
+     ],
+     [
+      259,
+      356
+     ],
+     [
+      266,
+      431
+     ],
+     [
+      265,
+      444
+     ],
+     [
+      262,
+      450
+     ],
+     [
+      251,
+      455
+     ],
+     [
+      244,
+      455
+     ],
+     [
+      238,
+      452
+     ],
+     [
+      235,
+      447
+     ]
+    ]
+   },
+   "stand": [
+    311,
+    472
+   ],
+   "face": "W",
+   "plane": "banjo"
+  },
+  {
+   "id": "vent",
+   "what": "the grille in the ceiling over the left run: slats, the duct's dark behind them (cut-outs vent, vent-eyes: two eyes in a black mask when Ranger is up there)",
+   "shape": {
+    "poly": [
+     [
+      83,
+      131
+     ],
+     [
+      155,
+      124
+     ],
+     [
+      167,
+      124
+     ],
+     [
+      221,
+      151
+     ],
+     [
+      208,
+      155
+     ],
+     [
+      155,
+      159
+     ],
+     [
+      147,
+      158
+     ],
+     [
+      89,
+      136
+     ]
+    ]
+   },
+   "stand": [
+    322,
+    463
+   ],
+   "face": "NW",
+   "planes": [
+    "vent",
+    "vent-eyes"
+   ]
+  },
+  {
+   "id": "speaker",
+   "what": "the building's speaker in the ceiling (Houston's voice)",
+   "shape": {
+    "rect": [
+     526,
+     198,
+     28,
+     10
+    ]
+   },
+   "stand": [
+    400,
+    416
+   ],
+   "face": "N",
+   "note": "an extra"
+  },
+  {
+   "id": "cart",
+   "what": "a utility cart parked by the right run: an archive box and a clipboard on it (front plane)",
+   "shape": {
+    "poly": [
+     [
+      592,
+      448
+     ],
+     [
+      612,
+      399
+     ],
+     [
+      621,
+      399
+     ],
+     [
+      691,
+      401
+     ],
+     [
+      716,
+      402
+     ],
+     [
+      762,
+      423
+     ],
+     [
+      800,
+      515
+     ],
+     [
+      800,
+      600
+     ],
+     [
+      726,
+      600
+     ],
+     [
+      592,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    580,
+    470
+   ],
+   "face": "SE",
+   "note": "an extra: the foreground"
+  },
+  {
+   "id": "kickstool",
+   "what": "a round kick stool on casters (front plane)",
+   "shape": {
+    "poly": [
+     [
+      255,
+      580
+     ],
+     [
+      269,
+      511
+     ],
+     [
+      286,
+      500
+     ],
+     [
+      310,
+      498
+     ],
+     [
+      327,
+      506
+     ],
+     [
+      340,
+      569
+     ],
+     [
+      340,
+      582
+     ],
+     [
+      318,
+      600
+     ],
+     [
+      264,
+      600
+     ],
+     [
+      255,
+      591
+     ]
+    ]
+   },
+   "stand": [
+    445,
+    473
+   ],
+   "face": "S",
+   "note": "an extra: the foreground"
+  },
+  {
+   "id": "floorboxes",
+   "what": "two archive boxes on the floor by the left run (front plane)",
+   "shape": {
+    "poly": [
+     [
+      86,
+      554
+     ],
+     [
+      99,
+      496
+     ],
+     [
+      143,
+      474
+     ],
+     [
+      150,
+      472
+     ],
+     [
+      204,
+      478
+     ],
+     [
+      208,
+      479
+     ],
+     [
+      213,
+      521
+     ],
+     [
+      212,
+      572
+     ],
+     [
+      186,
+      600
+     ],
+     [
+      88,
+      600
+     ]
+    ]
+   },
+   "stand": [
+    320,
+    470
+   ],
+   "face": "SW",
+   "note": "an extra"
+  }
+ ],
+ "marks": {
+  "opal": {
+   "at": [
+    437,
+    417
+   ],
+   "face": "N",
+   "scale": 0.868,
+   "seat_cm": 66.0,
+   "seat": 0.377,
+   "seat_height_px": 52,
+   "note": "Opal on her stool at the window, her back to the shelves (she faces the window: yaw 180): the floor under her hips. The stool's seat is 66 cm, so seat her with the rig's sit pose at `seat` (a share of a grown-up's height: sit(0, {seat: 0.377}))"
+  },
+  "vent": {
+   "at": [
+    147,
+    198
+   ],
+   "scale": 1.613,
+   "base": 526,
+   "face": "E",
+   "grille": [
+    155,
+    142
+   ],
+   "note": "on the left run's top shelf, right under the grille: where Ranger lands if he comes down, and from where he climbs back (draw his frames at `scale`, sorted by `base`: he is nearer than anybody in the aisle). `grille`: the grille's middle, where the eyes are, and where a thing dropped through it starts"
+  },
+  "counter": {
+   "at": [
+    385,
+    339
+   ],
+   "scale": 0.81,
+   "base": [
+    [
+     364,
+     399
+    ],
+    [
+     618,
+     411
+    ]
+   ],
+   "note": "where the receipt lands on the counter (#18): at its front edge, left of Opal's place (she is not in front of it), its near half hanging over the edge so that it shows (cut-out receipt.png). Dropped through the grille it flutters down the aisle from `vent.grille` to here (about four metres along, a metre and a half down)"
+  },
+  "banjo": {
+   "at": [
+    250,
+    438
+   ],
+   "stand": [
+    311,
+    472
+   ],
+   "face": "W",
+   "scale": 1.243,
+   "top": [
+    250,
+    352
+   ],
+   "note": "`at`: the middle of the banjo's pot, in its bay on the lowest shelf; `top`: its headstock. Opal takes it from `stand` (the aisle in front of the bay, as near us as a grown-up walks: 199 px)"
+  },
+  "door": [
+   572,
+   417
+  ],
+  "door_face": "S",
+  "hall": [
+   562,
+   398
+  ],
+  "hall_note": "in the hall, just outside the door (behind the wall's cut-out: seen through the doorway): where Opal goes, and comes back from",
+  "hallwindow": [
+   453,
+   392
+  ],
+  "hallwindow_note": "in the hall at the window, on the far side of the glass (behind the wall's cut-out)"
+ },
+ "stands": {
+  "opal": {
+   "at": [
+    437,
+    417
+   ],
+   "grownup_px": 139
+  },
+  "counter": {
+   "at": [
+    385,
+    408
+   ],
+   "grownup_px": 130
+  },
+  "vent": {
+   "at": [
+    147,
+    526
+   ],
+   "grownup_px": 258
+  },
+  "banjo": {
+   "at": [
+    311,
+    472
+   ],
+   "grownup_px": 199
+  },
+  "door": {
+   "at": [
+    572,
+    417
+   ],
+   "grownup_px": 139
+  },
+  "atwindow": {
+   "at": [
+    400,
+    416
+   ],
+   "grownup_px": 138
+  },
+  "atstool": {
+   "at": [
+    465,
+    425
+   ],
+   "grownup_px": 148
+  },
+  "atbasket": {
+   "at": [
+    506,
+    426
+   ],
+   "grownup_px": 149
+  },
+  "atstamp": {
+   "at": [
+    399,
+    415
+   ],
+   "grownup_px": 137
+  },
+  "atcabinet": {
+   "at": [
+    366,
+    415
+   ],
+   "grownup_px": 137
+  },
+  "atsign": {
+   "at": [
+    454,
+    422
+   ],
+   "grownup_px": 144
+  },
+  "atvent": {
+   "at": [
+    322,
+    463
+   ],
+   "grownup_px": 190
+  },
+  "atleft0": {
+   "at": [
+    355,
+    423
+   ],
+   "grownup_px": 146
+  },
+  "atleft1": {
+   "at": [
+    333,
+    444
+   ],
+   "grownup_px": 169
+  },
+  "atleft3": {
+   "at": [
+    320,
+    470
+   ],
+   "grownup_px": 197
+  },
+  "atright0": {
+   "at": [
+    570,
+    455
+   ],
+   "grownup_px": 181
+  },
+  "atright1": {
+   "at": [
+    580,
+    470
+   ],
+   "grownup_px": 198
+  },
+  "front": {
+   "at": [
+    445,
+    473
+   ],
+   "grownup_px": 200
+  }
+ },
+ "fx": [],
+ "cutouts": {
+  "vent": [
+   84,
+   125,
+   136,
+   33
+  ],
+  "banjo": [
+   235,
+   353,
+   30,
+   101
+  ],
+  "door": [
+   534,
+   256,
+   68,
+   154
+  ],
+  "front": [
+   87,
+   400,
+   713,
+   200
+  ],
+  "wall": [
+   351,
+   231,
+   268,
+   183
+  ],
+  "vent-eyes": [
+   84,
+   125,
+   136,
+   33
+  ],
+  "door-open": [
+   571,
+   257,
+   29,
+   149
+  ],
+  "receipt": [
+   380,
+   338,
+   10,
+   5
+  ]
+ },
+ "lights": {
+  "panels": [
+   [
+    [
+     445,
+     217
+    ],
+    [
+     490,
+     216
+    ],
+    [
+     486,
+     200
+    ],
+    [
+     433,
+     202
+    ]
+   ],
+   [
+    [
+     414,
+     179
+    ],
+    [
+     481,
+     176
+    ],
+    [
+     472,
+     135
+    ],
+    [
+     382,
+     141
+    ]
+   ],
+   [
+    [
+     314,
+     61
+    ],
+    [
+     452,
+     47
+    ],
+    [
+     379,
+     -275
+    ],
+    [
+     92,
+     -206
+    ]
+   ]
+  ],
+  "note": "the three light panels' corners in the picture (for a live glow or a flicker)"
+ },
+ "exits": [],
+ "exits_note": "none for the leads: Grandpa Joe is locked in his room and Ranger comes and goes by the grille (mark `vent`). Opal goes by the door (`door` inside it, `hall` outside it)"
+}

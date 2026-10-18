@@ -172,6 +172,7 @@ function skeleton(d, p) {
   for (const k of ["R", "L"]) low = Math.min(low, J[k].heel[1], J[k].ball[1], J[k].toe[1]);
   if (p.seated) low = Math.min(low, hipC[1] - d.pelvisR[1] - (p.seat || 0));
   if (p.ground != null) low = p.ground;                                  // a pose may say where the ground is itself
+  if (p.raise) low -= p.raise;                                           // OFFICE-17P: standing on something (spec.standOn, in drawFigure): the soles this far above the ground point
   const lower = new Set();
   const drop = (v) => { if (Array.isArray(v) && v.length === 3 && !lower.has(v)) { lower.add(v); v[1] -= low; } };
   for (const k of ["hipC", "sh", "neck", "head"]) drop(J[k]);
@@ -411,7 +412,11 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // character space to picture space. The camera looks slightly down, so nearer things sit lower.
   const P = (v0) => { const v = tipped0(v0), dp = (v[0] * s + v[2] * c) * S; return [ox + (-v[0] * c + v[2] * s) * S, oy - v[1] * S + dp * TILT, dp]; };
   const R = (r) => Math.max(0.85, r * S);
-  const J = skeleton(d, pose);
+  // OFFICE-17P: spec.standOn, someone standing on something (Grandpa Joe on a chair under the vent): its height, in a grown
+  // person's heights as a seat's is (people.js CM). The figure is drawn that much above the point it is placed at (the
+  // ground under what it stands on), so that the depth of the scene sizes it as anyone standing there; its shadow is on
+  // what it stands on, under the feet.
+  const J = skeleton(d, spec.standOn ? { ...pose, raise: spec.standOn / (spec.height || 1) } : pose);
   const fine = S >= 84, coarse = S < 52;
 
   const limb = (a, b, ra, rb, mat, o) => {
@@ -465,7 +470,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // (Someone sitting on a solid thing that the scene has painted, a step or a kerb or a stone bench, has no ground
   //  under the seat to throw a shadow on: theirs lies under their feet. `sit.solid` says so.)
   if (only) sf.oval(ox, oy - 0.5, S * (spec.seatShadow ?? 0.11), Math.max(1.5, S * 0.026), -1e8, SHADOW);     // (a seat by itself: its own shadow)
-  else if (pose.seated && spec.sit && spec.sit.solid) {
+  else if ((pose.seated && spec.sit && spec.sit.solid) || spec.standOn) {      // (OFFICE-17P: or standing on something: the shadow on it, under the feet)
     const f = P(mix(J.R.ball, J.L.ball, 0.5)), wide = Math.abs(P(J.R.ball)[0] - P(J.L.ball)[0]) / 2;
     sf.oval(f[0], f[1] + 0.5, wide + S * 0.075, Math.max(1.5, S * 0.026), -1e8, SHADOW);
   } else sf.oval(ox, oy - 0.5, S * (spec.shadow || 0.18), Math.max(1.5, S * 0.032), -1e8, SHADOW);
@@ -971,7 +976,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     const pts = [scr(-mw, mouthY, mz - 0.12), scr(0, mouthY, mz + (Math.abs(sideways) > 0.6 ? 0.06 : 0)), scr(mw, mouthY, mz - 0.12)].filter((q, i) => i === 1 || see(unit([(i - 1) * 0.5, 0, 0.87])) > 0.25);
     let x0 = Infinity, x1 = -Infinity;
     for (const q of pts) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); }
-    const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = pose.mouth || 0;
+    const mq = scr(0, mouthY, mz), y = Math.round(mq[1] - 0.5), open = (pose.mouth ?? spec.restMouth) || 0;      // (OFFICE-17P: spec.restMouth, a mouth a little open when nothing else says: a man asleep)
     let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
     if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
     else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
@@ -1083,9 +1088,21 @@ export function walkPose(ph, o = {}) {
     R: { leg: [r.pitch, 0.02], knee: r.knee, foot: r.foot, footYaw: 0.10, arm: [-arm * Math.cos(a), 0.07], elbow: bend + pump * (0.5 - 0.5 * Math.cos(a)) },
     L: { leg: [l.pitch, 0.02], knee: l.knee, foot: l.foot, footYaw: 0.10, arm: [arm * Math.cos(a), 0.07], elbow: bend + pump * (0.5 + 0.5 * Math.cos(a)) },
   };
-  for (const k of ["R", "L"]) if (o.hold && o.hold[k]) p[k] = { ...p[k], ...o.hold[k] };
+  for (const k of ["R", "L"]) if (o.hold && o.hold[k]) p[k] = stroked({ ...p[k], ...o.hold[k] }, ph);      // (OFFICE-17P: stroked)
   p.gait = { phase: ((ph % 1) + 1) % 1 };                              // for things that are carried: where in the step this is
   return p;
+}
+
+/** OFFICE-17P: a held hand that strokes (a hand strumming a banjo as he walks or talks): `stroke` is how far it goes
+    ([right, up, forward], in the space of the shoulders, as `hand` is) and back again, `strokes` how many times a cycle
+    (2 if not said), `beat` where in the cycle this moment is (0 to 1: the walk's phase, or the talk's frame). The hand
+    is at its place at the top of each stroke. Anything else is left as it was. */
+function stroked(q, beat) {
+  if (!q || !q.stroke) return q;
+  const { stroke, strokes = 2, ...rest } = q;
+  if (beat == null || !rest.hand) return rest;
+  const k = 0.5 - 0.5 * Math.cos(2 * Math.PI * strokes * beat);
+  return { ...rest, hand: add(rest.hand, mul(stroke, k)) };
 }
 
 // ---------- where things are on a body, for placing hands ----------
@@ -1161,7 +1178,13 @@ export function standPose(f = 0, o = {}) {
  *   16 wiping the brow 17 counting on the fingers       18 both hands spread wide    19 a thumb over the shoulder
  *   20 a nod aside, toward something off to that side (the river, the road), the open hand following it
  *   21 a hand raised in blessing, open, the palm toward the listener
+ *   (OFFICE-17P:) 22 a stamp brought down: the other hand held flat, palm up, at the waist, and the gesturing hand comes
+ *      down onto it from above, once a beat (THUNK: Opal and her date stamp, which her own `extras` draw in the hand)
+ *   23 a look over the glasses: the head tipped down, the brows up, the arms as they were (`p.over`: whoever wears
+ *      glasses low on the nose draws them a little lower, as Opal's half-moons are)
  * o.hand ("R" or "L") is the hand that makes one-handed gestures: the other may be holding something.
+ * (OFFICE-17P: p.beat, where in its cycle of six frames this one is, 0 to 1, for a hand that keeps time while they talk:
+ * see `stroked`.)
  */
 export function talkPose(f = 0, g = 0, o = {}) {
   const wob = Math.sin((2 * Math.PI * f) / 6), p = standPose(f, o), d = o.dim || ADULT, sp = spots(d);
@@ -1241,9 +1264,18 @@ export function talkPose(f = 0, g = 0, o = {}) {
   } else if (g === 21) {            // a hand raised in blessing: the forearm upright, the hand open, its palm toward the listener
     p[H] = { ...legs(H), arm: [0.95 + 0.04 * wob, 0.80], fore: [sd * 0.08, 0.99, 0.06], flat: true, point: [0, 1, 0.04], thumb: [-sd, 0, 0] };
     p.head = { nod: 0.03 + 0.015 * wob };
+  } else if (g === 22) {            // OFFICE-17P: a stamp brought down onto the other palm, once a beat (up, up, up, THUNK, up a little, up)
+    const up = [0.070, 0.082, 0.060, 0.004, 0.020, 0.050][((f % 6) + 6) % 6];
+    p[O] = { ...legs(O), hand: [-sd * 0.020, sp.waist + 0.040, sp.belly + 0.100], bend: [-sd, -0.5, -0.3], flat: true, thumb: [0, 0, 1], point: [sd * 0.5, -0.1, 0.85] };
+    p[H] = { ...legs(H), hand: [sd * 0.012, sp.waist + 0.122 + up, sp.belly + 0.104], bend: [sd, -0.4, -0.3], grip: true, point: [-sd * 0.2, -1, 0.15] };
+    p.head = { nod: 0.10 + (up < 0.01 ? 0.03 : 0) };
+  } else if (g === 23) {            // OFFICE-17P: a look over the glasses: the chin down, the eyes up over the rims
+    p.head = { nod: 0.13 + 0.015 * wob, turn: 0.05 * wob };
+    p.over = 1;
   } else p.head = { nod: 0.035 * wob };
   void free;
   p.gesture = g;                                                      // (for whatever a character carries that belongs to one gesture)
+  p.beat = (((f % 6) + 6) % 6) / 6;                                   // OFFICE-17P: for a hand that keeps time while they talk (stroked)
   return p;
 }
 
@@ -1382,7 +1414,7 @@ export function sitPose(f = 0, o = {}) {
       leg: [pitch, roll], shin: [sd * Math.sin(roll) * 0.25, -Math.cos(tilt), Math.sin(tilt)], foot: 0, footYaw: low && !lowest ? 0.36 : 0.14,
       hand: [sd * (d.hipW + Math.sin(roll) * d.thigh * 0.80), sp.hip - Math.cos(pitch) * d.thigh * 0.80 + 0.042, Math.sin(pitch) * d.thigh * 0.80 + 0.012], bend: [sd, -0.3, -0.6], curl: 0.6,     // a hand resting on each knee
     });
-    p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.62 - h, breath: br, lean: o.lean ?? (low ? 0.10 : -0.08), R: side(1), L: side(-1), head: { nod: o.nod ?? (low ? -0.02 : 0.06) } };
+    p = { seated: true, ground: d.hipY - d.pelvisR[1] * 0.62 - h, breath: br, lean: o.lean ?? (low ? 0.10 : -0.08), R: side(1), L: side(-1), head: { nod: o.nod ?? (low ? -0.02 : 0.06), turn: o.turn || 0 } };      // (OFFICE-17P: o.turn, the head turned on its own: Floyd's lolled against the couch)
   } else if (seat === "floor") {
     // NEVADA-12P: sat down on the ground like a man who has been sat down: the legs out in front of him, the knees a
     // little up and the heels on the ground, the toes up, leaning back on his two hands flat on the ground behind him.
@@ -1407,8 +1439,9 @@ export function sitPose(f = 0, o = {}) {
       for (const name of ARM_KEYS) { delete q[name]; if (t[k][name] !== undefined) q[name] = t[k][name]; }
       p[k] = q;
     }
-    if (t.head) p.head = { nod: (p.head.nod || 0) + (t.head.nod || 0), turn: t.head.turn || 0 };
-    if (which === 0) p.head = { nod: (p.head.nod || 0) + 0.035 * Math.sin((2 * Math.PI * f) / 6) };
+    if (t.head) p.head = { nod: (p.head.nod || 0) + (t.head.nod || 0), turn: (p.head.turn || 0) + (t.head.turn || 0) };      // (OFFICE-17P: the sitter's own turn kept)
+    if (which === 0) p.head = { nod: (p.head.nod || 0) + 0.035 * Math.sin((2 * Math.PI * f) / 6), turn: p.head.turn || 0 };
+    p.gesture = which; if (t.over) p.over = t.over;                   // OFFICE-17P: which gesture this is, sitting as standing (for what a person carries that belongs to one)
   }
   return p;
 }
@@ -1446,7 +1479,7 @@ const holding = (spec, p, praying = false) => {
     const q = { ...p[k] }, h = spec.hold[k];
     if (praying && h.loose) continue;                                    // (NEVADA-12P: `loose: true`: a prayer may take this hand, and the thing held hangs from the folded hands)
     for (const name of ARM_KEYS) delete q[name];
-    p[k] = { ...q, ...h };
+    p[k] = stroked({ ...q, ...h }, p.gait ? p.gait.phase : p.beat);     // (OFFICE-17P: a hand that strokes as they walk or talk: `stroke`, see stroked)
     // `still: true`: the thing held is fixed in the picture (painted there by the scene), so the hand must not ride
     // up and down as the chest breathes: the shoulders move and the hand stays.
     if (h.still && h.hand) p[k].hand = [h.hand[0], h.hand[1] - 0.006 * (p.breath || 0), h.hand[2]];
@@ -1466,15 +1499,18 @@ const resting = (spec, p, plain) => {
 const freeHand = (spec) => (spec.hold && spec.hold.R && !spec.hold.L ? "L" : spec.hand || "R");
 const seatOf = (spec) => (spec.seated === true ? "ground" : spec.seated || "chair");
 const mainGesture = (spec) => (spec.gestures || DEFAULT_GESTURES).find((g) => g !== 0) ?? 1;
+/** OFFICE-17P: spec.nod, how someone on their feet holds their head, added to whatever the pose does with it (less than
+    0: looking up, as Grandpa Joe does on his chair under the vent). */
+const headed = (spec, p) => { if (spec.nod) p.head = { ...(p.head || {}), nod: ((p.head && p.head.nod) || 0) + spec.nod }; return p; };
 /** Standing, walking, talking, reaching and sitting the way one particular character does them. */
 export const poses = {
-  stand: (spec, f) => spec.stance === "prayer" ? holding(spec, prayerStand(spec, f)) : holding(spec, resting(spec, standPose(f, { stance: spec.stance, dim: spec.dim, lean: spec.lean }))),      // (ROME-13P: "prayer")
-  walk: (spec, ph) => holding(spec, walkPose(ph, spec.walk)),
+  stand: (spec, f) => spec.stance === "prayer" ? holding(spec, prayerStand(spec, f)) : headed(spec, holding(spec, resting(spec, standPose(f, { stance: spec.stance, dim: spec.dim, lean: spec.lean })))),      // (ROME-13P: "prayer"; OFFICE-17P: headed)
+  walk: (spec, ph) => headed(spec, holding(spec, walkPose(ph, spec.walk))),      // (OFFICE-17P: headed)
   /** `seed` is any whole number; the same seed always gives this character the same gesture. */
   gesture: (spec, seed) => { const list = spec.gestures || DEFAULT_GESTURES; return list[seed % list.length]; },
   talk: (spec, f, g) => {
     if (spec.stance === "prayer") { const p = prayerStand(spec, f); p.head = { nod: (p.head ? p.head.nod : 0) - 0.06 + 0.03 * Math.sin((2 * Math.PI * f) / 6) }; return holding(spec, p); }     // ROME-13P: at prayer, only the head moves as they speak
-    const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o)));
+    const o = { stance: spec.stance, dim: spec.dim, lean: spec.lean, hand: freeHand(spec) }; return headed(spec, holding(spec, resting(spec, talkPose(f, g, o), standPose(f, o))));      // (OFFICE-17P: headed)
   },
   /** (A figure in the game is in prayer when its "act" is one called "pray", counted from 2 to 3 so that it is never
       taken for a reach: see Figure.pray in js/engine/cast.js.) */
@@ -1585,7 +1621,9 @@ export function riseOf(spec) {
   const how = sitHow(spec), ground = how.seat === "ground" || how.seat === "floor";       // (floor: NEVADA-12P)
   const J0 = skeleton(spec.dim, poses.sit(spec, 0));
   const feet = (J0.R.ankle[2] + J0.L.ankle[2]) / 2 - J0.hipC[2];
-  r = { ground, feet, forward: ground ? 0 : Math.max(0, feet * 0.55), ms: spec.riseMs ?? (ground ? 1250 : spec.height < 0.85 ? 760 : 1000) };
+  // (OFFICE-17P: sit.up, how far in front of the seat they stand once up, in their own heights, when it is not the usual:
+  //  0 for someone at a table, who pushes the chair back and stands where he sat)
+  r = { ground, feet, forward: ground ? 0 : spec.sit && spec.sit.up != null ? spec.sit.up : Math.max(0, feet * 0.55), ms: spec.riseMs ?? (ground ? 1250 : spec.height < 0.85 ? 760 : 1000) };
   // ROME-13P: a seat higher than the knees, the feet hanging clear of the floor (Titus on his statue base): getting down
   // is a hop (hopPose), quick, and they land on their feet a step in front of where the knees were, clear of the seat
   const hang = ground || !spec.seated ? 0 : Math.min(J0.R.heel[1], J0.L.heel[1], J0.R.ball[1], J0.L.ball[1], J0.R.toe[1], J0.L.toe[1]);      // (someone found sitting)
@@ -2078,6 +2116,72 @@ Object.assign(poses, {
   },
 });
 
+// ---------- LETTER-17 (round seventeen): on her knees ----------
+// Mom, at the little door in Act Four, the night she hears her son: it is at the height of a child's eye, and she goes
+// down on both knees in front of it; when she understands where he is she sits back on her heels. Kept to her: a person
+// kneels only if their page in people.js says how (`kneel`), and the engine's figure.kneel() leaves anyone else as they are.
+/** Where the ground is for a pose that rests on its knees (skeleton() stands a figure on its feet alone): whatever is
+    lowest touches it, a knee, a shin at the ankle, or a foot. Sets p.ground, and gives back p. */
+function groundOn(d, p) {
+  const J = skeleton(d, { ...p, ground: 0 });
+  let low = Infinity;
+  for (const k of ["R", "L"]) {
+    const L = J[k];
+    low = Math.min(low, L.heel[1], L.ball[1], L.toe[1], L.knee[1] - d.legR[1], L.ankle[1] - d.legR[2]);
+  }
+  p.ground = low;
+  return p;
+}
+/**
+ * Kneeling (LETTER-17). Upright: both knees on the ground, the thighs straight down from the hips, the shins along the
+ * ground behind, the tops of the feet down; leaning a little in, the head up, the hands on her thighs. `back`: sat back
+ * on her heels, the thighs forward over them, the hands together in her lap and the head a little bowed. Still poses.
+ * o.dim is the build; o.kneel (the person's own `kneel` in people.js) may give { lean, backLean }.
+ */
+export function kneelPose(o = {}) {
+  const d = o.dim || ADULT, sp = spots(d), back = !!o.back, how = o.kneel || {};
+  const p = standPose(0, { dim: d, lean: back ? (how.backLean ?? 0.02) : (how.lean ?? 0.10) });
+  const pitch = back ? 1.30 : 0.08, knee = pitch + Math.PI / 2 - (back ? 0.05 : 0.04);      // (the shins: back along the ground, a hair down to it)
+  for (const [k, sd] of [["R", 1], ["L", -1]]) {
+    // the hands: on the tops of her thighs, just below the hips (upright); together in her lap (back on her heels)
+    const hand = back ? [sd * 0.034, sp.hip + 0.020, sp.belly + 0.150] : [sd * (d.hipW + 0.016), sp.hip - 0.020, 0.072];
+    p[k] = { leg: [pitch, 0.07], knee, foot: Math.PI + 0.30, footYaw: 0.04, hand, bend: [sd * 0.7, -0.3, -0.6], curl: 0.5 };
+  }
+  p.breath = 0.3;
+  p.head = { nod: back ? 0.11 : -0.03 };
+  p.shift = -d.thigh * Math.sin(pitch);                                 // (the knees stay where they are, over her mark: sitting back, the hips go back)
+  if (back) p.lap = true;                                               // (the skirt lies along the thighs, as sitting)
+  p.kneeling = back ? 2 : 1;
+  return groundOn(d, p);
+}
+/** A kneeling figure's height against the same figure standing: for placing words over her head (figure.h). */
+const KNEEL_TALL = new WeakMap();
+export function kneelTall(spec, how = "up") {
+  let m = KNEEL_TALL.get(spec);
+  if (!m) KNEEL_TALL.set(spec, (m = {}));
+  if (m[how] == null) {
+    const top = (p) => skeleton(spec.dim, p).head[1] + spec.dim.headR[1] * 1.2;
+    m[how] = top(poses.kneel(spec, "stand", how, 1)) / top(poses.stand(spec, 0));
+  }
+  return m[how];
+}
+Object.assign(poses, {
+  /** LETTER-17: from one way of being ("stand", "up": on her knees, "back": sat back on her heels) to another, e from 0
+      to 1 (eased): the hands travel, the knees bend and fold, and whatever is lowest stays on the ground all the way. */
+  kneel: (spec, from = "stand", to = "up", e = 1) => {
+    const at = (name) => (name === "stand" ? poses.stand(spec, 0) : holding(spec, kneelPose({ dim: spec.dim, back: name === "back", kneel: spec.kneel })));
+    if (e >= 1 || from === to) return at(to);
+    const a = at(from), b = at(to);
+    if (!(e > 0)) return a;
+    const s = smooth(e), p = between(spec.dim, a, b, s);
+    for (const k of ["R", "L"]) p[k].foot = lerp((a[k] && a[k].foot) || 0, (b[k] && b[k].foot) || 0, s);
+    p.lap = s >= 0.5 ? !!b.lap : !!a.lap;
+    p.kneeling = s >= 0.5 ? b.kneeling || 0 : a.kneeling || 0;
+    delete p.ground;
+    return groundOn(spec.dim, p);
+  },
+});
+
 /** How tall a character is as they are usually found (standing, or sitting on whatever they sit on), in their own
     heights: 1 for someone standing, about 0.6 for someone cross-legged on the ground. For placing words over a head. */
 /**
@@ -2102,7 +2206,7 @@ export function headPoint(spec, pose, yawDeg, size) {
 
 export function tallOf(spec) {
   const J = skeleton(spec.dim, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0));
-  return J.head[1] + spec.dim.headR[1] * 1.2 + (spec.crown || 0);        // (crown, NEVADA-12P: how much higher than the head a hairdo or a hat rises, in heights: Grandma Jolene's tower)
+  return J.head[1] + spec.dim.headR[1] * 1.2 + (spec.crown || 0) + (spec.standOn ? spec.standOn / (spec.height || 1) : 0);        // (crown, NEVADA-12P: how much higher than the head a hairdo or a hat rises, in heights: Grandma Jolene's tower; OFFICE-17P: and what they stand on)
 }
 
 // =====================================================================================

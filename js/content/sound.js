@@ -83,6 +83,22 @@ export const sound = {
       bass: [7, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 11, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
         10, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 11, null, null, null, null, null, null, null, 7, null, null, null, null, null, null, null],
     },
+    // ENGINE-17: the Office's own tune, for its five scenes: the polite music a building plays to people who are waiting, a
+    // little flat (`detune`: its tune a fifth of a semitone low, as a tape that has been played too often), quiet under talk.
+    // A soft electric-piano voice falls by steps down a plain F major sequence (A C E D C, then G Bb D C Bb, and round),
+    // over a bass that walks F, C, Bb, F, G, D, C, F. Written for the game: not any real song.
+    office: {
+      bpm: 84, root: 53, scale: [0, 2, 4, 5, 7, 9, 11], wave: "sine", hold: 2.1, volume: 0.42, detune: -20,
+      lead: [2, null, 4, null, 6, null, 5, 4, null, null, 2, null, 3, null, null, null, 1, null, 3, null, 5, null, 4, 3, null, null, 1, null, 2, null, null, null],
+      bass: [7, null, null, null, 4, null, null, null, 3, null, null, null, 0, null, null, null, 1, null, null, null, 5, null, null, null, 4, null, null, null, 7, null, null, null],
+    },
+    // ENGINE-17: the Last Stop Rag (`rag`, above: the same notes) on the pie-tin banjo: a tin head is bright and hard, so a
+    // square wave, each note short and plucked, a little louder than his humming. Grandpa Joe's own tune, never sung.
+    "rag-tin": {
+      bpm: 150, root: 55, scale: [0, 2, 4, 5, 7, 9, 11], wave: "square", hold: 0.55, volume: 0.5,
+      lead: [2, 4, 7, 5, 4, 2, 3, 5, 4, 2, 1, 0],
+      bass: [7, null, null, 11, null, null, 10, null, null, 11, null, null],
+    },
     tunnel: {
       bpm: 150, root: 57, scale: [0, 2, 4, 6, 8, 10], wave: "square", hold: 0.9, volume: 0.5,
       lead: [0, 2, 4, 5, 4, 2, 0, 2, 1, 3, 5, 6, 5, 3, 1, 3],
@@ -165,5 +181,27 @@ export const sound = {
     notch: { noise: [2600, 1500], len: 0.035, q: 3, notes: [[88, 0, 0.016]], level: 0.03 },           // the dial clicking into a notch: short and dry, quieter than `dial` (the vault's)
     ding: { notes: [[93, 0, 1.1], [100, 0, 0.45], [105, 0, 0.18]], level: 0.026, wave: "sine" },      // the dial arriving at its time: a small bell, once (softer than `pickup` and `found`)
     rustle: { noise: [1800, 5200], len: 0.3, q: 0.9, level: 0.06 },                                     // the map opened, or put away: paper
+
+    // ---- ENGINE-17: the Office (stage one), every one made by code, the game's own. (The game had a `thunk`, the piano's
+    // dead note and the limousine's divider, and a `twang`, the banjo over Jed's head in "Backup": both kept as they were.
+    // So the rubber date stamp is `stamp`, and the pie-tin banjo's string is `twang-tin`.) A note may slide: [note, start,
+    // length, the note it slides to] (audio.js). ----
+    // A steel trash can tipped over onto gravel: the crunch of the gravel, the clang of the can (notes that are not in tune
+    // with one another, as struck metal is not), and the lid rattling after.
+    clang: { noise: [2600, 700], len: 0.55, q: 0.9, notes: [[83, 0, 0.42], [90, 0.005, 0.36], [94, 0.01, 0.3], [79, 0.17, 0.3], [86, 0.18, 0.24], [88, 0.31, 0.14], [84, 0.4, 0.12]], level: 0.055, wave: "triangle" },
+    // A wing nut turned: a short squeal of metal on metal, rising, twice.
+    squeak: { noise: [5200, 6400], len: 0.24, q: 6, notes: [[88, 0, 0.09, 91], [89, 0.12, 0.1, 93]], level: 0.028, wave: "triangle" },
+    // A big fan running down: the rush of its air falling away over a few seconds, and the hum of its motor sliding down under it.
+    fanstop: { noise: [900, 70], len: 2.6, q: 1.1, notes: [[45, 0, 2.5, 28], [57, 0, 2.2, 40]], level: 0.06, wave: "sawtooth" },
+    // A rubber date stamp coming down on a counter: THUNK. A dull, solid knock and the counter's thump under it.
+    stamp: { noise: [420, 140], len: 0.12, q: 1.5, notes: [[40, 0, 0.13], [33, 0.012, 0.11]], level: 0.16, wave: "sine" },
+    // An intercom's press-to-talk: the click of the button, and its buzz while it is held.
+    buzz: { noise: [3200, 2800], len: 0.05, q: 2, notes: [[47, 0.01, 0.34], [59, 0.01, 0.34]], level: 0.03, wave: "square" },
+    // The building's speakers clearing their throat: two soft notes, down a fourth, before every line on them (g.pa).
+    pa: { notes: [[79, 0, 0.7], [74, 0.38, 1.0]], level: 0.04, wave: "sine" },
+    // A raccoon and a pie: one short, happy slurp.
+    slurp: { noise: [700, 2600], len: 0.32, q: 3, notes: [[60, 0, 0.24, 72]], level: 0.05, wave: "sine" },
+    // One string of a banjo with a pie tin for a head: a hard, bright, loud pluck (the old `twang` is every string, and dull).
+    "twang-tin": { noise: [6000, 2500], len: 0.05, q: 1, notes: [[74, 0, 0.9], [86, 0, 0.5], [93, 0, 0.25]], level: 0.07, wave: "square" },
   },
 };

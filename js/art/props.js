@@ -69,6 +69,9 @@ const ROCK = ramp("#cfc6b8", "#a39988", "#766d5f", "#4c463c");
 const REDROCK = ramp("#e0a487", "#b8755a", "#87503c", "#573226");
 const QUARTZ = ramp("#ffffff", "#e9e4f2", "#b9b0cc", "#857c9c");
 const RUST = ramp("#e58a66", "#b9563c", "#863a28", "#562418");
+// LETTER-17: Mom's handbag (js/art/people.js, mom: LEATHER, and its strap and flap one tone down)
+const BAG = ramp("#d9a877", "#b07a4a", "#7e5430", "#50341d");
+const BAG_STRAP = ramp("#b07a4a", "#7e5430", "#50341d", "#50341d");
 
 function wagonBody(pen, lift = 0, aboard = true) {
   const b = -lift;                                                    // the body rides on its springs; the wheels do not
@@ -335,6 +338,22 @@ export const props = {
     },
   },
 
+  /** LETTER-17: Mom's handbag, set down on the gravel (Act Four, the night she hears her son: js/content/scenes/nevada-
+      roadside.js). The bag she carries on her arm (js/art/people.js, mom.extras: the same leather, the same size on a woman
+      160 pixels tall at scale 1), standing on its bottom with its strap up in a loop; a darker band along the bottom, a
+      little clasp. `scale` is the roadside's depth where it stands (or where Ranger holds it up by the strap). */
+  handbag: {
+    frames: 1,
+    draw(scale) {
+      const pen = new Pen([-9, -17, 9, 2], scale);
+      pen.shadow(0, 7, 1.6);
+      pen.limb(-3.6, -9, -1.6, -15, 0.85, 0.85, BAG_STRAP, { z: 0.5 }); pen.limb(-1.6, -15, 1.6, -15, 0.85, 0.85, BAG_STRAP, { z: 0.5 }); pen.limb(1.6, -15, 3.6, -9, 0.85, 0.85, BAG_STRAP, { z: 0.5 });
+      pen.ball(0, -5, 6, 5, BAG, { z: 1, fn: (ux, uy) => (uy < -0.55 ? BAG_STRAP : undefined) });      // (the flap, as on her arm)
+      pen.rect(-0.6, -7.5, 1.4, 1.4, 1.6, BRASS, 1);
+      return pen.sf.finish();
+    },
+  },
+
   /** A gas pump from before the road was moved. Nothing has come out of it for years. */
   pump: {
     frames: 1,
@@ -350,7 +369,27 @@ export const props = {
       return pen.sf.finish();
     },
   },
+
+  /** OFFICE-17P: Jed's ice pack, a cartoon ice bag (pale blue cloth, a silver screw cap), the one he holds on top of his
+      head in the break room (`agent-ice` in js/art/people.js draws it there). When he jumps up for his cheeseburger he
+      lets go of it, and it is this: a script puts it where it was (icePackAt in people.js says where, from his feet) and
+      tweens it, a moment in the air and then down. Its size is a grown man's at scale 1, as people's are (give it the
+      scale he has); its foot is the middle of its bottom. options.state "down": lying where it fell, a little flattened. */
+  icepack: {
+    frames: 1,
+    draw(scale, frame, o = {}) {
+      const down = o.state === "down", pen = new Pen([-12, -16, 12, 3], scale), h = down ? 6.5 : 9;
+      if (down) pen.shadow(0, 9, 1.6);
+      pen.ball(0, -h / 2, 8.5, h / 2, ICEBAG, { z: 1 });                                       // the bag, puffed out with ice
+      for (const x of [-4, 0, 4]) pen.limb(x - 0.5, -h + 1.5, x + 0.5, -1.2, 0.35, 0.35, shiftedTone(ICEBAG), { z: 1.6, tone: 2 });     // its quilting
+      pen.limb(5.5, -h + 0.6, 7.5, -h - 2.2, 2.3, 2.1, CHROME, { z: 1.8 });                   // the screw cap, up on its corner
+      pen.ball(7.6, -h - 2.4, 2.2, 1.0, CHROME, { z: 2.0, tone: 0 });
+      return pen.sf.finish();
+    },
+  },
 };
+const ICEBAG = ramp("#ecf7ff", "#a9d2f2", "#6f9fcc", "#466a92");          // OFFICE-17P: the ice pack's cloth
+const shiftedTone = (m) => ({ ...m, tones: [m.tones[1], m.tones[2], m.tones[2], m.tones[3]] });   // (its quilting: a line a tone down)
 
 /** The ground of the current era as a material, so drifts and mounds match the scene. */
 function sandOf(palette) {

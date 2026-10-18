@@ -15,6 +15,8 @@
 //      the size of the coin; the closing scene of the old act, word for word ("Some when"); then her head in the hole,
 //      and Big Sister's rule: a bigger shine, a bigger door
 //   the letterbox: through the little door, the Son, in Rome (letterboxTree, held through the door); a penny for luck
+//      (LETTER-17: rewritten: Mom hears her son, on her knees at the door, and he explains until she understands that he
+//      is in another time; his warning, and her answer; Grandpa Joe, who heard it all; Ranger brings her the handbag)
 //   #12: a bigger shine. Mom's car never shone; the banjo is a half-answer (a door the size of a banjo, while he plays);
 //      the sun shade from Jolene's window, held by Grandpa Joe in the low sun, opens a door as wide as a windshield
 //   the gate (#13): the goodbyes, and they go through, hand in hand; then the cut-scene "Backup" (SCENES-12C)
@@ -30,8 +32,9 @@
 //   before the coin goes up, Mom bows her head and the girls with her: a prayer in a line, and Little Sister's Amen
 //   just before the reveal Little Sister asks what B.C. is, and is told
 //   after "Daddy's EARLY", which stays the top of the scene, Mom has Psalm 31:15, and then the last two lines as they were
-//   at the walk through, Grandpa Joe has the first half of Psalm 121:8 (it is on a plate in Jolene's kitchen) and Mom
-//   the second, as they said it at their own front door the night before
+//   at the walk through, Grandpa Joe has the first half of Psalm 121:8 and Mom the second, as they said it at their own
+//   front door the night before (LETTER-17: after his promise, "Porch light on. However long it takes."; and she no
+//   longer says the reference)
 // And Little Sister's flashlight, which comes in her pocket from the house, gets its own answer where the tracks stop.
 //
 // The author's two rules of 7 October (briefs/DATING.md) hang on moments that were already here as well:
@@ -684,9 +687,140 @@ async function sendPenny(g) {
     await g.tween(260, (k) => c.open(1, { scale: 0.55 + 0.45 * k }));
   }
   // and she steps back from it, out from in front of it (where she stood, she covered it)
-  if (lil && far(lil, LIFT.lilsis)) await g.walkTo(LIFT.lilsis[0], LIFT.lilsis[1], "lilsis");
+  // (LETTER-17: back to her mother's side, if her mother is on her knees at the door: the first talk)
+  const back = kneels(g) ? SIDE.lilsis : LIFT.lilsis;
+  if (lil && far(lil, back)) await g.walkTo(back[0], back[1], "lilsis");
+  if (lil && kneels(g)) lil.face("E");
 }
-const LETTERBOX = letterboxTree({ penny: sendPenny });
+
+// ---------- LETTER-17 (round seventeen): the night Mom hears her son ----------
+// The letterbox, rewritten as the author asked (16 October; the design is briefs/out/office-hq-design.md, section 2; the
+// brief briefs/LETTER-17.md). The moment his voice comes through the little door, Mom's handbag goes down on the gravel
+// and she is at the door on her knees (figure.kneel: js/art/rig.js kneelPose, kept to her), facing it, her face at the
+// height of it; whoever was speaking into it makes room. When she understands where he is she sits back on her heels,
+// and the girls come and stand either side of her; she leans in again to ask if he has eaten. At the end of the first
+// talk she gets up, and Grandpa Joe, from his rocker, has a word with her; Ranger brings her the handbag. The handbag on
+// the gravel is the rig's own drawing (js/art/props.js `handbag`, a thing on the stage), and the fact nevada.bagDown says
+// it is there, so that a game saved in the middle of the talk comes back with it there (setup).
+const KNEEL = [600, 578];                       // Mom on her knees at the little door, facing it (E): her face at its height, to its left
+const SIDE = { bigsis: [560, 564], lilsis: [624, 589] };     // the girls, either side of her: Big Sister behind her shoulder, Little Sister by the door
+const BAG = [578, 592];                         // her handbag, on the gravel beside her
+const FETCH = [558, 592];                       // Ranger, beside the handbag, to pick it up (facing E)
+const RANGER_PAWS = [23, -26];                  // where his hands are in his reach frames (ranger-reach-1.png: from his foot point, at full size, facing E)
+/** Is Mom on her knees at the little door (the first talk)? */
+const kneels = (g) => { const m = g.actor("mom"); return !!(m && m.kneeling); };
+/** Her handbag: down on the gravel at BAG (true), or on her arm (false); the figure is drawn without it while it is down. */
+function bagDown(g, down) {
+  const mom = g.actor("mom"), cast = g.view && g.view.cast;
+  if (mom) mom.bare = down ? "bag" : null;
+  if (!cast) return null;
+  if (cast.get && cast.get("handbag")) cast.remove("handbag");
+  if (!down || !cast.addThing) return null;
+  return cast.addThing("handbag", "handbag", BAG[0], BAG[1], sizeAt(BAG[1]));
+}
+/** Where the handbag hangs from Ranger's hands, held up (his reach frames): its own foot point, under the strap. */
+function inPaws(r) {
+  const k = Math.min(1.25, r.scale), side = r.side || 1;
+  return [r.x + RANGER_PAWS[0] * k * side, r.y + RANGER_PAWS[1] * k + 15 * sizeAt(r.y)];
+}
+/** letterboxTree's `kneel`: his voice. Whoever was speaking into the door, and anyone in Mom's way, makes room; Mom comes
+    to the door (in a hurry: no other script hurries her); her handbag goes down on the gravel without her looking, and she
+    is on her knees, facing the door. Started at his first line; the tree waits for it after the two of them say hello. */
+async function momDown(g) {
+  const mom = g.actor("mom");
+  const inWay = (id) => { const a = g.actor(id); return a && (id === who(g) || Math.hypot(a.x - KNEEL[0], (a.y - KNEEL[1]) * 2.2) < 46 || Math.hypot(a.x - BAG[0], (a.y - BAG[1]) * 2.2) < 30); };
+  const room = ["bigsis", "lilsis"].filter(inWay).map((id) => g.walkTo(ASIDE[id][0], ASIDE[id][1], id).then(() => turn(g, id, "E")));
+  if (mom) {
+    if (Math.hypot(mom.x - KNEEL[0], mom.y - KNEEL[1]) < 12) await g.moveTo(KNEEL[0], KNEEL[1], "mom");
+    else { await g.wait(260); mom.hurry = true; await g.walkTo(KNEEL[0], KNEEL[1], "mom"); }
+    mom.face("E");
+    mom.kneel(true);
+    await g.wait(190);                                            // (halfway down: the handbag is on the gravel)
+    bagDown(g, true);
+    g.flag("nevada.bagDown", true);
+    await g.wait(230);
+  }
+  await Promise.all(room);
+}
+/** letterboxTree's `heels`: she understands where he is. She sits back on her heels, and the girls come and stand either
+    side of her, facing the door. */
+async function heels(g) {
+  const mom = g.actor("mom");
+  if (mom) mom.kneel("back");
+  await g.wait(420);
+  await Promise.all(["bigsis", "lilsis"].map((id) => (far(g.actor(id), SIDE[id]) ? g.walkTo(SIDE[id][0], SIDE[id][1], id) : null)));
+  for (const id of ["bigsis", "lilsis"]) turn(g, id, "E");
+  await g.wait(260);
+}
+/** letterboxTree's `lean`: she leans in to the door again, up on her knees. */
+async function lean(g) {
+  const mom = g.actor("mom");
+  if (mom) { mom.face("E"); mom.kneel(true); }
+  await g.wait(400);
+}
+/** letterboxTree's `rise`: the end of his warning. She gets up off her knees. */
+async function momUp(g) {
+  const mom = g.actor("mom");
+  await g.wait(300);
+  if (mom) mom.kneel(false);
+  await g.wait(520);
+}
+/** letterboxTree's `turn`: "Ma'am." She turns to Grandpa Joe, in his rocker; he looks at her, and so does Ranger. */
+async function turnToJoe(g) {
+  const mom = g.actor("mom"), joe = joeOf(g), r = g.actor("ranger");
+  if (mom) mom.face("W");
+  if (joe) joe.face("E");
+  if (r && mom) r.look(mom.x, mom.y);
+  await g.wait(350);
+}
+/** letterboxTree's `bring`: Ranger comes from beside the rocker to the handbag on the gravel, at a scamper, sits up, picks
+    it up by its strap, and holds it up to her. */
+async function bringBag(g) {
+  const r = g.actor("ranger"), bag = g.view && g.view.cast && g.view.cast.get ? g.view.cast.get("handbag") : null;
+  if (!r) return;
+  await r.sit(false);
+  r.hurry = true;
+  await g.walkTo(FETCH[0], FETCH[1], "ranger");
+  r.face("E");
+  r.hold(true);                                                   // up on his haunches, both hands out
+  if (bag) {
+    const [x0, y0] = [bag.x, bag.y], [x1, y1] = inPaws(r);
+    bag.base = r.y + 1;                                           // (in front of him, in his hands)
+    await g.tween(220, (k) => bag.place(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k), g.ease.out);
+  }
+  await g.wait(200);
+}
+/** letterboxTree's `take`: she bends to him and takes it, and the handbag is on her arm again. He sits back. */
+async function takeBag(g) {
+  const mom = g.actor("mom"), r = g.actor("ranger"), cast = g.view && g.view.cast, bag = cast && cast.get ? cast.get("handbag") : null;
+  if (mom && r) mom.look(r.x, r.y);
+  const bend = mom ? mom.play(g.clock, "pick") : Promise.resolve();
+  await g.wait(200);
+  if (bag && mom) {
+    const [x0, y0] = [bag.x, bag.y], x1 = mom.x + (r && r.x < mom.x ? -10 : 10) * mom.scale, y1 = mom.y - 52 * mom.scale;
+    await g.tween(160, (k) => bag.place(x0 + (x1 - x0) * k, y0 + (y1 - y0) * k), g.ease.out);
+  }
+  bagDown(g, false);
+  g.flag("nevada.bagDown", false);
+  if (r) r.hold(false);
+  await bend;
+  if (mom) mom.face("W");
+}
+/** After the first talk: Ranger goes back to his place beside the rocker and sits up, and Grandpa Joe looks down the road
+    again; Mom turns back to the door. */
+async function afterLetterbox(g) {
+  const r = g.actor("ranger"), joe = joeOf(g), mom = g.actor("mom");
+  if (mom) mom.face("E");
+  if (joe) joe.face("SE");
+  if (r) {
+    r.hurry = false;
+    await g.walkTo(RANGER[0], RANGER[1], "ranger");
+    await g.moveTo(RANGER[0], RANGER[1], "ranger");               // (the walk ends at the edge of the chair's patch of ground: the last step onto his place)
+    await r.sit(true);
+    r.face("SE");
+  }
+}
+const LETTERBOX = letterboxTree({ penny: sendPenny, kneel: momDown, heels, lean, rise: momUp, turn: turnToJoe, bring: bringBag, take: takeBag });
 /** NEVADA-12SA: after anything done at the little door. Whoever goes to it stands at DOORSIDE, to its left; if one of the
     others is standing there already, the engine puts her beside her, which is right in front of the door, and there she
     would hide it from everyone else afterwards (the three of them can be clicked, and they lie over what is behind them).
@@ -697,10 +831,15 @@ async function stepOff(g) {
 }
 /** A line said at the little door, and then a step to the side if she is in front of it. */
 const atDoor = (line) => async (g) => { await g.say(typeof line === "string" ? line : line[who(g)]); await stepOff(g); };
-/** The little door, spoken into (after #9): a talk with the Son, held through the door. His words are his portrait's. */
+/** The little door, spoken into (after #9): a talk with the Son, held through the door. His words are his portrait's.
+    (LETTER-17: a first talk broken off, by a game saved in the middle of it, is picked up with Mom at the door on her
+    knees again; and after the first talk, Ranger goes back to his place.) */
 async function talkThrough(g) {
+  const first = !g.flag("nevada.heardSon");
   if (g.lead) g.lead.look(PLACE[0], PLACE[1]);
+  if (first && g.flag("nevada.sonMet") && !kneels(g)) await momDown(g);
   await g.talk(LETTERBOX, { through: "son" });
+  if (first && g.flag("nevada.heardSon")) await afterLetterbox(g);
   await stepOff(g);
 }
 /** Her penny, posted into the little door outside a talk. */
@@ -754,9 +893,10 @@ async function into(g, id, delay) {
 }
 /** The wide door, used (#13). Whoever goes first must have the coin ("The coin comes with us"); anyone who is not at
     the door yet is called by Little Sister (an open door must not be kept open). Then the goodbyes, each in her own way
-    (Jolene comes out onto the porch for hers), the psalm in two halves, "Places, girls. Hold hands. All the way through.",
-    and they go in hand in hand, Little Sister in the middle. Then the cut-scene "Backup" (SCENES-12C). The coin goes
-    with them, the egg with Little Sister; the sun shade stays with Grandpa Joe. */
+    (Jolene comes out onto the porch for hers), Mom's and Grandpa Joe's (LETTER-17: "Will you be all right? Out here?" ...
+    "Porch light on. However long it takes."), the psalm in two halves, "Girls. Hold hands. All the way through.", and they
+    go in hand in hand, Little Sister in the middle. Then the cut-scene "Backup" (SCENES-12C). The coin goes with them, the
+    egg with Little Sister; the sun shade stays with Grandpa Joe. */
 async function goThrough(g) {
   const me = who(g);
   if (!g.flag("nevada.wideOpen")) return g.say(`nevada.through.small.${me}`);
@@ -776,11 +916,13 @@ async function goThrough(g) {
   const jolene = await joleneOut(g);
   await g.say("nevada.through.bigsis.1", "nevada.through.jolene.1", "nevada.through.bigsis.2");
   await joleneIn(g, jolene);
-  // Mom, to Grandpa Joe, with her hand out; and the psalm, his half and hers.
+  // Mom, to Grandpa Joe, with her hand out; the two of them (LETTER-17: the promise, "Porch light on."); and the psalm,
+  // his half and hers.
   turn(g, "mom", "W");
   turn(g, "bigsis", "N");
   await g.actor("mom")?.play(g.clock, "reach");
-  await g.say("nevada.through.mom.1", "nevada.through.joe.2", "nevada.through.joe.3", "nevada.through.mom.2", "nevada.through.joe.4");
+  await g.say("nevada.through.mom.1", "nevada.through.mom.4", "nevada.through.joe.5", "nevada.through.mom.5", "nevada.through.joe.6",
+    "nevada.through.joe.2", "nevada.through.mom.2", "nevada.through.joe.4");
   for (const id of THREE) turn(g, id, "N");
   await g.say("nevada.through.mom.3");
   // Hand in hand, Little Sister in the middle, into the door.
@@ -916,6 +1058,9 @@ export default {
     if (holding(g) && joe && joe.kind === "grandpajoe") { joe.sit(false, true); swapJoe(g, "grandpajoe-shade", HOLD, "E"); }
     // Once they have gone through (a game saved before the cut-scene has played), none of the three is on the stage.
     if (gone(g)) for (const id of THREE) { const a = g.actor(id); if (a) a.fade(0); }
+    // LETTER-17: Mom's handbag, down on the gravel while the fact says so (a game saved in the middle of the first talk
+    // through the little door: she comes back to it, and kneels, when the talk is picked up again)
+    bagDown(g, !!g.flag("nevada.bagDown"));
   },
 
   /** NEVADA-12SA: the door in time, to a size, for whoever needs it (SCENES-12): g.scene.door(g, "shut" | "coin" | "banjo" | "wide", ms). */

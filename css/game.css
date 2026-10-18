@@ -503,3 +503,36 @@ body[data-mode="boot"] .copyright, body[data-mode="title"] .copyright, body:not(
   .ring, .glow, .tw, .ripple, .flicker { animation: none !important; }
   #card, #toast { transition: none; }
 }
+
+/* ---------- ENGINE-17: the Office's engine: thoughts, the building's speakers, grilles, handing across ---------- */
+/* A thought: a bubble of pictures drawn by code (js/art/thoughts.js, placed by js/engine/dialogue.js), in picture pixels and
+   shown at the stage's scale, as the cast is: smooth below twice the size, hard pixels from there. It rises a little as it
+   comes; with less motion it is simply there. */
+#dialogue .thought { position: absolute; display: block; height: auto; image-rendering: auto; animation: thought-in 0.24s ease-out; transform-origin: 50% 100%; }
+.stage.crisp #dialogue .thought { image-rendering: crisp-edges; image-rendering: pixelated; }
+#dialogue .thought.loop { animation: none; }
+.say.through.thinking .thought { position: static; animation: none; }
+@keyframes thought-in { from { opacity: 0; transform: translateY(1.2cqw) scale(0.86); } to { opacity: 1; transform: none; } }
+.stage.calm #dialogue .thought { animation: none; }
+@media (prefers-reduced-motion: reduce) { #dialogue .thought { animation: none; } }
+/* The pictures of a thing a lead who cannot talk "says", in a menu of things to say, and on the map's label line. */
+.choices button img.pic, #atlas .atlas-label img.pic { display: inline-block; width: max(3.6cqw, 20px); height: auto; margin: 0 0.4cqw; vertical-align: middle;
+  image-rendering: crisp-edges; image-rendering: pixelated; background: #fff; border-radius: 0.6cqw; box-shadow: 0 0 0 0.2cqw var(--ink); }
+.choices button:hover img.pic, .choices button:focus-visible img.pic { box-shadow: 0 0 0 0.25cqw var(--time-cyan); }
+/* A line on the building's speakers (g.pa): a narrow banner across the top of the stage, under the HUD's buttons, the small
+   loudspeaker at its left, the words in the speaker's colour. Nobody on the stage says it. */
+#dialogue .pa { position: absolute; left: 50%; top: 9.2%; transform: translateX(-50%); margin: 0; max-width: 76cqw; width: max-content;
+  display: flex; align-items: center; gap: 1cqw; padding: 0.55cqw 1.6cqw 0.65cqw 1cqw; background: rgba(7, 4, 13, 0.82);
+  border-top: 0.2cqw solid currentColor; border-bottom: 0.2cqw solid currentColor; font: 700 max(2.2cqw, 11px)/1.25 var(--font-text);
+  text-shadow: var(--outline); animation: line-in 0.2s ease-out; }
+#dialogue .pa .speaker { flex: none; width: max(2.4cqw, 14px); height: auto; image-rendering: crisp-edges; image-rendering: pixelated; }
+#dialogue .pa img.pic { width: max(3cqw, 18px); height: auto; image-rendering: pixelated; background: #fff; border-radius: 0.5cqw; margin-right: 0.4cqw; }
+#dialogue .pa.ambient { opacity: 0.92; }
+/* The grille's picture over a scene seen from above (js/engine/grille.js): a layer of its own, over the cast, under Show's
+   outlines and the clickable areas; scaled as the painting is. */
+#grille { width: 100%; height: 100%; display: block; pointer-events: none; object-fit: fill; image-rendering: auto; }
+.stage.crisp #grille { image-rendering: crisp-edges; image-rendering: pixelated; }
+/* Back up, and drop down: in the bottom right corner, the one the HUD leaves free, while the lead looks down through a grille. */
+.peekbar { position: absolute; right: 1.2%; bottom: 1.6%; display: flex; gap: 0.8cqw; }
+/* Something handed to this lead in another scene (g.pass): the same mark as a thing come through a door for them. */
+.tool.face[data-new]::before { content: ""; position: absolute; left: 0.5cqw; top: 0.7cqw; width: max(1.7cqw, 9px); height: max(1.7cqw, 9px); border-radius: 50%; background: var(--time-cyan); box-shadow: 0 0 0 0.15cqw var(--ink), 0 0 0.7cqw var(--time-cyan); }

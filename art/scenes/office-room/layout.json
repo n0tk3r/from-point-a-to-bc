@@ -1,0 +1,1813 @@
+{
+ "id": "office-room",
+ "horizon": 295,
+ "full": 446,
+ "view": {
+  "horizon": 295,
+  "full": 446,
+  "cam": [
+   91,
+   617
+  ],
+  "yaw": 25,
+  "focal": 500,
+  "centre_x": 400
+ },
+ "eye_cm": 165,
+ "vanishing": [
+  [
+   167,
+   295
+  ],
+  [
+   1472,
+   295
+  ]
+ ],
+ "light": "fluorescent: four light panels in the ceiling, two tubes each behind a prismatic lens, pale and a little green; flat and even, the brightest pool on the table; soft shadows straight down under the table and the chairs; the corners and the foreground a little darker, the far corner cooler; the hall through the doorway a little brighter. The lamp in the corner is unplugged",
+ "fx_note": "The clock's second hand turns (frames second-*, 1 fps) and a bubble goes up in the cooler now and then (bubble-*). The light panels are painted lit; a live flicker over one of them (`lights.panels`) would suit a room that is getting hot.",
+ "walk": [
+  [
+   133,
+   451
+  ],
+  [
+   456,
+   413
+  ],
+  [
+   472,
+   419
+  ],
+  [
+   500,
+   416
+  ],
+  [
+   553,
+   435
+  ],
+  [
+   528,
+   439
+  ],
+  [
+   565,
+   453
+  ],
+  [
+   590,
+   448
+  ],
+  [
+   631,
+   463
+  ],
+  [
+   603,
+   471
+  ],
+  [
+   595,
+   479
+  ],
+  [
+   424,
+   479
+  ],
+  [
+   301,
+   479
+  ],
+  [
+   190,
+   479
+  ],
+  [
+   80,
+   479
+  ],
+  [
+   84,
+   470
+  ],
+  [
+   130,
+   464
+  ]
+ ],
+ "walk_note": "one outline: the floor round the table, clear of the corner chair, the lamp, the cooler and the plant; to the corner chair's front (atchair), to the door, the thermostat, the intercom and the mirror along the back wall. Its front edge runs on a slant where a grown-up is about 195 px tall (the camera is turned); it keeps 14 px or more off the walls",
+ "blocked": [
+  [
+   [
+    315,
+    450
+   ],
+   [
+    358,
+    445
+   ],
+   [
+    374,
+    457
+   ],
+   [
+    328,
+    464
+   ]
+  ],
+  [
+   [
+    412,
+    429
+   ],
+   [
+    446,
+    424
+   ],
+   [
+    466,
+    434
+   ],
+   [
+    431,
+    439
+   ]
+  ],
+  [
+   [
+    439,
+    443
+   ],
+   [
+    476,
+    438
+   ],
+   [
+    501,
+    450
+   ],
+   [
+    462,
+    456
+   ]
+  ],
+  [
+   [
+    488,
+    412
+   ],
+   [
+    490,
+    414
+   ],
+   [
+    485,
+    415
+   ],
+   [
+    477,
+    415
+   ],
+   [
+    470,
+    414
+   ],
+   [
+    468,
+    412
+   ],
+   [
+    473,
+    410
+   ],
+   [
+    481,
+    410
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "vent",
+   "file": "vent.png",
+   "plane": "back",
+   "note": "the grille, plain (the backdrop has it too): show it, or vent-eyes"
+  },
+  {
+   "id": "vent-eyes",
+   "file": "vent-eyes.png",
+   "plane": "back",
+   "alt": "vent",
+   "note": "the same grille with two eyes in a black mask shining between its slats: while Ranger is at the grille over this room"
+  },
+  {
+   "id": "thermostat-72",
+   "file": "thermostat-72.png",
+   "plane": "back",
+   "note": "72 (the backdrop has it too); until #16"
+  },
+  {
+   "id": "thermostat-77",
+   "file": "thermostat-77.png",
+   "plane": "back",
+   "alt": "thermostat-72",
+   "note": "77: warming (office.heat 73..79)"
+  },
+  {
+   "id": "thermostat-81",
+   "file": "thermostat-81.png",
+   "plane": "back",
+   "alt": "thermostat-72",
+   "note": "81, the number red: hot (office.heat 80+)"
+  },
+  {
+   "id": "intercom",
+   "file": "intercom.png",
+   "plane": "back",
+   "note": "its button dark (the backdrop has it too)"
+  },
+  {
+   "id": "intercom-lit",
+   "file": "intercom-lit.png",
+   "plane": "back",
+   "alt": "intercom",
+   "note": "the button lit, while it is pressed"
+  },
+  {
+   "id": "door",
+   "file": "door.png",
+   "base": [
+    [
+     104,
+     450
+    ],
+    [
+     266,
+     431
+    ]
+   ],
+   "note": "the leaf, shut. Hidden, the doorway shows the hall (painted in the backdrop); door-open shows the leaf swung out into the hall"
+  },
+  {
+   "id": "door-open",
+   "file": "door-open.png",
+   "base": [
+    [
+     104,
+     450
+    ],
+    [
+     266,
+     431
+    ]
+   ],
+   "alt": "door",
+   "note": "the leaf swung out into the hall (it opens out), seen past the jamb"
+  },
+  {
+   "id": "doorframe",
+   "file": "doorframe.png",
+   "base": [
+    [
+     104,
+     450
+    ],
+    [
+     266,
+     431
+    ]
+   ],
+   "note": "the back wall round the doorway and the steel casing: whoever is in the hall (feet above the wall's line) is behind it, seen only through the opening"
+  },
+  {
+   "id": "chair-corner",
+   "file": "chair-corner.png",
+   "base": [
+    [
+     64,
+     469
+    ],
+    [
+     121,
+     462
+    ]
+   ],
+   "solid": [
+    [
+     71,
+     454
+    ],
+    [
+     126,
+     448
+    ],
+    [
+     122,
+     462
+    ],
+    [
+     62,
+     469
+    ]
+   ],
+   "note": "the fourth chair. Grandpa Joe standing on its seat, and Ranger on it, are sorted as if on the floor just in front of it (marks `chair` and `vent`: `base`)"
+  },
+  {
+   "id": "table",
+   "file": "table.png",
+   "base": 458,
+   "solid": [
+    [
+     345,
+     435
+    ],
+    [
+     409,
+     427
+    ],
+    [
+     467,
+     459
+    ],
+    [
+     391,
+     471
+    ]
+   ],
+   "note": "a row: whoever's feet (or seated ground point) are above it is behind the table: the three at it (Grandpa Joe's knees go under its top) and anyone between it and the back wall; whoever is in front of it, below"
+  },
+  {
+   "id": "questionnaire",
+   "file": "questionnaire.png",
+   "base": 458,
+   "note": "on the table before Dale: lay it straight after the table; hide it when the suits take it (#17)"
+  },
+  {
+   "id": "plant",
+   "file": "plant.png",
+   "base": [
+    [
+     647,
+     484
+    ],
+    [
+     677,
+     482
+    ]
+   ],
+   "solid": [
+    [
+     668,
+     472
+    ],
+    [
+     680,
+     479
+    ],
+    [
+     674,
+     484
+    ],
+    [
+     655,
+     485
+    ],
+    [
+     633,
+     480
+    ],
+    [
+     624,
+     473
+    ],
+    [
+     630,
+     468
+    ],
+    [
+     648,
+     468
+    ]
+   ],
+   "note": "upright (until the room is hot)"
+  },
+  {
+   "id": "plant-droop",
+   "file": "plant-droop.png",
+   "base": [
+    [
+     647,
+     484
+    ],
+    [
+     677,
+     482
+    ]
+   ],
+   "alt": "plant",
+   "note": "drooping (office.heat 78+, say)"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the wastebasket near us at the left, and the box of spare questionnaires on the floor"
+  }
+ ],
+ "things": [
+  {
+   "id": "mirror",
+   "what": "the one-way mirror along the back wall: dark glass in a steel frame, a faint reflection of the room in it (the lamp, the cooler, the plant, the tubes). \"Somebody's back there eatin' chips.\"",
+   "shape": {
+    "poly": [
+     [
+      362,
+      266
+     ],
+     [
+      366,
+      266
+     ],
+     [
+      450,
+      268
+     ],
+     [
+      487,
+      269
+     ],
+     [
+      488,
+      350
+     ],
+     [
+      487,
+      351
+     ],
+     [
+      377,
+      357
+     ],
+     [
+      362,
+      357
+     ]
+    ]
+   },
+   "stand": [
+    438,
+    420
+   ],
+   "face": "N"
+  },
+  {
+   "id": "poster",
+   "what": "the poster: PECULIAR? REPORT IT. (a cartoon in two inks: a chain-link fence across the desert, and in the sky behind it a hole)",
+   "shape": {
+    "rect": [
+     312,
+     280,
+     45,
+     69
+    ]
+   },
+   "stand": [
+    346,
+    432
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sign",
+   "what": "the sign by the door: INTERVIEW ROOM C / THE COMFORTABLE ROOM / (small) THIS ROOM HAS BEEN RATED COMFORTABLE",
+   "shape": {
+    "rect": [
+     234,
+     254,
+     72,
+     63
+    ]
+   },
+   "stand": [
+    280,
+    442
+   ],
+   "face": "N"
+  },
+  {
+   "id": "clock",
+   "what": "the wall clock over the door: twenty to two; its red second hand goes round (frames second-00..59)",
+   "shape": {
+    "rect": [
+     168,
+     217,
+     33,
+     30
+    ]
+   },
+   "stand": [
+    186,
+    458
+   ],
+   "face": "N"
+  },
+  {
+   "id": "door",
+   "what": "the door: gray steel, a slit of wired glass with the hall's light in it, locked \"for your comfort\" (cut-outs door.png, door-open.png; the doorway and the hall beyond are painted in the backdrop)",
+   "shape": {
+    "poly": [
+     [
+      132,
+      252
+     ],
+     [
+      162,
+      252
+     ],
+     [
+      194,
+      253
+     ],
+     [
+      226,
+      254
+     ],
+     [
+      232,
+      255
+     ],
+     [
+      231,
+      437
+     ],
+     [
+      134,
+      448
+     ],
+     [
+      133,
+      448
+     ]
+    ]
+   },
+   "stand": [
+    186,
+    452
+   ],
+   "face": "N",
+   "planes": [
+    "door",
+    "door-open"
+   ]
+  },
+  {
+   "id": "thermostat",
+   "what": "the thermostat by the door: a beige box, a small dial, a window with the number in it: 72, 77 or 81 (cut-outs thermostat-72/77/81)",
+   "shape": {
+    "rect": [
+     237,
+     317,
+     33,
+     26
+    ]
+   },
+   "stand": [
+    260,
+    443
+   ],
+   "face": "N",
+   "planes": [
+    "thermostat-72",
+    "thermostat-77",
+    "thermostat-81"
+   ]
+  },
+  {
+   "id": "intercom",
+   "what": "the intercom by the door: a speaker grille, a red button, DISPATCH / PRESS TO TALK (cut-outs intercom, intercom-lit)",
+   "shape": {
+    "rect": [
+     273,
+     318,
+     28,
+     38
+    ]
+   },
+   "stand": [
+    295,
+    438
+   ],
+   "face": "N",
+   "planes": [
+    "intercom",
+    "intercom-lit"
+   ]
+  },
+  {
+   "id": "lamp",
+   "what": "the floor lamp in the far corner: a rose-colored shade with a fringe, unplugged (the Office's idea of comfort; no unauthorized lighting)",
+   "shape": {
+    "poly": [
+     [
+      466,
+      311
+     ],
+     [
+      470,
+      298
+     ],
+     [
+      471,
+      296
+     ],
+     [
+      487,
+      296
+     ],
+     [
+      492,
+      311
+     ],
+     [
+      492,
+      315
+     ],
+     [
+      488,
+      415
+     ],
+     [
+      472,
+      422
+     ],
+     [
+      469,
+      422
+     ],
+     [
+      466,
+      419
+     ]
+    ]
+   },
+   "stand": [
+    471,
+    421
+   ],
+   "face": "NE",
+   "note": "an extra: not in the brief's list"
+  },
+  {
+   "id": "cooler",
+   "what": "the water cooler: a big blue jug upside down, a red tap and a blue one (a bubble goes up now and then: frames bubble-*)",
+   "shape": {
+    "poly": [
+     [
+      541,
+      351
+     ],
+     [
+      553,
+      318
+     ],
+     [
+      557,
+      315
+     ],
+     [
+      569,
+      314
+     ],
+     [
+      578,
+      318
+     ],
+     [
+      590,
+      353
+     ],
+     [
+      589,
+      445
+     ],
+     [
+      568,
+      449
+     ],
+     [
+      564,
+      449
+     ],
+     [
+      543,
+      441
+     ]
+    ]
+   },
+   "stand": [
+    556,
+    454
+   ],
+   "face": "E"
+  },
+  {
+   "id": "cones",
+   "what": "the paper cones, in their tube on the cooler's side",
+   "shape": {
+    "rect": [
+     567,
+     335,
+     12,
+     57
+    ]
+   },
+   "stand": [
+    556,
+    454
+   ],
+   "face": "E"
+  },
+  {
+   "id": "chair-corner",
+   "what": "the fourth chair, in the corner under the grille (cut-out chair-corner.png): Grandpa Joe stands on its seat",
+   "shape": {
+    "poly": [
+     [
+      70,
+      370
+     ],
+     [
+      96,
+      368
+     ],
+     [
+      112,
+      368
+     ],
+     [
+      117,
+      372
+     ],
+     [
+      118,
+      375
+     ],
+     [
+      122,
+      412
+     ],
+     [
+      122,
+      460
+     ],
+     [
+      121,
+      461
+     ],
+     [
+      72,
+      469
+     ],
+     [
+      71,
+      469
+     ]
+    ]
+   },
+   "stand": [
+    113,
+    474
+   ],
+   "face": "NW",
+   "plane": "chair-corner"
+  },
+  {
+   "id": "vent",
+   "what": "the grille in the ceiling over the corner: big, slats, the duct's dark behind them (cut-outs vent, vent-eyes: two eyes in a black mask, when Ranger is up there)",
+   "shape": {
+    "poly": [
+     [
+      68,
+      192
+     ],
+     [
+      139,
+      197
+     ],
+     [
+      144,
+      198
+     ],
+     [
+      146,
+      209
+     ],
+     [
+      138,
+      213
+     ],
+     [
+      78,
+      209
+     ],
+     [
+      68,
+      204
+     ],
+     [
+      57,
+      193
+     ]
+    ]
+   },
+   "stand": [
+    113,
+    474
+   ],
+   "face": "NW",
+   "planes": [
+    "vent",
+    "vent-eyes"
+   ]
+  },
+  {
+   "id": "speaker",
+   "what": "the building's speaker in the ceiling (Houston's voice)",
+   "shape": {
+    "rect": [
+     479,
+     214,
+     27,
+     10
+    ]
+   },
+   "stand": [
+    438,
+    420
+   ],
+   "face": "N",
+   "note": "an extra: not in the brief's list"
+  },
+  {
+   "id": "chair-dale",
+   "what": "Dale's chair, across the table: gray-blue plastic on chrome legs",
+   "shape": {
+    "poly": [
+     [
+      414,
+      415
+     ],
+     [
+      415,
+      401
+     ],
+     [
+      448,
+      356
+     ],
+     [
+      452,
+      356
+     ],
+     [
+      466,
+      359
+     ],
+     [
+      468,
+      362
+     ],
+     [
+      464,
+      434
+     ],
+     [
+      432,
+      439
+     ],
+     [
+      431,
+      439
+     ],
+     [
+      414,
+      430
+     ]
+    ]
+   },
+   "stand": [
+    449,
+    427
+   ],
+   "face": "W"
+  },
+  {
+   "id": "chair-merle",
+   "what": "Merle's chair, across the table, the near one",
+   "shape": {
+    "poly": [
+     [
+      442,
+      402
+     ],
+     [
+      478,
+      363
+     ],
+     [
+      483,
+      363
+     ],
+     [
+      489,
+      364
+     ],
+     [
+      502,
+      367
+     ],
+     [
+      502,
+      375
+     ],
+     [
+      497,
+      450
+     ],
+     [
+      464,
+      456
+     ],
+     [
+      463,
+      456
+     ],
+     [
+      442,
+      445
+     ]
+    ]
+   },
+   "stand": [
+    521,
+    458
+   ],
+   "face": "W"
+  },
+  {
+   "id": "table",
+   "what": "the table: wood-grain laminate (no wood was harmed), a gray steel frame (cut-out table.png)",
+   "shape": {
+    "poly": [
+     [
+      346,
+      370
+     ],
+     [
+      370,
+      368
+     ],
+     [
+      382,
+      368
+     ],
+     [
+      423,
+      370
+     ],
+     [
+      461,
+      381
+     ],
+     [
+      466,
+      384
+     ],
+     [
+      466,
+      388
+     ],
+     [
+      461,
+      458
+     ],
+     [
+      460,
+      459
+     ],
+     [
+      397,
+      469
+     ],
+     [
+      393,
+      469
+     ],
+     [
+      350,
+      436
+     ]
+    ]
+   },
+   "stand": [
+    361,
+    469
+   ],
+   "face": "E",
+   "plane": "table"
+  },
+  {
+   "id": "questionnaire",
+   "what": "the questionnaire on the table before Dale: forty-seven pages and a green one, a binder clip (cut-out questionnaire.png, while the suits are there)",
+   "shape": {
+    "rect": [
+     379,
+     361,
+     46,
+     19
+    ]
+   },
+   "stand": [
+    361,
+    469
+   ],
+   "face": "E",
+   "plane": "questionnaire"
+  },
+  {
+   "id": "chair-joe",
+   "what": "Grandpa Joe's chair, on the table's left side",
+   "shape": {
+    "poly": [
+     [
+      313,
+      369
+     ],
+     [
+      316,
+      369
+     ],
+     [
+      326,
+      374
+     ],
+     [
+      371,
+      411
+     ],
+     [
+      371,
+      458
+     ],
+     [
+      331,
+      464
+     ],
+     [
+      330,
+      464
+     ],
+     [
+      318,
+      452
+     ],
+     [
+      313,
+      372
+     ]
+    ]
+   },
+   "stand": [
+    361,
+    469
+   ],
+   "face": "N"
+  },
+  {
+   "id": "plant",
+   "what": "the plastic plant (cut-outs plant, plant-droop): it cannot droop. It does.",
+   "shape": {
+    "poly": [
+     [
+      619,
+      316
+     ],
+     [
+      627,
+      309
+     ],
+     [
+      646,
+      303
+     ],
+     [
+      663,
+      306
+     ],
+     [
+      676,
+      313
+     ],
+     [
+      684,
+      324
+     ],
+     [
+      677,
+      447
+     ],
+     [
+      671,
+      480
+     ],
+     [
+      646,
+      482
+     ],
+     [
+      632,
+      475
+     ],
+     [
+      626,
+      441
+     ],
+     [
+      613,
+      331
+     ]
+    ]
+   },
+   "stand": [
+    590,
+    470
+   ],
+   "face": "E",
+   "planes": [
+    "plant",
+    "plant-droop"
+   ]
+  },
+  {
+   "id": "basket",
+   "what": "the wastebasket: steel mesh, crumpled pages of questionnaire in it (front plane)",
+   "shape": {
+    "poly": [
+     [
+      76,
+      528
+     ],
+     [
+      94,
+      510
+     ],
+     [
+      125,
+      506
+     ],
+     [
+      134,
+      507
+     ],
+     [
+      149,
+      516
+     ],
+     [
+      144,
+      587
+     ],
+     [
+      143,
+      592
+     ],
+     [
+      133,
+      600
+     ],
+     [
+      80,
+      600
+     ],
+     [
+      74,
+      538
+     ]
+    ]
+   },
+   "stand": [
+    185,
+    478
+   ],
+   "face": "S",
+   "note": "an extra: not in the brief's list"
+  },
+  {
+   "id": "filebox",
+   "what": "a box of spare questionnaires on the floor near us: QUESTIONNAIRE / FORM 7-C 47 PP. (front plane)",
+   "shape": {
+    "poly": [
+     [
+      353,
+      501
+     ],
+     [
+      407,
+      493
+     ],
+     [
+      414,
+      493
+     ],
+     [
+      434,
+      495
+     ],
+     [
+      450,
+      521
+     ],
+     [
+      449,
+      574
+     ],
+     [
+      367,
+      583
+     ],
+     [
+      359,
+      581
+     ],
+     [
+      353,
+      551
+     ],
+     [
+      352,
+      509
+     ]
+    ]
+   },
+   "stand": [
+    361,
+    475
+   ],
+   "face": "S",
+   "note": "an extra: not in the brief's list"
+  }
+ ],
+ "marks": {
+  "joe": {
+   "at": [
+    344,
+    454
+   ],
+   "face": "E",
+   "scale": 1.051,
+   "seat_cm": 46.0,
+   "seat_height_px": 44,
+   "note": "Grandpa Joe seated at the table, facing the two of them: the floor under his hips (his chair's middle); seated there his hips are seat_height_px above it. Behind the table's row (458), so its top covers his knees"
+  },
+  "dale": {
+   "at": [
+    439,
+    431
+   ],
+   "face": "W",
+   "scale": 0.901,
+   "seat_cm": 46.0,
+   "seat_height_px": 38,
+   "note": "Dale seated across the table, the far one (he reads the questions); the table covers him below its top"
+  },
+  "merle": {
+   "at": [
+    469,
+    446
+   ],
+   "face": "W",
+   "scale": 1.003,
+   "seat_cm": 46.0,
+   "seat_height_px": 42,
+   "note": "Merle seated across the table, the near one (he writes it down); the table covers him below its top"
+  },
+  "chair": {
+   "at": [
+    96,
+    412
+   ],
+   "floor": [
+    96,
+    458
+   ],
+   "scale": 1.078,
+   "base": 467,
+   "face": "S",
+   "seat_row": 412,
+   "note": "Grandpa Joe standing on the corner chair, his feet on its seat: draw him at `scale` (the floor's under him) with his feet at `at`, sorted by `base` (a row just in front of the chair). Reaching up, his hands are at the grille (`vent_hands`). He gets up from `atchair`"
+  },
+  "vent": {
+   "at": [
+    100,
+    412
+   ],
+   "scale": 1.078,
+   "base": 467,
+   "face": "E",
+   "grille": [
+    106,
+    201
+   ],
+   "hand_to": [
+    100,
+    241
+   ],
+   "note": "under the grille's middle: on the corner chair's SEAT (not the floor, not the table). Ranger comes down onto it (draw his frames at `scale`, sorted by `base`), and climbs back from it; a thing handed down is handed to Grandpa Joe on the chair at `hand_to` (just under the slats); one dropped with nobody there lands on this seat. `grille`: the middle of the grille (where the eyes are)"
+  },
+  "vent_hands": [
+   102,
+   209
+  ],
+  "door": [
+   186,
+   452
+  ],
+  "door_face": "S",
+  "opal": [
+   208,
+   460
+  ],
+  "opal_face": "E",
+  "intercom": [
+   295,
+   438
+  ],
+  "intercom_face": "N",
+  "thermostat": [
+   260,
+   443
+  ],
+  "thermostat_face": "N",
+  "hall": [
+   183,
+   428
+  ],
+  "hall_note": "in the hall, just outside the doorway (behind the doorframe: seen through the opening): where Opal and the suits come from and go to"
+ },
+ "stands": {
+  "joe": {
+   "at": [
+    344,
+    454
+   ],
+   "grownup_px": 168
+  },
+  "dale": {
+   "at": [
+    439,
+    431
+   ],
+   "grownup_px": 144
+  },
+  "merle": {
+   "at": [
+    469,
+    446
+   ],
+   "grownup_px": 161
+  },
+  "chair": {
+   "at": [
+    96,
+    458
+   ],
+   "grownup_px": 172
+  },
+  "atchair": {
+   "at": [
+    113,
+    474
+   ],
+   "grownup_px": 190
+  },
+  "door": {
+   "at": [
+    186,
+    452
+   ],
+   "grownup_px": 167
+  },
+  "opal": {
+   "at": [
+    208,
+    460
+   ],
+   "grownup_px": 175
+  },
+  "intercom": {
+   "at": [
+    295,
+    438
+   ],
+   "grownup_px": 152
+  },
+  "thermostat": {
+   "at": [
+    260,
+    443
+   ],
+   "grownup_px": 157
+  },
+  "atjoe": {
+   "at": [
+    361,
+    469
+   ],
+   "grownup_px": 184
+  },
+  "atsign": {
+   "at": [
+    280,
+    442
+   ],
+   "grownup_px": 156
+  },
+  "atposter": {
+   "at": [
+    346,
+    432
+   ],
+   "grownup_px": 145
+  },
+  "atmirror": {
+   "at": [
+    438,
+    420
+   ],
+   "grownup_px": 133
+  },
+  "atclock": {
+   "at": [
+    186,
+    458
+   ],
+   "grownup_px": 173
+  },
+  "attable": {
+   "at": [
+    361,
+    475
+   ],
+   "grownup_px": 191
+  },
+  "atquestionnaire": {
+   "at": [
+    351,
+    449
+   ],
+   "grownup_px": 163
+  },
+  "atcooler": {
+   "at": [
+    556,
+    454
+   ],
+   "grownup_px": 168
+  },
+  "atlamp": {
+   "at": [
+    471,
+    421
+   ],
+   "grownup_px": 134
+  },
+  "atplant": {
+   "at": [
+    590,
+    470
+   ],
+   "grownup_px": 186
+  },
+  "atbasket": {
+   "at": [
+    185,
+    478
+   ],
+   "grownup_px": 194
+  },
+  "atdale": {
+   "at": [
+    449,
+    427
+   ],
+   "grownup_px": 139
+  },
+  "atmerle": {
+   "at": [
+    521,
+    458
+   ],
+   "grownup_px": 173
+  },
+  "front": {
+   "at": [
+    511,
+    473
+   ],
+   "grownup_px": 189
+  }
+ },
+ "fx": [
+  {
+   "id": "second",
+   "what": "the clock's red second hand going round",
+   "at": [
+    184,
+    243
+   ],
+   "foot": [
+    12,
+    22
+   ],
+   "frames": [
+    "second-00.png",
+    "second-01.png",
+    "second-02.png",
+    "second-03.png",
+    "second-04.png",
+    "second-05.png",
+    "second-06.png",
+    "second-07.png",
+    "second-08.png",
+    "second-09.png",
+    "second-10.png",
+    "second-11.png",
+    "second-12.png",
+    "second-13.png",
+    "second-14.png",
+    "second-15.png",
+    "second-16.png",
+    "second-17.png",
+    "second-18.png",
+    "second-19.png",
+    "second-20.png",
+    "second-21.png",
+    "second-22.png",
+    "second-23.png",
+    "second-24.png",
+    "second-25.png",
+    "second-26.png",
+    "second-27.png",
+    "second-28.png",
+    "second-29.png",
+    "second-30.png",
+    "second-31.png",
+    "second-32.png",
+    "second-33.png",
+    "second-34.png",
+    "second-35.png",
+    "second-36.png",
+    "second-37.png",
+    "second-38.png",
+    "second-39.png",
+    "second-40.png",
+    "second-41.png",
+    "second-42.png",
+    "second-43.png",
+    "second-44.png",
+    "second-45.png",
+    "second-46.png",
+    "second-47.png",
+    "second-48.png",
+    "second-49.png",
+    "second-50.png",
+    "second-51.png",
+    "second-52.png",
+    "second-53.png",
+    "second-54.png",
+    "second-55.png",
+    "second-56.png",
+    "second-57.png",
+    "second-58.png",
+    "second-59.png"
+   ],
+   "fps": 1,
+   "plane": "back",
+   "rect": [
+    172,
+    221,
+    25,
+    22
+   ],
+   "note": "60 frames, one a second, from twelve"
+  },
+  {
+   "id": "bubble",
+   "what": "a bubble going up in the cooler's jug, now and then",
+   "at": [
+    566,
+    350
+   ],
+   "foot": [
+    2,
+    24
+   ],
+   "frames": [
+    "bubble-0.png",
+    "bubble-1.png",
+    "bubble-2.png",
+    "bubble-3.png",
+    "bubble-4.png",
+    "bubble-5.png",
+    "bubble-none.png"
+   ],
+   "fps": 6,
+   "plane": "back",
+   "rect": [
+    564,
+    326,
+    4,
+    24
+   ],
+   "note": "bubble-0..5 rising, then bubble-none (the jug at rest): list bubble-none twenty or thirty times after the six, so that it is now and then"
+  }
+ ],
+ "cutouts": {
+  "vent": [
+   58,
+   193,
+   88,
+   20
+  ],
+  "thermostat-72": [
+   240,
+   321,
+   27,
+   19
+  ],
+  "intercom": [
+   276,
+   321,
+   22,
+   33
+  ],
+  "door": [
+   139,
+   259,
+   88,
+   187
+  ],
+  "chair-corner": [
+   71,
+   369,
+   51,
+   99
+  ],
+  "table": [
+   347,
+   367,
+   118,
+   101
+  ],
+  "questionnaire": [
+   383,
+   365,
+   38,
+   11
+  ],
+  "plant": [
+   614,
+   304,
+   69,
+   178
+  ],
+  "front": [
+   75,
+   494,
+   375,
+   106
+  ],
+  "doorframe": [
+   95,
+   231,
+   169,
+   221
+  ],
+  "vent-eyes": [
+   58,
+   193,
+   88,
+   20
+  ],
+  "thermostat-77": [
+   240,
+   321,
+   27,
+   19
+  ],
+  "thermostat-81": [
+   240,
+   321,
+   27,
+   19
+  ],
+  "intercom-lit": [
+   276,
+   321,
+   22,
+   33
+  ],
+  "door-open": [
+   140,
+   260,
+   32,
+   182
+  ],
+  "plant-droop": [
+   610,
+   354,
+   69,
+   128
+  ]
+ },
+ "lights": {
+  "panels": [
+   [
+    [
+     372,
+     214
+    ],
+    [
+     418,
+     218
+    ],
+    [
+     472,
+     201
+    ],
+    [
+     419,
+     196
+    ]
+   ],
+   [
+    [
+     209,
+     202
+    ],
+    [
+     268,
+     207
+    ],
+    [
+     294,
+     184
+    ],
+    [
+     220,
+     177
+    ]
+   ],
+   [
+    [
+     421,
+     158
+    ],
+    [
+     493,
+     167
+    ],
+    [
+     628,
+     114
+    ],
+    [
+     537,
+     95
+    ]
+   ],
+   [
+    [
+     520,
+     206
+    ],
+    [
+     563,
+     210
+    ],
+    [
+     659,
+     189
+    ],
+    [
+     611,
+     182
+    ]
+   ]
+  ],
+  "note": "the four light panels' corners in the picture (for a live glow or a flicker)"
+ },
+ "exits": [],
+ "exits_note": "none: the door is locked for his comfort. People come and go through it by script (mark `hall`, outside it; `door`, inside it)"
+}

@@ -11,6 +11,9 @@
 // they do things, and follow regulations to the letter, which is their whole weakness. They are never frightening.
 // Their office is the Office Of Peculiar Sectors, and they pronounce every letter of it.
 //
+// PASS-17N (round seventeen, the dialogue pass): a little more of Ranger (limo.juice.ranger.joe, and a new word between
+// the two of them once Grandpa Joe is loose, limo.talk.ranger.joe.3c, in nevada-limo.js's talk). Every id is kept.
+//
 // Grandpa Joe's tune is his own, the Last Stop Rag. He hums it (limo.sing.1 to .3): no words, and no real song is sung,
 // named or quoted. The third sector on the clipboard is under Jed's thumb, and nobody names it (decision 2).
 
@@ -25,6 +28,10 @@ export const lines = {
   // the divider slides up; Ranger comes up from under the facing seat with the mirror shades on, and Grandpa Joe laughs
   "limo.open.5": ["grandpajoe", "Well, there you are. I wondered who'd got in."],
   "limo.open.6": ["grandpajoe", "All right, Ranger. You know what to do."],
+  // LETTER-17: then, quietly, with the divider up and the suits out of hearing (Ranger's "..." between): the promise he made
+  // Mom at the wide door (nevada.through.joe.6: "Porch light on. However long it takes.")
+  "limo.promise": ["grandpajoe", "I made that lady a promise, partner."],
+  "limo.promise.joe": ["grandpajoe", "I know. Then we'd best get loose."],
   // Ranger's line in this act, wherever he answers and Grandpa Joe says what he means
   "limo.ranger.dots": ["ranger", "..."],
 
@@ -116,7 +123,7 @@ export const lines = {
   "hint.limo.bag.ranger": ["grandpajoe", "He says the bag's his business and the clipboard's mine. He'll take the pickle for his trouble."],
   // the act's card (the scene shows it as a card, not as lines; written here so that it is in one place)
   "limo.card.1": ["narrator", "THE OFFICE OF PECULIAR SECTORS"],
-  "limo.card.2": ["narrator", "to be continued"],
+  "limo.card.2": ["narrator", "Desert Field Headquarters, the same afternoon"],      // SCENES-17: the arrival's card now (the demo ends at the Office's "Going Down")
 
   // ---------- every thing in the limousine: Grandpa Joe's look; Ranger's ("..."), and what Grandpa Joe says he means ----------
   "limo.divider.joe": ["grandpajoe", "A smoky window to the front. Two fellas behind it in dark shades, and one of 'em's eatin' somethin'."],
@@ -138,7 +145,7 @@ export const lines = {
   "limo.clipboard.ranger.joe": ["grandpajoe", "He says it smells of mustard and worry."],
   "limo.juice.joe": ["grandpajoe", "A juice box with a straw in it. Apple, by the picture."],
   "limo.juice.ranger": ["ranger", "..."],
-  "limo.juice.ranger.joe": ["grandpajoe", "He says he'd trade for it. He'd trade for anything."],
+  "limo.juice.ranger.joe": ["grandpajoe", "He says he'd trade for it. I asked him what with. He changed the subject."],         // PASS-17N: Ranger: a beat of business in a look
   "limo.fridge.joe": ["grandpajoe", "A little icebox under the seat. Empty but for a light. Like Harold, only quieter."],
   "limo.fridge.ranger": ["ranger", "..."],
   "limo.fridge.ranger.joe": ["grandpajoe", "He says he checked. Twice. Nothin'."],
@@ -173,6 +180,7 @@ export const lines = {
   "limo.talk.joe.ranger.4c": ["grandpajoe", "He says the little girls know. He's right."],
   "limo.talk.ranger.joe.1c": ["grandpajoe", "I know, partner. I miss her too. She'll be changin' her hat about now."],
   "limo.talk.ranger.joe.2c": ["grandpajoe", "Them little girls? They'll be fine. They had their mama, and their mama had a plan."],
+  "limo.talk.ranger.joe.3c": ["grandpajoe", "Yes, partner. Four strands and a bow. ...Yes, all four. I was there."],            // PASS-17N: new: Ranger: 'He'll be mentionin' it himself, later' comes round
 
   // ---------- the things carried in this act (js/content/world.js, items): Grandpa Joe's and Ranger's looks, and the family's ----------
   "item.sectormap.grandpajoe": ["grandpajoe", "The office's map. Three holes in my desert, and a column for what opens 'em with nothin' in it."],

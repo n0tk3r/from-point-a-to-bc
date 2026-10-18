@@ -266,6 +266,40 @@ KEYS = {
         "turn_orange": 0.15,
         "density": 0.016, "mark_len": 3, "film": 0.50, "stroke_value": 0.050, "stroke_colour": 0.040,
     },
+    # OFFICE-17: the Office Of Peculiar Sectors' headquarters, under fluorescent tubes (round seventeen). MERGE-17: made
+    # cooler after the first rooms were painted in it: the light ramp toward veronese green, more counted as shade (violet).
+    # A cool, faintly
+    # green white light on beige walls and gray carpet; its shadows go violet. Cloned from lamp-interior and turned
+    # cool: the pair is the tubes' pale green against cobalt violet. (The painters may ask for its numbers to change.)
+    "office-fluorescent": {
+        "title": "The Office under fluorescent tubes",
+        "pair": ("veronese-green", "cobalt-violet"),
+        "light": ["lead-white", mix("lead-white", "veronese-green", 0.35), mix("lead-white", "veronese-green", 0.6),     # MERGE-17: cooler
+                  mix("naples-yellow", "veronese-green", 0.55), "veronese-green"],                                  # (PAINT-17C's proposal)
+        "shadow": {
+            "warm": ["lilac", mix("lilac", "cobalt-violet", 0.5), "cobalt-violet", mix("cobalt-violet", "ultramarine", 0.5), "deep-violet", "prussian-blue"],
+            "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+            "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+            "red": [mix("vermilion", "geranium-lake", 0.5), "burnt-sienna", mix("burnt-sienna", "deep-violet", 0.5), "deep-violet"],
+        },
+        "sky": ["lead-white", mix("lead-white", "veronese-green", 0.3), "cerulean", "cobalt-blue"],     # (the tubes; a lit doorway)
+        "weight": {"veronese-green": 2.2, "naples-yellow": 1.1, "lead-white": 1.5, "cobalt-violet": 2.0, "lilac": 1.8, "yellow-ochre": 1.0,
+                   "viridian": 1.3, "cerulean": 1.2, "ultramarine": 1.1, "burnt-sienna": 1.0, "vermilion": 1.0, "deep-violet": 1.1},
+        "warm_light": 0.46,
+        "shade": 0.55,
+        "turn": 55,
+        "snap": 0.46,
+        "chroma": 0.26,
+        "shade_lo": 0.30, "shade_hi": 0.72,
+        "lit_lo": 0.40, "lit_hi": 0.66,
+        "lift": 0.06,
+        "sky_pull": 0.20,
+        "cast": 0.65,
+        "cool": 0.60,
+        "env_cap": 0.60,         # the tubes are lights, not lit surfaces
+        "turn_orange": 0.12,
+        "density": 0.016, "mark_len": 3, "film": 0.50, "stroke_value": 0.050, "stroke_colour": 0.040,
+    },
 }
 
 # The people (the rig's flat four-tone figures) take the scene's key with a few numbers of their own: small and flat,
@@ -274,7 +308,8 @@ KEYS = {
 # it tints the ground as the picture's own shadows do instead of greying it.
 PEOPLE = {"snap": 0.62, "shade": 0.85, "warm_light": 0.52, "chroma": 0.34, "turn": 40}
 GROUND_SHADOW = {"rome-morning": 0.46, "egypt-noon": 0.46, "home-night": 0.30,     # the lightness of the shadow paint
-                 "lamp-interior": 0.30, "nevada-morning": 0.46, "highway-dusk": 0.34}
+                 "lamp-interior": 0.30, "nevada-morning": 0.46, "highway-dusk": 0.34,
+                 "office-fluorescent": 0.34}                                     # OFFICE-17
 GROUND_ALPHA_GAIN = 0.7                                                            # alpha x (1 + gain * strength)
 
 
@@ -300,6 +335,10 @@ SCENE_KEY = {
     "nevada-roadside": "nevada-morning",                                          # Act Four
     "nevada-store": "nevada-morning",                                             # NEVADA-12B: the store, lit by the morning through its window
     "nevada-limo": "nevada-morning",                                              # Act Five: daylight through smoked glass, the same morning (NEVADA-12C)
+    "office-lot": "nevada-morning",                                               # OFFICE-17A: the Office's lot, the same day's light (early afternoon)
+    "office-ducts": "office-fluorescent",                                         # OFFICE-17B: the ducts, lit by the rooms' tubes through the grilles
+    "office-room": "office-fluorescent", "office-property": "office-fluorescent", # OFFICE-17C: the Comfortable Room and Property & Effects
+    "office-breakroom": "office-fluorescent",                                     # OFFICE-17D: the Office's break room, under its tubes
 }
 # A scene that is not in the table yet: its era's daylight key (an interior lit by lamps should be put in the table
 # with "lamp-interior").

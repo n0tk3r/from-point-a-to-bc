@@ -1075,6 +1075,8 @@ _TINY = {  # NEVADA-12B
     "N": ["X.X", "XXX", "XXX", "XXX", "X.X"], "O": ["XXX", "X.X", "X.X", "X.X", "XXX"], "P": ["XXX", "X.X", "XXX", "X..", "X.."],
     "R": ["XX.", "X.X", "XX.", "X.X", "X.X"], "S": ["XXX", "X..", "XXX", "..X", "XXX"], "V": ["X.X", "X.X", "X.X", "X.X", ".X."],
     "Y": ["X.X", "X.X", ".X.", ".X.", ".X."],
+    "M": ["X.X", "XXX", "XXX", "X.X", "X.X"], "G": ["XXX", "X..", "X.X", "X.X", "XXX"], "H": ["X.X", "X.X", "XXX", "X.X", "X.X"],    # OFFICE-17D
+    "T": ["XXX", ".X.", ".X.", ".X.", ".X."], "U": ["X.X", "X.X", "X.X", "X.X", "XXX"],                                            # OFFICE-17D
 }
 
 
@@ -1344,6 +1346,338 @@ def receipt(b, l):
     l.ellipse(*R([(31.0, 48.0)])[0], 1.0, 1.2, "#8a8494", 0.6)
 
 
+# ---------------------------------------------------------------- OFFICE-17D: the Office's things (round seventeen)
+CHROME = ("#ffffff", "#d6dbe2", "#9aa1ad", "#5e6470", "#3a3e48")               # the banjo's rim and hoop (the rig's chrome, one more dark)
+NECK = ("#c48e5c", "#8a5a36", "#603c22", "#3c2414")                           # its neck: the rig's dark wood
+HEAD = ("#ffffff", "#f5f2e8", "#d4cebd", "#9c9684")                           # its old head: the rig's white
+TIN = ("#ffffff", "#e6eaee", "#c2c8d0", "#929aa6", "#5c6470")                  # a pie tin's aluminium
+
+
+def _banjo_neck(b, l, pot, r_out, nut, tip):
+    """The neck, its fingerboard and frets, the headstock and its pegs, the fifth string's peg part way up: from the
+    pot's rim (centre `pot`, rim radius `r_out`) to the nut, then the headstock to its tip. -> (at(t, w), its length,
+    the way it runs, across it)"""
+    px, py = pot
+    ux, uy = nut[0] - px, nut[1] - py
+    L = math.hypot(ux, uy)
+    ux, uy = ux / L, uy / L
+    nx, ny = uy, -ux                                         # across the neck, toward its upper left side (the light's)
+    a = (px + ux * (r_out - 3.0), py + uy * (r_out - 3.0))
+
+    def at(t, w):
+        return (a[0] + ux * t + nx * w, a[1] + uy * t + ny * w)
+    Ln = math.hypot(nut[0] - a[0], nut[1] - a[1])
+    w0, w1 = 3.8, 3.0
+    b.poly([at(0, -w0 - 0.6), at(Ln, -w1 - 0.6), at(Ln + 0.6, -w1 + 0.8), at(0.6, -w0 + 0.8)], NECK[3])            # its shadow side
+    b.poly([at(0, w0), at(Ln, w1), at(Ln, -w1), at(0, -w0)], NECK[1])
+    b.poly([at(0, w0 - 1.2), at(Ln, w1 - 1.0), at(Ln, -w1 + 0.9), at(0, -w0 + 1.0)], NECK[2])                      # the fingerboard, dark
+    b.poly([at(0, w0), at(Ln, w1), at(Ln, w1 - 0.9), at(0, w0 - 1.1)], NECK[0])                                   # its lit edge
+    for k in range(8):                                                                                            # frets, closer toward the pot
+        t = Ln * (1 - (0.90 ** (k * 2.0 + 0.6)))
+        l.line([at(t, -w0 + 1.2), at(t, w0 - 1.3)], "#e8dcc4", 0.7, 0.8)
+    for t in (Ln * 0.36, Ln * 0.58, Ln * 0.76):                                                                   # the inlay dots
+        l.ellipse(*at(t, 0.0), 0.7, 0.7, "#f4ecd8", 0.9)
+    l.line([at(Ln - 0.3, -w1), at(Ln - 0.3, w1)], "#f8f0dc", 1.3, 0.95)                                            # the nut
+    # the headstock: wider, its end shaped, four pegs standing out at its sides
+    hx, hy = tip
+    hb = at(Ln, 0)
+    hux, huy = (hx - hb[0]), (hy - hb[1])
+    hL = math.hypot(hux, huy)
+    hux, huy = hux / hL, huy / hL
+    hnx, hny = huy, -hux
+
+    def hat_(t, w):
+        return (hb[0] + hux * t + hnx * w, hb[1] + huy * t + hny * w)
+    b.poly([hat_(0, -3.4), hat_(hL * 0.7, -4.6), hat_(hL, -3.0), hat_(hL + 0.8, 0.0), hat_(hL, 3.0), hat_(hL * 0.7, 4.6), hat_(0, 3.4)], NECK[3])
+    b.poly([hat_(0, 3.4), hat_(hL * 0.7, 4.6), hat_(hL, 3.0), hat_(hL + 0.8, 0.0), hat_(hL * 0.5, 0.6)], NECK[1])
+    for t in (hL * 0.34, hL * 0.80):
+        for sd in (1, -1):
+            l.line([hat_(t, sd * 3.6), hat_(t, sd * 6.0)], "#cfc8b8", 1.1, 0.95)
+            l.ellipse(*hat_(t, sd * 7.2), 1.8, 1.6, "#fffaf0")
+            l.ellipse(*hat_(t + 0.6, sd * 7.4 - 0.2), 0.8, 0.7, "#b8b0a0", 0.9)
+    fp = at(Ln * 0.40, -w0 - 0.4)                                                                                  # the fifth string's peg
+    l.line([fp, (fp[0] - nx * 2.8, fp[1] - ny * 2.8)], "#cfc8b8", 1.0, 0.9)
+    l.ellipse(fp[0] - nx * 4.0, fp[1] - ny * 4.0, 1.5, 1.4, "#fffaf0")
+    return at, Ln, (ux, uy), (nx, ny)
+
+
+def _banjo_rim(b, l, c, r_out, r_in, deg=-12):
+    """The pot's rim and its hoop, chrome, face on and a little turned: lit at its top left, dark at its bottom
+    right."""
+    cx, cy = c
+    b.poly(oval(cx + 1.8, cy + 2.0, r_out, r_out * 0.94, deg, 44), CHROME[4])                 # its depth, on the shadow side
+    b.poly(oval(cx, cy, r_out, r_out * 0.94, deg, 44), CHROME[2])
+    b.poly(loop([(cx - r_out * 0.95, cy + 3), (cx - r_out * 0.70, cy - r_out * 0.66), (cx, cy - r_out * 0.95), (cx + r_out * 0.55, cy - r_out * 0.80),
+                 (cx + 2, cy - r_out * 0.70), (cx - r_out * 0.60, cy - r_out * 0.38), (cx - r_out * 0.78, cy + 2)], 4), CHROME[1])   # its lit arc
+    b.poly(loop([(cx + r_out * 0.95, cy - 3), (cx + r_out * 0.68, cy + r_out * 0.64), (cx, cy + r_out * 0.94), (cx - r_out * 0.48, cy + r_out * 0.80),
+                 (cx - 1, cy + r_out * 0.70), (cx + r_out * 0.62, cy + r_out * 0.36)], 4), CHROME[3])                      # and its shadowed one
+    rim = oval(cx, cy, r_out, r_out * 0.94, deg, 44)
+    inner = oval(cx, cy, r_in, r_in * 0.94, deg, 44)
+    return rim, inner
+
+
+def _brackets(l, c, r, deg=-12, n=16):
+    cx, cy = c
+    for i in range(n):
+        ang = i / n * 2 * math.pi + 0.15
+        x, y = rot([(cx + math.cos(ang) * r, cy + math.sin(ang) * r * 0.94)], deg, (cx, cy))[0]
+        lit = math.cos(ang - math.radians(225))
+        l.ellipse(x, y, 1.15, 1.15, CHROME[0] if lit > 0.3 else (CHROME[2] if lit > -0.4 else CHROME[4]))
+
+
+def _tailpiece(l, pot, ro):
+    tail = rot([(pot[0] - 4.0, pot[1] + ro - 1.6)], -12, pot)[0]
+    l.poly([(tail[0] - 3.0, tail[1] - 0.6), (tail[0] + 3.0, tail[1] - 1.6), (tail[0] + 2.0, tail[1] + 2.8), (tail[0] - 1.8, tail[1] + 3.2)], CHROME[2])
+    l.line([(tail[0] - 3.0, tail[1] - 0.6), (tail[0] + 3.0, tail[1] - 1.6)], CHROME[0], 0.8, 0.9)
+    return tail
+
+
+POT, RO, RI = (22.5, 40.5), 20.5, 16.0
+BANJO_NUT, BANJO_TIP = (51.6, 12.4), (59.0, 4.8)
+
+
+def banjo_broken(b, l):
+    """Grandpa Joe's banjo, damaged: the head broken right through (Jed's head went through it), its torn white edges
+    left round the inside of the rim and the hole clean through the middle; the strings gone slack, hanging in loops
+    out of it; the neck, its pegs, the rim and its brackets as they were. OFFICE-17D"""
+    pot, ro, ri = POT, RO, RI
+    at, Ln, u, n = _banjo_neck(b, l, pot, ro, BANJO_NUT, BANJO_TIP)
+    rim, inner = _banjo_rim(b, l, pot, ro, ri)
+    # what is left of the head: a ring of torn white round the inside, jagged toward the middle
+    rng = np.random.default_rng(1703)
+    shard = []
+    for i in range(40):
+        ang = i / 40 * 2 * math.pi
+        rr = ri * (0.58 + 0.28 * rng.random()) if i % 3 else ri * (0.80 + 0.10 * rng.random())
+        shard.append(rot([(pot[0] + math.cos(ang) * rr, pot[1] + math.sin(ang) * rr * 0.94)], -12, pot)[0])
+    b.poly(inner, HEAD[2])
+    b.poly(loop(inner[18:34] + [shard[k] for k in range(34, 18, -1)], 2), HEAD[1])          # the torn edge toward the light, catching it
+    _hole(b, shard)                                                                          # the hole, clean through
+    l.line(shard + shard[:1], HEAD[3], 0.9, 0.9)
+    for k in range(0, 40, 3):                                                               # tears running out from the hole
+        x, y = shard[k]
+        dx, dy = x - pot[0], y - pot[1]
+        d = math.hypot(dx, dy) + 1e-6
+        l.line([(x, y), (x + dx / d * 2.4, y + dy / d * 2.4)], HEAD[3], 0.8, 0.8)
+    l.line(inner[20:38], CHROME[4], 1.0, 0.8)
+    l.line(rim[18:34], CHROME[0], 1.3, 0.95)
+    l.line(rim[38:44] + rim[:9], CHROME[4], 1.1, 0.7)
+    _brackets(l, pot, ro - 2.1)
+    _tailpiece(l, pot, ro)
+    # the strings: snapped where the bridge went, their ends curled up at the foot of the neck; one, still on its
+    # tailpiece, trailing loose out under the rim
+    for k, w in enumerate((-1.4, 0.0, 1.4)):
+        start = at(Ln - 0.3, w * 0.7)
+        end = at(Ln * (0.10 + 0.06 * k), w * 0.85)
+        l.line([start, end], "#f6eedc", 0.5, 0.7)                                              # still tight down the neck
+        cx_, cy_ = end
+        turn = (1, -1, 1)[k]
+        spiral = [(cx_ + math.cos(t) * (0.6 + t * 0.32) * turn - u[0] * t * 0.55, cy_ + math.sin(t) * (0.6 + t * 0.32) - u[1] * t * 0.55)
+                  for t in np.linspace(0.0, 2.2 * math.pi, 22)]
+        l.line([end] + spiral, "#3c3430", 1.0, 0.45)
+        l.line([end] + spiral, "#f6eedc", 0.55, 0.95)
+    tail = rot([(pot[0] - 4.0, pot[1] + ro - 1.6)], -12, pot)[0]
+    trail = curve([(tail[0] + 1.0, tail[1] + 1.6), (tail[0] + 5.0, tail[1] + 4.4), (tail[0] + 3.6, tail[1] + 7.6), (tail[0] + 8.6, tail[1] + 8.4),
+                   (tail[0] + 12.0, tail[1] + 6.0)], 6)
+    l.line(trail, "#3c3430", 1.0, 0.45)
+    l.line(trail, "#f6eedc", 0.55, 0.95)
+
+
+def banjo_pie(b, l):
+    """The pie-tin banjo: Grandpa Joe's banjo with the clean pie tin stretched on for its head, the tin's crimped rim
+    plain round the inside of the hoop, its shine and its pressed rings plain to see, a bridge on it and the strings
+    tight over it again. OFFICE-17D"""
+    pot, ro, ri = POT, RO, RI
+    at, Ln, u, n = _banjo_neck(b, l, pot, ro, BANJO_NUT, BANJO_TIP)
+    rim, inner = _banjo_rim(b, l, pot, ro, ri)
+    b.poly(inner, TIN[3])                                                                    # the tin, its bottom for a head: its crimped edge darker
+    face = oval(pot[0], pot[1], ri - 2.6, (ri - 2.6) * 0.94, -12, 40)
+    b.poly(face, TIN[1])
+    b.poly(rot(loop([(pot[0] - 11.0, pot[1] + 3.0), (pot[0] - 5.0, pot[1] - 9.0), (pot[0] + 4.0, pot[1] - 11.0), (pot[0] - 1.0, pot[1] - 1.0),
+                     (pot[0] - 7.0, pot[1] + 7.0)], 4), -12, pot), TIN[0])                       # the light across it
+    for i in range(44):                                                                      # the tin's crimped rim, round the inside of the hoop
+        ang = i / 44 * 2 * math.pi
+        p0 = rot([(pot[0] + math.cos(ang) * (ri - 0.2), pot[1] + math.sin(ang) * (ri - 0.2) * 0.94)], -12, pot)[0]
+        p1 = rot([(pot[0] + math.cos(ang) * (ri - 2.8), pot[1] + math.sin(ang) * (ri - 2.8) * 0.94)], -12, pot)[0]
+        lit = math.cos(ang - math.radians(225))
+        l.line([p0, p1], TIN[0] if i % 2 else TIN[3], 0.8, 0.9 if (i % 2 and lit > -0.3) else 0.6)
+    for rr in (ri - 6.2, ri - 9.4):                                                          # the rings pressed into it
+        ring = oval(pot[0], pot[1], rr, rr * 0.94, -12, 36)
+        l.line(ring[18:34], TIN[3], 0.8, 0.85)
+        l.line(ring[1:15], TIN[0], 0.8, 0.9)
+    l.line(rim[18:34], CHROME[0], 1.3, 0.95)
+    l.line(rim[38:44] + rim[:9], CHROME[4], 1.1, 0.7)
+    _brackets(l, pot, ro - 2.1)
+    tail = _tailpiece(l, pot, ro)
+    # the bridge on the tin, and the strings tight from the tailpiece over it to the nut
+    nut = at(Ln - 0.3, 0)
+    br = (pot[0] + u[0] * 2.0 - 0.6, pot[1] + u[1] * 2.0 + 3.4)
+    for w in (-1.5, 0.0, 1.5):
+        p0 = (tail[0] + n[0] * w * 1.2, tail[1] + n[1] * w * 1.2)
+        p1 = (nut[0] + n[0] * w * 0.7, nut[1] + n[1] * w * 0.7)
+        pm = (pot[0] + u[0] * (ro - 1.0) + n[0] * w, pot[1] + u[1] * (ro - 1.0) + n[1] * w)    # where the neck begins
+        l.line([p0, pm], "#2a2420", 0.9, 0.55)                                                 # over the tin: dark-edged, so they show on it
+        l.line([p0, pm], "#fff8e8", 0.5, 1.0)
+        l.line([pm, p1], "#f6eedc", 0.5, 0.65)                                                 # down the neck: thin lines of light
+    l.line([(br[0] - n[0] * 3.6, br[1] - n[1] * 3.6), (br[0] + n[0] * 3.6, br[1] + n[1] * 3.6)], "#4a2c18", 1.9)       # the bridge, across them
+    l.line([(br[0] - n[0] * 3.2 - u[0] * 0.6, br[1] - n[1] * 3.2 - u[1] * 0.6), (br[0] + n[0] * 3.2 - u[0] * 0.6, br[1] + n[1] * 3.2 - u[1] * 0.6)],
+           "#b88a5c", 0.7, 0.95)
+    sx, sy = 12.6, 31.0
+    l.poly([(sx, sy - 5.2), (sx + 1.0, sy - 1.0), (sx + 5.2, sy), (sx + 1.0, sy + 1.0), (sx, sy + 5.2), (sx - 1.0, sy + 1.0), (sx - 5.2, sy), (sx - 1.0, sy - 1.0)], "#ffffff")
+
+
+def pietin(b, l):
+    """An empty pie tin, washed and shining: a round aluminium plate seen from above and in front, its crimped rim, its
+    sloping side, its flat bottom with the rings pressed into it, the light running across it, a sparkle. OFFICE-17D"""
+    cx, cy, rx, ry, deg = 32.0, 30.0, 28.6, 18.6, -7
+    T = lambda pts: rot(pts, deg, (cx, cy))
+    rim = T([(cx + math.cos(i / 88 * 2 * math.pi) * (rx - (0.0 if i % 2 else 0.9)), cy + math.sin(i / 88 * 2 * math.pi) * (ry - (0.0 if i % 2 else 0.6)))
+             for i in range(88)])                                                            # crimped: its edge goes in and out
+    b.poly([(x + 0.8, y + 4.6) for x, y in rim], TIN[4])                                     # its outside, under the rim, on the shadow side
+    b.poly(rim, TIN[1])
+    lip_in = oval(cx, cy, rx - 4.0, ry - 2.7, deg, 44)
+    b.poly(lip_in, TIN[3])                                                                   # the sloping side, inside
+    bot = oval(cx + 0.4, cy + 3.0, rx - 9.6, ry - 6.4, deg, 44)
+    b.poly(bot, TIN[2])                                                                      # the bottom
+    b.poly(T(loop([(cx - 20.6, cy - 1.0), (cx - 14.0, cy - 11.4), (cx - 2.0, cy - 15.0), (cx - 6.0, cy - 10.4), (cx - 14.6, cy - 5.6)], 4)), TIN[1])   # the far side, lit
+    b.poly(T(loop([(cx - 15.0, cy + 6.0), (cx - 4.0, cy - 6.0), (cx + 6.0, cy - 8.0), (cx - 3.0, cy + 2.0), (cx - 10.0, cy + 9.0)], 4)), TIN[0])      # the light across the bottom
+    for k, (ex, ey) in enumerate(((rx - 12.6, ry - 8.6), (rx - 15.6, ry - 10.6))):
+        ring = oval(cx + 0.4, cy + 3.0, ex, ey, deg, 40)
+        l.line(ring[22:40], TIN[3], 0.8, 0.7)                                                # the rings pressed into the bottom
+        l.line(ring[2:18], TIN[0], 0.8, 0.8)
+    for i in range(44):                                                                      # the crimps round the rim
+        ang = i / 44 * 2 * math.pi
+        p0 = T([(cx + math.cos(ang) * (rx - 0.6), cy + math.sin(ang) * (ry - 0.4))])[0]
+        p1 = T([(cx + math.cos(ang) * (rx - 3.6), cy + math.sin(ang) * (ry - 2.4))])[0]
+        lit = math.cos(ang - math.radians(225))
+        l.line([p0, p1], TIN[0] if i % 2 else (TIN[3] if lit > -0.3 else TIN[4]), 1.0, 0.95)
+    l.line(rim[44:80], TIN[0], 1.2, 0.95)                                                    # the far lip, in the light
+    l.line(rim[0:40], TIN[4], 1.0, 0.7)
+    l.line(lip_in[0:20], TIN[0], 0.8, 0.75)
+    l.line(lip_in[24:40], TIN[4], 0.8, 0.6)
+    sx, sy = 20.6, 22.0                                                                      # it shines
+    l.poly([(sx, sy - 6.6), (sx + 1.3, sy - 1.3), (sx + 6.6, sy), (sx + 1.3, sy + 1.3), (sx, sy + 6.6), (sx - 1.3, sy + 1.3), (sx - 6.6, sy), (sx - 1.3, sy - 1.3)], "#ffffff")
+    l.poly([(46.6, 37.4), (47.2, 39.4), (49.2, 40.0), (47.2, 40.6), (46.6, 42.6), (46.0, 40.6), (44.0, 40.0), (46.0, 39.4)], "#ffffff", 0.9)
+
+
+def schedule(b, l):
+    """The test schedule, off the corkboard: a typed sheet, LAMPLIGHTER across its head over a rule, rows of typing
+    under it (too small to read here: the lines say what it says), its top corner torn off where the pin held it, a
+    fold across it from the trip through the duct. OFFICE-17D"""
+    c = (32, 32)
+    R = lambda pts: rot(pts, 3, c)
+    paper = ("#ffffff", "#f4f2ea", "#d6d2c4", "#9a968a")
+    sheet = [(11.6, 9.0), (47.0, 7.2), (52.4, 12.8), (52.4, 58.0), (11.6, 58.0)]          # the top right corner torn away
+    b.poly(R([(x + 1.2, y + 1.4) for x, y in sheet]), "#5a5650")
+    b.poly(R(sheet), paper[1])
+    b.poly(R([(11.6, 34.0), (52.4, 32.6), (52.4, 58.0), (11.6, 58.0)]), paper[0])           # folded once across: the lower half in the light
+    tear = [(47.0, 7.2), (48.6, 9.4), (48.0, 10.6), (50.4, 11.0), (52.4, 12.8)]
+    l.line(R(tear), paper[3], 0.9, 0.95)
+    l.line(R([(11.6, 34.0), (52.4, 32.6)]), paper[2], 1.0, 0.9)                              # the fold
+    l.line(R([(11.6, 34.8), (52.4, 33.4)]), "#ffffff", 0.7, 0.9)
+    l.ellipse(*R([(30.0, 10.6)])[0], 0.7, 0.7, "#6a665c", 0.9)                               # where the pin went through
+    # the heading, and its rule
+    x0, y0 = R([(14.0, 13.6)])[0]
+    _tiny_r(l, "LAMPLIGHTER", 14.6, 13.0, "#16161e", 3)
+    l.line(R([(14.0, 20.4), (49.6, 20.4)]), "#2a2a36", 1.0, 0.95)
+    # rows of typing: dates, hours, a sector, its notes
+    rows = [(23.6, 0.70), (27.0, 0.55), (30.4, 0.62), (37.4, 0.72), (40.8, 0.30), (47.2, 0.66), (50.6, 0.58)]
+    for (y, frac) in rows:
+        x = 14.4
+        while x < 14.4 + 34.0 * frac:
+            ln = 1.0 + (int(x * 7.3) % 3) * 0.6
+            l.line(R([(x, y), (x + ln, y)]), "#3a3a48", 1.0, 0.9)
+            x += ln + 0.9
+    l.line(R([(14.0, 44.2), (30.0, 44.2)]), "#7a7a86", 0.6, 0.6)                             # a typed underline
+
+
+def _tiny_r(l, text, x, y, color, deg, c=(32, 32)):
+    """Tiny capitals, turned with the sheet they are on: each pixel of a letter put through the turn."""
+    for ch in text:
+        if ch == " ":
+            x += 3
+            continue
+        for j, row in enumerate(_TINY[ch]):
+            for k, bit in enumerate(row):
+                if bit == "X":
+                    l.poly(rot([(x + k, y + j), (x + k + 1, y + j), (x + k + 1, y + j + 1), (x + k, y + j + 1)], deg, c), color)
+        x += len(_TINY[ch][0]) + 0.3
+    return x
+
+
+def bottlecap(b, l):
+    """A bottle cap, red, his best: its crown a little domed, a pale ring pressed round it, its crimped skirt; bent up a
+    little on one side where it came off its bottle; shining. OFFICE-17D"""
+    red = ("#ffd2c4", "#f2604a", "#d42c26", "#9e1c1a", "#5c0e10")
+    cx, cy, rx, ry, deg = 31.0, 30.0, 21.0, 14.6, -10
+    T = lambda pts: rot(pts, deg, (cx, cy))
+    skirt = []
+    for i in range(42):                                                                      # the crimped skirt: 21 flutes
+        ang = i / 42 * 2 * math.pi
+        r = 1.0 if i % 2 else 0.90
+        bend = 3.6 * max(0.0, math.cos(ang - math.radians(-28))) ** 3                         # bent up a little at the right
+        skirt.append(T([(cx + math.cos(ang) * rx * r, cy + math.sin(ang) * ry * r - bend)])[0])
+    b.poly([(x + 0.6, y + 6.8) for x, y in skirt], red[4])                                   # its side, toward us
+    b.poly([(x + 0.3, y + 3.6) for x, y in skirt], red[3])
+    b.poly(skirt, red[2])
+    top = oval(cx - 0.6, cy - 0.6, rx * 0.72, ry * 0.72, deg, 36)
+    b.poly(top, red[1])                                                                      # the crown
+    b.poly(T(loop([(cx - 11.4, cy - 1.0), (cx - 6.4, cy - 7.0), (cx + 2.0, cy - 8.6), (cx - 2.0, cy - 4.4), (cx - 8.0, cy - 0.6)], 4)), red[0])   # the light on its dome
+    ring = oval(cx - 0.6, cy - 0.6, rx * 0.56, ry * 0.56, deg, 36)
+    l.line(ring + ring[:1], "#f6e2c8", 1.0, 0.85)                                            # a pale ring pressed round it (no name)
+    l.line(top[19:35], red[4], 0.9, 0.6)
+    for i in range(0, 42, 2):                                                                # the flutes' edges
+        x, y = skirt[i]
+        l.line([(x, y), (x + 0.4, y + 3.4)], red[4] if 8 < i < 30 else red[1], 0.8, 0.8)
+    l.line(skirt[21:42] + skirt[:1], red[0], 0.9, 0.7)
+    sx, sy = 18.6, 21.4                                                                      # his best: it shines
+    l.poly([(sx, sy - 5.8), (sx + 1.2, sy - 1.2), (sx + 5.8, sy), (sx + 1.2, sy + 1.2), (sx, sy + 5.8), (sx - 1.2, sy + 1.2), (sx - 5.8, sy), (sx - 1.2, sy - 1.2)], "#ffffff")
+
+
+def peanuts(b, l):
+    """A small packet of peanuts out of the snack machine: a yellow pillow of a packet, its ends sealed with a crimp,
+    two peanuts drawn on it and PEANUTS in red (no maker's name). OFFICE-17D"""
+    c, deg = (32.0, 32.0), -14
+    T = lambda pts: rot(pts, deg, c)
+    yel = ("#fff6c0", "#f8d850", "#e0b42e", "#a8801e", "#6a5014")
+    body = [(14.0, 14.0), (50.0, 14.0), (51.4, 32.0), (50.0, 50.0), (14.0, 50.0), (12.6, 32.0)]
+    b.poly(T([(x + 1.4, y + 1.6) for x, y in body]), yel[4])
+    b.poly(T(body), yel[1])
+    b.poly(T([(14.0, 14.0), (50.0, 14.0), (50.6, 22.0), (13.4, 22.0)]), yel[0])              # it is puffed: lit along its top
+    b.poly(T([(13.2, 41.0), (50.8, 41.0), (50.0, 50.0), (14.0, 50.0)]), yel[2])
+    for (y0, y1, sgn) in ((8.6, 14.0, -1), (50.0, 55.4, 1)):                                 # the sealed ends, crimped
+        b.poly(T([(15.0, y0), (49.0, y0), (50.0, y1), (14.0, y1)]), yel[2] if sgn > 0 else yel[1])
+        for x in np.arange(15.6, 49.0, 1.8):
+            l.line(T([(x, y0 + 0.4), (x, y1 - 0.4)]), yel[3], 0.6, 0.75)
+        teeth = [(lerp(15.0, 49.0, i / 17), (y0 if sgn < 0 else y1) + (sgn * 0.9 if i % 2 else 0.0)) for i in range(18)]
+        l.line(T(teeth), yel[3], 0.8, 0.85)
+    # the drawing: two peanuts in their shells, each a figure of eight, pale tan, outlined, a little netted
+    for (px, py, ang) in ((25.4, 34.0, -32.0), (38.6, 32.4, 24.0)):
+        lobes = [(px - 3.4, py, 3.5, 3.1), (px + 3.4, py, 3.2, 2.8)]
+        outline = []
+        for (lx, ly, rx_, ry_) in lobes:
+            outline.append(rot(oval(lx, ly, rx_, ry_, 0, 20), ang, (px, py)))
+        for o in outline:
+            l.poly(T([(x + 0.8, y + 0.9) for x, y in o]), "#5a3a1a")                         # its shadow
+        for o in outline:
+            l.poly(T(o), "#d8a464")
+        l.poly(T(rot(oval(px, py, 1.4, 2.0, 0, 12), ang, (px, py))), "#d8a464")               # the waist
+        for (lx, ly, rx_, ry_) in lobes:
+            l.line(T(rot(oval(lx, ly, rx_, ry_, 0, 20)[8:18], ang, (px, py))), "#7a4e22", 0.7, 0.9)
+            for k in (-1.2, 1.2):
+                l.line(T(rot([(lx + k - 0.8, ly - 1.4), (lx + k + 0.8, ly + 1.4)], ang, (px, py))), "#a87438", 0.5, 0.8)
+            l.ellipse(*T(rot([(lx - rx_ * 0.35, ly - ry_ * 0.45)], ang, (px, py)))[0], 0.9, 0.6, "#f4d8a0", 0.9)
+    # PEANUTS, in red tiny capitals across its top half
+    x = 18.4
+    for ch in "PEANUTS":
+        for j, row in enumerate(_TINY[ch]):
+            for k, bit in enumerate(row):
+                if bit == "X":
+                    l.poly(T([(x + k, 17.0 + j), (x + k + 1, 17.0 + j), (x + k + 1, 18.0 + j), (x + k, 18.0 + j)]), "#c8241e")
+        x += 4.0
+    l.line(T(body[:2]), yel[0], 0.8, 0.8)
+
+
 ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
              coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
 ITEMS["pass"] = pass_
@@ -1353,10 +1687,13 @@ ITEMS.update(chicken=chicken, batteries=batteries)
 ITEMS.update(penny=penny, pennies=pennies, mirrorshades=mirrorshades, egg=egg, waters=waters, storeshade=storeshade,      # NEVADA-12B
              sectormap=sectormap, receipt=receipt)
 ITEMS.update(gaultoga=gaultoga, lamp=lamp)                                                  # ROME-13R1: the Gaul's toga, Phyllis's lamp
+ITEMS.update({"banjo-broken": banjo_broken, "pietin": pietin, "banjo-pie": banjo_pie, "schedule": schedule,          # OFFICE-17D: the Office's
+              "bottlecap": bottlecap, "peanuts": peanuts})
 ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",
          "phone", "quarter", "gum", "studykey", "lilflash", "pencil", "carkey", "chicken", "batteries",
          "penny", "pennies", "mirrorshades", "egg", "waters", "storeshade", "sectormap", "receipt"]                    # NEVADA-12B: the store's things
 ORDER += ["gaultoga", "lamp"]                                                               # ROME-13R1: the bigger Rome's two
+ORDER += ["banjo-broken", "pietin", "banjo-pie", "schedule", "bottlecap", "peanuts"]         # OFFICE-17D: the Office's six
 
 
 # ---------------------------------------------------------------- painting one

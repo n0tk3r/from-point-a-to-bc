@@ -22,6 +22,7 @@ import { act as rome } from "./acts/rome.js";
 import { act as home } from "./acts/home.js";
 import { act as nevada } from "./acts/nevada.js";
 import { act as limo } from "./acts/limo.js";                    // NEVADA-12SC: Act Five, in the limousine
+import { act as office } from "./acts/office.js";                // SCENES-17: Act Five, continued: the Office, stage one
 
 export const story = {
   // Where a new game begins, and the facts that are already true by then
@@ -56,5 +57,5 @@ export const story = {
     grandpajoe: ["give.grandpajoe.1"], ranger: ["give.ranger.1"] },                                                                    // NEVADA-12W
 
   // The acts, in order. Each is its own file in js/content/acts/.
-  acts: [prologue, egypt, rome, home, nevada, limo],      // NEVADA-12SC: limo
+  acts: [prologue, egypt, rome, home, nevada, limo, office],      // NEVADA-12SC: limo; SCENES-17: office
 };

@@ -1,0 +1,2184 @@
+{
+ "id": "office-lot",
+ "horizon": 140,
+ "full": 588,
+ "view": {
+  "horizon": 140,
+  "full": 588,
+  "cam": [
+   0.0,
+   831.25
+  ],
+  "yaw": 0.0,
+  "focal": 760.0,
+  "centre_x": 400.0
+ },
+ "view_note": "the room camera (room.View) these numbers make: X across, Z toward us; Z = -z of the painter's measurements (office_lot_kit), the lens 490 cm up at Z 831.25, square on to the building's front (yaw 0)",
+ "eye_cm": 490.0,
+ "vanishing": [
+  400.0,
+  140
+ ],
+ "light": "early afternoon, 31 October: the sun high (49 degrees) and a little behind us to the left; fronts lit, tops brightest, right-hand ends in shade; short shadows falling back and to the right. Key: nevada-morning (the same day's light)",
+ "walk": [
+  [
+   [
+    0.0,
+    393.1
+   ],
+   [
+    88.0,
+    393.1
+   ],
+   [
+    88.0,
+    430.2
+   ],
+   [
+    500.7,
+    430.2
+   ],
+   [
+    488.7,
+    395.5
+   ],
+   [
+    800.0,
+    395.5
+   ],
+   [
+    800.0,
+    597.0
+   ],
+   [
+    0.0,
+    597.0
+   ]
+  ],
+  [
+   [
+    123.9,
+    247.5
+   ],
+   [
+    438.5,
+    247.5
+   ],
+   [
+    432.6,
+    231.2
+   ],
+   [
+    165.7,
+    231.2
+   ]
+  ]
+ ],
+ "walk_areas": {
+  "ground": {
+   "poly": [
+    [
+     0.0,
+     393.1
+    ],
+    [
+     88.0,
+     393.1
+    ],
+    [
+     88.0,
+     430.2
+    ],
+    [
+     500.7,
+     430.2
+    ],
+    [
+     488.7,
+     395.5
+    ],
+    [
+     800.0,
+     395.5
+    ],
+    [
+     800.0,
+     597.0
+    ],
+    [
+     0.0,
+     597.0
+    ]
+   ],
+   "horizon": 140,
+   "full": 588,
+   "who": "everybody",
+   "note": "the gravel: from the bottom edge back to 18 cm in front of the building's wall, round its left end, and on the right back to the limousine's near side, keeping 90 cm off the building's right wall"
+  },
+  "roof": {
+   "poly": [
+    [
+     123.9,
+     247.5
+    ],
+    [
+     438.5,
+     247.5
+    ],
+    [
+     432.6,
+     231.2
+    ],
+    [
+     165.7,
+     231.2
+    ]
+   ],
+   "horizon": 140,
+   "full": 313.7,
+   "y_cm": 300.0,
+   "who": "ranger",
+   "note": "the strip of the roof in front of the unit, a floor 3 m up: whoever stands on it is sized by its own full ((feet - 140) / (full - 140)), not by the gravel's rows. Reached only by the climb (climb, below)"
+  }
+ },
+ "walk_note": "two floors with no way between them but Ranger's climb. On the roof he is about 0.53 (at the unit) to 0.61 (at the front edge) of full size.",
+ "blocked": [
+  [
+   [
+    114.5,
+    437.6
+   ],
+   [
+    115.0,
+    434.6
+   ],
+   [
+    110.6,
+    432.4
+   ],
+   [
+    102.5,
+    431.6
+   ],
+   [
+    92.7,
+    432.4
+   ],
+   [
+    83.8,
+    434.6
+   ],
+   [
+    78.1,
+    437.6
+   ],
+   [
+    77.2,
+    440.7
+   ],
+   [
+    81.5,
+    443.1
+   ],
+   [
+    89.9,
+    443.9
+   ],
+   [
+    100.0,
+    443.1
+   ],
+   [
+    109.1,
+    440.7
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "grille",
+   "file": "grille.png",
+   "plane": "back",
+   "note": "the intake grille, on (its louvres' slits are clear: the fan's frames turning behind it show through them). on the unit's face, on the roof: behind everybody (whoever is on the roof stands in front of the unit)",
+   "state": "on (grille-off when it is off)"
+  },
+  {
+   "id": "nut-1",
+   "file": "nut-1.png",
+   "plane": "back",
+   "note": "wing nut 1 on its stud (low, left): hide it as Ranger turns it off; all four gone, the grille comes off"
+  },
+  {
+   "id": "nut-2",
+   "file": "nut-2.png",
+   "plane": "back",
+   "note": "wing nut 2 on its stud (low, right): hide it as Ranger turns it off; all four gone, the grille comes off"
+  },
+  {
+   "id": "nut-3",
+   "file": "nut-3.png",
+   "plane": "back",
+   "note": "wing nut 3 on its stud (high, left): hide it as Ranger turns it off; all four gone, the grille comes off"
+  },
+  {
+   "id": "nut-4",
+   "file": "nut-4.png",
+   "plane": "back",
+   "note": "wing nut 4 on its stud (high, right): hide it as Ranger turns it off; all four gone, the grille comes off"
+  },
+  {
+   "id": "switch",
+   "file": "switch.png",
+   "plane": "back",
+   "note": "the maintenance switch's lever, up (on); its box and sticker are the backdrop's"
+  },
+  {
+   "id": "door",
+   "file": "door.png",
+   "plane": "back",
+   "note": "the front door, shut (behind everybody: whoever walks in through it, when it is open, is in front of the hall)"
+  },
+  {
+   "id": "awning",
+   "file": "awning.png",
+   "base": 443.7,
+   "note": "the awning over the door (base: its front edge on the gravel); it is higher than anyone's head"
+  },
+  {
+   "id": "trash",
+   "file": "trash.png",
+   "base": 439.1,
+   "solid": [
+    [
+     404.8,
+     432.9
+    ],
+    [
+     401.3,
+     428.9
+    ],
+    [
+     392.6,
+     426.5
+    ],
+    [
+     381.7,
+     426.5
+    ],
+    [
+     372.7,
+     428.9
+    ],
+    [
+     368.9,
+     432.9
+    ],
+    [
+     371.9,
+     437.1
+    ],
+    [
+     380.9,
+     439.7
+    ],
+    [
+     392.2,
+     439.7
+    ],
+    [
+     401.4,
+     437.1
+    ]
+   ],
+   "note": "the trash can standing by the wall, with its own shadow (on the gravel and up the wall)"
+  },
+  {
+   "id": "flagpole",
+   "file": "flagpole.png",
+   "base": 437.6,
+   "solid": [
+    [
+     114.5,
+     437.6
+    ],
+    [
+     115.0,
+     434.6
+    ],
+    [
+     110.6,
+     432.4
+    ],
+    [
+     102.5,
+     431.6
+    ],
+    [
+     92.7,
+     432.4
+    ],
+    [
+     83.8,
+     434.6
+    ],
+    [
+     78.1,
+     437.6
+    ],
+    [
+     77.2,
+     440.7
+    ],
+    [
+     81.5,
+     443.1
+    ],
+    [
+     89.9,
+     443.9
+    ],
+    [
+     100.0,
+     443.1
+    ],
+    [
+     109.1,
+     440.7
+    ]
+   ],
+   "note": "the flagpole on its concrete foot (its pennant: fx `pennant`, on this base)"
+  },
+  {
+   "id": "limo",
+   "file": "limo.png",
+   "base": 393.1,
+   "solid": [
+    [
+     507.2,
+     393.8
+    ],
+    [
+     800.0,
+     393.8
+    ],
+    [
+     778.4,
+     362.8
+    ],
+    [
+     494.1,
+     362.8
+    ]
+   ],
+   "note": "the gray limousine, parked (its near side's foot line is the base: Jed comes round from behind it)"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "sagebrush in the bottom corners"
+  },
+  {
+   "id": "grille-off",
+   "file": "grille-off.png",
+   "plane": "back",
+   "alt": true,
+   "replaces": [
+    "grille",
+    "nut-1",
+    "nut-2",
+    "nut-3",
+    "nut-4"
+   ],
+   "solid": [
+    [
+     248.7,
+     232.1
+    ],
+    [
+     309.8,
+     232.1
+    ],
+    [
+     311.7,
+     230.2
+    ],
+    [
+     251.9,
+     230.2
+    ]
+   ],
+   "note": "the grille off, leaning against the unit to the left of its opening, its foot on the roof; the four wing nuts in a neat row on the roof in front of its foot (solid: its foot, on the roof)"
+  },
+  {
+   "id": "switch-off",
+   "file": "switch-off.png",
+   "plane": "back",
+   "alt": true,
+   "replaces": [
+    "switch"
+   ],
+   "note": "the lever pulled down (off)"
+  },
+  {
+   "id": "door-open",
+   "file": "door-open.png",
+   "plane": "back",
+   "alt": true,
+   "replaces": [
+    "door"
+   ],
+   "note": "the door swung in (hinged on the left), the hall inside lit by tubes"
+  },
+  {
+   "id": "trash-tipped",
+   "file": "trash-tipped.png",
+   "base": 450.5,
+   "alt": true,
+   "replaces": [
+    "trash"
+   ],
+   "solid": [
+    [
+     374.0,
+     443.6
+    ],
+    [
+     429.9,
+     459.0
+    ],
+    [
+     449.6,
+     445.9
+    ],
+    [
+     395.0,
+     431.7
+    ]
+   ],
+   "note": "the can on its side on the gravel where it fell, its mouth toward us and to the right (Ranger in it is in front of it), the lid off beside it on its chain"
+  },
+  {
+   "id": "trash-pipe",
+   "file": "trash-pipe.png",
+   "base": 439.1,
+   "alt": true,
+   "replaces": [
+    "trash"
+   ],
+   "solid": [
+    [
+     457.4,
+     432.9
+    ],
+    [
+     453.2,
+     428.9
+    ],
+    [
+     444.0,
+     426.5
+    ],
+    [
+     433.2,
+     426.5
+    ],
+    [
+     424.6,
+     428.9
+    ],
+    [
+     421.5,
+     432.9
+    ],
+    [
+     425.3,
+     437.1
+    ],
+    [
+     434.7,
+     439.7
+    ],
+    [
+     446.0,
+     439.7
+    ],
+    [
+     454.7,
+     437.1
+    ]
+   ],
+   "note": "the can standing under the drainpipe's elbow (the elbow is painted over it: it is in front of it). While Ranger is on its lid or on the pipe, he is drawn in front of it (his feet are above its base)"
+  },
+  {
+   "id": "limo-door-open",
+   "file": "limo-door-open.png",
+   "base": 393.1,
+   "alt": true,
+   "replaces": [
+    "limo"
+   ],
+   "solid": [
+    [
+     507.2,
+     393.8
+    ],
+    [
+     600.8,
+     393.8
+    ],
+    [
+     608.6,
+     403.7
+    ],
+    [
+     637.8,
+     403.7
+    ],
+    [
+     628.9,
+     393.8
+    ],
+    [
+     800.0,
+     393.8
+    ],
+    [
+     778.4,
+     362.8
+    ],
+    [
+     494.1,
+     362.8
+    ]
+   ],
+   "note": "the limousine with its rear door open 50 degrees (we see the door's outside, turned toward the tail, and the back seat in the opening)"
+  }
+ ],
+ "things": [
+  {
+   "id": "door",
+   "what": "the front door: steel, beige, shut (locked: Wendell has the code)",
+   "shape": {
+    "poly": [
+     [
+      254.0,
+      426.2
+     ],
+     [
+      312.4,
+      426.2
+     ],
+     [
+      312.4,
+      303.5
+     ],
+     [
+      254.0,
+      303.5
+     ]
+    ]
+   },
+   "stand": [
+    279.0,
+    436.4
+   ],
+   "face": "N"
+  },
+  {
+   "id": "keypad",
+   "what": "the keypad beside the door: twelve buttons and a little red light",
+   "shape": {
+    "poly": [
+     [
+      318.2,
+      360.8
+     ],
+     [
+      330.5,
+      360.8
+     ],
+     [
+      330.5,
+      345.0
+     ],
+     [
+      318.2,
+      345.0
+     ]
+    ]
+   },
+   "stand": [
+    322.9,
+    435.3
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sign",
+   "what": "the sign over the door: OFFICE OF PECULIAR SECTORS / DESERT FIELD HEADQUARTERS / AUTHORIZED PERSONNEL ONLY \u00b7 PLEASE WIPE YOUR FEET",
+   "shape": {
+    "poly": [
+     [
+      123.8,
+      290.4
+     ],
+     [
+      430.4,
+      290.4
+     ],
+     [
+      430.4,
+      254.1
+     ],
+     [
+      123.8,
+      254.1
+     ]
+    ]
+   },
+   "stand": [
+    278.5,
+    437.6
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mat",
+   "what": "the mat by the door: WIPE",
+   "shape": {
+    "poly": [
+     [
+      248.4,
+      442.0
+     ],
+     [
+      305.1,
+      442.0
+     ],
+     [
+      309.2,
+      428.9
+     ],
+     [
+      255.0,
+      428.9
+     ]
+    ]
+   },
+   "stand": [
+    276.0,
+    443.7
+   ],
+   "face": "N"
+  },
+  {
+   "id": "window",
+   "what": "the one window on this side: small, high, frosted",
+   "shape": {
+    "poly": [
+     [
+      152.4,
+      331.6
+     ],
+     [
+      194.4,
+      331.6
+     ],
+     [
+      194.4,
+      302.4
+     ],
+     [
+      152.4,
+      302.4
+     ]
+    ]
+   },
+   "stand": [
+    166.2,
+    435.3
+   ],
+   "face": "N"
+  },
+  {
+   "id": "awning",
+   "what": "the little flat awning over the door",
+   "shape": {
+    "poly": [
+     [
+      216,
+      304
+     ],
+     [
+      219,
+      301
+     ],
+     [
+      226,
+      295
+     ],
+     [
+      339,
+      295
+     ],
+     [
+      339,
+      297
+     ],
+     [
+      336,
+      309
+     ],
+     [
+      216,
+      309
+     ]
+    ]
+   },
+   "stand": [
+    279.0,
+    436.4
+   ],
+   "face": "N"
+  },
+  {
+   "id": "trash",
+   "what": "the trash can (standing): steel, the lid chained to it, REGULATION stencilled on it",
+   "shape": {
+    "poly": [
+     [
+      369,
+      397
+     ],
+     [
+      370,
+      390
+     ],
+     [
+      372,
+      388
+     ],
+     [
+      374,
+      387
+     ],
+     [
+      377,
+      386
+     ],
+     [
+      381,
+      385
+     ],
+     [
+      383,
+      385
+     ],
+     [
+      397,
+      386
+     ],
+     [
+      400,
+      387
+     ],
+     [
+      402,
+      388
+     ],
+     [
+      403,
+      389
+     ],
+     [
+      403,
+      427
+     ],
+     [
+      372,
+      435
+     ],
+     [
+      371,
+      435
+     ],
+     [
+      369,
+      400
+     ]
+    ]
+   },
+   "stand": [
+    339.9,
+    434.3
+   ],
+   "face": "E",
+   "state": "standing",
+   "file": "trash.png"
+  },
+  {
+   "id": "trash-tipped",
+   "what": "the trash can (tipped): steel, the lid chained to it, REGULATION stencilled on it",
+   "shape": {
+    "poly": [
+     [
+      378,
+      421
+     ],
+     [
+      380,
+      415
+     ],
+     [
+      382,
+      411
+     ],
+     [
+      384,
+      408
+     ],
+     [
+      387,
+      406
+     ],
+     [
+      393,
+      406
+     ],
+     [
+      398,
+      407
+     ],
+     [
+      427,
+      414
+     ],
+     [
+      429,
+      415
+     ],
+     [
+      430,
+      416
+     ],
+     [
+      453,
+      452
+     ],
+     [
+      453,
+      457
+     ],
+     [
+      452,
+      458
+     ],
+     [
+      449,
+      460
+     ],
+     [
+      445,
+      461
+     ],
+     [
+      438,
+      462
+     ],
+     [
+      434,
+      462
+     ],
+     [
+      427,
+      461
+     ],
+     [
+      424,
+      460
+     ],
+     [
+      420,
+      458
+     ],
+     [
+      381,
+      438
+     ],
+     [
+      380,
+      437
+     ],
+     [
+      379,
+      435
+     ],
+     [
+      378,
+      432
+     ]
+    ]
+   },
+   "stand": [
+    369.0,
+    443.9
+   ],
+   "face": "E",
+   "state": "tipped",
+   "file": "trash-tipped.png"
+  },
+  {
+   "id": "trash-pipe",
+   "what": "the trash can (pipe): steel, the lid chained to it, REGULATION stencilled on it",
+   "shape": {
+    "poly": [
+     [
+      421,
+      398
+     ],
+     [
+      423,
+      389
+     ],
+     [
+      424,
+      388
+     ],
+     [
+      426,
+      387
+     ],
+     [
+      432,
+      385
+     ],
+     [
+      435,
+      385
+     ],
+     [
+      449,
+      386
+     ],
+     [
+      452,
+      387
+     ],
+     [
+      454,
+      388
+     ],
+     [
+      456,
+      390
+     ],
+     [
+      458,
+      399
+     ],
+     [
+      458,
+      400
+     ],
+     [
+      455,
+      414
+     ],
+     [
+      447,
+      427
+     ],
+     [
+      425,
+      435
+     ],
+     [
+      424,
+      435
+     ],
+     [
+      421,
+      400
+     ]
+    ]
+   },
+   "stand": [
+    436.0,
+    433.9
+   ],
+   "face": "E",
+   "state": "pipe",
+   "file": "trash-pipe.png"
+  },
+  {
+   "id": "drainpipe",
+   "what": "the drainpipe down the corner: it stops in an elbow three feet above the gravel (a raccoon's stretch and a half); its straps would do for rungs",
+   "shape": {
+    "poly": [
+     [
+      431.3,
+      247.5
+     ],
+     [
+      446.6,
+      247.5
+     ],
+     [
+      443.8,
+      371.4
+     ],
+     [
+      444.7,
+      385.7
+     ],
+     [
+      434.4,
+      385.7
+     ],
+     [
+      433.7,
+      371.4
+     ]
+    ]
+   },
+   "stand": [
+    436.0,
+    433.9
+   ],
+   "face": "E"
+  },
+  {
+   "id": "limo",
+   "what": "the gray limousine, parked",
+   "shape": {
+    "poly": [
+     [
+      499,
+      320
+     ],
+     [
+      558,
+      301
+     ],
+     [
+      565,
+      300
+     ],
+     [
+      711,
+      300
+     ],
+     [
+      775,
+      321
+     ],
+     [
+      780,
+      323
+     ],
+     [
+      800,
+      333
+     ],
+     [
+      800,
+      392
+     ],
+     [
+      791,
+      393
+     ],
+     [
+      552,
+      393
+     ],
+     [
+      510,
+      392
+     ],
+     [
+      508,
+      388
+     ],
+     [
+      504,
+      379
+     ],
+     [
+      501,
+      372
+     ],
+     [
+      499,
+      321
+     ]
+    ]
+   },
+   "stand": [
+    601.8,
+    400.2
+   ],
+   "face": "N"
+  },
+  {
+   "id": "limoDoor",
+   "what": "the limousine's rear door (open after the arrival)",
+   "shape": {
+    "poly": [
+     [
+      588,
+      300
+     ],
+     [
+      630,
+      300
+     ],
+     [
+      630,
+      392
+     ],
+     [
+      588,
+      392
+     ]
+    ]
+   },
+   "stand": [
+    597.5,
+    398.0
+   ],
+   "face": "N"
+  },
+  {
+   "id": "unit",
+   "what": "the rooftop unit: an air conditioner the size of a minivan, much too big for the building, humming, ducts going down into the roof",
+   "shape": {
+    "poly": [
+     [
+      191.2,
+      221.6
+     ],
+     [
+      419.0,
+      221.6
+     ],
+     [
+      419.0,
+      105.8
+     ],
+     [
+      191.2,
+      105.8
+     ]
+    ]
+   },
+   "stand": [
+    344.0,
+    231.8
+   ],
+   "face": "N",
+   "floor": "roof"
+  },
+  {
+   "id": "grille",
+   "what": "the intake grille on the unit's side: a big louvred panel held on by four wing nuts; the fan turning behind it",
+   "shape": {
+    "poly": [
+     [
+      314.6,
+      217.8
+     ],
+     [
+      375.3,
+      217.8
+     ],
+     [
+      375.3,
+      165.6
+     ],
+     [
+      314.6,
+      165.6
+     ]
+    ]
+   },
+   "stand": [
+    344.0,
+    231.8
+   ],
+   "face": "N",
+   "floor": "roof"
+  },
+  {
+   "id": "nut-1",
+   "what": "wing nut 1 (low, left)",
+   "shape": {
+    "poly": [
+     [
+      312.7,
+      215.5
+     ],
+     [
+      327.9,
+      215.5
+     ],
+     [
+      327.9,
+      204.5
+     ],
+     [
+      312.7,
+      204.5
+     ]
+    ]
+   },
+   "stand": [
+    309.4,
+    231.6
+   ],
+   "face": "E",
+   "floor": "roof",
+   "reach": "sitting up"
+  },
+  {
+   "id": "nut-2",
+   "what": "wing nut 2 (low, right)",
+   "shape": {
+    "poly": [
+     [
+      362.0,
+      215.5
+     ],
+     [
+      377.2,
+      215.5
+     ],
+     [
+      377.2,
+      204.5
+     ],
+     [
+      362.0,
+      204.5
+     ]
+    ]
+   },
+   "stand": [
+    359.5,
+    231.6
+   ],
+   "face": "E",
+   "floor": "roof",
+   "reach": "sitting up"
+  },
+  {
+   "id": "nut-3",
+   "what": "wing nut 3 (high, left)",
+   "shape": {
+    "poly": [
+     [
+      312.7,
+      174.6
+     ],
+     [
+      327.9,
+      174.6
+     ],
+     [
+      327.9,
+      163.7
+     ],
+     [
+      312.7,
+      163.7
+     ]
+    ]
+   },
+   "stand": [
+    309.4,
+    231.6
+   ],
+   "face": "E",
+   "floor": "roof",
+   "reach": "climbing the grille (the climb frames)"
+  },
+  {
+   "id": "nut-4",
+   "what": "wing nut 4 (high, right)",
+   "shape": {
+    "poly": [
+     [
+      362.0,
+      174.6
+     ],
+     [
+      377.2,
+      174.6
+     ],
+     [
+      377.2,
+      163.7
+     ],
+     [
+      362.0,
+      163.7
+     ]
+    ]
+   },
+   "stand": [
+    359.5,
+    231.6
+   ],
+   "face": "E",
+   "floor": "roof",
+   "reach": "climbing the grille (the climb frames)"
+  },
+  {
+   "id": "switch",
+   "what": "the maintenance switch: a lever in a gray box, a sticker with a fan crossed out: TURN OFF BEFORE SERVICING. THIS MEANS YOU, WENDELL.",
+   "shape": {
+    "poly": [
+     [
+      385.2,
+      223.1
+     ],
+     [
+      407.6,
+      223.1
+     ],
+     [
+      407.6,
+      200.2
+     ],
+     [
+      385.2,
+      200.2
+     ]
+    ]
+   },
+   "stand": [
+    378.3,
+    231.6
+   ],
+   "face": "E",
+   "floor": "roof"
+  },
+  {
+   "id": "flagpole",
+   "what": "the flagpole, and its small pennant: O.O.P.S. in white on gray",
+   "shape": {
+    "poly": [
+     [
+      79,
+      433
+     ],
+     [
+      93,
+      38
+     ],
+     [
+      94,
+      37
+     ],
+     [
+      98,
+      37
+     ],
+     [
+      100,
+      39
+     ],
+     [
+      113,
+      428
+     ],
+     [
+      113,
+      432
+     ],
+     [
+      112,
+      438
+     ],
+     [
+      111,
+      440
+     ],
+     [
+      110,
+      441
+     ],
+     [
+      106,
+      443
+     ],
+     [
+      101,
+      444
+     ],
+     [
+      91,
+      444
+     ],
+     [
+      87,
+      443
+     ],
+     [
+      84,
+      442
+     ],
+     [
+      80,
+      438
+     ],
+     [
+      79,
+      436
+     ]
+    ]
+   },
+   "stand": [
+    73.7,
+    447.5
+   ],
+   "face": "N"
+  },
+  {
+   "id": "fenceSign",
+   "what": "the small sign on the open gate: PLEASE DO NOT LOOK DIRECTLY AT THE BUILDING",
+   "shape": {
+    "poly": [
+     [
+      46.6,
+      269.7
+     ],
+     [
+      26.5,
+      273.3
+     ],
+     [
+      26.5,
+      290.2
+     ],
+     [
+      46.6,
+      286.0
+     ]
+    ]
+   },
+   "stand": [
+    38.4,
+    393.1
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "gate",
+   "what": "the gate in the fence, standing open (its left post is past the picture's edge)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      251
+     ],
+     [
+      60,
+      251
+     ],
+     [
+      60,
+      319
+     ],
+     [
+      0,
+      336
+     ],
+     [
+      0,
+      319
+     ]
+    ]
+   },
+   "stand": [
+    38.4,
+    393.1
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "desert",
+   "what": "the desert past the fence, and the range on the horizon (list it first: everything else is over it)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      112
+     ],
+     [
+      800,
+      112
+     ],
+     [
+      800,
+      318.9
+     ],
+     [
+      496,
+      318.9
+     ],
+     [
+      452,
+      220
+     ],
+     [
+      418,
+      118
+     ],
+     [
+      186,
+      118
+     ],
+     [
+      178,
+      196
+     ],
+     [
+      108,
+      249
+     ],
+     [
+      108,
+      318.9
+     ],
+     [
+      0,
+      318.9
+     ]
+    ]
+   },
+   "stand": [
+    240.7,
+    400.2
+   ],
+   "face": "N"
+  }
+ ],
+ "marks": {
+  "fromLimo": [
+   597.5,
+   398.0
+  ],
+  "door": [
+   230.9,
+   433.9
+  ],
+  "trash": [
+   339.9,
+   434.3
+  ],
+  "pipe": [
+   436.0,
+   433.9
+  ],
+  "climbFrom": [
+   389.8,
+   433.9
+  ],
+  "roof": [
+   405.5,
+   244.9
+  ],
+  "intake": [
+   344.0,
+   231.8
+  ],
+  "switch": [
+   378.3,
+   231.6
+  ],
+  "limoDoor": [
+   618.2,
+   407.3
+  ],
+  "dale": [
+   574.2,
+   408.4
+  ],
+  "merle": [
+   667.8,
+   410.0
+  ],
+  "outOfCar": [
+   [
+    614.9,
+    400.9
+   ],
+   [
+    652.4,
+    400.9
+   ],
+   [
+    712.3,
+    400.9
+   ],
+   [
+    749.0,
+    400.9
+   ]
+  ],
+  "jedFrom": [
+   1026.6,
+   400.2
+  ],
+  "walkIn": [
+   [
+    582.2,
+    410.6
+   ],
+   [
+    505.1,
+    426.2
+   ],
+   [
+    412.1,
+    436.4
+   ],
+   [
+    315.0,
+    437.6
+   ],
+   [
+    280.9,
+    431.8
+   ]
+  ],
+  "inDoor": [
+   287.5,
+   415.6
+  ],
+  "queue": {
+   "jed": [
+    280.4,
+    432.9
+   ],
+   "dale": [
+    240.6,
+    438.1
+   ],
+   "joe": [
+    277.5,
+    440.0
+   ],
+   "merle": [
+    314.7,
+    438.6
+   ],
+   "floyd": [
+    363.0,
+    442.5
+   ]
+  }
+ },
+ "faces": {
+  "fromLimo": "W",
+  "trash": "E",
+  "pipe": "E",
+  "climbFrom": "E",
+  "roof": "W",
+  "intake": "N",
+  "switch": "E",
+  "door": "W",
+  "limoDoor": "S",
+  "dale": "E",
+  "merle": "W",
+  "outOfCar": "S",
+  "walkIn": "W",
+  "inDoor": "N",
+  "queue": "N"
+ },
+ "stands": {
+  "fromLimo": {
+   "at": [
+    597.5,
+    398.0
+   ],
+   "grownup_px": 92,
+   "floor": "ground"
+  },
+  "door": {
+   "at": [
+    230.9,
+    433.9
+   ],
+   "grownup_px": 105,
+   "floor": "ground"
+  },
+  "trash": {
+   "at": [
+    339.9,
+    434.3
+   ],
+   "grownup_px": 105,
+   "floor": "ground"
+  },
+  "pipe": {
+   "at": [
+    436.0,
+    433.9
+   ],
+   "grownup_px": 105,
+   "floor": "ground"
+  },
+  "climbFrom": {
+   "at": [
+    389.8,
+    433.9
+   ],
+   "grownup_px": 105,
+   "floor": "ground"
+  },
+  "roof": {
+   "at": [
+    405.5,
+    244.9
+   ],
+   "grownup_px": 97,
+   "floor": "roof"
+  },
+  "intake": {
+   "at": [
+    344.0,
+    231.8
+   ],
+   "grownup_px": 85,
+   "floor": "roof"
+  },
+  "switch": {
+   "at": [
+    378.3,
+    231.6
+   ],
+   "grownup_px": 84,
+   "floor": "roof"
+  },
+  "limoDoor": {
+   "at": [
+    618.2,
+    407.3
+   ],
+   "grownup_px": 95,
+   "floor": "ground"
+  },
+  "dale": {
+   "at": [
+    574.2,
+    408.4
+   ],
+   "grownup_px": 96,
+   "floor": "ground"
+  },
+  "merle": {
+   "at": [
+    667.8,
+    410.0
+   ],
+   "grownup_px": 96,
+   "floor": "ground"
+  },
+  "jedFrom": {
+   "at": [
+    1026.6,
+    400.2
+   ],
+   "grownup_px": 93,
+   "floor": "ground"
+  },
+  "inDoor": {
+   "at": [
+    287.5,
+    415.6
+   ],
+   "grownup_px": 98,
+   "floor": "ground"
+  }
+ },
+ "climb": [
+  {
+   "name": "climbFrom",
+   "at": [
+    389.8,
+    433.9
+   ],
+   "scale": 0.6559,
+   "what": "on the gravel by the can (under the pipe), facing it",
+   "frames": "walk"
+  },
+  {
+   "name": "lid",
+   "at": [
+    431.1,
+    386.9
+   ],
+   "scale": 0.6539,
+   "what": "up onto the can's lid",
+   "frames": "reach"
+  },
+  {
+   "name": "pipeFoot",
+   "at": [
+    429.0,
+    373.7
+   ],
+   "scale": 0.6423,
+   "what": "his paws on the elbow, onto the pipe",
+   "frames": "climb"
+  },
+  {
+   "name": "pipeTop",
+   "at": [
+    429.0,
+    273.9
+   ],
+   "scale": 0.6423,
+   "what": "up the pipe to just under the coping",
+   "frames": "climb"
+  },
+  {
+   "name": "roof",
+   "at": [
+    405.5,
+    244.9
+   ],
+   "scale": 0.604,
+   "what": "over the coping onto the roof",
+   "frames": "walk"
+  }
+ ],
+ "climb_note": "for g.climbTo: on the lid and the pipe he is in front of the can (draw him at the plane of the pipe, z 463: scale 0.648, not by his row). His climb frames put the pipe's near face 11 px (full size) east of his foot point.",
+ "cans": {
+  "standing": {
+   "at": [
+    386.6,
+    439.1
+   ],
+   "file": "trash.png"
+  },
+  "tipped": {
+   "at": [
+    404.9,
+    442.9
+   ],
+   "file": "trash-tipped.png",
+   "mouth": [
+    423.9,
+    431.6
+   ]
+  },
+  "pipe": {
+   "at": [
+    440.3,
+    439.1
+   ],
+   "file": "trash-pipe.png",
+   "lid": [
+    439.5,
+    386.9
+   ]
+  }
+ },
+ "switch": {
+  "box": [
+   [
+    390.9,
+    220.2
+   ],
+   [
+    406.2,
+    220.2
+   ],
+   [
+    406.2,
+    202.1
+   ],
+   [
+    390.9,
+    202.1
+   ]
+  ],
+  "handle_on": [
+   387.9,
+   205.1
+  ],
+  "handle_off": [
+   386.8,
+   219.2
+  ],
+  "note": "Ranger at marks.switch facing E: his pull frames' hands (x +18, y 49 and x +16, y 22 at full size) are on the handle"
+ },
+ "nuts": [
+  {
+   "id": "nut-1",
+   "at": [
+    320.1,
+    212.3
+   ]
+  },
+  {
+   "id": "nut-2",
+   "at": [
+    369.5,
+    212.3
+   ]
+  },
+  {
+   "id": "nut-3",
+   "at": [
+    320.1,
+    171.4
+   ]
+  },
+  {
+   "id": "nut-4",
+   "at": [
+    369.5,
+    171.4
+   ]
+  }
+ ],
+ "intake": {
+  "opening": [
+   [
+    317.9,
+    214.5
+   ],
+   [
+    372.0,
+    214.5
+   ],
+   [
+    372.0,
+    169.0
+   ],
+   [
+    317.9,
+    169.0
+   ]
+  ],
+  "sill": [
+   344.9,
+   214.5
+  ],
+  "scale": 0.5191,
+  "note": "the unit's intake behind the grille: its opening, and the middle of its bottom edge, 33 cm above the roof, where Ranger hops up and goes in (into office-ducts at its mark intake); scale: his size there"
+ },
+ "limo": {
+  "files": [
+   "limo.png",
+   "limo-door-open.png"
+  ],
+  "foot": [
+   672.0,
+   393.1
+  ],
+  "row": 393.1,
+  "scale": 0.565,
+  "x": [
+   505.9,
+   830.8
+  ],
+  "door": {
+   "hinge": [
+    626.3,
+    393.1
+   ],
+   "free": [
+    610.9,
+    402.6
+   ],
+   "opening": [
+    590.6,
+    626.3
+   ]
+  },
+  "sill": {
+   "at": [
+    607.0,
+    380.1
+   ],
+   "scale": 0.5612,
+   "note": "the floor of the open rear door's opening, 22 cm up: where Ranger stands in the doorway, out from under the seat, before he drops to the gravel (his drop frames) at marks.fromLimo"
+  },
+  "note": "painted in place (a cut-out, not the roadside's frames, which have the morning's long shadow to the left): the same car at the size the roadside's frames would be drawn here (limo-side-0.png laid with its foot [438, 155] on `foot` at `scale`), its tail at x 506, its nose past the right edge; door: where the rear door's hinge and free edge stand when open, and its opening's columns"
+ },
+ "fx": [
+  {
+   "id": "fan",
+   "what": "the fan behind the intake grille, turning (three blades, a third of a turn in four frames)",
+   "frames": [
+    "fan-0.png",
+    "fan-1.png",
+    "fan-2.png",
+    "fan-3.png"
+   ],
+   "fps": 12,
+   "at": [
+    345,
+    215
+   ],
+   "foot": [
+    27,
+    48
+   ],
+   "rect": [
+    318,
+    167,
+    55,
+    48
+   ],
+   "plane": "back",
+   "note": "listed before the grille (it lies under it: the grille's slits show it turning); while the fans are on (until office.acOff). Stopped, it is the backdrop's own still fan (no frame needed)"
+  },
+  {
+   "id": "pennant",
+   "what": "the pennant at the top of the flagpole, stirring: O.O.P.S. in white on gray",
+   "frames": [
+    "pennant-0.png",
+    "pennant-1.png",
+    "pennant-2.png",
+    "pennant-3.png"
+   ],
+   "fps": 3,
+   "at": [
+    126,
+    70
+   ],
+   "foot": [
+    30,
+    26
+   ],
+   "rect": [
+    96,
+    44,
+    60,
+    26
+   ],
+   "base": 437.6,
+   "note": "on the flagpole's base, laid just after it"
+  }
+ ],
+ "fx_note": "Moving: the fan (until the switch is pulled) and the pennant. The unit's hum is a sound. Nothing else moves by nature here: no wind down here (the high cloud is combed by wind far up), and the desert's sagebrush is still.",
+ "cutouts": {
+  "grille": [
+   316,
+   167,
+   58,
+   49
+  ],
+  "nut-1": [
+   313,
+   206,
+   14,
+   9
+  ],
+  "nut-2": [
+   363,
+   206,
+   14,
+   9
+  ],
+  "nut-3": [
+   313,
+   165,
+   14,
+   9
+  ],
+  "nut-4": [
+   363,
+   165,
+   14,
+   9
+  ],
+  "switch": [
+   386,
+   203,
+   6,
+   11
+  ],
+  "door": [
+   254,
+   303,
+   59,
+   123
+  ],
+  "awning": [
+   216,
+   295,
+   123,
+   14
+  ],
+  "trash": [
+   369,
+   384,
+   42,
+   55
+  ],
+  "flagpole": [
+   79,
+   37,
+   34,
+   407
+  ],
+  "limo": [
+   499,
+   300,
+   301,
+   93
+  ],
+  "front": [
+   0,
+   540,
+   800,
+   60
+  ],
+  "grille-off": [
+   247,
+   184,
+   63,
+   49
+  ],
+  "switch-off": [
+   385,
+   211,
+   7,
+   10
+  ],
+  "door-open": [
+   254,
+   303,
+   59,
+   123
+  ],
+  "trash-tipped": [
+   378,
+   406,
+   75,
+   56
+  ],
+  "trash-pipe": [
+   421,
+   384,
+   46,
+   55
+  ],
+  "limo-door-open": [
+   499,
+   300,
+   301,
+   93
+  ]
+ },
+ "exits": [],
+ "exits_note": "no way out across the picture's edges: Ranger goes into the building by the unit's intake (a script, into office-ducts at its mark `intake`), and the lot is left by the Office's map"
+}

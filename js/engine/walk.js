@@ -51,16 +51,53 @@ function rows(poly, fill) {
   }
 }
 
+/**
+ * ENGINE-17: a scene's floors. The ground people stand on is one outline in most scenes, and can be several, each its own
+ * floor with no way between them but a script's (g.climbTo): the Office's lot has the gravel and, above it, the roof.
+ *   walk: { area: [[x, y], ...] }                 one outline (or { x: [min, max], y: [min, max] }, a box), as ever
+ *   walk: [outline, outline]                      several floors (or walk: { areas: [...], margin })
+ *   walk: [{ area, name: "roof", scale: 0.6, base: 300, away: "line.id" }, ...]
+ *                                                 a floor with a name, a size of its own for anyone on it (`scale`; or a
+ *                                                 `horizon` and `full` of its own), a row it sorts at among the cut-outs
+ *                                                 (`base`: in front of the wall it is on top of), and what a lead says (a line,
+ *                                                 or one for each lead) when the player asks for something on it from another
+ *   walk: (g) => ...                              any of those, as a function of the game, read whenever the ground is worked out
+ * Each floor is { area, name, index, ... }: its name is its own, or its place in the list ("0", "1").
+ */
+export function floorsOf(scene, game = null) {
+  let walk = scene.walk;
+  if (typeof walk === "function") { try { walk = walk(game); } catch (err) { console.warn(`Scene "${scene.id}": its walk stopped (${err.message}): the lower half of the picture is the floor.`); walk = null; } }
+  walk = walk || { x: [0, W], y: [290, 595] };                       // with nothing said: the lower half of the picture
+  const box = (w) => [[w.x[0], w.y[0]], [w.x[1], w.y[0]], [w.x[1], w.y[1]], [w.x[0], w.y[1]]];
+  const point = (p) => Array.isArray(p) && p.length === 2 && Number.isFinite(p[0]) && Number.isFinite(p[1]);
+  const list = Array.isArray(walk) ? (point(walk[0]) ? [walk] : walk) : Array.isArray(walk.areas) ? walk.areas : [walk.area || box(walk)];
+  return list.map((f) => (Array.isArray(f) ? { area: f } : f && Array.isArray(f.area) ? { ...f } : f && f.x && f.y ? { ...f, area: box(f) } : null))
+    .filter(Boolean).map((f, i) => ({ ...f, index: i, name: f.name != null ? String(f.name) : String(i) }));
+}
+/** How big a figure is with its feet at height y on a floor (ENGINE-17): the floor's own `scale`, or its own `horizon` and
+    `full` (and `minScale`, `maxScale`), or the scene's, as scaleAt. */
+export function scaleOn(scene, floor, y) {
+  if (!floor) return scaleAt(scene, y);
+  if (Number.isFinite(floor.scale)) return floor.scale;
+  if (floor.horizon != null || floor.full != null) return scaleAt({ ...scene, ...pick(floor, ["horizon", "full", "minScale", "maxScale"]) }, y);
+  return scaleAt(scene, y);
+}
+const pick = (o, keys) => Object.fromEntries(keys.filter((k) => o[k] != null).map((k) => [k, o[k]]));
+
 export class WalkMap {
   /**
-   * scene.walk is { area: [[x, y], ...] } (an outline) or { x: [min, max], y: [min, max] } (a box).
+   * scene.walk is { area: [[x, y], ...] } (an outline) or { x: [min, max], y: [min, max] } (a box); ENGINE-17: or several
+   * floors (floorsOf, above). `game`: for a walk that is a function of the game.
    * blocked is a list of outlines nobody can stand in: the footprints of props and cut-outs, seated people, water.
    */
-  constructor(scene, blocked = []) {
-    const walk = scene.walk || { x: [0, W], y: [290, 595] };          // with nothing said: the lower half of the picture
-    const area = walk.area || [[walk.x[0], walk.y[0]], [walk.x[1], walk.y[0]], [walk.x[1], walk.y[1]], [walk.x[0], walk.y[1]]];
+  constructor(scene, blocked = [], game = null) {
+    let walk = scene.walk;
+    if (typeof walk === "function") { try { walk = walk(game); } catch { walk = null; } }
+    walk = walk || {};
+    const floors = (this.floors = floorsOf(scene, game));           // ENGINE-17: one floor, or several
     const ok = (this.ok_ = new Uint8Array(W * H));
-    rows(area, (y, from, to) => ok.fill(1, y * W + from, y * W + to + 1));
+    if (floors.length > 1) this.floor_ = new Uint8Array(W * H).fill(255);   // which floor each pixel is on (255: none), before anything blocks it
+    floors.forEach((f, i) => rows(f.area, (y, from, to) => { ok.fill(1, y * W + from, y * W + to + 1); if (this.floor_) this.floor_.fill(i, y * W + from, y * W + to + 1); }));
     // A figure has some width, so keep its center a little way off every obstacle.
     const mx = walk.margin ? walk.margin[0] : 12, my = walk.margin ? walk.margin[1] : 5;
     for (const poly of blocked) {
@@ -77,11 +114,31 @@ export class WalkMap {
     return xi >= 0 && yi >= 0 && xi < W && yi < H && this.ok_[yi * W + xi] === 1;
   }
 
-  /** The closest place a figure may stand. (Up and down the screen counts for more than sideways: see DEPTH.) */
-  nearest(x, y) {
-    if (this.ok(x, y)) return [x, y];
+  /** ENGINE-17: which floor (its index) a point is on, by the floors' own outlines (whatever stands on them); with one
+      floor, 0 wherever it is; -1 for a point on none of several. floorNear: the floor of the nearest place to stand. */
+  floorAt(x, y) {
+    if (!this.floor_) return 0;
+    const xi = Math.floor(x), yi = Math.floor(y);
+    if (xi < 0 || yi < 0 || xi >= W || yi >= H) return -1;
+    const i = this.floor_[yi * W + xi];
+    return i === 255 ? -1 : i;
+  }
+  floorNear(x, y) {
+    const i = this.floorAt(x, y);
+    if (i >= 0) return i;
+    const [nx, ny] = this.nearest(x, y);
+    return Math.max(0, this.floorAt(nx, ny));
+  }
+
+  /** The closest place a figure may stand. (Up and down the screen counts for more than sideways: see DEPTH.)
+      ENGINE-17: `floor`, the index of one floor of several: the closest place on that floor. */
+  nearest(x, y, floor = -1) {
+    const only = floor >= 0 && this.floor_ ? floor : -1;
+    if (this.ok(x, y) && (only < 0 || this.floorAt(x, y) === only)) return [x, y];
     const xi = Math.round(x), yi = Math.round(y), from = Math.min(W - 1, Math.max(0, xi));
     let best = null, bestD = Infinity;
+    // (ENGINE-17: on one floor only, the first place of that floor each way along the row)
+    const side = (yy, step) => { for (let xx = from; xx >= 0 && xx < W; xx += step) { const i = yy * W + xx; if (this.ok_[i] === 1 && this.floor_[i] === only) return xx; } return -1; };
     // Row by row, outward from the row asked for. In each row only two places can be the nearest: the first
     // one to the left and the first to the right. Stop once a row is too far up or down to hold anything nearer.
     for (let dy = 0, far = 0; far < bestD; dy++, far = dy * dy * DEPTH * DEPTH) {
@@ -89,7 +146,7 @@ export class WalkMap {
       for (const yy of dy ? [yi - dy, yi + dy] : [yi]) {
         if (yy < 0 || yy >= H) continue;
         const row = this.ok_.subarray(yy * W, (yy + 1) * W);
-        for (const xx of [row.lastIndexOf(1, from), row.indexOf(1, from)]) {
+        for (const xx of only < 0 ? [row.lastIndexOf(1, from), row.indexOf(1, from)] : [side(yy, -1), side(yy, 1)]) {
           const d = (xx - xi) * (xx - xi) + far;
           if (xx >= 0 && d < bestD) { bestD = d; best = [xx + 0.5, yy + 0.5]; }
         }
@@ -124,21 +181,26 @@ export class WalkMap {
     return null;
   }
 
-  /** Is the straight line from a to b free of obstacles? */
-  clear(a, b) {
+  /** Is the straight line from a to b free of obstacles? (ENGINE-17: given a floor's index, and all of it on that floor) */
+  clear(a, b, floor = -1) {
     const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1])));
-    for (let i = 0; i <= n; i++) if (!this.ok(a[0] + ((b[0] - a[0]) * i) / n, a[1] + ((b[1] - a[1]) * i) / n)) return false;
+    for (let i = 0; i <= n; i++) {
+      const x = a[0] + ((b[0] - a[0]) * i) / n, y = a[1] + ((b[1] - a[1]) * i) / n;
+      if (!this.ok(x, y) || (floor >= 0 && this.floorAt(x, y) !== floor)) return false;
+    }
     return true;
   }
 
-  /** A route from one place to another, as a short list of points to walk through in turn. */
+  /** A route from one place to another, as a short list of points to walk through in turn. (ENGINE-17: in a scene of
+      several floors, on the floor `from` is on, all the way: it never crosses to another, even where two floors meet.) */
   path(from, to) {
-    const a = this.nearest(from[0], from[1]), b = this.nearest(to[0], to[1]);
-    if (this.clear(a, b)) return [b];
+    const fl = this.floor_ ? this.floorNear(from[0], from[1]) : -1;
+    const a = this.nearest(from[0], from[1], fl), b = this.nearest(to[0], to[1], fl);
+    if (this.clear(a, b, fl)) return [b];
     // A* over a coarse grid. Moving up or down the screen costs more, as it covers more ground.
     const cell = (p) => [Math.min(GW - 1, Math.max(0, Math.floor(p[0] / STEP))), Math.min(GH - 1, Math.max(0, Math.floor(p[1] / STEP)))];
     const mid = STEP / 2;                              // a square is free when its middle is
-    const free = (cx, cy) => cx >= 0 && cy >= 0 && cx < GW && cy < GH && this.ok(cx * STEP + mid, cy * STEP + mid);
+    const free = (cx, cy) => cx >= 0 && cy >= 0 && cx < GW && cy < GH && this.ok(cx * STEP + mid, cy * STEP + mid) && (fl < 0 || this.floorAt(cx * STEP + mid, cy * STEP + mid) === fl);
     let [sx, sy] = cell(a), [tx, ty] = cell(b);
     const snap = (cx, cy) => { if (free(cx, cy)) return [cx, cy]; for (let r = 1; r < 6; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) if (free(cx + dx, cy + dy)) return [cx + dx, cy + dy]; return [cx, cy]; };
     [sx, sy] = snap(sx, sy); [tx, ty] = snap(tx, ty);
@@ -174,7 +236,7 @@ export class WalkMap {
     let at = a, k = 0;
     while (k < cells.length) {
       let far = k;
-      for (let j = cells.length - 1; j > k; j--) if (this.clear(at, cells[j])) { far = j; break; }
+      for (let j = cells.length - 1; j > k; j--) if (this.clear(at, cells[j], fl)) { far = j; break; }      // (ENGINE-17: on his floor)
       out.push(cells[far]);
       at = cells[far];
       k = far + 1;

@@ -309,7 +309,8 @@ async function juice(g) {
 }
 
 /** The gate: the limousine slows (the desert going by slows with it: both drives, tweened to nothing: DRIVE-16M), a gate, a very small
-    building with a very long name on it; the card; "limo.done" and "demo.done"; the title (as the old end did). On the
+    building with a very long name on it; the card; "limo.done"; and (SCENES-17) the arrival at the Office, which goes on
+    from here (js/content/cutscenes/office-arrive.js): the demo now ends at the end of the Office's stage one. On the
     way, the two of them have the last word, about the map. */
 async function ending(g) {
   await g.say("limo.talk.joe.ranger.4a", DOTS, "limo.talk.joe.ranger.4c");
@@ -321,10 +322,9 @@ async function ending(g) {
   await g.wait(600);
   await g.fade(1, 900);
   const L = (id, or) => (g.lines[id] ? g.lines[id][1] : or);
-  await g.card(L("limo.card.1", "THE OFFICE OF PECULIAR SECTORS"), L("limo.card.2", "to be continued"), { plain: true, ms: 3800 });
+  await g.card(L("limo.card.1", "THE OFFICE OF PECULIAR SECTORS"), L("limo.card.2", "Desert Field Headquarters, the same afternoon"), { plain: true, ms: 3800 });
   g.flag("limo.done", true);
-  g.flag("demo.done", true);
-  await g.title();
+  await g.cutscene("office-arrive");                                              // SCENES-17: on to the Office (the demo's end is "Going Down" now)
 }
 
 // ---------- the opening: "Meanwhile, in a limousine" (the beat limo.arrive) ----------
@@ -354,6 +354,9 @@ async function opening(g) {
     r.sit(true, true);
     await g.wait(250);
   }
+  // LETTER-17: and with the divider up, where the suits cannot hear, quietly: the first thing he says to Ranger. The
+  // promise he made Mom at the wide door ("Porch light on. However long it takes.": nevada.through.joe.6).
+  await g.say("limo.promise", DOTS, "limo.promise.joe");
   await g.say(DOTS);                                                               // he looks at the ropes
   if (r) await r.play(g.clock, "look", { ms: 900 });
   g.flag("limo.arrived", true);
@@ -502,7 +505,9 @@ export default {
       ],
     },
     ranger: {
-      grandpajoe: [[DOTS, "limo.talk.ranger.joe.1c"], [DOTS, "limo.talk.ranger.joe.2c"]],
+      grandpajoe: [[DOTS, "limo.talk.ranger.joe.1c"], [DOTS, "limo.talk.ranger.joe.2c"],
+        // PASS-17N: once he is loose, Ranger mentions the ropes himself, as Grandpa Joe said he would (limo.talk.joe.ranger.3c)
+        { when: (g) => loose(g), say: [DOTS, "limo.talk.ranger.joe.3c"] }],
     },
   },
 
@@ -524,5 +529,6 @@ export default {
   async enter(g) {
     await Promise.all(["divider-up.png", "divider-down.png"].map((f) => g.assets.picture(art + f)));
     if (!g.flag("limo.arrived")) await opening(g);
+    else if (g.flag("limo.done") && !g.flag("office.arrived")) await g.cutscene("office-arrive");      // SCENES-17: a game saved at the gate goes on to the Office
   },
 };

@@ -1,6 +1,9 @@
 // Lines that belong to no one act: the opening movie, what the family say when they look at one another or hand
 // something over, and the stock replies for things nobody wrote a line for.
 //   "line.id": ["who", "What they say."]
+// PASS-17E (round seventeen, the dialogue pass): five lines have new words under their old ids, each marked with why
+// (Mom's stock replies talk to her girls as a mother does, with her contractions; Big Sister's look at her mother is
+// said in the morning too). Ranger's and Grandpa Joe's stock lines are as they were: the Office's are WRITE-17's.
 
 export const lines = {
   // ---------- intro movie ----------
@@ -22,7 +25,7 @@ export const lines = {
   // ---------- looking at each other ----------
   "see.mom.bigsis": ["mom", "My eldest. Thirteen, and she can read anything in the world except a room."],
   "see.mom.lilsis": ["mom", "My youngest. Seven years old, and entirely without brakes."],
-  "see.bigsis.mom": ["bigsis", "Mom. She has not raised her voice once tonight. That is how I know it is serious."],
+  "see.bigsis.mom": ["bigsis", "Mom. She has not raised her voice once. That is how I know it is serious."],  // PASS-17E: continuity (it is said in the morning in Nevada too)
   "see.bigsis.lilsis": ["bigsis", "My sister. Small, loud, and occasionally useful. Do not tell her I said useful."],
   "see.lilsis.mom": ["lilsis", "Mommy. She smells like the good soap."],
   "see.lilsis.bigsis": ["lilsis", "My sister. She knows EVERYTHING. It's so annoying."],
@@ -50,8 +53,8 @@ export const lines = {
   "nope.son.1": ["son", "That doesn't work. I checked. In my head. Twice."],
   "nope.son.2": ["son", "Nope. Nopity nope. Zero out of ten."],
   "nope.son.3": ["son", "Bad plan. I only do GOOD bad plans."],
-  "nope.mom.1": ["mom", "No, darling. That would not do at all."],
-  "nope.mom.2": ["mom", "I think not. Let us try something more sensible."],
+  "nope.mom.1": ["mom", "No, darling. That won't do at all."],  // PASS-17E: Mom's formality
+  "nope.mom.2": ["mom", "I think not. Let's try something your father wouldn't."],  // PASS-17E: Mom's formality; funnier ("your father", with fond exasperation)
   "nope.mom.3": ["mom", "A creative idea. We will not be using it."],
   "nope.bigsis.1": ["bigsis", "That will not work. I can give you three reasons, in order."],
   "nope.bigsis.2": ["bigsis", "No. Historically, that has never once worked."],
@@ -64,9 +67,9 @@ export const lines = {
   "look.mom.1": ["mom", "Nothing that needs me. How restful."],
   "look.bigsis.1": ["bigsis", "Unremarkable. I have remarked on it anyway."],
   "look.lilsis.1": ["lilsis", "It's just a thing. BORING. Next!"],
-  "hint.dad.none": ["dad", "I've got nothing. Let's look around."],
+  "hint.dad.none": ["dad", "I've got nothing. I'll look around and act like it was the plan."],  // PASS-17E: funnier
   "hint.son.none": ["son", "No idea. I'll poke things until something happens. That's called science."],
-  "hint.mom.none": ["mom", "I have no idea, my love. Let us look around properly."],
+  "hint.mom.none": ["mom", "I haven't the faintest idea, my love. Let's look around properly."],  // PASS-17E: Mom's formality
   "hint.bigsis.none": ["bigsis", "I don't know. ...I am writing that down. It doesn't happen often."],
   "hint.lilsis.none": ["lilsis", "I dunno. Let's ask somebody tall."],
   // NEVADA-12W: Grandpa Joe's stock lines, and Ranger's (his are dots, and nobody translates a stock line)

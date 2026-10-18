@@ -30,6 +30,7 @@
 // Positions are picture pixels (grid.js).
 
 import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, BASE } from "../art/rig.js";
+import { kneelTall } from "../art/rig.js";                // LETTER-17: how tall someone is on her knees (Figure.kneel, Figure.h)
 import { withoutKey } from "../art/look.js";
 import { people } from "../art/people.js";
 import { painted } from "../art/painted.js";          // NEVADA-12E: the figures that are painted frames, not the rig's (see PaintedFigure)
@@ -149,6 +150,7 @@ export class Sprite {
   fade(opacity) { this.opacity = opacity; return this; }
   flag(name, on) { this.flags[name] = on; return this; }
   face() { return this; }
+  pose() { return this; }              // ENGINE-17: one picture of a painted set held (PaintedFigure.pose); anyone else has none to hold
   get h() { return 0; }
   /** Where this meets the ground, measured at a given x. */
   baseAt(x) {
@@ -181,10 +183,16 @@ export class Figure extends Sprite {
     this.up = null;                     // someone found sitting who has got up: where their seat is, which way it faces (see sit)
     this.move = null;                   // getting up or sitting down, under way
     this.fid = null;                    // a small movement under way (see fidget)
+    this.bare = null;                   // LETTER-17: something of theirs they have set down, and are drawn without ("bag": Mom's handbag, on the gravel)
   }
 
   /** How far the top of the head is above the ground, in pixels at scale 1. For placing words just over it, seated or standing. */
-  get h() { return this.spec === this.home ? this.tall : (this.tallUp ??= tallOf(this.spec) * this.spec.height * BASE); }
+  get h() {
+    const full = this.spec === this.home ? this.tall : (this.tallUp ??= tallOf(this.spec) * this.spec.height * BASE);
+    const a = this.act;                 // LETTER-17: on her knees her head is lower, and so are her words
+    if (a && a.low === "kneel") { const k = (n) => (n === "stand" ? 1 : kneelTall(this.spec, n)), e = a.at(); return full * (k(a.from) + (k(a.to) - k(a.from)) * e); }
+    return full;
+  }
 
   /** Someone found sitting: are they sitting now? (Getting up and sitting down count as not.) Anyone else: false. */
   get seated() { return !!this.home.seated && !this.up; }
@@ -258,7 +266,21 @@ export class Figure extends Sprite {
 
   /** Keep an arm held out (or, with `low`, down to the ground) until told otherwise: for someone who holds a thing
       up while people talk. hold(false) lets it drop. */
-  hold(on = true, low = false) { this.act = on ? { low, k: 1 } : null; return this; }
+  hold(on = true, low = false) {
+    this.act = on ? { low, k: 1 } : null;
+    // OFFICE-17P: one of the person's own holds, by name (people.js `holds`: hold(true, "up")), is drawn by the act itself:
+    // so that it is kept sitting as well as standing (the picture of someone seated would otherwise be their seat's), under
+    // a name of its own (two holds of one person are two pictures, not one), and with the lips moving while they talk.
+    // `act.k` is still the script's to ease, as the blessing's is (rome-tiber.js: a tween on it from 0 to 1).
+    const name = on && typeof low === "string" && this.spec.holds && this.spec.holds[low] ? low : null;
+    if (name) this.act.frame = (me) => {
+      const k = Math.round(me.act.k * 10) / 10, spec = me.spec;
+      if (!me.talking) return { key: `hold.${name}.${k}`, pose: () => poses.reach(spec, k, name) };
+      const mouth = [0, 1, 2, 1, 0, 2][Math.floor(me.t / 115) % 6];
+      return { key: `hold.${name}.${k}.${mouth}`, pose: () => ({ ...poses.reach(spec, k, name), mouth }) };
+    };
+    return this;
+  }
 
   /** Stand in prayer (head bowed, eyes shut, hands folded: each of the family has their own way, `pray` in js/art/people.js)
       until told otherwise: pray(false) lets it go. It eases in and out over about a quarter of a second. Like hold(), it
@@ -300,6 +322,33 @@ export class Figure extends Sprite {
     if (!on) setTimeout(() => { if (this.act === act) { this.act = null; this.t = 0; } }, SPAN + 20);
     return this;
   }
+
+  /** LETTER-17: on her knees, for someone whose page in js/art/people.js says how (`kneel`: Mom's, at the little door in
+      Act Four, the night she hears her son; nobody else's: anyone else is left as they are). kneel() or kneel(true): down
+      on both knees, upright; kneel("back"): sat back on her heels; kneel(false): up again. Each eases over about a third
+      of a second (the rig's poses.kneel), from wherever the last one had got to. Like pray(), it stays through talking
+      (her lips move), and it is for someone standing still: let it go before she walks or reaches. (An "act" called
+      "kneel": frame() asks it what to draw.) */
+  kneel(how = true) {
+    if (!this.spec.kneel || this.spec.seated) return this;
+    const to = how === "back" ? "back" : how ? "up" : "stand", was = this.act && this.act.low === "kneel" ? this.act : null;
+    const from = was ? (was.at() >= 0.5 ? was.to : was.from) : "stand";
+    if (!was && to === "stand") return this;                                // not kneeling: nothing to get up from
+    const SPAN = to === "back" ? 520 : 380, start = performance.now();
+    const act = { low: "kneel", from, to, k: 1, at: () => Math.min(1, (performance.now() - start) / SPAN) };
+    act.frame = (me) => {                                                    // (talking: the same pose, with the lips moving)
+      const e = Math.round(act.at() * 6) / 6, spec = me.spec;
+      if (!me.talking) return { key: `kneel.${from}.${to}.${e}`, pose: () => poses.kneel(spec, from, to, e) };
+      const mouth = [0, 1, 2, 1][Math.floor(me.t / 120) % 4];
+      return { key: `kneel.${from}.${to}.${e}.${mouth}`, pose: () => ({ ...poses.kneel(spec, from, to, e), mouth }) };
+    };
+    this.endFidget();
+    this.act = act;
+    if (to === "stand") setTimeout(() => { if (this.act === act) { this.act = null; this.t = 0; } }, SPAN + 20);
+    return this;
+  }
+  /** LETTER-17: how she is kneeling: "up", "back", or null (standing, or on her way up). */
+  get kneeling() { const a = this.act; return a && a.low === "kneel" && a.to !== "stand" ? a.to : null; }
 
   /** A one-off action: "reach" (out, at chest height) or "pick" (down to the ground). */
   play(clock, name) {
@@ -436,8 +485,8 @@ export class Figure extends Sprite {
   picture(palette, calm) {
     const full = BASE * this.spec.height, want = full * this.scale, f = this.frame(calm);
     const even = (size) => Math.max(10, Math.round(size / 2) * 2);                              // in steps of two pixels, so pictures can be reused
-    const who = this.spec === this.home ? this.kind : this.kind + "^up";                       // (someone found sitting, on their feet)
-    const at = (size) => remember(`${who}|${f.key}|${this.yaw}|${size}`, () => drawFigure(this.spec, f.pose(), this.yaw, size));
+    const who = (this.spec === this.home ? this.kind : this.kind + "^up") + (this.bare ? "-" + this.bare : "");      // (someone found sitting, on their feet; LETTER-17: and without what they have set down)
+    const at = (size) => remember(`${who}|${f.key}|${this.yaw}|${size}`, () => drawFigure(this.spec, this.bare ? { ...f.pose(), bare: this.bare } : f.pose(), this.yaw, size));
     if (!f.moving) return at(even(want));                                                       // standing, talking, reaching: exactly the size they are
     // Walking: the nearest rung of the ladder (see RUNG), shown at the size wanted.
     const size = even(full * RUNG ** Math.round(Math.log(Math.max(this.scale, 0.01)) / Math.log(RUNG)));
@@ -492,7 +541,8 @@ export class Seat extends Sprite {
 // (preparePainted, from game.js), so a portrait is here when the team bar first wants it; the frames are fetched with
 // the pictures of the scene he stands in (Cast.load waits for them).
 const SIT_UP = ["sit", "nibble", "wash", "reach", "look"];
-const FALLBACK = { walk: "stand", run: "walk", sit: "stand", nibble: "sit", wash: "sit", reach: "sit", look: "sit", walkN: "walk", walkS: "walk", pick: "reach" };
+const FALLBACK = { walk: "stand", run: "walk", sit: "stand", nibble: "sit", wash: "sit", reach: "sit", look: "sit", walkN: "walk", walkS: "walk", pick: "reach",
+  climb: "walk", drop: "stand", peek: "sit", pull: "reach" };      // ENGINE-17: the Office's new sets (up a pipe, a drop, lying at a grille, a lever), until they are painted
 const FPS = { stand: 1.5, sit: 1.5, run: 10 };
 const isPoint = (p) => Array.isArray(p) && p.length >= 2 && Number.isFinite(p[0]) && Number.isFinite(p[1]);
 const sidecars = new Map();              // kind -> the sidecar, read
@@ -696,6 +746,7 @@ export class PaintedFigure extends Sprite {
   play(clock, name, { ms = null } = {}) {
     if (name == null) { this.stop(); return Promise.resolve(); }
     const s = this.sheet, set = s && this.setFor(name), reach = name === "reach" || name === "pick";
+    this.standIn(name, set);                                             // ENGINE-17: a set asked for by name that is not painted yet: the console says what shows instead, once
     if (!set || clock.skipping) return Promise.resolve();
     this.endFidget();
     this.stop();
@@ -717,6 +768,25 @@ export class PaintedFigure extends Sprite {
   }
   /** End whatever play() is playing (not a hold). */
   stop() { if (this.act && this.act.end) this.act.end(); return this; }
+  /** ENGINE-17: hold one picture of a set, its `i`th (from 0), until pose(null) (or a walk, or another play): a drop's
+      falling picture and then its landing one (the grille's fall, js/engine/grille.js), a blink of the `peek` set. A set
+      that is not painted shows what stands in for it (FALLBACK), as play's does. */
+  pose(name, i = 0) {
+    if (name == null) { if (this.act && this.act.posed) { this.act = null; this.t = 0; } return this; }
+    const set = this.sheet && this.setFor(name);
+    this.standIn(name, set);
+    if (!set) return this;
+    this.endFidget(); this.stop();
+    this.act = { name: set, k: 1, t: 0, held: true, posed: true, frame: Math.max(0, Math.floor(i)) };
+    return this;
+  }
+  /** ENGINE-17: a set asked for by name (play, pose) that this figure has no pictures for yet: said in the console, once
+      for each kind and set, with what is shown instead. (Not `pick`, which is the reach by design, nor sets painted.) */
+  standIn(name, set) {
+    const s = this.sheet;
+    if (!s || s.frames[name] || name === "pick" || name === "reach") return;
+    warnOnce(`set|${this.kind}|${name}`, `The painted figure "${this.kind}" has no "${name}" pictures yet: ${set ? `its "${set}" stand in for them` : "nothing stands in for them, and it plays nothing"}.`);
+  }
   /** What play() is playing, or null. */
   get playing() { return this.act && !this.act.held ? this.act.name : null; }
 
@@ -786,6 +856,7 @@ export class PaintedFigure extends Sprite {
     const a = this.act;
     if (a) {
       const set = this.setFor(a.name) || this.restSet();
+      if (a.frame != null) return { set, i: Math.min(a.frame, n(set) - 1) };      // ENGINE-17: one picture held (pose)
       if (!(a.held || a.reach)) return { set, i: at(set, a.t) };
       const i = Math.round(a.k * n(set)) - 1;                            // out of his resting pose and back into it
       return i < 0 ? { set: this.restSet(), i: 0 } : { set, i: Math.min(i, n(set) - 1) };

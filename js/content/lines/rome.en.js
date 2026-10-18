@@ -52,8 +52,8 @@
 // The old three places change only where ROME-13.md says ("What changes in the act as built"), each change marked
 // ROME-13W where it stands; the writer's ids.md for the round (with its working papers) has every changed line's old
 // words beside its new.
-//   - Scripture is quoted five times now, all in the act's two quiet scenes, King James Version, exact, each reference
-//     said by the Son: the date seller's two, and across the river Isaiah 40:31 to its semicolon (rome.eleazar.heart.2),
+//   - Scripture is quoted five times now, all in the act's two quiet scenes, King James Version, exact (PASS-17R: and no
+//     reference is said aloud since round seventeen: see below): the date seller's two, and across the river Isaiah 40:31 to its semicolon (rome.eleazar.heart.2),
 //     Numbers 6:25 (rome.eleazar.bless.1) and Numbers 6:26 (rome.eleazar.last.son). So the priestly blessing goes three
 //     ways: verse 24 from the date seller, 25 from his father-in-law, 26 from the boy. Everything else from the Bible is
 //     told in a speaker's own words: Daniel 6:10, Psalm 55:17 and 122:6, Isaiah 9:7, 32:1 and 60:3, Numbers 15:38-39,
@@ -64,6 +64,16 @@
 //     meeting. No year B.C. is named but 44; Rome's past is "long ago", "nineteen years ago", "a hundred years". The verses
 //     the city sings about the Gauls are never quoted: the Gaul tells of them himself, in his own words.
 //   - The Son wears no cap: his strange shoes and his hair are what the people of Rome notice.
+//
+// PASS-17R: THE DIALOGUE PASS (round seventeen: briefs/OFFICE-17.md, PASS-17.md; the design is
+// briefs/out/office-hq-design.md, section 1). The author's rule of 16 October: chapter and verse are said aloud only
+// when natural. Big Sister may cite one (she is not in this act); nobody else says a reference. So the Son no longer
+// says "Micah 5:2!", "Numbers 6:24!", "Isaiah 40:31!", "Numbers 6:25!", "Numbers 6:26." or "Luke 2:1.": he says where
+// he knows the words from (the Christmas program, the end of church, the fridge). The five quotations are King James,
+// exact, as they were, and every reference is still in docs/CHARACTERS.md, "Scripture quoted in the game", and in
+// docs/PUZZLES-rome.md. No Bible fact is tacked onto a look (the fig tree; the stepping stones); a few lines are truer
+// to the picture (he wears no hat), shorter, or answer back. Each changed line is marked PASS-17R where it stands; the
+// round's record (S/work-17-passR/changes.json) has every one's old words beside its new.
 
 export const lines = {
   // ================= rome-steps: the steps of the temple =================
@@ -214,7 +224,7 @@ export const lines = {
   "rome.senator.ask.caesar": ["son", "Does Caesar have a kid? A kid like that could get in ANYWHERE."],
   "rome.senator.ans.caesar.1": ["senator", "Caesar has no son. There is a great-nephew: Gaius Octavius, eighteen, off at his books in Apollonia."],
   "rome.senator.ans.caesar.2": ["senator", "Nobody gives the boy a thought. I mention him only because I am thorough."],
-  "rome.senator.ans.caesar.3": ["son", "I know another Caesar! Caesar AUGUSTUS. Luke 2:1. He counts everybody. It's how the Christmas story starts."],
+  "rome.senator.ans.caesar.3": ["son", "I know another Caesar! Caesar AUGUSTUS. He counts everybody. It's how the Christmas story starts."],      // PASS-17R: no reference aloud
   "rome.senator.ans.caesar.4": ["senator", "Augustus. There is no such name. I know every name in Rome that matters."],
   "rome.senator.ans.caesar.5": ["son", "...Not yet."],
   "rome.senator.ask.dad": ["son", "Have you seen my dad? Little beard, shirt with flowers all over it?"],
@@ -310,7 +320,7 @@ export const lines = {
   "rome.keeper.errand.4": ["son", "Operation Sausage Rescue. Find the kid, find the sausage. I won't eat it. I'll just THINK about eating it."],
   "rome.keeper.ask.pay": ["son", "How much do I owe you? I've got a quarter."],
   "rome.keeper.ans.pay.1": ["keeper", "Who is this? I know every consul's nose. That is not a consul."],
-  "rome.keeper.ans.pay.2": ["son", "That's George. He's on all the quarters."],
+  "rome.keeper.ans.pay.2": ["son", "That's George. Back home, EVERYBODY knows that nose."],      // PASS-17R: answers him back; and not every quarter has George now (us.quarter)
   "rome.keeper.ans.pay.3": ["keeper", "I do not know George, I do not know his nose, keep him, you pay me later, everyone pays me later."],
   "rome.keeper.ans.pay.4": ["son", "He gave me a tab. I have a TAB. I'm telling everyone."],
   "rome.keeper.ask.pizza": ["son", "Do you have pizza?"],
@@ -357,7 +367,7 @@ export const lines = {
   "rome.washer.look2": ["son", "She's got arms like the door guy. I'd watch that arm wrestle. I'd bring snacks."],
   "rome.washer.hi.1": ["washer", "Mind the basket. Those are clean, and you are not."],
   "rome.washer.hi.2": ["son", "I'm travel dirty. It's different. It's got miles on it."],
-  "rome.washer.hi.3": ["washer", "A pouch on the belly and a little awning on the head. Whoever dresses you enjoys a joke."],
+  "rome.washer.hi.3": ["washer", "A pouch on the belly, and a hood with no head in it. Whoever dresses you enjoys a joke."],      // PASS-17R: true to the picture (no cap; his hood is down)
   "rome.washer.hi.4": ["son", "That's my mom. You'd like her. You both look at my knees the same way."],
   "rome.washer.errand.1": ["washer", "Can you run? The senator's toga is dry, and he is up at the temple steps turning purple."],
   "rome.washer.errand.2": ["washer", "I cannot leave the tubs. Take it to him, and I will lend you a proper tunic for the day."],
@@ -373,7 +383,7 @@ export const lines = {
   "rome.washer.ans.white.8": ["son", "I'm going back to the corners."],
   "rome.washer.ask.tunic": ["son", "About that tunic..."],
   "rome.washer.ans.tunic": ["washer", "Toga first, then tunic. I have run a laundry for twenty years on 'first' and 'then'."],
-  "rome.washer.ask.dad": ["son", "Have you seen my dad? Tall, little beard, flowers on his shirt?"],
+  "rome.washer.ask.dad": ["son", "Have you seen my dad? Little beard, flowers on his shirt. You'd remember the shirt."],      // PASS-17R: was the doorkeeper's words exactly; now she answers it
   "rome.washer.ans.dad.1": ["washer", "Flowers. On a shirt. No. I would remember WASHING that."],
   "rome.washer.ans.dad.2": ["son", "That's what Mom says. Same face and everything."],
   "rome.washer.ask.bye": ["son", "Bye! I'll be careful with your bedsheets."],
@@ -501,7 +511,7 @@ export const lines = {
   "rome.dateseller.look2": ["son", "He keeps looking the same way, past the fountain and a long way off. Like he's waiting for somebody."],
   "rome.dateseller.hi.1": ["dateseller", "Dates, young sir. From Jericho, in Judea. There are none better: I have looked."],
   "rome.dateseller.hi.2": ["son", "Jericho? The Jericho with the WALLS?"],
-  "rome.dateseller.hi.3": ["dateseller", "You know of the walls. In that hat. ...The same Jericho. The palms have done better than the walls."],
+  "rome.dateseller.hi.3": ["dateseller", "You know of the walls. In those shoes. ...The same Jericho. The palms have done better than the walls."],      // PASS-17R: he wears no hat; his shoes are what Rome sees
   "rome.dateseller.ask.try": ["son", "Can I try one? I'm between snacks."],
   "rome.dateseller.ans.try.1": ["dateseller", "For a boy who knows of Jericho, the first is a gift. Here."],
   "rome.dateseller.ans.try.2": ["son", "It's candy. It's candy that GROWS. Nine out of... OW. There's a rock in it!"],
@@ -509,7 +519,7 @@ export const lines = {
   "rome.dateseller.ans.try.4": ["son", "Nine out of ten. One off for the surprise rock."],
   "rome.dateseller.ask.god": ["son", "Everybody here has a statue to pray to. Which one's yours?"],
   "rome.dateseller.ans.god.1": ["dateseller", "None. We have one God: the God of Abraham, of Isaac and of Jacob. He made heaven and earth."],
-  "rome.dateseller.ans.god.2": ["son", "Abraham, Isaac and Jacob? I KNOW them! That's who we pray to at my house!"],
+  "rome.dateseller.ans.god.2": ["son", "Abraham, Isaac and Jacob? I know those guys! He's our God too! We pray to Him at my house!"],      // PASS-17R: they pray to Abraham's God, not to Abraham
   "rome.dateseller.ans.god.3": ["dateseller", "At your house. ...Then the world is larger than Rome has told me."],
   "rome.dateseller.ans.god.4": ["dateseller", "Rome finds us Jews very funny: a great Temple in Jerusalem, and no statue in it."],
   "rome.dateseller.ans.god.5": ["dateseller", "Pompey himself went in, nineteen years ago. He found no image. Not one."],
@@ -517,14 +527,14 @@ export const lines = {
   "rome.dateseller.ask.pray": ["son", "What do you pray for?"],
   "rome.dateseller.ans.pray.1": ["dateseller", "For the one who is promised. Every day, facing Jerusalem. The prophet Micah has told us his town:"],
   "rome.dateseller.ans.pray.2": ["dateseller", "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'"],          // Micah 5:2, King James Version, the first clause: exact, comma and all
-  "rome.dateseller.ans.pray.3": ["son", "Micah 5:2! That was my line in the Christmas program. ...Bethlehem. I know SO much about Bethlehem."],
-  "rome.dateseller.ans.pray.4": ["son", "I've never wanted to tell anybody anything so much. It's not mine to tell. That news has its own angels."],
+  "rome.dateseller.ans.pray.3": ["son", "That was MY line! In the Christmas program! ...Bethlehem. I know SO much about Bethlehem."],      // PASS-17R: no reference aloud: where he knows it from
+  "rome.dateseller.ans.pray.4": ["son", "I've never wanted to tell anybody anything so much. It's not mine to tell. That's the angels' job."],      // PASS-17R: a boy's words for it
   "rome.dateseller.ans.pray.5": ["son", "Mister? It's going to be worth the wait. If I were you, I'd keep watching that town."],
   "rome.dateseller.ans.pray.6": ["dateseller", "...That was not a guess. I will not ask you what it was. But I will watch."],
   // (The id of the blessing is chosen with care: the engine picks each line's gesture from its id, and this one
   // gives him a hand laid on his chest. Renumber it and he may bless the boy with a shrug, or with a date in his hand.)
   "rome.dateseller.bless.1": ["dateseller", "And for you, young sir: 'The LORD bless thee, and keep thee:'"],                                   // Numbers 6:24, King James Version: exact, colon and all
-  "rome.dateseller.bless.2": ["son", "Numbers 6:24! Pastor says that at the end of church. The very same words. ...Thanks, mister."],
+  "rome.dateseller.bless.2": ["son", "Whoa. That's how church ends! The very same words. ...Thanks, mister."],      // PASS-17R: no reference aloud
   "rome.dateseller.ask.bye": ["son", "Bye, mister."],
   "rome.dateseller.ans.bye": ["dateseller", "Go well, young sir. Come any day but the seventh. That day I rest, and Rome always wants dates."],
   "rome.dateseller.quarter.1": ["dateseller", "A bird. An eagle? Whoever struck this was proud of his bird. ...It is not silver, young sir."],
@@ -543,7 +553,7 @@ export const lines = {
 
   // ---------- the rest of the street ----------
   "rome.stones.look": ["son", "Big stones to hop across the street, so your feet stay out of the... street. Good thinking, Rome."],
-  "rome.stones.look2": ["son", "Paul walks into Rome on a road like this. The Appian Way: it's on my Bible map. The church comes out to meet him. Not yet."],   // woven: Acts 28:15
+  "rome.stones.look2": ["son", "Paul walks into Rome on a road like this one day. It's on the map in the back of my Bible. Dotted line. Not yet."],   // woven: Acts 28:15-16. PASS-17R: shorter, and his own (the map), not a lesson
   "rome.cat.look": ["son", "A cat on a sill, ignoring a whole city. Cats were already like this. That's kind of comforting."],
   "rome.cat.use": ["son", "Here, kitty. ...Ignored. In a whole other century. Consistent. Ten out of ten."],
   "rome.shrine.look": ["son", "A tiny house in the wall, for a painted snake. With a night-light. He has a nicer room than me."],
@@ -697,16 +707,16 @@ export const lines = {
   "rome.forum.arrive.3": ["son", "And up on the hill, a gold roof on fire with sunshine. Rome does NOT do anything halfway."],
 
   // ---------- the things in it (a second look where one is worth it) ----------
-  "rome.forum.castor.look": ["son", "A giant temple with a front porch like a stage. You could put on a whole school play up there."],
+  "rome.forum.castor.look": ["son", "A giant temple with a front porch like a stage. Mom would have a play on up there by Friday."],      // PASS-17R: his mother and the stage
   "rome.forum.castor.look2": ["son", "The flower lady sits right at the bottom of it. Best spot in town. Everybody walks past a temple."],
   "rome.forum.castor.use": ["son", "Climb up there? It's a stage. Somebody would expect me to say something."],
-  "rome.forum.spring.look": ["son", "A square stone pool of clear water, with a spring bubbling in at the back. The fountain's big quiet cousin."],
-  "rome.forum.spring.use": ["son", "Splash my face? ...COLD. Very cold. Ten out of ten. I am now extremely awake."],
+  "rome.forum.spring.look": ["son", "A stone pool with a spring bubbling in. The fountain's big quiet cousin."],      // PASS-17R: shorter
+  "rome.forum.spring.use": ["son", "Splash my face? ...COLD. VERY cold. Two out of ten. I am now extremely awake."],      // PASS-17R: not every score is a ten
   "rome.forum.spring.coin": ["son", "No. It's somebody's wish. You don't move somebody's wish to a different pool."],
-  "rome.forum.garlands.look": ["son", "Baskets of purple flowers and green leaves, and crowns of them on a pole. Smells like Grandma's bathroom. In a good way."],
+  "rome.forum.garlands.look": ["son", "Baskets of purple flowers, and crowns of them on a pole. Smells like Grandma's bathroom. In a good way."],      // PASS-17R: shorter
   "rome.forum.garlands.use": ["phyllis", "Hands off the merchandise, child. Smell with your nose. That part's free."],
   "rome.forum.tuscan.look": ["son", "A narrow street going off downhill. It smells like river. And a little bit like cows."],
-  "rome.forum.julia.look": ["son", "A giant building made of arches, two floors of them. Half brand new, half still in scaffolding. Like my science project."],
+  "rome.forum.julia.look": ["son", "Two floors of arches. Half brand new, half still in scaffolding. Like my science project."],      // PASS-17R: shorter
   "rome.forum.scaffold.look": ["son", "Wooden scaffolding all over the end of that building. Rome's under construction. All of it. At the same time."],
   "rome.forum.scaffold.use": ["son", "Climb the scaffolding? Mom has a rule about scaffolding. It's the same as her rule about everything."],
   "rome.forum.puteal.look": ["son", "A round stone ring in the pavement, like a well with no well in it. Everybody walks AROUND it. Hmm."],
@@ -727,7 +737,7 @@ export const lines = {
   "rome.forum.records.look": ["son", "A long building with a row of arches, built right into the hill. It looks like a giant filing cabinet."],
   "rome.forum.paullus.look": ["son", "Another giant building of columns, with shops underneath. A mall! Rome has a MALL."],
   "rome.forum.paullus.look2": ["son", "Everybody under those arches is buying, selling, or arguing about it. Definitely a mall."],
-  "rome.forum.site.look": ["son", "A fence round a giant hole, with new stone going in at the bottom. Something used to be here. Something's GOING to be."],
+  "rome.forum.site.look": ["son", "A fence round a giant hole. Something used to be here. Something's GOING to be."],      // PASS-17R: shorter (the picture shows the new stone)
   "rome.forum.site.look2": ["son", "Old stones out, new stones in. Rome is getting a new tooth. A really big one."],
   "rome.forum.site.use": ["son", "The fence says keep out. It doesn't SAY it. It's just that kind of fence."],
   "rome.forum.crane.look": ["son", "A wooden crane with a giant wheel. Somebody walks inside the wheel to lift stuff. Like a hamster. A STRONG hamster."],
@@ -840,7 +850,7 @@ export const lines = {
   // ---------- Phyllis (NEW 4, Interest Is Extra Wishes, her side; phyllisTree) ----------
   // Fannia Phyllis, a Greek freedwoman, a widow, on her low stool among her baskets at the foot of Castor's temple. Fast
   // and warm, a seller's patter, sharp with fools, soft about her son. Anna Perenna's feast is today.
-  "rome.phyllis.look": ["son", "A little lady in a dark shawl, sitting in a nest of flowers, making them into crowns. Ten out of ten."],
+  "rome.phyllis.look": ["son", "A little lady in a dark shawl, in a nest of flowers, making crowns faster than I can tie my shoes."],      // PASS-17R: not every look is a ten
   "rome.phyllis.look2": ["son", "She's got a little bundle in her lap, wrapped up like an egg. She hasn't sold that one."],
   "rome.phyllis.look3": ["son", "No bundle now. A half-made crown in her lap instead, and she's going twice as fast."],
   "rome.phyllis.cry": ["phyllis", "Violets! Laurel for your doorpost! Myrtle for your sweetheart! A garland for Anna Perenna!"],
@@ -1041,7 +1051,7 @@ export const lines = {
   "rome.anser.opt.name": ["son", "What's your name? I'm collecting names. I've got Walnut."],
   "rome.anser.name.1": ["anser", "Titus Rubrius Anser. Anser means goose."],
   "rome.anser.name.2": ["anser", "It was my grandfather's name before it was my job. Nobody believes it."],
-  "rome.anser.name.son": ["son", "I believe it! A goose guy called Goose. Mister Goose! Ten out of ten."],
+  "rome.anser.name.son": ["son", "I believe it! A goose guy called Goose. Mister Goose! You go straight to the top of my collection."],      // PASS-17R: his collection of names comes round again
   "rome.anser.name.3": ["anser", "...Mister Goose. Well. These are no ordinary geese, child. These geese saved the city."],
   "rome.anser.opt.feed": ["son", "Do you feed them every day? That's a LOT of geese."],
   "rome.anser.feed.1": ["anser", "Every morning. The Republic pays for their grain, as it should, since the night they saved the city."],
@@ -1102,7 +1112,7 @@ export const lines = {
 
   // ---------- the things in it ----------
   "rome.tiber.river.look": ["son", "The river. It's brown and it's in a hurry. Like a dog after a bath."],
-  "rome.tiber.river.use": ["son", "Swim? It's brown and it's in a hurry. I'm not getting in a hurry."],
+  "rome.tiber.river.use": ["son", "Swim? I'd come out browner than I went in. And in a different town."],      // PASS-17R: the look has "brown and in a hurry" already
   "rome.tiber.river.coin": ["son", "Not in the river. Things that go in the river stay in the river."],
   "rome.tiber.river.quarter": ["son", "Skip a quarter across the Tiber? George would never forgive me."],
   "rome.tiber.barge.look": ["son", "A long flat boat piled with bundles. It's a boat that's mostly a table."],
@@ -1120,13 +1130,13 @@ export const lines = {
   "rome.tiber.doorpost.use": ["son", "Poke it? No. It's not my door. And it looks important in a quiet way."],
   "rome.tiber.window.look": ["son", "An upstairs window with the shutter folded back. Open wide, toward the river and the morning."],
   "rome.tiber.window.look2": ["son", "His window. Still open. He'll be back up there at midday, I bet. He's a three-times-a-day man."],
-  "rome.tiber.prayerhouse.look": ["son", "No statues, no pictures, nothing painted. A wide door and a bench. It looks like a place for listening in."],
+  "rome.tiber.prayerhouse.look": ["son", "No statues, no pictures, nothing painted. A wide door and a bench. Like a library, but for praying."],      // PASS-17R: a boy's way of putting it
   "rome.tiber.prayerhouse.use": ["son", "Go in? It's not my house of anything. And it's quiet in there. I'm not quiet."],
   "rome.tiber.bench.look": ["son", "A stone bench by the big door. Good for waiting. I'm an expert now."],
   "rome.tiber.bench.use": ["son", "I'll sit. Sitting is the main part of waiting."],
   "rome.tiber.well.look": ["son", "A well with a stone rim. I'm not dropping anything in. I've learned about coins and water."],
   "rome.tiber.well.coin": ["son", "No wells. No fountains. No more wishes in water. I'm on a break."],
-  "rome.tiber.figtree.look": ["son", "A fig tree with tiny new leaves. Fig trees are all over my Bible. This one's just getting started."],
+  "rome.tiber.figtree.look": ["son", "A fig tree with tiny new leaves. A snack tree! Still loading. Come back in summer."],      // PASS-17R: no Bible fact tacked onto a look
   "rome.tiber.figtree.use": ["son", "Pick a fig? There aren't any yet. Just baby leaves."],
   "rome.tiber.washing.look": ["son", "Washing on a line between two windows. The laundry lady would have OPINIONS."],
 
@@ -1143,7 +1153,7 @@ export const lines = {
   // against anybody's gods, and argues with nobody; the Son never tells him what is coming.
   // At his window: the boy waits (the scene), then the old man comes down to his bench.
   "rome.eleazar.look.window": ["son", "An old man at his window, eyes shut, lips moving. Praying. I'm not going to bother him."],
-  "rome.eleazar.look.window2": ["son", "No words that I can hear. He's talking to Somebody who doesn't need him to be loud."],
+  "rome.eleazar.look.window2": ["son", "I can't hear any words. That's okay. God can."],      // PASS-17R: what a boy would say
   "rome.eleazar.wait": ["son", "Waiting. I'm doing it. Look at me doing it."],
   "rome.eleazar.look": ["son", "The old man, on his bench, with a scroll. He reads with his finger. Like me with a hard book."],
   "rome.eleazar.look2": ["son", "He keeps looking up across the river, then back at his scroll. Like he's checking on something."],
@@ -1166,8 +1176,8 @@ export const lines = {
   // the window: Daniel 6:10 and Psalm 55:17, told, not quoted
   "rome.eleazar.opt.window": ["son", "What were you doing at the window? With your eyes shut?"],
   "rome.eleazar.window.1": ["eleazar", "Praying, child. Toward Jerusalem, where the Temple is. In the evening, in the morning, and at midday."],
-  "rome.eleazar.window.son": ["son", "Like Daniel! In the lions' story. He prayed with his windows open toward Jerusalem. Three times a day."],
-  "rome.eleazar.window.2": ["eleazar", "Then you have been well taught."],
+  "rome.eleazar.window.son": ["son", "Like Daniel! Window open, toward Jerusalem, three times a day. ...No lions, though. Right?"],      // PASS-17R: shorter, and a question to answer
+  "rome.eleazar.window.2": ["eleazar", "No lions, child. Only Mariam. ...You have been well taught."],      // PASS-17R: he answers it (Mariam is boss of Grandfather)
   // how he came to Rome: told without bitterness, and a pause
   "rome.eleazar.opt.rome": ["son", "How did you end up in Rome? Did you take a wrong turn? My dad takes a LOT of wrong turns."],
   "rome.eleazar.rome.1": ["eleazar", "I was a grown man in Jerusalem when Pompey took the city, nineteen years ago. Many of us were brought here."],
@@ -1186,7 +1196,7 @@ export const lines = {
   "rome.eleazar.opt.heart": ["son", "What if he doesn't come in time? For you, I mean."],
   "rome.eleazar.heart.1": ["eleazar", "Then my grandchildren will see him, or theirs. The promise does not depend on an old man's eyes."],
   "rome.eleazar.heart.2": ["eleazar", "The prophet Isaiah says it: 'But they that wait upon the LORD shall renew their strength;'"],          // Isaiah 40:31, King James Version, to its semicolon: exact
-  "rome.eleazar.heart.son.1": ["son", "Isaiah 40:31! It's on our fridge. On a magnet, with an eagle. Mom reads it when Dad's late."],
+  "rome.eleazar.heart.son.1": ["son", "That's on our fridge! On a magnet, with an eagle. Mom reads it when Dad's late."],      // PASS-17R: no reference aloud: where he knows it from
   "rome.eleazar.heart.son.2": ["son", "Dad's late right now. REALLY late. I don't even know which year he's late in."],
   "rome.eleazar.heart.3": ["eleazar", "Then we are both waiting, child. Shall we wait together a little?"],
   "rome.eleazar.opt.together": ["son", "Okay. ...Yes. Together."],
@@ -1205,13 +1215,13 @@ export const lines = {
   // the blessing: his hand on the boy's head (Genesis 48:14, shown); Numbers 6:25, QUOTED, King James Version, exact
   "rome.eleazar.bless.0": ["eleazar", "Come. Stand still a moment."],
   "rome.eleazar.bless.1": ["eleazar", "And for you, child: 'The LORD make his face shine upon thee, and be gracious unto thee:'"],          // Numbers 6:25, King James Version: exact, colon and all
-  "rome.eleazar.bless.son": ["son", "Numbers 6:25! That's the middle of the blessing. Back home we get all three parts. I know them by HEART."],
+  "rome.eleazar.bless.son": ["son", "That's the blessing! Pastor says it at the end of church! ...You only did the middle part. I know all THREE."],      // PASS-17R: the design's own sample (office-hq-design.md, section 1): no reference aloud
   // only if the date seller blessed him (rome.dateseller.bless.2 has been said)
   "rome.eleazar.pieces.son": ["son", "The date seller gave me the first part! You two are doing it in PIECES."],
   "rome.eleazar.pieces": ["eleazar", "Yose blessed you too? Then the blessing has been walking all over Rome this morning."],
   // and the boy gives him the last part: Numbers 6:26, QUOTED, King James Version, exact
   "rome.eleazar.opt.last": ["son", "Mister Eleazar? Can I give you the last part?"],
-  "rome.eleazar.last.son": ["son", "'The LORD lift up his countenance upon thee, and give thee peace.' Numbers 6:26."],          // Numbers 6:26, King James Version: exact
+  "rome.eleazar.last.son": ["son", "'The LORD lift up his countenance upon thee, and give thee peace.'"],          // Numbers 6:26, King James Version: exact. PASS-17R: the reference is no longer said after it
   "rome.eleazar.last": ["eleazar", "...From a child, at my own door. I will remember the day the blessing came back to me."],
   "rome.eleazar.go": ["eleazar", "Go in peace, child. And find your father."],
   // walking away, to us
@@ -1285,7 +1295,7 @@ export const lines = {
   // ---------- Felix (NEW 4's middle; felixTree) ----------
   // Gaius Fannius Felix, about twenty-six, Phyllis's son, born free: a boatman on the barges between here and Ostia,
   // his name down for Corinth. Cheerful, impatient, soft about his mother, full of Corinth.
-  "rome.felix.look": ["son", "A big sunburnt guy carrying bundles to and from a boat. He keeps looking at the bridge. Like he's waiting for someone."],
+  "rome.felix.look": ["son", "A big sunburnt guy, loading a boat. He keeps looking at the bridge. Like he's waiting for someone."],      // PASS-17R: shorter
   "rome.felix.look2": ["son", "He's whistling. No tune. Just air with ambition."],
   // ways in (the first, when the boy is carrying his mother's lamp)
   "rome.felix.opt.felix": ["son", "Are you Felix? Phyllis's Felix? Tall, sunburnt, in a hurry?"],

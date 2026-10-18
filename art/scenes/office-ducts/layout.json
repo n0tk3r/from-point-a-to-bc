@@ -1,0 +1,1489 @@
+{
+ "id": "office-ducts",
+ "horizon": 333,
+ "full": 470,
+ "view": {
+  "horizon": 333,
+  "full": 470,
+  "cam": [
+   400.0,
+   906.25
+  ],
+  "yaw": 0.0,
+  "focal": 600.0,
+  "centre_x": 400.0
+ },
+ "eye_cm": 150,
+ "vanishing": [
+  400,
+  333
+ ],
+ "minScale": 1.0,
+ "maxScale": 1.0,
+ "scale_note": "Ranger walks the middle of the duct's floor on the row 470 = full: scale 1.0, his frames pixel for pixel. The walk band is thin (rows 466 to 474: 0.95 to 1.03 by the camera); minScale and maxScale 1.0 hold him at exactly his painted size anywhere on it (a frame drawn at 0.97 would lose rows).",
+ "light": "a cut-away of the ceiling space, drawn as a section: the duct is the brightest thing, the rooms' fluorescent light (warm white, a little green) coming up through its four grilles in bars up its back wall to its top, the boots glowing under them; daylight down the intake run at the left from the rooftop unit; the light fittings glowing up between the tiles (the two the cut passes through show their tubes alight, and their light falls in soft fans into the rooms under the tiles' cut line; the ones behind the duct fan up the far wall); the B-7 shaft clean, lit from its cap and more from far below (the way down), a caged bulb over the duct's mouth; the ceiling space dim but readable, blue-violet in its shade. Light falls as if the cut walls were still there.",
+ "fx_note": "Nothing moves by nature here. The intake fan is painted still in the backdrop (it is never seen turning: the fans are off from the first time Ranger is in the duct); if it is ever to turn, it is the ellipse at `intake_fan`. The B-7 fan is the cut-out `fan` (four turning frames, then still): see `planes`. The fans' hum is a sound, not paint.",
+ "walk": [
+  [
+   62,
+   466
+  ],
+  [
+   623,
+   466
+  ],
+  [
+   638,
+   475
+  ],
+  [
+   39,
+   475
+  ]
+ ],
+ "walk_note": "the middle of the duct's floor, a thin band (Z 229 to 271 cm of its 100), from the foot of the intake run (past the elbow's corner) to the end of the floor over the shaft. Nobody else is ever here.",
+ "blocked": [],
+ "planes": [
+  {
+   "id": "fan",
+   "frames": [
+    "fan-0.png",
+    "fan-1.png",
+    "fan-2.png",
+    "fan-3.png"
+   ],
+   "fps": 3,
+   "at": [
+    693,
+    550
+   ],
+   "foot": [
+    39,
+    23
+   ],
+   "base": 573,
+   "when": "turning while the building's air is on: !office.acOff",
+   "note": "the B-7 fan turning: four frames a sixteenth of a turn apart (0.0, 22.5, 45.0, 67.5 degrees; four broad blades, so the fourth leads back to the first), slow (3 a second: a quarter turn in 1.3 s). Cropped pictures, each with the same box and foot: `at` is the fan's hub on the stage. Its base is the row of its plate's front rim (a figure going down the shaft is behind it until below that row)."
+  },
+  {
+   "id": "fan-stopped",
+   "src": "fan-stopped.png",
+   "at": [
+    693,
+    550
+   ],
+   "foot": [
+    39,
+    23
+   ],
+   "base": 573,
+   "when": "office.acOff (still from the first time Ranger is in the duct)",
+   "note": "the B-7 fan stopped, its blades at 11.0 degrees: the same box and foot as the turning frames"
+  }
+ ],
+ "things": [
+  {
+   "id": "tiles",
+   "what": "the backs of the ceiling tiles, under the duct: fibre board in its white grid, dusty; the light fittings glow up between them, and the rooms are under them",
+   "shape": {
+    "poly": [
+     [
+      0,
+      494
+     ],
+     [
+      643,
+      494
+     ],
+     [
+      643,
+      528
+     ],
+     [
+      0,
+      528
+     ]
+    ]
+   },
+   "stand": [
+    330,
+    470
+   ],
+   "face": "S"
+  },
+  {
+   "id": "grille-room",
+   "what": "the grille over ROOM C: a rectangle of slats in the duct's floor, the room's light coming up through it in bars across the duct's back wall, its stencil ROOM C over it; under it its boot, glowing, down to the room",
+   "shape": {
+    "poly": [
+     [
+      193,
+      397
+     ],
+     [
+      253,
+      397
+     ],
+     [
+      253,
+      526
+     ],
+     [
+      193,
+      526
+     ]
+    ]
+   },
+   "stand": [
+    175,
+    470
+   ],
+   "face": "E",
+   "mark": "over-room",
+   "grille": {
+    "scene": "office-room"
+   }
+  },
+  {
+   "id": "grille-property",
+   "what": "the grille over PROP & EFF: a rectangle of slats in the duct's floor, the room's light coming up through it in bars across the duct's back wall, its stencil PROP & EFF over it; under it its boot, glowing, down to the room",
+   "shape": {
+    "poly": [
+     [
+      320,
+      397
+     ],
+     [
+      367,
+      397
+     ],
+     [
+      367,
+      526
+     ],
+     [
+      320,
+      526
+     ]
+    ]
+   },
+   "stand": [
+    295,
+    470
+   ],
+   "face": "E",
+   "mark": "over-property",
+   "grille": {
+    "scene": "office-property"
+   }
+  },
+  {
+   "id": "grille-break",
+   "what": "the grille over BREAK: a rectangle of slats in the duct's floor, the room's light coming up through it in bars across the duct's back wall, its stencil BREAK over it; under it its boot, glowing, down to the room",
+   "shape": {
+    "poly": [
+     [
+      442,
+      397
+     ],
+     [
+      490,
+      397
+     ],
+     [
+      490,
+      526
+     ],
+     [
+      442,
+      526
+     ]
+    ]
+   },
+   "stand": [
+    415,
+    470
+   ],
+   "face": "E",
+   "mark": "over-break",
+   "grille": {
+    "scene": "office-breakroom"
+   }
+  },
+  {
+   "id": "grille-hall",
+   "what": "the grille over HALL: a rectangle of slats in the duct's floor, the room's light coming up through it in bars across the duct's back wall, its stencil HALL over it; under it its boot, glowing, down to the room",
+   "shape": {
+    "poly": [
+     [
+      556,
+      397
+     ],
+     [
+      617,
+      397
+     ],
+     [
+      617,
+      526
+     ],
+     [
+      556,
+      526
+     ]
+    ]
+   },
+   "stand": [
+    535,
+    470
+   ],
+   "face": "E",
+   "mark": "over-hall",
+   "grille": {
+    "scene": null
+   }
+  },
+  {
+   "id": "intake",
+   "what": "the intake: the duct turns up at its left end into the run to the roof; daylight at the top, from the rooftop unit's open grille; the intake fan's back in it, still (Ranger switched it off)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      78
+     ],
+     [
+      130,
+      78
+     ],
+     [
+      130,
+      436
+     ],
+     [
+      0,
+      436
+     ]
+    ]
+   },
+   "stand": [
+    71,
+    470
+   ],
+   "face": "E",
+   "mark": "intake"
+  },
+  {
+   "id": "intakefan",
+   "what": "the intake fan's back, up the run: still (Ranger switched it off)",
+   "shape": {
+    "rect": [
+     6,
+     81,
+     112,
+     50
+    ]
+   },
+   "stand": [
+    71,
+    470
+   ],
+   "face": "E",
+   "mark": "intake"
+  },
+  {
+   "id": "shaft",
+   "what": "the B-7 shaft: a big clean vertical tube of galvanized steel, cut open as the duct is, from the roof down out of the bottom of the picture; rungs down its back wall, a caged bulb over the duct's mouth, the fan across it in its ring under the duct's floor",
+   "shape": {
+    "poly": [
+     [
+      595,
+      78
+     ],
+     [
+      799,
+      78
+     ],
+     [
+      799,
+      599
+     ],
+     [
+      644,
+      599
+     ],
+     [
+      644,
+      481
+     ],
+     [
+      619,
+      481
+     ],
+     [
+      619,
+      353
+     ],
+     [
+      644,
+      353
+     ],
+     [
+      644,
+      341
+     ],
+     [
+      595,
+      341
+     ]
+    ]
+   },
+   "stand": [
+    618,
+    470
+   ],
+   "face": "E",
+   "mark": "shaft"
+  },
+  {
+   "id": "stencil",
+   "what": "the shaft's stencil, in red: B-7 EXHAUST \u00b7 SOUNDPROOFED \u00b7 AUTHORIZED AIR ONLY",
+   "shape": {
+    "poly": [
+     [
+      622,
+      356
+     ],
+     [
+      736,
+      356
+     ],
+     [
+      736,
+      418
+     ],
+     [
+      622,
+      418
+     ]
+    ]
+   },
+   "stand": [
+    618,
+    470
+   ],
+   "face": "E",
+   "mark": "shaft"
+  },
+  {
+   "id": "fan",
+   "what": "the B-7 fan across the shaft, in its plate: four broad blades, slow; it turns until the fans are switched off, and is still from then on",
+   "shape": {
+    "poly": [
+     [
+      652,
+      525
+     ],
+     [
+      753,
+      525
+     ],
+     [
+      753,
+      576
+     ],
+     [
+      652,
+      576
+     ]
+    ]
+   },
+   "stand": [
+    618,
+    470
+   ],
+   "face": "E",
+   "mark": "shaft",
+   "plane": [
+    "fan",
+    "fan-stopped"
+   ]
+  },
+  {
+   "id": "pipe",
+   "what": "the water pipe: copper gone brown, on hangers, a gate valve with a red handwheel",
+   "shape": {
+    "poly": [
+     [
+      165,
+      287
+     ],
+     [
+      194,
+      287
+     ],
+     [
+      218,
+      287
+     ],
+     [
+      242,
+      287
+     ],
+     [
+      266,
+      286
+     ],
+     [
+      290,
+      287
+     ],
+     [
+      314,
+      287
+     ],
+     [
+      338,
+      287
+     ],
+     [
+      362,
+      287
+     ],
+     [
+      386,
+      287
+     ],
+     [
+      410,
+      287
+     ],
+     [
+      434,
+      286
+     ],
+     [
+      458,
+      287
+     ],
+     [
+      482,
+      286
+     ],
+     [
+      506,
+      287
+     ],
+     [
+      530,
+      287
+     ],
+     [
+      554,
+      287
+     ],
+     [
+      578,
+      287
+     ],
+     [
+      599,
+      287
+     ],
+     [
+      599,
+      304
+     ],
+     [
+      578,
+      304
+     ],
+     [
+      554,
+      304
+     ],
+     [
+      530,
+      304
+     ],
+     [
+      506,
+      304
+     ],
+     [
+      482,
+      304
+     ],
+     [
+      458,
+      304
+     ],
+     [
+      434,
+      304
+     ],
+     [
+      410,
+      304
+     ],
+     [
+      386,
+      304
+     ],
+     [
+      362,
+      304
+     ],
+     [
+      338,
+      304
+     ],
+     [
+      314,
+      304
+     ],
+     [
+      290,
+      304
+     ],
+     [
+      266,
+      304
+     ],
+     [
+      242,
+      304
+     ],
+     [
+      218,
+      304
+     ],
+     [
+      194,
+      304
+     ],
+     [
+      165,
+      304
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "wires",
+   "what": "the bundled wires: five cables tied together, sagging between their hooks",
+   "shape": {
+    "poly": [
+     [
+      166,
+      230
+     ],
+     [
+      186,
+      230
+     ],
+     [
+      202,
+      229
+     ],
+     [
+      218,
+      227
+     ],
+     [
+      234,
+      227
+     ],
+     [
+      250,
+      229
+     ],
+     [
+      266,
+      230
+     ],
+     [
+      282,
+      230
+     ],
+     [
+      298,
+      229
+     ],
+     [
+      314,
+      227
+     ],
+     [
+      330,
+      227
+     ],
+     [
+      346,
+      229
+     ],
+     [
+      362,
+      230
+     ],
+     [
+      378,
+      230
+     ],
+     [
+      394,
+      229
+     ],
+     [
+      410,
+      227
+     ],
+     [
+      426,
+      227
+     ],
+     [
+      442,
+      229
+     ],
+     [
+      458,
+      230
+     ],
+     [
+      474,
+      230
+     ],
+     [
+      490,
+      229
+     ],
+     [
+      506,
+      229
+     ],
+     [
+      522,
+      227
+     ],
+     [
+      538,
+      228
+     ],
+     [
+      554,
+      230
+     ],
+     [
+      570,
+      230
+     ],
+     [
+      586,
+      230
+     ],
+     [
+      598,
+      230
+     ],
+     [
+      598,
+      242
+     ],
+     [
+      586,
+      242
+     ],
+     [
+      570,
+      243
+     ],
+     [
+      554,
+      242
+     ],
+     [
+      538,
+      241
+     ],
+     [
+      522,
+      241
+     ],
+     [
+      506,
+      242
+     ],
+     [
+      490,
+      242
+     ],
+     [
+      474,
+      243
+     ],
+     [
+      458,
+      243
+     ],
+     [
+      442,
+      242
+     ],
+     [
+      426,
+      241
+     ],
+     [
+      410,
+      241
+     ],
+     [
+      394,
+      242
+     ],
+     [
+      378,
+      243
+     ],
+     [
+      362,
+      243
+     ],
+     [
+      346,
+      242
+     ],
+     [
+      330,
+      241
+     ],
+     [
+      314,
+      241
+     ],
+     [
+      298,
+      242
+     ],
+     [
+      282,
+      243
+     ],
+     [
+      266,
+      243
+     ],
+     [
+      250,
+      242
+     ],
+     [
+      234,
+      241
+     ],
+     [
+      218,
+      241
+     ],
+     [
+      202,
+      242
+     ],
+     [
+      186,
+      242
+     ],
+     [
+      166,
+      243
+     ]
+    ]
+   },
+   "stand": [
+    380,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "insulation",
+   "what": "pink insulation lying along the duct's top, soft and lumpy (and more of it on the tiles under the duct)",
+   "shape": {
+    "rect": [
+     125,
+     318,
+     521,
+     25
+    ]
+   },
+   "stand": [
+    400,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rivets",
+   "what": "the rivets: a row each side of the joint in the duct's back wall, between ROOM C and PROP & EFF (and all along the duct)",
+   "shape": {
+    "rect": [
+     286,
+     351,
+     14,
+     108
+    ]
+   },
+   "stand": [
+    293,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cup",
+   "what": "a coffee cup, forgotten on a tile: white enamel, a blue band, the coffee long dried in the bottom",
+   "shape": {
+    "rect": [
+     285,
+     503,
+     19,
+     17
+    ]
+   },
+   "stand": [
+    294,
+    470
+   ],
+   "face": "S"
+  },
+  {
+   "id": "pencil",
+   "what": "a pencil on a tile: yellow, chewed a little, its point sharpened",
+   "shape": {
+    "rect": [
+     492,
+     513,
+     23,
+     10
+    ]
+   },
+   "stand": [
+    504,
+    470
+   ],
+   "face": "S"
+  },
+  {
+   "id": "wrapper",
+   "what": "a sandwich wrapper from about 1983: waxed paper, a faded print, crumpled",
+   "shape": {
+    "rect": [
+     520,
+     510,
+     23,
+     12
+    ]
+   },
+   "stand": [
+    532,
+    470
+   ],
+   "face": "S"
+  },
+  {
+   "id": "fitting",
+   "what": "a light fitting's top, set in the tiles: white enamel gone dusty, its vents alight, the room's light round its edge",
+   "shape": {
+    "rect": [
+     94,
+     490,
+     98,
+     39
+    ]
+   },
+   "stand": [
+    143,
+    470
+   ],
+   "face": "S"
+  },
+  {
+   "id": "valve",
+   "what": "the gate valve on the pipe, its red handwheel",
+   "shape": {
+    "rect": [
+     428,
+     288,
+     14,
+     14
+    ]
+   },
+   "stand": [
+    435,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bulb",
+   "what": "a caged bulb on the shaft's wall, lit",
+   "shape": {
+    "rect": [
+     691,
+     308,
+     17,
+     18
+    ]
+   },
+   "stand": [
+    627,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lifted",
+   "what": "a ceiling tile lifted at one edge: the room's light in the crack",
+   "shape": {
+    "rect": [
+     489,
+     494,
+     57,
+     17
+    ]
+   },
+   "stand": [
+    518,
+    470
+   ],
+   "face": "S"
+  }
+ ],
+ "marks": {
+  "intake": {
+   "at": [
+    71,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "note": "Ranger just in from the roof: he comes down the intake run and lands here, at its foot, facing along the duct"
+  },
+  "over-room": {
+   "at": [
+    175,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "grille": [
+    225,
+    470
+   ],
+   "note": "Ranger lying at the grille ROOM C, looking down through it: this is his foot point, his head over the grille's near half (with the peek frames lying facing E, his nose some 42 px ahead of the foot point at full size). If the peek frames carry his head further or nearer, move the mark by as much along the row."
+  },
+  "over-property": {
+   "at": [
+    295,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "grille": [
+    345,
+    470
+   ],
+   "note": "Ranger lying at the grille PROP & EFF, looking down through it: this is his foot point, his head over the grille's near half (with the peek frames lying facing E, his nose some 42 px ahead of the foot point at full size). If the peek frames carry his head further or nearer, move the mark by as much along the row."
+  },
+  "over-break": {
+   "at": [
+    415,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "grille": [
+    465,
+    470
+   ],
+   "note": "Ranger lying at the grille BREAK, looking down through it: this is his foot point, his head over the grille's near half (with the peek frames lying facing E, his nose some 42 px ahead of the foot point at full size). If the peek frames carry his head further or nearer, move the mark by as much along the row."
+  },
+  "over-hall": {
+   "at": [
+    535,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "grille": [
+    585,
+    470
+   ],
+   "note": "Ranger lying at the grille HALL, looking down through it: this is his foot point, his head over the grille's near half (with the peek frames lying facing E, his nose some 42 px ahead of the foot point at full size). If the peek frames carry his head further or nearer, move the mark by as much along the row."
+  },
+  "shaft": {
+   "at": [
+    618,
+    470
+   ],
+   "face": "E",
+   "scale": 1.0,
+   "note": "At the end of the duct's floor, the B-7 shaft and its fan below him (looking down it: on all fours his tail lies over the HALL grille's right half; sitting up he fits on the floor's last span). Going down the shaft (the cut-scene) is down the rungs on its back wall, past the fan, out of the bottom of the picture."
+  }
+ },
+ "stands": {
+  "tiles": {
+   "at": [
+    330,
+    470
+   ],
+   "face": "S"
+  },
+  "grille-room": {
+   "at": [
+    175,
+    470
+   ],
+   "face": "E"
+  },
+  "grille-property": {
+   "at": [
+    295,
+    470
+   ],
+   "face": "E"
+  },
+  "grille-break": {
+   "at": [
+    415,
+    470
+   ],
+   "face": "E"
+  },
+  "grille-hall": {
+   "at": [
+    535,
+    470
+   ],
+   "face": "E"
+  },
+  "intake": {
+   "at": [
+    71,
+    470
+   ],
+   "face": "E"
+  },
+  "intakefan": {
+   "at": [
+    71,
+    470
+   ],
+   "face": "E"
+  },
+  "shaft": {
+   "at": [
+    618,
+    470
+   ],
+   "face": "E"
+  },
+  "stencil": {
+   "at": [
+    618,
+    470
+   ],
+   "face": "E"
+  },
+  "fan": {
+   "at": [
+    618,
+    470
+   ],
+   "face": "E"
+  },
+  "pipe": {
+   "at": [
+    400,
+    470
+   ],
+   "face": "N"
+  },
+  "wires": {
+   "at": [
+    380,
+    470
+   ],
+   "face": "N"
+  },
+  "insulation": {
+   "at": [
+    400,
+    470
+   ],
+   "face": "N"
+  },
+  "rivets": {
+   "at": [
+    293,
+    470
+   ],
+   "face": "N"
+  },
+  "cup": {
+   "at": [
+    294,
+    470
+   ],
+   "face": "S"
+  },
+  "pencil": {
+   "at": [
+    504,
+    470
+   ],
+   "face": "S"
+  },
+  "wrapper": {
+   "at": [
+    532,
+    470
+   ],
+   "face": "S"
+  },
+  "fitting": {
+   "at": [
+    143,
+    470
+   ],
+   "face": "S"
+  },
+  "valve": {
+   "at": [
+    435,
+    470
+   ],
+   "face": "N"
+  },
+  "bulb": {
+   "at": [
+    627,
+    470
+   ],
+   "face": "N"
+  },
+  "lifted": {
+   "at": [
+    518,
+    470
+   ],
+   "face": "S"
+  }
+ },
+ "grilles": [
+  {
+   "id": "room",
+   "label": "ROOM C",
+   "mark": "over-room",
+   "floor": [
+    [
+     217,
+     463
+    ],
+    [
+     251,
+     463
+    ],
+    [
+     234,
+     478
+    ],
+    [
+     195,
+     478
+    ]
+   ],
+   "stencil": [
+    [
+     221,
+     399
+    ],
+    [
+     277,
+     399
+    ],
+    [
+     277,
+     414
+    ],
+    [
+     221,
+     414
+    ]
+   ],
+   "boot": [
+    189,
+    493,
+    65,
+    33
+   ],
+   "centre": [
+    225,
+    470
+   ],
+   "room": "office-room"
+  },
+  {
+   "id": "property",
+   "label": "PROP & EFF",
+   "mark": "over-property",
+   "floor": [
+    [
+     330,
+     463
+    ],
+    [
+     365,
+     463
+    ],
+    [
+     361,
+     478
+    ],
+    [
+     322,
+     478
+    ]
+   ],
+   "stencil": [
+    [
+     316,
+     399
+    ],
+    [
+     406,
+     399
+    ],
+    [
+     406,
+     414
+    ],
+    [
+     316,
+     414
+    ]
+   ],
+   "boot": [
+    319,
+    493,
+    48,
+    33
+   ],
+   "centre": [
+    345,
+    470
+   ],
+   "room": "office-property"
+  },
+  {
+   "id": "break",
+   "label": "BREAK",
+   "mark": "over-break",
+   "floor": [
+    [
+     444,
+     463
+    ],
+    [
+     479,
+     463
+    ],
+    [
+     488,
+     478
+    ],
+    [
+     449,
+     478
+    ]
+   ],
+   "stencil": [
+    [
+     448,
+     399
+    ],
+    [
+     497,
+     399
+    ],
+    [
+     497,
+     414
+    ],
+    [
+     448,
+     414
+    ]
+   ],
+   "boot": [
+    443,
+    493,
+    48,
+    33
+   ],
+   "centre": [
+    465,
+    470
+   ],
+   "room": "office-breakroom"
+  },
+  {
+   "id": "hall",
+   "label": "HALL",
+   "mark": "over-hall",
+   "floor": [
+    [
+     558,
+     463
+    ],
+    [
+     593,
+     463
+    ],
+    [
+     615,
+     478
+    ],
+    [
+     576,
+     478
+    ]
+   ],
+   "stencil": [
+    [
+     564,
+     399
+    ],
+    [
+     604,
+     399
+    ],
+    [
+     604,
+     414
+    ],
+    [
+     564,
+     414
+    ]
+   ],
+   "boot": [
+    556,
+    493,
+    65,
+    33
+   ],
+   "centre": [
+    585,
+    470
+   ],
+   "room": null
+  }
+ ],
+ "grille_view": {
+  "file": "grille-view.png",
+  "note": "what Ranger sees looking down through a grille (office_ducts_grille.py): 800 x 600, the slats over the room the engine draws under it; keyed with the Office's key as a frame"
+ },
+ "exits": [
+  {
+   "id": "intake",
+   "to": "office-lot",
+   "spawn_there": "intake",
+   "how": "up the intake run to the roof: the area `intake`; Ranger climbs up out of the top of the picture and comes out at the lot's `intake` mark (in front of the rooftop unit's open grille). Coming in from the lot he lands here at `intake`.",
+   "stand": [
+    71,
+    470
+   ],
+   "face": "N"
+  }
+ ],
+ "intake_fan": {
+  "at": [
+   75,
+   104
+  ],
+  "rx": 42,
+  "ry": 15,
+  "blades": 4,
+  "still": true
+ },
+ "lights": {
+  "grilles": [
+   [
+    225,
+    468
+   ],
+   [
+    345,
+    468
+   ],
+   [
+    465,
+    468
+   ],
+   [
+    585,
+    468
+   ]
+  ],
+  "intake_daylight": [
+   102,
+   7
+  ],
+  "glows": [
+   [
+    257,
+    333
+   ],
+   [
+    545,
+    333
+   ]
+  ],
+  "bulb": [
+   698,
+   318
+  ],
+  "note": "where the light comes from (painted): for a live glow or a flicker if wanted"
+ },
+ "cutouts": {
+  "fan": [
+   654,
+   527,
+   97,
+   47
+  ]
+ },
+ "rows": {
+  "duct_top": 353,
+  "floor_front": 481,
+  "floor_back": 460,
+  "tiles_cut": 526,
+  "plate": 575,
+  "top_band": [
+   341,
+   353
+  ],
+  "floor_band": [
+   481,
+   493
+  ],
+  "note": "the duct's inside runs from its ceiling (duct_top, at the cut) to its floor; the cut's bands are its walls seen cut, the top's (over it the insulation) and the floor's (under it the gap down to the tiles, whose cut line is tiles_cut); plate is the front of the fan's ring plate"
+ }
+}

@@ -75,7 +75,8 @@
 // an ordinary meeting. Eleazar never names Jesus, never says when, never says the promised one is God, says nothing
 // against anybody's gods, argues with nobody; the Son never tells him what is coming. Scripture is quoted three times
 // here, King James Version, exact (Isaiah 40:31 to its semicolon, Numbers 6:25, Numbers 6:26), each reference said by the
-// Son; everything else from the Bible is told in the speaker's own words.
+// Son; everything else from the Bible is told in the speaker's own words. (PASS-17R: since the author's rule of 16 October
+// no reference is said aloud: the Son says where he knows the words from; the references are in docs/CHARACTERS.md.)
 
 const is = (g, fact) => !!g.flag(fact);
 /** The engine's count of the lines it has said (kept in the save), as the street's own script reads it. */

@@ -31,6 +31,7 @@ PLACES["map-egypt"] = "maps/egypt"                # MAP-15E: the map of Egypt, a
 PLACES["map-rome"] = "maps/rome"                  # MAP-15R: the map of Rome, a wax tablet (installed as painted, never keyed)
 PLACES["map-home"] = "maps/home"                  # MAP-15H: the map of the house, a pencil floor plan (installed as painted, never keyed)
 PLACES["map-nevada"] = "maps/nevada"              # MAP-15N: the map of Nevada, a fold-out road map (installed as painted, never keyed)
+PLACES["map-office"] = "maps/office"              # OFFICE-17B: the map of the Office, a blueprint (installed as painted, never keyed)
 # Everything that `python3 install.py` installs, in the order of the story.
 SCENES = [
     "highway",
@@ -42,8 +43,13 @@ SCENES = [
     "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",  # Act Three: the house
     "nevada-roadside", "nevada-store",                                                        # Act Four (nevada-store: NEVADA-12B)
     "nevada-limo",                                                                            # Act Five (round twelve)
+    "office-lot",                                                                             # OFFICE-17A: the Office's lot (round seventeen)
+    "office-ducts",                                                                           # OFFICE-17B: the Office's air ducts (Act Five, stage one)
+    "office-room", "office-property",                                                         # OFFICE-17C: the Office's interview room and Property & Effects
+    "office-breakroom",                                                                       # OFFICE-17D: the Office's break room (round seventeen)
     "items", "portraits",
     "map-egypt", "map-rome", "map-home", "map-nevada",                                        # MAP-15E/R/H/N: the four maps
+    "map-office",                                                                             # OFFICE-17B: the Office's blueprint
 ]
 
 

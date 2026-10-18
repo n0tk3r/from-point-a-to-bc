@@ -25,7 +25,22 @@ THE SETS (the master brief's format, ranger.json): stand 2 (on all fours, breath
 a blink), walk 6, run 4 (a scamper), nibble 4 (chewing at a strand of rope held at his mouth, sitting up), wash 4
 (turning a pebble over in both hands, sitting up), reach 2 (both hands out flat, holding something up), look 1
 (sitting up, his head turned to us); walkN and walkS (from behind, from the front); and all of them again in the
-mirror shades (a wire frame, two small mirrored lenses over the mask). Two portraits, 64 x 64, for the team bar."""
+mirror shades (a wire frame, two small mirrored lenses over the mask). Two portraits, 64 x 64, for the team bar.
+
+OFFICE-17A (round seventeen: the Office) adds four sets, on the same canvas, foot point, facing and size, plain and in the
+shades (the Office only ever sees the shades), after all the others so that nothing of theirs changes:
+  climb 4   going up a pipe or a wall, seen from the side, facing E: his belly to the pipe, which stands just E of his
+            hands and feet (its near face at x +11 of the foot point, 0.914 px a cm at full size); hand over hand, the
+            front paws high (one reaching while the other holds), the hind feet pushing under him, his tail held out
+            behind for balance. The foot point (the canvas's own, as for every set) is level with his lower hind foot,
+            11 px W of the pipe's near face: the engine moves him up; the frames only change his hold. He is gathered (a raccoon on a trunk is a ball of grip): his whole length would not go
+            on this canvas upright, and does not need to.
+  drop 2    dropping, legs out (all four spread, tail up, looking down: the foot point is under his paws); landing,
+            crouched low on all fours
+  peek 2    lying on his front at an edge (the edge at x +22, under his front paws), his head out over it and tipped down,
+            looking down; then a blink (in the shades, which hide a blink, an ear flicks and the head dips a pixel)
+  pull 2    sitting up, both hands up on a lever's handle in front of him (at x +18, y 49 over the foot point, in his own
+            full-size pixels), then pulled down to his middle (x +16, y 22), looking at what he is doing"""
 
 import json
 import math
@@ -433,6 +448,95 @@ def walk_ns(view, phase, shades=False):
     return r
 
 
+# ---------------------------------------------------------------- OFFICE-17A: climbing, dropping, peeking, pulling
+PIPE_X = 11.0                       # the climb: the near face of the pipe (or the wall) is this far E of the foot point
+EDGE_X = 22.0                       # the peek: the edge he lies at is this far E of the foot point
+LEVER = ((18.0, 49.0), (16.0, 22.0))  # the pull: where his hands hold the lever's handle, up and pulled down
+
+
+def climbing(k, shades=False):
+    """Going up a pipe, seen from the side, facing E (OFFICE-17A). k, 0 to 3: hand over hand. His belly is to the pipe
+    (just E of him, at PIPE_X); the hind feet grip it under him with their soles flat to it, the front paws hold it high
+    (in 0 the near paw is up and the far one holds lower; in 2 the other way round; 1 and 3 between, his body drawn up a
+    little as the hind feet push); his head is tipped back to look up it, and his tail is held out behind him, low."""
+    r = Rig()
+    hold = ((51.0, 41.5), (46.5, 47.0), (41.5, 51.0), (47.0, 46.5))[k]        # (near paw, far paw): how high each grips
+    feet = ((0.6, 6.0), (3.4, 3.0), (6.0, 0.6), (3.0, 3.4))[k]               # (near hind foot, far hind foot): the soles' lower ends
+    b = (0.0, 1.2, 0.4, 1.4)[k]                                               # the body drawn up as the hind feet push
+    px = PIPE_X
+    # the far limbs, behind him: the far arm up to its paw on the pipe, the far hind foot on the pipe below
+    r.limb("arm-far", "fur_far", [(6.0, 30.0 + b), (8.4, (30.0 + b + hold[1]) / 2 + 0.6), (px - 1.4, hold[1] - 1.4)], [3.4, 3.0, 2.6])
+    r.ellipse("hand-far", "dark", px - 0.9, hold[1], 1.5, 2.2)
+    r.limb("foot-far", "dark", [(px - 1.6, feet[1]), (px - 1.2, feet[1] + 4.6)], [2.6, 2.2])
+    # the tail held out behind him, low, its tip lifted: rings from the root to the dark tip
+    tail(r, [(-7.6, 9.0 + b), (-12.6, 6.0 + b * 0.5), (-19.0, 4.4), (-25.0, 5.0), (-30.0, 7.4), (-33.4, 11.0)], [6.4, 7.6, 7.8, 7.0, 5.8, 4.0], rings=7)
+    # the body: gathered and upright, the back round to the W, the belly flat to the pipe
+    r.blob("body", "fur", [(6.0, 33.0 + b), (1.0, 35.4 + b), (-4.2, 34.0 + b), (-8.0, 28.6 + b), (-9.8, 21.0 + b), (-10.4, 13.0 + b), (-8.6, 6.6 + b),
+                           (-3.4, 4.0 + b), (3.2, 4.2 + b), (7.6, 7.4 + b), (8.8, 15.0 + b), (8.6, 24.0 + b)])
+    r.blob("belly", "belly", [(7.2, 29.0 + b), (8.6, 21.0 + b), (8.4, 12.0 + b), (6.2, 6.8 + b), (3.2, 9.0 + b), (3.2, 19.0 + b), (4.4, 27.0 + b)])
+    # the near hind leg: a round haunch, the knee drawn up toward the pipe, the sole flat to it
+    knee = (5.0, 12.6 + b * 0.6)
+    r.blob("haunch", "fur", [(-9.4, 11.6 + b), (-6.0, 17.6 + b), (0.4, 18.6 + b), (knee[0] + 2.2, knee[1] + 2.0), (knee[0] + 1.6, knee[1] - 3.4),
+                             (-1.0, 4.6 + b), (-7.4, 5.4 + b)], line=True)
+    r.limb("shin", "fur", [(knee[0] + 0.4, knee[1] - 1.0), (px - 2.6, feet[0] + 4.4)], [3.6, 3.0], line=True)
+    r.limb("foot", "dark", [(px - 1.4, feet[0]), (px - 1.0, feet[0] + 5.4)], [2.8, 2.4], line=True)
+    # the near arm, over his chest and up past his cheek to the paw that holds the pipe
+    sh = (4.4, 30.6 + b)
+    r.limb("arm", "fur", [sh, (sh[0] + 3.0, (sh[1] + hold[0]) / 2 + 0.4), (px - 1.7, hold[0] - 1.6)], [3.8, 3.2, 2.8], line=True)
+    # the head tipped back to look up the pipe (between his arms: his snout stays clear of the pipe)
+    head(r, -0.6, 37.4 + b, tilt=0.70 + 0.04 * (k % 2), shades=shades)
+    r.ellipse("hand", "dark", px - 0.9, hold[0] + 0.2, 1.6, 2.3)                # (the near paw over everything: it holds on)
+    return r
+
+
+def dropping(landed, shades=False):
+    """Dropping (OFFICE-17A): in the air with his legs spread out under him, tail up, looking down where he will land (the
+    foot point under his paws); and landed, crouched low on all fours, legs bent, head low."""
+    if not landed:
+        return all_fours(feet={"nf": (27.0, 0.0), "ff": (23.0, 2.4), "nh": (-27.0, 0.4), "fh": (-22.5, 2.8)}, bob=8.0, stretch=1.0,
+                         arch=-1.4, head_dy=-3.4, head_tilt=-0.50, tail_lift=11.0, shades=shades)
+    return all_fours(feet={"nf": (21.0, 0.0), "ff": (23.0, 0.0), "nh": (-15.5, 0.0), "fh": (-17.5, 0.0)}, bob=-4.4, stretch=-1.0,
+                     arch=1.6, head_dy=-3.0, head_tilt=-0.14, tail_lift=-0.6, shades=shades)
+
+
+def peeking(blink, shades=False):
+    """Lying on his front at an edge (OFFICE-17A), seen from the side: his hind legs out flat behind him, his chin and
+    front paws at the edge (EDGE_X), his head out over it and tipped down, looking down. `blink`: his eyes shut (in the
+    shades his near ear flicks back and his head dips a pixel instead: the lenses hide a blink)."""
+    r = Rig()
+    e = EDGE_X
+    dip = 0.8 if (blink and shades) else 0.0
+    # the far limbs: the far front paw at the edge, the far hind foot behind
+    r.limb("arm-far", "fur_far", [(8.0, 5.4), (14.0, 3.6), (e - 1.4, 2.0)], [3.6, 3.0, 2.6])
+    r.ellipse("hand-far", "dark", e - 0.6, 1.4, 2.2, 1.2)
+    r.limb("foot-far", "dark", [(-25.0, 1.6), (-31.0, 1.2)], [2.6, 2.0])
+    # the tail, laid out flat behind him
+    tail(r, [(-24.0, 6.4), (-31.0, 4.6), (-38.0, 3.6), (-45.0, 3.4), (-51.0, 4.4)], [7.0, 7.6, 7.4, 6.4, 4.4], rings=7)
+    # the body, flat on its belly, the back low and long, the shoulders forward at the edge
+    r.blob("body", "fur", [(13.4, 10.4), (6.0, 12.6), (-4.0, 13.6), (-14.0, 13.6), (-22.0, 12.4), (-27.0, 8.6), (-26.4, 3.2), (-20.0, 1.0),
+                           (-6.0, 0.8), (6.0, 1.0), (13.0, 2.2), (15.6, 6.0)])
+    r.blob("belly", "belly", [(12.6, 3.0), (4.0, 1.4), (-14.0, 1.2), (-14.0, 3.0), (4.0, 3.2)])
+    # the near hind leg out flat behind, its sole up; the haunch round over it
+    r.blob("haunch", "fur", [(-27.4, 6.0), (-24.0, 11.6), (-16.6, 11.0), (-13.4, 6.6), (-15.6, 1.6), (-24.0, 1.2)], line=True)
+    r.limb("foot", "dark", [(-25.6, 2.4), (-32.6, 2.6)], [3.0, 2.2], line=True)
+    # the near arm forward to the edge, its paw curled over it
+    r.limb("arm", "fur", [(7.4, 7.6), (13.6, 4.2), (e - 1.8, 2.0)], [4.0, 3.4, 2.8], line=True)
+    r.ellipse("hand", "dark", e - 0.4, 1.6, 2.4, 1.3)
+    # the head out over the edge, tipped down to look down
+    head(r, e + 2.6, 7.2 - dip, tilt=-0.52, blink=blink and not shades, shades=shades, far_ear=not (blink and shades))
+    return r
+
+
+def pulling(down, shades=False):
+    """Sitting up with both hands on a lever in front of his face (OFFICE-17A), and then pulled down to his chest, his
+    weight back on his haunches and his head tipped down with the effort. LEVER: where his hands hold it, each time."""
+    (hx, hy) = LEVER[1] if down else LEVER[0]
+    hands = ((hx - 0.8, hy - 0.6), (hx + 0.8, hy + 0.4))
+    if down:
+        return sitting(arms="out", hands=hands, head_tilt=-0.10, head_dy=-1.0, breath=-0.6, shades=shades)
+    return sitting(arms="out", hands=hands, head_tilt=0.30, head_dy=0.2, shades=shades)
+
+
 # ---------------------------------------------------------------- the portraits (64 x 64, head and shoulders, to us)
 def portrait(shades=False):
     """Head and shoulders, looking at us, drawn at 64 x 64 in the same manner with more room: the mask across both
@@ -535,6 +639,11 @@ def frames(shades=False):
     sets["look"] = [sitting(head_mode="front", shades=shades).render()]
     sets["walkN"] = [walk_ns("N", i / WALK_FRAMES, shades).render() for i in range(WALK_FRAMES)]
     sets["walkS"] = [walk_ns("S", i / WALK_FRAMES, shades).render() for i in range(WALK_FRAMES)]
+    # OFFICE-17A: the Office's four (after the others, so that the sidecar keeps their order and their files stay as they were)
+    sets["climb"] = [climbing(k, shades).render() for k in range(4)]
+    sets["drop"] = [dropping(False, shades).render(), dropping(True, shades).render()]
+    sets["peek"] = [peeking(False, shades).render(), peeking(True, shades).render()]
+    sets["pull"] = [pulling(False, shades).render(), pulling(True, shades).render()]
     return sets
 
 
@@ -628,14 +737,20 @@ if __name__ == "__main__":
             shaded = sets
     stand_h, sit_h = measure(plain)
     print("touching the canvas's edge:", edges(plain) + edges(shaded) or "none")
+    # OFFICE-17A: the new sets' own heights (ground to the top of him, the highest frame of each, less the line round him),
+    # for his words and his outline: climbing he is gathered and upright, lying at an edge he is low
+    own = {}
+    for name in ("climb", "drop", "peek", "pull"):
+        own[name] = int(max(FOOT[1] - np.nonzero(a[..., 3] > 0)[0].min() for a in plain[name]) - 1)
     sidecar = {
         "id": "ranger", "face": "E",
         "foot": list(FOOT),
-        "tall": {"stand": int(stand_h), "sit": int(sit_h)},
+        "tall": {"stand": int(stand_h), "sit": int(sit_h), **own},                       # OFFICE-17A: and the new sets'
         "stride": {"walk": STRIDE, "run": RUN_STRIDE},
         "pace": PACE,
         "frames": made,
-        "fps": {"stand": 1.5, "sit": 1.5, "walk": 8, "run": 10, "nibble": 6, "wash": 5, "reach": 2, "look": 1, "walkN": 8, "walkS": 8},
+        "fps": {"stand": 1.5, "sit": 1.5, "walk": 8, "run": 10, "nibble": 6, "wash": 5, "reach": 2, "look": 1, "walkN": 8, "walkS": 8,
+                "climb": 8, "drop": 6, "peek": 1.5, "pull": 2},                          # OFFICE-17A
         "fidgets": ["look", "wash"],
         "portrait": "art/portraits/ranger-face.png",
         "variants": {"shades": {"prefix": "ranger-shades-", "portrait": "art/portraits/ranger-shades-face.png"}},

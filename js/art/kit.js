@@ -123,6 +123,7 @@ export function sketch(scene) {
   out += rect("g3", 0, top, W, H - top) + rect("g1", 0, top, W, 15) + rect("g2", 0, top + 15, W, 25);
   const boxes = (scene.hotspots || []).map((h) => {
     let x, y, w, hh;
+    if (!h.rect && !h.circle && !h.poly) return "";                        // ENGINE-17: a companion's own area with no shape (the box round his figure): nothing to sketch
     if (h.rect) [x, y, w, hh] = h.rect;
     else if (h.circle) [x, y, w, hh] = [h.circle[0] - h.circle[2], h.circle[1] - h.circle[2], h.circle[2] * 2, h.circle[2] * 2];
     else {

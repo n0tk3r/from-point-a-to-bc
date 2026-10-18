@@ -8,8 +8,9 @@
 // The act opens on the roadside, where Act Four closes: the family has gone through the door, and the man in gray makes a
 // phone call he will regret (the cut-scene "Backup", js/content/cutscenes/backup.js). Then the limousine
 // (js/content/scenes/nevada-limo.js): "Meanwhile, in a limousine" as it is first entered, Ranger's Ropes (#14), Jed's
-// Lunch (#15), and the gate, which is the end of the demo: the limousine slows at the gate of a very small building with
-// a very long name, and the card "THE OFFICE OF PECULIAR SECTORS", "to be continued".
+// Lunch (#15), and the gate: the limousine slows at the gate of a very small building with a very long name, and the card
+// "THE OFFICE OF PECULIAR SECTORS", "Desert Field Headquarters, the same afternoon" (SCENES-17: the act goes on into the
+// Office, js/content/acts/office.js, whose "Going Down" is the end of the demo now).
 
 const BOTH = ["grandpajoe", "ranger"];
 
@@ -23,6 +24,6 @@ export const act = {
       hint: { grandpajoe: "hint.limo.ropes.joe", ranger: ["limo.ranger.dots", "hint.limo.ropes.ranger"] } },
     { id: "limo.bag", kind: "puzzle", chain: "A", title: "Jed's Lunch: read the clipboard, eat the cheeseburger, keep the map", lead: BOTH, scene: "nevada-limo", needs: ["limo.loose"], sets: "limo.map",
       hint: { grandpajoe: "hint.limo.bag.joe", ranger: ["limo.ranger.dots", "hint.limo.bag.ranger"] } },
-    { id: "limo.end", kind: "gate", title: "The gate of the Office Of Peculiar Sectors (the end of the demo)", lead: BOTH, scene: "nevada-limo", needs: ["limo.map"], sets: "limo.done" },
+    { id: "limo.end", kind: "gate", title: "The gate of the Office Of Peculiar Sectors", lead: BOTH, scene: "nevada-limo", needs: ["limo.map"], sets: "limo.done" },      // (SCENES-17: no longer the end of the demo)
   ],
 };

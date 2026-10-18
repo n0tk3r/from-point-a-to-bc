@@ -7,7 +7,7 @@
 // through the little door it opens (the letterbox), the sun shade from the store's window held in the low sun opens a
 // door as wide as a windshield (#12), and the family walks through it (#13, the gate: nevada.left). The cut-scene
 // "Backup" (js/content/cutscenes/backup.js) and Act Five follow (js/content/acts/limo.js); `demo.done` is set at Act
-// Five's end now.
+// Five's end now (SCENES-17: at the end of the Office's stage one, js/content/cutscenes/office-down.js).
 //
 // Nothing of the family's faith is a beat, and no puzzle knows of it (briefs/WEAVE.md). It hangs on moments that were
 // already here: the coin, when it is read, is the coin of the tribute money (Matthew 22:21); before the coin goes up

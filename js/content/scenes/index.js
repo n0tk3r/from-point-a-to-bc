@@ -12,8 +12,10 @@ export const sceneIds = [
   "home-living-room", "home-landing", "home-study", "home-lilsis-room", "home-bigsis-room",   // Act Three
   "nevada-roadside", "nevada-store",                                 // Act Four (NEVADA-12SB: the store)
   "nevada-limo",                                                     // Act Five (NEVADA-12SC)
+  "office-lot", "office-ducts", "office-room", "office-property", "office-breakroom",     // Act Five, continued: the Office (SCENES-17; office-common.js, beside them, is what they share: not a scene)
   "engine-proof",        // not part of the story: the worked example of a painted scene
   "sketch-example",      // not part of the story: shows how to storyboard a scene before it is painted
+  "proof-below",         // not part of the story: ENGINE-17's room under the proof's sand, for the grille, a thing handed across, travel per lead
 ];
 
 export const loadScene = (id) => import(`./${id}.js`).then((module) => module.default);

@@ -27,6 +27,13 @@ export function hintFor(story, beat, who) {
   return h[who] || h.any || null;
 }
 
+/** SCENES-17: the lines a lead's hint can say. A hint is a line, a list of lines, or (SCENES-17) a function of the game
+    giving one of those, for a long puzzle whose hint follows how far it has got (the Office's: the lot before the roof,
+    on the roof, the grille off); such a function lists every line it can give as its `lines`, for the checks. */
+export function hintLines(h) {
+  return [].concat(h || []).flat(Infinity).flatMap((x) => (typeof x === "function" ? [].concat(x.lines || []).flat(Infinity) : [x]));
+}
+
 export function allBeats(story) {
   return story.acts.flatMap((act) => act.beats.map((beat) => ({ ...beat, act: act.id })));
 }
@@ -53,7 +60,7 @@ export function checkStory({ story, scenes, cutscenes = {}, lines = {} }) {
     if (!b.sets) problems.push(`Beat "${b.id}" does not set a fact, so the game cannot tell when it is done.`);
     for (const n of b.needs || []) if (!set.has(n)) problems.push(`Beat "${b.id}" needs "${n}", which no beat sets.`);
     if (b.scene && !scenes[b.scene] && !cutscenes[b.scene]) problems.push(`Beat "${b.id}" happens in "${b.scene}", which does not exist yet.`);
-    for (const h of (!b.hint ? [] : typeof b.hint === "string" ? [b.hint] : Object.values(b.hint)).flat()) {      // (NEVADA-12E: a lead's hint can be a list of lines)
+    for (const h of hintLines(!b.hint ? [] : typeof b.hint === "string" ? [b.hint] : Object.values(b.hint))) {      // (NEVADA-12E: a lead's hint can be a list of lines; SCENES-17: or a function, with its `lines`)
       if (!lines[h]) problems.push(`Beat "${b.id}" has the hint "${h}", which is not in the lines file.`);
     }
     if (b.kind !== "cutscene" && !leadsOf(story, b).length) problems.push(`Beat "${b.id}" does not say who does it.`);

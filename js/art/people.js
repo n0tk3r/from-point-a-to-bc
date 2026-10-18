@@ -33,6 +33,17 @@
 //   top.bare   "R" or "L": a tunic fastened on one shoulder only, that shoulder bare (Felix's)
 //   and, in rig.js, wear.toga's `scant` and `hang` (a toga too small, or very large) and wear.mantle's `tassels` and `thread`
 //   Their own small movements are added to the rig's with addMoves (after the Rome people, below).
+//   (OFFICE-17P, round seventeen:)
+//   standOn    standing on something this high (a chair's seat, given as a seat's height is): drawn that much above their
+//              place, which is the ground under it; their shadow is on it, under their feet
+//   nod        how someone on their feet holds their head, added to every standing pose's own (less than 0: looking up)
+//   restMouth  a mouth a little open when nothing else says how it is (a man asleep)
+//   cues       the small movements a script plays on them, besides those of their life: { sit: [...], stand: [...] }
+//              (the sprites page shows them; any movement the rig knows can be played on anyone)
+//   sit.up     how far in front of the seat they stand once up, in their heights (0: at a table, they push the chair back)
+//   sit.turn   the head turned on its own, sitting (Floyd's, lolled against the couch)
+//   hold[k].stroke, .strokes   a held hand that goes there and back in time as they walk or talk (strumming)
+//   and, in rig.js, the gestures 22 (a stamp brought down onto the other palm) and 23 (a look over the glasses)
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -177,6 +188,9 @@ export const mom = {
   gestures: [0, 5, 8, 0],                               // a nod, a hand to the heart, an open hand
   pray: { high: 0.42, bow: 0.28 },                      // her hands folded at her breast
   pace: 150,
+  // LETTER-17: she kneels (figure.kneel() in a script: the rig's kneelPose): at the little door in Act Four, the night she
+  // hears her son, and nowhere else. Leaning in a little, upright; and sat back on her heels when she understands.
+  kneel: { lean: 0.10, backLean: 0.02 },
   extras({ ball, limb, hp, wide, deep, d, hy, tw, J, S, parts, pose }) {
     // her hair: long dark curls from the crown down her back, past her shoulders, and a fall of them over each shoulder
     const fall = [0.078, 0.030], foot = [0.070, 0.024], r0 = wide(fall), r1 = wide(foot);
@@ -193,6 +207,8 @@ export const mom = {
     }, tw);
     // a handbag, hanging from her left forearm: it swings clear of her skirt
     // (when she lifts her hands to pray it slides down to the crook of her elbow)
+    // LETTER-17: unless she has set it down (figure.bare = "bag": the roadside draws it on the gravel, js/art/props.js `handbag`)
+    if (pose.bare === "bag") return;
     const w = mix(J.L.elbow, J.L.wrist, 0.60 - 0.46 * (pose.praying || 0)), off = [w[0] - J.hipC[0], 0, w[2] - J.hipC[2]], far = Math.hypot(off[0], off[2]) || 1, clear = Math.max(1, (d.pelvisR[0] + 0.046) / far);
     const bag = [J.hipC[0] + off[0] * clear, w[1] - 0.084, J.hipC[2] + off[2] * clear];
     limb(add(w, [0, -0.004, 0]), add(bag, [0, 0.030, 0]), 0.006, 0.006, shifted(LEATHER, 1), { part: parts.EXTRA2 });
@@ -995,7 +1011,9 @@ export const agent = {
       const at = mix(J.L.wrist, J.L.elbow, 0.10);
       ball(at, [0.0115, 0.0115, 0.0115], ramp("#e8ecf0", "#b8c0c8", "#7c848e", "#4c525a"), { part: parts.HELD });
     }
-    limb(add(J.sh, J.torso([0, 0.004, front * 0.50])), add(J.sh, J.torso([0, -0.112, front * 1.00])), 0.008, 0.012, TIE, { part: parts.EXTRA, bias: 4 });
+    const lo = loosened(pose);                                          // OFFICE-17P: the knot pulled down a finger's width (`loosen`), then put back
+    limb(add(J.sh, J.torso([0, 0.004 - 0.016 * lo, front * (0.50 + 0.10 * lo)])), add(J.sh, J.torso([0, -0.112, front * 1.00])), 0.008, 0.012, TIE, { part: parts.EXTRA, bias: 4 });
+    if (lo > 0.4) limb(add(J.sh, J.torso([0, 0.006, front * 0.52])), add(J.sh, J.torso([0, -0.006, front * 0.60])), 0.0065, 0.0045, WHITE, { part: parts.EXTRA, bias: 4.4 });     // (OFFICE-17P: the collar open above it)
   },
 };
 
@@ -1061,37 +1079,54 @@ function ring(cx, c, a, b, r, tube, mat, o, n = 20, from = 0, to = 2 * Math.PI) 
  * dark neck with its headstock and pegs, and the strings as a line of light. `b`: { c: the middle of the pot, u: up the
  * neck, n: the way the head faces }, in the figure's own space. All of it is HELD.
  */
-function banjo(cx, b) {
+function banjo(cx, b, state = "whole") {
   const { limb, sf, P, parts, S, th, seatOnly } = cx;
   if (seatOnly) return;
-  const R = 0.085, u = unit(b.u), n0 = unit(b.n), n = unit(sub(n0, mul(u, dot3(n0, u)))), w = cross(u, n), c = b.c, held = { part: parts.HELD };
+  // (OFFICE-17P: `state`, what is left of it: "whole"; "broken", its head broken through, the rim, the neck and the strings,
+  //  slack, as Jed's head left it; "pie", mended with a pie tin, a bright tin head with a crimped rim. And b.k, its size
+  //  against the one who holds it, as their heights go: Opal is smaller than Grandpa Joe, and the banjo is not.)
+  const K = b.k || 1, R = 0.085 * K, u = unit(b.u), n0 = unit(b.n), n = unit(sub(n0, mul(u, dot3(n0, u)))), w = cross(u, n), c = b.c, held = { part: parts.HELD };
   const facing = dot3(n, [Math.sin(th), 0.22, Math.cos(th)]) > 0;
   // the rim, round the middle of the pot's depth
-  const mid = along(c, n, -0.010), rimAt = ring(cx, mid, w, u, R, 0.0125, CHROME, held, 22);
+  const mid = along(c, n, -0.010 * K), rimAt = ring(cx, mid, w, u, R, 0.0125 * K, CHROME, held, 22);
   // the head (or, from behind, the back), flat, at the face it is on
-  const face = along(c, n, facing ? 0.004 : -0.024), pts = [];
+  const face = along(c, n, (facing ? 0.004 : -0.024) * K), pts = [];
   for (let i = 0; i < 22; i++) { const t = (2 * Math.PI * i) / 22; pts.push(P(add(face, add(mul(w, Math.cos(t) * R * 0.93), mul(u, Math.sin(t) * R * 0.93))))); }
   const ctr = P(face), rpx = R * S;
-  sf.poly(pts.map((q) => [q[0], q[1]]), ctr[2], facing ? BANJO_HEAD : CHROME, 1, { part: parts.HELD,
-    fn: (x, y) => ((x + 0.5 - ctr[0]) * 0.60 + (y + 0.5 - ctr[1]) * 0.80 > rpx * (facing ? 0.52 : 0.30) ? 2 : facing ? undefined : (x + 0.5 - ctr[0]) ** 2 + (y + 0.5 - ctr[1]) ** 2 < (rpx * 0.45) ** 2 ? 2 : undefined) });
+  const lit = (x, y) => (x + 0.5 - ctr[0]) * 0.60 + (y + 0.5 - ctr[1]) * 0.80;          // (how far toward the shade side a pixel is: the light is from the upper left)
+  const fn = !facing ? (x, y) => (lit(x, y) > rpx * 0.30 ? 2 : (x + 0.5 - ctr[0]) ** 2 + (y + 0.5 - ctr[1]) ** 2 < (rpx * 0.45) ** 2 ? 2 : undefined)
+    : state === "broken" ? brokenHead(ctr, rpx, lit)
+    : state === "pie" ? tinHead(ctr, rpx, lit)
+    : (x, y) => (lit(x, y) > rpx * 0.52 ? 2 : undefined);
+  sf.poly(pts.map((q) => [q[0], q[1]]), ctr[2], !facing ? CHROME : state === "broken" ? POT_INSIDE : state === "pie" ? TIN : BANJO_HEAD, 1, { part: parts.HELD, fn });
   // the neck and the headstock, angled back a little, and its pegs
-  const neck0 = along(c, u, R * 0.90), neck1 = along(c, u, R + 0.370), hs = add(along(neck1, u, 0.052), mul(n, -0.012));
-  limb(neck0, neck1, 0.0105, 0.0085, NECK_WOOD, held);
-  limb(neck1, hs, 0.0135, 0.0125, NECK_WOOD, { ...held, squareEnd: true });
+  const neck0 = along(c, u, R * 0.90), neck1 = along(c, u, R + 0.370 * K), hs = add(along(neck1, u, 0.052 * K), mul(n, -0.012 * K));
+  limb(neck0, neck1, 0.0105 * K, 0.0085 * K, NECK_WOOD, held);
+  limb(neck1, hs, 0.0135 * K, 0.0125 * K, NECK_WOOD, { ...held, squareEnd: true });
   const dotAt = (p, ink) => { const q = P(p); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), ink, parts.HELD); };
-  if (S >= 84) for (const k of [0.014, 0.036]) for (const sd of [1, -1]) dotAt(add(along(neck1, u, k), mul(w, sd * 0.018)), INK_PEG);
-  if (S >= 84) dotAt(add(along(c, u, R + 0.11), mul(w, 0.012)), INK_PEG);                // the fifth string's peg, part way up the neck
-  if (facing) {
+  if (S >= 84) for (const k of [0.014, 0.036]) for (const sd of [1, -1]) dotAt(add(along(neck1, u, k * K), mul(w, sd * 0.018 * K)), INK_PEG);
+  if (S >= 84) dotAt(add(along(c, u, R + 0.11 * K), mul(w, 0.012 * K)), INK_PEG);                // the fifth string's peg, part way up the neck
+  if (facing && state === "broken") {
+    // (OFFICE-17P) no head, so no bridge: the strings hang slack from the tailpiece across the hole and up the neck,
+    // sagging away from it, each its own way
+    const from = along(along(c, u, -R * 0.78), n, 0.008 * K), to = along(along(neck1, u, -0.004 * K), n, 0.010 * K);
+    for (const [side, sag, out] of [[-0.012, -0.010, 0.006], [0.0, 0.006, 0.010], [0.012, 0.014, 0.004]]) {
+      const pts = [];
+      for (let i = 0; i <= 10; i++) { const t = i / 10, s = Math.sin(Math.PI * Math.min(1, t * 1.6)) * (t < 0.62 ? 1 : 0.7); pts.push(add(mix(add(from, mul(w, side * K)), add(to, mul(w, side * 0.4 * K)), t), add(mul(w, sag * s * K), add(mul(n, out * s * K), [0, -0.012 * s * K, 0])))); }
+      thread(cx, pts, SLACK_STRING);
+    }
+    limb(along(c, u, -R * 0.98), add(along(c, u, -R * 0.66), mul(n, 0.010 * K)), 0.006 * K, 0.005 * K, CHROME, held);       // the tailpiece
+  } else if (facing) {
     // the strings: a line of light from the tailpiece over the head and up the neck; a bridge across them
-    const from = P(along(along(c, u, -R * 0.78), n, 0.008)), to = P(along(along(neck1, u, -0.004), n, 0.010)), j = P(along(c, u, R * 0.95));
+    const from = P(along(along(c, u, -R * 0.78), n, 0.008 * K)), to = P(along(along(neck1, u, -0.004 * K), n, 0.010 * K)), j = P(along(c, u, R * 0.95));
     const steps = Math.ceil(Math.hypot(to[0] - from[0], to[1] - from[1]));
     for (let i = 0; i <= steps; i++) {
       const t = i / Math.max(1, steps), x = from[0] + (to[0] - from[0]) * t, y = from[1] + (to[1] - from[1]) * t;
       const onHead = (x - from[0]) * (j[0] - from[0]) + (y - from[1]) * (j[1] - from[1]) < (j[0] - from[0]) ** 2 + (j[1] - from[1]) ** 2;
-      sf.dot(Math.round(x - 0.5), Math.round(y - 0.5), onHead ? INK_STRING_HEAD : INK_STRING_NECK, parts.HELD);
+      sf.dot(Math.round(x - 0.5), Math.round(y - 0.5), onHead ? (state === "pie" ? INK_STRING_TIN : INK_STRING_HEAD) : INK_STRING_NECK, parts.HELD);      // (OFFICE-17P: darker over the bright tin, so they show)
     }
-    if (S >= 84) for (const k of [-0.016, 0, 0.016]) dotAt(add(along(along(c, u, -R * 0.32), n, 0.008), mul(w, k)), INK_BRIDGE);
-    limb(along(c, u, -R * 0.98), add(along(c, u, -R * 0.66), mul(n, 0.010)), 0.006, 0.005, CHROME, held);       // the tailpiece
+    if (S >= 84) for (const k of [-0.016, 0, 0.016]) dotAt(add(along(along(c, u, -R * 0.32), n, 0.008 * K), mul(w, k * K)), INK_BRIDGE);
+    limb(along(c, u, -R * 0.98), add(along(c, u, -R * 0.66), mul(n, 0.010 * K)), 0.006 * K, 0.005 * K, CHROME, held);       // the tailpiece
   }
   // the chrome catching the sun: a glint on the rim, on its side toward the light
   let best = null;
@@ -1564,7 +1599,7 @@ const suitOf = (o) => ({
   ...agent, name: "Man in Gray", stance: "behind", walk: SUIT_WALK, gestures: [0, 8, 0, 10],
   ...o,
   face: { shades: "#15161c", ...(o.face || {}) },
-  extras(c) { agent.extras(c); earpiece(c); if (o.gear) o.gear(c); },
+  extras(c) { agent.extras(c); earpiece(c); if (o.gear) o.gear(c); hankie(c); },      // (OFFICE-17P: hankie, while one of them mops his brow)
 });
 export const suit1 = suitOf({
   height: 0.97,
@@ -2420,6 +2455,625 @@ addMoves({
   } },
 });
 
+// =====================================================================================
+// OFFICE-17P (round seventeen): Opal of Property & Effects, and the poses the Office's stage one needs
+// =====================================================================================
+// Who they are and what they do: briefs/out/office-hq-design.md (sections 3 and 4: #16 to #20 and the two cut-scenes).
+// Opal is a person of our own: nobody's likeness. Everyone else here is someone the game has already (the backup, Jed,
+// Grandpa Joe) at another moment: a scene swaps one for the other under the same id, as `guard-shade` is the guard.
+//
+// How a script calls each pose (docs/DESIGN.md section 4, "The Office's people"):
+//   - a state is a kind of its own, swapped in under the same id (a scene's `redraw`, as backup.js swaps Grandpa Joe for
+//     `grandpajoe-broken`): Opal with the banjo, Wendell with his button or his fingers in his ears, Grandpa Joe on the chair;
+//   - a movement is a small movement, `g.actor(id).fidget("thunk")` (ends by itself; at once if they talk or walk);
+//   - a pose kept through whatever is said is one of their holds, `g.actor(id).hold(true, "up")`, until `hold(false)`
+//     (ease it in with a tween on `act.k`, as rome-tiber.js eases the blessing; held, the lips move when they talk);
+//   - getting up from the table, the couch or the stool is `figure.sit(false)`, as for anyone found sitting.
+
+/** The seats the Office's rooms paint, in the rig's measure (CM): the top of the seat over the floor under the sitter's
+    hips. These are the usual heights; when the painters' reports are in (S/work-17-paintC and S/work-17-paintD:
+    ready.md and layout.json), set each from theirs, as LIMO_SEAT was set from PAINT-12C's. */
+export const OFFICE_CHAIR_SEAT = 46 * CM;      // the Comfortable Room's chairs: Dale, Merle and Grandpa Joe at the table, and the corner chair he stands on
+export const OFFICE_TABLE_TOP = 74 * CM;       // its table: where their hands lie
+export const OPAL_STOOL_SEAT = 66 * CM;        // Opal's stool at her window, a counter stool: her feet hang (she hops down) (SCENES-17: 66 cm, as PAINT-17C painted it)
+export const COUCH_SEAT = 45.9 * CM;           // the break room's couch, sunk under Floyd (SCENES-17: 45.9 cm, as PAINT-17D painted its cushions)
+export const BREAK_CHAIR_SEAT = 45.9 * CM;     // the break room's plastic chair, Jed's (SCENES-17: 45.9 cm, as PAINT-17D painted it)
+/** How far in front of the hips of someone seated at the table its near edge is, in their own heights (for the painter
+    and the scene: put a seated suit or Grandpa Joe that far behind the edge, and his hands lie on the top). */
+export const TABLE_EDGE = 0.13;
+
+// ---------- things they carry, and small things they wear ----------
+const POT_INSIDE = ramp("#a07c5a", "#6c5038", "#4a3626", "#2c2018");      // the inside of the banjo's pot, where its head was
+const TIN = ramp("#ffffff", "#e6eaf0", "#b2b9c4", "#767d88", { shine: true });       // a pie tin, washed: it shines
+const SLACK_STRING = ramp("#e8e4da", "#d6d0c2", "#b8b2a2", "#9a9484");
+const INK_STRING_TIN = pack("#8a8f98");
+/** The broken head of the banjo: the dark inside of the pot, the wood of the rim inside it, and tatters of the old head
+    round the edge where they caught. (A poly's fn: the pixel, and how far from the middle it is.) */
+function brokenHead(ctr, rpx, lit) {
+  return (x, y) => {
+    const dx = x + 0.5 - ctr[0], dy = y + 0.5 - ctr[1], q = Math.hypot(dx, dy) / Math.max(1, rpx), a = Math.atan2(dy, dx);
+    const tatter = 0.70 + 0.16 * Math.abs(Math.sin(a * 3.5 + 0.7)) + 0.08 * Math.sin(a * 9.0);
+    if (q > tatter && Math.sin(a * 5.0 + 1.1) > -0.35) return BANJO_HEAD;                // the old head, torn: white jags round the edge
+    if (q > 0.80) return lit(x, y) > rpx * 0.20 ? 2 : 1;                                  // the wood of the rim, inside
+    return lit(x, y) < -rpx * 0.45 ? 1 : 2;                                               // the hole: dark, a little light at the far side
+  };
+}
+/** The pie tin for a head: bright tin, its crimped rim all round (light and dark in turn), and a shine across it. */
+function tinHead(ctr, rpx, lit) {
+  return (x, y) => {
+    const dx = x + 0.5 - ctr[0], dy = y + 0.5 - ctr[1], q = Math.hypot(dx, dy) / Math.max(1, rpx), a = Math.atan2(dy, dx);
+    if (q > 0.80) return Math.floor(((a + Math.PI) / (2 * Math.PI)) * 18) % 2 ? 0 : 2;   // the crimps
+    if (q > 0.72) return 2;                                                                // the step down into the tin
+    const shine = (dx - dy) / Math.max(1, rpx);
+    if (Math.abs(shine + 0.18) < 0.13) return 0;                                           // a shine across it
+    return lit(x, y) > rpx * 0.40 ? 2 : 1;
+  };
+}
+
+/** A man in gray mopping his brow (`mop`): the handkerchief in the hand that does it, white, a corner hanging. */
+const HANKIE = ramp("#ffffff", "#f4f6f8", "#c8ccd2", "#8c9098");
+function hankie(cx) {
+  const { pose, J, ball, limb, parts, seatOnly } = cx;
+  if (seatOnly || pose.fidget !== "mop" || !(pose.fu > 0.10 && pose.fu < 0.90)) return;
+  const s = pose.mopHand || "L", g = J[s].palm;
+  ball(add(g, J.torso([0, 0.006, 0.004])), [0.020, 0.016, 0.014], HANKIE, { part: parts.HELD, bias: 1 });
+  limb(add(g, J.torso([0, -0.004, 0.004])), add(g, J.torso([s === "R" ? 0.010 : -0.010, -0.040, 0.010])), 0.012, 0.006, HANKIE, { part: parts.HELD });
+}
+/** How far the tie is loosened at this moment of `loosen` (0 to 1): down, a while, and back up. */
+function loosened(pose) {
+  if (!pose || pose.fidget !== "loosen") return 0;
+  const u = pose.fu || 0;
+  return u < 0.22 ? 0 : u < 0.34 ? (u - 0.22) / 0.12 : u < 0.62 ? 1 : u < 0.76 ? 1 - (u - 0.62) / 0.14 : 0;
+}
+/** Sweat on the brow, in the heat: a bead at each temple that shows. */
+const INK_SWEAT = pack("#e6f6ff");
+function sweat(cx) {
+  const { hp, seatOnly } = cx;
+  if (seatOnly || cx.S < 84) return;
+  for (const [x, y] of [[0.62, 0.52], [-0.58, 0.46], [0.30, 0.66]]) inkAt(cx, hp(x, y, Math.sqrt(Math.max(0, 1 - x * x - y * y * 0.6)) * 0.98), INK_SWEAT, 0.02);
+}
+
+// ---------- Opal: Property & Effects, at her window since 1971 ----------
+// Small and round-shouldered, about 1.55 m; short silver curls; half-moon reading glasses on a beaded chain; a lavender
+// cardigan over a white blouse with a round collar, a gray skirt, stockings, sensible brown shoes; a rubber thimble on her
+// right thumb (a dot of pink). She moves briskly in small steps, looks at people over her glasses, and is never without
+// her date stamp or her knitting: on her stool, her hands are knitting the long gray scarf (in the regulation color) that
+// trails into her basket; on her feet, the stamp is in her right hand and her keys hang at her left hip.
+const OPAL_SKIN = ramp("#fde6d6", "#f2cab2", "#cc9a86", "#906454");
+const OPAL_SILVER = ramp("#ffffff", "#e3e6ed", "#b3b8c3", "#7f848e");     // silver: brighter than Grandma Jolene's, a little blue
+const OPAL_CURL = shifted(OPAL_SILVER, 1);
+const LAVENDER = ramp("#ecdff8", "#c4abe2", "#9178b6", "#605084");
+const OPAL_BLOUSE = ramp("#ffffff", "#f6f4f2", "#d0ccc6", "#9a948c");
+const OPAL_SKIRT = ramp("#c2c2c8", "#96969c", "#6e6e75", "#4a4a50");
+const OPAL_HOSE = ramp("#f6dece", "#e4c2ac", "#b48e7a", "#7c5e50");
+const OPAL_SHOES = ramp("#a07e6a", "#705442", "#4c382c", "#2e2219");
+const STAMP_KNOB = ramp("#f4cc8c", "#d29e5a", "#a06e36", "#68461e");
+const STAMP_BLOCK = ramp("#8a8290", "#544c5c", "#383240", "#201c26");
+const NEEDLE = ramp("#ffffff", "#e6edf4", "#b2bdc8", "#78838f", { shine: true });
+const SCARF = ramp("#c9cbce", "#9fa1a6", "#76797e", "#515358");          // the regulation gray
+const RECEIPT_PAPER = ramp("#fffdf6", "#f4efe0", "#cfc7b2", "#958c76");
+const INK_HALFMOON = pack("#c9a24c"), INK_BEAD_A = pack("#faf4ff"), INK_BEAD_B = pack("#c79ad8"), INK_THIMBLE = pack("#f28aa6");
+const KEY_METAL = ramp("#ffffff", "#d8dde4", "#a2a9b4", "#666d78", { shine: true });
+/** Short silver curls: little rings of shade all over, the crown too. */
+const opalCurls = (x, y, z) => {
+  const n = 7, a = Math.atan2(x, z) * n / Math.PI, b = (y + 1) * n * 1.1, i = Math.floor(a), j = Math.floor(b);
+  const u = a - i - 0.5, v = b - j - 0.5 + ((i & 1) ? 0.5 : 0) % 1, r = Math.hypot(u, v - Math.round(v));
+  return r > 0.26 && r < 0.44 && v - Math.round(v) > -0.12;
+};
+const OPAL_DIM = { ...WOMAN, headR: [0.057, 0.068, 0.064], shoulderW: 0.080, shoulderDrop: 0.052, trunkTop: [0.090, 0.068], trunkLow: [0.084, 0.066], bellyFwd: 0.010,
+  pelvisR: [0.098, 0.064, 0.076], armR: [0.024, 0.021, 0.015], handR: 0.019, legR: [0.046, 0.030, 0.019], footR: 0.018, bust: [0.004, 0.030], neckR: 0.84 };
+const OPAL_FACE = { eyes: "girl", eye: "#2a2230", iris: "#7d90ac", lid: "#5a4048", brows: OPAL_SILVER.tones[2], browUp: 2, blush: "#f29a9a", lip: "#c25a72", lips: "#dc8094", lines: 2,
+  nose: [0.9, 0.9, 1.0], noseShade: true, jaw: 0.84, chin: 0.50, chinY: -0.84, smile: 1, mouthW: 0.20, ear: 1.0, big: { eyeW: 0.42, eyeH: 0.42, lashes: 1, arch: 0.28 } };
+const opalBase = {
+  name: "Opal", height: 0.886, lean: 0.035,                            // 1.55 m; round-shouldered, a little forward
+  dim: OPAL_DIM,
+  skin: OPAL_SKIN,
+  hair: { mat: OPAL_SILVER, bulk: [1.17, 1.12, 1.17], lift: [0, 0.004, 0], ears: false,
+          where: hairline({ front: 0.50, temple: 0.34, side: -0.14, back: -0.46, brow: 0.46, temples: 1.10 }),
+          texture: (x, y, z) => (opalCurls(x, y, z) ? OPAL_CURL : undefined),
+          puffs: [[0, 0.78, 0.16, 0.86, 0.36, 0.82]] },                  // set short in curls, a little high on top
+  face: OPAL_FACE,
+  top: { mat: LAVENDER, sleeves: 2, hem: 0.034, open: 0.050, under: OPAL_BLOUSE, band: OPAL_BLOUSE, cuffs: shifted(LAVENDER, 1), buttons: "#f6eefc" },      // the cardigan over the blouse, its round collar out over it
+  bottom: { kind: "skirt", mat: OPAL_SKIRT, len: 1.30, flare: 1.10, folds: [[-0.7, 0.25], [0.75, 0.3], [0.05, 0.55], [2.6, 0.3], [-2.5, 0.3]] },
+  tights: OPAL_HOSE,
+  shoes: { kind: "shoes", mat: OPAL_SHOES, sole: shifted(OPAL_SHOES, 2) },
+  stance: "clasped",                                                    // her hands together at her waist, the stamp in them
+  walk: { swing: 0.30, arm: 0.22, elbow: 0.32, lean: 0.07, lift: 0.85, bob: 0.014, sway: 0.010, twist: 0.08 }, pace: 150,     // brisk, in small steps
+  gestures: [23, 0, 22, 8],                                             // over her glasses; a nod; THUNK, the stamp onto her other palm; an open hand
+  pray: { high: 0.45, bow: 0.28 },
+  portrait: { head: 0.54, y: 0.44 },
+};
+/** Opal's half-moon reading glasses, low on her nose: a straight gold rim along the middle of each eye and the half-round
+    lens under it, placed where the rig puts the eyes (as Grandma Jolene's are); a pixel lower when she looks over them
+    (pose.over). And the beaded chain, from the arms of the glasses down behind her ears and round the back of her neck. */
+function halfMoons(cx) {
+  const { hp, P, sf, J, d, S, th, hy, parts, pose, spec, fine } = cx, hr = d.headR;
+  const eyeX = spec.face.eyeX ?? 0.36, eyeY = spec.face.eyeY ?? 0.06, headPx = 2 * hr[0] * S, full = headPx >= 13.3, fineFace = headPx >= 10.0;
+  const look = (v) => { const w = turn(v, hy); return w[0] * Math.sin(th) + w[2] * Math.cos(th); }, sideways = Math.sin(th + hy);
+  const mid = P(hp(0, eyeY, 0.80))[0], low = pose.over ? 1 : 0, inner = [];
+  for (const sd of [1, -1]) {
+    const vis = look([sd * 0.25, 0, 0.97]);
+    if (vis < 0.20) continue;
+    const q = P(hp(sd * eyeX, eyeY, 0.80)), w = full && vis > 0.70 ? 2 : 1, right = Math.abs(sideways) > 0.86 ? sideways < 0 : q[0] > mid;
+    const ex = right ? Math.round(q[0] - w / 2) : Math.round(q[0] + w / 2) - 1, ey = Math.round(q[1] - 0.5) + 1 + low, out = right ? 1 : -1;
+    const put = (i, j) => sf.dot(ex + out * i, ey + j, INK_HALFMOON, parts.HEAD);
+    if (!fineFace) { put(0, 0); continue; }
+    for (let i = -1; i <= w; i++) put(i, 0);                            // the straight top of the rim, across the middle of the eye
+    if (full) { for (let i = 0; i < w; i++) put(i, 1); put(-1, 1); put(w, 1); }      // and the half-round under it
+    else put(0, 1);
+    inner.push(ex - out, ey);
+  }
+  if (inner.length === 4 && Math.abs(inner[1] - inner[3]) <= 1) { const [x0, y0, x1] = inner, a = Math.min(x0, x1), b = Math.max(x0, x1); for (let x = a + 1; x < b; x++) sf.dot(x, y0, INK_HALFMOON, parts.HEAD); }      // the bridge, over the nose
+  if (!fine) return;
+  // the chain: beads, pale and lavender in turn, from each temple behind the ear and round the back of the neck
+  const nape = add(J.spine(d.neckY - 0.010), J.torso([0, 0, -(d.trunkTop[1] * 0.62)]));
+  for (const sd of [1, -1]) {
+    const a = hp(sd * 1.00, eyeY - 0.04, 0.10), b = hp(sd * 0.98, -0.62, -0.36), c2 = add(J.sh, J.torso([sd * 0.052, 0.010, -(d.trunkTop[1] * 0.40)]));
+    for (let i = 0; i <= 20; i++) {
+      const t = i / 20, p = t < 0.45 ? mix(a, b, t / 0.45) : t < 0.78 ? mix(b, c2, (t - 0.45) / 0.33) : mix(c2, nape, (t - 0.78) / 0.22);
+      inkAt(cx, p, i % 2 ? INK_BEAD_B : INK_BEAD_A, 0.016);
+    }
+  }
+}
+/** Her date stamp, in her right hand: a turned wooden knob in her fist and the inked block under it, on the side the hand points. */
+function dateStamp(cx) {
+  const { J, limb, ball, parts } = cx, A = J.R, d = A.hDir, held = { part: parts.HELD };
+  ball(add(A.palm, mul(d, -0.004)), [0.0115, 0.0115, 0.0115], STAMP_KNOB, held);
+  limb(add(A.palm, mul(d, 0.010)), add(A.palm, mul(d, 0.034)), 0.0062, 0.0058, STAMP_KNOB, held);
+  limb(add(A.palm, mul(d, 0.034)), add(A.palm, mul(d, 0.050)), 0.0150, 0.0150, STAMP_BLOCK, { ...held, squareStart: true, squareEnd: true, depth: 0.6 });
+}
+/** The knitting: in her hands while she knits (two needles, their tips crossing in front, their ends out past her hands,
+    and the scarf hanging from them into her lap and down off her knees toward the basket by the stool), or, while her
+    hands are busy with anything else, laid in her lap. */
+const KNITTING = new Set(["knit", "purl", "look", "shift"]);
+function knitting(cx) {
+  const { J, limb, ball, parts, pose } = cx, held = { part: parts.HELD }, T = (v) => J.torso(v);
+  const rows = (t, nx, ny, x, y) => ((x + 2 * y) % 3 === 0 ? shifted(SCARF, 1) : undefined);
+  const kneeMid = mix(J.R.knee, J.L.knee, 0.5), lap = lapOf(J, 0.62, 0.030);
+  const inHands = (!pose.gesture || pose.gesture === 23) && !pose.held && (!pose.fidget || KNITTING.has(pose.fidget));      // (a nod, or a look over her glasses, leaves her hands at it)
+  if (inHands) {
+    const R = J.R.palm, L = J.L.palm, mid = mix(R, L, 0.5);
+    for (const [g, sd] of [[R, 1], [L, -1]]) {
+      // (long ones, the ends rising out past her elbows: from behind, as she sits at her window, they are what shows)
+      const tip = add(mid, T([-sd * 0.020, 0.004, 0.036])), dir = unit(add(unit(sub(g, tip)), T([sd * 0.10, 0.62, -0.30]))), butt = along(g, dir, 0.165);
+      limb(tip, butt, 0.0030, 0.0030, NEEDLE, held);
+      ball(butt, [0.0055, 0.0055, 0.0055], NEEDLE, held);
+    }
+    const top = add(mid, T([0, 0.016, 0.026]));
+    limb(top, lap, 0.026, 0.030, SCARF, { ...held, fn: rows });
+    limb(lap, add(kneeMid, [0, -0.13, 0.03]), 0.030, 0.028, SCARF, { ...held, fn: rows });
+  } else {
+    const a = add(lap, T([0.060, 0.012, -0.010])), b = add(lap, T([-0.060, 0.016, 0.020]));
+    limb(add(lap, T([0, 0.004, 0])), add(kneeMid, [0, -0.13, 0.03]), 0.030, 0.028, SCARF, { ...held, fn: rows });
+    limb(a, b, 0.0030, 0.0030, NEEDLE, held);
+    limb(add(a, T([0, 0, 0.030])), add(b, T([0, 0, -0.030])), 0.0030, 0.0030, NEEDLE, held);
+  }
+}
+/** A small slip of paper (the receipt) in her hand or hands, as her hold says (pose.slip: "R", "L" or "both"). */
+function slip(cx) {
+  const { J, limb, parts, pose, wide, deep } = cx, s = pose.slip;
+  if (!s) return;
+  const held = { part: parts.HELD };
+  if (s === "both") {
+    const a = add(J.L.palm, J.torso([0.008, 0.016, 0.006])), b = add(J.R.palm, J.torso([-0.008, 0.016, 0.006])), w = [0.030, 0.0015], r = wide(w);
+    limb(a, b, r, r, RECEIPT_PAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true, bias: 1 });
+    return;
+  }
+  const A = J[s], at = s === "L" && pose.flatL ? add(A.palm, J.torso([0, 0.012, 0])) : A.palm, w = [0.026, 0.0015], r = wide(w);
+  limb(add(at, J.torso([0, 0.004, -0.020])), add(at, J.torso([0, 0.004, 0.026])), r, r, RECEIPT_PAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true, bias: 1 });
+}
+/** Everything of Opal's but what is in her arms: the glasses and the chain, the thimble, the stamp, the knitting, the keys. */
+function opalGear(cx) {
+  const { J, pose, seatOnly, trunkAt, limb, ball, d, parts, cloth, S } = cx;
+  if (seatOnly) return;
+  halfMoons(cx);
+  inkAt(cx, J.R.thumb1, INK_THIMBLE, 0.014);                            // the rubber thimble on her right thumb
+  const sitting = pose.seated && !(pose.rising > 0), stamping = (pose.fidget === "thunk" && pose.fu > 0.08 && pose.fu < 0.92) || pose.gesture === 22;
+  if (sitting && !cx.spec.armsFull) knitting(cx);
+  if ((!pose.seated || stamping) && !cx.spec.armsFull) dateStamp(cx);
+  if (!pose.seated && S >= 52) {                                        // her keys, on a ring at her left hip
+    const at = trunkAt(d.hipY + 0.030, -1.28, 0.010), o = { part: parts.EXTRA, bias: cloth * 2 };
+    ball(at, [0.0080, 0.0080, 0.0040], KEY_METAL, o);
+    for (const [dx, len] of [[-0.006, 0.034], [0.004, 0.028], [0.010, 0.022]]) limb(add(at, [dx * 0.5, -0.004, 0]), add(at, [dx, -len, 0.004]), 0.0040, 0.0034, KEY_METAL, o);
+  }
+  slip(cx);
+}
+// Where her hands are while she knits, on her stool: together in front of her, low, her elbows out.
+const OPAL_KNIT = {
+  R: { hand: [0.042, -0.150, 0.150], bend: [1, -0.4, -0.5], grip: true, point: [-0.55, 0.30, 0.75] },
+  L: { hand: [-0.042, -0.146, 0.146], bend: [-1, -0.4, -0.5], grip: true, point: [0.55, 0.30, 0.75] },
+};
+/** Opal's own holds (figure.hold(true, name)), each made from how she is (on her stool, or on her feet). */
+const opalHolds = {
+  /** turned on her stool to look up (at the vent): her head back, looking up over her glasses, the receipt in her right
+      hand in her lap. (The scene turns her the way the vent is first: she is on a stool that turns.) */
+  up: (o) => {
+    const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.06, twist: -0.22, head: { nod: nodOf(b) - 0.50, turn: -0.42 }, slip: "R", held: "up", over: 1 };      // (her shoulders round to her left, her head up over that shoulder)
+    withArm(p, "R", { hand: [0.050, -0.200, 0.120], bend: [1, -0.4, -0.5], curl: 0.6, point: [-0.3, -0.3, 0.9] });
+    withArm(p, "L", { hand: [-0.050, -0.206, 0.112], bend: [-1, -0.4, -0.5], curl: 0.7, point: [0.4, -0.3, 0.85] });
+    return p;
+  },
+  /** reading a slip (the receipt) close, in both hands, her chin down, through her half-moons */
+  read: (o) => {
+    const b = o.base, p = { ...cloneP(b), head: { nod: nodOf(b) + 0.16 }, slip: "both", held: "read" };
+    withArm(p, "R", { hand: [0.032, -0.104, 0.170], bend: [1, -0.6, -0.4], curl: 0.8, point: [-0.6, 0.5, 0.6] });
+    withArm(p, "L", { hand: [-0.032, -0.104, 0.170], bend: [-1, -0.6, -0.4], curl: 0.8, point: [0.6, 0.5, 0.6] });
+    return p;
+  },
+  /** looking at someone over her glasses: the chin down, the glasses a little lower (sitting or standing) */
+  over: (o) => ({ ...cloneP(o.base), head: { nod: nodOf(o.base) + 0.14 }, over: 1, held: o.seated ? null : "over" }),
+  /** on her feet, holding out the slip for signing on her left palm, the stamp ready in her right */
+  form: (o) => {
+    const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.04, head: { nod: nodOf(b) + 0.08 }, slip: "L", flatL: true, held: "form" };
+    withArm(p, "L", { hand: [-0.040, -0.172, 0.215], bend: [-1, -0.5, -0.4], flat: true, thumb: [0, 0, 1], point: [0.30, 0.0, 0.95] });
+    withArm(p, "R", { hand: [0.060, -0.200, 0.110], bend: [1, -0.5, -0.5], grip: true, point: [-0.2, -0.9, 0.3] });
+    return p;
+  },
+};
+/** Opal, found on her stool at her window (the stool is painted: OPAL_STOOL_SEAT), knitting, her back to the shelves; her
+    life is her knitting. On her feet (`stood`, and `opal-standing`): the stamp in her hands, her keys at her hip. */
+export const opal = {
+  ...opalBase,
+  seated: "chair", sit: { seat: OPAL_STOOL_SEAT, lean: 0.10, knees: 0.08, feet: 0.02 }, shadow: 0.20, span: 1.20,
+  top: { ...opalBase.top, hem: undefined },                            // (sitting, her cardigan rides up over the skirt's band: no hem below it)
+  rest: OPAL_KNIT,
+  riseMs: 560,                                                          // down off the stool briskly: a little hop (rig.js hopPose)
+  fidgets: { only: true, sit: ["knit", "purl", "yarn", "look"], stand: ["look", "shift", "tidy"] },      // (two of her four are the needles going: give her `life: { fidget: [2.6, 3.4] }` and she knits nearly all the time)
+  holds: opalHolds, cues: { sit: ["thunk"], stand: ["thunk"] },      // (cues: what a script plays on her, besides her life: the THUNK)
+  stood: { rest: undefined, holds: opalHolds, top: opalBase.top, span: 1.10, shadow: 0.17 },
+  extras(c) { opalGear(c); },
+};
+export const opalStanding = { ...upOf(opal), name: "Opal, standing" };
+// ---------- Opal with the banjo (damaged), in both arms in front of her: from the shelf to Grandpa Joe ----------
+const OPAL_ARMS = {
+  R: { hand: [0.064, -0.270, 0.150], bend: [0.9, -0.6, -0.4], curl: 0.8, point: [-0.6, 0.1, 0.8] },      // under the pot
+  L: { hand: [-0.096, -0.150, 0.150], bend: [-0.9, -0.5, -0.4], curl: 0.9, point: [0.6, 0.3, 0.75] },     // round the neck where it leaves the pot
+};
+export const opalBanjo = {
+  ...opalStanding, name: "Opal, with the banjo", span: 1.25, armsFull: true,
+  hold: OPAL_ARMS, gestures: [23, 0, 23, 0],                            // her arms are full: over her glasses, a nod
+  fidgets: { only: true, stand: ["look"] }, holds: { over: opalHolds.over }, cues: undefined,
+  extras(c) {
+    opalGear(c);
+    const { J } = c, T = (v) => add(J.sh, J.torso(v)), D = (v) => J.torso(v);
+    banjo(c, { c: T([0.010, -0.228, 0.152]), u: D([-0.78, 0.60, 0.12]), n: D([0.10, 0.20, 0.97]), k: 0.97 / 0.886 }, "broken");
+  },
+};
+
+// ---------- the backup at the Office ----------
+// Dale (suit1) and Merle (suit2), seated at the table in the Comfortable Room, side-on (the chairs and the table are
+// painted: OFFICE_CHAIR_SEAT, OFFICE_TABLE_TOP, TABLE_EDGE). Dale reads the questionnaire, forty-seven pages and a green
+// one, held up in both hands; Merle writes the answers in capitals in his own copy, flat on the table, the pen going.
+// In the heat (`suit1-hot`, `suit2-hot`) they sweat, Merle mops his brow (`mop`) and Dale loosens his tie a finger's
+// width and puts it back (`loosen`). They get up where they sit (they push their chairs back) and walk out with the papers.
+const QPAPER = ramp("#ffffff", "#f3f3f0", "#cbcbc4", "#93938a");
+const QGREEN = ramp("#e0f8c8", "#a8d88c", "#76aa5c", "#4c723a");          // the green page
+/** A point on the table top in front of someone seated at it, in the space of their shoulders (as hands are placed). */
+function onTable(spec, x, fwd, up = 0.014) {
+  const J = skeleton(spec.dim, poses.sit({ ...spec, rest: undefined, hold: undefined }, 0));
+  return torsoOf(J)([x, OFFICE_TABLE_TOP / (spec.height || 1) + up, J.hipC[2] + fwd]);
+}
+/** The questionnaire, held up between Dale's hands, its pages toward him: thick, stapled, the green page sticking out of
+    it; on his feet, in his left hand at his side. */
+function questionnaire(cx) {
+  const { J, limb, parts, wide, deep, pose, seatOnly, sf, P, fine } = cx;
+  if (seatOnly) return;
+  const held = { part: parts.HELD }, sitting = pose.seated && !(pose.rising > 0), oneHand = !sitting || pose.fidget === "loosen" || pose.fidget === "mop";
+  // sitting: its foot on the table's edge between his hands, its top leaning away from him as a book is read; on his feet,
+  // upright in his left hand at his side
+  const mid = oneHand ? J.L.palm : mix(J.R.palm, J.L.palm, 0.5), up = sitting ? unit(J.torso([0, 0.80, 0.60])) : unit(J.torso([0, 1, 0.10]));
+  // (turned a little toward his left, so that side-on, as he sits at the table, it is seen at a slant and not edge-on)
+  const TURN = -0.75, w = [0.056, 0.012], r = cx.widthAt(w, cx.tw * 0.6 + TURN), a = add(mid, mul(up, -0.010)), b = add(mid, mul(up, 0.140));
+  const leaves = fine ? (t, nx, ny, x, y) => ((x + y) % 2 === 0 && Math.abs(nx) > 0.70 ? shifted(QPAPER, 1) : undefined) : null;      // (the edges of its pages)
+  limb(a, b, r, r, QPAPER, { ...held, depth: cx.depthAt(w, cx.tw * 0.6 + TURN) / Math.max(1e-4, r), squareStart: true, squareEnd: true, fn: leaves });
+  const across = turn([1, 0, 0], cx.tw * 0.6 + TURN);                   // (its width, turned so)
+  limb(add(mix(a, b, 0.80), mul(across, 0.052)), add(mix(a, b, 0.94), mul(across, 0.064)), 0.010, 0.010, QGREEN, { ...held, bias: -0.5 });      // the green page, sticking out at the side
+  if (fine) for (const k of [0.30, 0.48, 0.66]) { const q = P(add(mix(a, b, k), J.torso([0, 0, -0.014]))); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pack("#a8a8b0"), parts.HELD); }      // lines of print
+  if (pose.fidget === "page" && pose.fu > 0.25 && pose.fu < 0.70) limb(b, J.L.palm, 0.020, 0.016, QPAPER, { ...held, bias: 1 });       // a page, turning over
+}
+/** Merle's copy, flat on the table between his hands, and his pen in his right fist, its point on the page. */
+function answerSheet(cx) {
+  const { J, limb, parts, wide, deep, pose, seatOnly } = cx;
+  if (seatOnly) return;
+  const held = { part: parts.HELD };
+  if (pose.seated && !(pose.rising > 0)) {
+    // flat on the table top, where it lies whatever his hands do
+    const top = OFFICE_TABLE_TOP / (cx.spec.height || 1) + 0.003, h = J.hipC, near = [h[0] + 0.004, top, h[2] + TABLE_EDGE + 0.030], far = [h[0] + 0.004, top, h[2] + TABLE_EDGE + 0.150], w = [0.062, 0.003], r = wide(w);
+    limb(near, far, r, r, QPAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true });
+  } else {
+    const g = J.L.palm, w = [0.050, 0.006], r = wide(w);
+    limb(add(g, J.torso([0, -0.010, 0.004])), add(g, J.torso([0, 0.110, 0.012])), r, r, QPAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true });
+  }
+  const g = J.R.palm, dn = unit(J.R.hDir);
+  limb(add(g, mul(dn, -0.020)), add(g, mul(dn, 0.034)), 0.0040, 0.0030, ramp("#4c4a58", "#2c2a36", "#1c1a24", "#0e0d14"), held);      // the pen
+}
+const DALE_DESK = { seated: "chair", sit: { seat: OFFICE_CHAIR_SEAT, lean: 0.06, knees: 0.08, feet: 0.08, up: 0 }, shadow: 0.22, span: 1.15, riseMs: 900 };
+const daleBody = { ...suit1, ...DALE_DESK, name: "Man in Gray (Dale), at the table", hold: undefined, rest: undefined };
+const DALE_HOLD = { R: { hand: onTable(daleBody, 0.058, TABLE_EDGE + 0.020, 0.036), bend: [1, -0.5, -0.4], grip: true, point: [-0.6, 0.5, 0.6] },
+                    L: { hand: onTable(daleBody, -0.058, TABLE_EDGE + 0.020, 0.036), bend: [-1, -0.5, -0.4], grip: true, point: [0.6, 0.5, 0.6] } };
+const daleOf = (hot) => ({
+  ...daleBody, name: hot ? "Man in Gray (Dale), at the table, in the heat" : daleBody.name,
+  hold: DALE_HOLD, gestures: [0, 2, 0, 16],                             // the questionnaire in both hands: he talks with his head
+  fidgets: { only: true, sit: hot ? ["page", "loosen", "page"] : ["page", "look"], stand: ["watch", "tie"] }, cues: { sit: ["loosen", "page"], stand: ["loosen", "mop"] },
+  stood: { hold: { L: { hand: [-0.060, -0.196, 0.120], bend: [-1, -0.5, -0.4], grip: true } }, span: 1.05, shadow: 0.18 },      // on his feet: the papers in his left hand, as his clipboard was
+  extras(c) { agent.extras(c); earpiece(c); questionnaire(c); hankie(c); if (hot) sweat(c); },
+});
+export const suit1Table = daleOf(false), suit1Hot = daleOf(true);
+const merleBody = { ...suit2, ...DALE_DESK, name: "Man in Gray (Merle), at the table", hold: undefined, rest: undefined };
+const MERLE_PEN = { hand: onTable(merleBody, 0.030, TABLE_EDGE + 0.090, 0.050), bend: [1, -0.5, -0.4], grip: true, point: [-0.3, -0.6, 0.7] };
+const merleOf = (hot) => ({
+  ...merleBody, name: hot ? "Man in Gray (Merle), at the table, in the heat" : merleBody.name,
+  hold: { R: MERLE_PEN }, hand: "L",
+  rest: { L: { hand: onTable(merleBody, -0.050, TABLE_EDGE + 0.080, 0.026), bend: [-1, -0.5, -0.4], flat: true, point: [0.4, -0.3, 0.85] } },
+  gestures: [5, 0, 2, 0],                                               // a hand to his heart (sorry), a nod, a shrug: he apologizes for every question
+  fidgets: { only: true, sit: hot ? ["write", "mop", "write"] : ["write", "look", "write"], stand: ["watch", "tie"] }, cues: { sit: ["mop"], stand: ["mop"] },
+  stood: { hold: { L: { hand: [-0.060, -0.196, 0.120], bend: [-1, -0.5, -0.4], grip: true } }, rest: undefined, hand: "R", span: 1.05, shadow: 0.18 },
+  extras(c) { agent.extras(c); earpiece(c); answerSheet(c); hankie(c); if (hot) sweat(c); },
+});
+export const suit2Table = merleOf(false), suit2Hot = merleOf(true);
+
+// Wendell (suit3): on the front door, by regulation facing the gate; it is his birthday, and he has a button that says so.
+// `suit3-birthday` is the same man with a round yellow button on his lapel; `suit3-ears`, the same, his fingers in his ears
+// (the Rag: he walks, stands and talks so), his juice box in his breast pocket.
+const BUTTON = ramp("#fff6b0", "#ffd83a", "#d6a816", "#94700a");
+function birthdayButton(cx) {
+  const { J, ball, d, parts, cloth, seatOnly, sf, P, trunkFacing, th, S } = cx;
+  if (seatOnly) return;
+  const f = trunkFacing(-0.62), at = add(J.sh, J.torso([-0.054, -0.052, d.trunkTop[1] + 0.006]));
+  ball(at, [0.0150, 0.0150, 0.0050], BUTTON, { part: parts.EXTRA, bias: cloth * 3 }, cx.tw);
+  if (S >= 84 && f[0] * Math.sin(th) + f[2] * Math.cos(th) > 0.30) { const q = P(add(at, J.torso([0, 0, 0.006]))); sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), pack("#e8402e"), parts.EXTRA); }      // a candle on it, red
+}
+function pocketJuice(cx) {
+  const { J, limb, d, parts, cloth, seatOnly } = cx;
+  if (seatOnly) return;
+  const at = add(J.sh, J.torso([0.054, -0.060, d.trunkTop[1] + 0.006]));
+  limb(add(at, [0, -0.012, 0]), add(at, [0, 0.024, 0]), 0.016, 0.016, ramp("#d8f6a0", "#8ccf3e", "#5e9a24", "#3a6414"), { part: parts.EXTRA, bias: cloth * 2, squareStart: true, squareEnd: true, depth: 0.6 });
+  limb(add(at, [0.004, 0.024, 0]), add(at, [0.008, 0.050, -0.002]), 0.0030, 0.0030, ramp("#ffffff", "#f4f0f0", "#d0caca", "#9a9494"), { part: parts.EXTRA, bias: cloth * 2 });
+}
+export const suit3Birthday = { ...suit3, name: "Man in Gray (Wendell), with his birthday button", extras(c) { suit3.extras(c); birthdayButton(c); } };
+const EARS = {      // (the wrist below and outside the ear, the finger up into it, the elbow out and down)
+  R: { hand: [0.094, 0.026, -0.006], bend: [0.6, -0.8, 0.1], finger: true, point: [-0.50, 0.86, 0.0] },
+  L: { hand: [-0.094, 0.026, -0.006], bend: [-0.6, -0.8, 0.1], finger: true, point: [0.50, 0.86, 0.0] },
+};
+export const suit3Ears = {
+  ...suit3Birthday, name: "Man in Gray (Wendell), his fingers in his ears", hold: EARS, span: 1.15,
+  gestures: [0, 2, 0, 4],                                               // his hands are at his ears: he talks with his head
+  fidgets: { only: true, stand: ["look"] },
+  extras(c) { agent.extras(c); earpiece(c); pocketJuice(c); birthdayButton(c); },
+};
+
+// Floyd (suit4): on his regulation rest after a transport, asleep sitting up on the break room's couch (painted:
+// COUCH_SEAT), slumped, his head back against it, his sunglasses on, his mouth a little open, breathing slowly. He shifts
+// now and then (`stir`, his life); a script can wake him for a moment (`wake`), and he goes back. In his sleep he talks
+// regulations, with no hands at all. (The cheeseburger's bag is long gone.)
+export const suit4Asleep = {
+  ...suit4, name: "Man in Gray (Floyd), asleep", hold: undefined,
+  seated: "chair", sit: { seat: COUCH_SEAT, lean: -0.22, knees: 0.26, feet: 0.30, nod: -0.22, turn: 0.34 }, shadow: 0.24, span: 1.30,      // (his head lolled to one side against the couch's back)
+  rest: { R: { hand: [0.120, -0.300, 0.090], bend: [1, -0.4, -0.3], curl: 0.5, point: [0.1, -0.9, 0.4] }, L: { hand: [-0.020, -0.200, 0.110], bend: [-1, -0.3, -0.4], curl: 0.6, point: [0.6, -0.4, 0.6] } },
+  restMouth: 1, gestures: [0],
+  fidgets: { only: true, sit: ["stir", "stir"] }, cues: { sit: ["wake"] },
+  riseMs: 1400,
+  stood: { rest: undefined, restMouth: 0, gestures: [0, 8, 0, 10], fidgets: { stand: ["watch"] }, span: 1.05, shadow: 0.18 },
+  extras(c) { agent.extras(c); earpiece(c); hankie(c); },
+};
+
+// ---------- Jed in the break room: the hoop still round his neck ("It is evidence."), an ice pack held to the top of his head ----------
+// Found sitting on the plastic chair (painted: BREAK_CHAIR_SEAT), facing the counter and the pie. When Houston calls him
+// to the front desk he is up so fast the ice pack is still in the air: figure.sit(false) is quick (riseMs), and from the
+// moment he starts up the pack is no longer drawn on him. The script puts the `icepack` prop (js/art/props.js) where it
+// was (icePackAt, below), lets it hang a moment and tweens it down.
+const ICE_HAND = { hand: [0.020, 0.214, 0.012], bend: [0.9, 0.6, -0.1], flat: true, point: [-0.55, -0.10, 0.80], thumb: [0, 0, 1] };
+function icePack(cx) {
+  const { J, pose, ball, limb, parts, seatOnly } = cx;
+  if (seatOnly || !pose.seated || pose.rising > 0) return;
+  const at = add(J.R.palm, [0, -0.020, 0]), held = { part: parts.HELD };
+  ball(at, [0.046, 0.024, 0.040], ramp("#ecf7ff", "#a9d2f2", "#6f9fcc", "#466a92"), held);
+  limb(add(at, J.torso([0.034, 0.008, 0])), add(at, J.torso([0.050, 0.026, 0])), 0.010, 0.009, CHROME, held);     // the cap
+}
+export const agentIce = {
+  ...agentCollar, name: "Man in Gray (Jed), with an ice pack",
+  seated: "chair", sit: { seat: BREAK_CHAIR_SEAT, lean: 0.03, knees: 0.12, feet: 0.10, nod: 0.03 }, shadow: 0.22, span: 1.25, under: 0,
+  crown: 0.056,                                                         // (his hand and the pack on top of his head: his words go over them)
+  hold: { R: ICE_HAND },
+  rest: { L: { hand: [-0.110, -0.330, 0.150], bend: [-1, -0.3, -0.4], curl: 0.6, point: [0.3, -0.7, 0.6] } },
+  riseMs: 300,                                                          // up so fast the ice pack is still in the air
+  gestures: [0, 8, 0, 0],
+  fidgets: { only: true, sit: ["look"], stand: ["watch", "tie"] },
+  stood: { hold: undefined, rest: undefined, crown: 0, span: 1.05, under: 0, shadow: 0.18, gestures: [0, 8, 0, 10] },
+  extras(c) { agent.extras(c); hoop(c); dusty(c); icePack(c); },
+};
+/** Where the `icepack` prop goes so that it is where the pack was on Jed's head: [right, down] in picture pixels from his
+    place (the point on the floor under his hips), for him drawn `size` pixels tall facing `yawDeg`. Put the prop there at
+    his scale: cast.addThing("icepack", "icepack", jed.x + dx, jed.y + dy, jed.scale). */
+export function icePackAt(yawDeg, size) {
+  const J = skeleton(agentIce.dim, poses.sit(agentIce, 0)), p = add(J.R.palm, [0, -0.020 - 0.024, 0]);      // (the bottom of the pack: the prop's foot)
+  const th = (yawDeg * Math.PI) / 180, cs = Math.cos(th), sn = Math.sin(th), dp = (p[0] * sn + p[2] * cs) * size;
+  return [Math.round((-p[0] * cs + p[2] * sn) * size * 10) / 10, Math.round((-p[1] * size + dp * 0.22) * 10) / 10];
+}
+
+// ---------- Grandpa Joe at the Office ----------
+// He has no banjo when he comes in (it is in Property & Effects, tag No. 3117). His hat is on throughout.
+//   grandpajoe-table   at the table in the Comfortable Room, on its chair (painted: OFFICE_CHAIR_SEAT), side-on, his hands
+//                      on the table; up (figure.sit(false)) he stands where he sat (he pushes the chair back)
+//   grandpajoe-room    on his feet in the room, his thumbs in his straps; his hold `intercom`
+//   grandpajoe-chair   standing on the corner chair (standOn), looking up at the vent; his holds `reach` and `read`; his
+//                      movements `passup`, `taketin`, `takepaper`
+//   grandpajoe-banjo-broken, grandpajoe-banjo-pie     carrying the banjo by the neck at his side, as it is
+//   grandpajoe-play-broken, grandpajoe-play-pie       playing it, standing or walking: his hands stay on it, and the right
+//                      strums as he walks and as he talks (`strum` while he stands); `grandpajoe-play` is the banjo whole
+const JOE_TABLE_GESTURES = [0, 6, 0, 11, 5];                            // above the table: a nod; a hand to his chin; a finger raised; a hand to his heart
+const joeDeskBody = { ...joeBase, name: "Grandpa Joe, at the table", seated: "chair", sit: { seat: OFFICE_CHAIR_SEAT, lean: 0.03, knees: 0.10, feet: 0.10, up: 0 }, shadow: 0.24, span: 1.15 };
+const joeIntercom = (o) => {
+  const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.15, head: { nod: nodOf(b) + 0.10, turn: 0.22 } };      // leaning in, an ear to the speaker
+  withArm(p, "R", { hand: [0.054, -0.044, 0.250], bend: [0.8, -0.7, -0.2], finger: true, point: [-0.15, 0.10, 1] });
+  return p;
+};
+export const grandpajoeTable = {
+  ...joeDeskBody,
+  rest: { R: { hand: onTable(joeDeskBody, 0.060, TABLE_EDGE + 0.120, 0.022), bend: [1, -0.5, -0.4], flat: true, point: [-0.3, -0.2, 0.9] },
+          L: { hand: onTable(joeDeskBody, -0.070, TABLE_EDGE + 0.100, 0.022), bend: [-1, -0.5, -0.4], curl: 0.7, point: [0.4, -0.2, 0.9] } },
+  gestures: JOE_TABLE_GESTURES,
+  riseMs: 1250,
+  fidgets: { sit: ["hat"], stand: ["back"], not: ["knees"] },
+  stood: { rest: undefined, gestures: joeBase.gestures, span: 1.10, shadow: 0.18, holds: { intercom: joeIntercom } },
+  extras(c) { joeGear(c); },
+};
+export const grandpajoeRoom = { ...upOf(grandpajoeTable), name: "Grandpa Joe, on his feet in the Comfortable Room" };
+/** On the chair: his hands up to the vent, flat, as high as they go (to talk with Ranger through it, or to hand things up
+    and take them down). */
+const joeReach = (o) => {
+  const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.03, breath: 1, head: { nod: nodOf(b) - 0.16 }, held: "reach" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.074, 0.250, 0.060], bend: [sd * 0.9, -0.2, -0.3], flat: true, point: [-sd * 0.10, 1, 0.10], thumb: [-sd, 0, 0.3] });
+  return p;
+};
+/** On the chair: reading a sheet held up in both hands (the test schedule), his chin down to it. */
+const joeRead = (o) => {
+  const b = o.base, p = { ...cloneP(b), head: { nod: nodOf(b) + 0.42 }, held: "read", sheet: true };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.052, -0.040, 0.200], bend: [sd, -0.6, -0.4], curl: 0.8, point: [-sd * 0.4, 0.6, 0.7] });
+  return p;
+};
+/** What he has in his hands on the chair: the receipt going up (`passup`), the pie tin or the sheet coming down
+    (`taketin`, `takepaper`), the sheet he reads (`read`). */
+function chairThings(cx) {
+  const { J, pose, limb, ball, parts, wide, deep, seatOnly } = cx;
+  if (seatOnly) return;
+  const held = { part: parts.HELD }, f = pose.fidget, u = pose.fu || 0, both = mix(J.R.palm, J.L.palm, 0.5);
+  const sheet = (at) => { const w = [0.072, 0.0015], r = wide(w); limb(add(at, J.torso([0, -0.040, 0])), add(at, J.torso([0, 0.060, 0.010])), r, r, QPAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true, bias: 1 }); };
+  if (f === "passup" && u < 0.52) { const g = J.R.palm, w = [0.026, 0.0015], r = wide(w); limb(add(g, J.torso([0, 0.004, -0.012])), add(g, J.torso([0, 0.050, 0.004])), r, r, RECEIPT_PAPER, { ...held, depth: deep(w) / Math.max(1e-4, r), squareStart: true, squareEnd: true, bias: 1 }); }
+  if (f === "taketin" && u > 0.46 && u < 0.94) { ball(add(both, J.torso([0, 0.010, 0.016])), [0.068, 0.014, 0.068], TIN, held, cx.tw); ball(add(both, J.torso([0, 0.020, 0.016])), [0.050, 0.006, 0.050], shifted(TIN, 1), { ...held, bias: 1 }, cx.tw); }
+  if (f === "takepaper" && u > 0.46 && u < 0.94) sheet(both);
+  if (pose.sheet) sheet(both);
+}
+export const grandpajoeChair = {
+  ...joeBase, name: "Grandpa Joe, standing on the chair", standOn: OFFICE_CHAIR_SEAT, nod: -0.34, span: 1.25, shadow: 0.10,
+  tall: 1.55,                                                           // (room in his picture for his hands up over his head, on the chair)
+  gestures: [0, 8, 0, 1, 5],
+  fidgets: { only: true, stand: ["look"] },
+  holds: { reach: joeReach, read: joeRead }, cues: { stand: ["passup", "taketin", "takepaper"] },
+  extras(c) { joeGear(c); chairThings(c); },
+};
+// The banjo in his hands at the Office: carried by the neck at his side, as he carries it whole (grandpajoe-standing), or
+// held across him to play, as at the glass (grandpajoe-play), with his hands kept on it as he walks and talks.
+const JOE_STRUM = { ...JOE_REST.R, stroke: [0.006, -0.046, 0.004], strokes: 2 };     // his right hand over the head, strumming as he walks and talks
+const JOE_FRET = JOE_REST.L;
+const lapBanjo = (c) => { const { J } = c, T = (v) => add(J.sh, J.torso(v)), D = (v) => J.torso(v); return { c: T(JOE_LAP.c), u: D(JOE_LAP.u), n: D(JOE_LAP.n) }; };
+const carriedBanjo = (c) => { const { J } = c, u = J.torso([0.10, 1, 0.12]); return { c: along(J.R.palm, unit(u), -0.215), u, n: J.torso([0.82, 0, 0.57]) }; };
+const joePlaying = (state, name) => ({
+  ...joeBase, name, span: 1.12, shadow: 0.18,
+  rest: JOE_REST, banjoPot: JOE_LAP.c,
+  hold: { R: JOE_STRUM, L: JOE_FRET },
+  gestures: [0, 0, 2, 0],                                               // playing through it: his head and his shoulders talk
+  fidgets: { only: true, stand: ["strum"] },
+  extras(c) { joeGear(c); banjo(c, lapBanjo(c), state); },
+});
+export const grandpajoePlayBroken = joePlaying("broken", "Grandpa Joe, playing the broken banjo");
+export const grandpajoePlayPie = joePlaying("pie", "Grandpa Joe, playing the pie-tin banjo");
+const joeCarrying = (state, name) => ({ ...joeBase, ...joeOnFeet, name, extras(c) { joeGear(c); banjo(c, carriedBanjo(c), state); } });
+export const grandpajoeBanjoBroken = joeCarrying("broken", "Grandpa Joe, with the broken banjo");
+export const grandpajoeBanjoPie = joeCarrying("pie", "Grandpa Joe, with the pie-tin banjo");
+// (and grandpajoe-play, the banjo whole, walks as these do now: its walk keeps his hands on it, strumming)
+grandpajoePlay.walk = { ...JOE_STAND, hold: { R: JOE_STRUM, L: JOE_FRET } };
+// Jed in the arrival (office-arrive, "A Very Small Building With A Very Long Name"): on his feet, the hoop round his neck,
+// carrying what is left of the banjo by its neck at his side, ahead of everyone into the building ("Evidence."). He talks
+// with his free hand; the banjo goes into Property & Effects (tag No. 3117) and he never has it again.
+const JED_CARRY = { hand: [0.150, -0.300, 0.040], bend: [0.6, -1, -0.5], grip: true, loose: true };
+export const agentCollarBanjo = {
+  ...upOf(agentCollar), name: "Man in Gray (Jed), carrying the banjo (damaged)",
+  hold: { R: JED_CARRY }, hand: "L", span: 1.12,
+  fidgets: { only: true, stand: ["watch"] },                           // (his watch is on his left wrist: the banjo stays still)
+  extras(c) { agentCollar.extras(c); banjo(c, { ...carriedBanjo(c), k: 0.97 / 1.0 }, "broken"); },
+};
+
+// ---------- their own small movements (figure.fidget(name)) ----------
+addMoves({
+  /** Opal, on her stool: knitting, the needles going, her elbows working (her life when nobody needs her) */
+  knit: { ms: 2800, make(o) {
+    const b = o.base, at = (dr, dl, nod) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + nod } }; if (b.R.hand) withArm(p, "R", { ...b.R, hand: add(b.R.hand, dr) }); if (b.L.hand) withArm(p, "L", { ...b.L, hand: add(b.L.hand, dl) }); return p; };
+    const k1 = at([-0.014, 0.014, 0.012], [0.004, -0.004, 0.000], 0.05), k2 = at([0.010, -0.006, -0.006], [-0.004, 0.006, 0.006], 0.03);
+    return [[0, b], [0.12, k1], [0.26, k2], [0.40, k1], [0.54, k2], [0.68, k1], [0.82, k2], [1, b]];
+  } },
+  /** Opal, on her stool: the needles going the other way about, the left one working, a stitch slipped across */
+  purl: { ms: 2600, make(o) {
+    const b = o.base, at = (dr, dl, nod) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + nod } }; if (b.R.hand) withArm(p, "R", { ...b.R, hand: add(b.R.hand, dr) }); if (b.L.hand) withArm(p, "L", { ...b.L, hand: add(b.L.hand, dl) }); return p; };
+    const k1 = at([-0.004, 0.004, 0.002], [0.014, 0.012, 0.010], 0.06), k2 = at([0.006, -0.004, -0.002], [-0.008, -0.004, -0.004], 0.04);
+    return [[0, b], [0.14, k1], [0.30, k2], [0.46, k1], [0.62, k2], [0.78, k1], [1, b]];
+  } },
+  /** Opal, on her stool: a tug at the yarn, down to the basket at her left, and back to her knitting */
+  yarn: { ms: 2000, make(o) {
+    const b = o.base, down = withArm({ ...cloneP(b), twist: -0.10, head: { nod: nodOf(b) + 0.12, turn: -0.20 } }, "L", { hand: [-0.150, -0.300, 0.060], bend: [-1, -0.4, -0.4], grip: true });
+    const tug = withArm({ ...cloneP(b), twist: -0.06, head: { nod: nodOf(b) + 0.08, turn: -0.12 } }, "L", { hand: [-0.100, -0.200, 0.100], bend: [-1, -0.5, -0.4], grip: true });
+    return [[0, b], [0.30, down], [0.48, tug], [0.62, down], [1, b]];
+  } },
+  /** Opal: the date stamp brought down, THUNK, onto the slip on her other palm (or on her counter) (a script plays the
+      sound `thunk` when it lands: at 0.46 of its time, 550 ms in) */
+  thunk: { ms: 1200, make(o) {
+    const b = o.base, sp = o.sp, at = (up, nod) => {
+      const p = { ...cloneP(b), head: { nod: nodOf(b) + nod } };
+      withArm(p, "L", { hand: [-0.020, sp.waist + 0.040, sp.belly + 0.100], bend: [-1, -0.5, -0.3], flat: true, thumb: [0, 0, 1], point: [0.5, -0.1, 0.85] });
+      return withArm(p, "R", { hand: [0.012, sp.waist + 0.122 + up, sp.belly + 0.104], bend: [1, -0.4, -0.3], grip: true, point: [-0.2, -1, 0.15] });
+    };
+    const ready = at(0.050, 0.08), high = at(0.090, 0.06), down = at(0.002, 0.14);
+    return [[0, b], [0.18, ready], [0.34, high], [0.46, down], [0.60, down], [0.74, ready], [1, b]];
+  } },
+  /** Opal, on her feet: she straightens her cardigan, a tug at each front */
+  tidy: { ms: 1600, make(o) {
+    const b = o.base, sp = o.sp, at = (dy) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.10 } }; withArm(p, "R", { hand: [0.040, sp.waist + 0.010 + dy, sp.belly + 0.030], bend: [1, -0.4, -0.4], grip: true }); return withArm(p, "L", { hand: [-0.040, sp.waist + 0.010 + dy, sp.belly + 0.030], bend: [-1, -0.4, -0.4], grip: true }); };
+    return [[0, b], [0.30, at(0)], [0.46, at(-0.022)], [0.62, at(0)], [1, b]];
+  } },
+  /** the men in gray: a handkerchief to the brow, dabbing it twice, and put away (in the heat); with the free hand (holdable) */
+  mop: { ms: 2600, hold: 0.5, make(o) {
+    const b = o.base, s = o.held("L") ? (o.held("R") ? "L" : "R") : "L", sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    const at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.08, turn: -sd * 0.06 }, mopHand: s }, s, { hand: [sd * (0.006 + dx), o.sp.headY + hr[1] * 0.42 + dy, hr[2] + 0.040], bend: [sd * 0.7, -0.8, 0.3], curl: 0.8, point: [-sd, 0.15, 0.1] });
+    const a1 = at(0.010, 0), a2 = at(-0.012, -0.010);
+    return [[0, { ...cloneP(b), mopHand: s }], [0.22, a1], [0.36, a2], [0.50, a1], [0.64, a2], [0.78, a1], [1, { ...cloneP(b), mopHand: s }]];
+  } },
+  /** Dale: loosens his tie a finger's width, a breath of air, and puts it back (regulations) */
+  loosen: { ms: 2600, make(o) {
+    const b = o.base, sp = o.sp, s = o.held("R") && !o.held("L") ? "L" : "R", sd = s === "R" ? 1 : -1;
+    const at = (dy, nod) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + nod } }, s, { hand: [sd * 0.008, -0.044 + dy, sp.chest + 0.036], bend: [sd, -0.6, -0.1], grip: true, point: [0, 1, 0.3] });
+    return [[0, b], [0.20, at(0, -0.06)], [0.34, at(-0.018, -0.10)], [0.50, { ...at(-0.018, -0.14), breath: 1 }], [0.66, at(-0.016, -0.04)], [0.76, at(0.002, -0.06)], [1, b]];
+  } },
+  /** Dale, at the table: turns a page of the questionnaire, his left hand over the top of it */
+  page: { ms: 1800, make(o) {
+    const b = o.base, q = b.L, lift = (k) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.04 } }, "L", { ...q, hand: add(q.hand, [0.010 * k, 0.110 * k, 0.020 * k]), curl: 0.6 });
+    return [[0, b], [0.24, lift(0.6)], [0.42, lift(1)], [0.62, lift(0.5)], [1, b]];
+  } },
+  /** Merle, at the table: writes the answer down in capitals, the pen going along the line, his head down to it */
+  write: { ms: 2600, make(o) {
+    const b = o.base, q = b.R, at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.12 } }, "R", { ...q, hand: add(q.hand, [dx, dy, 0]) });
+    return [[0, b], [0.12, at(-0.012, 0.004)], [0.24, at(-0.004, 0)], [0.36, at(0.004, 0.004)], [0.48, at(0.012, 0)], [0.60, at(0.020, 0.004)], [0.74, at(-0.010, 0.002)], [0.86, at(0.000, 0.004)], [1, b]];
+  } },
+  /** Floyd, asleep on the couch: he shifts a little, his head lolls to the other side and back, his mouth shuts and opens */
+  stir: { ms: 3200, make(o) {
+    const b = o.base, roll = { ...cloneP(b), twist: 0.10, sway: 0.010, mouth: 0, head: { nod: nodOf(b) + 0.06, turn: 0.32 } }, back = { ...cloneP(b), twist: 0.04, mouth: 2, head: { nod: nodOf(b) - 0.02, turn: 0.18 } };
+    return [[0, b], [0.30, roll], [0.55, roll], [0.75, back], [1, b]];
+  } },
+  /** Floyd: wakes for a moment, his head up, a look round through his sunglasses, and back to sleep (a script's: holdable) */
+  wake: { ms: 3400, hold: 0.45, make(o) {
+    const b = o.base, up = { ...cloneP(b), lean: (b.lean || 0) + 0.16, mouth: 0, head: { nod: nodOf(b) + 0.28, turn: 0.20 } }, round = { ...cloneP(up), head: { nod: nodOf(b) + 0.26, turn: -0.26 } };
+    return [[0, b], [0.22, up], [0.40, round], [0.52, round], [0.66, up], [1, b]];
+  } },
+  /** Grandpa Joe on the chair: the receipt in his right hand, up through the slats of the vent, and his hand down empty */
+  passup: { ms: 2200, make(o) {
+    const b = o.base, at = (dy) => withArm({ ...cloneP(b), lean: (b.lean || 0) - 0.03, head: { nod: nodOf(b) - 0.16 } }, "R", { hand: [0.040, 0.250 + dy, 0.046], bend: [0.9, -0.2, -0.3], grip: true, point: [0, 1, 0.1] });
+    return [[0, b], [0.30, at(0)], [0.44, at(0.016)], [0.56, at(0.016)], [0.70, at(-0.020)], [1, b]];
+  } },
+  /** Grandpa Joe on the chair: both hands up to the vent, and down with what Ranger hands through it: the pie tin */
+  taketin: { ms: 2600, make(o) { return takeDown(o, 0.05); } },
+  /** the same, with a sheet of paper (the test schedule) */
+  takepaper: { ms: 2600, make(o) { return takeDown(o, 0.0); } },
+});
+/** Both hands up to the vent, a moment there, and down together to his chest with what he took. */
+function takeDown(o, wide) {
+  const b = o.base, both = (y, z, nod, flat) => {
+    const p = { ...cloneP(b), lean: (b.lean || 0) - (y > 0.1 ? 0.03 : 0), head: { nod: nodOf(b) + nod } };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * (0.046 + wide), y, z], bend: [sd * 0.9, -0.3, -0.3], ...(flat ? { flat: true, point: [-sd * 0.15, 1, 0.1] } : { curl: 0.8, point: [-sd * 0.5, 0.2, 0.8] }) });
+    return p;
+  };
+  const up = both(0.258, 0.046, -0.16, true), got = both(0.240, 0.050, -0.16, false), chest = both(-0.090, 0.200, 0.30, false);
+  return [[0, b], [0.28, up], [0.40, up], [0.48, got], [0.70, chest], [0.90, chest], [1, b]];
+}
+
 export const people = {
   dad, son, mom, bigsis, lilsis,
   scribe, carrier, overseer, hauler1, hauler2, hauler3, mason1, mason2, guard, lampboy, goldsmith,
@@ -2441,4 +3095,11 @@ export const people = {
   // ROME-13P: the bigger Rome, round thirteen; and the same people in another state, which a scene swaps in under the same id
   gaul, phyllis, titus, anser, eleazar, mariam, felix,
   "gaul-own": gaulOwn, "phyllis-free": phyllisFree, "titus-free": titusFree, "eleazar-window": eleazarWindow, "felix-free": felixFree,
+  // OFFICE-17P: the Office, round seventeen: Opal; and the people of the Office at their moments (each swapped in under the id it stands for)
+  opal, "opal-standing": opalStanding, "opal-banjo": opalBanjo,
+  "suit1-table": suit1Table, "suit1-hot": suit1Hot, "suit2-table": suit2Table, "suit2-hot": suit2Hot,
+  "suit3-birthday": suit3Birthday, "suit3-ears": suit3Ears, "suit4-asleep": suit4Asleep, "agent-ice": agentIce, "agent-collar-banjo": agentCollarBanjo,
+  "grandpajoe-table": grandpajoeTable, "grandpajoe-room": grandpajoeRoom, "grandpajoe-chair": grandpajoeChair,
+  "grandpajoe-banjo-broken": grandpajoeBanjoBroken, "grandpajoe-banjo-pie": grandpajoeBanjoPie,
+  "grandpajoe-play-broken": grandpajoePlayBroken, "grandpajoe-play-pie": grandpajoePlayPie,
 };

@@ -22,6 +22,27 @@
 
 import { picture, url, hold, listed } from "./assets.js";
 import { afterTo } from "./edges.js";
+import { picturesOf as thoughtNames, thoughtURL } from "../art/thoughts.js";         // ENGINE-17: a refusal that is a thought shows its pictures on the label line
+
+/**
+ * ENGINE-17: what a `travel` (a scene's, or a place's in js/content/maps.js) says for the lead being played: true, he may
+ * leave by the map; false, he may not ("Not from here."); or a line id, he may not, and that line says why ("Locked in, for
+ * my comfort."), on the label line as the map's refusals are. `travel` is any of those, or a function of the game and the
+ * lead ((g, who) => ...), or one for each lead ({ grandpajoe: "line.id", any: true }: `any` for whoever is not named; none
+ * named and no `any`: he may). A function giving any other true value counts as true, and any other false one as false.
+ */
+export function travelFor(t, g, who) {
+  for (let k = 0; k < 4; k++) {
+    if (typeof t === "function") t = t(g, who);
+    else if (t && typeof t === "object" && !Array.isArray(t)) t = Object.prototype.hasOwnProperty.call(t, who) ? t[who] : t.any;
+    else break;
+  }
+  if (typeof t === "string") return t;
+  return t === undefined || t === null ? true : !!t;
+}
+/** ENGINE-17: is a place drawn on its map whatever the visits say (`shown`: true, or a function of the game): a landmark,
+    as the Office's B-7 is on its blueprint, which may have no scene at all. */
+const shownPlace = (place, g) => !!place && (place.shown === true || (typeof place.shown === "function" && !!place.shown(g)));
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const px = (v) => `${(v / 8).toFixed(3)}cqw`;          // a length in picture pixels, in the stage's own unit (800 pixels are 100cqw)
@@ -53,7 +74,7 @@ export function checkMaps({ maps = {}, scenes = {}, eras = {}, sceneIds = [], ga
     if (!map.name) problems.push(`${it} has no name for its button on the map screen.`);
     for (const [pid, place] of Object.entries(map.places)) {
       const list = (place && place.scenes) || [];
-      if (!list.length) problems.push(`${it}, place "${pid}", lists no scene.`);
+      if (!list.length && !(place && place.shown)) problems.push(`${it}, place "${pid}", lists no scene.`);      // (ENGINE-17: a landmark that is `shown` may have none)
       if (!place.label) problems.push(`${it}, place "${pid}", has no label to write on the map.`);
       if (!(map.sketch && map.sketch.places && Array.isArray(map.sketch.places[pid]))) problems.push(`${it}, place "${pid}", has no pin in its sketch, so the map cannot be drawn before it is painted.`);
       list.forEach((sid, n) => {
@@ -190,8 +211,9 @@ export class Atlas {
     }
     return this._index[sceneId] || null;
   }
-  /** The active lead's own map: { id, map, place }, or null for a scene on no map. */
-  own() { return this.g.scene ? this.mapOf(this.g.scene.id) : null; }
+  /** The active lead's own map: { id, map, place }, or null for a scene on no map. (ENGINE-17: his own scene's, g.here: while
+      he looks down through a grille, the scene he looks down from) */
+  own() { return this.g.here ? this.mapOf(this.g.here.id) : null; }
   /** A map's notch on the Timer (its era's `dial`), or null. */
   stop(mapId) { const era = this.g.eras[this.maps[mapId].era]; return era && Number.isInteger(era.dial) ? era.dial : null; }
   era(mapId) { return this.g.eras[this.maps[mapId].era] || { name: this.maps[mapId].name, date: "" }; }
@@ -217,28 +239,58 @@ export class Atlas {
   stateOf(mapId) {
     const map = this.maps[mapId], seen = new Set(this.g.store.data.visited || []);
     for (const f of this.facesOn(mapId)) if (f.team) seen.add(f.scene);
-    const visited = new Set(Object.keys(map.places).filter((pid) => map.places[pid].scenes.some((s) => seen.has(s))));
+    // (ENGINE-17: `entered`, the places really been to; `visited`, what is drawn in: those and the landmarks, `shown`, which
+    // neither make a map known nor make the places beside them faint)
+    const entered = new Set(Object.keys(map.places).filter((pid) => (map.places[pid].scenes || []).some((s) => seen.has(s))));
+    const visited = new Set([...entered, ...Object.keys(map.places).filter((pid) => shownPlace(map.places[pid], this.g))]);
     const faint = new Set();
     for (const p of map.paths || []) {
-      if (visited.has(p.a) && !visited.has(p.b)) faint.add(p.b);
-      if (visited.has(p.b) && !visited.has(p.a)) faint.add(p.a);
+      if (entered.has(p.a) && !visited.has(p.b)) faint.add(p.b);
+      if (entered.has(p.b) && !visited.has(p.a)) faint.add(p.a);
     }
-    return { visited, faint };
+    return { visited, faint, entered };
   }
   /** The maps the player knows (one of their places visited, or someone standing on it), in the dial's order: A first. */
   known() {
     const ids = Object.keys(this.maps), at = (id) => ids.indexOf(id);
-    return ids.filter((id) => this.stop(id) != null && (this.stateOf(id).visited.size || this.facesOn(id).length))
+    return ids.filter((id) => this.stop(id) != null && (this.stateOf(id).entered.size || this.facesOn(id).length))      // (ENGINE-17: entered: a landmark makes no map known)
       .sort((a, b) => this.stop(a) - this.stop(b) || at(a) - at(b));
   }
-  /** May the lead leave the scene they are in by the map? Its `travel`: false never, or a function of the game. */
-  may() {
-    const t = this.g.scene && this.g.scene.travel;
-    return t === undefined || t === true || (typeof t === "function" && !!t(this.g));
+  /** May the lead leave the scene they are in by the map? Its `travel`: false never, or a function of the game. (ENGINE-17:
+      and of the lead, or one for each lead; and the place's own `travel` too: both must let him. travelFor, above.) */
+  may() { return !this.refusal(); }
+  /** ENGINE-17: why the lead being played may not leave his scene by the map now, or null if he may: { line } (the line his
+      scene's `travel`, or his place's, names; null for a plain refusal, "Not from here."). */
+  refusal() {
+    const g = this.g, here = g.here, own = this.own(), who = g.store.data.active, place = own && own.map.places[own.place];
+    for (const t of [here && here.travel, place && place.travel]) {
+      const r = travelFor(t, g, who);
+      if (r !== true) return { line: typeof r === "string" ? r : null };
+    }
+    return null;
+  }
+  /** ENGINE-17: the refusal as the label line shows it: "Not from here.", or its line's words (or pictures, for a thought). */
+  refused() {
+    const r = this.refusal(), entry = r && r.line ? this.g.lines[r.line] : null;
+    if (r && r.line && !entry) this.once(`The map's refusal line "${r.line}" is not in the lines files: "Not from here." is said instead.`);
+    if (!entry) return { text: "Not from here.", pictures: null };
+    return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${r.line}"`) } : { text: entry[1], pictures: null };
+  }
+  /** SCENES-17: what a landmark says when it is clicked or pointed at (a place with no scene, never travelled to: the
+      Office's B-7, RESTRICTED): its `travel` for the lead being played, when that names a line, as refused() gives one
+      ({ text } or { pictures }); otherwise null, and a click on it does nothing, as before. Only on the lead's own map. */
+  landmarkSays(mapId, pid) {
+    const own = this.own(), place = this.maps[mapId] && this.maps[mapId].places[pid];
+    if (!place || (place.scenes || []).length || !own || own.id !== mapId || place.travel == null) return null;
+    const line = travelFor(place.travel, this.g, this.g.store.data.active);
+    if (typeof line !== "string") return null;
+    const entry = this.g.lines[line];
+    if (!entry) { this.once(`The landmark "${pid}" names the line "${line}", which is not in the lines files: it says nothing.`); return null; }
+    return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${line}"`) } : { text: entry[1], pictures: null };
   }
   /** The fewest ways from one place of a map to another through visited places only: { places, ways }, or null. */
   route(mapId, from, to) {
-    const map = this.maps[mapId], { visited } = this.stateOf(mapId);
+    const map = this.maps[mapId], { entered: visited } = this.stateOf(mapId);      // (ENGINE-17: through places really been to, never a landmark only drawn)
     if (!visited.has(from) || !visited.has(to)) return null;
     const back = { [from]: null }, queue = [from];
     while (queue.length) {
@@ -260,8 +312,9 @@ export class Atlas {
     if (!own) return "the scene the lead is in is on no map";
     if (!own.map.places[pid]) return `"${pid}" is not a place of the map "${own.id}"`;
     if (pid === own.place) return "the lead is there already";
-    if (!this.stateOf(own.id).visited.has(pid)) return `the player has not been to "${pid}" yet`;
-    if (!this.may()) return `the scene "${this.g.scene.id}" does not let the lead leave by the map now (its travel)`;
+    if (!(own.map.places[pid].scenes || []).length) return `"${pid}" has no scene to go to`;                     // ENGINE-17: a landmark
+    if (!this.stateOf(own.id).entered.has(pid)) return `the player has not been to "${pid}" yet`;                 // (ENGINE-17: entered)
+    if (!this.may()) return `the scene "${this.g.here.id}" (or its place) does not let the lead leave by the map now (its travel)`;
     if (!this.route(own.id, own.place, pid)) return `there is no way to "${pid}" through the places visited`;
     return null;
   }
@@ -380,7 +433,7 @@ export class Atlas {
   async switchTo(lead) {
     const g = this.g, at = g.store.data.where[lead], there = at && at.scene ? this.mapOf(at.scene) : null;
     if (!there || this.open || !this.el) return false;
-    const era = g.scene ? g.scene.era : null, from = era && g.eras[era] ? g.eras[era].dial : null, to = this.stop(there.id);
+    const era = g.here ? g.here.era : null, from = era && g.eras[era] ? g.eras[era].dial : null, to = this.stop(there.id);      // (ENGINE-17: the lead's own scene, g.here)
     this.enter();
     this.mode = "switch"; this.target = lead;
     if (era !== there.map.era && Number.isInteger(from) && Number.isInteger(to) && from !== to) await this.timer(from, to, there.id);
@@ -606,9 +659,34 @@ export class Atlas {
     if (!this.stateOf(mapId).visited.has(pid)) return "Somewhere you haven't been yet";
     if (!own || own.id !== mapId) return place.label;
     if (pid === own.place) return `${place.label}: you are here`;
-    if (!this.may()) return `${place.label}. Not from here.`;
+    { const lm = this.landmarkSays(mapId, pid); if (lm) return lm.pictures ? `${place.label}. (${lm.pictures.join(", ")})` : lm.text.startsWith(place.label) ? lm.text : `${place.label}. ${lm.text}`; }      // (SCENES-17: a landmark's own words)
+    if (!this.may()) { const r = this.refused(); return `${place.label}. ${r.pictures ? `(${r.pictures.join(", ")})` : r.text}`; }      // (ENGINE-17: the scene's or the place's own words, if it names a line)
     if (!this.route(mapId, own.place, pid)) return place.label;
     return "Go " + (place.go || "to " + afterTo(place.label));
+  }
+  /** ENGINE-17: what the label line shows over a place: placeText's words; or, refused by a line that is a thought, the place's
+      name and the pictures. */
+  placeSay(mapId, pid) {
+    const own = this.own(), place = this.maps[mapId].places[pid];
+    if (own && own.id === mapId && pid !== own.place && this.stateOf(mapId).visited.has(pid)) {      // (SCENES-17: a landmark's own thought first)
+      const lm = this.landmarkSays(mapId, pid);
+      if (lm && lm.pictures) return { text: `${place.label}. `, pictures: lm.pictures };
+    }
+    if (own && own.id === mapId && pid !== own.place && this.stateOf(mapId).visited.has(pid) && !this.may()) {
+      const r = this.refused();
+      if (r.pictures) return { text: `${place.label}. `, pictures: r.pictures };
+    }
+    return this.placeText(mapId, pid);
+  }
+  /** ENGINE-17: the label line shows words, or { text, pictures }: the words and then the thought's pictures. */
+  write(what) {
+    const el = this.labelEl;
+    if (what && typeof what === "object") {
+      const pics = what.pictures || [];
+      el.textContent = what.text || "";
+      for (const n of pics) el.appendChild(Object.assign(document.createElement("img"), { src: thoughtURL(n), alt: n, className: "pic" }));
+      el.setAttribute("aria-label", `${what.text || ""}${pics.length ? `(a thought: ${pics.join(", ")})` : ""}`);
+    } else { el.textContent = what; el.removeAttribute("aria-label"); }
   }
   /** What a thing on the map screen is: { kind, id } for a place, a portrait, a chip, the dial or Close; or null. */
   whatIs(el) {
@@ -625,13 +703,13 @@ export class Atlas {
     const mapId = this.shown, here = (x) => x && mapId && (x.kind === "place" ? !!this.maps[mapId].places[x.id] : x.kind !== "face" || !!this.el.querySelector(`.atlas-face[data-lead="${x.id}"]`));
     const it = [this.over, this.focused].find(here);                    // (what was pointed at on a map turned away from is not there any more)
     if (text == null && it && mapId) {
-      if (it.kind === "place") text = this.placeText(mapId, it.id);
+      if (it.kind === "place") text = this.placeSay(mapId, it.id);                                // (ENGINE-17: placeSay, for a refusal that is a thought)
       else if (it.kind === "face") { const f = this.facesOn(mapId).find((x) => x.id === it.id); text = f ? this.faceText(f) : null; }
       else if (it.kind === "chip") text = this.chipText(it.id);
       else if (it.kind === "dial") text = "Turn the dial";
       else if (it.kind === "close") text = "Back to the game (Esc)";
     }
-    this.labelEl.textContent = text == null ? this.hint() : text;
+    this.write(text == null ? this.hint() : text);                    // (ENGINE-17: write, for words or a thought's pictures)
   }
   /** With nothing under the pointer: on the lead's own map, what a click on a place does (if the scene lets them leave by
       the map, and there is a place they can go: MAP-15M), and, if anyone else of the team is on the map, what a click on them does. */
@@ -660,7 +738,8 @@ export class Atlas {
   go(pid) {
     const own = this.own();
     if (!own || this.shown !== own.id || pid === own.place || !this.stateOf(own.id).visited.has(pid)) return;
-    if (!this.may()) { this.say("Not from here."); return; }
+    { const lm = this.landmarkSays(own.id, pid); if (lm) { this.say(lm.pictures ? lm : lm.text); return; } }      // (SCENES-17: a landmark says its own words, whoever clicks it)
+    if (!this.may()) { const r = this.refused(); this.say(r.pictures ? r : r.text); return; }      // (ENGINE-17: the scene's or the place's own words, if it names a line)
     if (!this.cannot(pid)) this.travel(pid);
   }
   /** A click on a portrait of the team (or a number key): play as them. Standing in the scene on the stage, the controls
@@ -717,7 +796,7 @@ export class Atlas {
       about 220 pixels a second, the whole trip never more than 2.5 seconds, a soft click at each place passed through.
       With less motion they are where they are going at once. A click or a key hurries it. */
   async walk(mapId, route) {
-    const g = this.g, d = g.store.data, L = await this.layout(mapId), scene = g.scene;
+    const g = this.g, d = g.store.data, L = await this.layout(mapId), scene = g.here;      // (ENGINE-17: the lead's own scene)
     const party = new Set([d.active, ...(((typeof scene.party === "function" ? scene.party(g) : scene.party) || [])
       .filter((id) => d.team.includes(id) && d.where[id] && d.where[id].scene === scene.id))]);
     const movers = ((this.rows || {})[route.places[0]] || []).filter((r) => party.has(r.id));

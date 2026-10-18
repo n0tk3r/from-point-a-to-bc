@@ -106,9 +106,10 @@ export class AudioEngine {
     const ctx = this.ctx;
     const stepLen = 60 / track.bpm / (track.div || 2);
     let step = 0, next = ctx.currentTime + 0.06;
-    const voice = (midi, when, len, wave, level) => {
+    const voice = (midi, when, len, wave, level, cents = 0) => {
       const osc = ctx.createOscillator(), env = ctx.createGain();
       osc.type = wave; osc.frequency.value = NOTE(midi);
+      if (cents) osc.detune.value = cents;           // ENGINE-17: a tune a little flat (`detune`, in cents, on its lead): a building's waiting music
       env.gain.setValueAtTime(0, when);
       env.gain.linearRampToValueAtTime(level, when + 0.012);
       env.gain.exponentialRampToValueAtTime(0.0008, when + len);
@@ -122,7 +123,7 @@ export class AudioEngine {
     const timer = setInterval(() => {
       while (next < ctx.currentTime + 0.14) {
         const i = step % track.lead.length;
-        if (track.lead[i] != null) voice(pitch(track.lead[i], 1), next, stepLen * (track.hold || 1.7), track.wave || "triangle", 0.12);
+        if (track.lead[i] != null) voice(pitch(track.lead[i], 1), next, stepLen * (track.hold || 1.7), track.wave || "triangle", 0.12, track.detune || 0);      // (ENGINE-17: detune)
         const b = track.bass[step % track.bass.length];
         if (b != null) voice(pitch(b, -1), next, stepLen * 3.4, track.bassWave || "sine", 0.17);
         step++; next += stepLen;
@@ -151,9 +152,10 @@ export class AudioEngine {
       src.connect(filter).connect(env).connect(this.sfxBus);
       src.start(t);
     }
-    for (const [midi, at, len] of fx.notes || []) {  // a few notes: clicks and pick-ups
+    for (const [midi, at, len, to] of fx.notes || []) {  // a few notes: clicks and pick-ups
       const osc = ctx.createOscillator(), env = ctx.createGain();
       osc.type = fx.wave || "square"; osc.frequency.value = NOTE(midi);
+      if (to != null) { osc.frequency.setValueAtTime(NOTE(midi), t + at); osc.frequency.exponentialRampToValueAtTime(NOTE(to), t + at + len); }    // ENGINE-17: a note that slides to another (a fan running down)
       env.gain.setValueAtTime(fx.level || 0.12, t + at);
       env.gain.exponentialRampToValueAtTime(0.0008, t + at + len);
       osc.connect(env).connect(this.sfxBus);

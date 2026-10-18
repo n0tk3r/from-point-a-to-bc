@@ -7,7 +7,11 @@
   ],
   "tall": {
     "stand": 34,
-    "sit": 49
+    "sit": 49,
+    "climb": 53,
+    "drop": 39,
+    "peek": 19,
+    "pull": 51
   },
   "stride": {
     "walk": 32.0,
@@ -71,6 +75,24 @@
       "ranger-walkS-3.png",
       "ranger-walkS-4.png",
       "ranger-walkS-5.png"
+    ],
+    "climb": [
+      "ranger-climb-0.png",
+      "ranger-climb-1.png",
+      "ranger-climb-2.png",
+      "ranger-climb-3.png"
+    ],
+    "drop": [
+      "ranger-drop-0.png",
+      "ranger-drop-1.png"
+    ],
+    "peek": [
+      "ranger-peek-0.png",
+      "ranger-peek-1.png"
+    ],
+    "pull": [
+      "ranger-pull-0.png",
+      "ranger-pull-1.png"
     ]
   },
   "fps": {
@@ -83,7 +105,11 @@
     "reach": 2,
     "look": 1,
     "walkN": 8,
-    "walkS": 8
+    "walkS": 8,
+    "climb": 8,
+    "drop": 6,
+    "peek": 1.5,
+    "pull": 2
   },
   "fidgets": [
     "look",

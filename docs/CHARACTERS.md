@@ -32,18 +32,39 @@ gray (their pages are under "The Last Stop, and the men in gray").
 
 ## Rules for every line
 
+<!-- PASS-17H: round seventeen. The author, 16 October: "now find ways to make the dialogue more realistic, some of
+the faith-based comments seem forced, make the dialogue fun". The rules below are his answers and the design's
+(briefs/out/office-hq-design.md, section 1, "The dialogue pass"). -->
+
 - **A line belongs to one person.** If it could be said by anybody, rewrite it until
   only one of them could have said it.
 - **Funny comes from character.** Dad puns, the Son swerves, Mom understates, Big
   Sister footnotes, Little Sister declares.
+- **People talk the way people talk.** Say the line out loud. If nobody would say it
+  like that, least of all on the worst night of their life, it is prose and not a
+  line: "I find I am in no hurry to hear it, and in every hurry" is a sentence; "I want
+  to hear it, and I don't" is a mother. The family uses contractions, as Americans do.
+  (Big Sister's whole words are hers, a size too big on purpose, and the people of
+  Egypt and Rome never shorten theirs: the acts' checks hold that.)
+- **Fun first.** A reply that answers back, a running gag that comes round once more, a
+  wrong foot that pays off. Tighter is funnier.
+- **Say it once.** A clue is said once, by the one whose job it is (the hints say it
+  again: that is what they are for). Nobody restates what the scene has just shown, or
+  a fact somebody has just said; "Noted." stays only where it is Big Sister being Big
+  Sister.
 - **Nobody is mean.** They tease, they bicker, they are never cruel, and none of them
   is ever the butt of the game's own joke.
 - **Every fact Big Sister states is true.** Check it before it goes in. Real history
   is the game's rule book. The list is [at the end of this document](#big-sisters-facts).
 - **Short.** One thought to a line, two lines at most before someone else speaks.
-- **The family is American.** Gray, tire, sedan, mailbox, Mom.
+- **The family is American.** Gray, tire, sedan, mailbox, Mom, clothespin.
 - **All of it is original.** No lines, names or jokes from any other game, book, film
   or show.
+- **Kept means kept.** A line marked kept, or the author's own, stays word for word,
+  and the acts' checks list them: "Daddy's not lost. Daddy's EARLY.", "I TOLD you!
+  Daddy's not lost! Daddy's EARLY!", "I don't want to go in there. The rug is probably
+  booby-trapped.", and his three in "Backup". Any other line may become a different,
+  shorter line; its id stays, because scripts, tests and saved games use it.
 
 ## The family's faith, and how it is written
 
@@ -53,14 +74,35 @@ their verses, the Bible by Dad's plate is read after supper, and when Dad does n
 home the first thing Mom does is pray. Write it the way such a family would recognise
 themselves: warm, natural and unselfconscious.
 
+<!-- PASS-17H: the author's answers of 16 October: (1) faith lines natural, not fewer; (2) chapter and verse said aloud
+only when natural: Big Sister may cite, everyone else says the words, and the references live in the documents. -->
+- **Natural, not fewer.** The faith is as much a part of them as it ever was; it is said
+  the way people really say it. It is in what they do (grace, the prayer that comes
+  first, the psalm before a journey) and in a few true words, not in commentary. A verse
+  is said when the moment calls for one, because it is what that person reaches for, not
+  because the scene wants Scripture in it.
 - **Never a sermon, and never a joke at its expense.** Nobody preaches to anybody, on
-  screen or at the player. The comedy stays where it always was, in character: Little
-  Sister adds her own postscript to a prayer; Big Sister knows the chapter and verse.
-- **Scripture is quoted from the King James Version only: exactly, briefly (a phrase or
-  one verse), with its reference said or shown.** LORD is in capitals where the King
-  James text prints it so. Scripture is never a pun, a password, a combination or a
-  riddle. It is said because it is true. The verses the game quotes are listed
-  [at the end of this document](#scripture-quoted-in-the-game).
+  screen or at the player. No Bible fact is tacked onto a joke or a look: a nest is a
+  nest, and not every object is a lesson. The comedy stays where it always was, in
+  character: Little Sister adds her own postscript to a prayer; Big Sister knows the
+  chapter and verse.
+- **The reference aloud only when it is natural.** Big Sister may cite chapter and
+  verse: she footnotes everything, and it is a joke about her, and a kind one ("Psalm
+  121, verse 8. She always does this part."). The Son may say where he knows a verse
+  from (it is on the fridge at home, on a magnet). Nobody else says a reference: they just
+  say the words, as people who know their Bibles do. Every reference is in the table
+  [at the end of this document](#scripture-quoted-in-the-game), with where it is said
+  aloud, if anywhere.
+- **Inside quotation marks, the King James Version only: exactly and briefly** (a
+  phrase, or one verse): word for word, capitals and punctuation included. LORD is in
+  capitals where the King James text prints it so; a quotation that stops where the
+  verse runs on has no full stop inside the marks, and one that starts after the verse
+  begins opens with "...". Each is read in a King James text before it goes in.
+- **Paraphrase is allowed, and is never in quotation marks.** Anybody may put a verse in
+  their own words, as people do: God told him every family on earth would be blessed
+  through him. That is telling, not quoting, and its reference is in the table too.
+- Scripture is never a pun, a password, a combination or a riddle. It is said because
+  it is true.
 - **Hymns and songs are named, never quoted.** No line of any hymn, song, poem or play
   appears in the game. If someone sings words, they are words written for the game.
   (Mom plays "A Mighty Fortress Is Our God", and names it. The few notes the game plays
@@ -78,9 +120,9 @@ themselves: warm, natural and unselfconscious.
 
 > "Father, You know where they are tonight, and I do not. Keep them."
 > "And please make Daddy ask for directions. Just ONE time. Amen."
-> "'The LORD is my shepherd; I shall not want.' Psalm 23. I know ALL of it. ...I do want Daddy, though."
-> "You may say it whenever you like, my love. It is not the clock He is listening for."
-> "The Lord's own picture of Himself: 'even as a hen gathereth her chickens under her wings'. Matthew 23:37." "Tonight I know just how the hen feels."
+> "'The LORD is my shepherd; I shall not want.' I know ALL of it. ...I do want Daddy, though."
+> "Any time you like, my love. He isn't listening for the clock. He's listening for you."
+> "'...even as a hen gathereth her chickens under her wings'..." "Tonight I know just how the hen feels."
 > "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen."
 
 ---
@@ -255,16 +297,27 @@ the facts allow, and she is too polite to interrupt nonsense the first time.
   great deal of Scripture by heart, and quotes it exactly and sparingly, when it is the
   truest thing to say. (See [the family's faith](#the-familys-faith-and-how-it-is-written).)
 
-**How she talks.**
-- Whole sentences, well made, and she does not shorten her words: "May I", "I would like", "Let us".
-- Endearments: darling, sweetheart, my love. She uses them most when she is worried.
+**How she talks.** <!-- PASS-17H: round seventeen. Her page used to say she never shortens a word, which made a refined
+woman a stiff one ("We shall look", "Let us begin", "That was most instructive"). -->
+- Classy, warm and real. With strangers and difficult men she keeps her whole sentences
+  and her steel: "May I", "I would like", "the gentleman".
+- With her daughters she talks like their mother: contractions, quick dry jokes, and
+  never "shall", "Let us" or "One does not". She keeps the whole word only where she
+  means it to land ("I am not clearing two of them away"; "I am not ready to look at
+  that room with nobody in it"), and in prayer. What stays refined is her choice of
+  words: "a great deal", "Precisely", "I have opinions about the other one".
+- Endearments: darling, sweetheart, my love. She uses them when she is worried or
+  tender, not on every line.
 - She understates. Where another person would shout, she gets quieter and more exact.
 - She counts her worries precisely: the ninth voicemail, the twelfth look out of the window.
 - Courtesy with steel inside it: perfectly polite and impossible to get rid of.
 - She knows her husband by heart, and speaks of him ("your father") with fond exasperation.
 - She never mocks the girls, and she always answers Little Sister's questions.
 - **"A matter of record:"** and then something true, where Big Sister says "Fun fact:".
-  They enjoy each other's facts, and are a little competitive about them.
+  They enjoy each other's facts, and are a little competitive about them. It is a
+  running gag, two or three times an act, best where it answers one of her daughter's
+  facts ("Fifty years to the day after the Declaration. A matter of record. And I told
+  YOU that one."): not a habit. Her other facts she just says.
 - A stage manager's words under pressure: "Places, girls." "That is your cue." "We do
   not stop the show for a missing cast member."
 - One touch of what she knows to a line, never three. She is not a lecturer: most of
@@ -300,10 +353,15 @@ do is to make a scene.
 > "He promised me he would never ask for directions. It is the one promise he has always kept."
 > "I do not need to hear it twice. He sounded happy."
 > "We are going to be perfectly polite, and completely impossible to get rid of."
+> "Your brother has never been scared of anything in his life. That's the part that scares me."
+> "Her sound machine. One slow tune, in D major. Sensible girl. D major never panics."
 > "Reformation Day, darling. A matter of record: Martin Luther's ninety-five theses, 1517."
 > "Then you have not read one of them. Good morning."
-> "Genesis 12. I have known that chapter all my life, darling. I had never once thought of it as a morning."
-> "'My times are in thy hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one."
+> "Abram going down into Egypt. I've read that my whole life. I never once thought of it as an ordinary morning."
+> "'My times are in thy hand'... All of them, girls. Even that one."
+<!-- PASS-17N: the two quotes above are round seventeen's lines (the author's rule of 16 October: the reference is not
+said aloud, and lives in "Scripture quoted in the game"). They were "Genesis 12. I have known that chapter all my
+life..." and "'My times are in thy hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one." -->
 
 ---
 
@@ -536,6 +594,7 @@ under "The Last Stop, and the men in gray". -->
 - JED (he was the man in gray): stands in front of a government notice in the desert; can neither confirm nor deny the fence, a dog, General Washington or a cheeseburger; wants nobody to read what is behind him, and lunch, and is no match for a seven-year-old.
 - THE BACKUP: four men in gray in one limousine; say sir to everybody; follow the regulations to the letter.
 - HOUSTON: a voice on Jed's earpiece; dispatch; wants to know if that is the child again.
+- OPAL <!-- WRITE-17 -->: Property & Effects, at her window in the Office since 1971; precise and fond, with a date stamp she loves; files everything, reads nothing green; wants every thing returned to its owner, and somebody, one day, to come for the gnome.
 
 ---
 
@@ -560,6 +619,19 @@ his knees and his raccoon sitting on the ground beside him. He has watched this 
 years, saw the low sun flash off the wagon and the sky open where the flash fell, and tells
 everybody he saw nothing. Everybody's grandpa: it says so on the sign. From Act Five he is a lead,
 with Ranger.
+
+<!-- SCENES-17 -->**His name.** Joe Hollis. The game says his surname once, and Opal of Property & Effects says it,
+at the door of the Comfortable Room with his banjo in her arms: "Forty-one statements of nothing, Joe Hollis."
+Everybody else calls him what the sign says. He tells the Office his name is Joe, and never says his last name is
+Grandpa; Merle writes it in the box anyway ("NAME: JOE. LAST NAME: GRANDPA." "...Jolene's gonna love that."), and from
+then on Houston calls him "Mr. Grandpa".
+
+<!-- SCENES-17 -->**He never lies,** not even to the Office. Every answer he gives in the interview is true, on every
+path through it, if not always the answer to the question ("I observed a station wagon."). When he wants something
+from them he asks nicely, and when he cannot ask for himself he asks for somebody else: Jed's cheeseburger, on Jed's
+behalf ("Ma'am, I'm callin' on behalf of Jed. Jed would still like the cheeseburger."), is how he clears the break room
+for Ranger. Where the truth is not his to tell he says so ("Ma'am, I wouldn't want to say what ain't on the form."), and
+"What raccoon, son?" is a question, not an answer.
 
 **Wants.** To be asked nicely. A quiet porch, Jolene's lemonade, and somebody who will ask to
 hear the Last Stop Rag twice. (A seven-year-old does.)
@@ -592,6 +664,11 @@ banjo, which flashes in the low sun (the half-answer of #12); he holds the sun s
 the long seat, which he never leaves. He can talk to anybody (the suits through the divider, and
 Ranger), hums the Last Stop Rag to get the divider up, and, once Ranger has his hands free, reads
 the clipboard and eats the cheeseburger, which Ranger fetches across the car for him.
+<!-- SCENES-17 -->The Office (Act Five, continued): locked in Interview Room C, the Comfortable Room, with Dale and Merle
+and a questionnaire forty-seven pages long; he answers from his chair, prays a short prayer of his own when they have
+gone ("Lord, You know where that family is, and I don't. You look after 'em."), stands on the spare chair to talk to
+Ranger through the vent, gets his banjo back by the receipt, mends it with a pie tin, and plays the Last Stop Rag through
+every vent in the building until the suits take him where he wants to go: B-7.
 
 **How he looks and moves.** Bib overalls over a red plaid shirt, a straw hat with a dent in the
 crown where the coin hit, a full white beard and moustache, white hair, boots. He leans back in
@@ -706,6 +783,25 @@ frame, and in his portrait.
 
 > "..." (Grandpa Joe: "He says you're welcome. He's shy with strangers and bold with their sandwiches.")
 > "..." (Grandpa Joe: "He says he knows exactly what to do and I'm in the way.")
+> "Bit of both, miss. Mostly I'm his." "..." "He says 'mostly' is generous." <!-- PASS-17N: new in round seventeen -->
+
+<!-- WRITE-17 -->
+**Thought pictures (round seventeen).** At the Office the two of them are apart, and nobody is there to say what Ranger
+means, so the game shows it: when he looks at a thing or tries one, a small bubble rises over his head with a picture in
+it, drawn in the game's pixel style, and his line is still "...". One picture is a plain reaction (`heart` at a trash can;
+`no` at the door Wendell is guarding); two or three in a row are an idea, read left to right, and are how he gives a hint
+(`trash`, `plus`, `up`: the can, under the drainpipe; `piepan`, `plus`, `banjo`: a new head). The pictures are a fixed set
+of about forty (`question`, `idea`, `heart`, `no`, `plus`, `arrow`, `up`, `down`, `joe` (Grandpa Joe's dented hat), `pie`,
+`piepan`, `banjo`, `banjo-broken`, `receipt`, `bottlecap`, `key`, `door`, `hole` (a door in time), `fan`, `hot`, `sun`,
+`zzz`, `eye`, `shiny`, `music`, `clock`, `paper`, `cheeseburger`, `pickle`, `water`, `suit`, `opal`, `trash`, `wingnut`,
+`lamp` (Lamplighter), `peanuts`, `switch`, `chair`, `hand`), and the lines carry them as a third element
+(`["ranger", "...", ["piepan", "plus", "banjo"]]`, `js/content/lines/office.en.js`). Where Grandpa Joe can hear him (in the
+Comfortable Room, or at the grille over it once the suits have gone) the bubble is followed by Joe saying what he means,
+as before: "He says there's a pie. He says it ain't his. He says that's a technicality." Away from Joe, the picture is all
+there is. He reads pictures the same way: the fan with a line through it on the maintenance switch is the first thing in
+the game he reads. He still never speaks. Some of his: `clock`, `clock`, `clock` (very old: a Roman sandal); `question`,
+`question`, `question` (a garden gnome, which nobody can explain); `paper`, `heart` (written down by Wendell, "...One
+raccoon. In trash.": he is on a form at last); `joe`, `no` (the open gate, the open limousine, the B-7 shaft: not without Joe).
 
 ### Jed, the man in gray
 
@@ -746,6 +842,26 @@ come with us." is answered on the spot by "Mind the hat." "We are minding the ha
 > "I can neither confirm nor deny the raccoon."
 > "Sir, please stop singing."
 
+<!-- WRITE-17 -->
+**Their names (round seventeen).** At the Office they are four men again, one gray voice and four small differences, and
+the arcs document's names are theirs now (each is said in stage one, by one of the others or by Houston):
+
+| | Who | His one thing |
+| --- | --- | --- |
+| `suit1` | **Dale** | Reads. The questions off the questionnaire (forty-seven pages; nobody has ever finished it), the regulations out of the book, the green page by mistake. |
+| `suit2` | **Merle** | Writes the answers down, in capitals, and apologizes for every question before Dale asks it ("Sorry in advance, sir."). Sweats first. |
+| `suit3` | **Wendell** | On the front door, by regulation facing the gate. It is his birthday: a round button says so, and there is a pie in the break room with a card on it (HAPPY BIRTHDAY WENDELL. DO NOT EAT. (REGULATIONS)). He tells anybody, and nobody. He is also maintenance ("THIS MEANS YOU, WENDELL."). |
+| `suit4` | **Floyd** | On his regulation rest after a transport (twenty minutes, Regulation 22), asleep sitting up on the break-room couch in his sunglasses for the whole of stage one, talking regulations in his sleep ("...neither confirm... nor deny... the raccoon..."). |
+
+They still say sir to everybody, raccoons included ("Sir. Er. Raccoon."), and sorry while they do things; nobody is ever
+pushed, grabbed or shouted at, and the door is locked "for your comfort". In `js/content/world.js` all four are still
+"Man in Gray", one colour; their names could go on the cast when the author likes them.
+
+> "Sir, you will now be processed." "Son, I been processed. Jolene does it every Sunday before church."
+> "Did you strike an officer of this Office with a banjo?" "Once." "...Once." "Thank you for your honesty, sir."
+> "Regulation 9. 'The Comfortable Room shall be comfortable.'" "It is not comfortable, Dale."
+> "Dale, it is my BIRTHDAY." "...Sir, we are now authorized."
+
 ### Houston
 
 A voice on Jed's earpiece: Houston Pruitt, dispatch, thirty-one years of service (the design's:
@@ -753,6 +869,62 @@ in the game she is "Houston", and nobody says her surname or her years). "Housto
 problem" is not a quotation in this game: it is her name. She has one line so far, small
 and far off, when Little Sister says hello to Mister Gray's mommy: "Jed, is that the child again?"
 Little Sister does not hear it. The player does.
+
+<!-- WRITE-17 -->
+**Heard at last (round seventeen).** At the Office she is on every speaker in the building (`office.pa.*`, said with
+`g.pa`: a narrow banner at the top of the stage, a chime) and on the intercom of the Comfortable Room (DISPATCH. PRESS TO
+TALK.). Brisk, exact, and fond of nobody but Jed: she knows how many times he has asked about the cheeseburger (nine;
+"...Ten, now."), and when Grandpa Joe asks for it on Jed's behalf she says "Oh, for heaven's sake." and sends it, and
+thanks him for asking. She calls Grandpa Joe "Mr. Grandpa", because that is what Merle wrote in the box. Her
+announcements are the building's life: a civilian to be made comfortable, Wendell's birthday pie (do not eat it), a
+raccoon noted in trash and not on the form, the air off and maintenance being Wendell, a vending machine out of everything
+but peanuts, music on the ground floor, and, at the very end, "Lamplighter test at seventeen hundred hours. Sector 44.
+Please do not look directly at the sector." For stage two she also calls "Dr. Fairweather to B-7, please." and reminds the
+building that "The Director's plant needs watering." Nobody says her surname or her years yet.
+
+> "Mr. Grandpa, please return to your chair." "Mr. Grandpa. Chair." "Mr. Grandpa, I have a building to run."
+> "Ma'am, what's down on B-7?" "You are not authorized to ask about B-7, Mr. Grandpa." "Can I ask about B-6?" "No."
+> "B-3 would like the music to stop. So would B-4. So would I."
+
+### Opal
+
+<!-- WRITE-17: new in round seventeen. Her lines are in js/content/lines/office.en.js (office.prop.*, office.opal.*), her
+talk is opalTree in js/content/talk/office.js; the design is briefs/out/office-hq-design.md, sections 3 and 4. -->
+
+**Who she is.** Property & Effects, at her window onto the hall on the Office's ground floor since 1971: fifty-five years.
+Small and round-shouldered, silver curls, half-moon reading glasses on a beaded chain, a lavender cardigan, a rubber thumb
+on her thumb, a date stamp she loves (THUNK), and a gray scarf in the regulation color that she has been knitting since
+about 1990. Behind her, floor-to-ceiling shelves of tagged and dated things that came in and were never claimed: a Roman
+sandal (1951: the Director brought it in himself, and has never once come for it), a clay oil lamp, a tin cup, a
+horseshoe, a cowboy hat bleached white, a goose feather, a cassette tape, a garden gnome (nobody knows), boxes of Form 7s,
+and, since this morning, tag No. 3117, one banjo (damaged). She has filed every one of Grandpa Joe's forty-one statements
+of nothing, and she is fond of him. She has the keys to everything in the building.
+
+**Wants.** Every thing returned to its owner, on presentation of the receipt (Regulation 4). Somebody, one day, to come
+for the gnome. (Draft: the window shut at 1700, not one minute after.)
+
+**Gets wrong.** Nothing on paper. She has filed every green page and never read one: "Reading is a different department."
+
+**How she talks.** Precise: claim numbers, regulation numbers, years, an inventory ("Rim: sound. Neck: sound. Strings:
+sound. Head: gone."). Fond, over her glasses. "Afternoon, Joe." "Opal." She calls him Joe, and once, the only time anyone
+in the game says it, "Joe Hollis". She says "dear" to a raccoon, and thanks him. Grandpa Joe calls her "Opal" and
+"ma'am".
+
+**In play.** #18, The Bearer. Ranger drops Grandpa Joe's receipt through the grille over her counter; she reads it
+("Claim number 3117. One banjo, damaged. One raccoon, unconfirmed."), looks up at the vent, two eyes in a mask look back,
+and: "...Confirmed." THUNK. "Regulation 4. Property is returned to its owner on presentation of the receipt." "It does not
+say who presents it." She takes the banjo off its shelf, and her keys, and brings it to the Comfortable Room (opalTree):
+he signs, she hands it over, they have a few words (the banjo, Jed, the Director's sandal, the green page, the door), and
+she locks the door behind him again, gently. For stage two: her keys, and the sandal ("Everybody wants something back,
+Joe. That's what my window is for.").
+
+**How she looks and moves.** As above; small brisk steps; she looks at people over her glasses, turns on her stool to look
+up at a vent, and is never without her stamp or her knitting (PEOPLE-17 draws her: `opal` in `js/art/people.js`).
+
+> "Forty-one statements of nothing, Joe Hollis." "I'm a man of few observations."
+> "Fifty-five years at this window, and nobody has ever come for the gnome."
+> "...You are not on the form, dear. Mind the gnome."
+> "Regulation 4, Joe. Thank the raccoon."
 
 ### The hens
 
@@ -1027,7 +1199,7 @@ to tell."
 - Slow, warm and grave, with a dry humor ("Twice. But very politely."). He listens more than
   he talks.
 - "Child." "Peace to you, child." "Go in peace, child. And find your father."
-- The Scriptures in his own words, and once, from Isaiah, exactly, with the boy naming it.
+- The Scriptures in his own words, and once, from Isaiah, exactly; the boy knows it from his fridge at home. <!-- PASS-17R: until round seventeen the boy named the reference -->
 - He never preaches, argues or hurries; says nothing against anybody's gods; never names
   who is coming, or when; and is not converted, and nobody tries.
 
@@ -1057,7 +1229,7 @@ remember the day the blessing came back to me."
 
 > "Peace to you, child."
 > "A house of prayer."
-> "Then you have been well taught."
+> "No lions, child. Only Mariam. ...You have been well taught." <!-- PASS-17R: was "Then you have been well taught." -->
 > "Even these. Even, perhaps, a boy in strange shoes."
 > "Then we are both waiting, child. Shall we wait together a little?"
 > "I am still waiting. It is easier this morning."
@@ -1272,7 +1444,6 @@ same rule as for her daughter: every one is true, and nothing goes on this list 
 | As a schoolboy George Washington copied out 110 Rules of Civility | `home.talk.landing.mom.bigsis.1a` | **Checked** (the fact-check of 7 October) |
 | John Adams and Thomas Jefferson died fifty years to the day after the Declaration | `home.talk.landing.bigsis.mom.2b` (Big Sister gives the date: 4 July 1826) | **Checked** (the fact-check of 7 October) |
 | Martin Luther wrote the hymn "A Mighty Fortress Is Our God" | `home.piano.use.mom` | **Checked** (the fact-check of 7 October) |
-| Psalm 46 is the psalm behind that hymn | `home.piano.use.mom2` | To check (the fact-check confirmed the verse's words and the hymn's author; that the hymn is drawn from this psalm is the common account) |
 | Johann Sebastian Bach wrote "S.D.G." at the end of many of his scores: Soli Deo Gloria, "to God alone the glory" | `home.talk.study.mom.bigsis.1a` | **Checked** (the fact-check of 7 October) |
 | A cassette's tape is wound back in with a pencil in its hub | `home.tape.wind.1` (she does it) | **Checked** (the fact-check of 7 October) |
 | Archbishop Ussher's book of dates (his Annals) was published in 1650 | `home.timeline.2` | To check. It is the year the author's rule gives ("his Annals, 1650") |
@@ -1282,8 +1453,14 @@ same rule as for her daughter: every one is true, and nothing goes on this list 
 | When the Constitution was signed, Benjamin Franklin said of the sun on the back of Washington's chair that it was "a rising and not a setting Sun" | `nevada.flash.sun` (only when it is Mom who holds the coin up) | **Checked** (`us.franklin.sun`). The seven words are James Madison's record of him, 17 September 1787, capital S and full stop included. The chair's sun is carved (National Park Service); Madison's word was "painted", so "carved" stays outside the quotation marks. https://avalon.law.yale.edu/18th_century/debates_917.asp ; https://www.nps.gov/articles/000/assembly-room-furnishings.htm |
 | Julius Caesar's coins bore his own portrait; American money bears the motto "In God We Trust" | `nevada.talk.mom.bigsis.quarter.a` | **Checked**: the portrait as in Big Sister's table (the coin); the motto `us.in.god.we.trust` (its sources are in Big Sister's table). She does not say whose face is on the quarter: "on the quarter since 1932" is no longer true of every quarter (`us.quarter`). |
 | B.C. means "before Christ" | `nevada.gate.2d` (she tells Little Sister) | **Checked** (`time.bc.ad`). https://www.britannica.com/topic/Christian-Era |
-| Genesis 12 is the chapter in which Abram goes down into Egypt | `nevada.gate.2e` ("Genesis 12. I have known that chapter all my life, darling.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She names the chapter and quotes nothing of it. |
-| Nevada is the driest state in the Union <!-- NEVADA-12W --> | `nevada.store.survival.mom` ("A matter of record:", at the survival shelf, before she buys three waters) | **Checked**: NOAA National Centers for Environmental Information / NCICS, State Climate Summaries 2022, Nevada: "Nevada is the driest state in the United States" (statewide annual average precipitation 10.2 inches, 1895-2020). https://statesummaries.ncics.org/chapter/nv/ |
+| Abram goes down into Egypt (Genesis 12:10) | `nevada.gate.2e` ("Abram going down into Egypt. I've read that my whole life.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She tells it in her own words and quotes nothing of it; since round seventeen she no longer names the chapter aloud (the author's rule of 16 October). <!-- PASS-17N --> |
+| Nevada is the driest state in the Union <!-- NEVADA-12W --> | `nevada.store.survival.mom` (at the survival shelf, before she buys three waters; since round seventeen without "A matter of record:", which she says three times in the act) <!-- PASS-17N --> | **Checked**: NOAA National Centers for Environmental Information / NCICS, State Climate Summaries 2022, Nevada: "Nevada is the driest state in the United States" (statewide annual average precipitation 10.2 inches, 1895-2020). https://statesummaries.ncics.org/chapter/nv/ |
+
+<!-- PASS-17H --> Since round seventeen Mom no longer says that Psalm 46 is the psalm behind the hymn
+(`home.piano.use.mom2` quotes its first verse and names nothing), so that statement, which was never checked, has gone
+from the table and from the game. Her "A matter of record" is in three of the house's lines now (`home.sign.mom.2`,
+`home.timeline.2`, `home.talk.landing.bigsis.mom.2b`); her other facts in the house are the same facts as before, said
+without it.
 
 Four are worded with care on purpose.
 
@@ -1299,34 +1476,51 @@ Four are worded with care on purpose.
 
 ## Scripture quoted in the game
 
-King James Version, exact, with the reference said in the same line. Listed here so
-that each can be checked word for word, capitals and punctuation included.
+<!-- PASS-17H: round seventeen (the author's rule of 16 October): a reference is said aloud only where it is natural, so it
+is no longer in the same line as every quotation. It is listed here, and the column "Said aloud" says where, if anywhere,
+somebody says it. Act Three's rows are as the game is now. The other acts' rows give the reference aloud as it was
+before round seventeen: each act's own pass (PASS-17E, PASS-17R, PASS-17N, LETTER-17) says in its ready.md where it is
+said now, and those cells are brought into step when the round is merged. Act One's four quotations were missing from
+this table until now (PUZZLES-egypt.md had them): they are the last four rows. -->
 
-| Verse | The words quoted | Line | Who says it, and where | Status |
-| --- | --- | --- | --- | --- |
-| Psalm 121:1 | "I will lift up mine eyes unto the hills, from whence cometh my help." | `home.bible.bigsis` | Big Sister, at the family Bible | **Checked** (the fact-check of 7 October) |
-| Psalm 121:2 | "My help cometh from the LORD, which made heaven and earth." | `home.bible.mom` | Mom, at the family Bible | **Checked** (the fact-check of 7 October) |
-| Psalm 23:1 | "The LORD is my shepherd; I shall not want." | `home.bible.lilsis` | Little Sister, at the family Bible, by heart | **Checked** (the fact-check of 7 October) |
-| Psalm 121:8 | "The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore." | `home.door.psalm.3` (the reference is Big Sister's line before it, `home.door.psalm.2`) | Little Sister, at the front door, before they leave | **Checked** (the fact-check of 7 October) |
-| Joshua 24:15, its last clause | "...as for me and my house, we will serve the LORD." | `home.sampler.mom` | Mom, at the sampler over the front door | **Checked** (the fact-check of 7 October) |
-| Psalm 46:1 | "God is our refuge and strength, a very present help in trouble." | `home.piano.use.mom2` | Mom, at the piano, after the hymn | **Checked** (the fact-check of 7 October) |
-| Matthew 23:37, nine words from the middle of the verse | "even as a hen gathereth her chickens under her wings" | `home.nest.mom` | Mom, at the nest in Little Sister's room. (No full stop inside the quotation marks: the verse goes on.) | Given as exact King James in the editor's brief; to check against a printed text |
-| Matthew 22:21, its second sentence | "Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." | `nevada.coin.read.2d` (the reference, "Matthew 22:21.", is in the same line) | Mom, when Big Sister reads the coin, in Nevada | **Checked** (`kjv.matt22.19-21`): https://www.bibleserver.com/KJV/Matthew22 ; https://biblehub.com/kjv/matthew/22.htm |
-| Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` (the reference, "Psalm 31, verse 15.", is in the same line) | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close before the line's own colon and there is no full stop inside them. |
-| Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it, and gives the reference: "Psalm 121, verse 8.") | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
-| Micah 5:2, its first clause <!-- ROME-13W: Rome's five, the first two in the game since 7 October --> | "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | `rome.dateseller.ans.pray.2` (the reference is the Son's next line, `rome.dateseller.ans.pray.3`) | The date seller, in the street in Rome | **Checked** (`kjv.mic5.2`). The verse runs on: the quotation ends on its comma |
-| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` (the reference is the Son's, `rome.dateseller.bless.2`) | The date seller, blessing the boy | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
-| Isaiah 40:31, its first clause | "But they that wait upon the LORD shall renew their strength;" | `rome.eleazar.heart.2` (the reference is the Son's, `rome.eleazar.heart.son.1`: "Isaiah 40:31! It's on our fridge.") | Eleazar, across the Tiber (round thirteen) | **Checked**: Bible Hub and Bibleserver, King James Version, read 13 October: https://biblehub.com/kjv/isaiah/40.htm ; https://www.bibleserver.com/KJV/Isaiah40 . The verse runs on: the quotation ends on its semicolon |
-| Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` (the reference is the Son's, `rome.eleazar.bless.son`) | Eleazar, his hand on the boy's head (round thirteen) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
-| Numbers 6:26 | "The LORD lift up his countenance upon thee, and give thee peace." | `rome.eleazar.last.son` (the reference, "Numbers 6:26.", is in the same line) | The Son, giving the old man the last part of the blessing (round thirteen) | **Checked** (the same) |
+King James Version, exact, inside quotation marks. Every quotation in the game is listed here with its reference, so
+that each can be checked word for word, capitals and punctuation included. The reference itself is said aloud only
+where it is natural (Big Sister may cite chapter and verse; the Son may say where he knows a verse from): "Said aloud"
+gives who says it, and where.
+
+| Verse | The words quoted | Line | Who says it, and where | Said aloud | Status |
+| --- | --- | --- | --- | --- | --- |
+| Psalm 121:1 | "I will lift up mine eyes unto the hills, from whence cometh my help." | `home.bible.bigsis` | Big Sister, at the family Bible | Big Sister, in the same line: "Psalm 121, where Dad left it." | **Checked** (the fact-check of 7 October) |
+| Psalm 121:2 | "My help cometh from the LORD, which made heaven and earth." | `home.bible.mom` | Mom, at the family Bible | No. (It was "Psalm 121.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
+| Psalm 23:1 | "The LORD is my shepherd; I shall not want." | `home.bible.lilsis` | Little Sister, at the family Bible, by heart | No. (It was "Psalm 23.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
+| Psalm 121:8 | "The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore." | `home.door.psalm.3` | Little Sister, at the front door, before they leave | Big Sister, the line before (`home.door.psalm.2`): "Psalm 121, verse 8. She always does this part." | **Checked** (the fact-check of 7 October) |
+| Joshua 24:15, its last clause | "...as for me and my house, we will serve the LORD." | `home.sampler.mom` | Mom, at the sampler over the front door | No. (It was "Joshua 24:15.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
+| Psalm 46:1 | "God is our refuge and strength, a very present help in trouble." | `home.piano.use.mom2` | Mom, at the piano, after the hymn | No. (It was "Psalm 46. That is the psalm behind it.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
+| Matthew 23:37, nine words from the middle of the verse | "even as a hen gathereth her chickens under her wings" | `home.nest.mom` (the line opens "'...even", since the verse begins before it, and has no stop inside the quotation marks, since it runs on) | Mom, at the nest in Little Sister's room; her next line is "Tonight I know just how the hen feels." | No. (It was "Matthew 23:37.", after "The Lord's own picture of Himself", until round seventeen.) | **Checked** on 16 October, through a tool that fetches a page and quotes it (one step short of reading the page oneself): both give "even as a hen gathereth her chickens under her wings," with a comma after "wings" and the second "her" in italics, a word the translators supplied. https://biblehub.com/kjv/matthew/23.htm ; https://www.bibleserver.com/KJV/Matthew23 . Not in the fact-checker's list (`briefs/out/facts-home.json`) |
+| Matthew 22:21, its second sentence | "Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." | `nevada.coin.read.2d` | Mom, when Big Sister reads the coin, in Nevada | Before round seventeen: Mom, in the same line ("Matthew 22:21.") | **Checked** (`kjv.matt22.19-21`): https://www.bibleserver.com/KJV/Matthew22 ; https://biblehub.com/kjv/matthew/22.htm |
+| Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | Before round seventeen: Mom, in the same line ("Psalm 31, verse 15.") | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close with no stop inside them. |
+| Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it) | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | Before round seventeen: Mom, after her half ("Psalm 121, verse 8.") | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
+| Micah 5:2, its first clause <!-- ROME-13W: Rome's five, the first two in the game since 7 October --> | "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | `rome.dateseller.ans.pray.2` | The date seller, in the street in Rome | Before round seventeen: the Son, the next line (`rome.dateseller.ans.pray.3`), with where he knows it from: his line in the Christmas program | **Checked** (`kjv.mic5.2`). The verse runs on: the quotation ends on its comma |
+| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` | The date seller, blessing the boy | No: the Son now answers "Whoa. That's how church ends!" <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.dateseller.bless.2`) | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
+| Isaiah 40:31, its first clause | "But they that wait upon the LORD shall renew their strength;" | `rome.eleazar.heart.2` | Eleazar, across the Tiber (round thirteen) | No: the Son now answers "That's on our fridge! On a magnet, with an eagle." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.heart.son.1`), with where he knows it from: "It's on our fridge." | **Checked**: Bible Hub and Bibleserver, King James Version, read 13 October: https://biblehub.com/kjv/isaiah/40.htm ; https://www.bibleserver.com/KJV/Isaiah40 . The verse runs on: the quotation ends on its semicolon |
+| Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` | Eleazar, his hand on the boy's head (round thirteen) | No: the Son now answers "That's the blessing! Pastor says it at the end of church!" <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.bless.son`) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
+| Numbers 6:26 | "The LORD lift up his countenance upon thee, and give thee peace." | `rome.eleazar.last.son` | The Son, giving the old man the last part of the blessing (round thirteen) | Before round seventeen: the Son, in the same line ("Numbers 6:26.") | **Checked** (the same) |
+| Exodus 2:3, its last clause <!-- PASS-17H: Act One's four, from PUZZLES-egypt.md --> | "...and she laid it in the flags by the river's brink." | `egypt.reeds.basket.1` | Dad, at the reeds by the river, in Act One | Before round seventeen: Dad, in the same line ("Exodus 2:3.") | **Checked** (`kjv.exod2.3`): the last clause of the verse, word for word. "Basket" is Dad's word for its "ark of bulrushes"; "flags" are reeds |
+| Exodus 1:11, five words | "treasure cities, Pithom and Raamses." | `egypt.site.bricks.use.3` | Dad, at the bricks on the building site, in Act One | Before round seventeen: Dad, in the same line ("Exodus 1:11.") | **Checked** (`kjv.exod1.11`): five words of the verse, word for word; "treasure cities" is the King James wording and "Raamses" its spelling |
+| Psalm 90:4 | "For a thousand years in thy sight are but as yesterday when it is past, and as a watch in the night." | `egypt.gate.psalm.1` | Dad, at the door in time in the chamber, in Act One | Before round seventeen: Dad, the next line (`egypt.gate.psalm.2`: "Psalm 90:4.") | **Checked** (`kjv.ps90.4`): the whole verse, word for word |
+| The heading of Psalm 90, its first four words | "A Prayer of Moses" | `egypt.gate.psalm.2` | Dad, in the same breath as the psalm's number | Before round seventeen: in the same line, after "Psalm 90:4." | **Checked** (`kjv.ps90.title`: "A Prayer of Moses the man of God.") |
 
 Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5` and
 `nevada.gate.2b`, in Big Sister's own words; in Act Four her mother names the chapter,
 `nevada.gate.2e`, and quotes nothing of it).
+Told and not quoted, in Egypt: PUZZLES-egypt.md has each, with its source and status (Lot and the scribe tell
+Genesis 11 to 13 in their own words; Dad has said Genesis 12:3, 7:19-20 and 10:6 with the reference until now, and Act
+One's pass says where it is said now). <!-- PASS-17H -->
 Told and not quoted, in Rome (round thirteen; PUZZLES-rome.md has each): Daniel 6:10 (and
 the lions' story, 6:16), Psalm 55:17 and 122:6, Isaiah 9:7, 32:1 and 60:3 (with 11:10 and
 49:6), Numbers 15:38-39, Deuteronomy 6:9, Acts 18:1-3 and 18:11, each in the speaker's own
-words; and Genesis 48:14, shown and not told (the old man's hand on the boy's head).
+words; Luke 2:1 (the Son, of Caesar Augustus: `rome.senator.ans.caesar.3`, until now with its reference
+said); and Genesis 48:14, shown and not told (the old man's hand on the boy's head).
 Named and not quoted: the hymn "A Mighty Fortress Is Our God" (`home.piano.use.mom`); and
 the hymn "O God, Our Help in Ages Past" (`nevada.talk.lilsis.mom.3b`: Mom is humming it
 in Nevada; the title is to confirm, under "To confirm" at the end of
@@ -1336,3 +1530,5 @@ the Constitution), "Remember the Ladies" (three words of Abigail Adams's letter)
 "a rising and not a setting Sun." (seven words of Benjamin Franklin's, as James Madison
 recorded them at the signing of the Constitution: `nevada.flash.sun`) and "In God We
 Trust" (the motto: `nevada.talk.mom.bigsis.quarter.a`).
+Also in quotation marks, and not Scripture: "To God alone the glory", what Bach's "S.D.G." (Soli Deo Gloria) means,
+in Mom's words (`home.talk.study.mom.bigsis.1a`). <!-- PASS-17H -->

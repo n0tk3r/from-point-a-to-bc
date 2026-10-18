@@ -13,6 +13,11 @@
 
 import { W, H } from "./grid.js";
 import { portrait } from "./cast.js";       // LETTERBOX-11: the portrait beside a voice through a door
+import { picturesOf, bubble, thoughtURL, speakerIcon } from "../art/thoughts.js";      // ENGINE-17: thought pictures, and the speakers' little loudspeaker
+
+// ENGINE-17: a thought is up for as long as a line of three words ("one two three, and"): 900 + 16 x 58 ms, at the usual speed.
+export const THOUGHT_MS = 900 + 16 * 58;
+const LIFT = 16;                            // from the top of a thinker's head to the bottom of his cloud: room for the puffs trailing down
 
 export class Dialogue {
   constructor(game) {
@@ -23,6 +28,9 @@ export class Dialogue {
     this._next = false;
     this._shownAt = 0;
     this.faces = {};           // LETTERBOX-11: portraits for voices through a door, drawn once for each size ("sprite|pixels")
+    this.loops = new Map();    // ENGINE-17: thoughts kept up over somebody (g.think(who, pictures, { loop: true })): who -> { names, el, hidden, key }
+    this._told = new Set();
+    game.clock.every(() => this.follow());
   }
 
   /** The player clicked or pressed a key: move to the next line. */
@@ -48,9 +56,12 @@ export class Dialogue {
     const g = this.g;
     const entry = g.lines[id];
     if (!entry) { console.warn("Missing line:", id); return; }
-    const [who, text] = entry;
+    const [who, text, pictures] = entry;                  // ENGINE-17: a third element is the pictures he thinks
     g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
     if (g.clock.skipping) return;
+    if (pictures != null) return this.thought(who, pictures, { line: id, through });      // ENGINE-17: a bubble, not words
+    const looping = through ? null : this.loops.get(who);                                   // ENGINE-17: a thought kept up over him steps aside while he speaks
+    if (looping) { looping.hidden++; this.follow(); }
 
     // LETTERBOX-11: a line through a door comes from someone in another century: their portrait stands beside the words,
     // in their colour, top centre as for anyone not on the stage, and nobody here moves their mouth for it.
@@ -128,7 +139,160 @@ export class Dialogue {
     if (actor && actor.talk) actor.talk(false);
     if (p) p.remove();
     this.active = false;
+    if (looping) { looping.hidden = Math.max(0, looping.hidden - 1); this.follow(); }      // (ENGINE-17: and back)
     if (!g.clock.skipping) await g.clock.wait(90);       // a short beat between lines
+  }
+
+  // ---------------------------------------------------------------- ENGINE-17: thoughts
+  /**
+   * A thought: a bubble with one to three pictures in it over the thinker's head (js/art/thoughts.js), in place of words.
+   * A line with pictures (its third element) is said this way by say(), which counts it as seen; g.think says one with no
+   * line. It is timed (as long as a line of three words, or `ms`), and skippable as a line is (a click, a key, a cutscene
+   * skipped). With { loop: true } it stays up over him until think(who, null), and steps aside while he says or thinks
+   * anything else; it resolves at once. Through a door in time (`through`), it is beside his portrait, as his words would be.
+   */
+  async thought(who, spec, { ms = null, loop = false, line = null, through = null } = {}) {
+    const g = this.g;
+    if (spec == null || spec === false) { this.unloop(who); return; }
+    const names = picturesOf(spec, line ? `the line "${line}"` : `g.think("${who}")`);
+    if (loop) { this.unloop(who); this.loops.set(who, { names, el: null, hidden: 0, key: "" }); this.follow(); return; }
+    if (g.clock.skipping) return;
+    const looping = this.loops.get(who);
+    if (looping) { looping.hidden++; this.follow(); }
+    const el = this.bubbleFor(who, names, { through });
+    this.active = true; this._next = false; this._shownAt = performance.now();
+    let left = (ms ?? THOUGHT_MS) / (g.settings.textSpeed || 1);
+    await new Promise((resolve) => {
+      const stop = g.clock.every((dt) => {
+        left -= dt;
+        if (left <= 0 || this._next || g.clock.skipping) { stop(); resolve(); }
+      });
+    });
+    el.remove();
+    this.active = false;
+    if (looping) { looping.hidden = Math.max(0, looping.hidden - 1); this.follow(); }
+    if (!g.clock.skipping) await g.clock.wait(90);       // a short beat, as between lines
+  }
+
+  /** Where a thought of `who` goes: { head: [x, y] } over the top of his head when he is drawn on the stage (as his words
+      would go), else { off: [x, y], up } where words go for someone off the stage (the scene's `wordsAt`, or the top
+      middle), `up` when he is up above the scene on the stage (the lead looking down through a grille). */
+  thinkerAt(who) {
+    const g = this.g, actor = g.view.cast.get(who);
+    if (actor && !actor.hidden && actor.opacity > 0 && actor.h) return { head: [actor.x, actor.y - actor.h * actor.scale] };
+    const at = g.scene && g.scene.wordsAt;
+    const off = Array.isArray(at) && at.length === 2 && at.every(Number.isFinite) ? [Math.min(Math.max(at[0], 210), W - 210), at[1]] : [W / 2, 150];
+    const view = g.peeking, there = g.store.data.where[who];
+    return { off, up: !!view && !actor && !!there && there.scene === view.from.id };
+  }
+
+  /** The bubble on the stage, in the words' layer: a picture drawn for it (bubble, in thoughts.js), placed in picture pixels
+      and shown at the stage's scale, as the cast is (smooth below twice the size, hard pixels from there: css). Gives the element. */
+  bubbleFor(who, names, { through = null } = {}) {
+    const g = this.g, rim = (g.cast[through || who] || {}).color || "#ffffff";
+    if (through) {                                     // through a door: the bubble beside the portrait, where the words would be
+      const b = bubble(names, { rim }), p = document.createElement("p");
+      p.className = "say through thinking";
+      p.style.color = rim;
+      const at = g.scene && g.scene.wordsAt;
+      p.style.left = `${((Array.isArray(at) ? Math.min(Math.max(at[0], 210), W - 210) : W / 2) / W) * 100}%`;
+      p.style.top = `${((Array.isArray(at) ? at[1] : 150) / H) * 100}%`;
+      b.canvas.className = "thought";
+      b.canvas.style.width = `${(b.size[0] / W) * 100}cqw`;
+      p.append(this.face(through), b.canvas);
+      this.el.appendChild(p);
+      return p;
+    }
+    const n = names.length, cw = n * 24 + (n - 1) * 4 + 14, ch = 36, where = this.thinkerAt(who);
+    let cx, by, toward;
+    if (where.head) {
+      const [hx, hy] = where.head;
+      cx = Math.min(Math.max(hx, cw / 2 + 4), W - cw / 2 - 4);
+      by = hy - LIFT;
+      if (by - ch < 4) {                               // too near the top: beside the head instead, toward the middle of the stage
+        cx = Math.min(Math.max(hx + (hx < W / 2 ? 1 : -1) * (cw / 2 + 18), cw / 2 + 4), W - cw / 2 - 4);
+        by = Math.max(ch + 4, hy + 6);
+      }
+      toward = [hx - cx, hy - 3 - by];
+    } else {
+      [cx, by] = where.off;
+      toward = where.up ? [0, -Math.min(44, Math.max(10, by - ch - 2))] : [0, 22];
+    }
+    const b = bubble(names, { rim, toward }), c = b.canvas;
+    const left = Math.min(Math.max(cx - b.ox, 0), W - b.size[0]), top = Math.min(Math.max(by - b.oy, 0), H - b.size[1]);
+    c.className = "thought";
+    c.dataset.who = who;
+    c.setAttribute("role", "img");
+    c.setAttribute("aria-label", `${(g.cast[who] || {}).name || who} thinks: ${names.join(", ")}`);
+    c.style.left = `${(left / W) * 100}%`; c.style.top = `${(top / H) * 100}%`; c.style.width = `${(b.size[0] / W) * 100}%`;
+    c.dataset.box = [left, top, b.size[0], b.size[1]].map((v) => Math.round(v)).join(",");          // (where it is, in picture pixels: for the tests)
+    c.dataset.cloud = [left + b.cloud[0], top + b.cloud[1], left + b.cloud[2], top + b.cloud[3]].map((v) => Math.round(v)).join(",");
+    this.el.appendChild(c);
+    return c;
+  }
+
+  /** Keep each looping thought over its thinker: drawn again where his head has gone, hidden while he says something else
+      or is not on the stage. (Every frame; a thought whose thinker stands still is not drawn again.) */
+  follow() {
+    if (!this.loops.size) return;
+    for (const [who, l] of this.loops) {
+      const at = this.thinkerAt(who), show = !l.hidden && !!at.head;
+      const key = show ? at.head.map(Math.round).join(",") : "";
+      if (key === l.key && (!!l.el) === show) continue;
+      if (l.el) { l.el.remove(); l.el = null; }
+      l.key = key;
+      if (show) { l.el = this.bubbleFor(who, l.names); l.el.classList.add("loop"); }
+    }
+  }
+  /** A looping thought ends (g.think(who, null)). */
+  unloop(who) { const l = this.loops.get(who); if (l && l.el) l.el.remove(); this.loops.delete(who); }
+
+  // ---------------------------------------------------------------- ENGINE-17: the building's speakers
+  /**
+   * A line over a building's speakers (g.pa): nobody on the stage says it. A soft chime (`pa`), and it is shown at the top of
+   * the stage in a narrow banner, a small loudspeaker drawn at its left, in the speaker's colour; timed, counted and
+   * skippable as a line is. It is heard only in a scene that is in a building (`building: "office"`, or a function of the
+   * game), in a grille's view too, and, given `building`, only in that one: anywhere else it is not shown, the console says
+   * so (once), and it resolves false at once. `ambient`: shown without taking the controls or a click (the building's own
+   * life, now and then: the scene's `announce`); one at a time. Resolves true when it has been heard. In a cut-scene, which
+   * dresses the stage itself and may be in no scene's building, the `building` it names is where it is.
+   */
+  async pa(id, { building = null, ambient = false } = {}) {
+    const g = this.g, entry = g.lines[id], scene = g.scene;
+    if (!entry) { console.warn("Missing line:", id); return false; }
+    const here = g.mode === "cutscene" && building ? building : scene ? (typeof scene.building === "function" ? scene.building(g) : scene.building) : null;
+    if (!here || (building && building !== here)) {
+      const key = id + "|" + (scene ? scene.id : "-");
+      if (!this._told.has(key)) { this._told.add(key); console.warn(`g.pa("${id}"): ${scene ? `the scene "${scene.id}" is in ${here ? `the building "${here}"` : "no building"}` : "there is no scene"}${building ? `, not "${building}"` : ""}, so the speakers are not heard here.`); }
+      return false;
+    }
+    if (ambient && this.el.querySelector(".pa")) return false;          // (one at a time)
+    const [who, text, pictures] = entry;
+    g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
+    if (g.clock.skipping) return true;
+    const color = (g.cast[who] || {}).color || "#ffffff";
+    g.sfx("pa");
+    const p = document.createElement("p"), speaker = speakerIcon(color).cloneNode(), words = document.createElement("span");
+    speaker.getContext("2d").drawImage(speakerIcon(color), 0, 0);
+    speaker.className = "speaker";
+    p.className = "pa" + (ambient ? " ambient" : "");
+    p.style.color = color;
+    if (pictures != null) for (const n of picturesOf(pictures, `the line "${id}"`)) words.appendChild(Object.assign(document.createElement("img"), { src: thoughtURL(n), alt: n, className: "pic" }));
+    else words.textContent = text;
+    p.append(speaker, words);
+    p.dataset.line = id;
+    this.el.appendChild(p);
+    if (!ambient) { this.active = true; this._next = false; this._shownAt = performance.now(); }
+    let left = (Math.max(1500, 900 + String(text).length * 58) + 400) / (g.settings.textSpeed || 1);       // (and a moment for the chime)
+    await new Promise((resolve) => {
+      const stop = g.clock.every((dt) => {
+        left -= dt;
+        if (left <= 0 || (!ambient && this._next) || g.clock.skipping || !p.isConnected) { stop(); resolve(); }
+      });
+    });
+    p.remove();
+    if (!ambient) { this.active = false; if (!g.clock.skipping) await g.clock.wait(90); }
+    return true;
   }
 
   /** Show a list of things to say. Resolves with the id of the one picked.
@@ -160,6 +324,14 @@ export class Dialogue {
         const li = document.createElement("li"), b = document.createElement("button");
         b.type = "button";
         b.textContent = g.lines[o.line] ? g.lines[o.line][1] : o.line;
+        const pics = g.lines[o.line] && g.lines[o.line][2];                         // ENGINE-17: a thing a lead who cannot talk "says" is the pictures he thinks
+        if (pics != null) {
+          const names = picturesOf(pics, `the line "${o.line}"`), words = b.textContent.trim();
+          b.textContent = "";
+          if (words && words !== "...") b.append(words + " ");
+          for (const n of names) b.appendChild(Object.assign(document.createElement("img"), { src: thoughtURL(n), alt: "", className: "pic" }));
+          b.setAttribute("aria-label", `${words && words !== "..." ? words + ": " : ""}${names.join(", ")}`);
+        }
         if (o.asked != null) b.classList.add(o.asked > 0 ? "asked" : "new");          // TALK-11: picked before (lighter), or never (the completist's mark)
         if (o.exit) b.classList.add("exit");                                           // TALK-11
         b.addEventListener("click", (event) => {
@@ -235,5 +407,9 @@ export class Dialogue {
     }
   }
 
-  clear() { this.el.innerHTML = ""; this.active = false; this.choosing = false; }
+  // (ENGINE-17: a thought kept up is drawn again over its thinker, if he is still on the stage: after a cut-scene played over
+  // the scene, say. The stage emptied (g.view.clear, as every scene is built) ends them all: forgetLoops.)
+  clear() { this.el.innerHTML = ""; this.active = false; this.choosing = false; for (const l of this.loops.values()) { l.el = null; l.key = ""; } this.follow(); }
+  /** ENGINE-17: every thought kept up ends (the stage is emptied). */
+  forgetLoops() { for (const l of this.loops.values()) if (l.el) l.el.remove(); this.loops.clear(); }
 }

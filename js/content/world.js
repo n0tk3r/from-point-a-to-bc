@@ -1,6 +1,8 @@
 // Who and what is in the game.
 // docs/CHARACTERS.md says who the family are; the puzzle documents in docs/ say what each act is.
 
+import { thought } from "./scenes/office-common.js";      // SCENES-17: Ranger's look at a thing in the Office (a thought, and Joe's reading where Joe can hear him)
+
 /** Everyone who speaks. `color` is the color of their words on screen.
     `sprite` names their figure in js/art/people.js, where their looks are set.
     `lead: true` marks someone the player can control: they get a place and pockets of their own.
@@ -52,11 +54,15 @@ export const cast = {
   grandpajoe: { name: "Grandpa Joe", color: "#ffa86b", sprite: "grandpajoe", lead: true, keeps: "bib pocket" },
   jolene:   { name: "Grandma Jolene", color: "#def547", sprite: "jolene" },       // (jolene-2 .. jolene-5 in js/art/people.js: the same woman under her other hats)
   ranger:   { name: "Ranger", color: "#c4b6ab", sprite: "ranger", lead: true, keeps: "stash" },      // painted frames, not a rig person (ENGINE-12); he says "...", and Grandpa Joe translates
-  suit1:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit1" },         // the backup: four men, one voice (as the haulers share theirs), and not Jed's
-  suit2:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit2" },
-  suit3:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit3" },
-  suit4:    { name: "Man in Gray", color: "#abc8ed", sprite: "suit4" },
+  suit1:    { name: "Dale", color: "#abc8ed", sprite: "suit1" },               // the backup: four men, one voice (as the haulers share theirs), and not Jed's
+  suit2:    { name: "Merle", color: "#abc8ed", sprite: "suit2" },              // (SCENES-17: their names, as the Office's stage one has them: Dale reads,
+  suit3:    { name: "Wendell", color: "#abc8ed", sprite: "suit3" },            //  Merle writes it down, Wendell is on the door on his birthday, Floyd is
+  suit4:    { name: "Floyd", color: "#abc8ed", sprite: "suit4" },              //  asleep on his regulation rest)
   houston:  { name: "Houston", color: "#66ffff" },                              // dispatch: a voice on Jed's earpiece, never seen
+  // OFFICE-17P: Opal of Property & Effects (round seventeen). Her colour is a pale heather, by round twelve's rule (CIE Lab:
+  // 25.7 from Big Sister's lilac, the nearest of the family's five; 17.4 from the man in gray's, the nearest of everyone else's).
+  // Her sprite is the kind she is found as (on her stool); `opal-standing` and `opal-banjo` are the same woman on her feet.
+  opal:     { name: "Opal", color: "#f0d0ec", sprite: "opal" },
   // NEVADA-12E: the engine's own painted creature, for the proof scene only (js/content/scenes/engine-proof.js)
   critter:  { name: "Critter", color: "#d6ef8a", sprite: "critter", lead: true, keeps: "stash" },
   narrator: { name: "Narrator", color: "#f6e3b8" },
@@ -124,6 +130,20 @@ export const items = {
   storeshade: { name: "Jolene's sun shade", proper: true, icon: "storeshade.png", look: { mom: "item.storeshade.mom", bigsis: "item.storeshade.bigsis", lilsis: "item.storeshade.lilsis", any: "item.storeshade.mom" } },
   sectormap: { name: "map of the sectors", icon: "sectormap.png", look: { grandpajoe: "item.sectormap.grandpajoe", ranger: ["item.sectormap.ranger", "item.sectormap.ranger.joe"],
     mom: "item.sectormap.mom", bigsis: "item.sectormap.bigsis", lilsis: "item.sectormap.lilsis", any: "item.sectormap.grandpajoe" } },
-  receipt: { name: "receipt for a banjo", icon: "receipt.png", look: { grandpajoe: "item.receipt.grandpajoe", ranger: ["item.receipt.ranger", "item.receipt.ranger.joe"],
+  // SCENES-17: in the Office Ranger's look at the receipt is a thought of his own (where it is going: Opal), and nobody
+  // beside him to say what he means; in the limousine it is as it was.
+  receipt: { name: "receipt for a banjo", icon: "receipt.png", look: { grandpajoe: "item.receipt.grandpajoe",
+    ranger: Object.assign((g) => (inOffice(g) ? g.say("office.item.receipt.ranger") : g.say("item.receipt.ranger", "item.receipt.ranger.joe")), { lines: ["office.item.receipt.ranger", "item.receipt.ranger", "item.receipt.ranger.joe"] }),
     mom: "item.receipt.mom", bigsis: "item.receipt.bigsis", lilsis: "item.receipt.lilsis", any: "item.receipt.grandpajoe" } },
+  // SCENES-17: the Office's stage one (WRITE-17's looks, lines/office.en.js; PAINT-17D's pictures). Ranger's look is a thought,
+  // and Grandpa Joe's reading of it follows where he can hear him (in the Comfortable Room, or at its grille with the suits gone).
+  "banjo-broken": { name: "banjo (damaged)", icon: "banjo-broken.png", look: { grandpajoe: "item.banjo-broken.grandpajoe", any: "item.banjo-broken.grandpajoe" } },
+  pietin: { name: "pie tin", icon: "pietin.png", look: { grandpajoe: "item.pietin.grandpajoe", ranger: thought("item.pietin.ranger"), any: "item.pietin.grandpajoe" } },
+  "banjo-pie": { name: "pie-tin banjo", icon: "banjo-pie.png", look: { grandpajoe: "item.banjo-pie.grandpajoe", any: "item.banjo-pie.grandpajoe" } },
+  schedule: { name: "test schedule", icon: "schedule.png", look: { grandpajoe: "item.schedule.grandpajoe", ranger: thought("item.schedule.ranger"), any: "item.schedule.grandpajoe" } },
+  bottlecap: { name: "bottle cap", icon: "bottlecap.png", look: { ranger: thought("item.bottlecap.ranger"), any: thought("item.bottlecap.ranger") } },
+  peanuts: { name: "packet of peanuts", icon: "peanuts.png", look: { ranger: thought("item.peanuts.ranger"), grandpajoe: "item.peanuts.grandpajoe", any: thought("item.peanuts.ranger") } },
 };
+
+/** SCENES-17: is the lead in the Office (a scene of its building, or looking down into one)? */
+function inOffice(g) { const s = g.here || g.scene; return !!s && (typeof s.building === "function" ? s.building(g) : s.building) === "office"; }

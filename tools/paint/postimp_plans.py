@@ -137,6 +137,7 @@ PLANS = {
         "alt": {"shade-held": []},                                  # NEVADA-12A: the sun shade, once Grandpa Joe holds it up
         "union": {},
         "frames": ["bird-*", "limo-*", "ranger-*-[0-9]"],           # NEVADA-12A: the limousine (PAINT-12A) and Ranger's frames (PAINT-12C; his portraits are the interface's, in art/portraits)
+                                                                    # OFFICE-17A: his climb, drop, peek and pull sets (round seventeen) are frames by the same pattern
     },
     "nevada-store": {                                               # NEVADA-12B: the store's inside (nevada_store.py)
         # back to front: the five hats on their pegs (the scene hides today's), the back door's frame (the hens and Little
@@ -156,6 +157,63 @@ PLANS = {
         "states": {"ropes-4": ["ropes-3", "ropes-2", "ropes-1"]},
         "union": {},
         "frames": ["desert-strip", "drive-*"],                     # DRIVE-16P: and the world outside for the `drive` kind (nevada_limo_drive.py)
+    },
+    # OFFICE-17A: outside the Office's field headquarters (office_lot.py). Back to front as the scene lays them with nobody
+    # there: on the unit (on the roof) the grille and its four wing nuts (each its own, to come off one by one) and the
+    # switch's lever; the door; the awning; the can by the wall; the flagpole; the limousine; the front plane. The other
+    # states replace them: the grille off (and its nuts with it), the lever down, the door open, the can tipped over or
+    # under the pipe, the limousine with its door open. The fan turning and the pennant stirring are frames.
+    "office-lot": {
+        "planes": ["grille", "nut-1", "nut-2", "nut-3", "nut-4", "switch", "door", "awning", "trash", "flagpole", "limo", "front"],
+        "alt": {"grille-off": ["grille", "nut-1", "nut-2", "nut-3", "nut-4"], "switch-off": ["switch"], "door-open": ["door"],
+                "trash-tipped": ["trash"], "trash-pipe": ["trash"], "limo-door-open": ["limo"]},
+        "union": {},
+        "frames": ["fan-*", "pennant-*"],
+    },
+    # OFFICE-17B: the air ducts over the Office's ground floor, a cut-away (office_ducts.py). Nothing stands in front of
+    # the duct (the cut is the front), so there is no cut-out on the stage. The B-7 fan's blades are small cropped frames
+    # (fan-0 .. fan-3 turning, fan-stopped still: one box and foot); the grille's view (what Ranger sees looking down
+    # through a grille, an RGBA laid by the engine over the room it draws under it) is keyed colour by colour as a frame,
+    # its soft alpha kept.
+    "office-ducts": {
+        "planes": [],
+        "alt": {},
+        "union": {},
+        "frames": ["fan-*", "grille-view"],
+    },
+    # OFFICE-17C: the Comfortable Room (office_room.py). With nobody on stage: the plain grille, the thermostat at 72, the
+    # intercom dark, the door shut in its frame, the corner chair, the table with the questionnaire on it, the plastic plant
+    # upright, the wastebasket and the box near us. Each other state replaces its first one: Ranger's eyes at the grille, 77
+    # and 81, the button lit, the door open, the plant drooping. The clock's second hand and the cooler's bubble are frames.
+    "office-room": {
+        "planes": ["vent", "thermostat-72", "intercom", "door", "doorframe", "chair-corner", "table", "questionnaire", "plant", "front"],
+        "alt": {"vent-eyes": ["vent"], "thermostat-77": ["thermostat-72"], "thermostat-81": ["thermostat-72"], "intercom-lit": ["intercom"],
+                "door-open": ["door"], "plant-droop": ["plant"]},
+        "union": {},
+        "frames": ["second-*", "bubble-*"],
+    },
+    # OFFICE-17C: Property & Effects (office_property.py). With nobody on stage: the plain grille, the door shut, the far wall
+    # round Opal's window and the door (her counter and what is on it, the window's frame, the casing, the sign), the banjo in
+    # its bay, the cart and the boxes near us. Ranger's eyes replace the plain grille, the open door the shut one; the receipt
+    # on the counter lies over everything (until then it is not shown).
+    "office-property": {
+        "planes": ["vent", "door", "wall", "banjo", "front"],
+        "alt": {"vent-eyes": ["vent"], "door-open": ["door"], "receipt": []},
+        "union": {},
+        "frames": [],
+    },
+    # OFFICE-17D: the Office's break room (office_breakroom.py). With nobody on stage: the grille over the fridge plain, the
+    # door shut, the schedule on the board, Wendell's pie whole, the snack machine full, Jed's chair, the near table. The
+    # grille with Ranger's eyes in it replaces the plain one; the door standing open replaces the shut one; the pie eaten
+    # (the empty tin and the bottle cap) and the pie gone (the card fallen flat, the cap left on it) each replace the whole
+    # pie; the peanuts in the tray replace the full machine, and the tray empty again is a state of that (the same painting
+    # with less in it). The clock's second hand is frames.
+    "office-breakroom": {
+        "planes": ["vent", "door", "schedule", "pie", "vending", "chair", "front"],
+        "alt": {"vent-eyes": ["vent"], "door-open": ["door"], "pie-eaten": ["pie"], "pie-gone": ["pie"], "vending-peanuts": ["vending"]},
+        "states": {"vending-peanuts": ["vending-taken"]},
+        "union": {},
+        "frames": ["clock-*"],
     },
 }
 

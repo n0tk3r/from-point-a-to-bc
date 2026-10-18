@@ -42,10 +42,18 @@ export class UI {
         <button class="tool" id="t-menu" type="button" title="Menu (Esc)">Menu</button>
       </div>
       <p class="label" id="label"></p>
-      <div class="inv" id="inv" aria-label="Inventory"></div>`;
+      <div class="inv" id="inv" aria-label="Inventory"></div>
+      <div class="peekbar" id="peekbar" role="group" aria-label="Looking down through a grille" hidden>
+        <button class="tool" id="t-drop" type="button">Drop down</button>
+        <button class="tool" id="t-back" type="button" title="Back up (Esc)">Back up</button>
+      </div>`;
     this.placeEl = q("#place"); this.toolsEl = q("#tools"); this.labelEl = q("#label"); this.invEl = q("#inv");
     this.teamEl = q("#team"); this.lookEl = q("#t-look");
     this.mapEl = q("#t-map");          // MAP-15: the Map button (the key M does the same): the map of the place the lead is in (atlas.js)
+    // ENGINE-17: looking down through a grille (grille.js): back up, and the grille's other verb, dropping in, in the corner
+    this.peekEl = q("#peekbar"); this.dropEl = q("#t-drop");
+    q("#t-back").addEventListener("click", () => g.leaveView());
+    this.dropEl.addEventListener("click", () => { if (g.peeking && !g.busy && g.mode === "play") g.run(() => g.dropIn(), { settle: false }).then(() => g.autosave()); });
 
     this.lookEl.addEventListener("click", () => { g.lookMode = !g.lookMode; this.refresh(); });
     q("#t-hint").addEventListener("click", () => g.hint());
@@ -130,8 +138,9 @@ export class UI {
   /** LETTERBOX-11: what waits in the tunnel for a lead, as the end of a sentence: ". Something has come through for Son:
       the pack of gum", or nothing. (The mark on their portrait says that something does; pointing at it says what.) */
   post(id) {
-    const g = this.g, list = g.waiting ? g.waiting(id) : [];
-    return list.length ? `. Something has come through for ${g.cast[id].name}: ${list.map((e) => g.the(e.item)).join(", ")}` : "";
+    const g = this.g, list = g.waiting ? g.waiting(id) : [], handed = g.handed ? g.handed(id) : [];
+    return (list.length ? `. Something has come through for ${g.cast[id].name}: ${list.map((e) => g.the(e.item)).join(", ")}` : "") +
+      (handed.length && id !== g.store.data.active ? `. ${g.cast[id].name} has something new: ${handed.map((e) => g.the(e.item)).join(", ")}` : "");      // ENGINE-17: handed across (g.pass)
   }
 
   label() {
@@ -151,7 +160,8 @@ export class UI {
       else if (g.held) text = spot && spot.mate ? `Give ${g.item(g.held).name} to ${name}` : `Use ${g.item(g.held).name} with ${name || "…"}`;
       else if (edge) text = g.edgeLabel(edge);
       else if (g.lookMode) text = `Look at ${name || "…"}`;
-      else if (spot) text = `${spot.verb || (spot.use ? "Use" : "Look at")} ${name}`;
+      else if (spot) text = `${spot.verb || (spot.grille ? "Look down" : spot.climb ? "Climb up" : spot.use ? "Use" : "Look at")} ${name}`;      // (ENGINE-17: a grille, a way up)
+      else if (g.peeking && !this.over && !this.thing) text = "Back up";                                                                    // ENGINE-17: a click there backs up
     }
     this.labelEl.textContent = text;
     this.arrow(edge);
@@ -172,21 +182,26 @@ export class UI {
     const free = g.mode === "play" && !g.busy && !g.dialogue.choosing;
     this.toolsEl.hidden = !free;
     this.invEl.hidden = !free;
-    this.mapEl.hidden = !(g.scene && g.atlas && g.mapOf(g.scene.id));      // MAP-15: only where the lead's scene is on a map
-    this.placeEl.textContent = g.scene && g.mode === "play" ? g.scene.name : "";
+    this.mapEl.hidden = !(g.here && g.atlas && g.mapOf(g.here.id));      // MAP-15: only where the lead's scene is on a map (ENGINE-17: his own, while he looks down through a grille)
+    this.placeEl.textContent = g.scene && g.mode === "play" ? (g.peeking ? `From above: ${g.scene.name}` : g.scene.name) : "";      // (ENGINE-17)
+    this.peekEl.hidden = !free || !g.peeking;                                                                                     // ENGINE-17
+    this.dropEl.hidden = !g.peeking || !g.peeking.grille.spawn;
+    if (g.peeking) this.dropEl.title = `Drop down into ${g.scene.name.replace(/^(The|A|An) /, (w) => w.toLowerCase())}`;
     this.lookEl.setAttribute("aria-pressed", String(g.lookMode));
     const team = this.team();
     this.teamEl.hidden = !free || team.length < 2;
     const count = (id) => (d.inventory[id] || []).length;
     const post = (id) => (g.waiting ? g.waiting(id).map((e) => e.item) : []);          // LETTERBOX-11: what waits in the tunnel for that lead
-    const now = team.map((id) => `${id}:${count(id)}:${post(id).join("+")}:${this.variantOf(id) || ""}`).join() + "|" + d.active;      // (NEVADA-12E: and the variant a painted lead is in)
+    const fresh = (id) => (g.handed && id !== d.active ? g.handed(id).map((e) => e.item) : []);      // ENGINE-17: what has been handed to that lead in another scene (g.pass), not yet seen
+    const now = team.map((id) => `${id}:${count(id)}:${post(id).join("+")}:${fresh(id).join("+")}:${this.variantOf(id) || ""}`).join() + "|" + d.active;      // (NEVADA-12E: and the variant a painted lead is in)
     if (now !== this._team) {                       // rebuilt only when it changes, so a portrait under the pointer stays put
       this._team = now;
       this.teamEl.innerHTML = team.map((id, n) => {
-        const name = esc(g.cast[id].name), on = id === d.active, has = count(id), came = post(id).length;
+        const name = esc(g.cast[id].name), on = id === d.active, has = count(id), came = post(id).length, got = fresh(id).length;
         const key = this.faceKey(id, this.facePx || 42);
-        // (LETTERBOX-11: data-post marks the portrait of someone something has come through for; css/game.css draws the mark)
-        return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}${came ? ` data-post="${came}"` : ""}` +
+        // (LETTERBOX-11: data-post marks the portrait of someone something has come through for; css/game.css draws the mark.
+        // ENGINE-17: data-new, the same mark, for someone who has been handed something in another scene)
+        return `<button class="tool face" type="button" data-lead="${esc(id)}" aria-pressed="${on}" style="--who:${esc(g.cast[id].color)}"${has ? ` data-n="${has}"` : ""}${came ? ` data-post="${came}"` : ""}${got ? ` data-new="${got}"` : ""}` +
           ` aria-label="${on ? `${name}, playing now` : `Play as ${name}`}${has ? `, carrying ${has} thing${has > 1 ? "s" : ""}` : ""}${esc(this.post(id))}" title="${on ? `${name} (playing now)` : `Play as ${name} (key ${n + 1})`}${esc(this.post(id))}">` +
           `<img src="${this.faces[key] || ""}" alt="" draggable="false"></button>`;
       }).join("");

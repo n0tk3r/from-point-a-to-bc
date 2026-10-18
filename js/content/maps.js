@@ -106,14 +106,46 @@ export const maps = {
     sketch: { places: { roadside: [300, 420], store: [300, 270], road: [580, 340] } },
   },
 
+  // ENGINE-17: the Office (Act Five, stage one: briefs/out/office-hq-design.md, section 4). A blueprint (PAINT-17B paints it;
+  // a sketch until then): the lot outside, the ducts over the ground floor, and the three rooms under them; and B-7, the
+  // shaft down, drawn on the sheet always (`shown`) and RESTRICTED: it has no scene yet, and nobody goes there. The only way
+  // is the lot to the ducts, by the roof and the unit's intake; the rooms are reached through the grilles in the ducts, not
+  // by the map (their grilles are drawn on the blueprint, not as ways). Grandpa Joe and Ranger are in two of its places from
+  // the opening on: switching between them is this map, with no Timer (one time). Travel is per lead (`travel` on a place:
+  // may he leave it by the map; a line says why not): Grandpa Joe, locked in, goes nowhere ("Locked in, for my comfort.");
+  // Ranger, down in a room, climbs back up the way he came (a thought). The line ids are WRITE-17's to write.
+  office: {
+    era: "nevada", name: "The Office", art: "art/maps/office/",
+    places: {
+      lot: { scenes: ["office-lot"], label: "The lot" },
+      ducts: { scenes: ["office-ducts"], label: "The ducts" },
+      // SCENES-17: Ranger's refusal is WRITE-17's line office.map.rooms.ranger ([door, no]: not by a room's door; back up the way he came)
+      room: { scenes: ["office-room"], label: "The Comfortable Room", travel: { grandpajoe: "office.map.locked.grandpajoe", ranger: "office.map.rooms.ranger" } },
+      property: { scenes: ["office-property"], label: "Property & Effects", travel: { ranger: "office.map.rooms.ranger", any: false } },
+      breakroom: { scenes: ["office-breakroom"], label: "The break room", travel: { ranger: "office.map.rooms.ranger", any: false } },
+      // SCENES-17: RESTRICTED. A landmark is never travelled to; its `travel` is what a click on it says, whoever is played
+      // (js/engine/atlas.js landmarkSays): WRITE-17's map refusals for B-7, Grandpa Joe's words and Ranger's thought.
+      b7: { scenes: [], label: "B-7", shown: true, travel: { grandpajoe: "office.map.b7.grandpajoe", ranger: "office.map.b7.ranger" } },
+    },
+    paths: [
+      { a: "lot", b: "ducts", spawn: { lot: "intake", ducts: "intake" } },      // SCENES-17: out of the ducts by the intake, onto the roof in front of the unit
+    ],
+    // SCENES-17: the sketch's pins where PAINT-17B's blueprint has them (art/maps/office/layout.json), for a page that draws the sketch
+    sketch: { places: { lot: [479, 479], ducts: [474, 174], room: [511, 317], property: [369, 269], breakroom: [247, 277], b7: [106, 174] } },
+  },
+
   // The engine's own proof (js/content/scenes/engine-proof.js, the letterbox): a map for each of its two scenes, drawn as
   // sketches. Dad on the sand in Egypt, the Son in the sketch of a market street in Rome: switching between them is the
   // Timer turning four notches, then the street's map.
+  // ENGINE-17: and under the sand, a room of the same time (proof-below.js), joined to the sand by a way: two leads in two
+  // scenes of one time switch through this map with no Timer; its travel is per lead (Dad may not leave it by the map: the
+  // place says so here; the critter may not: the scene says so).
   "proof-sand": {
     era: "egypt", name: "Proof sand",
-    places: { sand: { scenes: ["engine-proof"], label: "Where the wagon came down" } },
-    paths: [],
-    sketch: { places: { sand: [400, 350] } },
+    places: { sand: { scenes: ["engine-proof"], label: "Where the wagon came down" },
+      below: { scenes: ["proof-below"], label: "Under the sand", travel: { dad: "proof.travel.dad" } } },      // ENGINE-17
+    paths: [{ a: "sand", b: "below", spawn: { sand: "grate", below: "fromSand" } }],                           // ENGINE-17
+    sketch: { places: { sand: [400, 280], below: [400, 440] } },
   },
   "proof-street": {
     era: "rome", name: "Proof street",

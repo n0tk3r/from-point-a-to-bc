@@ -76,6 +76,7 @@ js/engine/              the engine. Knows nothing about this story.
   story.js                reads the story data: open beats, checks
   ui.js                   heads-up display and menus
   atlas.js                the map screen and the Timer: travel on the map, switching through it, the maps' check (MAP-15)
+  grille.js               grilles: looking down through one into the scene below, dropping in, climbing back (ENGINE-17)
   game.js                 ties it together; the `g` that scripts use
 js/art/                 everything that is drawn by code
   kit.js                  the neon rings (the title, the tunnel; the tab icon is the emblem since EMBLEM-13), the sketch of an unpainted scene, close-ups, and the old 320x200 drawings
@@ -83,6 +84,7 @@ js/art/                 everything that is drawn by code
   rig.js                  the jointed figure: poses, eight directions, the walk, stances, gestures, sitting
   people.js               the cast as the rig sees them: proportions, clothes, colors, and how each one stands, walks and talks
   painted.js              the people who are painted frame by frame and not drawn by the rig (Ranger, and the proof's critter), and where each one's sidecar is
+  thoughts.js             the thought pictures (39 small pictures drawn by code), the bubble round them, and the speakers' little loudspeaker (ENGINE-17)
   props.js                things drawn by code that stand on the ground (kept for scenes that are not painted yet)
   look.js                 the paints: the people and the moving things in the key of the scene on stage (section 9)
   look-data.js            the paint box, the six keys and which scene uses which (written by tools/paint/postimp_key.py)
@@ -105,6 +107,8 @@ js/content/             the game itself. Knows nothing about the engine's inside
   scenes/*.js             one file per scene, all fetched while the start-up panel shows
   scenes/engine-proof.js    the worked example of a painted scene: the pattern to copy
   scenes/sketch-example.js  a scene with no painting yet, to show storyboarding
+  scenes/proof-below.js     the room under the proof's sand, a sketch: what the proof's grate looks down into (ENGINE-17)
+  scenes/office-*.js        the Office's five scenes (Act Five, stage one): the engine's stand-in sketches until SCENES-17 writes them (ENGINE-17)
 art/scenes/<scene id>/  a scene's pictures: back.png, its cut-outs, and layout.json (the painter's measurements); the
                         frames and sidecar of anyone painted frame by frame who belongs there (Ranger's, in nevada-roadside/);
                         and the frames of its birds (the pigeons on the steps, the geese on the Capitol, the hens across the Tiber)
@@ -855,6 +859,59 @@ one on the stage: under the window, on the sand behind the house). The proof:
 `index.html?scene=engine-proof&lead=dad&flags=proof.window`, a plastered house front with a man at its upper window,
 praying; knock at his door and he comes down (`proof.windowDown`). The engine test's `window` part checks all of it.
 
+<!-- ENGINE-17 -->
+### Several floors
+
+The Office's lot has the gravel and, above it, the roof by the air-conditioning unit, where Ranger walks too; the break
+room has its floor, the top of the fridge and the counter. So a scene's ground can be several floors, each an outline of
+its own, joined by nothing but a script (marked `ENGINE-17` in the code; `floorsOf` in `js/engine/walk.js`):
+
+```js
+walk: [{ name: "gravel", area: [[40, 430], [760, 430], [790, 596], [10, 596]] },           // the first listed is the usual one
+       { name: "roof", area: [[470, 196], [700, 196], [700, 212], [470, 212]], scale: 0.42, base: 424,
+         away: { ranger: "office.lot.roof.ranger", any: "office.lot.roof" } }],
+// or walk: { areas: [...], margin }; or walk: [outline, outline]; or a function of the game giving any of these: walk: (g) => ...
+```
+
+| Field of a floor | Meaning |
+| --- | --- |
+| `area` | Its outline, as `walk.area` (or `x` and `y` for a box) |
+| `name` | Its name; without one, its place in the list ("0", "1") |
+| `scale` | The size of anyone on it, whatever the row: a roof is as far off as the wall under it. Or a `horizon` and `full` of its own (with `minScale`, `maxScale`), for a floor seen in a depth of its own. Without either, the scene's. |
+| `base` | The row it sorts at among the cut-outs: a roof's is a row just in front of the wall it is on top of, so that whoever stands on it is drawn in front of the building and behind what stands in front of the building. Without one, people on it sort by their feet, as anyone does. |
+| `away` | What is said when the player asks for something on this floor from another: a line, or one for each lead (`{ ranger: "...", any: "..." }`), as everywhere. Without one, nothing is said. |
+
+Two floors never share a pixel: where one lies over another in the picture, the one beneath has a notch cut out of it (the
+proof's sand has one where the wagon's roof lies over it).
+
+**How it plays.** The lead walks on the floor he stands on: a route never leaves it, even where two floors touch. A click
+on another floor does nothing but say that floor's `away` line; a click on no floor takes him to the nearest place on his
+own. A clickable thing whose place to stand (`walkTo`) is on another floor is looked at from where he is, and anything else
+asked of it (a use, a thing used on it) is answered by that floor's `away` line, or his stock reply: nobody walks there. A
+way out at an edge does not take him from another floor. He is the size of his floor and sorts at its `base` wherever he
+is put on it: arriving, after a climb, and in a saved game loaded there.
+
+**Between floors.** `await g.climbTo(mark, { path, set, pace, face, base, who })` is the one way from one floor to another:
+the lead (or `who`) goes from where he is along `path` (points of the picture between) to `mark` (a mark of the scene's
+`spawn`, or a point), growing or shrinking from his floor's size to the other's, on his painted `set` (`climb` if not said:
+Ranger's frames going up a pipe, which PAINT-17A paints; until they are there his walk stands in, and the console says so
+once), at `pace` (pixels a second at full size; half his walking pace if not said), sorting at `base` all the way (none: the
+nearer of the two floors' rows), facing `face` (none: the way the path goes across). Then he is on the other floor, at its
+size and depth. It resolves true when he is there (at once while a cut-scene is skipped); false, with nothing done and a
+console warning, for a mark the scene has not got. A scene's area calls it:
+`{ id: "pipe", name: "drainpipe", verb: "Climb", walkTo: [650, 470], use: { ranger: (g) => g.climbTo("roof", { path: [[650, 440], [650, 226]] }) } }`.
+
+`g.floors` lists the floors of the scene on the stage (`[{ name, index, area, scale, base, away }]`); `g.floorOf(at)` is the
+floor under a point, a figure or a person's id; `g.walkOf("roof")` the name of the floor a mark of the scene (or a point) is
+on; `g.sizeAt(x, y)` the size of anyone standing there. A scene of one outline has one floor, named "0", and nothing in it
+plays any differently. The storyboard page draws each floor's outline.
+
+**The proof.** `index.html?scene=engine-proof&lead=critter&flags=proof.floors,proof.arrived`: while `proof.floors` is true
+(the proof's `walk` is a function of the game) the wagon's roof is a floor of its own, at the wagon's size, sorted just in
+front of it; "Climb back of the wagon" takes the critter up the back, "Climb down edge of the roof" down again. The engine
+test's part `floors17` plays it: the climb, the sizes and the depth, the clicks across floors, a save on the roof, and the
+painted sets not painted yet standing in.
+
 ### The settings, with their defaults
 
 | Setting | Default | Meaning |
@@ -862,7 +919,7 @@ praying; knock at his door and he comes down (`proof.windowDown`). The engine te
 | `horizon` | 260 | The row where the ground meets the sky |
 | `full` | 590 | The row where a person is full size |
 | `minScale`, `maxScale` | 0.26, 1.12 | Limits, so that nobody vanishes or fills the screen. A scene with steps or a far doorway often sets `minScale` to hold people at the size that fits it. |
-| `walk.area` | the lower half of the picture | The outline of the walkable ground, as a list of points |
+| `walk.area` | the lower half of the picture | The outline of the walkable ground, as a list of points (ENGINE-17: or several floors, each its own, or a function of the game giving them: "Several floors", above) |
 | `blocked` | none | Outlines inside it where something stands |
 | `planes[].base`, `planes[].plane` | none, `"floor"` | See the table above |
 | `planes[].solid`, `props[].solid` | none | The outline of the ground a thing takes up |
@@ -952,7 +1009,7 @@ art/scenes/nevada-roadside/ranger.json
 | `foot` | The point on the ground under him, in every frame's pixels |
 | `tall` | Ground to the top of his head at full size, on all fours (`stand`) and sitting up (`sit`), for his words. A set may have a height of its own (`"nibble": 44`); without one, the sets drawn sitting up (`sit`, `nibble`, `wash`, `reach`, `look`, and any the sidecar lists in `sitUp`) take `sit`, and the rest `stand`. One number does for both. |
 | `stride`, `pace` | The ground one walk cycle covers at full size (or `{ "walk": 44, "run": 96 }`: a scamper covers twice a walk's if not said), and how fast he walks, in pixels a second at full size (120). His walk goes by the ground covered, as a person's does, so his feet do not slide. |
-| `frames` | The sets, each a list of files, in the sidecar's folder unless a name begins `art/`. Only `stand` is needed: a set that is not there is shown by another (`walk` and `sit` by `stand`, `run` by `walk`, the sets drawn sitting up by `sit`). `walkN` and `walkS` (from behind and from the front), if painted, are his walk to the north and to the south. |
+| `frames` | The sets, each a list of files, in the sidecar's folder unless a name begins `art/`. Only `stand` is needed: a set that is not there is shown by another (`walk` and `sit` by `stand`, `run` by `walk`, the sets drawn sitting up by `sit`). `walkN` and `walkS` (from behind and from the front), if painted, are his walk to the north and to the south. (ENGINE-17) The Office's four, `climb` (up a pipe or a wall, from the side), `drop` (falling, then landing crouched), `peek` (lying on his front, looking down over an edge) and `pull` (both hands on a lever), are shown until they are painted by `walk`, `stand`, `sit` and `reach`, and the console says so, once for each set. Nothing in the engine lists the sets it knows: any set is played by its name. |
 | `fps` | Pictures a second for each set when it is not a walk: `stand` and `sit` 1.5, `run` 10, any other 4 if not said |
 | `fidgets` | The sets that are his small movements, for his life (`look` and `wash` if not said) |
 | `portrait` | His face, 64 by 64, for the team bar and for words through a door: drawn as it is (never keyed), with hard pixels at a whole multiple of its size where that nearly fills the square, and at the size asked where it does not |
@@ -967,7 +1024,9 @@ stance or a walk of his own from a page of settings: whatever he does is a set t
 depth as a person is, from the size he was painted at: with hard pixels, in steps of two, and never more than a quarter
 bigger. A script plays a set by name: `await g.lead.play(g.clock, "nibble", { ms: 1800 })` runs for that long, or with
 no `ms` until `stop()`; `g.reach()` is his `reach` out and back, `hold()` holds it out; a hurried walk is a scamper
-(`run`).
+(`run`). <!-- ENGINE-17 --> `figure.pose("drop", 1)` holds one picture of a set (its second, here: landing) until
+`pose(null)`, a walk or another `play`: the grille's fall holds `drop`'s first picture while he falls and its second as he
+lands (section 8, "Looking down through a grille"). Anyone drawn by the rig has no pictures to hold, and `pose` does nothing.
 
 The sidecars and the portraits are read as the game starts, so a portrait is there when the team bar first draws it;
 the frames come with the pictures of the scene he is in, which does not show until they are here. A sidecar must be
@@ -980,7 +1039,7 @@ test's `painted` part plays all of it.
 
 ### Who is in the cast
 
-Thirty-eight people in the story, all in `js/art/people.js` (which also keeps two whom no scene uses now: `carrier`, the
+Thirty-nine people in the story, all in `js/art/people.js` (which also keeps two whom no scene uses now: `carrier`, the
 water carrier of the first drafts, whose place by the river Lot has taken, and `oldtimer`, the old man of the Last Stop
 in his lawn chair, whose place Grandpa Joe has taken):
 
@@ -989,7 +1048,8 @@ in his lawn chair, whose place Grandpa Joe has taken):
 | The family | `dad`, `son`, `mom`, `bigsis`, `lilsis` |
 | Egypt | `lot` (Abram's nephew: sits cross-legged on the sand and prays), `scribe` (sits cross-legged on the ground), `overseer` (a staff in his right hand), `hauler1`, `hauler2`, `hauler3`, `mason1`, `mason2` (far up the pyramid's faces on the painter's hanging planks, drawn small, rubbing the stone now and then), `guard` (the tallest, a long staff upright), `lampboy` (sits on a bench; can stand and walk), `goldsmith` (sits on his stool) |
 | Rome | `keeper`, `washer`, `urchin` (sits on the kerb), `soothsayer` (sits on a step, with a staff), `senator`, `doorkeeper`, `clerk` (sits at his table), `dateseller` (a basket of dates on his hip); and since round thirteen `gaul` (the Gaulish senator, in the Roman senator's toga, far too short), `phyllis` (on a low stool that is drawn with her, the lamp in her lap), `titus` (high on a statue's base, the breakfast in his lap: he gets down with a hop), `anser` (the goose-keeper: a basket of grain on his hip and a long stick), `eleazar` (on his bench with his scroll; he stands to pray, and lays his hand on the boy's head to bless him), `mariam` (a dish of grain on her hip), `felix` (a bale on his shoulder) |
-| Nevada | `agent` (Jed, the man in gray), `grandpajoe` (in his rocking chair, which is drawn with him, the banjo across his knees), `jolene` (under her straw cowboy hat), `suit1`, `suit2`, `suit3`, `suit4` (the backup, with a clipboard, a tape measure, a juice box and a paper bag) |
+| Nevada | `agent` (Jed, the man in gray), `grandpajoe` (in his rocking chair, which is drawn with him, the banjo across his knees), `jolene` (under her straw cowboy hat), `suit1`, `suit2`, `suit3`, `suit4` (the backup, with a clipboard, a tape measure, a juice box and a paper bag: Dale, Merle, Wendell and Floyd) |
+| The Office (round seventeen) <!-- OFFICE-17P --> | `opal` (Property & Effects, on her stool at her window, knitting, her back to the shelves: the stool is painted) |
 
 Twenty-four more figures are the same people in another state: `goldsmith-shades` (the goldsmith
 with the sunglasses on), `guard-shade` (the guard holding the windshield shade up, his
@@ -1006,6 +1066,78 @@ given and a half-made garland in her hands (`phyllis-free`), Titus on his feet w
 his hands (`titus-free`), Eleazar at his upper window, his way of standing his prayer
 (`eleazar-window`), and Felix with his bale set down (`felix-free`). A scene swaps one for the
 other in place, under the same id, so the person keeps their name and the color of their words.
+Since round seventeen there are eighteen more, for the Office (below, "The Office's people"), which makes forty-two.
+<!-- OFFICE-17P -->
+
+### The Office's people, and how a script calls their poses <!-- OFFICE-17P -->
+
+Stage one of the Office (round seventeen) needs a new person and the people the game already has at new moments. Each pose
+is called as the rig's own are, in one of four ways, and the table says which:
+
+- **a state** is a kind of its own in `people.js`, swapped in under the same id (the scene's `redraw`, or backup.js's
+  `swap`: the old figure taken off the stage and the new kind put where it stood, facing as it faced), as `guard-shade`
+  is the guard with the shade. A state walks, talks, lives and gets up as its kind says.
+- **a movement** is one of the small movements (`addMoves`), played with `await g.actor(id).fidget(name)`: it ends by
+  itself, and at once if they walk or talk; `{ hold: true }` stops it at its middle until `fidget(null)`, for the ones
+  that can be held. Any movement the rig knows can be played on anyone; a person's `fidgets` are the ones their life
+  plays, and their `cues` the ones a script plays (the sprites page shows both).
+- **a hold** is one of the person's own `holds`: `g.actor(id).hold(true, name)` keeps it through whatever is said, sitting
+  or standing, until `hold(false)`. It comes in at once; to ease it in, tween `act.k` from 0 to 1 (`await g.tween(300,
+  (k) => { f.act.k = k; })`), as rome-tiber.js eases the blessing. While someone holds, their lips move when they talk,
+  their life leaves them alone, and a movement asked of them does nothing (let the hold go first).
+- **getting up** from the table, the couch or the stool is `await g.actor(id).sit(false)`, as for anyone found sitting.
+
+| Who | Pose | How a script calls it |
+| --- | --- | --- |
+| Opal | on her stool at her window, her back to the shelves (face her `N`), knitting: the needles going is her life (`knit`, `purl`; a tug at the yarn, `yarn`); give her `life: { fidget: [2.6, 3.4] }` and she knits nearly all the time | kind `opal` (found sitting: `sit.seat` is `OPAL_STOOL_SEAT`, the painted stool) |
+| | reading the slip (the receipt), close, in both hands, through her half-moons | `hold(true, "read")` |
+| | turned on her stool to look up at the vent, the receipt in her lap, over her glasses | turn her first, a step at a time (`face("NW")`, a beat, `face("W")`: the stool turns), until the vent is above her and a little to her left; then `hold(true, "up")` (it turns her head back and to her left, over her shoulder) |
+| | the date stamp brought down, THUNK | `fidget("thunk")` (1200 ms; it lands 550 ms in: play the sound `thunk` then); and her talk gesture 22, which comes with some of her lines |
+| | looking at someone over her glasses | `hold(true, "over")`; and her talk gesture 23 |
+| | getting down off the stool (a brisk little hop), standing, walking (small brisk steps); on her feet the stamp is in her hands and her keys at her hip | `sit(false)`; standing from the start: kind `opal-standing` |
+| | holding out the slip to be signed, on her left palm, the stamp ready | `hold(true, "form")` (on her feet) |
+| | carrying the banjo (damaged) in both arms in front of her, standing and walking | kind `opal-banjo` |
+| Dale (`suit1`) | at the table, side-on, the questionnaire (47 pages and a green one) held up in both hands; his life turns its pages (`page`) | kind `suit1-table` (the chair and table are painted: `OFFICE_CHAIR_SEAT`, `OFFICE_TABLE_TOP`, `TABLE_EDGE`) |
+| | in the heat: sweating; loosens his tie a finger's width and puts it back | kind `suit1-hot` (his life does it); or `fidget("loosen")` on either |
+| | standing up (where he sits: he pushes the chair back) and walking out, the papers in his left hand | `sit(false)` |
+| Merle (`suit2`) | at the table, side-on, writing the answers in his copy flat on the table, the pen going (his life: `write`) | kind `suit2-table` |
+| | in the heat: sweating, mopping his brow with a handkerchief | kind `suit2-hot` (his life does it); or `fidget("mop")` (holdable) on any of the men in gray |
+| | standing up and walking out, his copy in his left hand | `sit(false)` |
+| Wendell (`suit3`) | by the front door with a round yellow birthday button on his lapel, facing the gate (the scene faces him so, wherever the lot's gate is painted; the button shows from the front and the sides, not from behind) | kind `suit3-birthday` |
+| | his fingers in his ears (walking, standing and talking so), the juice box in his breast pocket | kind `suit3-ears` |
+| Floyd (`suit4`) | asleep sitting up on the couch, slumped, his head back and lolled, sunglasses on, his mouth a little open; he shifts now and then (`stir`, his life); talks regulations in his sleep, with no hands | kind `suit4-asleep` (`COUCH_SEAT`) |
+| | waking for a moment, a look round, and back to sleep | `fidget("wake")` (holdable); the `zzz` over him is a thought picture, `g.think("suit4", "zzz", { ms })` (ENGINE-17's: its exact shape is theirs) |
+| Jed (`agent`) | in the plastic chair, the hoop round his neck, an ice pack held to the top of his head | kind `agent-ice` (`BREAK_CHAIR_SEAT`) |
+| | up so fast the ice pack is still in the air | read `icePackAt(jed.yaw, jed.sizeNow())` while he sits, then `jed.sit(false)` (300 ms; from that moment the pack is not on him) and put the prop there: `g.view.cast.addThing("icepack", "icepack", x + dx, y + dy, jed.scale)`, (x, y) where he sat, with its `base` set to `y + 2` so that it is drawn in front of him; let it hang while he goes, tween it down, and `{ state: "down" }` where it lands |
+| | in the arrival, on his feet, carrying what is left of the banjo by its neck at his side ("Evidence."); he talks with his free hand | kind `agent-collar-banjo` |
+| Grandpa Joe | at the table on its chair, side-on, his hands on the table | kind `grandpajoe-table` (`sit(false)`: up where he sat) |
+| | on his feet in the room, his thumbs in his straps | kind `grandpajoe-room` |
+| | at the intercom: a finger on the button, leaning in to talk | `hold(true, "intercom")` (on his feet) |
+| | standing on the corner chair, looking up at the vent | kind `grandpajoe-chair` (placed as the next paragraph but one says) |
+| | his hands up to the vent (talking with Ranger through it) | `hold(true, "reach")` |
+| | passing the receipt up through the slats; taking the pie tin, or a sheet, down | `fidget("passup")`, `fidget("taketin")`, `fidget("takepaper")` |
+| | reading the schedule on the chair | `hold(true, "read")` |
+| | carrying the banjo by the neck: broken, or mended with the pie tin | kinds `grandpajoe-banjo-broken`, `grandpajoe-banjo-pie` (whole: `grandpajoe-standing`) |
+| | playing it, standing and walking: his hands stay on it and his right hand strums as he walks and as he talks; standing, `strum` (his life) | kinds `grandpajoe-play-broken`, `grandpajoe-play-pie` (whole: `grandpajoe-play`, which now walks so too) |
+
+**The banjo's three states** are one drawing (`banjo(cx, b, state)` in `people.js`): `"whole"`; `"broken"`, its head broken
+through (the dark inside of the pot, the wood of the rim, white tatters of the old head where they caught, the strings
+slack across the hole, no bridge); `"pie"`, a bright tin head with a crimped rim and a shine. The hoop round Jed's neck
+(`agent-collar`) is the ring that held the head down; the rim stays with the banjo.
+
+**Grandpa Joe on the chair** (`standOn`): his place (`at`) is the floor under the middle of the chair's seat, where his feet
+would be if the chair were not there, and the rig draws him `standOn` (the seat's height, `OFFICE_CHAIR_SEAT`) above it, his
+shadow on the seat under his boots. So the depth of the room sizes him as anyone standing there, and his words go over his
+head on the chair. The chair's cut-out must be behind him (its base above his place's row, or on the back plane): standing on
+its seat, he is in front of all of it. Drawn where a grown man is 150 pixels tall, his boots are 39 pixels above his place
+and the top of his hat 192. He never walks while he is on it: getting up onto the chair and down again are swaps (from
+`grandpajoe-room` a step in front of the chair to `grandpajoe-chair` at the chair's place, and back), and a scene steps him
+down before he goes anywhere, as nevada-roadside swaps him out of `grandpajoe-play` before he walks back to his rocking chair.
+
+**Seats the painters paint** are constants in `people.js`, as `LIMO_SEAT` was: `OFFICE_CHAIR_SEAT` (46 cm), `OFFICE_TABLE_TOP`
+(74 cm), `TABLE_EDGE` (how far the table's near edge is in front of a seated person's hips: 0.13 of their height),
+`OPAL_STOOL_SEAT` (62 cm: a counter stool, her feet off the floor), `COUCH_SEAT` (42 cm), `BREAK_CHAIR_SEAT` (45 cm). A seated
+person's place is the floor under their hips, as everywhere; set each constant from the painter's report when it is in.
 
 Grandma Jolene's five hens are not people: each is a cut-out of the store's painting, with a
 picture for each thing she does (on guard, two ways; turning; sitting; pecking). Nor are the
@@ -1027,8 +1159,15 @@ Colors and clothes say who a person is when they stand still. These settings in
 | `pace` | How fast they walk, in picture pixels a second at full size (155 unless it says otherwise) | The water carrier plods at 110. The street boy darts at 190. |
 | `gestures` | What their hands do when they talk, as a short list of numbers | Dad nods, makes a point, shrugs, puts a hand on his hip. The Son throws both arms up. The clerk wipes his brow and counts on his fingers. |
 | `hold` | An arm that is always busy with something; and holds a person has of their own, which a script names and keeps through whatever is said (`figure.hold(true, "bless")`) | The overseer's staff, the youngest hauler's loaf, the goose-keeper's stick; Eleazar's hand laid on the boy's head (`bless`) |
+| `holds` <!-- OFFICE-17P --> | Their own holds, by name, sitting or standing (since round seventeen a hold is kept sitting too, and the lips move while they talk) | Opal's `up`, `read`, `over`, `form`; Grandpa Joe's `intercom`, and on the chair `reach` and `read` |
+| `cues` <!-- OFFICE-17P --> | The small movements a script plays on them, besides those of their life: `{ sit: [...], stand: [...] }` | Opal's `thunk`; Merle's `mop`; Dale's `loosen`; Floyd's `wake`; Grandpa Joe's `passup`, `taketin`, `takepaper` |
+| `standOn` <!-- OFFICE-17P --> | Standing on something this high (a seat's height): drawn that much above their place, the shadow on it under their feet, their words over their head there | Grandpa Joe on the corner chair under the vent |
+| `nod` <!-- OFFICE-17P --> | How someone on their feet holds their head, added to every standing pose's own (less than 0: looking up) | Grandpa Joe on the chair, looking up at the vent |
+| `restMouth` <!-- OFFICE-17P --> | A mouth a little open when nothing else says how it is | Floyd, asleep |
+| `hold.R.stroke` <!-- OFFICE-17P --> | A held hand that goes there and back in time, as they walk (the step) and as they talk (the words): `stroke` how far, `strokes` how often | Grandpa Joe's right hand over the banjo, strumming as he walks and talks |
 | `pray` | How they stand to pray: how high the folded hands are, how far the head bows, and whether the hands are clasped tight and the eyes squeezed shut | Dad folds his big hands low in front of him, his head well down. The Son folds his hands at his middle and bows his head; his hair stays up. Mom folds her hands at her breast, and her handbag slides down to the crook of her elbow. Big Sister prays exactly as she was taught, hands together at her breast. Little Sister prays with all her might: hands clasped tight under her chin, eyes squeezed shut. |
-| `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, a height, or the `"floor"`: legs out, leaning back on the hands) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, Grandpa Joe (in his rocking chair, and on the limousine's seat), and Jed in the dust (`"floor"`); since round thirteen Phyllis (on a low stool drawn with her, which stays where it is when she gets up), Titus (on a statue's base, high: he hops down) and Eleazar (on his bench) |
+| `kneel` <!-- LETTER-17 --> | That they kneel, and how far they lean in: on both knees, upright, the thighs straight down and the shins along the ground, the hands on the thighs (`figure.kneel()`); sat back on the heels, the hands in the lap and the head a little bowed (`figure.kneel("back")`); up again (`figure.kneel(false)`). Each eases over a third of a second (half a second to sit back), lasts through whatever is said (the lips move), and is for someone standing still. On her knees her words come down with her head (`figure.h`). Kept to whoever has it: anyone else is left as they are | Mom only: at the little door in Act Four, the night she hears her son (round seventeen), with her handbag down on the gravel beside her (`figure.bare = "bag"`: she is drawn without it, and the roadside draws it on the ground, `handbag` in `props.js`) |
+| `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, a height, or the `"floor"`: legs out, leaning back on the hands) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, Grandpa Joe (in his rocking chair, and on the limousine's seat), and Jed in the dust (`"floor"`); since round thirteen Phyllis (on a low stool drawn with her, which stays where it is when she gets up), Titus (on a statue's base, high: he hops down) and Eleazar (on his bench); since round seventeen Opal (on her counter stool: she hops down), the suits and Grandpa Joe at the table (`sit.up: 0`: they stand where they sat, pushing the chair back), Floyd on the couch (`sit.turn`: his head lolled) and Jed in the break room's chair <!-- OFFICE-17P --> |
 | `rest` | Where an arm lies when a pose leaves it alone | The scribe's pen hand |
 
 The twenty gestures: a nod, one hand making a point, a shrug, a hand on the hip, both
@@ -1036,7 +1175,10 @@ arms up, a hand to the heart, a hand to the chin, showing off muscles, an open h
 both hands waving, pointing straight ahead, a finger in the air, arms folded, a hand
 cupped to the ear, a shaken fist, waving something away, wiping the brow, counting on
 the fingers, both hands spread wide, and a thumb over the shoulder. Scripts never name a
-gesture: a line picks one from the speaker's own list.
+gesture: a line picks one from the speaker's own list. (Since then: 20, a nod aside; 21, a hand raised in blessing; and,
+since round seventeen, 22, a stamp brought down onto the other palm, once a beat, and 23, a look over the glasses, the
+chin down: Opal's. A gesture that a script wants at a moment of its own is also a movement, `thunk`, or a hold, `over`.)
+<!-- OFFICE-17P -->
 
 The engine never asks the rig for "a walk". It asks for *this person's* walk, through
 `poses` in `rig.js`, so nobody on stage moves like anybody else. The rig also knows
@@ -1371,6 +1513,11 @@ with `music` while he sings; its notes are the phrase his banjo plays on the por
 since round thirteen, the quiet across the Tiber (`tiber`: Rome's mode, slower and softer,
 named by that scene with `music`; it stops while the old man talks with the boy, from his
 greeting to his "Go in peace", so that the river is heard, very softly, and comes back after).
+<!-- ENGINE-17 --> Since round seventeen, the Office's tune (`office`), the music of its five scenes (each names it with
+`music`): the kind of polite, slightly flat tune a building plays to people who are waiting, quiet under talk, a soft
+voice falling by steps down a plain F major sequence over a bass that walks under it, a little flat (a track's `detune`,
+in cents, on its tune: -20, as a tape played too often); and Grandpa Joe's Last Stop Rag on the pie-tin banjo (`rag-tin`):
+the notes of `rag`, plucked short and bright, a little louder than his humming, never sung. Both written for the game.
 To use a real recording, add one line:
 
 ```js
@@ -1387,6 +1534,25 @@ whichever the player's browser can play.
 A later step for an adventure soundtrack: split a theme into layers (a bed, a melody,
 a tension layer) and fade layers in and out as the story moves. The mixer already
 gives each track its own volume, so this is an addition, not a rewrite.
+
+<!-- ENGINE-17 -->
+**The Office's sounds**, made by code as every sound in the game is (`sfx` in `sound.js`; since round seventeen a note
+may slide to another, `[note, start, length, the note it slides to]`, as a fan running down does):
+
+| Sound | What it is |
+| --- | --- |
+| `clang` | A steel trash can tipped over onto gravel: the crunch of the gravel, the clang (struck metal, out of tune with itself) and the lid rattling after |
+| `squeak` | A wing nut turned: a short squeal of metal on metal, rising, twice |
+| `fanstop` | A big fan running down: its air falling away over two and a half seconds, and the hum of its motor sliding down under it (the building's hum stopping with it) |
+| `stamp` | Opal's rubber date stamp coming down on her counter: THUNK |
+| `buzz` | The intercom's press-to-talk: the click of the button, and its buzz while it is held |
+| `pa` | The building's speakers clearing their throat: two soft notes, down a fourth, before every line on them (below, "The building's speakers") |
+| `slurp` | A raccoon and a pie: one short, happy slurp |
+| `twang-tin` | One string of the banjo with a pie tin for a head: hard, bright and loud |
+
+The round's brief named the date stamp `thunk` and the tin banjo's string `twang`. Both names were the game's already
+(`thunk`, the piano's dead note in the living room and the limousine's divider; `twang`, the banjo over Jed's head in
+"Backup", every string at once), and are kept as they were: the Office's are `stamp` and `twang-tin`.
 
 ### Dialogue, and the road to full voices
 
@@ -1527,6 +1693,97 @@ Eleazar (`eleazarTree`, every hook of it staging: the prayer side by side, the h
 (`mariamTree`) and Felix (`felixTree`). The act's old conversations (the doorkeeper, the senator, the keeper and the
 rest) are still the flat menus they were, with the few options round thirteen needed added: rewriting them as trees
 waits for the author's review of the puzzles.
+
+<!-- ENGINE-17 -->
+### Thought pictures
+
+The author, 16 October: Ranger alone in the ducts talks in thought pictures, "a bubble with a picture; where Grandpa Joe
+can hear him, Joe translates out loud." So a line may carry a third element: the picture he thinks, or a list of one to
+three (marked `ENGINE-17` in the code; the pictures are `js/art/thoughts.js`'s, and `js/engine/dialogue.js` shows them):
+
+```js
+"office.lot.trash.ranger": ["ranger", "...", "trash"],
+"office.duct.hint.ranger": ["ranger", "...", ["piepan", "plus", "banjo"]],      // a thought of three: a hint the player can read
+```
+
+Said by `g.say` like any line, it gives the speaker a thought bubble over his head instead of the words: a white cloud, a
+dark line round it and a thin rim inside the line in his own colour, two or three small puffs trailing down toward his
+head, and in it the pictures side by side. The words' box is not shown. It is up as long as a line of three words
+(900 + 16 x 58 ms at the usual speed, 1,828 ms; the text speed in Options changes it as it changes a line), counted as
+said, and skipped by a click or a key as a line is; it rises a little as it comes, unless the player has asked for less
+motion. Where the speaker is not drawn (off the stage; in a scene seen through the lead's own eyes; the lead himself, up in
+a duct looking down through a grille) it is where his words would be for someone off the stage (the top middle, its bottom
+on row 150, or the scene's `wordsAt`), its puffs trailing down from it, or, for the lead up above a grille's view, rising
+toward him. Too near the top of the stage, it goes beside his head instead, toward the middle. Through a door in time
+(`g.through`), it is beside his portrait, as his words would be.
+
+**The pictures.** Thirty-nine, by these names (fixed in the round's brief, `OFFICE-17.md`): `question`, `idea` (a lit bulb),
+`heart`, `no` (a circle with a bar), `plus`, `arrow` (pointing right), `up`, `down`, `joe` (Grandpa Joe's straw hat, a dent
+in the crown), `pie` (whole), `piepan` (an empty tin), `banjo`, `banjo-broken` (the round frame with no head, and the
+neck), `receipt`, `bottlecap`, `key`, `door`, `hole` (rings of the time cyan: a door in time), `fan` (three blades), `hot`
+(a thermometer, red at the top), `sun`, `zzz`, `eye`, `shiny` (a four-point sparkle), `music` (two notes), `clock`, `paper`,
+`cheeseburger`, `pickle`, `water` (a drop), `suit` (a face in black sunglasses), `opal` (half-moon glasses on a chain),
+`trash` (a can with a lid), `wingnut`, `lamp` (a lamp throwing rays: Lamplighter), `peanuts`, `switch` (a lever), `chair`,
+`hand` (a small paw, open). Each is 24 x 24, pixel art drawn by code as the inventory's small things and the people are:
+hard edges, flat colour, one darker tone on the side away from the light (from the upper left, as on every person), a
+dark line round it so it reads on any ground, a highlight or two; in a few of the interface's own colours (the ink, the
+cream, white, the papyrus, the time cyan and violet, the family's red, yellow and blue, the kit's olive and silver), never
+the scenes' paints: a bubble is the interface's, as a portrait is. A bubble is drawn at the stage's scale as the people
+are: smooth below twice the size, hard pixels from there. A name not in the set shows `question`, and the console says so,
+once; of more than three, the first three are shown, and the console says so.
+
+**Without a line.** `await g.think(who, pictures, { ms })` thinks one with no line, for a scene's own use (Ranger's
+reaction in a cut-scene). `g.think(who, pictures, { loop: true })` keeps it up over him (it resolves at once) until
+`g.think(who, null)`: Floyd asleep on the break room's couch thinking `zzz`, put up by the scene's `setup`. A thought kept
+up follows its thinker as he moves; it steps aside while he says or thinks anything else, and comes back after; it is
+drawn again where he is after a cut-scene played over the scene; and it ends when the stage is emptied (every scene built:
+the scene's `setup` puts it up again). It is not saved: the scene puts it up from the story's facts, as a variant is.
+
+**Hints and choices.** A hint for a lead who cannot talk is a list of lines (section 8, "A party is any leads"), and a line
+of his can carry pictures: his hint is his thought, then, where someone is there to hear him, that one saying what he
+means. In a menu of things to say (`g.choose`, `g.talk`), an option whose line carries pictures shows them in its button,
+small, after any words it has other than "...", and is named for a screen reader by them ("piepan, plus, banjo"). A refusal
+on the map can be a thought too (section 8, "The map, and the Timer").
+
+**Grandpa Joe's reading.** Where Grandpa Joe can hear him (in the room, or at the vent over it), a thought of Ranger's is
+followed by Joe saying what he means, as in the limousine. That is the lines' and the scenes' doing (a look of Ranger's,
+`office.<scene>.<thing>.ranger`, and Joe's reading of it, `...ranger.joe`, said in turn): the engine only draws the thought.
+
+**The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.thought,proof.arrived`: Dad and the critter a party of
+two; two men asleep sitting up, with `zzz` kept up over each (wake the one by the river: a word in his sleep, and back to
+sleep); the critter's thoughts of one picture and of three (a word with him; him looking at the cooler); his hint, a
+thought, and Dad's reading of it; and the thought of somebody who is not on the stage (the sky, "Wonder about"). The engine
+test's part `thoughts17` plays it all, and draws the 39 pictures to check each one: 24 x 24, hard edges, the ink line round
+it, one small palette for them all.
+
+<!-- ENGINE-17 -->
+### The building's speakers
+
+Houston, dispatch, is heard on the Office's speakers: a line from nobody on the stage. `await g.pa("office.pa.jed")` shows
+it at the top of the stage in a narrow banner across it, under the HUD's buttons, a small loudspeaker drawn at its left, in
+the speaker's colour (Houston's, `#66ffff`, is in `cast` in `world.js`), after a soft chime of two notes (`pa`). It is timed
+(as long as a line of its words, with a moment for the chime), counted and skippable as a line is, and holds the controls
+as a line does; nobody's words are over anybody's head. A line with pictures shows them in the banner in place of words.
+
+It is heard only in a building. A scene says it is in one: `building: "office"` (or a function of the game that gives one).
+In a scene of a building, and in a grille's view of one, `g.pa` is heard; `g.pa(id, { building: "office" })` is heard only
+in that building; anywhere else it is not shown, it resolves false at once, and the console says so (once for each line and
+scene). A cut-scene, which dresses the stage itself and may come after a scene in no building (the Office's opening comes
+after the limousine), says where it is: in a cut-scene, `g.pa(id, { building: "office" })` is heard.
+
+**Now and then, by itself.** A scene's `announce` has the building talk to nobody in particular while the player plays there
+(or looks into it through a grille): `announce: { lines: ["office.pa.fairweather", "office.pa.plant"], every: [60, 120], when:
+(g) => ... }`. One of its lines in turn (`lines` may be a function of the game), every so many seconds of play (between the
+two numbers; 60 to 120 if not said), while `when` holds, and never while a script, a line, a menu or the map has the
+controls. Such a line is ambient: shown and timed, but it takes nothing from the player, who plays on under it; one at a
+time. (Stage two's "Dr. Fairweather to B-7, please" and "The Director's plant needs watering" are what it is for.)
+
+**The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.pa,proof.arrived`: while `proof.pa` is true the sand is
+in the proof's building (as the room under it always is), a loudspeaker stands on a pole on the far sand ("Speak to
+loudspeaker": Dad's line, and the building answers), and every 25 to 40 seconds the building says something by itself. The
+engine test's part `speakers17` plays it: the banner, its colour, the chime, the timing and the skip; not heard outside a
+building, heard in a grille's view, in a cut-scene that names its building; the announcements; and the Office's sounds and
+tune, each rendered and heard.
 
 ---
 
@@ -1717,7 +1974,48 @@ the engine test's `unseen` part plays it, gives it a `wordsAt`, and plays the tw
 the long seat, with the bow of his ropes, the seatbelt and the divider beside him), the scene can give him an area of
 its own: one of its `hotspots` with `mate: "<id>"`, while its `when` holds, is his in place of the box (its shape, and its
 place among the scene's areas). A click on it is a word with him, a right click a look at him, a thing used on it is
-handed to him, all as on the box. The engine test's `limo12` part proves both on the proof scene.
+handed to him, all as on the box. The engine test's `limo12` part proves both on the proof scene. <!-- ENGINE-17 --> Since
+round seventeen such an area may have no shape of its own (no `rect`, `poly` or `circle`): it is then the box round his
+figure, where he is (none while he is not on the stage), still the scene's own, with its `when`, its handlers and its `peek`
+(a companion seen from above through a grille: below, "Looking down through a grille").
+
+<!-- ENGINE-17 -->
+**Two leads in two scenes of one time.** At the Office, Grandpa Joe is locked in the Comfortable Room and Ranger is outside,
+then in the ducts, from the opening on: a team of two in two scenes, in one time. That needs little that is new: each has
+his own place and pockets; switching to the other goes through their map (the Office's), with no Timer, the two scenes being
+in one time (a fade to the map, him breathing on it, a click on him: below, "The map, and the Timer"); and while the lead
+looks down through a grille, a switch to a lead standing in the room he looks into hands over the controls at once, as for
+anyone standing right here, the one who looked staying up at his grille. What is new (marked `ENGINE-17` in the code):
+
+- `await g.putLead(who, scene, mark, { face })` leaves a lead who is not the one being played in a scene, on one of its
+  marks, without going there: the Office's opening puts Grandpa Joe in his chair (`g.putLead("grandpajoe", "office-room",
+  "joe")`) and plays Ranger on the lot. `mark` is a mark's name in that scene's `spawn` (none: the one named for him, else
+  `default`) or a point; `face` a compass point or degrees (none: the scene's `facing`, or "S"). He is there for everything
+  that asks (the save, his portrait on the map, `g.where`) and is drawn there when the player switches to him or comes into
+  that scene; while the game is played the stage follows at once (put in the scene on the stage, he stands on the mark there;
+  taken from it to another, he is taken off it; a cut-scene's stage is its own and is left alone). True if he was put; the
+  lead being played, someone who is not a lead, or a scene not in the list: false, nothing done, and the console says why; a
+  mark the scene has not got: its `default`, and the console says so.
+- `g.where(who)` is where a lead is: `{ scene, x, y, face, mark }`, where `mark` is the name of the mark of that scene's
+  `spawn` he stands on or is within a step of (20 pixels at full size, less with the depth, as his scene sizes people there),
+  else null; null for a lead who is nowhere. On the stage, where he is this moment; anywhere else, where he was left; while
+  he looks down through a grille, his place up at it. So a scene asks whether the other is where a thing can be handed to
+  him: `g.where("ranger").mark === "over-room"`.
+- `g.pass("receipt", "ranger")` hands a thing from the pockets of the lead being played to another lead's, wherever he is: in
+  this scene or another (up through a vent, down through a grille). A pick-up sound, a note ("Ranger has the receipt"), and
+  the game saves; his portrait carries the letterbox's round mark in the time colour (`data-new`), and pointing at it says
+  what ("Play as Ranger. Ranger has something new: the receipt"), until the player plays as him. True if it went; a thing the
+  lead is not carrying, or a `to` who is not another lead: false, nothing happens, and the console says why. The engine does
+  not decide when it may: the scene does (by `g.where`: Grandpa Joe on his chair, Ranger at the grille over him), and plays
+  the moment itself (the thing drawn going up, the line). From above, a thing used on a lead seen through a grille is handed
+  down to him the same way (his own area, `mate` with no shape, and `peek: { useWith: { receipt: handDown } }`). The save
+  keeps what has been handed and not yet seen (`handed: [{ item, from, to, at }]`, for the mark); a save from before has none.
+
+The proof: `index.html?scene=engine-proof&lead=dad&flags=proof.pass,proof.arrived`: Dad on the sand with a pack of gum, the
+critter in the room under the sand (`proof-below.js`: the same time, the same map, a place of its own). From the grate Dad
+looks down at him and drops the gum to him; switching to him is their map with no Timer; as him, he hands it back up
+through the grate to Dad, who is standing on it up there. The engine test's part `handed17` plays it, with the map's travel
+for each of them, `g.putLead`, and a switch from the view.
 
 ### The letterbox
 
@@ -1786,6 +2084,90 @@ glass is a thing to click, "Talk into": a talk with the Son, in Rome, held throu
 (`g.talk(letterboxTree(...), { through: "son" })`, `js/content/scenes/nevada-roadside.js`); and Little Sister's lucky
 penny goes into it for him (`g.send("penny", { to: "son" })`, or, when the penny is in one of the others' pockets,
 straight onto the tunnel list from there). It waits in the tunnel for the Rome end of the door, which is not built yet.
+
+<!-- ENGINE-17 -->
+### Looking down through a grille
+
+The Office's ducts run over three of its rooms, and from the grille over each, Ranger looks down into the room below: the
+room as it is when it is played, everyone in it going on with what they do, a talk heard through the slats. He looks at
+things there and uses things on them, from above; where there is something to land on and nobody looking, he drops in, and
+climbs back up the way he came. The engine has this generically (`js/engine/grille.js`, the game's `g.grilles`, marked
+`ENGINE-17` in the code), with nothing of the Office in it: it knows grilles, the scenes they look into, and what each area
+of those scenes does from above.
+
+**A grille** is an area of a scene that has a `grille`:
+
+```js
+{ id: "grille-room", name: "grille", rect: [196, 362, 48, 14], walkTo: [220, 348], face: "S",
+  grille: { scene: "office-room",                      // the scene below
+            spawn: "vent",                             // its mark a drop lands on (none: no way down by this grille)
+            when: (g) => !g.flag("office.jedHere"),    // may he drop in now? (none: yes)
+            no: "office.duct.nodrop.ranger",           // what he says (or thinks) when he may not
+            from: [620, 40],                           // where the grille is in the picture below: the drop falls from there (none: straight above the mark)
+            view: "art/scenes/office-ducts/grille-view.png",   // (seldom) the slats' picture, if not this scene's own
+            back: async (g) => { /* ... */ } } }       // (seldom) what happens as he backs up onto it
+```
+
+Its verb is "Look down" (the label line says "Look down grille"). Used, the lead walks to it as to anything, lies down at it
+(his `peek` frames, if he is painted; until they are, his `sit` stands in), and the scene below comes up: its backdrop,
+cut-outs, people (with their lives and their scripts), moving things and words, as live as when it is played, without the
+lead (he is up above it), and over it the grille's picture: `art/scenes/<this scene>/grille-view.png` (PAINT-17B paints the
+Office's: 800 x 600, the slats of a ceiling grille seen from very close, clear between them, a softer dark frame at the
+edges), or, until it is painted, a stand-in drawn by the engine (four soft slats and a dark frame; the console says so
+once). It is a layer of its own (`#grille`), over the cast and under the outlines, the clickable areas and the words. The
+place line says "From above:" and the room's name, and in the bottom right corner are **Drop down** (when the grille has a
+`spawn`) and **Back up**.
+
+**Being in the view is being up at the grille.** The lead's place is still up there, on the grille's mark: `g.where`, the
+save (a game saved while looking down loads with him up at the grille), the map (his place, his own map, his travel) and
+the save's description all say so. `g.here` is the scene he looks down from, `g.scene` the scene shown, and `g.peeking` is
+`{ from, scene, spot, grille }` while he looks down (null otherwise). The scene below is shown, not entered: its `setup`
+runs, as whenever it is built (`g.peeking` tells it it is a view), its `enter` does not (nobody has entered it), and its
+`viewed(g, from)` does, if it has one: what happens when somebody looks in (two people talking, heard through the slats).
+Its people's lives, its `tick` and its `announce` run as usual, and the speakers are heard if it is in a building. Nothing in
+it may assume the lead is in it; anyone else of the team who is standing in it is there, as in any scene. It goes on the
+save's list of scenes entered, so the map draws the room once it has been seen.
+
+**From above.** Only the areas of the scene below that say what they do from above are there: `peek: { look, use, useWith,
+verb, drop }`, each given per lead as everywhere (`peek: { look: { ranger: "office.room.joe.above.ranger" }, useWith: {
+receipt: handDown } }`). An area with no `peek` cannot be clicked from above; `peek: {}` makes it there with only the stock
+replies; `peek: { drop: true }` (or a mark's name) makes it a place to drop down onto ("Drop down onto rug"). A companion
+seen from above has no box of the engine's (the lead is not there to talk to him): the scene gives him an area of its own,
+`mate: "<id>"` with no shape (the box round his figure, wherever he is) and a `peek`. A click on anything else backs up,
+as do the **Back up** button and Escape: the scene up there is built again (its `setup`, not its `enter`: nobody left it),
+with the lead on the grille.
+
+**Dropping in.** **Drop down**, an area's `peek: { drop }`, or `await g.dropIn(mark)`: if the grille's `when` allows (else its
+`no` line, or his stock reply, and he stays up), the lead drops into the scene below, onto its mark `spawn` (or the one
+given): a real `g.goto`, with no era card (one building), the scene entered and its `enter` told he came from the scene up
+there. He falls from `from`, as a thing falls (slow, then fast), on his `drop` frames if he has them (the first while he
+falls, the second as he lands, crouched), sorted in front of what he lands on, and is not seen on the mark before he has
+fallen onto it.
+
+**Climbing back.** An area of the room with `climb: { scene: "office-ducts", spawn: "over-room", to: [620, 40], who: "ranger" }`
+takes him back up (its verb is "Climb up", unless it gives one): from where he stands toward `to` (where the opening is in
+this picture; straight up if not said), on his `climb` frames, fading as he goes in; then the scene up there, on its mark
+`spawn`, as by any way out (this scene's `leaving` runs, and the other's `enter` is told he came from here). `who`, the leads
+it takes: for anyone else it is an ordinary area. `await g.climbUp({ scene, spawn, to })` does the same from a script.
+
+**From a script.** `await g.lookDown("grille-room")` looks down through a grille of the scene by its area's id (with no
+walk); `await g.backUp()`; `await g.dropIn()`; `g.peeking`; `g.here`. Each gives false, with a console warning, for a grille
+that is not there or a drop with nobody looking down. For a cut-scene, which dresses the stage itself, `await
+g.grilleOver("office-ducts")` lays a grille's picture over whatever is on the stage (the id of the scene whose
+`grille-view.png` it is, or a picture's path), as if seen from the duct, until `g.grilleOver(null)` or the cut-scene's end
+(the hall in "Going Down", seen through the slats).
+
+**Ways.** A grille and a climb are ways between scenes: the game fetches the pictures of the scenes a scene's grilles look
+into and its climbs go up to as soon as the scene is up, as it does for its `exits`, so that looking down never waits; and
+the storyboard's act maps draw each as a door is drawn (a dashed line, "Look down grille", "Climb up vent", with the mark it
+arrives on), so that a room reached only through a grille is a place on its act's map.
+
+**The proof.** `index.html?scene=engine-proof&lead=dad&flags=proof.grille,proof.arrived`: a grate in the sand (drawn live)
+over a room under the sand (`proof-below.js`, a sketch, in the same time and on the same map: a place of its own). Look down
+through it: the pacing man and the scribe, talking as somebody looks in; the table and the chest answer from above, the rug
+is a place to drop onto, and nothing else is there; **Drop down** (refused while `proof.noDrop` is true), and the rope
+(`climb`) back up. The engine test's part `grille17` plays it all, with a save while looking down, Escape and the button, a
+thought of the lead's while he looks down, a scene's `tick` while it is looked into, and `g.grilleOver` in a cut-scene.
 
 <!-- MAP-15 -->
 ### The map, and the Timer
@@ -1860,6 +2242,29 @@ save catches it in: the burial chamber once `egypt.ready`, the treasury once `ro
 `home.left`, the Last Stop and the store once `nevada.left`. A refusal is a plain line on the map, "Not from here.", and
 nothing is said.
 
+<!-- ENGINE-17 -->
+**Travel, for each lead.** Since round seventeen `travel` may also be a function of the game and the lead (`(g, who) =>
+...`), or one for each lead (`{ grandpajoe: "office.map.locked.grandpajoe", any: true }`: `any` for whoever is not named;
+none named and no `any`, he may), and it may give a line id in place of `false`: he may not, and that line says why. A
+place of a map can have a `travel` of its own (in `maps.js`), in the same forms, and both the scene's and the place's must
+let him go. The refusal is said on the label line as the map's refusals are: the place's name and the line's words ("The
+lot. Locked in, for my comfort."), or, for a line that is a thought, the place's name and its pictures ("(a thought: up,
+no)" for a screen reader); a click there says it again, and nothing happens. A line that is not in the lines files is said
+as "Not from here.", with a note in the console. `g.travel` says no at once, and the console says why. The rule is
+`travelFor(travel, g, who)` in `atlas.js`, for a script that wants to ask.
+
+**A landmark.** A place with `shown: true` (or a function of the game) is drawn on its map whatever the visits say, and may
+have no scene at all: the Office's B-7, on the blueprint and marked RESTRICTED, where nobody goes in stage one (there is no
+travel to a place with no scene: "has no scene to go to"). The maps' check lets a place that is `shown` list no scene.
+
+**The Office's map** (`office` in `maps.js`: era `nevada`, "The Office", `art/maps/office/`, PAINT-17B's blueprint, drawn as
+a sketch until it is in): the lot, the ducts, the Comfortable Room, Property & Effects, the break room, and B-7. One way: the
+lot to the ducts, by the roof and the unit's intake (arriving on the ducts' mark `intake`, or the lot's `roof`). The rooms
+are reached through the grilles, not by the map: no way leads to them, and their own `travel` says why (Grandpa Joe, locked
+in; Ranger, dropped into a room, goes back up the way he came: a thought). Grandpa Joe's portrait sits in the Comfortable
+Room and Ranger's wherever he is (up at a grille, in the ducts). The line ids `office.map.locked.grandpajoe` and
+`office.map.climb.ranger` are WRITE-17's to write.
+
 **Switching through the map.** To a lead in the same scene, the controls change hands at once, as always. To a lead in
 another scene (a click on their portrait in the team bar, or their number key), their map opens with their portrait
 breathing; a click on it, or Enter, drops into their scene, where they stand (`g.dropInto`: the old lead's place
@@ -1928,7 +2333,8 @@ part of Act Two on Dad had no place in them, nor the Son from the second part of
 and Rome maps showed nobody: so they were until round fifteen's testers made them again -->
 Within one time, switching to someone
 in another scene is the map with them breathing (a fade, no turn), then the drop: in the house, a sister in another room,
-when one is.
+when one is. <!-- ENGINE-17 --> At the Office (Act Five, stage one), Grandpa Joe and Ranger are in two scenes of one time
+from the opening on, and switching between them is always this: their map, with no Timer.
 
 **The test.** The engine test's part `map` (in its quick run) checks all of this, reading every position from the maps'
 data and the maps' layouts (`g.atlas.layout(id)`: the painters' `layout.json`, or the sketch's), so that it passes on the
@@ -2106,6 +2512,7 @@ papyrus, tablet or plan, and none of them names a year B.C. or a real company.
 | Rome | A writing tablet: a raised frame of plain wood round a panel of dark beeswax, the plan scratched into the wax with a stylus, each scratch pale where it reaches the wood, its walls lit and shaded by a light from the upper left; old writing rubbed out under it, none of it legible. Saturn's steps in the middle (the temple's front), the street to the left, the treasury behind the temple's doors, the Forum's long square below, the Capitol up its hill to the right, and across the Tiber at the lower left, beyond the river's bend and over the stone bridge. No lettering, nothing in Latin. | Capitals in the scratch's pale, spaced, with a halo of the dark wax |
 | The house | Dad's pencil plan on squared paper (a square is two feet), folded into a pocket, creased, a corner turned over, an eraser smudge or two: the ground floor on the left, upstairs on the right with the attic above it, each titled and underlined; the walls, doors and stairs on the sheet, each room that is a place in plan with its things, the rooms that are not places left empty. Dad's arrow "up" runs from the foot of the stairs to the landing. | Pencil grey, not in capitals, with a faint halo of the paper |
 | Nevada | Grandpa Joe's own fold-out road map, opened flat: thin paper gone yellow, creased into panels and worn at the folds, printed in a few flat inks a little out of register. The highway in red through LAST GAS and "37 MI." on to the east edge, TO NOTHING; ranges, dry lakes, a cover panel ("Compliments of GRANDPA JOE'S LAST STOP"), a legend, and a detail panel ("DETAIL · 37 MILES PAST LAST GAS", "NOT TO SCALE") in which the Last Stop's lot is in plan, with the store drawn inside the shack's walls and the hens out back; the No Gas sign marks the Last Stop on the highway. Once Act Five has begun, a small printed gray limousine on the road beyond it. | Printed blue-black capitals, spaced, knocked out of the paper |
+| The Office <!-- OFFICE-17B --> | A blueprint, sheet 1 of 8 of the Office of Peculiar Sectors' desert field headquarters: a contact print, white lines on the print's blue, folded in four, a corner dog-eared; its border, the title block (OFFICE OF PECULIAR SECTORS · DESERT FIELD HQ · GROUND FLOOR · SHEET 1 OF 8), a scale bar and a north arrow, general notes ("1. ALL AIR TO B-7."). The ground floor in plan, north up: the hall, Interview Room C (101), Property & Effects (102) with Opal's window onto the hall, the break room (103), the elevator and the B-7 shaft under a red rubber stamp, B-7 · RESTRICTED, and the front door with the lot outside it, the limousine drawn as a long rectangle; over everything, dotted, the duct from the roof's unit to the shaft, its four grilles small crossed squares; the way from the lot up the downspout to the roof, dashed. | The print's white, in capitals, with a halo of its blue |
 
 **The pictures** (`tools/paint/README.md`, "Maps", has them whole; section 8 says how the engine reads them). Each is 800x600,
 a palette with one clear colour and hard edges, one palette for all of a map's files (208 colours for Egypt and the house,
@@ -2151,13 +2558,19 @@ export default {
 
   horizon: 262, full: 590, minScale: 0.3,       // depth: the row the ground runs back to, the row where a person is full size
   walk: { area: [[352, 300], [640, 300], [780, 326], [780, 596], [60, 596], [150, 470], [240, 384], [312, 322]] },   // the ground people can stand on
+                                                // (ENGINE-17; seldom) or several floors, [{ name, area, scale, base, away }, ...], or a function of the game (section 3, "Several floors")
   blocked: [ [[296, 438], [357, 438], [384, 457], [296, 455]] ],        // (added) patches of it where something painted into the backdrop stands
   spawn: { default: [420, 572] },               // where the lead arrives. A lead's own id names a mark of their own.
   facing: "S",                                  // (added) which way the lead faces on arriving. This is the usual way.
   unseen: true,                                 // (CAR-13E; seldom) the picture is the lead's own view: he is on the stage, never drawn, walks nowhere, leaves by an edge at once (section 8)
   wordsAt: [400, 120],                          // (CAR-13E; seldom) where the words of anyone off the stage go, in place of the top middle (section 8)
   travel: (g) => !g.flag("egypt.ready"),        // (MAP-15; seldom) may the lead leave by the map now? false: never (section 8, "The map, and the Timer")
+                                                // (ENGINE-17) or (g, who) => ..., or one for each lead { grandpajoe: "line.id", any: true }: a line id says why not
   leaving(g, to) { /* ... */ },                 // (MAP-15; seldom) what happens as the lead leaves for another scene, by any way: an edge, a door, the map
+  building: "office",                           // (ENGINE-17; seldom) the building it is in: a line on its speakers is heard here (section 7, "The building's speakers")
+  announce: { lines: ["office.pa.plant"], every: [60, 120] },     // (ENGINE-17; seldom) the speakers by themselves, now and then
+  tick(g, dt) { /* ... */ },                    // (ENGINE-17; seldom) every frame while it is played, or looked down into: what changes by itself (cheap)
+  viewed(g, from) { /* ... */ },                // (ENGINE-17; seldom) what happens when somebody looks down into it through a grille (section 8)
   exits: ["egypt-site"],                        // (added) scenes that can be walked to from here: their pictures are made ready ahead of time
   edges: {                                      // ways out at the edges of the picture (below)
     N: { to: "sketch-example", name: "up the track", walkTo: [496, 302] },
@@ -2194,6 +2607,10 @@ export default {
       use: async (g) => { ... },                // (added) or a function,
       useWith: { reed: async (g) => { ... } },  // (added) or a reaction to a carried thing
       when: (g) => !g.flag("egypt.towed") },    // (added) there only while this holds
+    { id: "grate", name: "grate", poly: [...], walkTo: [262, 556],           // (ENGINE-17; seldom) a grille: "Look down" into another scene (section 8,
+      grille: { scene: "proof-below", spawn: "vent", when: (g) => ..., no: "line.id" } },     // "Looking down through a grille")
+    // (ENGINE-17) and in the scene below: `peek: { look, use, useWith, verb, drop }` on an area, what it does from above;
+    // `climb: { scene, spawn, to }`, an area that takes the lead back up
   ],
   setup(g) { /* (added) anything the picture still needs to match the story facts */ },
   async enter(g, from) {                        // what happens on arrival. It must be safe to run twice, so it checks its own fact.
@@ -2489,8 +2906,10 @@ loads the game, by the plain addresses, with the old risk.
 | `await g.moveTo(x, y)`, `await g.moveTo(x, y, "agent")` | Walks in a straight line to a place the player could not click on (into a closet) |
 | `await g.reach()`, `await g.reach(true)` | The lead reaches out, or bends down to the ground |
 | `g.lead.hold()`, `g.lead.hold(false)` | Someone keeps an arm held out while people talk (holding a thing up), until told to let it drop |
+| `g.actor("opal").hold(true, "up")`, `.hold(false)`; `await g.actor("opal").fidget("thunk")` <!-- OFFICE-17P --> | One of a person's own holds, kept through whatever is said, sitting or standing (tween `act.k` to ease it in); one of the small movements, played once. Section 4, "The Office's people", lists each person's |
 | `g.actor("mom").pray()`, `g.actor("mom").pray(false)` | Someone prays, in their own way (section 4), through whatever is said, until told to stop: standing still, or sitting where they sit. End it before they walk. |
 | `g.lead.shade()`, `g.lead.shade(false)` | Someone standing shades their eyes from a glare (section 4) until told to stop |
+| `g.actor("mom").kneel()`, `kneel("back")`, `kneel(false)` <!-- LETTER-17 --> | Mom goes down on her knees, sits back on her heels, gets up again (section 4: kept to her). Let it go before she walks or reaches |
 | `await g.actor("ranger").play(g.clock, "nibble", { ms: 1800 })`, `.stop()` | Someone painted frame by frame plays one of his sets by name (section 4, "Painted frame by frame"): for `ms`, or until stopped; resolves when it ends. Praying and shading the eyes do nothing for him. |
 | `g.actor("ranger").variant("shades")`, `.variant(null)`, `.variant()` | Someone painted frame by frame in another state his sidecar has (every set, and his portrait), back as he was, or which one he is in. Not saved: the scene puts it on from a fact in `setup`. |
 | `g.assets.url(path)`, `g.assets.picture(path)` | For a script that puts a painted picture on the live layer: its stamped address, and a promise that it has arrived |
@@ -2500,6 +2919,13 @@ loads the game, by the plain addresses, with the old risk.
 | `g.team(["mom", "bigsis", "lilsis"])` | Says which leads the player can switch between from now on |
 | `await g.switchLead("son")` | Changes who the player controls (they must be on the team). One who is in another scene is switched to through their map, the Timer first when the two scenes are in different eras (section 8, "The map, and the Timer"); `g.switchLead("son", { map: false })` keeps the old way: the short tunnel across the eras, a fade within one. <!-- MAP-15 --> |
 | `await g.travel("forum")`, `g.mapOf("rome-forum")`, `g.atlas.show()` | (MAP-15) The lead travels to a place of their own map as a click on it does (true when the new scene is up; false, and nothing done, when they may not go); the map and the place a scene is on (`{ id, map, place }`, or null); the map screen comes up, as the Map button brings it (section 8, "The map, and the Timer"). |
+| `await g.think("ranger", ["piepan", "plus", "banjo"])`, `g.think("suit4", "zzz", { loop: true })`, `g.think("suit4", null)` | (ENGINE-17) A thought: a bubble of one to three pictures over someone's head in place of words, for as long as a line of three words (`{ ms }`: another length), skippable; `{ loop: true }` keeps it over him until `null` (section 7, "Thought pictures"). A line with a third element is said this way by `g.say`. |
+| `await g.pa("office.pa.jed")`, `await g.pa(id, { building: "office" })` | (ENGINE-17) A line on the building's speakers: a banner at the top with a loudspeaker, after a chime; timed, counted, skippable. Heard only in a scene of a building (`building`) and in a grille's view of one, and with `{ building }` only in that one (in a cut-scene: the building it names); elsewhere not shown, false (section 7, "The building's speakers") |
+| `g.pass("receipt", "ranger")`, `g.handed("ranger")` | (ENGINE-17) The lead being played hands a thing to another lead, wherever he is: into his pockets, the mark on his portrait, a note, the game saved; true if it went. What has been handed to a lead and not yet seen as him: `[{ item, from, to, at }]` (section 8, "Seven leads, apart and together") |
+| `g.where("ranger")` | (ENGINE-17) Where a lead is: `{ scene, x, y, face, mark }` (`mark`: the mark of that scene's `spawn` he is on or within a step of, or null); null if he is nowhere. While he looks down through a grille, his place up at it. |
+| `await g.putLead("grandpajoe", "office-room", "joe")` | (ENGINE-17) Leaves a lead who is not the one being played in a scene, on one of its marks (or a point), without going there; `{ face }`. The stage follows while the game is played. True if he was put. |
+| `await g.lookDown("grille-room")`, `await g.backUp()`, `await g.dropIn()`, `await g.climbUp({ scene, spawn, to })`, `g.peeking`, `g.here` | (ENGINE-17) Looks down through a grille of the scene (by its area's id), backs up, drops into the scene below (if the grille's `when` allows), climbs back up into the scene above; `g.peeking` is `{ from, scene, spot, grille }` while looking down, and `g.here` the scene up there (section 8, "Looking down through a grille") |
+| `await g.climbTo("roof", { path: [[650, 440], [650, 226]] })`, `g.floors`, `g.floorOf(g.lead)`, `g.walkOf("roof")`, `g.sizeAt(x, y)` | (ENGINE-17) From one floor of the scene to another along a set path, on the `climb` frames, the size and the depth following; the scene's floors, the floor under a point, figure or id, the floor a mark is on, the size of anyone standing at a point (section 3, "Several floors") |
 | `g.closeup(drawing, label)`, `g.closeup()` | Shows a close look at something, and puts it away |
 | `await g.tap()` | Waits for a click or a key |
 | `g.startTunnel(dates)`, `g.stopTunnel()`, `await g.wormhole()` | The time tunnel, and the short trip between two eras |
@@ -2512,6 +2938,8 @@ For cutscenes, which dress the stage themselves:
 | `await g.view.draw("", words, { picture, live, grid: [800, 600] })` | Puts up a painted backdrop and its light. `words` describes the picture for someone who cannot see it. |
 | `g.view.cast.addPicture(id, { src }, x, y, scale)` | A painted sprite to move about: `{ src }` or `{ frames, fps }`, with `foot: [x, y]`, the point of the picture that is put at (x, y). It has `.place(x, y, scale)`, `.fade(opacity)` and `.flag("still", true)`, and (NEVADA-12SC) `.flag("mirror", true)`, which draws it turned left for right about its foot point: a car that came in nose first goes out the way it came. Shown smaller than it was painted, it is drawn smoothly. |
 | `await g.view.cast.load()` | Waits until every picture on the stage has arrived. Do this before fading in. |
+| `await g.grilleOver("office-ducts")`, `g.grilleOver(null)` | (ENGINE-17) A grille's picture over the stage, as if seen from up in the duct (the id of the scene whose `grille-view.png` it is, or a picture's path; the stand-in until it is painted), until taken away, the stage emptied or the cut-scene's end |
+| `await g.pa("office.pa.test", { building: "office" })`, `await g.think("ranger", "heart")` | (ENGINE-17) In a cut-scene too: a line on the speakers of the building the cut-scene names; a thought over someone on its stage (or, for someone not on it, where words for someone off the stage go) |
 
 ---
 
@@ -2550,10 +2978,14 @@ the water, a man at an upper window, the depth order where bases slant (and the 
 put on in the reverse order painting the same pixels), and a scene seen through the lead's
 own eyes, with its two new sounds; since round fifteen the map screen, the Timer, travel on the map and
 switching through it (the part `map`: section 8, "The map, and the Timer"); <!-- MAP-15 --> since round sixteen the world
-going by a car's side windows (the part `drive`: section 2); <!-- DRIVE-16E --> the interface at two sizes and in three other window
-shapes, the storyboard page and its maps, the intro and the stamping tools: some 650 checks
-in its quick run (655 at the end of round sixteen, 25 of them the part `drive`'s <!-- DRIVE-16E --> <!-- DRIVE-16F: four of them the things' shadows: 651 and 21 at the merge -->; 629 at the end of round fifteen, 116 of them the part `map`'s), in about twelve minutes on the test
-machine. <!-- MAP-15D: it was some 510, in eight or nine minutes, before the map --> It takes screenshots, which
+going by a car's side windows (the part `drive`: section 2); <!-- DRIVE-16E --> since round seventeen thought pictures, looking
+down through a grille, a thing handed to a lead in another scene and the map's travel for each lead, several floors, the
+building's speakers with the Office's sounds and tune, and the Office's scenes read from their own data (the parts
+`thoughts17`, `grille17`, `handed17`, `floors17`, `speakers17` and `office17`: sections 3, 7 and 8); <!-- ENGINE-17 --> the
+interface at two sizes and in three other window shapes, the storyboard page and its maps, the intro and the stamping
+tools: some 735 checks in its quick run (735 at the end of ENGINE-17's work in round seventeen, 74 of them its six parts'
+<!-- ENGINE-17 -->; 655 at the end of round sixteen, 25 of them the part `drive`'s <!-- DRIVE-16E --> <!-- DRIVE-16F: four of them the things' shadows: 651 and 21 at the merge -->; 629 at the end of round fifteen, 116 of them the part `map`'s), in about twelve minutes on the test
+machine, and some two minutes more for round seventeen's six parts. <!-- ENGINE-17: 1,007 s on round seventeen's machine, where the run before them took 906 s --> <!-- MAP-15D: it was some 510, in eight or nine minutes, before the map --> It takes screenshots, which
 have to be looked at: a picture that is wrong throws no error. Three more scripts
 measure what a frame costs (the table in section 1), take the pictures that the choice
 between hard and smooth pixels was made from, and take pictures of seated people
@@ -2587,7 +3019,11 @@ Since round fifteen: the map screen, with travel to the places already visited, 
 leads through the map, with the Timer turning across the centuries first (section 8, "The map, and the
 Timer"). <!-- MAP-15 --> With it, the save's list of the scenes the player has entered (`visited`,
 section 6), and each map drawn from its painters' pictures and measurements, or as a sketch until it is
-painted. <!-- MAP-15D -->
+painted. <!-- MAP-15D --> Since round seventeen: thought pictures (a lead who cannot talk thinks in pictures, and
+anyone can: section 7), the building's speakers (section 7), looking down through a grille into another scene, dropping in
+and climbing back (section 8), a thing handed to a lead in another scene, a lead left on a mark of another scene, and the
+map's travel for each lead (section 8), several floors in one scene, joined by a climb (section 3), and a scene's own
+`tick` (section 10). <!-- ENGINE-17 -->
 
 **Painted:** the highway of the intro and the title, and nineteen scenes: five in Egypt (the
 inside of the wagon among them), six in Rome, the five rooms of the house, and in Nevada the
@@ -2620,8 +3056,9 @@ all of it is waiting to be played.
   by lamplight and at noon alike, whatever the light in the painting; only their colors
   follow the scene's paints (section 9).
 - More acting. There is no turning between directions (he snaps round), no running for
-  the rig's people (Ranger's scamper is painted), no climbing, and faces cannot yet show a
-  feeling. Carrying someone is a pose drawn for one moment (two of the backup carrying
+  the rig's people (Ranger's scamper is painted), no climbing (ENGINE-17: `g.climbTo` moves anyone along a climb
+  between floors, but only someone painted with `climb` frames looks as if he climbs; a figure of the rig is moved as he
+  stands), and faces cannot yet show a feeling. Carrying someone is a pose drawn for one moment (two of the backup carrying
   Grandpa Joe), not something anybody can do. The Son cannot sit down: there is no seated
   drawing of him, so across the Tiber he waits for the old man standing.
 - Other people going wherever they like. Everyone lives a little by themselves (section 4,
@@ -3207,6 +3644,71 @@ first is 74; then the four maps themselves, 82 to 85.
     minute, one side or the other); one NEXT SERVICES 112 MI sign about 18 s in (and nine kilometres on); a mile marker
     every mile (its plate says MILE 41 every time); and a Joshua tree on each side every 80 to 240 m, though the roadside
     a few miles back has none. Fewer, more, or none is a number in a row. <!-- DRIVE-16M -->
+<!-- SCENES-17: the decisions of the Office's stage one (round seventeen). 94 to 102 are the design's own (its section 8,
+briefs/out/office-hq-design.md); 103 on are the builder's. The stage is written out in PUZZLES-the-present.md, "Act Five
+continued: the Office (stage one)". -->
+94. **Mom's voice is loosened everywhere** (round seventeen's dialogue pass): contractions with her girls, fewer
+    "darling"s, "A matter of record" as a gag, not a habit; formal now only with strangers and difficult men.
+95. **Paraphrase is allowed** (not in quotation marks), as people do; anything in quotation marks is the King James text
+    exactly.
+96. **The government makes the holes.** Lamplighter, since 1951, and its own field office does not know. Every door the
+    family uses was made by it, and any light opens one afterwards: yesterday's was opened by the sun off Dad's windshield.
+97. **The headquarters is mostly underground**, seven floors down, under a building the size of a garage.
+98. **The new people:** Opal (Property & Effects) and Dr. Nell Fairweather (stage two); the backup named Dale, Merle,
+    Wendell and Floyd. Grandpa Joe's surname, said once, by Opal: Hollis.
+99. **Grandpa Joe never lies, even to the Office:** the intercom is solved by asking on Jed's behalf.
+100. **Ranger eats Wendell's birthday pie,** and leaves his best bottle cap in the tin.
+101. **The final gate is opened from the lab by Grandpa Joe;** the door comes out at the Last Stop at sunset.
+102. **The demo ends at the end of stage one,** on the card LAMPLIGHTER, "to be continued". The limousine's card now leads
+    into the Office's arrival ("Desert Field Headquarters, the same afternoon").
+103. **The room warms with the play time:** 72 until the air goes off (#16), 77 forty seconds after, 81 two minutes and ten
+    seconds after (`WARM_MS` and `HOT_MS` in `js/content/scenes/office-common.js`): the three numbers the thermostat is
+    painted with, the same in every scene and after a load, since it is worked out from the moment of #16. Faster or
+    slower is two numbers. (A game whose air is off with no moment kept, as a tester's address makes one, is at 81.)
+104. **Regulation 9, three ways:** the thermostat at 81 with the suits there; "Hot in here, fellas. Ain't there a
+    regulation?" at any question of the interview; or his honest "One, son." to "how comfortable".
+105. **Grandpa Joe stays put** while they question him (he does everything from his chair, and they answer) and while he
+    stands on the spare chair (a thing farther off steps him down and walks him over; a click on the floor steps him down).
+106. **Ranger calls Joe up.** The first time Ranger looks down through ROOM C's grille after the suits have gone, Joe hears
+    him and gets up on the spare chair by himself ("Comin', partner. Let me get up on that chair."); from above, a click
+    on Joe on the floor does the same, and on the chair is a word between them.
+107. **The receipt's journey ends in a cut to Grandpa Joe** (the story's switch, as the limousine's opening was): Ranger
+    hurries back to ROOM C's grille, and the player has Joe at the door for Opal's visit, which begins as the room is
+    entered.
+108. **The cheeseburger is seen:** from Joe's intercom, the break room for a moment (Jed up so fast the ice pack is still
+    in the air, "...Thank you, Houston."), and back to Joe, whoever is being played. The writer's hook had Jed's three
+    lines said only where Ranger could hear them; it is the cheeseburger's payoff, so the player sees it.
+109. **The pie tin goes on the banjo by being used on anything in the room** (the engine has no "a thing used on a thing
+    in the pockets"); the banjo used on anything plays it. Mending leads straight into the Rag.
+110. **Wendell's bottle cap stays on his card** when Ranger takes the tin (the writer's question): the painting's "gone"
+    state shows it there, and stage two's "It is a very nice bottle cap." follows from it.
+111. **The HALL grille** has no painting in stage one, so it is not a grille to the engine: looking down through it is
+    its own (the elevator, the first time; no way down; then nothing doing), and Going Down is heard through its slats.
+112. **B-7 on the map says its own refusal,** whoever clicks it (Joe's words, Ranger's thought: a landmark's `travel` in
+    `js/content/maps.js`, said by the map: a small addition to `js/engine/atlas.js`, `landmarkSays`). The shaft in the
+    ducts says "not without Joe" for the whole stage, as the writer had it.
+113. **The interview keeps its place** (`office.iv`): a talk broken off goes on at the question it stopped at, and "how
+    comfortable" goes round to page two's first question again.
+114. **The intercom's lever** (on Jed's behalf) is offered only once the banjo is back and Ranger has told Joe that Jed is
+    watching the pie (the writer's): the player knows why he is asking before he asks. Houston calls him "Mr. Grandpa".
+115. **The Office has its own stock replies** (a scene's `stock`: a small addition to `js/engine/game.js`): Ranger's are
+    thoughts; Grandpa Joe's are about the questionnaire first, then his own.
+116. **A hint can follow how far its puzzle has got** (a function of the game, listing its lines for the story's check:
+    `hintLines` in `js/engine/story.js`): the lot's (the can, the roof, the switch), the room's heat, the pie's four steps.
+117. **The ducts' shapes are one block** (`SHAPES` in `js/content/scenes/office-ducts.js`), written from the painter's
+    `layout.json` by `briefs/out/office-ducts-shapes.py`, so that the ducts painted again (PAINT-17B2's) bring their
+    shapes in one step; the grilles, the marks, the walk and the B-7 fan's cut-out are the scene's own and stay. Tried on
+    the new layout: it takes the painter's new tiles, rivets and intake fan as they are.
+118. **The painters' extras are not clickable:** the room's lamp, speaker, wastebasket and box of questionnaires;
+    Property's filing cabinet, lantern, bowling ball, traffic cone, speaker, cart, kick stool and boxes on the floor; the
+    break room's calendar, bin, two tables and solitaire. Nobody wrote lines for them; stage two could.
+119. **The arrival's title is over the lot,** as the suits get out (the limousine's card stays on black).
+120. **Going Down is seen from Ranger's duct:** the room through ROOM C's slats, the hall heard through the HALL's, then
+    the shaft. Its card comes after the part a player can skip, so it always shows; then the title.
+121. **The Office's map and the save rows say "The Middle of Nevada" and "The next morning"**: the era's own words, the
+    same for the whole of Nevada, though the Office is the same afternoon. A time of day per map, or per act, would mend
+    it (the engine's).
+122. **Opal's area ends at her hem,** so the legs of her stool, under her, can be clicked as the stool.
 
 ---
 

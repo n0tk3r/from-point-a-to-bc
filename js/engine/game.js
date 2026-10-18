@@ -16,6 +16,13 @@
 //     await g.through("son", "line.id");  await g.choose([...], { through: "son" });              LETTERBOX-11: a voice from the other end of it
 //     await g.talk(tree);  await g.talk(tree, { through: "son" });  g.asked("joe/car");           TALK-11: a dialogue tree, and what has been asked in one
 //     g.mapOf("rome-forum");  await g.travel("forum");  g.atlas.show();                          MAP-15: the map, and travel on it (atlas.js)
+//     await g.think("ranger", ["piepan", "plus", "banjo"]);  g.think("suit4", "zzz", { loop: true });   ENGINE-17: thought pictures (a line can carry them too)
+//     await g.pa("office.pa.jed");                                                               ENGINE-17: a line on the building's speakers
+//     g.pass("receipt", "ranger");  g.where("ranger");  g.handed("ranger")                       ENGINE-17: a thing handed to a lead in another scene; where a lead is
+//     await g.putLead("grandpajoe", "office-room", "joe");                                        ENGINE-17: a lead left on a mark of another scene, without going there
+//     await g.lookDown("grille-room");  await g.backUp();  await g.dropIn();  g.peeking         ENGINE-17: looking down through a grille (grille.js)
+//     await g.grilleOver("office-ducts");  g.grilleOver(null)                                     ENGINE-17: (a cut-scene) a grille's slats over the stage
+//     await g.climbTo("roof", { path });  g.floorOf(g.lead);  g.walkOf("roof")                   ENGINE-17: a scene with several floors
 //
 // Scripts are ordinary async functions. They read top to bottom like a screenplay.
 // Every position is a pixel on the 800x600 picture (grid.js).
@@ -29,7 +36,8 @@ import { SceneView, footOf, picturesIn } from "./scene.js";
 import { Cutout } from "./cast.js";
 import * as castKit from "./cast.js";               // (castKit.forget: the paints, below)
 import { keyScene } from "../art/look.js";
-import { WalkMap, scaleAt } from "./walk.js";
+import { WalkMap, scaleAt, scaleOn, floorsOf } from "./walk.js";          // (ENGINE-17: scaleOn and floorsOf: a scene's floors, and a floor's own size)
+import { Grilles } from "./grille.js";                          // ENGINE-17: looking down through a grille into another scene, dropping in, climbing back
 import { W, H, OLD, fit } from "./grid.js";
 import { hold, url, picture } from "./assets.js";
 import { UI, iconPath } from "./ui.js";
@@ -45,6 +53,23 @@ import { Atlas, checkMaps } from "./atlas.js";                 // MAP-15: the ma
 
 const esc =(s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const copy = (data) => JSON.parse(JSON.stringify(data));
+/** ENGINE-17: is a point inside an outline? (the pixel's middle rule of walk.js, for one point) */
+const inside = (poly, x, y) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < xi + ((y - yi) / (yj - yi)) * (xj - xi)) c = !c; } return c; };
+/** ENGINE-17: the floor of any scene (the one on the stage or not) that a point is on, by the floors' own outlines: the
+    only one, in a scene of one floor; null, off every floor of several. */
+function floorOfPoint(scene, [x, y], game) {
+  const floors = floorsOf(scene, game);
+  return floors.length < 2 ? floors[0] || null : floors.find((f) => inside(f.area, x, y)) || null;
+}
+/** ENGINE-17: an area of a scene looked down into through a grille, as it is from above (grille.js): its `peek` in place of
+    its own handlers (look, use, useWith, verb; `drop`: a drop into the scene below, onto that mark or the grille's own), and
+    nowhere to walk to; a companion's own area is then a thing like any other (looked at, used, a thing used on it), and is
+    outlined by his figure. */
+function peekOf(h) {
+  const p = h.peek, drop = p.drop ? (g) => g.dropIn(p.drop === true ? null : p.drop) : null;
+  return { ...h, look: p.look, use: drop || p.use, useWith: p.useWith, verb: p.verb || (drop ? "Drop down onto" : p.use ? h.verb || "Use" : "Look at"),
+    walkTo: null, face: null, grille: null, climb: null, mate: null, plane: h.plane || h.mate || undefined, peek: p };
+}
 
 export class Game {
   constructor(content) {
@@ -76,6 +101,8 @@ export class Game {
     this.effects = new Effects(this);     // the things in a scene that move by nature: smoke, flames, water, birds, cloth (effects.js)
     this.maps = this.maps || {};          // MAP-15: the maps (js/content/maps.js), and the map screen that shows them (atlas.js)
     this.atlas = new Atlas(this);
+    this.grilles = new Grilles(this);     // ENGINE-17: grilles (grille.js): `peeking` while the lead looks down through one
+    { const clear = this.view.clear.bind(this.view); this.view.clear = () => { clear(); this.grilles.clear(); this.dialogue.forgetLoops(); }; }      // (ENGINE-17: an empty stage is no view, and nobody's thought is kept up: the title, a cut-scene that dresses the stage itself, every scene built)
     this.names = {};                      // each scene's name, by its id, once its file is in (for the label over a way out)
 
     this.mode = "boot";      // boot, cutscene, title or play
@@ -103,6 +130,7 @@ export class Game {
     this.clock.start();
     this.clock.every((dt) => { if (this.mode === "play") this.store.data.playMs += dt; });
     this.clock.every((dt) => this.view.cast.update(dt));                 // animate and repaint the people and props
+    this.clock.every((dt) => { this.announcing(dt); this.ticking(dt); });      // ENGINE-17: the building's speakers, now and then (a scene's `announce`), and a scene's own `tick`
     this.bindInput();
     const known = Object.fromEntries(this.sceneIds.map((id) => [id, true]));
     for (const problem of checkStory({ story: this.story, scenes: known, cutscenes: this.cutscenes, lines: this.lines })) console.warn("Story check:", problem);
@@ -336,6 +364,215 @@ export class Game {
     }
   }
 
+  // =============== ENGINE-17: thoughts, the building's speakers, a thing handed across, where a lead is ===============
+  /** A thought: a bubble of one to three pictures over someone's head, in place of words (dialogue.js thought; the pictures
+      are js/art/thoughts.js's). A line can carry its pictures too (its third element), and is then said this way by say.
+      { ms }: how long (as long as a line of three words, if not said); { loop: true }: kept up over him until
+      g.think(who, null), stepping aside while he says anything else (it resolves at once). Timed and skippable as a line is. */
+  think(who, pictures, opts = {}) { return this.dialogue.thought(who, pictures, opts); }
+  /** A line on the building's speakers: nobody on the stage says it (dialogue.js pa). Heard only in a scene that is in a
+      building (`building`), its grille's view too; elsewhere not shown, and the console says so. { ambient: true }: without
+      taking the controls. True if it was heard. */
+  pa(id, opts = {}) { return this.dialogue.pa(id, opts); }
+
+  /** The lead being played hands a thing to another lead, wherever he is: in another scene (up through a vent, down
+      through a grille) as well as this one. It goes from these pockets into his; his portrait carries a mark (something
+      new) until the player plays as him; a note says so, and the game saves. The scene decides when it may (g.where says
+      where everyone is), and plays the moment itself. True if it went; a thing these pockets do not hold, or a `to` that is
+      not another lead: a console warning, and nothing happens. */
+  pass(item, to) {
+    const d = this.store.data, from = d.active;
+    if (!this.store.has(item)) { console.warn(`g.pass: ${from} is not carrying "${item}", so it cannot be handed to ${to}.`); return false; }
+    if (!to || to === from || !this.leads.includes(to)) { console.warn(`g.pass: "${to}" is not another lead; a thing is handed to one of ${this.leads.filter((id) => id !== from).join(", ")}.`); return false; }
+    if (this.held === item) this.held = null;
+    if (!this.store.pass(item, to)) return false;
+    (d.handed = Array.isArray(d.handed) ? d.handed : []).push({ item, from, to, at: Math.round(d.playMs) });
+    this.sfx("pickup");
+    if (!this.clock.skipping) this.ui.toast(`${this.cast[to].name} has ${this.the(item)}`);
+    this.store.emit();
+    this.autosave();
+    return true;
+  }
+  /** The things handed to a lead that the player has not yet played as him to see: [{ item, from, to, at }]. */
+  handed(who = this.store.data.active) { return (this.store.data.handed || []).filter((e) => e.to === who); }
+  /** The player plays as this lead now: the mark on his portrait for things handed to him goes. */
+  sawHanded(who) { const d = this.store.data; if ((d.handed || []).some((e) => e.to === who)) { d.handed = d.handed.filter((e) => e.to !== who); this.store.emit(); } }
+
+  /** ENGINE-17: leave a lead in a scene, on one of its marks, without going there: a team split up as a stage opens (one
+      locked in a room, the other played outside), or anyone a script sends on ahead. `mark`: a mark of that scene's `spawn`
+      by name (none: the one named for him, else its `default`), or a point [x, y]; `face`: a compass point or degrees (none:
+      the scene's `facing`, or "S"). He is there for everything that asks (the save, his portrait on the map, g.where), and is
+      drawn there when the player switches to him or comes into that scene. While the game is played, the stage follows at
+      once: put in the scene on the stage (or the one looked down into), he stands on the mark there; taken from it to
+      another, he is taken off it. (A cut-scene's stage is its own, and is left alone.) Not the lead being played (g.goto
+      takes him). True if he was put; one who is not a lead, or a scene not in the list: a console warning, and nothing happens. */
+  async putLead(who, sceneId, mark = null, { face = null } = {}) {
+    const d = this.store.data;
+    if (!this.leads.includes(who) || who === d.active) { console.warn(`g.putLead: "${who}" is ${who === d.active ? "the lead being played (g.goto takes him somewhere)" : "not a lead"}, so nothing happens.`); return false; }
+    if (!this.sceneIds.includes(sceneId)) { console.warn(`g.putLead: "${sceneId}" is not in the list of scenes (js/content/scenes/index.js), so nothing happens.`); return false; }
+    let scene;
+    try { scene = await this.getScene(sceneId); } catch (err) { console.warn(`g.putLead: the scene "${sceneId}" would not load, so nothing happens:`, err); return false; }
+    const marks = scene.spawn || {}, named = (k) => (Array.isArray(marks[k]) ? marks[k] : null);
+    let at = Array.isArray(mark) ? mark : named(mark ?? who);
+    if (!at) { if (mark != null) console.warn(`g.putLead: "${sceneId}" has no mark "${mark}": ${this.cast[who].name} is put on its default mark.`); at = named("default") || [W / 2, 560]; }
+    const own = (sc) => (sc.actors || []).some((a) => a.id === who);      // (one of a scene's own people, by his id: the scene's, never moved here)
+    const stage = this.mode === "play" && this.scene && !own(this.scene) ? this.scene : null, cast = this.view.cast;
+    let f = stage ? cast.get(who) : null, yaw = null;
+    if (f && f._stop) f._stop();
+    if (stage && sceneId === stage.id) {                                   // here: on the mark, at the size and depth of its floor
+      if (!f) f = cast.addFigure(who, this.cast[who].sprite, at[0], at[1], 1);
+      this.standOn(f.place(at[0], at[1], this.sizeAt(at[0], at[1])).face(face ?? scene.facing ?? "S"));
+      yaw = f.yaw;
+      await cast.load();                                                   // (a painted lead's frames)
+      this.rebuildSpots();
+    } else if (f) { cast.remove(who); this.rebuildSpots(); }              // gone from here to another scene
+    d.where[who] = { scene: sceneId, x: Math.round(at[0]), y: Math.round(at[1]), face: yaw ?? face ?? scene.facing ?? "S" };
+    this.store.emit();
+    return true;
+  }
+
+  /** Where a lead is: { scene, x, y, face, mark } (`mark`: the name of the mark of that scene's `spawn` he stands on, or is
+      within a step of: 20 pixels at full size, less with the depth, as his scene sizes people there; of two as near, his
+      own, then any but `default`; else null), or null while he is nowhere. On the stage now, where he is this moment; anywhere else, where he was left. While the lead looks
+      down through a grille, his place is the grille's (the scene up there). */
+  where(who = this.store.data.active) {
+    const d = this.store.data, at = d.where[who];
+    if (!at || !at.scene) return null;
+    const live = this.scene && this.scene.id === at.scene ? this.actor(who) : null;
+    const x = live ? live.x : at.x, y = live ? live.y : at.y, face = live ? live.yaw : at.face;
+    const scene = (this.atlas && this.atlas.scenes && this.atlas.scenes[at.scene]) || (this.scene && this.scene.id === at.scene ? this.scene : null);
+    let mark = null;
+    if (scene && x != null) {
+      let best = Infinity;
+      const rank = (name) => (name === who ? 0 : name === "default" ? 2 : 1);     // (two marks as near: his own, then any named one, then `default`)
+      for (const [name, p] of Object.entries(scene.spawn || {})) {
+        if (!Array.isArray(p) || p.length < 2 || !Number.isFinite(p[0]) || !Number.isFinite(p[1])) continue;
+        const near = Math.hypot(p[0] - x, p[1] - y), step = Math.max(6, 20 * scaleOn(scene, floorOfPoint(scene, p, this), p[1]));
+        if (near <= step && (near < best || (near === best && rank(name) < rank(mark)))) { best = near; mark = name; }
+      }
+    }
+    return { scene: at.scene, x: x == null ? null : Math.round(x), y: y == null ? null : Math.round(y), face, mark };
+  }
+
+  // =============== ENGINE-17: grilles (grille.js) ===============
+  /** While the lead looks down through a grille: { from, scene, spot, grille } (the scene he is in, the one below, the grille's
+      area and its spec); else null. */
+  get peeking() { return this.grilles ? this.grilles.view : null; }
+  /** The scene the lead being played is in: the scene on the stage, or, while he looks down through a grille, the one he
+      looks down from (his place, the save's, the map's). */
+  get here() { return (this.grilles && this.grilles.view && this.grilles.view.from) || this.scene; }
+  /** A script looks down through a grille of the scene (by its area's id), as using it does (no walk there). */
+  lookDown(spot) { return this.grilles.look(spot); }
+  /** Back up from looking down, onto the grille. */
+  backUp() { return this.grilles.back(); }
+  /** Drop into the scene looked down into, onto its mark `mark` (none: the grille's `spawn`), if the grille's `when` allows:
+      a real g.goto. True if he went. */
+  dropIn(mark = null) { return this.grilles.drop(mark); }
+  /** Climb out of this scene into the one above, as an area's `climb` does ({ scene, spawn, to, set }). */
+  climbUp(spec) { return this.grilles.climb(spec); }
+  /** For a cut-scene, which dresses the stage itself: a grille's picture over the stage (the id of the scene whose
+      grille-view.png it is, or a picture's path), as if seen from the duct; null takes it away (so does the cut-scene's end). */
+  grilleOver(of) { return this.grilles.over(of); }
+  /** The player backs up from a grille's view (a click on the floor, the button, Escape): as a script, then saved. */
+  async leaveView() {
+    if (!this.peeking || this.busy || this.mode !== "play") return;
+    await this.run(() => this.backUp(), { settle: false });
+    this.autosave();
+  }
+
+  // =============== ENGINE-17: several floors (walk.js floorsOf) ===============
+  /** The floors of the scene on the stage: [{ name, index, area, scale, base, away, ... }] (one, in most scenes). */
+  get floors() { return this.map ? this.map.floors : []; }
+  /** The floor of the scene on the stage under a point ([x, y]), a figure, or a person's id: the one whose outline it is in,
+      or, off every floor, the one of the nearest place to stand. Null with no scene. */
+  floorOf(at) {
+    const m = this.map, f = typeof at === "string" ? this.actor(at) : at, p = Array.isArray(f) ? f : f && Number.isFinite(f.x) ? [f.x, f.y] : null;
+    if (!m || !p || !m.floors.length) return null;
+    return m.floors[m.floorNear(p[0], p[1])] || m.floors[0];
+  }
+  /** The name of the floor a mark of the scene (its name in `spawn`) or a point is on, or null. */
+  walkOf(mark) { const p = typeof mark === "string" ? (this.scene && this.scene.spawn || {})[mark] : mark, f = p ? this.floorOf(p) : null; return f ? f.name : null; }
+  /** How big someone is with their feet at (x, y) of the scene on the stage: their floor's own size, or the scene's. */
+  sizeAt(x, y, floor = undefined) { return scaleOn(this.scene, floor === undefined ? this.floorOf([x, y]) : floor, y); }
+  /** A figure's depth for the floor it stands on: that floor's `base` (the row it sorts at among the cut-outs: on a roof, in
+      front of the wall it is on top of), or its own feet, as anyone's. Nothing is changed in a scene of one floor with no base. */
+  standOn(f, floor = undefined) {
+    if (!f) return f;
+    const fl = floor === undefined ? this.floorOf(f) : floor;
+    if (this.floors.length < 2 && !(fl && Number.isFinite(fl.base))) return f;
+    f.base = fl && Number.isFinite(fl.base) ? fl.base : null;
+    return f;
+  }
+  /**
+   * From one floor to another along a set path, as a script does it (the pipe up the building's corner; the fridge's top
+   * down to the counter): the lead (or `who`) goes from where he is along `path` (points of the picture between) to `mark`
+   * (a mark of the scene's `spawn`, or a point), at `pace` (pixels a second at full size: half his walking pace if not
+   * said), on his `set` of painted frames (`climb`; a figure of the rig is moved as it is), growing or shrinking from his
+   * floor's size to the other's, in depth at `base` all the way (none: the nearer of the two floors), facing `face` (none:
+   * the way the path goes across). Then he is on the other floor, its size and depth, and walks there. Resolves true when
+   * he is there (at once, there, while a cutscene is skipped); false, and nothing done, for a mark the scene has not got.
+   */
+  async climbTo(mark, { path = [], set = "climb", pace = null, face = null, base = null, who = null } = {}) {
+    const f = who ? this.actor(who) : this.lead, scene = this.scene;
+    const end = typeof mark === "string" ? ((scene && scene.spawn) || {})[mark] : mark;
+    if (!f || !scene || !Array.isArray(end)) { console.warn(`g.climbTo: ${!f ? "nobody to move" : `"${scene && scene.id}" has no mark "${mark}"`}, so nothing happens.`); return false; }
+    const from = this.floorOf(f), to = this.floorOf(end), pts = [[f.x, f.y], ...path, end];
+    const s0 = f.scale, s1 = this.sizeAt(end[0], end[1], to);
+    const lens = [0];
+    for (let i = 1; i < pts.length; i++) lens.push(lens[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    const L = lens[lens.length - 1];
+    if (f._stop) f._stop();
+    if (!this.clock.skipping && L > 0.5) {
+      const speed = (pace ?? ((f.spec && f.spec.pace) || 120) * 0.5) * Math.max(0.5, (s0 + s1) / 2), ms = Math.max(300, (L / speed) * 1000);
+      if (face) f.face(face); else if (Math.abs(end[0] - f.x) > 2) f.face(end[0] > f.x ? "E" : "W");
+      const row = (fl, y) => (fl && Number.isFinite(fl.base) ? fl.base : y);
+      f.base = base ?? Math.max(row(from, f.y), row(to, end[1]));
+      const playing = f.sheet && f.play ? f.play(this.clock, set) : null;
+      await this.tween(ms, (k) => {
+        const s = k * L;
+        let i = 1;
+        while (i < lens.length - 1 && lens[i] < s) i++;
+        const t = lens[i] > lens[i - 1] ? Math.min(1, Math.max(0, (s - lens[i - 1]) / (lens[i] - lens[i - 1]))) : 1;
+        f.place(pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * t, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * t, s0 + (s1 - s0) * k);
+      }, (k) => k);
+      if (f.stop) f.stop();
+      if (playing) await playing;
+    }
+    f.place(end[0], end[1], s1);
+    f.base = null;
+    this.standOn(f, to);
+    if (face) f.face(face);
+    this.rememberPlace(f.id);
+    return true;
+  }
+
+  /** ENGINE-17: a scene's `announce`: the building's speakers now and then, while the player has the controls there (a grille's
+      view included): { lines: [ids] (or a function of the game giving them), every: [low, high] seconds (60 to 120 if not
+      said), when }. Each in turn, as an ambient line on the speakers (pa). Every frame, on the game clock: it stops with it. */
+  announcing(dt) {
+    const s = this.scene, a = s && s.announce;
+    if (!a || this.mode !== "play") { this._announce = null; return; }
+    const every = Array.isArray(a.every) ? a.every : [60, 120], next = (n) => (every[0] + (every[1] - every[0]) * [0.5, 0.2, 0.8, 0.35, 0.65][n % 5]) * 1000;
+    if (!this._announce || this._announce.scene !== s) this._announce = { scene: s, left: next(0), n: 0 };
+    if (this.busy || this.dialogue.active || this.dialogue.choosing || this.ui.open || (a.when && !a.when(this))) return;
+    const t = this._announce;
+    if ((t.left -= dt) > 0) return;
+    const lines = (typeof a.lines === "function" ? a.lines(this) : a.lines) || [];
+    t.n++; t.left = next(t.n);
+    if (lines.length) this.pa(lines[(t.n - 1) % lines.length], { ambient: true });
+  }
+  /** ENGINE-17: a scene's `tick(g, dt)`, every frame on the game clock while the game is played in it (or it is looked down
+      into through a grille: its scripts run as usual then), never while a cut-scene runs, nor while the clock is paused (the
+      menu, the map): for what changes by itself while the player watches (the Comfortable Room getting warmer, minute by
+      minute: a number of the story's, worked out from the play time, and the picture following it). It must be cheap, and
+      safe to call again and again; a tick that throws is said once in the console, and the game goes on. */
+  ticking(dt) {
+    const s = this.scene;
+    if (!s || typeof s.tick !== "function" || this.mode !== "play") return;
+    try { s.tick(this, dt); }
+    catch (err) { if (this._tickTold !== s.id) { this._tickTold = s.id; console.error(`Scene "${s.id}": its tick stopped:`, err); } }
+  }
+
   /** Say which leads the player can switch between from now on. */
   team(list) { this.store.data.team = list.filter((id) => this.leads.includes(id)); this.store.emit(); }
   music(id) { this.audio.music(id); }
@@ -355,14 +592,16 @@ export class Game {
   async walkTo(x, y, who = null) {
     const actor = who ? this.actor(who) : this.lead, scene = this.scene;
     if (!actor || !actor.walkPath || !scene || !this.map) return;
-    await actor.walkPath(this.clock, this.map.path([actor.x, actor.y], [x, y]), (yy) => scaleAt(scene, yy));
+    const floor = this.floors.length > 1 ? this.floorOf(actor) : null;            // ENGINE-17: on one floor of several, at that floor's size
+    await actor.walkPath(this.clock, this.map.path([actor.x, actor.y], [x, y]), (yy) => (floor ? this.sizeAt(actor.x, yy, floor) : scaleAt(scene, yy)));
     this.rememberPlace(actor.id);
   }
   /** For scripts: walk in a straight line to a place, even one the player could not click on (into a closet, behind a counter). */
   async moveTo(x, y, who = null) {
     const actor = who ? this.actor(who) : this.lead, scene = this.scene;
     if (!actor || !actor.walkPath || !scene) return;
-    await actor.walkPath(this.clock, [[x, y]], (yy) => scaleAt(scene, yy));
+    const floor = this.floors.length > 1 ? this.floorOf(actor) : null;            // ENGINE-17
+    await actor.walkPath(this.clock, [[x, y]], (yy) => (floor ? this.sizeAt(actor.x, yy, floor) : scaleAt(scene, yy)));
     this.rememberPlace(actor.id);
   }
 
@@ -446,6 +685,7 @@ export class Game {
       if (this.stopFx) { this.stopFx(); this.stopFx = null; }
       this.dialogue.clear();
       this.closeup();
+      if (!this.peeking) this.grilles.over(null);           // ENGINE-17: a grille's picture a cut-scene put up (g.grilleOver) goes with it
       this.cardEl.classList.remove("show");
       this.cardEl.innerHTML = "";
       this.ui.showSkip(false);
@@ -497,8 +737,11 @@ export class Game {
       who stands in that scene, and nobody leaves this one. Before anything changes, the scene being left runs its
       `leaving(g, to)` when the lead leaves it for another, by any way: an edge, a door, the map (not on switching, not when
       a script has handed the controls to a lead who is not in it, as the end of an act does, and not on loading a save). */
-  async goto(id, { via = "fade", spawn = "default", at = null, came = undefined, switching = false } = {}) {
-    const from = this.scene;
+  async goto(id, { via = "fade", spawn = "default", at = null, came = undefined, switching = false, card = true, fall = null } = {}) {
+    // ENGINE-17: `card: false`, no era card (a drop through a grille, a climb back: one building); `fall`: the lead falls into
+    // the new scene onto his mark, after it has faded in and before its `enter` (a drop through a grille: grille.js fall).
+    // The scene left is the lead's own: the one he looks down from, while he looks down through a grille (g.here).
+    const from = this.here;
     this.busy++;
     try {
       const loading = this.getScene(id);         // fetch during the fade, not after it
@@ -529,11 +772,13 @@ export class Game {
         this.stopTunnel();
         return await this.trouble(err, `Scene "${id}"`);
       }
+      if (fall && this.lead && !this.clock.skipping) this.lead.fade(0);       // ENGINE-17: not seen on his mark before he has fallen onto it
       await this.fade(0, via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");
-      if ((!from || from.era !== scene.era) && via !== "map") {        // (MAP-15: none after the map, which has said where and when)
+      if ((!from || from.era !== scene.era) && via !== "map" && card) {        // (MAP-15: none after the map, which has said where and when; ENGINE-17: nor when asked)
         const era = this.eras[scene.era];
         await this.card(era.name, era.date);
       }
+      if (fall) await this.grilles.fall(fall);                                 // ENGINE-17
       if (scene.enter) await scene.enter(this, came !== undefined ? came : from ? from.id : null);     // (MAP-15: came)
     } finally {
       this.busy--;
@@ -545,7 +790,7 @@ export class Game {
 
   /** Build a scene on the stage from the saved state. No story happens here.
       It returns once every picture the scene can show has arrived, so the caller can fade in on a finished stage. */
-  async enterScene(scene, pos, way = "default") {
+  async enterScene(scene, pos, way = "default", { peek = null } = {}) {
     const d = this.store.data, cast = this.view.cast;
     this.dialogue.clear();
     this.closeup();
@@ -553,6 +798,11 @@ export class Game {
     this.lookMode = false;
     this._leaving = null;
     this.view.clear();
+    // ENGINE-17: `peek`: the scene is built as a view through a grille (grille.js), the lead up above it and not in it: his
+    // place, the save's scene and the party are left as they are, he is not put on the stage, and only the areas that say
+    // what they do from above are there (rebuildSpots). Any other build ends a view.
+    this.grilles.clear();
+    if (peek) this.grilles.view = peek;
     // The paints (js/art/look.js): the people and the moving things take this scene's key. The team's portraits are the
     // interface's and are drawn with none (portrait() in cast.js sees to that itself, and keeps each one); pictures of
     // people kept from another key are let go.
@@ -589,10 +839,12 @@ export class Game {
     const want = pos || marks[d.active] || marks.default || [W / 2, 560];
     const [x, y] = this.map.nearest(want[0], want[1]);
     const was = d.where[d.active], facing = was && was.scene === scene.id && was.face != null && pos ? was.face : scene.facing || "S";
-    cast.addFigure(d.active, this.cast[d.active].sprite, x, y, scaleAt(scene, y)).face(facing);
-    d.scene = scene.id;
-    if (!(d.visited = d.visited || []).includes(scene.id)) d.visited.push(scene.id);      // MAP-15: the scenes the player has entered, in order (the map's)
-    d.where[d.active] = { scene: scene.id, x: Math.round(x), y: Math.round(y), face: this.lead.yaw };
+    if (!peek) {                                // (ENGINE-17: looking down through a grille, the lead is up above, not here)
+      this.standOn(cast.addFigure(d.active, this.cast[d.active].sprite, x, y, this.sizeAt(x, y)).face(facing));      // (ENGINE-17: the size and depth of the floor he is on)
+      d.scene = scene.id;
+      d.where[d.active] = { scene: scene.id, x: Math.round(x), y: Math.round(y), face: this.lead.yaw };
+    }
+    if (!(d.visited = d.visited || []).includes(scene.id)) d.visited.push(scene.id);      // MAP-15: the scenes the player has entered, in order (the map's; ENGINE-17: and looked into)
 
     // A scene can name a party: leads who are here together. They arrive with whoever is leading,
     // each on their own mark, and the player can switch between them. When they come in by a named way
@@ -600,7 +852,7 @@ export class Game {
     //     arrive: { fromStairs: [[x, y], [x, y]] }      (in the order of `party`, the lead left out)
     const markOf = (id, n) => marks[id] || [x + 55 * (n + 1), y];
     const party = ((typeof scene.party === "function" ? scene.party(this) : scene.party) || []).filter((id) => this.leads.includes(id));      // (NEVADA-12E: any leads; or a function of the game, for a party the story forms)
-    if (party.includes(d.active)) {
+    if (party.includes(d.active) && !peek) {
       const beside = (scene.arrive && scene.arrive[way]) || [];
       let nth = 0;
       party.forEach((id, n) => {
@@ -618,7 +870,7 @@ export class Game {
       if (id === d.active || !at || at.scene !== scene.id || cast.get(id)) return;      // (NEVADA-12E: cast.get: one who is on the stage already, as one of the scene's people, is not put there twice)
       const mark = at.x != null ? [at.x, at.y] : markOf(id, n);
       const [mx, my] = this.map.nearest(mark[0], mark[1]);
-      cast.addFigure(id, this.cast[id].sprite, mx, my, scaleAt(scene, my)).face(at.face ?? (scene.facing || "S"));
+      this.standOn(cast.addFigure(id, this.cast[id].sprite, mx, my, this.sizeAt(mx, my)).face(at.face ?? (scene.facing || "S")));      // (ENGINE-17: and the size and depth of his floor)
     });
     // CAR-13E: a scene seen through the lead's own eyes (`unseen`: true, or a function of the game, read now, as `party` is).
     // He is on the stage for everything that reaches for him (his place and facing, g.reach, what is saved), but never drawn:
@@ -626,15 +878,17 @@ export class Game {
     // here. He walks and turns to nothing (stays), leaves by an edge at once (leave), and speaks from off the stage (dialogue.js).
     this._unseen = (typeof scene.unseen === "function" ? scene.unseen(this) : scene.unseen) ? scene : null;
     if (this._unseen) for (const id of new Set([d.active, ...d.team])) { const f = cast.get(id); if (f) f.fade(0); }
-    if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts
+    if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts (ENGINE-17: g.peeking says it is a view)
     this.rebuildSpots();
     this.music(this.musicOf(scene));
     this.ui.hud(true);
     this.ui.refresh();
-    await Promise.all([shown, cast.load()]);     // NEVADA-12E: and every frame of each painted figure on the stage (cast.js), as for frames of birds
+    await Promise.all([shown, cast.load(), peek ? this.grilles.cover(peek) : null]);     // NEVADA-12E: and every frame of each painted figure on the stage (cast.js), as for frames of birds (ENGINE-17: and a view's grille)
     // Once this scene has everything it needs: fetch the pictures of the scenes that can be reached from it
-    // (`exits`, and its ways out at the edges), so that walking on does not mean waiting for them.
-    const next = new Set([...(scene.exits || []), ...Object.values(scene.edges || {}).map((way) => way && way.to)].filter((id) => this.sceneIds.includes(id)));
+    // (`exits`, and its ways out at the edges), so that walking on does not mean waiting for them. (ENGINE-17: and the
+    // scenes its grilles look down into and its climbs go up to, so that looking down does not wait for them either.)
+    const hops = (scene.hotspots || []).flatMap((h) => [h && h.grille && h.grille.scene, h && h.climb && h.climb.scene]);
+    const next = new Set([...(scene.exits || []), ...Object.values(scene.edges || {}).map((way) => way && way.to), ...hops].filter((id) => this.sceneIds.includes(id)));
     for (const id of next) this.getScene(id).then((there) => this.view.warm(there)).catch(() => {});
     this.gather();                               // (already under way, unless the game was opened straight into a scene)
   }
@@ -648,7 +902,7 @@ export class Game {
     const key = solid.map((c) => c.id).join("|") + "#" + people.map((p) => p.flat().map(Math.round).join(",")).join("|");
     if (!anyway && key === this._solid) return;
     this._solid = key;
-    this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people]);
+    this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people], this);      // (ENGINE-17: the game, for a walk that is a function of it)
   }
 
   /** The ground that things and people take up: the cut-outs that are showing ({ solid }), and the people who are not
@@ -686,7 +940,7 @@ export class Game {
       const f = this.actor(who);
       if (f && !f.hidden) family.push([[f.x - 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y + 6], [f.x - 20 * f.scale, f.y + 6]]);
     }
-    return new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people, ...family]);
+    return new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people, ...family], this);      // (ENGINE-17: this)
   }
 
   /** The story has changed, or a script has ended: the picture follows. Clickable areas and painted cut-outs
@@ -737,13 +991,18 @@ export class Game {
 
   /** A stock reply for things nobody wrote a line for. */
   fallback(kind) {
-    const table = this.story.fallbacks[kind] || {}, who = this.store.data.active, list = table[who] || table.any || [];
+    const who = this.store.data.active, own = this.stockOf(kind);                       // SCENES-17: the scene's own first (its `stock`)
+    const table = (own && (own[who] || own.any) ? own : this.story.fallbacks[kind]) || {}, list = table[who] || table.any || [];
     if (!list.length) {        // NEVADA-12E: a lead the story has no stock replies for (yet) says nothing; the console says so, once
       const key = kind + "|" + who;
       if (!(this._unsaid = this._unsaid || new Set()).has(key)) { this._unsaid.add(key); console.warn(`No stock "${kind}" reply for ${who} in story.fallbacks: nothing is said. Give them one of their own, or an "any".`); }
     }
     return list.length ? list[this._nope++ % list.length] : null;
   }
+  /** SCENES-17: a scene's own stock replies, in the story's shape, which it has before the story's (the Office's: Ranger's are
+      thoughts there, and Grandpa Joe's are about the questionnaire): `stock: { nope, look, hint } ` each { lead: [line ids] },
+      `see: { lead: { companion: line } }`, `give: { lead: [line ids] }`. The scene on the stage (the one looked down into, too). */
+  stockOf(kind) { const s = this.scene && this.scene.stock; return (s && s[kind]) || null; }
 
   // =============== companions ===============
   /** The clickable areas: the scene's own, and one over each companion standing here. A person's own area (the one with
@@ -753,7 +1012,19 @@ export class Game {
     const scene = this.scene, d = this.store.data;
     if (!scene) return;
     const people = new Set((scene.actors || []).map((a) => a.id));
-    const spots = (scene.hotspots || []).map((h) => (people.has(h.actor || h.id) ? { ...h, home: h } : h));
+    // ENGINE-17: a companion's own area with no shape of its own (`mate`, and no rect, poly or circle) is the box round his
+    // figure where it is now, as the engine's own box is (and none while he is not on the stage).
+    const boxed = (h) => {
+      if (!h.mate || h.rect || h.poly || h.circle) return h;
+      const a = this.actor(h.mate);
+      return a ? { ...h, rect: [a.x - (50 * a.scale) / 2, a.y - a.h * a.scale, 50 * a.scale, a.h * a.scale] } : null;
+    };
+    // ENGINE-17: looking down through a grille, only the areas that say what they do from above (`peek`) are there, as they
+    // are from above (peekOf, at the top of this file), and no companion has the engine's box: the lead is not here to talk.
+    const peeking = !!this.peeking;
+    const listed = (scene.hotspots || []).filter((h) => !peeking || (h.peek && typeof h.peek === "object")).map((h) => { const b = boxed(h); return b && peeking ? peekOf(b) : b; }).filter(Boolean);
+    const spots = listed.map((h) => (people.has(h.actor || h.id) ? { ...h, home: h } : h));
+    if (peeking) { this.view.setHotspots(spots); this.life.follow(); this.follow(); this.ui.edge = null; this.ui.hover(null); return; }
     // NEVADA-12SC: a companion the scene gives an area of its own (an area with `mate: "<id>"`, while its `when` holds:
     // its shape, and its place among the scene's areas) has that one instead of the box round his figure, which would lie
     // over everything near him (Grandpa Joe on the limousine's seat, with the bow and the seatbelt beside him).
@@ -836,7 +1107,7 @@ export class Game {
 
   /** The lead gives something they are carrying to a companion. A scene can react with given(g, item, to, from). */
   async handOver(item, to) {
-    const from = this.store.data.active, lines = (this.story.give && this.story.give[from]) || [];
+    const from = this.store.data.active, own = this.stockOf("give"), lines = (own && own[from]) || (this.story.give && this.story.give[from]) || [];      // (SCENES-17: the scene's own first)
     if (lines.length) await this.say(lines[this._nope++ % lines.length]);
     await this.reach();
     if (!this.store.pass(item, to)) return;
@@ -854,17 +1125,32 @@ export class Game {
     await this.run(async () => {
       const homing = this.life.settle();
       const lead = this.lead, scene = this.scene, mate = spot.mate ? this.actor(spot.mate) : null, stays = this.stays();
-      const stand = stays ? null : mate ? this.beside(mate) : this.clearOf(spot.walkTo);      // (NEVADA-12SC: a lead who stays where he is goes nowhere)
-      if (stand) await lead.walkPath(this.clock, this.map.path([lead.x, lead.y], stand), (yy) => scaleAt(scene, yy));
+      // ENGINE-17: on one floor of several, a thing whose place to stand is on another is looked at from where he is, and
+      // anything else asked of it is answered by that floor's `away` line (or his stock "nope"): there is no walking there.
+      const floor = this.floors.length > 1 && !stays ? this.floorOf(lead) : null, there = floor && spot.walkTo ? this.floorOf(spot.walkTo) : null;
+      const away = !!there && there.index !== floor.index;
+      if (away && (this.held || verb !== "look")) {
+        await homing;
+        lead.look(...footOf(spot));
+        this.held = null; this.ui.refresh();
+        if (!(await this.act(there.away))) await this.say(this.fallback("nope"));
+        return;
+      }
+      const stand = stays || away ? null : mate ? this.beside(mate) : this.clearOf(spot.walkTo);      // (NEVADA-12SC: a lead who stays where he is goes nowhere)
+      if (stand) await lead.walkPath(this.clock, this.map.path([lead.x, lead.y], stand), (yy) => (floor ? this.sizeAt(lead.x, yy, floor) : scaleAt(scene, yy)));
       await homing;
       if (!stays) { if (spot.face) lead.face(spot.face); else lead.look(...footOf(spot)); }       // turn to the thing (NEVADA-12SC: not from where he sits)
       this.rememberPlace();
-      const item = this.held;
+      const item = this.held, climb = !item && verb !== "look" ? this.grilles.climbOf(spot) : null;      // (ENGINE-17)
       if (mate) {                                                                  // a companion: talk, look, or hand something over
         if (!this.stays(mate.id)) mate.look(lead.x, lead.y);                       // (NEVADA-12SC: one who stays where he is does not turn in his seat)
         if (item) { this.held = null; this.ui.refresh(); await this.handOver(item, spot.mate); }
-        else if (verb === "look") { const see = this.story.see && this.story.see[this.store.data.active]; await this.say((see && see[spot.mate]) || this.fallback("look")); }
+        else if (verb === "look") { const own = this.stockOf("see"), mine = own && own[this.store.data.active], see = this.story.see && this.story.see[this.store.data.active]; await this.say((mine && mine[spot.mate]) || (see && see[spot.mate]) || this.fallback("look")); }      // (SCENES-17: the scene's own first)
         else await this.chat(spot.mate);
+      } else if (!item && verb !== "look" && this.grilles.specOf(spot) && !this.peeking) {
+        await this.grilles.look(spot);                                             // ENGINE-17: a grille: look down through it
+      } else if (climb) {
+        await this.grilles.climb(climb);                                           // ENGINE-17: up and out, into the scene above
       } else if (item) {
         this.held = null;
         this.ui.refresh();
@@ -884,6 +1170,7 @@ export class Game {
       without walking to it or turning. */
   stays(who = this.store.data.active) {
     if (this.unseen && this.leads.includes(who)) return true;     // CAR-13E: and every lead, in a scene seen through his own eyes
+    if (this.peeking && this.leads.includes(who)) return true;    // ENGINE-17: and looking down through a grille (he is up above: nobody walks to anything)
     const s = this.scene && this.scene.still;
     return !!s && (typeof s === "function" ? !!s(this, who) : Array.isArray(s) && s.includes(who));
   }
@@ -896,13 +1183,22 @@ export class Game {
     const lead = this.lead, scene = this.scene;
     if (!lead || !scene || this.busy || this.stays()) return;      // (NEVADA-12SC: a lead who stays where he is)
     this._leaving = null;
-    lead.walkPath(this.clock, this.map.path([lead.x, lead.y], [x, y]), (yy) => scaleAt(scene, yy)).then(() => this.rememberPlace());
+    // ENGINE-17: on one floor of several, he walks on his own: a click on another floor does nothing (or says that floor's
+    // `away` line), and a click off every floor goes to the nearest place on his.
+    let to = [x, y];
+    const floor = this.floors.length > 1 ? this.floorOf(lead) : null;
+    if (floor) {
+      const on = this.map.floorAt(x, y);
+      if (on >= 0 && on !== floor.index) { const away = this.floors[on].away; if (away) this.run(() => this.act(away), { settle: false }); return; }
+      if (on < 0) to = this.map.nearest(x, y, floor.index);
+    }
+    lead.walkPath(this.clock, this.map.path([lead.x, lead.y], to), (yy) => (floor ? this.sizeAt(lead.x, yy, floor) : scaleAt(scene, yy))).then(() => this.rememberPlace());
   }
 
   // =============== ways out at the edges of the picture (edges.js) ===============
   /** The side ("N", "S", "W", "E") of the way out whose band holds this point of the picture, or null. A clickable area
-      there still wins over the band: this answers only for the floor. */
-  edgeAt(x, y) { return this.mode === "play" ? edgeAt(this.scene, this, x, y) : null; }
+      there still wins over the band: this answers only for the floor. (ENGINE-17: none while looking down through a grille.) */
+  edgeAt(x, y) { return this.mode === "play" && !this.peeking ? edgeAt(this.scene, this, x, y) : null; }
   /** The side the lead is on his way out by (after a click in its band, before the scene changes), or null. */
   get leaving() { return this._leaving ? this._leaving.side : null; }
   /** Is there a way out at this side of the picture now? Its side if there is, or null. */
@@ -930,9 +1226,11 @@ export class Game {
     }
     if (!lead || !way || this.busy || this.mode !== "play" || !open(way, this) || this.stays()) return;      // (NEVADA-12SC: nor out by an edge)
     const target = way.walkTo || this.map.toward(side, x, y) || [lead.x, lead.y];
+    if (this.floors.length > 1) { const a = this.floorOf(lead), b = this.floorOf(target); if (a && b && a.index !== b.index) return; }      // ENGINE-17: not from another floor
     const route = this.map.path([lead.x, lead.y], target), end = route[route.length - 1];
     const trip = (this._leaving = { side, end });
-    lead.walkPath(this.clock, route, (yy) => scaleAt(scene, yy)).then(async () => {
+    const floor = this.floors.length > 1 ? this.floorOf(lead) : null;      // ENGINE-17: at the size of his floor
+    lead.walkPath(this.clock, route, (yy) => (floor ? this.sizeAt(lead.x, yy, floor) : scaleAt(scene, yy))).then(async () => {
       this.rememberPlace();
       if (this._leaving !== trip) return;                   // he was sent somewhere else on the way
       this._leaving = null;
@@ -987,7 +1285,8 @@ export class Game {
     // what to try, and the others' say whose job it is. The lead's own jobs come first.
     const open = openBeats(this.story, d.flags).filter((b) => hintFor(this.story, b, who));
     const beat = open.find((b) => leadsOf(this.story, b).includes(who)) || open[0];
-    const line = beat ? hintFor(this.story, beat, who) : this.fallback("hint");
+    let line = beat ? hintFor(this.story, beat, who) : this.fallback("hint");
+    if (typeof line === "function") line = line(this);                                   // SCENES-17: a hint that follows how far a long puzzle has got (story.js hintLines)
     if (line) await this.run(() => this.say(...[].concat(line)), { settle: false });      // (NEVADA-12E: or a list of lines, said in turn)
   }
 
@@ -1008,7 +1307,11 @@ export class Game {
       if (old && old._stop) old._stop();
       this.held = null;
       this.lookMode = false;
+      // ENGINE-17: one standing in the scene the lead is looking down into: the view becomes his scene, where it is (the lead
+      // who looked stays up at his grille), as for anyone standing right here
+      if (this.peeking) { this.grilles.clear(); d.scene = this.scene.id; }
       d.active = to;
+      this.sawHanded(to);                                                      // ENGINE-17: the mark for things handed to him goes
       this.sfx("switch");
       this.tidy();
       this.store.emit();
@@ -1017,10 +1320,11 @@ export class Game {
     }
     if (map && this.mapOf(place.scene) && this.atlas.el) { await this.atlas.switchTo(to); return; }      // MAP-15: through the map
     d.active = to;
+    this.sawHanded(to);                                                        // ENGINE-17
     // LETTERBOX-11: the other lead is in another scene. Across the centuries the trip is the short tunnel (the eras of
     // the two scenes differ); within one era it is a fade, as it always was. Their place and facing are kept.
     const there = this.scenes[place.scene] ? await this.scenes[place.scene].catch(() => null) : null;
-    const via = there && this.scene && there.era !== this.scene.era ? "wormhole" : "fade";
+    const via = there && this.here && there.era !== this.here.era ? "wormhole" : "fade";      // (ENGINE-17: from the lead's own scene, g.here)
     await this.goto(place.scene, { via, at: place.x != null ? [place.x, place.y] : null, switching: true });     // (MAP-15: switching: nobody leaves)
   }
 
@@ -1037,6 +1341,7 @@ export class Game {
     this.lookMode = false;
     this._leaving = null;
     d.active = to;
+    this.sawHanded(to);                                                        // ENGINE-17
     await this.goto(place.scene, { via: "map", at: place.x != null ? [place.x, place.y] : null, switching: true });
   }
 
@@ -1069,8 +1374,8 @@ export class Game {
   }
   snapshot() { this.rememberPlace(); return copy(this.store.data); }
   meta() {
-    const era = this.eras[this.scene.era];
-    return { scene: this.scene.name, era: `${era.name}${era.date ? ", " + era.date : ""}`, lead: this.cast[this.store.data.active].name, playMs: Math.round(this.store.data.playMs) };
+    const here = this.here, era = this.eras[here.era];      // (ENGINE-17: the lead's own scene, while he looks down through a grille)
+    return { scene: here.name, era: `${era.name}${era.date ? ", " + era.date : ""}`, lead: this.cast[this.store.data.active].name, playMs: Math.round(this.store.data.playMs) };
   }
   autosave() {
     if (this.mode === "play" && this.scene && !this.busy) saves.writeSlot("auto", this.snapshot(), this.meta());
@@ -1236,6 +1541,7 @@ export class Game {
       this.lookMode = false;
       if (spot) this.interact(spot, verb);
       else if (this.held) { this.held = null; this.ui.refresh(); }
+      else if (this.peeking) { if (!looking) this.leaveView(); else this.ui.refresh(); }      // ENGINE-17: a click outside everything seen from above: back up
       else {
         const [x, y] = this.view.toPicture(event), side = this.edgeAt(x, y);
         this.ui.refresh();
@@ -1280,6 +1586,7 @@ export class Game {
         if (tree) { const exit = tree.querySelector("button.exit"); if (exit) exit.click(); }
         else if (this.mode === "cutscene") this.skip();
         else if (this.ui.open) this.ui.back();
+        else if (this.peeking && !this.busy && !this.dialogue.choosing && this.mode === "play") this.leaveView();      // ENGINE-17: Esc backs up from a grille's view
         else this.ui.pauseMenu();
       } else if ((key === " " || key === "Enter") && this.cardEl.classList.contains("show")) {
         event.preventDefault();

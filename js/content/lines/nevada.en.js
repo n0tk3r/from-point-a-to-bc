@@ -10,10 +10,11 @@
 // MOM, AS SHE NOW IS, AND THE FAMILY'S FAITH (briefs/WEAVE.md; each group of lines is marked "woven" below).
 //   - Mom says "A matter of record:" where her daughter says "Fun fact:", and what follows is true. So is every
 //     other thing she states about her country: the sources are in briefs/out/facts-home.md.
-//   - Scripture is quoted twice, word for word from the King James Version, each with its reference in the same line:
-//     Matthew 22:21, its second sentence (nevada.coin.read.2d), and the first clause of Psalm 31:15 (nevada.gate.5b).
-//     The psalm's clause ends on a colon in the King James text, so the quotation marks close before the line's own
-//     colon. Do not "tidy" either of them. Franklin's seven words (nevada.flash.sun) are James Madison's, capital S and all.
+//   - Scripture is quoted twice, word for word from the King James Version: Matthew 22:21, its second sentence
+//     (nevada.coin.read.2d), and the first clause of Psalm 31:15 (nevada.gate.5b). PASS-17N: neither says its reference
+//     any more (the author's rule of 16 October; the references are in docs/CHARACTERS.md). The psalm's clause ends on a
+//     colon in the King James text, so nothing but its words is inside the quotation marks, and the line goes on after
+//     them. Do not "tidy" either of them. Franklin's seven words (nevada.flash.sun) are James Madison's, capital S and all.
 //   - A hymn is named and not quoted (nevada.talk.lilsis.mom.3b). The prayer is their own words (nevada.pray.1, .2).
 //   - "B.C." is explained at the Roman year (nevada.gate.2c and .2d come straight after nevada.gate.2), and nowhere else.
 //   - "I TOLD you! Daddy's not lost! Daddy's EARLY!" (nevada.gate.4) is the author's line: it stays word for word, and
@@ -22,8 +23,9 @@
 // THE YEARS, AND THE CHICKENS (briefs/DATING.md: the author's two rules. The lines are marked "dating" or "chickens".)
 //   - Every year before Christ is the Bible's own count, as Archbishop Ussher counted it. The notice seals sectors 44
 //     and 1921. 1921 B.C. is on Big Sister's timeline: the year Abram went down into Egypt (Genesis 12:10), told in her
-//     own words (nevada.gate.2b), and her mother knows the chapter (.2e: named, not quoted). From 1921 B.C. to A.D. 2026
-//     is 3,946 years: "nearly four thousand" (nevada.gate.5). Nobody here uses any other count of the years.
+//     own words (nevada.gate.2b), and her mother knows the chapter (.2e: told, not quoted; PASS-17N: and not named).
+//     From 1921 B.C. to A.D. 2026 is 3,946 years: "nearly four thousand" (nevada.gate.5). Nobody here uses any other
+//     count of the years.
 //   - The doors open on years that matter. Big Sister notices it once, and does not know why (nevada.gate.2f). It is a
 //     plant: nothing here pays it off.
 //   - Little Sister loves chickens above everything, and is always right about them. The old-timer's hens are told of
@@ -59,14 +61,32 @@
 //   - The man in gray is not named aloud by anyone in the family's hearing until the cut-scene: Houston's "Jed" (#7)
 //     is the one time, and only the player hears it. Jolene calls him "the gray fella".
 //   - Scripture: Psalm 121:8 once more, King James Version, letter for letter, split between Grandpa Joe, who says it
-//     to "coming in" (nevada.through.joe.2), and Mom, who finishes it from "from" and gives the reference
-//     (nevada.through.mom.2). Nothing else of Scripture is new. Both halves together are the verse exactly.
+//     to "coming in" (nevada.through.joe.2), and Mom, who finishes it from "from" (nevada.through.mom.2). Nothing else of
+//     Scripture is new. Both halves together are the verse exactly. (LETTER-17: Mom no longer says the reference aloud:
+//     the author's rule of 16 October, references aloud only when natural. It is in docs/CHARACTERS.md.)
 //   - The author's three lines of 9 October are word for word: nevada.backup.jed.1, nevada.backup.joe.1, nevada.backup.suit.1.
 //     "Houston" is not a quotation: it is the dispatcher's name (Houston Pruitt). Her one line is nevada.agent.lil.7b.
 //   - No song is sung, named or quoted. Grandpa Joe's tune is his own, the Last Stop Rag, and he plays it or hums it.
 //   - The men in gray are never frightening: nobody is pushed, pulled or shouted at, they say sir and sorry, and
 //     "come with us" is answered on the spot by "Mind the hat."
 //   - The things carried in this act have their look lines here (item.<id>.<who>): they are this act's.
+//
+// THE DIALOGUE PASS (round seventeen, 16 October: S/briefs/PASS-17.md; the design is S/briefs/out/office-hq-design.md,
+// section 1, "The dialogue pass". Every line it changed or added is marked PASS-17N, with why.)
+//   - Mom talks like a mother with her girls (contractions, no "shall", "girls" as often as "darlings"), and keeps her
+//     whole sentences with strangers and her steel with difficult men. "A matter of record" is said three times in the
+//     act (nevada.arrive.2b, nevada.agent.mom.5, nevada.talk.mom.bigsis.quarter.a), not four.
+//   - The author's rule of 16 October: a reference is said aloud only where it is natural (Big Sister may cite chapter
+//     and verse; the Son may say where he knows a verse from); nobody else says one, and every reference is in
+//     docs/CHARACTERS.md. So Mom says the words of Matthew 22:21 and of Psalm 31:15 and not their references, and tells
+//     Abram's going down into Egypt in her own words (nevada.gate.2e, nevada.gate.5b: the design's own samples).
+//   - Fewer of Big Sister's "she noted"s (the best of them kept); a joke that was the shape of a famous film line, gone
+//     (nevada.agent.again.2); a few looks that knew a name before anybody had said it (Harold, Bernice), mended.
+//   - A little more of Ranger, beside Grandpa Joe and Little Sister and in Jolene's mouth: new lines nevada.joe.ranger.3,
+//     nevada.joe.raccoon.big.2, nevada.ranger.carry.joe, nevada.ranger.dismissed.joe, nevada.ranger.opt.spare and
+//     nevada.ranger.spare.2 (in joeTree and rangerTree, js/content/talk/nevada.js). He still never says a word.
+//   - Every id is kept, and every line marked kept or the author's is word for word. The letterbox, #12 and #13
+//     (nevada.letterbox.*, nevada.shade.*, nevada.through.* and their hints) are LETTER-17's this round: not touched here.
 
 export const lines = {
   // ---------- the middle of Nevada, the next morning ----------
@@ -74,15 +94,15 @@ export const lines = {
   "nevada.arrive.2": ["bigsis", "Fun fact: Nevada became a state on the thirty-first of October, 1864. Halloween."],
   "nevada.arrive.2b": ["mom", "Reformation Day, darling. A matter of record: Martin Luther's ninety-five theses, 1517."],      // woven: her fact caps her daughter's
   "nevada.arrive.3": ["lilsis", "It's ALL dirt. Who ordered this much dirt? ...Okay. I'm ready. Where do I start looking for Daddy?"],
-  "nevada.arrive.4": ["mom", "Somebody here saw something. We will ask nicely. Stay where I can see you, girls."],
+  "nevada.arrive.4": ["mom", "Somebody here saw something. We'll ask nicely. Stay where I can see you, girls."],                // PASS-17N: Mom's formality: contractions with her girls
   // NEVADA-12W: the opening's new last line, as Mom looks across the lot (the design's words)
   // NEVADA-12F: "out front", not "on a porch": his rocking chair stands on the ground in front of the porch (the roadside's staging)
-  "nevada.arrive.5": ["mom", "And there is a gentleman out front with a banjo, and I believe that is a raccoon. We will ask nicely."],
+  "nevada.arrive.5": ["mom", "And there's a gentleman out front with a banjo, and I believe that's a raccoon. ...We'll ask very nicely."],  // PASS-17N: funnier: the echo of 'ask nicely' pays
 
   // ---------- chain A: Grandpa Joe (he was the old-timer; the ids are the old ones where the sense is the same) ----------
   // NEVADA-12W: the three looks, for the porch as it is now painted (the lawn chair is gone)
   // NEVADA-12F: "out front", not "on a porch": the rocking chair stands on the ground in front of the porch
-  "nevada.old.look.mom": ["mom", "A gentleman out front, in a rocking chair, with a banjo across his knees. He will have seen whatever passed."],
+  "nevada.old.look.mom": ["mom", "A gentleman in a rocking chair, with a banjo across his knees. Whatever came down this road, he saw it."],  // PASS-17N: truer, less stiff
   "nevada.old.look.bigsis": ["bigsis", "One witness. Elderly, seated, hat, banjo. One raccoon, also seated. Both are pretending not to watch us. Badly."],
   "nevada.old.look.lilsis": ["lilsis", "A real wizard! White beard, magic hat, a BANJO and a RACCOON. And he sells ROCKS. He's the Rock Wizard. I just decided."],
   "nevada.old.lilsis.1": ["lilsis", "Mister! Did you see my daddy? He's THIS tall, he has a scratchy beard, and he's EARLY."],
@@ -148,9 +168,9 @@ export const lines = {
   "nevada.joe.opt.raccoon": ["mom", "What a handsome raccoon."],
   "nevada.joe.opt.vegas": ["mom", "Is this, by any chance, the road to Las Vegas?"],
   // good morning (his answer is nevada.old.mom.2)
-  "nevada.joe.opt.people": ["mom", "Do people not?"],
+  "nevada.joe.opt.people": ["mom", "Nobody at all?"],                                                                           // PASS-17N: Mom's formality ('Do people not?')
   "nevada.joe.people": ["grandpajoe", "They say 'Is this the road to Vegas.' It ain't."],
-  "nevada.joe.opt.never": ["mom", "I shall never say it."],
+  "nevada.joe.opt.never": ["mom", "I promise never to say it."],                                                                // PASS-17N: Mom's formality; and a promise the road to Vegas can break
   "nevada.joe.never": ["grandpajoe", "Then we'll get along, ma'am."],
   "nevada.joe.opt.time": ["mom", "May I buy a few minutes of your time?"],
   "nevada.joe.time": ["grandpajoe", "Time's free, ma'am. Lemonade's a dollar. Stories are extra."],
@@ -164,6 +184,7 @@ export const lines = {
   // the raccoon: met before he is needed
   "nevada.joe.ranger.1": ["grandpajoe", "Ranger. Say thank you to the lady."],
   "nevada.joe.ranger.2": ["grandpajoe", "He says you're welcome. He's shy with strangers and bold with their sandwiches."],
+  "nevada.joe.ranger.3": ["grandpajoe", "And he says that's a fine handbag, ma'am. He ain't gonna touch it. He's just gonna look at it real hard."],  // PASS-17N: new: Ranger: a second translation (and the handbag, which comes round later)
   "nevada.joe.opt.always": ["mom", "Has he always been yours?"],
   "nevada.joe.always": ["grandpajoe", "Since he was a kit. Found him in the ice machine. He was cold, I was lonesome. Jolene says we're a matched set."],
   "nevada.joe.opt.eat": ["mom", "And what does he eat?"],
@@ -214,7 +235,7 @@ export const lines = {
   "nevada.joe.grandpa.again": ["grandpajoe", "Still everybody's, little miss. You're on the list."],
   "nevada.joe.opt.raccoon.lil": ["lilsis", "Is that your RACCOON? Is he a GOOD raccoon?"],
   "nevada.joe.raccoon.lil": ["grandpajoe", "Best there is, little miss. That's Ranger."],
-  "nevada.joe.raccoon.lil.2": ["grandpajoe", "He says you seem all right."],
+  "nevada.joe.raccoon.lil.2": ["grandpajoe", "He says you seem all right. From him, that's a parade."],                         // PASS-17N: Ranger: a beat more of him
   // the banjo: the Last Stop Rag, his own, and nobody has ever asked to hear it twice. In the low sun it flashes.
   "nevada.joe.opt.play": ["lilsis", "Can you play your banjo? PLEASE? I'm a GOOD listener."],
   "nevada.joe.play.1": ["grandpajoe", "This here's the Last Stop Rag, little miss. I wrote it. Nobody's ever asked to hear it twice."],
@@ -232,6 +253,7 @@ export const lines = {
   "nevada.joe.oath": ["grandpajoe", "I'm a witness to forty years of nothin', miss. Material ain't come into it."],
   "nevada.joe.opt.raccoon.big": ["bigsis", "The raccoon. Is he yours, or are you his?"],
   "nevada.joe.raccoon.big": ["grandpajoe", "Bit of both, miss. Mostly I'm his."],
+  "nevada.joe.raccoon.big.2": ["grandpajoe", "He says 'mostly' is generous."],                                                  // PASS-17N: new: Ranger: a reply that answers back
   "nevada.joe.opt.banjo.big": ["bigsis", "Sir. Would you play your banjo at the glass, facing the sun? It is for an experiment."],
   "nevada.joe.banjo.big": ["grandpajoe", "Your ma asks me nice, miss, I'll play it anywhere she likes."],
   "nevada.joe.opt.bigback": ["bigsis", "I will return. With my mother. She has the manners in this family."],
@@ -248,7 +270,7 @@ export const lines = {
   "nevada.ranger.look.bigsis": ["bigsis", "One raccoon. Gray, masked, ringed tail, both hands folded. He is looking at me as if I owe him something."],
   "nevada.ranger.look.lilsis": ["lilsis", "A RACCOON! With a little MASK! He's a robber! ...No. His face just looks like that. He's a GOOD raccoon."],
   // and once he has the mirror shades (he wears them for the rest of the game)
-  "nevada.ranger.look2.mom": ["mom", "Ranger, in mirror shades. I can see myself in them, and I look as if I am about to be told no."],
+  "nevada.ranger.look2.mom": ["mom", "Ranger, in mirror shades. I can see myself in them. I look like a woman about to be told no."],  // PASS-17N: shorter, funnier
   "nevada.ranger.look2.bigsis": ["bigsis", "A raccoon in mirror shades. 'He had,' she noted, 'never looked more like a federal agent.'"],
   "nevada.ranger.look2.lilsis": ["lilsis", "Ranger's got SHADES! He looks like Mister Gray! But SHINIER. And NICER."],
   // Mom
@@ -260,6 +282,7 @@ export const lines = {
   "nevada.ranger.opt.suit": ["mom", "Those suit you, Ranger."],
   "nevada.ranger.suit.joe": ["grandpajoe", "He says he knows, ma'am. He's been told."],
   "nevada.ranger.opt.bye.mom": ["mom", "Carry on, Ranger."],
+  "nevada.ranger.carry.joe": ["grandpajoe", "He says he will, ma'am. He never stopped."],                                       // PASS-17N: new: Ranger: a second translation, the first time (Mom's 'Carry on' had only his dots)
   // Big Sister: the fact, and the trade
   "nevada.ranger.opt.latin": ["bigsis", "Fun fact: your Latin name is Procyon lotor. 'Lotor' means 'washer.'"],
   "nevada.ranger.latin.joe": ["grandpajoe", "He says he knows, miss. He just don't like to brag."],
@@ -274,6 +297,7 @@ export const lines = {
   "nevada.ranger.opt.big.after": ["bigsis", "For the record, Ranger, you drive a fair bargain."],
   "nevada.ranger.after.joe": ["grandpajoe", "He says so do you, miss. He'd trade with you again."],
   "nevada.ranger.opt.bye.big": ["bigsis", "That will be all, Ranger."],
+  "nevada.ranger.dismissed.joe": ["grandpajoe", "He says it ain't all, miss. But he'll let you think so."],                     // PASS-17N: new: Ranger: a reply that answers back, the first time (Big Sister's 'That will be all' had only his dots)
   // Little Sister's long conversation, in which she does both parts
   "nevada.ranger.opt.hi": ["lilsis", "Hi! I'm going to name you. ...Wait. What's your name ALREADY?"],
   "nevada.ranger.hi.2": ["lilsis", "RANGER? That's a GOOD name. I would have picked that. Nice to meet you, Ranger."],
@@ -283,7 +307,9 @@ export const lines = {
   "nevada.ranger.chickens.2": ["lilsis", "He says NO, but he KNOWS some. Out back. They're not talking to him. They're BUSY."],
   "nevada.ranger.opt.wash": ["lilsis", "Why do you wash your pebbles in the lemonade?"],
   "nevada.ranger.wash.2": ["lilsis", "He says it's so he can FEEL them better. And the lemonade was just THERE. ...That's fair."],
-  "nevada.ranger.opt.coin.lil": ["lilsis", "Hi, Ranger! I'm naming you... oh. You HAVE a name."],
+  "nevada.ranger.opt.spare": ["lilsis", "Ranger? Do you want to be my SPARE raccoon? Grandpa Joe's my spare GRANDPA."],         // PASS-17N: new: Ranger: the spare grandpa comes round once more
+  "nevada.ranger.spare.2": ["lilsis", "He says he's ALREADY Grandpa Joe's. ...That's okay. Spares can SHARE."],                 // PASS-17N: new: Ranger: she does both parts, as she does
+  "nevada.ranger.opt.coin.lil": ["lilsis", "Ranger? About the shiny money."],                                                   // PASS-17N: the option now says what she is about to ask (it repeated her hello joke)
   "nevada.ranger.lil.evidence": ["lilsis", "Give me the coin, please. It's EVIDENCE."],
   "nevada.ranger.no.lil": ["grandpajoe", "That's a no, little miss."],                                                        // (he has turned round and shown her his tail)
   "nevada.ranger.opt.shades.lil": ["lilsis", "Look, Ranger! SHINY! Do you want them? You can have them!"],
@@ -328,16 +354,16 @@ export const lines = {
   "nevada.agent.lil.8": ["bigsis", "'It was,' she noted, 'the finest interrogation she had ever witnessed.'"],
   "nevada.agent.busy": ["agent", "Sir, now she wants to know whose side the SUN is on. ...No, sir. I didn't have an answer either."],
   "nevada.agent.again.1": ["lilsis", "You stay RIGHT there. Next question. Why is the sky? Not why is it BLUE. Why IS it?"],
-  "nevada.agent.again.2": ["agent", "...We are going to need a bigger department."],
+  "nevada.agent.again.2": ["agent", "...Sir? Requesting a transfer. To a quieter desert."],                                     // PASS-17N: an original joke (the old one was the shape of a famous film line)
   "nevada.agent.coin.1": ["agent", "I can neither confirm nor deny that that is a coin."],
   "nevada.agent.coin.2": ["agent", "If it were a coin, I would have to file a report. So it is not a coin."],
 
   "nevada.notice.blocked.mom": ["mom", "The gentleman is standing exactly in front of it. One admires the precision."],
-  "nevada.notice.blocked.bigsis": ["bigsis", "I can read 'AREA CLOSED'. The small print is behind his jacket. That is not enough to work with."],
+  "nevada.notice.blocked.bigsis": ["bigsis", "I can read 'AREA CLOSED'. The small print is behind his jacket, which I assume is the point."],  // PASS-17N: funnier
   "nevada.notice.blocked.lilsis": ["lilsis", "Mister Gray is standing in the WAY. I could ask him to move. I could ask him a LOT of things."],
   // dating: the notice reads SECTORS 44 AND 1921 (the close-up is notice() in js/art/kit.js)
   "nevada.notice.mom.1": ["mom", "'Area closed. Elevated radiation levels. Sectors 44 and 1921 sealed until further notice.'"],
-  "nevada.notice.mom.2": ["mom", "Sectors. As though the desert had been numbered. Your sister should see this."],
+  "nevada.notice.mom.2": ["mom", "Sectors. Somebody has numbered the desert. Your sister should see this."],                    // PASS-17N: shorter (the clue kept: her sister should read it)
   "nevada.notice.lilsis": ["lilsis", "It says... A, R, E, A. AREA! I can READ that. And a yellow spinny flower. 'Radiator levels.' That's bad, right?"],
   "nevada.notice.big.1": ["bigsis", "'Elevated radiation levels.' In Nevada, people will believe that. Fun fact: atomic bombs were tested out here from 1951 until 1992."],
   "nevada.notice.big.2": ["bigsis", "Which makes it a very good excuse. But look at the sectors. Forty-four. Nineteen twenty-one."],
@@ -348,29 +374,29 @@ export const lines = {
   "nevada.coin.read.1": ["bigsis", "Mother. This is a Roman denarius. And that is Julius Caesar."],
   "nevada.coin.read.2": ["bigsis", "Fun fact: in 44 B.C., coins were struck in Rome with Caesar's own portrait. While he was alive."],
   // woven: it is the coin of the tribute money. Little Sister knows it from Sunday school, Big Sister has the fact,
-  // and Mom has the verse: Matthew 22:21, King James Version, its second sentence, exact. (In Rome, in Act Two, her
-  // son told the same story in his own words, with this same coin in his hand.)
+  // and Mom has the verse: Matthew 22:21, King James Version, its second sentence, exact (PASS-17N: and no reference).
+  // (In Rome, in Act Two, her son told the same story in his own words, with this same coin in his hand.)
   "nevada.coin.read.2b": ["lilsis", "It's the Caesar money from Sunday school!"],
   "nevada.coin.read.2c": ["bigsis", "The 'penny' they brought to Jesus was a denarius, like this one. Most likely with a later Caesar on it: Tiberius."],
-  "nevada.coin.read.2d": ["mom", "'Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's.' Matthew 22:21."],
+  "nevada.coin.read.2d": ["mom", "'Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's.'"],  // PASS-17N: reference aloud: the words only, King James exact
   "nevada.coin.read.3": ["bigsis", "And it isn't two thousand years old. Look at the edges. It is NEW. It has hardly been in a pocket."],
   "nevada.coin.read.4": ["mom", "A new coin, from 44 B.C., that fell out of the sky. In Nevada."],
   "nevada.coin.lilsis": ["lilsis", "I get to HOLD it? Finally! Hi, grumpy man. You're with ME now. I'm holding you with BOTH hands."],
-  "nevada.coin.mom": ["mom", "Thank you, darling. I will keep it in my handbag, with everything else that matters."],
+  "nevada.coin.mom": ["mom", "Thank you, darling. It goes in my handbag, with everything else that matters."],                  // PASS-17N: Mom's formality
   "nevada.connect": ["bigsis", "Sector 44. A new coin from 44 B.C. It is the same forty-four. The holes don't go to places. They go to YEARS."],
 
   // ---------- the gate: where the tracks stop. Nothing to see but glass; and a hum ----------
   "nevada.tracks.look.mom": ["mom", "Tire tracks. They run out from under that fence and they simply... stop. At a patch of sand that has turned to glass."],
   "nevada.tracks.look.bigsis": ["bigsis", "It takes a furnace to turn sand into glass. Something here was very hot, very briefly."],
   "nevada.tracks.look.lilsis": ["lilsis", "The ground's all SHINY. And it hums, like a bee in a jar. But there's no bee. And no jar. It's the Hummy Place."],
-  "nevada.tracks.early.mom": ["mom", "Not yet, darlings. I would like to understand it before any of us stands on it."],
+  "nevada.tracks.early.mom": ["mom", "Not yet, darlings. I'd like to understand it before anybody stands on it."],              // PASS-17N: Mom's formality
   "nevada.tracks.early.bigsis": ["bigsis", "I have a theory. A theory is not a fact until I can footnote it."],
   "nevada.tracks.early.lilsis": ["lilsis", "I'll jump on it first. I'm the lightest, so it's SAFEST. ...Mommy's doing the eyebrow. That's a no."],
   // Her flashlight, from the blanket fort at home. Light opens doors in this story, and this light is too little:
   // in full morning sun its spot cannot even be seen. (Whoever is holding it, she is the one who says so.)
   "nevada.tracks.lilflash": ["lilsis", "CLICK. It's ON! ...Where's my spot? I can't even SEE my spot. The sun's got a WAY bigger flashlight."],
   // Going there once the coin and the notice are both read: each of them listens, and remembers the old man's flash.
-  "nevada.hum.mom.1": ["mom", "It hums, darlings. Very quietly, and a little flat. Like your father when he is lost and will not say so."],      // woven: she hears pitch
+  "nevada.hum.mom.1": ["mom", "It hums, darlings. Very quietly, and a little flat. Like your father when he's lost and won't say so."],  // woven: she hears pitch      // PASS-17N: Mom's formality (the joke kept)
   "nevada.hum.mom.2": ["mom", "The gentleman said a flash of low sun fell just here. I wonder what we have that flashes."],
   "nevada.hum.bigsis.1": ["bigsis", "It hums. Right here, over the glass, where there is nothing at all to hum."],
   "nevada.hum.bigsis.2": ["bigsis", "A flash of low sun fell here, and the sky opened. That is his whole story. So: we need a flash."],
@@ -380,13 +406,13 @@ export const lines = {
   "nevada.gate.0": ["mom", "Places, girls."],                                                                               // woven: the stage manager, and they take their marks
   "nevada.gate.1": ["bigsis", "The tracks don't turn. They don't skid. They just stop."],
   // woven: first things first. Mom bows her head and the girls with her; nobody has to be told. In their own words.
-  "nevada.pray.1": ["mom", "Father, You brought us this far. We do not understand what comes next, and You do. Keep us, and keep them. In Jesus' name."],
+  "nevada.pray.1": ["mom", "Father, You brought us this far. We don't understand what comes next. You do. Keep us, and keep them. In Jesus' name."],  // PASS-17N: faith: plainer, in her own words
   "nevada.pray.2": ["lilsis", "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen."],
   // woven: only when it is Mom who holds the coin up. The seven words in quotation marks are Dr. Franklin's, as James
   // Madison wrote them down on the day the Constitution was signed (17 September 1787): capital S and full stop are his.
   // ("Carved" is right for the chair, and is outside the quotation marks: Madison's own word for the sun was "painted".)
   "nevada.flash.sun": ["mom", "Dr. Franklin said the sun carved on General Washington's chair was 'a rising and not a setting Sun.' So is this one."],
-  "nevada.flash.mom": ["mom", "Stand back a little, darlings. I am about to do something your father would think of."],
+  "nevada.flash.mom": ["mom", "Stand back a little, girls. I'm about to do something your father would think of."],             // PASS-17N: Mom's formality
   "nevada.flash.bigsis": ["bigsis", "A low sun. A new coin. And an old man's story. This is called an experiment."],
   "nevada.flash.lilsis": ["lilsis", "My turn! I'm gonna do a FLASH, like the car did! Everybody stand BACK. And WATCH."],
   // The door is open: the size of the coin. What comes through it is small, and settles nothing.
@@ -404,17 +430,18 @@ export const lines = {
   "nevada.gate.2c": ["lilsis", "Wait! What's B.C.? Somebody tell me QUICK."],
   "nevada.gate.2d": ["mom", "Before Christ, sweetheart. Before Jesus was born."],
   // dating: the second year is on her own timeline (the Bible's count, as Ussher counted it), and her mother knows the
-  // chapter: Genesis 12, told and not quoted. Then, once, the pattern: both are years when something happened. She does
-  // not know why. (A plant: nothing pays it off yet.)
+  // chapter: Genesis 12, told and not quoted (PASS-17N: and since the 16th not named aloud). Then, once, the pattern:
+  // both are years when something happened. She does not know why. (A plant: nothing pays it off yet.)
   "nevada.gate.2b": ["bigsis", "Sector 1921: nineteen twenty-one B.C. It is on my timeline: the year Abram went down into Egypt."],
-  "nevada.gate.2e": ["mom", "Genesis 12. I have known that chapter all my life, darling. I had never once thought of it as a morning."],
+  "nevada.gate.2e": ["mom", "Abram going down into Egypt. I've read that my whole life. I never once thought of it as an ordinary morning."],  // PASS-17N: reference aloud, and the speech that was an essay: the design's sample, word for word
   "nevada.gate.2f": ["bigsis", "The Ides of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why."],
   "nevada.gate.3": ["bigsis", "They didn't crash, Mother. They didn't go anywhere. They went some WHEN."],
   "nevada.gate.4": ["lilsis", "I TOLD you! Daddy's not lost! Daddy's EARLY!"],                                              // the author's line: word for word, and the top of the scene
   // dating: from 1921 B.C. to A.D. 2026 is 3,946 years (there is no year 0)
   "nevada.gate.5": ["bigsis", "...Nearly four thousand years early. She was right. I need to sit down."],
   // woven: the family's answer to the whole story. Psalm 31:15, King James Version, its first clause, exact.
-  "nevada.gate.5b": ["mom", "'My times are in thy hand': Psalm 31, verse 15. Every one of the times, darlings. Even that one."],
+  // (PASS-17N: the reference is no longer said; the design's own sample, the quotation marks closing on "hand".)
+  "nevada.gate.5b": ["mom", "'My times are in thy hand'... All of them, girls. Even that one."],                                // PASS-17N: reference aloud: the design's sample (the King James has a colon after 'hand', so nothing but the words inside the quotation marks)
   "nevada.gate.6": ["mom", "Then we know where they are. And we have a door. It is only a little small."],
   "nevada.gate.7": ["mom", "Girls. We are going to go and bring them home."],
 
@@ -426,7 +453,7 @@ export const lines = {
   "nevada.shack.bigsis": ["bigsis", "A building held together by paint and optimism. Mostly optimism."],
   "nevada.shack.lilsis": ["lilsis", "They sell ROCKS. You can just FIND rocks. This is the best shop ever."],
   "nevada.pump.mom": ["mom", "A gas pump with no gas in it. There is a great deal of that about."],
-  "nevada.pump.bigsis": ["bigsis", "'The pump,' she noted, 'had not served a customer in her lifetime. Or, by the look of it, in her mother's.'"],
+  "nevada.pump.bigsis": ["bigsis", "That pump has not served a customer in my lifetime. Or, by the look of it, in Mom's."],     // PASS-17N: shorter: fewer 'she noted's
   "nevada.pump.lilsis": ["lilsis", "It has a ball on its head. Like a lollipop for cars."],
   "nevada.stand.mom": ["mom", "'Lemonade, one dollar. Rocks, two dollars. Stories extra.' An honest price list."],
   "nevada.stand.bigsis": ["bigsis", "Quartz, sandstone, and one that is just a rock. I respect the honesty."],
@@ -437,19 +464,19 @@ export const lines = {
   // NEVADA-12SA: the shop's door on the porch (the way into the store), and the spare hat on the nail beside it: a look
   // from each of the three (the writer had none for the outside of the door, or for the hat)
   "nevada.porch.door.mom": ["mom", "The door to the shop. Rocks, lemonade, and whatever else forty years have put on the shelves."],
-  "nevada.porch.door.bigsis": ["bigsis", "The door of the establishment. 'It appeared,' she noted, 'to be open, in the broadest sense.'"],
+  "nevada.porch.door.bigsis": ["bigsis", "The door of the establishment. It is open, in the broadest sense of the word."],      // PASS-17N: shorter: fewer 'she noted's
   "nevada.porch.door.lilsis": ["lilsis", "A SHOP! Inside the SHACK! I bet they have SNACKS. Can we go in? We're going in."],
   "nevada.hatnail.mom": ["mom", "A straw sun hat on a nail by the door, with a scarf tied round it. Somebody here dresses for the occasion."],
-  "nevada.hatnail.bigsis": ["bigsis", "A spare hat, hung on a nail. 'Somewhere,' she deduced, 'there is a woman with more hats than nails.'"],
+  "nevada.hatnail.bigsis": ["bigsis", "A spare hat on a nail. Deduction: somewhere nearby is a woman with more hats than nails."],  // PASS-17N: shorter: fewer 'she noted's
   "nevada.hatnail.lilsis": ["lilsis", "A hat on a NAIL! With a SCARF! It's the fanciest hat I ever saw on a nail. I've seen two."],
 
   // ---------- what they say to each other ----------
   "nevada.talk.mom.bigsis.1a": ["mom", "What do you make of it, darling?"],
   "nevada.talk.mom.bigsis.1b": ["bigsis", "It is too tidy. Real accidents are messy. This one has a fence and a sign."],
-  "nevada.talk.mom.bigsis.2a": ["mom", "Two books in the car, darling, and you have not opened either. I am almost concerned."],
+  "nevada.talk.mom.bigsis.2a": ["mom", "Two books in the car, darling, and you haven't opened either. I'm almost concerned."],  // PASS-17N: Mom's formality
   "nevada.talk.mom.bigsis.2b": ["bigsis", "This is better than either of them. Do not tell them."],
   "nevada.talk.mom.bigsis.2c": ["mom", "Your secret is safe, darling."],
-  "nevada.talk.mom.bigsis.coin.a": ["mom", "I have a coin that fell out of the sky. I would like your opinion of it."],      // NEVADA-12W: he no longer gave it
+  "nevada.talk.mom.bigsis.coin.a": ["mom", "I have a coin that fell out of the sky, darling. I'd like your professional opinion."],  // NEVADA-12W: he no longer gave it      // PASS-17N: Mom's formality; funnier
   "nevada.talk.mom.bigsis.coin.b": ["bigsis", "Then hand it over, Mother. I can't footnote what I can't hold."],
   // woven: once the coin has been read. Mom has the motto, and her daughter has the year: they keep score.
   "nevada.talk.mom.bigsis.quarter.a": ["mom", "A matter of record: Caesar put his own face on his money. Ours says 'In God We Trust.'"],
@@ -457,8 +484,8 @@ export const lines = {
   "nevada.talk.mom.lilsis.1a": ["mom", "Drink your lemonade slowly, sweetheart."],
   "nevada.talk.mom.lilsis.1b": ["lilsis", "I AM drinking it slowly. I'm drinking it slowly really FAST."],
   "nevada.talk.mom.lilsis.2a": ["lilsis", "Mommy, is Daddy STILL in trouble?"],                                           // (she asked it at home too: "STILL" makes this the second time)
-  "nevada.talk.mom.lilsis.2b": ["mom", "A little, sweetheart. But only with me, and only once he is home."],
-  "nevada.talk.mom.lilsis.gray.a": ["mom", "That gentleman in gray will not move for me."],
+  "nevada.talk.mom.lilsis.2b": ["mom", "A little, sweetheart. But only with me, and only once he's home."],                     // PASS-17N: Mom's formality
+  "nevada.talk.mom.lilsis.gray.a": ["mom", "That gentleman in gray won't budge for me."],                                       // PASS-17N: Mom's formality
   "nevada.talk.mom.lilsis.gray.b": ["lilsis", "Did you ask him enough times? You have to ask a LOT of times. I'll show you how. Watch me."],
   "nevada.talk.bigsis.mom.1a": ["bigsis", "For the record: I am not frightened. I am gathering data."],
   "nevada.talk.bigsis.mom.1b": ["mom", "Gather it close to me, please."],
@@ -474,16 +501,16 @@ export const lines = {
   "nevada.talk.bigsis.lilsis.1c": ["lilsis", "Like me when I hide! Nobody EVER finds me. I'm the best hider in our whole house."],
   "nevada.talk.bigsis.lilsis.1d": ["bigsis", "That is, regrettably, true. We once looked for an hour. She was in the laundry basket, under the towels."],
   "nevada.talk.lilsis.mom.1a": ["lilsis", "Mommy, is the Rock Wizard a real wizard? Or is he Santa, on vacation? He has the beard for both."],
-  "nevada.talk.lilsis.mom.1b": ["mom", "If he is Santa, darling, then we have been very good this year."],
+  "nevada.talk.lilsis.mom.1b": ["mom", "If he's Santa, darling, then we've all been very good this year."],                     // PASS-17N: Mom's formality
   "nevada.talk.lilsis.mom.2a": ["lilsis", "Mommy, when we find Daddy, can I tell him I fixed the internet?"],
-  "nevada.talk.lilsis.mom.2b": ["mom", "You may tell him first, before anybody says anything else at all."],
+  "nevada.talk.lilsis.mom.2b": ["mom", "You can tell him first. Before anybody says anything else at all."],                    // PASS-17N: Mom's formality
   "nevada.talk.lilsis.mom.2c": ["lilsis", "Even before 'hi'? ...Then I'll show him my tooth SECOND."],
   // woven: a hymn, named and not quoted
   "nevada.talk.lilsis.mom.3a": ["lilsis", "Mommy, you're humming. Is it the one with the loud part?"],
-  "nevada.talk.lilsis.mom.3b": ["mom", "'O God, Our Help in Ages Past,' sweetheart. Every part of it is the loud part, if one means it."],
+  "nevada.talk.lilsis.mom.3b": ["mom", "'O God, Our Help in Ages Past,' sweetheart. Today it's all the loud part."],            // PASS-17N: faith: a feeling, not a moral ('if one means it')
   // chickens: once the old-timer has told of his hens. The General went in Daddy's suitcase, to keep an eye on him.
   "nevada.talk.lilsis.mom.4a": ["lilsis", "Mommy, I miss General Feathers. But Daddy needs her MORE. She's keeping an eye on him. He has to do what she SAYS."],
-  "nevada.talk.lilsis.mom.4b": ["mom", "Then he is well looked after, sweetheart. She outranks him."],
+  "nevada.talk.lilsis.mom.4b": ["mom", "Then he's well looked after, sweetheart. She outranks him."],                           // PASS-17N: Mom's formality
   "nevada.talk.lilsis.bigsis.2a": ["lilsis", "Are you scared? You can tell me. I won't tell anybody."],
   "nevada.talk.lilsis.bigsis.2b": ["bigsis", "No. ...A little. Hold my hand. It is for your sake, obviously."],
   "nevada.talk.lilsis.bigsis.2c": ["lilsis", "Okay. I'm holding it MIGHTILY. I'm not scared. I'm BRAVE-scared."],
@@ -500,7 +527,7 @@ export const lines = {
   "hint.nevada.coin.bigsis": ["bigsis", "That coin fell out of the sky, and I have not read it properly yet. I need it in my own hands, and a long look."],      // NEVADA-12W
   "hint.nevada.coin.lilsis": ["lilsis", "Ranger traded us the shiny money! My sister knows ALL the olden-days stuff. Give it to HER, and make her LOOK."],      // NEVADA-12W
   "hint.nevada.distract.lilsis": ["lilsis", "Mister Gray is standing in front of the sign. I have SO many questions for him. All my fingers' worth."],
-  "hint.nevada.distract.mom": ["mom", "That man will not move for courtesy. He has not yet met your little sister."],
+  "hint.nevada.distract.mom": ["mom", "That man won't move for courtesy. He hasn't met your little sister yet."],               // PASS-17N: Mom's formality
   "hint.nevada.distract.bigsis": ["bigsis", "He can deflect one question. Can he deflect two hundred? I know someone who has two hundred."],
   "hint.nevada.notice.bigsis": ["bigsis", "The man in gray has his hands full. Now I can read that notice properly."],
   "hint.nevada.notice.mom": ["mom", "The notice is free at last. Your sister should be the one to read it. She reads between the lines."],
@@ -515,7 +542,7 @@ export const lines = {
   // Jolene, under the hat of the visit (nevada.visits: 1 a straw cowboy hat, 2 a sun hat with fruit, 3 a tiara,
   // 4 a hard hat, 5 a hat shaped like a hen; then round again). Her greeting as they come in:
   // NEVADA-12F: "out front", not "on the porch": his rocking chair stands on the ground in front of the porch
-  "nevada.jolene.hello.1": ["jolene", "Well, hey there, sugar! Come in out of the sun. I'm Jolene. Joe's the one out front, pretendin' he ain't nosy."],
+  "nevada.jolene.hello.1": ["jolene", "Well, hey there, sugar! Come in out of the sun. I'm Jolene. Joe's out front pretendin' he ain't nosy. Ranger don't pretend."],  // PASS-17N: Ranger: a beat of him, from Jolene
   "nevada.jolene.hello.2": ["jolene", "Back again! I changed my hat. The fruit ain't real, so don't nobody bite it."],
   "nevada.jolene.hello.3": ["jolene", "Well, if it ain't my favorite customers. Don't mind the tiara, sugar. Every woman's a queen before lunch."],
   "nevada.jolene.hello.4": ["jolene", "Hard hat today, sugar. Joe says he's fixin' the ceilin' fan. I'm dressed for it."],
@@ -530,7 +557,7 @@ export const lines = {
   "nevada.jolene.hens.1": ["jolene", "Oh, you're kind to ask. They won't talk to me. They won't talk to Joe. They're not talking to anybody. They just LOOK."],
   "nevada.jolene.opt.atwhat": ["mom", "At what?"],
   "nevada.jolene.hens.2": ["jolene", "The fence, sugar. Day and night. Like it owes them money."],
-  "nevada.jolene.opt.names.mom": ["mom", "Have they names?"],
+  "nevada.jolene.opt.names.mom": ["mom", "Do they have names?"],                                                                // PASS-17N: Mom's formality ('Have they names?')
   "nevada.jolene.names": ["jolene", "Darlene, Charlene, Marlene, Arlene and Doreen. Named for my sisters. The hens are nicer."],
   "nevada.jolene.opt.poor": ["mom", "Poor dears. All of them."],
   "nevada.jolene.opt.hens.big": ["bigsis", "Fun fact: a hen lays less when she is frightened."],
@@ -558,7 +585,7 @@ export const lines = {
   "nevada.jolene.window.give": ["jolene", "Take the window. The window likes you."],                                                   // #12: once #11 is done
   // her facts: four, one a visit, each wrong beyond argument, each delivered with total confidence, each put right by
   // Big Sister (who is right), and each a delight to Jolene. (S/work-writer/facts.md says why each is false.)
-  "nevada.jolene.opt.fact.mom": ["mom", "Have you any news, Mrs. Jolene?"],
+  "nevada.jolene.opt.fact.mom": ["mom", "Any news today, Mrs. Jolene?"],                                                        // PASS-17N: Mom's formality ('Have you any news')
   "nevada.jolene.opt.fact.big": ["bigsis", "Is there anything you would like to tell me, Mrs. Jolene? I am ready."],
   "nevada.jolene.opt.fact.lil": ["lilsis", "Tell me a FACT! My sister knows ALL the facts. I want a DIFFERENT one."],
   "nevada.jolene.fact.1": ["jolene", "Fun fact, sugar: a hen's got teeth. She just don't smile at strangers."],
@@ -617,11 +644,11 @@ export const lines = {
   "nevada.buy.ring": ["jolene", "There. She rang. She don't ring for just anybody."],                                         // (the register rings: for her)
   "nevada.buy.waters.mom": ["mom", "And three waters, please, Mrs. Jolene. We are going somewhere with no shops."],
   "nevada.buy.waters.jolene": ["jolene", "Somewhere with no shops? Then I'm glad you stopped at mine first, sugar."],
-  "nevada.buy.again.mom": ["mom", "We have what we need from that shelf, darlings. One does not buy for the pleasure of the register."],
+  "nevada.buy.again.mom": ["mom", "We have what we need from that shelf, girls. We don't buy just to hear the bell."],          // PASS-17N: Mom's formality ('One does not buy for the pleasure of the register')
 
   // ---------- the things in the store: a look from each of the three, and Jolene where she has a word ----------
-  "nevada.store.counter.mom": ["mom", "A counter worn pale by forty years of elbows. I shall not lean."],
-  "nevada.store.counter.bigsis": ["bigsis", "Everything on this counter is for sale, and none of it has been sold. 'It was,' she noted, 'a museum with prices.'"],
+  "nevada.store.counter.mom": ["mom", "A counter worn pale by forty years of elbows. I won't lean."],                           // PASS-17N: Mom's formality
+  "nevada.store.counter.bigsis": ["bigsis", "Everything on this counter is for sale, and none of it has ever been sold. It is a museum with prices."],  // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.counter.lilsis": ["lilsis", "The counter's TALLER than me. I can see over it on my TIPTOES. ...Hi, Grandma Jolene!"],
   // the register: it rings for Jolene and for nobody else
   "nevada.store.register.mom": ["mom", "An old cash register with a little bell. It has the air of something that has rung for royalty."],
@@ -632,14 +659,14 @@ export const lines = {
   "nevada.store.register.use.lilsis": ["lilsis", "I pressed ALL the buttons. It didn't ring. ...It rings for HER. Not for me. That's not FAIR."],
   "nevada.jolene.register": ["jolene", "It knows me, sugar. We've been together since '74. Longer than Joe and me, by a week."],
   // the pickled eggs
-  "nevada.store.eggs.mom": ["mom", "Pickled eggs, in a jar that has seen things. We will have lunch later, girls. Elsewhere."],
+  "nevada.store.eggs.mom": ["mom", "Pickled eggs, in a jar that has seen things. We'll have lunch later, girls. Elsewhere."],   // PASS-17N: Mom's formality
   "nevada.store.eggs.bigsis": ["bigsis", "No, thank you. Non, merci. Nein, danke."],
   "nevada.store.eggs.lilsis": ["lilsis", "Are they CHICKEN eggs?"],
   "nevada.jolene.eggs": ["jolene", "A dollar. The jar's older than the eggs. The eggs is older than you."],
   "nevada.jolene.eggs.lilsis": ["jolene", "Honey, everything's chicken eggs if you wait long enough."],
   "nevada.store.eggs.lilsis.2": ["lilsis", "...I'm not going to ask any more questions about the eggs."],
   // the take-a-penny dish (#10's wrong try: four pennies, and Ranger does not want copper)
-  "nevada.store.pennydish.mom": ["mom", "A take-a-penny dish. We shall leave a dollar in it on our way out, darlings. That is how it works."],
+  "nevada.store.pennydish.mom": ["mom", "A take-a-penny dish. We'll leave a dollar in it on our way out, girls. That's how it works."],  // PASS-17N: Mom's formality
   "nevada.store.pennydish.bigsis": ["bigsis", "A take-a-penny dish. The honor system, in copper."],
   "nevada.store.pennydish.lilsis": ["lilsis", "Pennies! In a DISH! For ANYBODY!"],
   "nevada.store.pennydish.lilsis.1": ["lilsis", "It SAYS take a penny."],
@@ -649,8 +676,8 @@ export const lines = {
   "nevada.store.pennydish.again": ["lilsis", "I have FOUR already. Leave some for the next person. That's MANNERS."],
   "nevada.pennies.keep": ["lilsis", "No! They're MINE. I took them FAIR. It SAID."],                                              // she will not give the three
   // the postcards
-  "nevada.store.postcards.mom": ["mom", "Postcards of the Last Stop. Every one is this exact view. One admires the commitment."],
-  "nevada.store.postcards.bigsis": ["bigsis", "Postcards of a place nobody visits, for people who do not write. 'The market,' she noted, 'was small.'"],
+  "nevada.store.postcards.mom": ["mom", "Postcards of the Last Stop. Every one is this exact view. I admire the commitment."],  // PASS-17N: 'One admires' was said twice in the act (the notice keeps it)
+  "nevada.store.postcards.bigsis": ["bigsis", "Postcards of a place nobody visits, for people who do not write. A niche market."],  // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.postcards.lilsis": ["lilsis", "Postcards! I'm sending one to Daddy. To DADDY, EARLY. The mailman will figure it out."],
   "nevada.jolene.postcards": ["jolene", "Ten cents each, sugar. Joe took the picture in 1975. Ain't changed a bit."],
   // the hat rack: today's hats, with a gap where the hat of the hour lives. Little Sister notices every time (one a
@@ -666,7 +693,7 @@ export const lines = {
   "nevada.store.hats.lilsis.5": ["lilsis", "A CHICKEN hat! It's the BEST hat! It's the best hat in the WHOLE WORLD. I want to LIVE in it."],
   // Ranger's basket, under the counter (where the coin is, until the trade)
   "nevada.store.basket.mom": ["mom", "A basket under the counter: bottle caps, a spoon and a watch with no hands. It is not ours to look in."],
-  "nevada.store.basket.bigsis": ["bigsis", "Bottle caps, a spoon, a watch with no hands. 'The collection,' she noted, 'was curated.'"],
+  "nevada.store.basket.bigsis": ["bigsis", "Bottle caps, a spoon, a watch with no hands. Small, but carefully curated."],       // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.basket.lilsis": ["lilsis", "Ranger's TREASURE! Bottle caps, a spoon, and a watch with NO hands! ...Is that where he keeps the coin?"],
   "nevada.jolene.basket": ["jolene", "Nobody goes in that basket but Ranger. Not me, not Joe, not the government."],
   // the front window, and the sun shade in it (DISPLAY ONLY: one side bleached by forty summers, the other a mirror)
@@ -685,7 +712,7 @@ export const lines = {
   // the spinner rack: one pair of mirror shades left
   // NEVADA-12F: a few dusty pairs of cheap shades are painted on the rack besides the mirror pair: not every hook is empty
   "nevada.store.spinner.mom": ["mom", "A spinning rack of dusty shades, most hooks empty. Mirror shades: three dollars and ninety-nine cents."],
-  "nevada.store.spinner.bigsis": ["bigsis", "One pair of mirror shades, last of their kind. I can see myself in both lenses, twice."],
+  "nevada.store.spinner.bigsis": ["bigsis", "One pair of mirror shades, the last of their kind. They are so shiny they are almost rude."],  // PASS-17N: funnier ('in both lenses, twice' did not add up); and shiny is what Ranger likes
   "nevada.store.spinner.lilsis": ["lilsis", "It SPINS! Wheeee! ...There's SHINY ones on it. Really really SHINY ones."],
   "nevada.store.spinner.use.bigsis": ["bigsis", "I have no money. I have a great deal of knowledge, which is not legal tender."],
   "nevada.store.spinner.use.lilsis": ["lilsis", "Mommy, can we buy the SHINY ones? Mommy BUYS things. That's how buying WORKS."],
@@ -696,8 +723,8 @@ export const lines = {
   // NEVADA-12F
   "nevada.store.spinner2.lilsis": ["lilsis", "It still SPINS. Wheeee. ...It's less fun with no SHINY ones on it."],
   // the cooler: Harold. He hums.
-  "nevada.store.cooler.mom": ["mom", "Harold, the cooler. He hums a little flat, poor dear. So does everyone out here."],
-  "nevada.store.cooler.bigsis": ["bigsis", "A cooler named Harold. 'She did not ask why,' she noted. 'She did not want to know.'"],
+  "nevada.store.cooler.mom": ["mom", "A drinks cooler, humming a little flat, poor dear. So does everyone out here."],          // PASS-17N: truer: Jolene says his name, after
+  "nevada.store.cooler.bigsis": ["bigsis", "A cooler. If I had any money, I would bet it has a name."],                         // PASS-17N: truer (Jolene names him, after); fewer 'she noted's; her money comes round
   "nevada.store.cooler.lilsis": ["lilsis", "It's HUMMING. Is it a door? ...No. It's just cold. The Hummy Place is warmer."],
   "nevada.jolene.cooler": ["jolene", "That's Harold. He keeps the lemonade cold and he never says a word. Joe could learn from Harold."],
   // the grill and the hot dog roller: cold since 1979, and the roller turns, empty, for company
@@ -723,17 +750,17 @@ export const lines = {
   "nevada.store.auto.lilsis": ["lilsis", "A SQUEEGEE! I know what that's for. It's for windows. And for SQUEEGEEING."],
   "nevada.jolene.squeegee": ["jolene", "That squeegee's been in this family longer than I have."],
   // the survival shelf: water, jerky, a space blanket (Mom buys three waters)
-  "nevada.store.survival.mom": ["mom", "Water, jerky and a space blanket. A matter of record: Nevada is the driest state in the Union."],
+  "nevada.store.survival.mom": ["mom", "Water, jerky and a space blanket. Nevada is the driest state in the Union, girls."],    // PASS-17N: 'A matter of record' three times in the act, not four
   "nevada.store.survival.bigsis": ["bigsis", "A survival shelf. Water, jerky, and a space blanket folded smaller than a sandwich."],
   "nevada.store.survival.lilsis": ["lilsis", "A SHINY BLANKET! It's a blanket made out of a CANDY WRAPPER."],
   // the TV: rabbit ears, one channel, snow
   // NEVADA-12F: she stands behind her counter facing the shop, with the television behind her: she is not watching it
   "nevada.store.tv.mom": ["mom", "A television with rabbit ears, showing nothing but snow. Mrs. Jolene keeps it on regardless."],
-  "nevada.store.tv.bigsis": ["bigsis", "One channel, and snow on it. 'It was,' she noted, 'the most honest television she had ever seen.'"],
+  "nevada.store.tv.bigsis": ["bigsis", "One channel, and snow on it. The most honest television I have ever seen."],            // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.tv.lilsis": ["lilsis", "It's SNOWING on the TV! ...Is it snowing somewhere? Can we GO there?"],
   "nevada.jolene.tv": ["jolene", "It's a weather channel, sugar. The weather's snow."],
   // the pay phone (Jolene's lines are nevada.jolene.phone.1 and .2)
-  "nevada.store.phone.mom": ["mom", "A pay phone. Mrs. Jolene says it has not worked since the eighties. She answers it anyway."],
+  "nevada.store.phone.mom": ["mom", "A pay phone. I doubt it has rung since the eighties. Somebody still dusts it."],           // PASS-17N: truer: nobody in the game told her it had not worked since the eighties
   "nevada.store.phone.bigsis": ["bigsis", "A pay phone, with no dial tone. There has not been a dial tone in my lifetime."],
   "nevada.store.phone.lilsis": ["lilsis", "A PHONE on the WALL! My brother has a quarter for one of these. He's never even SEEN one."],
   // the bulletin board: lost dogs, and a card in Jolene's hand (its name is painted, and nobody here reads it out)
@@ -751,34 +778,34 @@ export const lines = {
   "nevada.store.chair.bigsis.2": ["bigsis", "'She opened her mouth,' she noted, 'and closed it again.'"],
   "nevada.store.chair.lilsis.2": ["lilsis", "A CHICKEN SWEATER. That's the best thing I've ever SEEN."],
   // the hubcap wall: a hundred and twelve, one of them off a tractor, every one found on this road
-  "nevada.store.hubcaps.mom": ["mom", "A hundred and twelve hubcaps, every one found on this road. He has catalogued misfortune."],
+  "nevada.store.hubcaps.mom": ["mom", "A hundred and twelve hubcaps, every one off a car in a hurry. Somebody has catalogued misfortune."],  // PASS-17N: truer: whose they are is Jolene's to tell (her word on it follows)
   "nevada.store.hubcaps.bigsis": ["bigsis", "One hundred and twelve hubcaps, and every one of them was going somewhere at the time."],
   "nevada.store.hubcaps.lilsis": ["lilsis", "Which one's the SHINIEST? ...None of them. Grandpa Joe's BANJO is shinier. I SAW it."],
   "nevada.jolene.hubcaps": ["jolene", "Forty years of other people's bad luck. He dusts 'em."],
   // the ceiling fan, which has not turned since 1979
-  "nevada.store.fan.mom": ["mom", "A ceiling fan that has not turned since 1979. It has made its peace with that."],
+  "nevada.store.fan.mom": ["mom", "A ceiling fan that hasn't turned in years. It has made its peace with that."],               // PASS-17N: truer: the year is Jolene's to tell (her word on it follows)
   "nevada.store.fan.bigsis": ["bigsis", "The fan is not turning. Neither is the air."],
   "nevada.store.fan.lilsis": ["lilsis", "The fan's ASLEEP. ...WAKE UP, FAN! ...It's VERY asleep."],
   "nevada.jolene.fan": ["jolene", "Joe's fixin' that fan. Been fixin' it since 1979. Any day now."],
   // the back door: the hen yard, the five in a row, the fence beyond them, and beyond that the glass
   "nevada.store.backdoor.mom": ["mom", "Five hens in a row, out back, facing the fence. And past the fence, the glass."],
-  "nevada.store.backdoor.mom.2": ["mom", "They are looking straight at it, darlings. Straight at the place where the tracks stop."],
-  "nevada.store.backdoor.bigsis": ["bigsis", "'Five hens,' she noted, 'in a row, and not one of them pecking at anything. She did not like it.'"],
+  "nevada.store.backdoor.mom.2": ["mom", "They're looking straight at it, girls. Straight at the place where the tracks stop."],  // PASS-17N: Mom's formality
+  "nevada.store.backdoor.bigsis": ["bigsis", "Five hens in a row, and not one of them is pecking at anything. I do not like it."],  // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.backdoor.lilsis": ["lilsis", "CHICKENS! Five of them! They're all looking the SAME WAY. ...That means something. I KNOW it does."],
   // and after #11: two sitting, three still on guard
   // NEVADA-12F: after #11 the egg is in Little Sister's pocket, not in the dust
   "nevada.store.backdoor2.mom": ["mom", "Two hens sitting, three still watching, and one egg, safe in a pocket. Things are looking up."],
-  "nevada.store.backdoor2.bigsis": ["bigsis", "Two of them are sitting down. 'Stand down,' she noted, 'is apparently something a hen understands. From her.'"],
+  "nevada.store.backdoor2.bigsis": ["bigsis", "Two of them have sat down. Apparently 'stand down' is something a hen understands. From her."],  // PASS-17N: shorter: fewer 'she noted's
   "nevada.store.backdoor2.lilsis": ["lilsis", "Darlene and Charlene are SITTING! The others are still GUARDING. That's okay. Somebody has to."],
   // the door to the lot, and its bell (Bernice)
-  "nevada.store.door.mom": ["mom", "The door to the lot, and a bell on a spring. Mrs. Jolene has named the bell. I would expect nothing less."],
+  "nevada.store.door.mom": ["mom", "The door to the lot, and a bell on a spring. Of course the bell has a name."],              // PASS-17N: truer and shorter: Jolene names it, after
   "nevada.store.door.bigsis": ["bigsis", "A bell over the door that rings for everyone who comes in. Nobody comes in."],
   "nevada.store.door.lilsis": ["lilsis", "The door goes DING! I'll make it go again. DING! ...Okay. I'll stop. DING. Okay NOW I'll stop."],
   "nevada.jolene.bell": ["jolene", "That's Bernice. She lets me know when somebody's come in. She ain't had much to do."],
 
   // ---------- NEVADA-12W: #11, Jolene's Girls (hensTree in js/content/talk/nevada.js): Little Sister on the back step ----------
   // The other two will not go out. They watch from the doorway.
-  "nevada.hens.door.mom": ["mom", "I am not going to stand in a hen yard, darling. I have stood in worse, and I have standards."],
+  "nevada.hens.door.mom": ["mom", "I'm not going to stand in a hen yard, darling. I've stood in worse, and I have standards."],  // PASS-17N: Mom's formality
   "nevada.hens.door.bigsis": ["bigsis", "I will observe from the doorway. That is what a doorway is for."],
   // What she tries first is the player's choice. The order she names them in is hers.
   "nevada.hens.opt.attention": ["lilsis", "Flock! ATTENTION!"],
@@ -829,51 +856,68 @@ export const lines = {
   // { through: "son" })). The Son is on the other side of the coin door, holding his own door open in Rome with Dad's
   // keys in the sun. Through a door the menus are his words (the engine's way), so the options are his lines, and the
   // family answer on stage. Every line of his is "son", and goes through the door with his portrait.
+  // LETTER-17 (round seventeen): rewritten as the author asked (16 October): Mom hears her son, and answers like a
+  // mother; he explains as best he can until she understands that he is in another time; the rest of the talk, with a
+  // mother's real questions in it; his warning and her answer; and Grandpa Joe, who heard all of it, and Ranger, who
+  // brings her the handbag she put down on the gravel. (briefs/out/office-hq-design.md, section 2; briefs/LETTER-17.md.)
   // ======================================================================================================
   // whoever speaks into the door first
-  "nevada.letterbox.hail.mom": ["mom", "Hello? Is anyone there? Forgive me. I am speaking into a hole in the air."],
+  "nevada.letterbox.hail.mom": ["mom", "Hello? ...Is anybody there? I'm talking to a hole in the air, girls. Nobody tell your father."],     // LETTER-17 (the design's)
   "nevada.letterbox.hail.bigsis": ["bigsis", "Hello. This is a test. If anyone can hear this, please say so. Clearly."],
   "nevada.letterbox.hail.lilsis": ["lilsis", "HELLO! Is anybody IN there? It's ME!"],
-  // and then the two of them, across two doors
+  // and then the two of them, across two doors (the hails and "I asked FIRST" kept)
   "nevada.letterbox.son.0": ["son", "Hello? HELLO? Is somebody out there? This hole has VOICES in it."],
   "nevada.letterbox.lilsis.1": ["lilsis", "...Is that YOU?"],
   "nevada.letterbox.son.1": ["son", "Is that YOU?"],
   "nevada.letterbox.lilsis.2": ["lilsis", "I asked FIRST."],
   "nevada.letterbox.son.2": ["son", "I asked EARLIER."],
-  "nevada.letterbox.bigsis.1": ["bigsis", "'Technically,' she noted, 'he had.'"],
-  "nevada.letterbox.mom.1": ["mom", "...Sweetheart? Is that really you?"],
-  "nevada.letterbox.son.3": ["son", "MOM! It's me! I'm in Rome! In a TEMPLE! There's a hole in the wall, and you're IN it!"],
-  // the first where-and-when: she half has it from the notice; he tells her what he can smell and hear
-  "nevada.letterbox.bigsis.when": ["bigsis", "Rome. Yes. But WHEN? Tell me what you can hear, and what you can smell. All of it. I am taking notes."],
+  // LETTER-17: Mom. Her handbag is down on the gravel and she is at the little door on her knees, and every rule of her
+  // voice is gone at once: short, fast, no "darling". (Big Sister, very quietly, to her sister; her sister whispers as she
+  // whispers.)
+  "nevada.letterbox.mom.1": ["mom", "Baby? Is that you? Are you okay? Are you hurt? Where are you? Is Daddy with you?"],
+  "nevada.letterbox.son.3": ["son", "Mom! Hi! I'm okay! Don't freak out."],
+  "nevada.letterbox.mom.2": ["mom", "I'm not freaking out. Why would I freak out. Where ARE you?"],
+  "nevada.letterbox.bigsis.1": ["bigsis", "She's freaking out."],
+  "nevada.letterbox.lilsis.3": ["lilsis", "I know. It's AWESOME."],
+  // LETTER-17: he explains, as best he can. The player picks what he tries next; each try gets the answer a mother would
+  // give, and moves her a step from Italy to 44 B.C. The five clues of the year are the same as they were (the smell, the
+  // chickens, Caesar, the togas, the temple: the tree's CLUES); with three of them in he tells her it is B.C., and Big
+  // Sister pins it. Then Mom, slowly.
+  "nevada.letterbox.opt.where": ["son", "I'm in Rome!"],
+  "nevada.letterbox.mom.italy": ["mom", "Rome. ...Rome, ITALY? How did you get to Italy? Who took you to Italy?"],
+  "nevada.letterbox.opt.old": ["son", "It's not THAT Rome. It's old Rome. Like, OLD old."],
+  "nevada.letterbox.mom.funny": ["mom", "Honey, I need you to not be funny right now."],
+  "nevada.letterbox.son.funny": ["son", "I'm NOT being funny! ...For once."],
   "nevada.letterbox.opt.smell": ["son", "It smells like sausages out here. And bread. And smoke. And one other thing I'm choosing not to know."],
-  "nevada.letterbox.big.smell": ["bigsis", "Sausage, bread, woodsmoke. What we smelled through our side. Noted."],
-  "nevada.letterbox.opt.chickens": ["son", "I can hear chickens! On the steps outside, in a cage. A man says they're SACRED."],
+  "nevada.letterbox.big.smell": ["bigsis", "Sausage, bread, woodsmoke. What we smelled through our side."],
+  "nevada.letterbox.mom.smell": ["mom", "Whatever the other thing is, don't touch it."],
+  "nevada.letterbox.opt.chickens": ["son", "They have sacred chickens! In a CAGE!"],
   "nevada.letterbox.lil.chickens": ["lilsis", "I KNEW it! I HEARD them! I heard them FIRST!"],
-  "nevada.letterbox.big.chickens": ["bigsis", "Sacred chickens. Noted."],
-  "nevada.letterbox.opt.caesar": ["son", "Everybody keeps yelling about Caesar. Caesar this, Caesar that. Like he's the snack guy."],
-  "nevada.letterbox.big.caesar": ["bigsis", "Caesar, and the whole city talking about him. Noted, and underlined."],
-  "nevada.letterbox.opt.togas": ["son", "Everybody's wearing bedsheets, and NOBODY has a car. I asked. They didn't know what I meant."],
-  "nevada.letterbox.big.togas": ["bigsis", "Not bedsheets. Togas. And no cars. Noted."],
-  "nevada.letterbox.opt.temple": ["son", "I'm in a temple with giant stripy pillars, and a man counting money out loud. He's up to four hundred."],
-  "nevada.letterbox.big.temple": ["bigsis", "A temple, with money being counted in it. Noted."],
-  "nevada.letterbox.opt.when": ["son", "So? When AM I? You're the one with the timeline."],
-  "nevada.letterbox.big.pin.1": ["bigsis", "A new coin of 44 B.C. Sector 44 on the notice. Togas, a temple, sausages, sacred chickens and no cars."],
-  "nevada.letterbox.big.pin.2": ["bigsis", "You are in Rome, in 44 B.C."],
-  "nevada.letterbox.son.confirm": ["son", "I KNEW it was B.C.! Before the red mark on your timeline. I worked that out by MYSELF."],
-  // the question she does not ask, and asks
-  "nevada.letterbox.mom.eaten": ["mom", "...I was not going to ask. ...Sweetheart, have you eaten?"],
-  "nevada.letterbox.opt.rome": ["son", "Mom. I'm in ROME. That's your FIRST question?"],
-  "nevada.letterbox.mom.first": ["mom", "It is always my first question, darling. Answer it."],
+  "nevada.letterbox.mom.chickens": ["mom", "...Chickens."],
+  "nevada.letterbox.opt.caesar": ["son", "Caesar's on the money. And he's ALIVE. Everybody keeps yelling about him."],
+  "nevada.letterbox.mom.caesar": ["mom", "..."],                                                                                    // (nothing, for a moment)
+  "nevada.letterbox.big.caesar": ["bigsis", "Caesar on the money, and alive. Mother, that's our coin."],
+  "nevada.letterbox.opt.togas": ["son", "Everybody's wearing bedsheets, and nobody has a car. I asked."],
+  "nevada.letterbox.big.togas": ["bigsis", "Togas."],
+  "nevada.letterbox.mom.grownup": ["mom", "Who's watching you? Is there a grown-up there? Put a grown-up on."],
+  "nevada.letterbox.son.counting": ["son", "There's a man counting money. He's up to four hundred. I don't think he does phones."],
+  "nevada.letterbox.opt.temple": ["son", "I'm in a temple with giant stripy pillars. They keep the money in here. With the god."],
+  "nevada.letterbox.mom.temple": ["mom", "Are you allowed in there?"],
+  "nevada.letterbox.son.temple": ["son", "...Mostly."],
+  "nevada.letterbox.opt.when": ["son", "Mom, it's B.C. I checked. It's before the red mark on Big Sis's timeline."],
+  "nevada.letterbox.mom.before": ["mom", "...Before."],
+  "nevada.letterbox.big.pin.1": ["bigsis", "A new coin from 44 B.C. Sector 44 on the notice. And everything he's told us fits."],
+  "nevada.letterbox.big.pin.2": ["bigsis", "Mom. He's in Rome. In 44 B.C."],
+  "nevada.letterbox.mom.then": ["mom", "He's not in Italy. ...He's in Rome. Then."],                                                // (slowly: she sits back on her heels)
+  "nevada.letterbox.son.confirm": ["son", "...Mom? Are you okay?"],
+  // LETTER-17: she comes back. The first thing a mother does when she cannot fix it is the next thing she can fix.
+  "nevada.letterbox.mom.eaten": ["mom", "...Have you eaten?"],
+  "nevada.letterbox.opt.rome": ["son", "Mom. I'm in ROME. That's your question?"],
+  "nevada.letterbox.mom.first": ["mom", "It's always my question. Answer it."],
   "nevada.letterbox.opt.ate": ["son", "Bread with cheese IN it. Nine out of ten. It needed ketchup."],
-  "nevada.letterbox.mom.ate": ["mom", "Then I can think about everything else. Ketchup can wait."],
-  // his warning, word for word, which nobody takes
-  "nevada.letterbox.son.warn.0": ["son", "Mom. Wait. I have to tell you something. It's important."],
-  "nevada.letterbox.son.warn": ["son", "Dad went through his door to come to me. He didn't come. Mom. Don't go through yours."],
-  "nevada.letterbox.mom.heard": ["mom", "I heard you, my love. Every word. Now hear me: stay where you are, and keep your door in the sun."],
-  "nevada.letterbox.big.somewhere": ["bigsis", "Then Dad is somewhere. Not lost. Somewhere. That is a different thing."],
-  "nevada.letterbox.lil.coming": ["lilsis", "We're COMING. That's what a family DOES."],
-  "nevada.letterbox.son.snacks": ["son", "...Okay. Then bring snacks."],
-  // and after it: what else he may say
+  "nevada.letterbox.mom.ate": ["mom", "...Okay. Okay. Then I can think."],
+  // and the rest of the talk: what else he may say, and the questions a mother asks (warm enough, where he sleeps, who
+  // is kind to him). Her lucky penny goes through here, as it always has.
   "nevada.letterbox.opt.send": ["son", "Can you send me something? Anything? A snack would be ideal."],
   "nevada.letterbox.penny.lil": ["lilsis", "I'm sending you a PENNY. For LUCK. Here it comes!"],
   "nevada.letterbox.penny.son": ["son", "...Nothing came out. Did you SEND it?"],
@@ -882,9 +926,20 @@ export const lines = {
   "nevada.letterbox.chicken.big": ["bigsis", "No."],
   "nevada.letterbox.chicken.son": ["son", "Please don't post me a chicken. I've got chickens. They're SACRED."],
   "nevada.letterbox.penny.mine": ["lilsis", "I've got a PENNY for him! But I post it MYSELF. It's MY penny."],
-  "nevada.letterbox.penny.none": ["mom", "We have nothing small enough to send yet, darling. We shall look."],
+  "nevada.letterbox.penny.none": ["mom", "Nothing small enough to send yet, baby. We'll look."],
   "nevada.letterbox.opt.keys": ["son", "I'm holding my door open with Dad's keys, in the sun. My arm is SO tired."],
   "nevada.letterbox.mom.keys": ["mom", "Your father's keys. He never lets anyone hold his keys, sweetheart. He must be very sure of you."],
+  "nevada.letterbox.opt.warm": ["son", "There's a cat in here. She's asleep on the treasure. She's very official."],
+  "nevada.letterbox.mom.warm": ["mom", "Are you warm enough? Is your hoodie zipped up?"],
+  "nevada.letterbox.son.warm": ["son", "Zipped. And now the cat's asleep on MY feet. Ten out of ten."],
+  "nevada.letterbox.opt.sleep": ["son", "I'm not even tired. It's been morning here for AGES."],
+  "nevada.letterbox.mom.sleep": ["mom", "And tonight? Where are you going to sleep?"],
+  "nevada.letterbox.son.sleep": ["son", "...Operation Tonight is still in the planning stage."],
+  "nevada.letterbox.mom.sleep.2": ["mom", "Then you find a kind lady with a warm kitchen, and you ask her. Nicely."],
+  "nevada.letterbox.opt.kind": ["son", "Everybody's really nice here. Except the door guy. He scores people out of THREE."],
+  "nevada.letterbox.mom.kind": ["mom", "Who? Who's being kind to you?"],
+  "nevada.letterbox.son.kind": ["son", "Walnut. He's my best friend now. He's the best at nuts on the whole street."],
+  "nevada.letterbox.mom.kind.2": ["mom", "...You tell Walnut thank you. From me."],
   "nevada.letterbox.opt.there": ["son", "What's it like over there? Tell me EVERYTHING."],
   "nevada.letterbox.lil.there": ["lilsis", "There's a RACCOON. And a grandpa with a BANJO. And a lady with a HAT. And a PAY PHONE. On a WALL."],
   "nevada.letterbox.son.phone": ["son", "A PAY PHONE? I've got a QUARTER for one of those!"],
@@ -893,20 +948,45 @@ export const lines = {
   "nevada.letterbox.opt.dog": ["son", "Is there a dog? Please tell me there's a dog."],
   "nevada.letterbox.lil.dog": ["lilsis", "There's a RACCOON. He's like a dog with a MASK on."],
   "nevada.letterbox.son.dog": ["son", "...Ten out of ten. I'll allow it."],
-  "nevada.letterbox.opt.bye": ["son", "I have to go. My arm's about to fall off, and the counting man is giving me a look. Talk later?"],
+  // LETTER-17: his warning, and her answer. She does not promise; her daughter notices. (The first time he has something
+  // to tell her it ends the talk: then Grandpa Joe, below.)
+  "nevada.letterbox.son.warn.0": ["son", "Mom. Wait. I have to tell you something. It's important."],
+  "nevada.letterbox.son.warn": ["son", "Dad went through his door to come and get me. He didn't come out. Don't go through yours."],
+  "nevada.letterbox.mom.heard": ["mom", "...I hear you, baby."],
+  "nevada.letterbox.big.no": ["bigsis", "She didn't say no."],
+  "nevada.letterbox.mom.find": ["mom", "Stay where you are. Keep your door in the sun. We'll find you."],                               // (she means: we are coming)
+  "nevada.letterbox.lil.coming": ["lilsis", "We're COMING. That's what a family DOES."],
+  "nevada.letterbox.son.snacks": ["son", "...Okay. Then bring snacks."],
+  "nevada.letterbox.mom.love": ["mom", "I love you. You hear me? I love you."],
+  "nevada.letterbox.son.love": ["son", "Love you too. ...Don't tell anybody."],
+  "nevada.letterbox.big.noted": ["bigsis", "Noted."],
+  // goodbye (and every time after, when he has to go)
+  "nevada.letterbox.opt.bye": ["son", "I have to go. My arm's about to fall off, and the counting man is giving me a look."],
   "nevada.letterbox.mom.bye": ["mom", "Talk later, my love. Keep your door in the sun."],
   "nevada.letterbox.lil.bye": ["lilsis", "BYE! I asked FIRST!"],
   "nevada.letterbox.son.bye": ["son", "I asked EARLIER!"],
   "nevada.letterbox.son.again": ["son", "You're BACK! I'm still here. Still holding the keys. Still a little hungry."],
+  // LETTER-17: Grandpa Joe, who heard all of it. He has been out front the whole time with Ranger, and he does not pretend
+  // he did not hear. When Mom stands up; and Ranger brings her the handbag she put down on the gravel (his first kindness
+  // to her: Ranger's line is "...", nevada.ranger.dots, and Grandpa Joe says what he means).
+  "nevada.letterbox.joe.1": ["grandpajoe", "Ma'am."],
+  "nevada.letterbox.joe.2": ["grandpajoe", "That's a good boy you got."],
+  "nevada.letterbox.mom.he": ["mom", "He is."],
+  "nevada.letterbox.joe.3": ["grandpajoe", "I been sittin' out here forty years watchin' the sky not do anything. ...You tell me what you need, and I'll hold it."],
+  "nevada.letterbox.joe.bag": ["grandpajoe", "He says you dropped this. He didn't look inside. ...He looked a little."],
+  "nevada.letterbox.mom.ranger": ["mom", "...Thank you, Ranger."],
   // her penny, posted into the door outside a talk (the door's useWith: penny)
   "nevada.door.penny": ["lilsis", "One penny, for LUCK. In you go. ...Bye, penny! Say hi to my brother!"],
 
   // ======================================================================================================
   // NEVADA-12W: #12, Something That Shines Like A Station Wagon (nevada.shade.*)
+  // LETTER-17: loosened by the pass's rules (Mom's above all: contractions with her girls, fewer darlings, and "Mr. Joe"
+  // once he has offered to hold whatever she needs); every clue as it was (the rule of the shine, the banjo, the sun
+  // shade, Grandpa Joe holding it).
   // ======================================================================================================
   // Mom's car
   // NEVADA-12F: teal, as her car is painted
-  "nevada.shade.car.mom.1": ["mom", "It is a sensible teal sedan, darling. It has never shone in its life. That was rather the point of it."],
+  "nevada.shade.car.mom.1": ["mom", "It's a sensible teal sedan. It has never shone in its life. That was rather the point of it."],          // LETTER-17
   "nevada.shade.car.bigsis": ["bigsis", "Also, the hubcaps are plastic. I checked."],
   "nevada.shade.car.lilsis.1": ["lilsis", "I could WASH it."],
   "nevada.shade.car.mom.2": ["mom", "With what, sweetheart?"],
@@ -918,7 +998,7 @@ export const lines = {
   "nevada.shade.banjo.no": ["mom", "No."],
   "nevada.shade.banjo.sideways": ["lilsis", "I could fit SIDEWAYS."],
   "nevada.shade.banjo.bigsis": ["bigsis", "Bigger shine, bigger door. That is the rule, and it is now a fact. We need the biggest shine for a hundred miles."],
-  "nevada.shade.banjo.thanks": ["mom", "Thank you, sir. You may sit down. That was most instructive."],
+  "nevada.shade.banjo.thanks": ["mom", "Thank you. That was very... loud. You can sit down now."],                                      // LETTER-17 (the design's)
   "nevada.shade.banjo.joe": ["grandpajoe", "...Most folks just say they liked the tune."],
   // the hubcap wall (one hubcap is a hubcap's worth of shine: less than the banjo; nobody tries it twice)
   "nevada.shade.hubcaps.joe": ["grandpajoe", "Them's not for sale, ma'am. Them's a COLLECTION."],                                         // (through the window, to Mom)
@@ -929,42 +1009,45 @@ export const lines = {
   "nevada.shade.blanket.mom": ["mom", "And three of us holding corners is three of us not going anywhere."],
   // the chrome polish, on the auto shelf
   "nevada.shade.polish.bigsis": ["bigsis", "Chrome polish. 1987."],
-  "nevada.shade.polish.mom": ["mom", "It has had a long time to think about what it wants to polish, darling. Nothing here wants polishing."],
+  "nevada.shade.polish.mom": ["mom", "It's had since 1987 to decide what it wants to polish. Nothing here wants polishing."],             // LETTER-17
   // the sun shade, before #11: nevada.jolene.window.2 ("Not the window, sugar. Anything but the window.")
   // the sun shade, after #11: Jolene gives it (nevada.jolene.window.give), and Mom, holding it:
   "nevada.shade.mom.1": ["mom", "Your father bought one of these for the trip. He said it was for keeping the car cool. I said it was for show."],
   "nevada.shade.bigsis.1": ["bigsis", "It is a mirror the size of a windshield, Mother."],
   "nevada.shade.mom.2": ["mom", "...Then it was for this."],
   // at the glass: it wants holding, square to the sun, by somebody who is not going anywhere. Mom does not ask twice.
+  // (LETTER-17: she does not have to ask at all: he said to tell him what she needed, and he would hold it.)
   "nevada.shade.need": ["bigsis", "It wants holding in the low sun, square to the place, by somebody who is not going anywhere."],
-  "nevada.shade.ask": ["mom", "Sir? Might we trouble you one more time?"],
+  "nevada.shade.ask": ["mom", "Mr. Joe? You said to tell you what I needed."],                                                     // LETTER-17
   "nevada.shade.joe": ["grandpajoe", "I been holdin' things for Jolene since 1974, ma'am. I can hold a sun shade."],
   // and the door grows: from the coin outward, to a windshield's width, with a different morning in it
   "nevada.shade.open.lilsis": ["lilsis", "It's GROWING! It's bigger than a banjo! It's bigger than MOMMY!"],
   "nevada.shade.open.bigsis": ["bigsis", "'The door,' she noted, 'was exactly as wide as a windshield. She had never been so glad to be right.'"],
-  "nevada.shade.open.mom": ["mom", "And there is a different morning on the other side of it. Well. We knew that."],
+  "nevada.shade.open.mom": ["mom", "And there's a different morning on the other side of it. ...Well. We knew that."],                // LETTER-17
   // the door after that, while it is held open
-  "nevada.shade.done.mom": ["mom", "The gentleman is holding the light, darlings. We must not keep him."],
+  "nevada.shade.done.mom": ["mom", "Mr. Joe's holding the light, girls. We mustn't keep him."],                                     // LETTER-17
   "nevada.shade.done.bigsis": ["bigsis", "It is open, it is wide, and it will not stay that way. A door is only open while the light is held."],
   "nevada.shade.done.lilsis": ["lilsis", "It's a REAL door now! A door for PEOPLE! For US!"],
   // NEVADA-12SA: Grandpa Joe, looked at while he holds the sun shade to the sun (the writer had no look for him standing there)
-  "nevada.joe.holding.mom": ["mom", "Mr. Joe has not moved an inch, darlings. His arms must ache, and he will never say so."],
+  "nevada.joe.holding.mom": ["mom", "Mr. Joe hasn't moved an inch, girls. His arms must ache, and he'll never say so."],        // PASS-17N: Mom's formality
   "nevada.joe.holding.bigsis": ["bigsis", "He is holding it square to the sun, and perfectly still. 'The witness,' she noted, 'had become an accomplice.'"],
   "nevada.joe.holding.lilsis": ["lilsis", "Grandpa Joe's holding the WHOLE window! He's the strongest grandpa. I'm going to tell my other one."],
   // NEVADA-12SA: the sun shade taken to the glass before the coin has opened the little door (#12 needs #9): not yet
-  "nevada.shade.early.mom": ["mom", "One thing at a time, darlings. The coin came out of that sky. Let us begin with the coin."],
+  "nevada.shade.early.mom": ["mom", "One thing at a time, girls. The coin came out of that sky. We start with the coin."],              // LETTER-17
   "nevada.shade.early.bigsis": ["bigsis", "Not the window. Not yet. An experiment starts small: the coin first."],
   "nevada.shade.early.lilsis": ["lilsis", "The WINDOW is for later. First the shiny MONEY. I just KNOW it."],
 
   // ======================================================================================================
   // NEVADA-12W: #13, Going Out And Coming In (nevada.through.*): the gate. The family walks in.
+  // LETTER-17: the goodbye is longer, and it is the start of the rest of Grandpa Joe's story (the design's, section 2, "At
+  // the wide door"): "Porch light on. However long it takes." is the line the rest of his part of the game keeps.
   // ======================================================================================================
   // the door, before #12: as the hole, too small
-  "nevada.through.small.mom": ["mom", "Not yet, darlings. It is a door for a coin, and we are three people."],
+  "nevada.through.small.mom": ["mom", "Not yet, girls. It's a door for a coin, and there are three of us."],                            // LETTER-17
   "nevada.through.small.bigsis": ["bigsis", "It is the size of a coin. I am not."],
   "nevada.through.small.lilsis": ["lilsis", "I could fit my HEAD. ...Mommy says not head first."],
   // leaving without the coin
-  "nevada.through.coin.mom": ["mom", "The coin comes with us. It is the only thing we own that has been where we are going."],
+  "nevada.through.coin.mom": ["mom", "The coin comes with us. It's the only thing we own that's been where we're going."],             // LETTER-17
   // the door used while one of the three is not there yet (still in the store, or out back with the hens)
   "nevada.through.rude.lilsis": ["lilsis", "Everybody COME ON. The door's open and it's RUDE to keep a door open."],
   // the goodbyes, each in her own way
@@ -973,13 +1056,20 @@ export const lines = {
   "nevada.through.jolene.1": ["jolene", "Then that egg your sister's carryin' is a whole day's work, sugar. You mind it for her."],
   "nevada.through.bigsis.2": ["bigsis", "...I will think about that."],
   "nevada.through.mom.1": ["mom", "Thank you. For the lemonade, the story, and the light."],
+  // LETTER-17: and then the two of them, the woman going and the man staying (the design's)
+  "nevada.through.mom.4": ["mom", "Will you be all right? Out here?"],
+  "nevada.through.joe.5": ["grandpajoe", "Ma'am, I'm the only one on this porch who ain't goin' anywhere."],
+  "nevada.through.mom.5": ["mom", "If we're not back..."],
+  "nevada.through.joe.6": ["grandpajoe", "Then I'll be right here. Porch light on. However long it takes."],
   // Psalm 121:8, King James Version, letter for letter, in two halves: he says it to "coming in" (no stop inside his
-  // quotation marks: the verse runs on), and she finishes it from "from" and gives the reference. Nothing else is quoted.
+  // quotation marks: the verse runs on), and she finishes it from "from". Nothing else is quoted. (LETTER-17: she no
+  // longer says the reference aloud, by the author's rule of 16 October: it is in docs/CHARACTERS.md, "Scripture quoted
+  // in the game". And "Jolene's got it on a plate in the kitchen.", nevada.through.joe.3, is gone: with the promise
+  // before it, it was three of his lines in a row.)
   "nevada.through.joe.2": ["grandpajoe", "Go on, ma'am. 'The LORD shall preserve thy going out and thy coming in'..."],
-  "nevada.through.joe.3": ["grandpajoe", "Jolene's got it on a plate in the kitchen."],
-  "nevada.through.mom.2": ["mom", "...'from this time forth, and even for evermore.' Psalm 121, verse 8. We said it at our own front door last night."],
-  "nevada.through.joe.4": ["grandpajoe", "Then you're all right, ma'am. You're all right."],
-  "nevada.through.mom.3": ["mom", "Places, girls. Hold hands. All the way through."],
+  "nevada.through.mom.2": ["mom", "...'from this time forth, and even for evermore.' ...We said that at our own front door last night."],     // LETTER-17
+  "nevada.through.joe.4": ["grandpajoe", "Then you're all right. Go get your boy."],                                                     // LETTER-17
+  "nevada.through.mom.3": ["mom", "Girls. Hold hands. All the way through."],                                                           // LETTER-17
 
   // ======================================================================================================
   // NEVADA-12W: CUT-SCENE: BACKUP (js/content/cutscenes/backup.js). The author's script, staged. Never frightening:
@@ -1030,7 +1120,7 @@ export const lines = {
   // ======================================================================================================
   // NEVADA-12W: HINTS for the new beats, one from each of the three (the act's older hints are above, with the lot)
   // ======================================================================================================
-  "hint.nevada.ranger.mom": ["mom", "Ranger trades shiny for shinier, and there is something shiny for sale in that store. We are a family who buys."],
+  "hint.nevada.ranger.mom": ["mom", "Ranger trades shiny for shinier, and there's something shiny for sale in that store. We're a family that buys."],  // PASS-17N: Mom's formality
   "hint.nevada.ranger.bigsis": ["bigsis", "A raccoon feels with his front paws. Something shinier than a coin, held out flat on both hands, and kept very still."],
   "hint.nevada.ranger.lilsis": ["lilsis", "He likes SHINY. The store has SHINY. I saw it SPIN."],
   "hint.nevada.hens.mom": ["mom", "Mrs. Jolene would do anything for anyone who did something for those hens."],
@@ -1039,10 +1129,10 @@ export const lines = {
   "hint.nevada.letterbox.mom": ["mom", "That little door has a morning in it, and mornings have people in them. One of us should say hello."],
   "hint.nevada.letterbox.bigsis": ["bigsis", "A door the size of a coin will carry a voice. Somebody should speak into it, clearly, and take notes."],
   "hint.nevada.letterbox.lilsis": ["lilsis", "The Hummy Place has a HOLE in it now. I'm going to say HELLO into it. REALLY loud."],
-  "hint.nevada.shade.mom": ["mom", "The gentleman's flash came off a whole car. Ours came off a coin. Somewhere at this store is something that shines like a car."],
+  "hint.nevada.shade.mom": ["mom", "The flash Mr. Joe saw came off a whole car. Ours came off a coin. Somewhere at this store is something that shines like a car."],     // LETTER-17
   "hint.nevada.shade.bigsis": ["bigsis", "Bigger shine, bigger door. The biggest shine for a hundred miles is in that window, and Mrs. Jolene is fond of her window."],
   "hint.nevada.shade.lilsis": ["lilsis", "The shiny thing in the WINDOW! Grandma Jolene said I could have anything. I did the chickens."],
-  "hint.nevada.through.mom": ["mom", "The door is open, and the gentleman is holding the light. Goodbyes, girls, and then we go."],
+  "hint.nevada.through.mom": ["mom", "The door's open, and Mr. Joe is holding the light. Goodbyes, girls, and then we go."],          // LETTER-17
   "hint.nevada.through.bigsis": ["bigsis", "The door is as wide as a windshield, and it will not stay that way. Say goodbye, and go through."],
   "hint.nevada.through.lilsis": ["lilsis", "The door's BIG now! Say bye to EVERYBODY and GO! Grandpa Joe's arms are getting TIRED."],
 
@@ -1057,7 +1147,7 @@ export const lines = {
   "nevada.talk.lilsis.bigsis.trade.c": ["lilsis", "It's called a RANGER. I just decided."],
   // the egg (nevada.jolene: the hens are done, and she has it)
   "nevada.talk.lilsis.mom.egg.a": ["lilsis", "Mommy, feel my egg. It's WARM. I'm keeping it warm for Darlene."],
-  "nevada.talk.lilsis.mom.egg.b": ["mom", "Then keep your hand on it, sweetheart, and do not run."],
+  "nevada.talk.lilsis.mom.egg.b": ["mom", "Then keep your hand on it, sweetheart, and don't run."],                             // PASS-17N: Mom's formality
   "nevada.talk.lilsis.mom.egg.c": ["lilsis", "I'll walk FAST."],
   "nevada.talk.bigsis.lilsis.egg.a": ["bigsis", "You realize that you are carrying an egg into the unknown."],
   "nevada.talk.bigsis.lilsis.egg.b": ["lilsis", "It's not the unknown. It's my POCKET."],
@@ -1070,17 +1160,17 @@ export const lines = {
   "nevada.talk.mom.lilsis.hats.b": ["lilsis", "No. She has a hat for every MOOD. I'm going to have one for every mood too."],
   // the Son's warning (nevada.heardSon)
   "nevada.talk.bigsis.mom.son.a": ["bigsis", "Mother. He said not to go through."],
-  "nevada.talk.bigsis.mom.son.b": ["mom", "He did, darling. Your father went through alone. We shall go through together. That is a different thing."],
+  "nevada.talk.bigsis.mom.son.b": ["mom", "He did, darling. Your father went through alone. We'll go through together. That's a different thing."],  // PASS-17N: Mom's formality
   "nevada.talk.bigsis.mom.son.c": ["bigsis", "'It was,' she noted, 'not an argument. It was a decision.'"],
   "nevada.talk.lilsis.mom.son.a": ["lilsis", "Mommy, my brother sounded BRAVE."],
   "nevada.talk.lilsis.mom.son.b": ["mom", "He did, sweetheart. Brave and a little hungry, which is how he always sounds."],
   // Mrs. Jolene (once she has told a fact)
   "nevada.talk.mom.bigsis.jolene.a": ["mom", "What do you make of Mrs. Jolene, darling?"],
   "nevada.talk.mom.bigsis.jolene.b": ["bigsis", "She has been wrong about every single thing she has told me, and I like her enormously. I do not understand it."],
-  "nevada.talk.mom.bigsis.jolene.c": ["mom", "That is called a friend, darling."],
+  "nevada.talk.mom.bigsis.jolene.c": ["mom", "That's called a friend, darling."],                                               // PASS-17N: Mom's formality
   // chickens of her own (nevada.jolene)
   "nevada.talk.lilsis.mom.hens.a": ["lilsis", "Mommy, can we have REAL chickens? Grandma Jolene says I'm a NATURAL."],
-  "nevada.talk.lilsis.mom.hens.b": ["mom", "We shall discuss it, sweetheart. In this century."],
+  "nevada.talk.lilsis.mom.hens.b": ["mom", "We'll talk about it, sweetheart. In this century."],                                // PASS-17N: Mom's formality ('We shall discuss it')
   "nevada.talk.lilsis.mom.hens.c": ["lilsis", "That's not a NO."],
   // her spare grandpa (once she has asked him)
   "nevada.talk.mom.lilsis.joe.a": ["mom", "You were very polite to Mr. Joe, sweetheart."],
@@ -1092,11 +1182,11 @@ export const lines = {
   // ======================================================================================================
   // NEVADA-12W: THE THINGS CARRIED IN THIS ACT (js/content/world.js, items): a look from each of the three
   // ======================================================================================================
-  "item.penny.mom": ["mom", "One penny, which your sister has declared lucky. I am not going to argue with her."],
+  "item.penny.mom": ["mom", "One penny, which your sister has declared lucky. I'm not going to argue with her."],               // PASS-17N: Mom's formality
   "item.penny.bigsis": ["bigsis", "One penny, declared lucky. I asked for her evidence. She says the evidence is that it is lucky."],
   "item.penny.lilsis": ["lilsis", "My LUCKY penny. It's the luckiest one. I can tell. It was on TOP."],
-  "item.pennies.mom": ["mom", "Three pennies from the dish. We shall leave a dollar for them on our way out. That is how the dish works."],
-  "item.pennies.bigsis": ["bigsis", "Three pennies. 'Take a penny,' it said. She took four. 'The sign,' she noted, 'had been perfectly clear.'"],
+  "item.pennies.mom": ["mom", "Three pennies from the dish. We'll leave a dollar for them on our way out. That's how the dish works."],  // PASS-17N: Mom's formality
+  "item.pennies.bigsis": ["bigsis", "Three pennies. The sign said take a penny. She took four. The sign was perfectly clear."],  // PASS-17N: shorter: fewer 'she noted's
   "item.pennies.lilsis": ["lilsis", "Three pennies. I'm SAVING them. Not for anything. Just SAVING."],
   "item.mirrorshades.mom": ["mom", "Mirror shades, three dollars and ninety-nine cents, paid for. In this family, we buy."],
   "item.mirrorshades.bigsis": ["bigsis", "Mirror shades. I can see myself in both lenses, which is a great deal more of myself than I need."],
@@ -1104,7 +1194,7 @@ export const lines = {
   "item.egg.mom": ["mom", "One warm egg, from Darlene. Your sister has made herself its nest."],
   "item.egg.bigsis": ["bigsis", "A hen's egg, still warm. It took Darlene about a day to make it. I intend to tell Mrs. Jolene so."],
   "item.egg.lilsis": ["lilsis", "Darlene's egg. It's WARM. I'm the nest now. I take it VERY seriously."],
-  "item.waters.mom": ["mom", "Three bottles of water. We are going somewhere with no shops, and I intend to be ready."],
+  "item.waters.mom": ["mom", "Three bottles of water. We're going somewhere with no shops, and I intend to be ready."],         // PASS-17N: Mom's formality
   "item.waters.bigsis": ["bigsis", "Three waters, one each. Mom does not plan for adventures. She plans for afterward."],
   "item.waters.lilsis": ["lilsis", "Waters! One for me, one for Mommy, one for my sister. That's ALL of us. ...All of us HERE."],
   "item.storeshade.mom": ["mom", "Mrs. Jolene's sun shade. Bleached on one side, and on the other a mirror the size of a windshield."],

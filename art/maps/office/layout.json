@@ -1,0 +1,72 @@
+{
+  "map": "office",
+  "size": [800, 600],
+  "sheet": [40, 136, 760, 564],
+  "material": "A blueprint: the ground floor of the Office of Peculiar Sectors' desert field headquarters, sheet 1 of 8, white lines on the print's blue, folded in four, a corner dog-eared.",
+  "label": {
+    "color": "#eae9d9",
+    "halo": "#233c72",
+    "upper": true,
+    "spacing": 0.03,
+    "size": 13
+  },
+  "places": [
+    {
+      "id": "lot",
+      "picture": "place-lot.png",
+      "shape": [[421, 438], [424, 439], [424, 441], [436, 441], [439, 443], [439, 445], [562, 445], [563, 474], [565, 474], [566, 476], [566, 548], [564, 551], [560, 553], [178, 553], [176, 551], [112, 551], [103, 553], [54, 553], [49, 549], [49, 450], [52, 445], [413, 445], [413, 440]],
+      "pin": [479, 479],
+      "label": [523, 524],
+      "label_max": 63
+    },
+    {
+      "id": "ducts",
+      "picture": "place-ducts.png",
+      "shape": [[145, 206], [640, 206], [641, 246], [593, 247], [592, 226], [147, 227], [144, 225]],
+      "pin": [474, 174],
+      "label": [391, 174],
+      "label_max": 82
+    },
+    {
+      "id": "room",
+      "picture": "place-room.png",
+      "shape": [[468, 229], [590, 229], [591, 248], [593, 250], [642, 249], [642, 265], [644, 267], [644, 279], [642, 281], [642, 309], [644, 311], [642, 315], [642, 345], [469, 346], [468, 325], [466, 323], [466, 249], [468, 247]],
+      "pin": [511, 317],
+      "label": [549, 371],
+      "label_max": 168
+    },
+    {
+      "id": "property",
+      "picture": "place-property.png",
+      "shape": [[314, 229], [466, 229], [466, 248], [464, 249], [464, 324], [466, 325], [466, 345], [465, 346], [315, 346], [314, 345], [314, 319], [313, 319], [313, 231], [314, 231]],
+      "pin": [369, 269],
+      "label": [384, 371],
+      "label_max": 146
+    },
+    {
+      "id": "breakroom",
+      "picture": "place-breakroom.png",
+      "shape": [[188, 229], [312, 229], [312, 231], [311, 231], [312, 345], [311, 346], [189, 346], [188, 345], [188, 331], [187, 331]],
+      "pin": [247, 277],
+      "label": [246, 371],
+      "label_max": 119
+    },
+    {
+      "id": "b7",
+      "picture": "place-b7.png",
+      "shape": [[64, 199], [148, 200], [148, 204], [145, 204], [143, 206], [142, 226], [148, 230], [148, 271], [150, 271], [152, 278], [151, 283], [153, 285], [155, 309], [152, 312], [148, 312], [147, 361], [63, 360], [63, 320], [61, 317], [58, 283], [59, 281], [63, 280]],
+      "pin": [106, 174],
+      "label": [163, 174],
+      "label_max": 31
+    }
+  ],
+  "paths": [
+    {
+      "a": "lot",
+      "b": "ducts",
+      "picture": "path-lot-ducts.png",
+      "via": [[479, 479], [562, 462], [646, 461], [656, 451], [656, 300], [656, 232], [642, 226], [474, 174]]
+    }
+  ],
+  "note": "The ground floor in plan, north up, the lot at the bottom (map_office_things.py). The duct runs along the north rooms' back wall, dotted (overhead), from the roof's unit at the north-east to the B-7 shaft at the north-west, its four grilles small crossed squares: over Interview Room C, Property & Effects, the break room, and the hall where it turns up to the elevator; so the rooms' shapes stop short of the duct's strip. The duct's and the shaft's portraits stand in the margin over the building, next to what they name. B-7 has no way to it: drawn whenever the map entry says it is (it is stamped RESTRICTED). The one way, lot to ducts, is the route up the downspout to the roof and in at the unit's intake; its via runs along its dashes between the two pins (the first and last steps go from a pin to the way's end)."
+}

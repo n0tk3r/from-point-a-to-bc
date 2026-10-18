@@ -167,7 +167,7 @@ const CARRIER = {
 // sunglasses go on (figure.variant("shades"), set again from the fact "proof.shades" whenever the scene is built: nothing
 // of it is saved). "proof-critter" is a cutscene he is in, to be skipped.
 const painted = (g) => !!g.flag("proof.painted");
-const party = (g) => !!g.flag("proof.party");
+const party = (g) => !!g.flag("proof.party") || !!g.flag("proof.thought");      // (ENGINE-17: the thoughts' proof has the two of them as a party too)
 const joined = (g) => !!g.flag("proof.critterJoined");
 const CRITTER_AT = [520, 470];                                                  // where he sits up, one of the scene's people
 const CRITTER = {
@@ -232,6 +232,12 @@ const PROOF_ACT = { id: "proof", title: "The engine's proof", era: "egypt", summ
     { id: "proof.cooler", kind: "puzzle", chain: "A", title: "Get into the cooler: a job for small hands", lead: ["dad", "critter"], scene: "engine-proof",
       needs: ["proof.party"], sets: "proof.nibbled", hint: { dad: "proof.hint.party.dad", critter: ["proof.critter.dots", "proof.hint.party.critter.dad"] } },
   ] };
+// ENGINE-17: the thoughts' proof (proof.thought) has a beat of its own, open from the start, in an act of its own that is put in
+// the story only then (setup), so that no other proof's story check ever meets it: the critter's hint is a thought, and then
+// what Dad makes of it.
+const THOUGHT_ACT = { id: "proof-thought", title: "The engine's proof: thoughts", era: "egypt", summary: "Not part of the story: the thoughts' proof's own beat, for its tests.",
+  beats: [{ id: "proof.thinking", kind: "puzzle", chain: "B", title: "A hint that is a thought", lead: ["dad", "critter"], scene: "engine-proof", needs: [], sets: "proof.thought.done",
+    hint: { critter: ["proof.critter.think.hint", "proof.hint.thought.dad"], dad: "proof.hint.thought.dad2" } }] };
 /** What the story needs for the creature while he is here: the proof's beat, his stock replies ("..."), and what he and Dad say on looking at each other. */
 function critterStory(g) {
   const st = g.story;
@@ -384,6 +390,76 @@ const proofDrive = (side) => ({ id: `drive-${side.toLowerCase()}`, type: "drive"
   haze: "#dfe7f0", haze_far: 3000, seed: side === "L" ? 16 : 61, when: driveProof,
   sun: [0.36, 1.95] });                                                    // DRIVE-16F: the things' shadows on the ground (the limousine's sun)
 
+// ---------- ENGINE-17: round seventeen's proofs: thoughts, a grille, a thing handed across, two floors, the speakers ----------
+// What the Office (Act Five, stage one) needs of the engine, each on the stage while its fact is true (add ",proof.arrived"):
+//   index.html?scene=engine-proof&lead=dad&flags=proof.thought       thought pictures (docs/DESIGN.md, section 7, "Thought pictures")
+//   index.html?scene=engine-proof&lead=dad&flags=proof.grille        a grate in the sand over a room (section 8, "Looking down through a grille")
+//   index.html?scene=engine-proof&lead=dad&flags=proof.pass          Dad up here, the critter down there, a thing handed between them
+//                                                                    (section 8, "Two leads in two scenes of one time"; and the map's travel for each)
+//   index.html?scene=engine-proof&lead=critter&flags=proof.floors    the wagon's roof, a floor of its own (section 3, "Several floors")
+//   index.html?scene=engine-proof&lead=dad&flags=proof.pa            the sand in a building with speakers (section 7, "The building's speakers")
+// The room under the sand is js/content/scenes/proof-below.js. The lines are the proof's own, added to the game's as the scene
+// is built (setup), as the others are. A line of the critter's that carries pictures (its third element) is said as a
+// thought: a bubble over his head (js/art/thoughts.js).
+const LINES17 = {
+  // proof.thought (index.html?scene=engine-proof&lead=dad&flags=proof.thought): Dad and the critter a party of two again
+  "proof.critter.think.pie": ["critter", "...", "pie"],
+  "proof.critter.think.pie.dad": ["dad", "He says he's thinking about pie. He's always thinking about pie."],
+  "proof.critter.think.three": ["critter", "...", ["piepan", "plus", "banjo"]],
+  "proof.critter.think.hint": ["critter", "...", ["switch", "arrow", "fan"]],
+  "proof.hint.thought.dad": ["dad", "He says: pull the switch, and the fan stops. I don't know which switch. He's very sure."],
+  "proof.hint.thought.dad2": ["dad", "Ask the little one. He thinks in pictures, and the pictures are usually right."],
+  "proof.dozer.look": ["dad", "A man asleep sitting up, his tablet on his knees. Dreaming in bubbles, by the look of it."],
+  "proof.dozer.wake": ["dozer", "Regulation twenty-two... I am resting my eyes..."],
+  "proof.napper.look": ["dad", "Another one, out cold in the sand. It must be very restful here."],
+  "proof.thought.far": ["dad", "Somewhere a long way off, somebody is thinking about a door."],
+  "proof.sky.look": ["dad", "Sky. Very blue. Nobody's thinking anything up there."],
+  // proof.grille and proof.pass: the grate in the sand, onto the room under it (proof-below.js)
+  "proof.grate.look": ["dad", "A grate in the sand. There's a room down there. Somebody's built a basement under the Nile."],
+  "proof.grate.nodrop": ["dad", "Not now. Somebody's looking right up at the grate."],
+  // proof.floors (index.html?scene=engine-proof&lead=critter&flags=proof.floors): the wagon's roof, a floor of its own
+  "proof.floors.up": ["dad", "That's up on the wagon's roof. I'd have to climb it, and I'm not climbing my own car."],
+  "proof.floors.up.critter": ["critter", "...", ["up", "question"]],
+  "proof.floors.down": ["dad", "Down there. I'd have to climb down first."],
+  "proof.floors.down.critter": ["critter", "...", ["down", "question"]],
+  "proof.bumper.look": ["dad", "The back of the wagon. There's a bumper to stand on, and the roof rack above it."],
+  "proof.roofedge.look": ["dad", "The edge of the roof. It's a long way down for somebody small."],
+  // proof.pa (index.html?scene=engine-proof&lead=dad&flags=proof.pa): the proof's building has speakers
+  "proof.pa.pole.look": ["dad", "A loudspeaker on a pole, in the middle of the desert. Somebody likes announcements."],
+  "proof.pa.ask": ["dad", "Hello? Is this thing on?"],
+  "proof.pa.1": ["houston", "Attention, please. Will the owner of a red station wagon please move it off the river."],
+  "proof.pa.2": ["houston", "The pyramid will close at sunset. Please make your way to the exits."],
+  "proof.pa.3": ["houston", "Lost: one water-skin. Answers to nothing. Please see the water carrier."],
+};
+const thoughtProof = (g) => !!g.flag("proof.thought");
+const grilleProof = (g) => !!g.flag("proof.grille") || !!g.flag("proof.pass");
+const passProof = (g) => !!g.flag("proof.pass");
+const floorsProof = (g) => !!g.flag("proof.floors");
+const paProof = (g) => !!g.flag("proof.pa");
+// The grate (proof.grille, proof.pass): drawn live on the sand at the front, an area of it a grille onto the room under the
+// sand. Dad stands on it (its mark `grate`) and looks down through it; the critter, if it were him, would lie down at it.
+const GRATE = [[232, 546], [292, 546], [300, 563], [224, 563]];
+const GRATE_AT = [262, 556];
+// The wagon's roof (proof.floors): a floor of its own, on top of the luggage, at the wagon's size (it is as far off as the
+// wagon is) and in depth just in front of the wagon (its base); the sand has a notch cut where the roof lies over it in the
+// picture, since two floors never share a pixel. The critter climbs up by the back of the wagon (g.climbTo, on his `climb`
+// frames: he has none, so his walk stands in, and the console says so once), and down the same way.
+const SAND = [[352, 300], [640, 300], [780, 326], [780, 596], [60, 596], [150, 470], [240, 384], [312, 322]];
+const SAND_NOTCHED = [[352, 300], [640, 300], [780, 326], [780, 388], [640, 388], [640, 422], [780, 422], [780, 596], [60, 596], [150, 470], [240, 384], [312, 322]];
+const ROOF = [[652, 398], [748, 398], [748, 410], [652, 410]];
+const UP_THE_BACK = [[772, 560], [772, 420]];
+/** A thought from somebody who is not on the stage (the Son, centuries off): placed as words are for someone off the stage. */
+async function farThought(g) {
+  await g.say("proof.thought.far");
+  await g.think("son", "hole");
+}
+/** The man asleep: woken (his thought stops), a word in his sleep, and off again (it comes back). */
+async function wake(g) {
+  g.think("dozer", null);
+  await g.say("proof.dozer.wake");
+  g.think("dozer", "zzz", { loop: true });
+}
+
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
   for (const entry of g.waiting()) {
@@ -434,8 +510,19 @@ export default {
 
   // WHERE PEOPLE CAN STAND: the sand. The left edge keeps to the bank, clear of the water and of the palms' feet;
   // the far edge stops under the village and the dunes; the right edge keeps a body's width inside the picture.
-  walk: { area: [[352, 300], [640, 300], [780, 326], [780, 596], [60, 596], [150, 470], [240, 384], [312, 322]] },
-  spawn: { default: [420, 572], critter: [478, 566], fromTrack: [496, 330] },   // (NEVADA-12E: the creature's own mark, and a way in from the track, for the party below)
+  // ENGINE-17: a walk can be a function of the game, and can have several floors: while "proof.floors" is true the wagon's
+  // roof is a second floor (see the top), joined to the sand only by a climb (g.climbTo). Each floor's `away` is what is
+  // said when the player asks for something on the other one.
+  walk: (g) => (g && floorsProof(g)                                         // (with no game, as a tool reads it: the sand alone)
+    ? { areas: [{ name: "sand", area: SAND_NOTCHED, away: { critter: "proof.floors.down.critter", any: "proof.floors.down" } },
+        { name: "roof", area: ROOF, scale: 0.84, base: 546, away: { critter: "proof.floors.up.critter", any: "proof.floors.up" } }] }
+    : { area: SAND }),
+  spawn: { default: [420, 572], critter: [478, 566], fromTrack: [496, 330],   // (NEVADA-12E: the creature's own mark, and a way in from the track, for the party below)
+    grate: GRATE_AT, roof: [700, 404], wagonFoot: [758, 574] },               // (ENGINE-17: on the grate; on the wagon's roof; at the back of the wagon)
+  // ENGINE-17: while "proof.pa" is true the sand is in the proof's building (as the room under it always is: proof-below.js), so
+  // that a line on its speakers is heard here (g.pa), and now and then the building says something by itself (`announce`).
+  building: (g) => (paProof(g) ? "proof" : null),
+  announce: { lines: ["proof.pa.2", "proof.pa.3"], every: [25, 40], when: paProof },
   // NEVADA-12E: a party of two who are not family, while "proof.party" is true (see the top): Dad and the creature. A party
   // can be a function of the game, for one the story forms. By the way in from the track the creature arrives beside Dad.
   party: (g) => (party(g) ? ["dad", "critter"] : null),
@@ -527,6 +614,19 @@ export default {
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
   //   live(art, g) { return art.portal(500, 300, 40, "door"); },        and a script finds it with g.q("#door")
+  // ENGINE-17: and stand-ins for things not painted: the grate in the sand (proof.grille, proof.pass), the loudspeaker on its
+  // pole (proof.pa). (The live layer is under the cast: whoever stands on the grate is drawn over it.)
+  live(art, g) {
+    let out = "";
+    if (grilleProof(g)) {
+      out += `<g id="grate"><polygon points="${GRATE.map((p) => p.join(",")).join(" ")}" fill="#2e2924" stroke="#1a1612" stroke-width="1.5"/>`;
+      for (const y of [549.5, 553.5, 557.5]) out += `<line x1="${230 + (y - 546) * 0.35}" y1="${y}" x2="${294 - (y - 546) * -0.35}" y2="${y}" stroke="#9a948a" stroke-width="2"/>`;
+      out += `</g>`;
+    }
+    if (paProof(g)) out += `<g id="pa-pole"><line x1="598" y1="338" x2="598" y2="288" stroke="#4a3f36" stroke-width="3"/>` +
+      `<polygon points="597,290 615,281 615,301" fill="#c9cdd3" stroke="#3a332c" stroke-width="1.2"/><rect x="590" y="287" width="8" height="7" fill="#8e949c" stroke="#3a332c" stroke-width="1"/></g>`;
+    return out;
+  },
 
   // WAYS OUT AT THE EDGES OF THE PICTURE. Over the floor near an edge that has one, the pointer becomes an arrow and the
   // label says where it leads ("Go up the track"); a click there walks the lead to that edge, and on (js/engine/edges.js).
@@ -551,7 +651,12 @@ export default {
     { id: "pyramids", name: "pyramids", rect: [432, 78, 368, 172], look: "egypt.pyramids.look" },
     { id: "river", name: "river", poly: [[0, 262], [345, 262], [20, 530], [0, 545]], walkTo: [200, 440], face: "W", look: "egypt.river.look" },
     { id: "reeds", name: "reeds", poly: [[132, 384], [214, 330], [280, 286], [300, 290], [300, 312], [240, 376], [178, 440], [136, 440]], walkTo: [262, 380], face: "W", look: "egypt.reeds.look" },
-    { id: "wagon", name: "wagon", poly: [[462, 492], [560, 470], [600, 420], [650, 388], [750, 394], [790, 440], [790, 520], [740, 544], [462, 520]], walkTo: [600, 574], face: "N", look: "egypt.wagon.look" },
+    { id: "wagon", name: "wagon", poly: [[462, 492], [560, 470], [600, 420], [650, 388], [750, 394], [790, 440], [790, 520], [740, 544], [462, 520]], walkTo: [600, 574], face: "N", look: "egypt.wagon.look",
+      when: (g) => !floorsProof(g) },
+    // ENGINE-17: while the wagon's roof is a floor (proof.floors), the wagon's area stops short of it, so that a click there is a
+    // click on the roof's floor (to walk along it, or to be told it is another floor)
+    { id: "wagon", name: "wagon", poly: [[462, 492], [560, 470], [600, 420], [640, 414], [756, 414], [790, 440], [790, 520], [740, 544], [462, 520]], walkTo: [600, 574], face: "N", look: "egypt.wagon.look",
+      when: floorsProof },
     // The two people (below, under `actors`), while "proof.life" is true: each area is the figure at its mark. Away from
     // the mark on a walk of their own, the area goes with them (js/engine/life.js); a click brings them home to talk.
     { id: "scribe", name: "scribe", verb: "Talk to", rect: [550, 339, 32, 37], walkTo: [604, 384], face: "W", when: (g) => !!g.flag("proof.life"),
@@ -572,7 +677,7 @@ export default {
       look: "proof.critter.look", use: (g) => g.talk(CRITTER) },
     // NEVADA-12E: the cooler on the far sand, painted in the backdrop: nothing for Dad, a nibble for the creature
     { id: "cooler", name: "cooler", rect: [706, 322, 40, 30], walkTo: [712, 364], face: "N", when: (g) => painted(g) || party(g),
-      look: { critter: "proof.critter.dots", any: "proof.cooler.look" }, use: { critter: nibble, any: "proof.cooler.use.dad" } },
+      look: { critter: (g) => g.say(thoughtProof(g) ? "proof.critter.think.three" : "proof.critter.dots"), any: "proof.cooler.look" }, use: { critter: nibble, any: "proof.cooler.use.dad" } },      // (ENGINE-17: thinking, in three pictures)
     // ROME-13E: the geese and their pen (see the top). Shoo the geese: Dad stomps, and they are herded into the pen. The pen,
     // asked of them nicely, makes them hiss. Herded, the geese are clicked in the pen (an area listed after the pen's, so on top)
     { id: "geese", name: "geese", verb: "Shoo", poly: [[240, 428], [440, 426], [444, 540], [240, 542]], walkTo: [290, 568], face: "N", when: (g) => herdProof(g) && !herded(g),
@@ -593,11 +698,29 @@ export default {
       look: "proof.watcher.look", use: hello },
     { id: "watcher", name: "man", verb: "Talk to", rect: [212, 378, 48, 116], walkTo: [290, 496], face: "W", when: (g) => windowProof(g) && down(g),
       look: "proof.watcher.look.down", use: ["proof.watcher.hello.dad", "proof.watcher.down.2"] },
+    // ENGINE-17: the grate (see the top): a grille onto the room under the sand (proof-below.js). "Look down" is the engine's
+    // verb for it; its `spawn` lets whoever looks down drop in, while its `when` allows (proof.noDrop: not now, and its `no`).
+    { id: "grate", name: "grate", poly: GRATE, walkTo: GRATE_AT, face: "S", when: grilleProof, look: "proof.grate.look",
+      grille: { scene: "proof-below", spawn: "vent", from: [400, 250], when: (g) => !g.flag("proof.noDrop"), no: "proof.grate.nodrop" } },
+    // ENGINE-17: the two floors (see the top): up the back of the wagon onto its roof, and down again, by a set path
+    { id: "bumper", name: "back of the wagon", verb: "Climb", rect: [748, 448, 42, 72], walkTo: [758, 574], face: "N", when: floorsProof,
+      look: "proof.bumper.look", use: (g) => g.climbTo("roof", { path: UP_THE_BACK }) },
+    { id: "roofedge", name: "edge of the roof", verb: "Climb down", rect: [736, 390, 24, 24], walkTo: [736, 404], face: "E", when: floorsProof,
+      look: "proof.roofedge.look", use: (g) => g.climbTo("wagonFoot", { path: [...UP_THE_BACK].reverse() }) },
+    // ENGINE-17: the loudspeaker on its pole (proof.pa): a word into it, and the building answers on its speakers
+    { id: "pa-pole", name: "loudspeaker", verb: "Speak to", rect: [586, 278, 32, 62], walkTo: [600, 352], face: "N", when: paProof,
+      look: "proof.pa.pole.look", use: async (g) => { await g.say("proof.pa.ask"); await g.pa("proof.pa.1"); } },
+    // ENGINE-17: the thoughts (proof.thought): two men asleep, sitting, each thinking zzz (a thought kept up: g.think with
+    // loop); and the sky, where the thought of somebody who is not on the stage is put, as his words would be
+    { id: "dozer", name: "sleeping man", verb: "Wake", rect: [204, 478, 34, 46], walkTo: [270, 540], face: "W", when: thoughtProof,
+      look: "proof.dozer.look", use: wake },
+    { id: "napper", name: "man asleep in the sand", rect: [362, 404, 40, 30], walkTo: [400, 470], face: "N", when: thoughtProof, look: "proof.napper.look" },
+    { id: "sky", name: "sky", verb: "Wonder about", rect: [60, 20, 300, 110], when: thoughtProof, look: "proof.sky.look", use: farThought },
   ],
 
   // NEVADA-12E: Dad and the creature, talking (each exchange is what the one clicked on says, then what Dad makes of it)
   talk: {
-    dad: { critter: [["proof.talk.dad.critter.1", "proof.critter.dots", "proof.talk.dad.critter.1b"]] },
+    dad: { critter: (g) => (thoughtProof(g) ? [["proof.critter.think.pie", "proof.critter.think.pie.dad"]] : [["proof.talk.dad.critter.1", "proof.critter.dots", "proof.talk.dad.critter.1b"]]) },     // (ENGINE-17: a thought, and Dad's reading of it)
     critter: { dad: [["proof.critter.dots", "proof.talk.critter.dad.1"]] },
   },
   given,
@@ -607,6 +730,19 @@ export default {
   setup(g) {
     for (const [id, line] of Object.entries(LINES)) if (!g.lines[id]) g.lines[id] = line;
     for (const [id, line] of Object.entries(LINES13)) if (!g.lines[id]) g.lines[id] = line;          // ROME-13E: round thirteen's
+    for (const [id, line] of Object.entries(LINES17)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-17: round seventeen's
+    if (thoughtProof(g)) {                                                                            // ENGINE-17: the two asleep, each thinking zzz, kept up
+      if (!g.story.acts.some((a) => a.id === THOUGHT_ACT.id)) g.story.acts.push(THOUGHT_ACT);      // (and the thoughts' own beat, for the critter's hint)
+      for (const [id, name, color] of [["dozer", "Sleeper", "#ffb48a"], ["napper", "Sleeper", "#c9ced6"]]) if (!g.cast[id]) g.cast[id] = { name, color };
+      g.think("dozer", "zzz", { loop: true });
+      g.think("napper", "zzz", { loop: true });
+    }
+    if (passProof(g)) {                                                                               // ENGINE-17: the critter under the sand, Dad up here with the gum
+      const d = g.store.data;
+      critterStory(g);
+      if (!g.flag("proof.passSetup")) { d.where.critter = { scene: "proof-below", x: 560, y: 520, face: 270 }; if (!d.inventory.dad.includes("gum")) d.inventory.dad.push("gum"); g.flag("proof.passSetup", true); }
+      if (!d.team.includes("critter")) g.team(["dad", "critter"]);
+    }
     if (windowProof(g) && !down(g) && g.actor("watcher")) g.actor("watcher").pray(true);              // ROME-13E: the man at the window, at his prayers
     if (bobProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                             // ROME-13E: the papyrus cleared away, so that the boat can be seen
     if (driveProof(g)) for (const id of ["palms", "papyrus"]) if (g.plane(id)) g.plane(id).show(false);    // DRIVE-16E: the palms and the papyrus cleared away, so that the windows can be seen
@@ -647,6 +783,10 @@ export default {
     // ground of ours taken up, no small movements while he prays; and the same man on the sand once he has come down
     { id: "watcher", kind: "dateseller", at: UPSTAIRS, scale: UPSTAIRS_SCALE, face: "W", solid: false, life: { fidget: false }, when: (g) => windowProof(g) && !down(g) },
     { id: "watcher", kind: "dateseller", at: DOWNSTAIRS, face: "E", when: (g) => windowProof(g) && down(g) },
+    // ENGINE-17: the thoughts' proof: two men asleep sitting up (the rig's seated figures: a scribe cross-legged, and the man in
+    // gray in the dust), each with a thought kept over his head (setup), so that a bubble is seen over a seated head
+    { id: "dozer", kind: "scribe", at: [220, 520], face: "E", life: { fidget: false }, when: thoughtProof },
+    { id: "napper", kind: "agent-collar", at: [382, 432], face: "S", life: { fidget: false }, when: thoughtProof },
   ],
 
   // Runs when the lead arrives. It must be safe to run twice (a save can be loaded in the middle of it), so it checks its own fact.
