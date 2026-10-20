@@ -122,7 +122,7 @@ export const gaulTree = (h = {}) => ({
         { id: "song", line: "rome.gaul.opt.song", say: { 1: ["rome.gaul.song.1", "rome.gaul.song.2", "rome.gaul.song.son", "rome.gaul.song.3"], more: ["rome.gaul.song.4"] } },
         { id: "mustache", line: "rome.gaul.opt.mustache", once: true, say: ["rome.gaul.mustache.1", "rome.gaul.mustache.son", "rome.gaul.mustache.2"] },
         // the toga held out before he has his answer: first the Senate, then his knees
-        { id: "togaFirst", line: "rome.gaul.opt.swap", when: (g) => g.has("gaultoga"), say: { 1: ["rome.gaul.swap.first"], more: ["rome.gaul.swap.first.2"] } },
+        { id: "togaFirst", clue: true, line: "rome.gaul.opt.swap", when: (g) => g.has("gaultoga"), say: { 1: ["rome.gaul.swap.first"], more: ["rome.gaul.swap.first.2"] } },
         { id: "bye", line: "rome.gaul.opt.bye", say: { 1: ["rome.gaul.bye.1"], more: ["rome.gaul.bye.2"] }, then: "exit" },
       ],
     },
@@ -136,7 +136,7 @@ export const gaulTree = (h = {}) => ({
     waiting: {
       options: [
         { id: "swap", line: "rome.gaul.opt.swap", when: (g) => g.has("gaultoga"), say: ["rome.gaul.swap.1"], do: h.swap, then: "swapped" },
-        { id: "why", line: "rome.gaul.opt.why", when: (g) => !g.has("gaultoga"), say: { 1: ["rome.gaul.why.1", "rome.gaul.why.2"], more: ["rome.gaul.why.3"] } },
+        { id: "why", clue: true, line: "rome.gaul.opt.why", when: (g) => !g.has("gaultoga"), say: { 1: ["rome.gaul.why.1", "rome.gaul.why.2"], more: ["rome.gaul.why.3"] } },
         { id: "remind", line: "rome.gaul.opt.remind", say: { 1: ["rome.gaul.remind.1"], more: ["rome.gaul.remind.2"] } },
         { id: "songAfter", line: "rome.gaul.opt.song", when: (g) => !g.asked("gaul/song"), once: true, say: ["rome.gaul.song.1", "rome.gaul.song.2", "rome.gaul.song.son", "rome.gaul.song.3"] },
         { id: "mustacheAfter", line: "rome.gaul.opt.mustache", when: (g) => !g.asked("gaul/mustache"), once: true, say: ["rome.gaul.mustache.1", "rome.gaul.mustache.son", "rome.gaul.mustache.2"] },
@@ -171,10 +171,10 @@ export const phyllisTree = (h = {}) => ({
       options: [
         { id: "anna", line: "rome.phyllis.opt.anna", say: { 1: ["rome.phyllis.anna.1", "rome.phyllis.anna.2"], more: ["rome.phyllis.anna.3"] }, do: h.stand },     // the clue: she cannot leave
         { id: "sweetheart", line: "rome.phyllis.opt.sweetheart", once: true, say: ["rome.phyllis.sweetheart.1", "rome.phyllis.sweetheart.son", "rome.phyllis.sweetheart.2"] },    // the laugh
-        { id: "son", line: "rome.phyllis.opt.son", say: { 1: ["rome.phyllis.son.1", "rome.phyllis.son.2", "rome.phyllis.son.3", "rome.phyllis.son.son"], more: ["rome.phyllis.son.4"] } },
+        { id: "son", clue: true, line: "rome.phyllis.opt.son", say: { 1: ["rome.phyllis.son.1", "rome.phyllis.son.2", "rome.phyllis.son.3", "rome.phyllis.son.son"], more: ["rome.phyllis.son.4"] } },
         { id: "twins", line: "rome.phyllis.opt.twins", once: true, say: ["rome.phyllis.twins.1", "rome.phyllis.twins.2", "rome.phyllis.twins.son"] },
         // the lever: the coin, and whose it was (Walnut has said so)
-        { id: "wish", line: "rome.phyllis.opt.wish", when: (g) => g.has("coin") && is(g, "rome.knowsWish") && !is(g, "rome.hasLamp"),
+        { id: "wish", clue: true, line: "rome.phyllis.opt.wish", when: (g) => g.has("coin") && is(g, "rome.knowsWish") && !is(g, "rome.hasLamp"),
           say: { 1: ["rome.phyllis.wish.1", "rome.phyllis.wish.2", "rome.phyllis.wish.3", "rome.phyllis.wish.4"], more: ["rome.phyllis.wish.again"] }, then: "wish" },
         { id: "bye", line: "rome.phyllis.opt.bye", say: { 1: ["rome.phyllis.bye.1"], more: ["rome.phyllis.bye.2"] }, then: "exit" },
       ],
@@ -182,7 +182,7 @@ export const phyllisTree = (h = {}) => ({
     // the wish told: give it back (no), pay for it (no), or take the lamp to her son
     wish: {
       options: [
-        { id: "giveBack", line: "rome.phyllis.opt.giveback", say: { 1: ["rome.phyllis.giveback"], more: ["rome.phyllis.giveback.2"] } },
+        { id: "giveBack", clue: true, line: "rome.phyllis.opt.giveback", say: { 1: ["rome.phyllis.giveback"], more: ["rome.phyllis.giveback.2"] } },
         { id: "quarter", line: "rome.phyllis.opt.quarter", when: (g) => g.has("quarter"), say: { 1: ["rome.phyllis.quarter"], more: ["rome.phyllis.quarter.2"] } },
         { id: "take", line: "rome.phyllis.opt.take", say: ["rome.phyllis.take.1", "rome.phyllis.take.2"], do: h.lamp, then: "lamped" },
         { id: "think", line: "rome.phyllis.opt.think", say: ["rome.phyllis.think"], then: "exit" },
@@ -193,8 +193,8 @@ export const phyllisTree = (h = {}) => ({
     waiting: {
       say: ["rome.phyllis.waiting"],
       options: [
-        { id: "where", line: "rome.phyllis.opt.where", say: { 1: ["rome.phyllis.where.1"], more: ["rome.phyllis.where.2"] } },
-        { id: "lampBack", line: "rome.phyllis.opt.lampback", say: ["rome.phyllis.lampback"] },
+        { id: "where", clue: true, line: "rome.phyllis.opt.where", say: { 1: ["rome.phyllis.where.1"], more: ["rome.phyllis.where.2"] } },
+        { id: "lampBack", clue: true, line: "rome.phyllis.opt.lampback", say: ["rome.phyllis.lampback"] },
         { id: "byeWaiting", line: "rome.phyllis.opt.byewait", say: ["rome.phyllis.byewait"], then: "exit" },
       ],
     },
@@ -234,12 +234,12 @@ export const titusTree = (h = {}) => ({
     ask: {
       options: [
         // what the geese do whenever he puts a foot down (hook feet), and the second time, what he will say about it
-        { id: "geese", line: "rome.titus.opt.geese", say: { 1: ["rome.titus.geese.1"], more: ["rome.titus.geese.again"] }, do: h.feet,
+        { id: "geese", clue: true, line: "rome.titus.opt.geese", say: { 1: ["rome.titus.geese.1"], more: ["rome.titus.geese.again"] }, do: h.feet,
           then: (g) => (g.asked("titus/geese") === 1 ? "feet" : null) },
         { id: "ewe", line: "rome.titus.opt.ewe", once: true, say: ["rome.titus.ewe.1", "rome.titus.ewe.2", "rome.titus.ewe.son"] },
         { id: "father", line: "rome.titus.opt.father", say: { 1: ["rome.titus.father.1", "rome.titus.father.2"], more: ["rome.titus.father.3"] } },
         { id: "jump2", line: "rome.titus.opt.jump2", say: { 1: ["rome.titus.jump.2"], more: ["rome.titus.jump.3"] } },
-        { id: "help", line: "rome.titus.opt.help", say: { 1: ["rome.titus.help.1", "rome.titus.help.2"], more: ["rome.titus.help.3"] } },     // the clue: ask old Anser
+        { id: "help", clue: true, line: "rome.titus.opt.help", say: { 1: ["rome.titus.help.1", "rome.titus.help.2"], more: ["rome.titus.help.3"] } },     // the clue: ask old Anser
         { id: "bye", line: "rome.titus.opt.bye", say: { 1: ["rome.titus.bye.1"], more: ["rome.titus.bye.2"] }, then: "exit" },
       ],
     },
@@ -270,7 +270,7 @@ export const anserTree = (h = {}) => ({
     ask: {
       options: [
         // the clue: the tale (the second time he tells it gladly again; the third time is a running gag)
-        { id: "saved", line: "rome.anser.opt.saved", say: { 1: TALE, 2: ["rome.anser.tale.again.1", "rome.anser.tale.again.son", "rome.anser.tale.again.2"], more: ["rome.anser.tale.more", "rome.anser.tale.more.son"] },
+        { id: "saved", clue: true, line: "rome.anser.opt.saved", say: { 1: TALE, 2: ["rome.anser.tale.again.1", "rome.anser.tale.again.son", "rome.anser.tale.again.2"], more: ["rome.anser.tale.more", "rome.anser.tale.more.son"] },
           set: "rome.knowsGeese" },
         // the lever: once he has told it, the boy puts it to the test (the hook says the lines of the stomp)
         { id: "test", line: "rome.anser.opt.test", when: (g) => is(g, "rome.knowsGeese") && !is(g, "rome.geeseGone"), do: h.stomp, then: "exit" },
@@ -403,7 +403,7 @@ export const mariamTree = (h = {}) => ({
     ask: {
       options: [
         { id: "hensAsk", line: "rome.mariam.opt.hens2", when: (g) => !is(g, "rome.sawHens"), say: ["rome.mariam.hens.1"], then: "hens" },
-        { id: "crouch", line: "rome.mariam.opt.crouch", say: { 1: ["rome.mariam.crouch.1"], more: ["rome.mariam.crouch.3"] }, do: h.crouch,
+        { id: "crouch", clue: true, line: "rome.mariam.opt.crouch", say: { 1: ["rome.mariam.crouch.1"], more: ["rome.mariam.crouch.3"] }, do: h.crouch,
           then: (g) => (g.asked("mariam/crouch") === 1 ? "crouched" : null) },
         { id: "family", line: "rome.mariam.opt.family", say: ["rome.mariam.family.1", "rome.mariam.family.2"],
           then: (g) => (is(g, "rome.metDateSeller") && g.asked("mariam/family") === 1 ? "dates" : null) },

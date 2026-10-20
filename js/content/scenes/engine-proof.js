@@ -109,7 +109,7 @@ const LINES = {
 
 // ---------- TALK-11: a dialogue tree, the engine's own proof of it (docs/DESIGN.md, "Dialogue trees") ----------
 // On the stage while "proof.talk" is true: index.html?scene=engine-proof&lead=dad&flags=proof.talk. An old water carrier
-// stands on the sand by the river; talking to him is `g.talk(CARRIER)`. The tree below uses every piece there is: a start
+// stands on the sand by the river; talking to him is `g.talk(CARRIER)`. (TALK-18: the jars and "show me" are its clues: they stay, asked again.) The tree below uses every piece there is: a start
 // that depends on the story (`start` as a function: his greeting once, then straight to the questions), a node with four
 // ways in, a fork two deep (the river, then the fish), an option gated by `when` that appears only after another was
 // picked (the pyramid, after his name), a `once` (his name), a reply keyed by the nth asking with `more` (the jars), a
@@ -131,7 +131,7 @@ const CARRIER = {
     hello: { say: ["proof.carrier.hello.1", "proof.carrier.hello.2"], then: (g) => { g.flag("proof.carrierMet", true); return "ask"; } },
     ask: {
       options: [
-        { id: "jars", line: "proof.carrier.opt.jars", say: { 1: ["proof.carrier.jars.1"], 2: ["proof.carrier.jars.2"], more: ["proof.carrier.jars.more"] } },
+        { id: "jars", line: "proof.carrier.opt.jars", clue: true, say: { 1: ["proof.carrier.jars.1"], 2: ["proof.carrier.jars.2"], more: ["proof.carrier.jars.more"] } },
         { id: "river", line: "proof.carrier.opt.river", say: ["proof.carrier.river.1"], then: "river" },
         { id: "name", line: "proof.carrier.opt.name", once: true, say: ["proof.carrier.name.1", "proof.carrier.name.2"], set: "proof.carrierNamed" },
         { id: "pyramid", line: "proof.carrier.opt.pyramid", when: (g) => g.asked("proof.carrier/name") > 0, say: ["proof.carrier.pyramid.1"] },
@@ -148,7 +148,7 @@ const CARRIER = {
     fish: {
       say: ["proof.carrier.fish.1"],
       options: [
-        { id: "show", line: "proof.carrier.opt.show", say: ["proof.carrier.show.1"], do: fetchWater, then: "back" },
+        { id: "show", line: "proof.carrier.opt.show", clue: true, say: ["proof.carrier.show.1"], do: fetchWater, then: "back" },
         { id: "enough", line: "proof.carrier.opt.enough", say: ["proof.carrier.enough"], then: "root" },
       ],
     },
@@ -390,6 +390,43 @@ const proofDrive = (side) => ({ id: `drive-${side.toLowerCase()}`, type: "drive"
   haze: "#dfe7f0", haze_far: 3000, seed: side === "L" ? 16 : 61, when: driveProof,
   sun: [0.36, 1.95] });                                                    // DRIVE-16F: the things' shadows on the ground (the limousine's sun)
 
+// ---------- ROAD-18E: the drive seen straight ahead (docs/DESIGN.md, section 2, "Straight ahead") ----------
+// On the stage while "proof.road" is true: index.html?scene=engine-proof&lead=dad&flags=proof.road,proof.arrived. The stage is
+// given over to a drive straight down a road (`side: "ahead"`), from the highway's camera (ROAD_CAM: the vanishing point
+// (400, 330), focal 800, the eye 2.70 m up) and the engine's own plain pictures (art/proof/road/, painted by
+// tools/paint/proof_road.py): a sky; the road from above in squares, with its yellow centre line in dashes, its white edge
+// lines and red bands across its shoulders; the desert either side in squares, with stripes along the road 10 m and 20 m out
+// (they run to the vanishing point); brown poles 7.5 m left with their wires, white posts either side, bushes and stones on
+// both sides, each on its shadow toward us (the sun dead ahead); and the sign (a green board, B 40) standing 5.95 m right of
+// the middle of the road, 317.3 m along it (`pieces`: so that with the camera 300 m along it is 17.3 m ahead, and drawn pixel
+// for pixel as the painting's sign is: its board on x 599 to 752), the rows of things kept off the road round it (`gap`). The
+// proof's car stands still in the lane (a cut-out at row 548) while the road goes by under it; the hole in time is open on
+// the vanishing point (`road-hole`, its paint read again each time the drive draws: the far road bends as it goes by), and
+// the hole's glow runs down the road (a light of the drive's). The sign's own rings (`road-sign`, shut) read the drive and,
+// as much as the alpha of their second `under` says, the sign as it will be (`sign-bc`). The palms, the papyrus, the wagon
+// and the lead are cleared away while it is there (setup). `g.effects.get("road").set({ s: 300 })` puts the camera where the
+// sign is 17.3 m ahead, parked; `.set({ speed: 20 })` drives on.
+const roadProof = (g) => !!g.flag("proof.road");
+const ROAD_CAM = { vanish: [400, 330], focal: 800, eye: 2.7 };
+const ROAD_ART = "art/proof/road/";
+const ROAD_SIGN = { X: 5.95, s: 317.3 };                                   // the sign's foot: across the road, and along it
+const proofRoad = () => [
+  { id: "road", type: "drive", side: "ahead", ...ROAD_CAM, speed: 20, sky: ROAD_ART + "sky.png",
+    grounds: [{ src: ROAD_ART + "desert-l.png", from: -30, to: -6, ppm: 16 }, { src: ROAD_ART + "road.png", from: -6, to: 6, ppm: 32 }, { src: ROAD_ART + "desert-r.png", from: 6, to: 30, ppm: 16 }],
+    things: { src: ROAD_ART + "things.png", rows: [
+      { sprite: "pole", every: 40, at: -7.5, wires: [8.1, 7.6], offset: 18, gap: false },      // (the poles go on through the gap, wires and all)
+      { sprite: "post", every: 30, at: [-3.6, 3.6], offset: 12 },                               // a post either side of the road
+      { sprite: ["bush", "bush-2", "bush", "stone"], every: [3, 12], at: [6.5, 40], both: true } ] },      // either side, at random
+    pieces: [{ id: "sign", sprite: "sign", ...ROAD_SIGN }],
+    gap: [[ROAD_SIGN.s - 14, ROAD_SIGN.s + 10]],
+    sun: [-5.5, 0], shade: "#4a3a6a", shade_k: 0.5, haze: "#f2d2a0", haze_far: 1200, far: 2000,
+    light: [{ id: "glow", poly: [[398, 331], [402, 331], [710, 600], [90, 600]], radial: { at: [400, 331], r: [527, 228.65] }, stops: [[0, "#7ff5ff", 0.45], [1, "#7ff5ff", 0]] }],
+    seed: 18 },
+  { id: "road-hole", type: "portal", at: [400, 330], r: 40, rise: true, open: 1, base: 331, pale: "#fff2c8", under: [{ fx: "road" }] },
+  { id: "road-sign", type: "portal", at: [675, 332], r: 44, wide: 2.4, keep: [599, 752], base: 332, pale: "#fff2c8", strength: 0.8,
+    under: [{ fx: "road" }, { fx: "road", piece: "sign", sprite: "sign-bc", alpha: 0 }] },     // (the second: what the rings bring through, and how much of it)
+];
+
 // ---------- ENGINE-17: round seventeen's proofs: thoughts, a grille, a thing handed across, two floors, the speakers ----------
 // What the Office (Act Five, stage one) needs of the engine, each on the stage while its fact is true (add ",proof.arrived"):
 //   index.html?scene=engine-proof&lead=dad&flags=proof.thought       thought pictures (docs/DESIGN.md, section 7, "Thought pictures")
@@ -561,6 +598,8 @@ export default {
     { id: "wall", src: "art/proof/wall.png", base: 430, solid: [[250, 400], [430, 400], [430, 432], [250, 432]], when: windowProof },
     // DRIVE-16E: the car's side, seen from the back seat, with a window each side of the vanishing point (see the top)
     { id: "car", src: DRIVE_ART + "car.png", plane: "back", when: driveProof },
+    // ROAD-18E: the proof's car, standing still in the lane at row 548 while the road goes by under it (see the top)
+    { id: "road-car", src: ROAD_ART + "car.png", at: [521, 548], foot: [73.5, 121], base: 548, when: roadProof },
   ],
   // A cut-out can also follow the story. These are the other forms (none is needed here):
   //   { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") }      a row for a base; shown only while the test passes
@@ -610,6 +649,9 @@ export default {
     { id: "boat-bob", type: "bob", plane: "boat", amount: 1, period: 5, tilt: 0.75, when: bobProof },
     // DRIVE-16E: the world going by the car's windows (see the top), one each side of the road, behind everybody
     proofDrive("L"), proofDrive("R"),
+    // ROAD-18E: the drive straight ahead, the hole on the vanishing point, the sign's rings (see the top): on the stage only
+    // when the scene is built with the fact proof.road (so that the other proofs' lists of moving things are as they were)
+    ...(roadProof(g) ? proofRoad() : []),
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -746,6 +788,7 @@ export default {
     if (windowProof(g) && !down(g) && g.actor("watcher")) g.actor("watcher").pray(true);              // ROME-13E: the man at the window, at his prayers
     if (bobProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                             // ROME-13E: the papyrus cleared away, so that the boat can be seen
     if (driveProof(g)) for (const id of ["palms", "papyrus"]) if (g.plane(id)) g.plane(id).show(false);    // DRIVE-16E: the palms and the papyrus cleared away, so that the windows can be seen
+    if (roadProof(g)) { for (const id of ["palms", "papyrus", "wagon"]) if (g.plane(id)) g.plane(id).show(false); if (g.lead) g.lead.fade(0); }      // ROAD-18E: the stage given over to the road
     // NEVADA-12E: the creature's story, Dad's gum and sunglasses (once), and the creature in his shades if he has them on
     if (painted(g) || party(g)) {
       critterStory(g);

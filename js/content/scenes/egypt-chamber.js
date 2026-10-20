@@ -142,12 +142,12 @@ async function talkToGoldsmith(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
+      { id: "boy", line: "egypt.ask.boy", clue: true, heard: "egypt.goldsmith.boy.1" },
       { id: "hum", line: "egypt.goldsmith.ask.hum" },
-      { id: "eyes", line: "egypt.goldsmith.ask.eyes" },
+      { id: "eyes", line: "egypt.goldsmith.ask.eyes", clue: true },
       { id: "king", line: "egypt.goldsmith.ask.king" },
-      { id: "bye", line: "egypt.goldsmith.ask.bye" },
-    ]);
+      { id: "bye", line: "egypt.goldsmith.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.goldsmith.boy.1", "egypt.goldsmith.boy.2", "egypt.goldsmith.boy.3");
     else if (pick === "hum") await g.say("egypt.goldsmith.ask.hum", "egypt.goldsmith.hum.1", "egypt.goldsmith.hum.2");
     else if (pick === "eyes") {

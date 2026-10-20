@@ -67,11 +67,11 @@ async function talkToBoy(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
+      { id: "boy", line: "egypt.ask.boy", clue: true, heard: "egypt.lampboy.saw.1" },
       { id: "door", line: "egypt.ask.door", when: (g) => !!g.flag("egypt.heardBoy") },
       { id: "lamps", line: "egypt.lampboy.ask.lamps" },
-      { id: "bye", line: "egypt.lampboy.ask.bye" },
-    ]);
+      { id: "bye", line: "egypt.lampboy.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await whatHeSaw(g);
     else if (pick === "door") await g.say("egypt.ask.door", "egypt.lampboy.door.1", "egypt.lampboy.door.2", "egypt.lampboy.door.3");
     else if (pick === "lamps") await g.say("egypt.lampboy.ask.lamps", "egypt.lampboy.lamps.1", "egypt.lampboy.lamps.2", "egypt.lampboy.lamps.3");

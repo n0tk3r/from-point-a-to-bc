@@ -82,7 +82,7 @@ export const interviewTree = (h = {}) => {
   // what he can say at any question: the lever (hot), its warning (warm), the green page, going home, and a minute's rest
   const common = [
     { id: "hot", line: "office.iv.opt.hot", when: hot, say: SUSPEND, set: "office.alone", do: h.suspend, then: "exit" },
-    { id: "warm", line: "office.iv.opt.warm", when: warm, do: h.mop,
+    { id: "warm", clue: true, line: "office.iv.opt.warm", when: warm, do: h.mop,
       say: { 1: ["office.room.thermostat.77.suits.1", "office.room.thermostat.77.suits.2", "office.room.thermostat.77.suits.3"], more: ["office.iv.warm.again"] } },
     { id: "greenpage", line: "office.iv.opt.greenpage", once: true, when: (g) => is(g, "office.lamplighter"), say: ["office.iv.green.1", "office.iv.green.2"] },
     { id: "leave", line: "office.iv.opt.leave", say: { 1: ["office.iv.leave.1", "office.iv.leave.2", "office.iv.leave.3"], more: ["office.iv.leave.again.1", "office.iv.leave.again.2"] } },
@@ -100,73 +100,73 @@ export const interviewTree = (h = {}) => {
 
       // page one, question one: the name. He never says his last name is Grandpa; they write it down anyway.
       q1: ask(["office.iv.q1"], [
-        { id: "joe", line: "office.iv.opt.joe", say: ["office.iv.q1.last"], then: "q1b" },
+        { id: "joe", keep: true, line: "office.iv.opt.joe", say: ["office.iv.q1.last"], then: "q1b" },
         { id: "drove", line: "office.iv.opt.drove", once: true, say: ["office.iv.q1.drove.1", "office.iv.q1.drove.2"] },
       ]),
       q1b: { options: [
-        { id: "folks", line: "office.iv.opt.folks", say: ["office.iv.q1.folks"], then: "named" },
-        { id: "sign", line: "office.iv.opt.sign", say: ["office.iv.q1.sign.1", "office.iv.q1.sign.2"], then: "named" },
-        { id: "sooner", line: "office.iv.opt.sooner", say: ["office.iv.q1.sooner.1", "office.iv.q1.sooner.2"], then: "named" },
+        { id: "folks", keep: true, line: "office.iv.opt.folks", say: ["office.iv.q1.folks"], then: "named" },
+        { id: "sign", keep: true, line: "office.iv.opt.sign", say: ["office.iv.q1.sign.1", "office.iv.q1.sign.2"], then: "named" },
+        { id: "sooner", keep: true, line: "office.iv.opt.sooner", say: ["office.iv.q1.sooner.1", "office.iv.q1.sooner.2"], then: "named" },
         ...common,
       ] },
       named: { say: ["office.iv.q1.record", "office.iv.q1.jolene"], then: to(1) },
 
       q2: ask(["office.iv.sorry", "office.iv.q2"], [
-        { id: "lemonade", line: "office.iv.opt.lemonade", say: ["office.iv.q2.lemonade.1", "office.iv.q2.lemonade.2", "office.iv.q2.lemonade.3"], then: to(2) },
-        { id: "rocks", line: "office.iv.opt.rocks", say: ["office.iv.q2.rocks.1", "office.iv.q2.rocks.2"], then: to(2) },
-        { id: "road", line: "office.iv.opt.road", say: ["office.iv.q2.road"], then: to(2) },
+        { id: "lemonade", keep: true, line: "office.iv.opt.lemonade", say: ["office.iv.q2.lemonade.1", "office.iv.q2.lemonade.2", "office.iv.q2.lemonade.3"], then: to(2) },
+        { id: "rocks", keep: true, line: "office.iv.opt.rocks", say: ["office.iv.q2.rocks.1", "office.iv.q2.rocks.2"], then: to(2) },
+        { id: "road", keep: true, line: "office.iv.opt.road", say: ["office.iv.q2.road"], then: to(2) },
       ]),
 
       // yesterday at 1747 (the clue: somebody wrote down the very minute); and Opal, who files his statements of nothing
       q3: ask(["office.iv.q3.sorry", "office.iv.q3"], [
-        { id: "wagon", line: "office.iv.opt.wagon", say: ["office.iv.q3.wagon.1", "office.iv.q3.wagon.2", "office.iv.q3.wagon.3", "office.iv.q3.wagon.4"], then: to(3) },
-        { id: "sector", line: "office.iv.opt.sector", say: ["office.iv.q3.sector.1", "office.iv.q3.sector.2", "office.iv.q3.sector.3", "office.iv.q3.sector.4"], then: to(3) },
-        { id: "opal", line: "office.iv.opt.opal", say: ["office.iv.q3.opal.1", "office.iv.q3.opal.2", "office.iv.q3.opal.3"], then: to(3) },
+        { id: "wagon", keep: true, line: "office.iv.opt.wagon", say: ["office.iv.q3.wagon.1", "office.iv.q3.wagon.2", "office.iv.q3.wagon.3", "office.iv.q3.wagon.4"], then: to(3) },
+        { id: "sector", keep: true, line: "office.iv.opt.sector", say: ["office.iv.q3.sector.1", "office.iv.q3.sector.2", "office.iv.q3.sector.3", "office.iv.q3.sector.4"], then: to(3) },
+        { id: "opal", keep: true, line: "office.iv.opt.opal", say: ["office.iv.q3.opal.1", "office.iv.q3.opal.2", "office.iv.q3.opal.3"], then: to(3) },
         { id: "minute", line: "office.iv.opt.minute", once: true, say: ["office.iv.q3.minute.1", "office.iv.q3.minute.2", "office.iv.q3.minute.3"] },
       ]),
 
       // page two: the raccoon, who is not on the form, except on this one
       q4: ask(["office.iv.q4.page", "office.iv.sorry", "office.iv.q4"], [
-        { id: "what", line: "office.iv.opt.what", say: { 1: ["office.iv.q4.what.1", "office.iv.q4.what.2", "office.iv.q4.what.3"], more: ["office.iv.q4.what.3"] } },
-        { id: "handsome", line: "office.iv.opt.handsome", say: ["office.iv.q4.handsome.1", "office.iv.q4.handsome.2", "office.iv.q4.handsome.3"], then: to(4) },
-        { id: "likeme", line: "office.iv.opt.likeme", say: ["office.iv.q4.likeme"], then: to(4) },
+        { id: "what", keep: true, line: "office.iv.opt.what", say: { 1: ["office.iv.q4.what.1", "office.iv.q4.what.2", "office.iv.q4.what.3"], more: ["office.iv.q4.what.3"] } },
+        { id: "handsome", keep: true, line: "office.iv.opt.handsome", say: ["office.iv.q4.handsome.1", "office.iv.q4.handsome.2", "office.iv.q4.handsome.3"], then: to(4) },
+        { id: "likeme", keep: true, line: "office.iv.opt.likeme", say: ["office.iv.q4.likeme"], then: to(4) },
       ]),
 
       // the green page: Lamplighter (the clue: there is such a thing, and they do not know what it is either)
       q5: ask(["office.iv.q5.turn", "office.iv.sorry", "office.iv.q5"], [
-        { id: "withwhat", line: "office.iv.opt.withwhat", say: GREEN, set: "office.lamplighter", then: to(5) },
-        { id: "pleasure", line: "office.iv.opt.pleasure", say: GREEN, set: "office.lamplighter", then: to(5) },
-        { id: "lamp", line: "office.iv.opt.lamp", say: ["office.iv.q5.lamp", ...GREEN.slice(1)], set: "office.lamplighter", then: to(5) },
+        { id: "withwhat", keep: true, line: "office.iv.opt.withwhat", say: GREEN, set: "office.lamplighter", then: to(5) },
+        { id: "pleasure", keep: true, line: "office.iv.opt.pleasure", say: GREEN, set: "office.lamplighter", then: to(5) },
+        { id: "lamp", keep: true, line: "office.iv.opt.lamp", say: ["office.iv.q5.lamp", ...GREEN.slice(1)], set: "office.lamplighter", then: to(5) },
       ]),
 
       // the banjo (he struck an officer with it once, and says so), and the receipt for it
       q6: ask(["office.iv.sorry", "office.iv.q6"], [
-        { id: "once", line: "office.iv.opt.once", say: ["office.iv.q6.once.1", "office.iv.q6.once.2", ...RECEIPT], then: to(6) },
-        { id: "sorry", line: "office.iv.opt.sorry", say: ["office.iv.q6.sorry.1", "office.iv.q6.sorry.2", ...RECEIPT], then: to(6) },
-        { id: "going", line: "office.iv.opt.going", say: ["office.iv.q6.going", ...RECEIPT], then: to(6) },
+        { id: "once", keep: true, line: "office.iv.opt.once", say: ["office.iv.q6.once.1", "office.iv.q6.once.2", ...RECEIPT], then: to(6) },
+        { id: "sorry", keep: true, line: "office.iv.opt.sorry", say: ["office.iv.q6.sorry.1", "office.iv.q6.sorry.2", ...RECEIPT], then: to(6) },
+        { id: "going", keep: true, line: "office.iv.opt.going", say: ["office.iv.q6.going", ...RECEIPT], then: to(6) },
       ]),
 
       // and on, and on: five more, round and round, never finished
       m1: ask(["office.iv.sorry", "office.iv.m1"], [
-        { id: "m1a", line: "office.iv.opt.m1.a", say: ["office.iv.m1.a"], then: to(7) },
-        { id: "m1b", line: "office.iv.opt.m1.b", say: ["office.iv.m1.b.1", "office.iv.m1.b.2"], then: to(7) },
+        { id: "m1a", keep: true, line: "office.iv.opt.m1.a", say: ["office.iv.m1.a"], then: to(7) },
+        { id: "m1b", keep: true, line: "office.iv.opt.m1.b", say: ["office.iv.m1.b.1", "office.iv.m1.b.2"], then: to(7) },
       ]),
       m2: ask(["office.iv.sorry.2", "office.iv.m2"], [
-        { id: "m2a", line: "office.iv.opt.m2.a", say: ["office.iv.m2.a"], then: to(8) },
-        { id: "m2b", line: "office.iv.opt.m2.b", say: ["office.iv.m2.b"], then: to(8) },
+        { id: "m2a", keep: true, line: "office.iv.opt.m2.a", say: ["office.iv.m2.a"], then: to(8) },
+        { id: "m2b", keep: true, line: "office.iv.opt.m2.b", say: ["office.iv.m2.b"], then: to(8) },
       ]),
       m3: ask(["office.iv.sorry.3", "office.iv.m3"], [
-        { id: "m3a", line: "office.iv.opt.m3.a", say: ["office.iv.m3.a"], then: to(9) },
-        { id: "m3b", line: "office.iv.opt.m3.b", say: ["office.iv.m3.b"], then: to(9) },
+        { id: "m3a", keep: true, line: "office.iv.opt.m3.a", say: ["office.iv.m3.a"], then: to(9) },
+        { id: "m3b", keep: true, line: "office.iv.opt.m3.b", say: ["office.iv.m3.b"], then: to(9) },
       ]),
       m4: ask(["office.iv.sorry", "office.iv.m4"], [
-        { id: "m4a", line: "office.iv.opt.m4.a", say: ["office.iv.m4.a"], then: to(10) },
-        { id: "m4b", line: "office.iv.opt.m4.b", say: ["office.iv.m4.b"], then: to(10) },
+        { id: "m4a", keep: true, line: "office.iv.opt.m4.a", say: ["office.iv.m4.a"], then: to(10) },
+        { id: "m4b", keep: true, line: "office.iv.opt.m4.b", say: ["office.iv.m4.b"], then: to(10) },
       ]),
       // how comfortable, from one to five: at 81 his honest answer is the second way to Regulation 9
       m5: ask(["office.iv.sorry.4", "office.iv.m5"], [
-        { id: "m5cool", line: "office.iv.opt.m5.cool", when: cool, say: ROUND, then: to(6) },
-        { id: "m5warm", line: "office.iv.opt.m5.warm", when: warm, say: ROUND, do: h.mop, then: to(6) },
+        { id: "m5cool", keep: true, line: "office.iv.opt.m5.cool", when: cool, say: ROUND, then: to(6) },
+        { id: "m5warm", keep: true, line: "office.iv.opt.m5.warm", when: warm, say: ROUND, do: h.mop, then: to(6) },
         { id: "m5hot", line: "office.iv.opt.m5.hot", when: hot, say: ["office.iv.m5.hot.1", "office.iv.m5.hot.2", ...SUSPEND], set: "office.alone", do: h.suspend, then: "exit" },
       ]),
     },
@@ -189,22 +189,22 @@ export const ventTree = (h = {}) => {
       talk: {
         options: [
           // #18: the banjo, and why; then the receipt, up through the slats
-          { id: "banjo", line: "office.vent.opt.banjo", when: (g) => !is(g, "office.banjoBack") && !is(g, "office.receiptUp"),
+          { id: "banjo", clue: true, line: "office.vent.opt.banjo", when: (g) => !is(g, "office.banjoBack") && !is(g, "office.receiptUp"),
             say: { 1: ["office.vent.banjo.1", "office.vent.banjo.ranger", "office.vent.banjo.joe"], more: ["office.vent.banjo.ranger", "office.vent.banjo.joe"] }, set: "office.planned" },
-          { id: "receipt", line: "office.vent.opt.receipt", when: (g) => is(g, "office.planned") && g.has("receipt") && !is(g, "office.receiptUp"),
+          { id: "receipt", clue: true, line: "office.vent.opt.receipt", when: (g) => is(g, "office.planned") && g.has("receipt") && !is(g, "office.receiptUp"),
             then: (g) => (is(g, "office.sawProperty") ? "receiptKnown" : "receiptTell") },
-          { id: "seenbanjo", line: "office.vent.opt.seenbanjo", when: (g) => is(g, "office.sawProperty") && !is(g, "office.banjoBack"),
+          { id: "seenbanjo", clue: true, line: "office.vent.opt.seenbanjo", when: (g) => is(g, "office.sawProperty") && !is(g, "office.banjoBack"),
             say: ["office.vent.seenbanjo.ranger", "office.vent.seenbanjo.joe"] },
           // #19: a pie, and who is watching it
-          { id: "eat", line: "office.vent.opt.eat", when: (g) => is(g, "office.sawBreak") && !is(g, "office.pieEaten"),
+          { id: "eat", clue: true, line: "office.vent.opt.eat", when: (g) => is(g, "office.sawBreak") && !is(g, "office.pieEaten"),
             say: ["office.vent.eat.ranger", "office.vent.eat.joe"], then: (g) => (is(g, "office.jedGone") ? null : "jed") },
-          { id: "head", line: "office.vent.opt.head", when: (g) => is(g, "office.banjoBack") && !is(g, "office.tinClean") && !g.has("pietin"),
+          { id: "head", clue: true, line: "office.vent.opt.head", when: (g) => is(g, "office.banjoBack") && !is(g, "office.tinClean") && !g.has("pietin"),
             say: ["office.vent.head.1"], then: (g) => (is(g, "office.sawBreak") ? "headKnown" : "headLook") },
-          { id: "jed", line: "office.vent.opt.jed", when: (g) => is(g, "office.jedTold") && !is(g, "office.jedGone"),
+          { id: "jed", clue: true, line: "office.vent.opt.jed", when: (g) => is(g, "office.jedTold") && !is(g, "office.jedGone"),
             say: ["office.vent.jedplan.ranger", "office.vent.jedplan.joe.1", "office.vent.jedplan.joe.2"] },
           { id: "trade", line: "office.vent.opt.trade", once: true, when: (g) => is(g, "office.pieEaten"), say: ["office.vent.trade.ranger", "office.vent.trade.joe"] },
           // #20: the way down, once the schedule is read
-          { id: "down", line: "office.vent.opt.down", when: (g) => is(g, "office.schedule"), say: ["office.vent.down.ranger", "office.vent.down.joe.1", "office.vent.down.joe.2"] },
+          { id: "down", clue: true, line: "office.vent.opt.down", when: (g) => is(g, "office.schedule"), say: ["office.vent.down.ranger", "office.vent.down.joe.1", "office.vent.down.joe.2"] },
           // and the two of them
           { id: "promise", line: "office.vent.opt.promise", once: true, say: ["office.vent.promise.ranger", "office.vent.promise.joe"] },
           { id: "jolene", line: "office.vent.opt.jolene", say: { 1: ["office.vent.jolene.ranger", "office.vent.jolene.joe"], more: ["office.vent.jolene.2.ranger", "office.vent.jolene.2.joe"] } },
@@ -288,8 +288,8 @@ export const intercomTree = (h = {}) => ({
         { id: "joe", line: "office.intercom.opt.joe", say: { 1: ["office.intercom.joe.1"], 2: ["office.intercom.joe.2"], more: ["office.intercom.joe.3"] } },
         { id: "name", line: "office.intercom.opt.name", once: true, when: (g) => g.asked("intercom/joe") > 0, say: ["office.intercom.name.1", "office.intercom.name.2"] },
         { id: "out", line: "office.intercom.opt.out", say: ["office.intercom.out"] },
-        { id: "air", line: "office.intercom.opt.air", when: (g) => is(g, "office.acOff"), say: ["office.intercom.air.1", "office.intercom.air.2"] },
-        { id: "burger", line: "office.intercom.opt.burger", say: { 1: ["office.intercom.burger.1"], more: ["office.intercom.burger.2"] } },
+        { id: "air", clue: true, line: "office.intercom.opt.air", when: (g) => is(g, "office.acOff"), say: ["office.intercom.air.1", "office.intercom.air.2"] },
+        { id: "burger", clue: true, line: "office.intercom.opt.burger", say: { 1: ["office.intercom.burger.1"], more: ["office.intercom.burger.2"] } },
         // the lever: on Jed's behalf, and true (Jed said so himself, in the limousine)
         { id: "behalf", line: "office.intercom.opt.behalf", when: (g) => is(g, "office.banjoBack") && is(g, "office.jedTold") && !is(g, "office.jedGone"),
           say: ["office.intercom.behalf.1", "office.intercom.behalf.2"], do: h.burger, then: (g) => { g.flag("office.jedGone", true); return "behalf"; } },
@@ -313,7 +313,7 @@ export const ragTree = (h = {}) => {
   const twice = { id: "twice", line: "office.rag.opt.twice", once: true, say: ["office.rag.twice.1", "office.rag.twice.2", "office.rag.twice.3"] };
   const home = { id: "home", line: "office.rag.opt.home", say: { 1: ["office.rag.home"], more: ["office.iv.leave.again.1"] } };
   const lamp = { id: "lamp", line: "office.rag.opt.lamp", once: true, say: ["office.rag.lamp.1", "office.rag.lamp.2", "office.rag.lamp.3", "office.rag.lamp.4", "office.rag.lamp.5"] };
-  const somewhere = { id: "somewhere", line: "office.rag.opt.somewhere", say: ["office.rag.lever.1", "office.rag.lever.2"],
+  const somewhere = { id: "somewhere", clue: true, line: "office.rag.opt.somewhere", say: ["office.rag.lever.1", "office.rag.lever.2"],
     then: async (g) => { if (h.louder) await h.louder(g); return "birthday"; } };
   const stop = { id: "stop", line: "office.rag.opt.stop", say: ["office.rag.stop.1", "office.rag.stop.2", "office.rag.stop.3"], do: h.stop, then: "exit" };
   return {

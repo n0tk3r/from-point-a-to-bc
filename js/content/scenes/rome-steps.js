@@ -219,11 +219,11 @@ async function talkToDoorkeeper(g) {
   turnTo(g, "doorkeeper");
   for (;;) {
     const pick = await g.choose([
-      { id: "rule", line: "rome.doorkeeper.ask.rule", when: (g) => !g.flag("rome.inside") },
+      { id: "rule", line: "rome.doorkeeper.ask.rule", clue: true, when: (g) => !g.flag("rome.inside") },
       { id: "what", line: "rome.doorkeeper.ask.what" },
       { id: "dad", line: "rome.doorkeeper.ask.dad" },
-      { id: "bye", line: "rome.doorkeeper.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.doorkeeper.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "rule") await g.say("rome.doorkeeper.ask.rule", "rome.doorkeeper.ans.rule");
     else if (pick === "what") await g.say("rome.doorkeeper.ask.what", "rome.doorkeeper.ans.what.1", "rome.doorkeeper.ans.what.2");
     else if (pick === "dad") await g.say("rome.doorkeeper.ask.dad", "rome.doorkeeper.ans.dad.1", "rome.doorkeeper.ans.dad.2", "rome.doorkeeper.ans.dad.3", "rome.doorkeeper.ans.dad.4");
@@ -262,12 +262,12 @@ async function talkToSoothsayer(g) {
   for (;;) {
     const fed = !!g.flag("rome.hasIncense");
     const pick = await g.choose([
-      { id: "feed", line: fedLine(g), when: (g) => g.has("breakfast") },      // ROME-13S1
+      { id: "feed", line: fedLine(g), keep: true, when: (g) => g.has("breakfast") },      // ROME-13S1
       { id: "birds", line: "rome.soothsayer.ask.birds" },
-      { id: "temple", line: "rome.soothsayer.ask.temple" },
+      { id: "temple", line: "rome.soothsayer.ask.temple", clue: true },
       { id: "future", line: "rome.soothsayer.ask.future" },
-      { id: "bye", line: "rome.soothsayer.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.soothsayer.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "feed") return feedSoothsayer(g);
     if (pick === "birds") {
       if (fed) await g.say("rome.soothsayer.ask.birds", "rome.soothsayer.ans.birds.fed");
@@ -359,16 +359,16 @@ async function talkToSenator(g) {
   await meetSenator(g);
   for (;;) {
     const pick = await g.choose([
-      { id: "give", line: g.flag("rome.swapped") ? "rome.senator.toga.1" : "rome.senator.wrong.1", when: (g) => g.has("toga") },      // ROME-13S1
-      { id: "late", line: "rome.senator.ask.late" },
-      { id: "toga", line: "rome.senator.ask.toga" },
+      { id: "give", line: g.flag("rome.swapped") ? "rome.senator.toga.1" : "rome.senator.wrong.1", keep: true, when: (g) => g.has("toga") },      // ROME-13S1
+      { id: "late", line: "rome.senator.ask.late", clue: true },
+      { id: "toga", line: "rome.senator.ask.toga", clue: true },
       // Once he has heard whose nose is on the new money (the keeper cries it, the first time he walks into the street),
       // he can ask about Caesar. The senator's gossip is of a great-nephew nobody thinks about: the Caesar Augustus of
       // Luke 2:1, as the boy does not know and nobody in Rome could. It gives nothing and changes nothing.
       { id: "caesar", line: "rome.senator.ask.caesar", when: (g) => g.flag("rome.knowsBC") },
       { id: "dad", line: "rome.senator.ask.dad" },
-      { id: "bye", line: "rome.senator.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.senator.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "give") return giveToga(g);                     // ROME-13S1
     if (pick === "late") {
       await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");

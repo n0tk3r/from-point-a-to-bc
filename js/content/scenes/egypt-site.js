@@ -90,11 +90,11 @@ async function talkToScribe(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
-      { id: "list", line: "egypt.scribe.ask.list" },
+      { id: "boy", line: "egypt.ask.boy", heard: "egypt.scribe.boy.1" },
+      { id: "list", line: "egypt.scribe.ask.list", clue: true },
       { id: "news", line: "egypt.scribe.ask.news", when: (g) => !!g.flag("egypt.heardAbram") && !count(g, "egypt.scribe.ask.news") },      // once Lot has told him; told once
-      { id: "bye", line: "egypt.ask.bye" },
-    ]);
+      { id: "bye", line: "egypt.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.scribe.boy.1", "egypt.scribe.boy.2");
     else if (pick === "list") await g.say("egypt.scribe.ask.list", g.flag("egypt.hasPass") ? "egypt.scribe.list.done" : g.flag("egypt.penGiven") ? "egypt.scribe.list.nosheet" : "egypt.scribe.list.nopen");
     else if (pick === "news") return news(g);                 // he has heard what he needed to hear, and he goes
@@ -299,11 +299,11 @@ async function talkToOverseer(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
-      { id: "hum", line: "egypt.overseer.ask.hum" },
-      { id: "schedule", line: "egypt.overseer.ask.schedule" },
-      { id: "bye", line: "egypt.overseer.ask.bye" },
-    ]);
+      { id: "boy", line: "egypt.ask.boy", heard: "egypt.overseer.boy.1" },
+      { id: "hum", line: "egypt.overseer.ask.hum", clue: true },
+      { id: "schedule", line: "egypt.overseer.ask.schedule", clue: true },
+      { id: "bye", line: "egypt.overseer.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.overseer.boy.1");
     else if (pick === "hum") await g.say("egypt.overseer.ask.hum", "egypt.overseer.hum.1", "egypt.overseer.hum.2", "egypt.overseer.hum.3", "egypt.overseer.hum.4");
     else if (pick === "schedule") { await g.say("egypt.overseer.ask.schedule"); await report(g); }
@@ -320,12 +320,12 @@ async function talkToHaulers(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
+      { id: "boy", line: "egypt.ask.boy", heard: "egypt.haulers.boy.1" },
       { id: "break", line: "egypt.haulers.ask.break" },
       { id: "free", line: "egypt.haulers.ask.free" },
       { id: "sand", line: "egypt.haulers.ask.sand" },
-      { id: "bye", line: "egypt.haulers.ask.bye" },
-    ]);
+      { id: "bye", line: "egypt.haulers.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.haulers.boy.1", "egypt.haulers.boy.2", "egypt.haulers.boy.3");
     else if (pick === "break") await g.say("egypt.haulers.ask.break", "egypt.haulers.break.1", "egypt.haulers.break.2");
     else if (pick === "free") await g.say("egypt.haulers.ask.free", "egypt.haulers.free.1", "egypt.haulers.free.2", "egypt.haulers.free.3", "egypt.haulers.free.4");

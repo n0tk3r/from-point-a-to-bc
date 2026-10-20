@@ -1,0 +1,114 @@
+{
+ "ppm": 48,
+ "note": "ROAD-18E: the proof's upright things, seen from behind at 48 pixels a metre (the signs at 800 / 17.3); foot: in the box",
+ "sprites": {
+  "pole": {
+   "box": [
+    2,
+    2,
+    96,
+    408
+   ],
+   "foot": [
+    48.0,
+    408
+   ],
+   "height": 8.5
+  },
+  "post": {
+   "box": [
+    104,
+    2,
+    5,
+    53
+   ],
+   "foot": [
+    2.5,
+    53
+   ],
+   "height": 1.104
+  },
+  "bush": {
+   "box": [
+    115,
+    2,
+    43,
+    34
+   ],
+   "foot": [
+    21.5,
+    34
+   ],
+   "height": 0.708
+  },
+  "bush-2": {
+   "box": [
+    164,
+    2,
+    62,
+    46
+   ],
+   "foot": [
+    31.0,
+    46
+   ],
+   "height": 0.958
+  },
+  "stone": {
+   "box": [
+    232,
+    2,
+    24,
+    14
+   ],
+   "foot": [
+    12.0,
+    14
+   ],
+   "height": 0.292
+  },
+  "marker": {
+   "box": [
+    262,
+    2,
+    24,
+    96
+   ],
+   "foot": [
+    12.0,
+    96
+   ],
+   "height": 2.0
+  },
+  "sign": {
+   "box": [
+    292,
+    2,
+    153,
+    167
+   ],
+   "foot": [
+    76.301,
+    167
+   ],
+   "height": 3.611,
+   "ppm": 46.2428,
+   "air": 0
+  },
+  "sign-bc": {
+   "box": [
+    451,
+    2,
+    153,
+    167
+   ],
+   "foot": [
+    76.301,
+    167
+   ],
+   "height": 3.611,
+   "ppm": 46.2428,
+   "air": 0
+  }
+ }
+}

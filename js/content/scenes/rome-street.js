@@ -104,12 +104,12 @@ async function talkToKeeper(g) {
   turnTo(g, "keeper");
   for (;;) {
     const pick = await g.choose([
-      { id: "pay", line: "rome.keeper.ask.pay", when: (g) => g.has("quarter") },
+      { id: "pay", line: "rome.keeper.ask.pay", keep: true, when: (g) => g.has("quarter") },
       { id: "pizza", line: "rome.keeper.ask.pizza" },
       { id: "owe", line: "rome.keeper.ask.owe" },
       { id: "dad", line: "rome.keeper.ask.dad" },
-      { id: "bye", line: "rome.keeper.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.keeper.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "pay") await g.say(...payWithQuarter);
     else if (pick === "pizza") await g.say("rome.keeper.ask.pizza", "rome.keeper.ans.pizza.1", "rome.keeper.ans.pizza.2", "rome.keeper.ans.pizza.3", "rome.keeper.ans.pizza.4", "rome.keeper.ans.pizza.5");
     else if (pick === "owe") await g.say("rome.keeper.ask.owe", "rome.keeper.ans.owe.1", "rome.keeper.ans.owe.2", "rome.keeper.ans.owe.3");
@@ -147,10 +147,10 @@ async function talkToWasher(g) {
   for (;;) {
     const pick = await g.choose([
       { id: "white", line: "rome.washer.ask.white" },
-      { id: "tunic", line: "rome.washer.ask.tunic", when: (g) => !g.flag("rome.hasTunic") },
+      { id: "tunic", line: "rome.washer.ask.tunic", clue: true, when: (g) => !g.flag("rome.hasTunic") },
       { id: "dad", line: "rome.washer.ask.dad" },
-      { id: "bye", line: "rome.washer.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.washer.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "white") {                                       // the best fact he has ever heard
       await g.say("rome.washer.ask.white", "rome.washer.ans.white.1", "rome.washer.ans.white.2", "rome.washer.ans.white.3", "rome.washer.ans.white.4", "rome.washer.ans.white.5");
       g.flag("rome.knowsWash", true);
@@ -235,11 +235,11 @@ async function talkToUrchin(g) {
   for (;;) {
     const help = askForHelp(g);
     const pick = await g.choose([
-      { id: "help", line: help[0] },
+      { id: "help", line: help[0], clue: true },
       { id: "game", line: "rome.urchin.ask.game" },
-      { id: "temple", line: "rome.urchin.ask.temple" },
-      { id: "bye", line: "rome.urchin.ask.bye" },
-    ]);
+      { id: "temple", line: "rome.urchin.ask.temple", clue: true },
+      { id: "bye", line: "rome.urchin.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "help") {
       await g.say(...help);
       if (help.includes("rome.urchin.tip.gaul")) g.flag("rome.knowsSenate", true);       // ROME-13S2: it says where the Senate meets today
@@ -318,8 +318,8 @@ async function talkToDateSeller(g) {
       { id: "god", line: "rome.dateseller.ask.god" },
       // what he prays for comes up once the boy knows whom he prays to; and a blessing is not given twice for the asking
       { id: "pray", line: "rome.dateseller.ask.pray", when: (g) => heard(g, "rome.dateseller.ans.god.6") && !heard(g, "rome.dateseller.bless.2") },
-      { id: "bye", line: "rome.dateseller.ask.bye" },
-    ]);
+      { id: "bye", line: "rome.dateseller.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "try") await tryDate(g, seller);
     else if (pick === "god") await g.say("rome.dateseller.ask.god", "rome.dateseller.ans.god.1", "rome.dateseller.ans.god.2", "rome.dateseller.ans.god.3", "rome.dateseller.ans.god.4", "rome.dateseller.ans.god.5", "rome.dateseller.ans.god.6");
     else if (pick === "pray") await whatHePraysFor(g, seller);

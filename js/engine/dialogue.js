@@ -301,10 +301,17 @@ export class Dialogue {
       door in time): their portrait at its head, the options in their colour.
       TALK-11: an option may carry `asked` (how many times it has been picked before: 0 marks it new, more marks it asked)
       and `exit: true` (it ends a talk: Esc picks it); { talk: true } marks the list as a tree's. A menu that is up when
-      a cutscene starts being skipped is taken as it would be if it were asked for while skipping: the last open option. */
+      a cutscene starts being skipped is taken as it would be if it were asked for while skipping: the last open option.
+      TALK-18: { talk: true } on a scripted menu (a loop of things to ask someone, its options not worked out by talk()):
+      the same rule as a tree's (docs/DESIGN.md, section 7). An option once asked is gone, unless it is `clue: true` or
+      `keep: true` (it stays, shown as asked) or the way out (`exit: true`: the "bye"); one that opens another menu
+      (`under: [its options]`) stays while anything under it would still show. Asked is read from the lines said
+      (`seenLines`): the option's `heard` (a line id, or a list: the first line of its own reply, where its `line` is said
+      to more than one person), else its `line`. */
   choose(options, { through = null, talk = false } = {}) {
     const g = this.g;
-    const open = options.filter((o) => !o.when || o.when(g));
+    let open = options.filter((o) => !o.when || o.when(g));
+    if (talk) open = open.filter((o) => o.asked != null || this.stays(o)).map((o) => (o.asked != null ? o : { ...o, asked: this.heard(o) }));      // TALK-18
     if (g.clock.skipping || open.length === 0) return Promise.resolve(open.length ? open[open.length - 1].id : null);
     return new Promise((resolve) => {
       const list = document.createElement("ul");
@@ -347,6 +354,17 @@ export class Dialogue {
     });
   }
 
+  /** TALK-18: how many times a scripted menu's option has been asked: its `heard` line(s), else its `line`, as said. */
+  heard(o) { const seen = this.g.store.data.seenLines || {}; return Math.max(0, ...[].concat(o.heard || o.line).map((l) => seen[l] || 0)); }
+  /** TALK-18: whether a scripted menu's option still shows (choose, { talk: true }): the way out, a clue, a keep, one never asked,
+      or one that opens another menu (`under`) with something left in it that would show (no endless loop on menus that circle). */
+  stays(o, seen = new Set()) {
+    if (o.exit || o.clue || o.keep || !this.heard(o)) return true;
+    if (!Array.isArray(o.under) || seen.has(o.under)) return false;
+    seen.add(o.under);
+    return o.under.some((u) => !u.exit && (!u.when || u.when(this.g)) && this.stays(u, seen));
+  }
+
   /**
    * TALK-11: a dialogue tree, the way the classic adventures do them (docs/DESIGN.md, "Dialogue trees"). The tree is plain
    * data: { id, start, nodes: { name: { say, options, then } } }, an option { id, line, when, once, say, set, do, then }.
@@ -357,6 +375,12 @@ export class Dialogue {
    * of askings ({ 1: [...], 2: [...], more: [...] }) answers differently each time.
    * { through: who } shows every menu as the words of a lead who is off the stage (LETTERBOX-11) and says the picked
    * line, and any reply of theirs, through the door. Resolves when the talk is over.
+   * TALK-18, the rule (docs/DESIGN.md, section 7): an option picked once is gone from then on, unless it is a clue (`clue:
+   * true`: it stays, shown as asked) or kept for another reason (`keep: true`); the ways out (`then` "exit"; and "back" or
+   * "root" with no reply or script of its own) always stay; a topic (`then` another node of the tree) stays while anything under it would still show, worked
+   * out through the nodes it leads to (each node looked at once, so a tree that circles back ends); `once` as before. An
+   * option whose `then` is a function is a plain line by this rule (it is not called to see where it goes: some set facts).
+   * It is read from `asked` in the save, so an old save follows it as it is.
    */
   async talk(tree, { through = null, id = null } = {}) {
     const g = this.g, nodes = (tree && tree.nodes) || {}, memory = g.store.data.asked || (g.store.data.asked = {});
@@ -374,6 +398,24 @@ export class Dialogue {
       const last = Math.max(0, ...Object.keys(say).map(Number).filter((k) => k > 0));
       return n > last ? say.more : null;
     };
+    // TALK-18: the rule. A way out always shows; a clue or a keep until `once` takes it; a line never picked; a topic while
+    // something is left under it (`left`: a node with an option that is not a way out and would still show).
+    // (A "back" or "root" with a reply or a script of its own is a line like any other: only the bare way back always stays.)
+    const wayOut = (o) => o.then === "exit" || ((o.then === "back" || o.then === "root") && o.say == null && !o.do && o.set == null);
+    const shows = (node, o, seen = null) => {
+      if (o.when && !o.when(g)) return false;
+      const n = count(node, o);
+      if (o.once && n) return false;
+      if (wayOut(o) || o.clue || o.keep || !n) return true;
+      return typeof o.then === "string" && !!nodes[o.then] && left(o.then, seen || new Set([node]));
+    };
+    const left = (name, seen) => {
+      for (let at = name; at != null && nodes[at] && !seen.has(at); at = typeof nodes[at].then === "string" ? nodes[at].then : null) {
+        seen.add(at);
+        if ((nodes[at].options || []).some((o) => !wayOut(o) && shows(at, o, seen))) return true;
+      }
+      return false;
+    };
     const trail = [await root()];                       // the nodes on the way here, for "back"
     let node = trail[0];
     for (;;) {
@@ -382,7 +424,7 @@ export class Dialogue {
       await speak(spec.say);                            // on arriving: once, however many picks are made here
       let next = spec.then == null ? null : await resolve(spec.then);
       while (next == null) {                            // the node's choices, again after a pick that stays, until one leads away
-        const open = (spec.options || []).filter((o) => (!o.when || o.when(g)) && !(o.once && count(node, o)));
+        const open = (spec.options || []).filter((o) => shows(node, o));       // TALK-18: by the rule (above)
         if (!open.length) { next = "exit"; break; }     // nothing to ask: the talk is over
         let pick = null;
         if (g.clock.skipping) pick = open.find((o) => o.then === "exit") || open[open.length - 1];     // a cutscene being skipped: the way out, else the last

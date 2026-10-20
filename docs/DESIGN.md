@@ -99,7 +99,7 @@ js/content/             the game itself. Knows nothing about the engine's inside
   checkpoints.js          the testers' saved games, one for each beat (section 6, "Testing: parts"): written by a script, not by hand
   sound.js                music, effects and the list of recorded lines
   maps.js                 the maps: each time's places and the ways between them, the marks they arrive on, a sketch of each (MAP-15)
-  cutscenes/highway.js    the painted highway at dusk, and the parts of it that change
+  cutscenes/highway.js    the painted highway at dusk, driven down, and the parts of it that change <!-- ROAD-18M -->
   cutscenes/intro.js      the intro movie
   cutscenes/title.js      what is behind the title screen
   cutscenes/backup.js     the cut-scene "Backup", on the Nevada roadside: it closes Act Four and hands the game to Act Five
@@ -119,7 +119,10 @@ art/proof/              the engine's own pictures for its proof scene: a small p
                         since round thirteen a flock of geese (their frames) with their pen, a boat, and a house front with a room
                         behind its upper window; since round sixteen, in art/proof/drive/, the world outside a car's side windows
                         for the `drive` (a car's side, a sky, two grounds of squares and stripes, ranges of plain triangles,
-                        posts, poles and a marker: tools/paint/proof_drive.py) <!-- DRIVE-16E -->
+                        posts, poles and a marker: tools/paint/proof_drive.py) <!-- DRIVE-16E -->; since round eighteen, in
+                        art/proof/road/, a road seen straight down it for the `drive` straight ahead (a sky, the road and the
+                        desert either side in squares, poles, posts, bushes, a marker, a sign of plain colours and a car seen
+                        from behind: tools/paint/proof_road.py) <!-- ROAD-18E -->
 art/emblem/             the game's emblem, the Timer (EMBLEM-13): the begin screen's sky, turning bow, top and still, and the
                         tab and home-screen icons: interface pictures, never keyed; since round fifteen the same three pieces at
                         1024, for the large dial of the switch across the centuries (MAP-15D)
@@ -399,7 +402,7 @@ The marks go into the scene file as they are: the field names are the same in bo
 | `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
 | `bob` | A cut-out of the scene (a boat, a barge at its mooring) riding the water: it rises and falls on the swell, as two slow waves added together so that it never ticks like a clock, and with a `tilt` it rocks as well, about the middle of its base line. It is drawn on whole pixels from its own picture (a turned copy for each quarter of a degree it rocks, made once and kept), only its place changing, a few times a second at most; its base (who is in front of it and who behind), its clickable area, its `solid` ground and anything a script does to it are as they were. One that also sways does both: it rises and falls as it stirs, without rocking. For less motion half the amount (a bob of one pixel is then still) at half the pace <!-- ROME-13E --> | `plane` (the cut-out's id); `amount` (1 px up and down); `period` (5 s); `tilt` (0 degrees: none) |
 | `strip` | The country going by the windows of a car on the move: one long painting, painted to run on from its right edge into its left, scrolling past behind the windows and drawn only inside them, with hard edges, over the backdrop. In the proof the car is a cut-out with its windows cut clear, laid over it; in the limousine (`nevada-limo`) the windows are the backdrop's own, and two strips went by, outward on each side, until round sixteen: two drives now (below) <!-- DRIVE-16M --> | `src` (the picture, in the scene's folder unless its name begins `art/`); `windows` (the glass of each window, the shapes it shows through; or `clip`; with neither, the whole width of the stage); `row` (the row of the stage its bottom edge is on: needed); `speed` (0 px a second; more than 0, the world goes by to the left, as from a car driving right; `set({ speed })` from a script, and it goes on from where it is); `loop` (true: drawn twice where the seam is in a window; false: it goes by once); `offset` (0: the column of the picture at the stage's left edge when it begins); `fps` (20) |
-| `drive` | The world outside a car's side windows as a pinhole camera that is moving forward sees it, drawn from the scene's own camera: the ground in perspective, panoramas standing at their distances, upright things beside the road growing and sweeping past, wires; each side of the road its own place. See "The world going by a car's side windows", below <!-- DRIVE-16E --> And each thing's shadow laid on the ground in perspective, from the sun the scene gives <!-- DRIVE-16F --> | `side` (`"L"`, `"R"`); `windows` (or `clip`); `vanish`, `focal`, `eye` (1.6 m); `speed` (0 m a second; `set({ speed })`); `start` (0 m); `sky`; `bands` (`[{ src, distance, ppm }]`); `ground` (`{ src, from, ppm }`); `things` (`{ src, rows }`); `haze` (`#d9dde6`), `haze_far` (4000 m); `streak` (0.6); `slices` (2); `wire` (`#2f2a26`); `phase` (0 on the left, 0.5 on the right); `fps` (30); `sun` (`[forward, left]`; none: no shadows), `shade` (`#6664ac`), `shade_k` (0.6) <!-- DRIVE-16F --> |
+| `drive` | The world outside a car's side windows as a pinhole camera that is moving forward sees it, drawn from the scene's own camera: the ground in perspective, panoramas standing at their distances, upright things beside the road growing and sweeping past, wires; each side of the road its own place. See "The world going by a car's side windows", below <!-- DRIVE-16E --> And each thing's shadow laid on the ground in perspective, from the sun the scene gives <!-- DRIVE-16F --> Or, with `side: "ahead"`, the whole stage looking straight down the road, both sides and the road between: "Straight ahead: the road coming at us", below <!-- ROAD-18E --> | `side` (`"L"`, `"R"`; `"ahead"`: ROAD-18E); `windows` (or `clip`); `vanish`, `focal`, `eye` (1.6 m); `speed` (0 m a second; `set({ speed })`); `start` (0 m); `sky`; `bands` (`[{ src, distance, ppm }]`); `ground` (`{ src, from, ppm }`); `things` (`{ src, rows }`); `haze` (`#d9dde6`), `haze_far` (4000 m); `streak` (0.6); `slices` (2); `wire` (`#2f2a26`); `phase` (0 on the left, 0.5 on the right); `fps` (30); `sun` (`[forward, left]`; none: no shadows), `shade` (`#6664ac`), `shade_k` (0.6) <!-- DRIVE-16F --> |
 | `portal` | The door in time: a ripple in the paint. See "The door in time", below | `at` (its middle, wide open); `r` (half its height, wide open); `wide` (1: a round hole; the chamber's doorway 0.48); `keep` (the bare wall it is in, `[x0, x1]`); `rise`; `under`; `light`; `open` (0); `strength` (0.45); `bend` (0.6); `rate` (1.5); `size` (1.11); `pale` |
 
 Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
@@ -496,7 +499,9 @@ page address (or `game.effects.enabled = false`) takes them all away. The engine
 sand, with `flags=proof.strip` (`g.effects.get("desert").set({ speed: 0 })` parks it). A boat riding the water by the bank
 is `flags=proof.bob` (the papyrus in the corner is cleared away while it is there), and a flock herded into a pen
 `flags=proof.herd`. <!-- ROME-13E --> The world going by a car's side windows is `flags=proof.drive`
-(`g.effects.get("drive-l").set({ speed: 0 })` parks one side). <!-- DRIVE-16E -->
+(`g.effects.get("drive-l").set({ speed: 0 })` parks one side). <!-- DRIVE-16E --> A road seen straight down it, the stage
+given over to it, is `flags=proof.road` (`g.effects.get("road").set({ s: 300 })` stops the camera with the sign 17.3 m
+ahead). <!-- ROAD-18E -->
 
 <!-- DRIVE-16E --> <!-- DRIVE-16F: this section moved here, after the paragraphs about every moving thing ("On the game clock" to "Trying marks out"), which had come after it -->
 ### The world going by a car's side windows
@@ -650,7 +655,7 @@ the sky and the sheet). On the test machine a moment's four panes in the limousi
 (Measured with the painter's pictures, at the merge; the engine's stand-ins had taken about 60 and 30 ms, and 6 ms.)
 <!-- DRIVE-16M --> `cost` on a drive keeps what its pictures took. <!-- DRIVE-16F --> The things' shadows add about 0.3 ms to
 a moment's four panes (their outlines and the fill); the engine test's whole quick run measured the limousine at 6 to 7 ms
-a moment with them, and 11 to 16 ms for a side's panes slowed four times over (that last varies from run to run).
+a moment with them, and 11 to 16 ms for a side's panes slowed four times over (that last varies from run to run). <!-- ROAD-18F --> Measured again on 2026-10-20 (the test machine busier, and its speed drifting a fifth between one minute and the next), round seventeen's engine and round eighteen's interleaved in the same minutes: 2.8 to 3.1 ms a pane either way, 11.4 to 12.2 ms a moment's four; nothing of round eighteen's straight-ahead work runs for a side view (a few `ahead` tests that fail at once, and a counter of pictures drawn), and the "third slower" seen once that night was two runs at different moments. The engine test's limit is 18 ms the four (one and a half times the measured), so a pane twice as dear fails.
 
 **The proof**: `index.html?scene=engine-proof&lead=dad&flags=proof.drive`. A car's side of the engine's own seen from the
 back seat (`art/proof/drive/car.png`, a cut-out behind everybody: a grey band with a window cut clear on each side of the
@@ -661,6 +666,98 @@ the cross) and bands across it every 16 m, ranges of plain triangles 3000 and 40
 ones drift), red posts with wires and brown poles on the left, a magenta marker and a yellow board on the right, each on
 its shadow (the limousine's sun: out across the ground on the left, in toward the road on the right). <!-- DRIVE-16F --> The engine
 test's part `drive` reads the geometry back from the pixels.
+
+<!-- ROAD-18E -->
+### Straight ahead: the road coming at us
+
+The author, 19 October, of the opening movie: "The car should be driving down the road and the road and background should
+be moving past the car with the car being the focal point." So the camera rides behind the wagon, at a fixed distance,
+and the world comes at us: the broken yellow line and the cracks rush toward us under the wagon, the poles and the brush
+come out of the far end of the road small and slow and sweep out past the edges of the picture, and the mesas and the sun
+stay where they are. It is the same pinhole camera as a side window's, looking down the line of travel instead of out to
+one side, and it is the same kind: a `drive` with `side: "ahead"`. Everything above holds (no shimmer, the streak, its
+time, the haze, the shadows); this is what is different.
+
+**The camera** is the scene's, as on a side: on the highway the painting's own (tools/paint/highway.py: the horizon on row
+330, the vanishing point `[400, 330]` in the middle of the sun, `focal` 800, the eye 2.70 m above the road). A point X
+metres right of the line of travel (negative: left), z ahead and Y up is on the stage at `x = 400 + 800 * X / z` and
+`y = 330 + 800 * (2.70 - Y) / z`. With no `windows` (nor `clip`) the whole stage is its one picture.
+
+**The ground** comes in strips across the road (`grounds`), each its own picture from straight above: columns along the
+road (looping end to end), rows across it from `from` metres (its top row) to `to` (its bottom row). On the highway: the
+road `-6` to `6` at 48 pixels a metre, the desert `-30` to `-6` and `6` to `30` at 24. A row of the stage below the horizon
+is one depth (`z = focal * eye / (row - horizon)`), so its patch of road is the same for every pixel of the row: each row of
+a strip's picture is averaged along that patch once (from the sums made as the picture arrives), and each pixel of the
+stage is the average of the stretch across the road it covers (a pixel inside one row of the picture shows it, hard; one
+across two takes a share of each; one wider than many, their average). So the near road is sharp, the far road is never one
+pixel picked from many, and a row is cheap. Strips that meet meet with no seam; past the outermost ones the ground goes on in
+the colour of their outer rows, going by with them; nothing is drawn farther off than `far` (2000 m). The haze is a colour,
+or `haze: "backdrop"`: the ground fades into clear with distance, so that near the horizon the backdrop's own far land shows
+through it (the highway's backdrop paints the far plain in the painting's own air). The streak is the side view's.
+
+**The things** are rows as on a side, with `at` across the road: a number (negative on the left); a range; two numbers of
+opposite signs, each thing of the row at both (reflector posts either side of the road); or `both: true` with a range of
+distances out, each thing on one side or the other at random, from the seed. A wire is a height, or `[across, up]` from the
+thing's foot (a pole's insulators either side of it). A sprite on the sheet may carry its own `ppm` (the sign at
+800 / 17.3 = 46.24, so that 17.3 m ahead it is drawn at its own size, pixel for pixel, on whole pixels), its `air` (the
+share of the haze it takes: 1; 0 for a thing painted in its own air as it is seen from where it is drawn at its own size,
+which is hazed only by the air beyond that: a set piece cut out of the painting is exactly itself where the camera stops,
+and fades with the rest seen from farther off), and it may be painted for each side of the road (`sage-1-l`, `sage-1-r`: a
+row or a set piece that names `sage-1` gets the side's own). With the sun dead ahead (`sun: [-5.5, 0]`: 5.5 m of shadow
+toward the camera for a metre of height) every shadow runs toward us down the road, cut a metre ahead of the camera. A
+thing farther than `things_far` (1500 m), smaller than a pixel or nearer than 1.5 m is not drawn; a row may say how far
+its own things reach (`far`, metres: the highway's brush 200 to 240 m, its poles 520 m, so that a picture has some 400
+things and not thousands) and how solid its wires are (`wire_alpha`: the highway's poles 0.9, as dark as the painting's;
+not said, as the side views have them) <!-- ROAD-18M -->. The bands are a side
+view's only: straight ahead the far land is the backdrop's, still.
+
+**Light** (`light`: one or a list): pictures, or shapes filled with a gradient, laid over the ground and under the things,
+still on the stage while the road goes by under them: the low sun's shine on the asphalt, the darker corners, the hole's
+glow down the road. Each has an `id`, a `blend` (`"screen"`, `"multiply"`...) and an `opacity` a script changes
+(`set({ light: { hole: k } })`). Light is never keyed. (The drive covers the live layer below the horizon, so what the
+live layer drew there, the hole's glow, is a light of the drive's now; the sun's disc, above the horizon, stays on the
+live layer.)
+
+**For scripts**, besides `set({ speed })`:
+
+- `set({ s })` puts the camera s metres along the road and parks it there; `set({ s, speed })` puts it there and lets it go
+  on at that speed. A tween that carries the camera passes its speed at each moment too, so that between two frames it
+  goes on at that speed: then the hand-over from its own speed into the script's hands, and back, has no hitch, and the
+  tween's last step lands it on the very number (`set({ s: STOP, speed: 0 })`). `.s` and `.speed` read where it is and how
+  fast it goes. Its time is still its own: worked out from its time and what was set, so a skipped movie lands on the same
+  picture.
+- `place(id, { sprite, X, s, Y })` puts a set piece, a thing of the sheet, at X across and s along the road (metres from
+  where the drive began: it stays where it is as the camera comes on); placed again with only some of these it keeps the
+  rest (the sign changes its mind: `place("sign", { sprite: "sign-bc" })`); `remove(id)` takes it away. `gap: [[s0, s1],
+  ...]` (and `set({ gap })`) keeps the rows' things off stretches of road, so that the painting's own things, placed as set
+  pieces where the camera stops, are not doubled; a row with `gap: false` goes on through (the poles and their wires). A
+  parked drive is drawn again, in its turn, when a piece, a light or a gap changes.
+
+**The doors in time over it.** A portal names the drive in `under`: `{ fx: "road" }` reads the drive's picture into the
+paint it bends, again each time the drive draws a new one (only its own box; once while it is parked), in the same frame,
+so the far road bends as it goes by under the hole and is not a still picture of the road pasted in it. `{ fx: "road",
+piece: "sign", sprite: "sign-bc", alpha }` reads one set piece in, as another picture of the sheet, at an alpha a script
+turns from 0 to 1: the sign's rings bring through the drive's own POINT B.C., and once the drive's sign is `sign-bc`, its
+picture is, pixel for pixel, what the rings brought through, so nothing pops when they settle.
+
+**Cost.** The whole stage below the horizon is some 216,000 pixels a picture, thirty pictures a second. The ground of the
+next picture is worked out on the frame of the game between two pictures, while the camera goes at its own speed (where it
+will be is known; a script carrying it wastes that, no more), so a frame that draws a picture does about half the work.
+On the test machine (two processors, shared): the proof's road about 2.5 ms a picture, a frame with one in it about 5 ms
+(the hole reading the road and bending it, and the cast layer painted, included), the ground ahead of time 4 to 6 ms on the
+frame between; the title's road with the engine's stand-in pictures (more things, three lights) about 4.5 ms a picture and
+a frame with one about 11 to 12 ms (the 95th percentile 15 to 24, as the machine is busy); with the processor slowed four
+times over, some 26 to 33 ms a picture, about 22 pictures a second. (Measured by the engine test's part `road`.) <!-- ROAD-18F --> With the painter's pictures (ROAD-18M: more things, their shadows, the sun's light) and the machine as it was on 2026-10-20, three runs alone: the title's road 13.9, 23.9 and 15.2 ms a picture, the hole reading it 7.4 to 8.9 ms (its one read-back of the pixels a read: the probe for paint, a second read-back, is made once a door now) and bending it 6.5 to 11.8 ms, a frame with a picture of the road 24 to 37 ms (the 95th percentile 39 to 56); the proof's road 3.8 to 7.8 ms a picture. The test's limits are one and a half times the mean of those three runs (a picture under 27 ms, a frame with one under 44, its 95th percentile under 70; the proof's 95th percentile under 35), so a run here passes with room and a road twice as dear fails.
+
+**The proof**: `index.html?scene=engine-proof&lead=dad&flags=proof.road,proof.arrived`. The stage is given over to a road
+seen straight down it, from the highway's camera and the engine's own plain pictures (art/proof/road/,
+tools/paint/proof_road.py): the road from above in squares with its yellow line in dashes, its white edge lines and red
+bands across the shoulders, the desert either side in squares with stripes along it 10 and 20 m out (they run to the
+vanishing point), brown poles 7.5 m left with their wires, white posts either side, bushes and stones on both sides, each
+on its shadow toward us, a sign of plain colours 5.95 m right and 317.3 m along (`g.effects.get("road").set({ s: 300 })`
+stops the camera 17.3 m from it: its board where the painting's is), the proof's car standing still in its lane, the hole
+open on the vanishing point (reading the moving road) with its glow down the road, and the sign's own rings, shut. The
+engine test's part `road` reads it all back from the pixels.
 
 ### The door in time
 
@@ -692,7 +789,9 @@ scale }` (the flashlight opens a plate-sized round hole off to one side: `at` an
 0.11 of its size), `{ flicker }` (with the batteries). The coin's wink in Rome is `scale` over 600 ms. `refresh()`
 reads the paint again when the light over it has changed (the beam has come on). On the highway `rise: true` lets
 the hole's middle rise out of the sun's disc as it opens, and `under: [{ src: "...sun.png" }]` reads the sun into the
-paint it bends; the sun stays where it is, part of the picture the hole is in.
+paint it bends; the sun stays where it is, part of the picture the hole is in. <!-- ROAD-18E --> Over a moving world a
+door reads it again as it moves: `under: [{ fx: "road" }]` names a drive, whose picture is read in each time it draws one
+("Straight ahead", above).
 
 What it costs: the chamber door is about 30,000 pixels a picture (one read of the paint, blended from four pixels,
 per pixel), 1.5 to 3 ms here and perhaps three times that on a slow laptop, thirty times a second while it is open;
@@ -1296,6 +1395,7 @@ one beat of the storyboard, so the file reads like a shot list:
 ```js
 await g.card("n0tk3r presents", "", { plain: true, ms: 1700 });
 const road = highway(g, "A desert highway at dusk.");
+road.cruise(SPEED);                                          // the camera follows the wagon down the road (ROAD-18M)
 await road.ready;                                            // every picture is here
 await g.fade(0, 900);
 await g.tween(1500, (k) => road.hole(k), ease.out);          // the sun opens into the hole in time
@@ -1304,8 +1404,8 @@ await g.say("intro.3", "intro.4");
 
 ### Why not a video file
 
-- **Size.** The intro is a script of a few KB and six pictures, which the title uses
-  too. A 40-second video is tens of megabytes.
+- **Size.** The intro is a script of a few KB and the highway's pictures (3.3 MB since it is driven down: the road, the
+  desert and the things beside it, ROAD-18M), which the title uses too. A 40-second video is tens of megabytes.
 - **One look.** It uses the same painting, the same wagon and the same light as the
   game, so there is no jump in style between the movie and the title.
 - **It can be skipped properly, paused, subtitled and translated.**
@@ -1323,11 +1423,13 @@ disagree.
 
 ### The opening
 
+<!-- ROAD-18M: round eighteen, driving -->
 ```
-click to begin  ->  studio card  ->  the road at dusk  ->  the sun opens into a portal
-->  the road sign changes its mind  ->  the wagon drives in, white flash
-->  the time tunnel, years flying past  ->  white flash
-->  the title: the papyrus strip unrolls, the menu arrives
+click to begin  ->  studio card  ->  dusk, driving: the camera behind the wagon, the world going by
+->  the sun opens into a portal while they drive  ->  the sign comes up; the camera eases to a stop
+->  the wagon drives on alone into the hole  ->  a breath; the sign changes its mind (POINT B.C.)
+->  white flash  ->  the time tunnel, years flying past  ->  white flash
+->  the title: the wagon cruising toward the hole; the papyrus strip unrolls, the menu arrives
 ```
 
 - The **first click** is needed anyway: browsers keep sound off until the player
@@ -1335,9 +1437,32 @@ click to begin  ->  studio card  ->  the road at dusk  ->  the sun opens into a 
   both starts the movie and unlocks audio.
 - The intro plays in full the first time. After that the game opens on the title,
   and the menu has **Watch the intro**. (`index.html?intro` forces it.)
-- **The movie and the title are the same stage.** `cutscenes/highway.js` puts the painted
-  highway up (`art/scenes/highway/`) with the few parts of it that change, and hands back
-  what a script does with them: `road.hole(k)` opens the sun into the hole in time,
+- **Driven down (ROAD-18M, round eighteen).** The author, 19 October: "The car should be driving down the road and the
+  road and background should be moving past the car with the car being the focal point." The camera is the painting's
+  own (the horizon on row 330, the vanishing point (400, 330) in the sun, focal 800, the eye 2.70 m up), behind the
+  wagon at the chase distance (9.9 m: its back wheels on row 548), going 25 m a second (55 mph). The road, the desert
+  and everything standing beside it are the engine's `drive` seen straight ahead (section 2, "Straight ahead"), from
+  the painter's pictures (`tools/paint/highway_drive.py`); the sky, the mesas and the sun are the still backdrop
+  (`sky.png`, `sun.png`), too far to move. **The storyboard** (the top of `intro.js`): the movie fades in with the
+  camera right behind the wagon (only its luggage in the picture) and the world already going by; the wagon draws
+  ahead into its lane (row 935 to 548) and from then on the camera follows it, the dashes and cracks rushing at us,
+  poles, posts, fences, brush and now and then a Joshua tree sweeping past; the Son and Dad talk; the sun opens into
+  the hole while they drive and its glow runs down the moving road. **The stop**: the camera's stop is a multiple of
+  40 m at least 260 m on (the poles' spacing: they and their six wires stand where the painting has them); the world
+  the camera stops in is set out on the road then, while it is a speck (the painting's own things, `drive-stop.json`:
+  260 of its pieces, the sign 17.3 m ahead on the painting's board, the rows kept off that stretch; the brush field and
+  what nobody could pick out are the ground's, MERGE-18B, decision 127). The camera brakes over
+  the last 60 m (4.8 s, eased: no jolt); the wagon keeps its speed, draws away up the road while the world slows, and
+  once the world has stopped (it is then the painting) drives on alone into the hole, fading. **The sign**: a breath,
+  then its rings, and POINT B comes out POINT B.C. (the rings bring through the drive's own `sign-bc`: no pop when they
+  settle); a breath to read it; the white flash. **The title**: the camera behind the wagon cruising toward the open
+  hole on a loop with no seam (the road loops every 64 m, the things beside it never repeat), no sign. **Less motion**:
+  the drive's own rule (its time at half speed, no streaks), the scripted moves as written, no white flashes.
+  **Skipping** lands on the same title.
+- **The movie and the title are the same stage.** `cutscenes/highway.js` puts the highway up
+  (`art/scenes/highway/`) with the few parts of it that change, and hands back
+  what a script does with them: `road.cruise(speed)` drives the camera on, `road.at(z)` puts the wagon z metres
+  ahead of it, `road.stopAt(STOP, pieces)` sets out the world the camera stops in (ROAD-18M); `road.hole(k)` opens the sun into the hole in time,
   `road.bend(k)` runs the hole's rings over the sign and `road.bc(k)` changes what it says
   (POINT B comes out POINT B.C. while the paint is bent: round twelve; until then a red
   slash and dripping letters, which read as blood), `road.drive(row)` puts the wagon
@@ -1347,10 +1472,10 @@ click to begin  ->  studio card  ->  the road at dusk  ->  the sun opens into a 
   `title` to dress the stage behind the title screen, waits for it, and puts the game's
   name and the menu over it.
 - The wagon is a painted sprite that a cutscene moves about
-  (`g.view.cast.addPicture`, in the table at the end of section 10). The sun and the
-  sign's second board are painted too, but lie on the live layer, because each is paint
-  that a portal bends (it reads them in: `under`). The hole and its glow are light, and
-  are drawn.
+  (`g.view.cast.addPicture`, in the table at the end of section 10). The sun is painted too, but lies on the live
+  layer, because it is paint that a portal bends (it reads it in: `under`). The hole is the paint bending; its glow
+  down the road is light, a light of the drive's (ROAD-18M: the drive covers the live layer below the horizon). The
+  sign is a set piece of the drive's, and its rings read the drive and bring the sign through as it will be.
 
 ---
 
@@ -1644,6 +1769,8 @@ today's answer: the greeting the first time, the questions after).
 | `line` | The line id the player picks: its words are the menu button, and it is said when picked, by whoever the line belongs to (the lead) |
 | `when` | A test of the game: the option is offered only while it passes. Read again every time the menu is shown, so an option can come and go with the story |
 | `once` | `true`: gone for good once it has been picked (the memory remembers across saves). Off by default |
+| `clue` | TALK-18: `true`: its reply is a clue toward a puzzle (the puzzle documents say which): it stays after it is picked, shown as asked, and can be asked again. Off by default |
+| `keep` | TALK-18: `true`: it stays after it is picked for a reason that is not a clue (an answer on a questionnaire that goes round; the song that lifts the divider). Rare: the table in TALK-18's ready.md says why each one |
 | `say` | The reply: a list of line ids, said after the pick. Or an object keyed by how many times this option has been picked, `1`, `2`, `3`..., with `more` for every time after the last given, so a question asked twice gets a different answer |
 | `set` | A story fact, or a list of them, made true (`g.flag`) |
 | `do` | A script, `(g) => ...`, run after the lines and awaited: anything a script can do (walk somebody, hand something over, open a door) |
@@ -1693,6 +1820,41 @@ Eleazar (`eleazarTree`, every hook of it staging: the prayer side by side, the h
 (`mariamTree`) and Felix (`felixTree`). The act's old conversations (the doorkeeper, the senator, the keeper and the
 rest) are still the flat menus they were, with the few options round thirteen needed added: rewriting them as trees
 waits for the author's review of the puzzles.
+
+<!-- TALK-18 -->
+**A line once said is gone, unless it is a clue** (TALK-18; the author, 19 October: "once you have selected something to
+say, that line should disappear from the options unless it has a clue to help the characters solve the puzzle"). In
+every talk, a tree's and a scripted menu's, an option picked once is not offered again, and the menus get shorter as a
+conversation is used up. What stays:
+
+- **A clue** (`clue: true`): an option whose reply helps solve a puzzle (where something is or who has it, what someone
+  wants, what to use or do, what a word or number means for a puzzle, the next step of a chain, or a reply that changes
+  with the story to say what is still needed). It stays, written lighter as asked, and can be asked again, so a player
+  who has forgotten can always hear it once more. A reply that is both a joke and a clue is a clue.
+- **The way out**: an option whose `then` is `"exit"` (every goodbye, and its replies keyed by the askings still play);
+  and the bare way back, `"back"` or `"root"` with no reply, script or fact of its own ("Never mind the river."). A
+  `"back"` or `"root"` option that says something of its own is a line like any other.
+- **A topic**: an option whose `then` is another node of the tree stays while anything under it would still show
+  (worked out through the nodes it leads to, each looked at once, so a tree that circles back cannot loop), and goes
+  once its questions are used up. An option whose `then` is a function is a plain line by the rule (the function is not
+  called to look ahead: some of them set facts).
+- **`once`** keeps its meaning (gone after once, clue or not), and **`keep: true`** stays for a reason that is not a
+  clue (rare; each is listed with its reason).
+
+It is worked out from what the save already holds: `asked` for the trees, so an old save and the testers' checkpoints
+follow the rule as they are, with nothing rebuilt. A reply keyed by the number of askings (`{ 1, 2, more }`) on an
+option that is not a clue is now heard only the first time; section 14 lists those lines.
+
+**The scripted menus.** The older conversations that are a loop of `g.choose` with a goodbye (the goldsmith, Lot, the
+lamp boy, the scribe, the overseer, the haulers; the doorkeeper, the soothsayer, the senator, the keeper, the
+washerwoman, Walnut, the date seller, the temple's clerk) follow the same rule through the engine:
+`g.choose(options, { talk: true })` (dialogue.js `choose`). An option counts as asked once its line has been said
+(`seenLines`), or, where the asking line is said to more than one person ("Have you seen a boy?"), once the first line of
+its own reply has (`heard: "egypt.scribe.boy.1"`); the goodbye is marked `exit: true` (it always stays, and Escape takes
+it, as in a tree); `clue` and `keep` as in a tree; one that opens another menu would carry `under: [its options]` and
+stay while anything under it shows (none does yet). They now show a tree's marks (asked lighter, new marked). The menus
+that are not talk stay as they were: Mom's choice of words at Dad's computer and of a year at his vault (a puzzle's own
+input), and the proof's door menu (the engine test's plain menu).
 
 <!-- ENGINE-17 -->
 ### Thought pictures
@@ -2981,7 +3143,9 @@ switching through it (the part `map`: section 8, "The map, and the Timer"); <!--
 going by a car's side windows (the part `drive`: section 2); <!-- DRIVE-16E --> since round seventeen thought pictures, looking
 down through a grille, a thing handed to a lead in another scene and the map's travel for each lead, several floors, the
 building's speakers with the Office's sounds and tune, and the Office's scenes read from their own data (the parts
-`thoughts17`, `grille17`, `handed17`, `floors17`, `speakers17` and `office17`: sections 3, 7 and 8); <!-- ENGINE-17 --> the
+`thoughts17`, `grille17`, `handed17`, `floors17`, `speakers17` and `office17`: sections 3, 7 and 8); <!-- ENGINE-17 --> since
+round eighteen the drive seen straight down the road, with the doors in time over it, on the proof and on the title's
+highway (the part `road`: section 2, "Straight ahead"); <!-- ROAD-18E --> the
 interface at two sizes and in three other window shapes, the storyboard page and its maps, the intro and the stamping
 tools: some 735 checks in its quick run (735 at the end of ENGINE-17's work in round seventeen, 74 of them its six parts'
 <!-- ENGINE-17 -->; 655 at the end of round sixteen, 25 of them the part `drive`'s <!-- DRIVE-16E --> <!-- DRIVE-16F: four of them the things' shadows: 651 and 21 at the merge -->; 629 at the end of round fifteen, 116 of them the part `map`'s), in about twelve minutes on the test
@@ -3015,6 +3179,9 @@ one was right: section 3, "Nearer things cover farther things"), a scene seen th
 own eyes (`unseen` and `wordsAt`, section 8), the storyboard's map of each act's ways (section 8,
 "The map"), and the game's emblem on the begin screen and in the browser tab (the Timer, section 9). Since round
 sixteen: the world going by a car's side windows, drawn from the scene's camera (`drive`, section 2). <!-- DRIVE-16E -->
+Since round eighteen: the same seen straight down the road, the whole stage (`drive` with `side: "ahead"`: section 2,
+"Straight ahead"), with set pieces, a camera a script can carry and land exactly, and doors in time that bend a moving
+world. <!-- ROAD-18E -->
 Since round fifteen: the map screen, with travel to the places already visited, and switching between
 leads through the map, with the Timer turning across the centuries first (section 8, "The map, and the
 Timer"). <!-- MAP-15 --> With it, the save's list of the scenes the player has entered (`visited`,
@@ -3709,6 +3876,85 @@ continued: the Office (stage one)". -->
     same for the whole of Nevada, though the Office is the same afternoon. A time of day per map, or per act, would mend
     it (the engine's).
 122. **Opal's area ends at her hem,** so the legs of her stool, under her, can be clicked as the stool.
+<!-- ROAD-18M: round eighteen, the opening movie driven down -->
+123. **The speed is 25 m a second (55 mph)**: a pole goes by in a second and a half, and the dashes rush without
+    flickering. The camera follows at 9.9 m (the wagon's back wheels on row 548, as before).
+124. **The camera stops on a multiple of 40 m** (the poles' spacing), at least 260 m on from where the sign comes up: the
+    poles and their wires stand where the painting has them. The road's own marks under the stopped picture are the
+    painting's only when the stop is also a multiple of 64 m (the road's loop): a multiple of 320 m would make them so
+    always, at the cost of up to 13 s more cruising before the brake; asphalt is asphalt, so the shorter wait was taken.
+    The brake is the last 60 m, eased (4.8 s); the wagon keeps its speed through it, so it draws away while the world
+    slows, and is 70 m on (row 361) when the world stops, then goes into the hole in 3.8 s.
+125. **The sign is seen** from about 260 m (a speck) for some 10 s of cruising and braking, then stopped: 0.7 s before the
+    rings, 1.9 s of rings, and 1.2 s to read POINT B.C. before the flash.
+126. **The rows, thinned** from the painter's preview (6,851 things a picture, 774 ms) to about 400 (under 8 ms): the poles
+    every 40 m with their six wires at the painting's insulators; reflector posts every 18 m each side; the far fences
+    every 10 m with two faint wires (the painting's are 5.2 m apart and never come round to a stop: 10 m does); the
+    brush near (every 1.2 to 4 m, its stones and tufts folded in), middling (the painter's `-mid`, 12 to 30 m out) and
+    far (`-far`, 30 to 90 m out); a Joshua tree every 140 to 320 m; a tumbleweed now and then. Each row reaches only as
+    far as it can be seen (its own `far`, a small addition to the drive: 200 to 240 m for the brush, posts and fences,
+    520 m for the poles). Under them the painting's brush field is painted into the ground (decision 133), so the
+    desert going by is the country the camera stops in.
+127. **The stop's pieces**: of the painter's 820, the 4 poles and 58 fence posts are left to their rows (which run
+    through), and (MERGE-18B) of the other 757 only 260 are set out: every piece 16 px tall or more where the camera
+    stops; the brush, stones and tufts by the road (inside 16 m) from 10 px; the painting's few odd things (the
+    windpump, the reflector posts, the birds, the jackrabbit, the tumbleweeds, the tread, the hubcap, the bottle) from
+    2 px. The brush farther out and the small stones and tufts are the ground's brush field's now (decision 133), and
+    a piece costs a picture as much seen or not. A braking picture now costs about what a cruising one does (a picture
+    painted straight: on a quieter machine 14 to 15 ms with 257 pieces of a like rule, against about 12.5 cruising and
+    26 to 29 with all 747; on a busy one, with these 260, 20 to 26 ms against 15 to 17, and 37 to 46 with all 747); the
+    stopped picture is half a level further off the painting in tone (7.9 against 7.4) and is still taken for it.
+    (`keepAtStop` in `highway.js`.)
+128. **The haze is a colour,** the painter's (`#febb85`, the key's own of its `#ffba8c`, at 120 m), with the painting's
+    two lights at full strength over the ground (fitted on the bare plain: kept, so the brush field stays as dark as
+    it is painted): the stopped picture is 7.9 levels off the painting in tone below the horizon, 1.7 above it (the
+    far field reads a little darker than the painting's far band). The road is the painting's tone close by and
+    gritty now; the painting's sparkle down the middle and its crisp tar patches at 25 to 35 m are its own.
+129. **Nothing added to the wagon** but its bounce: with the road and the brush streaming past it reads as driving.
+    (A sway, tail lights or dust were not tried this round.)
+130. **The windpump** is a piece of the stop only (it is not in `sky.png`: at 170 m it moves): it comes up out of the
+    haze with the sign (the stop's pieces are set out then, 430 m or more off) and is the one piece beyond the haze
+    kept (55 px tall where the camera stops). The title's cruise has none.
+131. **`back.png` stays in the folder** though nothing shows it now (the stop is the painting set out as pieces):
+    the painter's scripts check against it, and it is the picture the stop is measured by.
+132. **Wires straight ahead are drawn as solid as a row says** (`wire_alpha`, a small addition to the drive; the
+    side views keep theirs): the pole's at 0.9, as dark as the painting's, the fences' at 0.35.
+<!-- ROAD-18M (MERGE-18B): the brush field -->
+133. **The brush field is in the ground** (the painter's PAINT-18B): five grounds now, the near deserts (6 to 30 m)
+    and two far strips (30 to 150 m, 8 px a metre), the painting's round dark clumps in its drifts seen from above, gold
+    on their sunward side; taken together (the near deserts no longer end in a calm band). The cruise reads as the
+    country the camera stops in, so the field was not made denser (the painter's `CLUMP_DENS` 1.0 and
+    `CLUMP_FAR_MORE` 0.5 as painted). Beyond 150 m the engine carries on the far strips' own colour into the haze.
+
+<!-- TALK-18's five decisions, numbered 123 to 127 in its own folder, are 134 to 138 here (FINAL-18: MERGE-18's 123 to 133 come first). -->
+134. **What a way out is** (TALK-18): every option whose `then` is `"exit"` stays; of `"back"` and `"root"`, only the
+     bare ones (no reply, script or fact of their own) always stay. One with its own reply ("I beg your pardon. I was
+     testing you.", "That is a double negative.") is a line, and goes once said. If you meant every `back` and `root`
+     to stay, it is the one line `wayOut` in dialogue.js.
+135. **The scripted conversations look like trees now** (TALK-18): fourteen loops of `g.choose` ask by the rule, and with
+     it they took the tree's marks (asked lighter, new marked) and Escape for their goodbye.
+136. **Kept, though not clues** (TALK-18): the questionnaire's answers (the interview goes round its pages, and the room
+     must get hot); Grandpa Joe's "You boys like music?" (it lifts the divider, each time); the senator's "give" (the
+     toga is delivered twice), the soothsayer's breakfast and the keeper's quarter (things handed over, offered while
+     they are carried). And (TALK-18C) Little Sister's chickens with Jolene ("Why are the chickens all looking at ME?"):
+     under it "Can you ask the hens?" sends her out to them and ends the talk, so it counts as a way out and would not
+     keep the topic showing; kept, the hens can always be asked for (found by play-store).
+137. **The hard calls of what is a clue** (TALK-18; the full table is TALK-18's ready.md): the Nevada lines that plant
+     Jed's cheeseburger (Grandpa Joe's "No breakfast? The poor man.", Jolene on the gray fella's lunch) are clues for
+     the Office; Jolene's "the sun shade... for sale?" is a clue (her third answer says what she wants: "do somethin'
+     about my girls"), so all three of her answers can be heard; Ranger's pebbles in the lemonade (he feels with his
+     hands) and his favourite colour (shiny) are clues for the trade; "Have you seen a boy?" is a clue where it says
+     where the boy went (the goldsmith, Lot, the lamp boy) and not where it does not (the scribe, the overseer, the
+     haulers); Mariam's hens are not a clue, but "Can you ask one what's wrong?" (look her in the eye) is; Felix's
+     mother, Eleazar's talk and the date seller's are not (story and faith).
+138. **Replies that can no longer be heard** (TALK-18): the second and later answers of options that are not clues. The
+     ones you may miss, left as they are for you to decide (mark the option `keep: true` to have them back): the Last
+     Stop Rag asked for again ("...Twice? Little miss, in forty years you're the first." / "Jolene! She's asked THREE
+     times!"); "Is this the road to Las Vegas?" asked again ("Still ain't, ma'am." / "...start chargin' for that
+     question"); Jolene's fun facts (each lead's "fact" option has a `then` that is a function, so it goes after one
+     asking: the three leads hear three of the four facts at most, the fourth and its correction by Big Sister never); the divider's raccoon ("Sir, we are still looking up the
+     raccoon."); the Gaul's "You are the most Roman person I have met today."; "Corinth! A house! TWO seas!". The whole
+     list (31 options) is in TALK-18's ready.md.
 
 ---
 

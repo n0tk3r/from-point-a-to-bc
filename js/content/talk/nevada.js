@@ -113,7 +113,7 @@ export const joeTree = (h = {}) => ({
       say: ["nevada.joe.ranger.1", "nevada.ranger.dots", "nevada.joe.ranger.2", "nevada.ranger.dots", "nevada.joe.ranger.3"],      // PASS-17N: a second translation (the handbag)
       options: [
         { id: "always", line: "nevada.joe.opt.always", say: ["nevada.joe.always"] },
-        { id: "eat", line: "nevada.joe.opt.eat", say: ["nevada.joe.eat"] },                     // the clue: shiny, he keeps
+        { id: "eat", clue: true, line: "nevada.joe.opt.eat", say: ["nevada.joe.eat"] },                     // the clue: shiny, he keeps
         { id: "yesterday", line: "nevada.joe.opt.yesterday", then: "asking" },
       ],
     },
@@ -128,7 +128,7 @@ export const joeTree = (h = {}) => ({
       options: [
         { id: "car", line: "nevada.joe.opt.car", when: (g) => is(g, "nevada.joeLiked"), say: ["nevada.old.mom.5", "nevada.old.mom.6", "nevada.old.mom.7"], then: "cars" },
         { id: "carNo", line: "nevada.joe.opt.car", when: (g) => !is(g, "nevada.joeLiked"), say: ["nevada.old.bigsis.2"] },
-        { id: "gray", line: "nevada.joe.opt.gray", say: ["nevada.old.mom.3", "nevada.joe.gray.2"], then: "gray" },          // the cheeseburger starts here
+        { id: "gray", clue: true, line: "nevada.joe.opt.gray", say: ["nevada.old.mom.3", "nevada.joe.gray.2"], then: "gray" },          // the cheeseburger starts here
         { id: "gas", line: "nevada.joe.opt.gas", say: { 1: ["nevada.joe.gas.1"], 2: ["nevada.joe.gas.2"], more: ["nevada.joe.gas.3"] } },
         { id: "manners", line: "nevada.joe.opt.manners", when: (g) => !is(g, "nevada.joeLiked"), set: "nevada.joeLiked", then: "morning" },
         { id: "raccoon2", line: "nevada.joe.opt.raccoon", when: (g) => !is(g, "nevada.rangerMet"), set: ["nevada.joeLiked", "nevada.rangerMet"], then: "ranger" },
@@ -140,7 +140,7 @@ export const joeTree = (h = {}) => ({
       options: [
         { id: "nothing", line: "nevada.old.mom.4", when: (g) => is(g, "nevada.joeLiked"), say: ["nevada.old.mom.5", "nevada.old.mom.6", "nevada.old.mom.7"], then: "cars" },
         { id: "nothingNo", line: "nevada.old.mom.4", when: (g) => !is(g, "nevada.joeLiked"), say: ["nevada.joe.gray.stranger"] },
-        { id: "breakfast", line: "nevada.joe.opt.breakfast", say: ["nevada.joe.breakfast"] },
+        { id: "breakfast", clue: true, line: "nevada.joe.opt.breakfast", say: ["nevada.joe.breakfast"] },
         { id: "grayBack", line: "nevada.joe.opt.back", then: "back" },
       ],
     },
@@ -155,19 +155,19 @@ export const joeTree = (h = {}) => ({
     // ---- after the story: the flash again, the strange week (first the hens, then the coin: he likes the order), and the rest
     after: {
       options: [
-        { id: "flash", line: "nevada.ask.flash", say: ["nevada.ans.flash"] },
-        { id: "week1", line: "nevada.joe.opt.week", when: (g) => !is(g, "nevada.hensTold"), say: ["nevada.old.saw.3b", "nevada.joe.hens.banjo", "nevada.old.saw.3c"], set: "nevada.hensTold" },
-        { id: "week2", line: "nevada.joe.opt.week", when: (g) => is(g, "nevada.hensTold") && !is(g, "nevada.witness"),
+        { id: "flash", clue: true, line: "nevada.ask.flash", say: ["nevada.ans.flash"] },
+        { id: "week1", clue: true, line: "nevada.joe.opt.week", when: (g) => !is(g, "nevada.hensTold"), say: ["nevada.old.saw.3b", "nevada.joe.hens.banjo", "nevada.old.saw.3c"], set: "nevada.hensTold" },
+        { id: "week2", clue: true, line: "nevada.joe.opt.week", when: (g) => is(g, "nevada.hensTold") && !is(g, "nevada.witness"),
           say: ["nevada.old.saw.5", "nevada.old.saw.5b", "nevada.old.saw.6", "nevada.old.saw.7"], set: ["nevada.witness", "nevada.rangerMet"], do: h.coinTold, then: "coin" },
         { id: "week3", line: "nevada.joe.opt.week", when: (g) => is(g, "nevada.witness"), say: ["nevada.joe.week.done"] },
-        { id: "tradeAgain", line: "nevada.joe.opt.trade", when: (g) => is(g, "nevada.witness") && !is(g, "nevada.traded"), say: ["nevada.old.saw.8"] },
+        { id: "tradeAgain", clue: true, line: "nevada.joe.opt.trade", when: (g) => is(g, "nevada.witness") && !is(g, "nevada.traded"), say: ["nevada.old.saw.8"] },
         { id: "fence", line: "nevada.ask.fence", say: ["nevada.ans.fence"] },
         { id: "areas", line: "nevada.ask.areas", say: ["nevada.ans.areas"] },
         { id: "grayAfter", line: "nevada.joe.opt.gray", say: ["nevada.old.mom.3", "nevada.joe.gray.2"], then: "grayAfter" },
         { id: "hubcaps", line: "nevada.joe.opt.hubcaps", when: (g) => visits(g) > 0, say: ["nevada.joe.hubcaps"] },
         { id: "laying", line: "nevada.joe.opt.laying", once: true, when: (g) => is(g, "nevada.jolene"), say: ["nevada.joe.laying"] },
         // #12: the banjo, asked for nicely (the half-answer), and then the sun shade, held
-        { id: "banjo", line: "nevada.shade.banjo.ask", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.shade.banjo.1"],
+        { id: "banjo", clue: true, line: "nevada.shade.banjo.ask", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.shade.banjo.1"],
           set: "nevada.banjoTried", do: h.banjo, then: "banjo" },
         { id: "hold", line: "nevada.shade.ask", when: (g) => is(g, "nevada.shadeGiven") && is(g, "nevada.doorOpen") && !is(g, "nevada.wideOpen"),
           say: ["nevada.shade.need", "nevada.shade.joe"], do: h.hold, then: "wide" },
@@ -176,14 +176,14 @@ export const joeTree = (h = {}) => ({
     },
     coin: {
       options: [
-        { id: "trade", line: "nevada.joe.opt.trade", say: ["nevada.old.saw.8"] },                // his hint for #10
+        { id: "trade", clue: true, line: "nevada.joe.opt.trade", say: ["nevada.old.saw.8"] },                // his hint for #10
         { id: "hat", line: "nevada.joe.opt.hat", say: ["nevada.joe.hat"] },
         { id: "thanks", line: "nevada.old.saw.4", say: ["nevada.joe.welcome"], then: "after" },
       ],
     },
     grayAfter: {
       options: [
-        { id: "breakfast2", line: "nevada.joe.opt.breakfast", say: ["nevada.joe.breakfast"] },
+        { id: "breakfast2", clue: true, line: "nevada.joe.opt.breakfast", say: ["nevada.joe.breakfast"] },
         { id: "grayAfterBack", line: "nevada.joe.opt.back", then: "back" },
       ],
     },
@@ -204,7 +204,7 @@ export const joeTree = (h = {}) => ({
         { id: "raccoonLil", line: "nevada.joe.opt.raccoon.lil", say: ["nevada.joe.raccoon.lil", "nevada.ranger.dots", "nevada.joe.raccoon.lil.2"], set: "nevada.rangerMet" },
         { id: "play", line: "nevada.joe.opt.play", say: { 1: ["nevada.joe.play.1"], 2: ["nevada.joe.play.2"], more: ["nevada.joe.play.more"] }, set: "nevada.banjoFlash",
           do: h.play, then: (g) => (g.asked("joe/play") === 1 ? "played" : null) },
-        { id: "banjoLil", line: "nevada.joe.opt.banjo.lil", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.lil"] },
+        { id: "banjoLil", clue: true, line: "nevada.joe.opt.banjo.lil", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.lil"] },
         { id: "lilBye", line: "nevada.joe.opt.lilbye", say: ["nevada.joe.lilbye"], then: "exit" },
       ],
     },
@@ -216,7 +216,7 @@ export const joeTree = (h = {}) => ({
         { id: "observe", line: "nevada.old.bigsis.1", when: (g) => !is(g, "nevada.witness"), say: ["nevada.old.bigsis.2"], then: "double" },
         { id: "raccoonBig", line: "nevada.joe.opt.raccoon.big", say: ["nevada.joe.raccoon.big", "nevada.ranger.dots", "nevada.joe.raccoon.big.2"] },      // PASS-17N: and Ranger answers back
         { id: "geiger", line: "nevada.old.after.bigsis.1", when: (g) => is(g, "nevada.witness"), say: ["nevada.old.after.bigsis.2", "nevada.old.after.bigsis.3"] },
-        { id: "banjoBig", line: "nevada.joe.opt.banjo.big", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.big"] },
+        { id: "banjoBig", clue: true, line: "nevada.joe.opt.banjo.big", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.big"] },
         { id: "bigBye", line: "nevada.joe.opt.bigbye", say: ["nevada.joe.bigbye"], then: "exit" },
       ],
     },
@@ -245,7 +245,7 @@ const FACTS = {
 const factReady = (g) => factsTold(g) < Math.min(4, visits(g));
 const nextFact = (g) => "fact" + (factsTold(g) + 1);
 /** The window: not for sale (it is a shed without it), anything but the window, do somethin' about my girls; then hers to give. */
-const windowAsk = (id, line) => ({ id, line, when: (g) => !is(g, "nevada.jolene") && !is(g, "nevada.shadeGiven"),
+const windowAsk = (id, line) => ({ id, line, clue: true, when: (g) => !is(g, "nevada.jolene") && !is(g, "nevada.shadeGiven"),
   say: { 1: ["nevada.jolene.window.1"], 2: ["nevada.jolene.window.2"], more: ["nevada.jolene.window.3"] } });
 const windowGive = (h, id, line) => ({ id, line, when: (g) => is(g, "nevada.jolene") && !is(g, "nevada.shadeGiven"),
   say: ["nevada.jolene.window.give"], set: "nevada.shadeGiven", do: h.giveShade });
@@ -262,7 +262,7 @@ export const joleneTree = (h = {}) => {
           windowGive(h, "giveMom", "nevada.jolene.opt.window.mom"),
           { id: "factMom", line: "nevada.jolene.opt.fact.mom", when: factReady, then: nextFact },
           { id: "joeMom", line: "nevada.jolene.opt.joe.mom", say: ["nevada.jolene.joe.1"] },
-          { id: "grayMom", line: "nevada.jolene.opt.gray.mom", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
+          { id: "grayMom", clue: true, line: "nevada.jolene.opt.gray.mom", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
           { id: "hatsMom", line: "nevada.jolene.opt.hats.mom", say: ["nevada.jolene.hats"] },
           { id: "phoneMom", line: "nevada.jolene.opt.phone.mom", say: ["nevada.jolene.phone.1", "nevada.jolene.phone.2"], do: h.phone },
           { id: "byeMom", line: "nevada.jolene.opt.bye.mom", say: ["nevada.jolene.bye.mom"], then: "exit" },
@@ -270,7 +270,7 @@ export const joleneTree = (h = {}) => {
       },
       hensMom: {
         options: [
-          { id: "atWhat", line: "nevada.jolene.opt.atwhat", say: ["nevada.jolene.hens.2"] },
+          { id: "atWhat", clue: true, line: "nevada.jolene.opt.atwhat", say: ["nevada.jolene.hens.2"] },
           { id: "namesMom", line: "nevada.jolene.opt.names.mom", say: ["nevada.jolene.names"] },
           { id: "poor", line: "nevada.jolene.opt.poor", then: "back" },
         ],
@@ -282,7 +282,7 @@ export const joleneTree = (h = {}) => {
           windowGive(h, "giveBig", "nevada.jolene.opt.window.big"),
           { id: "factBig", line: "nevada.jolene.opt.fact.big", when: factReady, then: nextFact },
           { id: "joeBig", line: "nevada.jolene.opt.joe.big", say: ["nevada.jolene.joe.2"] },
-          { id: "grayBig", line: "nevada.jolene.opt.gray.big", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
+          { id: "grayBig", clue: true, line: "nevada.jolene.opt.gray.big", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
           { id: "hatsBig", line: "nevada.jolene.opt.hats.big", say: ["nevada.jolene.hats.big"] },
           { id: "phoneBig", line: "nevada.jolene.opt.phone.big", say: ["nevada.jolene.phone.1", "nevada.jolene.phone.2"], do: h.phone },
           { id: "byeBig", line: "nevada.jolene.opt.bye.big", say: ["nevada.jolene.bye.big"], then: "exit" },
@@ -291,7 +291,10 @@ export const joleneTree = (h = {}) => {
       lil: {
         options: [
           // the colleagues' branch: what do you feed yours?
-          { id: "hensLil", line: "nevada.jolene.opt.hens.lil", say: ["nevada.jolene.flock", "nevada.jolene.feed.lil", "nevada.jolene.color", "nevada.jolene.blue.lil", "nevada.jolene.blue"], then: "hensLil" },
+          // TALK-18 (TALK-18C): kept: under it the step of #11, "Can you ask the hens?" (askHens), ends the talk, so by the
+          // rule it is a way out and does not keep this topic showing; once the names were asked the topic went, and the
+          // hens with it (found by play-store). Kept, it stays as it did before the rule.
+          { id: "hensLil", keep: true, line: "nevada.jolene.opt.hens.lil", say: ["nevada.jolene.flock", "nevada.jolene.feed.lil", "nevada.jolene.color", "nevada.jolene.blue.lil", "nevada.jolene.blue"], then: "hensLil" },
           windowAsk("windowLil", "nevada.jolene.opt.window.lil"),
           windowGive(h, "giveLil", "nevada.jolene.opt.window.lil"),
           { id: "factLil", line: "nevada.jolene.opt.fact.lil", when: factReady, then: nextFact },
@@ -345,9 +348,9 @@ export const rangerTree = (h = {}) => ({
     lil: {
       options: [
         { id: "hi", line: "nevada.ranger.opt.hi", when: (g) => !is(g, "nevada.rangerMet"), say: ["nevada.ranger.dots", "nevada.ranger.hi.2"], set: "nevada.rangerMet" },
-        { id: "color", line: "nevada.ranger.opt.color", say: ["nevada.ranger.dots", "nevada.ranger.color.2"] },                  // the clue: SHINY
+        { id: "color", clue: true, line: "nevada.ranger.opt.color", say: ["nevada.ranger.dots", "nevada.ranger.color.2"] },                  // the clue: SHINY
         { id: "chickens", line: "nevada.ranger.opt.chickens", say: ["nevada.ranger.dots", "nevada.ranger.chickens.2"] },
-        { id: "wash", line: "nevada.ranger.opt.wash", say: ["nevada.ranger.dots", "nevada.ranger.wash.2"] },
+        { id: "wash", clue: true, line: "nevada.ranger.opt.wash", say: ["nevada.ranger.dots", "nevada.ranger.wash.2"] },
         // PASS-17N: her spare grandpa comes round once more (once she has asked Grandpa Joe for one)
         { id: "spare", line: "nevada.ranger.opt.spare", once: true, when: (g) => g.asked("joe/grandpa") > 0, say: ["nevada.ranger.dots", "nevada.ranger.spare.2"] },
         { id: "coinLil", line: "nevada.ranger.opt.coin.lil", when: (g) => is(g, "nevada.witness") && !is(g, "nevada.traded"),
@@ -466,8 +469,8 @@ export const letterboxTree = (h = {}) => {
       after: {
         options: [
           { id: "send", line: "nevada.letterbox.opt.send", when: (g) => g.has("penny") && !is(g, "nevada.pennySent"), say: ["nevada.letterbox.penny.lil"], do: h.penny, then: "sent" },
-          { id: "sendLater", line: "nevada.letterbox.opt.send", when: (g) => !g.has("penny") && is(g, "nevada.pennies") && !is(g, "nevada.pennySent"), say: ["nevada.letterbox.penny.mine"] },
-          { id: "sendNone", line: "nevada.letterbox.opt.send", when: (g) => !is(g, "nevada.pennies") && !is(g, "nevada.pennySent"), say: ["nevada.letterbox.penny.none"] },
+          { id: "sendLater", clue: true, line: "nevada.letterbox.opt.send", when: (g) => !g.has("penny") && is(g, "nevada.pennies") && !is(g, "nevada.pennySent"), say: ["nevada.letterbox.penny.mine"] },
+          { id: "sendNone", clue: true, line: "nevada.letterbox.opt.send", when: (g) => !is(g, "nevada.pennies") && !is(g, "nevada.pennySent"), say: ["nevada.letterbox.penny.none"] },
           { id: "keys", line: "nevada.letterbox.opt.keys", say: ["nevada.letterbox.mom.keys"] },
           { id: "warm", line: "nevada.letterbox.opt.warm", say: ["nevada.letterbox.mom.warm", "nevada.letterbox.son.warm"] },
           { id: "sleep", line: "nevada.letterbox.opt.sleep", say: ["nevada.letterbox.mom.sleep", "nevada.letterbox.son.sleep", "nevada.letterbox.mom.sleep.2"] },
@@ -521,7 +524,7 @@ export const dividerTree = (h = {}) => ({
         { id: "burger", line: "limo.divider.opt.burger", say: ["limo.divider.burger.1", "limo.divider.burger.jed"] },
         { id: "up", line: "limo.divider.opt.up", say: ["limo.ropes.visual"] },
         // the lever: the Last Stop Rag, hummed (his own tune: no words)
-        { id: "music", line: "limo.ropes.music", say: { 1: ["limo.ropes.required", "limo.sing.1"], 2: ["limo.ropes.required.2", "limo.sing.2"], more: ["limo.ropes.required.3", "limo.sing.3"] },
+        { id: "music", keep: true, line: "limo.ropes.music", say: { 1: ["limo.ropes.required", "limo.sing.1"], 2: ["limo.ropes.required.2", "limo.sing.2"], more: ["limo.ropes.required.3", "limo.sing.3"] },
           do: h.sing, then: (g) => (g.asked("divider/music") === 1 ? "singing" : "singing2") },
         { id: "dividerBye", line: "limo.divider.opt.bye", say: ["limo.divider.bye"], then: "exit" },
       ],

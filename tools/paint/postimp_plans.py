@@ -30,7 +30,7 @@ PLANS = {
         "planes": ["sign-bc"],
         "alt": {},
         "union": {},
-        "frames": ["wagon-rear-*", "sun"],                         # (the sun's soft disc: keyed colour by colour, its edge kept)
+        "frames": ["wagon-rear-*", "sun", "sky", "drive-*", "light-*"],     # (the sun's soft disc: keyed colour by colour, its edge kept) ROAD-18P: sky, drive-*, light-*: the drive straight ahead (its backdrop, strips of ground, sheet of things, light)
     },
     "egypt-crash": {
         "folder": "egypt1",                                         # (the painter's working name for it, in out/)

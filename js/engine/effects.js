@@ -1027,7 +1027,8 @@ export function fxPictures(scene) {
   const strip = (spec) => (spec && spec.type === "strip" && typeof spec.src === "string" ? [spec.src.startsWith("art/") ? spec.src : folderOf(scene) + spec.src] : []);      // (NEVADA-12E: a strip's picture)
   const at = (p) => (typeof p !== "string" ? [] : [p.startsWith("art/") ? p : folderOf(scene) + p]);
   const sheetOf = (t) => (t && typeof t.src === "string" ? (typeof t.sheet === "string" ? t.sheet : t.src.replace(/\.png$/i, "") + ".json") : null);
-  const drive = (spec) => (spec && spec.type === "drive" ? [spec.sky, ...(Array.isArray(spec.bands) ? spec.bands : []).map((b) => b && b.src), spec.ground && spec.ground.src, spec.things && spec.things.src, sheetOf(spec.things)].flatMap(at) : []);      // DRIVE-16E: a drive's pictures, and its sheet
+  const drive = (spec) => (spec && spec.type === "drive" ? [spec.sky, ...(Array.isArray(spec.bands) ? spec.bands : []).map((b) => b && b.src), spec.ground && spec.ground.src, spec.things && spec.things.src, sheetOf(spec.things),
+    ...(Array.isArray(spec.grounds) ? spec.grounds : []).map((g) => g && g.src), ...[].concat(spec.light || [], spec.lights || []).map((l) => l && l.src)].flatMap(at) : []);      // DRIVE-16E: a drive's pictures, and its sheet (ROAD-18E: and straight ahead, its strips of ground and its pictures of light)
   return [...new Set(list.flatMap((spec) => { const f = spec && framesOf(spec.frames, scene); return [...(f ? [...Object.values(f.lists).flat(), ...(f.shadow ? [f.shadow] : [])] : []), ...strip(spec), ...drive(spec)]; }))];
 }
 
@@ -1781,6 +1782,49 @@ class Strip extends Effect {
  * Its time is the strip's: where it is (s, metres gone) is worked out from its time alone and the speeds since each set(),
  * so a scene opened twice shows the same thing at the same moment; parked, it draws nothing new. Each pane's picture is
  * drawn again only when s has changed (or less motion has come or gone). `cost` keeps what its pictures took.
+ *
+ * ROAD-18E: STRAIGHT AHEAD (side: "ahead"; round eighteen: the opening movie, the camera behind the wagon). The same camera
+ * looking down the line of travel: both sides of it and the road between, one picture. A point X metres right of the line
+ * of travel (negative: left), z ahead and Y up is on the stage at  x = vanish x + focal * X / z,  y = vanish y + focal *
+ * (eye - Y) / z. With no `windows` (nor `clip`) the whole stage is its one pane. What it draws, far to near: the sky (if
+ * it has one, where no ground is: usually none, the backdrop being the sky); the ground, every row below the horizon one
+ * depth (z = focal * eye / (row - horizon)), so a row is one patch of road along it and each pixel the average of the
+ * stretch across the road it covers; the things' shadows; the lights; the things and wires. Every rule above holds (no
+ * shimmer, the streak, its time, the haze, the shadows), with these besides:
+ *   grounds    [{ src, from, to, ppm }]: the ground from straight above in strips across the road, each its own picture:
+ *              columns along the road (looping end to end), rows across from `from` (its top row) to `to` (its bottom
+ *              row), metres right of the line of travel (the road -6 to 6, the desert -30 to -6 and 6 to 30). Strips that
+ *              meet meet with no seam; past the outermost ones the ground goes on in the colour of their outer rows, going
+ *              by with them, into the haze. (`ground`, a side view's one strip, is read as the only strip)
+ *   far        metres: no ground farther off than this (2000): the backdrop shows beyond. things_far the same for things (1500)
+ *   haze       a colour, as on a side; or "backdrop": the ground fades into clear with distance, so that the backdrop's
+ *              own far land shows through it near the horizon (the highway's: its far plain painted in the painting's air)
+ *   things     rows as on a side, `at` across the road: a number (negative on the left), a range, two numbers of opposite
+ *              signs (each thing at both: posts either side of the road), or with `both: true` a range of distances out,
+ *              each thing on one side or the other at random (seeded). A row's `gap` (its own stretches kept clear; false:
+ *              never kept clear). A wire is a height, or [across, up] from the thing's foot (a pole's insulators either side
+ *              of it). A sprite's own `ppm` on the sheet (the signs', so that at 17.3 m they are drawn pixel for pixel), its
+ *              `air` (the share of the haze it takes: 1; the painter's poles 0.6; 0 for a thing painted in its own air as it
+ *              is seen from where it is drawn at its own size, focal / ppm ahead: only the air beyond that), and a thing
+ *              painted for each side of the road (`sage-1-l`, `sage-1-r`): a row or a piece naming "sage-1" gets the side's own
+ *   gap        [[s0, s1], ...]: stretches of road (metres along it from where the drive began) where the rows put nothing
+ *   pieces     [{ id, sprite, X, s, Y }]: set pieces from the start (see place)
+ *   light      [{ id, src, x, y } or { id, poly, radial: { at, r: [rx, ry] } or linear: { from, to }, stops: [[offset, colour,
+ *              alpha], ...] }, with `blend` ("screen", "multiply"...; "source-over") and `opacity` (1)]: light laid over the
+ *              ground (under the things), still on the stage while the road goes by under it: the shine of the low sun on
+ *              the asphalt, the dark corners, the hole's glow down the road. Never keyed (time's light belongs to no place)
+ * For scripts, besides set({ speed }) and set({ opacity }):
+ *   set({ s })          puts the camera s metres along the road and parks it there (a tween carrying it lands exactly where
+ *                       it is sent; set({ s, speed }) and it goes on from there at that speed). No jump either way: speed
+ *                       hands over to place at the place it has reached, and place to speed at the place it was put
+ *   .s, .speed          where the camera is (metres along the road) and its speed, now
+ *   place(id, { sprite, X, s, Y })   a set piece: a thing of the sheet at X across and s along the road (it stays where it
+ *                       is as the camera comes on); placed again with only some of these, it keeps the rest (the sign:
+ *                       place("sign", { sprite: "sign-bc" })). remove(id) takes it away
+ *   set({ gap }), set({ light: { id: k } })   the stretches kept clear; a light's opacity
+ * Doors in time over it: a portal names it in `under` ({ fx: id }) and reads its picture again each time it draws a new one
+ * (Portal, below); { fx: id, piece, sprite, alpha } reads one set piece in, as another picture of the sheet if `sprite` says.
+ * The proof: index.html?scene=engine-proof&lead=dad&flags=proof.road,proof.arrived (docs/DESIGN.md, section 2).
  */
 const driveKept = new WeakMap();              // the tables made from each picture (by the picture held for the session): made once
 const DRIVE_SLICES = 2;                       // the most slices a pixel's patch of ground is taken in, unless the spec says (planGround)
@@ -1894,13 +1938,65 @@ function shadowShape({ w: sw, h: sh, d }, box, foot) {
   }
   return { pts: line.filter((p, i) => keep[i]), top: line[line.length - 1][0], area };
 }
+/** ROAD-18E: a strip of ground seen straight ahead (`grounds`): the ground's sums (groundSums: P, and F the colour of its last
+    rows), and F0 the colour of its first rows, so that past the outermost strips the ground carries on, either side, in the
+    colour of their outer rows, going by with them. */
+function stripSums(px) {
+  const g = groundSums(px), { w, h, d } = px, F0 = new Float32Array((w + 1) * 3), K = Math.min(h, 8);
+  for (let a = 0; a < w; a++) {
+    let fr = 0, fg = 0, fb = 0;
+    for (let b = 0; b < K; b++) { const i = (b * w + a) * 4; fr += d[i]; fg += d[i + 1]; fb += d[i + 2]; }
+    F0[a * 3 + 3] = F0[a * 3] + fr / K; F0[a * 3 + 4] = F0[a * 3 + 1] + fg / K; F0[a * 3 + 5] = F0[a * 3 + 2] + fb / K;
+  }
+  return { ...g, F0 };
+}
+/** ROAD-18E: the lights a drive straight ahead lays over its ground (`light`: one, or a list), still on the stage while the
+    ground goes by under them: a picture ({ src, x, y }), or a shape filled with a gradient ({ poly, radial: { at, r: [rx, ry] }
+    or linear: { from, to }, stops: [[offset, colour, alpha], ...] }; with neither, `color`); each with an `id`, a `blend` (the
+    canvas's: "screen", "lighter", "multiply"...; "source-over" if not said) and an `opacity` (1) a script changes with
+    set({ light: { id: k } }). Never keyed: light (the hole's) need not be the place's. */
+function lightsOf(spec, path) {
+  const list = Array.isArray(spec.light) ? spec.light : Array.isArray(spec.lights) ? spec.lights : spec.light && typeof spec.light === "object" ? [spec.light] : [];
+  return list.filter((l) => l && (typeof l.src === "string" || polyOf(l.poly))).map((l, i) => ({
+    id: String(l.id || `light-${i + 1}`), src: typeof l.src === "string" ? path(l.src) : null, x: num(l.x, 0), y: num(l.y, 0),
+    poly: typeof l.src === "string" ? null : polyOf(l.poly),
+    radial: l.radial && isPoint(l.radial.at) ? { at: l.radial.at, r: isPair(l.radial.r) ? l.radial.r : [num(l.radial.r, 100), num(l.radial.r, 100)] } : null,
+    linear: l.linear && isPoint(l.linear.from) && isPoint(l.linear.to) ? l.linear : null,
+    stops: (Array.isArray(l.stops) ? l.stops : []).filter((v) => Array.isArray(v) && typeof v[0] === "number").map(([o, c, a]) => [clamp(o), rgbOf(c, [255, 255, 255]), clamp(num(a, 1))]),
+    color: rgbOf(l.color, [255, 255, 255]), blend: typeof l.blend === "string" ? l.blend : "source-over", opacity: clamp(num(l.opacity, 1)), paints: new WeakMap() }));
+}
+/** ROAD-18E: stretches of road kept clear of seeded things: [[s0, s1], ...] (or one [s0, s1]), metres along the road. */
+function gapsOf(v) {
+  if (isPair(v)) v = [v];
+  return Array.isArray(v) ? v.filter(isPair).map(([a, b]) => [Math.min(a, b), Math.max(a, b)]).sort((p, q) => p[0] - q[0]) : [];
+}
+const inGap = (gaps, w) => { for (const [a, b] of gaps) { if (w < a) return false; if (w <= b) return true; } return false; };
+/** ROAD-18E: the things a sheet has painted for each side of the road, `name-l` for the left and `name-r` for the right (lit
+    from the side the sun is on), by the name without its side where the sheet has no picture of that name itself: a row or a
+    set piece that names "sage-1" is drawn with "sage-1-l" left of the line of travel and "sage-1-r" right of it (one painted
+    for one side only stands for both). -> { L: { name: "name-l" }, R: { name: "name-r" } } */
+function sidesOf(sprites) {
+  const lr = { L: {}, R: {} };
+  for (const name of Object.keys(sprites)) {
+    const m = /^(.+)-([lr])$/.exec(name);
+    if (m && !sprites[m[1]]) lr[m[2] === "l" ? "L" : "R"][m[1]] = name;
+  }
+  for (const [a, b] of [["L", "R"], ["R", "L"]]) for (const k of Object.keys(lr[a])) if (!lr[b][k]) lr[b][k] = lr[a][k];
+  return lr;
+}
+/** ROAD-18E: how far a row's things reach, in metres at their own pixels a metre: half the widest, and the tallest (for how
+    far its shadows reach). */
+function reachOf(pics) {
+  return { half: Math.max(0.5, ...pics.map((p) => p.levels[0].w / 2 / p.ppm)), tall: Math.max(0, ...pics.map((p) => p.levels[0].fy / p.ppm)) };
+}
 
 class Drive extends Effect {
   constructor(host, spec, n) {
     super(host, spec, n);
     const s = spec, folder = folderOf(host.scene), path = (p) => (typeof p !== "string" ? null : p.startsWith("art/") ? p : folder + p);
-    this.side = s.side === "L" ? -1 : s.side === "R" ? 1 : 0;
-    if (!this.side) throw new Error('a drive needs `side`: "L" or "R", the side of the line of travel its world is on');
+    this.ahead = s.side === "ahead";                                 // ROAD-18E: the view straight down the road: both sides, and the road between
+    this.side = s.side === "L" ? -1 : s.side === "R" ? 1 : this.ahead ? 1 : 0;      // (ROAD-18E: ahead, x = vanish x + focal * X / z, X negative on the left)
+    if (!this.side) throw new Error('a drive needs `side`: "L" or "R", the side of the line of travel its world is on (or "ahead": ROAD-18E)');
     if (!isPoint(s.vanish)) throw new Error("a drive needs `vanish`: [x, y], where the line of travel runs to (its row is the horizon)");
     this.focal = num(s.focal, 0);
     if (!(this.focal > 0)) throw new Error("a drive needs `focal`: the camera's focal length, in pixels");
@@ -1912,7 +2008,7 @@ class Drive extends Effect {
     this.fps = Math.max(1, num(s.fps, 30)); this.calmFps = this.fps;    // (for less motion its time runs at half speed, as the strip's)
     // Its pictures are due at its steps, shifted by `phase` of a step: the right side's fall half way between the left's (0
     // and 0.5), so that a frame of the game draws one side's panes and the next frame the other's, never all four at once.
-    this.phase = clamp(num(s.phase, this.side > 0 ? 0.5 : 0), 0, 0.999);
+    this.phase = clamp(num(s.phase, this.side > 0 && !this.ahead ? 0.5 : 0), 0, 0.999);      // (ROAD-18E: straight ahead, one drive: 0)
     this.alpha = clamp(num(s.opacity, 1));
     this.streak = Math.max(0, num(s.streak, 0.6));
     this.slices = Math.round(clamp(num(s.slices, DRIVE_SLICES), 1, 6));     // the most slices a pixel's patch of ground is taken in (planGround)
@@ -1937,11 +2033,12 @@ class Drive extends Effect {
     this.rows = this.thingsSrc && Array.isArray(th.rows) ? th.rows.map((r, i) => this.rowOf(r, i)).filter(Boolean) : [];
     this.sheet = null;                                               // the sheet's JSON once read (false: it would not come)
     const shapes = polysOf(s.windows).length ? polysOf(s.windows) : polysOf(s.clip);
+    if (!shapes.length && this.ahead) shapes.push([[0, 0], [W, 0], [W, H], [0, H]]);         // ROAD-18E: straight ahead with no panes: the stage is the window
     if (!shapes.length) throw new Error("a drive needs `windows`: the panes it is seen through");
     this.wins = shapes.map((poly, i) => {
       const win = { poly, step: null, s: null, calm: null, go: false, sprite: this.mote(":" + i) };
       win.sprite.win = win;
-      this.frame(win);
+      if (this.ahead) this.frameAhead(win); else this.frame(win);      // (ROAD-18E: frameAhead)
       return win;
     });
     const us = this.wins.flatMap((w) => [...w.U0, ...w.U1]);
@@ -1949,6 +2046,8 @@ class Drive extends Effect {
     this.world = null;                                               // the things and wires as seen from one s, for all the panes
     this.tabs = null;                                                // the pictures' tables, once they are all here
     this.cost = { pictures: 0, ms: 0, last: 0, most: 0, tables: 0 };  // what its pictures took (ms), and its pictures' tables, for the tests
+    this.gen = 0;                                                    // ROAD-18E: how many pictures it has drawn (a door in time that bends it reads it again when this changes)
+    if (this.ahead) this.setupAhead(s, path);                        // ROAD-18E: its strips of ground, lights, gaps and set pieces
     this.ready();
   }
   /** A row of things, as the engine places them: from the seed, a thing in each cell of `cell` metres along the road. */
@@ -1960,8 +2059,8 @@ class Drive extends Effect {
     const mean = isPair(every) ? (every[0] + every[1]) / 2 : every, loop = num(r.loop, 0);
     const n = loop > 0 ? Math.max(1, Math.round(loop / mean)) : 0, cell = n ? loop / n : mean;
     const seed = mix(this.seed, i + 1) >>> 0, at = isPair(r.at) ? [Math.min(...r.at), Math.max(...r.at)] : num(r.at, 10);
-    return { names, n, cell, jit: isPair(every) ? (every[1] - every[0]) / 4 : 0, seed, offset: num(r.offset, rnd(seed, 7) * cell), at,
-      Xs: isPair(at) ? at : [at, at], wires: (Array.isArray(r.wires) ? r.wires : []).filter((v) => typeof v === "number" && Number.isFinite(v)), sag: num(r.sag, null) };
+    return this.aheadRow(r, { names, n, cell, jit: isPair(every) ? (every[1] - every[0]) / 4 : 0, seed, offset: num(r.offset, rnd(seed, 7) * cell), at,
+      Xs: isPair(at) ? at : [at, at], wires: (Array.isArray(r.wires) ? r.wires : []).map((v) => (isPair(v) ? [v[0], v[1]] : typeof v === "number" && Number.isFinite(v) ? [0, v] : null)).filter(Boolean), sag: num(r.sag, null), wireAlpha: r.wire_alpha == null ? null : clamp(num(r.wire_alpha, 1)), farAhead: Math.max(0, num(r.far, 0)) });      // ROAD-18M: wire_alpha, how solid its wires are (as the side views have them, if not said); far, metres: none of its things farther off straight ahead (things_far, if not said)      // (ROAD-18E: aheadRow; a wire is [across, up] from the thing's foot: a height alone is [0, height])
   }
   /** Thing i of a row: where it stands along the road (metres from where the road begins), how far out, which picture. In a
       row that loops, thing i + n is thing i again, a loop further on. (A range for `every`: each in its cell, moved by up to
@@ -2006,7 +2105,7 @@ class Drive extends Effect {
     win.out = new ImageData(w, h); win.out32 = new Uint32Array(win.out.data.buffer);
     win.sprite.place(box[0], box[1]);
   }
-  pics() { return [this.skySrc, ...this.bands.map((b) => b.src), this.ground && this.ground.src, this.thingsSrc].filter(Boolean); }
+  pics() { return [this.skySrc, ...this.bands.map((b) => b.src), this.ground && this.ground.src, this.thingsSrc, ...(this.ahead ? [...this.strips.map((g) => g.src), ...this.lights.filter((l) => l.src).map((l) => l.src)] : [])].filter(Boolean); }      // (ROAD-18E: straight ahead, its strips of ground and its pictures of light)
   /** Its pictures here, the sheet that says where each thing is on its sheet read (held for the session, as a picture is),
       and, if it is on the stage as the scene opens, the tables made from them: so that a scene does not show (Effects.enter
       waits for this) until its first picture can be drawn without a pause (the tables of the limousine's pictures take some
@@ -2040,10 +2139,13 @@ class Drive extends Effect {
         if (!all.levels.has(key)) all.levels.set(key, spriteLevels(all.px, sp.box, sp.foot));
         const shapes = all.shapes || (all.shapes = new Map());                    // DRIVE-16F: what its shadow is made from, made once
         if (this.sun && !shapes.has(key)) shapes.set(key, shadowShape(all.px, sp.box, sp.foot));
-        sprites[name] = { levels: all.levels.get(key), height: num(sp.height, null), shape: this.sun ? shapes.get(key) : null };
+        sprites[name] = { levels: all.levels.get(key), height: num(sp.height, null), shape: this.sun ? shapes.get(key) : null,
+          ppm: Math.max(1e-3, num(sp.ppm, this.sheetPpm)), air: clamp(num(sp.air, 1)) };      // ROAD-18E: its own pixels a metre, where it has them (the signs'); the sheet's if not. And `air`: how much of the haze it takes (1; 0 for a thing painted in its own air)
       }
+      const lr = this.ahead ? sidesOf(sprites) : null;               // ROAD-18E: straight ahead, the things painted for each side of the road
       for (const r of this.rows) {
-        for (const nm of r.names) if (!sprites[nm]) warnDrive(this, `has no picture called "${nm}" on its sheet: those are left out`);
+        for (const nm of r.names) if (!sprites[nm] && !(lr && lr.L[nm])) warnDrive(this, `has no picture called "${nm}" on its sheet: those are left out`);      // (ROAD-18E: nor "-l" and "-r")
+        if (lr) { const pics = r.names.flatMap((nm) => [sprites[lr.L[nm] || nm], sprites[lr.R[nm] || nm]]).filter(Boolean); r.reach = pics.length ? reachOf(pics) : null; }      // (ROAD-18E: how wide and tall its things are, at their own pixels a metre)
         r.half = Math.max(0.5, ...r.names.filter((nm) => sprites[nm]).map((nm) => sprites[nm].levels[0].w / 2 / this.sheetPpm));     // (metres: the widest of its pictures, half)
         r.tall = Math.max(0, ...r.names.filter((nm) => sprites[nm]).map((nm) => sprites[nm].levels[0].fy / this.sheetPpm));          // DRIVE-16F: (metres: the tallest, for how far its shadows reach)
       }
@@ -2052,6 +2154,7 @@ class Drive extends Effect {
     const gs = ((ground ? ground.h : 0) + 3) * 3 * 6;
     this.tabs = { sky, ground, sprites, R: new Float64Array(gs), Q: new Float64Array(gs), SL: new Float64Array(16 * 6),
       C: new Float64Array((most + 2) * 4), CQ: new Float64Array((most + 3) * 4) };
+    if (this.ahead) { this.tabs.strips = this.stripsHere(got_); this.tabs.lr = sidesOf(sprites); }      // ROAD-18E: straight ahead, the strips of ground; the things for each side
     this.cost.tables = performance.now() - t0;                       // (ms: no time at all for pictures whose sums another drive has made)
     return true;
   }
@@ -2061,7 +2164,8 @@ class Drive extends Effect {
   gone(t) { return this.d0 + (this.speed * Math.max(0, t - this.t0)) / 1000; }
   /** For scripts: { speed } (metres a second; 0 parks it), { opacity }. It goes on from where it is. */
   set(o = {}) {
-    if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }
+    if (this.ahead && o) this.setAhead(o);                           // ROAD-18E: straight ahead, also { s }, { light: { id: k } }, { gap } (setAhead)
+    if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed && !(this.ahead && typeof o.s === "number")) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }      // (ROAD-18E: with { s }, setAhead has it)
     if (o && typeof o.opacity === "number") { this.alpha = clamp(o.opacity); for (const w of this.wins) w.step = null; }
     return this;
   }
@@ -2071,7 +2175,7 @@ class Drive extends Effect {
   /** Each pane's next picture is due when it has gone on since the last (or less motion has come or gone); drawn in its turn. */
   update(calm) {
     const s = this.at(this.stepAt(this.time));
-    for (const w of this.wins) if (w.step !== null) w.sprite.want = s !== w.s || calm !== w.calm;
+    for (const w of this.wins) if (w.step !== null) w.sprite.want = s !== w.s || calm !== w.calm || (this.ahead && this.stale(w, s));      // (ROAD-18E: stale)
   }
   grant(sprite) { if (sprite.win) sprite.win.go = true; }
   picture(sprite, calm) {
@@ -2079,17 +2183,20 @@ class Drive extends Effect {
     if (!w || !this.here()) return null;                             // (not here yet)
     const step = this.stepAt(this.time), s = this.at(step), go = w.go;
     w.go = false;
-    if (w.step === null || (go && (s !== w.s || calm !== w.calm))) {           // (the first picture at once; after that, in its turn)
+    if (w.step === null || (go && (s !== w.s || calm !== w.calm || (this.ahead && this.stale(w, s))))) {           // (the first picture at once; after that, in its turn. ROAD-18E: stale)
+      if (this.ahead) w.moved = w.step !== null && step > w.step && step - w.step <= 3 ? Math.abs(s - w.s) / (step - w.step) : 0;      // ROAD-18E: how far it went a picture, since the one before (a script carrying it)
       w.step = step; w.s = s; w.calm = calm;
       const t0 = performance.now();
       this.paint(w, s, calm);
       const ms = performance.now() - t0, c = this.cost;
       c.pictures++; c.ms += ms; c.last = ms; c.most = Math.max(c.most, ms);
-    }
+      this.gen++;                                                    // ROAD-18E: a new picture (for a door in time that bends it)
+    } else if (this.ahead && w.step !== null) this.prepare(w, step, calm);     // ROAD-18E: a frame that draws none: the next picture's ground, ahead of time
     return { canvas: w.pair.canvas, ox: 0, oy: 0 };
   }
   /** One pane's picture with the car gone s metres: the sky and the ground, the bands, the things; cut to the pane. */
   paint(w, s, calm) {
+    if (this.ahead) return this.paintAhead(w, s, calm);              // ROAD-18E: straight ahead (paintAhead)
     const travel = calm ? 0 : (this.streak * Math.abs(this.speed)) / this.fps;     // metres the ground is averaged over along its motion
     this.base(w, s, travel);
     for (const band of this.bands) this.band(w, band, s);
@@ -2284,6 +2391,7 @@ class Drive extends Effect {
   }
   /** The things and the wires as seen with the car gone s metres, far to near: worked out once for each s, for every pane. */
   sights(s) {
+    if (this.ahead) return this.sightsAhead(s);                      // ROAD-18E: straight ahead (sightsAhead)
     if (this.world && this.world.s === s) return this.world.items;
     const items = [], f = this.focal, e = this.eye, sprites = this.tabs.sprites, sppm = this.sheetPpm || 24, near = 1.5, sw = this.sunWay;
     for (const [ri, row] of this.rows.entries()) {
@@ -2317,13 +2425,13 @@ class Drive extends Effect {
     if (zb < near) return;
     const span = Math.hypot(b.w - a.w, b.X - a.X), sag = row.sag != null ? row.sag : 0.015 * span, N = 10;
     const tA = za >= near ? 0 : (near - za) / (zb - za);
-    for (const h of row.wires) {
+    for (const [dX, h] of row.wires) {                               // (ROAD-18E: [across, up]: a wire from insulators off to one side of the post, dX 0 for one on it)
       const pts = [];
       for (let q = 0; q <= N; q++) {
-        const t = tA + ((1 - tA) * q) / N, z = za + (zb - za) * t, X = a.X + (b.X - a.X) * t, Y = h - sag * 4 * t * (1 - t);
+        const t = tA + ((1 - tA) * q) / N, z = za + (zb - za) * t, X = a.X + dX + (b.X - a.X) * t, Y = h - sag * 4 * t * (1 - t);
         pts.push(this.vx + (this.side * f * X) / z, this.hz + (f * (e - Y)) / z);
       }
-      items.push({ z: zb, wire: true, pts, alpha: clamp(0.25 + 6 / Math.max(1, (za + zb) / 2), 0.3, 0.9) });
+      items.push({ z: zb, wire: true, pts, alpha: row.wireAlpha != null ? row.wireAlpha : clamp(0.25 + 6 / Math.max(1, (za + zb) / 2), 0.3, 0.9) });      // (ROAD-18M: or the row's own wire_alpha)
     }
   }
   /** DRIVE-16F: a thing's shadow, the thing standing X out and z ahead: a band on the ground from its foot along the sun, as
@@ -2364,7 +2472,7 @@ class Drive extends Effect {
       to near, all turning the same way, so where two overlap the ground is shaded once), the ground multiplied by `shade`
       at `shade_k`. -> how many. */
   shadows(ctx, w, s) {
-    if (!this.rows.length) return 0;
+    if (!this.rows.length && !(this.pieces && this.pieces.size)) return 0;      // (ROAD-18E: or set pieces)
     const items = this.sights(s), [bx, by, bx1, by1] = w.box;
     let n = 0;
     ctx.save();
@@ -2413,6 +2521,442 @@ class Drive extends Effect {
     ctx.restore();
     return n;
   }
+
+  // ---------------------------------------------------------------- ROAD-18E: the view straight ahead (side: "ahead")
+  /** ROAD-18E: what a drive straight ahead reads of its description beyond what every drive does (see the top). */
+  setupAhead(s, path) {
+    this.strips = (Array.isArray(s.grounds) ? s.grounds : s.ground && typeof s.ground === "object" ? [s.ground] : [])
+      .filter((g) => g && typeof g.src === "string")
+      .map((g) => ({ src: path(g.src), ppm: Math.max(1e-3, num(g.ppm, 16)), from: num(g.from, 0), to: num(g.to, null) }));
+    this.ground = null;                                              // (its strips are its ground: `ground`, one strip, is the first of them)
+    if (this.bands.length) { warnDrive(this, "looks straight ahead: `bands` are a side view's, and are left out (the far land is the backdrop's)"); this.bands = []; }
+    this.far = Math.max(1, num(s.far, 2000));                        // the ground is drawn no farther off than this (metres): beyond, the backdrop shows
+    this.thingsFar = Math.max(10, num(s.things_far, num(s.thingsFar, 1500)));      // nor any thing
+    this.hazeInto = s.haze === "backdrop";                           // the ground fades into the backdrop's own far land, not into a colour
+    this.lights = lightsOf(s, path);
+    this.gaps = gapsOf(s.gap);
+    this.pieces = new Map();
+    this.ver = 0;                                                    // how many times what it draws has been changed by a script (a piece, a light, a gap)
+    for (const p of Array.isArray(s.pieces) ? s.pieces : []) if (p && typeof p.id === "string" && typeof p.sprite === "string") this.pieces.set(p.id, { sprite: p.sprite, X: num(p.X, 0), s: num(p.s, 0), Y: num(p.Y, 0) });      // (set pieces from the start)
+  }
+  /** ROAD-18E: a row of things seen straight ahead. `at` is across the road (negative on the left): two numbers of opposite
+      signs are two places, each thing of the row standing at both (reflector posts either side of the road), any other pair a
+      range as on a side; `both: true` puts each thing on one side or the other at random (seeded), `at` then how far out;
+      `gap`, the row's own stretches kept clear (false: none, whatever the drive's `gap` says). */
+  aheadRow(r, row) {
+    if (!this.ahead) return row;
+    const pair = isPair(r.at) && r.at[0] * r.at[1] < 0 ? [Math.min(...r.at), Math.max(...r.at)] : null, both = !pair && !!r.both;
+    const out = (v) => (isPair(v) ? [Math.min(Math.abs(v[0]), Math.abs(v[1])), Math.max(Math.abs(v[0]), Math.abs(v[1]))] : Math.abs(v));
+    return Object.assign(row, { pair, both, at: both ? out(row.at) : row.at, gap: r.gap === false ? [] : r.gap !== undefined ? gapsOf(r.gap) : null });
+  }
+  /** ROAD-18E: where thing i of a row stands across the road: [[thing, X, which], ...] (two for a pair). */
+  placesAhead(row, i) {
+    const t = this.thing(row, i);
+    if (row.pair) return [[t, row.pair[0], "L"], [t, row.pair[1], "R"]];
+    if (!row.both) return [[t, t.X, ""]];
+    const k = row.n ? ((i % row.n) + row.n) % row.n : i;
+    return [[t, rnd(row.seed, k, 4) < 0.5 ? -t.X : t.X, ""]];
+  }
+  /** ROAD-18E, for scripts: a set piece, a thing of the sheet put by name at a place of the road: `sprite`; `X` metres across
+      (negative on the left); `s` metres along the road from where the drive began, so that it stays where it is as the camera
+      comes on (it is s - (the drive's s) ahead); `Y` metres up (0: on the ground; one off the ground throws no shadow). Placed
+      again with only some of these, it keeps the rest: place("sign", { sprite: "sign-bc" }) changes its picture. -> the drive */
+  place(id, o = {}) {
+    if (!this.pieces) return this;
+    const was = this.pieces.get(id) || { sprite: null, X: 0, s: 0, Y: 0 };
+    const p = { sprite: typeof o.sprite === "string" ? o.sprite : was.sprite, X: num(o.X, was.X), s: num(o.s, was.s), Y: num(o.Y, was.Y) };
+    if (!p.sprite) { warnDrive(this, `was asked to place "${id}" with no sprite`); return this; }
+    this.pieces.set(id, p);
+    this.changed();
+    return this;
+  }
+  /** ROAD-18E, for scripts: take a set piece away. */
+  remove(id) { if (this.pieces && this.pieces.delete(id)) this.changed(); return this; }
+  /** ROAD-18E: something it draws has been changed by a script: its panes are drawn again in their turn, parked or not. */
+  changed() { this.ver++; this.world = null; if (this.host && this.host.frame && this.wins) this.host.frame(0); }
+  /** ROAD-18E: set({ s }) puts it s metres along the road, parked (a script's tween carries it there, and it lands exactly);
+      set({ s, speed }) and it goes on from there at that speed. set({ light: { id: k } }): a light's opacity. set({ gap }): the
+      stretches kept clear of the rows' things. */
+  setAhead(o) {
+    if (typeof o.s === "number" && Number.isFinite(o.s)) { this.d0 = o.s; this.t0 = this.time; this.speed = typeof o.speed === "number" && Number.isFinite(o.speed) ? o.speed : 0; }
+    if (o.light && typeof o.light === "object") {
+      for (const [id, k] of Object.entries(o.light)) { const l = this.lights.find((v) => v.id === id); if (l && typeof k === "number" && clamp(k) !== l.opacity) { l.opacity = clamp(k); this.changed(); } }
+    }
+    if (o.gap !== undefined) { this.gaps = gapsOf(o.gap); this.changed(); }
+  }
+  /** ROAD-18E: metres gone now (for scripts: where the camera is along the road; set({ s }) puts it somewhere). */
+  get s() { return this.gone(this.time); }
+  /** ROAD-18E: is a pane's picture out of date though the camera has not moved? What it draws has been changed, or it was
+      drawn streaked by a script's move that has now stopped (parked, it is drawn again, sharp). */
+  stale(w, s) { return w.ver !== this.ver || (s === w.s && w.travel > 0 && !this.speed); }
+  /** ROAD-18E: a pane straight ahead (the whole stage, unless `windows` or `clip` say): its picture, its place, its shape (a
+      pixel is in it when its middle is; a rectangle that fills its box needs no mask), and for each column the directions its
+      edges look in (u from the vanishing point, negative on the left). */
+  frameAhead(win) {
+    const [x0, y0, x1, y1] = boxOf(win.poly), box = [Math.max(0, Math.floor(x0)), Math.max(0, Math.floor(y0)), Math.min(W, Math.ceil(x1)), Math.min(H, Math.ceil(y1))];
+    const w = Math.max(1, box[2] - box[0]), h = Math.max(1, box[3] - box[1]);
+    Object.assign(win, { box, w, h, pair: new Pair(w, h), inside: new Uint8Array(w * h), rowA: new Int32Array(h).fill(-1), rowB: new Int32Array(h), colA: new Int32Array(w).fill(-1), colB: new Int32Array(w), ver: 0, travel: 0, moved: 0 });
+    win.full = win.poly.length === 4 && win.poly.every(([px, py]) => (px === box[0] || px === box[2]) && (py === box[1] || py === box[3]));
+    if (win.full) { win.inside.fill(1); win.rowA.fill(0); win.rowB.fill(w); win.colA.fill(0); win.colB.fill(h); }
+    else {
+      win.mask = canvasOf(w, h);
+      const img = win.mask.getContext("2d").createImageData(w, h), d = img.data;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        if (!inside(win.poly, box[0] + x + 0.5, box[1] + y + 0.5)) continue;
+        win.inside[y * w + x] = 1; d[(y * w + x) * 4 + 3] = 255;
+        if (win.rowA[y] < 0) win.rowA[y] = x;
+        win.rowB[y] = x + 1;
+        if (win.colA[x] < 0) win.colA[x] = y;
+        win.colB[x] = y + 1;
+      }
+      win.mask.getContext("2d").putImageData(img, 0, 0);
+    }
+    win.U0 = new Float32Array(w); win.U1 = new Float32Array(w);
+    for (let x = 0; x < w; x++) { win.U0[x] = box[0] + x - this.vx; win.U1[x] = win.U0[x] + 1; }
+    win.out = new ImageData(w, h); win.out32 = new Uint32Array(win.out.data.buffer);
+    win.sprite.place(box[0], box[1]);
+  }
+  /** ROAD-18E: the strips' tables (their sums along the road, made once a picture), each strip's place across the road, left
+      to right, and room for a row's samples. */
+  stripsHere(got_) {
+    const list = this.strips.map((g) => {
+      const tab = driveTables(got_(g.src), "strip", stripSums), to = g.to != null ? g.to : g.from + tab.h / g.ppm;
+      const X0 = Math.min(g.from, to), X1 = Math.max(g.from, to);
+      if (Math.abs((X1 - X0) * g.ppm - tab.h) > 1.5) warnDrive(this, `has a strip of ground (${g.src}) of ${tab.h} rows for ${(X1 - X0).toFixed(2)} m across at ${g.ppm} pixels a metre: its rows are spread from \`from\` to \`to\``);
+      return { tab, X0, X1, ppm: g.ppm, ppmX: tab.h / Math.max(1e-6, X1 - X0), rev: g.from > to, src: g.src, cut: null };
+    }).sort((a, b) => a.X0 - b.X0);
+    for (let i = 1; i < list.length; i++) if (list[i].X0 < list[i - 1].X1 - 1e-6) { warnDrive(this, `has strips of ground that overlap (${list[i - 1].src} and ${list[i].src}): the second begins where the first ends`); list[i].cut = list[i - 1].X1; }
+    const most = list.reduce((n, g) => n + g.tab.h, 0) + 4 * list.length + 8;
+    return { list, SR: new Float64Array(most * 3), PT: list.map(() => new Float64Array(8)) };
+  }
+  /**
+   * ROAD-18E: what a pane's ground straight ahead sees that never changes: each row of it below the horizon and nearer than
+   * `far` is one depth (from zBot, its lower edge, to zTop, its upper edge); a pixel of it covers (x - vanish x) * d to
+   * (x + 1 - vanish x) * d metres across the road (d = z / focal, at the row's middle depth); so the pieces across the row it
+   * needs are known once: the ground past the leftmost strip, each strip's samples (its rows) from the first a pixel touches to
+   * the last, any gap between two strips, the ground past the rightmost (SX: where each begins, in metres across; `runs`: for
+   * each strip [strip, first piece, first sample, end]; `gaps`: [strip, piece]). And the haze over each pixel, as far off as
+   * its middle (along the ground: z * sqrt(1 + (u / focal)^2)). `top`: the pane's first row of ground.
+   */
+  planAhead(w) {
+    const f = this.focal, e = this.eye, bx = w.box[0], by = w.box[1], rows = [], HZ = w.hazeK || (w.hazeK = new Float32Array(w.w * w.h));
+    const list = this.tabs.strips.list, nl = list.length;
+    let top = w.h;
+    for (let j = 0; j < w.h; j++) {
+      const v0 = by + j - this.hz;
+      if (!nl || w.rowA[j] < 0 || v0 + 0.5 <= 0) continue;
+      const zc = (f * e) / (v0 + 0.5);
+      if (zc > this.far) continue;
+      const d = zc / f, xA = w.rowA[j], xB = w.rowB[j], mA = (bx + xA - this.vx) * d, mB = (bx + xB - this.vx) * d;
+      const SX = [Math.min(mA, list[0].X0) - 1], runs = [], gaps = [];
+      for (let q = 0; q < nl; q++) {
+        const st = list[q];
+        if (q > 0 && st.X0 > list[q - 1].X1 + 1e-6) { gaps.push([q, SX.length]); SX.push(Math.max(list[q - 1].X1, SX[SX.length - 1])); }      // (a gap between two strips)
+        let kA = Math.max(0, Math.floor((mA - st.X0) * st.ppmX));
+        const kB = Math.min(st.tab.h, Math.ceil((mB - st.X0) * st.ppmX));
+        if (st.cut != null) kA = Math.max(kA, Math.floor((st.cut - st.X0) * st.ppmX));
+        if (kA >= kB) continue;
+        runs.push([q, SX.length, kA, kB]);
+        for (let k = kA; k < kB; k++) SX.push(Math.max(st.X0 + k / st.ppmX, st.cut != null ? st.cut : -Infinity));
+      }
+      SX.push(Math.max(list[nl - 1].X1, SX[SX.length - 1]), Infinity);
+      rows.push({ j, xA, xB, zBot: (f * e) / (v0 + 1), zTop: v0 > 0 ? (f * e) / v0 : Infinity, d, inv: 1 / d, mA, SX: Float64Array.from(SX), runs, gaps, right: SX.length - 2 });
+      if (j < top) top = j;
+      for (let x = xA; x < xB; x++) { const u = bx + x + 0.5 - this.vx; HZ[j * w.w + x] = 1 - Math.exp((-Math.LN2 * zc * Math.sqrt(1 + (u / f) ** 2)) / this.hazeFar); }
+    }
+    return { rows, top };
+  }
+  /** ROAD-18E: the colour of a strip's first rows (which 0) or last rows (1) along a row's patch (t: its weights), into SR at `at`. */
+  edgeAhead(st, t, which, SR, at) {
+    const tab = st.tab, F = which ? tab.F : tab.F0, ft = tab.w * 3;
+    if (t[6]) { for (let c = 0; c < 3; c++) SR[at + c] = F[ft + c] / tab.w; return; }      // (the row at the horizon: the whole loop)
+    const mH = t[0] * 3, fH = t[1], mL = t[2] * 3, fL = t[3], loops = t[4], il = t[5];
+    for (let c = 0; c < 3; c++) SR[at + c] = (F[mH + c] * (1 - fH) + F[mH + 3 + c] * fH + loops * F[ft + c] - F[mL + c] * (1 - fL) - F[mL + 3 + c] * fL) * il;
+  }
+  /**
+   * ROAD-18E: the ground straight ahead, into the pane's pixels. A row of the stage below the horizon is one depth, so its
+   * patch of road (from zBot to zTop ahead, the camera s metres along; longer by the streak) is the same for every pixel of
+   * it: each sample across the road (a row of a strip's picture) is averaged along that patch once, from the strip's sums
+   * (SR), and each pixel is the average of the pieces across the stretch it covers (the plan's), left to right: a pixel inside
+   * one sample shows it, hard; one that straddles two takes a share of each; one larger, their average. Past the outermost
+   * strips, their outer rows' colour; between two strips that do not meet, the mean of their edges. Then the haze, as far off
+   * as the pixel's middle: into its colour, or (`haze: "backdrop"`) into clear, so that the backdrop's own far land shows.
+   */
+  baseAhead(w, s, travel) {
+    const T = this.tabs.strips, list = T.list, nl = list.length, SR = T.SR, PT = T.PT, out = w.out32, ins = w.full ? null : w.inside, HZ = w.hazeK;
+    const pw = w.w, into = this.hazeInto, hr = this.haze[0], hg = this.haze[1], hb = this.haze[2];
+    for (const row of w.plan.rows) {
+      const { j, xA, xB, zBot, zTop, d, inv, SX } = row, o = j * pw, endless = zTop === Infinity;
+      const ext = !endless && travel > zTop - zBot ? (travel - (zTop - zBot)) / 2 : 0;      // (the streak: a row that goes by faster than it is long)
+      for (let q = 0; q < nl; q++) {                                 // each strip's patch along the road, in its own columns: the weights that read its sums
+        const st = list[q], gw = st.tab.w, t = PT[q];
+        if (endless) { t[6] = 1; continue; }
+        const lo = (zBot + s - ext) * st.ppm, hi = (zTop + s + ext) * st.ppm, iH = Math.floor(hi), iL = Math.floor(lo), mH = ((iH % gw) + gw) % gw, mL = ((iL % gw) + gw) % gw;
+        t[0] = mH; t[1] = hi - iH; t[2] = mL; t[3] = lo - iL; t[4] = (iH - mH) / gw - (iL - mL) / gw; t[5] = 1 / Math.max(1e-6, hi - lo); t[6] = 0;
+      }
+      // the colours of the row's pieces: past the leftmost strip; any gap (the mean of its two edges); each strip's samples; past the rightmost
+      this.edgeAhead(list[0], PT[0], list[0].rev ? 1 : 0, SR, 0);
+      for (const [q, n0] of row.gaps) {
+        const a = list[q - 1], b = list[q], n3 = n0 * 3;
+        this.edgeAhead(a, PT[q - 1], a.rev ? 0 : 1, SR, n3); this.edgeAhead(b, PT[q], b.rev ? 1 : 0, SR, n3 + 3);
+        for (let c = 0; c < 3; c++) SR[n3 + c] = (SR[n3 + c] + SR[n3 + 3 + c]) / 2;
+      }
+      for (const [q, n0, kA, kB] of row.runs) {
+        const st = list[q], tab = st.tab, gh = tab.h, P = tab.P, t = PT[q], tot = tab.w * gh * 3, inc = st.rev ? -3 : 3, end = (n0 + kB - kA) * 3;
+        let b3 = (st.rev ? gh - 1 - kA : kA) * 3, n3 = n0 * 3;
+        if (t[6]) { const iw = 1 / tab.w; for (; n3 < end; n3 += 3, b3 += inc) { SR[n3] = P[tot + b3] * iw; SR[n3 + 1] = P[tot + b3 + 1] * iw; SR[n3 + 2] = P[tot + b3 + 2] * iw; } continue; }
+        const il = t[5], gH = (1 - t[1]) * il, fH = t[1] * il, gL = (1 - t[3]) * il, fL = t[3] * il, li = t[4] * il;
+        const h0 = t[0] * gh * 3, h1 = h0 + gh * 3, l0 = t[2] * gh * 3, l1 = l0 + gh * 3;
+        if (!li) for (; n3 < end; n3 += 3, b3 += inc) {
+          SR[n3] = P[h0 + b3] * gH + P[h1 + b3] * fH - P[l0 + b3] * gL - P[l1 + b3] * fL;
+          SR[n3 + 1] = P[h0 + b3 + 1] * gH + P[h1 + b3 + 1] * fH - P[l0 + b3 + 1] * gL - P[l1 + b3 + 1] * fL;
+          SR[n3 + 2] = P[h0 + b3 + 2] * gH + P[h1 + b3 + 2] * fH - P[l0 + b3 + 2] * gL - P[l1 + b3 + 2] * fL;
+        } else for (; n3 < end; n3 += 3, b3 += inc) {                 // (a patch longer than the loop: whole loops in it too)
+          SR[n3] = P[h0 + b3] * gH + P[h1 + b3] * fH - P[l0 + b3] * gL - P[l1 + b3] * fL + li * P[tot + b3];
+          SR[n3 + 1] = P[h0 + b3 + 1] * gH + P[h1 + b3 + 1] * fH - P[l0 + b3 + 1] * gL - P[l1 + b3 + 1] * fL + li * P[tot + b3 + 1];
+          SR[n3 + 2] = P[h0 + b3 + 2] * gH + P[h1 + b3 + 2] * fH - P[l0 + b3 + 2] * gL - P[l1 + b3 + 2] * fL + li * P[tot + b3 + 2];
+        }
+      }
+      this.edgeAhead(list[nl - 1], PT[nl - 1], list[nl - 1].rev ? 0 : 1, SR, row.right * 3);
+      // the pixels, left to right: each the average of the pieces across its stretch [m0, m1) (an average of numbers from 0 to 255:
+      // no clamping needed)
+      let k = 0, m0 = row.mA;
+      while (SX[k + 1] <= m0) k++;
+      for (let x = xA; x < xB; x++) {
+        const m1 = m0 + d;
+        let r, g, b, k3 = k * 3;
+        if (m1 <= SX[k + 1]) { r = SR[k3]; g = SR[k3 + 1]; b = SR[k3 + 2]; }
+        else {
+          let wd = SX[k + 1] - m0; r = wd * SR[k3]; g = wd * SR[k3 + 1]; b = wd * SR[k3 + 2]; k++; k3 += 3;
+          while (SX[k + 1] < m1) { wd = SX[k + 1] - SX[k]; r += wd * SR[k3]; g += wd * SR[k3 + 1]; b += wd * SR[k3 + 2]; k++; k3 += 3; }
+          wd = m1 - SX[k]; r = (r + wd * SR[k3]) * inv; g = (g + wd * SR[k3 + 1]) * inv; b = (b + wd * SR[k3 + 2]) * inv;
+        }
+        m0 = m1;
+        const i = o + x;
+        if (ins && !ins[i]) continue;
+        const hk = HZ[i];
+        if (into) out[i] = ((((1 - hk) * 255 + 0.5) << 24) | ((b + 0.5) << 16) | ((g + 0.5) << 8) | (r + 0.5)) >>> 0;
+        else { r += (hr - r) * hk; g += (hg - g) * hk; b += (hb - b) * hk; out[i] = 0xff000000 | ((b + 0.5) << 16) | ((g + 0.5) << 8) | (r + 0.5); }
+      }
+    }
+  }
+  /** ROAD-18E: the haze over a thing X across and z ahead (0 to 1), as over the ground there. */
+  hazeAt(X, z) { return 1 - Math.exp((-Math.LN2 * Math.sqrt(z * z + X * X)) / this.hazeFar); }
+  /** ROAD-18E: one thing as the camera sees it straight ahead: X across, z ahead, its foot Y up; at its sheet's pixels a metre
+      (or its own); from a halved copy when smaller, hard when larger; at its own size (within a fifth of a percent) on whole
+      pixels, pixel for pixel; hazed by its distance (drawn the less solid, the farther); on its shadow. Null when under a pixel. */
+  sightAhead(sp, X, z, Y, key, name) {
+    const f = this.focal, k = f / (z * sp.ppm), exact = Math.abs(k - 1) < 0.002;
+    const L = k >= 1 || exact ? 0 : Math.min(sp.levels.length - 1, Math.floor(Math.log2(1 / k))), lv = sp.levels[L], rel = exact ? 1 : k * 2 ** L;
+    if (lv.h * rel < 1) return null;
+    return { z, wire: false, x: this.vx + (f * X) / z, y: this.hz + (f * (this.eye - Y)) / z, lv, rel, hard: k >= 1 || exact, exact, key, name, X, Y,
+      alpha: 1 - this.airOf(sp, X, z), shadow: this.sunWay && sp.shape && !Y ? this.shadowAhead(sp.shape, X, z, sp.ppm) : null };
+  }
+  /** ROAD-18E: how much of the air lies over a thing of the sheet X across and z ahead (0 to 1): its `air` share of the haze
+      there (1: all of it; the painter's poles 0.6, to stay dark against the sky); with `air` 0, a thing painted in its own air
+      as it is seen from where it is drawn at its own size (focal / its ppm metres ahead: a set piece cut from the painting,
+      where the camera stops), only the air beyond that: none there or nearer, and as it is seen from farther off it fades as
+      the rest do. */
+  airOf(sp, X, z) {
+    const h = this.hazeAt(X, z);
+    return sp.air > 0 ? sp.air * h : Math.max(0, 1 - (1 - h) / (1 - this.hazeAt(X, Math.min(z, this.focal / sp.ppm))));
+  }
+  /** ROAD-18E: the sheet's name for a thing called `name` standing X across: its own, or the side's own ("-l", "-r": sidesOf). */
+  sideName(name, X) { const lr = this.tabs.lr; return (lr && (X < 0 ? lr.L : lr.R)[name]) || name; }
+  /** ROAD-18E: the things, wires and set pieces seen straight ahead with the camera s metres along, far to near, once for each
+      s (and each change a script makes). A row's things come from the seed, as on a side, on both sides of the road; those in
+      a gap are left out (and the wires between them); a thing farther than `things_far`, under a pixel, nearer than 1.5 m,
+      or off the panes is not drawn. */
+  sightsAhead(s) {
+    if (this.world && this.world.s === s && this.world.ver === this.ver) return this.world.items;
+    const items = [], f = this.focal, sprites = this.tabs.sprites, near = 1.5, far = this.thingsFar, sw = this.sunWay;
+    for (const [ri, row] of this.rows.entries()) {
+      if (!row.reach) continue;                                      // (none of its pictures on the sheet: here())
+      const { half, tall } = row.reach;
+      const reach = half + (sw ? Math.abs(sw.dX) * tall : 0), zHi = Math.min(far, row.farAhead || far, (f * tall) / 0.5), gaps = row.gap || this.gaps;      // (ROAD-18M: and the row's own far)
+      const iA = Math.floor((s + near - row.offset - row.jit) / row.cell) - 1, iB = Math.ceil((s + zHi - row.offset + row.jit) / row.cell) + 1;
+      if (iB - iA > 4000) { warnDrive(this, `has a row of "${row.names[0]}" too close together to draw (every ${row.cell.toFixed(2)} m)`); continue; }
+      const prev = {};
+      for (let i = iA; i <= iB; i++) {
+        for (const [t, X, side] of this.placesAhead(row, i)) {
+          if (gaps.length && inGap(gaps, t.w)) { prev[side] = null; continue; }
+          const z = t.w - s, here = { w: t.w, X };
+          if (z >= near && z <= far) {
+            const u = (f * X) / z, hw = (f * reach) / z, name = this.sideName(t.name, X), sp = sprites[name];
+            if (sp && u + hw >= this.uMin && u - hw <= this.uMax) { const it = this.sightAhead(sp, X, z, 0, `${ri}:${i}${side}`, name); if (it) items.push(it); }
+          }
+          if (prev[side] && row.wires.length && Math.min(prev[side].w, t.w) - s <= far) {
+            const n0 = items.length;
+            this.wires(row, prev[side], here, s, items);
+            for (let q = n0; q < items.length; q++) items[q].alpha *= 1 - this.hazeAt(X, Math.max(near, (prev[side].w + t.w) / 2 - s));
+          }
+          prev[side] = here;
+        }
+      }
+    }
+    for (const [id, p] of this.pieces) {
+      const name = this.sideName(p.sprite, p.X), sp = sprites[name], z = p.s - s;
+      if (!sp) { warnDrive(this, `has no picture called "${p.sprite}" on its sheet (the set piece "${id}")`); continue; }
+      if (z < near || z > far) continue;
+      const it = this.sightAhead(sp, p.X, z, p.Y, `piece:${id}`, name);
+      if (it) items.push(it);
+    }
+    items.sort((a, b) => b.z - a.z);
+    this.world = { s, ver: this.ver, items };
+    return items;
+  }
+  /** ROAD-18E: a thing's shadow straight ahead: as shadowOf (DRIVE-16F) has it, at the thing's own pixels a metre, cut where it
+      would come nearer than a metre ahead (the sun ahead throws it back toward the camera, and a long one runs past it). */
+  shadowAhead(shape, X, z, ppm) {
+    const f = this.focal, e = this.eye, S = this.sunWay;
+    if ((((shape.area / (ppm * ppm)) * S.L * f * f * e) / (z * z * z)) * this.shadeK < 0.04) return null;
+    let P = shape.pts;
+    if (S.dz < 0) {
+      const top = ((z - 1) / -S.dz) * ppm;                           // (sheet pixels: the height whose shadow lies a metre ahead)
+      if (top <= 0) return null;
+      if (P[P.length - 1][0] > top) { const k = P.findIndex((v) => v[0] > top), a = P[k - 1], b = P[k], t = (top - a[0]) / (b[0] - a[0]); P = [...P.slice(0, k), [top, a[1] + (b[1] - a[1]) * t]]; }
+    }
+    const n = P.length, pts = new Float32Array(n * 4);
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (let i = 0; i < n; i++) {
+      const Y = P[i][0] / ppm, hw = P[i][1] / ppm / 2, bz = z + S.dz * Y, bX = X + S.dX * Y;
+      if (bz < 0.25) return null;
+      const zz2 = bz * bz, Az = -(f * bX) / zz2, Ay = -(f * e) / zz2, Bx = f / bz;
+      const mx = this.vx + (f * bX) / bz, my = this.hz + (f * e) / bz;
+      const lx = S.dz * Az + S.dX * Bx, ly = S.dz * Ay, ll = Math.hypot(lx, ly) || 1, ux = lx / ll, uy = ly / ll;
+      const ax = S.az * Az + S.aX * Bx, ay = S.az * Ay, along = (ax * ux + ay * uy) * hw, across = ax * -uy + ay * ux;
+      const least = Math.min(this.shadeMin, (this.shadeFace * f) / bz) / 2;
+      const half = Math.max(Math.abs(across) * hw, least) * (across < 0 ? -1 : 1), ox = along * ux - half * uy, oy = along * uy + half * ux;
+      for (let q = 0; q < 2; q++) {
+        const k = q ? 2 * n - 1 - i : i, px = q ? mx + ox : mx - ox, py = q ? my + oy : my - oy;
+        pts[k * 2] = px; pts[k * 2 + 1] = py;
+        if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py;
+      }
+    }
+    return { pts, x0, y0, x1, y1 };
+  }
+  /** ROAD-18E: the lights over the ground (`light`), each at its opacity and in its blend, still on the stage. -> how many. */
+  light(ctx, w) {
+    let n = 0;
+    for (const L of this.lights) {
+      if (!(L.opacity > 0)) continue;
+      ctx.save();
+      ctx.translate(-w.box[0], -w.box[1]); ctx.globalAlpha = L.opacity; ctx.globalCompositeOperation = L.blend;
+      if (L.src) { const img = got(L.src); if (img) ctx.drawImage(img, L.x, L.y); }
+      else {
+        ctx.beginPath(); L.poly.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
+        let paint = L.paints.get(ctx);
+        if (!paint) {
+          const stops = L.stops.length ? L.stops : [[0, L.color, 1]];
+          if (L.radial) paint = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(1e-3, L.radial.r[0]));
+          else if (L.linear) paint = ctx.createLinearGradient(L.linear.from[0], L.linear.from[1], L.linear.to[0], L.linear.to[1]);
+          if (paint) for (const [o, c, a] of stops) paint.addColorStop(o, rgba(c, a)); else paint = rgba(stops[0][1], stops[0][2]);
+          L.paints.set(ctx, paint);
+        }
+        ctx.fillStyle = paint;
+        if (L.radial) { const [cx, cy] = L.radial.at, [rx, ry] = L.radial.r; ctx.translate(cx, cy); ctx.scale(1, ry / Math.max(1e-3, rx)); }      // (an ellipse: the gradient's own space; the shape was laid down before)
+        ctx.fill();
+      }
+      ctx.restore();
+      n++;
+    }
+    return n;
+  }
+  /** ROAD-18E: the things and wires straight ahead, far to near. -> how many. */
+  thingsAhead(ctx, w, s) {
+    const items = this.sightsAhead(s), [bx, by, bx1, by1] = w.box;
+    let n = 0;
+    ctx.save();
+    ctx.translate(-bx, -by);
+    ctx.lineWidth = 1; ctx.lineCap = "round";
+    for (const it of items) {
+      if (it.wire) {
+        const p = it.pts;
+        let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+        for (let i = 0; i < p.length; i += 2) { x0 = Math.min(x0, p[i]); x1 = Math.max(x1, p[i]); y0 = Math.min(y0, p[i + 1]); y1 = Math.max(y1, p[i + 1]); }
+        if (x1 < bx || x0 > bx1 || y1 < by || y0 > by1 || !(it.alpha > 0.01)) continue;
+        ctx.globalAlpha = 1; ctx.strokeStyle = rgba(this.wire, it.alpha);
+        ctx.beginPath(); ctx.moveTo(p[0], p[1]);
+        for (let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]);
+        ctx.stroke();
+        n++;
+        continue;
+      }
+      if (this.drawSight(ctx, it, 1, bx, by, bx1, by1)) n++;
+    }
+    ctx.restore();
+    return n;
+  }
+  /** ROAD-18E: one thing (a sight) onto a canvas whose corner is (bx, by) on the stage (the caller has moved it there), at
+      `alpha` of its own solidity; nothing if it lies outside [bx, by, bx1, by1). -> whether it was drawn. */
+  drawSight(ctx, it, alpha, bx, by, bx1, by1) {
+    const lv = it.lv;
+    let x, y, dw, dh;
+    if (it.exact) { dw = lv.w; dh = lv.h; x = Math.round(it.x - lv.fx); y = Math.round(it.y - lv.fy); }
+    else { dw = lv.w * it.rel; dh = lv.h * it.rel; x = it.x - lv.fx * it.rel; y = it.y - lv.fy * it.rel; }
+    const a = it.alpha * alpha;
+    if (x > bx1 || x + dw < bx || y > by1 || y + dh < by || !(a > 0.004)) return false;
+    ctx.globalAlpha = a; ctx.imageSmoothingEnabled = !it.hard;
+    ctx.drawImage(lv.canvas, x, y, dw, dh);
+    return true;
+  }
+  /** ROAD-18E: on a frame of the game that draws no picture of it (at 30 pictures a second, every other frame), the ground
+      of its next picture is worked out ahead of time while it goes at its own speed (where it will be at its next step is
+      known), so that the frame that draws that picture does some half the work. Used only if it is then where it was foreseen,
+      as it was foreseen (a script carrying it wastes it, no more: it is worked out again then). */
+  prepare(w, step, calm) {
+    if (!this.speed || !this.tabs.strips.list.length) return;
+    const s = this.at(step + 1), travel = calm ? 0 : this.streak * Math.min(Math.abs(this.speed) / this.fps, 4);
+    const nx = w.next || (w.next = { s: null, travel: null, out: new ImageData(w.w, w.h) });
+    if (nx.s === s && nx.travel === travel) return;
+    if (!nx.out32 || nx.out32.buffer !== nx.out.data.buffer) nx.out32 = new Uint32Array(nx.out.data.buffer);
+    const out = w.out, out32 = w.out32;
+    w.out = nx.out; w.out32 = nx.out32;
+    try { this.baseAhead(w, s, travel); } finally { w.out = out; w.out32 = out32; }
+    nx.s = s; nx.travel = travel;
+  }
+  /** ROAD-18E: a pane's picture straight ahead: the sky (if it has one) over the rows the ground does not reach; the ground;
+      the things' shadows on it; the lights over it; the things and wires, far to near; cut to the pane (and its opacity). */
+  paintAhead(w, s, calm) {
+    const per = this.speed ? Math.abs(this.speed) / this.fps : w.moved || 0;          // metres it goes a picture: at its speed, or as a script carries it
+    const travel = calm ? 0 : this.streak * Math.min(per, 4);
+    w.travel = travel; w.ver = this.ver;
+    const strips = this.tabs.strips.list.length, plan = w.plan || (w.plan = this.planAhead(w)), top = strips ? plan.top : w.h, nx = w.next;
+    if (strips && nx && nx.s === s && nx.travel === travel) {        // (its ground worked out ahead of time, on the frame before: prepare)
+      const o = w.out, o32 = w.out32; w.out = nx.out; w.out32 = nx.out32; nx.out = o; nx.out32 = o32; nx.s = null;
+    } else if (strips) this.baseAhead(w, s, travel);
+    const ctx = w.pair.next(), sky = this.skySrc && got(this.skySrc);
+    if (sky && top > 0) ctx.drawImage(sky, w.box[0], w.box[1], w.w, top, 0, 0, w.w, top);
+    if (strips && top < w.h) ctx.putImageData(w.out, 0, 0, 0, top, w.w, w.h - top);
+    w.shadows = this.sun ? this.shadows(ctx, w, s) : 0;
+    w.lit = this.light(ctx, w);
+    w.things = this.thingsAhead(ctx, w, s);
+    if (!w.full || this.alpha < 1) {
+      ctx.globalCompositeOperation = "destination-in"; ctx.globalAlpha = this.alpha;
+      if (w.full) { ctx.fillStyle = "#000"; ctx.fillRect(0, 0, w.w, w.h); } else ctx.drawImage(w.mask, 0, 0);
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+    }
+    this.drawn = this.wins.reduce((sum, v) => sum + 1 + (v.things || 0), 0);
+  }
+  /** ROAD-18E: for a door in time that bends what this drive draws (its `under`: { fx: id }, or { fx: id, piece, sprite,
+      alpha }): its panes' pictures as they are now, or one set piece as it stands now (as another picture of the sheet, if
+      `sprite` says; at `alpha`), drawn onto the door's canvas, whose corner is (x0, y0) on the stage. False while it has no
+      picture yet (the door waits); a piece it has not got draws nothing. */
+  under(ctx, x0, y0, u) {
+    if (u.piece != null) {
+      const p = this.pieces && this.pieces.get(u.piece), w = this.wins[0], sp = p && this.tabs && this.tabs.sprites[this.sideName(typeof u.sprite === "string" ? u.sprite : p.sprite, p.X)];
+      if (!p || !sp || w.s == null) return true;
+      const it = this.sightAhead(sp, p.X, p.s - w.s, p.Y, "", "");
+      if (!it) return true;
+      ctx.save(); ctx.translate(-x0, -y0);
+      this.drawSight(ctx, it, clamp(num(u.alpha, 1)), -Infinity, -Infinity, Infinity, Infinity);
+      ctx.restore();
+      return true;
+    }
+    let any = false;
+    for (const w of this.wins) if (w.step !== null) { ctx.drawImage(w.pair.canvas, w.box[0] - x0, w.box[1] - y0); any = true; }
+    return any;
+  }
 }
 const warnedDrive = new Set();
 function warnDrive(e, text) { const k = `${e.id}|${text}`; if (!warnedDrive.has(k)) { warnedDrive.add(k); console.warn(`The drive "${e.id}" (${e.host.place || "added by a script"}) ${text}.`); } }
@@ -2439,7 +2983,11 @@ function warnDrive(e, text) { const k = `${e.id}|${text}`; if (!warnedDrive.has(
  *   under        cut-outs that lie behind the door in its box, read into the paint it bends: their ids, or pictures
  *                laid over the backdrop, { src, x, y, alpha }. `alpha` (1 if not said) is how much of the picture
  *                shows; a script that changes it calls refresh(), and the door bends the paint as it is now (the road
- *                sign comes out of the rings saying something else: highway.js)
+ *                sign comes out of the rings saying something else: highway.js). ROAD-18E: or a moving thing's
+ *                pictures, { fx: id } (a drive: the road going by under the hole), read again, in its box only, each
+ *                time it draws a new picture (once when it is parked), so the far road bends as it goes by; or one of
+ *                its set pieces, { fx: id, piece, sprite, alpha }, as it stands now, drawn as another picture of the
+ *                sheet if `sprite` says (the sign's rings bring through the drive's own `sign-bc`)
  *   light        true: the light the scene draws over the paint (its live layer: a beam on the wall, a spot of sun) is
  *                read into the paint too, so the door bends the lit wall and does not hide the light. A script calls
  *                refresh() when that light has changed (the beam has come on). Pictures the live layer shows by
@@ -2506,6 +3054,8 @@ class Portal extends Effect {
     this.keep = Array.isArray(s.keep) && s.keep.length === 2 && s.keep.every((v) => typeof v === "number") ? s.keep : null;
     this.rise = !!s.rise;
     this.under = Array.isArray(s.under) ? s.under : [];
+    this.fxUnder = this.under.some((u) => u && typeof u.fx === "string");     // ROAD-18E: a moving thing under it (a drive): read again each time it draws a new picture
+    this.gens = new Map();                                                     // (ROAD-18E: which of its pictures was read)
     this.light = !!s.light;
     this.snap = null; this.snapGen = 0;                    // the live layer as pixels, when `light` asks for it, and which asking it answers
     this.strength = clamp(num(s.strength, 0.45));
@@ -2582,13 +3132,17 @@ class Portal extends Effect {
       }
       if (this.snap !== false) return false;
     }
-    const tmp = canvasOf(fw, fh), ctx = tmp.getContext("2d", { willReadFrequently: true });
+    const tmp = this.tmp || (this.tmp = canvasOf(fw, fh)), ctx = tmp.getContext("2d", { willReadFrequently: true });      // (ROAD-18E: kept, as a door over a drive reads its paint thirty times a second)
+    ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over"; ctx.clearRect(0, 0, fw, fh);                      // (ROAD-18E)
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(view.backdrop, fx0, fy0, fw, fh, 0, 0, fw, fh);
-    const paint = ctx.getImageData(0, 0, fw, fh).data;                            // (nothing painted yet? then not yet: the picture comes in its own time)
-    let painted = false;
-    for (let i = 3; i < paint.length; i += 4) if (paint[i] > 0) { painted = true; break; }
-    if (!painted) return false;
+    if (!this.painted) {                                                            // ROAD-18F: the probe once: paint in its box stays painted (a scene's backdrop only gains paint, and a new scene drops its doors), so a door over a drive, reading thirty times a second, reads its pixels back once a read, not twice
+      const paint = ctx.getImageData(0, 0, fw, fh).data;                          // (nothing painted yet? then not yet: the picture comes in its own time)
+      let painted = false;
+      for (let i = 3; i < paint.length; i += 4) if (paint[i] > 0) { painted = true; break; }
+      if (!painted) return false;
+      this.painted = true;
+    }
     if (this.snap) ctx.drawImage(this.snap, fx0, fy0, fw, fh, 0, 0, fw, fh);
     for (const u of this.under) {
       if (typeof u === "string") {
@@ -2606,17 +3160,30 @@ class Portal extends Effect {
         ctx.globalAlpha = alpha;
         ctx.drawImage(img, num(u.x, 0) - fx0, num(u.y, 0) - fy0);
         ctx.globalAlpha = 1;
+      } else if (u && typeof u.fx === "string") {                            // ROAD-18E: a moving thing's pictures (a drive's), or one of its set pieces
+        const e = this.host.get(u.fx);
+        if (!e || typeof e.under !== "function") continue;
+        if (!e.under(ctx, fx0, fy0, u)) return false;
+        this.gens.set(u.fx, e.gen || 0);
       }
     }
     this.src = ctx.getImageData(0, 0, fw, fh).data;
     return true;
   }
+  /** ROAD-18E: has a moving thing it bends (`under`: { fx }) drawn a new picture since the paint was read? Then the paint is
+      read again, and the door drawn over it, in the same frame: the far road bends as it goes by. Parked, it is read once. */
+  moved() {
+    for (const u of this.under) if (u && typeof u.fx === "string") { const e = this.host.get(u.fx); if (e && (e.gen || 0) !== this.gens.get(u.fx)) return true; }
+    return false;
+  }
   picture(sprite, calm) {
     if (this.openK <= 0) return null;
+    const moved = this.fxUnder && !!this.src && this.moved();               // ROAD-18E: what it bends has moved on
+    if (moved) this.src = null;
     if (!this.src && !this.read()) return null;                             // (the backdrop is not painted yet: next frame)
     const fps = calm ? this.calmFps : this.fps, step = Math.floor((this.time * fps) / 1000), go = this.go;
     this.go = false;
-    if (this.step === null || (go && (this.dirty || step !== this.step || calm !== this.drawnCalm))) {    // (the first picture at once; after that, in its turn)
+    if (this.step === null || moved || (go && (this.dirty || step !== this.step || calm !== this.drawnCalm))) {    // (the first picture at once; after that, in its turn. ROAD-18E: or what it bends has moved on)
       this.step = step; this.drawnCalm = calm; this.dirty = false;
       this.render(step / fps, calm);
       this.pair.next().putImageData(this.out, 0, 0);

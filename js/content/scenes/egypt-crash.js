@@ -142,13 +142,13 @@ async function talkToLot(g) {
   }
   for (;;) {
     const pick = await g.choose([
-      { id: "boy", line: "egypt.ask.boy" },
-      { id: "horizon", line: "egypt.lot.ask.horizon", when: (g) => count(g, "egypt.lot.boy.2") > 0 },       // he has to have heard the word first
-      { id: "news", line: "egypt.lot.ask.news" },
+      { id: "boy", line: "egypt.ask.boy", clue: true, heard: "egypt.lot.boy.1" },
+      { id: "horizon", line: "egypt.lot.ask.horizon", clue: true, when: (g) => count(g, "egypt.lot.boy.2") > 0 },       // he has to have heard the word first
+      { id: "news", line: "egypt.lot.ask.news", clue: true },
       { id: "who", line: "egypt.lot.ask.who", when: (g) => !g.flag("egypt.knowsLot") },                      // told once
       { id: "week", line: "egypt.lot.ask.week", when: (g) => !!g.flag("egypt.knowsLot") && !count(g, "egypt.lot.week.1") },
-      { id: "bye", line: "egypt.lot.ask.bye" },
-    ]);
+      { id: "bye", line: "egypt.lot.ask.bye", exit: true },
+    ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "boy") await g.say("egypt.ask.boy", "egypt.lot.boy.1", "egypt.lot.boy.2", "egypt.lot.boy.3");
     else if (pick === "horizon") await g.say("egypt.lot.ask.horizon", "egypt.lot.horizon.1", "egypt.lot.horizon.2");
     else if (pick === "news") await g.say("egypt.lot.ask.news", "egypt.lot.news.1", "egypt.lot.news.2", "egypt.lot.news.3", "egypt.lot.news.4");

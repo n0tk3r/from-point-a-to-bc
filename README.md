@@ -14,7 +14,7 @@ In development. What is here now:
 - **A map of each place the story goes**, each the kind of map its own time would make: a scribe's sketch on papyrus for Egypt, a plan scratched in a wax tablet for Rome, Dad's pencil floor plan of the house, and Grandpa Joe's fold-out road map of Nevada. It shows where you have been and where everyone is, takes you back to any place you have already been, and is the way to switch to someone in another scene: across the centuries the game's emblem, a kitchen-timer dial, first turns notch by notch from one time to the other. <!-- MAP-15D -->
 - **Pixel-art people drawn by code**: each of the thirty-eight is a jointed figure that walks in eight directions, talks with its hands, reaches, bends and sits, and each stands, walks and gestures in a way of their own. There are no picture files of people. Ranger, who is a raccoon, is painted frame by frame.
 - **Depth**: people walk behind things and in front of them, round obstacles, and get smaller as they walk away.
-- **An intro movie** that runs into the title screen.
+- **An intro movie** that runs into the title screen: the camera follows the family's wagon down a desert highway at dusk, the road and the desert streaming past, stops by the POINT B sign while the wagon drives on into a hole in time, and the sign warps to POINT B.C. <!-- ROAD-18M -->
 - **Saved games**: autosave, three slots, and a save file you can download and load on any device.
 - **Sound**: music, effects and voices on separate sliders. The music is synthesized placeholder until real tracks are written. Dialogue is ready for recorded voices.
 - **The story so far**: a prologue, four acts, and the opening of a fifth. Each leads into the next, from the intro to the end of the demo:

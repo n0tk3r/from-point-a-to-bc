@@ -209,9 +209,45 @@
     "raw": "356e1c9dcaee3850c69e553af093db58afeab1f73f59b275ae01bf9847547e21",
     "keyed": "7d77cc3d569b323f925fd25bc3d2ae08e431f493d42794a7d1b9626a7b716a54"
    },
+   "drive-desert-l.png": {
+    "raw": "60c7974cd25702bd6ba8f2185678372971e8dc5f72b1b6cfc76f79a2afa622ff",
+    "keyed": "0814ee753519ec739f35a3a3e3ff2e866dc8e6f75eab758459f68c75e4e9f8f4"
+   },
+   "drive-desert-r.png": {
+    "raw": "8d5dbbc9b23778fdae25bdb6f16811a9112978ff6082de05b42ef4379457a53d",
+    "keyed": "c5f7590add42c6a53e10d13f38980cd5938e8f21fc55c35f1faccfb78ba5aa60"
+   },
+   "drive-far-l.png": {
+    "raw": "36a7feada46f9f4a2dd360b751b001ee52f33a2d461a7c457b698abc0b2e3e01",
+    "keyed": "72b3d7135326c72a99d6c1682c43729e30ddfd339bf62d7e249ec9c352357955"
+   },
+   "drive-far-r.png": {
+    "raw": "bfae4c95b34d727cba37c39d1e2eb20539d4ce4739c296b7125e5cff065bcf48",
+    "keyed": "8b9e716e44756c7b7e555b2cbe8e0e761b06b915cafba6fc068043b670ee999e"
+   },
+   "drive-road.png": {
+    "raw": "431e2386be4d70412ed45897c572ee3e2b5c75befb1c65ef3c0a82a4b25de1e9",
+    "keyed": "94f94c5752d41da821d42ffe6fd024eab996b1c4465926361b6231cb6bf319c7"
+   },
+   "drive-things.png": {
+    "raw": "765bc88755cb43c4dc0f85eb72e25cf864c17548af94f11afe0ab176535f25a2",
+    "keyed": "b6b7c97bbd31ea2a53d116c4e2f5f1b65372eafe838d7816ae038eeac7fe2195"
+   },
+   "light-glow.png": {
+    "raw": "83a19d5345a1e111b35127ea5dd7882939930f4f5b9b8f077e2ed2bf8473329c",
+    "keyed": "ca5c0422c3b06f562e1739dc0fd6a75a509bd2b5e6d902f45c0b8b8c81d599c9"
+   },
+   "light-shade.png": {
+    "raw": "866dcb7c28c16edfc828a1f491fc69552da0817f4eb235f6db18324588042e13",
+    "keyed": "632ff8f0891dc81f04fe3c8a05319a782ceb556a12a121864840351d161cbdf2"
+   },
    "sign-bc.png": {
     "raw": "99124a9775fcb3a3abb38e423b11e72e302b84136cfac51ca5db93f29a918de5",
     "keyed": "5830aa08bec82aaa3ed84331719a3c2d9fe37f0301b5a61bd2c847fc800f2dfb"
+   },
+   "sky.png": {
+    "raw": "b94d672f322afe0a50f1e20ffedbe604575ed3b647eb8c3e62856787fc7fcf3e",
+    "keyed": "1f8cf7a767d0a58ffaaa8903c5971611638d6d283c85499ffab01279dba4bf0d"
    },
    "sun.png": {
     "raw": "de4b1a7aa12b09e157397426fc69db50e3350ddc273d1dc13ba5a39c96e99e3d",
