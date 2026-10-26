@@ -54,6 +54,9 @@ import egypt_site_ground as ground
 LIGHT = (-0.78, -0.62)
 SKY = [(0.0, "#2a72c6"), (0.38, "#4a9ae0"), (0.68, "#86c6ec"), (0.86, "#cfe6e0"), (1.0, "#f8e6be")]      # the riverbank's sky
 CLOUDS = [(96, 226, 320, 150, 34), (30, 246, 150, 24, 7), (262, 104, 150, 40, 9)]
+# STAGE-19E (round nineteen, SCORE-19A egypt-site S1): the great cloud's half tone, light and brightest about 10 L*
+# lower (they were "#bcd0ea", "#fbf2de", "#fffcf0"), so that it stops out-shining the doorway and its pediment
+CLOUD_TONES = ("#86a6da", "#a9bedc", "#e6dbc6", "#efe6d4")
 QUEENS = [(36, 278, 29, 51), (88, 275, 24, 42), (130, 273, 19, 33)]                                    # middle x, base y, half width, height
 OUT = "out/egypt-site"
 
@@ -124,7 +127,7 @@ def under(seed=21):
     # ---- sky: the riverbank's sky, with one great heap of cloud standing behind the sunlit face
     pic = sky.field(shape, HZ, SKY, seed, haze="#fbeacc", patch=0.03)
     sky.wisps(pic, HZ, seed + 3, "#fdf0d8", top=0.55, amount=0.55)
-    sky.paint_clouds(pic, CLOUDS, seed + 5, tones=("#86a6da", "#bcd0ea", "#fbf2de", "#fffcf0"), light=LIGHT, ragged=13)
+    sky.paint_clouds(pic, CLOUDS, seed + 5, tones=CLOUD_TONES, light=LIGHT, ragged=13)
 
     # ---- far left: the hills across the river
     hills, hl = land.ridge(shape, [(0, 241), (50, 237), (110, 242), (190, 245), (300, 247)], HZ + 3, seed + 6, rough=1.8)
@@ -235,6 +238,30 @@ def under(seed=21):
 
 
 KITES = [(196, 58, 4.2), (214, 70, 3.2), (150, 96, 2.6)]                       # kites turning in the warm air (round four: the game flies them)
+
+
+def value_pass(pic, info, seed=21):
+    """STAGE-19E (round nineteen): the value pass SCORE-19A asked for (egypt-site S2, S3, S4, S9). The sand floor about
+    8 L* down from the plateau's lip toward us, so that the people (keyed warm and light) stand a level above it, and
+    its texture halved where people stand; the sunny spot (the shade puzzle's tee, PUZZLES-egypt #8) kept in full sun,
+    smooth and a little paler and warmer, so that it reads about 9 L* above the sand round it. Laid over the finished
+    picture (after the details), on the picture and on the picture as approved alike: nothing is drawn anywhere new."""
+    shape = pic.shape[:2]
+    x, y = grid(shape)
+    sand = info["sand"]
+    toward = step(0.0, 1.0, (y - 345) / 55.0)                                    # from the lip of the plateau (y 345) to y 400 and on toward us
+    floor = (sand * toward).astype(F32)
+    spot = (mask_ellipse(shape, SUNSPOT[0], SUNSPOT[1] - 1, 38, 14, soft=6, wobble=3, seed=seed + 58) * sand).astype(F32)
+    calm = np.zeros(shape, F32)                                                  # where people stand and walk most
+    for (mx, my) in list(MARKS.values()) + [(248, 464), (170, 545), (238, 506)]:
+        calm = np.maximum(calm, mask_ellipse(shape, mx, my, 46, 16, soft=12))
+    m = (calm * floor * 0.5)[..., None]
+    pic[...] = pic * (1 - m) + blur(pic, 2.2) * m
+    tint(pic, "#dbd7d2", (floor * (1 - spot)).astype(F32))                      # the floor down: a near-neutral glaze, about -8 L*
+    m = (spot * 0.75)[..., None]
+    pic[...] = pic * (1 - m) + blur(pic, 3.0) * m                                 # the tee swept smooth
+    over(pic, "#fbe6b4", (spot * 0.22).astype(F32))                              # and in full sun
+    return pic
 
 
 def details(pic, info, seed=21, as_approved=False):
@@ -436,7 +463,7 @@ def layout(fx=None):
         ],
         "exits": [{"to": "egypt-gallery", "shape": {"poly": [r(p) for p in door]}, "stand": r(at_door)},
                   {"to": "egypt-crash", "shape": {"poly": [[0, 520], [150, 540], [176, 600], [0, 600]]}, "stand": [130, 590]}],
-        "marks": {"dad": [170, 574], "scribe": list(MARKS["scribe"]), "overseer": list(MARKS["overseer"]), "hauler1": list(MARKS["hauler1"]), "hauler2": list(MARKS["hauler2"]),
+        "marks": {"dad": [170, 545], "scribe": list(MARKS["scribe"]), "overseer": list(MARKS["overseer"]), "hauler1": list(MARKS["hauler1"]), "hauler2": list(MARKS["hauler2"]),
                   "hauler3": list(MARKS["hauler3"]), "guard": list(MARKS["guard"]), "shadeHolder": r(SUNSPOT), "atDoor": r(at_door), "stairFoot": r(stair[0]), "stairTop": r(stair[-1])},
         "stair": [r(p) for p in stair], "landing": [r(p) for p in landing],
         "door": {"rect": bbox(door), "middle": r(backp(DOOR_OFF, DOOR_H * 0.5))},
@@ -468,9 +495,14 @@ if __name__ == "__main__":
         approved = pic.copy()
         details(approved, info, as_approved=True)                               # as approved, with the moving things painted in: for the palette
         details(pic, info)
+        value_pass(approved, info)                                              # STAGE-19E: the floor and the sunny spot (both alike)
+        value_pass(pic, info)
         Image.fromarray((np.clip(pic, 0, 1) * 255).astype(np.uint8)).save(OUT + "-2-back.png")
     planes = {"awning": things.awning_plane((H, W), fast), "sledge": things.sledge_plane((H, W), fast),
               "shade": things.shade_plane((H, W), fast), "front": things.front_plane((H, W), fast, cloud_shadow((H, W)))}
+    # STAGE-19E (SCORE-19A egypt-site S10): the waiting blocks in the near corner were the brightest large shape in the
+    # lower half; the cloud's shadow over that corner lies deeper on them now (about -18 L*), tools and all
+    shadow(planes["front"][0], np.ones((H, W), F32), 0.52, cool=0.08)
     whole = pic.copy()
     for name in ("awning", "sledge", "shade", "front"):
         c, a = planes[name]

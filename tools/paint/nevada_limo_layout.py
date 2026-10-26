@@ -82,9 +82,16 @@ def write(stA, stB, boxes, wins, cover):
     thing("clipboard", "the clipboard propped on the facing seat: the office's map in pen, three circles (44, 1921, and one under a smudge), a column of empty boxes",
           rect_xywh(boxes["clipboard-own"], 2), "atclipboard", plane="clipboard")
     thing("juice", "a juice box with a straw on the facing seat, a plain apple on its side", rect_xywh(boxes["juice-own"], 3), "atjuice", plane="juice")
-    thing("fridge", "the little fridge in the facing seat's base, at its near end: brushed steel, a chrome handle, a little blue light", rect_of(B, ["fridge"]), "atfridge")
+    # STAGE-19N (S9, S10): a hotspot a puzzle may need is at least 20 px tall (the guide's floor: about a head's width), grown
+    # down from where it is; and the fridge's area stops where the near seat back starts to cover it (y 498 there), so a click
+    # on the seat back is not a click on the fridge.
+    def tall(r, h=20):
+        return None if r is None else [r[0] - max(0, (22 - r[2]) // 2), r[1] - max(0, (h - r[3]) // 4), max(r[2], 22) if r[2] < 22 else r[2], max(r[3], h)]
+    def above(r, y):
+        return None if r is None else [r[0], r[1], r[2], min(r[3], y - r[1])]
+    thing("fridge", "the little fridge in the facing seat's base, at its near end: brushed steel, a chrome handle, a little blue light", above(rect_of(B, ["fridge"]), 498), "atfridge")
     thing("phone", "the car phone: a cream handset in its cradle on the bar under the divider, a coiled cord", rect_of(B, ["phone"], 2), "atphone")
-    thing("ashtray", "the ashtray on the bar: cut glass, full of jelly beans", rect_of(B, ["ashtray"], 2), "atashtray")
+    thing("ashtray", "the ashtray on the bar: cut glass, full of jelly beans", tall(rect_of(B, ["ashtray"], 2)), "atashtray")
     thing("window-l", "the windows on the left: long, low, smoked; the desert going by", rect_poly("L"), "atwindow-l", windows=[i for i, s, q in polys if s == "L"])
     thing("window-r", "the windows on the right: long, low, smoked; the desert going by", rect_poly("R"), "atwindow-r", windows=[i for i, s, q in polys if s == "R"])
     from nevada_limo import clip_poly
@@ -102,7 +109,7 @@ def write(stA, stB, boxes, wins, cover):
           poly=seat_poly(0.0, M.SEAT_D, M.LONG_SEAT[4], M.LONG_SEAT[5]))
     thing("facingseat", "the facing seat: gray leather, along the right side", rect_of(B, ["facingseat", "facing-back"]), "atbag",
           poly=seat_poly(M.W, M.W - M.SEAT_D, M.FACING_SEAT[4], M.FACING_SEAT[5]))
-    thing("belt", "a spare seatbelt's buckle end lying on the long seat's cushion (the belt round Joe is drawn on him)", rect_of(B, ["belt"], 3), "atbelt")
+    thing("belt", "a spare seatbelt's buckle end lying on the long seat's cushion (the belt round Joe is drawn on him)", tall(rect_of(B, ["belt"], 3)), "atbelt")
 
     joe = M.MARKS["joe"]
     jx, jy = fl(*joe)

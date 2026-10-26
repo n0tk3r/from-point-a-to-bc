@@ -296,7 +296,7 @@ Cut-Scene: Crash landing by the Nile        (opens the act)
 The wagon, nose-down in the sand, steaming. "Well. That's one expressway I won't be taking again."
 "Buddy? ... Buddy?" He was in the passenger seat a minute ago, or a thousand years from
 now. Then Dad sees them: small sneaker prints, going up the track toward the pyramid.
-"He's gone to see the biggest thing in sight. I'd be annoyed if I hadn't taught him that."
+"Off to see the biggest thing in sight. I taught him that."
 And then, where he stands, he bows his head: "Lord. I took a shortcut. You know that. You
 were in the car." "You know where he is. I don't even know when I am. Keep him till I get
 there. In Jesus' name. Amen." (The first of his three prayers.)
@@ -349,7 +349,7 @@ Plants/pays:  The ketchup packets he is saving. The shade and the mirror that he
               family's own, at home and in Nevada.
 Notes:        Afterwards: "Nothing left in there but ketchup packets. I'm saving those."
               The glovebox, shut: "The glovebox. The map's in there, with a few things I'm saving."
-              The map, put back: "It's never gone back in the way it came out. I'm not starting now."
+              The map, put back: "It's never gone back in the way it came out. Not starting now."
               The dazzle, once (round three): "Ow. The door mirror just put the sun in my eye.
               Objects in mirror are brighter than they appear." The window and the wagon are parts
               of the car, so nobody gets in without it. He gets out by the door or the bottom of the
@@ -367,7 +367,7 @@ Gives:        The reed.
 Teaches:      That things in the landscape can be taken, not only things in the car.
 Hints:        Said in the world: Lot, asked for news, says the scribe's pen has split (he has it from
               the men who come down for water); the scribe says so himself.
-              Hint button: "The scribe's pen has split. Something by the river might do for a new one."
+              Hint button: "The scribe's pen has split. A new one might grow by the river."
 Notes:        It can be cut before he has met anybody, as in the old act.
               With the reed in his pocket he parts the reeds and has a look: "Moses' mother put him
               in a basket. '...and she laid it in the flags by the river's brink.'" <!-- PASS-17E -->
@@ -427,7 +427,7 @@ Wrong tries:  The stair, with no pass -> the line above. "I'm more of a walk-in.
                                         nowhere I know."
 Solution:     Show the pass: click the entrance, the stair or the guard with the pass in his pockets,
               or use the pass on any of them. "The scribe's hand. I know it. It looks like geese in a
-              quarrel. You are on the list. Go up. If it hums at you, do not bring it down here."
+              quarrel. You are on the list. Go up. If it hums at you, do not bring it here."
 Gives:        The inside of the pyramid, from now on. (He keeps the pass.)
 Teaches:      That a way through can belong to a person.
 Hints:        Hint button: "I'm on the list, and I've got the pass to prove it. The guard at the stairs
@@ -466,8 +466,8 @@ Plants/pays:  "It is not a door. I know every door in the Horizon. I light them.
 ```
 Puzzle #7: The Flashlight        (Egypt · Lead: Dad · the burial chamber)
 Needs:        #5, and the flashlight from the trunk (which can be taken at any time)
-Setup:        "Bare wall, empty air, a clean ring swept on the floor. And a hum. Probably the wind."
-              The old goldsmith works on beside it: "WHAT HUM?"
+Setup:        "Bare wall, empty air. And a hum. Probably the wind."
+              The old goldsmith works on beside it: "What hum?"
 Wrong tries:  Touch it                -> "I knocked on the air. It's like knocking on a door from the
                                          wrong side. Nobody came."
               The flashlight on the goldsmith -> "Put it OUT. I have enough bright in here."
@@ -477,15 +477,15 @@ Solution:     Shine the flashlight at the place that hums. A round hole opens in
               his hand. "A hole in the air the size of a dinner
               plate. I am not the size of a dinner plate." He steps closer: "It shrinks every time I get
               close. I have the same effect on waiters." The batteries die and the hole goes with them.
-              "So that's the trick. Light opens it. A little light, a little door. More light, more
+              "That's the trick. Light opens it. A little light, a little door. More light, more
               door. And there's a whole sun going to waste outside."
 Gives:        The rule ("egypt.knowsLight"). From now on Dad will take the windshield shade out of the
               trunk and the mirror off the door.
 Teaches:      The rule of every door in the game.
 Hints:        Said in the world: the lamp boy (#6); the overseer, once Dad has heard the boy ("Then find
               a little sun. I have only the big one.").
-              Hint button: "A little sun in his hand: a flashlight. I packed one of those. And the wall
-              that hums is at the top of the gallery."
+              Hint button: "A little sun in his hand: a flashlight. I packed one. Try the wall that hums."
+              <!-- FINAL-19: REVIEW-19 -->
 Plants/pays:  Pays off #6, and the flashlight he packed "in case of a flat". Keeps the old act's two
               best lines exactly.
 Notes:        The dead flashlight stays in his pockets ("Dead. I've shaken it. Shaking is all I know
@@ -515,8 +515,7 @@ Gives:        The first stretch of the beam: from the site into the gallery, as 
 Teaches:      That a job can be somebody else's, at a price, and that the price is in another place.
 Hints:        Said in the world: Dad at the sunny spot ("I need a volunteer."); the guard ("I would hold it for
               something cold."); Dad, looking back down the track ("...the only cold drinks in Egypt.").
-              Hint button: "The windshield shade could throw the sun into that doorway, if somebody held
-              it. The guard looks thirsty."
+              Hint button: "Somebody has to hold the shade to throw sun in the doorway. The guard's thirsty." <!-- FINAL-19: REVIEW-19 -->
 Plants/pays:  Pays off the cooler. The guard complains of his arms for the rest of the act.
 Notes:        No dead end: a guard who is given a root beer before there is a shade to hold says "I owe
               you one holding. Of anything. Not heavy.", and pays it later. The cooler always has one more.
@@ -554,7 +553,7 @@ Setup:        The goldsmith owns a polished copper hand mirror and cannot stand 
               all. It shines AND it shows me my face."
 Wrong tries:  Ask to borrow it        -> "MY SORROW? Yes. That mirror. I check the gold in it, and it
                                          checks my face. Leave it be."
-              A root beer             -> "GOOD BEER? ... No. Somebody has played a trick on beer."
+              A root beer             -> "Beer? ... No. Somebody has played a trick on beer."
               The door mirror         -> "ANOTHER mirror? Is this a joke? Who sent you?"
 Solution:     Give him the sunglasses from the suitcase. "Oh. ... Oh, that is kind. The whole world has
               gone the color of good beer. I never want to see a shining thing again. That mirror least
@@ -586,7 +585,8 @@ Teaches:      That the three jobs can be done in any order, and the game keeps u
 Hints:        Hint button: "The copper mirror goes on the top step of the gallery. One more corner, and
               the light's in the chamber." <!-- PASS-17E -->
 Notes:        Done before the beam reaches it: "It's reflecting the dark beautifully. The daylight
-              hasn't made it this far up."
+              hasn't made it this far up." The mirror can be used on the step or on the doorway just
+              above it (STAGE-19E: the step's area is 20 px deep now, and the doorway takes it too).
 ```
 
 ```
@@ -603,9 +603,10 @@ Setup:        Whichever reflector goes in last, Dad says the beam is through ("T
 Solution:     Go through it. He steps up to it, and with the hole in time in front of him he says
               Psalm 90:4, once: "'For a thousand years in thy sight are but as yesterday when it is
               past, and as a watch in the night.'" "Moses wrote that. Show-off." <!-- PASS-17E -->
-              "Long gone, or not born yet. I'm still working out the tenses." "Either way, a thousand
-              years is yesterday to Him. Then He knows right where my boy is." And then the old
-              line: "Hold on, buddy. Dad's taking the next shortcut."
+              "Either way, a thousand years is yesterday to Him. He knows where my boy is." He stops
+              there, and after a moment he is the player's again. <!-- STAGE-19E --> "Go through" once
+              more, and the old line: "Hold on, buddy. Dad's taking the next shortcut." He walks into
+              the door as the picture fades.
 Gives:        The end of the act.
 Hints:        Hint button: "The door is holding still now. Time to go through it."
 Notes:        If the player later switches back to Dad, he is still there: "Not until I know where it
@@ -615,7 +616,7 @@ Notes:        If the player later switches back to Dad, he is still there: "Not 
 ```
 Cut-Scene: Meanwhile        (closes the act)
 ```
-The picture fades on Dad at the door. A card: "Meanwhile", "nearly nineteen hundred
+The picture fades on Dad stepping into the door (STAGE-19E: mid-stride). A card: "Meanwhile", "nearly nineteen hundred
 years later" (from 1921 B.C. to 44 B.C. is 1,877 years, by the Bible's count). The time
 tunnel, and the story is the Son's, on the steps of a temple in Rome (`rome-steps`, Act
 Two).
@@ -668,39 +669,35 @@ settles it. And he prays, three times and no more, the way he talks.
 
 The arrival, after "I'd be annoyed if I hadn't taught him that":
 > "Lord. I took a shortcut. You know that. You were in the car."
-> "You know where he is. I don't even know when I am. Keep him till I get there. In Jesus' name. Amen."
+> "You know where he is. I don't know when I am. Keep him. In Jesus' name, amen."
 
 The reeds, after "I never bring pens back":
-> "Moses' mother put him in a basket. '...and she laid it in the flags by the river's brink.'" <!-- PASS-17E -->
+> "Moses' basket. '...and she laid it in the flags by the river's brink.'" <!-- PASS-17E -->
 > "Flags are reeds. So I looked. No basket. I'm early, or I'm late."
 
 The river, after "I'm calling it: the Nile":
-> "So this is the Egypt in my Bible. Abraham came down here in a famine."
-> "Joseph was sold here and ended up running it. Moses was born here."
-> "Any one of them could come round that bend. Or not for a thousand years."
-> "I should have looked at the dates in the back of my Bible. I always go straight to the maps."
+> "The Egypt in my Bible. Abraham, Joseph, Moses. Any of them, round that bend."
+> "Or not for a thousand years. I always skip to the maps."
 
 The pyramids, the third time he looks:
-> "I wonder who's stood right here and looked at those. Abraham, maybe. Or not yet." <!-- PASS-17E -->
+> "I wonder who's looked at those from right here. Abraham? Not yet, maybe." <!-- PASS-17E -->
 
 The mud bricks. He lifts one, and half remembers; then he looks up at the pyramid:
-> "Bricks for Pharaoh. I know this one. The Israelites made the bricks, and here's the brickyard."
-> "Except these are for the steps. The job is that hill, and that hill is stone."
-> "In the Bible the bricks were for 'treasure cities, Pithom and Raamses.' Cities." <!-- PASS-17E -->
-> "Not one word about them building a pyramid. I've been wrong about this since Sunday school." <!-- PASS-17E -->
+> "Bricks for Pharaoh. I know this one: the Israelites made them."
+> "That's stone. The Bible's bricks were for 'treasure cities, Pithom and Raamses.'" <!-- PASS-17E -->
+> "Not one word about building a pyramid. Wrong since Sunday school." <!-- PASS-17E -->
 
 The doorway:
 > "Lord, it's dark in there, and it hums. That's exactly where he'd go."
 > "Go in ahead of me. I'll follow. For once. Amen."
 
 The door opens. After the goldsmith's "I am wearing the night":
-> "Thank You, Lord. A windshield shade, a root beer and two mirrors. I know who did the rest."
+> "Thank You, Lord. A shade, a root beer, two mirrors. I know who did the rest."
 
 At the door, before "Hold on, buddy. Dad's taking the next shortcut":
 > "'For a thousand years in thy sight are but as yesterday when it is past, and as a watch in the night.'"
 > "Moses wrote that. Show-off." <!-- PASS-17E -->
-> "Long gone, or not born yet. I'm still working out the tenses."
-> "Either way, a thousand years is yesterday to Him. Then He knows right where my boy is."
+> "Either way, a thousand years is yesterday to Him. He knows where my boy is."
 
 **The rules it keeps** (`briefs/out/check-egypt.mjs` holds the act to each of them):
 
@@ -786,20 +783,20 @@ week from the Egyptian side (the Great House, the sickness, the hurry), told as 
 Egyptian would, from outside, by a man with no idea whom he is talking about; and Dad,
 who has met the man's nephew, knows more than he does:
 
-> SCRIBE: "Only the grain account. There is famine across the desert, and its herdsmen have come down to eat our grain."
-> SCRIBE: "One of them is rich. Flocks as far as you can see. Abram, by name. He brought his sister."
+> SCRIBE: "Only grain. Famine has sent the desert herdsmen down to eat ours."
+> SCRIBE: "One of them is rich. Abram, by name. He brought his sister."
 > DAD: "Abram. I've met his nephew."
-> SCRIBE: "She is very fair. The king's princes praised her to him, and she was taken into the Great House."
+> SCRIBE: "She is very fair. She was taken into the Great House."
 > DAD: "The Great House. That's what 'Pharaoh' means. I read that in a footnote."
-> SCRIBE: "The king has been good to him for her sake. Sheep, oxen, asses, servants, camels. Every one went through my accounts."
-> SCRIBE: "Then a sickness fell on the Great House. And now the word is that she is his WIFE."
-> DAD: "And now the king's sending him away. Him, his wife, and everything he owns."
-> SCRIBE: "Today, in a hurry, with the king's men to see him out of the country. How do you know? It is written nowhere."
+> SCRIBE: "Sheep, oxen, asses, camels. The king's gifts, all through my accounts."
+> SCRIBE: "Then a sickness fell on the Great House. Now they say she is his WIFE."
+> DAD: "And the king's sending him away. Him, his wife, everything he owns."
+> SCRIBE: "Today, with the king's men. How do you know? It is written nowhere."
 > DAD: "Not yet."
 
 He looks back down the track, toward the river:
 
-> "And down by the river his nephew's waiting for the king's men, and praying. For my boy, among other things."
+> "His nephew's down by the river, praying. For my boy, among other things."
 
 The news is told once; it is no puzzle, the Hint button never sends him to it, and a
 player who never asks Lot who he is never hears it, from either of them. How it keeps
@@ -835,10 +832,10 @@ the reeds, the pyramids and the open door stands as it was. After it:
 
 | Where | Before Lot tells him | After it |
 | --- | --- | --- |
-| The river, looked at a second time | `egypt.river.bible.1` to `.4` (he wonders) | `egypt.river.after.1` to `.3`, once, even if he wondered before: "Abram's in Egypt this week. Right where my Bible said he'd be." "Joseph's still to come, and Moses after him. Most of the book hasn't happened yet." <!-- PASS-17E --> "Turns out I didn't need the dates in the back of my Bible. I needed his nephew." |
+| The river, looked at a second time | `egypt.river.bible.1` to `.4` (he wonders) | `egypt.river.after.1` to `.3`, once, even if he wondered before: "Abram's in Egypt this week. Joseph and Moses are still to come." "Joseph's still to come, and Moses. Most of the book hasn't happened." <!-- PASS-17E --> "I didn't need the dates in the back of my Bible. I needed his nephew." |
 | The reeds, when he takes his reed | `egypt.reeds.basket.2`: "...No basket. I'm early, or I'm late." | `egypt.reeds.basket.3`: "Flags are reeds. So I looked. No basket. I'm early." <!-- PASS-17E --> |
-| The pyramids from the bank, the third look | `egypt.pyramids.look3`: "I wonder who's stood right here and looked at those. Abraham, maybe. Or not yet." <!-- PASS-17E --> | `egypt.pyramids.look3b`: "I wonder if Abram stood where I'm standing and looked at those. This week, he could have." |
-| The open door, after Psalm 90:4 and its heading | `egypt.gate.psalm.3`, `.4`: "Long gone, or not born yet. I'm still working out the tenses." | `egypt.gate.psalm.3b`, `.4b`: "And he isn't even born yet. I've finally got the tenses worked out." <!-- PASS-17E --> "A thousand years is yesterday to Him. Then He knows right where my boy is." |
+| The pyramids from the bank, the third look | `egypt.pyramids.look3`: "I wonder who's looked at those from right here. Abraham? Not yet, maybe." <!-- PASS-17E --> | `egypt.pyramids.look3b`: "Abram could've stood right here and looked at those. This week." |
+| The open door, after Psalm 90:4 and its heading | `egypt.gate.psalm.4`: "Either way, a thousand years is yesterday to Him. He knows where my boy is." (`egypt.gate.psalm.3`, the tenses again, went in round nineteen <!-- PASS-19E -->) | `egypt.gate.psalm.3b`, `.4b`: "And he isn't even born yet. I've got the tenses worked out." <!-- PASS-17E --> "A thousand years is yesterday to Him. He knows right where my boy is." |
 
 **General Feathers.** Little Sister's favourite: a white hen, well worn, one blue button
 eye, a paper medal "for bravery", five times through the wash. She sent her along in
@@ -849,9 +846,9 @@ kit's `paper` and `print`: she is seven and has the best handwriting in the fami
 every letter is the same height and stands straight on the rule):
 `DADDY. GENERAL FEATHERS IS IN CHARGE. DO WHAT SHE SAYS.`
 
-> "And under the shirts, General Feathers. With orders. In crayon, in the neatest hand in the family."
-> "My youngest sent her to keep an eye on me. She's seven. She has concerns about my driving."
-> "Good to have you aboard, General. The boy's gone on ahead. I'll brief you on the way."
+> "And under the shirts, General Feathers. With orders. In crayon."
+> "My youngest sent her to watch me. She has concerns about my driving."
+> "Welcome aboard, General. The boy's gone ahead."
 
 She is a carried thing (`chicken`, "General Feathers" on screen) that no puzzle needs.
 Everybody opens the suitcase, because the sunglasses are needed, so nobody misses her.
@@ -865,14 +862,14 @@ Feathers. She's in charge.") and five of them answer once, in their own way:
 
 | Who | What he says |
 | --- | --- |
-| Lot | "I keep flocks and herds, and I would not know whether to shear her, milk her, or follow her." |
-| Scribe | "There is no sign for that bird. I cannot write her down. So, officially, she is not here." |
-| Guard (at the stair, or holding the shade) | "She does not move. She does not speak. She has no arms. I do not see how she is in charge." DAD: "She delegates." |
+| Lot | "I would not know whether to shear her, milk her, or follow her." |
+| Scribe | "There is no sign for that bird. So, officially, she is not here." |
+| Guard (at the stair, or holding the shade) | "She does not move. She has no arms. I do not see how she is in charge." DAD: "She delegates." |
 | Lamp boy | "What does she eat? Everything I look after goes hungry, if I let it." DAD: "She's stuffed." |
-| Goldsmith | (mishearing "General") "A MEDAL? Yes. Paper and a ribbon. It does not shine at all. Whoever made it, I would take on." |
+| Goldsmith | (mishearing "General") "A medal. Paper and ribbon. It does not shine. I would hire its maker." |
 
 The overseer and the haulers, and anybody shown her a second time, get Dad's stock reply:
-"Nobody here has ever seen a bird like her. She's taking it well."
+"Nobody here's seen a bird like her. She's taking it well."
 
 **The geese.** Lot's news ends: "And the geese on the bank have faced the Horizon since
 the hum began. When a flock all faces one way, something is there." (Chickens know;
@@ -880,9 +877,8 @@ here, geese are filling in, and a herdsman notices. Nobody explains it.)
 
 **Seashells in the stone.** The masons' tools at the site, looked at a second time, once:
 
-> "The chips off their stone are full of little round shells, like coins. Seashells. In the desert."
-> "The Flood went over every hill there is. They're building with what it left behind." <!-- PASS-17E -->
-> "And Noah's grandson settled this country. So technically, everybody here is my cousin." <!-- PASS-17E -->
+> "The stone chips are full of little shells. Seashells. In the desert."
+> "Noah's grandson settled Egypt. Technically, everybody here's my cousin." <!-- PASS-17E -->
 
 **What answers what, now.** "I don't even know when I am" (the first prayer) is answered
 by Lot's story and Dad's "Now I know when I am". "I'm still working out the tenses" (the
@@ -923,67 +919,61 @@ areas, of which one shows at a time.
 **The conversation.** His first words, the first time (the exchange about the horses is
 the old act's, and Dad's line in it is kept word for word):
 
-> LOT: "You came down out of the sky in a red box. No ox was pulling it. No donkey. Nothing."
+> LOT: "You came down out of the sky in a red box. No ox. No donkey. Nothing."
 > DAD: "It has a hundred and forty horses. They're resting."
-> LOT: "Then let them rest. Since my uncle left Haran at the word of the LORD, I have stopped asking how anybody arrives."
+> LOT: "Let them rest. Since the LORD called my uncle, I ask nobody how they got here." <!-- FINAL-19: REVIEW-19 -->
 
 Then Dad's questions, as the choices come:
 
 | Dad asks | Offered | Lot |
 | --- | --- | --- |
-| "Have you seen a boy? About this tall, asks a lot of questions?" | always | "A small one in strange sandals passed me and went up the track, asking everyone where the 'wy-fy' was." "I told him I did not know it. If the Egyptians have one, it is up at their Horizon. They keep everything there." DAD: "That's him. He asks that everywhere. It's how he says hello." |
-| "What's this Horizon everybody's at?" | once he has heard the word | "The great white one, up the track. It is their king's tomb. The Egyptians call it the Horizon of Khufu." DAD: "A pyramid called Horizon. Finally, one I can actually reach." |
-| "Anything I should know before I go up? And this isn't me asking for directions." <!-- PASS-17E --> | always | "Those who come down for water say a wall inside the Horizon has begun to hum, and the haulers have put down the rope." "And their scribe's pen has split, so he can write nobody onto his list. To hear them, the sky has fallen." DAD: "A humming wall and a paperwork problem. I've had Mondays like that." LOT: "And the geese on the bank have faced the Horizon since the hum began. When a flock all faces one way, something is there." |
+| "Have you seen a boy? About this tall, asks a lot of questions?" | always | "A small one in strange sandals went up the track, asking for the 'wy-fy'." "If the Egyptians have one, it is at their Horizon. They keep everything there." DAD: "That's him. He asks that everywhere. It's how he says hello." |
+| "What's this Horizon everybody's at?" | once he has heard the word | "The great white one. Their king's tomb: the Horizon of Khufu." DAD: "A pyramid called Horizon. Finally, one I can actually reach." |
+| "Anything to know before I go up? This isn't asking for directions." <!-- PASS-17E --> | always | "Those who come for water say a wall in the Horizon has begun to hum." "Their scribe's pen has split. He can write nobody onto his list." DAD: "A humming wall and a paperwork problem. I've had Mondays like that." LOT: "Since the hum began, the geese on the bank all face the Horizon." |
 | "Who are you, if you don't mind my asking?" | until he has said | his story, below |
-| "So what brings you down to the river? You look like a man waiting for a ride." | once he has said who he is; once | the week, below |
-| "Well. I've got a hill to climb and a boy to ground." | always | the first time after his story: the parting, below. Any other time: "Go in peace, and walk slowly. Everything up there has already gone wrong. You cannot be late." |
+| "What brings you to the river? You look like a man waiting for a ride." | once he has said who he is; once | the week, below |
+| "I've got a hill to climb and a boy to ground." | always | the first time after his story: the parting, below. Any other time: "Go in peace. Everything up there has already gone wrong. You cannot be late." |
 
 **Who he is.** His own memory, in his own words:
 
-> LOT: "Lot, the son of Haran. My father died in Ur of the Chaldees, before his own father, Terah."
-> LOT: "Terah took my uncle Abram, and Sarai his wife, and me, out of Ur for Canaan. We stayed at Haran, and Terah died there."
-> DAD: "Ur of the Chaldees. I've only ever seen that on a map in the back of my Bible."
-> LOT: "The LORD had told my uncle to leave his country and his father's house, for a land He would show him." <!-- PASS-17E -->
-> LOT: "He promised to make of him a great nation, and that in him all the families of the earth would be blessed."
-> LOT: "My uncle was seventy and five years old. He went, as the LORD had told him, and I went with him."
-> LOT: "In Canaan he built an altar at Sichem, and another by Bethel, and there he called on the LORD." <!-- PASS-17E -->
-> LOT: "Then came a grievous famine, and we went down into Egypt. Now I have flocks and herds and tents of my own." <!-- PASS-17E -->
+> LOT: "Lot, son of Haran. My father died in Ur of the Chaldees, before his own father."
+> LOT: "Grandfather Terah took my uncle Abram, Sarai and me out of Ur. He died at Haran."
+> DAD: "Ur of the Chaldees. I've only seen that on the maps in my Bible."
+> LOT: "The LORD called my uncle to a land He would show him. At seventy-five, he went." <!-- PASS-17E -->
+> LOT: "He built altars to the LORD in Canaan. Then famine brought us down into Egypt." <!-- PASS-17E -->
 
 And Dad understands: he looks out over the river and says it to himself
 (`egypt.heardAbram` is set here now):
 
-> "Abram. Egypt. A famine. ...I'm standing in Genesis. Now I know when I am." <!-- PASS-17E -->
-> "Still Abram. Not Abraham yet. And no son yet. He'll have one. I've read ahead." <!-- PASS-17E -->
-> "God told him every family on earth would be blessed through him. ...I'm going to need that to include mine." <!-- PASS-17E -->
+> "Abram, not Abraham yet. Egypt. A famine. ...I'm standing in Genesis." <!-- PASS-17E -->
+> "God promised every family on earth a blessing through him. Mine too, please." <!-- PASS-17E --> <!-- FINAL-19: REVIEW-19 -->
 
 **The week.** Briefly, as a man tells what has happened to his family, judging nobody:
 
-> LOT: "When we came into Egypt, the king's princes praised my uncle's wife to the king, and she was taken into his house."
-> LOT: "The king was good to my uncle for her sake: sheep, oxen, asses, servants, and camels. I had never seen a camel."
-> LOT: "Then the LORD struck the king and his house with great plagues, because of Sarai, and the king gave her back."
-> LOT: "Today his men send us out of Egypt with all that we have. So I wait here for them, and I pray."
+> LOT: "The king took my uncle's wife into his house, and was good to him for her sake."
+> LOT: "Then the LORD struck his house with plagues. Today his men send us out of Egypt."
 > DAD: "I'd heard something like that."
 > LOT: "Then the story has gone farther than we have."
 
 **The parting** (the first time after his story): a father who has lost his boy, and a
 man whose uncle has no son yet and has been promised a nation.
 
-> DAD: "Well. I've got a hill to climb and a boy to ground."
-> LOT: "Your boy. My uncle has no son at all, and the LORD has promised him a great nation."
-> DAD: "A nation coming, and not one son yet. I've got one son, and I've mislaid him."
-> LOT: "Then you are both waiting on a son. Yours, at least, is already walking."
+> DAD: "I've got a hill to climb and a boy to ground."
+> LOT: "My uncle has no son. And the LORD has promised him a great nation."
+> DAD: "A nation, and not one son yet. I've got one, and I've mislaid him."
+> LOT: "Then you are both waiting on a son. Yours is already walking."
 > DAD: "I'd give a lot to go and shake your uncle's hand."
 > DAD: "But I've got a boy to find."
 > LOT: "Then go and find him. But first, let me ask for him."
 
 He lifts his hands, and Dad bows his head beside him:
 
-> LOT: "LORD, the God of my father's brother Abram: the boy has gone up the track. Keep him, until his father comes to him."
+> LOT: "LORD, the God of my father's brother Abram, keep the boy until his father comes."
 > DAD: "Amen."
 
 Both are themselves again, and then:
 
-> DAD: "Thank you. I asked Him the same thing when I landed. It's good to hear somebody else ask."
+> DAD: "Thank you. I asked Him that when I landed. Good to hear someone else ask."
 
 **The rest.** Looked at, before his prayer for the boy: "A man sitting in the shade,
 praying. My car fell out of the sky in front of him, and he didn't lose his place." After
@@ -1066,7 +1056,7 @@ else there, the low sun off the mirror catches him in the eye: a flash at the gl
 shaft of light to his face, a burst at his eyes. He flinches and turns from it, and says
 so, once (`egypt.dazzled`):
 
-> "Ow. The door mirror just put the sun in my eye. Objects in mirror are brighter than they appear."
+> "Ow. Sun off the mirror. Objects in mirror are brighter than they appear."
 
 Then he turns back to the car and does what he came to do. The glovebox is part of the
 car and the first puzzle, so nobody misses it; and it comes long before #9 needs the
@@ -1123,14 +1113,14 @@ scribe's news (`egypt.scribe.news.11`). Dropped: all twenty-nine of the carrier'
 
 | Line | Was | Is |
 | --- | --- | --- |
-| `egypt.river.after.3` | "...I needed a scribe." | "Turns out I didn't need the dates in the back of my Bible. I needed his nephew." |
-| `egypt.donkey.look` | "A donkey with three water jars. Low mileage, runs on hay, never needs a jump." | "A donkey having a long drink. Low mileage, runs on hay, never needs a jump." (the painter took the third jar away) |
-| `egypt.donkey.look2` | "Donkey the donkey. These are my kind of people." | "He's been drinking since I landed. Wherever he's headed, he's not starting it thirsty." |
+| `egypt.river.after.3` | "...I needed a scribe." | "I didn't need the dates in the back of my Bible. I needed his nephew." |
+| `egypt.donkey.look` | "A donkey with three water jars. Low mileage, runs on hay, never needs a jump." | "A donkey. Low mileage, runs on hay, never needs a jump." (the painter took the third jar away) |
+| `egypt.donkey.look2` | "Donkey the donkey. These are my kind of people." | "Drinking since I landed. Wherever he's headed, he won't be thirsty." |
 | `egypt.abram.4` | "I'd give a lot to go and shake that man's hand." | "I'd give a lot to go and shake your uncle's hand." (said to Lot) |
-| `egypt.site.water.look` | "...The old man's delivery. He's the only one here on schedule." | "Water jars, by the road from the river. Somebody carried those up full. I get winded carrying a cooler." |
+| `egypt.site.water.look` | "...The old man's delivery. He's the only one here on schedule." | "Water jars, carried up from the river. I get winded with a cooler." |
 | `egypt.scribe.news.3` | "Abram. That rings a bell." | "Abram. I've met his nephew." |
-| `egypt.scribe.news.6` | "...Sheep, oxen, asses, servants. All out of my stores." | "The king has been good to him for her sake. Sheep, oxen, asses, servants, camels. Every one went through my accounts." |
-| `egypt.scribe.news.9` | "This morning, in a hurry, ..." | "Today, in a hurry, with the king's men to see him out of the country. How do you know? It is written nowhere." |
+| `egypt.scribe.news.6` | "...Sheep, oxen, asses, servants. All out of my stores." | "Sheep, oxen, asses, camels. The king's gifts, all through my accounts." |
+| `egypt.scribe.news.9` | "This morning, in a hurry, ..." | "Today, with the king's men. How do you know? It is written nowhere." |
 
 ## Round four: everything that moves, and the people's own lives
 
@@ -1196,7 +1186,7 @@ the label reads "Get into driver's seat"; it is where the glovebox's area was, a
 door mirror's area lies over its lower front corner, as the mirror does. Looked at,
 before he has the map and after it:
 
-> "The window's down. Wheel, dash, and the glovebox, where my map is being wrong in private."
+> "Window's down. My map's in the glovebox, being wrong in private."
 > "Window's down to let the heat out. The heat has other plans."
 
 The wagon itself does what the window does ("Get in wagon"), so that no click on the car
@@ -1210,7 +1200,7 @@ He walks to the driver's door (642, 563), faces it and reaches for the handle; t
 sounds, the picture fades, and he is in the driver's seat. It is the same era, so there
 is no card, and the door is never seen open. The first time (`egypt.sawCar`):
 
-> "The driver's seat. Hot as a skillet, and still the only seat in Egypt that fits me."
+> "Hot as a skillet. Still the only seat in Egypt that fits me."
 
 He gets out by the door ("Open door") or by the bottom of the picture, anywhere along it
 ("Go out of the wagon"): the latch, the fade, and he is standing at his door outside, on
@@ -1255,21 +1245,21 @@ be clicked along it.
 
 | Thing | Label | Look | Use, and things tried on it |
 | --- | --- | --- | --- |
-| `windshield` | Wipe windshield | "A windshield full of sand. She parked nose first. I've parked worse." and "Past the sand, a river and no traffic. Best parking space I've ever found.", in turn | "I gave the glass a wipe. The sand's on the other side. It always is." |
-| `visor` | Pull down sun visor; once down, Look at sun visor | Up: "The sun visor. My youngest tucked something behind it. I'm not to look while I'm driving." Down: "And the registration. Paid up through next spring. I'll explain the gap." | Up: a click, and it is down and stays down (`egypt.visorDown`), the drawing showing: "Her drawing. The five of us, the wagon, and the General up on the roof." "She drew me the biggest. Hang on, you three. We're making good time." Down: as the look |
-| `rearview` | Adjust rearview mirror | "The rearview mirror. It's all sky back there. She's standing on her nose." | "I tipped it down. Sky. I tipped it up. More sky. I'm leaving it." Once he knows what light does (`egypt.knowsLight`): "It's glued to the windshield. It's the one on the door that comes off." |
+| `windshield` | Wipe windshield | "Sand. She parked nose first. I've parked worse." and "A river and no traffic. Best parking space I've ever found.", in turn | "I wiped the glass. The sand's on the other side. It always is." |
+| `visor` | Pull down sun visor; once down, Look at sun visor | Up: "My youngest tucked something behind the visor. Not while I'm driving." Down: "The registration. Paid up through next spring. I'll explain the gap." | Up: a click, and it is down and stays down (`egypt.visorDown`), the drawing showing: "Her drawing. The five of us, the wagon, and the General on the roof." "She drew me the biggest. Hang on, you three. We're making good time." Down: as the look |
+| `rearview` | Adjust rearview mirror | "All sky back there. She's standing on her nose." | "Tipped it down. Sky. Tipped it up. More sky. I'm leaving it." Once he knows what light does (`egypt.knowsLight`): "Glued to the windshield. The door one's the one that comes off." |
 | `freshener` | air freshener (looked at only) | "'New Car Smell.' She's older than two of my kids. Nobody's fooled." | A click looks |
-| `door` | Open door | "My door. Out there, Egypt. In here, the one thing in Egypt I understand." | He gets out (the latch; nothing is said) |
-| `manual` | Read owner's manual | "The owner's manual, in the door pocket. Read to the middle, like all my manuals." | "I've read the first half. Time travel must be in the second." |
-| `seat` | Look under passenger seat | "His seat. Six wrappers, one sock, no boy. He travels light and leaves heavy." | "Half a pack of gum under his seat, stuck to the carpet. That's a problem for later." (He leaves it there.) General Feathers on it: "I sat the General in his seat. She says it's sticky. She's right." |
-| `glovebox` | Open glovebox; once open, Search glovebox | <!-- CAR-13S --> While the map is in it: "The glovebox. The map's in there, with a few things I'm saving." Once the map is in his pockets, shut or open: "Nothing left in there but ketchup packets. I'm saving those." (So a game saved before round thirteen with the map already taken never hears "The map's in there".) | Shut: a clunk, the door drops open on the map (`egypt.gloveOpen`), a beat, "There's a road map in the glovebox. Three states, zero centuries.", and the map is his (`egypt.hasMap`). Open: "Nothing left in there but ketchup packets. I'm saving those." The map on it: "It's never gone back in the way it came out. I'm not starting now." |
-| `cupholder` | Pick up slushie | "His slushie. He said the sky was doing the thing his slushie does. I said weather. I stand by weather." | "I'm leaving it for him. He's never finished one. He likes to be asked." The root beer on it: "That holder's his. Mine rides in my shorts." |
-| `wheel` | Turn steering wheel | "Both hands on the wheel, the whole way. I'd like that on the record." | "I turned the wheel. The front end's in a dune. It didn't get the message." |
-| `radio` | Turn on radio | "A tape in the deck: a musical my wife taped off the radio, with the traffic report in the big song." | A hiss of static, then "Static from one end of the dial to the other. It's a quiet century." |
-| `gauges` | Tap gauges | "Two hundred thousand and six miles on her. The last one was a long one." | "I tapped the temperature gauge. It stayed in the red. So it isn't the gauge." |
-| `horn` | Honk horn | "The horn. It's a little flat. My wife says the same about me." | The first time, the horn, then "I don't raise my voice. That's what the horn is for." After that, no sound: "Once is hello. Twice is rude. There's a man sitting quietly out there." |
-| `gears` | Shift gear lever | "P, R, N, D and L. Nothing marked B.C. I'd have noticed." | A click, then "It's in Park, and it's staying in Park. Park has never once let me down." |
-| `key` | Turn car key | "The key's in. I'm not worried. Car thieves haven't been invented." | The starter grinds and gives up, then "I turned the key. She made the noise she makes when I bring up the transmission." (the wagon's old line, moved here) |
+| `door` | Open door | "Out there, Egypt. In here, the one thing in Egypt I understand." | He gets out (the latch; nothing is said) |
+| `manual` | Read owner's manual | "The owner's manual. Read to the middle, like all my manuals." | "I've read the first half. Time travel must be in the second." |
+| `seat` | Look under passenger seat | "Six wrappers, one sock, no boy. He travels light and leaves heavy." | "Half a pack of gum, stuck under his seat. A problem for later." (He leaves it there.) General Feathers on it: "The General's in his seat. She says it's sticky. She's right." |
+| `glovebox` | Open glovebox; once open, Search glovebox | <!-- CAR-13S --> While the map is in it: "The glovebox. The map's in there, with a few things I'm saving." Once the map is in his pockets, shut or open: "Nothing left in there but ketchup packets. I'm saving those." (So a game saved before round thirteen with the map already taken never hears "The map's in there".) | Shut: a clunk, the door drops open on the map (`egypt.gloveOpen`), a beat, "There's a road map in the glovebox. Three states, zero centuries.", and the map is his (`egypt.hasMap`). Open: "Nothing left in there but ketchup packets. I'm saving those." The map on it: "It's never gone back in the way it came out. Not starting now." |
+| `cupholder` | Pick up slushie | "He said the sky did the slushie thing. I said weather. I stand by weather." | "Leaving it for him. He's never finished one. He likes to be asked." The root beer on it: "That holder's his. Mine rides in my shorts." |
+| `wheel` | Turn steering wheel | "Both hands on the wheel, the whole way. On the record." | "The front end's in a dune. It didn't get the message." |
+| `radio` | Turn on radio | "A musical my wife taped off the radio, traffic report and all." | A hiss of static, then "Static, end to end. It's a quiet century." |
+| `gauges` | Tap gauges | "Two hundred thousand and six miles. The last one was a long one." | "Tapped the gauge. Still in the red. So it isn't the gauge." |
+| `horn` | Honk horn | "The horn. It's a little flat. My wife says the same about me." | The first time, the horn, then "I don't raise my voice. That's what the horn is for." After that, no sound: "Once is hello. Twice is rude. A man's sitting quietly out there." |
+| `gears` | Shift gear lever | "P, R, N, D and L. Nothing marked B.C. I'd have noticed." | A click, then "It's staying in Park. Park has never once let me down." |
+| `key` | Turn car key | "The key's in. Car thieves haven't been invented." | The starter grinds and gives up, then "She made the noise she makes when I bring up the transmission." (the wagon's old line, moved here) |
 
 Anything else tried on anything in the car gets Dad's stock reply, as everywhere in the
 act. The driver's seat is under him and out of the picture: the arrival line is his word
@@ -1527,9 +1517,9 @@ the gum under his seat, the drawing in the visor and the owner's manual.
 | General Feathers, in the suitcase "to keep an eye on Daddy" | The suitcase | The empty place on Little Sister's pillow (Act Three); she misses her in Act Four |
 | "Not yet." | The scribe's news ("It is written nowhere.") | The Son's tag in Rome |
 | "The sky is doing the thing my slushie does." "Weather. Probably." <!-- CAR-13W --> | The opening (`intro.3`, `.4`), in the car on the road | The car's inside, the slushie in its holder: "I said weather. I stand by weather." |
-| Half a pack of gum under the Son's seat: "That's a problem for later." <!-- CAR-13W --> | The car's inside | Act Two: the Son's half of the pack ("The other half is under the car seat. That's a problem for later. Or earlier.") |
+| Half a pack of gum under the Son's seat: "That's a problem for later." <!-- CAR-13W --> | The car's inside | Act Two: the Son's half of the pack ("Half a pack. The rest is under the car seat. A problem for later. Or earlier.") |
 | Little Sister's drawing in the visor: the five of them, the wagon, the General on the roof, "She drew me the biggest." <!-- CAR-13W --> | The car's inside, behind the sun visor | Act Three: the first drawing, on her wall at home ("She drew your father the biggest. He was so pleased.") |
-| "A musical my wife taped off the radio" <!-- CAR-13W --> | The car's inside, the tape in the deck | Act Three: Mom winds a cassette with a pencil ("I recorded entire musicals off the radio with one of these.") |
+| "A musical my wife taped off the radio" <!-- CAR-13W --> | The car's inside, the tape in the deck | Act Three: Mom winds a cassette with a pencil ("I taped whole musicals off the radio on these.") |
 
 ## Where the scripts differ from the design, and why
 
@@ -1739,7 +1729,7 @@ What the words mean:
 | The sarcophagus is a plain stone box | Dad, `egypt.chamber.sarc.look`, `egypt.chamber.sarc.look2` | On the list. That its lid is off, and leaning on the wall still roped (`egypt.chamber.lid.look`), is the picture's choice |
 | There are goldsmiths, gilded furniture and polished copper mirrors | The goldsmith and his bench; `egypt.chamber.treasure.look`; the copper mirror | On the list. The bed with lion's feet and the carrying-chair are from the painters' brief: to check |
 | The king is "the king"; nobody says "pharaoh" | Goldsmith, `egypt.goldsmith.king.1`, mishearing Dad's "pharaoh" as "one arrow" | On the list |
-| Camels are among the king's gifts to Abram this week, and Lot had never seen one before | Lot, `egypt.lot.week.2`; the scribe, `egypt.scribe.news.6` | Genesis 12:16 (the second table). That they were new to Lot is the brief's (`briefs/EGYPT-3.md`: "they are new to him too"). Since round three nobody says that camels are unknown here: the water carrier's line that rested on the textbook dates (4) is gone with him |
+| Camels are among the king's gifts to Abram this week, and Lot had never seen one before | the scribe, `egypt.scribe.news.6` (Lot's `egypt.lot.week.2`, his camel, was folded away in round nineteen <!-- PASS-19E -->) | Genesis 12:16 (the second table). That they were new to Lot is the brief's (`briefs/EGYPT-3.md`: "they are new to him too"). Since round three nobody says that camels are unknown here: the water carrier's line that rested on the textbook dates (4) is gone with him |
 | Egypt keeps geese, and has no chickens yet | Nobody has seen a bird like the General (`egypt.chicken.stock`); the scribe has no sign for her (`egypt.scribe.chicken`); Lot, `egypt.lot.chicken`; the geese on the bank (`egypt.lot.news.4`) | **The author's rule** (`briefs/DATING.md`: "true: they reached Egypt later"). To check |
 | The geese on the bank have faced the pyramid since the wall began to hum | Lot, `egypt.lot.news.4` | The game's own lore (`briefs/DATING.md`: animals notice a door in time first). Not history |
 | The king's household is "the Great House", and the scribe says so; "Pharaoh" means "great house" | Scribe, `egypt.scribe.news.4`, `.7`; Dad, `egypt.scribe.news.5` | To check. (Nobody of the time says "pharaoh" for the king: the act's rule from the start) |
@@ -1768,38 +1758,38 @@ is quoted from the King James Version only, and each quotation is given here who
 | The statement | Who, and where | Source, and status |
 | --- | --- | --- |
 | Abraham came down into Egypt in a famine | Dad, `egypt.river.bible.1`, in his own words | Genesis 12:10. **Checked** (`kjv.gen12.10`). The verse calls him Abram, his name at the time; Dad says Abraham |
-| Joseph was sold into Egypt, and was set over all the land ("ended up running it") | Dad, `egypt.river.bible.2`, in his own words | Set over all the land: Genesis 41:41. **Checked** (`kjv.gen41.41`). Sold into Egypt: Genesis 37:36; it is in the brief's list of true things, and that verse is not in the checker's file: **To check** |
-| Moses was born in Egypt | Dad, `egypt.river.bible.2`, in his own words | Exodus 2:1-2; in the brief's list of true things, and not in the checker's file: **To check** |
+| Joseph was sold into Egypt, and was set over all the land ("ended up running it") | Dad, `egypt.river.bible.2`, in his own words, until round nineteen; since then `egypt.river.bible.1` only names him <!-- PASS-19E --> | Set over all the land: Genesis 41:41. **Checked** (`kjv.gen41.41`). Sold into Egypt: Genesis 37:36; it is in the brief's list of true things, and that verse is not in the checker's file: **To check** |
+| Moses was born in Egypt | Dad, `egypt.river.bible.2`, in his own words, until round nineteen; since then `egypt.river.bible.1` only names him <!-- PASS-19E --> | Exodus 2:1-2; in the brief's list of true things, and not in the checker's file: **To check** |
 | His mother put him in a basket and laid it in the reeds at the river's edge. Quoted: "...and she laid it in the flags by the river's brink." | Dad, `egypt.reeds.basket.1` (with its reference until round seventeen; since then the words alone <!-- PASS-17E -->); "Flags are reeds", `egypt.reeds.basket.2` | Exodus 2:3. **Checked** (`kjv.exod2.3`): the last clause of the verse, word for word. "Basket" is Dad's word for its "ark of bulrushes"; "flags" are reeds |
 | The Israelites made bricks for Pharaoh, and straw went to make them | Dad, `egypt.site.bricks.use.1`, `.use.3`, in his own words | Exodus 1:14 ("in morter, and in brick") and 5:7 ("straw to make brick"). **Checked** (`kjv.exod1.14`, `kjv.exod5.7`) |
 | What they built was cities. Quoted: "treasure cities, Pithom and Raamses." | Dad, `egypt.site.bricks.use.3` (with its reference until round seventeen; since then the words alone <!-- PASS-17E -->) | Exodus 1:11. **Checked** (`kjv.exod1.11`): five words of the verse, word for word. "Treasure cities" is the King James wording (modern versions have "store cities"), and "Raamses" its spelling |
 | The Bible nowhere says that the Israelites built a pyramid | Dad, `egypt.site.bricks.use.4` | **Checked** (`egypt.bricks`, verdict TRUE). The checker's note: it rests on a sentence of the Biblical Archaeology Society; a word search of the King James text could not be run |
-| The pyramid is stone | Dad, `egypt.site.bricks.use.2` ("that hill is stone") | **Checked** (`egypt.bricks`): limestone and granite. Also on the design's list, above |
-| The mud bricks at the site are for the steps | Dad, `egypt.site.bricks.use.2` | Dad's reading of the picture, in which the stair and its landing are mud brick. **To check**, with the row above about the stair |
+| The pyramid is stone | Dad, `egypt.site.bricks.use.3` ("That's stone."; `egypt.site.bricks.use.2` until round nineteen <!-- PASS-19E -->) | **Checked** (`egypt.bricks`): limestone and granite. Also on the design's list, above |
+| The mud bricks at the site are for the steps | Dad, `egypt.site.bricks.use.2`, until round nineteen (folded away; not said now <!-- PASS-19E -->) | Dad's reading of the picture, in which the stair and its landing are mud brick. **To check**, with the row above about the stair |
 | "The Israelites made the bricks, and here's the brickyard" | Dad, `egypt.site.bricks.use.1` | **Dad's guess**: that this pyramid is the work in Exodus. He is put right three lines later by the text, and by nobody of the time |
 | Psalm 90:4. Quoted: "For a thousand years in thy sight are but as yesterday when it is past, and as a watch in the night." | Dad, `egypt.gate.psalm.1`; the reference was the first words of `egypt.gate.psalm.2` until round seventeen, and is said nowhere now <!-- PASS-17E --> | **Checked** (`kjv.ps90.4`): the whole verse, word for word |
 | Psalm 90 is headed "A Prayer of Moses the man of God.": Moses wrote it | Dad, `egypt.gate.psalm.2`, in his own words: "Moses wrote that. Show-off." (until round seventeen it quoted the first four words of the heading, "A Prayer of Moses", after the reference) <!-- PASS-17E --> | **Checked** (`kjv.ps90.title`): the heading |
 | **The second pass.** There was famine, and Abram came down into Egypt | Scribe, `egypt.scribe.news.1`, `.2`, as gossip ("famine across the desert", "Abram, by name"); Lot, `egypt.lot.who.8`; Dad, `egypt.river.after.1` | Genesis 12:10: "And there was a famine in the land: and Abram went down into Egypt to sojourn there; for the famine was grievous in the land." **Checked** (`kjv.gen12.10`), and Read (7), (8) |
 | Sarai was very fair; the princes of Pharaoh commended her to him, and she was taken into Pharaoh's house; he treated Abram well for her sake (sheep, oxen, asses, servants, camels); great plagues on Pharaoh's house; "she was thy wife"; Pharaoh's men sent him away, and his wife, and all that he had | Scribe, `egypt.scribe.news.2` to `.9`, from outside; Dad, `egypt.scribe.news.8`; and Lot, from inside (the rows below) | Genesis 12:11-20, told and not quoted. Read (7), (8) (since round three). Left out of the scribe's telling on purpose: why the plagues came (12:17: the LORD sent them; no Egyptian speaks of Abram's God, though Lot does), and that she is not his sister (Genesis 20:12 says she is that too). The camels of 12:16 are in it since round three |
 | "Pharaoh" means "great house" | Dad, `egypt.scribe.news.5` | To check |
-| He is still Abram; the new name comes later | Dad, `egypt.abram.2` | Genesis 17:5, in his own words, without the reference. **To check** |
-| He has no son yet, and will have | Dad, `egypt.abram.2`, `egypt.lot.son.2`; Lot, `egypt.lot.son.1` ("no son at all") | No son yet: Genesis 11:30, "But Sarai was barren; she had no child." Read (7), (8); and 15:2-3, 16:1. That he will have: 21:2 (Isaac); 16:15 (Ishmael, before him): **To check**. Lot says only what he knows: no son, and a nation promised |
-| God promised that all the families of the earth would be blessed in him | Dad, `egypt.abram.3`, in his own words ("blessed through him"; with the reference until round seventeen <!-- PASS-17E -->); Lot, `egypt.lot.who.5`, in his | Genesis 12:3: "and in thee shall all families of the earth be blessed." Read (7), (8) (since round three). Told and not quoted: the check holds every quotation to the fact-checker's file, which does not have this verse |
-| He is standing in Genesis 12 | Dad, `egypt.abram.1`, when Lot has told his story (since round seventeen: "Abram. Egypt. A famine. ...I'm standing in Genesis.", the chapter's number here and not aloud <!-- PASS-17E -->) | The chapter of the call, the altars, and the going down into Egypt. **Checked** for 12:10 (`kjv.gen12.10`); the chapter Read (7), (8) |
-| Joseph and Moses are still to come | Dad, `egypt.river.after.2`, `egypt.reeds.basket.3`, `egypt.gate.psalm.3b` (and the pyramids' third look, `egypt.pyramids.look3b`, wonders whether Abram has stood there this week) | The Bible's count (Ussher): Jacob comes down to Joseph in 1706 B.C., Moses is born in 1571 B.C. (`briefs/DATING.md`). Joseph sold into Egypt and set over it: as in the first table |
-| Seashells in the desert: the Flood went over every high hill, and the people here build with what it left | Dad, `egypt.site.shells.2`, in his own words (with the reference until round seventeen <!-- PASS-17E -->) | Genesis 7:19-20 (all the high hills, and the mountains, covered). Not in the checker's file: **To check**. That the shells in the limestone were laid down by the Flood is the author's understanding (`briefs/DATING.md`), said here as Dad's |
-| Egypt is Mizraim, after Noah's grandson: the country was settled by him, so everybody here is family, way back | Dad, `egypt.site.mizraim`, in his own words: since round seventeen "And Noah's grandson settled this country. So technically, everybody here is my cousin.", with neither the name nor the reference (until then: "In Hebrew this country is Mizraim, after Noah's grandson. Genesis 10:6. Everybody here is family, way back.") <!-- PASS-17E --> | Genesis 10:6 (Mizraim a son of Ham, the son of Noah). "Mizraim" is the Hebrew name of Egypt; the author's table (`briefs/DATING.md`) has Egypt settled by Mizraim. Not in the checker's file: **To check** |
+| He is still Abram; the new name comes later | Dad, `egypt.abram.1` ("not Abraham yet"; `egypt.abram.2` until round nineteen <!-- PASS-19E -->) | Genesis 17:5, in his own words, without the reference. **To check** |
+| He has no son yet, and will have | Dad, `egypt.lot.son.2` (and `egypt.abram.2` until round nineteen <!-- PASS-19E -->); Lot, `egypt.lot.son.1` ("no son at all") | No son yet: Genesis 11:30, "But Sarai was barren; she had no child." Read (7), (8); and 15:2-3, 16:1. That he will have: 21:2 (Isaac); 16:15 (Ishmael, before him): **To check**. Lot says only what he knows: no son, and a nation promised |
+| God promised that all the families of the earth would be blessed in him | Dad, `egypt.abram.3`, in his own words ("blessed through him"; with the reference until round seventeen <!-- PASS-17E -->); Lot, `egypt.lot.who.5` until round nineteen (folded away: Dad's line says it <!-- PASS-19E -->), in his | Genesis 12:3: "and in thee shall all families of the earth be blessed." Read (7), (8) (since round three). Told and not quoted: the check holds every quotation to the fact-checker's file, which does not have this verse |
+| He is standing in Genesis 12 | Dad, `egypt.abram.1`, when Lot has told his story (since round nineteen: "Abram, not Abraham yet. Egypt. A famine. ...I'm standing in Genesis.", the chapter's number here and not aloud <!-- PASS-17E -->) | The chapter of the call, the altars, and the going down into Egypt. **Checked** for 12:10 (`kjv.gen12.10`); the chapter Read (7), (8) |
+| Joseph and Moses are still to come | Dad, `egypt.river.after.1` (`egypt.river.after.2` until round nineteen <!-- PASS-19E -->), `egypt.reeds.basket.3`, `egypt.gate.psalm.3b` (and the pyramids' third look, `egypt.pyramids.look3b`, wonders whether Abram has stood there this week) | The Bible's count (Ussher): Jacob comes down to Joseph in 1706 B.C., Moses is born in 1571 B.C. (`briefs/DATING.md`). Joseph sold into Egypt and set over it: as in the first table |
+| Seashells in the desert: the Flood went over every high hill, and the people here build with what it left | Dad, `egypt.site.shells.1` (`egypt.site.shells.2` until round nineteen <!-- PASS-19E -->), in his own words (with the reference until round seventeen <!-- PASS-17E -->) | Genesis 7:19-20 (all the high hills, and the mountains, covered). Not in the checker's file: **To check**. That the shells in the limestone were laid down by the Flood is the author's understanding (`briefs/DATING.md`), said here as Dad's |
+| Egypt is Mizraim, after Noah's grandson: the country was settled by him, so everybody here is family, way back | Dad, `egypt.site.mizraim`, in his own words: since round seventeen "Noah's grandson settled Egypt. Technically, everybody here's my cousin.", with neither the name nor the reference (until then: "In Hebrew this country is Mizraim, after Noah's grandson. Genesis 10:6. Everybody here is family, way back.") <!-- PASS-17E --> | Genesis 10:6 (Mizraim a son of Ham, the son of Noah). "Mizraim" is the Hebrew name of Egypt; the author's table (`briefs/DATING.md`) has Egypt settled by Mizraim. Not in the checker's file: **To check** |
 | **Round three: Lot.** Lot is the son of Haran, Abram's brother; Haran died in Ur of the Chaldees, before his father Terah | Lot, `egypt.lot.who.1`; his prayer ("my father's brother Abram"); Dad, `egypt.lot.look2` ("Abram's nephew") | Genesis 11:27, "Haran begat Lot"; 11:28, "And Haran died before his father Terah in the land of his nativity, in Ur of the Chaldees."; 12:5, "Lot his brother's son". Read (7), (8) |
 | Terah took Abram, Sarai and Lot out of Ur for Canaan; they stopped at Haran and dwelt there, and Terah died there | Lot, `egypt.lot.who.2` | Genesis 11:31-32: "and they went forth with them from Ur of the Chaldees, to go into the land of Canaan; and they came unto Haran, and dwelt there." "and Terah died in Haran." Read (7), (8) |
 | The LORD had told Abram to leave his country and his father's house, for a land He would show him | Lot, `egypt.lot.who.4` (until round seventeen: "had bidden my uncle leave his country, and his kindred, and his father's house" <!-- PASS-17E -->) | Genesis 12:1: "Now the LORD had said unto Abram, Get thee out of thy country, and from thy kindred, and from thy father's house, unto a land that I will shew thee". Read (7), (8). Lot's "had told" (his "had bidden" until round seventeen) keeps the verse's "had said": he does not say when the word came |
-| The LORD promised to make of him a great nation, and that in him all families of the earth would be blessed | Lot, `egypt.lot.who.5`, `egypt.lot.son.1` | Genesis 12:2, "And I will make of thee a great nation"; 12:3, as in the row above. Read (7), (8) |
-| Abram went out of Haran at the LORD's word, seventy-five years old, and Lot went with him | Lot, `egypt.lot.who.6`; `egypt.lot.hello2` ("Since my uncle left Haran at the word of the LORD") | Genesis 12:4: "So Abram departed, as the LORD had spoken unto him; and Lot went with him: and Abram was seventy and five years old when he departed out of Haran." Read (7), (8) |
-| In Canaan Abram built an altar to the LORD at Sichem, and another by Bethel, and called on the name of the LORD there | Lot, `egypt.lot.who.7` | Genesis 12:5-8: "unto the place of Sichem"; "and there builded he an altar unto the LORD"; "a mountain on the east of Bethel"; "and there he builded an altar unto the LORD, and called upon the name of the LORD." Read (7), (8) |
+| The LORD promised to make of him a great nation, and that in him all families of the earth would be blessed | Lot, `egypt.lot.son.1` (the nation); Dad, `egypt.abram.3` (every family); `egypt.lot.who.5` until round nineteen <!-- PASS-19E --> | Genesis 12:2, "And I will make of thee a great nation"; 12:3, as in the row above. Read (7), (8) |
+| Abram went out of Haran at the LORD's word, seventy-five years old, and Lot went with him | Lot, `egypt.lot.who.4` ("At seventy-five, he went."; `egypt.lot.who.6` until round nineteen <!-- PASS-19E -->); `egypt.lot.hello2` ("Since Haran") | Genesis 12:4: "So Abram departed, as the LORD had spoken unto him; and Lot went with him: and Abram was seventy and five years old when he departed out of Haran." Read (7), (8) |
+| In Canaan Abram built an altar to the LORD at Sichem, and another by Bethel, and called on the name of the LORD there | Lot, `egypt.lot.who.8` ("He built altars to the LORD in Canaan."; the two places named in `egypt.lot.who.7` until round nineteen <!-- PASS-19E -->) | Genesis 12:5-8: "unto the place of Sichem"; "and there builded he an altar unto the LORD"; "a mountain on the east of Bethel"; "and there he builded an altar unto the LORD, and called upon the name of the LORD." Read (7), (8) |
 | A grievous famine, and they went down into Egypt to sojourn there, Lot too | Lot, `egypt.lot.who.8` | Genesis 12:10 (above); that Lot went down too: he came up out of Egypt with Abram, 13:1, "and Lot with him". Read (7), (8) |
 | Lot has flocks and herds and tents of his own | Lot, `egypt.lot.who.8` ("Now I have flocks and herds and tents of my own"), `egypt.lot.chicken` | Genesis 13:5: "And Lot also, which went with Abram, had flocks, and herds, and tents." Read (7), (8) |
 | When they came into Egypt, the princes of Pharaoh commended Sarai to him, and she was taken into his house | Lot, `egypt.lot.week.1` ("the king's princes praised my uncle's wife to the king") | Genesis 12:14-15: "when Abram was come into Egypt"; "The princes also of Pharaoh saw her, and commended her before Pharaoh: and the woman was taken into Pharaoh's house." Read (7), (8) |
-| The king treated Abram well for her sake: sheep, oxen, asses, servants and camels | Lot, `egypt.lot.week.2`; the scribe, `egypt.scribe.news.6` | Genesis 12:16: "And he entreated Abram well for her sake: and he had sheep, and oxen, and he asses, and menservants, and maidservants, and she asses, and camels." Read (7), (8). "I had never seen a camel": the brief's |
-| The LORD plagued the king and his house with great plagues because of Sarai, and the king gave her back | Lot, `egypt.lot.week.3`; the scribe, from outside, `egypt.scribe.news.7` ("a sickness fell on the Great House") | Genesis 12:17: "And the LORD plagued Pharaoh and his house with great plagues because of Sarai Abram's wife."; 12:19: "now therefore behold thy wife, take her, and go thy way." Read (7), (8) |
+| The king treated Abram well for her sake: sheep, oxen, asses, servants and camels | Lot, `egypt.lot.week.1` ("was good to him for her sake"; `egypt.lot.week.2` until round nineteen <!-- PASS-19E -->); the scribe, `egypt.scribe.news.6` | Genesis 12:16: "And he entreated Abram well for her sake: and he had sheep, and oxen, and he asses, and menservants, and maidservants, and she asses, and camels." Read (7), (8). "I had never seen a camel": the brief's |
+| The LORD plagued the king and his house with great plagues because of Sarai, and the king gave her back | Lot, `egypt.lot.week.4` ("the LORD struck his house with plagues"; `egypt.lot.week.3` until round nineteen <!-- PASS-19E -->); the scribe, from outside, `egypt.scribe.news.7` ("a sickness fell on the Great House") | Genesis 12:17: "And the LORD plagued Pharaoh and his house with great plagues because of Sarai Abram's wife."; 12:19: "now therefore behold thy wife, take her, and go thy way." Read (7), (8) |
 | The king's men send them out of Egypt with all that they have, Lot with them | Lot, `egypt.lot.week.4`; Dad, `egypt.scribe.news.8`; the scribe, `egypt.scribe.news.9`; Dad, `egypt.scribe.news.11` ("his nephew's waiting for the king's men") | Genesis 12:20: "and they sent him away, and his wife, and all that he had."; 13:1, "and Lot with him". Read (7), (8). "Today" is the act's: the day it is set on |
 | Lot does not name the land of the Jordan, Sodom, or anything after Genesis 13:5, and does not know what comes | All of his lines | The rule of the brief, held by the check. Sodom is named by nobody in the act |
 

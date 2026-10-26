@@ -15,9 +15,23 @@ import { W, H } from "./grid.js";
 import { portrait } from "./cast.js";       // LETTERBOX-11: the portrait beside a voice through a door
 import { picturesOf, bubble, thoughtURL, speakerIcon } from "../art/thoughts.js";      // ENGINE-17: thought pictures, and the speakers' little loudspeaker
 
+import { textRate, TEXT_RATES } from "./save.js";      // ENGINE-19A: the reader's rate
+
 // ENGINE-17: a thought is up for as long as a line of three words ("one two three, and"): 900 + 16 x 58 ms, at the usual speed.
 export const THOUGHT_MS = 900 + 16 * 58;
 const LIFT = 16;                            // from the top of a thinker's head to the bottom of his cloud: room for the puffs trailing down
+
+// ENGINE-19A: text timing, the guide's rule (docs/DESIGN.md, section 7, "How long a line stays"). A spoken box is up for
+// clamp(characters / rate, 1.2 s, 7 s), the rate the reader's ("Text speed": Slow 9, Normal 12, Fast 18 characters a
+// second); at Slow a box that would need more than 7 s waits for a click instead (a small mark after its words says so).
+// A click always moves on. Two boxes in a row by the same speaker have a quarter second of nothing between them.
+export const TEXT_MIN = 1200, TEXT_MAX = 7000, SAME_GAP = 250;
+/** ENGINE-19A: how long a spoken box of `chars` characters stays up at `rate` characters a second (ms). */
+export const lineMs = (chars, rate) => Math.min(Math.max((chars * 1000) / rate, TEXT_MIN), TEXT_MAX);
+/** ENGINE-19A: whether such a box waits for a click: at the slowest rate only, when it would need more than the cap. */
+export const waitsForClick = (chars, rate) => rate <= TEXT_RATES[0] && (chars * 1000) / rate > TEXT_MAX;
+/** ENGINE-19A: the factor the settings were before (0.6, 1, 1.6), for what keeps its old time: a thought, a PA line of pictures. */
+const factorOf = (rate) => (rate <= TEXT_RATES[0] ? 0.6 : rate >= TEXT_RATES[2] ? 1.6 : 1);
 
 export class Dialogue {
   constructor(game) {
@@ -30,6 +44,7 @@ export class Dialogue {
     this.faces = {};           // LETTERBOX-11: portraits for voices through a door, drawn once for each size ("sprite|pixels")
     this.loops = new Map();    // ENGINE-17: thoughts kept up over somebody (g.think(who, pictures, { loop: true })): who -> { names, el, hidden, key }
     this._told = new Set();
+    this._endWho = null; this._endAt = -Infinity;      // ENGINE-19A: who said the last box, and when it went (say)
     game.clock.every(() => this.follow());
   }
 
@@ -60,6 +75,10 @@ export class Dialogue {
     g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
     if (g.clock.skipping) return;
     if (pictures != null) return this.thought(who, pictures, { line: id, through });      // ENGINE-17: a bubble, not words
+    {                                                       // ENGINE-19A: the same speaker again at once: a quarter second of nothing first
+      const gap = g.clock.now - this._endAt;
+      if (this._endWho === who && gap >= 0 && gap < SAME_GAP && g.cutsceneId !== "intro") { await g.clock.wait(SAME_GAP - gap); if (g.clock.skipping) return; }
+    }
     const looping = through ? null : this.loops.get(who);                                   // ENGINE-17: a thought kept up over him steps aside while he speaks
     if (looping) { looping.hidden++; this.follow(); }
 
@@ -79,12 +98,16 @@ export class Dialogue {
     for (let i = 0; i < id.length; i++) seed = (seed * 31 + id.charCodeAt(i)) >>> 0;       // which gesture goes with this line
     const voiced = g.settings.voices ? g.audio.voice(id) : null;
     const showText = g.settings.subtitles || !voiced;
+    // ENGINE-19A: the reader's rate; the opening (the cut-scene "intro", as the author approved it in round eighteen) keeps its
+    // lines' old times: max(1.5 s, 0.9 s + 58 ms a character) / the factor, never waiting for a click.
+    const rate = textRate(g.settings.textSpeed), approved = g.cutsceneId === "intro", clickOnly = !approved && waitsForClick(text.length, rate);
 
     let p = null, fit = () => {};
     {
       const actor = seen;                                  // CAR-13E: the words go by the speaker as seen (above)
       p = document.createElement("p");
       p.className = "say";
+      if (clickOnly && !voiced) p.classList.add("wait");   // ENGINE-19A: it waits for a click (the mark after the words: css)
       p.hidden = !showText;
       p.style.color = person.color || "#fff";
       if (through) { p.classList.add("through"); p.append(this.face(through), Object.assign(document.createElement("span"), { textContent: text })); }      // LETTERBOX-11
@@ -122,10 +145,12 @@ export class Dialogue {
     }
 
     this.active = true; this._next = false; this._shownAt = performance.now();
-    let left = Math.max(1500, 900 + text.length * 58) / (g.settings.textSpeed || 1);
+    // ENGINE-19A: clamp(characters / rate, 1.2 s, 7 s), or (Slow, over the cap) until a click. (Before: max(1.5 s, 0.9 s + 58 ms
+    // a character) / the factor.) A recorded voice as before: the words stay until it ends, and 280 ms more.
+    let left = clickOnly && !voiced ? Infinity : approved ? Math.max(1500, 900 + text.length * 58) / factorOf(rate) : lineMs(text.length, rate);
     let speaking = !!voiced;
     // When the recording ends, move on. If it would not play, show the words for their usual time instead.
-    if (voiced) voiced.then((played) => { speaking = false; if (played) left = 280; else { p.hidden = false; fit(); } });
+    if (voiced) voiced.then((played) => { speaking = false; if (played) left = 280; else { p.hidden = false; if (clickOnly) { p.classList.add("wait"); left = Infinity; } fit(); } });
 
     if (actor && actor.talk) actor.talk(true, seed);       // mouth and hands
     await new Promise((resolve) => {
@@ -139,6 +164,7 @@ export class Dialogue {
     if (actor && actor.talk) actor.talk(false);
     if (p) p.remove();
     this.active = false;
+    this._endWho = who; this._endAt = g.clock.now;       // ENGINE-19A: who spoke last, and when the box went (the same speaker's next box waits)
     if (looping) { looping.hidden = Math.max(0, looping.hidden - 1); this.follow(); }      // (ENGINE-17: and back)
     if (!g.clock.skipping) await g.clock.wait(90);       // a short beat between lines
   }
@@ -161,7 +187,7 @@ export class Dialogue {
     if (looping) { looping.hidden++; this.follow(); }
     const el = this.bubbleFor(who, names, { through });
     this.active = true; this._next = false; this._shownAt = performance.now();
-    let left = (ms ?? THOUGHT_MS) / (g.settings.textSpeed || 1);
+    let left = (ms ?? THOUGHT_MS) / factorOf(textRate(g.settings.textSpeed));      // ENGINE-19A: as long as before at each setting
     await new Promise((resolve) => {
       const stop = g.clock.every((dt) => {
         left -= dt;
@@ -170,6 +196,7 @@ export class Dialogue {
     });
     el.remove();
     this.active = false;
+    this._endWho = null;                                 // ENGINE-19A: a thought between two lines: they are not in a row
     if (looping) { looping.hidden = Math.max(0, looping.hidden - 1); this.follow(); }
     if (!g.clock.skipping) await g.clock.wait(90);       // a short beat, as between lines
   }
@@ -283,7 +310,12 @@ export class Dialogue {
     p.dataset.line = id;
     this.el.appendChild(p);
     if (!ambient) { this.active = true; this._next = false; this._shownAt = performance.now(); }
-    let left = (Math.max(1500, 900 + String(text).length * 58) + 400) / (g.settings.textSpeed || 1);       // (and a moment for the chime)
+    // ENGINE-19A: words by the spoken rule (and a moment for the chime); at Slow one over the cap waits for a click, as a spoken
+    // box does, unless it is the building's own life (`ambient`: nobody can click it away, so it keeps the cap). A line of
+    // pictures as long as before (a thought's rule).
+    const rate = textRate(g.settings.textSpeed), n = String(text).length, clickOnly = !ambient && pictures == null && waitsForClick(n, rate);
+    if (clickOnly) p.classList.add("wait");
+    let left = clickOnly ? Infinity : pictures != null ? (Math.max(1500, 900 + n * 58) + 400) / factorOf(rate) : lineMs(n, rate) + 400;
     await new Promise((resolve) => {
       const stop = g.clock.every((dt) => {
         left -= dt;
@@ -291,7 +323,7 @@ export class Dialogue {
       });
     });
     p.remove();
-    if (!ambient) { this.active = false; if (!g.clock.skipping) await g.clock.wait(90); }
+    if (!ambient) { this.active = false; this._endWho = null; if (!g.clock.skipping) await g.clock.wait(90); }      // (ENGINE-19A: not "in a row" with a line)
     return true;
   }
 

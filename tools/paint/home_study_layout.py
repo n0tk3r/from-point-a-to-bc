@@ -38,8 +38,11 @@ def write(stA, stB, boxes, a_desk, a_front, wob=None):
     def rect_xywh(b):
         return [b[0], b[1], b[2] - b[0], b[3] - b[1]]
 
+    # STAGE-19H: the third arrival mark is on the rug, off the desk's front (GUIDE-19 S16, S7, S4): picture pixels
+    STAGE19H_MARKS = {"lilsis": [480, 455]}
     mk = M.MARKS
     stand = {k: fl(*p) for k, p in mk.items()}
+    stand.update(STAGE19H_MARKS)
     size = {k: int(round(v.person(*p)[2])) for k, p in mk.items()}
 
     things = []

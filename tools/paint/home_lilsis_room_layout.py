@@ -47,6 +47,9 @@ def layout(signs=None):
     walk = [[int(round(x)), int(round(y))] for x, y in v.poly([(X, 0, Z) for X, Z in M.WALK])]
     blocked = [[[int(round(x)), int(round(y))] for x, y in v.poly([(X, 0, Z) for X, Z in poly])] for poly in M.BLOCKED]
     mk = {k: px(*xz) for k, xz in M.MARKS.items()}
+    # STAGE-19H: the three default marks as a shallow triangle, Mom up-stage at its apex, off the nest's approach, Big
+    # Sister clear of the tea table's top edge, Little Sister out from under the RESERVED sign (GUIDE-19 S16, S7, S12)
+    mk.update({"mom": [518, 450], "bigsis": [480, 476], "lilsis": [553, 474]})
     wx0, wx1, wy0, wy1 = M.WINDOW
     cx0, cx1, cy0, cy1 = M.CHART
     dx0, dx1, dy0, dy1 = M.DRAWINGS

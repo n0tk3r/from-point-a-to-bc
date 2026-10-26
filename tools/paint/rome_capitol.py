@@ -391,6 +391,7 @@ def under(seed=11):
     near = np.clip((y - HZ) / (H - HZ), 0, 1) ** 1.2
     own = own * (1 - near[..., None] * (1 - np.array([1.0, 0.94, 0.80], dtype=F32)) * 0.8)
     cut = ground_shadow() * gmask
+    cut = cut * (1 - 0.4 * step(425.0, 470.0, y))                  # STAGE-19R (S3): the long cast shadows across the walk band 40% softer
     lit = LIT.on(own, TH.SUNW[2], cut, up=1, deep=0.08 * cut, bounce=0.25)
     drift = (noise(SHAPE, 150, seed + 12, 3) - 0.5) * 0.10
     lit = np.clip(lit * (1 + (cut[..., None] * np.stack([drift, drift * 0.3, -drift], axis=-1))), 0, 1)
@@ -562,6 +563,75 @@ def pen_back_layer():
     return c
 
 
+# ---------------------------------------------------------------- STAGE-19R: round nineteen's value pass (scene audit S1, S2)
+# The eye went to the big cloud and the temple while the puzzle (a boy on a statue base, geese at its foot) was pale stone
+# against a pale city (SCORE-19B: S1 1, S2 1, S3 1). Laid on the picture as painted, with the layout, the cut-outs'
+# shapes and every mark as they were:
+#   - (in under()) the long cast shadows across the walk band 40% softer: the shadows stay, calmer;
+#   - stage19_back (after the details, on the picture and on the ground the cut-outs are brushed against): the view of
+#     the city left of the temple about 10 L* down and bluer, so the view and the temple's shade are one middle mass
+#     and the pale bases, Titus, the white geese and Anser stand against it; the cloud calmed (its whites held down, its
+#     edges softer) and the sky's deep top eased; a little light at the head of the way down (the bottom edge);
+#   - stage19_cut: the bronze man on the world his highlights a third quieter; the hut's black door a warm dark brown.
+def _lab(p):
+    from skimage.color import rgb2lab
+    return rgb2lab(np.clip(p, 0, 1).astype(np.float64))
+
+
+def _rgb(lab):
+    from skimage.color import lab2rgb
+    return np.clip(lab2rgb(lab), 0, 1).astype(F32)
+
+
+def _nblur(a, w, s):
+    return blur(a * w, s) / np.maximum(blur(w, s), 1e-4)
+
+
+def stage19_back(pic, info, temple, kings, pen_back):
+    x, y = grid(SHAPE)
+    cc, ca = info["city"]
+    solid = np.maximum(np.maximum(np.clip(temple.a, 0, 1), np.clip(kings.a, 0, 1)), np.clip(pen_back.a, 0, 1))
+    lab = _lab(pic)
+    L = lab[..., 0]
+    sky = ((y < HZ - 1) * (1 - np.clip(blur(np.maximum(np.clip(ca, 0, 1), solid), 1.2) * 1.5, 0, 1))).astype(np.float64)
+    m = _nblur(L, sky + 1e-6, 30.0)
+    Lc = m + (L - m) * 0.6                                                         # the cloud's edges softer
+    Lc = np.where(Lc > 80.0, 80.0 + (Lc - 80.0) * 0.3, Lc)                         # its whites held down
+    up = np.clip(1 - y / 200.0, 0, 1) ** 1.5
+    Lc = Lc + 6.0 * up                                                             # the deep blue at the top eased
+    chroma = 0.92 - 0.22 * up
+    lab[..., 0] = L + (Lc - L) * sky
+    lab[..., 1] = lab[..., 1] * (1 - sky + sky * chroma)
+    lab[..., 2] = lab[..., 2] * (1 - sky + sky * chroma)
+    # (from x 185: Anser, at the left, is a darker figure than the view behind him, which is left as it was)
+    view = np.clip(ca, 0, 1) * (1 - np.clip(blur(solid, 1.0) * 1.3, 0, 1)) * mask_poly(SHAPE, [(185, 170), (470, 170), (470, 395), (185, 395)], soft=12.0)
+    lab[..., 0] -= 10.0 * view                                                     # the view behind the kings
+    lab[..., 1] -= 1.0 * view
+    lab[..., 2] -= 6.0 * view
+    gap = mask_ellipse(SHAPE, 545, 600, 58, 28, soft=12.0)                         # the head of the way down
+    lab[..., 0] += 6.0 * gap
+    lab[..., 2] += 3.0 * gap
+    pic[...] = _rgb(lab)
+    return pic
+
+
+def stage19_cut(c, a, name):
+    if name not in ("world", "hut"):
+        return c
+    lab = _lab(c)
+    L = lab[..., 0]
+    if name == "world":
+        on = a > 0.5
+        mid = float(np.median(L[on])) if on.any() else 50.0
+        lab[..., 0] = np.where(on & (L > mid), L - (L - mid) / 3.0, L)            # the bronze man's highlights a third quieter
+    else:
+        door = mask_poly(SHAPE, [(0, 404), (26, 404), (26, 456), (0, 456)], soft=2.0) * np.clip((30.0 - L) / 12.0, 0, 1)
+        lab[..., 0] += 15.0 * door                                                 # the hut's black door: a warm dark brown
+        lab[..., 1] += 5.0 * door
+        lab[..., 2] += 9.0 * door
+    return _rgb(lab)
+
+
 if __name__ == "__main__":
     t0 = time.time()
     os.makedirs(OUT, exist_ok=True)
@@ -581,6 +651,8 @@ if __name__ == "__main__":
     pic = base.copy() if fast else strokes(base, sizes=(12, 6, 3), seed=2, density=1.5, jitter=0.03, keep=0.24)
     ground_ = pic.copy()
     details(pic, info, temple_l, kings_l, pen_b)
+    stage19_back(pic, info, temple_l, kings_l, pen_b)            # STAGE-19R: the view deeper, the cloud calmer
+    stage19_back(ground_, info, temple_l, kings_l, pen_b)        # (the same on the ground the cut-outs are brushed against)
     print("details", round(time.time() - t0, 1))
     cuts = cut_layers()
     whole = pic.copy()
@@ -592,6 +664,7 @@ if __name__ == "__main__":
             a = (a > 0.5).astype(F32)
         else:
             c, a = brushed(layer, ground_, seed=20 + i)
+        c = stage19_cut(c, a, name)                              # STAGE-19R: the bronze man quieter, the hut's door
         cut[name] = (c, a)
         over(whole, c, a)
     Image.fromarray((np.clip(whole, 0, 1) * 255).astype(np.uint8)).save(f"{OUT}-2-all.png")

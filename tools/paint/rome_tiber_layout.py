@@ -159,8 +159,12 @@ def marks():
         "mariam": {"at": F(170, 150), "face": "W"},
         "mariam_spots": [F(80, 120) + ["W"], F(250, 90) + ["SW"]],
         "mariam_talk": F(240, 300),
-        "felix": {"at": G(-520, 520), "face": "W"},
-        "felix_spots": [G(-560, 592) + ["NW"], G(-540, 450) + ["E"]],
+        # STAGE-19R (scene audit S7): the barge's mast (x 92, y 296 to 352) grew out of his head at G(-520, 520) = (82, 463)
+        # and at the idle spot G(-560, 592) = (75, 453): his place goes 14 pixels left (his head then clears the mast by
+        # about 12 pixels), and that spot goes to (72, 485), nearer us on the landing (the bales' margin closes the floor
+        # left of x 65 up there); his other spot is unchanged (each 15 pixels or more from the mark: a few steps).
+        "felix": {"at": [68, 465], "face": "W"},
+        "felix_spots": [[72, 485, "NW"], G(-540, 450) + ["E"]],
         "petosiris": G(-420, 598),
         "door": F(500, 40),
         "wait": [520, 427],                                    # beside the bench's near end, just in front of it
@@ -320,7 +324,7 @@ def things(info, cut):
     gardens = [[300, 214], [442, 206], [442, 262], [300, 262]]
     t = [
         {"id": "doorpost", "what": "the little case fixed upright on the right-hand post of Eleazar's door (words of the Law: not seen)",
-         "shape": {"rect": [mzc[0] - 6, mzc[1] - 10, 12, 20]}, "stand": F(450, 70), "face": "E"},
+         "shape": {"rect": [mzc[0] - 10, mzc[1] - 10, 20, 20]}, "stand": F(450, 70), "face": "E"},      # STAGE-19R (S9): 20 wide, was 12 (a head's width)
         {"id": "window", "what": "Eleazar's upper window, open, its shutter folded back (in the first scene he stands in it, praying)",
          "shape": {"poly": hull(window_opening() + sh)}, "stand": F(250, 330), "face": "E"},
         {"id": "washing", "what": "the washing on the line between his two upper windows: a small tunic, a blue cloth",

@@ -495,7 +495,7 @@ async function shadesToRanger(g) {
   } else if (!g.flag("nevada.witness") || g.flag("nevada.traded")) {
     await g.say(g.fallback("nope"));
   } else {
-    await g.say("nevada.ranger.fact", "nevada.ranger.method");
+    await g.say("nevada.ranger.fact", "nevada.ranger.dots", "nevada.ranger.method");      // PASS-19N1: his "..." between her two, a beat
     await trade(g);
     await g.say("nevada.ranger.thanks", "nevada.ranger.lil.good", "nevada.ranger.big.fast");
     await readIfHers(g);
@@ -522,7 +522,7 @@ async function readCoin(g) {
   // Caesar's own portrait: it is the coin of the tribute money. Little Sister knows it from Sunday school, Big Sister
   // has the fact, and Mom has the verse. Then back to what matters for the puzzle: the coin is new.
   await g.say("nevada.coin.read.2b", "nevada.coin.read.2c", "nevada.coin.read.2d");
-  await g.say("nevada.coin.read.3", "nevada.coin.read.4");
+  await g.say("nevada.coin.read.3");      // PASS-19N1: nevada.coin.read.4 removed (it said again what she had just said)
   g.flag("nevada.coinRead", true);
   await connect(g);
 }
@@ -544,7 +544,7 @@ async function talkToAgent(g) {
   g.lead.face("E");
   g.flag("nevada.distracted", true);
   // (NEVADA-12SA: and the earpiece has a name for him, small and far, which she does not hear and we do: Houston, who is dispatch.)
-  await g.say("nevada.agent.lil.7", "nevada.agent.lil.7b", "nevada.agent.lil.8");
+  await g.say("nevada.agent.lil.7", "nevada.agent.lil.7b");      // PASS-19N1: Houston has the last word (nevada.agent.lil.8 removed)
 }
 
 async function readNotice(g) {
@@ -554,7 +554,7 @@ async function readNotice(g) {
   if (me === "mom") return g.say("nevada.notice.mom.1", "nevada.notice.mom.2");
   if (me === "lilsis") return g.say("nevada.notice.lilsis");
   if (g.flag("nevada.notice")) return g.say("nevada.notice.again");
-  await g.say("nevada.notice.big.1", "nevada.notice.big.2", "nevada.notice.big.3");
+  await g.say("nevada.notice.big.1", "nevada.notice.big.2", "nevada.notice.big.2.b", "nevada.notice.big.3");      // PASS-19N1: Mom's turn in the middle
   g.flag("nevada.notice", true);
   g.closeup();
   await connect(g);
@@ -599,7 +599,7 @@ async function flash(g) {
   await g.wait(280);
   for (const id of ["bigsis", "lilsis"]) pray(g.actor(id), true);
   await g.wait(420);
-  await g.say("nevada.pray.1", "nevada.pray.2");
+  await g.say("nevada.pray.1", "nevada.pray.2", "nevada.pray.2.b");   // FINAL-19: the prayer is three boxes (the lemonade, then the Amen)
   for (const id of THREE) pray(g.actor(id), false);
   await g.wait(360);
   // The low morning sun. If it is Mom who has the coin, she knows of another one that was rising and not setting.
@@ -631,16 +631,33 @@ async function flash(g) {
   // The top of the scene is hers, word for word. Then Big Sister needs to sit down, Mom has the psalm, and the last two lines are as they were.
   await g.say("nevada.gate.4", "nevada.gate.5", "nevada.gate.5b", "nevada.gate.6", "nevada.gate.7");
   // NEVADA-12SA: it is no longer the end of the demo. The door is open, the size of the coin (#9: nevada.doorOpen), and
-  // instead of the title there is one more beat, and then play.
+  // instead of the title there is play.
   g.flag("nevada.doorOpen", true);
-  await headInTheHole(g);
+  // STAGE-19N (C13, C14): the scene's button is Mom's "Girls. We are going to go and bring them home.": a held beat on the
+  // three of them and the little door, and then the player has the hand back (it was 34 boxes and about three minutes
+  // without input, with the head in the hole and Big Sister's rule on the end of it). Those two are now the first thing
+  // that happens at the little door (`firstAtTheDoor`, below), which is where the act's hint for this moment sends every
+  // lead (hint.nevada.letterbox.*); a player who goes elsewhere first hears them there later, and the tries of #12 (the car,
+  // the banjo, the store's shelves) wait for the rule (`knowsShine`).
+  await g.wait(1000);
 }
+
+/** STAGE-19N: they know they need a bigger shine (Big Sister's rule has been said, at the little door). The tries of #12
+    wait for it: the store's (`seeking` in nevada-store.js), the banjo in Grandpa Joe's talk (talk/nevada.js), Mom's car. */
+const knowsShine = (g) => !!g.flag("nevada.doorOpen") && heard(g, "nevada.shade.rule.3");
+/** STAGE-19N: the first click on the little door, whatever it is (talked into, looked at, a thing used on it): her head
+    in the hole and Big Sister's rule, and that is the click; after it the door is what it was. */
+const firstAtTheDoor = (fn) => async (g, ...rest) => (knowsShine(g) ? fn(g, ...rest) : headInTheHole(g));
 
 /** After "Some when": her head in the hole (she has to try), Mom lifting her out as one lifts a cat out of a drawer,
     and Big Sister's rule, which is the setup of #12. Little Sister's word about the banjo is said only if she has seen
-    it flash (she asked him to play: nevada.banjoFlash). */
+    it flash (she asked him to play: nevada.banjoFlash). STAGE-19N: now the first click on the little door, so they may
+    be anywhere in the picture when it comes: they take the places they had for the flash first (Little Sister at the
+    height of her eye, the two tall ones a step back), and then it plays as it did. */
 async function headInTheHole(g) {
   const lil = g.actor("lilsis"), mom = g.actor("mom"), big = g.actor("bigsis");
+  await Promise.all([g.walkTo(EYE[0], EYE[1], "lilsis"), ...["mom", "bigsis"].map((id) => g.walkTo(BACK[id][0], BACK[id][1], id))]);
+  for (const id of THREE) { const a = g.actor(id); if (a) a.face("E"); }
   await g.wait(350);
   if (lil) lil.face("E");                                         // back to the door
   await g.say("nevada.hole.1");
@@ -656,8 +673,8 @@ async function headInTheHole(g) {
   if (lil) { lil.hold(false); await g.moveTo(LIFT.lilsis[0], LIFT.lilsis[1], "lilsis"); lil.face("W"); }
   await g.say("nevada.hole.3");
   if (big) big.look(PLACE[0], PLACE[1]);                          // she has not stopped looking at the hole
-  await g.say("nevada.hole.4", "nevada.hole.5");
-  await g.say("nevada.shade.rule.1", "nevada.shade.rule.2", "nevada.shade.rule.3", "nevada.shade.rule.mom");
+  await g.say("nevada.hole.5", "nevada.hole.5.b");      // PASS-19N1: Mom draws her out (nevada.hole.4 removed: the door said it)
+  await g.say("nevada.shade.rule.1", "nevada.shade.rule.2", "nevada.shade.rule.mom", "nevada.shade.rule.3");      // PASS-19N1: Mom's line before her daughter's topper
   if (g.flag("nevada.banjoFlash")) await g.say("nevada.shade.rule.lilsis");
 }
 
@@ -730,6 +747,10 @@ async function momDown(g) {
   const mom = g.actor("mom");
   const inWay = (id) => { const a = g.actor(id); return a && (id === who(g) || Math.hypot(a.x - KNEEL[0], (a.y - KNEEL[1]) * 2.2) < 46 || Math.hypot(a.x - BAG[0], (a.y - BAG[1]) * 2.2) < 30); };
   const room = ["bigsis", "lilsis"].filter(inWay).map((id) => g.walkTo(ASIDE[id][0], ASIDE[id][1], id).then(() => turn(g, id, "E")));
+  // STAGE-19N: at his voice everyone else in the picture stops and looks at the little door: the girls who are not in
+  // Mom's way, Grandpa Joe in his rocker, Ranger beside it. (Their own lives wait while anyone speaks: life.js.)
+  for (const id of ["bigsis", "lilsis"].filter((id) => !inWay(id))) lookAt(g.actor(id), PLACE);
+  lookAt(joeOf(g), PLACE); lookAt(g.actor("ranger"), PLACE);
   if (mom) {
     if (Math.hypot(mom.x - KNEEL[0], mom.y - KNEEL[1]) < 12) await g.moveTo(KNEEL[0], KNEEL[1], "mom");
     else { await g.wait(260); mom.hurry = true; await g.walkTo(KNEEL[0], KNEEL[1], "mom"); }
@@ -807,20 +828,42 @@ async function takeBag(g) {
   if (mom) mom.face("W");
 }
 /** After the first talk: Ranger goes back to his place beside the rocker and sits up, and Grandpa Joe looks down the road
-    again; Mom turns back to the door. */
+    again; Mom turns back to the door. (STAGE-19N, C14: the player has the controls back at once; Ranger scampers home
+    while she does: his walk rides the end of the scene instead of holding it up for five seconds.) */
 async function afterLetterbox(g) {
   const r = g.actor("ranger"), joe = joeOf(g), mom = g.actor("mom");
   if (mom) mom.face("E");
   if (joe) joe.face("SE");
-  if (r) {
-    r.hurry = false;
-    await g.walkTo(RANGER[0], RANGER[1], "ranger");
-    await g.moveTo(RANGER[0], RANGER[1], "ranger");               // (the walk ends at the edge of the chair's patch of ground: the last step onto his place)
-    await r.sit(true);
-    r.face("SE");
-  }
+  if (r) rangerHome(g, r);                                        // (not awaited)
 }
-const LETTERBOX = letterboxTree({ penny: sendPenny, kneel: momDown, heels, lean, rise: momUp, turn: turnToJoe, bring: bringBag, take: takeBag });
+async function rangerHome(g, r) {
+  r.hurry = true;
+  await g.walkTo(RANGER[0], RANGER[1], "ranger");
+  await g.moveTo(RANGER[0], RANGER[1], "ranger");                 // (the walk ends at the edge of the chair's patch of ground: the last step onto his place)
+  r.hurry = false;
+  await r.sit(true);
+  r.face("SE");
+}
+/** STAGE-19N: a head turned to a place (a figure's `look`), for the eyelines below. */
+const lookAt = (a, [x, y]) => { if (a && a.look) a.look(x, y); };
+/** STAGE-19N: letterboxTree's `eyes`: where everyone else looks while Mom talks to him. "mom": the girls, Grandpa Joe and
+    Ranger turn their heads to her (their eyelines hold the eye on her); "aside": the two girls turn to each other for their
+    whispered aside, and she holds still at the door. Then "mom" again: back to her. */
+async function eyes(g, what) {
+  const mom = g.actor("mom"), big = g.actor("bigsis"), lil = g.actor("lilsis");
+  if (!mom) return;
+  if (what === "aside" && big && lil) { lookAt(big, [lil.x, lil.y]); lookAt(lil, [big.x, big.y]); }
+  else { for (const a of [big, lil, joeOf(g), g.actor("ranger")]) lookAt(a, [mom.x, mom.y]); }
+  await g.wait(what === "aside" ? 300 : 250);
+}
+const LETTERBOX = letterboxTree({ penny: sendPenny, kneel: momDown, heels, lean, rise: momUp, turn: turnToJoe, bring: bringBag, take: takeBag, eyes });
+/** STAGE-19N (C12): while a talk is held through the little door, the Son's words go at the door (the scene's `wordsAt`,
+    below): as near the hole as words can go and still all show (his are his portrait and his words side by side, up to
+    about 480 pixels wide: at 590, as near as the engine lets anyone's words go, they ran 30 pixels off the right edge),
+    and over the head of whoever is at it. Nobody else in this scene speaks from off the stage during it; Houston on the
+    radio and Grandma Jolene from inside the shop keep the top of the picture. */
+const THROUGH = { at: null };
+const AT_THE_DOOR = [552, 430];
 /** NEVADA-12SA: after anything done at the little door. Whoever goes to it stands at DOORSIDE, to its left; if one of the
     others is standing there already, the engine puts her beside her, which is right in front of the door, and there she
     would hide it from everyone else afterwards (the three of them can be clicked, and they lie over what is behind them).
@@ -838,7 +881,8 @@ async function talkThrough(g) {
   const first = !g.flag("nevada.heardSon");
   if (g.lead) g.lead.look(PLACE[0], PLACE[1]);
   if (first && g.flag("nevada.sonMet") && !kneels(g)) await momDown(g);
-  await g.talk(LETTERBOX, { through: "son" });
+  THROUGH.at = AT_THE_DOOR;
+  try { await g.talk(LETTERBOX, { through: "son" }); } finally { THROUGH.at = null; }
   if (first && g.flag("nevada.heardSon")) await afterLetterbox(g);
   await stepOff(g);
 }
@@ -853,7 +897,7 @@ async function postPenny(g) {
 // ---------- #12: Mom's car, which never shone ----------
 /** Mom's car, looked at once they know they need a bigger shine: the exchange the design wrote for it (once). */
 async function car(g) {
-  if (g.flag("nevada.doorOpen") && !g.flag("nevada.wideOpen") && !heard(g, "nevada.shade.car.lilsis.2"))
+  if (knowsShine(g) && !g.flag("nevada.wideOpen") && !heard(g, "nevada.shade.car.lilsis.2"))      // STAGE-19N: once the rule is said
     return g.say("nevada.shade.car.mom.1", "nevada.shade.car.bigsis", "nevada.shade.car.lilsis.1", "nevada.shade.car.mom.2", "nevada.shade.car.lilsis.2");
   return g.say(`nevada.car.look.${who(g)}`);
 }
@@ -906,6 +950,20 @@ async function goThrough(g) {
   // In front of the door, in a row: Mom, Little Sister, Big Sister.
   await Promise.all(THREE.map((id) => g.walkTo(LINE[id][0], LINE[id][1], id)));
   for (const id of THREE) turn(g, id, "N");
+  if (!g.flag("nevada.saidBye")) return goodbyes(g);              // STAGE-19N: the goodbyes are a click of their own (below)
+  await g.say("nevada.through.mom.3");
+  // Hand in hand, Little Sister in the middle, into the door.
+  g.sfx("portal");
+  await Promise.all([into(g, "mom", 0), into(g, "lilsis", 60), into(g, "bigsis", 120)]);
+  g.flag("nevada.left", true);
+  await g.cutscene("backup");
+}
+
+/** STAGE-19N (C13): the goodbyes, at the wide door, end on their own button, Grandpa Joe's "Then you're all right. Go get
+    your boy.", a held beat, and the player has the hand back: the next click on the door is Mom's "Girls. Hold hands. All
+    the way through." and the walk in, and "Backup" (before, the goodbyes, the walk and "Backup" were one stretch of about
+    49 boxes with no input). `nevada.saidBye`: they are not said twice. */
+async function goodbyes(g) {
   // Little Sister turns to the porch and says goodbye to everybody, hens and all; Ranger looks at her.
   turn(g, "lilsis", "W");
   const r = g.actor("ranger"), lil = g.actor("lilsis");
@@ -923,13 +981,9 @@ async function goThrough(g) {
   await g.actor("mom")?.play(g.clock, "reach");
   await g.say("nevada.through.mom.1", "nevada.through.mom.4", "nevada.through.joe.5", "nevada.through.mom.5", "nevada.through.joe.6",
     "nevada.through.joe.2", "nevada.through.mom.2", "nevada.through.joe.4");
-  for (const id of THREE) turn(g, id, "N");
-  await g.say("nevada.through.mom.3");
-  // Hand in hand, Little Sister in the middle, into the door.
-  g.sfx("portal");
-  await Promise.all([into(g, "mom", 0), into(g, "lilsis", 60), into(g, "bigsis", 120)]);
-  g.flag("nevada.left", true);
-  await g.cutscene("backup");
+  g.flag("nevada.saidBye", true);
+  await g.wait(800);                                              // (the button: his word, and a beat on it)
+  for (const id of THREE) turn(g, id, "N");                       // and they turn to the door: it is the player's click
 }
 
 export default {
@@ -937,6 +991,7 @@ export default {
   era: "nevada",
   name: "The last stop before nothing",
   travel: (g) => !g.flag("nevada.left"),                   // MAP-15: not by the map once the act has ended (whatever a save catches it in)
+  get wordsAt() { return THROUGH.at; },                     // STAGE-19N (C12): the Son's voice at the little door, during a talk through it (above)
 
   // Every place in this file is the painter's own measurement of the finished picture (art/scenes/nevada-roadside/layout.json),
   // or was set by eye against the picture with the people standing in it; where the two differ the comment says why.
@@ -959,7 +1014,7 @@ export default {
   // stands a row back now, too, at the right of the three (320, 546): at 334, 576 she hid half of Ranger, who sits at
   // 352, 512, and anywhere in the front row her words were written across Grandpa Joe's face in his rocker while her
   // mother talked to him.
-  spawn: { default: [286, 562], mom: [286, 562], bigsis: [320, 546], lilsis: [248, 528], fromStore: [261, 452] },
+  spawn: { default: [286, 545], mom: [286, 545], bigsis: [320, 546], lilsis: [250, 505], fromStore: [261, 452] },      // STAGE-19N (SCORE-19B S4, S16): Little Sister onto the shack's violet shadow (she melted into the sand); Mom off the bottom edge
   arrive: { fromStore: [[218, 462], [306, 474]] },
   facing: "E",
   exits: ["nevada-store"],                                        // NEVADA-12SA: (its pictures are made ready while they are out here)
@@ -975,7 +1030,7 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },      // the rusty drum and the sagebrush at the bottom right corner
     // Two that are not pictures: the patch of ground the man in gray is standing on. He moves when the story does, and
     // a cut-out's `solid` follows the story where a person's own does not.
-    { id: "agent-ground", solid: [[641, 448], [681, 448], [681, 464], [641, 464]], when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup") },
+    { id: "agent-ground", solid: [[641, 464], [681, 464], [681, 480], [641, 480]], when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup") },
     { id: "agent2-ground", solid: [[732, 458], [772, 458], [772, 474], [732, 474]], when: (g) => !!g.flag("nevada.distracted") && !g.flag("nevada.backup") },
     // NEVADA-12SA: the sun shade from the store's window, in Grandpa Joe's hands (PAINT-12A: shade-held.png, an alt), from
     // #12 until the cut-scene takes it down. Its base is a row below his feet, so it lies over him and his fists show round it.
@@ -1040,7 +1095,7 @@ export default {
     // The man in gray: in front of the notice, and then a few yards along the fence. (The ground he stands on is among the cut-outs, above.)
     // While he is in front of the notice he keeps it covered (the story needs him there): small movements only, his
     // watch and his tie. Once he has stepped aside he paces a little along the fence, never back in front of it.
-    { id: "agent", kind: "agent", at: [661, 458], face: "S", solid: false, when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup"),
+    { id: "agent", kind: "agent", at: [661, 474], face: "S", solid: false, when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup"),
       life: { still: true, fidget: [5, 11] } },
     { id: "agent", kind: "agent", at: [752, 468], face: "E", solid: false, when: (g) => !!g.flag("nevada.distracted") && !g.flag("nevada.backup"),
       life: { every: [18, 34], spots: [[726, 480, "W"], [784, 482, "E"]], stay: [2.5, 5] } },
@@ -1048,6 +1103,7 @@ export default {
 
   // Make the picture match the story facts. Runs on arrival and after loading a save.
   setup(g) {
+    THROUGH.at = null;                                            // STAGE-19N: (a game loaded in the middle of a talk through the door)
     shine(g);
     put(g, SIZES[holding(g) ? "wide" : g.flag("nevada.doorOpen") ? "coin" : "shut"]);
     banjoNow = null;
@@ -1081,7 +1137,8 @@ export default {
       use: (g) => g.goto("nevada-store", { spawn: "fromLot" }) },
     { id: "hat-nail", name: "hat on the nail", rect: [277, 356, 25, 15], walkTo: [291, 466], face: "N", look: each("nevada.hatnail") },
     { id: "fence", name: "fence", poly: [[562, 291], [614, 319], [800, 309], [800, 333], [617, 333], [617, 434], [606, 434], [603, 412], [562, 298]], walkTo: [590, 456], face: "N", look: each("nevada.fence") },      // its far side, its corner post, and the barbed wire along the top of its near side (the notice and the men are kept out of it)
-    { id: "notice", name: "notice", verb: "Read", poly: [[630, 402], [695, 405], [695, 361], [630, 359]], walkTo: [646, 472], face: "N", look: readNotice, use: readNotice },
+    { id: "notice", name: "notice", verb: "Read", poly: [[630, 402], [695, 405], [695, 361], [630, 359]], walkTo: [646, 488], face: "N",      // STAGE-19N: a step back, with the man in gray
+      look: readNotice, use: readNotice },
     { id: "pump", name: "gas pump", plane: "pump", poly: [[346, 348], [340, 352], [338, 357], [339, 364], [344, 370], [340, 372], [336, 378], [336, 433], [334, 442], [362, 443], [365, 439], [363, 428], [370, 426], [372, 422], [372, 392], [368, 385], [363, 384], [362, 374], [355, 370], [361, 361], [359, 352], [353, 348]], walkTo: [346, 466], face: "N", look: each("nevada.pump") },
     { id: "stand", name: "lemonade stand", plane: "stand", poly: [[490, 316], [486, 318], [485, 325], [413, 344], [416, 352], [428, 357], [437, 356], [448, 362], [463, 362], [478, 369], [474, 387], [474, 431], [471, 432], [467, 428], [452, 428], [444, 432], [443, 419], [431, 418], [424, 426], [423, 432], [415, 433], [416, 445], [420, 447], [420, 451], [428, 454], [423, 477], [426, 483], [425, 494], [428, 496], [431, 494], [435, 475], [439, 476], [439, 483], [449, 496], [453, 490], [472, 490], [475, 483], [480, 483], [486, 491], [503, 491], [507, 496], [512, 490], [513, 483], [522, 482], [525, 494], [531, 494], [522, 447], [537, 446], [539, 441], [530, 426], [524, 427], [520, 432], [516, 429], [490, 432], [480, 425], [483, 370], [485, 367], [491, 367], [501, 372], [518, 372], [526, 376], [539, 374], [544, 377], [551, 375], [553, 367], [492, 326], [493, 318]], walkTo: [486, 522], face: "N", look: each("nevada.stand") },      // its umbrella, its table and its sign
     {
@@ -1100,12 +1157,12 @@ export default {
     },
     // The man in gray, before and after he backs off along the fence: Show outlines his own figure (the person "agent"), inside the area.
     {
-      id: "agent", name: "man in gray", verb: "Talk to", poly: [[659, 365], [654, 368], [652, 373], [655, 379], [646, 384], [643, 398], [649, 403], [648, 458], [653, 462], [661, 455], [668, 462], [673, 458], [672, 403], [678, 398], [675, 384], [666, 379], [669, 376], [667, 368]], walkTo: [626, 476], face: "NE", when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup"),
-      look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.1", "nevada.agent.coin.2"] },
+      id: "agent", name: "man in gray", verb: "Talk to", poly: [[659, 381], [654, 384], [652, 389], [655, 395], [646, 400], [643, 414], [649, 419], [648, 474], [653, 478], [661, 471], [668, 478], [673, 474], [672, 419], [678, 414], [675, 400], [666, 395], [669, 392], [667, 384]], walkTo: [626, 490], face: "NE", when: (g) => !g.flag("nevada.distracted") && !g.flag("nevada.backup"),
+      look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.2"] },
     },
     {
       id: "agent2", name: "man in gray", verb: "Talk to", plane: "agent", actor: "agent", poly: [[750, 371], [744, 377], [746, 388], [736, 400], [736, 412], [745, 430], [746, 470], [757, 472], [761, 469], [761, 463], [757, 460], [757, 447], [763, 402], [760, 388], [763, 381], [759, 373]], walkTo: [708, 482], face: "E", when: (g) => !!g.flag("nevada.distracted") && !g.flag("nevada.backup"),
-      look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.1", "nevada.agent.coin.2"] },
+      look: each("nevada.agent.look"), use: talkToAgent, useWith: { coin: ["nevada.agent.coin.2"] },
     },
     // Mom's car. (NEVADA-12SA: once they know that a bigger shine is wanted, a look at it is #12's first wrong try: it never shone.)
     { id: "car", name: "Mom's car", plane: "car", verb: "Look at", poly: [[0, 423], [0, 582], [112, 582], [121, 586], [132, 586], [141, 582], [156, 582], [159, 580], [162, 569], [180, 569], [187, 564], [218, 523], [223, 520], [226, 505], [224, 486], [219, 475], [206, 466], [186, 460], [158, 457], [100, 425], [81, 421], [22, 421]], walkTo: [229, 588], face: "W", look: car, use: car },
@@ -1130,8 +1187,9 @@ export default {
       // the letterbox (the Son, on the other side of it, in Rome); her penny goes in, for luck.
       id: "hole", name: "little door", verb: "Talk into", circle: [PLACE[0], PLACE[1], 16], walkTo: DOORSIDE, face: "NE",
       when: (g) => !!g.flag("nevada.doorOpen") && !g.flag("nevada.wideOpen"),
-      look: atDoor(each("nevada.through.small")), use: talkThrough,
-      useWith: { penny: postPenny, pennies: atDoor("nevada.pennies.keep"), egg: atDoor("nevada.egg.keep"), coin: atDoor("nevada.gate.6") },
+      // STAGE-19N: the first click on it, whichever, is her head in the hole and Big Sister's rule (firstAtTheDoor).
+      look: firstAtTheDoor(atDoor(each("nevada.through.small"))), use: firstAtTheDoor(talkThrough),
+      useWith: { penny: firstAtTheDoor(postPenny), pennies: firstAtTheDoor(atDoor("nevada.pennies.keep")), egg: firstAtTheDoor(atDoor("nevada.egg.keep")), coin: firstAtTheDoor(atDoor("nevada.gate.6")) },
     },
     {
       // NEVADA-12SA: the door, wide open in Grandpa Joe's light (#12): gone through, it is the gate (#13).
@@ -1174,8 +1232,7 @@ export default {
         { when: (g) => !g.flag("nevada.distracted"), say: ["nevada.talk.mom.lilsis.gray.a", "nevada.talk.mom.lilsis.gray.b"] },
         ["nevada.talk.mom.lilsis.1a", "nevada.talk.mom.lilsis.1b"],
         ["nevada.talk.mom.lilsis.2a", "nevada.talk.mom.lilsis.2b"],
-        { when: (g) => (Number(g.flag("nevada.visits")) || 0) >= 2, say: ["nevada.talk.mom.lilsis.hats.a", "nevada.talk.mom.lilsis.hats.b"] },      // NEVADA-12SA
-        { when: (g) => g.asked("joe/grandpa") > 0, say: ["nevada.talk.mom.lilsis.joe.a", "nevada.talk.mom.lilsis.joe.b"] },                           // NEVADA-12SA
+        // PASS-19N1: the hats and the spare grandpa are rationed (nevada.talk.mom.lilsis.hats.*, .joe.* removed)
       ],
     },
     bigsis: {
@@ -1186,9 +1243,8 @@ export default {
       lilsis: [
         { when: (g) => !g.flag("nevada.distracted"), say: ["nevada.talk.bigsis.lilsis.gray.a", "nevada.talk.bigsis.lilsis.gray.b"] },
         ["nevada.talk.bigsis.lilsis.1a", "nevada.talk.bigsis.lilsis.1b", "nevada.talk.bigsis.lilsis.1c", "nevada.talk.bigsis.lilsis.1d"],
-        ["nevada.talk.bigsis.lilsis.2a", "nevada.talk.bigsis.lilsis.2b"],
         { when: (g) => !!g.flag("nevada.jolene"), say: ["nevada.talk.bigsis.lilsis.egg.a", "nevada.talk.bigsis.lilsis.egg.b"] },              // NEVADA-12SA
-        { when: (g) => !!g.flag("nevada.banjoTried"), say: ["nevada.talk.bigsis.lilsis.banjo.a", "nevada.talk.bigsis.lilsis.banjo.b"] },     // NEVADA-12SA
+        // PASS-19N1: nevada.talk.bigsis.lilsis.2* (no turn) and .banjo.* (fitting, said at the banjo already) removed
       ],
     },
     lilsis: {
@@ -1215,7 +1271,7 @@ export default {
     if (from === "nevada-store") for (const id of THREE) turn(g, id, "S");
     if (g.flag("nevada.arrived")) return;
     await g.wait(500);
-    await g.say("nevada.arrive.1", "nevada.arrive.2", "nevada.arrive.2b", "nevada.arrive.3", "nevada.arrive.4", "nevada.arrive.5");      // (NEVADA-12SA: and "a gentleman on a porch with a banjo")
+    await g.say("nevada.arrive.1", "nevada.arrive.2", "nevada.arrive.2b", "nevada.arrive.3", "nevada.arrive.5");      // PASS-19N1: nevada.arrive.4 merged into .5      // (NEVADA-12SA: and "a gentleman on a porch with a banjo")
     g.flag("nevada.arrived", true);
   },
 };

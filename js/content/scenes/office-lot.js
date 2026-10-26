@@ -35,7 +35,7 @@ const ROOF_FULL = 313.7;               // the roof's own depth: whoever stands o
 
 // ---------- the marks (layout.json marks, faces) ----------
 const M = {
-  fromLimo: [597.5, 398.0], door: [230.9, 433.9], trash: [339.9, 434.3], pipe: [436.0, 433.9], climbFrom: [389.8, 433.9],
+  fromLimo: [597.2, 417.7], door: [230.9, 433.9], trash: [339.9, 434.3], pipe: [436.0, 433.9], climbFrom: [389.8, 433.9],
   roof: [405.5, 244.9], intake: [344.0, 231.8], switch: [378.3, 231.6], limoDoor: [618.2, 407.3],
   dale: [574.2, 408.4], merle: [667.8, 410.0], inDoor: [287.5, 415.6],
 };
@@ -414,7 +414,8 @@ export default {
       look: { ranger: "office.lot.sign.ranger" }, use: { ranger: "office.lot.sign.use.ranger" } },
     { id: "door", name: "front door", poly: [[254.0, 426.2], [312.4, 426.2], [312.4, 303.5], [254.0, 303.5]], walkTo: [279.0, 436.4], face: "N",
       look: { ranger: "office.lot.door.ranger" }, use: { ranger: door } },
-    { id: "keypad", name: "keypad", poly: [[318.2, 360.8], [330.5, 360.8], [330.5, 345.0], [318.2, 345.0]], walkTo: [322.9, 435.3], face: "N",
+    { id: "keypad", name: "keypad", poly: [[318.2, 361.9], [336.2, 361.9], [336.2, 343.9], [318.2, 343.9]],      // STAGE-19O: 18 px (S9; layout.json)
+      walkTo: [322.9, 435.3], face: "N",
       look: { ranger: "office.lot.keypad.ranger" }, use: { ranger: keypad } },
     { id: "mat", name: "mat", poly: [[248.4, 442.0], [305.1, 442.0], [309.2, 428.9], [255.0, 428.9]], walkTo: [276.0, 443.7], face: "N",
       look: { ranger: "office.lot.mat.ranger" }, use: { ranger: mat } },
@@ -437,8 +438,9 @@ export default {
       look: { ranger: unitLook }, use: { ranger: unitLook } },
     { id: "grille", name: "grille", verb: "Unscrew", poly: [[314.6, 217.8], [375.3, 217.8], [375.3, 165.6], [314.6, 165.6]], walkTo: M.intake, face: "N",
       when: (g) => !grilleOff(g), look: { ranger: "office.lot.grille.ranger" }, use: { ranger: nuts } },
-    ...[[312.7, 204.5], [362.0, 204.5], [312.7, 163.7], [362.0, 163.7]].map(([x, y], i) => ({
-      id: `nut-${i + 1}`, name: "wing nut", verb: "Unscrew", rect: [x, y, 15.2, i < 2 ? 11 : 10.9], walkTo: NUTS[i].stand, face: "E",
+    // STAGE-19O: each nut's box 18 px square about the painted nut (S9: it was 15 by 11); layout.json `things` has the same
+    ...[[311.3, 201], [360.6, 201], [311.3, 160.1], [360.6, 160.1]].map(([x, y], i) => ({
+      id: `nut-${i + 1}`, name: "wing nut", verb: "Unscrew", rect: [x, y, 18, 18], walkTo: NUTS[i].stand, face: "E",
       when: (g) => !grilleOff(g), look: { ranger: "office.lot.wingnuts.ranger" }, use: { ranger: nuts } })),
     // the grille off: the opening, the fan in it (turning, or stopped); and the grille itself, leaning on the unit
     { id: "grille-off", name: "grille", poly: [[247, 232], [311, 232], [311, 184], [247, 184]], walkTo: [300, 236], face: "N",

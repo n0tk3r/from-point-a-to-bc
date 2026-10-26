@@ -209,6 +209,8 @@ def write(stA, stB, covers, frames, wob=None):
         "exits": [],
         "exits_note": "none: the door is locked for his comfort. People come and go through it by script (mark `hall`, outside it; `door`, inside it)",
     }
+    import stage19_boxes                                      # STAGE-19O: the small clickable things grown to be hit (S9)
+    stage19_boxes.grow(L["things"], "office-room")
     json.dump(L, open(f"{OUT}/layout.json", "w"), indent=1)
     print("layout.json:", len(things), "things,", len(planes), "planes")
     return L

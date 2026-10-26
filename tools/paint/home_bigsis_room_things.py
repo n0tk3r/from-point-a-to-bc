@@ -375,7 +375,7 @@ def strings(st):
         st.rope(line, 0.22, col("#b8a890"), name="strings", min_px=0.5, flag=2, shade=False)
     for bulbs in STRINGS:
         for i, p in enumerate(bulbs):
-            st.ball(p, 1.15, col("#fff0d0"), "strings", shadow=False, flag=2, emi=col("#ffd9a0") * 3.0)
+            st.ball(p, 1.15, col("#fff0d0"), "strings", shadow=False, flag=2, emi=col("#ffd9a0") * 1.6)   # STAGE-19H: 3.0 before
 
 
 
@@ -1211,7 +1211,7 @@ def m_lantern(seed):
         seam = np.clip(1 - rib / 0.16, 0, 1)
         low = np.clip(0.62 - 0.38 * np.sin(c.lat), 0, 1)                        # the little lamp is low inside it
         pap = 0.88 + 0.14 * fbm(c.lon * 2 + seed, c.lat * 2, 5, 2)
-        e = lerp(col("#f0965a"), col("#ffdca8"), np.clip(low * 1.25 - 0.25, 0, 1)[:, None]) * (low * pap * (1 - 0.22 * seam))[:, None] * 2.5
+        e = lerp(col("#f0965a"), col("#ffdca8"), np.clip(low * 1.25 - 0.25, 0, 1)[:, None]) * (low * pap * (1 - 0.22 * seam))[:, None] * 1.4   # STAGE-19H: 2.5 before (the brightest thing in the room, on no hotspot)
         return full(c, "#f2dcc0"), e
     return f
 

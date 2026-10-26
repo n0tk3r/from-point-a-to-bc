@@ -1,7 +1,7 @@
 {
   "id": "egypt-chamber",
-  "horizon": -200,
-  "full": 585,
+  "horizon": 175,
+  "full": 527,
   "light": "six oil lamps (see lamps): warm pools on the lower walls and floor, the ceiling and corners in cool dark; no daylight",
   "walk": [[86, 470], [120, 461], [160, 467], [456, 467], [465, 440], [546, 440], [550, 509], [752, 509], [757, 529], [792, 529], [792, 594], [150, 594], [72, 584], [72, 498]],
   "blocked": [
@@ -24,7 +24,7 @@
   "exits": [
     {"to": "egypt-gallery", "shape": {"poly": [[135, 330], [135, 413], [67, 469], [67, 369]]}, "stand": [106, 468], "face": "W"}
   ],
-  "marks": {"goldsmith": [330, 494], "dad": [150, 484], "talk": [434, 524]},
+  "marks": {"goldsmith": [330, 497], "dad": [150, 484], "talk": [434, 524]},
   "lamps": [
     {"id": "A", "flame": [160, 278], "on": "back.png"},
     {"id": "B", "flame": [371, 283], "on": "back.png"},

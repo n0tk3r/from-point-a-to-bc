@@ -202,9 +202,10 @@ export default {
       id: "top-door", name: "doorway at the top", verb: "Go through", poly: [[381, 152], [419, 152], [419, 197], [381, 197]], walkTo: [400, 231], face: "N",
       look: (g) => g.say(g.flag("egypt.sawChamber") ? "egypt.gallery.top.look2" : "egypt.gallery.top.look"),
       use: (g) => g.goto("egypt-chamber", { spawn: "fromGallery" }),
+      useWith: { coppermirror: standMirror, carmirror: "egypt.top.wrong" },      // STAGE-19E: a mirror dropped on the doorway goes on the step in front of it
     },
     {
-      id: "step-top", name: "top step", poly: [[364, 198], [436, 198], [438, 206], [361, 206]], walkTo: [395, 230], face: "N",
+      id: "step-top", name: "top step", poly: [[364, 198], [436, 198], [441, 218], [359, 218]], walkTo: [395, 230], face: "N",      // STAGE-19E: 20 px deep (it was 8), down the top of the ramp
       look: (g) => g.say(g.flag("egypt.topSet") ? "egypt.gallery.step.set" : "egypt.gallery.step.look"),
       useWith: { coppermirror: standMirror, carmirror: "egypt.top.wrong", shade: "egypt.gallery.shade" },
     },
@@ -237,7 +238,11 @@ export default {
   ],
 
   // Runs when the lead arrives. It must be safe to run twice, so each part checks its own fact.
-  async enter(g) {
+  async enter(g, came) {
+    // STAGE-19E: in from the chamber (he left it by its left-hand doorway, walking left), his first steps carry on down
+    // and to the left, off the doorway at the top, so the move runs on across the cut. (Not on a game loaded here: `came`
+    // is the room he walked in from, null for a save.)
+    if (came === "egypt-chamber" && g.lead && g.lead.y < 240) { await g.walkTo(372, 262); g.lead.face("SW"); }
     if (!g.flag("egypt.sawGallery")) {
       await g.wait(400);
       await g.say("egypt.gallery.arrive.1", "egypt.gallery.arrive.2");

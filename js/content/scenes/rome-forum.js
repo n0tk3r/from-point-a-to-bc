@@ -82,7 +82,7 @@ const GATE = [641, 379];
 const BEHIND = [690, 389];
 // Where the boy stands to talk to him: beside him on his left, a step nearer us, clear of his face and of the gateway (the
 // painter's stand for the crane, which the Gaul stands under).
-const AT_GAUL = [610, 420];
+const AT_GAUL = [590, 435];      // STAGE-19R (scene audit S7): was 610, 420, where the hoarding's post (x 602, y 304 to 353) ended on his head; the pair now stand about 65 px apart, the talk's shape kept
 // Where he goes, once he has his own toga and his way: up the square toward its far right end, where the plain lies
 // beyond the basilica of Paullus, between the site and the colonnade, until the square leaves the picture.
 const GAUL_GOES = [576, 300];
@@ -244,9 +244,16 @@ async function swap(g) {
 async function leave(g) {
   const gaul = g.actor("gaul");
   if (!gaul) return;
-  await stroll(g, "gaul", GAUL_GOES);
-  await g.tween(600, (k) => gaul.fade(1 - k));
-  g.view.cast.remove("gaul");
+  // STAGE-19R (C14: control back within about a second of the button): he turns and sets off as his last line ends, and
+  // the player has the square back at once; his walk up the square and his fade run on the game's clock on their own.
+  // (rome.swapped has already taken his area away, and nobody's script waits for him: the scene built again has no Gaul.)
+  (async () => {
+    await stroll(g, "gaul", GAUL_GOES);
+    if (g.actor("gaul") !== gaul) return;                         // (the boy has left the Forum meanwhile)
+    await g.tween(600, (k) => gaul.fade(1 - k));
+    if (g.actor("gaul") === gaul) g.view.cast.remove("gaul");
+  })();
+  await g.wait(300);                                              // the first steps, then the square is the player's
 }
 const GAUL_TREE = gaulTree({ point, bow, swap, leave });
 /** Talked to (or his own toga held out to him): his talk. Then he turns back to the hoarding, if he is still here. */

@@ -288,8 +288,10 @@ async function handDown(g, item) {
   if (item === "peanuts") return g.say("office.vent.down.peanuts");
   // the schedule: he reads it, on his chair under the vent (#19's end: the stage's revelation)
   if (j && j.hold && onChair(g)) j.hold(true, "read");
-  await g.say("office.schedule.read.1", "office.schedule.read.2", "office.schedule.read.3", "office.schedule.read.4", "office.schedule.read.5",
-    "office.schedule.read.6", "office.schedule.read.7", "office.schedule.read.ranger", "office.schedule.read.8", "office.schedule.read.9");
+  // PASS-19O: read as a turn with Ranger (his thoughts between: a hole seen, a hole made, what time, which way), not a run
+  await g.say("office.schedule.read.1", "office.schedule.read.2", "office.room.poster.ranger", "office.schedule.read.4", "office.schedule.read.5",
+    "office.schedule.read.ranger", "office.schedule.read.6", "office.schedule.read.3", "office.vent.r.5", "office.schedule.read.7",
+    "office.schedule.read.8", "office.duct.shaft.ranger", "office.schedule.read.9");
   if (j && j.hold) j.hold(false);
   g.flag("office.schedule", true);
 }
@@ -585,8 +587,9 @@ export default {
     if (item === "pietin") await g.say("office.vent.down.pietin.1", "office.vent.down.pietin.ranger", "office.vent.down.pietin.joe");
     else if (item === "peanuts") await g.say("office.vent.down.peanuts");
     else if (item === "schedule") {
-      await g.say("office.schedule.read.1", "office.schedule.read.2", "office.schedule.read.3", "office.schedule.read.4", "office.schedule.read.5",
-        "office.schedule.read.6", "office.schedule.read.7", "office.schedule.read.ranger", "office.schedule.read.8", "office.schedule.read.9");
+      await g.say("office.schedule.read.1", "office.schedule.read.2", "office.room.poster.ranger", "office.schedule.read.4", "office.schedule.read.5",
+        "office.schedule.read.ranger", "office.schedule.read.6", "office.schedule.read.3", "office.vent.r.5", "office.schedule.read.7",
+        "office.schedule.read.8", "office.duct.shaft.ranger", "office.schedule.read.9");      // PASS-19O: as handed down (a turn with Ranger)
       g.flag("office.schedule", true);
     }
   },
@@ -656,7 +659,7 @@ export default {
       joeLook: (g) => g.say(heat(g) >= 77 ? "office.room.cooler.hot.grandpajoe" : "office.room.cooler.grandpajoe"), rLook: rlook("office.room.cooler.ranger"),
       joeUse: low(suitsOr(["office.room.cooler.use.grandpajoe", "office.room.cooler.use.suits"], "office.room.cooler.use.grandpajoe"), [556, 454], "E"),
       rUse: async (g) => { const r = ranger(g); if (r) { await r.sit(true); await r.play(g.clock, "wash", { ms: 1600 }); } await g.say("office.room.cooler.use.ranger", "office.room.cooler.use.ranger.joe"); if (r) await r.sit(false); } }),
-    spot("cones", "paper cones", { rect: [567, 335, 12, 57] }, [556, 454], "E", {
+    spot("cones", "paper cones", { rect: [564, 335, 18, 57] }, [556, 454], "E", {
       joeLook: "office.room.cones.grandpajoe", rLook: rlook("office.room.cones.ranger") }),
     spot("plant", "plastic plant", { poly: [[619, 316], [627, 309], [646, 303], [663, 306], [676, 313], [684, 324], [677, 447], [671, 480], [646, 482], [632, 475], [626, 441], [613, 331]] }, [590, 470], "E", {
       joeLook: (g) => g.say(heat(g) >= 81 ? "office.room.plant.droop.grandpajoe" : "office.room.plant.grandpajoe"), rLook: rlook("office.room.plant.ranger"),

@@ -87,13 +87,16 @@ def paint_sky():
     """Early afternoon: deep blue overhead going pale and a little warm at the horizon; high thin cloud in long
     streaks and a few hooked tails, combed by a wind up there that is not felt down here; their cores bright, their
     edges thin into the blue."""
-    pic = SKY.field(SHAPE, K.HZ, [(0.0, "#2856a6"), (0.32, "#3a70be"), (0.66, "#6f9fd4"), (0.88, "#accbe2"), (1.0, "#e2dccb")], SEED,
+    # STAGE-19O (a value pass, round nineteen's scene audit S1): the sky calmer and lighter overhead (it was the most vivid
+    # thing in the frame): the top of the blue from #2856a6 (about L* 37) to a paler, greyer blue (about L* 58), the
+    # streaks' value steps halved below; the horizon's haze as it was
+    pic = SKY.field(SHAPE, K.HZ, [(0.0, "#6a8cbe"), (0.32, "#7397c6"), (0.66, "#8eb0d6"), (0.88, "#b6cfe2"), (1.0, "#e2dccb")], SEED,
                     haze="#eae0ca", patch=0.04)
     x, y = grid(SHAPE)
     tint(pic, "#a8b8e8", (np.clip(1 - x / 700.0, 0, 1) * np.clip(1 - y / 140.0, 0, 1) * 0.10).astype(F32))
     band = step(0.0, 0.22, y / K.HZ) * step(1.0, 0.62, y / K.HZ)
-    for (cell, lo, hi, amt, seed, colr) in (((440, 20), 0.58, 0.84, 0.50, SEED + 3, "#eef0f2"), ((240, 8), 0.64, 0.86, 0.55, SEED + 4, "#ffffff"),
-                                           ((150, 5), 0.70, 0.90, 0.35, SEED + 5, "#f4f6fa")):
+    for (cell, lo, hi, amt, seed, colr) in (((440, 20), 0.58, 0.84, 0.25, SEED + 3, "#eef0f2"), ((240, 8), 0.64, 0.86, 0.28, SEED + 4, "#ffffff"),
+                                           ((150, 5), 0.70, 0.90, 0.18, SEED + 5, "#f4f6fa")):        # STAGE-19O: halved
         n = noise(SHAPE, cell, seed, 5)
         slant = sample(n, x, y + (x - 400) * 0.09)
         m = step(lo, hi, slant) * band * amt * (y < K.HZ + 4)
@@ -107,8 +110,8 @@ def paint_sky():
         y0 = rng.uniform(14, 92)
         L = rng.uniform(90, 210)
         pts = [(x0 + L * t, y0 + 6 * t + math.sin(t * 3.0) * 2.5 - (9 * (t - 0.75) ** 2 if t > 0.75 else 0) * 4) for t in np.linspace(0, 1, 14)]
-        sh.taper(pts, "#ffffff", rng.uniform(2.4, 4.2), 0.6, alpha=rng.uniform(0.22, 0.38))
-        sh.taper([(px_, py_ + 1.2) for px_, py_ in pts], "#c8d6ea", 1.6, 0.4, alpha=0.25)
+        sh.taper(pts, "#ffffff", rng.uniform(2.4, 4.2), 0.6, alpha=rng.uniform(0.22, 0.38) * 0.5)          # STAGE-19O: halved
+        sh.taper([(px_, py_ + 1.2) for px_, py_ in pts], "#c8d6ea", 1.6, 0.4, alpha=0.125)
     lay(pic, (sh,))
     return pic
 
@@ -455,6 +458,9 @@ def paint_facade(pic, info):
     h = h - np.floor(h)
     c = np.empty(SHAPE + (3,), F32)
     c[...] = lit(T.BEIGE, FRONT)
+    # STAGE-19O: the wall a step darker and a touch cooler, so the building reads as a mass against the desert behind it
+    # (S1: it sat only 13 L* under the desert, in the same tan)
+    c = c * col("#e2e2e6")[None, None, :] * 0.94
     c = c * (1 + (h[..., None] - 0.5) * 0.035)
     foot = Y < 10.0
     c = np.where(foot[..., None], lit("#bdb6aa", FRONT), c)

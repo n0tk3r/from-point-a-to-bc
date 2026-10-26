@@ -73,13 +73,18 @@ def lamps():
     for i, (x0, x1, z0, z1) in enumerate(M.TROFFERS):
         cx, cz = (x0 + x1) / 2, (z0 + z1) / 2
         power = 1.15 if i == 0 else 1.15 * (1 - len(M.TUBES_OUT) / 3.0) + 0.08          # the near one has tubes out
+        # STAGE-19O (a light pass, round nineteen's scene audit S1/S13): the light on the counter and the corkboard, not on
+        # the empty floor in front: the fitting over the counter brighter, the near one (two tubes out) dimmer still
+        power = 1.45 if i == 0 else 0.30
         out.append(Lamp((cx, M.H - 4.0, cz), "#f0f6e6", power, reach=235.0, aim=(0, -1, 0), spread=0.18, soft=0.62, back=0.0, size=34.0,
                         wrap=0.35, samples=8, name=f"tubes-{i}", core=0.9, fill=0.05))
     gx0, gx1, gy0, gy1 = M.VEND_GLASS
-    out.append(Lamp(((gx0 + gx1) / 2, (gy0 + gy1) / 2, M.VENDING[5] + 4), "#ffe2b0", 0.45, reach=70.0, aim=(0, -0.2, 1), spread=-0.2,
+    # STAGE-19O: the machine's own glow a little stronger and aimed down onto its tray (S13: the tray was near-black)
+    out.append(Lamp(((gx0 + gx1) / 2, (gy0 + gy1) / 2, M.VENDING[5] + 4), "#ffe2b0", 0.55, reach=70.0, aim=(0, -0.5, 1), spread=-0.2,
                     soft=0.8, back=0.1, local=150.0, name="vending", core=0.8, wrap=0.4))
     dx0, dx1, dy0, dy1 = M.DOOR
-    out.append(Lamp(((dx0 + dx1) / 2 + 20, 150, -6), "#e6eedc", 0.20, reach=60.0, local=90.0, name="doorglass", core=0.8, wrap=0.5))
+    # STAGE-19O: the hall's light through the door's window a little stronger (S8: the door was 57% near-black)
+    out.append(Lamp(((dx0 + dx1) / 2 + 20, 150, -6), "#e6eedc", 0.32, reach=60.0, local=90.0, name="doorglass", core=0.8, wrap=0.5))
     return out
 
 
@@ -151,9 +156,10 @@ def render(ss=1, fast=True, skip=(), rect=None, occ=None, **state):
     ceil = st.mask_of("ceiling")
     dark += ceil * (np.exp(-np.clip(Z, 0, 1e4) / 25.0) + np.exp(-np.clip(X, 0, 1e4) / 25.0) + np.exp(-np.clip(M.W - X, 0, 1e4) / 25.0)) * 0.22
     pic = pic * (1 - np.clip(dark, 0, 0.8))[..., None]
-    # the waxed floor: a soft sheen of the near fitting
-    tx0, tx1, tz0, tz1 = M.TROFFERS[1]
-    sheen = np.exp(-((X - (tx0 + tx1) / 2) / 90.0) ** 2 - ((Z - (tz0 + tz1) / 2 + 60) / 120.0) ** 2) * floor * 0.10
+    # the waxed floor: a soft sheen of the fitting over the counter (STAGE-19O: was the near fitting's, which lit the empty
+    # foreground floor; now it lies on the strip in front of the counter, where Ranger walks)
+    tx0, tx1, tz0, tz1 = M.TROFFERS[0]
+    sheen = np.exp(-((X - (tx0 + tx1) / 2) / 90.0) ** 2 - ((Z - (tz0 + tz1) / 2 + 20) / 80.0) ** 2) * floor * 0.08
     pic = pic + sheen[..., None] * col("#f0f6e6")[None, None, :]
     # depth by tone: the far wall a little paler and cooler, as through the room's air
     t = np.minimum(st.t, 3000.0)
@@ -162,6 +168,12 @@ def render(ss=1, fast=True, skip=(), rect=None, occ=None, **state):
     # the near things are darker and warmer than the middle of the room
     fr = (st.grp == st.groups.get("front", -1))
     pic[fr] = pic[fr] * col("#d8c4b0")
+    # STAGE-19O: the snack machine's colours quieter (S1: its blue body and coloured rows were the most vivid thing in
+    # the frame), about 30% less chroma
+    vm = (st.grp == st.groups.get("vending", -1))
+    if vm.any():
+        g_ = (pic[vm] @ LUM)[:, None]
+        pic[vm] = g_ + (pic[vm] - g_) * 0.70
     return st.down(pic), st
 
 
@@ -193,7 +205,7 @@ def grade(pic, rect=None):
     cx = ((x - 400) / 400) ** 2
     low = np.clip((y - 450) / 150, 0, 1) ** 1.3
     top = np.clip((120 - y) / 120, 0, 1) ** 1.2
-    v = np.clip(cx * 0.20 * (0.4 + 0.6 * low) + low * 0.20 + top * 0.14 + top * cx * 0.18, 0, 0.55)
+    v = np.clip(cx * 0.20 * (0.4 + 0.6 * low) + low * 0.36 + top * 0.14 + top * cx * 0.18, 0, 0.62)    # STAGE-19O: the foreground floor lower (low 0.20 -> 0.36)
     warm = col("#4a3040")
     out = pic * (1 - v[..., None]) + pic * warm[None, None, :] * 1.5 * v[..., None]
     out = out * (1 - top[..., None] * 0.06) + col("#3a4060") * (top * 0.05)[..., None]

@@ -49,7 +49,7 @@
  "exits": [
   {"id": "track", "to": "egypt-site", "what": "the track up to the plateau: a wide band of it, the sand on either side included, so that a click anywhere near it is a click on it", "shape": {"poly": [[452, 286], [532, 284], [544, 330], [540, 380], [530, 420], [512, 420], [506, 380], [500, 340], [496, 318], [480, 318], [480, 350], [486, 390], [486, 420], [470, 420], [460, 380], [454, 330]]}, "stand": [500, 372], "face": "N"}
  ],
- "marks": {"dad": [420, 570], "lot": [404, 432], "talkToLot": [448, 444], "muzzle": [155.4, 420.0], "fromCar": [642, 563]},
+ "marks": {"dad": [340, 570], "lot": [404, 432], "talkToLot": [448, 444], "muzzle": [155.4, 420.0], "fromCar": [642, 563]},
  "lot": {"note": "Lot sits on the sand here (the game draws him), in the near palm's shade: with the sun low on the left the crown's shadow lies to the right of the palm's foot, and this is its darkest part, a few steps from his donkey at the water", "hips": [404, 432], "seated": "ground", "face": "E", "stand": [448, 444], "standFace": "W", "solid": [[368, 418], [428, 418], [434, 430], [428, 440], [374, 440], [366, 430]], "bundle": {"at": [380, 427], "box": [[370, 418], [390, 428]], "what": "his bundle, painted into the backdrop at his left hand, behind him: a mantle of banded wool (madder, ochre, indigo on undyed), rolled and corded"}},
  "steam": [472, 498],
  "fx": [

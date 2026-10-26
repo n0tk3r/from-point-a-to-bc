@@ -504,6 +504,20 @@ given over to it, is `flags=proof.road` (`g.effects.get("road").set({ s: 300 })`
 ahead). <!-- ROAD-18E -->
 
 <!-- DRIVE-16E --> <!-- DRIVE-16F: this section moved here, after the paragraphs about every moving thing ("On the game clock" to "Trying marks out"), which had come after it -->
+
+**Hushed while someone speaks** (ENGINE-19B). While a line is on the stage (`g.dialogue.active`: words, a thought, the
+building's speakers) and for 0.4 s after it, so that the beat between two lines does not wake them, the scene's moving
+things go **slower and fainter**, eased in and out over a quarter of a second in eighths (so the cast repaints them eight
+times each way, not every frame): smoke at half its pace and 0.7 of its opacity; shimmer at half and 0.65; ripples half
+and 0.7; a stream 0.6 and 0.7; a flame and embers at about half pace and 0.85 and 0.8; birds 0.6 of their pace and 0.85; a
+sway (washing, a palm's crown) and a boat on the swell only slow, never fade; a strip and a drive at a car's side windows
+(the limousine's desert) 0.8 and 0.85 (`HUSH` in `effects.js`). Never the door in time, a drive straight ahead (the
+opening's road), a flock a script is herding or posing, a strip or a drive whose speed a script has set in the last two
+seconds, or anything whose description says `hush: false`; and a scene with `hush: false` is never hushed. A small
+movement of someone's own (`life.js`'s fidgets, which it marks `life`) under way while a line is up goes at half its
+pace, unless they are the one speaking (cast.js, `hushOf`); a fidget a script asks for (the Gaul pointing at the hole in
+the swap) goes at its own pace. The guide's S15: alive, but no longer competing with the words.
+
 ### The world going by a car's side windows
 
 The author, 15 October, of the limousine's windows: "the outside needs to go past not look like mirrors". A strip
@@ -799,6 +813,27 @@ the coin doors are under 0.2 ms; making a door (its tables) is about 30 ms, once
 motion the clock runs at half speed, the bend is 0.6 as big, and it is drawn fifteen times a second: never stopped
 dead, as the author asked. The study, with the six looks and the author's settings, is kept as a private page
 (`claude.ai/artifact/WCRWEAbF2DfeouYApqQewm`).
+
+
+### Cuts between scenes: the dip, the black, and the sound first <!-- ENGINE-19B -->
+
+A fixed camera cuts between paintings, so the engine's ways from one scene to another are its edits (`g.goto`,
+`js/engine/game.js`; the numbers are `LEAD`, `SOON` and `DIP` at the top of it):
+
+- **A walk next door is a short dip.** A `g.goto` that names no `via` is a walk: an edge, a door, a stair. When the room
+  it goes to is **next door** (`g.nextDoor(from, to)`: the same time, and one place of a map, or two places a way on the
+  map joins, or a way out of the room left, its `exits` or an edge, goes into it), the picture dips for **70 ms out and
+  80 ms in**, where it used to go to black for 300 and 400 (a plain cut flickered: decision 160). Black keeps its
+  meanings (the guide's C16): a goto that asks for
+  `via: "fade"` by name (a script; switching leads), the map's travel, the tunnel, a change of time, an act's gate.
+- **Sound first (a J-cut).** When the scene gone to has another track (another time, or a room with a track of its
+  own: the Retreat, the Tiber, the Office), its track starts **0.8 s before its picture fades in** (`LEAD`): under the
+  picture being left on a walk (it holds 0.73 s, then the dip), under the fade out of a black fade, in the dark after an
+  act's card, and in the tunnel (`SOON`: 0.54 s before the tunnel's end and its 0.26 s of white). Where the same track
+  carries on, nothing waits. Not from the title or a fresh start (no scene is left), not on loading a save (the scene is
+  built without a goto), and never while a cut-scene is skipped. The Timer's switch (`atlas.js`, `switchTo`) starts the
+  other time's track under the dial; Esc, which changes nothing, puts the first one back.
+- `g.lastWay` says how the last goto went (`{ id, via: "dip" | "fade" | "cut" | "map" | "wormhole", lead }`), for tests.
 
 ### How the pictures are painted
 
@@ -1387,6 +1422,33 @@ What the engine sees to, so that a scene never has to:
 
 ---
 
+
+### People in the room's light <!-- ENGINE-19B -->
+
+The people are drawn in the scene's paints (`look.js`) and lit from the upper left. A scene can say more, for the guide's
+S4 and S14 (`js/engine/cast.js`, "people in the room's light"):
+
+```js
+figureLight: { exposure: -0.12, contrast: 1.06 },    // everyone 12% darker (a noon room where they vanish into the sand); contrast 1 is as drawn
+lightZones: [                                        // whoever has their feet in a zone: darker (k below 0) or lighter by k as well,
+  { ellipse: [455, 408, 60, 26], k: 0.1, soft: 20 }, //   eased over `soft` pixels across its edge (20 if not said)
+  { poly: [[560, 470], [760, 470], [760, 600], [560, 600]], k: -0.2 },   // an awning's or a doorway's shade, a lamp's pool
+],
+lightFrom: "right",                                  // the key light's side ("left", the rig's own, if not said)
+```
+
+Each may be a function of the game, read as the scene is built. Darker multiplies each colour by `1 + exposure`;
+lighter takes it toward white by `exposure`; contrast is about mid-grey. The light on a person is the sum, in steps of
+0.04, and each step is a picture of its own in the store of finished pictures (a table of 256 values a channel, applied
+once as the picture is drawn; nothing per frame): a new step costs the rig's drawing and well under a millisecond more,
+and is found again at no cost. `lightFrom: "right"` mirrors the rig's own shading (pix.js `lightSide`): the shade side,
+the outline on it, the shadows a part casts and the bands of shade; the eyes' glints and the nose's shadow stay where
+they are. A painted figure (Ranger) is not changed. How to set it: look at the room with `?scene=<id>`, put the people on
+their marks, and set `figureLight` until the lead reads off the floor at a glance (S4: a level apart when the picture is
+posterised); add a zone where the painting has a pool of light or of shade a mark stands in, with `soft` about a third of
+its width; `lightFrom` only where the painting's sun is plainly on the right. The proof (`engine-proof`) shows a shaded
+and a sunny zone with the flag `proof.light` (and the light from the right with `proof.lightRight`).
+
 ## 5. Intro movies and cutscenes
 
 A cutscene is **one async function**, kept in `js/content/cutscenes/`. Each `await` is
@@ -1415,11 +1477,25 @@ on the stage inside a cutscene function and `await` its `ended` event.
 
 ### How skipping works
 
-When the player presses Skip (or Esc), the engine sets `clock.skipping = true`.
+When the player presses Skip, the engine sets `clock.skipping = true`.
 Every `wait`, `tween` and `say` then finishes at once. The same function runs to
 its end in a few milliseconds and leaves the stage exactly as it would have been.
 Nobody has to write a second "skipped" version of each scene, and the two can never
 disagree.
+
+<!-- ENGINE-19A --> **Pausing a cut-scene.** Esc during a cut-scene no longer skips it: it opens the pause menu, with the
+clock stopped (the scene waits where it is, the ambient loops too), and the menu's first row is **Skip this scene**.
+**Back to the game** (or Esc again) goes on from where it stopped. The on-screen **Skip** button stays and still skips at
+once, and from under the menu too. While the menu is up in a cut-scene, clicks and keys are the menu's (Space does not
+hurry the line behind it). Saving, loading and quitting wait in it, as they do whenever a script has control. (A player
+who reached for Esc to pause used to lose the scene: CUTS-19's E1, the guide's C15, Ratchet & Clank's pattern.)
+
+<!-- ENGINE-19A --> **Saved before it.** A full cut-scene played from a game in progress (`backup`, `office-arrive`,
+`office-down`, and any other but the opening) writes the autosave as it begins, whatever script started it, with the
+cut-scene's name in it (`cutscene`). Loading that save takes the name out of the game again, lets the scene's arrival
+run (Backup's roadside and the Office's lot and limousine play their cut-scenes themselves for a save made there), and
+plays the named one if the arrival did not play a cut-scene. So a player who quits in one comes back just before it, and
+sees it again, not the last room before it.
 
 ### The opening
 
@@ -1719,6 +1795,50 @@ On screen, each character speaks in their own color, just above their own head, 
 manner of classic adventure games. While a close-up is showing, the words run along the
 bottom of the stage, clear of what is being looked at.
 
+<!-- ENGINE-19A --> **Words over paint.** Every line spoken on the stage (over a head, along the bottom in a close-up, beside
+a portrait through a door) has a **soft backing**: a plate in the interface's ink (`--backing` in `css/tokens.css`: the
+ink at half), a little larger than the words, its edges feathered, so the painting still reads through it. It is the
+line's own `::before` (no element, no canvas: the browser draws it). On by default; Options has the tick **A soft backing
+behind the words**. Not in the opening, which keeps the look the author approved (the stage's `data-cut="intro"`).
+Options also has **Text size**: Normal, or Large (the words a quarter larger, `max(3.375cqw, 15px)`). The box keeps its
+width (400 picture pixels at most), so a large line is taller, not wider: its bottom still sits ten pixels over the head
+(and over a taller head close by), and `fit` brings a line that would run off the top down onto the stage. Both are kept
+with the other settings (`pabc.settings`). Thoughts and the building's speakers are not changed (their own pictures and
+banner); the menus neither.
+
+### How long a line stays <!-- ENGINE-19A -->
+
+A spoken box is up for **clamp(characters / rate, 1.2 s, 7 s)**, the rate the reader's (Options, **Text speed**: Slow 9,
+Normal 12, Fast 18 characters a second; the guide's rule, from the subtitle standards: under-13s read about 11 to 13 a
+second, under-7s about 9). At **Slow**, a box that would need more than 7 s (over 63 characters) **waits for a click**
+instead, with a small mark after its words (a triangle, gently pulsing; still with less motion). At Normal and Fast the
+7-second cap holds. A click always moves on at once. A setting stored before (0.6, 1, 1.6: a factor) is read as the
+nearest rate (Slow, Normal, Fast). Two boxes in a row by the **same speaker** have a quarter second of nothing between
+them, so the change shows; a different speaker's follows after the 90 ms beat, as before. In game time (the clock).
+
+| Characters | Slow, before / now | Normal, before / now | Fast, before / now |
+| --- | --- | --- | --- |
+| 10 | 2.50 s / 1.20 s | 1.50 s / 1.20 s | 0.94 s / 1.20 s |
+| 20 | 3.43 s / 2.22 s | 2.06 s / 1.67 s | 1.29 s / 1.20 s |
+| 40 | 5.37 s / 4.44 s | 3.22 s / 3.33 s | 2.01 s / 2.22 s |
+| 60 | 7.30 s / 6.67 s | 4.38 s / 5.00 s | 2.74 s / 3.33 s |
+| 80 | 9.23 s / until a click | 5.54 s / 6.67 s | 3.46 s / 4.44 s |
+| 120 | 13.10 s / until a click | 7.86 s / 7.00 s | 4.91 s / 6.67 s |
+
+(Before: `max(1.5 s, 0.9 s + 58 ms a character) / the factor` 0.6, 1 or 1.6.) What keeps its old time: a **recorded
+voice** (the words stay until it ends, and 280 ms; if it will not play, the words by the rule); a **thought** (Ranger's
+pictures: 1.83 s at Normal, 3.05 s at Slow, 1.14 s at Fast, as before); the **opening's** lines (the cut-scene `intro`,
+timed as the author approved it). The **building's speakers** (`g.pa`) follow the rule, and 0.4 s for the chime; at Slow
+one over the cap waits for a click, unless it is the building's own life (`announce`), which nobody clicks and keeps the
+cap; a line of pictures there as before.
+
+**Cards** (an era's card, "Meanwhile", a scene's title such as "A Very Small Building With A Very Long Name", the last
+card) stay **0.6 s a word at least** (the title and its line together; a word is anything with a letter or a digit:
+"1920" and "B.C." count), counted from when the card is fully shown (after its 0.35 s fade-in; at once with less
+motion). A card a script gives longer keeps its time. So the era cards go from 2.4 s to 3.0 s, the "Meanwhile" cards to
+3.6 s, the Office's title to 5.4 s, the Office of Peculiar Sectors card to 6.6 s; "LAMPLIGHTER / to be continued" keeps
+its 4.2 s. The opening's own card ("n0tk3r presents", 1.7 s) is as approved.
+
 ### Dialogue trees
 
 The author, 10 October: the dialogue branches in the LucasArts games "are all enjoyable with funny and cute quips back
@@ -1871,7 +1991,7 @@ three (marked `ENGINE-17` in the code; the pictures are `js/art/thoughts.js`'s, 
 Said by `g.say` like any line, it gives the speaker a thought bubble over his head instead of the words: a white cloud, a
 dark line round it and a thin rim inside the line in his own colour, two or three small puffs trailing down toward his
 head, and in it the pictures side by side. The words' box is not shown. It is up as long as a line of three words
-(900 + 16 x 58 ms at the usual speed, 1,828 ms; the text speed in Options changes it as it changes a line), counted as
+(900 + 16 x 58 ms at the usual speed, 1,828 ms; the text speed in Options changes it by the factor it always had: 0.6 at Slow, 1.6 at Fast, ENGINE-19A), counted as
 said, and skipped by a click or a key as a line is; it rises a little as it comes, unless the player has asked for less
 motion. Where the speaker is not drawn (off the stage; in a scene seen through the lead's own eyes; the lead himself, up in
 a duct looking down through a grille) it is where his words would be for someone off the stage (the top middle, its bottom
@@ -3414,7 +3534,7 @@ to showing the drawing itself.
 | Give a companion something | Click the thing, then click them or their portrait | Tap the thing, then tap them or their portrait | |
 | Next line | Click | Tap | Space or Enter |
 | Pick a reply | Click it | Tap it | Number keys |
-| Skip a cutscene | **Skip** | **Skip** | Esc |
+| Skip a cutscene | **Skip** | **Skip** | Esc, then **Skip this scene** (Esc alone pauses it: ENGINE-19A) |
 | Menu | **Menu** | **Menu** | Esc |
 | Show what can be clicked (an outline round each thing, an arrow at each way out) | **Show** | **Show** | Hold H |
 | See the map, go back to a place already visited, play as someone elsewhere (MAP-15) | **Map**, then click the place or the portrait (a map's name at the top, or the dial, turns to another map) <!-- MAP-15D --> | **Map**, then tap | M; Tab and Enter; Left and Right for the other maps; M or Esc to put it away |
@@ -3955,6 +4075,260 @@ continued: the Office (stage one)". -->
      asking: the three leads hear three of the four facts at most, the fourth and its correction by Big Sister never); the divider's raccoon ("Sir, we are still looking up the
      raccoon."); the Gaul's "You are the most Roman person I have met today."; "Corinth! A house! TWO seas!". The whole
      list (31 options) is in TALK-18's ready.md.
+
+139. **Esc pauses a cut-scene; it does not skip it** (ENGINE-19A). Skip is the pause menu's first row and the on-screen
+     button. One more key press to skip with the keyboard (Esc, Enter), for never losing a scene by reaching for pause.
+140. **The pause menu in a cut-scene is the whole pause menu** (ENGINE-19A): Skip, Back, then Save, Load and Quit greyed
+     out (they wait for the scene, as in any scripted moment), and Options. A shorter menu (Skip, Back, Options) is one line.
+141. **The autosave before a cut-scene plays it again on loading** (ENGINE-19A), for every cut-scene but the opening,
+     started from play. The saved moment is inside the script that starts it (its facts so far), which the three
+     cut-scenes are built to begin from (they dress the stage themselves). FINAL-19: except the demo's end, "Going Down" (`save = false` on its script): after the end, Continue brings Grandpa Joe back
+     to the Comfortable Room as last saved at rest, before the Rag, as in round eighteen, and not into the ending again.
+142. **Text speed is a rate: Slow 9, Normal 12, Fast 18 characters a second** (ENGINE-19A), the guide's numbers. Normal
+     is a little slower than before for lines of 40 to 105 characters (the box up to 1.1 s longer at 80) and faster
+     under 35; 192 lines that stayed past 7 s now stop at 7 s at Normal.
+143. **At Slow, a long box waits for a click** (over 63 characters), marked by a small pulsing triangle. A young reader
+     never loses a line; an adult who picks Slow clicks more.
+144. **The same speaker's next box waits a quarter second** (ENGINE-19A); another speaker's the 90 ms beat as before.
+145. **What keeps its old time** (ENGINE-19A): thoughts, recorded voices, and the opening (its lines and its card are as
+     the author approved them in round eighteen; its words also have no backing). Say if the opening should follow the
+     new rule and have the backing too: one test each (`intro` in `dialogue.js` and `card`, `data-cut` in the css).
+146. **Cards 0.6 s a word, after the fade-in** (ENGINE-19A): every card is 0.35 s longer than before, and the wordy ones
+     longer still (section 7). "Going Down" (two words) keeps its 2.2 s, now counted after the fade-in.
+147. **The backing: the ink at 50%, feathered, on by default** (ENGINE-19A), chosen by eye in four rooms (a noon Egypt
+     room, the Rome steps, the house at night, the limousine: `look/` in ENGINE-19A's folder). Lighter (40%) shows more
+     paint and less contrast on the sunlit sand; 60% reads as a box.
+148. **Large text is a quarter larger and keeps the box's width** (ENGINE-19A): taller boxes, more lines, never wider than
+     400 picture pixels, so every rule that keeps the words over their speaker holds as it was.
+
+160. **A walk next door dips, it does not cut** (ENGINE-19B): 70 ms out and 80 in. Filmed frame by frame on three walks,
+     each way and back (the steps and the street, the landing and the study, the gallery and the site): the dip is the
+     same short blink every time (the new picture starts back 0.08 to 0.16 s after the old one starts to go). A plain cut
+     was not clean: the room is built under cover, so a cut showed a lone black frame between the two pictures in six
+     walks of nine (a flicker that looks like a fault) and a third of a second of black on a first visit. One number
+     (`DIP` in game.js) makes it a cut if you prefer one.
+161. **Sound first holds the old picture on a walk** (ENGINE-19B): into a room with its own track (the Retreat, the Tiber),
+     the track starts and the lead stays at the edge 0.73 s before the dip; over black (a change of time, an act's gate)
+     the black lasts up to 0.8 s longer than before with the new music in it. `LEAD` is 0.8 s; the guide allows 0.5 to 1.5.
+162. **The Timer's music under the dial** (ENGINE-19B): it starts as the dial starts turning, and Esc on the map puts the
+     first time's track back; the cross-fade both ways is 1.2 s, as everywhere.
+163. **How much the hush takes** (ENGINE-19B): smoke and light on water at half pace and about 0.7 of their opacity (the
+     scenes' smoke is faint already, and the half pace does most of the quieting), flames and birds a little, cloth and
+     boats only slower; the limousine's windows 0.8; people's own small movements half pace, never one a script asks for.
+     Everything is hushed while anyone speaks, not only what is near the words: simpler to see and to set, and a scene
+     or a thing can opt out (`hush: false`).
+164. **The figure light is the scene's to ask for** (ENGINE-19B): no room changes until its staging builder sets it; in
+     this copy only `egypt-site` (exposure -0.12, contrast 1.06) and `rome-tiber` (exposure -0.1, contrast 0.9, the light
+     on the left, a +0.1 pool at Eleazar's wall) show it. A backlit room gets darker and flatter people; a rim of light
+     from behind is not built (the brief's sides are left and right only).
+     <!-- FINAL-19 --> In the game as merged the staging builders set it: `egypt-site` exposure 0, contrast 1
+     (STAGE-19E, decision 173: the repaint does the work), `egypt-crash` -0.12 / 1.06 (STAGE-19E), `rome-tiber` -0.1 /
+     0.9 with the light from the left and a +0.1 zone at Eleazar's bench (STAGE-19R, decision 180), and a -0.15 zone at
+     the threshold of `rome-steps` (STAGE-19R); ENGINE-19B's demonstration values were not taken.
+
+170. **The burial chamber's depth follows its walls** (STAGE-19E, from SCORE-19A's S6): `horizon: 175, full: 527`,
+     `maxScale: 1.2` (it was -200/585). The side walls and the ceiling beams run to an eye level near row 175, a camera
+     about twice a man's height; the old numbers kept Dad between 132 and 161 px over the whole floor, and he seemed to
+     float toward us. Now he is 139 px where he was (470, 480), about 123 px at the back of the floor and about 190 px
+     at the front edge. One thing to know: the painter drew the floor and the king's things through the old numbers on
+     purpose (a long lens 8.6 m up, the walls "as a stage set is", `egypt_chamber_kit.py`), so beside the furniture he
+     is now up to about 8% larger at the bench and the sarcophagus and about 7% smaller at the back wall. If that reads
+     wrong to you, the two numbers go back (scene and `layout.json`) and nothing else changes.
+171. **The act's last step is the player's** (STAGE-19E, C13 and C14): the first time Dad steps up to the open door he
+     says the psalm and stops, and after a hold on his face the player has him back; "Go through" again, and he says
+     his old line, walks in as the black comes down, and the "Meanwhile" card follows. The gate was one locked stretch
+     of 14 boxes and about 90 s, with the Son's arrival in Rome; the Egypt half is now 3 or 4 boxes ending on its
+     button.
+172. **Egypt's smaller staging** (STAGE-19E): the top step in the gallery is 20 px deep (it was 8), and a mirror used on
+     the doorway above it goes on the step; the wagon's door mirror is a 26 x 22 px box (it was 12); coming back from
+     the chamber, Dad's first steps go down and to the left off the top doorway (he left the chamber walking left);
+     the way up from the river lands a step in from the bottom edge (170, 545); the flashlight beat ends with Dad under
+     the place that hums (500, 500), clear of the king's last chest; the wagon's driver's door says "Get out by the
+     door"; and the arrival by the river holds 0.6 s after "I taught him that" and after the amen.
+173. **The foot of the pyramid, one value pass** (STAGE-19E, from SCORE-19A's egypt-site S1 to S4, S9, S10): the painter
+     (`egypt_site.py`: `value_pass`, `CLOUD_TONES` and the front plane's shade) lays the sand floor about 8 L* lower from
+     the lip of the plateau toward us, with its texture halved where people stand; keeps the sunny spot (the shade's tee)
+     in full sun, smooth and paler, so that it now reads about 13 L* over the sand round it (it was 4); puts the waiting
+     blocks in the near corner in the cloud's shade (about 18 L* lower); and takes the great cloud's lights about 10 L*
+     down. Same composition, same layout, keyed and installed as usual. Dad now stands 5.5 L* above his ground (he was
+     -0.6) and the scribe 8.8 (0.5); the haulers, darker than the sand, come 4 to 8 L* under it (they were 8 to 13), and
+     the people's light is left as drawn (`figureLight: { exposure: 0, contrast: 1 }` in the scene).
+174. **At the river, Dad stands clear of Lot** (STAGE-19E, from SCORE-19A's egypt-crash S12): Lot keeps his painted seat
+     in the palm's shade with his bundle at his hand, and Dad's marks move instead: he climbs out at (340, 570) (it was
+     (420, 570), his head over Lot's lap) and his first steps go to (340, 500) (it was (424, 502), Lot just behind his
+     shoulder), looking up the track along the prints. The prints' own walk-to stays where it was. In the burial
+     chamber the goldsmith's stool mark is 3 px lower (330, 497), on the line his two walking spots keep, so that the
+     re-scale's 3% does not put his head on a painted line.
+180. **Rome's staging, round nineteen** (STAGE-19R; the scene audit and the cut-scene audit of the round). One fixed
+     frame per room, as before: what moved is marks, a few areas, holds, and four painters' light and values.
+     - **The Son lands lower on the steps:** the doorkeeper puts him down at (470, 540), the foot of the flight, not
+       (470, 508), where two step edges ran through his head. Then a still beat (0.7 s) as he turns and sees Rome, before
+       "Dad? ... This is NOT the rest stop."
+     - **The gate gets its takes:** half a second after his "YES." and 0.6 s after the doorkeeper's "The hair."; in the
+       treasury, half a second as he turns to the clerk before "Sorry. Wrong wall."; and the act ends on its button, "Do
+       we get the dog?", held 1.2 s on the boy alone at the little door before the fade (it was 0.4 s).
+     - **The Gaul leaves while you play:** after his last line he sets off up the square and the player has the Forum
+       back at once (it was about six seconds of watching him walk away and fade). He takes nothing with him that a
+       script waits for.
+     - **Marks off the tangents:** the boy talks to the Gaul from (590, 435), not (610, 420), where the hoarding's post
+       stood on his head; Felix stands at (68, 465), off the barge's mast, his idle places (72, 485) and (54, 475).
+     - **Easier to click:** the treasury's way out is 40 pixels tall (it was a 14-pixel strip at the bottom edge); the
+       little case on Eleazar's doorpost is 20 pixels wide (it was 12).
+     - **Words off faces:** the boy's three lines on first seeing the river now lift over Mariam's head (her sprite flag
+       `clear`), as his arrival's lines on the steps do over the soothsayer's.
+     - **Light, painted (two painters re-run, same composition, layout and marks):** on the steps (`rome_steps.py`,
+       `stage19`) a warm glow in the open doors only (the one lit opening is the gate: the doorway's box L* 34 to 43),
+       a cool shade thrown left across the steps by the columns where the soothsayer and his cage sit (L* 74 to 60: his
+       white robe reads against blue, not white on white; in that shade the steps' nosings catch no sun, so their light
+       lines are damped where his head is: one crossed it once the shade made it stand out), the altar's shadow longer
+       to the lower left behind the
+       senator (73 to 61), and calmer clouds (their brightest cell 99.7 to 94.4). The people on the steps need no light
+       of their own (no `figureLight`): the paint does it. The one exception is the threshold: the glow came up to about
+       the doorkeeper's own value, so whoever stands in the doors, under the porch roof with the lamp behind, is a shade
+       darker (`lightZones`, k -0.15, in `rome-steps.js`): the keeper reads dark against the one lit opening. By the
+       river (`rome_tiber.py`, `stage19`) the shade of the eaves on the sunlit wall behind Eleazar's bench (that wall's
+       box L* 68 to 54, and cooler), so the old man's white robe reads off his own wall and the faith talk has its quiet
+       pocket; the clouds calmed the same way (99.2 to 91.4).
+       Both keyed and installed as `tools/paint/README.md` says (`install.py`; `postimp_key.py --check` clean).
+     - **Values, painted: the Forum and the Capitol** (two more painters re-run with a value pass; same composition,
+       layout, cut-outs and marks; nothing a puzzle needs moved). Both squares were evenly bright, with nothing saying
+       "look here". **The Forum** (`rome_forum.py`: `stage19_paving`, `stage19_back`, `stage19_light`): the paving's
+       mottle halved toward its own sunlit and shaded values, so the square is one light value and the hoarding and
+       Castor's shade are the two dark masses (the backdrop's three values, darkest first, from 0.31 / 0.37 / 0.32 of the
+       frame to 0.19 / 0.38 / 0.43); a warm pool of light on Phyllis's stall (its box L* 67 to 73); the hoarding's
+       boards a step brighter (+7 L*) behind the Gaul; a sunlit slot down the Tuscan street's mouth, the way to the
+       river (48 to 56); the sky's deep top eased (L* 59 to 65, chroma 38 to 31) and the clouds' edges softer. The
+       crane's turning frames are cut from the same light (frame 0 is still the backdrop, pixel for pixel). **The
+       Capitol** (`rome_capitol.py`: `stage19_back`, `stage19_cut`, and the shadows in `under()`): the view of the city
+       behind the kings (x 185 to 470) 10 L* down and bluer, so the view and the temple's shade make one middle mass and
+       the pale bases, Titus and the white geese stand against it (not behind Anser, at the left: he is a darker figure
+       than the view, and darkening it there brought his surround nearer his own value); the long cast shadows
+       across the walk band 40% softer (the band's spread, sd, 10.8 to 8.6: the shadows stay, calmer); the cloud calmed
+       (its brightest 100 to 88, its edges half as hard) and the sky's deep top eased; the bronze man on the world his
+       highlights a third quieter; the hut's black door a warm dark brown (+15 L*); a little light at the head of the way
+       down, the bottom edge. Both keyed and installed; `postimp_key.py --check` clean.
+     - **The people by the river in the room's light** (`rome-tiber.js`, for the engine's figure light): the lane is
+       backlit, so everyone is a little darker and flatter (`figureLight` exposure -0.1, contrast 0.9) except in the
+       talk's pocket at the bench, where a +0.1 zone gives Eleazar and the boy back their drawn light against the new
+       shade: the frame's one peak of contrast is the old man at his bench.
+     - **Kept as they are, on purpose:** the Capitol is entered from behind the camera (its gate is behind us), so a
+       walk out of the steps' right edge comes in at the Capitol's bottom: a change of axis, not a reversal, kept. The
+       steps' ways in from the Forum and the Capitol start at the edge and walk him in (the cut on action the guide
+       asks for), so their marks stay at the edge. Phyllis's walk to her pole and back, and the Titus, Anser and
+       street-boy gestures that end their talks, are conversation staging, which this round leaves alone.
+
+
+<!-- STAGE-19H (round nineteen, the house): decisions numbered from 190. -->
+190. **The act's opening keeps all seventeen boxes** (STAGE-19H). It is Act Three's opening, so it may hold the player
+     (GUIDE-19 C1), and it is about 85 seconds at the new text pace, inside the 90 the round aimed at; but it is over the
+     twelve boxes. Every box plants something the act pays off (the voicemail and "EARLY" for "Some when", the five
+     places, the prayer and its postscript for #7, the study, the computer and the router for #1 to #7, "Places,
+     girls." for Act Four), the puzzle notes keep its lines in their old order, and the engine has no way to start the
+     second half on the player's first click. What changed is its timing: the phone rings out first, the beep follows
+     Dad's greeting, and there are holds after "Daddy's EARLY", on the still room after the five places, and after the
+     "Amen". If you would rather it gave control back after the prayer, the computer half wants an engine hook (the
+     first click in the room starts it), or Big Sister's arithmetic (`home.arrive.3`) can go.
+191. **Big Sister's timeline keeps its one reading** (STAGE-19H). Ten boxes, about a minute, and the player asked for it
+     by reading the timeline; every box of it plants Act Four (1921, 44 and the red mark: "It's before the red mark on
+     Big Sis's timeline."), so splitting it would make a plant depend on a second look.
+192. **The landing's right end** (STAGE-19H): the study door, the ladder's foot and the spot both of those ways out share
+     fit in about 120 px. Whoever comes out of the study now stands a step down-stage of its door, in front of its middle
+     ([742, 336]); the three who come down the ladder stand to the left of it, clear of the line of its rail. Coming down
+     a ladder and standing 80 px from its foot is a small cheat of the eye, chosen over standing on the exit.
+193. **Two upstairs rooms repainted in light and value, not in drawing** (STAGE-19H). The Retreat's light now gathers
+     on the sound table (a warm lamp of the fountain's own light, `name="table"` in `home_bigsis_room.py`), and its
+     paper lanterns, string bulbs and moon are quieter; its layout is the same to the number. Little Sister's room keeps
+     its warmth and clutter, but the fort's way in is lit round her flashlight (the string lights' glow, and a glint on
+     it), the egg rug is a fifth less white, the hen house has about 30% less colour, and her drawings and paper eggs
+     are a third calmer. The wall behind the three default marks was darkened too, and measured: Little Sister read
+     better, Mom and Big Sister (who stand darker than the wall) worse, so it was taken back; the family's separation
+     there is left to the engine's figure light. Same composition, same marks, nothing a puzzle needs moved.
+
+200. **The boy's last two lines are the player's to say** (STAGE-19N, the night Mom hears her son): the end of the first
+     talk through the coin door ran nineteen boxes with no input (his warning, her answer, the goodbye, Grandpa Joe and
+     the handbag). Through a door the menus are already his words, so his "Love you too. ...Don't tell anybody." and "I
+     asked EARLIER!" are each a menu of one now: the same lines in the same order, in three beats with the player's hand
+     back between them. With held silences after her "...Before." (1.8 s), Big Sister's "Mom. He's in Rome. In 44 B.C."
+     (1.4 s) and "...I hear you, baby." (1.5 s); eyelines on the voice, then on Mom, and the girls' aside to each other;
+     a held last picture; and the controls back at once while Ranger scampers home. Undo: put the two lines back into the
+     `warning` node's `say` (talk/nevada.js).
+201. **His voice comes from the door** (STAGE-19N): during a talk through the coin door the roadside's `wordsAt` is
+     (552, 430), over the door and clear of Mom's head, in place of the top of the picture; anyone else off the stage there
+     (Houston, Grandma Jolene inside) keeps the top. 552 and not nearer: his portrait and words together are up to 480 px
+     wide.
+202. **The limousine is heard before it is seen** (STAGE-19N, "Backup"): a new sound, `motor` (sound.js), a second before
+     it shows on the far road, and again as it goes; the holds after the punch lines (the guide's 0.5 to 1 s), the row's
+     tableau 1 s before "Who ordered a cheese burger? Jed? JED?", and the empty porch held 1.2 s before the fade, paid for
+     by shorter waits on the quiet lot (0.4 s) and the hens (1.2 s).
+203. **The flash ends on its button, and the head in the hole is the first click on the little door** (STAGE-19N, #9
+     and the setup of #12): Mom's "Girls. We are going to go and bring them home." is held a second and the player has
+     the hand back (the scene was 34 boxes, about three minutes, without input). Little Sister's head in the hole and Big
+     Sister's rule ("Not a bigger sun, Mother. A bigger SHINE.") are the first click on the little door, whatever it is;
+     the three take their flash places again first. The hint for the moment (hint.nevada.letterbox.*) points every lead
+     to the little door; the tries of #12 (Mom's car, the banjo in Grandpa Joe's talk, the store's shelves) wait for the
+     rule (`knowsShine` in the roadside, `shine` in talk/nevada.js, `seeking` in the store), so going elsewhere first
+     loses nothing. Undo: call `headInTheHole(g)` at the end of `flash()` again and drop `firstAtTheDoor`.
+204. **The goodbyes are a click of their own** (STAGE-19N, #13 and "Backup"): they end on Grandpa Joe's "Then you're all
+     right. Go get your boy." and a held beat (0.8 s), with the hand back at the wide door (`nevada.saidBye`); the next
+     click on the door is Mom's "Girls. Hold hands. All the way through.", the walk in and "Backup". It broke a stretch
+     of about 49 boxes into 13 and 36 (the cut-scene's own). Undo: say the rest straight after the goodbyes in `goThrough`.
+205. **The man in gray stands 16 px lower** (STAGE-19N, SCORE-19B S7): off the notice's top edge, at (661, 474), with
+     his ground, his area and the place to talk to him (626, 490), and the notice read from a step further back (646,
+     488); in the scene, the painter's `nevada_roadside.py` and `layout.json`. Little Sister arrives on the shack's
+     violet shadow (250, 505) and Mom up off the bottom edge (286, 545) (S4, S16).
+206. **Ranger sits off the limousine's centre line** (STAGE-19N, SCORE-19A S12): his mark is (447, 354), 25 px toward the
+     facing seat (the painter's model, `nevada_limo_model.py` MARKS: 207 cm across, was 180), so he no longer sits on the
+     cabin's centre line right under the divider, and the people's middle comes nearer the frame's; in the scene
+     (`RANGER`), the model and `layout.json` (`marks.ranger`, scale 0.995). Undo: the old numbers in the comments.
+207. **The roadside's sky is calmer** (STAGE-19N, SCORE-19B S1 and S2, the scorers' "calm the skies"): the deepest blue at
+     the top 15% less chroma and a step lighter, the deepening up on the left at two thirds, the clouds' lights capped at
+     about L* 85 (their warm hue kept) and their burning edge at half strength; `nevada_roadside.py` re-run with them,
+     keyed and installed (`install.py nevada-roadside`), the birds' and Ranger's frames from the same raw files as before.
+     Nothing moved: no mark, area, cut-out or layout number. Undo: the old colours in the script's comments.
+208. **The penny dish's box is 22 px high** (STAGE-19N, SCORE-19B S9): [387, 316, 23, 22], grown about its middle (was 17
+     px), in the scene, `layout.json` and the painter's layout (`tall22`). Its glint and the mirror shades' (S9) are a
+     re-paint of the store (new marks in its painter, then keyed and installed), not done in this round's staging.
+
+210. **The Office's two cut-scenes, re-timed** (STAGE-19O, round nineteen; the cut-scene audit's holds): "A Very Small
+     Building With A Very Long Name" holds its title card 5.4 s (0.6 s a word), lets the four men in gray stand in a
+     row for 0.8 s before anyone speaks, and holds half a second to 0.7 s after "...We have all had a day, sir.", "...We
+     are not permitted to discuss the air.", "Then officially, there ain't one." and "...It is my birthday."; "Going
+     Down" says "Y'all ever been down to B-7?" when the walk is done (not over it), holds after "Well. Now you are." and
+     "Noted, Wendell.", goes from the room to the duct by a 150 ms dip instead of a black fade (a cut within one moment:
+     black means an ending), and holds 1.2 s on Houston's last announcement before the fade to the end card.
+211. **Ranger's thoughts on the gravel: two, not three** (STAGE-19O): Joe's hat, a beat, and the door plus a suit. The
+     question mark between them (`office.arrive.ranger.2`) is gone, line and use: three boxes of the same picture were
+     4.8 s of nothing new. Put it back in the lines file and the arrival's script if you miss it.
+212. **The Office's small things are bigger to click** (STAGE-19O, the scene audit's S9): the four wing nuts and the
+     keypad on the lot (18 px), the pie (30 by 20), its card (20 by 20) and the takeout menu in the break room, the
+     paper cones, the bell in Property & Effects, and the pencil, wrapper, rivets and valve in the duct. Only the
+     clickable box grew; nothing painted moved (`tools/paint/stage19_boxes.py`, which every Office layout script calls).
+213. **Ranger lands a metre nearer us on the lot** (STAGE-19O, S7): out of the limousine he lands at [597, 418], on the
+     gravel in front of the open door, not at [597, 398], where the limousine's waist line ran through his head. His
+     place to stand at the limousine's door moves with it.
+214. **The Office's arrival enters late** (STAGE-19O, the cut-scene audit's C3 and C13): the four men in gray step out of
+     the car in a row and stand there, and the first word is Dale's "Sir, you will now be processed." "We have arrived,
+     sir." and "Sorry about the drive, sir." (`office.arrive.1`, `.2`) are gone, lines and use: they carried no clue and
+     the arrival, with the limousine's end before it, was the longest stretch of the Office without a click. Put them
+     back (lines file, `office-arrive.js`, the act check's and the plays' orders) if you miss them.
+215. **Three Office rooms re-lit, by their own painters** (STAGE-19O, the scene audit's S1, S2, S5, S8, S10, S13): same
+     cameras, same compositions, every mark and box as before (each new layout.json was compared with the installed
+     one). The **break room**: the fitting over the counter brighter (1.15 to 1.45), the near one with its two tubes out
+     dimmer still (0.30), the floor's sheen moved from the empty foreground to the strip in front of the counter, the
+     near floor a step lower, the snack machine's colours about 30% quieter and its glow aimed down at its tray, the
+     hall's light through the door's window stronger: the counter, the pie and the corkboard are the light peak. The
+     **lot**: the sky calmer and lighter overhead (its top from about L* 37 to 58, greyer; its streaks half as strong),
+     the building's wall a step darker and cooler than the desert behind it, the rooftop intake grille's frame and
+     louvres darker (the roof's accent). The **Comfortable Room**: a darker frame (the ceiling and the side walls' far
+     ends), the upper back wall's band (y 210 to 280, where Grandpa Joe's words sit) a step lower, the two near props
+     (the wastebasket, the carton of questionnaires) quieter, the ceiling's lenses a step down, one small warm pocket on
+     the thermostat and the intercom. The room's sterile light stays the joke: it is quieter at the edges, not darker.
+216. **Grandpa Joe's standing place in the Comfortable Room stays** (STAGE-19O; the scene audit asked for `atjoe` 40 px
+     right, to [400, 469], so that the one-way mirror is behind his hat and shirt): measured through the room's camera,
+     [400, 469] is the table's near leg (the table's foot is at [393..397, 469]), and every place where the mirror is
+     the ground for his whole upper body is in front of the table's end, at the floor's front edge (about [410, 477]),
+     where he would stand over the table's corner and be drawn larger still (the audit's S14 asks for him no larger).
+     So `atjoe` stays at [361, 469], beside his chair; the mirror's edge behind his shoulder is the price.
 
 ---
 

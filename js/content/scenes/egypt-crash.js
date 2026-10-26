@@ -90,8 +90,8 @@ async function lookAtRiver(g) {
   const second = count(g, "egypt.river.look") > count(g, "egypt.river.look2");
   await g.say(second ? "egypt.river.look2" : "egypt.river.look");
   if (!second) return;
-  if (g.flag("egypt.heardAbram")) { if (!count(g, "egypt.river.after.1")) await g.say("egypt.river.after.1", "egypt.river.after.2", "egypt.river.after.3"); }
-  else if (!count(g, "egypt.river.bible.1")) await g.say("egypt.river.bible.1", "egypt.river.bible.2", "egypt.river.bible.3", "egypt.river.bible.4");
+  if (g.flag("egypt.heardAbram")) { if (!count(g, "egypt.river.after.1")) await g.say("egypt.river.after.1", "egypt.river.after.3"); }     // PASS-19E: after.2 folded into .1
+  else if (!count(g, "egypt.river.bible.1")) await g.say("egypt.river.bible.1", "egypt.river.bible.4");     // PASS-19E: four boxes folded to two
 }
 
 /** The pyramids from the bank: three things to say, in turn. The third is a wonder, and once he knows that Abram is
@@ -153,7 +153,7 @@ async function talkToLot(g) {
     else if (pick === "horizon") await g.say("egypt.lot.ask.horizon", "egypt.lot.horizon.1", "egypt.lot.horizon.2");
     else if (pick === "news") await g.say("egypt.lot.ask.news", "egypt.lot.news.1", "egypt.lot.news.2", "egypt.lot.news.3", "egypt.lot.news.4");
     else if (pick === "who") await whoHeIs(g);
-    else if (pick === "week") await g.say("egypt.lot.ask.week", "egypt.lot.week.1", "egypt.lot.week.2", "egypt.lot.week.3", "egypt.lot.week.4", "egypt.lot.week.5", "egypt.lot.week.6");
+    else if (pick === "week") await g.say("egypt.lot.ask.week", "egypt.lot.week.1", "egypt.lot.week.4", "egypt.lot.week.5", "egypt.lot.week.6");     // PASS-19E: folded
     else return parting(g);
   }
 }
@@ -163,12 +163,12 @@ async function talkToLot(g) {
 async function whoHeIs(g) {
   await g.say("egypt.lot.ask.who", "egypt.lot.who.1");
   g.flag("egypt.knowsLot", true);                 // he has said who he is: from now on he is "Lot" on the screen
-  await g.say("egypt.lot.who.2", "egypt.lot.who.3", "egypt.lot.who.4", "egypt.lot.who.5", "egypt.lot.who.6", "egypt.lot.who.7", "egypt.lot.who.8");
+  await g.say("egypt.lot.who.2", "egypt.lot.who.3", "egypt.lot.who.4", "egypt.lot.who.8");     // PASS-19E: never more than two of his before Dad speaks
   g.flag("egypt.heardAbram", true);               // and Dad knows when he is
   await g.wait(400);
   g.lead.look(40, 330);                           // out over the river
   await g.wait(500);
-  await g.say("egypt.abram.1", "egypt.abram.2", "egypt.abram.3");
+  await g.say("egypt.abram.1", "egypt.abram.3");
   await g.wait(300);
   const lot = g.actor("lot");
   if (lot) g.lead.look(lot.x, lot.y);             // and back to the man in front of him
@@ -514,6 +514,10 @@ export default {
   // Every number below is a pixel of the painting, measured by the painter (art/scenes/egypt-crash/layout.json).
   // DEPTH: minScale stops anyone shrinking to a dot at the far end of the track.
   horizon: 262, full: 590, minScale: 0.2,
+  // STAGE-19E (SCORE-19A S4): noon on bright ochre sand, where Dad's yellow shirt sat 1.7 L* off it: the people a little
+  // darker as a whole (ENGINE-19 item 9, `figureLight`; it takes effect when the engine merges, and the final run
+  // re-measures it).
+  figureLight: { exposure: -0.12, contrast: 1.06 },
 
   // The sand: the left edge keeps to the bank, clear of the water; the far edge runs under the village and the dunes,
   // with a tongue up the track. Two rocks by the front edge are in the way; so are the palms, the donkey and the wagon (below).
@@ -523,7 +527,7 @@ export default {
     [[284, 582], [293, 573], [310, 573], [318, 582], [316, 587], [286, 587]],
   ],
   spawn: {
-    default: [420, 570],            // where he climbs out
+    default: [340, 570],            // where he climbs out (STAGE-19E: 80 px left of (420, 570), where his head stood over Lot's lap)
     fromSite: [500, 372],           // coming down the track (its far end is a long walk off, and he is a dot there)
     fromCar: [642, 563],            // CAR-13S: out of the wagon, at his door (the painter's mark; he faces out, S)
   },
@@ -660,7 +664,7 @@ export default {
     ...lidded({ id: "cooler", name: "cooler", verb: "Open", walkTo: [730, 563], face: "N", look: nearCar("egypt.cooler.look"), use: nearCar(searchCooler) },
       "egypt.coolerOpen", [[701, 400], [730, 396], [748, 407], [749, 429], [723, 433], [706, 422]], [[701, 399], [720, 388], [732, 390], [750, 401], [761, 428], [744, 436], [721, 433], [705, 423]]),
     atCar({
-      id: "mirror", name: "door mirror", verb: "Take", plane: "mirror", poly: [[618, 485], [618, 487], [625, 492], [630, 492], [635, 489], [635, 484], [629, 480], [624, 481]], walkTo: [622, 563], face: "N", when: (g) => !g.flag("egypt.tookMirror"),
+      id: "mirror", name: "door mirror", verb: "Take", plane: "mirror", poly: [[614, 476], [640, 476], [640, 498], [614, 498]], walkTo: [622, 563], face: "N", when: (g) => !g.flag("egypt.tookMirror"),
       look: "egypt.mirror.look", use: takeMirror,
     }),
   ],
@@ -670,14 +674,19 @@ export default {
     if (g.flag("egypt.arrived")) return;
     await g.wait(500);
     await g.say("egypt.arrive.1", "egypt.arrive.2", "egypt.arrive.3");
-    await g.walkTo(424, 502);                                     // to where the prints begin
+    // STAGE-19E: a few steps up, to (340, 500), looking along the prints from the left of them: Lot keeps his painted seat in
+    // the palm's shade, and Dad's mark moves instead, so that at the act's opening the two stand apart (they were 20 px
+    // apart at (424, 502), Lot just behind Dad's left shoulder: SCORE-19A egypt-crash S12)
+    await g.walkTo(340, 500);                                     // toward where the prints begin
     g.lead.look(492, 316);                                        // up the track
     await g.say("egypt.arrive.4", "egypt.arrive.5");
+    await g.wait(600);                                            // STAGE-19E: the take on "I taught him that" (it was 300 ms, and the turn came first)
     g.lead.face("SE");                                            // he turns from the track, and bows his head where he stands
     await g.wait(300);
     pray(g.lead, true);
     await g.wait(400);
     await g.say("egypt.arrive.pray.1", "egypt.arrive.pray.2");
+    await g.wait(600);                                            // STAGE-19E: a beat on the bowed head after the amen (the button), then the hands come down
     pray(g.lead, false);
     await g.wait(350);                                            // (his hands are his own again before the player has him)
     g.flag("egypt.arrived", true);

@@ -276,12 +276,14 @@ directions. Just ONE time. Amen." Big Sister remembers that Dad's phone still re
 to the family computer, "the mainframe", which is upstairs in his study, and that the
 internet has been down since Dad "improved" the wiring. Mom says where the router
 lives (the closet under the stairs, next to the vacuum cleaner), and turns stage
-manager: "Places, girls. We are going to find out where that phone was last seen."
+manager: "Places, girls. We'll find out where that phone was last seen."
 *Plants:* "Daddy's EARLY" (pays off in "Some when", in the middle of Act Four). That Dad never asks for
 directions (#7; and Little Sister has now prayed that he will). The study, the computer
 and the router (#1 to #7). "Places, girls."
 *Notes:* the old cut-scene's lines are kept and in their old order. All three bow their
-heads for the prayer (`actor.pray`, when the pose exists).
+heads for the prayer (`actor.pray`, when the pose exists). Its timing (STAGE-19H, round nineteen): the phone is heard
+ringing out before anyone speaks, the beep comes after Dad's greeting, and the scene holds after "Daddy's EARLY", for
+two seconds on the still room after the five places, and after the "Amen"; control comes back on "Places, girls."
 
 ```
 Puzzle #1: The Other Eighty-Eight        (Home · Lead: Big Sister or Mom · the landing, or the piano)
@@ -291,18 +293,17 @@ Setup:        Dad's study is locked. Taped to its door, in his capitals: "TRIP H
               time they come upstairs Big Sister points at it, and Mom says: "With your father there is
               always a notice."
 Wrong tries:  The study door            -> "Locked. Naturally. And he's left us a notice instead of a key."
-              Little Sister reads it    -> "Eighty-eight keys! Daddy has a LOT of doors."
+              Little Sister reads it    -> "Daddy has a lot of doors."
               The key bowl on the hall table -> every key this family owns, except the two Mom wants tonight.
-Solution:     Big Sister or Mom reads the notice (it is shown close up). Big Sister: "Eighty-eight of what?
-              ...Keys. Fun fact: a standard piano has eighty-eight keys. Dad has hidden the study key in the
-              piano." Mom: "He has hidden a key in MY piano." (If it is Mom who reads it: "A matter of
-              record: a full-size piano has eighty-eight keys." and Big Sister was half a second behind.)
+Solution:     Big Sister or Mom reads the notice (it is shown close up). Big Sister: "...Eighty-eight
+              what?" "...Keys. A standard piano has eighty-eight. The study key is in ours." Mom: "He has
+              hidden a key in MY piano." (If it is Mom who reads it: "A matter of record: a full-size piano
+              has eighty-eight keys. MY piano." and Big Sister was half a second behind.)
               OR, from the other end, before anyone has read it: Mom or Big Sister plays the piano
               downstairs, and one note goes thunk. "Something is lying on the hammers."
 Gives:        The knowledge that something is in the piano (`home.keyInPiano`).
 Plants/pays:  Plants "THE MANAGEMENT" (the vault's label, and the card inside it). If they found the dead
-              note first, reading the notice afterwards joins the two up: "So THAT is what is lying on
-              the hammers."
+              note first, reading the notice afterwards joins the two up: "So that is what went 'thunk'."
 Notes:        A piano has eighty-eight keys: a fact Mom and Big Sister both have, and Little Sister has
               not. The hint from each says the notice is a riddle; Little Sister's says it wants
               somebody who likes words.
@@ -314,11 +315,11 @@ Needs:        #1
 Setup:        The key is down inside Mom's upright piano, on the hammers, under the A above middle C.
 Wrong tries:  Mom at the piano          -> she lifts the lid and can SEE it, with a tag on it in Dad's
                                            capitals. "And I cannot reach it. My arms are a civilized length."
-                                           "The panel down by the pedals lifts off. Under the keyboard,
-                                           sweetheart: that is your cue."
+                                           Little Sister: "My arms aren't civilized at ALL." "The panel
+                                           by the pedals lifts off. Your cue, sweetheart."
               Big Sister at the piano   -> "It is under the A above middle C. I can hear exactly where."
-                                           "I am not putting my arm in a piano. I need all ten fingers. I
-                                           am halfway through a sonata."
+                                           "I am not putting my arm in a piano. I am halfway through a
+                                           sonata."
               Mom asks Big Sister       -> "It is a piano, Mother, not a mailbox. Ask the one who fits
                                            under things."
 Solution:     Play as Little Sister and use the piano. "I FIT!" She goes under the keyboard, takes the
@@ -337,18 +338,17 @@ Notes:        "He hid it in a piano, and then he labelled it." Whoever is standi
 Puzzle #3: Open Trip Headquarters        (Home · Lead: whoever holds the key · the landing)
 Needs:        #2
 Setup:        Little Sister has the key. It can be handed to either of the others.
-Wrong tries:  The study door, as one who is not holding the key -> she says who is. Mom: "Your little
-              sister is holding the key. She fetched it, so she gets to turn it." Big Sister: "Mom has
+Wrong tries:  The study door, as one who is not holding the key -> she says who is. Mom: "Your little sister has the key. She fetched it, so she turns it." Big Sister: "Mom has
               the key. Technically she outranks the Management."
-              The key on the Son's door -> "It doesn't have a keyhole! It has a PASSWORD."
-              The key on the front door -> "This door wants a car at the other end of it."
+              The key on the Son's door -> "It has a password. Passwords are keys you say."
+              The key on the front door -> "This door wants a car at the other end."
 Solution:     As whoever holds the key, use the study door (the key in her pockets is enough; using
               the key on the door does the same). Mom: "'Authorized personnel only.' I authorized
               myself on our wedding day." They all go in.
 Gives:        The study. From now on its door is the way into `home-study`.
 Plants/pays:  Plants handing things over, which #6 and #8 use, and Act Four's coin depends on.
 Notes:        The first time in: Mom, "He hasn't let me dust in here since March."; Big Sister
-              points out the computer and the "family vault"; Little Sister: "Something's BLINKING!"
+              points out the computer and the "family vault"; Little Sister: "Something's BLINKING."
               (the answering machine: #8).
 ```
 
@@ -358,31 +358,22 @@ Needs:        nothing
 Setup:        The closet under the stairs is too dark to find a plug in (#5), and Little Sister will not
               go in without her own flashlight. It lives just inside her blanket fort, in her room,
               where nobody but she may go: "NO BIG SISTERS" is her sign, and her rule.
-Wrong tries:  Mom or Big Sister at the fort, or at the flashlight -> "You don't go into a lady's fort
-                                             without an invitation." / "'NO BIG SISTERS.' I respect a posted
-                                             boundary."
-              A dead flashlight at the closet -> "A DEAD flashlight is just a pink stick! It wants
-                                             batteries. THEN I go in. That's the plan."
-              Big Sister at her sound machine, before there is a dead flashlight in the house -> "It
-                                             stays on. Tonight of all nights. It is the only one of us
-                                             that is calm."
-              Mom at the sound machine     -> "The batteries are in there, and they're not mine to take.
-                                             Not from a daughter. Your sister has to do this herself."
-              Little Sister at the sound machine -> "The batteries are IN there! I can't touch it: rule
-                                             AND treaty. So YOU have to. It's your music box. Go on."
-Solution:     Little Sister fetches her flashlight from the fort. "CLICK. ...Click? CLICK CLICK CLICK."
-              "It's DEAD. I used it all up last night. I was reading to the flock under the blanket.
-              They wanted the WHOLE book." Mom has not seen a battery of that size in the house since
-              Easter. Big Sister, unasked: "...There are four. In my sound machine. In the Retreat. I
-              should like it noted that I said so myself." Up the attic ladder. As Big Sister, open the
+Wrong tries:  Mom or Big Sister at the fort, or at the flashlight -> "Nobody goes into a lady's fort uninvited. I taught her that myself." / "I respect a posted boundary. Also, I would not fit."
+              A dead flashlight at the closet -> "A dead flashlight is just a pink stick. It needs batteries."
+              Big Sister at her sound machine, before there is a dead flashlight in the house -> "It stays on. Tonight it is the only one of us that is calm."
+              Mom at the sound machine     -> "They're not mine to take, darling. Your sister has to give them."
+              Little Sister at the sound machine -> "The batteries are in there. I can't touch it. So YOU have to."
+Solution:     Little Sister fetches her flashlight from the fort. "Click. ...Click?"
+              "It's DEAD. I read to the flock all night. They wanted the whole book." Mom has not seen a battery of that size in the house since
+              Easter. Big Sister, unasked: "...There are four, in my sound machine. Let it be noted I said so." Up the attic ladder. As Big Sister, open the
               sound machine: "Very well. The Retreat goes dark so that the internet may live." The music
               stops. Then batteries and flashlight have to meet in one pair of hands: whoever holds one
               is handed the other, and puts them in. (If Big Sister is holding the flashlight herself
               when she takes them, in they go.)
 Gives:        A flashlight that works (`home.flashWorks`). The Retreat is quiet for the rest of the act.
 Plants/pays:  Pays off handing things over. Plants the sacrifice: "I intend to mention this again."
-              ("You will, darling. Often. And every time, I'll say thank you and mean it.")
-Notes:        Little Sister: "IT STOPPED. ...Now I can hear the water. It's going tick, tick, tick."
+              ("You will, darling. And each time, I'll say thank you and mean it.")
+Notes:        Little Sister: "It stopped. ...Now the water's going tick, tick, tick."
               The fountain sounds like a clock, which Big Sister had been managing not to notice. She
               can fetch the flashlight before she has ever tried the closet. Whoever goes to the fort,
               the bed or the sound table has it to herself: the other two step back and watch. A beat's
@@ -399,20 +390,12 @@ Setup:        Dad "improved" the wiring this morning, and the internet has been 
               inches. A tiny red light shows in the gap.
 Wrong tries:  Mom at the closet           -> "A lady does not squeeze into closets, darling. A lady has
                                              a seven-year-old."
-              Big Sister at the closet    -> "I refuse. There are spiders in there, and I am thirteen.
-                                             Both of those are final."
-              Little Sister, with no light -> "I FIT!" She goes in. "It's SO dark. I can't find the plug.
-                                             I found the vacuum. With my NOSE." She comes out: "I need
-                                             my flashlight. MINE. The pink one, from my fort. Come ON,
-                                             everybody. I know the way!" She will not go in again
-                                             without it: "Not without my flashlight! I'm not scared.
-                                             I'm BRAVE-scared. Brave-scared people bring a flashlight."
-              Little Sister, when one of the others is holding it -> "I need my flashlight BACK.
-                                             Somebody's got it who isn't me. Hand it over, please.
-                                             I'm the closet person."
+              Big Sister at the closet    -> "I refuse. There are spiders in there, and I am thirteen. Both are final."
+              Little Sister, with no light -> "I FIT!" She goes in. "It's so dark. I can't find the plug. I found the vacuum. With my NOSE." She comes out: "I need my pink flashlight, from my fort. I know the way!" She will not go in again
+                                             without it: "I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."
+              Little Sister, when one of the others is holding it -> "My flashlight, please. I'm the closet person."
               The computer upstairs, before this is done -> "No internet."
-Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Flashlight ON!
-              Hi, vacuum. Hi, spiders. And there's a plug that isn't plugged into ANYTHING!" Mom
+Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Hi, vacuum. Hi, spiders. There's a plug that isn't plugged into ANYTHING." Mom
               talks her through the socket. The little light goes from red to green.
 Gives:        The internet. The computer upstairs can be signed in to.
 Plants/pays:  "I FIT!" again. The flashlight goes with her to Nevada (where, in full morning sun, its
@@ -426,15 +409,12 @@ Puzzle #6: Read Dad's Note        (Home · Lead: Big Sister · the study)
 Needs:        #3
 Setup:        The computer wants a four-figure password. There is a yellow note stuck to the monitor,
               in Dad's handwriting: "Password: the year of the best thing since." He has left off the end.
-Wrong tries:  Mom reads the note          -> "Since WHAT, my love?"
+Wrong tries:  Mom reads the note          -> "'Password: the year of the best thing since.' Since WHAT, my love?"
               Little Sister reads it      -> she can read "PASS WORD", and admires the loopy Ys.
               Little Sister at the sign-in page (if the router is on) -> she types 1, 2, 3, 4. "It said no AGAIN."
-              Mom or Little Sister takes the note -> it goes in her pocket. Looking at it there: "Your sister
-                                             will know. She knows the year of everything."
+              Mom or Little Sister takes the note -> it goes in her pocket. Looking at it there: "Your sister knows the year of everything."
 Solution:     Get the note in front of Big Sister: she takes it herself, or whoever has it hands it to
-              her (in any room). "Since sliced bread. With Dad, everything is the best thing since
-              sliced bread. Fun fact: sliced bread was first sold on the seventh of July, 1928, in
-              Chillicothe, Missouri. The password is 1928."
+              her (in any room). "'The year of the best thing since.' ...Since sliced bread." Mom: "He said that about the toaster." Big Sister: "Sliced bread: first sold on the seventh of July, 1928, in Chillicothe, Missouri." "The password is 1928."
 Gives:        The password.
 Plants/pays:  Pays off #3 (handing things over).
 Notes:        Exactly as in the first version of the act, moved upstairs. The fact is true and has
@@ -447,20 +427,17 @@ Needs:        #5 and #6
 Setup:        With the router on and the password known, anyone can sign in. Then the computer asks one
               more thing, because it has not seen this sign-in before: "What did you promise on your
               wedding day?"
-Wrong tries:  Big Sister signs in         -> "I was not invited to the wedding. Mother?"
+Wrong tries:  Big Sister signs in         -> "I was not invited. Mother?"
               Little Sister signs in      -> "I wasn't BORN. Mommy!"
               Mom: "To love, honor and cherish."         -> "No? I did say that. I had hoped he was listening."
               Mom: "To always take the scenic route."    -> "No. That was not a promise. That was a warning."
-Solution:     Mom: "To never ask for directions." The map comes up: one dot. "Dad's phone. Last seen
-              5:47 p.m. Thirty-seven miles past Last Gas." In the middle of Nevada.
+Solution:     Mom: "To never ask for directions." The map comes up: one dot, "Dad's phone". "'Last seen 5:47 p.m. Thirty-seven miles past Last Gas.' In the middle of Nevada."
 Gives:        The place (`home.foundPing`).
 Plants/pays:  Pays off the voicemail, Little Sister's postscript to the prayer, and the wedding
-              photograph on the landing ("He was forty minutes late for it. He had refused to ask the
-              way."). Plants the place name for Act Four.
-Notes:        "He promised me he would never ask for directions. It is the one promise he has always kept."
+              photograph on the landing ("He was forty minutes late. He would not ask the way."). Plants the place name for Act Four.
+Notes:        "He promised never to ask for directions. It's the one promise he's always kept."
               A wrong answer costs nothing but a line. If they have already heard the message (#9),
-              Big Sister does the sum here: "5:47. His message was at 5:41. Six minutes after that, his
-              phone stops."
+              Big Sister does the sum here: "5:47. His message was 5:41. Six minutes later, his phone stops."
 ```
 
 ```
@@ -470,17 +447,13 @@ Setup:        Dad will not replace his answering machine. Its little red light i
               message. And a loop of its tape is hanging out (Little Sister "fixed" it last week).
 Wrong tries:  Little Sister at the machine -> "I'm not allowed to fix it again. Mommy said. With her
                                               whole-name voice."
-              Big Sister at the machine    -> "Fun fact: you can wind a cassette by turning its hub with
-                                              a pencil. Mine are too slim. Dad's is not." And with the
-                                              pencil in her hand: "I know that it fits. I do not know
-                                              how hard to turn. That tape is his voice. Mom should do this."
-              Mom, with no pencil          -> "It wants winding back in, and for that I want a pencil."
-                                              "There's exactly one pencil in this house that can ever
-                                              be found. It's on your father's crossword."
+              Big Sister at the machine    -> "A pencil in the hub winds a cassette. Mine are too slim. Dad's is not." And with the
+                                              pencil in her hand: "That tape is his voice. Mom should do this."
+              Mom, with no pencil          -> "I'll need a pencil to wind it in. An ordinary wooden one."
+                                              "The only pencil anyone can ever find is on his crossword."
               Big Sister's own pencils (her desk, in the Retreat) -> the slim kind. Not for this.
 Solution:     Fetch Dad's pencil from his crossword, on the arm of his chair in the living room (any of
-              them can take it), get it to Mom, and have Mom use the machine. "I recorded entire
-              musicals off the radio with one of these. Pencil in the hub, and gently."
+              them can take it), get it to Mom, and have Mom use the machine. "I taped whole musicals off the radio on these. Pencil in the hub, gently."
 Gives:        A machine that will play (`home.tapeWound`). The loop of tape is gone from the picture.
 Plants/pays:  Pays off handing things over. Plants the message.
 Notes:        Mom is of the generation that did this. Big Sister has the fact and not the knack. If
@@ -491,17 +464,13 @@ Notes:        Mom is of the generation that did this. Big Sister has the fact an
 Puzzle #9: Play The Message        (Home · Lead: any of them · the study)
 Needs:        #8
 Setup:        One new message.
-Solution:     Any of them presses play. The other two come and stand to listen. Dad, cheerful: "Hi,
-              honey. It's 5:41 and we are making GREAT time. I found a shortcut." "Thirty-seven miles
-              past the last gas station and not one other car. The boy says hi." "He says the road
-              sign up ahead looks funny. ...Huh. That IS funny." "That sign just changed its--" And
+Solution:     Any of them presses play. The other two come and stand to listen. Dad, cheerful: "Hi, honey. It's 5:41 and we're making GREAT time. I found a shortcut." "Thirty-seven miles past the last gas station, and not one other car." The Son: "Hi, Mom! Dad, that sign up there looks funny." Dad: "...Huh. That IS funny." "That sign just changed its--" And
               the tape hisses.
 Gives:        Dad's last message (`home.heardMessage`). The machine's light stops blinking.
 Plants/pays:  This is the moment the player saw in the opening of the game. Act Four's witness says
               "The road sign changed its mind."
-Notes:        Little Sister: "Changed its WHAT? Daddy! Changed its WHAT?" Big Sister does the
-              arithmetic: with the dot already found, "5:41 on the tape. His phone was last seen at
-              5:47. Whatever happened took six minutes."; without it, she writes down the minute. Mom:
+Notes:        Little Sister: "Changed its WHAT? Daddy? Changed its what?" Big Sister does the
+              arithmetic: with the dot already found, "5:41 on the tape. 5:47 on the map. Whatever happened took six minutes."; without it, she writes down the minute. Mom:
               "I do not need to hear it twice. He sounded happy." Nobody plays it a second time.
 ```
 
@@ -512,21 +481,19 @@ Setup:        Mom's car keys left the house this morning in Dad's pocket (the fr
               first time anyone tries to leave). The spare is in the "family vault": a cash box with a
               dial, on the study shelves. Its label, in Dad's hand: "FAMILY VAULT. Combination: the
               year WE THE PEOPLE got it in writing. Your mother will know. She brings it up."
-Wrong tries:  Big Sister reads the label  -> "I can think of three years. Mom will know which."
-              Little Sister reads it      -> "MOMMY! The box says you know!"
+Wrong tries:  Big Sister reads the label  -> "'The year We the People got it in writing.' Mom will know which."
+              Little Sister reads it      -> "It says 'Your mother will know.' MOMMY! The box says you know."
               Mom: "Seventeen seventy-six." -> "No. 1776 is the Declaration, the Fourth of July. 'We
                                                the People' came later."
-              Mom: "Seventeen eighty-nine." -> "No. In 1789 the new government began, and General
-                                               Washington took the oath. It was written by then."
+              Mom: "Seventeen eighty-nine." -> "No. 1789 is the new government, and General Washington's oath. Too late."
               Mom: "Let me think about it." -> she leaves the dial alone.
-              The study key on the vault  -> "The vault has a dial, not a keyhole."
-Solution:     Mom: "Seventeen eighty-seven." "Signed in Philadelphia on the seventeenth of September.
-              He does listen. Just not at the time." Inside: her spare car key, two ketchup packets,
+              The study key on the vault  -> "A dial, not a keyhole. Your father does like a dial."
+Solution:     Mom: "Seventeen eighty-seven." "1787. Signed in Philadelphia in September. He does listen. Just not at the time." Inside: her spare car key, two ketchup packets,
               and a card: "KNEW YOU'D KNOW. - THE MANAGEMENT."
 Gives:        The spare car key (`home.hasCarKey`).
 Plants/pays:  The clue is in the house for a player who does not know: the framed Preamble in the
-              living room. Mom, looking at it: "'We the People.' Signed in Philadelphia, the
-              seventeenth of September, 1787. It still gives me goosebumps." Pays off "THE MANAGEMENT". The ketchup
+              living room. Mom, looking at it: "'We the People.' Philadelphia, 17 September
+              1787. It still gives me goosebumps." Pays off "THE MANAGEMENT". The ketchup
               is Dad's running gag (he is saving it; nobody has asked for what).
 Notes:        The wrong years cost a line each, and each line is true. "He keeps ketchup in a vault."
 ```
@@ -535,19 +502,18 @@ Notes:        The wrong years cost a line each, and each line is true. "He keeps
 Puzzle #11: Leave For Nevada        (Home · Lead: any of them · the front door)       THE GATE
 Needs:        #7, #9 and #10
 Setup:        Nothing stops them now.
-Wrong tries:  The door, with no dot on the map: Mom -> "Not until we know where we are going. One of us
-              in this family must." Big Sister -> "A journey without a destination is just Dad."
-              Little Sister -> "I'm READY. I've been ready since dinner. ...Which way IS Daddy?" (The
-              first time, Mom adds why they will want a key: "And there's the matter of my car. Your
-              father moved it this morning. My keys left in his pocket." Big Sister: the spare is in
-              the family vault. Little Sister: "It's a box with a clicky wheel! Mommy will know the
+Wrong tries:  The door, with no dot on the map: Mom -> "Not until we know where we're going. One of us
+              in this family must." Big Sister -> "We do not have a destination. A journey without one is just Dad."
+              Little Sister -> "I've been ready since dinner. ...Which way IS Daddy?" (The
+              first time, Mom adds why they will want a key: "And my car keys left this morning, in
+              your father's pocket." Big Sister: the spare is in
+              the family vault. Little Sister: "It's a box with a clicky wheel. Mommy knows ALL the
               clicks.")
-              The door, with the dot and no message: Mom -> "There's a message on your father's
-              machine upstairs, and I want to hear it first."
+              The door, with the dot and no message: Mom -> "Not yet. There's a message on your father's
+              machine. I want it first."
               The door, with both and no key: Big Sister -> "Destination: yes. Message: yes. Car key:
-              no. Two out of three does not start an engine."
-Solution:     Open the door. Mom: "One moment. In this family nobody starts a journey without the
-              psalm." Big Sister: "Psalm 121, verse 8. She always does this part." Little Sister, by heart: "The LORD shall
+              no. Two of three does not start a car."
+Solution:     Open the door. Mom: "One moment. Nobody in this family leaves without the psalm." Big Sister: "Psalm 121, verse 8. She always does this part." Little Sister, by heart: "The LORD shall
               preserve thy going out and thy coming in from this time forth, and even for evermore."
               Mom: "Amen. Going out, and coming in. All five of us." Then, as before: "Coats, girls.
               We are going to Nevada." "We are going to be perfectly polite, and completely impossible
@@ -560,8 +526,8 @@ Notes:        The drive is a card ("The Middle of Nevada. The next morning."). A
 Also in the house, for character and nothing else. Each of the three has her own line
 for every one of these, and they have things to say to each other in every room.
 
-- **The Son's door** (the landing). It says NO GIRLS ALLOWED ("He spelled all three
-  words correctly this year. I was so proud that I very nearly obeyed it."), and it is
+- **The Son's door** (the landing). It says NO GIRLS ALLOWED ("Spelled right this
+  year. I was so proud I nearly obeyed."), and it is
   booby-trapped. His toy alarm asks for the password in his own recorded voice ("HALT!
   This is Operation No Girls. What's the password?"). Little Sister knows it, because she
   has watched him, and does the voice: "The password is: I still want a dog." It says
@@ -570,22 +536,21 @@ for every one of these, and they have things to say to each other in every room.
   fires a volley of seven foam darts, orange and blue (drawn live, a "thwip" each), which
   come down on the runner in front of the door and stay there. Big Sister says the
   author's line: "I don't want to go in there. The rug is probably booby-trapped."
-  Little Sister, if it was her: "It said CORRECT! You can't say ten out of ten and then
-  SHOOT people! ...It was a GOOD trap, though." If it was her sister: "He GOT you! SEVEN
-  darts! ...Right. I'm making a sign for MY door. NO BROTHERS. Except on Saturdays."
-  Mom does not try his door tonight ("'NO GIRLS ALLOWED.' I'm his mother, which he's
-  always counted as a separate thing. ...Not tonight."); when the darts have come down
+  Little Sister, if it was her: "It said 'CORRECT.' Then it SHOT
+  me. ...It was a good trap, though." If it was her sister: "He got you. ...I'm making a
+  sign. 'NO BROTHERS.' Except on Saturdays."
+  Mom does not try his door tonight ("I'm his mother. He counts that
+  as a separate thing. ...Not tonight."); when the darts have come down
   she says, quietly, "Not tonight, sweetheart (darling). I am not ready to look at that
   room with nobody in it." The second time either sister tries it, one more dart, the
-  one he kept back, flops out at her feet: "ONE more! He saved one for me! ...That's not
-  a trap anymore. That's just RUDE." / "One more. He kept one in reserve. I respect that,
-  and I am still not going in." After that the trap is spent and nobody tries: Little
-  Sister can wait ("I'm getting good at it"), and Big Sister stands by what she said
+  one he kept back, flops out at her feet: "He saved one for me. That's not a trap.
+  That's just RUDE." / "He kept one in reserve. I respect that. I am still not
+  going in." After that the trap is spent and nobody tries: Little
+  Sister can wait ("I'm getting good at waiting"), and Big Sister stands by what she said
   about the rug. The darts lie on the runner for the rest of the act (Mom leaves them
   where they fell, for him to count). The door stays shut all act. It is still the one
   place the act is allowed to be sad.
-- **The railing**: the living room, seen from above. "A set with the lights left on and
-  nobody on it. Two of the cast are late."
+- **The railing**: the living room, seen from above. "From up here it's a lit set. Two of the cast are late."
 - **The family Bible**, at the head of the table by Dad's plate, open where he left it
   this morning at the psalm for a journey. Mom has verse 2 of Psalm 121, Big Sister
   verse 1, and Little Sister knows Psalm 23:1 by heart, and adds what she wants: "...I
@@ -593,39 +558,33 @@ for every one of these, and they have things to say to each other in every room.
 - **The sampler** over the front door (Joshua 24:15) and **the framed Preamble**.
 - **Mom's bookcase**: the Adams letters, General Washington, Dr. Franklin, a great many
   plays, and the hymnal. Abigail Adams's "Remember the Ladies".
-- **Little Sister's room**, which is all chickens. The flock ("Admiral Doodle on top.
-  Corporal Speckle. Private Peep. Each has a name, a rank and a job. I know them all.
-  Against my will."); the chart, MY CHICKENS, twelve of them, the General with a star
+- **Little Sister's room**, which is all chickens. The flock ("Admiral Doodle on top. Corporal Speckle. Private Peep. I know them all."); the chart, MY CHICKENS, twelve of them, the General with a star
   ("You go up a rank every time you go in the wash."); the tea party; the hen house that
   was a dollhouse ("Everybody in my hen house is home. I checked. Twice."); the pillow
   with one place kept on it, RESERVED, for General Feathers, who is on the trip in
-  Daddy's suitcase ("I'm not worried about the General. I'm a LITTLE worried about
-  Daddy. That's why I SENT her."). It is where **"Chickens KNOW."** is first said, of
+  Daddy's suitcase ("I'm not worried about the General. Daddy's the one who needs supervising."). It is where **"Chickens KNOW."** is first said, of
   the flock, as a plain fact: it pays off in every other act. And at the nest Mom says
   the truest thing in the room, once, half to herself: "'...even as a hen gathereth her
   chickens under her wings'..." "Tonight I know just how the hen feels." (Matthew 23:37:
   since round seventeen she says the words and not the reference.)
 - **The Retreat.** Little Sister takes her boots off with great ceremony and whispers
-  at full volume ("THIS IS MY WHISPER."). Mom: "Soft light, one sound, nothing out of
-  place. Darling, it is a set. It is a very good set." She can name the key the music
+  at full volume ("THIS IS MY WHISPER."). Mom: "Darling, it is a set. It is a very good set." She can name the key the music
   is in (D major). The rules, close up: THE RETREAT. 1. SHOES OFF. 2. VOICES DOWN. 3. NO
-  CHICKENS; and under the third, in crayon, AN APPEAL HAS BEEN LODGED. ("You haven't
-  made a room. You've founded a republic.") The room is perfectly calm and Big Sister
+  CHICKENS; and under the third, in crayon, AN APPEAL HAS BEEN LODGED. ("Three rules,
+  and the third under appeal. You've founded a republic.") The room is perfectly calm and Big Sister
   is not: she has counted the little lights in fours, twice.
 - **Big Sister's timeline**, on the Retreat's wall: where the game says how it counts
-  the years. "I used Archbishop Ussher's dates. He counted the years from the Bible's
-  own genealogies." The first time any of them looks along it they read it between
+  the years. "I used Archbishop Ussher's dates. He counted from the Bible's own genealogies." The first time any of them looks along it they read it between
   them: 4004 B.C., the Creation; 2348 B.C., the Flood; 1921 B.C., Abram leaves Haran
   and goes down into Egypt; 1491 B.C., the Exodus; 44 B.C., the Ides of March; and at
   the red mark, what B.C. and A.D. mean. Mom's matter of record is that the
-  Archbishop's book was published in 1650. Little Sister: "There's not much paper
-  before Abram! I thought the beginning would be the LONGEST bit." Big Sister: "It is
+  Archbishop's book was published in 1650. Little Sister: "Not much paper before Abram. I thought the beginning was the LONGEST bit." Big Sister: "It is
   as long as it was." Nothing else is said about the dates, here or anywhere. Little
   Sister is on the timeline, at the far end, in pencil. (1921 and 44 are the two numbers
   on the notice in Act Four.)
 - **The wall map**, **the corkboard** and **the banner** in the study: Dad's route in
   red wool, and a shorter piece, in yellow, across a part of the map with nothing on it
-  ("Yellow is for caution. He chose it himself."); the Son's "Operation Road Trip",
+  ("Yellow is for caution. He chose it."); the Son's "Operation Road Trip",
   whose steps one to five are "snacks"; TRIP in Dad's blue, and HEADQUARTERS in the
   Son's hand, one color to a letter.
 - The clock, the kitchen (her best hen is on the fridge, guarding the snacks), the
@@ -887,12 +846,8 @@ Cut-Scene: Where the map stops        (opens the act)
 ```
 A dirt lot. Mom: "Thirty-seven miles past Last Gas. This is where the map stops." Big
 Sister: "Fun fact: Nevada became a state on the thirty-first of October, 1864.
-Halloween." Her mother caps it: "Reformation Day, darling. A matter of record: Martin
-Luther's ninety-five theses, 1517." Little Sister: "It's ALL dirt. Who ordered this much
-dirt? ...Okay. I'm ready. Where do I start looking for Daddy?" Mom: "Somebody here saw
-something. We'll ask nicely. Stay where I can see you, girls." And, looking across the lot
-(round twelve): "And there's a gentleman out front with a banjo, and I believe that's a
-raccoon. ...We'll ask very nicely."
+Halloween." Her mother caps it: "Reformation Day. A matter of record: Martin Luther's ninety-five theses, 1517." Little Sister: "Who ordered this much DIRT? ...Where do I start looking for Daddy?" And Mom, looking across the lot
+(round twelve): "A gentleman with a banjo out front. And, I believe, a raccoon. We'll ask nicely."
 
 ```
 Puzzle #5: Ask Nicely        (Nevada · Lead: Mom · the rocking chair)            a talk (joeTree)
@@ -902,44 +857,32 @@ Setup:        One witness: an old man in a rocking chair who has watched this ro
               him. Talking to him is a talk (`joeTree` in js/content/talk/nevada.js), and each of the three has her
               own.
 The talk:     Mom has four ways in, and each is a choice, not a wrong lead:
-                "Good morning. Forgive us for troubling you."  -> "Well, good MORNIN'. Ma'am. Nobody's said good
-                    mornin' to me out here in forty years." ("Nobody at all?" "They say 'Is this the road to
+                "Good morning. Forgive us for troubling you."  -> "Well, good mornin', ma'am. First one I've had out here in forty years." ("Nobody at all?" "They say 'Is this the road to
                     Vegas.' It ain't." "I promise never to say it." "Then we'll get along, ma'am." "May I buy a few
                     minutes of your time?" "Time's free, ma'am. Lemonade's a dollar. Stories are extra.")
                 "May I buy three lemonades?"  -> "Dollar each, ma'am. Jolene squeezes 'em. I pour." He gets up,
-                    pours three at the stand beside his chair, and sits back down. Little Sister: "It's got PULP. I
-                    LIKE pulp. Pulp is lemonade with CHUNKS." (And he still will not tell her anything: she has not
+                    pours three at the stand beside his chair, and sits back down. Little Sister: "It's got pulp. I LIKE pulp. Pulp is lemonade with chunks." (And he still will not tell her anything: she has not
                     said good morning. "I have quite forgotten my manners. Good morning." puts that right.)
-                "What a handsome raccoon."  -> "Ranger. Say thank you to the lady." "..." "He says you're welcome.
-                    He's shy with strangers and bold with their sandwiches." (The raccoon is met before he is
+                "What a handsome raccoon."  -> "Ranger. Say thank you to the lady." "..." "He says you're welcome. Shy with strangers, bold with their sandwiches." (The raccoon is met before he is
                     needed: "And what does he eat?" "Whatever ain't his, ma'am. But he don't eat shiny. Shiny, he
                     keeps.")
-                "Is this, by any chance, the road to Las Vegas?"  -> "...No, ma'am." "This ain't the road to
-                    Vegas. There ain't no road to Vegas from here. There's a road to NOTHIN', and you're on it."
+                "Is this, by any chance, the road to Las Vegas?"  -> "...No, ma'am." "Ain't no road to Vegas from here. Road to nothin', and you're on it."
                     ("I beg your pardon. I was testing you." "Passed, did I." Or "...Is it, though?" "JOLENE! We
                     got another one!" From inside: "Charge her DOUBLE, Joe!" Big Sister: "You asked twice, Mother.
                     The surcharge is just." The lemonade is two dollars for the rest of the act: "Two dollars each,
-                    ma'am. Vegas prices." Asked again: "Still ain't, ma'am. Ain't been since the last time you
-                    asked.")
+                    ma'am. Vegas prices." Asked again: "Still ain't, ma'am. Not since the last time you asked.")
               Then the asking. "Did you see a car yesterday, at about a quarter to six?" He answers it only for
               someone who has said good morning (or admired his raccoon); anyone else gets "Didn't see nothing.
               Been not seeing nothing out here for forty years." "The men in the gray suits. Who are they?" "Folks
-              come asking about yesterday. Men in gray suits, mostly. I tell 'em I didn't see nothing." "One of
-              'em's still out there. Been standin' at that notice since five this mornin'. Ain't had his
-              breakfast." (The cheeseburger starts here: "No breakfast? The poor man." "He come in at five wantin'
-              a cheeseburger. We ain't sold a cheeseburger here since 1979.") "Why does your sign say GAS, crossed
+              come asking about yesterday. Men in gray suits, mostly. I tell 'em I didn't see nothing." "One of 'em's stood at that notice since five this morning. No breakfast." (The cheeseburger starts here: "No breakfast? The poor man." "Come in at five wantin' a cheeseburger. Ain't sold one since 1979.") "Why does your sign say GAS, crossed
               out?" "Pump quit in '79. Sign didn't." (Again: "Still quit, ma'am." Again: "Ma'am, that pump is not
               comin' back.") And the way out is a line, a different one each time: "We must not keep you." "Ma'am,
               nobody's kept me since Jolene. You're welcome to try."
-Wrong tries:  Little Sister asks          -> her talk is her own: "Mister! Did you see my daddy? He's THIS tall,
-                                             he has a scratchy beard, and he's EARLY." "Lemonade's a dollar,
-                                             little miss. Stories are extra." "I don't HAVE a dollar. I have a
-                                             loose tooth. But it's not for sale. It's waiting for Daddy." And,
+Wrong tries:  Little Sister asks          -> her talk is her own: "Mister, did you see my daddy? Scratchy beard. He's EARLY." "Lemonade's a dollar,
+                                             little miss. Stories are extra." "I don't have a dollar. I have a loose tooth. It's waiting for Daddy." And,
                                              new: "Are you MY grandpa?" "I'm everybody's, little miss. Says so on
                                              the sign." "...I have one of those already. But he lives far away."
-                                             "So you can be my SPARE one. Grandpa Joe the Rock Wizard. That's your
-                                             WHOLE name now." "I been called a lot of things, little miss. That's
-                                             the best one yet."
+                                             "You can be my SPARE one. Grandpa Joe the Rock Wizard. That's your whole name." "Been called a lot of things, little miss. That's the best one yet."
               Big Sister asks             -> she cross-examines him, and it is a choice: "Sir. Did you observe a
                                              red station wagon yesterday at approximately 5:47 p.m.?" "Didn't see
                                              nothing. Been not seeing nothing out here for forty years." "That is
@@ -949,19 +892,13 @@ Wrong tries:  Little Sister asks          -> her talk is her own: "Mister! Did y
               Mom: "A gray car with dark windows."   -> "That's what the gray suits drive. Try again."
 Solution:     Mom says good morning (or admires Ranger), and asks about the car. He will talk to family, so he
               tests her: "Depends who's asking. You kin to whoever was in that car?" "My husband and my son." "Then
-              tell me what they were driving. The gray suits couldn't." "A red station wagon with wood on the
-              sides and far too much luggage on the roof." "That's the one. Red wagon, wood trim, cooler on the
-              roof. Driver waved at me. Folks don't wave no more." "Sun was low. Hit the chrome on that wagon and
+              tell me what they were driving. The gray suits couldn't." "A red station wagon, wood on the sides, far too much luggage on the roof." "That's the one. Driver waved at me. Folks don't wave no more." "Sun was low. Hit the chrome on that wagon and
               threw a flash up ahead, like a signal mirror." "Right where it landed, the sky opened up like a tin
               can. The road sign changed its mind. And that wagon drove straight in." "Hour later the gray suits
               came and put up a fence. 'Radiation,' they say. Third piece of desert they've shut this year." He
               looks up the road toward the glass, a hand to his hat. Then, asked whether anything else has been
-              strange this week, first the hens: "Been a strange week. Jolene's hens quit layin' the day the sky
-              opened. Stand out back all day now, facin' that fence." "Jolene says it's the sky. I say it's my
-              banjo." Little Sister: "That's EVIDENCE. Chickens KNOW." And, asked again, the coin: "One more thing.
-              Somethin' come down out of a clear sky about an hour after, and hit my hat. Rang like a bell.
-              Silver." "I'd give it to you, ma'am. Only it ain't mine no more. Ranger had it before it quit
-              ringin'." He touches his hat (the dent), and Ranger looks at Mom. "A silver coin. In the keeping of a
+              strange this week, first the hens: "Strange week. Jolene's hens quit layin' the day the sky opened." "Jolene says it's the sky. I say it's my
+              banjo." Little Sister: "That's EVIDENCE. Chickens KNOW." And, asked again, the coin: "About an hour after, somethin' silver fell out of a clear sky and rang my hat." "It ain't mine to give, ma'am. Ranger had it before it quit ringin'." He touches his hat (the dent), and Ranger looks at Mom. "A silver coin. In the keeping of a
               very serious raccoon." "He don't steal. He trades. You just weren't there for your half."
 Gives:        The witness's account, and where the coin is (`nevada.witness`: it comes true when he tells of the
               coin). His hint for #10, asked "And what would he take in trade?": "Ranger's partial to shiny. And he
@@ -978,20 +915,14 @@ Notes:        The tree is `joeTree`, from the sample in the story document (sect
               own lines said the same thing, the act's words were kept. His kept lines are word for word, with no
               accent added; the rest of his lines are lightly Southern. Each of the girls has her own talk with him.
               After the coin, Little Sister's lemonade is on the house ("Your ma's good people. Lemonade's on the
-              house, little miss." "On the house? WHERE'S the house? ...Thank you, Mister Rock Wizard. You're a
-              GOOD wizard."). She can ask him to play ("Can you play your banjo? PLEASE? I'm a GOOD listener."
-              "This here's the Last Stop Rag, little miss. I wrote it. Nobody's ever asked to hear it twice."),
-              and he plays a few bars in his rocker, and the chrome of the banjo flashes in the low sun: "It did a
-              FLASH! Your banjo did a FLASH in the sun! Did everybody SEE?" "Does that when the sun's low. Jolene
+              house, little miss." "On the house? WHERE'S the house? ...Thank you, Mister Rock Wizard."). She can ask him to play ("Can you play your banjo? Please? I'm a GOOD listener."
+              "The Last Stop Rag. I wrote it. Nobody's ever asked to hear it twice."),
+              and he plays a few bars in his rocker, and the chrome of the banjo flashes in the low sun: "Your banjo did a FLASH in the sun! Did everybody see?" "Does that when the sun's low. Jolene
               says it's showin' off." (Asked twice: "...Twice? Little miss, in forty years you're the first.")
               Big Sister asks about radiation ("Sir. They say radiation. Do you own anything that measures it?"
               "My daddy's Geiger counter. Clicked fine for him in fifty-seven. Hasn't clicked once this year."
-              "Then somebody is lying, and it isn't the Geiger counter. Interesting.") and about Ranger ("The
-              raccoon. Is he yours, or are you his?" "Bit of both, miss. Mostly I'm his."). Hints: Mom, "The
-              gentleman in the rocking chair has had a front-row seat on this road for forty years. Nobody has
-              asked him nicely."; Big Sister, "The old man is a witness, and he doesn't care for my questions. Mom
-              could get a statue to talk."; Little Sister, "The Rock Wizard won't tell ME. He wants a dollar.
-              Mommy has dollars AND manners. Mommy should ask him."
+              "Then somebody is lying. And it is not the Geiger counter.") and about Ranger ("The
+              raccoon. Is he yours, or are you his?" "Bit of both, miss. Mostly I'm his."). Hints: Mom, "The gentleman in the chair has watched this road forty years. Ask nicely."; Big Sister, "The old man is a witness, but not for me. Mom could get a statue to talk." <!-- FINAL-19: REVIEW-19 -->; Little Sister, "The Rock Wizard wants a dollar. Mommy has dollars AND manners."
 ```
 
 ```
@@ -1003,34 +934,30 @@ Setup:        The coin is in Ranger's basket under the store counter, and Ranger
 Wrong tries:  Little Sister at Ranger, empty-handed -> "Ranger? About the shiny money."
                                            "Give me the coin, please. It's EVIDENCE." "..." Ranger turns round and
                                            shows her his tail. Grandpa Joe: "That's a no, little miss."
-              Mom at Ranger              -> "Ranger, I believe you have something of ours." "..." "I have
-                                           negotiated with a seven-year-old, a thirteen-year-old and a man who
-                                           keeps ketchup in a vault. I draw the line at a raccoon." Grandpa Joe:
+              Mom at Ranger              -> "Ranger, I believe you have something of ours." "..." "I negotiate with a seven-year-old daily. I draw the line at a raccoon." Grandpa Joe:
                                            "He'd take that as a compliment, ma'am." (The same if she holds the
                                            mirror shades out to him.)
               The take-a-penny dish, in the store -> Little Sister takes a penny. "It SAYS take a penny." Big
-                                           Sister: "It says take A penny." "I'm taking a penny A LOT of times."
-                                           Three more. "One, two, three, FOUR. Four pennies. I'm RICH." A penny
+                                           Sister: "It says take A penny." "I'm taking a penny LOTS of times."
+                                           Three more. "One, two, three, four. I'm RICH." A penny
                                            held out to Ranger: he takes it, sniffs it and hands it back. Grandpa
                                            Joe: "He don't want copper, little miss. He wants to see himself in
                                            it." (Put in his basket in the store, Jolene: "He don't want copper,
                                            sugar. He wants to see himself in it.")
-              Little Sister with the mirror shades -> "Look, Ranger! SHINY! Do you want them? You can have them!"
-                                           She holds them out, and snatches them back when he reaches: "I'm not a
-                                           GRABBER. I'm a HOLDER." Ranger, to the tail again. Grandpa Joe: "He's
+              Little Sister with the mirror shades -> "Look, Ranger, SHINY! Do you want them? You can have them."
+                                           She holds them out, and snatches them back when he reaches: "I'm not a grabber. I'm a HOLDER." Ranger, to the tail again. Grandpa Joe: "He's
                                            particular about manners, little miss."
               Ranger's basket, under the counter -> Jolene: "Nobody goes in that basket but Ranger. Not me, not Joe,
                                            not the government."
-              The spinner rack, as one of the girls -> Big Sister: "I have no money. I have a great deal of
-                                           knowledge, which is not legal tender." Little Sister: "Mommy, can we buy
-                                           the SHINY ones? Mommy BUYS things. That's how buying WORKS."
+              The spinner rack, as one of the girls -> Big Sister: "I have no money. Only
+                                           knowledge, which is not legal tender." Little Sister: "Mommy has
+                                           to buy the SHINY ones. That's how buying works."
 Solution:     Mom buys the last pair of mirror shades off the spinner rack: "We buy, girls. We do not borrow." She
-              takes them off the hook and pays at the register. Jolene: "Three dollars and ninety-nine
-              cents, sugar. Last pair. They been waitin' on you." The register rings, for her: "There. She rang.
+              takes them off the hook and pays at the register. Jolene: "Three ninety-nine,
+              sugar. Last pair. They been waitin' on you." The register rings, for her: "There. She rang.
               She don't ring for just anybody." Mom hands them to Big Sister, and Big Sister trades, in Ranger's
               talk ("Ranger. I would like to propose a trade.") or by holding the shades out to him. She has the
-              fact: "Fun fact: a raccoon's most important sense is touch, and water is thought to make his front
-              paws feel even more." "So: both hands out, flat, and hold very still. Let him read it." She holds
+              fact: "A raccoon's most important sense is touch. Wet paws are thought to feel more." "Both hands out, flat, and very still. Let him read it." She holds
               them out flat on both hands and keeps still. Ranger takes them, turns them over in his paws, looks at
               himself in the lenses, scampers into the store for his half of the bargain and back, and puts the
               coin in her hand. "...Thank you. That was very correct of you." He puts the mirror shades on, and
@@ -1039,49 +966,34 @@ Gives:        The coin, to Big Sister (`nevada.traded`), and she reads it there 
 Plants/pays:  Pays off "Chickens KNOW" the other way about: a raccoon knows a grabber. Plants Ranger's
               manners for Act Five: he trades, he feels with his paws, and he is a very good judge of ropes.
               The shades on Ranger are the running sight gag of the limousine.
-Notes:        Little Sister cannot do this one, and it is the first time in the game that she minds: "I would
-              have been GOOD at that. If he'd let me." Big Sister: "You would have been fast at it." The trade is
+Notes:        Little Sister cannot do this one, and it is the first time in the game that she minds: "I'd have been GOOD at that. If he'd let me." Big Sister: "You would have been fast at it." The trade is
               offered only once Grandpa Joe has said that the coin is Ranger's (#5). In Ranger's talk Little
               Sister holds long conversations in which she does both parts ("What's your favorite color?" "..."
-              "SHINY? Shiny's not a COLOR, Ranger. ...He says it is NOW."), Mom says good morning ("He says good
-              mornin', ma'am. Nobody says it to him neither."), and Big Sister tells him his Latin name ("Fun fact:
-              your Latin name is Procyon lotor. 'Lotor' means 'washer.'" "..." "He says he knows, miss. He just
-              don't like to brag."). Hints: Mom, "Ranger trades shiny for shinier, and there's something shiny
-              for sale in that store. We're a family that buys."; Big Sister, "A raccoon feels with his front paws.
-              Something shinier than a coin, held out flat on both hands, and kept very still."; Little Sister, "He
-              likes SHINY. The store has SHINY. I saw it SPIN."
+              "Shiny? Shiny's not a color, Ranger. ...He says it is NOW."), Mom says good morning ("He says good
+              mornin', ma'am. Nobody says it to him neither."), and Big Sister tells him his Latin name ("Your Latin name is Procyon lotor. 'Lotor' means 'washer.'" "..." "He says he knows, miss. He just
+              don't like to brag."). Hints: Mom, "Ranger trades shiny for shinier. The store sells something shinier."; Big Sister, "Something shinier than a coin, flat on both hands, held very still."; Little Sister, "He likes shiny. The store has shiny. I saw it SPIN."
 ```
 
 ```
 Puzzle #6: Hand Over The Coin        (Nevada · Lead: Big Sister)
 Needs:        #10
 Setup:        Ranger puts the coin in Big Sister's hand, and she is the one who knows what it is.
-Wrong tries:  Give it to Little Sister    -> "I get to HOLD it? Finally! Hi, grumpy man. You're with ME now.
-                                             I'm holding you with BOTH hands." (She can pass it on.)
-              Give it to Mom              -> "Thank you, darling. It goes in my handbag, with everything else
-                                             that matters."
+Wrong tries:  Give it to Little Sister    -> "I get to HOLD it? Finally! Hi, grumpy man. You're with me now." (She can pass it on.)
+              Give it to Mom              -> "Thank you, darling. In my handbag, with everything that matters."
               Show it to Grandpa Joe      -> "Don't show it to Ranger. He'll want it back." (round twelve: he
                                              did not give it to them, so Mom's old line went)
-              Show it to the man in gray  -> "I can neither confirm nor deny that that is a coin."
-                                             "If it were a coin, I would have to file a report. So it is not a coin."
+              Show it to the man in gray  -> "If it were a coin, I would have to file a report. So it is not a coin."
 Solution:     Big Sister reads it as soon as Ranger puts it in her hand (round twelve: #6 falls together with
-              #10). "Mother. This is a Roman denarius. And that is Julius Caesar." "Fun fact: in 44 B.C., coins
-              were struck in Rome with Caesar's own portrait. While he was alive." Little Sister knows it at once:
-              "It's the Caesar money from Sunday school!" Big Sister has the fact: "The 'penny' they brought to
-              Jesus was a denarius, like this one. Most likely with a later Caesar on it: Tiberius." And Mom has
+              #10). "Mother. This is a Roman denarius. And that is Julius Caesar." "Fun fact: in 44 B.C., Rome put Caesar's portrait on coins. While he was alive." Little Sister knows it at once:
+              "It's the Caesar money from Sunday school!" Big Sister has the fact: "The 'penny' brought to Jesus was a denarius. Most likely with Tiberius on it." And Mom has
               the verse: "'Render therefore unto Caesar the things which are Caesar's; and unto God the things
-              that are God's.'" Then Big Sister goes back to the coin: "And it isn't two thousand
-              years old. Look at the edges. It is NEW. It has hardly been in a pocket." Mom: "A new coin, from 44
-              B.C., that fell out of the sky. In Nevada."
+              that are God's.'" Then Big Sister goes back to the coin: "And it is not two thousand years old. The edges are NEW."
 Gives:        Half the answer: a new coin from 44 B.C. (`nevada.coinRead`).
 Plants/pays:  As before: pays off the Son's coin toss in Act Two; plants that the coin is new, which is to say
-              that it shines (#9). Once the coin has been read, a word between Mom and Big Sister: "A matter of
-              record: Caesar put his own face on his money. Ours says 'In God We Trust.'" "Fun fact: first in
-              1864, on the two-cent piece. The year Nevada became a state. That half is mine."
+              that it shines (#9). Once the coin has been read, a word between Mom and Big Sister: "Caesar put his own face on his money. Ours says 'In God We Trust.'" "It was first on the two-cent piece, in 1864. The year Nevada became a state."
 Notes:        Kept as it was, with the coin now coming from Ranger (#10) and not from the old man. The design let
               her hand it to her mother first, unread; the scene has her read it on the spot, since a carried
-              thing's look cannot call the scene. So two of Mom's lines, for a coin nobody has read yet ("I have a
-              coin that fell out of the sky, darling. I'd like your professional opinion." "Then hand it over, Mother. I can't
+              thing's look cannot call the scene. So two of Mom's lines, for a coin nobody has read yet ("A coin out of the sky, darling. Your professional opinion?" "Then hand it over, Mother. I can't
               footnote what I can't hold."), and this beat's three hints are written and never heard. (Mom's own
               look at the coin, "A silver coin with a stern gentleman on it. It looks old and it looks new. Your
               sister will know which.", is heard only once it has been read.)
@@ -1092,37 +1004,25 @@ Puzzle #7: Ask Two Hundred Questions        (Nevada · Lead: Little Sister · th
 Needs:        nothing
 Setup:        There is a notice on the fence. A man in a gray suit is standing exactly in front of it.
 Wrong tries:  Read the notice             -> each of them can see AREA CLOSED above his shoulders and none
-                                             of the small print, and says so. Big Sister: "I can read
-                                             'AREA CLOSED'. The small print is behind his jacket, which I
-                                             assume is the point."
+                                             of the small print, and says so. Big Sister: "The small print is behind his jacket. I assume that is the point."
               Mom asks him to move        -> "Good morning. May we read the notice behind you?" "There is no
                                              notice, ma'am." "I can see all four corners of it." "I can neither
                                              confirm nor deny a corner."
-              Mom asks a second time      -> courtesy, with the rule book named. "A matter of record:
-                                             by the time he was sixteen, General Washington had copied
-                                             out 110 rules of civility." "I can neither confirm nor
+              Mom asks a second time      -> courtesy, with the rule book named. "By sixteen, General Washington had copied out 110 rules of civility." "I can neither confirm nor
                                              deny General Washington." "Then you have not read one of
                                              them. Good morning."
               Big Sister asks on what authority -> "I can neither confirm nor deny that it is an area."
                                              "It has a fence." "I can neither confirm nor deny the fence."
 Solution:     Play as Little Sister and talk to him (looked at, he is named already: "I'm naming him
-              Mister Gray."). She counts her questions on her fingers: "Hi, Mister Gray! I have some
-              questions. Number ONE: why is your tie gray?" "Move along, little girl." "That's not an
-              ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"
-              "I can neither confirm nor deny a dog." "Five: what's his NAME? Why are you standing THERE?
-              Is it your turn? Do you get a snack? That's EIGHT fingers. I have TOES too." (Round
+              Mister Gray."). She counts her questions on her fingers: "Hi, Mister Gray! Question ONE: why is your tie gray?" "Move along, little girl." "That's not an ANSWER. Two: is your car gray? Three: do you have a dog?"
+              "I can neither confirm nor deny a dog." "Four: what's his name? Five: any snacks? That's five fingers. I have TOES." (Round
               twelve: he answers the snack, once, to himself: "...I have not had a snack since 0500.")
-              Into his earpiece: "...Sir? It's me. I have a situation. No, sir. She is about seven. She
-              has a list." He retreats along the fence, and she goes with him: "Who are you talking to?
-              Is it your mommy? Tell her you're not DONE. ...Hi, Mister Gray's mommy!" (Round twelve: the
+              Into his earpiece: "...Sir? I have a situation. No, sir. She is about seven. She has a list." He retreats along the fence, and she goes with him: "Is that your mommy? ...Hi, Mister Gray's mommy!" (Round twelve: the
               earpiece answers, small and far, and only the player hears it: "Jed, is that the child
-              again?" Nobody repeats it.) Big Sister: "'It was,' she noted, 'the finest interrogation
-              she had ever witnessed.'"
-Gives:        A clear view of the notice (`nevada.distracted`). He stays busy for the rest of the act ("You
-              stay RIGHT there. Next question. Why is the sky? Not why is it BLUE. Why IS it?" "...Sir?
+              again?" Nobody repeats it.)
+Gives:        A clear view of the notice (`nevada.distracted`). He stays busy for the rest of the act ("You stay RIGHT there. Next question: why is the sky?" "...Sir?
               Requesting a transfer. To a quieter desert.").
-Plants/pays:  Pays off "ask a LOT of times". Looking at the fence, she says: "I could fit under that.
-              I fit under EVERYTHING. ...I'm just SAYING." That is for the next act. Mom's second try pays off Act Three, on the
+Plants/pays:  Pays off "ask a LOT of times". Looking at the fence, she says: "I could fit under that. I fit under EVERYTHING. ...Just saying." That is for the next act. Mom's second try pays off Act Three, on the
               landing ("as a schoolboy, George Washington copied out 110 Rules of Civility"). Plants Jed's
               lunch ("...I have not had a snack since 0500.") and his name.
 Notes:        Courtesy cannot move him, and neither can logic. The notice itself says "No questions."
@@ -1135,18 +1035,13 @@ Setup:        The notice can be read now: AREA CLOSED. BY ORDER. ELEVATED RADIAT
               SECTORS 44 AND 1921 SEALED UNTIL FURTHER NOTICE.
 Wrong tries:  Mom reads it                -> she reads it out. "Sectors. Somebody has numbered the
                                              desert. Your sister should see this."
-              Little Sister reads it      -> "It says... A, R, E, A. AREA! I can READ that. And a yellow
-                                             spinny flower. 'Radiator levels.' That's bad, right?"
-Solution:     Big Sister reads it. "'Elevated radiation levels.' In Nevada, people will believe that. Fun
-              fact: atomic bombs were tested out here from 1951 until 1992." "Which makes it a very good
-              excuse. But look at the sectors. Forty-four. Nineteen twenty-one." "Nobody numbers sectors like
-              that. Those aren't places, Mother. I think those are years."
+              Little Sister reads it      -> "A, R, E, A. AREA! And a yellow spinny flower. 'Radiator levels.' Is that bad?"
+Solution:     Big Sister reads it. "'Radiation.' Atomic bombs were tested in Nevada, 1951 to 1992. A good excuse." "But look at the sectors. Forty-four. Nineteen twenty-one." "Those aren't places, Mother. I think those are years."
 Gives:        The other half of the answer (`nevada.notice`).
 Plants/pays:  44 and 1921 are the years the Son and Dad are in. Whoever put up the fence knows that.
               Both are on Big Sister's timeline at home (Act Three): she says so in "Some when". The
               office's own map, in Act Five, has a third sector.
-Notes:        Whichever of #6 and #8 comes second, she joins them up on the spot: "Sector 44. A new coin
-              from 44 B.C. It is the same forty-four. The holes don't go to places. They go to YEARS."
+Notes:        Whichever of #6 and #8 comes second, she joins them up on the spot: "Sector 44. A coin from 44 B.C. They don't go to places. They go to YEARS."
 ```
 
 ```
@@ -1155,58 +1050,55 @@ Needs:        nothing (the store is open from the first line)
 Setup:        Grandma Jolene's hens have quit laying, and they stand out back in a row, facing the fence: through
               the open back door, five small hens with their backs to us. Asked for the sun shade in her window,
               she will not part with it: "Then I'd have an empty window, sugar. A store with an empty window is a
-              shed." Again: "Not the window, sugar. Anything but the window." And again: "Sugar, you could ask
-              me with a cherry on top. You do somethin' about my girls, and we'll see."
-Wrong tries:  Mom asks about the hens      -> in Jolene's talk: "And how are your hens, Mrs. Jolene?" "Oh, you're
-                                              kind to ask. They won't talk to me. They won't talk to Joe. They're
-                                              not talking to anybody. They just LOOK." "At what?" "The fence,
+              shed." Again: "Not the window, sugar. Anything but the window." And again: "Ask with a cherry
+              on top, sugar. Do somethin' about my girls, then we'll see."
+Wrong tries:  Mom asks about the hens      -> in Jolene's talk: "How are your hens, Mrs. Jolene?" "Not
+                                              talking to anybody, sugar. Not me,
+                                              not Joe. They just look." "At what?" "The fence,
                                               sugar. Day and night. Like it owes them money."
-              Big Sister on the hens       -> "Fun fact: a hen lays less when she is frightened." Jolene: "They
-                                              ain't frightened. I know frightened. Frightened goes UNDER the
-                                              porch." Big Sister, who cannot stand it: "That is... actually a
+              Big Sister on the hens       -> "A hen lays fewer eggs when she is frightened." Jolene: "They
+                                              ain't frightened, sugar. Frightened
+                                              goes under the porch." Big Sister, who cannot stand it: "That is... actually a
                                               fair point."
-              Mom or Big Sister at the back door -> "I'm not going to stand in a hen yard, darling. I've stood
-                                              in worse, and I have standards." / "I will observe from the
+              Mom or Big Sister at the back door -> "Not the hen yard, darling.
+                                              I've stood in worse. I have standards." / "I will observe from the
                                               doorway. That is what a doorway is for."
-              Little Sister on the step, first -> what she tries first is the player's choice, each once: "Flock!
-                                              ATTENTION!" "...Nothing. They're not MY flock. You can't order
-                                              somebody else's flock. That's RUDE."; "Hi, chickens! I'm new here.
-                                              I'm VERY good with chickens." "...They didn't even LOOK. They're busy
-                                              looking at something ELSE."; "Bawk? Bawk BAWK?" "That's hello, in
+              Little Sister on the step, first -> what she tries first is the player's choice, each once: "Flock,
+                                              ATTENTION!" "...Nothing. You can't
+                                              order somebody else's flock. That's RUDE."; "Hi, chickens.
+                                              I'm VERY good with chickens." "...They didn't even
+                                              look. They're busy looking at something ELSE."; "Bawk? Bawk BAWK?" "That's hello, in
                                               chicken. ...They can tell I have an ACCENT."
-Solution:     Play as Little Sister and go out of the back door onto the step (or, in Jolene's talk: "I speak
-              chicken. I'll go out and ASK them what's wrong." "You go on, sugar. Back door's open. They ain't
-              told me a thing all week."). The first time, the other two come and watch from the doorway, and
-              Jolene calls the names after her: "Darlene, Charlene, Marlene, Arlene and Doreen. Named for my
-              sisters. The hens are nicer." Then the hens' talk. "Okay. I'll stand in the row with you. And look
-              where YOU look." She faces the fence with them. "The fence. ...The Hummy Place." "...Oh. They're not
-              scared. And they're not waiting. They're GUARDING." "Somebody went in there, and they're keeping an
-              eye on it till he comes back." "That's what General Feathers is doing for Daddy. Chickens KNOW when
-              somebody needs minding." (She may salute them first: "I'll SALUTE them first. That's what you do
-              for guards." "...They didn't salute back. They're ON DUTY. That's allowed.") "I'll TELL them. One
-              at a time, by name. That's polite." In her order: "Darlene. It's okay. My family's going IN there.
-              We're going to get them. You can stand down." Darlene turns round to look at her, and sits; Jolene
-              comes out from behind the counter to the doorway to see. "Charlene. You too. Stand DOWN. That's an
-              order. ...A NICE order." Charlene sits. "Marlene, Arlene, Doreen: you can keep guarding if you WANT.
-              Somebody should. Thank you for minding them." Darlene stands up, and there is an egg in the dust.
-              "...An EGG! Darlene did an EGG! Right THERE! In the DIRT!" Jolene, in the doorway: "Twenty-two years
-              I've kept hens. Nobody ever TOLD them anything." "Anything in this store is yours, sugar. The window
-              too. Not the pickled eggs. Those are Joe's." "And that egg's yours to carry. For luck. Darlene'd want
-              you to have it." Little Sister hops down into the yard for it, and back onto the step: "It's WARM!
-              I'll keep it in my FRONT pocket, with my hand on it. Like a NEST."
+Solution:     Play as Little Sister and go out of the back door onto the step (or, in Jolene's talk: "I
+              speak chicken. I'll go out and ASK them." "Back door's open, sugar. They
+              ain't told me a thing all week."). The first time, the other two come and watch from the doorway, and
+              Jolene calls the names after her: "Darlene, Charlene, Marlene, Arlene, Doreen.
+              For my sisters. The hens are nicer." Then the hens' talk. "I'll stand in the row with you.
+              And look where YOU look." She faces the fence with them. "The fence. ...The Hummy Place." Mom, from the doorway: "Are they frightened, darling?" "No. They're
+              not scared. They're GUARDING." Big Sister: "Guarding what?" "Somebody went in there. They're minding it till he
+              comes back." "General Feathers does that for Daddy. Chickens KNOW." (She may salute them first: "I'll SALUTE
+              them first. You do that for guards." "...They didn't salute back. They're on duty. That's allowed.") "I'll tell
+              them. One at a time, by name." In her order: "Darlene, my family's going in there to get them. You can stand
+              down." Darlene turns round to look at her, and sits; Jolene comes out from behind the counter to the doorway
+              to see, and says as she comes: "Twenty-two years I've kept hens. Nobody ever TOLD them anything." "Charlene,
+              you too. That's an order. ...A NICE order." Charlene sits. Big Sister: "Two for two." "Marlene, Arlene, Doreen:
+              you keep guarding. Thank you for minding them." Darlene stands up, and there is an egg in the dust. "...Darlene
+              laid an EGG!" Jolene, in the doorway: "Anything in this store is yours, sugar. The window too." "And that egg's
+              yours. For luck." Little Sister hops down into the yard for it, and back onto the step: "It's warm. I'll keep
+              it in my front pocket, like a NEST."
 Gives:        Jolene's friendship, which is the run of the store, the window too (`nevada.jolene`). And one warm
-              egg, which Little Sister will not hand to anybody: "It's WARM. It's MINE to keep warm." (Handed to
+              egg, which Little Sister will not hand to anybody: "It's warm. It's MINE to keep warm." (Handed to
               one of the others, it comes straight back.) Darlene and Charlene sit from now on; the other three
-              keep guarding, and peck now and then. Back on the step: "Hi again, girls. Still guarding? GOOD. You
-              keep GUARDING."
+              keep guarding, and peck now and then. Back on the step: "Still guarding, girls? Good.
+              You keep GUARDING."
 Plants/pays:  Pays off "Chickens KNOW" (Act Three, Little Sister's room), the RESERVED pillow and General
               Feathers in Dad's suitcase, and the hens facing the fence (#5). Plants the hens turning round,
               all five, to watch the limousine go (the cut-scene), and the egg (the one thing in her pocket that
               has to be kept warm, wherever they land).
 Notes:        This is the author's "bonds with Little Sister over chickens", written so that the bond is the
               puzzle: the hens will not be ordered, and the one person at the Last Stop who knows that is seven.
-              Jolene and Little Sister talk like two colleagues (`joleneTree`): "Can I see your chickens? I'm VERY
-              good with chickens. I have a whole FLOCK." "Do you now! What do you feed yours?" "Everything.
+              Jolene and Little Sister talk like two colleagues (`joleneTree`): "I have chickens
+              too. A whole FLOCK." "Do you now. What do you feed 'em?" "Everything.
               They're not fussy. Admiral Doodle ate a crayon." "Which color?" "Blue." "...They do like a blue."
               Jolene's talk has her facts too, one a visit, four in all, each wrong beyond argument, each put
               right by Big Sister: a hen has teeth; a raccoon has a pocket; a good hen lays one on the hour; the
@@ -1220,53 +1112,31 @@ Notes:        This is the author's "bonds with Little Sister over chickens", wri
 Puzzle #9: Flash The Coin Where The Tracks Stop        (Nevada · Lead: whoever holds the coin · the patch of glass)
 Needs:        #6 and #8
 Setup:        Tire tracks run out from under the fence and stop at a patch of sand that has turned to
-              glass. There is nothing else to see. Little Sister, looking: "The ground's all SHINY. And it
-              hums, like a bee in a jar. But there's no bee. And no jar. It's the Hummy Place."
-Wrong tries:  Go to the tracks before both halves: Mom -> "Not yet, darlings. I'd like to understand it
-              before anybody stands on it." Big Sister -> "I have a theory. A theory is not a fact until I can
-              footnote it." Little Sister -> "I'll jump on it first. I'm the lightest, so it's SAFEST. ...Mommy's
-              doing the eyebrow. That's a no."
+              glass. There is nothing else to see. Little Sister, looking: "It hums like a bee in a jar. But there's no bee. It's the Hummy Place."
+Wrong tries:  Go to the tracks before both halves: Mom -> "Not yet, darlings. Nobody stands on it till I understand it." Big Sister -> "I have a theory. A theory is not a fact until I can
+              footnote it." Little Sister -> "I'm the lightest, so I go first. ...Mommy's doing the eyebrow. That's a no."
               The coin at the tracks before both halves -> the same.
               Little Sister's flashlight where the tracks stop (at any time, whoever is holding it)
-              -> Little Sister: "CLICK. It's ON! ...Where's my spot? I can't even SEE my spot. The
-              sun's got a WAY bigger flashlight." Nothing opens. Light is the right idea, and this
+              -> Little Sister: "Click. ...I can't even see my spot. The sun's got a WAY bigger flashlight." Nothing opens. Light is the right idea, and this
               is too little of it. (Tried anywhere else, and the other four things from the house
               tried anywhere at all: the game's stock replies.)
               The sun shade from the store's window, at the glass, after both halves -> too soon (#12): "One thing
-              at a time, darlings. The coin came out of that sky. Let us begin with the coin." / "Not the window.
-              Not yet. An experiment starts small: the coin first." / "The WINDOW is for later. First the shiny
-              MONEY. I just KNOW it."
+              at a time, girls. We start with the coin." / "Not yet. An experiment starts small: the coin first." / "The window's for later. First the shiny money. I just KNOW it."
               Go to the tracks after both halves, with nothing in hand -> she listens, and remembers
               the old man. Mom: "It hums, darlings. Very quietly, and a little flat. Like your father
-              when he's lost and won't say so." "The gentleman said a flash of low sun fell just
-              here. I wonder what we have that flashes." Big Sister: "It hums. Right here, over the glass,
-              where there is nothing at all to hum." "A flash of low sun fell here, and the sky opened. That
-              is his whole story. So: we need a flash." Little Sister: "It HUMS! Right THERE! There's nothing
-              there and it HUMS! ...Hello? Daddy? Are you in there?" "The Rock Wizard said the car went FLASH
-              and the sky went OPEN. So we need a flash. I'm READY."
+              when he's lost and won't say so." "He said a flash of low sun fell here. What do we have that flashes?" Big Sister: "It hums. Right over the glass, where there is nothing to hum." "Low sun, a flash, the sky opened: his whole story. We need a flash." Little Sister: "It HUMS. And there's nothing there. ...Hello? Daddy? Are you in there?" "The car went flash and the sky went open. We need a flash. I'm READY."
 Solution:     Use the coin where the tracks stop, as whichever of them is holding it. Mom: "Places,
               girls." The one with the coin goes to the corner of the glass, and the other two stand
               back. Big Sister: "The tracks don't turn. They don't skid. They just stop." Then, first
-              things first: Mom bows her head, and the girls with her. Nobody has to be told. "Father,
-              You brought us this far. We don't understand what comes next. You do. Keep us, and
-              keep them. In Jesus' name." Little Sister: "And thank You for the lemonade. And tell Daddy
-              we're COMING, so he doesn't have to be brave by himself. Amen." Heads up, and the coin goes
+              things first: Mom bows her head, and the girls with her. Nobody has to be told. "Father, You know what comes next. Keep us, and keep them. In Jesus' name." Little Sister: "And thank You for the lemonade." "And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen." <!-- FINAL-19: two boxes, nevada.pray.2 and .2.b --> Heads up, and the coin goes
               up into the low sun. Each has her own
-              line for it. Mom (and only when it is she who holds the coin, a line before it: "Dr.
-              Franklin said the sun carved on General Washington's chair was 'a rising and not a
-              setting Sun.' So is this one."): "Stand back a little, girls. I'm about to do
-              something your father would think of." Big Sister: "A low sun. A new coin. And an old
-              man's story. This is called an experiment." Little Sister: "My turn! I'm gonna do a
-              FLASH, like the car did! Everybody stand BACK. And WATCH." One flash. The light stays where it fell,
+              line for it. Mom (and only when it is she who holds the coin, a line before it: "On Washington's chair, Franklin saw 'a rising and not a setting Sun.' So do I."): "Stand back, girls. I'm doing something your father would think of." Big Sister: "Low sun. New coin. An old man's story. This is called an experiment." Little Sister: "My turn! I'm doing a flash, like the car did. Everybody stand BACK." One flash. The light stays where it fell,
               over the glass, and a door opens there, exactly the size of the coin.
 Gives:        A door in time the size of a coin (`nevada.doorOpen`), and the scene "Some when". (Round
               twelve: no longer the act's gate, and no longer the end of the demo. #13 is the gate.)
 Teaches:      Their half of the rule of the doors: light opens them. (A coin's worth of light, a coin's
               worth of door: they have not been told that yet, and Mom's last line knows it anyway.)
-Hints:        Mom: "A flash of low sun opened the sky where the tracks stop. We have a low sun, and a
-              very new coin." Big Sister: "A flash of sun opened it once. The sun is low again, and the
-              coin is new enough to flash. Where the tracks stop." Little Sister: "The shiny money can
-              do a FLASH, like the car did! At the Hummy Place, where the car tracks stop! I'm READY."
+Hints:        Mom: "A flash of low sun opened the sky where the tracks stop. We have a new coin." Big Sister: "Low sun. A new coin, bright enough to flash. Where the tracks stop." Little Sister: "The shiny money can FLASH, like the car did! At the Hummy Place."
 Plants/pays:  Pays off the old man's flash (#5), the newness of the coin (#6), and the Son's "little
               light, little door" in Rome, which nobody here has heard.
 Notes:        Any of the three can do it, and each has her own line: the coin can be handed round
@@ -1285,21 +1155,14 @@ Notes:        Any of the three can do it, and each has her own line: the coin ca
 Cut-Scene: Some when        (the middle of the act now; round twelve)
 ```
 Little Sister is at the door before anybody can say no: it is at the height of her eye.
-"A HOLE! In the AIR! And it's littler than ME! ...I bet I could still FIT." Big Sister
-narrates it: "'The air,' she noted, 'now had a hole in it. A hole exactly the size of the
-coin.'" Little Sister, with her eye to it, hears them first, and counts them: "SHH!
-Everybody SHH! ...CHICKENS. Three! No, FOUR! I can hear CHICKENS in there!" And then:
-"It's a DIFFERENT sunny in there! And it smells
-like SAUSAGES!" Mom: "Chickens. She is quite right. And sausages, and bread, and
+"A hole in the AIR! ...I bet I could still fit." Big Sister
+narrates it: "'The air,' she noted, 'now had a hole in it.'" Little Sister, with her eye to it, hears them first, and counts them: "Shh. Everybody SHH. ...Chickens. Three. No, four. I can hear chickens in there." And then:
+"It's a different sunny in there. And it smells like SAUSAGES." Mom: "Chickens. She is quite right. And sausages, and bread, and
 woodsmoke." Big Sister: "It is morning in there, too. I do not think it is THIS
 morning." "Then which morning, darling?" She gives both, and at the first of them Little
-Sister, with her eye still at the door, has a question: "Sector 44: forty-four B.C. The
-year Julius Caesar was killed, on the Ides of March." "Wait! What's B.C.? Somebody tell
-me QUICK." Mom: "Before
-Christ, sweetheart. Before Jesus was born." "Sector 1921: nineteen twenty-one B.C. It is
-on my timeline: the year Abram went down into Egypt." Her mother knows the chapter:
-"Abram going down into Egypt. I've read that my whole life. I never once thought of it as
-an ordinary morning." And Big Sister sees a pattern she cannot explain: "The Ides of March.
+Sister, with her eye still at the door, has a question: "Sector 44: forty-four B.C. The year Julius Caesar was killed. The Ides of March." "Wait. What's B.C.? Somebody tell me QUICK." Mom: "Before
+Christ, sweetheart. Before Jesus was born." "Sector 1921: nineteen twenty-one B.C. My timeline: Abram went down into Egypt." Her mother knows the chapter:
+"Abram going down into Egypt. I never once thought of it as an ordinary morning." And Big Sister sees a pattern she cannot explain: "The Ides of March.
 Abram in Egypt. The holes open on years that MATTER. ...I don't know why." "They didn't
 crash, Mother. They didn't go anywhere. They went some WHEN." Little Sister, turning
 round to them: "I TOLD you! Daddy's not lost! Daddy's EARLY!" Big Sister: "...Nearly four
@@ -1313,7 +1176,7 @@ to keep. It is still Little Sister's last word. Four lines follow it: Big Sister
 psalm, and the last two exactly as they were. ("Then we know where they are" now follows
 the psalm, and means two things. Not a word of it was changed.)
 
-*"Wait! What's B.C.? Somebody tell me QUICK."* is what makes EARLY land: she is told
+*"Wait. What's B.C.? Somebody tell me QUICK."* is what makes EARLY land: she is told
 "before", and a few lines later she has done the sum her own way. It is asked and answered
 at the Roman year and nowhere else.
 
@@ -1343,17 +1206,24 @@ a few steps from it with his back turned, reporting a seven-year-old to his supe
 
 <!-- NEVADA-12W -->
 *Round twelve: the scene no longer ends the act.* Instead of the title, one more beat, and
-play. Little Sister turns back to the hole: "I STILL bet I could fit. ...Just my HEAD. I'm only
-going to try my HEAD." She goes up under it and leans in, to the ears. From inside, muffled:
-"It's WARM in here. ...Mommy, there's a chicken LOOKING at me." Mom comes and lifts her out by
+play. Little Sister turns back to the hole: "I still bet I could fit. ...Just my HEAD." She goes up under it and leans in, to the ears. From inside, muffled:
+"It's warm in here. ...Mommy, there's a chicken LOOKING at me." Mom comes and lifts her out by
 the collar, as one lifts a cat out of a drawer: "Not head first, sweetheart. Not into any
-century." Big Sister, who has not stopped looking at the hole: "It is exactly the size of the
-coin. The coin was exactly the size of the flash." "...Mother. I think I know what the old man's
+century." Big Sister, who has not stopped looking at the hole: "...Mother. I think I know what the old man's
 story was about." And she says the rule, in three lines: "A small flash, a small door." "A car's
-worth of flash, a car's worth of door." "We don't need a bigger sun. We need a bigger SHINE."
+worth of flash, a car's worth of door." "Not a bigger sun, Mother. A bigger SHINE."
 Mom: "Something that shines like a station wagon." And Little Sister, if she has seen the banjo
-flash (she asked him to play): "Grandpa Joe's BANJO shines! I SAW it! It did a FLASH when he
-played!" Then play goes on, with the little door open over the glass.
+flash (she asked him to play): "Grandpa Joe's BANJO shines! I saw it flash." Then play goes on, with the little door open over the glass.
+
+<!-- STAGE-19N -->
+*Round nineteen (STAGE-19N): the beat is the first click on the little door.* The scene ends on its button, Mom's "Girls.
+We are going to go and bring them home.", held a second on the three of them and the door, and the player has the hand
+back (it was one stretch of 34 boxes and about three minutes). The head in the hole and Big Sister's rule, as above, word
+for word, are the first thing that happens at the little door, whatever is done with it (talked into, looked at, a thing
+used on it): the three take their places for the flash again, and it plays; the next click talks into it. The act's hint
+for this moment sends every lead to the little door ("Say hello into it"), and a player who goes elsewhere first loses
+nothing: the tries of #12 (Mom's car, the banjo asked for in Grandpa Joe's talk, the store's shelves) wait until the
+rule has been said, and the rule is still said at the door.
 
 <!-- LETTER-17: the night Mom hears her son (round seventeen) -->
 
@@ -1362,85 +1232,69 @@ The letterbox: Is That YOU?        (Nevada · any of them · the little door)   
 Needs:        #9
 Setup:        On the other side of the coin door is the Son, in Rome, holding his own coin door open with Dad's keys
               in the sun. Through a door the size of a coin, voices carry. From #9 until #12 the little door is a
-              thing to click ("Talk into"); his words come through it, top centre, with his portrait. (Round
+              thing to click ("Talk into"); his words come through it, with his portrait, at the door (STAGE-19N: the
+              scene's `wordsAt`, (552, 430), during a talk through it: over the door, as near it as his words can go and all show). (Round
               seventeen: the night Mom hears her son, rewritten as the author asked on 16 October. She must answer
               as a mother would when she hears her son, and he must explain as best he can until she understands
               that he is in another time.)
-The talk:     Whoever speaks into it first hails it. Mom: "Hello? ...Is anybody there? I'm talking to a hole in the
-              air, girls. Nobody tell your father." Big Sister: "Hello. This is a test. If anyone can hear this,
-              please say so. Clearly." Little Sister: "HELLO! Is anybody IN there? It's ME!" He answers: "Hello?
-              HELLO? Is somebody out there? This hole has VOICES in it." At his voice Mom's handbag goes down on the
+The talk:     Whoever speaks into it first hails it. Mom: "Hello? ...I'm talking to a hole in the air, girls. Nobody tell your father." Big Sister: "Hello. This is a test. If anyone can hear this,
+              please say so. Clearly." Little Sister: "HELLO! Is anybody in there? It's me." He answers: "Hello? HELLO? Is somebody out there? This hole has voices in it." At his voice Mom's handbag goes down on the
               gravel (the first time in the game she has put it down without looking), and she is at the door on her
               knees, facing it, while he and his little sister say hello: "...Is that YOU?" "Is that YOU?" "I asked
               FIRST." "I asked EARLIER."
               Then Mom, and every rule of her voice is gone at once: "Baby? Is that you? Are you okay? Are you hurt?
-              Where are you? Is Daddy with you?" "Mom! Hi! I'm okay! Don't freak out." "I'm not freaking out. Why
+              Where are you? Is Daddy with you?" "Mom! Hi. I'm okay. Don't freak out." "I'm not freaking out. Why
               would I freak out. Where ARE you?" Big Sister, very quietly: "She's freaking out." Little Sister: "I
               know. It's AWESOME."
               He explains, as best he can. Through a door the menus are his words, so the player chooses what he
               tries next, each once, and each try gets the answer a mother would give and moves her a step from
               Italy to 44 B.C.: "I'm in Rome!" "Rome. ...Rome, ITALY? How did you get to Italy? Who took you to
-              Italy?"; then "It's not THAT Rome. It's old Rome. Like, OLD old." "Honey, I need you to not be funny
-              right now." "I'm NOT being funny! ...For once."; the smell ("It smells like sausages out here. And
-              bread. And smoke. And one other thing I'm choosing not to know." Big Sister: "Sausage, bread,
+              Italy?"; then "Not THAT Rome. Old Rome. Like, old old." "Honey, I need you to not be funny
+              right now." "I'm NOT being funny! ...For once."; the smell ("Sausages, bread, smoke, and one thing I'm choosing not to know." Big Sister: "Sausage, bread,
               woodsmoke. What we smelled through our side." Mom: "Whatever the other thing is, don't touch it.");
-              the chickens ("They have sacred chickens! In a CAGE!" Little Sister: "I KNEW it! I HEARD them! I heard
-              them FIRST!" Mom: "...Chickens."); Caesar ("Caesar's on the money. And he's ALIVE. Everybody keeps
+              the chickens ("They have sacred chickens. In a CAGE." Little Sister: "I KNEW it! I heard them first." Mom: "...Chickens."); Caesar ("Caesar's on the money. And he's ALIVE. Everybody keeps
               yelling about him." Mom: "..." Big Sister: "Caesar on the money, and alive. Mother, that's our
               coin."); the togas ("Everybody's wearing bedsheets, and nobody has a car. I asked." "Togas." "Who's
-              watching you? Is there a grown-up there? Put a grown-up on." "There's a man counting money. He's up to
-              four hundred. I don't think he does phones."); and the temple ("I'm in a temple with giant stripy
-              pillars. They keep the money in here. With the god." "Are you allowed in there?" "...Mostly."). Once
+              watching you? Is there a grown-up there? Put a grown-up on." "A man's counting money. He's up to four hundred. I don't think he does phones."); and the temple ("I'm in a temple with stripy pillars. They keep the money in here. With the god." "Are you allowed in there?" "...Mostly."). Once
               three of the five clues are in (the smell, the chickens, Caesar, the togas, the temple, as before), he
               can tell her: "Mom, it's B.C. I checked. It's before the red mark on Big Sis's timeline." "...Before."
-              Big Sister pins it: "A new coin from 44 B.C. Sector 44 on the notice. And everything he's told us
-              fits." "Mom. He's in Rome. In 44 B.C." And Mom, slowly: "He's not in Italy. ...He's in Rome. Then."
+              Big Sister pins it: "A new coin from 44 B.C. Sector 44. And everything he's told us fits." "Mom. He's in Rome. In 44 B.C." And Mom, slowly: "He's not in Italy. ...He's in Rome. Then."
               She sits back on her heels, and the girls come and stand either side of her. "...Mom? Are you okay?"
               She comes back, up on her knees at the door, to the next thing she can fix: "...Have you eaten?"
               ("Mom. I'm in ROME. That's your question?" "It's always my question. Answer it.") "Bread with cheese
               IN it. Nine out of ten. It needed ketchup." "...Okay. Okay. Then I can think."
               After that, what else he may say, with a mother's real questions in it. "Can you send me something?
-              Anything? A snack would be ideal." If the one talking has the lucky penny: "I'm sending you a PENNY.
-              For LUCK. Here it comes!" Little Sister goes up to the door and pushes it in, and the door winks.
-              "...Nothing came out. Did you SEND it?" "I SENT it. It's taking the LONG way. Pennies are SLOW."
+              Anything? A snack would be ideal." If the one talking has the lucky penny: "I'm sending you a penny. For LUCK. Here it comes!" Little Sister goes up to the door and pushes it in, and the door winks.
+              "...Nothing came out. Did you SEND it?" "I sent it. It's taking the long way. Pennies are SLOW."
               "...Would a CHICKEN fit?" "No." "Please don't post me a chicken. I've got chickens. They're SACRED."
-              (If somebody else is talking: "I've got a PENNY for him! But I post it MYSELF. It's MY penny." If
+              (If somebody else is talking: "I've got a penny for him! But I post it MYSELF." If
               nobody has taken a penny yet, Mom: "Nothing small enough to send yet, baby. We'll look.") "I'm holding
-              my door open with Dad's keys, in the sun. My arm is SO tired." "Your father's keys. He never lets
-              anyone hold his keys, sweetheart. He must be very sure of you." "There's a cat in here. She's asleep
+              my door open with Dad's keys, in the sun. My arm is SO tired." "He never lets anyone hold his keys, sweetheart. He must be very sure of you." "There's a cat in here. She's asleep
               on the treasure. She's very official." "Are you warm enough? Is your hoodie zipped up?" "Zipped. And
               now the cat's asleep on MY feet. Ten out of ten." "I'm not even tired. It's been morning here for
               AGES." "And tonight? Where are you going to sleep?" "...Operation Tonight is still in the planning
-              stage." "Then you find a kind lady with a warm kitchen, and you ask her. Nicely." "Everybody's really
-              nice here. Except the door guy. He scores people out of THREE." "Who? Who's being kind to you?"
+              stage." "Then you find a kind lady with a warm kitchen, and you ask her. Nicely." "Everybody's nice here. Except the door guy. He scores people out of THREE." "Who? Who's being kind to you?"
               "Walnut. He's my best friend now. He's the best at nuts on the whole street." "...You tell Walnut
-              thank you. From me." "What's it like over there? Tell me EVERYTHING." "There's a RACCOON. And a
-              grandpa with a BANJO. And a lady with a HAT. And a PAY PHONE. On a WALL." "A PAY PHONE? I've got a
-              QUARTER for one of those!" "It does not work." "...I'm keeping the quarter anyway." "Is there a dog?
-              Please tell me there's a dog." "There's a RACCOON. He's like a dog with a MASK on." "...Ten out of
+              thank you. From me." "What's it like over there? Tell me EVERYTHING." "A raccoon. A grandpa with a banjo. And a pay phone, on a WALL." "A pay phone? I've got a QUARTER for one of those!" "It does not work." "...I'm keeping the quarter anyway." "Is there a dog?
+              Please tell me there's a dog." "There's a raccoon. He's like a dog with a MASK on." "...Ten out of
               ten. I'll allow it."
               The first time, his warning, which ends the talk: "Mom. Wait. I have to tell you something. It's
-              important." "Dad went through his door to come and get me. He didn't come out. Don't go through
-              yours." A pause. "...I hear you, baby." She does not promise. Big Sister: "She didn't say no." "Stay
-              where you are. Keep your door in the sun. We'll find you." Little Sister: "We're COMING. That's what a
-              family DOES." "...Okay. Then bring snacks." "I love you. You hear me? I love you." "Love you too.
-              ...Don't tell anybody." Big Sister: "Noted." "BYE! I asked FIRST!" "I asked EARLIER!"
+              important." "Dad went through his door to get me. He didn't come out. Don't go through yours." A pause. "...I hear you, baby." She does not promise. Big Sister: "She didn't say no." "Stay
+              where you are. Keep your door in the sun. We'll find you." Little Sister: "We're COMING. That's what a family does." "...Okay. Then bring snacks." "I love you. You hear me? I love you." "Love you too.
+              ...Don't tell anybody." Big Sister: "Noted." "Bye! I asked FIRST." "I asked EARLIER!"
               Grandpa Joe heard all of it. Mom gets up off her knees, and from his rocker: "Ma'am." She turns to
-              him. "That's a good boy you got." "He is." "I been sittin' out here forty years watchin' the sky not
-              do anything. ...You tell me what you need, and I'll hold it." Ranger comes down off the porch at a
+              him. "That's a good boy you got." "He is." "Sky did nothin' for forty years. ...You tell me what you need, and I'll hold it." <!-- FINAL-19: REVIEW-19 --> Ranger comes down off the porch at a
               scamper, sits up beside the handbag, picks it up by its strap and holds it up to her: "..." "He says
               you dropped this. He didn't look inside. ...He looked a little." She bends and takes it, and it is on
               her arm again. "...Thank you, Ranger." He goes back to his place by the rocker.
               Spoken into again: "You're BACK! I'm still here. Still holding the keys. Still a little hungry." Then
-              the rest of the talk, and goodbye: "I have to go. My arm's about to fall off, and the counting man is
-              giving me a look." "Talk later, my love. Keep your door in the sun." "BYE! I asked FIRST!" "I asked
+              the rest of the talk, and goodbye: "I have to go. My arm's falling off, and the counting man's giving me a look." "Talk later, my love. Keep your door in the sun." "Bye! I asked FIRST." "I asked
               EARLIER!" (A first talk broken off, in a game saved in the middle of it, picks up after "You're BACK!"
               where it was, with Mom at the door on her knees and her handbag on the gravel.)
 Wrong tries:  The little door, looked at -> too small to go through: "Not yet, girls. It's a door for a coin, and there
                                            are three of us." / "It is the size of a coin. I am not." / "I could fit
                                            my HEAD. ...Mommy says not head first."
-              The three pennies, or the egg, on it -> Little Sister will not part with them: "No! They're MINE. I
-                                           took them FAIR. It SAID." / "It's WARM. It's MINE to keep warm."
+              The three pennies, or the egg, on it -> Little Sister will not part with them: "No! They're mine. I took them fair. The dish SAID." / "It's warm. It's MINE to keep warm."
               The coin on it              -> "Then we know where they are. And we have a door. It is only a
                                            little small."
 Gives:        `nevada.heardSon`: round seventeen, it comes true at the end of the first talk, with his warning and
@@ -1448,8 +1302,7 @@ Gives:        `nevada.heardSon`: round seventeen, it comes true at the end of th
               words to him) and `nevada.sonPinned` (the year pinned), and `nevada.bagDown` while her handbag is on
               the gravel. The penny goes into the tunnel for the Son (`g.send("penny", { to: "son" })`;
               `nevada.pennySent`) and waits there for the Rome end, which is the next stage's. It can be posted
-              outside a talk too: the penny used on the little door, "One penny, for LUCK. In you go. ...Bye, penny!
-              Say hi to my brother!"
+              outside a talk too: the penny used on the little door, "One penny, for LUCK. In you go. ...Say hi to my brother!"
 Plants/pays:  Pays off the coin door in Rome (the Son kept it open), "Why is the sky DOWN?", the chickens Little
               Sister heard first, the timeline's red mark, and Mom's page: there are days when the correct thing to
               do is to make a scene, and this is the first of them. His tries are his own Rome (Walnut, the bank's
@@ -1463,10 +1316,7 @@ Notes:        The family's answer to the warning is in a word between Big Sister
               is why the gate is "Hold hands. All the way through." Nothing in it is frightening: the Son is
               cheerful, fed, and holding a door open in the sun; his mother forgets her manners for a minute, and
               then she is his mother. Nothing in Act Two shows his end of it yet (the keys, the door held open):
-              that is the next stage's. Hints: Mom, "That little door has a morning in it, and mornings have people
-              in them. One of us should say hello."; Big Sister, "A door the size of a coin will carry a voice.
-              Somebody should speak into it, clearly, and take notes."; Little Sister, "The Hummy Place has a HOLE
-              in it now. I'm going to say HELLO into it. REALLY loud."
+              that is the next stage's. Hints: Mom, "That little door has a morning in it. Mornings have people. Say hello."; Big Sister, "A door the size of a coin will carry a voice. Somebody should speak into it."; Little Sister, "The Hummy Place has a hole now. I'm going to say HELLO into it."
               How it is staged (LETTER-17): Mom kneels at KNEEL (600, 578), facing the door, her face at its height:
               `figure.kneel()` (js/art/rig.js `kneelPose`, kept to her: DESIGN.md, section 4), up on her knees, or
               sat back on her heels (`kneel("back")`) from her understanding until "Have you eaten?". Whoever was
@@ -1475,6 +1325,15 @@ Notes:        The family's answer to the warning is in a word between Big Sister
               figure is drawn without its handbag while it is down, and the handbag is a drawn thing on the gravel
               (js/art/props.js `handbag`) at (578, 592); Ranger fetches it from (558, 592), in his reach frames, and
               Mom takes it from his hands with her pick.
+              Round nineteen (STAGE-19N, the guide's staging for this scene; the same lines in the same order): at his
+              voice everyone else looks at the door; before her first word the girls, Grandpa Joe and Ranger turn
+              their heads to her, the girls turn to each other for their aside while she holds still, and then back
+              to her; a held silence after her "...Before." (1.8 s) and after Big Sister's "Mom. He's in Rome. In 44
+              B.C." (1.4 s), and after "...I hear you, baby." (1.5 s); his last two lines of the first talk, "Love you
+              too. ...Don't tell anybody." and "I asked EARLIER!", are the player's to say for him, each a menu of one
+              (so the end of the talk is three beats with the player's hand back between them, not nineteen boxes
+              with none); the last picture, her handbag on her arm and Ranger at her feet, is held a second; and
+              the player has the controls back at once after it, while Ranger scampers back to his place.
 ```
 
 ```
@@ -1482,20 +1341,16 @@ Puzzle #12: Something That Shines Like A Station Wagon        (Nevada · Lead: B
 Needs:        #9 and the letterbox; and the sun shade needs #11
 Setup:        A coin's worth of light, a coin's worth of door. Big Sister has the rule (the end of "Some when"):
               a bigger shine, a bigger door. They need the biggest shine for a hundred miles.
-Wrong tries:  Mom's car, looked at (once, after #9) -> "It's a sensible teal sedan. It has never shone in its
-                                              life. That was rather the point of it." Big Sister: "Also, the
+Wrong tries:  Mom's car, looked at (once, after #9) -> "A sensible teal sedan. It has never shone in its life. That was the point." Big Sister: "Also, the
                                               hubcaps are plastic. I checked." Little Sister: "I could WASH it."
                                               "With what, sweetheart?" "...Lemonade."
               The banjo (the half-answer) -> Mom, in Grandpa Joe's talk: "Sir, might I ask you, very nicely, for
-                                              the loan of your banjo?" "Nobody holds this banjo but me and the
-                                              Lord, ma'am. But I'll stand where you tell me and play what you
-                                              like." He gets up, slowly, a hand to the small of his back, walks to
+                                              the loan of your banjo?" "Nobody holds this banjo but me and the Lord, ma'am. I'll play it where you like." He gets up, slowly, a hand to the small of his back, walks to
                                               the corner of the glass, and plays, on his feet, facing the sun. The
                                               chrome at the end of the banjo's neck catches the low sun, the flash
                                               falls on the place, and the door grows: not to a coin, not to a car:
                                               to a banjo. "I could FIT!" "No." "I could fit SIDEWAYS." "No." Big
-                                              Sister: "Bigger shine, bigger door. That is the rule, and it is now a
-                                              fact. We need the biggest shine for a hundred miles." "Thank you.
+                                              Sister: "Bigger shine, bigger door. Now we need the biggest shine for a hundred miles." "Thank you.
                                               That was very... loud. You can sit down now." "...Most folks just
                                               say they liked the tune." He stops, the door shuts back to a
                                               coin, and he goes back to his chair (`nevada.banjoTried`). The girls
@@ -1504,14 +1359,14 @@ Wrong tries:  Mom's car, looked at (once, after #9) -> "It's a sensible teal sed
               The hubcap wall, in the store -> Grandpa Joe, from the porch, through the window: "Them's not for
                                               sale, ma'am. Them's a COLLECTION." (To either of the girls: "Them's
                                               not for sale, girls. Them's a COLLECTION.") Jolene: "Forty years of
-                                              other people's bad luck. He dusts 'em." Big Sister: "One hubcap is
-                                              one hubcap's worth of shine. Less than a banjo. Nobody is taking a
-                                              hundred and twelve."
+                                              other people's bad luck. He dusts 'em." Big Sister: "One
+                                              hubcap shines less than a banjo. We are not
+                                              taking a hundred and twelve."
               The space blanket, on the survival shelf -> Big Sister: "It would flash like a flag in a wind. There
                                               is no wind." Mom: "And three of us holding corners is three of us
                                               not going anywhere."
-              The chrome polish, on the auto shelf -> "Chrome polish. 1987." "It's had since 1987 to decide what it
-                                              wants to polish. Nothing here wants polishing."
+              The chrome polish, on the auto shelf -> "Chrome polish. 1987." "It's had since 1987
+                                              to find something to polish. Nothing here wants it."
               The sun shade, before #11   -> Jolene's three answers (#11's setup): "...A store with an empty
                                               window is a shed."; "Not the window, sugar. Anything but the
                                               window."; "...You do somethin' about my girls, and we'll see."
@@ -1520,20 +1375,16 @@ Wrong tries:  Mom's car, looked at (once, after #9) -> "It's a sensible teal sed
 Solution:     The sun shade in the front window: the folding silver kind, a windshield wide, DISPLAY ONLY, one
               side bleached by forty summers and the other as bright as the day it came. After #11, ask Jolene for
               it, at the window or in her talk: "Take the window. The window likes you." She comes out from behind
-              the counter, lifts it out of the window and gives it to whoever asked. Mom: "Your father bought one
-              of these for the trip. He said it was for keeping the car cool. I said it was for show." Big Sister:
+              the counter, lifts it out of the window and gives it to whoever asked. Mom: "Your father
+              bought one of these for the trip. I said it was for show." Big Sister:
               "It is a mirror the size of a windshield, Mother." Mom: "...Then it was for this." Then, at the
               glass, once they have heard the Son: Mom asks Grandpa Joe in his talk, "Mr. Joe? You said to tell
               you what I needed." (or the shade is taken to the glass, or held out to him: the same lines). Big
-              Sister: "It wants holding in the low sun, square to the place, by somebody who is not going
-              anywhere." "I been holdin' things for Jolene since 1974, ma'am. I can hold a sun shade." He gets up
+              Sister: "It wants holding in the low sun, by somebody who is not going anywhere." "I been holdin' things for Jolene since 1974, ma'am. I can hold a sun shade." He gets up
               out of the rocking chair, slowly, a hand to the small of his back; whoever has the shade hands it to
               him at the corner of the glass; and he holds it up, square to the sun. The flash is the size of a
               windshield, and so is the door: it opens from the coin outward, to a doorway from the sand to higher
-              than Mom's head and as wide as the two girls side by side. "It's GROWING! It's bigger than a banjo!
-              It's bigger than MOMMY!" "'The door,' she noted, 'was exactly as wide as a windshield. She had never
-              been so glad to be right.'" "And there's a different morning on the other side of it. ...Well. We
-              knew that."
+              than Mom's head and as wide as the two girls side by side. "It's GROWING! It's bigger than a banjo. It's bigger than Mommy." "'She had never,' she noted, 'been so glad to be right.'" "And a different morning on the other side. ...Well. We knew that."
 Gives:        A door the family can walk through (`nevada.wideOpen`). The sun shade stays in Grandpa Joe's hands,
               and the door stays open while it is held: he stands at the glass holding it, his chair empty, until
               the cut-scene.
@@ -1543,18 +1394,17 @@ Plants/pays:  Pays off the old man's story ("a flash... like a signal mirror... 
               opens theirs with a windshield shade from a gas station, and his wife's line about it. Pays off
               Grandpa Joe's word to Mom at the letterbox ("You tell me what you need, and I'll hold it."): she asks
               him by it. Plants Grandpa Joe holding the light when Jed makes his call, and letting it down.
-Notes:        Hints: Mom, "The flash Mr. Joe saw came off a whole car. Ours came off a coin. Somewhere at this
-              store is something that shines like a car."; Big Sister, "Bigger shine, bigger door. The biggest
-              shine for a hundred miles is in that window, and Mrs. Jolene is fond of her window."; Little Sister,
-              "The shiny thing in the WINDOW! Grandma Jolene said I could have anything. I did the chickens." The
+Notes:        Hints: Mom, "Mr. Joe's flash came off a whole car; ours, off
+              a coin. We need a bigger shine."; Big Sister, "Bigger shine, bigger
+              door. The biggest for a hundred miles is in her window."; Little Sister,
+              "I did the chickens. Grandma Jolene will give me the shiny thing in the window." The
               beat needs #11 as well as #9, so that her hint is true when it is given, and the letterbox too, so
               that the Son's warning comes before they go through. The door's three sizes are two of the engine's
               portals: the coin's, and over it a second, opened round at about a third of its size for the banjo
               and squeezed to a doorway for the windshield, bending the held shade with the sand. While he holds
               it Grandpa Joe can still be talked to (not about the banjo: his hands are full), and looked at ("Mr.
               Joe has not moved an inch, darlings. His arms must ache, and he will never say so."). The wide door,
-              looked at: "It is open, it is wide, and it will not stay that way. A door is only open while the
-              light is held." (Mom's car is painted teal, and her lines say so: DESIGN.md, section 14.) Round
+              looked at: "It will not stay this wide. A door is only open while the light is held." (Mom's car is painted teal, and her lines say so: DESIGN.md, section 14.) Round
               seventeen (LETTER-17): Mom's lines here loosened, as the pass asks: contractions with her girls, "Mr.
               Joe" for "the gentleman", and fewer "darling"s; every clue of the puzzle as it was.
 ```
@@ -1567,23 +1417,20 @@ Setup:        The door stands open and Grandpa Joe is holding the light on it. N
 Wrong tries:  The door, before #12         -> too small: "Not yet, girls. It's a door for a coin, and there are
                                               three of us." / "It is the size of a coin. I am not." / "I could
                                               fit my HEAD. ...Mommy says not head first."
-              Going through without the coin (whoever goes first must be carrying it) -> Mom: "The coin comes with
-                                              us. It's the only thing we own that's been where we're going."
-              Going through while Mom or Big Sister is still some way off -> Little Sister: "Everybody COME ON. The
-                                              door's open and it's RUDE to keep a door open." And they come.
+              Going through without the coin (whoever goes first must be carrying it) -> Mom: "The coin comes with us. It's been where we're going."
+              Going through while Mom or Big Sister is still some way off -> Little Sister: "Everybody come on. It's RUDE to keep a door open." And they come.
 Solution:     Use the door (or the coin on it) as whoever is being played and has the coin; the other two come. They
               stand in a row in front of it, Little Sister in the middle. Goodbyes first, each in her own way.
-              Little Sister, turned to the porch: "Bye, Grandpa Joe! Bye, Ranger! Bye, Grandma Jolene! Bye Darlene
-              Charlene Marlene Arlene and Doreen! Keep GUARDING!" Grandma Jolene comes out of the shop's door onto
-              the porch, under the hat of the visit, for Big Sister's: "Thank you for the window, Mrs. Jolene. And
-              it takes a hen a whole day to make one egg." "Then that egg your sister's carryin' is a whole day's
-              work, sugar. You mind it for her." "...I will think about that." She goes back in. Mom, to Grandpa
+              Little Sister, turned to the porch: "Bye, everybody! Bye, Darlene Charlene Marlene Arlene and Doreen. Keep GUARDING." Grandma Jolene comes out of the shop's door onto
+              the porch, under the hat of the visit, for Big Sister's: "Thank you for the window, Mrs. Jolene. A hen takes a whole day to make one egg." "That egg's a whole day's work, then, sugar. You mind it for her." "...I will think about that." She goes back in. Mom, to Grandpa
               Joe, with her hand out: "Thank you. For the lemonade, the story, and the light." And the two of them
               (round seventeen): "Will you be all right? Out here?" "Ma'am, I'm the only one on this porch who ain't
               goin' anywhere." "If we're not back..." "Then I'll be right here. Porch light on. However long it
               takes." "Go on, ma'am. 'The LORD shall preserve thy going out and thy coming in'..." Mom finishes it:
               "...'from this time forth, and even for evermore.' ...We said that at our own front door last night."
-              "Then you're all right. Go get your boy." She turns to the door. "Girls. Hold hands. All the way
+              "Then you're all right. Go get your boy." (STAGE-19N: the goodbyes end there, on his word and a held
+              beat, and the player has the hand back at the door; the next click on it is the rest, and "Backup".)
+              She turns to the door. "Girls. Hold hands. All the way
               through." They walk into it together, Little Sister in the middle, and each is gone as she reaches it.
               Then the cut-scene.
 Gives:        `nevada.left`: the end of Act Four, and the cut-scene "Backup", which hands the game to Act Five.
@@ -1604,10 +1451,7 @@ Notes:        One verse only, King James Version, letter for letter: Grandpa Joe
               not say a third line before she answers; "Places, girls." is no longer said here (it still is at #9).
               The goodbye with Jolene was the design's "A hen cannot count to five": that fact was not used (a chick
               can tell small numbers apart), so Big Sister restates another of her corrections, and Jolene, as
-              always, is right about the person. Hints: Mom, "The door's open, and Mr. Joe is holding the light.
-              Goodbyes, girls, and then we go."; Big Sister, "The door is as wide as a windshield, and it will not
-              stay that way. Say goodbye, and go through."; Little Sister, "The door's BIG now! Say bye to EVERYBODY
-              and GO! Grandpa Joe's arms are getting TIRED." A game saved after they have gone through and before
+              always, is right about the person. Hints: Mom, "Mr. Joe is holding the light, girls. Goodbyes, and then we go."; Big Sister, "The door is as wide as a windshield, for now. Say goodbye and go."; Little Sister, "The door's BIG now! Say bye to everybody. Grandpa Joe's arms are tired." A game saved after they have gone through and before
               the cut-scene has played plays the cut-scene when it is loaded.
 ```
 
@@ -1633,18 +1477,17 @@ earpieces step out in a row, one of them with a paper bag. The first one, to the
 Grandpa Joe with what is left of the banjo. A pause in which four men consult a clipboard. "Sir. We
 are going to need you to come with us." "Mind the hat." He walks over to them himself: nobody is
 pushed or pulled. "We are minding the hat, sir." The four of them stand round him in a row, their
-backs to us, and tie him up: "Sorry about this, sir. Regulations, sir." "Is that too tight, sir?"
-"Snug as a hug, son." When they step back he is tied, with a bow. "And a bow, sir. Lifting on
-three, sir. One. Two. ...Sorry, sir. Three." Two of them carry him to the car between them,
+backs to us, and tie him up: "Sorry about this, sir. Regulations." "Is that too tight, sir?"
+"Snug as a hug, son." When they step back he is tied, with a bow. "And a bow. Lifting on three, sir. One. Two. ...Sorry. Three." Two of them carry him to the car between them,
 upright, his hat on and his boots off the ground: "Mind the... well. Mind what's left of the
 banjo." "The banjo is evidence, sir. You will receive a receipt." In he goes, at a back door.
 Jolene comes out onto the porch, under the hat of the visit: "JOE! You bring that banjo back in one
-piece!" "Too late, Jolene!" "Then bring YOU back in one piece!" "I'll do my best!" Ranger comes out
+piece!" "Too late, Jolene." "Then bring YOU back in one piece." "I'll do my best." Ranger comes out
 from behind the car at a run, along the front of the lot, and in at the last door as it shuts. "Is
 that a raccoon?" "I can neither confirm nor deny the raccoon." Two of them help Jed up, the hoop
 still round his neck: "Is that my cheeseburger?" "Lunch rides in the back, sir. Regulations."
 "...Of course it does." Jed gets in at the front, and the rest after him. The limousine turns, and
-out of the window: "Jolene! Feed the hens! And don't sell my rocks!" "I'll sell every one of 'em,
+out of the window: "Jolene. Feed the hens. And don't sell my rocks." "I'll sell every one of 'em,
 Joe!" It drives out the way it came. Out back of the store (a close look, through its back door),
 the five hens turn round, all together, to look the way it went; then they turn back to the fence.
 Jolene, alone on the porch, to nobody: "Well. I'd better change my hat." She goes in. A card:
@@ -1672,25 +1515,25 @@ what is left of the banjo, its neck.
 **Also in the store, for character and nothing else.** Each of the three has a line for every
 thing, and Jolene has a word for most, the first time anybody looks (`nevada.store.<thing>.<who>`,
 `nevada.jolene.<thing>`): her greeting as they come in, under the hat of the visit
-(`nevada.jolene.hello.1` to `.5`: "Well, hey there, sugar! Come in out of the sun. I'm Jolene.
-Joe's out front pretendin' he ain't nosy. Ranger don't pretend."); the hat rack (Little Sister notices the hat
-every visit, a line for each hat; Big Sister refuses to: "I am not going to say anything about the
-hats. Any of the hats. I have decided."); the register (it rings for her and nobody else: "It knows
-me, sugar. We've been together since '74. Longer than Joe and me, by a week."); the pickled eggs
+(`nevada.jolene.hello.1` to `.5`: "I'm Jolene. Joe's on the porch pretending
+he's not nosy. Ranger don't pretend."); the hat rack (Little Sister notices the hat
+every visit, a line for each hat; Big Sister refuses to: "I am not going to say anything
+about the hats. I have decided."); the register (it rings for her and nobody else: "We've
+been together since '74, sugar. Longer than Joe and me, by a week."); the pickled eggs
 (Big Sister declines in three languages: "No, thank you. Non, merci. Nein, danke."); the
 take-a-penny dish; the postcards; Ranger's basket; the front window and the sun shade in it (before
-and after #11); the spinner rack; Harold the cooler (Little Sister: "It's HUMMING. Is it a door?
-...No. It's just cold. The Hummy Place is warmer."); the grill and the hot dog roller ("Grill's
-been cold since 1979, sugar. The roller turns for company."); the rock bins (Big Sister: "One is
-labeled 'SHY. Do not look at directly.' I am looking at it directly. ...Nothing. I am slightly put
+and after #11); the spinner rack; Harold the cooler (Little Sister: "It's humming. Is
+it a DOOR? ...No. Just cold."); the grill and the hot dog roller ("Grill's
+been cold since 1979, sugar. The roller turns for company."); the rock bins (Big Sister: "One
+says 'SHY. Do not look at directly.' I did. Nothing. I am slightly put
 out."); the map rack ("A road map of Nevada. It stops here too."); the auto shelf; the survival
-shelf (Mom: "Water, jerky and a space blanket. Nevada is the driest state in the Union,
-girls."; she buys three waters: "And three waters, please, Mrs. Jolene. We are going somewhere with
-no shops."); the TV ("It's a weather channel, sugar. The weather's snow."); the pay phone, which
+shelf (Mom: "Water, jerky, a space blanket. Nevada is the driest state in the
+Union."; she buys three waters: "Three waters, please. We're going somewhere with no
+shops."); the TV ("It's a weather channel, sugar. The weather's snow."); the pay phone, which
 she answers ("Last Stop, Jolene speakin'. ...No? All right then." "Keeps it hopeful."); the
 bulletin board; Jolene's chair and her knitting ("For Doreen. She feels the cold."); the hubcap
-wall; the ceiling fan; the back door (Mom sees what the hens see: "They're looking straight at it,
-girls. Straight at the place where the tracks stop."); and the door to the lot, and its bell,
+wall; the ceiling fan; the back door (Mom sees what the hens see: "They're looking straight
+at the place where the tracks stop."); and the door to the lot, and its bell,
 Bernice. On the lot, the shop's door and the spare hat on its nail have a look from each of the
 three too (`nevada.porch.door.<who>`, `nevada.hatnail.<who>`).
 
@@ -1735,11 +1578,9 @@ Cut-Scene: Meanwhile, in a limousine        (opens the act)
 The back of the limousine, the desert going by both windows. Grandpa Joe sits at the far end of
 the long seat, in the ropes, with a seatbelt over them. From the front, through the divider:
 "Seatbelt, sir. Regulations." The divider slides down: the backs of two heads with earpieces, and
-two pairs of dark shades in the mirror. "Sir, you are being transported for questioning." "Son, I
-been questioned by a seven-year-old this mornin'. You ain't got anything she didn't." "...Noted."
+two pairs of dark shades in the mirror. "Sir, you are being transported for questioning." "Been questioned once this mornin', son. By a seven-year-old." "...Noted."
 The divider slides up. Ranger comes up from under the facing seat, by the little fridge, with the
-mirror shades on: "Well, there you are. I wondered who'd got in." Then: "All right, Ranger. You
-know what to do." Ranger crosses the carpet and sits up facing him: "...". He looks at the ropes,
+mirror shades on: "Stowaway. I might've known." Then: "Ropes, partner. When nobody's lookin'." Ranger crosses the carpet and sits up facing him: "...". He looks at the ropes,
 and the play begins: "Play as Grandpa Joe or Ranger: use the portraits". From now until the first
 strand is chewed, the divider goes down now and then by itself, as a suit looks back, and up
 again.
@@ -1761,15 +1602,11 @@ Wrong tries:  Ranger at the ropes while the divider is down -> he hops up onto t
                                               the juice box and the clipboard.)
               Grandpa Joe at the divider   -> if it is up he raps on the glass, and it slides down: "Sir?" Then
                                               he talks (`dividerTree`): where they are taking him ("Where you
-                                              boys takin' me, anyhow?"), the office ("What outfit are you boys
-                                              with, anyhow?" "The Office Of Peculiar Sectors, sir. O. O. P. S."
+                                              boys takin' me, anyhow?"), the office ("What outfit you boys with?" "The Office Of Peculiar Sectors, sir. O. O. P. S."
                                               "Oops." "It is pronounced O. O. P. S., sir." "That's what I
-                                              said."), what about ("Sir, we are not permitted to tell you what you
-                                              will be asked." "Then how'm I supposed to get my answers ready?"),
-                                              the regulations ("You boys got a rule for everything?" "Sir, the
-                                              regulations cover every situation, sir." "Got one for a raccoon?"
-                                              "...We are looking it up, sir."), and Jed's lunch ("And where's
-                                              Jed's cheeseburger got to?" "Lunch rides in the back, sir.
+                                              said."), what about ("Sir, we are not permitted to tell you the questions." "Then how'm I supposed to get my answers ready?"),
+                                              the regulations ("You boys got a rule for everything?" "The regulations cover every situation, sir." "Got one for a raccoon?"
+                                              "...We are looking it up, sir."), and Jed's lunch ("Where'd Jed's cheeseburger get to?" "Lunch rides in the back, sir.
                                               Regulations." Jed, from the front: "...I would still like the
                                               cheeseburger. For the record."). Talk does not put the divider up:
                                               "Y'all mind puttin' that window back up? I'm shy." "Sir, we are
@@ -1777,16 +1614,13 @@ Wrong tries:  Ranger at the ropes while the divider is down -> he hops up onto t
               Ranger at the car phone      -> he lifts it, and it says nothing. "..." "That ain't for you.
                                               That's for later."
               A click on the floor, as Grandpa Joe -> nothing: he is belted in.
-Solution:     As Grandpa Joe, at the divider: "You boys like music?" "Sir, we are required to..." "Hmm-hm-HMM,
-              hm-hm-hmm... HMM-hm-hm-hmmm..." The divider goes up, and stays up while he hums: the Last Stop Rag,
+Solution:     As Grandpa Joe, at the divider: "You boys like music?" "Sir, we are required to--" "Hmm-hm-HMM, hm-hm-hmm... hm-hm-hmmm..." The divider goes up, and stays up while he hums: the Last Stop Rag,
               his own tune, plays under him, and three small notes rise over his head. "Sir, please stop
               singing." "Can't, son. It's a medical condition." Then, as Ranger, the ropes: he hops up onto the
               seat beside the bow and chews, "...!", one strand: "That's one. Keep goin', partner." The singing
               stops, the divider comes down once more, and Ranger sits on his work: "Groomin'." He gets down, and
-              the divider stays down until Grandpa Joe sings again ("Sir, not again, sir." "Hm-HMM-hm-hm!
-              Hmm-hm-hmm-HMMM! Hm. Hm. HMMMM..." "Sir. PLEASE, sir." "Still a medical condition, son. Flares up in
-              limousines."; and after that, "Sir, we are asking you very nicely, sir." "Hmm-hm-hm-HMM-hmm-hm-hm-
-              hmmmmm... Here comes the good part, boys! HMMM-hm!"). "Two. You're a credit to your mask." "Three.
+              the divider stays down until Grandpa Joe sings again ("Sir. Not again." "Hmm-hm-hmm-hm-HMMM... Hm. Hm. Hmmmmm..." "Sir. PLEASE." "Still a medical condition, son. Flares up in
+              limousines."; and after that, "We are asking you very nicely, sir." "Hmm-hm-hm-hmmmmm... Here comes the good part, boys!"). "Two. You're a credit to your mask." "Three.
               Easy, now. One to go." "Four! Now the bow. Gentle. It's a trade like any other." Ranger turns the
               bow over in his paws, and it comes undone: "...Well, I'll be. Hands. I'd near forgot I had 'em."
               He keeps the seatbelt on. "Regulations."
@@ -1806,44 +1640,33 @@ Puzzle #15: Jed's Lunch        (Act Five · Lead: Grandpa Joe, then Ranger · th
 Needs:        #14
 Setup:        On the facing seat, across the car: the paper bag (one cheeseburger, one pickle, cold), a juice box
               and the clipboard. Grandpa Joe cannot leave his seat, so whatever he wants from it Ranger fetches.
-Wrong tries:  Grandpa Joe at the bag, before #14 -> "I can smell it from here. That's the cruelest thing they've
-                                              done yet."
+Wrong tries:  Grandpa Joe at the bag, before #14 -> "I can smell it from here. Cruelest thing they've done yet."
               Ranger at the bag            -> he is into it before anyone can speak. The pickle is gone.
-                                              "Ranger. ...Well. He's earned the pickle."
+                                              "Ranger. ...Fine. He's earned the pickle."
               Ranger at the clipboard      -> he turns it over in his paws, which tells him it is a clipboard.
-                                              "..." "He says it's a clipboard. He's right. That's all it is, to a
-                                              raccoon."
+                                              "..." "He says it's a clipboard. That's all it is, to a raccoon."
               The juice box, as Grandpa Joe with his hands free -> Ranger fetches it, and he drinks it. "Apple.
                                               They're not monsters."
 Solution:     As Grandpa Joe, his hands free, the bag or the clipboard. Ranger fetches the bag across the car to
-              him (if the pickle is still in it, it is Ranger's fee, eaten on the way: "Ranger. ...Well. He's
-              earned the pickle."), and then the clipboard. Grandpa Joe eats the cheeseburger while he reads:
+              him (if the pickle is still in it, it is Ranger's fee, eaten on the way: "Ranger. ...Fine. He's earned the pickle."), and then the clipboard. Grandpa Joe eats the cheeseburger while he reads:
               "Jed can have the next one." The clipboard, close: AREA CLOSED, ELEVATED RADIATION; a map with three
               sectors ringed in pen, 44, 1921, and the third under a thumbprint in mustard; a column headed WHAT
-              OPENS THEM, its boxes empty; and in the margin, "A COIN?? Ask Houston." "'Area closed. Elevated
-              radiation.' Same as the fence. And a map. Three sectors. Forty-four. Nineteen twenty-one." "And a
-              third, with Jed's thumbprint square on top of it. In mustard. I ain't touchin' that." "And a
-              column says WHAT OPENS THEM. Blank, all the way down. And in the margin: 'A COIN?? Ask Houston.'"
+              OPENS THEM, its boxes empty; and in the margin, "A COIN?? Ask Houston." "Same notice as the fence. Three sectors. Forty-four. Nineteen twenty-one." "The third's under Jed's thumbprint. In mustard. I ain't touchin' that." "'WHAT OPENS THEM.' Blank, all the way down. And: 'A COIN?? Ask Houston.'"
               "They got a map of holes and no idea how to open one." "And them little girls worked it out with a
-              coin and a window." Ranger puts the map in the bib pocket for him: "That ain't stealin'. That's
-              tradin'. They can have the banjo." The divider slides down: "Your receipt, sir. For the banjo.
+              coin and a window." Ranger puts the map in the bib pocket for him: "That ain't stealin'. That's a trade. They can have the banjo." The divider slides down: "Your receipt, sir. For the banjo.
               Regulations." It comes back to him through the divider. "'RECEIVED: one banjo (damaged). one raccoon
               (unconfirmed).'" "Hear that, partner? You're unconfirmed." "..." "He says he ain't never been so
               confirmed in his life."
 Gives:        The map of the sectors and the receipt for the banjo, the first things in Grandpa Joe's pockets
-              (`limo.map`); and the end of the demo. "That map's comin' home with us, partner. Somebody ought to
-              know what opens them holes." "..." "He says the little girls know. He's right." The desert slows in
-              the windows, and stops: "We're slowin' down. ...Well, would you look at that. Long name for a little
-              building." The card: THE OFFICE OF PECULIAR SECTORS, and, smaller, "Desert Field Headquarters, the
+              (`limo.map`); and the end of the demo. "That map's comin' home with us. Somebody ought to know what opens them holes." "..." "He says the little girls know. He's right." The desert slows in
+              the windows, and stops: "We're slowin' down. ...Long name for a little building." The card: THE OFFICE OF PECULIAR SECTORS, and, smaller, "Desert Field Headquarters, the
               same afternoon". Then `limo.done` (the act's gate, `limo.end`), and the Office's arrival (below).
               <!-- SCENES-17: the card said "to be continued", and was followed by demo.done and the title screen; since
               round seventeen the demo ends at the Office's "Going Down". -->
 Plants/pays:  Pays off the cheeseburger, three times: ordered, delivered, eaten by the wrong man. Pays off "they
               figured it out": the office has not, and Jed's margin says so. Plants the third sector (under Jed's
               thumb: decision 2) and the office itself.
-Notes:        Hints: Grandpa Joe, "That clipboard's what they know, and that bag's what Jed wanted. I can read
-              one and eat the other."; Ranger, "..." (Grandpa Joe: "He says the bag's his business and the
-              clipboard's mine. He'll take the pickle for his trouble."). Every thing in the limousine has a look
+Notes:        Hints: Grandpa Joe, "Jed's clipboard, and Jed's bag. I can read one and eat the other."; Ranger, "..." (Grandpa Joe: "He says the bag's his business and the clipboard's mine. He'll take the pickle."). Every thing in the limousine has a look
               from each of the two (`limo.<thing>.joe`, `limo.<thing>.ranger`, and what Grandpa Joe says Ranger
               means, `limo.<thing>.ranger.joe`). The looks at the map and the receipt are written for all five of
               the family and the two of them, and nobody can hear them in this demo: both come into the bib
@@ -2068,21 +1891,19 @@ its floor by them, as a raccoon goes. Floyd sleeps on his regulation rest the wh
 Cut-Scene: A Very Small Building With A Very Long Name        (opens the stage)
 ```
 The limousine's card first, on black: THE OFFICE OF PECULIAR SECTORS, and smaller, "Desert Field Headquarters, the same
-afternoon". Then the lot, and the stage's own title over it while the four suits get out of the car in a row: "Sir, we
-have arrived, sir." "Sorry about the drive, sir." Two of them bring Grandpa Joe out of the back door, upright, hat on:
-"Sir, you will now be processed." "Son, I been processed. Jolene does it every Sunday before church." Jed comes round
+afternoon". Then the lot, and the stage's own title over it while the four suits get out of the car in a row, and stand there (STAGE-19O: no words; the scene enters late). Two of them bring Grandpa Joe out of the back door, upright, hat on:
+"Sir, you will now be processed." "You might could ask nicely first, son." Jed comes round
 from the front with the banjo's hoop round his neck and what is left of the banjo in his hands, and goes in ahead:
 "Evidence." "Careful with her, son. She's had a day." "...We have all had a day, sir." Across the gravel to the door
-between the suits: "'Please do not look directly at the building.' Son, there ain't nothin' else out here to look at."
-"Please look at the gravel, sir." "That's a powerful lot of air conditioner for a buildin' no bigger'n a garage." "Sorry,
+between the suits: "'Please do not look directly at the building.' Only thing out here to look at." <!-- FINAL-19: REVIEW-19 -->
+"Please look at the gravel, sir." "That's a powerful lot of air conditioner for a building the size of a garage." "Sorry,
 sir. We are not permitted to discuss the air." He wipes his boots on the mat (WIPE): "Thank you for wiping your feet,
 sir." "Sign asked nice." At the door he looks back at the limousine's open door, and says, not loud: "Ranger. You know
 what to do." "Sir, was that addressed to the raccoon?" "What raccoon, son?" Dale checks the clipboard: "...The raccoon is
 not on the form." "Then officially, there ain't one." The door shuts on all of them but Wendell, who turns round, by
-regulation, to face the gate: "...It is my birthday." Inside, on every speaker: "Attention all personnel. One civilian
-has arrived for processing. Please make him comfortable." "Attention all personnel. It is Wendell's birthday. There is a
+regulation, to face the gate: "...It is my birthday." Inside, on every speaker: "Attention all personnel. One civilian has arrived. Please make him comfortable." "Attention all personnel. It is Wendell's birthday. There is a
 pie in the break room. Do not eat the pie." A moment. Ranger comes out of the limousine's open door in his mirror shades,
-drops to the gravel and sits up: a thought of Grandpa Joe's hat; a question mark; the door, plus a suit. Play as Ranger.
+drops to the gravel and sits up: a thought of Grandpa Joe's hat; a beat; the door, plus a suit (STAGE-19O: two thoughts, the question mark between them gone). Play as Ranger.
 Grandpa Joe is in the Comfortable Room already (the game has put him there, on his chair at the table), and the player
 can switch to him at any time. Ranger has his stash: one bottle cap, his best. Skipped, the cut-scene lands in the same
 place.
@@ -2096,15 +1917,14 @@ Setup:        A raccoon outside a building he must get into. The front door has 
               can stands by the wall, its lid chained (REGULATION).
 Wrong tries:  The door                       -> Wendell turns to him: "Sir. Er. Raccoon. You are not authorized." "Shoo,
                                                 please." (no) He backs off a few steps. Again: "Raccoon. You are still not
-                                                authorized." "I am asking you very nicely, sir. Raccoon." (heart: asked
+                                                authorized." "Raccoon. Please. I am on the door." (heart: asked
                                                 nicely, he goes; he likes manners)
               The keypad                     -> he presses every button, and it beeps every time: "That is not the code."
-                                                (question); "That is also not the code."; "Sir. Raccoon. That is the code
-                                                for the vending machine. Please stop."
+                                                (question); "That is also not the code."; "Raccoon. That is the code for the vending machine."
               The mat                        -> he wipes his feet, all four, carefully (hand, shiny): "...Thank you for
                                                 wiping your feet, sir. Raccoon."
-              Wendell                        -> "Sir. Raccoon. Please do not approach the door." (no)
-              The bottle cap, on Wendell     -> "Sir. Raccoon. That is a very nice bottle cap." "But this is my birthday
+              Wendell                        -> "Raccoon. Please do not approach the door." (no)
+              The bottle cap, on Wendell     -> "That is a very nice bottle cap, sir. ...Raccoon." "But this is my birthday
                                                 button. It is not for trade." (bottlecap, heart)
               The drainpipe, from the gravel -> he stretches up; it is just out of reach (up, no); again (hand, up, no)
               The limousine                  -> he hops up onto the hood; the roof is too far (no)
@@ -2113,15 +1933,14 @@ Wrong tries:  The door                       -> Wendell turns to him: "Sir. Er. 
                                                 thought each, and no way in
 Solution:     The trash can. He tries the lid (hand, no: chained), and tips the can over instead: a clang. Wendell turns
               round, and there is a raccoon in a trash can: "...One raccoon. In trash." "Noted." (paper, heart: he is on a
-              form at last.) Wendell turns back to the gate, and a little later reports it into his earpiece: "Houston, it
-              is Wendell. One raccoon, in trash. Noted." Houston: "Attention all personnel. One raccoon has been noted. In
+              form at last.) Wendell turns back to the gate, and a little later reports it into his earpiece: "Houston, it is Wendell." Houston: "Attention all personnel. One raccoon has been noted. In
               trash. It is not on the form. Carry on." Ranger rolls the can along to the foot of the drainpipe and stands
               it up there (idea), and climbs the can and the pipe to the roof (up, heart). On the roof: the four wing
               nuts, one, two, three, four (the low ones sitting up, the high ones climbing the grille's louvres; each one
               squeaks, and goes), and the grille comes off and leans on the unit; behind it the fan, turning. The switch
               beside it has a picture of a fan with a line through it on its sticker: he reads the picture, looks at the
               fan (fan, arrow, no), and pulls. The fan runs down and stops, and the building's hum with it. Houston:
-              "Attention all personnel. The building's air is off. Will maintenance please see to it." "Wendell, you are
+              "Attention all personnel. The air is off. Will maintenance please see to it." "Wendell, you are
               maintenance." Wendell, into his earpiece: "Houston, I am on the door. It is my birthday." Houston: "Then the
               air will have to wait." He goes in at the intake, to find Joe (joe, heart); and in the ducts: where's Joe?
               (joe, question)
@@ -2133,8 +1952,7 @@ Plants/pays:  Pays off a raccoon and a trash can (it had to be done). Plants the
 Notes:        A click on the gravel from the roof takes him back down the pipe, and the can, under it, back up. The
               switch, pulled again: (fan, no): the fans stay off. Hints: Ranger, on the gravel (trash, plus, up), on the
               roof (wingnut, hand), with the grille off (switch, fan, no), and with the air off, the open intake (door,
-              heart); Grandpa Joe, once he is alone and Ranger not yet in: "Nothin' I can do from this chair. Gettin' into
-              places is Ranger's end of it."
+              heart); Grandpa Joe, once he is alone and Ranger not yet in: "Nothin' I can do from this chair. Getting into places is Ranger's end of it."
 ```
 
 ```
@@ -2142,12 +1960,12 @@ Puzzle #17: The Comfortable Room        (Act Five, continued · Lead: Grandpa Jo
 Needs:        the arrival (the talk can be had at once; it is finished by #16)
 Setup:        Grandpa Joe at the table, Dale and Merle across it with the questionnaire. Forty-seven pages. The door is
               locked "for your comfort". The thermostat on the wall says 72.
-The talk:     `interviewTree`, with Dale or Merle. "Sir. Thank you for coming in, sir." "Didn't have a lot of say in it,
+The talk:     `interviewTree`, with Dale or Merle. "Thank you for coming in, sir." "Didn't have a lot of say in it,
               son." "Sorry about that, sir." "This is the questionnaire, sir. It is forty-seven pages." "Sorry about that
               too, sir." Dale reads the questions, Merle writes the answers down in capitals and apologizes for each one
               before Dale asks it, and every answer is Grandpa Joe's choice, and every one is true:
                 "Name?"            "Joe." "Last name?" He never says Grandpa; "Folks just call me Grandpa." / "It's on
-                                   the sign out front of my store, son." ("The sign says GRANDPA JOE'S, Dale." "Then it
+                                   the sign out front of my store, son." ("The sign says GRANDPA JOE'S." "Then it
                                    is Grandpa, sir.") / "I'd sooner not say, son." Whichever way: "NAME: JOE. LAST
                                    NAME: GRANDPA." "...Jolene's gonna love that."
                 "Occupation?"      "Lemonade." ("Sir, lemonade is a beverage." "It's a dollar, son.") / "Rocks." ("Sir,
@@ -2155,21 +1973,17 @@ The talk:     `interviewTree`, with Dale or Merle. "Sir. Thank you for coming in
                                    Forty years."
                 Yesterday at 1747: "I observed a station wagon." ("Sir, what color was the station wagon?" "Red, son. Wood
                                    on the sides." "Sorry, sir. There is no box for wood.") / "What's a sector?" ("We
-                                   are not permitted to say, sir." "Then I can't rightly say if I seen one.") / "Son,
-                                   I've told this office nothin' forty-one times. Ask Opal. She's got 'em all on file."
-                                   ("She files them, Dale." "...She files them.") / and, once, "Seventeen forty-seven.
+                                   are not permitted to say, sir." "Then I can't rightly say if I seen one.") / "Told this office nothin' forty-one times, son. Ask Opal."
+                                   ("She files them." "...She files them.") / and, once, "Seventeen forty-seven.
                                    That's an awful particular minute, son." (the clue: somebody wrote down the very
                                    minute)
-                Page two, "Describe the raccoon." "What raccoon?" ("...The raccoon is not on the form, sir." "It is on this
-                                   form, Dale. Page two, question one.") / "Handsome." ("Very handsome.") / "He's a lot
+                Page two, "Describe the raccoon." "What raccoon?" ("...The raccoon is not on the form, sir." "It is on this form. Page two, question one.") / "Handsome." ("Very handsome.") / "He's a lot
                                    like me, only he don't talk and he's better lookin'."
-                The green page,    "Have you had any contact with Lamplighter?" "With what?" / "Son, I don't believe I've
-                                   had the pleasure." / "That some kind of a lamp?" "Strike that, sir." "You read the
+                The green page,    "Have you had any contact with Lamplighter?" "With what?" / "Don't believe I've had the pleasure, son." / "That some kind of a lamp?" "Strike that, sir." "You read the
                                    green page." "I read the green page." "We are not supposed to read the green page."
                                    (the clue: there is a Lamplighter, and they do not know what it is either)
                 The banjo,         "Did you strike an officer of this Office with a banjo?" "Once." ("Thank you for your
-                                   honesty, sir.") And the receipt: "Your banjo has been entered into Property &
-                                   Effects, sir. You have your receipt." "I do."
+                                   honesty, sir.") And the receipt: "Your banjo is entered in Property & Effects, sir. You have your receipt." "I do."
               And on and on: five more questions, round and round ("Have you ever been, or are you now, a sector?" "Not as
               I know of, son."; "Have you ever looked directly at the building?" "Your sign told me not to. So I did."), the
               last of them "On a scale of one to five, how comfortable are you?" "Four, son. Five if the door opened."
@@ -2177,9 +1991,9 @@ The talk:     `interviewTree`, with Dale or Merle. "Sir. Thank you for coming in
               ("Sir, you have not completed the questionnaire." "How far are we?" "Page two, sir."), ask about the green
               page once he has heard of it, or ask for a minute ("Give me a minute"): the talk goes on where it stopped.
 Wrong tries:  The door                       -> "Sir, the door is locked for your comfort." "...I'm feelin' better already."
-              The thermostat at 72           -> "Seventy-two. Course it is." "It is always seventy-two, sir. It is the
+              The thermostat at 72           -> "Seventy-two. Figures." "It is always seventy-two, sir. It is the
                                                 Comfortable Room."
-              The spare chair, the intercom  -> "Sir, please remain in your chair, sir. That chair is the spare."; "Sir,
+              The spare chair, the intercom  -> "Please remain in your chair, sir. That one is the spare."; "Sir,
                                                 please do not touch the intercom."
               The mirror                     -> "Afternoon. ...Go on and finish your chips, son. I won't tell." "Sir, that
                                                 is a mirror." "Course it is, son." (His look at it: "That's a nice mirror.
@@ -2189,15 +2003,14 @@ Solution:     After #16 the room warms, then gets hot. At 77: "Seventy-seven. An
               forehead; Dale loosens his tie a finger's width. In the talk, "Gettin' warm in here, fellas.", the same, and
               then "Still within regulations, sir. Just." At 81 the plastic plant droops, and either the thermostat
               ("Eighty-one. Now that ain't comfortable."), or in the talk "Hot in here, fellas. Ain't there a regulation?"
-              at any question, or, at the last question, his honest "One, son. And that's bein' neighborly." ("Dale. That
-              is a one." "...There is a regulation for a one."): "Regulation 9. 'The Comfortable Room shall be
+              at any question, or, at the last question, his honest "One, son. And that's bein' neighborly." ("...That is a one." "...There is a regulation for a one."): "Regulation 9. 'The Comfortable Room shall be
               comfortable.'" "It is not comfortable, Dale." "...Then the interview is suspended, pending a Form 30."
-              "Sorry, sir. We will be back, sir. A Form 30 is very long, sir." "The door will be locked for your comfort,
+              "We will be back, sir. A Form 30 is very long." "The door will be locked for your comfort,
               sir." They gather the questionnaire, apologize their way out and lock the door. Grandpa Joe alone: "...Well."
               A short prayer of his own: "Lord, You know where that family is, and I don't. You look after 'em." "...And
               that raccoon of mine, wherever he's got to." He gets up, and looks up at the vent.
 Gives:        Grandpa Joe alone in the room (`office.alone`): the spare chair under the vent, the intercom.
-Plants/pays:  Pays off the limousine's "Sir, we are required to..." at full length. Plants Lamplighter (the green page),
+Plants/pays:  Pays off the limousine's "Sir, we are required to--" at full length. Plants Lamplighter (the green page),
               the minute of yesterday's opening, Opal (who files his nothings) and the intercom (#19). Merle writes his
               name GRANDPA, and Houston calls him "Mr. Grandpa" from then on.
 Notes:        The questionnaire's place is kept (`office.iv`): a talk broken off goes on at the question it stopped at.
@@ -2212,11 +2025,10 @@ Setup:        Grandpa Joe wants his banjo. A banjo will not come through a vent,
 Steps:        Ranger at the grille over ROOM C, the suits gone: he looks down, and Joe hears him: "...!" (heart, the first
               time he looks); and with the suits gone, "Comin', partner. Let me get up on that chair." Grandpa Joe stands
               on the spare chair under the vent ("Easy, now. ...I ain't stood on a chair since Jolene saw a mouse.", if he
-              climbs up himself). At the vent, the two of them (`ventTree`): "Well, there you are. You got in." (fan, no)
-              "He says he turned the fans off. ...So that's why I'm cookin'. Partner, you're a wonder." "Partner, I want
-              my banjo back." "Them boys'll do anything to make the Rag stop. With a banjo, I could empty this whole
-              building." (banjo, door, no) "He says a banjo won't come through there. No, sir. But a receipt will." Then
-              the receipt: "Property and Effects. A little window with a bell, and a lady with glasses on a chain." (opal,
+              climbs up himself). At the vent, the two of them (`ventTree`): "Took your time, partner." (fan, no)
+              "He says he turned the fans off. ...So that's why I'm cookin'. You're a wonder." "Partner, I want
+              my banjo back." "With a banjo and the Rag, partner, I could empty this whole building." (banjo, door, no) "He says a banjo won't come through there. No, sir. But a receipt will." Then
+              the receipt: "Property and Effects. A window with a bell, and a lady with glasses on a chain." (opal,
               question) "That's her. Opal. You give her this, and she'll know what to do." (or, if Ranger has looked down
               into Property already, (opal, idea) "You seen her already? ...'Course you have.") "Up she goes." He
               pushes it up through the slats (receipt, heart). Or the receipt used on the vent does the same.
@@ -2237,11 +2049,8 @@ Steps:        Ranger at the grille over ROOM C, the suits gone: he looks down, a
               "One banjo, damaged. Returned to its owner." She puts it in his hands. "Well. Look at you, darlin'." She
               looks up at the vent: "...And good afternoon to you too, up there." Then as many words as he likes: what they
               did to her ("Jed's head went through her, Joe. It's in the report." "Rim: sound. Neck: sound. Strings: sound.
-              Head: gone."), how Jed is ("In the break room, with an ice pack and the hoop still on. He says it's
-              evidence."), the Roman sandal ("Since 1951. The Director brought it in himself, and he has never once come to
-              claim it." "Maybe he don't want it back." "Everybody wants something back, Joe. That's what my window is
-              for."), Lamplighter ("That's a green-page word, Joe." "I file the green pages. I have never read one. Reading
-              is a different department."), the door ("Regulations, Joe." "I figured." "But I'll lock it gently."), and
+              Head: gone."), how Jed is ("In the break room, with an ice pack and the hoop still on."), the Roman sandal ("Since 1951. The Director brought it in himself. He has never come back for it." "Maybe he don't want it back." "Everybody wants something back, Joe. That's what my window is
+              for."), Lamplighter ("That's a green-page word, Joe." "I file the green pages, Joe. Reading is a different department."), the door ("Regulations, Joe." "I figured." "But I'll lock it gently."), and
               "Thank you kindly, Opal." "Regulation 4, Joe. Thank the raccoon." "Regulations, Joe." She locks the door
               behind her, gently.
 Wrong tries:  Ranger at the banjo, on the top shelf -> he cannot lift it (banjo, up, no); and it would not fit in the duct
@@ -2256,8 +2065,7 @@ Wrong tries:  Ranger at the banjo, on the top shelf -> he cannot lift it (banjo,
               The map, the receipt, the banjo up the vent -> "Not the map, partner. That map's comin' home with us."; "She
                                                 won't go through there, partner. That's the whole trouble."
               Ranger handing the receipt or his bottle cap down to Joe -> "That ain't for me, partner. That's for Opal.";
-                                                (bottlecap, heart, no) "He says that's his best one, and it ain't for
-                                                givin'. He'd trade it, for the right thing."
+                                                (bottlecap, heart, no) "He says that's his best one. He'd trade it, for the right thing."
               Ranger dropping in while Joe stands on the chair, or while the suits are there -> (eye, no); (suit, no)
 Gives:        The banjo (damaged) (`office.banjoBack`), in Grandpa Joe's hands.
 Plants/pays:  Pays off the receipt from the limousine (and its "one raccoon (unconfirmed)", now confirmed and stamped).
@@ -2265,8 +2073,7 @@ Plants/pays:  Pays off the receipt from the limousine (and its "one raccoon (unc
               said.
 Notes:        The cut to Grandpa Joe is the story's, as the cut to the limousine was: the player has the controls again at
               Opal's door. The two of them can talk at the vent at any time after (the vent's tree; and from above, a click
-              on Joe is a word between them: (joe, heart) "Missed you too, partner."). Hints: Grandpa Joe, "That receipt
-              says one banjo. Opal'll honor a receipt. I just can't walk it down the hall.", then "Ranger's got the
+              on Joe is a word between them: (joe, heart) "Missed you too, partner."). Hints: Grandpa Joe, "Opal'll honor a receipt for one banjo. I just can't walk it down the hall.", then "Ranger's got the
               receipt, and Opal's got the banjo. Rest of it's up to him."; Ranger (joe, down), then (receipt, arrow, opal),
               with Joe's reading at the vent.
 ```
@@ -2274,8 +2081,7 @@ Notes:        The cut to Grandpa Joe is the story's, as the cut to the limousine
 ```
 Puzzle #19: Wendell's Pie        (Act Five, continued · Lead: both · the room's intercom; the break room)
 Needs:        #18
-Setup:        The banjo's head is broken: "Somethin' round and tin, stretched tight. A pie plate'd do it, if a man had a
-              pie." Ranger, at the grille over BREAK, looks down: Floyd asleep on the couch (zzz), Jed in a plastic chair
+Setup:        The banjo's head is broken: "Somethin' round and tin, stretched tight. A pie plate'd do, if a man had a pie." Ranger, at the grille over BREAK, looks down: Floyd asleep on the couch (zzz), Jed in a plastic chair
               with an ice pack on his head and the hoop round his neck, facing the counter; and on the counter, a pie in
               a tin, with a card: HAPPY BIRTHDAY WENDELL. DO NOT EAT. (REGULATIONS). Jed is looking right at it ("I am not
               going to eat the pie." "It says do not eat. It says it in capitals.").
@@ -2293,8 +2099,7 @@ Steps:        1. Jed has to go. Ranger cannot make him: dropping in with Jed the
                  of Jed." "Oh, for heaven's sake." On every speaker in the building: "Jed. Your cheeseburger is at the
                  front desk." And in the break room, for a moment: Jed up so fast the ice pack is still in the air.
                  "...Thank you, Houston." "Floyd. My cheeseburger, Floyd." Floyd, asleep: "...lunch rides in the back,
-                 sir..." Jed goes. Houston: "That boy has waited since five this morning. ...Thank you for asking, Mr.
-                 Grandpa." "Any time, ma'am."
+                 sir..." Jed goes. Houston: "He has waited since five this morning. ...Thank you for asking, Mr. Grandpa." "Any time, ma'am."
               3. The pie. Ranger drops onto the fridge (pie, heart), along the counter, and eats Wendell's pie: the
                  nibble ("...!"), the whole pie (pie, heart), a pause, a satisfied lean back (heart, zzz). Then his best
                  bottle cap out of his stash, set in the middle of the empty tin (bottlecap, arrow, piepan): he does not
@@ -2304,23 +2109,21 @@ Steps:        1. Jed has to go. Ranger cannot make him: dropping in with Jed the
                  joe) and takes it too.
               4. Back up through the vent over the fridge, along the duct, and down through ROOM C's grille to Grandpa
                  Joe: into his hands if he is on the chair, or onto the spare chair's seat ("That's twice this week
-                 somethin's fell out of the sky on me."). The pie tin: "Well, look at that. Washed and shinin'." (piepan,
+                 somethin's fell out of the sky on me."). The pie tin: "Washed and shinin'." (piepan,
                  plus, banjo) "Round, and tin, and just the size. Great minds, partner." The schedule, read on the spot:
                  "What's this, partner? ...'LAMPLIGHTER. TEST SCHEDULE.'" "'30 OCT, 1747 HRS: SECTOR 1921. One civilian
-                 vehicle, unconfirmed. See Form 7.'" "'31 OCT, 1700 HRS: SECTOR 44. B-7. Please do not look directly at
-                 the sector.'" "Seventeen forty-seven. Yesterday, with the sun goin' low. That's when the sky opened over my
-                 road." "One civilian vehicle. Unconfirmed. ...I can confirm it. Red, with wood on the sides." "They're
-                 makin' 'em, Ranger. Every hole in my desert. They ain't findin' 'em." "They're MAKIN' 'em." (hole,
-                 question) "Sector 44. Today, at five. ...Forty-four's the boy's year. Miss said so." "B-7. That's why they
-                 need all that air. This little building goes DOWN."
+                 vehicle, unconfirmed. See Form 7.'" (hole, eye) "Seventeen forty-seven. That's when the sky opened over
+                 my road." "I can confirm the vehicle. Red, with wood on the sides." (hole, question) "Every hole in my
+                 desert, partner. They're makin' 'em." "'31 OCT, 1700 HRS: SECTOR 44. B-7. Please do not look directly at
+                 the sector.'" (clock, question) "Today. Five o'clock." "Sector 44. ...That's the boy's year. Miss said
+                 so." (down, question) "B-7. That's why all the air. This little building goes DOWN."
 Wrong tries:  Waking Floyd                   -> "...Regulation twenty-two, sir." (zzz) He does not wake.
               The vending machine            -> he presses every button. One packet of peanuts falls (peanuts, clock): for
                                                 later. Again: nothing more comes. Handed down to Joe: "Peanuts. He's a
                                                 planner."; and back up: "You keep them, partner. You're the planner."
               The pie with Jed there (from above) -> Jed is looking right at it
               The intercom before #18        -> no lever yet: Houston will not hear of a cheeseburger for Mr. Grandpa
-              The pie tin or the schedule up the vent -> "I'll be needin' that one, partner."; "I'll hang on to this. It's
-                                                the most important piece of paper in the building."
+              The pie tin or the schedule up the vent -> "I'll be needin' that one, partner."; "I'll hang on to this. Most important paper in the building."
               Ranger at the intercom (if he drops into the room) -> "Dispatch." (cheeseburger, question) "...Mr. Grandpa,
                                                 is there a raccoon on my intercom?" "Ma'am, I wouldn't want to say what
                                                 ain't on the form."
@@ -2331,11 +2134,8 @@ Plants/pays:  Pays off Jed's cheeseburger at last (ordered at 0500 in Act Four; 
               very nice bottle cap."): the cap stays on his card.
 Notes:        Grandpa Joe will not lie, and does not have to: the intercom's lever is offered once the banjo is back and
               Ranger has told him Jed is watching the pie. Ranger can also drop into the Comfortable Room once the suits
-              have gone and Joe is off the chair, hop down, wash up at the cooler ("He's washin' up. Government water's good for
-              somethin'."), and hand Joe the tin and the schedule himself; he climbs back the way he came ("Up you go,
-              partner. Mind the... well. You ain't got a hat."). Hints follow the puzzle: Grandpa Joe, "A pie tin'd mend
-              her. If there's a pie in this building, Ranger's the one'd sniff it out.", "Jed won't leave that pie for
-              nothin' but a cheeseburger. And Houston's got the cheeseburgers.", "Jed's gone after his lunch. That pie's
+              have gone and Joe is off the chair, hop down, wash up at the cooler ("He's washin' up. Government water's good for something."), and hand Joe the tin and the schedule himself; he climbs back the way he came ("Up you go,
+              partner. Mind the... well. You ain't got a hat."). Hints follow the puzzle: Grandpa Joe, "A pie tin'd mend her. If there's a pie in here, Ranger's the one'd sniff it out.", "Jed won't leave that pie for nothin' but a cheeseburger. Houston's got those.", "Jed's gone after his lunch. That pie's
               Ranger's business now.", "I'd bet that break room's got more in it than pie. Ranger's got the eyes for it.";
               Ranger (suit, cheeseburger, joe), (pie, piepan, joe), (piepan, water), (lamp, arrow, joe).
 ```
@@ -2345,25 +2145,22 @@ Puzzle #20: A Soundproof Room        (Act Five, continued · Lead: Grandpa Joe �
 Needs:        #19
 Setup:        Grandpa Joe has a broken banjo, a clean pie tin, and a reason to get to B-7 before five o'clock.
 Steps:        The pie tin used on the banjo (the engine has no thing used on a thing in the pockets: the pie tin, or the
-              banjo, used on anything in the room): "Hold still, darlin'. New head, comin' up." Bracket by bracket: "One
-              bracket. Two. Three... and the rest. Snug." (`banjo-pie`, the pie-tin banjo) "Let's hear you, then." One
+              banjo, used on anything in the room): "Hold still, darlin'. Here's your new head." Bracket by bracket: "One bracket. Two. Three... Snug." (`banjo-pie`, the pie-tin banjo) "Let's hear you, then." One
               string: the loudest sound the building has ever made. "...Oh, my. She's louder'n she ever was." And he plays.
               The ducts are quiet, every fan stopped, and sheet metal carries a tune like a trumpet: the Last Stop Rag goes
               through every vent on every floor. Houston: "Attention all personnel. There is... music. On the ground floor."
               The door: Dale and Merle in it, and Wendell behind them in the hall with his fingers in his ears ("Fella with a
-              birthday button and his fingers in his ears. Happy birthday, son."). "Sir. PLEASE, sir." "Sir, it is in the
-              ducts, sir. It is on every floor." "B-3 has called twice, sir." Then a talk (`ragTree`), and he plays on
-              through it: "Can't stop, son. Medical condition." ("Sir, there is no medical condition in your file." "Son, at
-              my age I am a medical condition." "...I will add it to the file, sir. Sorry, sir."); "This here's the Last
-              Stop Rag. Y'all want to hear it twice?" ("No, sir. Sorry, sir." "Once was very nice, sir." "Sir. Please. It is
-              my birthday."); and, once the schedule is read, "Lamplighter." ("...Sir. Where did you hear that word, sir?"
+              birthday button and his fingers in his ears. Happy birthday, son."). "Sir. PLEASE." "Sir, it is in the ducts. It is on every floor." "B-3 has called twice, sir." Then a talk (`ragTree`), and he plays on
+              through it: "Can't stop, son. Medical condition." ("Sir, there is no medical condition in your file." "At my age, son, I am a medical condition." "...I will add it to the file. Sorry, sir."); "This here's the Last
+              Stop Rag. Y'all want to hear it twice?" ("No, sir. Sorry." "Once was very nice, sir." "Sir. Please. It is
+              my birthday."); and, once the schedule is read, "Lamplighter." ("...Where did you hear that word, sir?"
               "A raccoon brought it to me, son." "Sorry, sir. That is a green-page word. It is on B-7." "MERLE." "...Sorry,
               Dale.") and the lever: "Y'all got somewhere I can play where I won't bother nobody?" "Sir, the only
               soundproof room in the building is B-7." "We are not authorized to take civilians to B-7, sir." He plays
               louder. Wendell: "Dale, it is my BIRTHDAY." "...Sir, we are now authorized."
 Wrong tries:  Playing the broken banjo       -> one dull clunk: "That ain't music. That's furniture."
               Playing before the schedule    -> the suits come, beg, and he stops when asked nicely: "Well. Since y'all
-                                                asked nice." "Thank you, sir." "It is a very nice song, sir. Sorry, sir." "For
+                                                asked nice." "Thank you, sir." "It is a very nice song, sir. Sorry." "For
                                                 your comfort, sir." They lock the door again, and nothing changes: he does
                                                 not yet know where he wants to go. Played again, Houston: "B-3 would like the
                                                 music to stop. So would B-4. So would I."
@@ -2371,10 +2168,8 @@ Wrong tries:  Playing the broken banjo       -> one dull clunk: "That ain't musi
 Gives:        Grandpa Joe on his way down (`office.down`), and Going Down.
 Plants/pays:  Pays off the singing in the limousine (the suits will do anything to make it stop: they will even take him
               where he wants to go). Pays off the stopped fans (#16): Ranger can go down the B-7 shaft.
-Notes:        Hints: Grandpa Joe, "A broken banjo and a clean pie tin. Jolene'd say that's a banjo waitin' to happen."; once
-              mended and nowhere yet to play to, "I could play 'em right out of this room. I just don't know where I'm playin'
-              to yet."; once he knows, "Them boys'll do anything to make the Rag stop. Even take a man where he wants to
-              go."; Ranger (joe, music), and where Joe hears him, "He says play it, Joe. I aim to, partner."
+Notes:        Hints: Grandpa Joe, "A broken banjo, a clean pie tin. Jolene'd call that a banjo waitin' to happen."; once
+              mended and nowhere yet to play to, "I could play 'em out of this room. Don't know where I'm playin' to yet."; once he knows, "Them boys'll do anything to stop the Rag. Even take a man where he wants to go."; Ranger (joe, music), and where Joe hears him, "He says play it, Joe. I aim to, partner."
 ```
 
 ```
@@ -2382,7 +2177,7 @@ Cut-Scene: Going Down        (ends the stage, and the demo)
 ```
 A title, "Going Down". Then the Comfortable Room through the slats of ROOM C's grille, Ranger's eyes in the vent: Grandpa
 Joe walks out across the room playing the pie-tin banjo, hat on, between Dale and Merle, and Wendell already out in the
-hall with his fingers in his ears. "Y'all ever been down to B-7?" "No, sir. We have never been authorized, sir." "Well. Now
+hall with his fingers in his ears. "Y'all ever been down to B-7?" "No, sir. We have never been authorized." "Well. Now
 you are." "It is still my birthday, Dale." "Noted, Wendell." Out through the door, one after another. Houston, on every
 speaker: "Attention all personnel. The music is going down to B-7. Thank you for your patience." Then Ranger along the
 duct, lying at the grille over the HALL, and the elevator heard through the slats under him: its own polite little tune,
@@ -2408,10 +2203,10 @@ screen. Skipped, the same; the card is after the part that can be skipped, so it
 | Dad's pencil | His crossword, on the arm of his chair in the living room | Any of the three | Act Three #8: Mom winds the answering machine's tape with it |
 | Spare car key | The family vault, Act Three #10 | Mom; then whoever she gives it to | Act Three #11: they cannot leave without it. Mom drives. |
 | Silver coin | The Son takes it from a fountain in Rome, opens a door the size of it with the morning sun, and tosses it through (Act Two). It hits Grandpa Joe's hat in Nevada, and Ranger has it before it stops ringing. <!-- NEVADA-12W --> | The Son; then Ranger; then Big Sister, by trade (#10), and whoever she gives it to | Act Four #6: only Big Sister knows what it is. Act Four #9: any of them can flash the sun off it. #13: it goes through the door with them |
-| Four pennies <!-- NEVADA-12W: the rows to the next comment are round twelve's --> | The take-a-penny dish in the store (#10, a wrong try): one is the lucky `penny`, three are `pennies` | Little Sister. The lucky one she may hand to anybody; the three she will not ("No! They're MINE. I took them FAIR. It SAID.": handed over, they come straight back) | The lucky penny goes through the coin door to her brother, for luck (the letterbox: whoever holds it, Little Sister posts it); it waits in the tunnel for the Rome end. Ranger does not want copper. |
+| Four pennies <!-- NEVADA-12W: the rows to the next comment are round twelve's --> | The take-a-penny dish in the store (#10, a wrong try): one is the lucky `penny`, three are `pennies` | Little Sister. The lucky one she may hand to anybody; the three she will not ("No! They're mine. I took them fair. The dish SAID.": handed over, they come straight back) | The lucky penny goes through the coin door to her brother, for luck (the letterbox: whoever holds it, Little Sister posts it); it waits in the tunnel for the Rome end. Ranger does not want copper. |
 | Mirror shades | The spinner rack; Mom buys them ($3.99) | Any of the three | #10: traded to Ranger by Big Sister. He wears them from then on. |
-| One warm egg | Darlene, out back (#11) | Little Sister ("It's WARM. It's MINE to keep warm.") | Not yet. The one thing in her pocket that must be kept warm, wherever they land. |
-| Three waters | The survival shelf; Mom buys them | Mom | Not yet. "We are going somewhere with no shops." |
+| One warm egg | Darlene, out back (#11) | Little Sister ("It's warm. It's MINE to keep warm.") | Not yet. The one thing in her pocket that must be kept warm, wherever they land. |
+| Three waters | The survival shelf; Mom buys them | Mom | Not yet. "We're going somewhere with no shops." |
 | The sun shade | The front window, DISPLAY ONLY. After #11 Jolene lifts it out and gives it to whoever asks for it (#12) | Any of the three, then Grandpa Joe | #12: held in the low sun by Grandpa Joe; the door as wide as a windshield. It stays with him. |
 | The map of the sectors | Jed's clipboard, in the limousine (Act Five #15) | Grandpa Joe (Ranger puts it in his bib pocket) | Not yet: three sectors, one of them under Jed's thumb, and a blank column headed WHAT OPENS THEM. <!-- SCENES-17 -->It stays in the bib pocket through the Office: "Not the map, partner. That map's comin' home with us." |
 | The receipt for the banjo | The backup, through the divider (Act Five #15) | Grandpa Joe <!-- SCENES-17 -->(then Ranger, up through the vent) | Not yet. It reads "RECEIVED: one banjo (damaged). one raccoon (unconfirmed)." <!-- NEVADA-12W: end of round twelve's rows --> <!-- SCENES-17 -->The Office #18: down through PROP & EFF's grille to Opal, claim number 3117; the banjo is returned on it. |
@@ -2419,7 +2214,7 @@ screen. Skipped, the same; the card is after the part that can be skipped, so it
 | Pie tin | Wendell's pie, in the break room (#19): Ranger eats the pie, leaves his best bottle cap, and washes the tin at the sink till it shines | Ranger; then Grandpa Joe (down through the vent, or by hand in the room) | #20: the banjo's new head |
 | Pie-tin banjo | The banjo (damaged) and the pie tin, put together by Grandpa Joe (#20) | Grandpa Joe | #20: the Last Stop Rag through every vent in the building, until the suits take him where he won't bother nobody: B-7 |
 | The test schedule | The break room's corkboard (#19): LAMPLIGHTER. TEST SCHEDULE. | Ranger; then Grandpa Joe, who reads it at once ("I'll hang on to this.") | The stage's revelation (`office.schedule`): 30 OCT, 1747 HRS, SECTOR 1921; 31 OCT, 1700 HRS, SECTOR 44, B-7 |
-| Bottle cap | Ranger's stash, his best, from the arrival on | Ranger ("He says that's his best one, and it ain't for givin'.") | #19: traded for Wendell's pie; it stays on Wendell's card |
+| Bottle cap | Ranger's stash, his best, from the arrival on | Ranger ("He says that's his best one. He'd trade it, for the right thing.") | #19: traded for Wendell's pie; it stays on Wendell's card |
 | Packet of peanuts | The break room's vending machine: every button (#19, a wrong try) | Ranger; Grandpa Joe hands it back ("You keep them, partner. You're the planner.") | Not yet. For later. <!-- SCENES-17: end of round seventeen's rows --> |
 
 The five things from the house that are not used up (the key, the flashlight, the note, the pencil, the car key) are still in their pockets in Nevada. The batteries are in the flashlight.
@@ -2444,34 +2239,34 @@ The five things from the house that are not used up (the key, the flashlight, th
 | Psalm 121:8: "thy going out and thy coming in" | Act Three #11, at the front door. Mom: "Going out, and coming in. All five of us." | Act Four #13: said again, at the door (below). Not yet: the coming in. (Mom's "My times are in thy hand", Psalm 31:15, is the second line after "Daddy's EARLY", in "Some when".) |
 | Little Sister's flashlight | Act Three #4 and #5 | Act Four: light opens doors in this story, and hers is too small to be seen in the morning sun. For later. |
 | "Chickens KNOW." | Act Three, Little Sister at her flock | The geese in Egypt, the sacred chickens in Rome, Grandma Jolene's hens in Act Four (#5: they quit laying the day the sky opened and stand facing the fence; Little Sister: "That's EVIDENCE. Chickens KNOW."; and #11): in every era the birds face a door in time before any person has noticed it. |
-| General Feathers' place on the pillow: RESERVED | Act Three, Little Sister's room | She is in Dad's suitcase in Egypt (Act One), in charge. In Act Four, once she has heard of Grandma Jolene's hens, Little Sister misses her: "Mommy, I miss General Feathers. But Daddy needs her MORE. She's keeping an eye on him. He has to do what she SAYS." "Then he's well looked after, sweetheart. She outranks him." Not yet: her coming home. |
-| 1921 B.C. and 44 B.C. on Big Sister's timeline | Act Three, the Retreat | The two sectors on the notice in Act Four. In "Some when": "Sector 1921: nineteen twenty-one B.C. It is on my timeline: the year Abram went down into Egypt." |
+| General Feathers' place on the pillow: RESERVED | Act Three, Little Sister's room | She is in Dad's suitcase in Egypt (Act One), in charge. In Act Four, once she has heard of Grandma Jolene's hens, Little Sister misses her: "I miss General Feathers. But Daddy needs her MORE. She keeps an eye on him." "Then he's well looked after, sweetheart. She outranks him." Not yet: her coming home. |
+| 1921 B.C. and 44 B.C. on Big Sister's timeline | Act Three, the Retreat | The two sectors on the notice in Act Four. In "Some when": "Sector 1921: nineteen twenty-one B.C. My timeline: Abram went down into Egypt." |
 | "The Retreat goes dark so that the internet may live." "I intend to mention this again." | Act Three #4 | Not yet. She will. |
 | The appeal lodged against rule three (NO CHICKENS) | Act Three, the rules in the Retreat | Not yet heard. |
 | The coin that "didn't come back down" | Rome, Act Two | #5 and #6 |
 | "Sun was low. Hit the chrome on that wagon and threw a flash up ahead, like a signal mirror." | #5, Grandpa Joe's account | #9: the coin, held up to the low morning sun; #12: the banjo, and then the sun shade |
-| "Look at the edges. It is NEW." | #6 | #9: a new coin shines |
+| "The edges are NEW." | #6 | #9: a new coin shines |
 | "Why is the sky DOWN?" | Rome, Act Two, looking through the coin-sized door | #5: the coin fell out of the sky and hit his hat |
 | A Geiger counter that never clicks | #5, ask again as Mom or as Big Sister | Not yet. The radiation is an excuse: for what? |
 | Sectors 44 and 1921 | #8 | Act Five #15: the office's own map has them, and a third, under Jed's thumb. Not yet: who numbered them, and how many more there are. |
 | A hum where there is nothing to hum | #9, before the coin goes up | #9. It is the door, shut. |
 | A door the size of a coin, with a morning in it | "Some when" | The letterbox: the Son is on the other side of it. #12: more light, a bigger door (nobody told them). #13: they walk through it. |
-| Sausages | "Some when": the second thing Little Sister notices (the first is chickens) | The letterbox, if the player has him tell it: "It smells like sausages out here." Her brother found Rome's snack bar the same way: "Step one, I can SMELL you." |
-| "Father, You know where they are tonight, and I do not. Keep them." "And bring us to them." | Act Three, the opening prayer | Act Four #9, before the coin goes up: "Father, You brought us this far. We don't understand what comes next. You do. Keep us, and keep them. In Jesus' name." |
-| Little Sister's postscript to a prayer | Act Three: "And please make Daddy ask for directions. Just ONE time. Amen." | Act Four #9: "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen." Not yet answered, either of them. |
+| Sausages | "Some when": the second thing Little Sister notices (the first is chickens) | The letterbox, if the player has him tell it: "Sausages, bread, smoke, and one thing I'm choosing not to know." Her brother found Rome's snack bar the same way: "Step one's past that bush. My nose is never wrong." |
+| "Father, You know where they are tonight, and I do not. Keep them." "And bring us to them." | Act Three, the opening prayer | Act Four #9, before the coin goes up: "Father, You know what comes next. Keep us, and keep them. In Jesus' name." |
+| Little Sister's postscript to a prayer | Act Three: "And please make Daddy ask for directions. Just ONE time. Amen." | Act Four #9: "And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen." Not yet answered, either of them. |
 | "Places, girls." | Act Three, the opening (and the title of Big Sister's next chapter) | Act Four #9: Mom says it, and the three take their marks at the glass; #13: "Places, girls. Hold hands. All the way through." |
 | George Washington's 110 Rules of Civility | Act Three, a word on the landing | Act Four #7: Mom's second try at the man in gray. "I can neither confirm nor deny General Washington." |
 | "Is Daddy in trouble?" | Act Three, a word in the study | Act Four, a word with her mother: "Mommy, is Daddy STILL in trouble?" "A little, sweetheart. But only with me, and only once he's home." |
-| The tribute money, in a ten-year-old's own words | Rome, Act Two, at the fountain: "So Caesar gets his coin. And God gets what's God's." | Act Four #6: the same coin, and his mother has the verse (Matthew 22:21) |
-| "That is not what early means." | Opening of Act Three (Big Sister) | "Some when", in Act Four: "Wait! What's B.C.? Somebody tell me QUICK." "Before Christ, sweetheart." And then it is exactly what early means. |
+| The tribute money, in a ten-year-old's own words | Rome, Act Two, at the fountain: "So Caesar gets his coin, and God gets what's God's. Me included." | Act Four #6: the same coin, and his mother has the verse (Matthew 22:21) |
+| "That is not what early means." | Opening of Act Three (Big Sister) | "Some when", in Act Four: "Wait. What's B.C.? Somebody tell me QUICK." "Before Christ, sweetheart." And then it is exactly what early means. |
 | Little Sister's loose tooth: not allowed out till Daddy has seen it | Act Three (a word with her sister in the study) | Act Four: it is not for sale ("It's waiting for Daddy"), and when they find him it comes second, after the internet. Not yet: Daddy sees it. |
-| "I'm not scared. I'm BRAVE-scared." | Act Three #5, the closet | Act Four, holding her sister's hand by the fence: "Okay. I'm holding it MIGHTILY. I'm not scared. I'm BRAVE-scared." |
+| "I'm not scared. I'm BRAVE-scared." | Act Three #5, the closet | Act Four, holding her sister's hand by the fence: "I'm holding it mightily. I'm not scared. I'm BRAVE-scared." |
 | "Chickens KNOW." <!-- NEVADA-12W: the rows to the next comment are round twelve's --> | Act Three; Act Four #5 | #11: Jolene's hens are guarding, not waiting; Little Sister is the only one they will listen to. The cut-scene: five hens turn to watch the limousine go. |
 | General Feathers, keeping an eye on Daddy | Act Three, the RESERVED pillow; Act Four | #11: "That's what General Feathers is doing for Daddy." |
 | "I FIT!" / "I bet I could still FIT." | Act Three; "Some when" | Her head in the hole ("there's a chicken LOOKING at me"); the banjo-sized door ("I could fit SIDEWAYS." "No."). Not yet: a door her size that she goes through. |
 | The old man's flash: "like a signal mirror" | #5 | #12: the sun shade, "a mirror the size of a windshield" |
 | Dad's windshield shade (Act One) | Egypt | #12: his family opens their door with a windshield shade; Mom's "I said it was for show." "...Then it was for this." |
-| "Do you get a snack?" | #7 | Jed: "I have not had a snack since 0500."; "I need a cheeseburger and backup"; "Who ordered a cheese burger?"; Act Five #15: Grandpa Joe eats it. |
+| "Five: any snacks?" | #7 | Jed: "I have not had a snack since 0500."; "I need a cheeseburger and backup"; "Who ordered a cheese burger?"; Act Five #15: Grandpa Joe eats it. |
 | "Hi, Mister Gray's mommy!" | #7 | Houston: "Jed, is that the child again?"; "Houston, we have a problem" is her name. |
 | "That's what the gray suits drive." | #5 | The limousine. |
 | The banjo flashes in the sun | The porch, when he plays ("Can you play your banjo? PLEASE?") | #12's half-answer: a banjo-sized door. Then the cut-scene: it is a weapon, once. |
@@ -2487,14 +2282,14 @@ The five things from the house that are not used up (the key, the flashlight, th
 | "They figured it out." | The cut-scene (Jed) | Act Five #15: the office's column WHAT OPENS THEM is blank. The family knows; the office does not. |
 | The third sector, under Jed's thumb | Act Five #15 | Not yet: the story's next door. <!-- NEVADA-12W: end of round twelve's rows --> |
 | Mom is humming "O God, Our Help in Ages Past" | Act Four, a word with Little Sister | Not yet, and never said aloud: it is the hymn made from Psalm 90, which is the psalm Dad says at the door in Egypt (Act One). To confirm before anyone leans on it: see "To confirm", at the end of this document. |
-| Grandma Jolene's hens, facing the fence | #5, his account: "Been a strange week. Jolene's hens quit layin' the day the sky opened. Stand out back all day now, facin' that fence." | "Some when": through the door, it is Little Sister who hears chickens, before anybody smells a sausage. #11: they are guarding. |
+| Grandma Jolene's hens, facing the fence | #5, his account: "Strange week. Jolene's hens quit layin' the day the sky opened." | "Some when": through the door, it is Little Sister who hears chickens, before anybody smells a sausage. #11: they are guarding. |
 | "The holes open on years that MATTER. ...I don't know why." | "Some when" (Big Sister): the Ides of March, and Abram in Egypt | Not yet. Nobody explains it. (It is also the first time she says "I don't know" in this act.) |
 | "I never once thought of it as an ordinary morning." | "Some when" (Mom, of Genesis 12) | Not yet. Her husband is standing in that chapter. |
 | Jed's cheeseburger <!-- SCENES-17: the rows to the next comment are round seventeen's --> | Act Four #7 ("since 0500"); Act Five #15 (eaten by the wrong man) | The Office #19: asked for on Jed's behalf, and sent to the front desk at last. "...Thank you, Houston." |
 | The singing: the suits will do anything to make it stop | Act Five #14 | The Office #20: they will even take him where he wants to go, and that is B-7. |
 | The receipt's "one raccoon (unconfirmed)" | Act Five #15 | The Office #18: Opal looks up at the vent. "...Confirmed." THUNK. |
 | Lamplighter | The Office #17: the green page, which they are not supposed to read | #19: the test schedule; #20: "That is a green-page word. It is on B-7."; the last card. Not yet: what it is (stage two). |
-| "Seventeen forty-seven. That's an awful particular minute, son." | The Office #17 | #19: the schedule: the minute the sky opened over his road. "One civilian vehicle. Unconfirmed. ...I can confirm it. Red, with wood on the sides." |
+| "Seventeen forty-seven. That's an awful particular minute, son." | The Office #17 | #19: the schedule: the minute the sky opened over his road. "I can confirm the vehicle. Red, with wood on the sides." |
 | Sector 44, the boy's year | Act Four #8 (the notice) | The Office #19: the next test, today at five. Not yet: what happens at five (stage two). |
 | The building's air, turned off by a raccoon | The Office #16 | The heat (#17); Going Down: the B-7 shaft's fan is stopped, and Ranger goes down it after him. |
 | Ranger's best bottle cap | The Office's arrival (his stash) | #19: traded for Wendell's pie, and left on Wendell's card. Not yet: "Somebody ate my pie and left me a bottle cap. ...It is a very nice bottle cap." (stage two) |

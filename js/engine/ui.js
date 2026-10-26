@@ -87,7 +87,7 @@ export class UI {
     this.invEl.addEventListener("focusin", thing);
     this.invEl.addEventListener("pointerleave", noThing);
     this.invEl.addEventListener("focusout", noThing);
-    this.skipEl.addEventListener("click", () => g.skip());
+    this.skipEl.addEventListener("click", () => { if (this.open) this.close(); g.skip(); });      // (ENGINE-19A: from under the pause menu too)
     this.menuEl.addEventListener("click", (event) => this.onClick(event));
     this.menuEl.addEventListener("input", (event) => this.onInput(event));
 
@@ -279,7 +279,7 @@ export class UI {
     this.menuEl.className = "layer" + (overTitle ? " title-mode" : "");
     this.menuEl.innerHTML = html;
     this.menuEl.hidden = false;
-    const pause = this.g.mode === "play";
+    const pause = this.g.mode === "play" || this.g.mode === "cutscene";      // (ENGINE-19A: a cut-scene's pause menu stops it too)
     this.g.clock.paused = pause;                     // the world stops while a menu is up
     this.g.stage.classList.toggle("paused", pause);
     const first = this.menuEl.querySelector("button:not(:disabled)");
@@ -324,9 +324,11 @@ export class UI {
       lead is walking somewhere) saving and loading wait, so a save can never catch
       the story half-way through a sentence. */
   pauseMenu() {
-    if (this.g.mode !== "play") return;
+    const cut = this.g.mode === "cutscene";          // ENGINE-19A (C15): a cut-scene pauses too, and its first row skips it
+    if (this.g.mode !== "play" && !cut) return;
     const off = this.g.busy ? " disabled" : "";
     this.show("pause", `<div class="panel" role="dialog" aria-label="Paused"><h2>Paused</h2><div class="rows">
+      ${cut ? `<button class="row" type="button" data-act="skip-scene"><b>Skip this scene</b></button>` : ""}
       <button class="row" type="button" data-act="resume"><b>Back to the game</b></button>
       <button class="row" type="button" data-act="save"${off}><b>Save game</b></button>
       <button class="row" type="button" data-act="load"${off}><b>Load game</b></button>
@@ -376,6 +378,8 @@ export class UI {
   }
 
   optionsMenu() {
+    // ENGINE-19A: "Text speed" is the reader's rate now (9, 12, 18 characters a second: dialogue.js); "A soft backing behind the
+    // words" and "Text size" (Normal, Large) are new (game.js, applyWords; css: .stage.backing, .stage.large-text).
     const s = this.g.settings;
     const slider = (key, label) => `<label>${label}<input type="range" min="0" max="1" step="0.05" value="${s[key]}" data-opt="${key}"></label>`;
     const check = (key, label) => `<label>${label}<input type="checkbox" data-opt="${key}"${s[key] ? " checked" : ""}></label>`;
@@ -383,8 +387,12 @@ export class UI {
       ${slider("music", "Music")}${slider("sfx", "Sound effects")}${slider("voice", "Voices")}
       ${check("subtitles", "Show the words on screen")}${check("voices", "Play recorded voices when there are any")}
       ${check("calm", "Less motion and no flashes")}
+      ${check("backing", "A soft backing behind the words")}
       <label>Text speed<select data-opt="textSpeed">
-        ${[[0.6, "Slow"], [1, "Normal"], [1.6, "Fast"]].map(([v, n]) => `<option value="${v}"${Number(s.textSpeed) === v ? " selected" : ""}>${n}</option>`).join("")}
+        ${[[9, "Slow"], [12, "Normal"], [18, "Fast"]].map(([v, n]) => `<option value="${v}"${saves.textRate(s.textSpeed) === v ? " selected" : ""}>${n}</option>`).join("")}
+      </select></label>
+      <label>Text size<select data-opt="textSize">
+        ${[[1, "Normal"], [1.25, "Large"]].map(([v, n]) => `<option value="${v}"${(Number(s.textSize) > 1 ? 1.25 : 1) === v ? " selected" : ""}>${n}</option>`).join("")}
       </select></label>
       <p>Hold H during play to show everything you can click.</p>
       <div class="foot"><button class="row" type="button" data-act="back"><b>Back</b></button></div></div>`);
@@ -407,6 +415,7 @@ export class UI {
       case "continue": return g.load(saves.readSlot("auto"));
       case "intro": this.close(); await g.cutscene("intro"); return g.title();
       case "resume": return this.close();
+      case "skip-scene": this.close(); return g.skip();      // ENGINE-19A: the pause menu's first row in a cut-scene
       case "save": return this.saveMenu();
       case "load": return this.loadMenu();
       case "options": return this.optionsMenu();

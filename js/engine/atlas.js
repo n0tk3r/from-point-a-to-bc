@@ -394,6 +394,7 @@ export class Atlas {
     const g = this.g;
     if (!this.open) return;
     this.open = false; this.mode = this.target = null; this.moving = this.busy = false;
+    this.wasMusic = undefined;                                                 // ENGINE-19B (6)
     this.el.hidden = true;
     this.sheetsEl.innerHTML = ""; this.shown = null; this._rows = {};
     g.busy = Math.max(0, g.busy - 1);
@@ -423,6 +424,7 @@ export class Atlas {
     if (!this.open || this.busy || this.moving) return;
     this.busy = true;
     this.g.sfx("rustle");
+    if (this.wasMusic !== undefined) { const was = this.wasMusic; this.wasMusic = undefined; this.g.music(was); }      // ENGINE-19B (6): back to the time it was
     await this.tween(180, (k) => { this.el.style.opacity = 1 - k; });
     this.exit();
   }
@@ -436,6 +438,13 @@ export class Atlas {
     const era = g.here ? g.here.era : null, from = era && g.eras[era] ? g.eras[era].dial : null, to = this.stop(there.id);      // (ENGINE-17: the lead's own scene, g.here)
     this.enter();
     this.mode = "switch"; this.target = lead;
+    // ENGINE-19B (6): sound first. Into another time, its track starts under the dial (the scene the lead stands in: its
+    // music, or its era's), so the drop into it (pick) finds it playing; Esc (close) puts back the one that was playing.
+    this.wasMusic = undefined;
+    if (era !== there.map.era && g.audio.ready) {
+      const scene = await g.getScene(at.scene).catch(() => null), m = scene && g.musicOf(scene), now = g.audio.current ? g.audio.current.id : null;
+      if (m && m !== now && g.audio.sound.music[m]) { this.wasMusic = now; g.music(m); }
+    }
     if (era !== there.map.era && Number.isInteger(from) && Number.isInteger(to) && from !== to) await this.timer(from, to, there.id);
     else {                                                    // the same time, or two times on one notch (home and Nevada): no turn, a fade
       g.sfx("rustle");
@@ -750,6 +759,7 @@ export class Atlas {
     if (!this.open || this.busy || this.moving || !d.team.includes(lead) || lead === d.active || !at || !at.scene) return;
     this.busy = true;
     if (g.scene && at.scene === g.scene.id && g.actor(lead)) {
+      if (this.wasMusic !== undefined) g.music(g.musicOf(g.scene));            // ENGINE-19B (6): staying in this time after all
       await this.tween(160, (k) => { this.el.style.opacity = 1 - k; });
       this.exit();
       await g.switchLead(lead);

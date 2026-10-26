@@ -26,6 +26,7 @@
   --ink: #1f130a;
   --cream: #f6e3b8;
   --letterbox: #07040d;
+  --backing: rgb(31 19 10 / 0.5);   /* ENGINE-19A: the soft plate behind the words on the stage: the ink (--ink), half seen through */
 
   /* characters from the present keep their colors everywhere */
   --dad: #ffd34d;

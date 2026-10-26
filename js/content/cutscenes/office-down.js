@@ -55,18 +55,23 @@ export default async function down(g) {
   await g.wait(400);
   // across the room toward the door, playing as he goes (a walk and a word, and a walk and a word)
   const step = (id, to) => walk(id, [to], roomSize);
-  await Promise.all([step("suit1", ROOM.daleDoor), step("grandpajoe", ROOM.joeMid), step("suit2", ROOM.merleMid), g.say("office.down.1")]);
+  // STAGE-19O: the walk first, then the line (one mover on a key beat; C9): he stops, and asks
+  await Promise.all([step("suit1", ROOM.daleDoor), step("grandpajoe", ROOM.joeMid), step("suit2", ROOM.merleMid)]);
+  { const a = g.actor("suit2"); if (a) a.look(ROOM.joeMid[0], ROOM.joeMid[1]); }
+  await g.say("office.down.1");
   { const a = g.actor("suit1"); if (a) a.look(ROOM.joeMid[0], ROOM.joeMid[1]); }
   await g.say("office.down.2");
   await Promise.all([step("grandpajoe", ROOM.joeDoor), step("suit2", ROOM.merleDoor)]);
   await g.say("office.down.3");
+  await g.wait(500);                                                            // STAGE-19O: the take after "Well. Now you are." (C10)
   { const a = g.actor("suit3"); if (a) a.look(ROOM.daleDoor[0], ROOM.daleDoor[1]); }
   await g.say("office.down.4", "office.down.5");
+  await g.wait(600);                                                            // STAGE-19O: the take after "Noted, Wendell." before they go (C10)
   // out through the door into the hall, Dale first: past the doorframe, gone
   const out = async (id, wait) => { await g.wait(wait); await walk(id, [ROOM.door, ROOM.hall], roomSize); const a = g.actor(id); if (a) a.hidden = true; };
   await Promise.all([out("suit1", 0), out("grandpajoe", 500), out("suit2", 1100), g.wait(900).then(() => walk("suit3", [[ROOM.hall[0] - 50, ROOM.hall[1] - 4]], roomSize))]);
   await g.pa("office.pa.down", { building: "office" });
-  await g.fade(1, 400);
+  await g.fade(1, 150);                                                         // STAGE-19O: a cut within one moment, not a black fade (C16; was 400 out, 400 in)
 
   // ---- 2. along the duct: Ranger at the grille over the HALL; the elevator, heard through the slats under him
   g.grilleOver(null);
@@ -76,7 +81,7 @@ export default async function down(g) {
   if (r.variant) r.variant("shades");
   await cast.load();
   if (r.pose) r.pose("peek", 0);
-  await g.fade(0, 400);
+  await g.fade(0, 150);
   WORDS.at = DUCT.below;                                                       // (the voices come up through the slats)
   try {
     g.sfx("ding");                                                             // the elevator, and its own polite little tune
@@ -112,7 +117,7 @@ export default async function down(g) {
 
   // ---- 4. Houston, to nobody in particular
   await g.pa("office.pa.test", { building: "office" });
-  await g.wait(600);
+  await g.wait(1200);                                                           // STAGE-19O: the button's hold before the fade (C14; was 600)
 
   // ---- 5. the card (after the skippable part: it always shows), and the end of the demo
   g.clock.skipping = false;
@@ -124,3 +129,7 @@ export default async function down(g) {
   g.flag("office.done", true);
   g.flag("demo.done", true);
 }
+
+// FINAL-19: the end of the demo is not saved before (js/engine/game.js, cutscene): Continue after the end brings Grandpa Joe
+// back to the Comfortable Room as the game last saved it at rest, before the Rag, as in round eighteen (play-office.py checks it).
+down.save = false;

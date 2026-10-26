@@ -747,7 +747,9 @@ def layout(mirror_at, fx=None):
     mx, my, mrx, mry = mirror_at
     pts = lambda *q: [[int(round(a)), int(round(c))] for a, c in q]
     lay = {
-        "id": "egypt-chamber", "horizon": HZ, "full": FULL,
+        # STAGE-19E: the game's depth numbers for the people, from round nineteen: the eye level the side walls and the
+        # beams run to (about row 175), not the long lens the floor is drawn with (HZ, FULL stay the floor's camera).
+        "id": "egypt-chamber", "horizon": 175, "full": 527,
         "light": "six oil lamps (see lamps): warm pools on the lower walls and floor, the ceiling and corners in cool dark; no daylight",
         "walk": [[86, 470], [120, 461], [160, 467], [456, 467], [465, 440], [546, 440], [550, 509], [752, 509], [757, 529], [792, 529], [792, 594], [150, 594], [72, 584], [72, 498]],
         "blocked": [footprint([(b["x0"] - 72, b["d1"] + 12), (b["x1"] + 76, b["d1"]), (b["x1"] + 76, b["d0"] + 10), (b["x1"], b["d0"]), (b["x0"], b["d0"]), (b["x0"] - 72, b["d0"] + 28)], 5.0)],
@@ -764,7 +766,7 @@ def layout(mirror_at, fx=None):
             {"id": "brazier", "what": "the goldsmith's charcoal brazier, and his basket of charcoal", "shape": {"rect": [356, 478, 54, 38]}, "stand": [434, 524], "face": "W"},
         ],
         "exits": [{"to": "egypt-gallery", "shape": {"poly": pts((xf, yft), (xf, yfb), (xn, ynb), (xn, ynt))}, "stand": [106, 468], "face": "W"}],
-        "marks": {"goldsmith": [330, 494], "dad": [150, 484], "talk": [434, 524]},
+        "marks": {"goldsmith": [330, 497], "dad": [150, 484], "talk": [434, 524]},      # STAGE-19E: the goldsmith 3 px lower (was 494)
         "lamps": [{"id": l.name, "flame": [int(round(l.at[0])), int(round(l.at[1] - 3))], "on": {"C": "bench.png", "E": "front.png"}.get(l.name, "back.png")} for l in LAMPS],
         "hum": {"wall": [500, 300], "floor": [int(round(hx)), int(round(hy))], "ring": ring},
         "beam": [[int(round((xf + xn) / 2)), int(round((yft + ynb) / 2 - 8))], [500, 300]],

@@ -80,8 +80,16 @@ EXPOSE = 0.92                # how much light the picture is given (a dim room, 
 def lamps():
     L = []
     for i, (x, z, y, r) in enumerate(M.LANTERNS):                # the paper lanterns: big, soft, never bright
-        L.append(Lamp((x, y, z), "#ffc48c", 0.98 if i == 1 else 0.84, reach=165, size=r * 0.9, wrap=0.5, core=0.9, samples=7, name="lantern",
+        L.append(Lamp((x, y, z), "#ffc48c", 0.86 if i == 1 else 0.72, reach=165, size=r * 0.9, wrap=0.5, core=0.9, samples=7, name="lantern",
                       aim=(0, -1, 0), spread=-0.25, soft=0.9, back=0.18))
+    # STAGE-19H (a light pass, GUIDE-19 S1: the room's focus is the sound table and its machine, the only batteries in the
+    # house, and the painting lit the ceiling instead): the little warm light of the tabletop fountain throws a pool on
+    # the table, its machine and the wall behind them, kept low (it does not climb to the roof); the lanterns are a
+    # little lower (0.98 and 0.84 before), and their paper and the strings' bulbs glow about half as bright
+    # (home_bigsis_room_things.py); the moon is a little weaker (1.25 before).
+    tx0, tx1, _, ty1, tz0, tz1 = M.SOUNDTABLE
+    L.append(Lamp(((tx0 + tx1) / 2 + 12, ty1 + 34, (tz0 + tz1) / 2 + 6), "#ffb070", 1.35, reach=92, size=10, wrap=0.5, core=0.8,
+                  samples=6, ceil=120.0, name="table"))
     sx, sz = M.SALTLAMP[0], M.SALTLAMP[1]
     L.append(Lamp((sx + 2, 63, sz + 2), "#ff7a30", 1.5, reach=62, size=7, wrap=0.45, core=0.6, samples=6, name="salt"))
     hx0, hx1, hz0, hz1 = M.HATCH                                  # the landing's lamp, coming up the hatch
@@ -89,9 +97,9 @@ def lamps():
                   gate=("Y", 0.0, hx0, hx1, hz0, hz1), name="hatch"))
     for s_, pts in enumerate(T.STRINGS):                          # the strings of tiny lights: each bulb lights its own bit of roof
         for p in pts:
-            L.append(Lamp(p, "#ffb088", 0.10, reach=32, local=68, wrap=0.6, name="bulb"))
+            L.append(Lamp(p, "#ffb088", 0.05, reach=32, local=68, wrap=0.6, name="bulb"))     # STAGE-19H: halved (they lit the roof, not the puzzle)
         for k in range(0, len(pts), max(len(pts) // 7, 1)):      # and together they are a soft light for the room below
-            L.append(Lamp(pts[k], "#ffbc9c", 0.013, reach=240, shadows=False, wrap=0.8, core=1.2, name="string"))
+            L.append(Lamp(pts[k], "#ffbc9c", 0.008, reach=240, shadows=False, wrap=0.8, core=1.2, name="string"))
     for x in M.CANDLES:                                           # candles in glass along the ledge
         L.append(Lamp((x, 141, 7.5), "#ffa24c", 0.66, reach=30, local=88, wrap=0.7, name="candle"))
     bx0, bx1, _, by1, bz0, bz1 = M.BOOKCASE                       # two more on the bookcase
@@ -120,7 +128,7 @@ def lamps():
     return L
 
 
-MOON = Moon(toward=(0.22, 1.0, -0.30), color=(0.25, 0.48, 1.0), power=1.25, knee=M.KNEE, rise=M.RISE, openings=M.SKYLIGHTS,
+MOON = Moon(toward=(0.22, 1.0, -0.30), color=(0.25, 0.48, 1.0), power=1.05, knee=M.KNEE, rise=M.RISE, openings=M.SKYLIGHTS,
             soft=(4.0, 0.030), bars=T.skylight_bars)
 
 

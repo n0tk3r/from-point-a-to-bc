@@ -242,9 +242,9 @@ export default {
       poly: [[449, 144], [443, 148], [422, 148], [417, 146], [416, 145], [416, 139], [432, 106], [433, 105], [447, 133], [449, 138]],
       look: "egypt.car.freshener.look",
     },
-    // his door down the left edge: the open window, the lock knob, the armrest's end, the crank, the pocket. "Open": out.
+    // his door down the left edge: the open window, the lock knob, the armrest's end, the crank, the pocket. The way out.
     {
-      id: "door", name: "door", verb: "Open",
+      id: "door", name: "door", verb: "Get out by the",      // STAGE-19E: the verb says it is the way out (it said "Open")
       poly: [[0, 59], [0, 599], [61, 599], [65, 590], [55, 577], [29, 576], [25, 541], [26, 522], [17, 510], [18, 506], [16, 504], [0, 503], [0, 421], [18, 402], [18, 371], [15, 369], [15, 363], [1, 361], [1, 307], [6, 304], [29, 303], [29, 292], [36, 288], [87, 287], [86, 266], [39, 265], [67, 80], [68, 65], [59, 59]],
       look: "egypt.car.door.look", use: getOut,
     },

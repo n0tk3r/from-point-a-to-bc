@@ -26,180 +26,181 @@ export const lines = {
   "home.arrive.1": ["mom", "Voicemail. That is the ninth time. I had decided to stop worrying at eight."],
   "home.arrive.2": ["lilsis", "Daddy's not lost. Daddy's EARLY."],
   "home.arrive.2b": ["bigsis", "That is not what early means."],
-  "home.arrive.3": ["bigsis", "They left at noon. It is a four-hour drive. It is now nine forty. For the record, that is not a shortcut."],
+  "home.arrive.3": ["bigsis", "Noon start, four-hour drive, now nine forty. That is not a shortcut."],   // PASS-19H1: shorter; punch last (her figures are the joke)
   "home.arrive.4": ["mom", "Dinner was at six. I set five places, and I am not clearing two of them away."],
   "home.arrive.pray.1": ["mom", "First things first, girls."],
   "home.arrive.pray.2": ["mom", "Father, You know where they are tonight, and I do not. Keep them."],
   "home.arrive.pray.3": ["mom", "And bring us to them. In Jesus' name."],
   "home.arrive.pray.4": ["lilsis", "And please make Daddy ask for directions. Just ONE time. Amen."],
   "home.arrive.pray.5": ["mom", "Amen."],
-  "home.arrive.5": ["bigsis", "His phone still tells the family computer where it is. 'The mainframe'. Upstairs, in his study."],
-  "home.arrive.6": ["lilsis", "Then the computer KNOWS! Ask the computer!"],
-  "home.arrive.6b": ["bigsis", "It cannot answer. The internet has been down since Dad 'improved' the wiring this morning."],
-  "home.pc.router": ["mom", "The router lives in the closet under the stairs. Your father keeps the internet next to the vacuum cleaner."],
-  "home.arrive.7": ["mom", "Places, girls. We are going to find out where that phone was last seen."],
+  "home.arrive.5": ["bigsis", "Dad's phone tells the family computer where it is. In his study."],   // PASS-19H1: shorter
+  "home.arrive.6": ["lilsis", "Then the computer KNOWS. Ask the computer!"],   // PASS-19H1: emphasis (one exclamation)
+  "home.arrive.6b": ["bigsis", "It cannot. The internet has been down since Dad 'improved' the wiring."],   // PASS-19H1: shorter; punch last
+  "home.pc.router": ["mom", "The router's under the stairs. Your father keeps the internet by the vacuum."],
+  "home.arrive.7": ["mom", "Places, girls. We'll find out where that phone was last seen."],   // PASS-19H1: spoken; shorter
 
   // =====================================================================================================
   // THE LIVING ROOM
   // =====================================================================================================
-  "home.upstairs.mom": ["mom", "Three doors upstairs. The locked one is your father's study. He says it keeps the surprises in."],
-  "home.upstairs.bigsis": ["bigsis", "Upstairs: my brother's room, my sister's room, Dad's study. Above all three, mine. One of the four is tidy."],
-  "home.upstairs.lilsis": ["lilsis", "My fort is up there! It has a sign. NO BIG SISTERS. I made the sign AND the rule."],
+  "home.upstairs.mom": ["mom", "His study is the locked one. He says it keeps surprises in."],   // PASS-19H1: shorter
+  "home.upstairs.bigsis": ["bigsis", "Four rooms upstairs. One of the four is tidy."],   // PASS-19H1: shorter; punch last; one idea
+  "home.upstairs.lilsis": ["lilsis", "My fort's up there. Its sign says 'NO BIG SISTERS.'"],   // PASS-19H1: shorter; emphasis; one idea
 
   "home.window.mom": ["mom", "No headlights. I have looked eleven times. Twelve."],
-  "home.window.bigsis": ["bigsis", "'The street,' she wrote, 'was the wrong kind of quiet.' ...That's good. I'm keeping that."],
-  "home.window.lilsis": ["lilsis", "I'm watching for the car. I'm the best at watching. I haven't blinked since dinner."],
-  "home.photo.mom": ["mom", "The five of us at the lake. Your father took a shortcut that day, too. We saw a great deal of the lake."],
-  "home.photo.bigsis": ["bigsis", "Five people, one tripod. Dad set the timer and ran. He is the blur."],
-  "home.photo.lilsis": ["lilsis", "That's me at the lake! I was only SIX. Now I'm seven. That's a WHOLE number bigger."],
-  "home.stairs.mom": ["mom", "Nobody is going up to bed tonight. Least of all me."],
-  "home.stairs.bigsis": ["bigsis", "Sixteen steps. I count in fours when I'm nervous. Sixteen is four fours. It did not help."],
+  "home.window.bigsis": ["bigsis", "'The street,' she wrote, 'was the wrong kind of quiet.' I am keeping that."],   // PASS-19H1: her whole words; shorter
+  "home.window.lilsis": ["lilsis", "I'm watching for the car. I haven't blinked since dinner."],   // PASS-19H1: shorter; punch last
+  "home.photo.mom": ["mom", "He took a shortcut to the lake. We saw a great deal of lake."],   // PASS-19H1: shorter; one idea
+  "home.photo.bigsis": ["bigsis", "Dad set the timer and ran. He is the blur."],   // PASS-19H1: shorter; one idea
+  "home.photo.lilsis": ["lilsis", "I was six at the lake. Now I'm a WHOLE number bigger."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.stairs.mom": ["mom", "Nobody's going up to bed tonight. Least of all me."],   // PASS-19H1: spoken
+  "home.stairs.bigsis": ["bigsis", "Sixteen steps, counted in fours. It did not help."],   // PASS-19H1: shorter; her whole words; one idea
   "home.stairs.lilsis": ["lilsis", "I'm not tired. I'm NEVER tired. ...What time is it?"],
 
   // ---- chain B: the closet under the stairs
-  "home.closet.look.mom": ["mom", "The closet under the stairs. The door stops at my shoulder, and it opens exactly this far."],
-  "home.closet.look.bigsis": ["bigsis", "The door opens four inches. I am wider than four inches. I have shoulders."],
-  "home.closet.look.lilsis": ["lilsis", "It's dark in there. And there's a tiny light! That's the internet. The internet is TINY."],
+  "home.closet.look.mom": ["mom", "The closet under the stairs. The door opens exactly this far."],
+  "home.closet.look.bigsis": ["bigsis", "Four inches. I am wider than four inches. I have shoulders."],
+  "home.closet.look.lilsis": ["lilsis", "That tiny light in there is the internet. The internet is TINY."],
   "home.closet.use.mom": ["mom", "A lady does not squeeze into closets, darling. A lady has a seven-year-old."],
-  "home.closet.use.bigsis": ["bigsis", "I refuse. There are spiders in there, and I am thirteen. Both of those are final."],
+  "home.closet.use.bigsis": ["bigsis", "I refuse. There are spiders in there, and I am thirteen. Both are final."],
   "home.closet.go.1": ["lilsis", "I FIT!"],
-  "home.closet.dark.1": ["lilsis", "It's SO dark. I can't find the plug. I found the vacuum. With my NOSE."],
-  "home.closet.dark.2": ["lilsis", "I need my flashlight. MINE. The pink one, from my fort. Come ON, everybody. I know the way!"],
-  "home.closet.dark.3": ["mom", "Then we go up and fetch it, sweetheart. Nobody else is allowed in that fort. Your rule."],
-  "home.closet.needflash": ["lilsis", "Not without my flashlight! I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."],
-  "home.closet.lent": ["lilsis", "I need my flashlight BACK. Somebody's got it who isn't me. Hand it over, please. I'm the closet person."],
-  "home.closet.dead": ["lilsis", "A DEAD flashlight is just a pink stick! It wants batteries. THEN I go in. That's the plan."],
-  "home.closet.go.2": ["lilsis", "Flashlight ON! Hi, vacuum. Hi, spiders. And there's a plug that isn't plugged into ANYTHING!"],
-  "home.closet.go.3": ["mom", "Into the wall, sweetheart. The socket with two little eyes and a surprised mouth."],
-  "home.closet.go.4": ["lilsis", "The red light went GREEN! I fixed the internet! I'm a ENGINEER!"],
+  "home.closet.dark.1": ["lilsis", "It's so dark. I can't find the plug. I found the vacuum. With my NOSE."],
+  "home.closet.dark.2": ["lilsis", "I need my pink flashlight, from my fort. I know the way!"],
+  "home.closet.dark.3": ["mom", "Then we'll fetch it, sweetheart. Nobody else goes in that fort."],
+  "home.closet.needflash": ["lilsis", "I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."],
+  "home.closet.lent": ["lilsis", "My flashlight, please. I'm the closet person."],
+  "home.closet.dead": ["lilsis", "A dead flashlight is just a pink stick. It needs batteries."],
+  "home.closet.go.2": ["lilsis", "Hi, vacuum. Hi, spiders. There's a plug that isn't plugged into ANYTHING."],
+  "home.closet.go.3": ["mom", "Into the wall, darling. The socket with the surprised face."],
+  "home.closet.go.4": ["lilsis", "The red light went green. I fixed the internet. I'm a ENGINEER!"],
   "home.closet.go.5": ["bigsis", "AN engineer."],
   "home.closet.go.6": ["lilsis", "That's what I SAID."],
-  "home.closet.again": ["lilsis", "I already fixed it. It's green. Green means I'm good at it."],
+  "home.closet.again": ["lilsis", "I already fixed it. Green means I'm good at it."],
   "home.closet.done.mom": ["mom", "A small green light. Clever girl."],
   "home.closet.done.bigsis": ["bigsis", "The light is green. She will be insufferable for a week."],
-  "home.closet.key.mom": ["mom", "It doesn't lock. It's never needed to. Nothing in there wants to get out."],   // PASS-17H: Mom's formality; one darling fewer
-  "home.closet.key.bigsis": ["bigsis", "The closet does not lock. It only sticks. Dad says that is a feature."],
-  "home.closet.key.lilsis": ["lilsis", "No keyhole! It's just a door that's bad at being a door."],
+  "home.closet.key.mom": ["mom", "It doesn't lock. Nothing in there wants to get out."],   // PASS-17H: Mom's formality; one darling fewer
+  "home.closet.key.bigsis": ["bigsis", "It does not lock. It only sticks. Dad says that is a feature."],
+  "home.closet.key.lilsis": ["lilsis", "No keyhole. It's just a door that's bad at being a door."],
 
   // ---- Mom's bookcase, the kitchen, the Preamble, the clock
-  "home.shelf.mom": ["mom", "My shelves. The Adams letters, General Washington, Dr. Franklin, a great many plays, and the hymnal."],
-  "home.shelf.mom2": ["mom", "In March of 1776 Abigail Adams wrote to John, 'Remember the Ladies.' I do like her."],   // PASS-17H: 'A matter of record' as a gag, not a habit
-  "home.shelf.bigsis": ["bigsis", "Mom's books. She reads lives of the Founders the way other people read thrillers. She gasps."],
-  "home.shelf.lilsis": ["lilsis", "Mommy's books. No pictures. I checked ALL of them. One has a man in a wig."],
-  "home.kitchen.mom": ["mom", "I've left the kitchen light on. I always do, for whoever's last home."],   // PASS-17H: Mom's formality
-  "home.kitchen.bigsis": ["bigsis", "Mom has made four pots of tea since six. She says she is not worried. The kettle says otherwise."],
-  "home.kitchen.lilsis": ["lilsis", "My best hen is on the fridge! She's guarding the snacks. Is it snack time? It's ALWAYS a little bit snack time."],
-  "home.frame.mom": ["mom", "'We the People.' Signed in Philadelphia, the seventeenth of September, 1787. It still gives me goosebumps."],   // PASS-17H: 'A matter of record' as a gag (three in the act), not a habit; warmer
-  "home.frame.bigsis": ["bigsis", "The Preamble. Mom can recite all of it. On the Fourth of July she does. With gestures."],
-  "home.frame.lilsis": ["lilsis", "It says 'We the People' in GIANT curly letters. Then the letters get tired and go little."],
-  "home.clock.mom": ["mom", "Twenty to ten. They're five hours and forty minutes late. I've stopped rounding."],   // PASS-17H: Mom's formality
-  "home.clock.bigsis": ["bigsis", "Nine forty. Mom says that clock ticks a little flat. I cannot hear it. I have tried."],
-  "home.clock.lilsis": ["lilsis", "The little hand's nearly on the ten. That's THREE fingers past my bedtime. Nobody say anything."],
+  "home.shelf.mom": ["mom", "The Adams letters, Washington, Franklin, a great many plays, and the hymnal."],
+  "home.shelf.mom2": ["mom", "In March 1776 Abigail Adams wrote to John, 'Remember the Ladies.' I do like her."],   // PASS-17H: 'A matter of record' as a gag, not a habit
+  "home.shelf.bigsis": ["bigsis", "Mom reads the Founders the way people read thrillers. She gasps."],
+  "home.shelf.lilsis": ["lilsis", "No pictures. I checked ALL of them. One has a man in a wig."],
+  "home.kitchen.mom": ["mom", "I always leave the kitchen light on, for whoever's last home."],   // PASS-19H1: shorter
+  "home.kitchen.bigsis": ["bigsis", "Four pots of tea since six. The kettle is worried."],   // PASS-19H1: shorter; punch last; one idea
+  "home.kitchen.lilsis": ["lilsis", "My hen guards the snacks. It's always a little bit snack time."],   // PASS-19H1: shorter; emphasis
+  "home.frame.mom": ["mom", "'We the People.' Philadelphia, 17 September 1787. It still gives me goosebumps."],   // PASS-19H1: shorter (the fact's figures stay)
+  "home.frame.bigsis": ["bigsis", "Mom recites the Preamble every Fourth of July. With gestures."],   // PASS-19H1: shorter; punch last; one idea
+  "home.frame.lilsis": ["lilsis", "The letters start giant and curly. Then they get tired."],   // PASS-19H1: emphasis; punch last
+  "home.clock.mom": ["mom", "Five hours and forty minutes late. I've stopped rounding."],   // PASS-19H1: shorter; one idea
+  "home.clock.bigsis": ["bigsis", "That clock ticks flat, Mom says. I cannot hear it, and I have tried."],   // PASS-19H1: one idea
+  "home.clock.lilsis": ["lilsis", "Three fingers past my bedtime. Nobody say anything."],   // PASS-19H1: shorter; emphasis
 
   // ---- chain A: the piano, and the key that is in it
-  "home.piano.look.mom": ["mom", "My piano. I taught your sister to play it. Now she plays it better than I do. That was the plan."],   // PASS-17H: truer to her (proud, not stiff)
-  "home.piano.look.bigsis": ["bigsis", "My piano. Fun fact: Bartolomeo Cristofori built the first one, in Florence, around the year 1700."],
-  "home.piano.look.bigsis2": ["bigsis", "They called it a harpsichord with soft and loud. I would have called it a miracle."],
-  "home.piano.look.lilsis": ["lilsis", "The piano! I know one whole song. I made it up. It's short and LOUD, and it's MINE."],
-  "home.piano.key.mom": ["mom", "There is a key in my piano. I've said it out loud now, and it's no better."],   // PASS-17H: the speech that is really an essay (lightly)
-  "home.piano.key.bigsis": ["bigsis", "The key is on the hammers, under the A above middle C. I can hear it from here."],
-  "home.piano.key.lilsis": ["lilsis", "A key INSIDE the piano? I'll get it! I fit under everything. Everybody stand BACK."],
+  "home.piano.look.mom": ["mom", "Your sister plays my piano better than I do. That was the plan."],   // PASS-19H1: shorter; punch last; one idea
+  "home.piano.look.bigsis": ["bigsis", "Bartolomeo Cristofori built the first one, in Florence, around 1700."],   // PASS-19H1: shorter; 'Fun fact' rationed (the fact's figures stay)
+  "home.piano.look.bigsis2": ["bigsis", "They called it a harpsichord with soft and loud. I would say miracle."],   // PASS-19H1: shorter
+  "home.piano.look.lilsis": ["lilsis", "I made up one whole song on the piano. It's short and LOUD."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.piano.key.mom": ["mom", "There's a key in my piano. Saying it out loud doesn't help."],   // PASS-19H1: shorter
+  "home.piano.key.bigsis": ["bigsis", "Under the A above middle C. I can hear it from here."],   // PASS-19H1: shorter; one idea
+  "home.piano.key.lilsis": ["lilsis", "A key in the piano? I fit under everything. Everybody stand BACK."],   // PASS-19H1: emphasis; shorter
   "home.piano.use.mom": ["mom", "'A Mighty Fortress Is Our God.' Luther's. One verse, quietly, for courage."],   // PASS-17H: shorter; the hymn's author without the label
-  "home.piano.use.mom2": ["mom", "'God is our refuge and strength, a very present help in trouble.' Very present. That's the part I need tonight."],   // PASS-17H: reference aloud; the Bible fact tacked on
+  "home.piano.use.mom2": ["mom", "'God is our refuge and strength, a very present help in trouble.' Very present."],   // PASS-19H1: shorter; faith natural (the quotation stays)
   "home.piano.use.mom3": ["mom", "Once more, then. It's a hymn that doesn't mind being needed."],   // PASS-17H: Mom's formality
   "home.piano.use.bigsis": ["bigsis", "Something in a minor key. It felt appropriate."],
   "home.piano.use.bigsis2": ["bigsis", "When Dad is home I will play the loud one he likes. Twice."],
   "home.piano.use.lilsis": ["lilsis", "PLONK. That was my song. It's called 'Plonk'."],
-  "home.thunk.bigsis.1": ["bigsis", "That was the A above middle C. It went 'thunk'. This piano does not go 'thunk'."],
+  "home.thunk.bigsis.1": ["bigsis", "The A above middle C went 'thunk'. This piano does not go 'thunk'."],   // PASS-19H1: shorter; one idea
   "home.thunk.bigsis.2": ["bigsis", "Something is lying on the hammers. Something small, and metal."],
-  "home.thunk.mom.react": ["mom", "On the hammers. In MY piano. Then somebody put it there, and I know which somebody."],
-  "home.thunk.mom.1": ["mom", "One dead note. The A above middle C. That's not the piano, and it's certainly not me."],   // PASS-17H: Mom's formality
-  "home.thunk.mom.2": ["mom", "Something is lying on the hammers. Somebody has dropped something into MY piano."],
-  "home.thunk.bigsis.react": ["bigsis", "Small and metal, by the sound. I can tell you exactly which hammer it is on."],
-  "home.key.mom.1": ["mom", "With the lid up I can see it. A door key, on the hammers, with a tag in your father's capitals."],
+  "home.thunk.mom.react": ["mom", "In MY piano. Somebody put it there, and I know which somebody."],   // PASS-19H1: shorter; punch last
+  "home.thunk.mom.1": ["mom", "One dead note, the A above middle C. Not the piano, and certainly not me."],   // PASS-19H1: one idea
+  "home.thunk.mom.2": ["mom", "Somebody has dropped something into MY piano."],   // PASS-19H1: shorter; one idea
+  "home.thunk.bigsis.react": ["bigsis", "Small and metal, by the sound. I can tell you which hammer."],   // PASS-19H1: shorter; one idea
+  "home.key.mom.1": ["mom", "With the lid up I can see it. A door key, on the hammers."],   // PASS-19H1: one idea
   "home.key.mom.2": ["mom", "And I cannot reach it. My arms are a civilized length."],
-  "home.key.mom.3": ["mom", "The panel down by the pedals lifts off. Under the keyboard, sweetheart: that is your cue."],
-  "home.key.bigsis.1": ["bigsis", "Thunk. It is under the A above middle C. I can hear exactly where."],
-  "home.key.bigsis.2": ["bigsis", "I am not putting my arm in a piano. I need all ten fingers. I am halfway through a sonata."],
-  "home.key.get.1": ["lilsis", "There's a little wall down here by the pedals. It comes OFF!"],
+  "home.key.mom.2.b": ["lilsis", "My arms aren't civilized at ALL."],   // PASS-19H1: new; a turn: three boxes by one speaker broken
+  "home.key.mom.3": ["mom", "The panel by the pedals lifts off. Your cue, sweetheart."],   // PASS-19H1: shorter
+  "home.key.bigsis.1": ["bigsis", "It is under the A above middle C. I can hear exactly where."],   // PASS-19H1: shorter; one idea
+  "home.key.bigsis.2": ["bigsis", "I am not putting my arm in a piano. I am halfway through a sonata."],   // PASS-19H1: shorter; punch last
+  "home.key.get.1": ["lilsis", "There's a little wall down here. It comes OFF."],   // PASS-19H1: emphasis; shorter
   "home.key.get.2": ["lilsis", "It's all dusty. There's a marble. And a penny. And a KEY!"],
-  "home.key.get.3": ["mom", "The study key. With a tag: 'TRIP HQ.' He hid it in a piano, and then he labelled it."],
-  "home.key.get.4": ["bigsis", "And not one string out of tune. For the record, that is luck."],
+  "home.key.get.3": ["mom", "The study key, tagged 'TRIP HQ.' He hid it, and then he labelled it."],   // PASS-19H1: shorter; punch last; one idea
+  "home.key.get.4": ["bigsis", "And not one string out of tune. That is luck."],   // PASS-19H1: shorter (one 'For the record' an act scene)
   "home.key.get.5": ["lilsis", "I'm keeping the marble."],
   "home.piano.keyback.mom": ["mom", "It has spent quite long enough in my piano, thank you."],
-  "home.piano.keyback.bigsis": ["bigsis", "Putting it back would be historically accurate and of no use whatever."],
-  "home.piano.keyback.lilsis": ["lilsis", "It came OUT of there. I'm not putting it back. I only just got it!"],
+  "home.piano.keyback.bigsis": ["bigsis", "Putting it back: historically accurate, and of no use whatever."],   // PASS-19H1: shorter
+  "home.piano.keyback.lilsis": ["lilsis", "It came OUT of there. I'm not putting it back."],   // PASS-19H1: shorter; emphasis
 
   // ---- the gate: the front door, and the sampler over it
-  "home.door.look.mom": ["mom", "The doorbell is a quarter-tone flat. So is your father, when he sings. I'm fond of them both."],   // PASS-17H: Mom's formality
-  "home.door.look.bigsis": ["bigsis", "The front door. Two coats are missing from the hooks. I notice hooks."],
-  "home.door.look.lilsis": ["lilsis", "The door Daddy comes in by. I'm watching it AND the window. I have two eyes."],
-  "home.door.early.mom": ["mom", "Not until we know where we are going. One of us in this family must."],
-  "home.door.early.bigsis": ["bigsis", "We don't have a destination. A journey without a destination is just Dad."],
-  "home.door.early.lilsis": ["lilsis", "I'm READY. I've been ready since dinner. ...Which way IS Daddy? Somebody find out which way."],
-  "home.door.message.mom": ["mom", "Not yet. There's a message on your father's machine upstairs, and I want to hear it first."],   // PASS-17H: Mom's formality
-  "home.door.message.bigsis": ["bigsis", "There is one new message on Dad's machine. One does not leave the house with one new message."],
-  "home.door.message.lilsis": ["lilsis", "But the blinky machine has a message! What if it's Daddy? It's probably DADDY."],
-  "home.door.nokey.mom": ["mom", "We know where, and we've heard his voice. What we haven't got is a car key."],   // PASS-17H: Mom's formality
-  "home.door.nokey.bigsis": ["bigsis", "Destination: yes. Message: yes. Car key: no. Two out of three does not start an engine."],
-  "home.door.nokey.lilsis": ["lilsis", "We can't go! We don't have a KEY! ...I could push the car. I'm mighty."],
-  "home.door.keys.1": ["mom", "And there's the matter of my car. Your father moved it this morning. My keys left in his pocket."],   // PASS-17H: Mom's formality
-  "home.door.keys.2": ["bigsis", "There is a spare. Dad keeps it in the 'family vault'. In his study. He told us so. He was proud."],
-  "home.door.keys.3": ["lilsis", "It's a box with a clicky wheel! Mommy will know the clicks. Mommy knows ALL the clicks."],
-  "home.door.psalm.1": ["mom", "One moment. In this family nobody starts a journey without the psalm."],
+  "home.door.look.mom": ["mom", "The doorbell sings a quarter-tone flat, like your father. I'm fond of both."],   // PASS-19H1: shorter (its words stay); one idea
+  "home.door.look.bigsis": ["bigsis", "Two coats are missing from the hooks. I notice hooks."],   // PASS-19H1: shorter; one idea
+  "home.door.look.lilsis": ["lilsis", "I'm watching the door and the window. I have two eyes."],   // PASS-19H1: emphasis
+  "home.door.early.mom": ["mom", "Not until we know where we're going. One of us in this family must."],   // PASS-19H1: spoken
+  "home.door.early.bigsis": ["bigsis", "We do not have a destination. A journey without one is just Dad."],   // PASS-19H1: her whole words; shorter
+  "home.door.early.lilsis": ["lilsis", "I've been ready since dinner. ...Which way IS Daddy?"],   // PASS-19H1: shorter; emphasis
+  "home.door.message.mom": ["mom", "Not yet. There's a message on your father's machine. I want it first."],   // PASS-19H1: shorter
+  "home.door.message.bigsis": ["bigsis", "One new message on Dad's machine. We are not leaving it blinking."],   // PASS-19H1: shorter; concrete
+  "home.door.message.lilsis": ["lilsis", "The blinky machine has a message. It's probably DADDY."],   // PASS-19H1: emphasis
+  "home.door.nokey.mom": ["mom", "We know where, and we've heard him. What we haven't got is a car key."],   // PASS-19H1: shorter
+  "home.door.nokey.bigsis": ["bigsis", "Destination: yes. Message: yes. Car key: no. Two of three does not start a car."],   // PASS-19H1: shorter
+  "home.door.nokey.lilsis": ["lilsis", "We don't have a key. ...I could push the car. I'm mighty."],   // PASS-19H1: emphasis; shorter
+  "home.door.keys.1": ["mom", "And my car keys left this morning, in your father's pocket."],   // PASS-19H1: shorter; one idea
+  "home.door.keys.2": ["bigsis", "A spare is in the 'family vault' in his study. He was proud of that."],   // PASS-19H1: shorter
+  "home.door.keys.3": ["lilsis", "It's a box with a clicky wheel. Mommy knows ALL the clicks."],   // PASS-19H1: shorter; emphasis
+  "home.door.psalm.1": ["mom", "One moment. Nobody in this family leaves without the psalm."],   // PASS-19H1: shorter
   "home.door.psalm.2": ["bigsis", "Psalm 121, verse 8. She always does this part."],   // PASS-17H: the reference is Big Sister's to say; a beat for her sister
   "home.door.psalm.3": ["lilsis", "'The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore.'"],
   "home.door.psalm.4": ["mom", "Amen. Going out, and coming in. All five of us."],
   "home.leave.1": ["mom", "Coats, girls. We are going to Nevada."],
-  "home.leave.2": ["bigsis", "I'll bring the atlas. And a book. And a second book, in case the first one ends."],
-  "home.leave.3": ["lilsis", "I'll bring my boots! I'm already WEARING my boots!"],
+  "home.leave.2": ["bigsis", "The atlas, a book, and a second book in case the first one ends."],   // PASS-19H1: her whole words; shorter; three, the best last
+  "home.leave.3": ["lilsis", "I'll bring my boots. I'm already WEARING my boots!"],   // PASS-19H1: emphasis (one exclamation)
   "home.leave.4": ["mom", "We are going to be perfectly polite, and completely impossible to get rid of."],
-  "home.door.studykey.mom": ["mom", "That's the study key. This door wants a car at the other end of it."],   // PASS-17H: Mom's formality; one darling fewer
-  "home.door.studykey.bigsis": ["bigsis", "Wrong key. This one opens Dad's study. That door opens everything else."],
-  "home.door.studykey.lilsis": ["lilsis", "It doesn't fit! Daddy's key is for Daddy's door."],
-  "home.sampler.mom": ["mom", "'...as for me and my house, we will serve the LORD.' I stitched it the winter we moved in. Before the curtains."],   // PASS-17H: reference aloud
-  "home.sampler.bigsis": ["bigsis", "Mom's needlework. Every letter is the same height. I measured. I was nine, and it was raining."],
-  "home.sampler.lilsis": ["lilsis", "Red letters, and a little house, and a heart. Mommy let me do one stitch. It's THAT one. The wobbly one."],
-  "home.coats.mom": ["mom", "The hooks. His good hat is still here. He left in the other one. I have opinions about the other one."],
-  "home.coats.bigsis": ["bigsis", "Coats. Mine is the one hung up by its loop. I wish to be clear about that."],
-  "home.coats.lilsis": ["lilsis", "Coats! Daddy's big one is gone. It went on the trip with Daddy in it."],
+  "home.door.studykey.mom": ["mom", "That's the study key. This door wants a car at the other end."],   // PASS-19H1: shorter
+  "home.door.studykey.bigsis": ["bigsis", "This one opens Dad's study. That door opens everything else."],   // PASS-19H1: shorter; one idea
+  "home.door.studykey.lilsis": ["lilsis", "It doesn't fit. Daddy's key is for Daddy's door."],   // PASS-19H1: emphasis
+  "home.sampler.mom": ["mom", "'...as for me and my house, we will serve the LORD.' Hung before the curtains."],   // PASS-19H1: shorter (the quotation stays)
+  "home.sampler.bigsis": ["bigsis", "I measured every letter. I was nine, and it was raining."],   // PASS-19H1: shorter; one idea
+  "home.sampler.lilsis": ["lilsis", "Mommy let me do one stitch. The wobbly one."],   // PASS-19H1: shorter; emphasis; one idea
+  "home.coats.mom": ["mom", "He wore his other hat. I have opinions about the other hat."],   // PASS-19H1: spoken; shorter
+  "home.coats.bigsis": ["bigsis", "Mine is hung up by its loop. I wish to be clear about that."],   // PASS-19H1: shorter; one idea
+  "home.coats.lilsis": ["lilsis", "Daddy's big coat went on the trip with Daddy in it."],   // PASS-19H1: emphasis; shorter
 
   // ---- Dad's armchair, his crossword and his pencil; the dinner table and the Bible
-  "home.chair.mom": ["mom", "Your father's chair. It has kept his shape. I find I rather like that tonight."],
-  "home.chair.bigsis": ["bigsis", "Dad's chair. His crossword is on the arm. Seven across is wrong. I haven't told him."],
+  "home.chair.mom": ["mom", "It has kept his shape. I rather like that tonight."],   // PASS-19H1: spoken; shorter
+  "home.chair.bigsis": ["bigsis", "Seven across is wrong. I have not told him."],   // PASS-19H1: her whole words; shorter
   "home.chair.lilsis": ["lilsis", "Daddy's chair. If you sit in it you have to say 'well, well, well'."],
-  "home.crossword.mom": ["mom", "His crossword, half done. He does it in that chair every evening. Tonight it can wait for him."],
-  "home.crossword.bigsis": ["bigsis", "Seven across is still wrong. He does them in ink when he is sure. This one is in pencil. He knew."],
-  "home.crossword.lilsis": ["lilsis", "Daddy's puzzle. He lets me do the three-letter ones. I always put HEN. It's right more than you'd think."],
-  "home.pencil.look.mom": ["mom", "His pencil. The only one in this house that is ever where it should be."],
-  "home.pencil.look.bigsis": ["bigsis", "Dad's crossword pencil. Yellow, ordinary, and a great many tooth marks. He thinks with his teeth."],
-  "home.pencil.look.lilsis": ["lilsis", "Daddy's pencil! He bites it when he thinks. It's a VERY thought-about pencil."],
-  "home.pencil.take.mom": ["mom", "I'm borrowing this, my love. You can have it back when you come home and ask for it."],   // PASS-17H: Mom's formality ('shall')
-  "home.pencil.take.bigsis": ["bigsis", "Dad's pencil. I will return it sharpened. He will not notice. He never does."],
-  "home.pencil.take.lilsis": ["lilsis", "I've got Daddy's pencil! It has teeth marks. They're not mine. Mostly."],
+  "home.crossword.mom": ["mom", "His crossword, half done. Tonight it can wait for him."],   // PASS-19H1: shorter
+  "home.crossword.bigsis": ["bigsis", "Seven across is wrong, in pencil. He uses ink when he is sure. He knew."],   // PASS-19H1: shorter; punch last
+  "home.crossword.lilsis": ["lilsis", "I do the three-letter ones. Always HEN. It's right more than you'd think."],   // PASS-19H1: shorter
+  "home.pencil.look.mom": ["mom", "The only pencil in this house that is ever where it should be."],   // PASS-19H1: shorter
+  "home.pencil.look.bigsis": ["bigsis", "A great many tooth marks. He thinks with his teeth."],   // PASS-19H1: shorter
+  "home.pencil.look.lilsis": ["lilsis", "He bites it when he thinks. It's a VERY thought-about pencil."],   // PASS-19H1: emphasis
+  "home.pencil.take.mom": ["mom", "I'm borrowing this, my love. Come home and ask for it."],   // PASS-19H1: shorter; punch last
+  "home.pencil.take.bigsis": ["bigsis", "I will return it sharpened. He will never notice."],   // PASS-19H1: shorter; one idea
+  "home.pencil.take.lilsis": ["lilsis", "I've got Daddy's pencil. The teeth marks aren't mine. Mostly."],   // PASS-19H1: shorter; emphasis
   "home.table.mom": ["mom", "Pot roast at six o'clock sharp. It is no longer sharp."],
   "home.table.bigsis": ["bigsis", "'The table,' she observed, 'was set for five. The house was not.'"],
   "home.table.lilsis": ["lilsis", "Can I have Daddy's potatoes? He's not using them."],
-  "home.bible.mom": ["mom", "'My help cometh from the LORD, which made heaven and earth.' He read us that this morning. I'm holding on to it."],   // PASS-17H: reference aloud
-  "home.bible.bigsis": ["bigsis", "Psalm 121, where Dad left it. 'I will lift up mine eyes unto the hills, from whence cometh my help.'"],
-  "home.bible.lilsis": ["lilsis", "'The LORD is my shepherd; I shall not want.' I know ALL of it. ...I do want Daddy, though."],   // PASS-17H: reference aloud
+  "home.bible.mom": ["mom", "'My help cometh from the LORD, which made heaven and earth.' He read us that this morning."],   // PASS-19H1: shorter (the quotation stays); FINAL-19: the lead's line
+  "home.bible.bigsis": ["bigsis", "Psalm 121, where Dad left it. 'I will lift up mine eyes unto the hills, from whence cometh my help.'"],   // PASS-19H1: shorter (the quotation stays); FINAL-19: the lead's line
+  "home.bible.lilsis": ["lilsis", "'The LORD is my shepherd; I shall not want.' ...I do want Daddy, though."],   // PASS-19H1: shorter; faith natural (the quotation stays)
 
   // ---- what they say to each other in the living room
   "home.talk.mom.bigsis.key.a": ["mom", "You can hear which note it's under. Can't you just reach in?"],   // PASS-17H: Mom's formality; one darling fewer
-  "home.talk.mom.bigsis.key.b": ["bigsis", "I could. I will not. It is a piano, Mother, not a mailbox. Ask the one who fits under things."],
-  "home.talk.batt.mom.bigsis.a": ["mom", "Darling. Your sister's flashlight wants batteries. I believe you know where there are some."],
-  "home.talk.batt.mom.bigsis.b": ["bigsis", "I know where ALL the batteries in this house are, Mother. That is what makes it painful."],
-  "home.talk.batt.lilsis.bigsis.a": ["lilsis", "Your music box has batteries in it. I've SEEN them. With my EYES. So you know what you have to do."],
-  "home.talk.batt.lilsis.bigsis.b": ["bigsis", "It is a sound machine. And yes. It has. I was hoping nobody would say so out loud."],
-  "home.talk.batt.mom.lilsis.a": ["mom", "Batteries in one pocket and a flashlight in another, sweetheart. They ought to be introduced."],
-  "home.talk.batt.mom.lilsis.b": ["lilsis", "Give them to ME! Or give me the flashlight. Or BOTH. I've got two hands and a pocket."],
+  "home.talk.mom.bigsis.key.b": ["bigsis", "It is a piano, Mother, not a mailbox. Ask the one who fits under things."],   // PASS-19H1: shorter
+  "home.talk.batt.mom.bigsis.a": ["mom", "Darling, your sister's flashlight wants batteries. You know where."],
+  "home.talk.batt.mom.bigsis.b": ["bigsis", "I know where every battery in this house is. That is what hurts."],
+  "home.talk.batt.lilsis.bigsis.a": ["lilsis", "Your music box has batteries. I've SEEN them."],
+  "home.talk.batt.lilsis.bigsis.b": ["bigsis", "It is a sound machine. And yes. I hoped nobody would say so."],
+  "home.talk.batt.mom.lilsis.a": ["mom", "Batteries here, a flashlight there. They ought to be introduced."],
+  "home.talk.batt.mom.lilsis.b": ["lilsis", "Give them to ME. I've got two hands and a pocket."],
   "home.talk.mom.bigsis.1a": ["mom", "You are very quiet, darling."],
   "home.talk.mom.bigsis.1b": ["bigsis", "I am thinking. It only looks like quiet from the outside."],
-  "home.talk.mom.bigsis.2a": ["mom", "Whatever has happened, we will deal with it the way we deal with everything."],
+  "home.talk.mom.bigsis.2a": ["mom", "Whatever has happened, we'll handle it like everything else."],   // PASS-19H1: shorter
   "home.talk.mom.bigsis.2b": ["bigsis", "With a list?"],
   "home.talk.mom.bigsis.2c": ["mom", "With a list."],
-  "home.talk.mom.lilsis.dark.a": ["mom", "Your flashlight's in your fort, sweetheart. Want to go up and get it?"],   // PASS-17H: Mom's formality ('shall')
-  "home.talk.mom.lilsis.dark.b": ["lilsis", "I'm ALREADY going. And nobody look in my fort. There's nothing in there. There's a LOT in there."],
+  "home.talk.mom.lilsis.dark.a": ["mom", "Your flashlight's in your fort, sweetheart. Go up and get it?"],   // PASS-19H1: shorter
+  "home.talk.mom.lilsis.dark.b": ["lilsis", "I'm ALREADY going. There's nothing in my fort. There's a lot in there."],   // PASS-19H1: shorter; emphasis; punch last
   "home.talk.mom.lilsis.1a": ["mom", "Are you frightened, sweetheart?"],
   "home.talk.mom.lilsis.1b": ["lilsis", "No! ...Are YOU?"],
   "home.talk.mom.lilsis.1c": ["mom", "Not while I have you to look after me."],
@@ -208,23 +209,23 @@ export const lines = {
   "home.talk.bigsis.mom.1a": ["bigsis", "Mom. Statistically, they are fine."],
   "home.talk.bigsis.mom.1b": ["mom", "Thank you, darling. And unstatistically?"],
   "home.talk.bigsis.mom.1c": ["bigsis", "...Also fine. Probably."],
-  "home.talk.bigsis.mom.2a": ["bigsis", "I've started a new chapter. It is called 'The Night They Didn't Come Home'."],
+  "home.talk.bigsis.mom.2a": ["bigsis", "I have started a new chapter: 'The Night They Didn't Come Home'."],   // PASS-19H1: her whole words; shorter
   "home.talk.bigsis.mom.2b": ["mom", "Do give it a happy ending."],
-  "home.talk.bigsis.lilsis.key.a": ["bigsis", "There is a panel by the pedals, under the keyboard. You are the only one of us who fits under there."],
-  "home.talk.bigsis.lilsis.key.b": ["lilsis", "I KNOW. I've been under there LOTS. That's where I keep my marble."],
-  "home.talk.bigsis.lilsis.1a": ["bigsis", "Don't touch anything while I'm thinking."],
+  "home.talk.bigsis.lilsis.key.a": ["bigsis", "There is a panel by the pedals. Only you fit under there."],   // PASS-19H1: shorter
+  "home.talk.bigsis.lilsis.key.b": ["lilsis", "I KNOW. That's where I keep my marble."],   // PASS-19H1: shorter
+  "home.talk.bigsis.lilsis.1a": ["bigsis", "Do not touch anything while I am thinking."],   // PASS-19H1: her whole words
   "home.talk.bigsis.lilsis.1b": ["lilsis", "I'm not touching. I'm HOLDING."],
   "home.talk.bigsis.lilsis.2a": ["lilsis", "Why do you know so many years?"],
-  "home.talk.bigsis.lilsis.2b": ["bigsis", "Because somebody has to. Years don't remember themselves."],
+  "home.talk.bigsis.lilsis.2b": ["bigsis", "Because somebody has to. Years do not remember themselves."],   // PASS-19H1: her whole words
   "home.talk.lilsis.mom.1a": ["lilsis", "Mommy, I can help. I'm small but I'm MIGHTY."],
   "home.talk.lilsis.mom.1b": ["mom", "You are the mightiest person I know, my love. Do aim it carefully."],
   "home.talk.lilsis.mom.2a": ["lilsis", "Can I stay up?"],
   "home.talk.lilsis.mom.2b": ["mom", "Tonight, yes."],
   "home.talk.lilsis.mom.2c": ["lilsis", "...Now I'm worried."],
-  "home.talk.lilsis.mom.3a": ["lilsis", "Mommy, sit down. You've been standing up since dinner. I'll do the worrying for a while."],
+  "home.talk.lilsis.mom.3a": ["lilsis", "Mommy, sit down. I'll do the worrying for a while."],   // PASS-19H1: shorter
   "home.talk.lilsis.mom.3b": ["mom", "Five minutes, my love. Then I'll want my worrying back."],   // PASS-17H: Mom's formality ('shall')
   "home.talk.lilsis.bigsis.1a": ["lilsis", "Read me a fact."],
-  "home.talk.lilsis.bigsis.1b": ["bigsis", "It's 'tell me a fact'."],
+  "home.talk.lilsis.bigsis.1b": ["bigsis", "It is 'tell me a fact'."],   // PASS-19H1: her whole words
   "home.talk.lilsis.bigsis.1c": ["lilsis", "Tell me a READ."],
   "home.talk.lilsis.bigsis.2a": ["lilsis", "My tooth is loose. Look. LOOK."],
   "home.talk.lilsis.bigsis.2b": ["bigsis", "I have seen the tooth. Everyone on this street has seen the tooth."],
@@ -232,132 +233,133 @@ export const lines = {
   // =====================================================================================================
   // THE LANDING
   // =====================================================================================================
-  "home.landing.first.1": ["bigsis", "Dad's study is the door with the notice taped to it. It will be locked. It is always locked."],
+  "home.landing.first.1": ["bigsis", "Dad's study has the notice on it. It is always locked."],   // PASS-19H1: shorter
   "home.landing.first.2": ["mom", "With your father there is always a notice."],
-  "home.landing.first.3": ["lilsis", "And my brother's door says NO GIRLS ALLOWED. We'll SEE about that."],
+  "home.landing.first.3": ["lilsis", "My brother's door says 'NO GIRLS ALLOWED.' We'll SEE about that."],   // PASS-19H1: emphasis (a sign read out)
 
-  "home.landing.window.mom": ["mom", "The moon is over the maple. It's the same moon wherever they are. I find that useful."],   // PASS-17H: Mom's formality
-  "home.landing.window.bigsis": ["bigsis", "The moon is nearly full. Bright enough to read by, if one's mother allowed it."],
-  "home.landing.window.lilsis": ["lilsis", "The moon follows our car when we drive. So it's following Daddy RIGHT NOW. Good moon."],
-  "home.ladder.mom": ["mom", "The attic ladder. She asked for the attic for her thirteenth birthday. I said yes before I'd thought about the ladder."],   // PASS-17H: Mom's formality
-  "home.ladder.bigsis": ["bigsis", "The way up to the Retreat. The card says so. It is my room, and I should like that remembered up there."],
-  "home.ladder.lilsis": ["lilsis", "The ladder to my sister's room! The card says THE RETREAT. I have visiting hours. They're SHORT."],
-  "home.landing.photos.mom": ["mom", "Our wedding photograph. He was forty minutes late for it. He had refused to ask the way."],
-  "home.landing.photos.bigsis": ["bigsis", "Baby pictures. I was a serious baby. There is one of me frowning at a rattle."],
-  "home.landing.photos.lilsis": ["lilsis", "That's me with NO teeth. And that's me with all my teeth. Soon it's me with one less."],
-  "home.hamper.mom": ["mom", "The hamper. It was empty at noon. I don't know how this family does it, but I admire the industry."],   // PASS-17H: Mom's formality
+  "home.landing.window.mom": ["mom", "The same moon is over them. I find that useful."],   // PASS-19H1: shorter
+  "home.landing.window.bigsis": ["bigsis", "Bright enough to read by, if one's mother allowed it."],   // PASS-19H1: shorter; one idea
+  "home.landing.window.lilsis": ["lilsis", "The moon follows our car. It's following Daddy. Good moon."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.ladder.mom": ["mom", "She asked for the attic. I said yes before I'd thought about the ladder."],   // PASS-19H1: shorter; punch last
+  "home.ladder.bigsis": ["bigsis", "The way up to the Retreat. Visitors by appointment."],   // PASS-19H1: shorter; punch last; one idea
+  "home.ladder.lilsis": ["lilsis", "The card says 'THE RETREAT.' My visiting hours are SHORT."],   // PASS-19H1: shorter; emphasis; one idea
+  "home.landing.photos.mom": ["mom", "Our wedding. He was forty minutes late. He would not ask the way."],   // PASS-19H1: shorter
+  "home.landing.photos.bigsis": ["bigsis", "I was a serious baby. Here I am frowning at a rattle."],   // PASS-19H1: shorter; one idea
+  "home.landing.photos.lilsis": ["lilsis", "Me with no teeth. Me with all my teeth. Soon, me with one less."],   // PASS-19H1: shorter; emphasis; three, the best last
+  "home.hamper.mom": ["mom", "The hamper was empty at noon. I admire the industry."],   // PASS-19H1: shorter; punch last
   "home.hamper.bigsis": ["bigsis", "The laundry hamper. I have no comment on the hamper."],
-  "home.hamper.lilsis": ["lilsis", "The hamper! That's where the flock goes to get promoted. Corporal Speckle's going in NEXT."],
-  "home.lildoor.mom": ["mom", "'BEWARE OF CHICKENS.' She asked me how to spell 'beware'. I didn't ask why. You learn not to."],   // PASS-17H: Mom's formality ('One learns')
-  "home.lildoor.bigsis": ["bigsis", "My sister's door. Chicken stickers, a hen in crayon, and a warning. The warning is accurate."],
-  "home.lildoor.lilsis": ["lilsis", "MY door! It says BEWARE OF CHICKENS. I did the letters. And the hen. And ALL the stickers."],
-  "home.halltable.mom": ["mom", "The key bowl. Every key this family owns, except the two I want tonight."],
-  "home.halltable.bigsis": ["bigsis", "The shed, the mailbox, and three keys nobody can identify. Not the study. I have looked."],
-  "home.halltable.lilsis": ["lilsis", "The key bowl! I'm not allowed to play pirates with it. Anymore."],
-  "home.halltable.use.mom": ["mom", "I've been through this bowl twice. I'm not above a third time. ...No."],   // PASS-17H: Mom's formality
-  "home.halltable.use.bigsis": ["bigsis", "Nothing labelled 'study'. Dad labels everything. Its absence is a clue in itself."],
+  "home.hamper.lilsis": ["lilsis", "The flock gets promoted in the hamper. Corporal Speckle's next."],   // PASS-19H1: emphasis; shorter
+  "home.lildoor.mom": ["mom", "'BEWARE OF CHICKENS.' She asked me how to spell 'beware'. I didn't ask why."],   // PASS-19H1: explanation cut
+  "home.lildoor.bigsis": ["bigsis", "Stickers, a crayon hen, a warning. The warning is accurate."],   // PASS-19H1: shorter
+  "home.lildoor.lilsis": ["lilsis", "My door. I did the letters, the hen, and ALL the stickers."],   // PASS-19H1: emphasis; shorter
+  "home.halltable.mom": ["mom", "Every key this family owns, except the two I want tonight."],   // PASS-19H1: shorter
+  "home.halltable.bigsis": ["bigsis", "Three keys nobody can name, and no study key. I have looked."],   // PASS-19H1: shorter; one idea
+  "home.halltable.lilsis": ["lilsis", "I'm not allowed to play pirates with the key bowl. Anymore."],   // PASS-19H1: emphasis; one idea
+  "home.halltable.use.mom": ["mom", "I've been through this bowl twice, and I'm not above a third. ...No."],   // PASS-19H1: one idea
+  "home.halltable.use.bigsis": ["bigsis", "Nothing labelled 'study'. From Dad, that is a clue."],   // PASS-19H1: shorter; one idea
   "home.halltable.use.lilsis": ["lilsis", "Jingle jingle jingle. ...I'm HELPING."],
-  "home.countdown.mom": ["mom", "The countdown to the trip. One day crossed off every morning at breakfast, with ceremony. Today is the little car."],
-  "home.countdown.bigsis": ["bigsis", "My brother's countdown. He crossed off today before today had happened. I let it stand."],
-  "home.countdown.lilsis": ["lilsis", "The trip chart! The red car at the end is TODAY. The car got there. Daddy's still coming."],
-  "home.landing.stairs.mom": ["mom", "The stairs. I've carried each of you up them asleep. You were all a great deal lighter."],   // PASS-17H: Mom's formality
-  "home.landing.stairs.bigsis": ["bigsis", "Sixteen steps down. It is the same sixteen. I checked on the way up."],
-  "home.landing.stairs.lilsis": ["lilsis", "I can do the stairs two at a time! Going DOWN I can do three. Mommy says don't."],
-  "home.rail.mom": ["mom", "The living room, from the gallery. A set with the lights left on and nobody on it. Two of the cast are late."],
-  "home.rail.bigsis": ["bigsis", "'From the landing,' she wrote, 'the room below looked like a sentence with two words missing.'"],
-  "home.rail.lilsis": ["lilsis", "I can see the piano! And the rug! And the door Daddy comes in by. It's still shut. I checked."],
+  "home.countdown.mom": ["mom", "A day crossed off every breakfast. Today is the little car."],   // PASS-19H1: shorter
+  "home.countdown.bigsis": ["bigsis", "He crossed off today before it happened. I let it stand."],   // PASS-19H1: shorter
+  "home.countdown.lilsis": ["lilsis", "The red car at the end is today. Daddy's still coming."],   // PASS-19H1: emphasis; shorter
+  "home.landing.stairs.mom": ["mom", "I've carried you all up these asleep. You were a great deal lighter."],   // PASS-19H1: shorter
+  "home.landing.stairs.bigsis": ["bigsis", "The same sixteen steps down. I checked on the way up."],   // PASS-19H1: shorter; one idea
+  "home.landing.stairs.lilsis": ["lilsis", "I can do the stairs two at a time. Mommy says don't."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.rail.mom": ["mom", "From up here it's a lit set. Two of the cast are late."],   // PASS-19H1: shorter
+  "home.rail.bigsis": ["bigsis", "'The room below,' she wrote, 'was a sentence missing two words.'"],   // PASS-19H1: shorter
+  "home.rail.lilsis": ["lilsis", "I can see the piano, the rug and Daddy's door. Still shut."],   // PASS-19H1: emphasis; shorter; one idea
 
   // ---- the Son's door: NO GIRLS ALLOWED, and booby-trapped. Mom does not try it tonight. The first time a sister opens
   // it, his toy alarm (.alarm.1; Little Sister does the password, .2 and .3), a volley of foam darts, the author's line
   // for Big Sister (.trap.bigsis, word for word), Little Sister's say, and Mom's "not tonight" (.alarm.4 to her, .trap.mom
   // to her sister). The second time, the one dart he kept back (.dart). After that nobody tries (.again); and the darts
   // stay on the runner (.after, looking at the door).
-  "home.son.look.mom": ["mom", "'NO GIRLS ALLOWED.' He spelled all three words correctly this year. I was so proud that I very nearly obeyed it."],
-  "home.son.look.bigsis": ["bigsis", "My brother's door. 'NO GIRLS ALLOWED', warning tape, and smaller notices. One is addressed to me personally."],
-  "home.son.look.lilsis": ["lilsis", "NO GIRLS ALLOWED? I'm not a girl. I'm a SISTER. That's a whole different thing."],
-  "home.son.use.mom": ["mom", "'NO GIRLS ALLOWED.' I'm his mother, which he's always counted as a separate thing. ...Not tonight."],   // PASS-17H: Mom's formality
-  "home.son.use.bigsis": ["bigsis", "I decline to guess. It will be about snacks, and I have my dignity. I shall simply open the door."],
+  "home.son.look.mom": ["mom", "'NO GIRLS ALLOWED.' Spelled right this year. I was so proud I nearly obeyed."],   // PASS-19H1: shorter; punch last
+  "home.son.look.bigsis": ["bigsis", "Smaller notices too. One is addressed to me personally."],   // PASS-19H1: shorter
+  "home.son.look.lilsis": ["lilsis", "'NO GIRLS ALLOWED'? I'm not a girl. I'm a SISTER."],   // PASS-19H1: explanation cut; punch last
+  "home.son.use.mom": ["mom", "I'm his mother. He counts that as a separate thing. ...Not tonight."],   // PASS-19H1: shorter
+  "home.son.use.bigsis": ["bigsis", "I decline to guess: it will be about snacks. I shall simply open it."],   // PASS-19H1: shorter; one idea
   "home.son.alarm.1": ["son", "'HALT! This is Operation No Girls. What's the password?'"],
-  "home.son.alarm.2": ["lilsis", "'The password is: I still want a dog.' ...That's how he says it. I've watched."],
+  "home.son.alarm.2": ["lilsis", "'The password is: I still want a dog.' I've watched him."],   // PASS-19H1: shorter; explanation cut
   "home.son.alarm.3": ["son", "'Password CORRECT. Ten out of ten. You may enter, me.'"],
   "home.son.trap.bigsis": ["bigsis", "I don't want to go in there. The rug is probably booby-trapped."],
-  "home.son.trap.lilsis": ["lilsis", "It said CORRECT! You can't say ten out of ten and then SHOOT people! ...It was a GOOD trap, though."],
-  "home.son.trap.lilsis.2": ["lilsis", "He GOT you! SEVEN darts! ...Right. I'm making a sign for MY door. NO BROTHERS. Except on Saturdays."],
+  "home.son.trap.lilsis": ["lilsis", "It said 'CORRECT.' Then it SHOT me. ...It was a good trap, though."],   // PASS-19H1: emphasis; shorter; punch last
+  "home.son.trap.lilsis.2": ["lilsis", "He got you. ...I'm making a sign. 'NO BROTHERS.' Except on Saturdays."],   // PASS-19H1: second joke cut; emphasis; punch last
   "home.son.trap.mom": ["mom", "Not tonight, darling. I am not ready to look at that room with nobody in it."],
   "home.son.alarm.4": ["mom", "Not tonight, sweetheart. I am not ready to look at that room with nobody in it."],
-  "home.son.alarm.5": ["lilsis", "...Okay. I'll shut it. He'd want me to shut it."],
-  "home.son.again": ["lilsis", "Mommy said not tonight. I can wait. I'm getting good at it."],
-  "home.son.dart.lilsis": ["lilsis", "ONE more! He saved one for me! ...That's not a trap anymore. That's just RUDE."],
-  "home.son.dart.bigsis": ["bigsis", "One more. He kept one in reserve. I respect that, and I am still not going in."],
+  "home.son.alarm.5": ["lilsis", "...I'll shut it. He'd want me to shut it."],   // PASS-19H1: filler cut
+  "home.son.again": ["lilsis", "Mommy said not tonight. I'm getting good at waiting."],   // PASS-19H1: shorter; one idea
+  "home.son.dart.lilsis": ["lilsis", "He saved one for me. That's not a trap. That's just RUDE."],   // PASS-19H1: emphasis; shorter
+  "home.son.dart.bigsis": ["bigsis", "He kept one in reserve, and I respect that. I am still not going in."],   // PASS-19H1: one idea
   "home.son.again.bigsis": ["bigsis", "No. I stand by what I said about the rug."],
-  "home.son.after.mom": ["mom", "His darts, all over my runner. I'm leaving them exactly where they fell. He'll want to count them."],   // PASS-17H: Mom's formality ('shall')
-  "home.son.after.bigsis": ["bigsis", "Foam darts all over the runner. He will want a full report. I intend to say it was adequate."],
-  "home.son.after.lilsis": ["lilsis", "His darts are ALL over the rug. Nobody pick them up. That's EVIDENCE."],
-  "home.son.key.mom": ["mom", "That key is for the study. This door has never had a lock. Only opinions."],   // PASS-17H: one darling fewer
-  "home.son.key.bigsis": ["bigsis", "His door has no keyhole. It has a toy alarm and a great deal of confidence."],
-  "home.son.key.lilsis": ["lilsis", "It doesn't have a keyhole! It has a PASSWORD. Passwords are keys you say."],
-  "home.bag.mom": ["mom", "His school bag, on its peg. Exactly where it can never be found on a school morning."],
-  "home.bag.bigsis": ["bigsis", "My brother's bag. There is a sandwich in it from before the holidays. I will not be the one who finds it."],
-  "home.bag.lilsis": ["lilsis", "His school bag! I'm guarding it till he's back. Nobody touch it. Not even me."],
+  "home.son.after.mom": ["mom", "I'm leaving his darts where they fell. He'll want to count them."],   // PASS-19H1: shorter
+  "home.son.after.bigsis": ["bigsis", "He will want a full report. I intend to say it was adequate."],   // PASS-19H1: shorter
+  "home.son.after.lilsis": ["lilsis", "His darts are all over the rug. Nobody touch the EVIDENCE."],   // PASS-19H1: emphasis; one idea
+  "home.son.key.mom": ["mom", "That key's for the study. This door only ever had opinions."],   // PASS-19H1: shorter; one idea
+  "home.son.key.bigsis": ["bigsis", "No keyhole. A toy alarm and a great deal of confidence."],   // PASS-19H1: shorter
+  "home.son.key.lilsis": ["lilsis", "It has a password. Passwords are keys you say."],   // PASS-19H1: emphasis
+  "home.bag.mom": ["mom", "His school bag, on its peg. Never there on a school morning."],   // PASS-19H1: shorter
+  "home.bag.bigsis": ["bigsis", "A holiday sandwich is in there. I will not be the one to find it."],   // PASS-19H1: shorter
+  "home.bag.lilsis": ["lilsis", "I'm guarding his bag. Nobody touch it. Not even me."],   // PASS-19H1: emphasis; shorter; one idea; FINAL-19: REVIEW-19's patch
 
   // ---- chain A: Dad's notice, and the study door
-  "home.sign.lilsis": ["lilsis", "'LOST YOUR KEY? IT IS WITH THE OTHER EIGHTY-EIGHT.' Eighty-eight keys! Daddy has a LOT of doors."],
-  "home.sign.bigsis.1": ["bigsis", "'Lost your key? It is with the other eighty-eight.' Signed, 'The Management'. Eighty-eight of what?"],
-  "home.sign.bigsis.2": ["bigsis", "...Keys. Fun fact: a standard piano has eighty-eight keys. Dad has hidden the study key in the piano."],
+  "home.sign.lilsis": ["lilsis", "'LOST YOUR KEY? IT IS WITH THE OTHER EIGHTY-EIGHT.' Daddy has a lot of doors."],   // PASS-19H1: emphasis; shorter; punch last
+  "home.sign.bigsis.1": ["bigsis", "'Lost your key? It is with the other eighty-eight.' ...Eighty-eight what?"],   // PASS-19H1: shorter
+  "home.sign.bigsis.2": ["bigsis", "...Keys. A standard piano has eighty-eight. The study key is in ours."],   // PASS-19H1: shorter; 'Fun fact' rationed
   "home.sign.mom.react": ["mom", "He has hidden a key in MY piano."],
-  "home.sign.mom.1": ["mom", "'Lost your key? It is with the other eighty-eight.' Signed, 'The Management'. Oh, my love."],
-  "home.sign.mom.2": ["mom", "A matter of record: a full-size piano has eighty-eight keys. He has hidden a key in MY piano."],
+  "home.sign.mom.1": ["mom", "'Lost your key? It is with the other eighty-eight.' Oh, my love."],   // PASS-19H1: shorter
+  "home.sign.mom.2": ["mom", "A matter of record: a full-size piano has eighty-eight keys. MY piano."],   // PASS-19H1: shorter; punch last
   "home.sign.bigsis.react": ["bigsis", "Eighty-eight. I was half a second behind you, Mother. Half."],
-  "home.sign.thunk.mom": ["mom", "'The other eighty-eight.' Piano keys. So that's what he dropped into my piano: his own door key."],   // PASS-17H: Mom's formality
-  "home.sign.thunk.bigsis": ["bigsis", "'The other eighty-eight.' Eighty-eight piano keys. So THAT is what is lying on the hammers."],
-  "home.sign.again.mom": ["mom", "'Authorized personnel only.' In a family of five. He means himself and the boy."],
-  "home.sign.again.bigsis": ["bigsis", "Block capitals, no spelling mistakes, and one riddle. For Dad, that is a formal document."],
-  "home.study.look.mom": ["mom", "Your father's study. He locks one door in this house, and tonight it's the one we need."],   // PASS-17H: Mom's formality
+  "home.sign.thunk.mom": ["mom", "'The other eighty-eight.' So that was the thunk: his study key."],   // PASS-19H1: shorter
+  "home.sign.thunk.bigsis": ["bigsis", "'The other eighty-eight.' So that is what went 'thunk'."],   // PASS-19H1: shorter; punch last
+  "home.sign.again.mom": ["mom", "'Authorized personnel only.' He means himself and the boy."],   // PASS-19H1: shorter; one idea
+  "home.sign.again.bigsis": ["bigsis", "Block capitals and a riddle. For Dad, a formal document."],   // PASS-19H1: shorter
+  "home.study.look.mom": ["mom", "Your father's study. The one door he locks, and the one we need."],   // PASS-17H: Mom's formality
   "home.study.look.bigsis": ["bigsis", "Dad's study. One lock, one notice, no key. In that order."],
-  "home.study.look.lilsis": ["lilsis", "Daddy's room. It's for 'planning'. I've seen planning. It's maps and snacks."],
-  "home.study.open.mom": ["mom", "Open. I half expect him to be sitting in there, saying 'well, well, well'."],
-  "home.study.open.bigsis": ["bigsis", "Trip Headquarters is open. For the record, I am authorized personnel now."],
-  "home.study.open.lilsis": ["lilsis", "It's OPEN! We're allowed in Daddy's room! Don't touch anything. I'M going to touch everything."],
-  "home.study.locked.mom": ["mom", "Locked. Naturally. And he's left us a notice instead of a key."],   // PASS-17H: Mom's formality
-  "home.study.locked.bigsis": ["bigsis", "Locked. Dad's notice says where the key is. It simply does not say it in plain English."],
-  "home.study.locked.lilsis": ["lilsis", "It's LOCKED. Daddy! Open up! ...He can't hear me. I forgot."],
-  "home.study.theirs.mom.bigsis": ["mom", "Your big sister is holding the key, darling. Let her do the honors."],
-  "home.study.theirs.mom.lilsis": ["mom", "Your little sister is holding the key. She fetched it, so she gets to turn it."],   // PASS-17H: Mom's formality ('shall')
+  "home.study.look.lilsis": ["lilsis", "Daddy's room. It's for 'planning'. Planning is maps and snacks."],
+  "home.study.open.mom": ["mom", "Open. I half expect him in there, saying 'well, well, well'."],
+  "home.study.open.bigsis": ["bigsis", "Trip Headquarters is open. I am authorized personnel now."],
+  "home.study.open.lilsis": ["lilsis", "It's OPEN! Don't touch anything. I'm going to touch everything."],
+  "home.study.locked.mom": ["mom", "Locked, naturally. He's left us a notice instead of a key."],   // PASS-17H: Mom's formality
+  "home.study.locked.bigsis": ["bigsis", "Locked. The notice says where the key is. Just not in English."],
+  "home.study.locked.lilsis": ["lilsis", "It's LOCKED. Daddy, open up! ...He can't hear me. I forgot."],
+  "home.study.theirs.mom.bigsis": ["mom", "Your big sister has the key, darling. Let her do the honors."],
+  "home.study.theirs.mom.lilsis": ["mom", "Your little sister has the key. She fetched it, so she turns it."],   // PASS-17H: Mom's formality ('shall')
   "home.study.theirs.bigsis.mom": ["bigsis", "Mom has the key. Technically she outranks the Management."],
-  "home.study.theirs.bigsis.lilsis": ["bigsis", "My sister has the key. She has not put it down since. She will be sleeping with it, I expect."],
-  "home.study.theirs.lilsis.mom": ["lilsis", "Mommy's got the key! Mommy, do the door! Do the DOOR!"],
-  "home.study.theirs.lilsis.bigsis": ["lilsis", "SHE's got the key. She's being slow about it on PURPOSE."],
+  "home.study.theirs.bigsis.lilsis": ["bigsis", "My sister has the key. She will be sleeping with it."],
+  "home.study.theirs.lilsis.mom": ["lilsis", "Mommy's got the key! Mommy, do the DOOR."],
+  "home.study.theirs.lilsis.bigsis": ["lilsis", "She's got the key. She's being slow on PURPOSE."],
   "home.study.unlock.mom": ["mom", "There. 'Authorized personnel only.' I authorized myself on our wedding day."],
   "home.study.unlock.bigsis": ["bigsis", "It turns. Trip Headquarters is under new management."],
-  "home.study.unlock.lilsis": ["lilsis", "It WENT! I opened Daddy's door! With the key I got out of the PIANO!"],
+  "home.study.unlock.lilsis": ["lilsis", "It went! I opened Daddy's door with the PIANO key."],
 
   // ---- what they say to each other on the landing
   "home.talk.landing.mom.bigsis.sign.a": ["mom", "Your father's notice is a riddle. What do you make of it?"],   // PASS-17H: one darling fewer
-  "home.talk.landing.mom.bigsis.sign.b": ["bigsis", "There is a number in it. I should like to read it again. Properly, with my finger."],
+  "home.talk.landing.mom.bigsis.sign.b": ["bigsis", "There is a number in it. I should like to read it again."],   // PASS-19H1: shorter
   "home.talk.landing.mom.bigsis.1a": ["mom", "As a schoolboy, George Washington copied out 110 Rules of Civility."],   // PASS-17H: 'A matter of record' as a gag, not a habit
   "home.talk.landing.mom.bigsis.1b": ["bigsis", "Is one of them 'Do not hide keys in your wife's piano'?"],
   "home.talk.landing.mom.bigsis.1c": ["mom", "It's implied, darling. Throughout."],   // PASS-17H: Mom's formality
-  "home.talk.landing.mom.bigsis.2a": ["mom", "You take after me, you know. It's the nicest thing I can say about either of us."],   // PASS-17H: Mom's formality
+  "home.talk.landing.mom.bigsis.2a": ["mom", "You take after me. It's the nicest thing I can say about either of us."],   // PASS-19H1: shorter; one idea
   "home.talk.landing.mom.bigsis.2b": ["bigsis", "I take after you with footnotes."],
-  "home.talk.landing.mom.lilsis.1a": ["lilsis", "Mommy, is my brother scared? Because I'm NOT. You can tell him I said."],
-  "home.talk.landing.mom.lilsis.1b": ["mom", "Your brother has never been scared of anything in his life. That's the part that scares me."],   // PASS-17H: funnier: a reply that answers back
+  "home.talk.landing.mom.lilsis.1a": ["lilsis", "Mommy, is my brother scared? Because I'm NOT."],   // PASS-19H1: shorter
+  "home.talk.landing.mom.lilsis.1b": ["mom", "Your brother has never been scared of anything. That's the part that scares me."],   // PASS-19H1: shorter
   "home.talk.landing.mom.lilsis.2a": ["mom", "Hold the rail on the stairs, sweetheart."],
   "home.talk.landing.mom.lilsis.2b": ["lilsis", "I AM holding it."],
   "home.talk.landing.mom.lilsis.2c": ["mom", "With a hand, darling."],
   "home.talk.landing.bigsis.mom.1a": ["bigsis", "Mom. When they are back, I intend to be extremely calm about it."],
-  "home.talk.landing.bigsis.mom.1b": ["mom", "Of course you do, darling. So do I. We'll be calm together, at some volume."],   // PASS-17H: Mom's formality ('shall')
-  "home.talk.landing.bigsis.mom.2a": ["bigsis", "Fun fact: John Adams and Thomas Jefferson died on the same day. The fourth of July, 1826."],
-  "home.talk.landing.bigsis.mom.2b": ["mom", "Fifty years to the day after the Declaration. A matter of record. And I told YOU that one."],
+  "home.talk.landing.bigsis.mom.1b": ["mom", "I intend the same, darling. We'll be calm together, at some volume."],   // PASS-19H1: shorter; filler cut
+  "home.talk.landing.bigsis.mom.2a": ["bigsis", "John Adams and Thomas Jefferson died on the same day. The fourth of July, 1826."],   // PASS-19H1: shorter; 'Fun fact' rationed
+  "home.talk.landing.bigsis.mom.2b": ["mom", "Fifty years to the day after the Declaration. A matter of record."],   // PASS-19H1: shorter; punch last
+  "home.talk.landing.bigsis.mom.2b.b": ["mom", "And I told YOU that one."],   // PASS-19H1: new; punch own box
   "home.talk.landing.bigsis.lilsis.1a": ["bigsis", "Do not slide down the banister."],
   "home.talk.landing.bigsis.lilsis.1b": ["lilsis", "I wasn't GOING to. ...Now I'm thinking about it."],
   "home.talk.landing.bigsis.lilsis.2a": ["lilsis", "Do you know his password?"],
-  "home.talk.landing.bigsis.lilsis.2b": ["bigsis", "I have never asked. A person is entitled to one secret. He has chosen a noisy one."],
+  "home.talk.landing.bigsis.lilsis.2b": ["bigsis", "I have never asked. A person is entitled to one noisy secret."],   // PASS-19H1: shorter; punch last; one idea
   "home.talk.landing.lilsis.mom.1a": ["lilsis", "Mommy, can I say my bedtime prayer if it isn't bedtime?"],
-  "home.talk.landing.lilsis.mom.1b": ["mom", "Any time you like, my love. He isn't listening for the clock. He's listening for you."],   // PASS-17H: a faith line said as a mother says it
-  "home.talk.landing.lilsis.mom.2a": ["lilsis", "When Daddy's home, can we have dinner again? The SAME dinner? I'm saving him my potato."],
+  "home.talk.landing.lilsis.mom.1b": ["mom", "Any time, my love. He isn't listening for the clock. He's listening for you."],   // PASS-19H1: shorter
+  "home.talk.landing.lilsis.mom.2a": ["lilsis", "When Daddy's home, can we have the same dinner? I saved him my potato."],   // PASS-19H1: shorter; emphasis
   "home.talk.landing.lilsis.mom.2b": ["mom", "A fresh one, darling. That one has done its duty."],
   "home.talk.landing.lilsis.bigsis.1a": ["lilsis", "Why doesn't YOUR ladder have stickers?"],
-  "home.talk.landing.lilsis.bigsis.1b": ["bigsis", "It has a card. One card. It is not boring. It is restrained."],
+  "home.talk.landing.lilsis.bigsis.1b": ["bigsis", "One card. It is not boring, it is restrained."],   // PASS-19H1: shorter; one idea
   "home.talk.landing.lilsis.bigsis.2a": ["lilsis", "Are you writing this down for your book?"],
   "home.talk.landing.lilsis.bigsis.2b": ["bigsis", "Every word."],
   "home.talk.landing.lilsis.bigsis.2c": ["lilsis", "Write that I was BRAVE."],
@@ -366,156 +368,158 @@ export const lines = {
   // DAD'S STUDY
   // =====================================================================================================
   "home.study.first.1": ["mom", "Trip Headquarters. He hasn't let me dust in here since March."],   // PASS-17H: Mom's formality
-  "home.study.first.2": ["bigsis", "The mainframe is on the desk. And that box on the shelves is the 'family vault'. It has a label."],
-  "home.study.first.3": ["lilsis", "Something's BLINKING! Over there! On the drawer thing!"],
+  "home.study.first.2": ["bigsis", "That box on the shelves is the 'family vault'. It has a label."],
+  "home.study.first.3": ["lilsis", "Something's BLINKING. Over there, on the drawer thing!"],
 
   // ---- chain C: the family computer, and the note on it
-  "home.pc.look.mom": ["mom", "The family computer. Your father calls it 'the mainframe'. It is nine years old and it sighs when you switch it on."],
-  "home.pc.look.bigsis": ["bigsis", "Our computer. It runs the family map. It also runs. Technically."],
+  "home.pc.look.mom": ["mom", "The family computer. Nine years old, and it sighs when you switch it on."],
+  "home.pc.look.bigsis": ["bigsis", "It runs the family map. It also runs. Technically."],
   "home.pc.look.lilsis": ["lilsis", "The computer! It has a game where a cat eats numbers."],
-  "home.pc.offline.mom": ["mom", "'No internet.' I see. It was working perfectly well until your father improved it."],
-  "home.pc.offline.bigsis": ["bigsis", "No connection. Fun fact: the first message ever sent on the network that became the internet was 'LO'. They were typing LOGIN, and it crashed. October 1969."],
+  "home.pc.offline.mom": ["mom", "'No internet.' It worked perfectly well until your father improved it."],
+  "home.pc.offline.bigsis": ["bigsis", "October 1969: what became the internet tried LOGIN. It crashed at 'LO'."],
   "home.pc.offline.bigsis2": ["bigsis", "So this is traditional."],
   "home.pc.offline.lilsis": ["lilsis", "It says NO. Computers aren't allowed to say no. I'm telling Mommy."],
-  "home.pc.login.mom": ["mom", "It wants a password. Four numbers. 'Forgot it? Ask Dad.' I would dearly love to."],
-  "home.pc.login.bigsis": ["bigsis", "Four digits. Ten thousand possibilities. Dad will have written it down somewhere. He always does."],
-  "home.pc.login.lilsis": ["lilsis", "One, two, three, four! ... It said no AGAIN."],
+  "home.pc.login.mom": ["mom", "Four numbers. 'Forgot it? Ask Dad.' I would dearly love to."],
+  "home.pc.login.bigsis": ["bigsis", "Ten thousand possibilities. Dad will have written it down."],
+  "home.pc.login.lilsis": ["lilsis", "One, two, three, four! ...It said no AGAIN."],
   "home.pc.type.mom": ["mom", "One. Nine. Two. Eight."],
-  "home.pc.type.bigsis": ["bigsis", "One, nine, two, eight. I type with all ten fingers. It is not difficult."],
-  "home.pc.type.lilsis": ["lilsis", "One! Nine! Two! Eight! I typed it with ONE finger."],
+  "home.pc.type.bigsis": ["bigsis", "One, nine, two, eight, with all ten fingers. It is not difficult."],
+  "home.pc.type.lilsis": ["lilsis", "One. Nine. Two. Eight. I typed it with ONE finger!"],
   "home.pc.question.mom": ["mom", "'What did you promise on your wedding day?' Oh, my love. You would."],
-  "home.pc.question.bigsis": ["bigsis", "'What did you promise on your wedding day?' I was not invited to the wedding. Mother?"],
+  "home.pc.question.bigsis": ["bigsis", "'What did you promise on your wedding day?' I was not invited. Mother?"],
   "home.pc.question.lilsis": ["lilsis", "It's asking about a wedding. I wasn't BORN. Mommy!"],
   "home.pc.pick.love": ["mom", "To love, honor and cherish."],
   "home.pc.pick.scenic": ["mom", "To always take the scenic route."],
   "home.pc.pick.directions": ["mom", "To never ask for directions."],
   "home.pc.wrong.love": ["mom", "No? I did say that. I had hoped he was listening."],
   "home.pc.wrong.scenic": ["mom", "No. That was not a promise. That was a warning."],
-  "home.pc.right": ["mom", "He promised me he would never ask for directions. It is the one promise he has always kept."],
-  "home.pc.map.1": ["mom", "There. 'Dad's phone. Last seen 5:47 p.m. Thirty-seven miles past Last Gas.' In the middle of Nevada."],
+  "home.pc.right": ["mom", "He promised never to ask for directions. It's the one promise he's always kept."],
+  "home.pc.map.1": ["mom", "'Last seen 5:47 p.m. Thirty-seven miles past Last Gas.' In the middle of Nevada."],
   "home.pc.map.2": ["bigsis", "That is not on the way home. That is not on the way to anywhere."],
-  "home.pc.map.six": ["bigsis", "5:47. His message was at 5:41. Six minutes after that, his phone stops."],
+  "home.pc.map.six": ["bigsis", "5:47. His message was 5:41. Six minutes later, his phone stops."],
   "home.pc.map.3": ["lilsis", "Is Nevada past the mailbox?"],
-  "home.pc.map.4": ["mom", "A little past the mailbox, darling. Shoes on, both of you. We leave tonight."],
-  "home.pc.done.mom": ["mom", "One dot, in the middle of nothing. I have looked at it quite long enough."],
-  "home.pc.done.bigsis": ["bigsis", "Thirty-seven miles past Last Gas. I have memorized it. I memorize everything."],
+  "home.pc.map.4": ["mom", "A little past the mailbox, darling. Shoes on. We leave tonight."],
+  "home.pc.done.mom": ["mom", "One dot, in the middle of nothing. I've looked at it quite long enough."],
+  "home.pc.done.bigsis": ["bigsis", "Thirty-seven miles past Last Gas. I memorize everything."],
   "home.pc.done.lilsis": ["lilsis", "The dot is Daddy. Hi, dot."],
-  "home.pc.pencil.lilsis": ["lilsis", "I poked the screen with Daddy's pencil. Now there's a dot. It's not the right kind of dot."],
+  "home.pc.pencil.lilsis": ["lilsis", "I poked the screen with Daddy's pencil. Now there's a bad dot."],
 
-  "home.note.look.mom": ["mom", "Your father's handwriting. 'Password: the year of the best thing since.' Since WHAT, my love? He has left off the end."],
-  "home.note.look.lilsis": ["lilsis", "It says 'PASS WORD'. And then more words. Daddy does the loopy Ys."],
-  "home.note.take.mom": ["mom", "I will hold on to this. It is the nearest thing to your father in the house."],
+  "home.note.look.mom": ["mom", "'Password: the year of the best thing since.' Since WHAT, my love?"],
+  "home.note.look.lilsis": ["lilsis", "It says 'PASS WORD', and more words. Daddy does the loopy Ys."],
+  "home.note.take.mom": ["mom", "I'll keep this. It's the nearest thing to your father in the house."],
   "home.note.take.lilsis": ["lilsis", "MINE. I mean: evidence."],
-  "home.note.solve.1": ["bigsis", "'Password: the year of the best thing since.' ...Since sliced bread. With Dad, everything is the best thing since sliced bread."],
-  "home.note.solve.2": ["bigsis", "Fun fact: sliced bread was first sold on the seventh of July, 1928, in Chillicothe, Missouri."],
+  "home.note.solve.1": ["bigsis", "'The year of the best thing since.' ...Since sliced bread."],
+  "home.note.solve.1.b": ["mom", "He said that about the toaster."],
+  "home.note.solve.2": ["bigsis", "Sliced bread: first sold on the seventh of July, 1928, in Chillicothe, Missouri."],
   "home.note.solve.3": ["bigsis", "The password is 1928. Dad, that is so... actually, that is quite good."],
 
   // ---- chain D: the answering machine, its tape, and Dad's last message
-  "home.machine.look.mom": ["mom", "Your father's answering machine. It's older than you are, darling. And its tape is on the outside."],   // PASS-17H: Mom's formality
-  "home.machine.look.bigsis": ["bigsis", "A machine with a cassette in it. 'One new message.' And a loop of tape hanging out like a tongue."],
+  "home.machine.look.mom": ["mom", "His answering machine. Its tape is meant to be on the inside."],   // PASS-17H: Mom's formality
+  "home.machine.look.bigsis": ["bigsis", "'One new message.' And a loop of tape hanging out, like a tongue."],
   "home.machine.look.lilsis": ["lilsis", "I FIXED that last week! ...It was working before I fixed it."],
   "home.machine.ready.mom": ["mom", "Wound, and blinking. One new message. I want to hear it, and I don't."],   // PASS-17H: the speech that is really an essay
-  "home.machine.ready.bigsis": ["bigsis", "The tape is back in. One new message. The button marked PLAY is the large one."],
-  "home.machine.ready.lilsis": ["lilsis", "The answer machine's BLINKING! It's got an answer in it! Press the big button! PRESS it!"],
-  "home.machine.flash": ["lilsis", "I shined my flashlight in its little window. There's two wheels in there. It has EYES."],
-  "home.tape.need.mom": ["mom", "It wants winding back in, and for that I want a pencil. An ordinary wooden one."],
-  "home.tape.need.bigsis": ["bigsis", "Fun fact: you can wind a cassette by turning its hub with a pencil. Mine are too slim. Dad's is not."],
+  "home.machine.ready.bigsis": ["bigsis", "One new message. The button marked PLAY is the large one."],
+  "home.machine.ready.lilsis": ["lilsis", "The answer machine's got an answer in it. Press the BIG button."],
+  "home.machine.flash": ["lilsis", "I shined my flashlight in its window. It has EYES."],
+  "home.tape.need.mom": ["mom", "I'll need a pencil to wind it in. An ordinary wooden one."],
+  "home.tape.need.bigsis": ["bigsis", "A pencil in the hub winds a cassette. Mine are too slim. Dad's is not."],
   "home.tape.need.lilsis": ["lilsis", "I'm not allowed to fix it again. Mommy said. With her whole-name voice."],
-  "home.tape.where": ["mom", "There's exactly one pencil in this house that can ever be found. It's on your father's crossword."],   // PASS-17H: Mom's formality
-  "home.tape.has.mom": ["mom", "I have his pencil here. Stand aside, darlings. This is my department."],
-  "home.tape.has.bigsis": ["bigsis", "I am holding Dad's pencil. Mom should be. She is the one who knows which way it turns."],
-  "home.tape.has.lilsis": ["lilsis", "I've got Daddy's pencil! Mommy needs it. I'll give it to her. In a minute. Okay, NOW."],
-  "home.tape.notme.bigsis": ["bigsis", "I know that it fits. I do not know how hard to turn. That tape is his voice. Mom should do this."],
-  "home.tape.notme.lilsis": ["lilsis", "I'm not ALLOWED. I fixed it last time. Mommy has to do it. She needs the pencil."],
-  "home.tape.wind.1": ["mom", "I recorded entire musicals off the radio with one of these. Pencil in the hub, and gently."],
+  "home.tape.where": ["mom", "The only pencil anyone can ever find is on his crossword."],   // PASS-17H: Mom's formality
+  "home.tape.has.mom": ["mom", "I have his pencil. Stand aside, darlings. This is my department."],
+  "home.tape.has.bigsis": ["bigsis", "I have Dad's pencil. Mom knows which way it turns."],
+  "home.tape.has.lilsis": ["lilsis", "I've got Daddy's pencil. Mommy needs it. In a minute. ...Okay, NOW."],
+  "home.tape.notme.bigsis": ["bigsis", "That tape is his voice. Mom should do this."],
+  "home.tape.notme.lilsis": ["lilsis", "I'm not ALLOWED. I fixed it last time. Mommy has to."],
+  "home.tape.wind.1": ["mom", "I taped whole musicals off the radio on these. Pencil in the hub, gently."],
   "home.tape.wind.2": ["mom", "There. Every inch of it back in, and not one crease."],
-  "home.tape.wind.3": ["bigsis", "So that is the knack. Slower than you want to. I am writing it down."],
-  "home.tape.wind.4": ["lilsis", "It's still BLINKING. It wants to tell us something! Can I press it? I'm asking really FAST."],
-  "home.msg.1": ["dad", "'Hi, honey. It's 5:41 and we are making GREAT time. I found a shortcut.'"],
-  "home.msg.2": ["dad", "'Thirty-seven miles past the last gas station and not one other car. The boy says hi.'"],
-  "home.msg.3": ["dad", "'He says the road sign up ahead looks funny. ...Huh. That IS funny.'"],
+  "home.tape.wind.3": ["bigsis", "So that is the knack: slower than you want to. Noted."],
+  "home.tape.wind.4": ["lilsis", "It's still blinking. Can I press it? I'm asking really FAST."],
+  "home.msg.1": ["dad", "'Hi, honey. It's 5:41 and we're making GREAT time. I found a shortcut.'"],
+  "home.msg.2": ["dad", "'Thirty-seven miles past the last gas station, and not one other car.'"],
+  "home.msg.2.b": ["son", "'Hi, Mom! Dad, that sign up there looks funny.'"],
+  "home.msg.3": ["dad", "'...Huh. That IS funny.'"],
   "home.msg.4": ["dad", "'That sign just changed its--'"],
-  "home.msg.after.lilsis": ["lilsis", "Changed its WHAT? Daddy! Changed its WHAT?"],
-  "home.msg.after.bigsis": ["bigsis", "5:41 p.m. on the tape. That is the last anybody heard of them. I am writing down the minute."],
-  "home.msg.after.bigsis.six": ["bigsis", "5:41 on the tape. His phone was last seen at 5:47. Whatever happened took six minutes."],
+  "home.msg.after.lilsis": ["lilsis", "Changed its WHAT? Daddy? Changed its what?"],
+  "home.msg.after.bigsis": ["bigsis", "5:41 p.m. The last anybody heard. I am writing down the minute."],
+  "home.msg.after.bigsis.six": ["bigsis", "5:41 on the tape. 5:47 on the map. Whatever happened took six minutes."],
   "home.msg.after.mom": ["mom", "I do not need to hear it twice. He sounded happy."],
   "home.msg.again.mom": ["mom", "Once was enough, my love. I have it by heart already."],
-  "home.msg.again.bigsis": ["bigsis", "5:41 p.m. I have the whole message memorized. Including the hiss."],
-  "home.msg.again.lilsis": ["lilsis", "Changed its WHAT. I'm going to ask him. FIRST thing."],
+  "home.msg.again.bigsis": ["bigsis", "5:41 p.m. I have it memorized. Including the hiss."],
+  "home.msg.again.lilsis": ["lilsis", "Changed its WHAT. I'm asking him first thing."],
 
   // ---- chain E: the family vault
   "home.vault.read.mom": ["mom", "'The year WE THE PEOPLE got it in writing.' ...I do NOT bring it up. Not often."],
-  "home.vault.read.bigsis": ["bigsis", "'The year We the People got it in writing.' I can think of three years. Mom will know which."],
-  "home.vault.read.lilsis": ["lilsis", "It says 'FAMILY VAULT'. And 'Your mother will know.' MOMMY! The box says you know!"],
+  "home.vault.read.bigsis": ["bigsis", "'The year We the People got it in writing.' Mom will know which."],
+  "home.vault.read.lilsis": ["lilsis", "It says 'Your mother will know.' MOMMY! The box says you know."],
   "home.vault.pick.1776": ["mom", "Seventeen seventy-six."],
   "home.vault.pick.1787": ["mom", "Seventeen eighty-seven."],
   "home.vault.pick.1789": ["mom", "Seventeen eighty-nine."],
   "home.vault.pick.later": ["mom", "Let me think about it."],
   "home.vault.wrong.1776": ["mom", "No. 1776 is the Declaration, the Fourth of July. 'We the People' came later."],   // PASS-17H: 'A matter of record' as a gag, not a habit
-  "home.vault.wrong.1789": ["mom", "No. In 1789 the new government began, and General Washington took the oath. It was written by then."],
-  "home.vault.right.1": ["mom", "1787. Signed in Philadelphia on the seventeenth of September. He does listen. Just not at the time."],
-  "home.vault.right.2": ["mom", "My spare car key. Two ketchup packets. And a card: 'KNEW YOU'D KNOW. - THE MANAGEMENT.'"],
+  "home.vault.wrong.1789": ["mom", "No. 1789 is the new government, and General Washington's oath. Too late."],
+  "home.vault.right.1": ["mom", "1787. Signed in Philadelphia in September. He does listen. Just not at the time."],
+  "home.vault.right.2": ["mom", "My spare car key. Two ketchup packets. And: 'KNEW YOU'D KNOW. - THE MANAGEMENT.'"],
   "home.vault.right.3": ["bigsis", "He keeps ketchup in a vault."],
-  "home.vault.right.4": ["lilsis", "Is the ketchup a treasure? Can I have the treasure?"],
-  "home.vault.right.5": ["mom", "The ketchup stays, darling. He's saving it. I've never asked what for."],   // PASS-17H: Mom's formality
-  "home.vault.done.mom": ["mom", "Empty, but for two ketchup packets and a card. I've left him the ketchup."],   // PASS-17H: Mom's formality
-  "home.vault.done.bigsis": ["bigsis", "The family vault, opened by the Constitution. I am going to enjoy footnoting that."],
-  "home.vault.done.lilsis": ["lilsis", "The treasure box is open! It's got ketchup. Daddy's treasure is ketchup."],
-  "home.vault.key.mom": ["mom", "The vault has a dial, not a keyhole. Your father does like a dial."],   // PASS-17H: one darling fewer
-  "home.vault.key.bigsis": ["bigsis", "It is a combination lock. A key would be cheating, and Dad does not cheat at his own riddles."],
-  "home.vault.key.lilsis": ["lilsis", "No hole for a key. It's got a wheel with numbers. The numbers go CLICK."],
+  "home.vault.right.4": ["lilsis", "Is it a treasure? Can I have the treasure?"],
+  "home.vault.right.5": ["mom", "The ketchup stays, darling. I've never asked what he's saving it for."],   // PASS-17H: Mom's formality
+  "home.vault.done.mom": ["mom", "Empty, but for his card and his condiments."],   // PASS-17H: Mom's formality
+  "home.vault.done.bigsis": ["bigsis", "The vault, opened by the Constitution. I will be footnoting that."],
+  "home.vault.done.lilsis": ["lilsis", "The treasure box is open. Daddy's treasure is ketchup."],
+  "home.vault.key.mom": ["mom", "A dial, not a keyhole. Your father does like a dial."],   // PASS-17H: one darling fewer
+  "home.vault.key.bigsis": ["bigsis", "A combination lock. Dad does not cheat at his own riddles."],
+  "home.vault.key.lilsis": ["lilsis", "No hole for a key. Just a wheel that goes CLICK."],
 
   // ---- the rest of the study
-  "home.wallmap.mom": ["mom", "His route, in red wool. And a shorter piece, in yellow, across a part of the map with nothing on it."],
-  "home.wallmap.bigsis": ["bigsis", "The yellow piece cuts the corner on a road the map says ends. Yellow is for caution. He chose it himself."],
-  "home.wallmap.lilsis": ["lilsis", "The pin is our house! Hi, house. The red string is Daddy driving. The yellow one is Daddy being clever."],
-  "home.wallmap.pencil.mom": ["mom", "I'm not drawing on his map. I will, however, be having a word with him about that yellow string."],   // PASS-17H: Mom's formality ('shall')
-  "home.wallmap.pencil.bigsis": ["bigsis", "I am not going to correct Dad's map. I am going to correct Dad. Later. In person."],
-  "home.wallmap.pencil.lilsis": ["lilsis", "I drew a tiny car on the string. And a hen in the window. That's the General. Now they're BOTH on the map."],
-  "home.corkboard.mom": ["mom", "'Operation Road Trip.' Your brother's plan. Step one is 'snacks'. So are steps two through five."],
-  "home.corkboard.bigsis": ["bigsis", "My brother's snack schedule. Hourly. He has rated each snack out of ten, in advance."],
-  "home.corkboard.lilsis": ["lilsis", "He drew the wagon! He made the luggage taller than the car. That part's TRUE."],
-  "home.shelves.mom": ["mom", "His manuals. Every one of them read exactly as far as the middle."],
-  "home.shelves.bigsis": ["bigsis", "Jars of screws, sorted by a system known only to Dad. One jar is labelled 'MISC'. So are the others."],
-  "home.shelves.lilsis": ["lilsis", "Jars! That one's got googly eyes in it. I'm not saying whose."],
-  "home.globe.mom": ["mom", "The globe. He spins it and says 'anywhere but the interstate'. I should have listened harder."],
-  "home.globe.bigsis": ["bigsis", "A globe tells you where. Tonight I have a feeling 'where' is only half the question."],   // PASS-17H: truer; it plants 'when' without saying it
-  "home.globe.lilsis": ["lilsis", "The WORLD! It opens in the middle, like an egg. Daddy says it's not an egg. It's SO an egg."],
-  "home.globe.use.mom": ["mom", "I'm not spinning it. I know exactly which part of it I care about tonight."],   // PASS-17H: Mom's formality ('shall')
-  "home.globe.use.bigsis": ["bigsis", "It stops on Nevada. It always stops on Nevada. Dad has leaned on it."],
-  "home.globe.use.lilsis": ["lilsis", "WHEEE. I stopped it with my finger! Daddy's in... the ocean. That can't be right."],
-  "home.study.window.mom": ["mom", "The driveway, from above. One oil spot, where the wagon lives. I'll be taking that up with him."],   // PASS-17H: Mom's formality ('shall')
-  "home.study.window.bigsis": ["bigsis", "The whole street, from the highest window in the house. I have looked. It has not helped."],
-  "home.study.window.lilsis": ["lilsis", "I can see my swing! Swings look sad in the dark. Tomorrow I'm going SO high. Daddy can push."],
-  "home.banner.mom": ["mom", "'TRIP HEADQUARTERS.' Your father did TRIP, in blue. Your brother did the rest, one color to a letter."],
-  "home.banner.bigsis": ["bigsis", "Dad ruled his four letters in pencil first. My brother did twelve freehand and added a car. His is the better half."],
-  "home.banner.lilsis": ["lilsis", "I helped! I held the tape. Nobody put my name on it. I'll do it myself when Daddy's home. In PINK."],
-  "home.plane.mom": ["mom", "The biplane. He and your brother built it in February. It took three weekends and every clothespin I own."],   // PASS-17H: American: clothespin
-  "home.plane.bigsis": ["bigsis", "My brother's model biplane. It hangs on a thread. The thread was my condition for living under the same roof."],
-  "home.plane.lilsis": ["lilsis", "The red airplane! It goes round if you blow. I'm not allowed to blow. I blow a LITTLE."],
-  "home.boxes.mom": ["mom", "What wouldn't fit in the car. The tent, the cooler, and the box of maps. He left the maps."],   // PASS-17H: Mom's formality
-  "home.boxes.bigsis": ["bigsis", "He left the maps behind. On purpose. The box says 'MAPS' in his own capitals, and he walked straight past it."],
-  "home.boxes.lilsis": ["lilsis", "The cooler! ...It's empty. They took ALL the juice boxes. Daddy and I are going to have a TALK."],
-  "home.study.door.mom": ["mom", "The landing. I'm leaving this door open behind us. He may hide the next key somewhere else."],   // PASS-17H: Mom's formality
-  "home.study.door.bigsis": ["bigsis", "The way out. I am not finished in here. I may never be finished in here."],
-  "home.study.door.lilsis": ["lilsis", "That's the door we opened with the key I got. Out of the PIANO."],
+  "home.wallmap.mom": ["mom", "His route, in red wool. And a yellow piece, across nothing at all."],
+  "home.wallmap.bigsis": ["bigsis", "Yellow string, on a road that ends. Yellow is for caution. He chose it."],
+  "home.wallmap.lilsis": ["lilsis", "The red string is Daddy driving. The yellow one is Daddy being clever."],
+  "home.wallmap.pencil.mom": ["mom", "Not on his map. I'll have a word about that yellow string."],   // PASS-17H: Mom's formality ('shall')
+  "home.wallmap.pencil.bigsis": ["bigsis", "I am not correcting Dad's map. I am correcting Dad. In person."],
+  "home.wallmap.pencil.lilsis": ["lilsis", "I drew a tiny car on the string, with the General in the window."],
+  "home.corkboard.mom": ["mom", "Your brother's plan. Step one is 'snacks'. So are steps two to five."],
+  "home.corkboard.bigsis": ["bigsis", "My brother's snack schedule. Each snack rated out of ten. In advance."],
+  "home.corkboard.lilsis": ["lilsis", "He made the luggage taller than the car. That part's TRUE."],
+  "home.shelves.mom": ["mom", "His manuals. Every one read exactly as far as the middle."],
+  "home.shelves.bigsis": ["bigsis", "Jars of screws. One is labelled 'MISC'. So are the others."],
+  "home.shelves.lilsis": ["lilsis", "That jar's got googly eyes in it. I'm not saying whose."],
+  "home.globe.mom": ["mom", "'Anywhere but the interstate,' he says. I should have listened."],
+  "home.globe.bigsis": ["bigsis", "A globe tells you where. Tonight 'where' feels like half the question."],   // PASS-17H: truer; it plants 'when' without saying it
+  "home.globe.lilsis": ["lilsis", "It opens in the middle. Daddy says it's not an egg. It's SO an egg."],
+  "home.globe.use.mom": ["mom", "I'm not spinning it. I know which part I care about tonight."],   // PASS-17H: Mom's formality ('shall')
+  "home.globe.use.bigsis": ["bigsis", "It always stops on Nevada. Dad has leaned on it."],
+  "home.globe.use.lilsis": ["lilsis", "I stopped it with my finger. Daddy's in... the ocean."],
+  "home.study.window.mom": ["mom", "One oil spot, where the wagon lives. I'll take that up with him."],   // PASS-17H: Mom's formality ('shall')
+  "home.study.window.bigsis": ["bigsis", "The whole street. I have looked. It has not helped."],
+  "home.study.window.lilsis": ["lilsis", "Swings look sad in the dark. Tomorrow Daddy's pushing me SO high."],
+  "home.banner.mom": ["mom", "Your father did TRIP. Your brother did the rest, one color a letter."],
+  "home.banner.bigsis": ["bigsis", "Dad ruled his in pencil. My brother did his freehand. His is the better half."],
+  "home.banner.lilsis": ["lilsis", "I held the tape. Nobody put my name on it. I'll add it. In PINK."],
+  "home.plane.mom": ["mom", "He and your brother built it. It took every clothespin I own."],   // PASS-17H: American: clothespin
+  "home.plane.bigsis": ["bigsis", "It hangs by a thread. The thread was my condition for sharing a roof."],
+  "home.plane.lilsis": ["lilsis", "It goes round if you blow. I'm not allowed to blow. I blow a LITTLE."],
+  "home.boxes.mom": ["mom", "The tent, the cooler, and the box of maps. He left the maps."],   // PASS-17H: Mom's formality
+  "home.boxes.bigsis": ["bigsis", "The box says 'MAPS', in his capitals. He walked straight past it."],
+  "home.boxes.lilsis": ["lilsis", "They took every juice box. Daddy and I are having a TALK."],
+  "home.study.door.mom": ["mom", "I'm leaving this door open. He may hide the next key somewhere else."],   // PASS-17H: Mom's formality
+  "home.study.door.bigsis": ["bigsis", "I am not finished in here. I may never be finished in here."],
+  "home.study.door.lilsis": ["lilsis", "The door we opened with the key I got. Out of the PIANO."],
 
   // ---- what they say to each other in the study
-  "home.talk.study.mom.bigsis.note.a": ["mom", "This note of your father's is about a year, darling. Years are your department."],
+  "home.talk.study.mom.bigsis.note.a": ["mom", "Your father's note is about a year, darling. Years are your department."],
   "home.talk.study.mom.bigsis.note.b": ["bigsis", "Then may I have it? I read better with my hands."],
   "home.talk.study.mom.bigsis.1a": ["mom", "Bach wrote 'S.D.G.' at the end of many of his scores. 'To God alone the glory.'"],   // PASS-17H: 'A matter of record' as a gag, not a habit
   "home.talk.study.mom.bigsis.1b": ["bigsis", "Dad writes 'THE MANAGEMENT' at the end of his."],
-  "home.talk.study.mom.bigsis.2a": ["mom", "Your father planned this trip for a month, up here, with your brother."],
+  "home.talk.study.mom.bigsis.2a": ["mom", "He planned this trip for a month, up here, with your brother."],
   "home.talk.study.mom.bigsis.2b": ["bigsis", "And then he took a shortcut."],
   "home.talk.study.mom.bigsis.2c": ["mom", "And then he took a shortcut."],
   "home.talk.study.mom.lilsis.1a": ["mom", "Hands, sweetheart."],
-  "home.talk.study.mom.lilsis.1b": ["lilsis", "I'm not touching! I'm looking with my hands."],
+  "home.talk.study.mom.lilsis.1b": ["lilsis", "I'm not touching. I'm looking with my hands."],
   "home.talk.study.mom.lilsis.2a": ["lilsis", "Mommy, what's a headquarters?"],
   "home.talk.study.mom.lilsis.2b": ["mom", "It's where the plans get made, darling. The mistakes get made on the road."],   // PASS-17H: Mom's formality
-  "home.talk.study.bigsis.mom.vault.a": ["bigsis", "Mother. 'The year We the People got it in writing.' Which year does he mean?"],
-  "home.talk.study.bigsis.mom.vault.b": ["mom", "The one that's framed on our living-room wall. I'll do the dial myself."],   // PASS-17H: Mom's formality ('shall'); one darling fewer
+  "home.talk.study.bigsis.mom.vault.a": ["bigsis", "Mother. 'The year We the People got it in writing.' Which year?"],
+  "home.talk.study.bigsis.mom.vault.b": ["mom", "The one framed on our living-room wall. I'll do the dial myself."],   // PASS-17H: Mom's formality ('shall'); one darling fewer
   "home.talk.study.bigsis.mom.dot.a": ["bigsis", "Mother. What if they are not at the dot?"],
-  "home.talk.study.bigsis.mom.dot.b": ["mom", "We do not stop the show for a missing cast member, darling. We go and fetch him."],
+  "home.talk.study.bigsis.mom.dot.b": ["mom", "We do not stop the show for a missing cast member. We fetch him."],
   "home.talk.study.bigsis.mom.1a": ["bigsis", "Dad calls this computer 'the mainframe'."],
   "home.talk.study.bigsis.mom.1b": ["mom", "He calls the car 'she', and himself 'the Management'. He has a gift for names."],
   "home.talk.study.bigsis.mom.2a": ["bigsis", "If he had simply told us the route..."],
@@ -523,14 +527,14 @@ export const lines = {
   "home.talk.study.bigsis.lilsis.1a": ["bigsis", "Do not spin the globe. Do not open the jars. Do not fix anything."],
   "home.talk.study.bigsis.lilsis.1b": ["lilsis", "That's ALL the good ones."],
   "home.talk.study.bigsis.lilsis.2a": ["lilsis", "What's a mainframe?"],
-  "home.talk.study.bigsis.lilsis.2b": ["bigsis", "It is what Dad calls a computer he has owned for nine years. It is a term of affection."],
+  "home.talk.study.bigsis.lilsis.2b": ["bigsis", "Dad's word for a nine-year-old computer. It is a term of affection."],
   "home.talk.study.lilsis.mom.tape.a": ["lilsis", "Mommy, I only fixed the tape machine a LITTLE."],
-  "home.talk.study.lilsis.mom.tape.b": ["mom", "I know, sweetheart. I can mend it. I want one ordinary pencil, and a moment's quiet."],
+  "home.talk.study.lilsis.mom.tape.b": ["mom", "I can mend it, sweetheart. One ordinary pencil and a moment's quiet."],
   "home.talk.study.lilsis.mom.1a": ["lilsis", "Is Daddy in trouble?"],
   "home.talk.study.lilsis.mom.1b": ["mom", "A little, my love. He has to come home first. The trouble will keep."],   // PASS-17H: Mom's formality
   "home.talk.study.lilsis.mom.2a": ["lilsis", "Mommy, why does Daddy have SO many jars?"],
-  "home.talk.study.lilsis.mom.2b": ["mom", "Because he has so many screws. And he has so many screws because he has so many jars."],   // PASS-17H: funnier: the answer goes round in a circle; one darling fewer
-  "home.talk.study.lilsis.bigsis.1a": ["lilsis", "My tooth's SO loose. But it's not allowed out till Daddy's home. He has to SEE it."],
+  "home.talk.study.lilsis.mom.2b": ["mom", "Because he has so many screws. Which is because he has so many jars."],   // PASS-17H: funnier: the answer goes round in a circle; one darling fewer
+  "home.talk.study.lilsis.bigsis.1a": ["lilsis", "My tooth's SO loose. It's waiting till Daddy's home to see it."],
   "home.talk.study.lilsis.bigsis.1b": ["bigsis", "You are negotiating with a tooth. I would not bet against you."],
   "home.talk.study.lilsis.bigsis.2a": ["lilsis", "If the computer's broken, I can fix it. I fixed the tape machine."],
   "home.talk.study.lilsis.bigsis.2b": ["bigsis", "That is exactly why I am standing between you and the computer."],
@@ -538,96 +542,97 @@ export const lines = {
   // =====================================================================================================
   // LITTLE SISTER'S ROOM (it was the girls' room until Big Sister's thirteenth birthday). A kingdom of chickens.
   // =====================================================================================================
-  "home.lilroom.first.1": ["lilsis", "Welcome to MY room! Rule one: don't step on the rug. The rug is an EGG. Nobody steps on an egg."],
+  "home.lilroom.first.1": ["lilsis", "Rule one: don't step on the rug. The rug is an EGG."],
   "home.lilroom.first.2": ["bigsis", "I used to live in here. It has since been annexed by poultry."],
 
-  "home.lilroom.window.mom": ["mom", "The maple, and the moon in it. She used to think the tree was holding it up. I never corrected her."],
-  "home.lilroom.window.bigsis": ["bigsis", "Chicken curtains. And over the window, a paper rooster. His job is the weather. I have been told his name. Twice."],
-  "home.lilroom.window.lilsis": ["lilsis", "The tree taps on the glass at night. It's saying hi. I say hi back so it knows."],
-  "home.drawings.mom": ["mom", "The five of us and the wagon, with a hen on the roof. She drew your father the biggest. He was so pleased."],
-  "home.drawings.bigsis": ["bigsis", "Her drawings. Chickens, mostly. In the family one I have no neck, and the hen has. I have raised it with the artist."],
-  "home.drawings.lilsis": ["lilsis", "That's all of us and the car! General Feathers is on the roof, on lookout. Keep an eye on Daddy, General!"],
+  "home.lilroom.window.mom": ["mom", "She thought the maple held up the moon. I never corrected her."],
+  "home.lilroom.window.bigsis": ["bigsis", "The paper rooster does the weather. I have been told his name. Twice."],
+  "home.lilroom.window.lilsis": ["lilsis", "The tree taps on the glass to say hi. I say hi back."],
+  "home.drawings.mom": ["mom", "She drew your father the biggest. He was so pleased."],   // PASS-19H1: shorter
+  "home.drawings.bigsis": ["bigsis", "She drew the hen a neck and me none. I have raised it with the artist."],   // PASS-19H1: shorter; one idea
+  "home.drawings.lilsis": ["lilsis", "On the roof: General Feathers. Keep an eye on Daddy, General!"],   // PASS-19H1: emphasis; shorter
 
   // ---- the chickens. Every one has a name and a rank or a job; "Chickens KNOW." is said here for the first time
-  "home.chart.mom": ["mom", "'MY CHICKENS.' Twelve of them, drawn from life. The General has a star. I'm told the Admiral is cross about it."],   // PASS-17H: Mom's formality
-  "home.chart.bigsis": ["bigsis", "Twelve chickens. I know every name, rank and job. I did not set out to. She quizzes me at breakfast."],
-  "home.chart.lilsis": ["lilsis", "MY CHICKENS. All twelve! The one with the star is General Feathers. You go up a rank every time you go in the wash."],
-  "home.flock.mom": ["mom", "Her flock. Every one of them has been through my washing machine, and has come out with a promotion."],
-  "home.flock.bigsis": ["bigsis", "Admiral Doodle on top. Corporal Speckle. Private Peep. Each has a name, a rank and a job. I know them all. Against my will."],
-  "home.flock.lilsis": ["lilsis", "That's the flock. Admiral Doodle's the big one on top. He's in charge of mornings. Everybody's very quiet tonight."],
+  "home.chart.mom": ["mom", "The General has a star. I'm told the Admiral is cross about it."],   // PASS-19H1: shorter
+  "home.chart.bigsis": ["bigsis", "I know every name and rank. She quizzes me at breakfast."],   // PASS-19H1: shorter
+  "home.chart.lilsis": ["lilsis", "You go up a rank every time you go in the wash."],   // PASS-19H1: emphasis; shorter
+  "home.flock.mom": ["mom", "Every one has been through my washing machine. And come out promoted."],
+  "home.flock.bigsis": ["bigsis", "Admiral Doodle on top. Corporal Speckle. Private Peep. I know them all."],
+  "home.flock.bigsis.b": ["bigsis", "Against my will."],
+  "home.flock.lilsis": ["lilsis", "Admiral Doodle does the mornings. Everybody's very quiet tonight."],
   "home.flock.lilsis2": ["lilsis", "They know something's up. They knew before I did. Chickens KNOW."],
-  "home.teaparty.mom": ["mom", "Four chickens at tea, and a spotted teapot. I was invited last week. I was told my manners would do."],
-  "home.teaparty.bigsis": ["bigsis", "Four chickens and a spotted teapot. The tea is water. The water is from Tuesday. I checked. I regret checking."],
-  "home.teaparty.lilsis": ["lilsis", "It's a tea party! Mrs. Biscuit poured. Nobody's drinking yet. They're waiting for the General. It's MANNERS."],
-  "home.coop.mom": ["mom", "It was a dollhouse. The dolls were asked to leave. I understand they are in the toy box, and that it was amicable."],
-  "home.coop.bigsis": ["bigsis", "The hen house has electric light. I did the wiring. I was told it was for dolls. I was misled."],
+  "home.teaparty.mom": ["mom", "Invited to tea last week. I was told my manners would do."],   // PASS-19H1: shorter; punch last
+  "home.teaparty.bigsis": ["bigsis", "The tea is water. The water is from Tuesday. I regret checking."],   // PASS-19H1: shorter
+  "home.teaparty.lilsis": ["lilsis", "Nobody drinks till the General comes. It's MANNERS."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.coop.mom": ["mom", "It was a dollhouse. The dolls were asked to leave. I'm told it was amicable."],
+  "home.coop.bigsis": ["bigsis", "I wired the hen house. I was told it was for dolls. I was misled."],
   "home.coop.lilsis": ["lilsis", "Everybody in my hen house is home. I checked. Twice."],
-  "home.coop.flash": ["lilsis", "I shined my flashlight in their window. They didn't even blink. They're very brave hens."],
+  "home.coop.flash": ["lilsis", "They didn't even blink at my flashlight. Brave hens."],
   // (Matthew 23:37. Those nine words, and no more of the verse, are quoted.)
   "home.nest.mom": ["mom", "'...even as a hen gathereth her chickens under her wings'..."],   // PASS-17H: reference aloud; the Bible fact tacked on
   "home.nest.mom2": ["mom", "Tonight I know just how the hen feels."],
-  "home.nest.bigsis": ["bigsis", "'NEST.' A cardboard box, straw from the garden, and a hen who has sat on plastic eggs since March. I admire her patience."],
-  "home.nest.lilsis": ["lilsis", "That's the NEST. Henrietta's sitting on the eggs. You can't rush eggs. They're plastic, so it takes EXTRA long."],
+  "home.nest.bigsis": ["bigsis", "A hen on plastic eggs since March. I admire her patience."],
+  "home.nest.lilsis": ["lilsis", "Henrietta's on the eggs. They're plastic, so it takes EXTRA long."],
 
   // ---- her bed, and the place kept on the pillow for General Feathers, who went on the trip in Daddy's suitcase
   "home.lilbed.mom": ["mom", "A bed that has been jumped on. Recently, and with conviction."],
-  "home.lilbed.bigsis": ["bigsis", "Her bed. Hens on the quilt, hens on the bed, and the non-hens ranked below them. The rankings change. There are tears."],
-  "home.lilbed.lilsis": ["lilsis", "My bed! The officers sleep there. I sleep in my FORT. The bed is for officers. And jumping."],
-  "home.pillow.mom": ["mom", "The General's place, kept. I found the first draft of her note to your father. It said 'DO WHAT SHE SAYS' twice."],
-  "home.pillow.bigsis": ["bigsis", "'RESERVED.' For a stuffed hen with one blue eye and a medal. She outranks me. I have seen the chart."],
-  "home.pillow.lilsis": ["lilsis", "That's General Feathers' place. RESERVED. She's on the trip, in Daddy's suitcase. To keep an eye on him."],
-  "home.pillow.lilsis2": ["lilsis", "I'm not worried about the General. I'm a LITTLE worried about Daddy. That's why I SENT her. He needs supervising."],
-  "home.lamp.mom": ["mom", "The rooster lamp. She won't sleep without it. Nor, I suspect, would the rooster."],   // PASS-17H: Mom's formality
-  "home.lamp.bigsis": ["bigsis", "A lamp shaped like a rooster. She stood in front of the shop window until it was hers. It took a week."],
-  "home.lamp.lilsis": ["lilsis", "My rooster lamp! He stays on ALL night. Roosters are supposed to get up early. He never even goes to BED."],
+  "home.lilbed.bigsis": ["bigsis", "Hens on top, non-hens ranked below. There are tears."],   // PASS-19H1: shorter; one idea
+  "home.lilbed.lilsis": ["lilsis", "My bed is for the officers. And jumping."],   // PASS-19H1: shorter; punch last
+  "home.pillow.mom": ["mom", "Her first draft of the note said 'DO WHAT SHE SAYS' twice."],
+  "home.pillow.bigsis": ["bigsis", "'RESERVED.' For a hen with a medal. She outranks me."],
+  "home.pillow.lilsis": ["lilsis", "General Feathers is in Daddy's suitcase. Keeping an eye on him."],
+  "home.pillow.lilsis2": ["lilsis", "I'm not worried about the General. Daddy's the one who needs supervising."],
+  "home.lamp.mom": ["mom", "She won't sleep without it. Nor, I suspect, would the rooster."],   // PASS-19H1: shorter; one idea
+  "home.lamp.bigsis": ["bigsis", "She stood at the shop window for a week until it was hers."],   // PASS-19H1: shorter
+  "home.lamp.lilsis": ["lilsis", "My rooster stays up all night. He never even goes to BED."],   // PASS-19H1: emphasis; shorter
 
   // ---- chain B: the blanket fort, and the flashlight in it, which is dead
-  "home.fort.look.mom": ["mom", "Two chairs, a drying rack and every blanket she owns. Her flashlight is just inside the door."],   // PASS-17H: American: drying rack
-  "home.fort.look.bigsis": ["bigsis", "'NO BIG SISTERS.' There is one big sister in this house. The sign is not a general statement."],
-  "home.fort.look.lilsis": ["lilsis", "My FORT. It's got lights and a sign and my flashlight and a secret. I'm not telling the secret."],
-  "home.fort.empty.mom": ["mom", "The fort. It's better built than your father's shelves. I haven't told either of them."],   // PASS-17H: Mom's formality
-  "home.fort.empty.bigsis": ["bigsis", "'NO BIG SISTERS.' I have never once tried to go in. That is what makes the sign so hurtful."],
-  "home.fort.empty.lilsis": ["lilsis", "My fort. I've got my flashlight now. The secret's still in there. It's a cookie."],
-  "home.fort.use.mom": ["mom", "Her fort, and her flashlight. You don't go into a lady's fort without an invitation. I taught her that myself."],   // PASS-17H: Mom's formality ('One does not')
-  "home.fort.use.bigsis": ["bigsis", "'NO BIG SISTERS.' I respect a posted boundary. Also I would not fit, and she would never let it go."],
-  "home.flashlight.mom": ["mom", "Her flashlight, just inside the door of her fort. It's hers to fetch, and nobody else's. Her rule, and a good one."],   // PASS-17H: Mom's formality
-  "home.flashlight.bigsis": ["bigsis", "Her flashlight. It is inside the sign's jurisdiction. I am not reaching past that sign."],
-  "home.flashlight.lilsis": ["lilsis", "My flashlight! It lives right inside my fort so I can find it in the dark. That's when you NEED one."],
-  "home.fort.take.dark": ["lilsis", "MY flashlight! Now the closet can't be dark at me. CLICK. ...Click? CLICK CLICK CLICK."],
-  "home.fort.take.early": ["lilsis", "My flashlight! I'm bringing it. You never know when it's going to be dark. CLICK. ...Click?"],
-  "home.fort.take.2": ["lilsis", "It's DEAD. I used it all up last night. I was reading to the flock under the blanket. They wanted the WHOLE book."],
-  "home.fort.take.3": ["mom", "Then it wants batteries, sweetheart. And I haven't seen one that size in this house since Easter."],   // PASS-17H: Mom's formality
-  "home.fort.take.4": ["bigsis", "...There are four. In my sound machine. In the Retreat. I should like it noted that I said so myself."],
-  "home.fort.again": ["lilsis", "I went in and came out again. Everything's okay in there. The cookie's okay."],
+  "home.fort.look.mom": ["mom", "Every blanket she owns. Her flashlight's just inside."],   // PASS-17H: American: drying rack
+  "home.fort.look.bigsis": ["bigsis", "'NO BIG SISTERS.' There is only one of me."],
+  "home.fort.look.lilsis": ["lilsis", "My fort has my flashlight and a secret. I'm not telling the secret."],
+  "home.fort.empty.mom": ["mom", "Better built than your father's shelves. I haven't told either one."],   // PASS-17H: Mom's formality
+  "home.fort.empty.bigsis": ["bigsis", "I have never once tried to go in. That is what makes it hurtful."],
+  "home.fort.empty.lilsis": ["lilsis", "The secret's still in my fort. It's a cookie."],
+  "home.fort.use.mom": ["mom", "Nobody goes into a lady's fort uninvited. I taught her that myself."],   // PASS-17H: Mom's formality ('One does not')
+  "home.fort.use.bigsis": ["bigsis", "I respect a posted boundary. Also, I would not fit."],
+  "home.flashlight.mom": ["mom", "Hers to fetch: her rule, and a good one."],   // PASS-19H1: shorter
+  "home.flashlight.bigsis": ["bigsis", "Inside the sign's jurisdiction. I am not reaching past it."],   // PASS-19H1: shorter
+  "home.flashlight.lilsis": ["lilsis", "It lives in my fort, for the dark. That's when you NEED one."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.fort.take.dark": ["lilsis", "My flashlight! The closet can't be dark at me now. Click. ...Click?"],
+  "home.fort.take.early": ["lilsis", "My flashlight, in case of dark. Click. ...Click?"],
+  "home.fort.take.2": ["lilsis", "It's DEAD. I read to the flock all night. They wanted the whole book."],
+  "home.fort.take.3": ["mom", "Then it wants batteries. I haven't seen that size since Easter."],   // PASS-17H: Mom's formality
+  "home.fort.take.4": ["bigsis", "...There are four, in my sound machine. Let it be noted I said so."],
+  "home.fort.again": ["lilsis", "I went in and out again. The cookie's okay."],
   "home.fort.putback.mom": ["mom", "Not yet, darling. Your sister will be wanting that."],
-  "home.fort.putback.bigsis": ["bigsis", "I am not permitted within arm's reach of that fort. I shall hold the flashlight until relieved."],
+  "home.fort.putback.bigsis": ["bigsis", "I may not go near that fort. I shall hold this until relieved."],
   "home.fort.putback.lilsis": ["lilsis", "No! We NEED it. It can go home after."],
   "home.lilroom.door.mom": ["mom", "The landing. Lights off when we go, girls. ...No. Leave them on tonight."],
-  "home.lilroom.door.bigsis": ["bigsis", "The way out. There is a hen on this side of the door as well. Of course there is."],
-  "home.lilroom.door.lilsis": ["lilsis", "The door! There's a hen on it so the door knows whose door it is."],
+  "home.lilroom.door.bigsis": ["bigsis", "There is a hen on this side of the door as well. Of course there is."],
+  "home.lilroom.door.lilsis": ["lilsis", "There's a hen on the door, so the door knows whose door it is."],
 
   // ---- what they say to each other in Little Sister's room
   "home.talk.lilroom.mom.bigsis.1a": ["mom", "How's the novel, darling?"],   // PASS-17H: Mom's formality
   "home.talk.lilroom.mom.bigsis.1b": ["bigsis", "It has acquired a plot this evening. I did not ask for one."],
   "home.talk.lilroom.mom.bigsis.2a": ["mom", "You shared this room once, darling. Do you miss it?"],
-  "home.talk.lilroom.mom.bigsis.2b": ["bigsis", "I miss the window, Mother. I do not miss being counted at bedtime. With the flock. As one of the flock."],
-  "home.talk.lilroom.mom.lilsis.flash.a": ["mom", "Your flashlight's in your fort, sweetheart, and only you are allowed in."],   // PASS-17H: Mom's formality
-  "home.talk.lilroom.mom.lilsis.flash.b": ["lilsis", "I KNOW. I made the rule. It's a GOOD rule. I'm already getting it. Stand back, everybody."],
+  "home.talk.lilroom.mom.bigsis.2b": ["bigsis", "I miss the window. Not being counted at bedtime with the flock."],
+  "home.talk.lilroom.mom.lilsis.flash.a": ["mom", "Your flashlight's in your fort, sweetheart. Only you're allowed in."],   // PASS-17H: Mom's formality
+  "home.talk.lilroom.mom.lilsis.flash.b": ["lilsis", "I KNOW. I made the rule. I'm already getting it."],
   "home.talk.lilroom.mom.lilsis.1a": ["mom", "Did you say your verse tonight, sweetheart?"],
   "home.talk.lilroom.mom.lilsis.1b": ["lilsis", "Twice. Once for me and once for my brother. He forgets."],
   "home.talk.lilroom.mom.lilsis.2a": ["lilsis", "Mommy, can Daddy sleep in my fort when he's back?"],
   "home.talk.lilroom.mom.lilsis.2b": ["mom", "He'd be honored, my love. He also wouldn't fit. He'll try anyway."],   // PASS-17H: Mom's formality
   "home.talk.lilroom.bigsis.mom.1a": ["bigsis", "Mom, did you ever want to be on a real stage? A big one?"],
-  "home.talk.lilroom.bigsis.mom.1b": ["mom", "I'm on one every day, darling. I direct, I stage-manage, and nobody ever knows their lines."],   // PASS-17H: Mom's formality
+  "home.talk.lilroom.bigsis.mom.1b": ["mom", "I'm on one every day, darling. And nobody ever knows their lines."],   // PASS-17H: Mom's formality
   "home.talk.lilroom.bigsis.mom.2a": ["bigsis", "I have decided what the next chapter is called. 'Places, Girls.'"],
   "home.talk.lilroom.bigsis.mom.2b": ["mom", "I expect a credit."],   // PASS-17H: Mom's formality ('I should like'); funnier
   "home.talk.lilroom.bigsis.lilsis.1a": ["bigsis", "Which one is Corporal Speckle? I have forgotten."],
-  "home.talk.lilroom.bigsis.lilsis.1b": ["lilsis", "You have NOT. You never forget ANYTHING. You're being nice. ...It's the speckly one."],
+  "home.talk.lilroom.bigsis.lilsis.1b": ["lilsis", "You have NOT. You're being nice. ...It's the speckly one."],
   "home.talk.lilroom.bigsis.lilsis.2a": ["lilsis", "When I'm thirteen, do I get an attic?"],
   "home.talk.lilroom.bigsis.lilsis.2b": ["bigsis", "When you are thirteen I shall be nineteen, and you may have mine."],
   "home.talk.lilroom.bigsis.lilsis.2c": ["lilsis", "...I don't WANT yours. Yours has no chickens."],
-  "home.talk.lilroom.lilsis.mom.1a": ["lilsis", "Mommy, look! I made my bed!"],
-  "home.talk.lilroom.lilsis.mom.1b": ["mom", "You made A bed, darling. It's on the floor, out of every blanket we own. Well done."],   // PASS-17H: Mom's formality
+  "home.talk.lilroom.lilsis.mom.1a": ["lilsis", "Mommy, look. I made my bed!"],
+  "home.talk.lilroom.lilsis.mom.1b": ["mom", "You made A bed, darling. Out of every blanket we own."],   // PASS-17H: Mom's formality
   "home.talk.lilroom.lilsis.mom.2a": ["lilsis", "Is it still today?"],
   "home.talk.lilroom.lilsis.mom.2b": ["mom", "It's still today, sweetheart. It's been today for a very long time."],   // PASS-17H: Mom's formality
   "home.talk.lilroom.lilsis.bigsis.1a": ["lilsis", "Do you want to hold a chicken? It helps."],
@@ -638,209 +643,209 @@ export const lines = {
   // =====================================================================================================
   // THE RETREAT: Big Sister's attic. Soft light, one sound, three rules. (Up here Little Sister whispers at full volume.)
   // =====================================================================================================
-  "home.retreat.first.1": ["lilsis", "Boots OFF. One. ...Two. I'M DOING THE RULE. Everybody see me doing the rule!"],
+  "home.retreat.first.1": ["lilsis", "Boots off. One. ...Two. Everybody see me doing the RULE."],
   "home.retreat.first.2": ["bigsis", "Rule two is voices down. You are whispering at full volume."],
   "home.retreat.first.3": ["lilsis", "THIS IS MY WHISPER."],
-  "home.retreat.first.4": ["mom", "Soft light, one sound, nothing out of place. Darling, it is a set. It is a very good set."],
+  "home.retreat.first.4": ["mom", "Darling, it is a set. It is a very good set."],
 
   // ---- the rules, on their easel by the hatch (the close-up shows them, and what is written under the third in crayon)
-  "home.rules.mom": ["mom", "Three rules, darling, and the third already under appeal. You haven't made a room. You've founded a republic."],   // PASS-17H: Mom's formality
-  "home.rules.bigsis": ["bigsis", "My rules. I kept them to three, so that a person of seven could remember them. The crayon is not mine."],
-  "home.rules.lilsis": ["lilsis", "Rule three is NOT FAIR. So I lodged a appeal. Mommy told me the word. It has a D in it for no reason."],
+  "home.rules.mom": ["mom", "Three rules, and the third under appeal. You've founded a republic."],   // PASS-19H1: shorter
+  "home.rules.bigsis": ["bigsis", "Three rules, for a person of seven. The crayon is not mine."],   // PASS-19H1: shorter
+  "home.rules.lilsis": ["lilsis", "Rule three is NOT fair, so I lodged a appeal. It has a D for no reason."],   // PASS-19H1: emphasis; shorter; one idea
 
   // ---- Big Sister's timeline: where the game says how it counts the years, and what B.C. and A.D. mean.
   // Every year before Christ is the Bible's count, as Archbishop Ussher counted it (docs/CHARACTERS.md has the table).
   // The first time any of them looks along it, the three read it between them: .1 to .6, then .bigsis, .bigsis2, .mom, .lilsis.
-  "home.timeline.1": ["bigsis", "My timeline. I used Archbishop Ussher's dates. He counted the years from the Bible's own genealogies."],
-  "home.timeline.2": ["mom", "A matter of record: the Archbishop's book was published in 1650. And here are his years, on an attic wall, in felt pen."],
+  "home.timeline.1": ["bigsis", "I used Archbishop Ussher's dates. He counted from the Bible's own genealogies."],
+  "home.timeline.2": ["mom", "A matter of record: the Archbishop's book, 1650. Now he's in felt pen."],
   "home.timeline.3": ["bigsis", "It begins at the left: 4004 B.C., the Creation. And here, 2348 B.C.: the Flood."],
-  "home.timeline.4": ["lilsis", "There's not much paper before Abram! I thought the beginning would be the LONGEST bit."],
-  "home.timeline.5": ["bigsis", "It is as long as it was. Here: 1921 B.C. Abram leaves Haran, and goes down into Egypt."],
-  "home.timeline.6": ["bigsis", "1491 B.C.: the Exodus. And 44 B.C.: the Ides of March. That one is Rome's. It is on my wall anyway."],
-  "home.timeline.bigsis": ["bigsis", "And at the red mark the years turn round. Before it they count down: B.C., 'before Christ'."],
-  "home.timeline.bigsis2": ["bigsis", "After it they count up: A.D. It is Latin. Anno Domini, 'in the year of the Lord'."],
+  "home.timeline.4": ["lilsis", "Not much paper before Abram. I thought the beginning was the LONGEST bit."],
+  "home.timeline.5": ["bigsis", "It is as long as it was. 1921 B.C.: Abram leaves Haran, goes down into Egypt."],
+  "home.timeline.6": ["bigsis", "1491 B.C.: the Exodus. 44 B.C.: the Ides of March. Rome's, but on my wall."],
+  "home.timeline.bigsis": ["bigsis", "At the red mark the years turn round. Before it: B.C., 'before Christ'."],
+  "home.timeline.bigsis2": ["bigsis", "After it they count up: A.D. Anno Domini, Latin for 'in the year of the Lord'."],
   "home.timeline.mom": ["mom", "Every year on that wall is counted from His birth. I've always loved that."],   // PASS-17H: a faith line said as a mother says it
-  "home.timeline.lilsis": ["lilsis", "And I'm ON it! Right at the end. She did me in pencil. Everybody else gets PEN."],
-  "home.timeline.bigsis3": ["bigsis", "Fun fact: a monk named Dionysius worked that count out in the year 525. It starts at the birth of Jesus."],
-  "home.timeline.bigsis4": ["bigsis", "Cristofori's piano. The Constitution. Sliced bread. And at the far end, in pencil, my sister."],
-  "home.timeline.again.mom": ["mom", "From the Creation to your little sister, on one strip of paper. I'd hate to have had to rule that line."],   // PASS-17H: Mom's formality ('I should not like')
-  "home.timeline.again.lilsis": ["lilsis", "I'm the last thing on it. In PENCIL. When I do something big she has to do me in pen. That's the deal."],
+  "home.timeline.lilsis": ["lilsis", "I'm on it! At the end, in pencil. Everybody else gets PEN."],
+  "home.timeline.bigsis3": ["bigsis", "A monk named Dionysius worked that count out in 525, from the birth of Jesus."],
+  "home.timeline.bigsis4": ["bigsis", "Cristofori's piano. The Constitution. Sliced bread. And, in pencil, my sister."],
+  "home.timeline.again.mom": ["mom", "From the Creation to your sister, on one strip. I'd hate to have ruled it."],   // PASS-17H: Mom's formality ('I should not like')
+  "home.timeline.again.lilsis": ["lilsis", "I'm in pencil. When I do something big, she has to do me in PEN."],
   "home.timeline.pencil.mom": ["mom", "It's your sister's, darling. She does her own footnotes."],   // PASS-17H: Mom's formality ('One does not'); funnier
-  "home.timeline.pencil.bigsis": ["bigsis", "Tonight goes on the timeline when I know what tonight was. Not before. And not in Dad's pencil."],
-  "home.timeline.pencil.lilsis": ["lilsis", "I'm not allowed to draw on it. I drew a hen on it once, by the Flood. She's still there. She's SMALL."],
+  "home.timeline.pencil.bigsis": ["bigsis", "Tonight goes on when I know what tonight was. Not in Dad's pencil."],
+  "home.timeline.pencil.lilsis": ["lilsis", "I drew a hen on it once, by the Flood. She's still there, very SMALL."],
 
   // ---- chain B: the sound machine, and the only batteries of that size in the house
-  "home.sound.look.mom": ["mom", "Her sound machine. One slow tune, in D major. Sensible girl. D major never panics."],   // PASS-17H: the speech that is really an essay; funnier
-  "home.sound.look.bigsis": ["bigsis", "My sound machine. One tune, very slow, very soft. It is the only thing in this house that is calm on purpose."],
-  "home.sound.look.lilsis": ["lilsis", "THE MUSIC BOX. It runs on batteries. I looked in the back. With my EYES. I'M WHISPERING."],
+  "home.sound.look.mom": ["mom", "One slow tune, in D major. Sensible girl. D major never panics."],   // PASS-17H: the speech that is really an essay; funnier
+  "home.sound.look.bigsis": ["bigsis", "The only thing in this house that is calm on purpose."],
+  "home.sound.look.lilsis": ["lilsis", "The music box runs on batteries. I'm WHISPERING."],
   "home.sound.use.mom": ["mom", "It's her room and her machine. I wouldn't dream of it."],   // PASS-17H: Mom's formality ('One does not'); one darling fewer
-  "home.sound.use.bigsis": ["bigsis", "It stays on. Tonight of all nights. It is the only one of us that is calm."],
-  "home.sound.use.lilsis": ["lilsis", "I'm not ALLOWED to touch anything up here. It's a rule. It's ALL the rules. And we signed a treaty."],
-  "home.sound.take.mom": ["mom", "The batteries are in there, and they're not mine to take. Not from a daughter. Your sister has to do this herself."],   // PASS-17H: Mom's formality
-  "home.sound.take.lilsis": ["lilsis", "The batteries are IN there! I can't touch it: rule AND treaty. So YOU have to. It's your music box. Go on."],
-  "home.sound.give.1": ["bigsis", "The only batteries of that size in this house are in here. I have looked in every drawer. Twice."],
+  "home.sound.use.bigsis": ["bigsis", "It stays on. Tonight it is the only one of us that is calm."],
+  "home.sound.use.lilsis": ["lilsis", "I'm not allowed to touch anything up here. We signed a TREATY."],
+  "home.sound.take.mom": ["mom", "They're not mine to take, darling. Your sister has to give them."],   // PASS-17H: Mom's formality
+  "home.sound.take.lilsis": ["lilsis", "The batteries are in there. I can't touch it. So YOU have to."],
+  "home.sound.give.1": ["bigsis", "The only batteries that size in this house are in here."],
   "home.sound.give.2": ["bigsis", "Very well. The Retreat goes dark so that the internet may live."],
-  "home.sound.give.3": ["lilsis", "IT STOPPED. ...Now I can hear the water. It's going tick, tick, tick."],
-  "home.sound.give.4": ["bigsis", "Thank you. I shall be hearing that all night. I intend to mention this again."],
-  "home.sound.give.5": ["mom", "You will, darling. Often. And every time, I'll say thank you and mean it."],   // PASS-17H: Mom's formality ('shall')
-  "home.sound.quiet.mom": ["mom", "Silent. She gave up her music for her sister's flashlight, and she's only mentioned it twice. I'm very proud."],   // PASS-17H: Mom's formality
-  "home.sound.quiet.bigsis": ["bigsis", "Silent. Now there is only the fountain, and the fountain sounds like a clock. I had been managing not to notice."],
-  "home.sound.quiet.lilsis": ["lilsis", "It's quiet now. She took the batteries out FOR ME. I'm going to draw her a chicken. She'll say no. I'll draw it anyway."],
-  "home.sound.putback.mom": ["mom", "Not into the machine, darling. They have an appointment with a pink flashlight."],
-  "home.sound.putback.bigsis": ["bigsis", "They are not going back in. A sacrifice stays made. They go in my sister's flashlight."],
-  "home.sound.putback.lilsis": ["lilsis", "They go in my FLASHLIGHT now. That's the whole point of them. And I can't touch the music box anyway."],
-  "home.soundtable.mom": ["mom", "One table, two sounds. Music at one end, water at the other. It's very well blocked."],   // PASS-17H: Mom's formality
-  "home.soundtable.bigsis": ["bigsis", "The sound table. The machine and the fountain, a hand's width apart. I measured. It matters."],
-  "home.soundtable.lilsis": ["lilsis", "The music table. Music at THIS end, water at THAT end. I'd put a chicken in the middle. She says no."],
-  "home.fountain.mom": ["mom", "A fountain, on a table, in an attic. And not one drop on the floor. She's my daughter."],   // PASS-17H: Mom's formality
-  "home.fountain.bigsis": ["bigsis", "Water over stones. It is meant to sound like a brook. Tonight it sounds like a clock."],
-  "home.fountain.lilsis": ["lilsis", "THE FOUNTAIN. It never stops. It makes me need to... never mind. I'M WHISPERING."],
+  "home.sound.give.3": ["lilsis", "It stopped. ...Now the water's going tick, tick, tick."],
+  "home.sound.give.4": ["bigsis", "I shall be hearing that all night. I intend to mention this again."],
+  "home.sound.give.5": ["mom", "You will, darling. And each time, I'll say thank you and mean it."],   // PASS-17H: Mom's formality ('shall')
+  "home.sound.quiet.mom": ["mom", "She gave up her music for her sister. And only mentioned it twice."],   // PASS-17H: Mom's formality
+  "home.sound.quiet.bigsis": ["bigsis", "Only the fountain now. It sounds like a clock."],
+  "home.sound.quiet.lilsis": ["lilsis", "She took the batteries out for ME. I'm drawing her a chicken."],
+  "home.sound.putback.mom": ["mom", "Darling, they have an appointment with a pink flashlight."],
+  "home.sound.putback.bigsis": ["bigsis", "A sacrifice stays made. They go in my sister's flashlight."],
+  "home.sound.putback.lilsis": ["lilsis", "They go in my FLASHLIGHT now. That's the whole point of them."],
+  "home.soundtable.mom": ["mom", "Music at one end, water at the other. Very well blocked."],   // PASS-19H1: shorter
+  "home.soundtable.bigsis": ["bigsis", "A hand's width apart, I measured. It matters."],   // PASS-19H1: shorter; one idea
+  "home.soundtable.lilsis": ["lilsis", "I'd put a chicken between the music and the water. She says no."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.fountain.mom": ["mom", "Not one drop on the floor. She's my daughter."],   // PASS-19H1: shorter
+  "home.fountain.bigsis": ["bigsis", "Meant to sound like a brook. Tonight it sounds like a clock."],   // PASS-19H1: shorter
+  "home.fountain.lilsis": ["lilsis", "The fountain never stops. It makes me need to... never mind."],   // PASS-19H1: emphasis; second joke cut
 
   // ---- the rest of the Retreat
-  "home.skylight.mom": ["mom", "Two skylights. She lies under the stars to think. So did I, at her age. I had to go outside for it."],
-  "home.skylight.bigsis": ["bigsis", "A branch in the left one, the moon in the right. I have counted the little lights along the rafters, in fours. Twice."],
-  "home.skylight.lilsis": ["lilsis", "You can see the MOON from her bed. I can see it from mine too. It's the same moon. I asked."],
-  "home.retreat.window.mom": ["mom", "The round window. From the road, at night, it looks as if the house has one eye open. Tonight it has."],
-  "home.retreat.window.bigsis": ["bigsis", "The round window looks down the road. I have not been watching the road. Much."],
-  "home.retreat.window.lilsis": ["lilsis", "A ROUND window. Like on a boat. Her room's a boat and my room's a farm."],
-  "home.plants.mom": ["mom", "Ferns, ivy, a small palm. Every one of them alive. In an attic. I can't keep parsley."],   // PASS-17H: Mom's formality
-  "home.plants.bigsis": ["bigsis", "The ferns, the ivy and the palm. Each has its watering day. Not one of them is worried about anything. I envy them."],
-  "home.plants.lilsis": ["lilsis", "Her jungle. There's no animals in it. I OFFERED her a chicken for it."],
-  "home.towels.mom": ["mom", "A robe, rolled towels, slippers side by side. She's thirteen. I didn't own a robe until I was married."],   // PASS-17H: Mom's formality
-  "home.towels.bigsis": ["bigsis", "Towels, rolled, not folded. A folded towel is a towel. A rolled towel is a decision."],
-  "home.towels.lilsis": ["lilsis", "Towel rolls! They look like cinnamon buns. They're NOT. I checked."],
-  "home.saltlamp.mom": ["mom", "A lamp made of salt. It gives the light of one tired candle, and she won't hear a word against it."],   // PASS-17H: Mom's formality
-  "home.saltlamp.bigsis": ["bigsis", "A salt lamp. It is said to be calming. Tonight I have my doubts, and I have written them down."],
-  "home.saltlamp.lilsis": ["lilsis", "The orange rock! It's SALT. I licked it once. It's really salt. I'm not allowed to lick the lamp."],
-  "home.books.mom": ["mom", "Your sister's books. She's read every one of them. Several were mine first."],   // PASS-17H: Mom's formality; shorter
-  "home.books.bigsis": ["bigsis", "My books. By color: red at one end, violet at the other. It is not a system. It is a view. The system is in my head."],
-  "home.books.lilsis": ["lilsis", "It's a RAINBOW of books. The one about the duck is in the yellow. The duck has NO words."],
-  "home.desk.mom": ["mom", "Her novel, squared up, and the whole plot on cards above it. I've been asked not to read either. In writing."],   // PASS-17H: Mom's formality
-  "home.desk.bigsis": ["bigsis", "My desk. Chapter nine, the plot on cards, and my pencils: the slim kind, all exactly the same length."],
-  "home.desk.lilsis": ["lilsis", "Her desk. I touched ONE pencil ONE time and she KNEW."],
-  "home.desk.pencil.mom": ["mom", "That's your father's. It doesn't go in with your sister's. Hers are a matched set."],   // PASS-17H: Mom's formality; one darling fewer
-  "home.desk.pencil.bigsis": ["bigsis", "That is Dad's pencil. It does not go in my jar. My jar has standards."],
-  "home.desk.pencil.lilsis": ["lilsis", "I put Daddy's pencil in her jar and took it out again. Now she has to count them ALL."],
-  "home.bedbig.mom": ["mom", "Hospital corners. I didn't teach her that. I'm not sure anybody did."],   // PASS-17H: Mom's formality
-  "home.bedbig.bigsis": ["bigsis", "My bed. Made. One book on the pillow, a ribbon at my place, and a second book under it, in case the first one ends."],
-  "home.bedbig.lilsis": ["lilsis", "Her bed has a TENT on it. A see-through one. I'm not allowed in it. I've only been in it nine times."],
-  "home.mat.mom": ["mom", "The exercise mat. She stretches at dawn, in perfect silence. I only know because the floorboards tell me."],   // PASS-17H: Mom's formality
-  "home.mat.bigsis": ["bigsis", "My mat. Ten minutes every morning. In for four, out for four. Tonight I keep losing count at three."],
-  "home.mat.lilsis": ["lilsis", "I can do a somersault on it! I'm not allowed. I did three. In my head. ...And one not in my head."],
-  "home.hatch.mom": ["mom", "The way down. Mind the ladder, girls. It's steeper going down than it was coming up. Everything is."],   // PASS-17H: Mom's formality
-  "home.hatch.bigsis": ["bigsis", "The hatch. Shoes go back on at the bottom. Outdoor voices may be resumed on the landing."],
-  "home.hatch.lilsis": ["lilsis", "The ladder hole! I go down it backwards. Like a bear. Bears go down backwards."],
+  "home.skylight.mom": ["mom", "She thinks under the stars. At her age, I had to go outside."],   // PASS-19H1: shorter
+  "home.skylight.bigsis": ["bigsis", "I have counted the rafter lights in fours. Twice."],   // PASS-19H1: shorter
+  "home.skylight.lilsis": ["lilsis", "Her bed has the same moon as mine. I asked."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.retreat.window.mom": ["mom", "From the road, the house has one eye open. Tonight it really has."],
+  "home.retreat.window.bigsis": ["bigsis", "It looks down the road. I have not been watching the road. Much."],
+  "home.retreat.window.lilsis": ["lilsis", "A ROUND window. Her room's a boat and my room's a farm."],
+  "home.plants.mom": ["mom", "Every plant alive, in an attic. I can't keep parsley."],   // PASS-19H1: shorter
+  "home.plants.bigsis": ["bigsis", "Not one of these plants is worried. I envy them."],   // PASS-19H1: shorter
+  "home.plants.lilsis": ["lilsis", "There's no animals in her jungle. I OFFERED her a chicken."],   // PASS-19H1: shorter; one idea
+  "home.towels.mom": ["mom", "A robe. I didn't own a robe until I was married."],   // PASS-19H1: shorter
+  "home.towels.bigsis": ["bigsis", "A folded towel is a towel. A rolled towel is a decision."],   // PASS-19H1: shorter
+  "home.towels.lilsis": ["lilsis", "They look like cinnamon buns. They're NOT."],   // PASS-19H1: emphasis; one idea
+  "home.saltlamp.mom": ["mom", "The light of one tired candle. She won't hear a word against it."],   // PASS-19H1: shorter
+  "home.saltlamp.bigsis": ["bigsis", "It is said to be calming. I have written down my doubts."],   // PASS-19H1: shorter; one idea
+  "home.saltlamp.lilsis": ["lilsis", "The orange rock is salt. I'm not allowed to lick the lamp."],   // PASS-19H1: emphasis; shorter
+  "home.books.mom": ["mom", "She's read every one of them. Several were mine first."],   // PASS-19H1: shorter; one idea
+  "home.books.bigsis": ["bigsis", "Red to violet is not the system. The system is in my head."],   // PASS-19H1: shorter; one idea
+  "home.books.lilsis": ["lilsis", "The duck book's in the yellow. The duck has NO words."],   // PASS-19H1: emphasis; shorter
+  "home.desk.mom": ["mom", "Her novel. I've been asked not to read it. In writing."],   // PASS-17H: Mom's formality
+  "home.desk.bigsis": ["bigsis", "Chapter nine. And my pencils: all slim, all the same length."],
+  "home.desk.lilsis": ["lilsis", "I touched one pencil one time, and she KNEW."],
+  "home.desk.pencil.mom": ["mom", "That's your father's pencil. Your sister's are a matched set."],   // PASS-17H: Mom's formality; one darling fewer
+  "home.desk.pencil.bigsis": ["bigsis", "Dad's pencil does not go in my jar. My jar has standards."],
+  "home.desk.pencil.lilsis": ["lilsis", "I put Daddy's pencil in her jar. Now she has to count them ALL."],
+  "home.bedbig.mom": ["mom", "I didn't teach her hospital corners. I'm not sure anybody did."],   // PASS-19H1: shorter; one idea
+  "home.bedbig.bigsis": ["bigsis", "I learned hospital corners from a book. A book about hospitals."],   // PASS-19H1: shorter; the 'second book' joke is the leaving's; one idea
+  "home.bedbig.lilsis": ["lilsis", "I'm not allowed in her tent. I've been in it nine times."],   // PASS-19H1: emphasis; shorter
+  "home.mat.mom": ["mom", "She stretches at dawn, in silence. The floorboards tell me."],   // PASS-19H1: shorter
+  "home.mat.bigsis": ["bigsis", "In for four, out for four. Tonight I lose count at three."],   // PASS-19H1: shorter
+  "home.mat.lilsis": ["lilsis", "I did three somersaults in my head. ...And one not in my head."],   // PASS-19H1: emphasis; shorter
+  "home.hatch.mom": ["mom", "Mind the ladder, girls. Everything's steeper going down."],   // PASS-19H1: shorter; punch last; one idea
+  "home.hatch.bigsis": ["bigsis", "Shoes on at the bottom. Outdoor voices may resume on the landing."],   // PASS-19H1: shorter
+  "home.hatch.lilsis": ["lilsis", "I go down the ladder hole backwards. Like a bear."],   // PASS-19H1: emphasis; shorter
 
   // ---- what they say to each other in the Retreat
   "home.talk.retreat.mom.bigsis.key.a": ["mom", "D major, darling?"],
   "home.talk.retreat.mom.bigsis.key.b": ["bigsis", "D major. You always know. It is extremely annoying, Mother."],
   "home.talk.retreat.mom.bigsis.1a": ["mom", "You put the Constitution on your timeline. In ink."],   // PASS-17H: Mom's formality
   "home.talk.retreat.mom.bigsis.1b": ["bigsis", "You stood behind me until I did, Mother."],
-  "home.talk.retreat.mom.bigsis.2a": ["mom", "It's a lovely room, darling. You made every inch of it yourself."],   // PASS-17H: Mom's formality
+  "home.talk.retreat.mom.bigsis.2a": ["mom", "It's a lovely room, darling. You made every inch yourself."],   // PASS-17H: Mom's formality
   "home.talk.retreat.mom.bigsis.2b": ["bigsis", "On pocket money. I should like that in the program."],
   "home.talk.retreat.mom.lilsis.1a": ["mom", "Indoor voice, sweetheart."],
   "home.talk.retreat.mom.lilsis.1b": ["lilsis", "THIS IS MY INDOOR VOICE. IT'S FOR INDOORS IN A BARN."],
-  "home.talk.retreat.mom.lilsis.2a": ["lilsis", "Mommy, can the General come up here when she's home? She's not a chicken. She's a GENERAL."],
+  "home.talk.retreat.mom.lilsis.2a": ["lilsis", "Can the General come up here? She's not a chicken. She's a GENERAL."],
   "home.talk.retreat.mom.lilsis.2b": ["mom", "That's for the court of appeal, darling. I only supplied the spelling."],   // PASS-17H: Mom's formality
-  "home.talk.retreat.bigsis.mom.1a": ["bigsis", "Mother. It is perfectly calm up here, and I am not. I find that inconsiderate of the room."],
-  "home.talk.retreat.bigsis.mom.1b": ["mom", "The set is never nervous, darling. Only the cast. That's what a set is for."],   // PASS-17H: Mom's formality
+  "home.talk.retreat.bigsis.mom.1a": ["bigsis", "It is calm up here, and I am not. It is inconsiderate of the room."],
+  "home.talk.retreat.bigsis.mom.1b": ["mom", "The set is never nervous, darling. Only the cast."],   // PASS-17H: Mom's formality
   "home.talk.retreat.bigsis.mom.2a": ["bigsis", "I counted the lights again. In fours. It came out even."],
   "home.talk.retreat.bigsis.mom.2b": ["mom", "And did it help?"],
   "home.talk.retreat.bigsis.mom.2c": ["bigsis", "No. But it came out even."],
   "home.talk.retreat.bigsis.lilsis.1a": ["bigsis", "Visiting hours end when the big hand reaches the twelve."],
-  "home.talk.retreat.bigsis.lilsis.1b": ["lilsis", "WHICH twelve? There's one every hour! I'll have the LAST one."],
+  "home.talk.retreat.bigsis.lilsis.1b": ["lilsis", "Which twelve? There's one every hour. I'll have the LAST one."],
   "home.talk.retreat.bigsis.lilsis.2a": ["bigsis", "You may stay if you can be silent for one whole minute."],
   "home.talk.retreat.bigsis.lilsis.2b": ["lilsis", "Okay. ...Is it a minute? ...Now? ...I was silent in BETWEEN."],
   "home.talk.retreat.lilsis.mom.1a": ["lilsis", "Mommy, why can't chickens come up here?"],
-  "home.talk.retreat.lilsis.mom.1b": ["mom", "Because it's your sister's room, and she asks so little. Three rules. You have eleven."],   // PASS-17H: Mom's formality; one darling fewer
-  "home.talk.retreat.lilsis.mom.2a": ["lilsis", "It smells like a flower shop up here. And a little bit like a library."],
+  "home.talk.retreat.lilsis.mom.1b": ["mom", "It's your sister's room. Three rules. You have eleven."],   // PASS-17H: Mom's formality; one darling fewer
+  "home.talk.retreat.lilsis.mom.2a": ["lilsis", "It smells like a flower shop up here. And a bit like a library."],
   "home.talk.retreat.lilsis.mom.2b": ["mom", "That's your sister, darling. Precisely."],   // PASS-17H: Mom's formality
   "home.talk.retreat.lilsis.bigsis.1a": ["lilsis", "Can I come up when it isn't visiting hours? Just my toe?"],
   "home.talk.retreat.lilsis.bigsis.1b": ["bigsis", "...One toe. For morale."],
   "home.talk.retreat.lilsis.bigsis.2a": ["lilsis", "Are you scared?"],
   "home.talk.retreat.lilsis.bigsis.2b": ["bigsis", "No. ...A little. Do not tell the room."],
-  "home.talk.retreat.lilsis.bigsis.2c": ["lilsis", "I'll hold your hand, then. Not because I'M scared. For the ROOM."],
+  "home.talk.retreat.lilsis.bigsis.2c": ["lilsis", "I'll hold your hand, then. Not for me. For the ROOM."],
 
   // =====================================================================================================
   // IN ANY ROOM
   // =====================================================================================================
   // ---- what the one who is handed something says
   "home.give.studykey.mom": ["mom", "Thank you, darling. I'll do the honors."],   // PASS-17H: Mom's formality ('shall')
-  "home.give.studykey.bigsis": ["bigsis", "The key to Trip Headquarters. I accept the responsibility. And the tag."],
-  "home.give.studykey.lilsis": ["lilsis", "The KEY! I'm the key person! I'm in CHARGE of the door!"],
-  "home.give.lilflash.mom": ["mom", "Your flashlight, sweetheart? I'll keep it safe. You'll want it back for the closet."],   // PASS-17H: Mom's formality
-  "home.give.lilflash.bigsis": ["bigsis", "Her flashlight. It is pink and slightly sticky. I am holding it under protest."],
-  "home.give.lilflash.lilsis": ["lilsis", "MY flashlight! Hi, flashlight. I'm hugging it. Nobody else hold it. It likes ME best."],
-  "home.give.batteries.mom": ["mom", "Your sister's batteries. I'll hold them the way you hold a borrowed prop: carefully, and not for long."],   // PASS-17H: Mom's formality ('shall')
-  "home.give.batteries.bigsis": ["bigsis", "My batteries, back in my own hand. They are not going back in the machine. A sacrifice stays made."],
-  "home.give.batteries.lilsis": ["lilsis", "The batteries! But I don't have my flashlight. Somebody's got it who isn't me. They need to MEET."],
+  "home.give.studykey.bigsis": ["bigsis", "Trip Headquarters. I accept the responsibility, and the tag."],   // PASS-19H1: shorter; one idea
+  "home.give.studykey.lilsis": ["lilsis", "The key! I'm the key person, in CHARGE of the door."],   // PASS-19H1: emphasis; one idea
+  "home.give.lilflash.mom": ["mom", "I'll keep it safe. You'll want it for the closet."],   // PASS-19H1: shorter
+  "home.give.lilflash.bigsis": ["bigsis", "Pink, slightly sticky. I am holding it under protest."],   // PASS-19H1: shorter
+  "home.give.lilflash.lilsis": ["lilsis", "Hi, flashlight. You like ME best."],   // PASS-19H1: emphasis; shorter; one idea
+  "home.give.batteries.mom": ["mom", "I'll hold them like a borrowed prop: carefully, not for long."],   // PASS-19H1: shorter
+  "home.give.batteries.bigsis": ["bigsis", "Not going back in the machine. A sacrifice stays made."],   // PASS-19H1: shorter
+  "home.give.batteries.lilsis": ["lilsis", "Somebody else has my flashlight. They need to MEET."],   // PASS-19H1: emphasis; shorter
   // ---- batteries and flashlight in one pair of hands: whoever that is puts them in
-  "home.flash.load.mom": ["mom", "In they go, the right way round. ...And it lights. A small pink spotlight. She'll want it back at once."],   // PASS-17H: Mom's formality
-  "home.flash.load.bigsis": ["bigsis", "Batteries in. The flat ends go against the springs. ...There. It lights. The Retreat did not go dark for nothing."],
-  "home.flash.load.lilsis": ["lilsis", "Batteries IN. Click. ...CLICK! It WORKS! It's pink and it's back! Now the closet can't be dark at me."],
+  "home.flash.load.mom": ["mom", "In they go: a small pink spotlight. She'll want it back at once."],   // PASS-19H1: shorter; one idea
+  "home.flash.load.bigsis": ["bigsis", "It lights. The Retreat did not go dark for nothing."],   // PASS-19H1: shorter
+  "home.flash.load.lilsis": ["lilsis", "Click. ...It WORKS! Now the closet can't be dark at me."],   // PASS-19H1: emphasis; shorter
   // ---- her flashlight, shined at something while there is nothing in it
-  "home.flash.dead": ["lilsis", "Click. Nothing. It's all used up. I can't shine it at ANYTHING till it gets batteries."],
-  "home.give.pencil.mom": ["mom", "Your father's pencil. Yellow, wooden, and thoroughly chewed. That'll do very nicely."],   // PASS-17H: Mom's formality
-  "home.give.pencil.bigsis": ["bigsis", "Dad's pencil. I know what it fits. I do not know how to do it."],
-  "home.give.pencil.lilsis": ["lilsis", "Daddy's pencil! I'll just HOLD it. I won't fix anything. Probably."],
-  "home.give.carkey.mom": ["mom", "Thank you. I am, after all, the only one of us with a license."],
-  "home.give.carkey.bigsis": ["bigsis", "The car key. I am thirteen. I am holding it. I am not driving. Yet."],
-  "home.give.carkey.lilsis": ["lilsis", "The car key! I call the front seat. I CALLED it. It's called."],
+  "home.flash.dead": ["lilsis", "Click. Nothing. It needs batteries."],
+  "home.give.pencil.mom": ["mom", "Your father's pencil, thoroughly chewed. That'll do nicely."],   // PASS-19H1: shorter
+  "home.give.pencil.bigsis": ["bigsis", "I know what Dad's pencil fits. I do not know how to do it."],   // PASS-19H1: shorter; one idea
+  "home.give.pencil.lilsis": ["lilsis", "I'll just hold Daddy's pencil and not fix anything. Probably."],   // PASS-19H1: emphasis; one idea
+  "home.give.carkey.mom": ["mom", "Thank you. I am, after all, the only one with a license."],   // PASS-19H1: shorter
+  "home.give.carkey.bigsis": ["bigsis", "I am thirteen and holding the car key. I am not driving. Yet."],   // PASS-19H1: shorter; one idea
+  "home.give.carkey.lilsis": ["lilsis", "I call the front seat. I CALLED it. It's called."],   // PASS-19H1: emphasis
 
   // ---- carried things
-  "item.note.mom": ["mom", "'The year of the best thing since.' Your sister will know. She knows the year of everything."],
+  "item.note.mom": ["mom", "'The year of the best thing since.' Your sister knows the year of everything."],   // PASS-19H1: shorter; one idea
   "item.note.bigsis": ["bigsis", "Sliced bread, 1928. I am keeping this. It is a primary source."],
   "item.note.lilsis": ["lilsis", "Words. I'll give it to somebody who reads books with NO pictures."],
-  "item.studykey.mom": ["mom", "The study key, on a string, with a tag: 'TRIP HQ.' It smells faintly of piano."],
-  "item.studykey.bigsis": ["bigsis", "One brass key, formerly of the piano. Technically it was the eighty-ninth."],
-  "item.studykey.lilsis": ["lilsis", "Daddy's key! I got it out of the piano. Me. With my arm."],
-  "item.lilflash.mom": ["mom", "Her flashlight. Pink, chunky, and very much loved. It's hers to carry into the dark."],   // PASS-17H: Mom's formality
-  "item.lilflash.bigsis": ["bigsis", "My sister's flashlight. The button is sticky. I am not going to ask."],
-  "item.lilflash.lilsis": ["lilsis", "My flashlight! It's pink and it's got a big squishy button. It only works when its batteries work."],
-  "item.batteries.mom": ["mom", "Your sister's batteries. Four of them. They want a pink flashlight, and after that they want to go home."],
-  "item.batteries.bigsis": ["bigsis", "Four double-A batteries, lately the whole sound of the Retreat. They go in my sister's flashlight. I am fine."],
-  "item.batteries.lilsis": ["lilsis", "Batteries! They go in my flashlight. Then it works. Then I do the closet. That's the WHOLE plan."],
-  "item.pencil.mom": ["mom", "Your father's crossword pencil. I've wound a great many tapes with pencils like this."],   // PASS-17H: Mom's formality
-  "item.pencil.bigsis": ["bigsis", "Dad's pencil. Fun fact: you can wind a cassette with one. Knowing it and doing it are different."],
-  "item.pencil.lilsis": ["lilsis", "Daddy's pencil. It's all bitey at the end. That's where the thinking goes in."],
-  "item.carkey.mom": ["mom", "My spare car key. It's spent two years in a cash box with the ketchup. It's earned a drive."],   // PASS-17H: Mom's formality
-  "item.carkey.bigsis": ["bigsis", "The spare key to Mom's car. Liberated by the Constitution. I will be telling this story for years."],
-  "item.carkey.lilsis": ["lilsis", "The key for Mommy's car! It makes the car go BEEP. Mommy does the driving. I do the BEEP."],
+  "item.studykey.mom": ["mom", "The study key, tag and all. It smells faintly of piano."],   // PASS-19H1: shorter; one idea
+  "item.studykey.bigsis": ["bigsis", "One brass key, formerly of the piano. Technically, the eighty-ninth."],   // PASS-19H1: shorter
+  "item.studykey.lilsis": ["lilsis", "I got Daddy's key out of the piano. Me, with my arm."],   // PASS-19H1: emphasis; one idea
+  "item.lilflash.mom": ["mom", "Pink, chunky and much loved. Hers to carry into the dark."],   // PASS-19H1: shorter
+  "item.lilflash.bigsis": ["bigsis", "The button is sticky. I am not going to ask."],   // PASS-19H1: shorter; one idea
+  "item.lilflash.lilsis": ["lilsis", "My flashlight. It only works when its batteries work."],   // PASS-19H1: emphasis; shorter
+  "item.batteries.mom": ["mom", "They want a pink flashlight, and then they want to go home."],   // PASS-19H1: shorter
+  "item.batteries.bigsis": ["bigsis", "Four double-As for her flashlight, and the Retreat is silent. I am fine."],   // PASS-19H1: shorter; one idea
+  "item.batteries.lilsis": ["lilsis", "In my flashlight, then the closet. That's the WHOLE plan."],   // PASS-19H1: emphasis; shorter; one idea
+  "item.pencil.mom": ["mom", "I've wound a great many tapes with a pencil like this."],   // PASS-19H1: shorter
+  "item.pencil.bigsis": ["bigsis", "You can wind a cassette with a pencil. Doing it is another matter."],   // PASS-19H1: 'Fun fact' rationed; shorter
+  "item.pencil.lilsis": ["lilsis", "It's bitey at the end. That's where the thinking goes in."],   // PASS-19H1: shorter; one idea
+  "item.carkey.mom": ["mom", "Two years in a cash box with the ketchup. It's earned a drive."],   // PASS-19H1: shorter
+  "item.carkey.bigsis": ["bigsis", "Mom's spare car key. Liberated by the Constitution."],   // PASS-19H1: shorter; punch last
+  "item.carkey.lilsis": ["lilsis", "Mommy does the driving. I do the BEEP."],   // PASS-19H1: emphasis; shorter; one idea
 
   // =====================================================================================================
   // HINTS: one from each of them for every puzzle. The one whose job it is says what to try; the others say whose job it is.
   // =====================================================================================================
-  "hint.home.riddle.mom": ["mom", "Your father has locked his study and taped a notice to the door. I should read it properly."],
-  "hint.home.riddle.bigsis": ["bigsis", "The study is locked, and Dad has left a notice on its door. It reads like a riddle. I like riddles."],
-  "hint.home.riddle.lilsis": ["lilsis", "Daddy's door upstairs has a sign with SO many words. My sister likes words. Mommy likes words. I like DOORS."],
-  "hint.home.key.lilsis": ["lilsis", "The key's INSIDE the piano, way down. There's a little wall by the pedals. I fit under there. I fit under EVERYTHING."],
-  "hint.home.key.mom": ["mom", "The key is down inside my piano, and my arms won't reach. It wants someone small, underneath."],   // PASS-17H: Mom's formality
-  "hint.home.key.bigsis": ["bigsis", "The key is on the hammers. I am not putting my arm in a piano. My sister fits under the keyboard."],
-  "hint.home.study.mom": ["mom", "We have the key to his study. Whoever is holding it should try that door upstairs."],
-  "hint.home.study.bigsis": ["bigsis", "One of us is holding the study key. The study door is upstairs, at the end of the landing."],
-  "hint.home.study.lilsis": ["lilsis", "We got the KEY! Whoever's holding it has to put it in Daddy's door upstairs. Chop chop!"],
-  "hint.home.batteries.lilsis": ["lilsis", "The closet's too dark! I need my flashlight from my fort. If it's dead, my sister's music box has batteries. Just SAYING."],
-  "hint.home.batteries.bigsis": ["bigsis", "Her flashlight is no use dead. The only batteries that size live in my sound machine. After that, the two must meet."],
-  "hint.home.batteries.mom": ["mom", "No light, no closet. If her flashlight is dead, the batteries are your sister's to give. Then the two must be put together."],
-  "hint.home.router.lilsis": ["lilsis", "My flashlight WORKS! The internet's in the closet under the stairs. I fit. I'm going IN."],
-  "hint.home.router.mom": ["mom", "The router is in the closet under the stairs, and she has a flashlight that works. That's her cue."],   // PASS-17H: Mom's formality
-  "hint.home.router.bigsis": ["bigsis", "The flashlight works. I paid for that. Now the router: it is in the closet only my sister fits into."],
-  "hint.home.note.bigsis": ["bigsis", "Dad always writes his passwords down. There is a yellow note on the monitor. I should read it."],
-  "hint.home.note.mom": ["mom", "Your father left a note on the monitor. It's a riddle about a year, and your sister is the one for years."],   // PASS-17H: Mom's formality
-  "hint.home.note.lilsis": ["lilsis", "There's a yellow sticky on the computer with words on it. Words are for my sister."],
-  "hint.home.login.mom": ["mom", "We have the internet and we have the password. I'll sit down at that computer myself."],   // PASS-17H: Mom's formality
-  "hint.home.login.bigsis": ["bigsis", "The router is on and the password is 1928. After that it asks about the wedding. That is Mom's department."],
-  "hint.home.login.lilsis": ["lilsis", "I fixed the internet and my sister did the number. Now Mommy has to do the typing."],
-  "hint.home.tape.mom": ["mom", "The machine has spilled its tape. I can wind it in with a pencil: your father's, from his crossword."],
-  "hint.home.tape.bigsis": ["bigsis", "The tape wants winding back in with a pencil. Dad's is on his crossword. Mom has the knack."],
-  "hint.home.tape.lilsis": ["lilsis", "The tape machine's tape fell out. NOT my fault this time. Mommy needs Daddy's pencil, from his puzzle downstairs."],
-  "hint.home.message.mom": ["mom", "The tape is wound, and there's one new message on your father's machine. Somebody press play."],   // PASS-17H: Mom's formality
-  "hint.home.message.bigsis": ["bigsis", "The tape is back in. There is one new message on Dad's machine. We should play it."],
-  "hint.home.message.lilsis": ["lilsis", "The tape's fixed and I didn't even do it! Press PLAY on the blinky machine! The big button!"],
-  "hint.home.vault.mom": ["mom", "The vault wants the year 'We the People' got it in writing. That's framed on our living-room wall."],   // PASS-17H: Mom's formality
-  "hint.home.vault.bigsis": ["bigsis", "The spare car key is in Dad's 'family vault'. The combination is a year. Mom's kind of year."],
-  "hint.home.vault.lilsis": ["lilsis", "Daddy's vault box has a clicky wheel, and Mommy knows the number. It's the 'We the People' year!"],
+  "hint.home.riddle.mom": ["mom", "Your father has locked his study and taped a notice to the door. I'll read it."],
+  "hint.home.riddle.bigsis": ["bigsis", "The study is locked. Dad left a notice on its door. It reads like a riddle."],
+  "hint.home.riddle.lilsis": ["lilsis", "Daddy's door upstairs has a sign with SO many words. My sister likes words."],
+  "hint.home.key.lilsis": ["lilsis", "The key's inside the piano, past the little wall by the pedals. I fit."],   // PASS-19H1: shorter (its words stay); one idea
+  "hint.home.key.mom": ["mom", "The key's inside my piano, and my arms won't reach. It wants someone small."],   // PASS-19H1: shorter (its words stay); one idea
+  "hint.home.key.bigsis": ["bigsis", "The key is on the hammers, and my arm stays out of the piano. My sister fits."],   // PASS-19H1: shorter (its words stay); one idea
+  "hint.home.study.mom": ["mom", "We have the key to his study. Whoever has it should try the door upstairs."],
+  "hint.home.study.bigsis": ["bigsis", "One of us has the study key. Its door is upstairs, at the end of the landing."],
+  "hint.home.study.lilsis": ["lilsis", "We got the KEY. Whoever's got it, put it in Daddy's door upstairs."],
+  "hint.home.batteries.lilsis": ["lilsis", "The closet's too dark. I need my flashlight from my fort. Dead? The music box."],
+  "hint.home.batteries.bigsis": ["bigsis", "Her flashlight is no use dead. Batteries that size live in my sound machine."],
+  "hint.home.batteries.mom": ["mom", "No light, no closet. A dead flashlight needs your sister's batteries."],
+  "hint.home.router.lilsis": ["lilsis", "My flashlight WORKS! The internet's in the closet under the stairs. I fit."],
+  "hint.home.router.mom": ["mom", "The router is in the closet under the stairs. Her flashlight works: her cue."],   // PASS-17H: Mom's formality
+  "hint.home.router.bigsis": ["bigsis", "The flashlight works; I paid for that. Now the router. The closet is hers."],
+  "hint.home.note.bigsis": ["bigsis", "Dad always writes his passwords down. There is a yellow note on the monitor."],
+  "hint.home.note.mom": ["mom", "Your father left a note on the monitor. A riddle about a year: your sister's."],   // PASS-17H: Mom's formality
+  "hint.home.note.lilsis": ["lilsis", "There's a yellow sticky on the computer. Words are for my sister."],
+  "hint.home.login.mom": ["mom", "We have the internet and the password. I'll sit down at that computer myself."],   // PASS-17H: Mom's formality
+  "hint.home.login.bigsis": ["bigsis", "The router is on, the password is 1928. After that, it asks about Mom's wedding."],
+  "hint.home.login.lilsis": ["lilsis", "I fixed the internet. My sister did the number. Now Mommy does the typing."],
+  "hint.home.tape.mom": ["mom", "The machine spilled its tape. I'll wind it with your father's crossword pencil."],
+  "hint.home.tape.bigsis": ["bigsis", "The tape wants winding back in with Dad's crossword pencil. Mom has the knack."],
+  "hint.home.tape.lilsis": ["lilsis", "The tape machine's tape fell out. NOT my fault this time. Mommy needs a pencil."],
+  "hint.home.message.mom": ["mom", "The tape is wound. There's one new message on your father's machine."],   // PASS-17H: Mom's formality
+  "hint.home.message.bigsis": ["bigsis", "The tape is back in. One new message on Dad's machine. We should play it."],
+  "hint.home.message.lilsis": ["lilsis", "The tape's fixed and I didn't even do it. Press PLAY on the blinky machine."],
+  "hint.home.vault.mom": ["mom", "The vault wants the 'We the People' year. That's framed on our living-room wall."],   // PASS-17H: Mom's formality
+  "hint.home.vault.bigsis": ["bigsis", "Dad's 'family vault' has the spare car key. The combination is a year Mom knows."],
+  "hint.home.vault.lilsis": ["lilsis", "Daddy's vault box has a clicky wheel. Mommy knows the 'We the People' number."],
   "hint.home.leave.mom": ["mom", "We know where that phone was last seen. The front door, girls."],
   "hint.home.leave.bigsis": ["bigsis", "We have a location. The logical next step is the front door."],
-  "hint.home.leave.lilsis": ["lilsis", "We found the dot! Let's GO! The door is right THERE!"],
+  "hint.home.leave.lilsis": ["lilsis", "We found the dot! Let's go, the front door's right THERE."],   // PASS-19H1: emphasis; one idea
 };

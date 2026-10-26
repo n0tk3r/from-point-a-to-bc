@@ -63,7 +63,7 @@ const BACK = [462, 430];               // and a step back from the blessing, to 
 const AWAY = [466, 486];               // where the boy walks to after the blessing, a few steps off down the lane, and turns to us
 const MARIAM = [646, 474];             // marks.mariam: in the hen yard, behind its fence, facing W with her hens
 const MARIAM_TALK = [547, 474];        // marks.mariam_talk: on the lane outside the fence, beside her, the fence between them
-const FELIX = [82, 463];               // marks.felix: on the landing, by the pile of bales
+const FELIX = [68, 465];               // marks.felix: on the landing, by the pile of bales (STAGE-19R: 14 px left, his head off the mast: scene audit S7; was 82, 463)
 // Talking to Felix: on the landing a step east of him, turned to him. (The landing is small on the screen: the painter's
 // stands for the bales, the landing and the barge lie close round him; this one is clear of the bollard and of all three.)
 const FELIX_TALK = [144, 466];
@@ -371,6 +371,15 @@ export default {
   // DEPTH (fixed by the master brief, and the painter's camera): no minScale or maxScale is needed here. The farthest stand,
   // on the road at row 366, draws the boy 40 pixels tall.
   horizon: 250, full: 590,
+  // STAGE-19R (the people in the room's light, for the engine's figure light, ENGINE-19 item 9; DESIGN.md decision 180):
+  // the lane is backlit (the sun low, ahead and to the left: faces toward us in shade), so everyone is a little darker
+  // and flatter (scene audit S14). The talk's pocket at the bench is the exception: rome_tiber.py's stage19 shades the
+  // wall behind the bench, and a +0.1 zone over the bench and the prayer place (BENCH, PRAY_EL, BLESS_AT, PRAY_SON; not
+  // WAIT) gives the old man, and the boy praying beside him, their drawn light back against it: the frame's one peak of
+  // contrast is Eleazar at his bench (S1, S4). ENGINE-19B's demonstration had the same light and a zone at
+  // [455, 408, 60, 26]; moved right and narrowed so the bench's seat sits inside it, not on its edge.
+  figureLight: { exposure: -0.1, contrast: 0.9 }, lightFrom: "left",
+  lightZones: [{ ellipse: [478, 406, 50, 22], k: 0.1, soft: 20 }],
 
   // The lane from the bridgehead to the road along the river, the little square with the well, and the landing. Not the
   // water, the barge, the hen yard or the house fronts.
@@ -446,7 +455,7 @@ export default {
       life: { every: [16, 30], spots: [[702, 486, "W"], [640, 458, "SW"]], stay: [3, 6] } },
     // Felix, with a bale on his shoulder, working between the landing and the barge's side (in front of the barge).
     { id: "felix", kind: "felix", at: FELIX, face: "W",
-      life: { every: [10, 18], spots: [[75, 453, "NW"], [54, 475, "E"]], stay: [2, 4] } },
+      life: { every: [10, 18], spots: [[72, 485, "NW"], [54, 475, "E"]], stay: [2, 4] } },      // STAGE-19R: the first spot off the mast (was 75, 453)
   ],
 
   // Back to front: a later area lies over an earlier one. The painter lists the things small before big ("where two shapes
@@ -488,12 +497,12 @@ export default {
     // His window: while he is at it, to wait under; once he has come down, to look at again.
     { id: "window", ...windowThing, verb: "Wait under", when: (g) => !down(g), look: "rome.tiber.window.look", use: (g) => waitForHim(g) },
     { id: "window-2", ...windowThing, when: down, look: "rome.tiber.window.look2" },
-    { id: "doorpost", name: "little case", verb: "Poke", rect: [600, 351, 12, 20], walkTo: [576, 434], face: "E",       // fixed upright on the right-hand post of his door
+    { id: "doorpost", name: "little case", verb: "Poke", rect: [596, 351, 20, 20], walkTo: [576, 434], face: "E",       // STAGE-19R (S9): 20 wide, was 12       // fixed upright on the right-hand post of his door
       look: lookAtDoorpost, use: "rome.tiber.doorpost.use" },
 
     // The people. Felix on the landing, and Mariam in the yard (talked to from the lane outside the fence).
     {
-      id: "felix", name: "boatman", verb: "Talk to", poly: [[61, 464], [68, 373], [70, 368], [75, 359], [78, 357], [85, 357], [98, 369], [102, 373], [104, 464], [102, 467], [98, 468], [90, 469], [75, 469], [67, 468], [63, 467]], walkTo: FELIX_TALK, face: "W",
+      id: "felix", name: "boatman", verb: "Talk to", poly: [[47, 466], [54, 375], [56, 370], [61, 361], [64, 359], [71, 359], [84, 371], [88, 375], [90, 466], [88, 469], [84, 470], [76, 471], [61, 471], [53, 470], [49, 469]], walkTo: FELIX_TALK, face: "W",      // STAGE-19R: his figure at his new mark (14 left, 2 down)
       look: twice("rome.felix.look", "rome.felix.look2"), use: talkToFelix,
       useWith: { lamp: talkToFelix, gaultoga: showFelix("rome.felix.gaultoga"), coin: showFelix("rome.felix.coin"), breakfast: showFelix("rome.felix.breakfast") },
     },
@@ -535,6 +544,11 @@ export default {
     await g.walkTo(STEP_IN[0], STEP_IN[1]);
     if (!down(g)) {                                               // (he is at his window: always so the first time, in a game played)
       if (me) me.face("N");
+      // STAGE-19R: the arrival's shorter first line (round 19) put its words across the girl's face, 130 pixels to his
+      // right and level with him: for these three lines her sprite flag `clear` lifts his words over her head (as
+      // rome-steps does for the soothsayer at the arrival), and then as before.
+      const girl = g.actor("mariam"), lift = !!(girl && girl.flag), was = lift && !!(girl.flags && girl.flags.clear);
+      if (lift) girl.flag("clear", true);
       await g.wait(500);
       await g.say("rome.tiber.arrive.1");
       if (me) me.look(WINDOW[0], WINDOW[1] - 60);                 // up at the window
@@ -542,6 +556,7 @@ export default {
       await g.say("rome.tiber.arrive.2");
       if (me) me.face("S");                                       // and to us
       await g.say("rome.tiber.arrive.3");
+      if (lift) girl.flag("clear", was);
       if (me) me.face("N");
     }
     g.flag("rome.sawTiber", true);

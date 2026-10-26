@@ -233,7 +233,9 @@ async function useSpinner(g) {
 
 // ---------- the survival shelf: Mom buys three waters; and #12's try, the space blanket ----------
 /** #12 is open: the coin door is the size of a coin, and they are looking for something that shines like a car. */
-const seeking = (g) => !!g.flag("nevada.doorOpen") && !g.flag("nevada.wideOpen");
+// STAGE-19N: and Big Sister's rule has been said (it is the first thing that happens at the little door now, not the end of
+// the flash): before it, nobody here is looking for anything that shines.
+const seeking = (g) => !!g.flag("nevada.doorOpen") && !g.flag("nevada.wideOpen") && heard(g, "nevada.shade.rule.3");
 async function blanket(g) {
   await g.say("nevada.shade.blanket.bigsis", "nevada.shade.blanket.mom");
 }
@@ -450,11 +452,19 @@ const HENS_TREE = hensTree({
   },
 });
 /** Out to the hens, and #11 (or, after it, a word with them). Then Jolene goes back behind her counter. */
+// STAGE-19N (SCORE-19B S16): where the two who watched from the doorway go once #11 is done: the middle of the floor, clear
+// of the back door's way (at WATCH and ASIDE they bunched everyone to the right, Big Sister 62 px from the edge against the
+// pay phone, and stood in the way to the door).
+const AFTER_HENS = { mom: [500, 455], bigsis: [455, 470] };
 async function hens(g) {
   hen.jolene = null;
+  const first = !g.flag("nevada.jolene");
   await toStep(g);
   await g.talk(HENS_TREE);
+  const done = first && !!g.flag("nevada.jolene");
+  const back = done ? Promise.all(["mom", "bigsis"].filter((id) => g.actor(id) && g.lead && g.lead.id !== id).map((id) => g.walkTo(AFTER_HENS[id][0], AFTER_HENS[id][1], id))) : null;
   if (hen.jolene) { await hen.jolene; hen.jolene = null; await jolHome(g); }
+  if (back) await back;
 }
 async function useBackdoor(g) {
   const me = who(g);
@@ -619,7 +629,8 @@ export default {
     { id: "roller", name: "hot dog roller", rect: [522, 320, 32, 22], walkTo: [538, 436], face: "N", look: lookAt("nevada.store.roller", "nevada.jolene.roller") },
     { id: "register", name: "cash register", rect: [411, 284, 54, 53], walkTo: [427, 428], face: "N", look: each("nevada.store.register"), use: useRegister },
     { id: "eggs", name: "pickled eggs", rect: [323, 285, 25, 43], walkTo: [315, 418], face: "N", look: eggsLook, use: (g) => jolSay(g, "nevada.jolene.eggs") },
-    { id: "pennydish", name: "take-a-penny dish", rect: [387, 318, 23, 17], walkTo: COUNTER, face: "N", look: each("nevada.store.pennydish"),
+    // STAGE-19N (SCORE-19B S9): the dish's box 22 px high (was [387, 318, 23, 17]), as the painter's layout has it.
+    { id: "pennydish", name: "take-a-penny dish", rect: [387, 316, 23, 22], walkTo: COUNTER, face: "N", look: each("nevada.store.pennydish"),
       use: { lilsis: takePennies, mom: "nevada.store.pennydish.mom", bigsis: "nevada.store.pennydish.bigsis" } },
     { id: "postcards", name: "postcards", rect: [299, 274, 20, 51], walkTo: [289, 416], face: "N", look: each("nevada.store.postcards"), use: (g) => jolSay(g, "nevada.jolene.postcards") },
     { id: "maprack", name: "map rack", rect: [433, 343, 48, 55], walkTo: [452, 431], face: "N", look: each("nevada.store.maps") },
@@ -649,8 +660,7 @@ export default {
         ["nevada.talk.mom.bigsis.2a", "nevada.talk.mom.bigsis.2b", "nevada.talk.mom.bigsis.2c"],
       ],
       lilsis: [
-        { when: (g) => visits(g) >= 2, say: ["nevada.talk.mom.lilsis.hats.a", "nevada.talk.mom.lilsis.hats.b"] },
-        { when: (g) => g.asked("joe/grandpa") > 0, say: ["nevada.talk.mom.lilsis.joe.a", "nevada.talk.mom.lilsis.joe.b"] },
+        // PASS-19N1: the hats and the spare grandpa are rationed (nevada.talk.mom.lilsis.hats.*, .joe.* removed)
         ["nevada.talk.mom.lilsis.2a", "nevada.talk.mom.lilsis.2b"],
       ],
     },
@@ -662,8 +672,7 @@ export default {
       ],
       lilsis: [
         { when: (g) => !!g.flag("nevada.jolene"), say: ["nevada.talk.bigsis.lilsis.egg.a", "nevada.talk.bigsis.lilsis.egg.b"] },
-        { when: (g) => !!g.flag("nevada.banjoTried"), say: ["nevada.talk.bigsis.lilsis.banjo.a", "nevada.talk.bigsis.lilsis.banjo.b"] },
-        ["nevada.talk.bigsis.lilsis.2a", "nevada.talk.bigsis.lilsis.2b"],
+        // PASS-19N1: nevada.talk.bigsis.lilsis.banjo.* and .2* removed (N1's lines)
       ],
     },
     lilsis: {

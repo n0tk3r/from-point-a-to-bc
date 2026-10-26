@@ -69,7 +69,8 @@ LIGHT_R = 6.0
 # ---- marks: where the game puts people (X, Z on the floor). Nobody stands: Joe sits, Ranger is a raccoon.
 MARKS = {
     "joe": JOE,                                             # seated on the long seat, facing E
-    "ranger": (180.0, 148.0),                               # on the carpet, between the seats, near us
+    "ranger": (207.0, 148.0),                               # on the carpet, between the seats, near us (STAGE-19N: 27 cm toward the
+                                                            # facing seat, about 25 px off the cabin's centre line under the divider)
     "ropes": (ROPES["at"][0] + 2.0, ROPES["at"][2] + 16.0),        # where Ranger sits to nibble: ON the cushion (at SEAT_H), beside the bow, toward us
 }
 # the master brief's fixed marks `bag`, `juice`, `clipboard` (X, Z): ON the facing seat's cushion (at SEAT_H), where each

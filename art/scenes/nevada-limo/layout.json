@@ -218,7 +218,7 @@
      580,
      388,
      99,
-     194
+     110
     ]
    },
    "stand": [
@@ -249,10 +249,10 @@
    "what": "the ashtray on the bar: cut glass, full of jelly beans",
    "shape": {
     "rect": [
-     449,
-     267,
-     20,
-     13
+     448,
+     266,
+     22,
+     20
     ]
    },
    "stand": [
@@ -403,9 +403,9 @@
    "shape": {
     "rect": [
      271,
-     312,
+     310,
      47,
-     11
+     20
     ]
    },
    "stand": [
@@ -429,11 +429,11 @@
   },
   "ranger": {
    "at": [
-    422,
+    447,
     354
    ],
    "face": "W",
-   "scale": 0.99,
+   "scale": 0.995,
    "note": "on the carpet between the seats, near us, facing Joe"
   },
   "ropes": {

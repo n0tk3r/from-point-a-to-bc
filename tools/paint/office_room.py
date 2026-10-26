@@ -66,6 +66,10 @@ def lamps():
     out.append(Lamp((280, 20, 180), "#c8ccbe", 0.36, reach=300, size=120.0, wrap=0.9, shadows=False, inside_only=True, name="bounce", core=1.4))
     # and what the lit walls round us give back: a broad soft light from our side of the room, onto faces turned to us
     out.append(Lamp((250, 150, 660), "#d2ccbc", 0.55, reach=420, size=160.0, wrap=0.6, shadows=False, inside_only=True, name="nearwall", core=1.6))
+    # STAGE-19O (S13): one small warm pocket on the panel by the door, the thermostat and the intercom (the two things on
+    # that wall Grandpa Joe works), from the intercom's own little lamp
+    out.append(Lamp(((M.THERMO[0] + M.INTERCOM[1]) / 2, (M.THERMO[2] + M.INTERCOM[3]) / 2, 14.0), "#ffd8a6", 0.20, reach=45.0, local=70.0,
+                    shadows=False, inside_only=True, name="panel", core=0.8, wrap=0.5))
     return out
 
 
@@ -137,6 +141,13 @@ def render(ss=1, fast=True, skip=(), rect=None, occ=None, state=None, reflection
     pic = pic * (1 - air[..., None]) + col("#9aa0b0")[None, None, :] * air[..., None]
     fr = (st.grp == st.groups.get("front", -1))
     pic[fr] = pic[fr] * col("#e0d4c4")
+    # STAGE-19O (a value pass, S1/S10): the two near props, the wastebasket and the carton of questionnaires, quieter: their
+    # darks lifted and their contrast lowered (they were the darkest, most contrasted things in the frame, on its edge)
+    if fr.any():
+        pic[fr] = pic[fr] * 0.72 + col("#8c847a")[None, :] * 0.28
+    # and the fittings' lenses a step down (S1: the ceiling's panels matched the white table)
+    lens = st.mask_of(*[f"troffer{i}" for i in range(len(M.TROFFERS))])
+    pic = pic * (1 - 0.16 * lens)[..., None]
     return st.down(pic), st
 
 
@@ -148,7 +159,11 @@ def grade(pic, rect=None):
     cx = ((x - 430) / 430) ** 2
     low = np.clip((y - 460) / 140, 0, 1) ** 1.1
     top = np.clip((170 - y) / 170, 0, 1) ** 1.1
-    v = np.clip(cx * 0.18 * (0.4 + 0.6 * low) + low * 0.30 + top * 0.20 + top * cx * 0.14, 0, 0.55)
+    # STAGE-19O (a value pass, S2/S5): a darker frame (the ceiling and the side walls' far ends lower), and the upper back
+    # wall's band (y 210 to 280, the clock, the sign, the poster: where Grandpa Joe's words are) a step lower, so the back
+    # wall round the table and the mirror is the light peak
+    band = np.exp(-((y - 245) / 36.0) ** 2) * 0.13
+    v = np.clip(cx * 0.30 * (0.4 + 0.6 * low) + low * 0.30 + top * 0.32 + top * cx * 0.14 + band, 0, 0.6)
     warm = col("#5a3828")
     out = pic * (1 - v[..., None]) + pic * warm[None, None, :] * 1.4 * v[..., None]
     grey = (out @ LUM)[..., None]

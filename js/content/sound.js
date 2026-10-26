@@ -157,6 +157,10 @@ export const sound = {
     // Grandpa Joe's banjo coming down over Jed's head: one twang, every string at once (the five of a banjo tuned to G),
     // and the thump of the head going through. Nobody is hurt: it is a banjo.
     twang: { noise: [900, 180], len: 0.16, q: 1.6, notes: [[67, 0, 0.8], [50, 0, 0.95], [55, 0, 0.9], [59, 0, 0.85], [62, 0, 0.8]], level: 0.045, wave: "sawtooth" },
+    // STAGE-19N: the gray limousine's motor, heard a second before it shows on the far road and again as it leaves (the
+    // guide's "sound first" for an arrival): a low, smooth, rising purr of noise over two low notes a fifth apart, about two
+    // seconds, quieter than the starter. A big, expensive, unhurried car.
+    motor: { noise: [110, 240], len: 2.0, q: 1.2, notes: [[31, 0, 1.9], [38, 0.05, 1.85]], level: 0.07, wave: "triangle" },
 
     // ---- CAR-13E: inside the wagon, Act One (the car also has latch, clunk, hiss and click, above) ----
     // The wagon's horn: two square-wave notes a major third apart (E and G sharp), dying away over half a second, not loud. A

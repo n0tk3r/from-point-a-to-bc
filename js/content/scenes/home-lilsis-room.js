@@ -72,11 +72,11 @@ const nestLook = (g) => g.say(...(who(g) === "mom" ? ["home.nest.mom", "home.nes
 // ---------- the reserved place on the pillow ----------
 const pillowLook = (g) => g.say(...(who(g) === "lilsis" ? ["home.pillow.lilsis", "home.pillow.lilsis2"] : [`home.pillow.${who(g)}`]));
 // ---------- the flock, where "Chickens KNOW." is said for the first time ----------
-const flockLook = (g) => g.say(...(who(g) === "lilsis" ? ["home.flock.lilsis", "home.flock.lilsis2"] : [`home.flock.${who(g)}`]));
+const flockLook = (g) => g.say(...(who(g) === "lilsis" ? ["home.flock.lilsis", "home.flock.lilsis2"] : who(g) === "bigsis" ? ["home.flock.bigsis", "home.flock.bigsis.b"] : [`home.flock.${who(g)}`]));      // PASS-19H2: her punch in its own box
 
 // ---------- handing things on ----------
 async function solveNote(g) {
-  await g.say("home.note.solve.1", "home.note.solve.2", "home.note.solve.3");
+  await g.say("home.note.solve.1", "home.note.solve.1.b", "home.note.solve.2", "home.note.solve.3");      // PASS-19H2: Mom between, so Big Sister is never three boxes running
   g.flag("home.knowsYear", true);
 }
 /** Batteries and flashlight in the same pockets: in they go, and it works. */
@@ -84,6 +84,7 @@ async function loadFlash(g, to) {
   const pockets = g.store.data.inventory[to];
   pockets.splice(pockets.indexOf("batteries"), 1);
   g.sfx("click");
+  await g.wait(400);                             // STAGE-19H: the click, then the light: a beat before she says it works (C10)
   g.flag("home.flashWorks", true);
   await g.say(`home.flash.load.${to}`);
 }
@@ -115,8 +116,11 @@ export default {
   ],
 
   party: ["mom", "bigsis", "lilsis"],
-  spawn: { default: [518, 469], mom: [518, 469], bigsis: [461, 475], lilsis: [580, 471], fromLanding: [518, 469] },
-  arrive: { fromLanding: [[461, 475], [580, 471]] },
+  // STAGE-19H: a shallow triangle with Mom at its apex, up-stage ([518, 469] stood 10 px from the nest's place); Big Sister
+  // clear of the tea table's top edge ([461, 475]); Little Sister out from under the RESERVED sign ([580, 471]): GUIDE-19
+  // S16, S7, S12. layout.json and home_lilsis_room_layout.py agree.
+  spawn: { default: [518, 450], mom: [518, 450], bigsis: [480, 476], lilsis: [553, 474], fromLanding: [518, 450] },
+  arrive: { fromLanding: [[480, 476], [553, 474]] },
   exits: ["home-landing"],
   // The way out across the edges of the picture: her door is at the right edge, at the front, so the right edge and the
   // bottom both lead out to the landing.
@@ -161,7 +165,8 @@ export default {
       look: atFort(fortLook), use: atFort(fort), useWith: { lilflash: atFort(each("home.fort.putback")) },
     },
     {
-      id: "flashlight", name: "her flashlight", verb: "Take", rect: [127, 466, 42, 15], walkTo: [227, 471], face: "W", plane: "flashlight", when: (g) => !g.flag("home.flashTaken"),
+      id: "flashlight", name: "her flashlight", verb: "Take", rect: [127, 461, 42, 20], walkTo: [227, 471], face: "W", plane: "flashlight",   // STAGE-19H: 20 px tall, not 15 (GUIDE-19 S9: the puzzle's object)
+      when: (g) => !g.flag("home.flashTaken"),
       look: atFort(each("home.flashlight")), use: atFort(fort),
     },
     {

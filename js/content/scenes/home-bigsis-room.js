@@ -63,8 +63,8 @@ async function timeline(g) {
   if (!g.flag("home.sawTimeline") && home(g)) {
     g.flag("home.sawTimeline", true);
     turn(g, MARK);
-    await g.say("home.timeline.1", "home.timeline.2", "home.timeline.3", "home.timeline.4", "home.timeline.5", "home.timeline.6");
-    await g.say("home.timeline.bigsis", "home.timeline.bigsis2", "home.timeline.mom", "home.timeline.lilsis");
+    await g.say("home.timeline.1", "home.timeline.2", "home.timeline.3", "home.timeline.4", "home.timeline.5", "home.timeline.6", "home.timeline.mom");
+    await g.say("home.timeline.bigsis", "home.timeline.bigsis2", "home.timeline.lilsis");      // PASS-19H2: Mom's line before the red mark, so Big Sister is never three boxes running
     return;
   }
   if (me !== "bigsis") return g.say(`home.timeline.again.${me}`);
@@ -78,12 +78,15 @@ async function loadFlash(g, to) {
   const pockets = g.store.data.inventory[to];
   pockets.splice(pockets.indexOf("batteries"), 1);
   g.sfx("click");
+  await g.wait(400);                             // STAGE-19H: the click, then the light: a beat before she says it works (C10)
   g.flag("home.flashWorks", true);
   await g.say(`home.flash.load.${to}`);
 }
 
 const TABLE = [339, 387];                        // where one stands at the sound table (its three things' walkTo, below)
-const BACK = [[282, 396], [300, 420], [258, 414]];    // where the others step back to
+// STAGE-19H: to the right of the room, in front of the desk, not in front of the bookcase, whose top ledge ran through
+// their faces at [282, 396], [300, 420] and [258, 414] (GUIDE-19 S7); still out of the line between the table and us.
+const BACK = [[476, 486], [520, 494], [562, 500]];    // where the others step back to
 /** The machine is small, and anybody standing in front of the table hides it. So whoever comes to the table has it to
     herself: the others step back to where they can watch, and she takes the place at its end. */
 async function standBack(g) {
@@ -118,7 +121,7 @@ const soundLook = (g) => g.say(`home.sound.${g.flag("home.retreatQuiet") ? "quie
 
 // ---------- handing things on ----------
 async function solveNote(g) {
-  await g.say("home.note.solve.1", "home.note.solve.2", "home.note.solve.3");
+  await g.say("home.note.solve.1", "home.note.solve.1.b", "home.note.solve.2", "home.note.solve.3");      // PASS-19H2: Mom between, so Big Sister is never three boxes running
   g.flag("home.knowsYear", true);
 }
 /** What the one who is handed something says. Big Sister is the one who can read Dad's note. */

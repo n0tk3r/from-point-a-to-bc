@@ -50,7 +50,8 @@ const strands = (g) => Number(g.flag("limo.strands")) || 0;
 // ---------- where the two of them are ----------
 const JOE = [318, 327];                // the mark `joe`: the ground under his hips, under the long seat's cushion; facing E, across the car
 const JOE_SCALE = 0.791;               // the size the painter drew him at there (the row's own is 0.793)
-const RANGER = [422, 354];             // the mark `ranger`: on the carpet, near us, facing Joe (W)
+const RANGER = [447, 354];             // the mark `ranger`: on the carpet, near us, facing Joe (W). STAGE-19N: 25 px off
+                                       // the cabin's centre line under the divider (SCORE-19A S12), as the painter's model has it
 // Ranger's places on the carpet in front of each thing (the painter's `stands`), and the cushion beside the bow.
 const AT = { ropes: [344, 340], joe: [354, 330], belt: [332, 359], phone: [376, 329], ashtray: [460, 330], divider: [419, 329],
   bag: [504, 364], juice: [514, 378], clipboard: [507, 380], fridge: [498, 381], windowL: [335, 352], windowR: [502, 353] };
@@ -283,14 +284,14 @@ async function lunch(g) {
   await fetch(g, "clipboard");
   await g.say("limo.lunch.burger");
   g.closeup(clipboard(), "The office's clipboard", { grid: [800, 600] });
-  await g.say("limo.lunch.read.1", "limo.lunch.read.2", "limo.lunch.read.3");
+  await g.say("limo.lunch.read.1", "limo.ranger.dots", "limo.lunch.read.2", "limo.lunch.read.3");      // PASS-19O: Ranger's "..." between (no run of three)
   g.closeup();
-  await g.say("limo.lunch.read.4", "limo.lunch.read.5");
+  await g.say("limo.ranger.dots", "limo.lunch.read.4", "limo.lunch.read.5");
   // The map, torn off the clipboard and folded small; Ranger puts it in the bib pocket for him.
   const r = g.actor("ranger");
   if (r) await r.play(g.clock, "reach");
   g.give("sectormap");
-  await g.say("limo.lunch.trade");
+  await g.say("limo.ranger.dots", "limo.lunch.trade");
   // And the divider slides down, and a hand passes back a receipt.
   await slide(g, true);
   await g.say("limo.lunch.receipt.1");
@@ -298,7 +299,7 @@ async function lunch(g) {
   await g.arrive("receipt", [421, 252], { to: [346, 322] });
   g.give("receipt");
   await slide(g, false);
-  await g.say("limo.lunch.receipt.2", "limo.lunch.receipt.3", DOTS, "limo.lunch.receipt.4");
+  await g.say("limo.lunch.receipt.2", "limo.lunch.receipt.3", "limo.ranger.dots", "limo.lunch.receipt.4");
   g.flag("limo.map", true);
   await ending(g);
 }
@@ -468,7 +469,9 @@ export default {
       when: (g) => who(g) === "ranger" },
     { id: "window-l", name: "window", rect: [0, 177, 300, 146], walkTo: AT.windowL, face: "W", look: looks("window"), use: looks("window") },
     { id: "window-r", name: "window", rect: [544, 179, 255, 140], walkTo: AT.windowR, face: "E", look: looks("window"), use: looks("window") },
-    { id: "fridge", name: "little fridge", verb: "Open", rect: [580, 388, 99, 194], walkTo: AT.fridge, face: "E", look: looks("fridge"),
+    // STAGE-19N (S9, S10: the painter's layout, nevada_limo_layout.py): the belt and the ashtray at least 20 px tall, and the
+    // fridge's area only where it shows above the near seat back.
+    { id: "fridge", name: "little fridge", verb: "Open", rect: [580, 388, 99, 110], walkTo: AT.fridge, face: "E", look: looks("fridge"),
       use: { grandpajoe: "limo.fridge.joe", ranger: async (g) => { await g.actor("ranger").play(g.clock, "reach"); await g.say("limo.fridge.ranger", "limo.fridge.ranger.joe"); } } },
     { id: "divider", name: "divider", verb: "Talk through", rect: [321, 202, 201, 69], walkTo: AT.divider, face: "N",
       look: { grandpajoe: "limo.divider.joe", ranger: ["limo.divider.ranger", "limo.divider.ranger.look.joe"] },
@@ -476,8 +479,8 @@ export default {
     { id: "phone", name: "car phone", verb: "Pick up", rect: [366, 263, 28, 53], walkTo: AT.phone, face: "N",
       look: { grandpajoe: "limo.phone.joe", ranger: ["limo.phone.ranger", "limo.phone.ranger.look.joe"] },
       use: { grandpajoe: "limo.phone.joe", ranger: async (g) => { await g.actor("ranger").play(g.clock, "reach"); await g.say(DOTS, "limo.phone.ranger.joe"); } } },     // he lifts it off the hook, and it says nothing
-    { id: "ashtray", name: "ashtray", rect: [449, 267, 20, 13], walkTo: AT.ashtray, face: "N", look: looks("ashtray"), use: looks("ashtray") },
-    { id: "belt", name: "seatbelt", rect: [271, 312, 47, 11], walkTo: AT.belt, face: "W", look: looks("belt"),
+    { id: "ashtray", name: "ashtray", rect: [448, 266, 22, 20], walkTo: AT.ashtray, face: "N", look: looks("ashtray"), use: looks("ashtray") },
+    { id: "belt", name: "seatbelt", rect: [271, 310, 47, 20], walkTo: AT.belt, face: "W", look: looks("belt"),
       use: { grandpajoe: (g) => g.say(loose(g) ? "limo.ropes.regs" : "limo.belt.joe"), ranger: looks("belt").ranger } },
     // The ropes beside him: four strands and a bow, and after #14 what is left of them (the cut-out goes; the place stays, and
     // the two of them have a word for what Ranger has done to it).

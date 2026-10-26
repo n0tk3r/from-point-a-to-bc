@@ -120,7 +120,7 @@ async function giveReed(g) {
   await g.say("egypt.give.reed");
   await g.reach();
   g.take("reed");
-  await g.say("egypt.got.reed", "egypt.scribe.rush", "egypt.scribe.supplier", "egypt.scribe.needsheet");
+  await g.say("egypt.got.reed", "egypt.got.reed.b", "egypt.scribe.rush", "egypt.scribe.supplier");     // PASS-19E: Dad answers between
   g.flag("egypt.metScribe", true);
   g.flag("egypt.penGiven", true);
 }
@@ -269,7 +269,7 @@ async function liftBrick(g) {
   await g.say("egypt.site.bricks.use.1");
   g.lead.look(700, 180);                          // up at the pyramid
   await g.wait(350);
-  await g.say("egypt.site.bricks.use.2", "egypt.site.bricks.use.3", "egypt.site.bricks.use.4");
+  await g.say("egypt.site.bricks.use.3", "egypt.site.bricks.use.4");     // PASS-19E: use.2 folded into use.3
 }
 
 // ---------- the masons' stone: seashells in the desert ----------
@@ -277,7 +277,7 @@ async function liftBrick(g) {
     the Flood was here first (Genesis 7:19-20), and Noah's grandson after it (Genesis 10:6). Said once; after that the
     tools are only tools. */
 async function lookAtStone(g) {
-  if (count(g, "egypt.site.blocks.look") && !count(g, "egypt.site.shells.1")) return g.say("egypt.site.shells.1", "egypt.site.shells.2", "egypt.site.mizraim");
+  if (count(g, "egypt.site.blocks.look") && !count(g, "egypt.site.shells.1")) return g.say("egypt.site.shells.1", "egypt.site.mizraim");     // PASS-19E: shells.2 folded into .1
   await g.say("egypt.site.blocks.look");
 }
 
@@ -353,6 +353,12 @@ export default {
   // Every number below is a pixel of the painting, measured by the painter (art/scenes/egypt-site/layout.json).
   // DEPTH. minScale is Dad's size on the steps and the landing, where it fits the doorway.
   horizon: 250, full: 590, minScale: 0.33,
+  // STAGE-19E (SCORE-19A S4): the people's light here is left as drawn. The value pass on the painting (egypt_site.py
+  // value_pass: the floor about 8 L* down, the sunny spot painted, the waiting blocks in shade) put Dad 5.5 L* above
+  // his ground (he was -0.6) and the scribe 8.8 (0.5); the haulers, darker than the sand, are now 4 to 8 L* under it
+  // (they were 8 to 13), so a darker exposure would help them and lose Dad again. ENGINE-19B's proof copy had
+  // { exposure: -0.12, contrast: 1.06 } over the old floor: this copy's value is the one to keep in the merge.
+  figureLight: { exposure: 0, contrast: 1 },
 
   // The trampled sand, and with it the steps and the landing (so that Dad can stand on them). The first thing in
   // `blocked` is a bar across the bottom steps: it cuts the stair off from the sand, so that no click can send him
@@ -366,8 +372,8 @@ export default {
     [[360, 472], [384, 472], [384, 462], [360, 462]],
   ],
   spawn: {
-    default: [170, 574],
-    fromCrash: [170, 574],          // up the track from the river, bottom left
+    default: [170, 545],
+    fromCrash: [170, 545],          // up the track from the river, bottom left (STAGE-19E: a step in from the bottom edge, where it was 26 px from it)
     fromGallery: [552, 266],        // out of the doorway, on the landing (enter() brings him down the steps)
     fromGalleryAgain: [670, 326],   // every time after the first: already halfway down them
   },

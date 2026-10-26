@@ -186,7 +186,7 @@ const sonLook = (g) => g.say(`home.son.${g.flag("home.sonTrap") ? "after" : "loo
 
 // ---------- handing things on ----------
 async function solveNote(g) {
-  await g.say("home.note.solve.1", "home.note.solve.2", "home.note.solve.3");
+  await g.say("home.note.solve.1", "home.note.solve.1.b", "home.note.solve.2", "home.note.solve.3");      // PASS-19H2: Mom between, so Big Sister is never three boxes running
   g.flag("home.knowsYear", true);
 }
 /** Batteries and flashlight in the same pockets: in they go, and it works. */
@@ -194,6 +194,7 @@ async function loadFlash(g, to) {
   const pockets = g.store.data.inventory[to];
   pockets.splice(pockets.indexOf("batteries"), 1);
   g.sfx("click");
+  await g.wait(400);                             // STAGE-19H: the click, then the light: a beat before she says it works (C10)
   g.flag("home.flashWorks", true);
   await g.say(`home.flash.load.${to}`);
 }
@@ -224,12 +225,16 @@ export default {
   // middle of the Son's sign, and the runner in front of his door is where his darts come down.)
   spawn: {
     default: [471, 284], mom: [471, 284], bigsis: [375, 263], lilsis: [337, 262],
-    fromStairs: [471, 284], fromLilsis: [590, 308], fromStudy: [721, 324],
-    fromLadder: [718, 325],   // at the foot of the ladder
+    // STAGE-19H: the arrivals from the study and from the ladder no longer land on the spot both of those ways out share
+    // ([718..723, 322..325]): from the study a step down-stage of its door, in front of its middle (the ladder's foot and
+    // its blocked ground fill the gap to the west), from the ladder to the left of the ladder, clear of the line of its
+    // rail (GUIDE-19 S16, S12). layout.json and home_landing.py agree (the model's WAYS, in home_landing_model.py, are the old places).
+    fromStairs: [471, 284], fromLilsis: [590, 308], fromStudy: [742, 336],
+    fromLadder: [604, 314],   // left of the ladder's foot
   },
   arrive: {
     fromStairs: [[375, 263], [337, 262]], fromLilsis: [[541, 290], [476, 287]], fromStudy: [[635, 318], [578, 301]],
-    fromLadder: [[642, 328], [756, 345]],
+    fromLadder: [[560, 302], [516, 295]],
   },
   exits: ["home-living-room", "home-study", "home-lilsis-room", "home-bigsis-room"],
 
@@ -313,7 +318,7 @@ export default {
       lilsis: [["home.talk.landing.mom.lilsis.1a", "home.talk.landing.mom.lilsis.1b"], ["home.talk.landing.mom.lilsis.2a", "home.talk.landing.mom.lilsis.2b", "home.talk.landing.mom.lilsis.2c"]],
     },
     bigsis: {
-      mom: [["home.talk.landing.bigsis.mom.1a", "home.talk.landing.bigsis.mom.1b"], ["home.talk.landing.bigsis.mom.2a", "home.talk.landing.bigsis.mom.2b"]],
+      mom: [["home.talk.landing.bigsis.mom.1a", "home.talk.landing.bigsis.mom.1b"], ["home.talk.landing.bigsis.mom.2a", "home.talk.landing.bigsis.mom.2b", "home.talk.landing.bigsis.mom.2b.b"]],
       lilsis: [["home.talk.landing.bigsis.lilsis.1a", "home.talk.landing.bigsis.lilsis.1b"], ["home.talk.landing.bigsis.lilsis.2a", "home.talk.landing.bigsis.lilsis.2b"]],
     },
     lilsis: {

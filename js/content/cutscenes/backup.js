@@ -198,6 +198,9 @@ async function driveIn(g) {
     const x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t;
     return [x, y, sizeAt(y)];
   };
+  // STAGE-19N (C8, Tati's motor): heard before it is seen. Its motor, a second before it shows on the far road.
+  g.sfx("motor");
+  await g.wait(1000);
   const dusty = trail(g);                                               // dust on the road
   await g.tween(3400, (k) => { const [x, y, s] = along(k); front.place(x, y, s); dusty.at(x, y, s); }, g.ease.in);
   dusty.stop();
@@ -217,6 +220,7 @@ async function driveOut(g, side, joe, during) {
   const cast = g.view.cast, front = cast.get("limo-front");
   const row = STOP[1], k = sizeAt(row);
   // The turn: from the side, to facing us, to the other side.
+  g.sfx("motor");                                                      // STAGE-19N (C8): and its motor as it goes
   side.flag("still", false);
   await g.tween(380, (t) => side.place(STOP[0] + 14 * t, row, k), g.ease.inOut);
   side.show(false);
@@ -265,7 +269,7 @@ async function hensWatch(g) {
   });
   await g.wait(700);
   set("turn");                                                         // all together: round, to look
-  await g.wait(1900);
+  await g.wait(1200);      // STAGE-19N (cuts 2.6): 1900 to 1200, to pay for the holds below
   set("back");                                                         // and back to the fence
   await g.wait(800);
   g.closeup();
@@ -278,7 +282,7 @@ export default async function backup(g) {
   await ready(g);
   const jed = () => g.actor("agent"), joe = () => g.actor("grandpajoe"), ranger = g.actor("ranger");
   if (g.fadeEl && Number(g.fadeEl.style.opacity || 0) > 0.5) await g.fade(0, 500);
-  await g.wait(900);                                                   // the lot is quiet; the door stands open in his light
+  await g.wait(400);                                                    // the lot is quiet; the door stands open in his light  (STAGE-19N, C3: enter late, 900 to 400)
 
   // ---- 1. Jed turns round, sees the door, and walks up to it, slowly
   face(g, "agent", "W");
@@ -322,11 +326,11 @@ export default async function backup(g) {
   await g.view.cast.load();
   await inStep(g, SUITS.map((id, i) => [id, [[DOORS[3 - i], OUT]]]));
   SUITS.forEach((id) => face(g, id, "S"));
-  await g.wait(500);
+  await g.wait(1000);      // STAGE-19N (C10): the row out of the car holds its tableau a second before anyone speaks
   await g.say("nevada.backup.suit.1");
   face(g, "suit1", "SW"); await g.wait(350); face(g, "suit1", "SE"); await g.wait(350);
   for (const id of SUITS) look(g, id, SAT);                           // there he is
-  await g.wait(900);
+  await g.wait(600);      // STAGE-19N: the take, then the clipboard (900 to 600)
   // a pause, in which four men consult a clipboard (it is suit1's)
   for (const id of ["suit2", "suit3", "suit4"]) look(g, id, "suit1");
   face(g, "suit1", "SW");
@@ -350,6 +354,7 @@ export default async function backup(g) {
   await g.say("nevada.backup.suit.4");
   swap(g, "grandpajoe", "grandpajoe-tied");
   await g.say("nevada.backup.suit.5", "nevada.backup.joe.3");
+  await g.wait(500);                                                   // STAGE-19N (C10): his punch, held, before they step back
   // they step back: tied, with a bow
   await inStep(g, [["suit1", [[TIE[0] - 70, TIE[1] - 4]]], ["suit4", [[TIE[0] + 74, TIE[1] - 4]]], ["suit2", [[TIE[0] - 30, TIE[1]]]], ["suit3", [[TIE[0] + 32, TIE[1]]]]]);
   face(g, "suit1", "E"); face(g, "suit4", "W");
@@ -368,6 +373,7 @@ export default async function backup(g) {
   await g.say("nevada.backup.joe.4");
   look(g, "suit1", "grandpajoe");
   await g.say("nevada.backup.suit.7");
+  await g.wait(600);                                                   // STAGE-19N (C10): the receipt is the punch: a hold before the carry ends
   await carrying;
   follow(); stop();
   // in at the back door: he goes in, his hat last
@@ -396,6 +402,7 @@ export default async function backup(g) {
   await g.say("nevada.backup.suit.8");
   look(g, "suit4", "suit3");
   await g.say("nevada.backup.suit.9");
+  await g.wait(700);                                                   // STAGE-19N (C10): the take after the punch, before the suits move
 
   // ---- Jed, helped up, and put in the front; the lunch in the back
   await inStep(g, [["suit1", [[SAT[0] - 34, SAT[1] - 2]]], ["suit4", [[SAT[0] + 34, SAT[1] - 6]]]]);
@@ -432,7 +439,7 @@ export default async function backup(g) {
   await g.say("nevada.backup.jolene.4");
   face(g, "jolene", "N");
   await Promise.all([walk(g, "jolene", [[JOLENE[0], JOLENE[1] - 6]]), g.tween(500, (k) => jo.fade(1 - k))]);
-  await g.wait(600);
+  await g.wait(1200);      // STAGE-19N (C14): the empty porch is the button's hold (600 to 1200)
   await g.fade(1, 900);
   await g.card(g.lines["nevada.backup.card"] ? g.lines["nevada.backup.card"][1] : "Meanwhile, in a limousine.", "", { plain: true, ms: 2600 });
 

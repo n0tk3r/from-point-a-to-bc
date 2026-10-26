@@ -32,6 +32,7 @@
 import { drawFigure, drawSeat, poses, strideOf, tallOf, upOf, riseOf, standOffset, fidgetsOf, fidgetMs, fidgetHold, fidgetStep, portraitOf, BASE } from "../art/rig.js";
 import { kneelTall } from "../art/rig.js";                // LETTER-17: how tall someone is on her knees (Figure.kneel, Figure.h)
 import { withoutKey } from "../art/look.js";
+import { lightSide } from "../art/pix.js";             // ENGINE-19B (9): the side the key light comes from, for one person's drawing
 import { people } from "../art/people.js";
 import { painted } from "../art/painted.js";          // NEVADA-12E: the figures that are painted frames, not the rig's (see PaintedFigure)
 import { props } from "../art/props.js";
@@ -138,6 +139,11 @@ function halved(key, from) {
     return { canvas, size: canvas.width * canvas.height };
   }).canvas;
 }
+
+// ENGINE-19B (8): while a line is up (effects.js, Effects.hushing, sets cast.hush from 0 to 1), a small movement under way
+// of someone who is not speaking goes on at half its pace, so it does not pull the eye from the words: only one of their
+// own life's (life.js marks it `life`); a fidget a script asks for (the Gaul's point) goes at its own pace.
+const hushOf = (f) => (f.fid && f.fid.life && f.cast && f.cast.hush && !f.talking ? 1 - 0.5 * f.cast.hush : 1);
 
 export class Sprite {
   constructor(id) {
@@ -443,7 +449,7 @@ export class Figure extends Sprite {
     const f = this.fid;
     if (f) {
       const stop = f.hold != null && !f.release ? f.hold * f.ms : Infinity;   // (held: it waits at its middle)
-      f.t = Math.min(f.t + dt, Math.max(stop, f.t));
+      f.t = Math.min(f.t + dt * hushOf(this), Math.max(stop, f.t));          // (ENGINE-19B (8): slower while a line is up)
       if (f.t >= f.ms) this.endFidget();
     }
   }
@@ -486,7 +492,8 @@ export class Figure extends Sprite {
     const full = BASE * this.spec.height, want = full * this.scale, f = this.frame(calm);
     const even = (size) => Math.max(10, Math.round(size / 2) * 2);                              // in steps of two pixels, so pictures can be reused
     const who = (this.spec === this.home ? this.kind : this.kind + "^up") + (this.bare ? "-" + this.bare : "");      // (someone found sitting, on their feet; LETTER-17: and without what they have set down)
-    const at = (size) => remember(`${who}|${f.key}|${this.yaw}|${size}`, () => drawFigure(this.spec, this.bare ? { ...f.pose(), bare: this.bare } : f.pose(), this.yaw, size));
+    const lit = this.cast && this.cast.light ? litOf(this.cast.light, this.x, this.y) : null;      // ENGINE-19B (9): the room's light on them, if it asks
+    const at = (size) => remember(`${who}|${f.key}|${this.yaw}|${size}${lit ? lit.key : ""}`, () => litDraw(lit, () => drawFigure(this.spec, this.bare ? { ...f.pose(), bare: this.bare } : f.pose(), this.yaw, size)));
     if (!f.moving) return at(even(want));                                                       // standing, talking, reaching: exactly the size they are
     // Walking: the nearest rung of the ladder (see RUNG), shown at the size wanted.
     const size = even(full * RUNG ** Math.round(Math.log(Math.max(this.scale, 0.01)) / Math.log(RUNG)));
@@ -494,6 +501,83 @@ export class Figure extends Sprite {
     if (w === pic.canvas.width && h === pic.canvas.height) return pic;
     return { canvas: pic.canvas, ox: pic.ox * k, oy: pic.oy * k, sw: pic.canvas.width, sh: pic.canvas.height, w, h, hard: true };
   }
+}
+
+// ---------- ENGINE-19B (9): people in the room's light ----------
+// The people are drawn in the scene's paints (look.js) and lit from the upper left; a scene can say more (docs/DESIGN.md,
+// "People in the room's light"):
+//   figureLight: { exposure, contrast }    everyone a little darker (exposure below 0: -0.12 is 12% darker) or lighter
+//                                          (above 0: toward white by that share), and their contrast (1 as drawn)
+//   lightZones: [{ poly | ellipse, k, soft }]   whoever has their feet in a zone is drawn darker (k below 0) or lighter by
+//                                          k as well, eased over `soft` pixels (20) across its edge: a doorway's shade, a
+//                                          lamp's pool, an awning. ellipse: [cx, cy, rx, ry]; poly: [[x, y], ...]
+//   lightFrom: "left" | "right"            the side the key light comes from (the rig's own is the left)
+// The light on a person is a step (LIGHT_STEP) of the sum, and each step is a picture of its own in the store (remember),
+// made once from the drawing by a table of 256 values a channel: no filter while the game runs.
+const LIGHT_STEP = 0.04;
+/** A scene's light for the cast (game.js enterScene sets cast.light), or null when it asks for nothing. */
+export function lightOfScene(scene, g = null) {
+  if (!scene) return null;
+  const read = (v) => (typeof v === "function" ? v(g) : v);                  // (each may be a function of the game, read as the scene is built)
+  const fl = read(scene.figureLight) || {}, zones = read(scene.lightZones), from = read(scene.lightFrom);
+  const exposure = Number.isFinite(fl.exposure) ? fl.exposure : 0, contrast = Number.isFinite(fl.contrast) && fl.contrast > 0 ? fl.contrast : 1;
+  const side = from === "right" ? -1 : 1;
+  const zs = (Array.isArray(zones) ? zones : []).map((z) => ({ poly: Array.isArray(z.poly) ? z.poly : null, ellipse: Array.isArray(z.ellipse) && z.ellipse.length === 4 ? z.ellipse : null,
+    k: Number.isFinite(z.k) ? z.k : 0, soft: Number.isFinite(z.soft) && z.soft > 0 ? z.soft : 20 })).filter((z) => (z.poly || z.ellipse) && z.k);
+  if (!exposure && contrast === 1 && side === 1 && !zs.length) return null;
+  return { exposure, contrast, side, zones: zs };
+}
+/** How far (x, y) is inside a zone, in pixels (below 0: outside). */
+function insideBy(z, x, y) {
+  if (z.ellipse) { const [cx, cy, rx, ry] = z.ellipse, r = Math.hypot((x - cx) / rx, (y - cy) / ry); return (1 - r) * Math.min(rx, ry); }
+  const P = z.poly; let inside = false, best = Infinity;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [xi, yi] = P[i], [xj, yj] = P[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    const dx = xi - xj, dy = yi - yj, L2 = dx * dx + dy * dy, t = L2 ? Math.max(0, Math.min(1, ((x - xj) * dx + (y - yj) * dy) / L2)) : 0;
+    best = Math.min(best, Math.hypot(x - (xj + t * dx), y - (yj + t * dy)));
+  }
+  return inside ? best : -best;
+}
+/** The light on a person standing at (x, y): { key, step, contrast, side }, or null when it is the rig's own. */
+export function litOf(light, x, y) {
+  let k = light.exposure;
+  for (const z of light.zones) { const e = Math.min(1, Math.max(0, 0.5 + insideBy(z, x, y) / z.soft)); k += z.k * e * e * (3 - 2 * e); }
+  const step = Math.round(k / LIGHT_STEP) * LIGHT_STEP;
+  if (Math.abs(step) < 1e-9 && light.contrast === 1 && light.side === 1) return null;
+  return { key: `|L${step.toFixed(2)},${light.contrast}${light.side < 0 ? ",R" : ""}`, step, contrast: light.contrast, side: light.side };
+}
+const luts = new Map();
+/** The table for a step and a contrast: each channel's 256 values, darker (multiplied) or lighter (toward white), about mid-grey. */
+function lutOf(step, contrast) {
+  const key = step.toFixed(2) + "," + contrast;
+  let t = luts.get(key);
+  if (t) return t;
+  t = new Uint8Array(256);
+  for (let v = 0; v < 256; v++) {
+    let c = (v / 255 - 0.5) * contrast + 0.5;
+    c = step < 0 ? c * (1 + step) : 1 - (1 - c) * (1 - step);
+    t[v] = Math.max(0, Math.min(255, Math.round(c * 255)));
+  }
+  luts.set(key, t);
+  return t;
+}
+/** Draw one person (make: the rig's drawing) in that light: from the side it comes from, then through the table. */
+function litDraw(lit, make) {
+  if (!lit) return make();
+  const was = lightSide(lit.side);
+  let sf;
+  try { sf = make(); if (!sf.out && sf.finish) sf.finish(); } finally { lightSide(was); }
+  const out = sf.out;
+  if (out instanceof Uint32Array && (lit.step || lit.contrast !== 1)) {
+    const t = lutOf(lit.step, lit.contrast);
+    for (let i = 0; i < out.length; i++) {
+      const v = out[i];
+      if (!(v >>> 24)) continue;
+      out[i] = ((v & 0xff000000) | (t[(v >>> 16) & 255] << 16) | (t[(v >>> 8) & 255] << 8) | t[v & 255]) >>> 0;
+    }
+  }
+  return sf;
 }
 
 /** The seat of someone who has got up from it (the goldsmith's stool, the old-timer's lawn chair), left where it stood
@@ -833,7 +917,7 @@ export class PaintedFigure extends Sprite {
     const f = this.fid;
     if (f) {
       const stop = f.hold && !f.release ? f.ms * 0.5 : Infinity;
-      f.t = Math.min(f.t + dt, Math.max(stop, f.t));
+      f.t = Math.min(f.t + dt * hushOf(this), Math.max(stop, f.t));          // (ENGINE-19B (8))
       if (f.t >= f.ms) this.endFidget();
     }
   }

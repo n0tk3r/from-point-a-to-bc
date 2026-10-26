@@ -277,14 +277,14 @@ def grille(d, dl):
     x0, x1 = GRILLE["x"]
     y0, y1 = GRILLE["y"]
     z = UNIT["z"][0] - GRILLE["proud"] - d.wz
-    frame_c = face("#7c8084", FRONT)
+    frame_c = face("#545860", FRONT)                                      # STAGE-19O: darker (was #7c8084): the roof's accent
     d.poly([(x0, y0, z), (x1, y0, z), (x1, y1, z), (x0, y1, z)], frame_c)
     b = 6.0
     n = 11
     for i in range(n):                                                          # the louvres
         ya = y0 + b + (y1 - y0 - 2 * b) * i / n
         yb = ya + (y1 - y0 - 2 * b) / n
-        d.poly([(x0 + b, ya, z - 0.2), (x1 - b, ya, z - 0.2), (x1 - b, yb, z - 0.2), (x0 + b, yb, z - 0.2)], face("#9a9d9c", FRONT * 0.75))
+        d.poly([(x0 + b, ya, z - 0.2), (x1 - b, ya, z - 0.2), (x1 - b, yb, z - 0.2), (x0 + b, yb, z - 0.2)], face("#6c7072", FRONT * 0.75))   # STAGE-19O: was #9a9d9c
         d.poly([(x0 + b, yb - 2.6, z - 0.4), (x1 - b, yb - 2.6, z - 0.4), (x1 - b, yb, z - 0.4), (x0 + b, yb, z - 0.4)], face("#c4c7c6", min(1.0, TOP * 1.1)))
         dl.line([(x0 + b, ya + 1.0, z - 0.6), (x1 - b, ya + 1.0, z - 0.6)], "#34363c", 1.2, 0.95)          # the slit under each
     dl.line([(x0, y0, z - 0.8), (x1, y0, z - 0.8), (x1, y1, z - 0.8), (x0, y1, z - 0.8), (x0, y0, z - 0.8)], "#3c3e44", 1.0, 0.9)

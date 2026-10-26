@@ -760,10 +760,22 @@ UNDER = [("hen", 334, 58, 3.0, 11), ("tall", 393, 60, -4.0, 12), ("henhouse", 11
 BIG = 1.2                                                      # she draws on big paper
 
 
+def calm_card(tex, al, k=1 / 3.0):
+    """STAGE-19H (a value pass, GUIDE-19 S2, S5: the back wall was dozens of small loud pieces behind the words): a
+    drawing's colours pulled a third of the way to the sheet's own mean, so the wall reads as one light mass."""
+    if al is None:
+        m = tex.reshape(-1, 3).mean(axis=0)
+    else:
+        w_ = np.clip(al, 0, 1)[..., None]
+        m = (tex * w_).reshape(-1, 3).sum(axis=0) / max(float(w_.sum()), 1e-6)
+    return (m + (tex - m) * (1 - k)).astype(tex.dtype), al
+
+
 def wall_things(L):
     # ---- her drawings: the gable to the left of the window, as high as she can reach from the top of the flock
     for kind, cx, cy, deg, seed in DRAWN + UNDER:
         tex, al, w, h = drawing(kind, seed)
+        tex, al = calm_card(tex, al)                                                                # STAGE-19H
         w, h = w * BIG, h * BIG
         p.contact(L, [(cx - w / 2 + 1.5, cy - h / 2 - 2.0, 0.4), (cx + w / 2 + 1.5, cy - h / 2 - 2.0, 0.4), (cx + w / 2 + 1.5, cy + h / 2 - 2.0, 0.4), (cx - w / 2 + 1.5, cy + h / 2 - 2.0, 0.4)], 0.22, 1.2)
         on_gable(L, tex, al, cx, cy, w, h, deg, keep=0.93)
@@ -776,10 +788,12 @@ def wall_things(L):
     # ---- and more on her knee wall, and where the roof comes down to it
     for kind, zc, yc, deg, seed in (("run", 150, 86, 3, 11), ("flower", 198, 96, -6, 12), ("scribble", 236, 104, 4, 13), ("rainbow", 262, 84, -3, 14)):
         tex, al, w, h = drawing(kind, seed)
+        tex, al = calm_card(tex, al)                                                                # STAGE-19H
         tl, tr, bl = rot2(zc, yc, w, h, deg)
         p.quad_image(L, (0.6, tl[1], tl[0]), (0.6, tr[1], tr[0]), (0.6, bl[1], bl[0]), tex, al, keep=0.9)
     for kind, zc, sc, seed in (("hen", 96, 34, 21), ("eggs", 150, 30, 22), ("moon", 205, 26, 23), ("hands", 252, 30, 24), ("chicks", 316, 30, 25)):
         tex, al, w, h = drawing(kind, seed)
+        tex, al = calm_card(tex, al)                                                                # STAGE-19H
         def up(z, s_):                                       # a place on the left slope: z along the room, s_ up the slope from the knee wall
             return (s_ * (WD / 2) / SLOPE_LEN + NL[0] * 0.6, KNEE + s_ * (RIDGE - KNEE) / SLOPE_LEN + NL[1] * 0.6, z)
         p.quad_image(L, up(zc - w / 2, sc + h / 2), up(zc + w / 2, sc + h / 2), up(zc - w / 2, sc - h / 2), tex, al, keep=0.9)
@@ -1031,7 +1045,9 @@ def egg_rug(L):
     def blob(k_):
         return [(rx + math.cos(a) * rx * 0.88 * k_ * (1 + 0.10 * math.sin(3 * a + 0.6) + 0.07 * math.sin(5 * a + 1.9) + 0.05 * math.sin(2 * a + 4.0)),
                  rz + math.sin(a) * rz * 0.88 * k_ * (1 + 0.10 * math.sin(3 * a + 0.6) + 0.07 * math.sin(5 * a + 1.9) + 0.05 * math.sin(2 * a + 4.0))) for a in np.linspace(0, 6.2832, 72, endpoint=False)]
-    c.poly(blob(1.0), (0.90, 0.88, 0.82)); c.poly(blob(0.95), (0.98, 0.97, 0.93))
+    # STAGE-19H (a value pass, GUIDE-19 S1: the egg was the lightest large shape in the room, and the fort, the puzzle,
+    # is on the left): its white about four fifths as light as it was ((0.90, 0.88, 0.82) and (0.98, 0.97, 0.93) before)
+    c.poly(blob(1.0), (0.72, 0.70, 0.66)); c.poly(blob(0.95), (0.78, 0.78, 0.74))
     c.disc(rx + 14, rz - 5, 29, (0.90, 0.60, 0.08), 23); c.disc(rx + 14, rz - 6, 27, (0.99, 0.76, 0.14), 21)
     c.disc(rx + 6, rz - 13, 8, (1.0, 0.90, 0.50), 5)
     tex, al = c.done(0.07, 5)
@@ -1312,6 +1328,11 @@ def fort(L, back, flash):
     p.dot2(flash, (x0 + x1) / 2 - 1.5 * k, (y0 + y1) / 2 - 2.2 * k, 1.5 * k, 1.1 * k, head, fine=False, keep=0.95)                      # its button
     lp = [(x0 - 0.5 * k, y0), (x0 - 4.5 * k, y0 - 2.4 * k), (x0 - 7.2 * k, y0 + 0.8 * k), (x0 - 4.0 * k, y0 + 2.6 * k), (x0 - 0.5 * k, y0 + 0.8 * k)]
     p.line2(flash, lp, head * 0.9, 1.0, fine=False, keep=0.95)                                       # and its wrist loop
+    # STAGE-19H (a light pass, GUIDE-19 S1, S9, S13: the puzzle's thing was in near-black): the string lights' warm
+    # light gathered just inside the way in, round the flashlight (about +20 L* there), and a 2-px glint on its body
+    p.glow(L, ((x0 + x1) / 2, (y0 + y1) / 2 - 3.0 * k), 17.0 * k, (1.0, 0.72, 0.40), 0.55)
+    p.glow(L, ((x0 + x1) / 2 + 6.0 * k, (y0 + y1) / 2 - 14.0 * k), 12.0 * k, (1.0, 0.70, 0.36), 0.30)
+    p.dot2(flash, (x0 + x1) / 2 - 4.5 * k, (y0 + y1) / 2 - 2.6 * k, 1.1, 0.9, col((1.0, 0.97, 0.88)) * 1.8, fine=False, keep=0.95)
 
 
 def fort_doormat(L):
@@ -1395,6 +1416,14 @@ def window_hen(L, cx, y0, z, kind="white", face=1, size=1.0):
     disc(2.6, 12.3, 0.62, 0.62, edge)
 
 
+def calm(c, k=0.30):
+    """STAGE-19H (a value pass, GUIDE-19 S1 and S10): a colour with its chroma cut by k, pulled toward its own grey
+    (the same lightness), for the hen house, the room's loudest large shape, on the frame's bottom edge."""
+    c = tuple(float(v_) for v_ in c)
+    g_ = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
+    return tuple(v_ + (g_ - v_) * k for v_ in c)
+
+
 def coop(L, back):
     """The toy hen house: the dollhouse, turned to face us and given over to the hens. A hen looks out of every lit
     window; a ramp she made goes up to the front door."""
@@ -1402,13 +1431,15 @@ def coop(L, back):
     wall_h, zr, mid = 54.0, (Z0 + Z1) / 2, (X0 + X1) / 2
     zf = Z1
     p.contact(back, [(X0 - 6, 0, Z0 - 6), (X1 + 6, 0, Z0 - 6), (X1 + 6, 0, Z1 + 4), (X0 - 6, 0, Z1 + 4)], 0.5, 6.0)
+    # STAGE-19H: the clapboard, the roof, the door leaf, the dormer and the chimney about 30% less chroma (calm());
+    # the lit windows 15% (the hens in them stay as they were)
     def clap(X, Y, Z, t):
-        c = col((1.0, 0.80, 0.34)) * (1 - 0.30 * lines(Y, 4.6, 0.7, footprint(Y)))[..., None] * (0.93 + 0.14 * STAIN.at(X * 3, Y * 3))[..., None]
+        c = col(calm((1.0, 0.80, 0.34))) * (1 - 0.30 * lines(Y, 4.6, 0.7, footprint(Y)))[..., None] * (0.93 + 0.14 * STAIN.at(X * 3, Y * 3))[..., None]
         trim = (X < X0 + 4) | (X > X1 - 4) | (Y > wall_h - 3.2) | (Y < 2.5) | (np.abs(Y - 29.5) < 1.2)
         return np.where(trim[..., None], col((0.95, 0.94, 0.88)), c)
     p.face(L, [(X0, 0, zf), (X1, 0, zf), (X1, wall_h, zf), (X0, wall_h, zf)], clap, (0, 0, 1), keep=0.88, gain=2.0)
     p.shade2(L, [p.pt((X0, wall_h, zf + 0.2)), p.pt((X1, wall_h, zf + 0.2)), p.pt((X1, wall_h - 5, zf + 0.2)), p.pt((X0, wall_h - 5, zf + 0.2))], 0.42, 1.2)
-    lit_c = emit((0.99, 0.80, 0.36))
+    lit_c = emit(calm((0.99, 0.80, 0.36), 0.15))
     white = (0.96, 0.95, 0.90)
     def win(x, y0, y1, kind, face, w=17.0):
         z = zf + 0.5
@@ -1428,7 +1459,7 @@ def coop(L, back):
     # the front door, open, a chick on the step; the ramp
     p.face(L, [(mid - 10.5, 5, zf + 0.5), (mid + 10.5, 5, zf + 0.5), (mid + 10.5, 28, zf + 0.5), (mid - 10.5, 28, zf + 0.5)], white, (0, 0, 1), keep=0.9, gain=1.15)
     p.face(L, [(mid - 8.5, 6.5, zf + 0.7), (mid + 8.5, 6.5, zf + 0.7), (mid + 8.5, 26.5, zf + 0.7), (mid - 8.5, 26.5, zf + 0.7)], lit_c, (0, 0, 1), keep=0.95, lit=False)
-    p.face(L, [(mid - 8.5, 6.5, zf + 0.9), (mid - 15.5, 6.5, zf + 6.5), (mid - 15.5, 26.5, zf + 6.5), (mid - 8.5, 26.5, zf + 0.9)], (0.84, 0.30, 0.38), keep=0.9, gain=1.2)   # the door leaf, pink, standing open
+    p.face(L, [(mid - 8.5, 6.5, zf + 0.9), (mid - 15.5, 6.5, zf + 6.5), (mid - 15.5, 26.5, zf + 6.5), (mid - 8.5, 26.5, zf + 0.9)], calm((0.84, 0.30, 0.38)), keep=0.9, gain=1.2)   # the door leaf, pink, standing open
     window_hen(L, mid + 1.5, 6.5, zf + 1.0, "chick", -1, size=1.05)
     ramp = [(mid - 7.5, 6.0, zf + 0.6), (mid + 7.5, 6.0, zf + 0.6), (mid + 9.5, 0.4, zf + 30), (mid - 5.5, 0.4, zf + 30)]
     p.contact(back, [(mid - 9, 0, zf), (mid + 12, 0, zf), (mid + 14, 0, zf + 32), (mid - 7, 0, zf + 32)], 0.35, 3.0)
@@ -1447,7 +1478,7 @@ def coop(L, back):
         u = X + (row % 2) * 3.0
         tile_ = np.floor(u / 6.0)
         tn = hash01(tile_, row, 5.0)
-        c = lerp(col((0.74, 0.30, 0.34)), col((0.94, 0.50, 0.50)), tn[..., None])
+        c = lerp(col(calm((0.74, 0.30, 0.34))), col(calm((0.94, 0.50, 0.50))), tn[..., None])
         within = (s_ / 5.2 - row)
         c = c * (0.70 + 0.34 * np.clip(within * 2.2, 0, 1))[..., None]                              # each row shades the next one down
         return c * (1 - 0.35 * lines(u, 6.0, 0.7, footprint(X)))[..., None]
@@ -1458,16 +1489,16 @@ def coop(L, back):
     p.seg(L, (X0 - 4, Y1 + 0.6, zr), (X1 + 4, Y1 + 0.6, zr), (0.98, 0.82, 0.80), 2.0, fine=False, lit=(0, 1, 0), min_px=1.5, gain=1.25)         # the ridge
     cz_ = zr + run * 0.36
     cy0 = eave[0] + rise * (1 - 0.36)
-    p.box(L, X1 - 30, X1 - 18, cy0 - 6, Y1 + 9, cz_ - 6, cz_ + 6, (0.70, 0.36, 0.28), keep=0.88, gain=1.1)        # chimney
+    p.box(L, X1 - 30, X1 - 18, cy0 - 6, Y1 + 9, cz_ - 6, cz_ + 6, calm((0.70, 0.36, 0.28)), keep=0.88, gain=1.1)        # chimney
     p.box(L, X1 - 31.5, X1 - 16.5, Y1 + 9, Y1 + 12, cz_ - 7.5, cz_ + 7.5, (0.92, 0.90, 0.84), keep=0.88, gain=1.1)
     dzf = zr + run * 0.74                                       # the dormer's face
     dy0 = eave[0] + rise * (1 - 0.74)
     ddx = X0 + 26
-    p.box(L, ddx - 11, ddx + 11, dy0 - 2, dy0 + 18, dzf - 14, dzf, (1.0, 0.80, 0.34), keep=0.88, gain=1.15)
+    p.box(L, ddx - 11, ddx + 11, dy0 - 2, dy0 + 18, dzf - 14, dzf, calm((1.0, 0.80, 0.34)), keep=0.88, gain=1.15)
     p.face(L, [(ddx - 7, dy0 + 2, dzf + 0.3), (ddx + 7, dy0 + 2, dzf + 0.3), (ddx + 7, dy0 + 15, dzf + 0.3), (ddx - 7, dy0 + 15, dzf + 0.3)], lit_c, (0, 0, 1), keep=0.95, lit=False)
     window_hen(L, ddx, dy0 + 2, dzf + 0.5, "chick", 1, size=0.9)
-    p.face(L, [(ddx - 13, dy0 + 17, dzf + 1.5), (ddx, dy0 + 28, dzf + 1.5), (ddx, dy0 + 28, dzf - 16), (ddx - 13, dy0 + 17, dzf - 16)], (0.74, 0.30, 0.36), keep=0.88, gain=1.1)
-    p.face(L, [(ddx + 13, dy0 + 17, dzf + 1.5), (ddx, dy0 + 28, dzf + 1.5), (ddx, dy0 + 28, dzf - 16), (ddx + 13, dy0 + 17, dzf - 16)], (0.88, 0.46, 0.50), keep=0.88, gain=1.1)
+    p.face(L, [(ddx - 13, dy0 + 17, dzf + 1.5), (ddx, dy0 + 28, dzf + 1.5), (ddx, dy0 + 28, dzf - 16), (ddx - 13, dy0 + 17, dzf - 16)], calm((0.74, 0.30, 0.36)), keep=0.88, gain=1.1)
+    p.face(L, [(ddx + 13, dy0 + 17, dzf + 1.5), (ddx, dy0 + 28, dzf + 1.5), (ddx, dy0 + 28, dzf - 16), (ddx + 13, dy0 + 17, dzf - 16)], calm((0.88, 0.46, 0.50)), keep=0.88, gain=1.1)
     p.poly3(L, [(ddx - 13, dy0 + 17, dzf + 1.6), (ddx + 13, dy0 + 17, dzf + 1.6), (ddx, dy0 + 28, dzf + 1.6)], white, fine=False, lit=(0, 0, 1), gain=1.15)
     # her sign, taped to the roof
     sw, sh = 62.0, 12.5
@@ -1633,10 +1664,10 @@ def garland(L):
         P = pts[i]
         c = Card(13, 17, (0, 0, 0), 6.0, clear=True)
         egg(c, 6.5, 8.6, 5.4, cols_[i % len(cols_)], stripe=(0.99, 0.98, 0.94) if i % 2 else None, dots=(0.99, 0.98, 0.94) if i % 2 == 0 else None)
-        tex, al = c.done(0.05, i)
+        tex, al = calm_card(*c.done(0.05, i))                                                       # STAGE-19H: the bunting calmed a third,
         tl = (P[0] - p.R[0] * 6.5, P[1] - 1.0, P[2] - p.R[2] * 6.5)
         tr = (P[0] + p.R[0] * 6.5, P[1] - 1.0, P[2] + p.R[2] * 6.5)
-        p.quad_image(L, tl, tr, (tl[0], P[1] - 18.0, tl[2]), tex, al, keep=0.92, gain=1.5)
+        p.quad_image(L, tl, tr, (tl[0], P[1] - 18.0, tl[2]), tex, al, keep=0.92, gain=1.3)           # and lit a little less (1.5 before)
 
 
 def floor_things(L):
@@ -1772,7 +1803,19 @@ def depth_air(pic):
     corner = np.clip(near * (0.45 + 0.75 * side), 0, 1)
     top = np.clip((190 - yy) / 190.0, 0, 1) ** 0.8 * np.clip((np.abs(xx - 380) - 40) / 260.0, 0, 1)
     k = np.clip(corner * 0.50 + top * 0.62, 0, 0.74)
-    return pic * (1 - k[..., None] * (1 - col((0.50, 0.32, 0.34))))
+    # STAGE-19H (a value pass, GUIDE-19 S4): the wall and quilt behind the three default marks (x 440 to 620, y 330 to
+    # 430, soft-edged) about 10 L* lower, so the family read by value and not by hue only; the lamp's pool on the pillow
+    # (the RESERVED sign's place) is kept. Below Mom's head (she stands up-stage, her head about y 300), so her dark hair
+    # keeps the light wall behind it.
+    def ramp(v, a, b):
+        return np.clip((v - a) / (b - a), 0, 1)
+    box_ = ramp(xx, 418, 452) * (1 - ramp(xx, 608, 640)) * ramp(yy, 312, 340) * (1 - ramp(yy, 420, 446))
+    pillow = np.exp(-(((xx - 590) / 34.0) ** 2 + ((yy - 336) / 15.0) ** 2))
+    # STAGE-19H, measured: at 0.17 the scene audit read Little Sister 8 -> 10 L* but Mom 10 -> 6 and Big Sister 4 -> 0
+    # (both stand darker than the wall, so a darker wall hides them): taken back to 0 (kept here, off, for the record)
+    LOWER = 0.0
+    lower = 1 - LOWER * box_ * (1 - pillow)
+    return pic * (1 - k[..., None] * (1 - col((0.50, 0.32, 0.34)))) * lower[..., None]
 
 
 def palette_pick(px, colors, seed=3, rounds=10):

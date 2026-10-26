@@ -131,6 +131,10 @@ def write(stA, stB, covers, frames, hens, wob=None):
 
     things = []
 
+    def tall22(r):
+        """STAGE-19N (SCORE-19B S9): a small thing a puzzle needs gets a box at least 22 px high, grown about its middle."""
+        return None if r is None or r[3] >= 22 else [r[0], r[1] - (22 - r[3]) // 2, r[2], 22]
+
     def thing(id_, what, shape, at, face, **more):
         if shape is None:
             print("layout: nothing found for", id_)
@@ -167,7 +171,7 @@ def write(stA, stB, covers, frames, hens, wob=None):
     thing("roller", "the hot dog roller on the grill: turning, empty, for company (frames roller-0, roller-1)", rect_of(A, ["roller", "rollers"], 2), "atroller", "N")
     thing("register", "the brass register: it rings for Jolene and nobody else", rect_of(A, ["register"]), "atregister", "N")
     thing("eggs", "the jar of pickled eggs: the jar is older than the eggs", rect_of(A, ["eggs"]), "ateggs", "N")
-    thing("pennydish", "the take-a-penny dish: a chipped saucer, a few pennies, a little card (TAKE A PENNY / LEAVE A PENNY)", rect_of(A, ["pennydish"], 3), "atpennydish", "N")
+    thing("pennydish", "the take-a-penny dish: a chipped saucer, a few pennies, a little card (TAKE A PENNY / LEAVE A PENNY)", tall22(rect_of(A, ["pennydish"], 3)), "atpennydish", "N")
     thing("postcards", "the postcard spinner on the counter: desert views", rect_of(A, ["postcards"]), "atpostcards", "N")
     thing("maprack", "the map rack on the counter's front: road maps of Nevada (it stops here too)", rect_of(A, ["maprack"]), "atmaprack", "N")
     thing("basket", "Ranger's basket at the counter's foot: wicker, the lid half off, a glint inside (his stash)", rect_of(A, ["basket"], 2), "atbasket", "NW")

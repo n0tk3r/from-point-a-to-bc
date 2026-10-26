@@ -716,9 +716,9 @@
    "what": "the paper cones, in their tube on the cooler's side",
    "shape": {
     "rect": [
-     567,
+     564,
      335,
-     12,
+     18,
      57
     ]
    },
@@ -726,7 +726,8 @@
     556,
     454
    ],
-   "face": "E"
+   "face": "E",
+   "stage19": "STAGE-19O: the clickable box grown to at least 18x57 px (S9); the painting is unchanged"
   },
   {
    "id": "chair-corner",

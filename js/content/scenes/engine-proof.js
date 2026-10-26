@@ -544,6 +544,11 @@ export default {
   // The painter works from the same two numbers, so doors and wagons come out the right size for the people.
   // minScale stops anyone shrinking to a dot at the far end of the sand.
   horizon: 262, full: 590, minScale: 0.3,
+  // ENGINE-19B (9): the people in the room's light (docs/DESIGN.md, "People in the room's light"), proved here: the palms'
+  // shade on the left of the sand (darker), a sunny patch on the right (lighter), the light from the left, as the rig has it.
+  // Only while "proof.light" is true, so that nothing else the proof shows changes (a function of the game, read on entering).
+  lightZones: (g) => (g && g.flag("proof.light") ? [{ ellipse: [200, 540, 120, 50], k: -0.24, soft: 30 }, { poly: [[560, 470], [760, 470], [760, 600], [560, 600]], k: 0.16, soft: 24 }] : []),
+  lightFrom: (g) => (g && g.flag("proof.lightRight") ? "right" : "left"),
 
   // WHERE PEOPLE CAN STAND: the sand. The left edge keeps to the bank, clear of the water and of the palms' feet;
   // the far edge stops under the village and the dunes; the right edge keeps a body's width inside the picture.

@@ -82,12 +82,14 @@ def rut(side, n=40):
 # ---------------------------------------------------------------- the sky
 def paint_sky(shape, seed):
     x, y = grid(shape)
-    pic = sky.field(shape, HZ, [(0.0, "#2654a8"), (0.30, "#3676c6"), (0.58, "#60a2dc"), (0.78, "#a4cde6"), (0.92, "#e6dccc"), (1.0, "#f8dcb2")],
+    # STAGE-19N (SCORE-19B S1, S2; the scorers' "calm the skies"): the deepest blue at the top eased, its chroma down
+    # 15% and a step lighter (L* +4): was (0.0, "#2654a8"), (0.30, "#3676c6"), the frame's most vivid cells.
+    pic = sky.field(shape, HZ, [(0.0, "#435ea6"), (0.30, "#5580c5"), (0.58, "#60a2dc"), (0.78, "#a4cde6"), (0.92, "#e6dccc"), (1.0, "#f8dcb2")],
                     seed, haze="#f8e0bc", patch=0.03)
     # the sun is just out of the picture on the right: the air glows that way
     near_sun = np.exp(-((x - 930) / 430.0) ** 2 - ((y - 262) / 120.0) ** 2)
     glow(pic, "#ffd49a", (near_sun * 0.62).astype(F32))
-    tint(pic, "#7f8fd0", (np.clip(1 - x / 520.0, 0, 1) * np.clip(1 - y / 260.0, 0, 1) * 0.30).astype(F32))    # and is deepest up on the left
+    tint(pic, "#7f8fd0", (np.clip(1 - x / 520.0, 0, 1) * np.clip(1 - y / 260.0, 0, 1) * 0.20).astype(F32))    # and is deepest up on the left (STAGE-19N: 0.30)
     return pic
 
 
@@ -139,15 +141,19 @@ def morning_clouds(pic, seed):
     x, y = grid(shape)
     light = (0.93, -0.36)                                    # the light comes from the right, a little from above
     sets = [
-        ([(610, 118, 330, 50, 22), (190, 72, 180, 26, 10)], seed + 5, 40.0, ("#6a80c0", "#9a9ccc", "#eea6a6", "#ffd8a2"), 1.0),
-        ([(410, 188, 200, 26, 12), (790, 208, 150, 22, 8)], seed + 6, 26.0, ("#7888c4", "#a6a4d0", "#f0aca6", "#ffdca8"), 0.8),
-        ([(500, 240, 200, 11, 8), (716, 262, 170, 8, 7), (250, 256, 130, 7, 5)], seed + 7, 12.0, ("#8a98cc", "#b2aed6", "#f4b8aa", "#ffe2b0"), 0.5),
+        ([(610, 118, 330, 50, 22), (190, 72, 180, 26, 10)], seed + 5, 40.0, ("#6a80c0", "#9a9ccc", "#eea6a6", "#f5ce99"), 1.0),
+        ([(410, 188, 200, 26, 12), (790, 208, 150, 22, 8)], seed + 6, 26.0, ("#7888c4", "#a6a4d0", "#f0aca6", "#f2cf9c"), 0.8),
+        ([(500, 240, 200, 11, 8), (716, 262, 170, 8, 7), (250, 256, 130, 7, 5)], seed + 7, 12.0, ("#8a98cc", "#b2aed6", "#f4b8aa", "#edd19f"), 0.5),
     ]
+    # STAGE-19N (SCORE-19B summary 3, "calm the skies"): the clouds' lights capped at about L* 85 (their hue kept), and
+    # the burning edge at half its strength (the cloud-edge contrast halved). Were "#ffd8a2", "#ffdca8", "#ffe2b0" (L* 88
+    # to 91), the top "#fff0cc" (95) and the rim "#fff2c8" at 0.8.
+    TOP, RIM, RIM_K = "#e5d6b3", "#e3d7ae", 0.4
     for clouds, sd, reach, tones, ragged in sets:
         thick, height = long_clouds(shape, clouds, sd, ragged)
         bright = sky.lit(thick, height, light, sd, reach=reach, rise=0.5)
         bright = np.clip(bright + (noise(shape, (90, 7), sd + 41, 3) - 0.5) * 0.16, 0, 1)             # streaks of thicker and thinner cloud
-        color = ramp(bright, [(0.0, tones[0]), (0.50, tones[1]), (0.72, tones[2]), (0.90, tones[3]), (1.0, "#fff0cc")])
+        color = ramp(bright, [(0.0, tones[0]), (0.50, tones[1]), (0.72, tones[2]), (0.90, tones[3]), (1.0, TOP)])
         fray = 0.55 + 0.9 * noise(shape, (60, 18), sd + 31, 4)
         body = smooth(blur(thick, 1.3) * fray)
         edge = lerp(blur(body, 4.0) * 0.9, body, np.clip(bright * 1.4, 0, 1))
@@ -155,7 +161,7 @@ def morning_clouds(pic, seed):
         # the edge that faces the sun burns: a thin line of gold where cloud ends and sky begins
         rim = np.clip(body - sample(body, x + light[0] * 3.5, y + light[1] * 3.5), 0, 1) * np.clip(body * 3, 0, 1)
         rim = np.clip(rim * 2.4, 0, 1) * (0.5 + 0.7 * noise(shape, 40, sd + 9, 3))
-        over(pic, "#fff2c8", np.clip(rim * 0.8, 0, 1).astype(F32))
+        over(pic, RIM, np.clip(rim * RIM_K, 0, 1).astype(F32))
 
 
 def all_clouds(pic, seed):
@@ -761,7 +767,7 @@ def layout(planes, info, limo_m, limo_mf):
     car_base = [[0, 592], r(gp(P.CAR_AT[0] + 394, P.CAR_AT[1] + P.CAR_W))]
     nose_far, nose_near = gp(P.CAR_AT[0] + 398, P.CAR_AT[1] + P.CAR_W + 6), gp(P.CAR_AT[0] + 398, P.CAR_AT[1] - 8)
     car_block = [[0, int(nose_far[1]) - 2], [int(nose_far[0]) + 3, int(nose_far[1]) - 2], [int(nose_near[0]) + 6, 596], [0, 596]]
-    agent, agent2 = [661, 458], [752, 468]
+    agent, agent2 = [661, 474], [752, 468]      # STAGE-19N (SCORE-19B S7): the man in gray 16 px down, off the notice's top edge
     out = {
         "id": "nevada-roadside", "horizon": HZ, "full": FULL,
         "light": "early morning sun, low from the right and a little behind us: shadows fall to the left",
@@ -796,8 +802,8 @@ def layout(planes, info, limo_m, limo_mf):
              "shape": {"poly": [r(P.fpt("B", 2400)), r(P.fpt("B", 2400, 250)), r(P.fpt("A", 0, 280)), [800, int(P.fpt("A", 400, 280)[1])], [800, 354], [int(P.fpt("A", n0 - 6)[0]), 354],
                                 r(P.fpt("A", n0 - 6)), r(P.fpt("A", 0))]},
              "stand": [590, 456], "face": "N"},
-            {"id": "notice", "what": "the notice on the fence: AREA CLOSED", "shape": {"poly": notice}, "stand": [646, 472], "face": "N"},
-            {"id": "agent", "what": "the man in gray, in front of the notice (drawn by the game)", "shape": {"rect": [agent[0] - 16, agent[1] - 92, 32, 96]}, "stand": [626, 476], "face": "NE"},
+            {"id": "notice", "what": "the notice on the fence: AREA CLOSED", "shape": {"poly": notice}, "stand": [646, 488], "face": "N"},      # STAGE-19N: a step back, with him
+            {"id": "agent", "what": "the man in gray, in front of the notice (drawn by the game)", "shape": {"rect": [agent[0] - 16, agent[1] - 92, 32, 96]}, "stand": [626, 490], "face": "NE"},      # STAGE-19N: with him
             {"id": "agent2", "what": "the man in gray, after he has backed off along the fence (drawn by the game)", "shape": {"rect": [agent2[0] - 16, agent2[1] - 98, 32, 102]}, "stand": [708, 482], "face": "E"},
             {"id": "tracks", "what": "where the tracks stop: the ruts from the fence to the glass, and the glass", "shape": {"poly": [[604, 466], [712, 466], [732, 520], [730, 548], [650, 560], [566, 546], [564, 522]]},
              "stand": [548, 548], "face": "E"},

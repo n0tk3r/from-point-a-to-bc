@@ -1617,6 +1617,42 @@ def details(pic, info, back, first=None, seed=11, moving=None):
     return pic
 
 
+def stage19(pic):
+    """STAGE-19R (round nineteen's scene audit, S1, S4, S13 and the outdoor rooms' clouds): a light and value pass laid on
+    the finished brushwork, the layout and every mark as they were.
+      - The open doors are the gate: a warm lamplit glow inside them (the treasury's lamps, and the bronze lamp before
+        the door), brightest low where the doorkeeper stands, so the one lit opening in the colonnade is the way in and
+        the doorkeeper stands against light, not dark.
+      - A cool shadow thrown left across the steps by the right-hand columns (the sun is upper right), behind the
+        soothsayer and his cage: his white robe reads against blue shade, not white marble.
+      - The altar's cast shadow, longer, to the lower left over the paving behind the senator's places.
+      - The clouds calmed: their whites held under the steps' and their edges softened, so the brightest thing in the
+        frame is the lit doorway and the sunlit steps, not the sky."""
+    h, w = pic.shape[:2]
+    yy = np.mgrid[0:h, 0:w][0].astype(F32)
+    lum0 = pic @ np.array([0.3, 0.59, 0.11], dtype=F32)
+    door = mask_poly((h, w), [(479, 151), (529, 153), (529, 293), (479, 293)], soft=1.5)
+    dark = blur(np.clip((0.34 - lum0) / 0.16, 0, 1), 1.2)                            # the room inside, not the bronze leaves
+    low = np.clip((yy - 150) / 143.0, 0, 1)                                          # 0 at the lintel, 1 at the threshold
+    glow(pic, "#f0b466", door * dark * (0.30 + 0.50 * low ** 1.4))
+    band = mask_poly((h, w), [(498, 333), (602, 333), (532, 457), (428, 457)], soft=3.5, wobble=2.0, seed=191)
+    tint(pic, "#a3abd0", band * 0.85)
+    # (run 3, scene audit S7) in the shade the steps' nosings catch no sun: their light lines damped where the
+    # soothsayer's head is (a nosing at row 368 ran through it once the shade made it stand out); clear of the cage
+    head = mask_poly((h, w), [(484, 350), (552, 350), (552, 390), (484, 390)], soft=6.0)
+    pic[...] = lerp(pic, blur(pic, 2.2), (head * band * 0.8)[..., None])
+    cast = mask_poly((h, w), [(246, 452), (252, 524), (150, 550), (136, 474)], soft=4.0, wobble=2.0, seed=192)
+    tint(pic, "#a8acc8", cast * 0.8)
+    lum = pic @ np.array([0.3, 0.59, 0.11], dtype=F32)
+    sky_ = (yy < 248).astype(F32) * np.clip((lum - 0.74) / 0.12, 0, 1)            # the cloud whites, above the far view
+    sky_ = blur(sky_, 2.0)
+    soft_ = blur(pic, 1.6)
+    calm = soft_ * 0.35 + pic * 0.65
+    calm = calm * np.minimum(1.0, 0.86 / np.maximum(calm @ np.array([0.3, 0.59, 0.11], dtype=F32), 1e-3))[..., None]
+    pic[...] = pic * (1 - sky_[..., None]) + calm * sky_[..., None]
+    return pic
+
+
 def brushed(layer, ground, seed, sizes=(7, 4, 2), keep=0.36, restate=0.6):
     """A cut-out, repainted with a small brush on the ground it stands against, then said again crisply.
     -> (color, hard coverage)."""
@@ -1828,7 +1864,8 @@ def layout():
         "exits": [
             {"to": "rome-temple", "shape": {"poly": [r(P(d0, DEEP, dh1)), r(P(d1, DEEP, dh1)), r(P(d1, DEEP, HP)), r(P(d0, DEEP, HP))]}, "stand": r(at_door)},
             {"to": "rome-street", "shape": {"poly": [[0, 438], [40, 440], [40, 500], [0, 500]]}, "stand": [34, 470]}],
-        "marks": {"soothsayer": r(seat), "soothsayer_feet": r(feet), "senator": [200, 540], "doorkeeper": r(keeper), "son": [470, 508],
+        # STAGE-19R: "son" (the arrival mark, the scene's default spawn) 470, 540, was 470, 508: two step nosings ran through his head (scene audit S7)
+        "marks": {"soothsayer": r(seat), "soothsayer_feet": r(feet), "senator": [200, 540], "doorkeeper": r(keeper), "son": [470, 540],
                   "top_of_steps": r(P((COLS[1] + COLS[2]) / 2, EDGE - 19, 13 * RISE)), "foot_of_steps": r(P(UW / 2 - 300, VK(1) - 40, 0))},
         "sizes": {"adult_px_at_foot_of_steps": round(175 * T.k(UW / 2 - 300, VK(1) - 40), 1), "adult_px_at_top_of_steps": round(175 * T.k(UW / 2 - GAP / 2, EDGE), 1),
                   "adult_px_at_doors": round(175 * T.k(UW / 2, DEEP - 70), 1), "step_px": "about 11 at the foot, 6 at the top"},
@@ -1881,6 +1918,9 @@ if __name__ == "__main__":
         ground = pic
     else:                                                    # the cut-outs keep the brushwork they were given against the picture as it
         details(ground, info, back, first, moving=True)      # was, birds and smoke and all, so that they stay exactly as they were
+    stage19(pic)                                             # STAGE-19R: the doorway's glow, two cool shadows, calmer clouds
+    if ground is not pic:
+        stage19(ground)
     print("details", round(time.time() - t0, 1))
     layers = [("columns", cols, 96), ("altar", altar_layer(), 64), ("tripod", tripod_layer(), 32), ("stone", stone_layer(), 32), ("front", front_layer(), 48)]
     whole = pic.copy()

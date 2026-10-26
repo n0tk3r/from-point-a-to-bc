@@ -191,7 +191,7 @@ export default {
     spot("boxes-left", "archive boxes", { poly: [[0, 101], [29, 98], [86, 121], [129, 210], [131, 366], [130, 442], [128, 481], [89, 576], [53, 600], [0, 600]] }, "office.prop.boxes.ranger", "office.prop.boxes.use.ranger"),
     spot("window", "window", { poly: [[388, 265], [404, 263], [499, 262], [507, 263], [507, 334], [435, 334], [388, 333]] }, "office.prop.window.ranger", "office.prop.window.use.ranger"),
     spot("sign", "sign", { rect: [423, 245, 47, 18] }, "office.prop.sign.ranger"),
-    spot("bell", "bell", { rect: [472, 322, 24, 12] }, "office.prop.bell.ranger", "office.prop.bell.use.ranger"),
+    spot("bell", "bell", { rect: [472, 319, 24, 18] }, "office.prop.bell.ranger", "office.prop.bell.use.ranger"),
     spot("door", "door", { poly: [[530, 251], [573, 250], [606, 250], [606, 411], [599, 411], [530, 408]] }, "office.prop.door.ranger"),
     spot("counter", "counter", { poly: [[356, 338], [364, 334], [520, 325], [527, 346], [525, 408], [524, 414], [512, 414], [371, 407], [360, 406], [359, 401]] },
       (g) => g.say(lying.now ? "office.prop.receipt.lying.ranger" : "office.prop.counter.ranger"), null, { peekWith: DOWN }),

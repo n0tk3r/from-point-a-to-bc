@@ -449,7 +449,7 @@ export class Life {
       let name = names[Math.floor(p.rnd() * names.length)];
       if (name === p.last && names.length > 1) name = names[(names.indexOf(name) + 1) % names.length];
       p.last = name;
-      try { f.fidget(name); } catch (err) { console.warn(`Life: ${p.id} could not ${name}:`, err); }
+      try { const was = f.fid; f.fidget(name); if (f.fid && f.fid !== was) f.fid.life = true; } catch (err) { console.warn(`Life: ${p.id} could not ${name}:`, err); }      // (ENGINE-19B (8): life's own, which a line hushes: cast.js hushOf)
       return name;
     }
     if (this.sitting(f, p)) return null;                                  // (a glance means turning: someone seated stays as they are)

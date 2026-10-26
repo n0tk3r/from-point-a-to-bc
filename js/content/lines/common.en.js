@@ -4,10 +4,12 @@
 // PASS-17E (round seventeen, the dialogue pass): five lines have new words under their old ids, each marked with why
 // (Mom's stock replies talk to her girls as a mother does, with her contractions; Big Sister's look at her mother is
 // said in the morning too). Ranger's and Grandpa Joe's stock lines are as they were: the Office's are WRITE-17's.
+// PASS-19E (round nineteen, 25 October: the author's "Stiff, written-sounding", "Too long", "Jokes fall flat"): four
+// lines have new words under their old ids (S/work-19-passE/changes.json): one exclamation a box, no name as address.
 
 export const lines = {
   // ---------- intro movie ----------
-  "intro.1": ["son", "Dad, the map says this road ends. There's just a little drawing of a shrug."],
+  "intro.1": ["son", "This road ends on the map. There's just a little drawing of a shrug."],
   "intro.2": ["dad", "Maps don't know about shortcuts."],
   "intro.3": ["son", "Dad. DAD. The sky is doing the thing my slushie does."],
   "intro.4": ["dad", "Weather. Probably."],
@@ -17,7 +19,7 @@ export const lines = {
 
   // ---------- the sketch example scene ----------
   "sketch.stall": ["son", "Placeholder fruit. It tastes like a to-do list."],
-  "sketch.gate": ["son", "This gate isn't drawn yet. It's still very impressive. Nine out of ten, for a rectangle."],
+  "sketch.gate": ["son", "This gate isn't drawn yet. Nine out of ten, for a rectangle."],
   "sketch.cart": ["son", "A cart, according to the label."],
   "sketch.cart.use": ["son", "I'd push it, but it's mostly a rectangle."],
 
@@ -36,10 +38,10 @@ export const lines = {
 
   // ---------- handing something over ----------
   "give.dad.1": ["dad", "Here, buddy. Don't say I never gave you anything."],
-  "give.son.1": ["son", "Here! Hot potato! It's not a potato."],
+  "give.son.1": ["son", "Here. Hot potato! It's not a potato."],
   "give.mom.1": ["mom", "Would you take this for me, darling?"],
   "give.bigsis.1": ["bigsis", "Here. It is yours now. I will expect a full report."],
-  "give.lilsis.1": ["lilsis", "Here! Hold this! It's IMPORTANT!"],
+  "give.lilsis.1": ["lilsis", "Hold this. It's IMPORTANT!"],
   "give.grandpajoe.1": ["grandpajoe", "Here, partner. Hold on to that for me."],                      // NEVADA-12W
   "give.ranger.1": ["ranger", "..."],                                                            // NEVADA-12W
 

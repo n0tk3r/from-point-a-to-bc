@@ -47,12 +47,20 @@ import { BANDS, edgeAt, edgeLabel, open, checkEdges } from "./edges.js";
 import { Outlines } from "./outline.js";
 import { Life } from "./life.js";
 import { Effects } from "./effects.js";
+
+// ENGINE-19B: the cuts. LEAD: ms a new track starts before its picture fades in (a J-cut: sound first, item 6). SOON: of
+// that, the part in the tunnel (the rest is its 260 ms of white). DIP: a walk into a room next door, ms out and in (item 7).
+const LEAD = 800, SOON = 540, DIP = { out: 70, in: 80 };
 import * as art from "../art/kit.js";
 import { checkpoints } from "../content/checkpoints.js";      // TESTING-9 (temporary): the testers' parts. See "parts" below.
 import { Atlas, checkMaps } from "./atlas.js";                 // MAP-15: the map screen, the Timer, travel and switching through the map
 
 const esc =(s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const copy = (data) => JSON.parse(JSON.stringify(data));
+// ENGINE-19A: a card's least time, 0.6 s a word (the guide: read twice at 200 words a minute), after its 0.35 s fade-in (css #card).
+export const CARD_WORD_MS = 600, CARD_IN_MS = 350;
+/** ENGINE-19A: the words on a card: what has a letter or a digit in it ("1920", "B.C." count; a lone "/" or "-" does not). */
+export const wordsIn = (text) => String(text || "").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 /** ENGINE-17: is a point inside an outline? (the pixel's middle rule of walk.js, for one point) */
 const inside = (poly, x, y) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < xi + ((y - yi) / (yj - yi)) * (xj - xi)) c = !c; } return c; };
 /** ENGINE-17: the floor of any scene (the one on the stage or not) that a point is on, by the floors' own outlines: the
@@ -91,6 +99,7 @@ export class Game {
     this.store = new Store(newGame(this.leads));
     this.settings = saves.loadSettings();
     this.applyCalm();
+    this.applyWords();                             // ENGINE-19A: the backing and the size of the words on the stage
     this.audio = new AudioEngine(this.settings, content.sound);
     this.view = new SceneView(this.stage);
     this.view.cast.calm = this.calm;
@@ -106,6 +115,7 @@ export class Game {
     this.names = {};                      // each scene's name, by its id, once its file is in (for the label over a way out)
 
     this.mode = "boot";      // boot, cutscene, title or play
+    this.cutsceneId = null;  // ENGINE-19A: the cut-scene playing, if one is
     this.busy = 0;           // above zero while a script has control
     this.scene = null;
     this.held = null;        // the inventory item in the player's hand
@@ -185,6 +195,7 @@ export class Game {
     this.ui.close();
     this.ui.hud(false);
     this.view.clear();
+    this.view.cast.light = null;                 // ENGINE-19B (9): no room's light behind the title
     this.view.setEra("present");
     // What is behind the title belongs to the story, not to the engine: the cutscene called "title"
     // dresses the stage (js/content/cutscenes/title.js), and returns when its pictures are in.
@@ -653,6 +664,9 @@ export class Game {
     void el.offsetWidth;
     el.classList.add("show");
     this._cardNext = false;                      // a click or a key moves on early
+    // ENGINE-19A: a card stays 0.6 s a word at least (its title and its line together), counted from when it is fully shown
+    // (after the 0.35 s it takes to come up: css #card; none with less motion). The opening's card keeps its old time (as approved).
+    if (this.cutsceneId !== "intro") ms = Math.max(ms, CARD_WORD_MS * wordsIn(title + " " + sub)) + (this.calm ? 0 : CARD_IN_MS);
     await new Promise((resolve) => {
       let left = ms;
       const stop = this.clock.every((dt) => {
@@ -670,7 +684,16 @@ export class Game {
   async cutscene(id) {
     const script = this.cutscenes[id];
     if (!script) throw new Error(`No cutscene called "${id}"`);
-    const before = this.mode;
+    const before = this.mode, was = this.cutsceneId;
+    // ENGINE-19A (C15): a full cut-scene played from a game in progress (any but the opening) is saved before it: the autosave,
+    // marked with the cut-scene (load plays it again, if the scene's own arrival does not), so a player who quits in it comes
+    // back before it, not before the last room.
+    // FINAL-19: a cut-scene that ends the game's story (`save = false` on its script: the demo's end, "Going Down") is not
+    // saved before: Continue after the end comes back to the last save at rest, as in round eighteen, not into the ending.
+    if (id !== "intro" && script.save !== false && before === "play" && this.scene) this.autosave({ before: id });
+    this._cuts = (this._cuts || 0) + 1;            // ENGINE-19A: cut-scenes begun (load, below)
+    this.cutsceneId = id;                          // ENGINE-19A: the one playing (the opening keeps its old times: dialogue.js, card)
+    this.stage.dataset.cut = id;                   // ENGINE-19A: (and its look: no backing behind its words, css)
     this.mode = "cutscene";
     this.busy++;
     this.ui.close();
@@ -691,6 +714,8 @@ export class Game {
       this.ui.showSkip(false);
       this.busy--;
       this.mode = before;
+      this.cutsceneId = was;                       // ENGINE-19A
+      if (was) this.stage.dataset.cut = was; else delete this.stage.dataset.cut;
     }
   }
 
@@ -709,7 +734,7 @@ export class Game {
   stopTunnel() { if (this.stopFx) { this.stopFx(); this.stopFx = null; } }
 
   /** The short trip between two eras. */
-  async wormhole(ms = 1600) {
+  async wormhole(ms = 1600, soon = null) {
     this.sfx("portal");
     await this.fade(1, 260, "#fff");
     if (this.clock.skipping) return;
@@ -717,16 +742,31 @@ export class Game {
     this.startTunnel();
     this.music("tunnel");
     await this.fade(0, 220, "#fff");
-    await this.wait(ms);
+    // ENGINE-19B (6): `soon()`, LEAD before the far end's picture fades in (the tunnel's last SOON ms and its white): the
+    // track of the time it goes to, in the tunnel (goto's soundFirst).
+    if (soon) { await this.wait(Math.max(0, ms - SOON)); soon(); await this.wait(Math.min(ms, SOON)); }
+    else await this.wait(ms);
     await this.fade(1, 260, "#fff");
     this.stopTunnel();
+  }
+
+  /** ENGINE-19B (7): is scene `to` (an id) next door to scene `from`: in the same time, and one place of a map, or two
+      places a way on the map joins, or a way out of one (its `exits`, an edge) goes into the other? */
+  nextDoor(from, to) {
+    const there = this.built && this.built[to], A = from && this.mapOf(from.id), B = this.mapOf(to);
+    const era = there ? there.era : B ? B.map.era : null;
+    if (!from || from.id === to || !era || era !== from.era) return false;
+    const joins = (a, b) => !!a && ((a.exits || []).includes(b) || Object.values(a.edges || {}).some((w) => w && w.to === b));
+    if (joins(from, to) || joins(there, from.id)) return true;
+    if (!A || !B || A.id !== B.id) return false;
+    return A.place === B.place || (A.map.paths || []).some((p) => (p.a === A.place && p.b === B.place) || (p.a === B.place && p.b === A.place));
   }
 
   // =============== scenes ===============
   /** Fetch a scene file the first time it is needed, then keep it. */
   async getScene(id) {
     if (!this.sceneIds.includes(id)) throw new Error(`No scene called "${id}". Add it to js/content/scenes/index.js.`);
-    if (!this.scenes[id]) this.scenes[id] = this.loadScene(id).then((scene) => { this.names[id] = scene.name; return scene; });      // keep the promise, so two askers share one fetch
+    if (!this.scenes[id]) this.scenes[id] = this.loadScene(id).then((scene) => { this.names[id] = scene.name; (this.built ||= {})[id] = scene; return scene; });      // keep the promise, so two askers share one fetch (ENGINE-19B: built, the ones here, to read at once)
     return this.scenes[id];
   }
 
@@ -737,11 +777,16 @@ export class Game {
       who stands in that scene, and nobody leaves this one. Before anything changes, the scene being left runs its
       `leaving(g, to)` when the lead leaves it for another, by any way: an edge, a door, the map (not on switching, not when
       a script has handed the controls to a lead who is not in it, as the end of an act does, and not on loading a save). */
-  async goto(id, { via = "fade", spawn = "default", at = null, came = undefined, switching = false, card = true, fall = null } = {}) {
+  async goto(id, { via, spawn = "default", at = null, came = undefined, switching = false, card = true, fall = null } = {}) {
     // ENGINE-17: `card: false`, no era card (a drop through a grille, a climb back: one building); `fall`: the lead falls into
     // the new scene onto his mark, after it has faded in and before its `enter` (a drop through a grille: grille.js fall).
     // The scene left is the lead's own: the one he looks down from, while he looks down through a grille (g.here).
     const from = this.here;
+    // ENGINE-19B (7): `via` not given is a walk (an edge, a door, a stair). Into a room next door (nextDoor: one place, the
+    // same time) it is a short dip, DIP, not the black fade: black is kept for what asks for it by name ("fade": a script,
+    // a switch of leads), the map, the tunnel, an era's or an act's change.
+    const walked = via === undefined;
+    if (walked) via = "fade";
     this.busy++;
     try {
       const loading = this.getScene(id);         // fetch during the fade, not after it
@@ -750,9 +795,24 @@ export class Game {
       if (from && from.leaving && from.id !== id && !switching && here && here.scene === from.id) {
         try { await from.leaving(this, id); } catch (err) { console.error(`Scene "${from.id}": leaving stopped:`, err); }
       }
-      if (via === "wormhole") await this.wormhole();
-      else if (via === "fade") await this.fade(1, 300);
-      else { this._fade = 1; this.fadeEl.style.opacity = 1; }        // "cut"; and MAP-15's "map", where the map has faded out to the dark
+      const dip = walked && this.nextDoor(from, id) ? DIP : null;                             // ENGINE-19B (7)
+      // ENGINE-19B (6): sound first. A scene that changes the music (another time, or a room with a track of its own) has
+      // its track start before its picture: under the picture being left (a walk: held LEAD - DIP.out on it, then the dip),
+      // under the fade out, or in the tunnel; and the new picture fades in LEAD after the track started (a J-cut). Not
+      // from the title or a fresh start (no scene left), not on loading a save (enterScene alone), not while skipping.
+      const lead = { at: null };
+      const soundFirst = (scene) => {
+        if (lead.at != null || !from || !scene || this.clock.skipping || !this.audio.ready) return false;
+        const m = this.musicOf(scene), now = this.audio.current ? this.audio.current.id : null;
+        if (!m || m === now || !(this.audio.sound && this.audio.sound.music && this.audio.sound.music[m])) return false;
+        this.music(m); lead.at = this.clock.now;
+        return true;
+      };
+      const known = this.built && this.built[id];
+      if (via === "wormhole") await this.wormhole(1600, () => soundFirst(this.built && this.built[id]));       // (ENGINE-19B: the new time's track in the tunnel)
+      else if (dip) { if (soundFirst(known)) await this.wait(LEAD - dip.out); await this.fade(1, dip.out); }  // ENGINE-19B (6, 7)
+      else if (via === "fade") { soundFirst(known); await this.fade(1, 300); }                                // (ENGINE-19B: under the fade out)
+      else { soundFirst(known); this._fade = 1; this.fadeEl.style.opacity = 1; }        // "cut"; and MAP-15's "map", where the map has faded out to the dark
       let scene;
       try { scene = await loading; }
       catch (err) {                                // the file would not load: come back to where we were
@@ -766,6 +826,7 @@ export class Game {
         return;
       }
       const marks = scene.spawn || {};         // a named way in, then this lead's own mark, then the usual one
+      soundFirst(scene);                           // ENGINE-19B (6): a scene that was not here yet: its track now, in the dark
       try {
         await this.enterScene(scene, at || (spawn !== "default" && marks[spawn]) || marks[this.store.data.active] || marks.default, spawn);
       } catch (err) {                              // the scene broke while it was being built: never leave the player looking at black
@@ -773,7 +834,9 @@ export class Game {
         return await this.trouble(err, `Scene "${id}"`);
       }
       if (fall && this.lead && !this.clock.skipping) this.lead.fade(0);       // ENGINE-17: not seen on his mark before he has fallen onto it
-      await this.fade(0, via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");
+      if (lead.at != null) await this.wait(LEAD - (this.clock.now - lead.at));   // ENGINE-19B (6): the picture LEAD after its sound
+      this.lastWay = { id, via: dip ? "dip" : via, lead: lead.at != null ? Math.round(this.clock.now - lead.at) : 0 };     // ENGINE-19B: for the tests
+      await this.fade(0, dip ? dip.in : via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");      // (ENGINE-19B: DIP.in next door)
       if ((!from || from.era !== scene.era) && via !== "map" && card) {        // (MAP-15: none after the map, which has said where and when; ENGINE-17: nor when asked)
         const era = this.eras[scene.era];
         await this.card(era.name, era.date);
@@ -808,6 +871,7 @@ export class Game {
     // people kept from another key are let go.
     if (keyScene(scene.id, scene.era) && castKit.forget) castKit.forget();
     this.scene = scene;
+    cast.light = castKit.lightOfScene ? castKit.lightOfScene(scene, this) : null;      // ENGINE-19B (9): the people in this room's light, if it asks (cast.js)
     this.life.enter(scene);                     // everyone's own life starts again with the scene, on their marks (life.js)
     this.mode = "play";
     this.titleEl.hidden = true;
@@ -1377,7 +1441,10 @@ export class Game {
     const here = this.here, era = this.eras[here.era];      // (ENGINE-17: the lead's own scene, while he looks down through a grille)
     return { scene: here.name, era: `${era.name}${era.date ? ", " + era.date : ""}`, lead: this.cast[this.store.data.active].name, playMs: Math.round(this.store.data.playMs) };
   }
-  autosave() {
+  autosave({ before = null } = {}) {
+    // ENGINE-19A: { before: a cut-scene's id }, from cutscene(): written whatever is under way (the script that starts it), with
+    // the cut-scene's name in it (`cutscene`), which load() takes out again and plays.
+    if (before) { if (this.scene) { const data = this.snapshot(); data.cutscene = before; saves.writeSlot("auto", data, this.meta()); } return; }
     if (this.mode === "play" && this.scene && !this.busy) saves.writeSlot("auto", this.snapshot(), this.meta());
   }
   saveSlot(slot) {
@@ -1399,6 +1466,8 @@ export class Game {
   async load(body) {
     if (!body) return;
     const data = complete(copy(body.data), this.leads);
+    const owed = typeof data.cutscene === "string" && this.cutscenes[data.cutscene] ? data.cutscene : null;     // ENGINE-19A: saved as a cut-scene began
+    delete data.cutscene;
     if (!this.leads.includes(data.active) || !this.sceneIds.includes(data.scene)) { this.ui.toast("That save is from a part of the game this version does not have.", 4200); return; }
     // Anyone else who was left in a scene this version does not have is nowhere, until the story puts them somewhere.
     // And a thing in somebody's pockets that this version does not have is left behind.
@@ -1421,7 +1490,9 @@ export class Game {
       await this.enterScene(scene, place.x != null ? [place.x, place.y] : null);
       await this.fade(0, 400);
       this.ui.toast("Game loaded");
+      const cuts = this._cuts || 0;
       if (scene.enter) await scene.enter(this, null);   // finish an arrival the save interrupted
+      if (owed && (this._cuts || 0) === cuts && this.mode === "play") await this.cutscene(owed);     // ENGINE-19A: and the cut-scene it was saved before (unless the arrival played one)
     } catch (err) {                                     // a save that will not open must not leave a black screen
       await this.trouble(err, "Loading a save");
     } finally {
@@ -1490,6 +1561,14 @@ export class Game {
     saves.storeSettings(this.settings);
     this.audio.applyVolumes();
     this.applyCalm();
+    this.applyWords();                             // ENGINE-19A
+  }
+
+  /** ENGINE-19A: the words spoken on the stage: a soft backing behind them (on unless the player turns it off), and their size
+      (Normal, or Large: a quarter larger). Classes on the stage (css: .stage.backing, .stage.large-text). */
+  applyWords() {
+    this.stage.classList.toggle("backing", this.settings.backing !== false);
+    this.stage.classList.toggle("large-text", Number(this.settings.textSize) > 1);
   }
 
   /** Less motion: decoration holds still, flashes become fades, the tunnel drifts. */
@@ -1509,6 +1588,7 @@ export class Game {
 
     // A click while someone is talking moves to the next line, whatever was clicked.
     this.stage.addEventListener("click", (event) => {
+      if (this.mode === "cutscene" && this.ui.open) return;      // ENGINE-19A: a click on the pause menu in a cut-scene is not a click on the scene
       this._tapped = true;
       if (this.cardEl.classList.contains("show")) this._cardNext = true;
       if (this.dialogue.active && !event.target.closest("button")) {
@@ -1584,10 +1664,12 @@ export class Game {
       if (key === "Escape") {
         const tree = this.dialogue.choosing && !this.ui.open ? this.stage.querySelector(".choices.talk") : null;     // TALK-11: a dialogue tree's menu: Esc takes the way out, if this node has one; else nothing
         if (tree) { const exit = tree.querySelector("button.exit"); if (exit) exit.click(); }
-        else if (this.mode === "cutscene") this.skip();
+        else if (this.mode === "cutscene") { if (this.ui.open) this.ui.back(); else this.ui.pauseMenu(); }      // ENGINE-19A: Esc pauses a cut-scene (Skip is in the menu); it no longer skips at once
         else if (this.ui.open) this.ui.back();
         else if (this.peeking && !this.busy && !this.dialogue.choosing && this.mode === "play") this.leaveView();      // ENGINE-17: Esc backs up from a grille's view
         else this.ui.pauseMenu();
+      } else if (this.mode === "cutscene" && this.ui.open) {
+        // ENGINE-19A: while the pause menu is up in a cut-scene, the other keys are the menu's (Enter and Space press its buttons)
       } else if ((key === " " || key === "Enter") && this.cardEl.classList.contains("show")) {
         event.preventDefault();
         this._cardNext = true;

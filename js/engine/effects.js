@@ -207,6 +207,9 @@ const Sprite = castKit.Sprite || class {
 /** One moving thing on the cast layer (a column of smoke, one bird). Its effect says what it looks like. */
 class Mote extends Sprite {
   constructor(id, effect) { super(id); this.fx = effect; this.want = false; this.waits = 0; this.urgent = false; }
+  // ENGINE-19B (8): its opacity as drawn is its own times its effect's hush (Effect.hushed): fainter while a line is up.
+  get opacity() { const k = this.fx && this.fx.hushed ? this.fx.hushed("opacity") : 1; return (this._op ?? 1) * k; }
+  set opacity(v) { this._op = v; }
   get h() { return 0; }                         // (not a head for spoken words to keep clear of: dialogue.js)
   picture(palette, calm) { return this.fx.picture(this, calm); }
   /** Its picture may change this frame (see Effects.frame, the budget). */
@@ -252,8 +255,17 @@ class Effect {
     if (on !== this.shown) { this.shown = on; this.reveal(on); }
     if (!on) return;
     this.calm = calm;
-    this.time += dt * (calm ? this.slow : 1);
+    this.time += dt * (calm ? this.slow : 1) * this.hushed("speed");      // (ENGINE-19B (8): slower while a line is up)
     this.update(calm, people);
+  }
+  /** ENGINE-19B (8): how far this one goes on while a line is up, as a share of itself: of its `speed` (its time) or its
+      `opacity`, eased with the host's hush (0 to 1). 1 for a kind that is never hushed (HUSH: the portal, a drive), for a
+      thing whose description says `hush: false`, and for a flock a script is herding or posing. */
+  hushed(what) {
+    const h = this.host.hushQ, a = h ? HUSH[this.type] : null;
+    if (!a || this.spec.hush === false || this.herding || this.posing || this.ahead) return 1;      // (a drive straight ahead: the opening's road, never)
+    if (this.setAt != null && this.game && this.game.clock && this.game.clock.now - this.setAt < STEERED) return 1;      // (a strip or a drive a script is changing: its own)
+    return 1 - (1 - a[what]) * h;
   }
   reveal(on) { for (const s of this.sprites) s.hidden = !on; }
   update() {}
@@ -1666,6 +1678,7 @@ class Strip extends Effect {
   gone(t) { return this.d0 + (this.speed * Math.max(0, t - this.t0)) / 1000; }
   /** For scripts: { speed } (pixels a second; 0 parks it), { opacity }. It goes on from where it is. */
   set(o = {}) {
+    this.setAt = this.game && this.game.clock ? this.game.clock.now : 0;      // ENGINE-19B (8): a script is steering it: not hushed for STEERED ms
     if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }
     if (o && typeof o.opacity === "number") { this.alpha = clamp(o.opacity); for (const w of this.wins) w.step = null; }
     return this;
@@ -2164,6 +2177,7 @@ class Drive extends Effect {
   gone(t) { return this.d0 + (this.speed * Math.max(0, t - this.t0)) / 1000; }
   /** For scripts: { speed } (metres a second; 0 parks it), { opacity }. It goes on from where it is. */
   set(o = {}) {
+    this.setAt = this.game && this.game.clock ? this.game.clock.now : 0;      // ENGINE-19B (8): a script is steering it: not hushed for STEERED ms
     if (this.ahead && o) this.setAhead(o);                           // ROAD-18E: straight ahead, also { s }, { light: { id: k } }, { gap } (setAhead)
     if (o && typeof o.speed === "number" && Number.isFinite(o.speed) && o.speed !== this.speed && !(this.ahead && typeof o.s === "number")) { this.d0 = this.gone(this.time); this.t0 = this.time; this.speed = o.speed; }      // (ROAD-18E: with { s }, setAhead has it)
     if (o && typeof o.opacity === "number") { this.alpha = clamp(o.opacity); for (const w of this.wins) w.step = null; }
@@ -3250,6 +3264,19 @@ class Portal extends Effect {
   }
 }
 
+// ENGINE-19B (8): how far each kind goes on while a line is up, as a share of itself (Effect.hushed): `speed`, of its
+// time; `opacity`, of how solid it is drawn. Chosen by eye on the noon site, the Rome steps, the night house and the
+// limousine: still alive, no longer pulling at the words (smoke and water keep 0.7: the scenes' smoke is faint already, and the half pace does the quieting). Things that are a painted object (a sway's washing, a boat on the
+// swell) only slow, never fade; birds fade only a little. A drive only at a car's side windows (the limousine's desert),
+// never straight ahead (the opening's road); the portal never (not listed).
+const HUSH = {
+  smoke: { speed: 0.5, opacity: 0.7 }, shimmer: { speed: 0.5, opacity: 0.65 }, ripples: { speed: 0.5, opacity: 0.7 },
+  stream: { speed: 0.6, opacity: 0.7 }, flame: { speed: 0.45, opacity: 0.85 }, embers: { speed: 0.5, opacity: 0.8 },
+  birds: { speed: 0.6, opacity: 0.85 }, sway: { speed: 0.5, opacity: 1 }, bob: { speed: 0.6, opacity: 1 },
+  strip: { speed: 0.8, opacity: 0.85 }, drive: { speed: 0.8, opacity: 0.85 },      // (a drive: a car's side windows; never one straight ahead)
+};
+const HUSH_EASE = 250, HUSH_GAP = 400;          // ms: the ease in and out; and how long after a line it stays hushed
+const STEERED = 2000;                           // ms after a script last set a strip's or a drive's speed that it is left as the script has it
 const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal, strip: Strip };      // (strip: NEVADA-12E)
 KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rides the water
 KINDS.drive = Drive;                             // DRIVE-16E: the world going by a car's side windows
@@ -3298,7 +3325,8 @@ export class Effects {
     this.frame(0);
     return Promise.all([...this.list.flatMap((e) => e.pics()).map(fetchPicture), ...this.list.map((e) => (e.ready ? e.ready() : null))]);          // (NEVADA-12E: pics(), which a strip has too; DRIVE-16E: and ready(), a drive's sheet of things)
   }
-  drop(scene = null) { for (const e of this.list) if (e.end) e.end(); this.list = []; this.time = 0; this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }      // (ROME-13E: end(): a herd or a pose a script waits for is over)
+  drop(scene = null) { for (const e of this.list) if (e.end) e.end(); this.list = []; this.time = 0; this.hush = 0; this.hushQ = 0; this.talkAt = -1e9; if (this.game && this.game.view && this.game.view.cast) this.game.view.cast.hush = 0;      // (ENGINE-19B: the hush too)
+    this.owner = scene; this.scene = scene; this.place = scene ? scene.id : ""; this.granted = this.deferred = 0; }      // (ROME-13E: end(): a herd or a pose a script waits for is over)
 
   /** Another moving thing, on the stage now. It goes when the scene does. */
   add(spec, quiet = false) {
@@ -3323,6 +3351,7 @@ export class Effects {
   frame(dt) {
     const g = this.game;
     if (this.list.length && this.owner !== g.scene && this.owner !== null) this.drop();     // the scene has gone (the title, or another scene being built)
+    this.hushing(dt);                                                                      // ENGINE-19B (8)
     if (!this.list.length) return;
     const cast = g.view.cast, calm = !!cast.calm, step = this.held ? 0 : dt;
     this.time += step;
@@ -3341,6 +3370,23 @@ export class Effects {
       const s = wanting[i];
       if (i < this.budget) { s.waits = 0; s.grant(); this.granted++; } else { s.waits++; this.deferred++; }
     }
+  }
+  /**
+   * ENGINE-19B (8): hush the moving things while someone speaks. While a line is on the stage (g.dialogue.active: words,
+   * a thought, the building's speakers), and for HUSH_GAP after it (so the beat between two lines does not wake them), the
+   * hush goes up to 1, and after that back to 0, eased over HUSH_EASE ms of game time in eighths (hushQ: so the cast
+   * repaints them eight times each way, not every frame). Each thing then runs slower and is fainter by its kind's amounts
+   * (HUSH). A scene with `hush: false` is never hushed. The people's own small movements (cast.js, a fidget under way) go
+   * slower with it: the cast is told (cast.hush).
+   */
+  hushing(dt) {
+    const g = this.game, now = g && g.clock ? g.clock.now : 0;
+    const talk = !!(g && g.dialogue && g.dialogue.active) && !(g.scene && g.scene.hush === false);
+    if (talk) this.talkAt = now;
+    const want = talk || now - (this.talkAt ?? -1e9) < HUSH_GAP ? 1 : 0, h = this.hush || 0;
+    this.hush = want > h ? Math.min(1, h + dt / HUSH_EASE) : want < h ? Math.max(0, h - dt / HUSH_EASE) : h;
+    const q = Math.round(this.hush * 8) / 8;
+    if (q !== this.hushQ) { this.hushQ = q; if (g && g.view && g.view.cast) g.view.cast.hush = q; }
   }
   /** Jump every moving thing to this moment of the scene's time. Startled birds are put back: the flock is worked out as if nobody were about. */
   seek(ms) { this.time = ms; for (const e of this.list) e.seek(ms); this.frame(0); }

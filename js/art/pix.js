@@ -38,13 +38,18 @@ export function shifted(material, by) {
 
 // Direction to the light, in picture space (y down): up, left and toward the viewer.
 const LX = -0.50, LY = -0.66, LZ = 0.56;
+// ENGINE-19B (9): or up and to the RIGHT, for a scene whose key light is on that side (`lightFrom: "right"`): the cast
+// (cast.js, Figure.picture) sets the side for the drawing of one person, and puts it back. SIDE 1 is the left, as always;
+// -1 mirrors the light: the shade side, the outline on it, the shadows things cast and the bands of shade, left for right.
+let SIDE = 1;
+export function lightSide(side = 1) { const was = SIDE; SIDE = side < 0 ? -1 : 1; return was; }
 
 // Flat shading, the way a hand-drawn sprite is shaded: a form is its plain color, and the side turned
 // from the light is one darker tone, with a clean edge between the two. Nothing is modelled round.
 // The lightest tone is kept for materials that really shine (shine: true), and the deepest for the
 // thin lines where one thing lies in front of another.
 function toneOf(nx, ny, nz, material) {
-  const d = nx * LX + ny * LY + nz * LZ + (material.lift || 0);
+  const d = nx * LX * SIDE + ny * LY + nz * LZ + (material.lift || 0);      // (ENGINE-19B: SIDE)
   if (material.shine && d > 0.80) return 0;
   return d > (material.cut ?? 0.20) ? 1 : 2;
 }
@@ -244,7 +249,7 @@ export class Surface {
     }
     if (inset) {
       const band = new Uint8Array(n), asked = new Map();
-      const wantOf = (part) => { let v = asked.get(part); if (v === undefined) { v = inset(part) || 0; if (v && !Array.isArray(v)) v = [v, 0.6, 0.8]; asked.set(part, v); } return v; };      // how wide, and which way the shade side lies
+      const wantOf = (part) => { let v = asked.get(part); if (v === undefined) { v = inset(part) || 0; if (v && !Array.isArray(v)) v = [v, 0.6, 0.8]; if (v && SIDE < 0) v = [v[0], -v[1], v[2]]; asked.set(part, v); } return v; };      // how wide, and which way the shade side lies (ENGINE-19B: mirrored with SIDE)
       for (let y = by0; y <= by1; y++) for (let x = bx0; x <= bx1; x++) {
         const i = y * w + x;
         if (!m[i] || t[i] !== 1) continue;
@@ -253,7 +258,7 @@ export class Surface {
         const k = want[0], dx = want[1], dy = want[2];
         for (let j = 1; j <= k; j++) {
           const qx = x + Math.round(j * dx), qy = y + Math.round(j * dy);
-          if (qx >= w || qy >= h) { band[i] = 1; break; }
+          if (qx >= w || qy >= h || (SIDE < 0 && qx < 0)) { band[i] = 1; break; }      // (ENGINE-19B: qx < 0, the light on the right)
           const q = qy * w + qx;
           if (!sol[q]) { band[i] = 1; break; }                             // the edge of the whole figure
           if (p[q] === p[i]) continue;
@@ -268,7 +273,7 @@ export class Surface {
       // Follow the light back from each lit pixel: if something nearer stands in its way, the pixel is in shadow.
       const DX = 0.60, DY = 0.80, RISE = 0.68;             // the light comes from the upper left and from in front
       const steps = Math.max(1, Math.min(12, Math.ceil(reach))), sx = [], sy = [], rise = [];
-      for (let k = 0; k <= steps; k++) { sx.push(Math.round(k * DX)); sy.push(Math.round(k * DY)); rise.push(k * RISE + 1.4); }
+      for (let k = 0; k <= steps; k++) { sx.push(Math.round(k * DX) * SIDE); sy.push(Math.round(k * DY)); rise.push(k * RISE + 1.4); }      // (ENGINE-19B: SIDE)
       const known = new Map();                             // what cast() answered for each pair of parts
       const castOf = (a, b) => { const key = a * 256 + b; let v = known.get(key); if (v === undefined) { v = cast(a, b) || 0; known.set(key, v); } return v; };
       dark = new Uint8Array(n);
@@ -278,7 +283,7 @@ export class Surface {
         const pi = p[i], zi = z[i];
         for (let k = 1; k <= steps; k++) {
           const qx = x - sx[k], qy = y - sy[k];
-          if (qx < 0 || qy < 0) break;
+          if (qx < 0 || qy < 0 || qx >= w) break;
           const q = qy * w + qx;
           if (!sol[q] || p[q] === pi || z[q] - zi < rise[k]) continue;
           if (k <= castOf(p[q], pi)) { dark[i] = 1; break; }
@@ -300,17 +305,19 @@ export class Surface {
         let tone = t[i];
         if (sol[i]) {
           if (dark && dark[i] === 1 && tone < 2) tone = 2;
-          const L = x > 0 && sol[i - 1] === 1, R = x < w - 1 && sol[i + 1] === 1, U = y > 0 && sol[i - w] === 1, D = y < h - 1 && sol[i + w] === 1;
+          let L = x > 0 && sol[i - 1] === 1, R = x < w - 1 && sol[i + 1] === 1, U = y > 0 && sol[i - w] === 1, D = y < h - 1 && sol[i + w] === 1;
+          const lx = SIDE < 0 ? 1 : -1;                                     // ENGINE-19B: the pixel toward the light (to the left, or with SIDE -1 to the right)
+          if (SIDE < 0) { const t0 = L; L = R; R = t0; }                    // (and L, R: toward the light, away from it)
           // The outline on the shadow side is the shade tone, not a black line. (A deeper line, and one down the lit
           // side as well, only if asked for, and only on forms thick enough to have an inside: a finger or a nose
           // two pixels wide would be nothing but outline.)
           if (edge && (!R || !D)) {
-            const thick = (R || (x > 1 && sol[i - 1] === 1 && sol[i - 2] === 1)) && (D || (y > 1 && sol[i - w] === 1 && sol[i - 2 * w] === 1));
+            const thick = (R || (sol[i + lx] === 1 && sol[i + 2 * lx] === 1 && x + 2 * lx >= 0 && x + 2 * lx < w)) && (D || (y > 1 && sol[i - w] === 1 && sol[i - 2 * w] === 1));
             tone = Math.max(tone, rim && thick ? 3 : 2);
-          } else if (outline && ((!L && x < w - 2 && sol[i + 2] === 1) || (!U && y < h - 2 && sol[i + 2 * w] === 1))) tone = Math.max(tone, 2);
+          } else if (outline && ((!L && x - 2 * lx >= 0 && x - 2 * lx < w && sol[i - 2 * lx] === 1) || (!U && y < h - 2 && sol[i + 2 * w] === 1))) tone = Math.max(tone, 2);
           if (contact && tone < 3) {
-            if ((L && p[i - 1] !== p[i] && z[i - 1] - z[i] > gap) || (U && p[i - w] !== p[i] && z[i - w] - z[i] > gap)) tone++;
-            else if (seams && ((L && p[i - 1] !== p[i] && seams(p[i - 1], p[i], false, x, y)) || (U && p[i - w] !== p[i] && seams(p[i - w], p[i], true, x, y)))) tone++;   // two parts that touch: a line between them
+            if ((L && p[i + lx] !== p[i] && z[i + lx] - z[i] > gap) || (U && p[i - w] !== p[i] && z[i - w] - z[i] > gap)) tone++;
+            else if (seams && ((x > 0 && sol[i - 1] === 1 && p[i - 1] !== p[i] && seams(p[i - 1], p[i], false, x, y)) || (U && p[i - w] !== p[i] && seams(p[i - w], p[i], true, x, y)))) tone++;   // two parts that touch: a line between them
           }
         }
         tones[i] = tone;

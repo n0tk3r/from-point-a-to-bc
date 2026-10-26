@@ -4,7 +4,7 @@
 //
 // The limousine has stopped in the lot (its ending, js/content/scenes/nevada-limo.js, slows the desert to nothing and puts
 // up the card THE OFFICE OF PECULIAR SECTORS, "Desert Field Headquarters, the same afternoon"). Then:
-//   1. The title over the lot, and the four suits get out in a row: "Sir, we have arrived, sir." "Sorry about the drive, sir."
+//   1. The title over the lot, and the four suits get out in a row, and stand there (STAGE-19O: no words: the scene enters late)
 //   2. Two of them bring Grandpa Joe out of the back, upright, hat on: "Sir, you will now be processed." "Son, I been
 //      processed. Jolene does it every Sunday before church."
 //   3. Jed comes round the front with the banjo's hoop round his neck and what is left of the banjo, and goes in ahead:
@@ -18,7 +18,7 @@
 //   7. The door shuts on all of them but Wendell, who turns round, by regulation, to face the gate. "...It is my birthday."
 //      Houston, on every speaker inside: one civilian has arrived; it is Wendell's birthday, and there is a pie.
 //   8. A moment. Ranger comes out from under the limousine's seat in his mirror shades, drops to the gravel, sits up: a
-//      thought of Joe's hat; a question mark; the door, plus a suit. Play as Ranger.
+//      thought of Joe's hat; a beat; the door, plus a suit (STAGE-19O: the question mark between them is gone). Play as Ranger.
 // Nobody touches anybody: the suits walk either side of him, and he walks.
 //
 // Played by the limousine's ending (or by the lot's `enter`, for a game that has not had it: a save, or the address
@@ -66,15 +66,16 @@ export default async function arrive(g) {
   await cast.load();
   await g.fade(0, 700);
   await g.wait(500);
-  await g.card(g.lines["office.arrive.card"] ? g.lines["office.arrive.card"][1] : "A Very Small Building With A Very Long Name", "", { plain: true, ms: 2600 });
+  await g.card(g.lines["office.arrive.card"] ? g.lines["office.arrive.card"][1] : "A Very Small Building With A Very Long Name", "", { plain: true, ms: 5400 });                 // STAGE-19O: 0.6 s a word (9 words), as the engine will ask (C11)
   g.store.data.seenLines["office.arrive.card"] = (g.store.data.seenLines["office.arrive.card"] || 0) + 1;
 
   // ---- 1. four doors: four men in gray step out in a row
   g.sfx("latch");
   await Promise.all(SUITS.map((id, i) => { const a = g.actor(id), [x, y] = A.outOfCar[3 - i]; return Promise.all([walk(id, [[x, y]]), g.tween(300, (k) => a.fade(k))]); }));
   SUITS.forEach((id) => face(id, "S"));
-  await g.wait(300);
-  await g.say("office.arrive.1", "office.arrive.2");
+  await g.wait(800);                                                            // STAGE-19O: the four in a row, a tableau before anyone speaks (was 300)
+  // STAGE-19O: no words here ("We have arrived, sir." "Sorry about the drive, sir." are gone, lines and use): the scene
+  // enters late, on the four men in gray standing in a row by the car, and the first word is Dale's "processed" (C3, C13)
 
   // ---- 2. two of them either side of the back door, and Grandpa Joe out of it, upright, hat on
   await Promise.all([walk("suit1", [A.dale]), walk("suit2", [A.merle])]);
@@ -94,6 +95,7 @@ export default async function arrive(g) {
   look("grandpajoe", "agent");
   await g.say("office.arrive.5");
   await g.say("office.arrive.6", "office.arrive.7");
+  await g.wait(500);                                                            // STAGE-19O: the take after "...We have all had a day, sir." (C10)
   await jedIn;
   await Promise.all([walk("agent", [A.queue.jed]), (async () => { if (door) door.show(false); if (doorOpen) doorOpen.show(true); g.sfx("unlock"); })()]);
   await goIn("agent");
@@ -114,6 +116,7 @@ export default async function arrive(g) {
   await g.say("office.arrive.10");
   look("suit2", "grandpajoe");
   await g.say("office.arrive.11");
+  await g.wait(500);                                                            // STAGE-19O: the take after "...not permitted to discuss the air." (C10)
 
   // ---- 5. the mat: he wipes his boots; Wendell to his post at the door
   await Promise.all([walk("grandpajoe", [A.walkIn[3], A.mat]), walk("suit1", [A.queue.dale]), walk("suit2", [A.queue.merle]), walk("suit3", [A.door]), walk("suit4", [A.queue.floyd])]);
@@ -134,6 +137,7 @@ export default async function arrive(g) {
   face("suit1", "S");                                                           // (the clipboard)
   await g.say("office.arrive.17");
   await g.say("office.arrive.18");
+  await g.wait(700);                                                            // STAGE-19O: the take after "Then officially, there ain't one." (C10)
 
   // ---- 7. in they go, all but Wendell; the door shuts; Wendell turns to face the gate, by regulation
   await goIn("suit1");
@@ -146,11 +150,12 @@ export default async function arrive(g) {
   face("suit3", "W");
   await g.wait(600);
   await g.say("office.arrive.19");
+  await g.wait(600);                                                            // STAGE-19O: Wendell alone with it, before the speakers (C10)
   await g.pa("office.pa.arrive", { building: "office" });
   await g.pa("office.pa.pie", { building: "office" });                         // (the pie, planted: Joe hears it too)
 
   // ---- 8. a moment; and Ranger, out from under the seat in his mirror shades, down to the gravel
-  await g.wait(1200);
+  await g.wait(900);                                                            // STAGE-19O: the hold after Houston's off-screen payoff (0.6 to 1.8 s; was 1200)
   ranger.hidden = false;
   await g.tween(380, (k) => ranger.fade(k));
   await g.wait(500);
@@ -160,7 +165,11 @@ export default async function arrive(g) {
   ranger.face("W");
   if (ranger.sit) await ranger.sit(true);
   await g.wait(300);
-  await g.say("office.arrive.ranger.1", "office.arrive.ranger.2", "office.arrive.ranger.3");
+  // STAGE-19O: two thoughts, not three boxes of the same picture (C10, C13): the want (Joe's hat), a beat, and the problem
+  // (the door, plus a suit). The question mark between them (office.arrive.ranger.2) is gone, line and use.
+  await g.say("office.arrive.ranger.1");
+  await g.wait(500);
+  await g.say("office.arrive.ranger.3");
 
   // ---- the play goes to the two of them: Ranger here, Grandpa Joe in the Comfortable Room (as an act hands over)
   g.flag("office.arrived", true);

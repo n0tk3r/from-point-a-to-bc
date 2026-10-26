@@ -66,6 +66,46 @@ the faith-based comments seem forced, make the dialogue fun". The rules below ar
   booby-trapped.", and his three in "Backup". Any other line may become a different,
   shorter line; its id stays, because scripts, tests and saved games use it.
 
+<!-- PASS-19H1: round nineteen; the author, 25 October: "Stiff, written-sounding", "Too long", "Jokes fall flat" -->
+
+- **Spoken, not written.** Read it aloud: the family and Grandpa Joe contract ("it's", "don't", "we'll") unless a
+  whole word is a deliberate marker (Big Sister's whole words; one marker of Mom's refinement in most of her lines,
+  "darling", a formal turn or a calm specific, while she contracts with her girls; the people of Egypt and Rome and the
+  men in gray never contract).
+- **Talk is broken, the same way everywhere.** Fragments are how people talk; two hyphens mark an interruption and an
+  ellipsis a trail-off.
+- **No stage directions, no reports, no filler.** No adverbs or stage directions in the text; no "as you know",
+  "remember when" or "like I said"; no "Well,", "So,", "Okay,", "Oh," or "Hmm," to open a box and no "Thanks!" or
+  "Bye!" to close one, except one signature tic a scene (Grandpa Joe's "Well," is his, and rationed).
+- **Children talk like children.** At seven, ten and thirteen they use concrete nouns and literal readings, never an
+  abstraction an adult would use.
+- **Eighty characters, one idea.** A box is at most 80 characters (two lines of 40), one line when it fits in 40, and
+  one idea: a box that joins two becomes one idea, or two boxes when both are needed.
+- **In late, out early.** No greeting or chit-chat before the point and nothing after it; no more than two boxes by
+  one speaker before someone else speaks (locked lines aside); a long run loses boxes, a long box loses words.
+- **The punch is the last word.** The surprise is the last word or two of its box, and gets a box of its own when the
+  setup fills one; nothing follows it, no explanation and no second joke.
+- **Every joke through its teller's filter.** Dad puns and talks sideways, the Son swerves, Mom understates, Big Sister
+  footnotes, Little Sister declares, Grandpa Joe wants to be asked nicely, Ranger thinks in pictures that Grandpa Joe
+  translates, Jolene is certain and wrong about facts and right about people, and the men in gray do everything by the
+  regulation; someone always plays it straight.
+- **Jokes are rationed.** At most three jokes on one subject in a scene; a running gag comes round about three times
+  an act, varied, the last time a reversal; a joke punches up, never down, and one that does not land is rewritten or
+  cut, because a flat joke is worse than none.
+- **Emphasis is rationed.** At most one exclamation mark an exchange (Little Sister holds the licence, and rations it)
+  and one word in capitals a box, outside locked lines and signs read out; Egypt has none, and Dad never raises his
+  voice there.
+- **Dialect is syntax, not spelling.** At most one dropped g a box, for Grandpa Joe and anyone else with dialect; the
+  region is in word order and word choice, and nobody's age or accent is ever the joke.
+- **Faith is done, not explained.** Theology in one sentence at most; faith shown in what people do (a prayer, a hand,
+  a choice), with doubt and warmth allowed beside belief and never at faith's expense; a faith line is made truer, not
+  removed.
+- **Clues survive in plain sight.** Every clue's noun, number or name stays in its line by its own name, best at the
+  end of the box; a hint keeps its rung (the goal, a pointer, the place, the action), each self-contained; a clue
+  reply heard many times gets a short repeat form that keeps the noun.
+- **Every exchange has a want.** Who wants what from whom, and why now: an exchange with no want that carries no clue,
+  hint, joke that lands or beat of the story is merged into another or cut.
+
 ## The family's faith, and how it is written
 
 They are a Reformed Christian family who love Jesus. It is simply part of how this
@@ -120,10 +160,10 @@ only when natural: Big Sister may cite, everyone else says the words, and the re
 
 > "Father, You know where they are tonight, and I do not. Keep them."
 > "And please make Daddy ask for directions. Just ONE time. Amen."
-> "'The LORD is my shepherd; I shall not want.' I know ALL of it. ...I do want Daddy, though."
-> "Any time you like, my love. He isn't listening for the clock. He's listening for you."
+> "'The LORD is my shepherd; I shall not want.' ...I do want Daddy, though."
+> "Any time, my love. He isn't listening for the clock. He's listening for you."
 > "'...even as a hen gathereth her chickens under her wings'..." "Tonight I know just how the hen feels."
-> "And thank You for the lemonade. And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen."
+> "And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen."
 
 ---
 
@@ -169,8 +209,7 @@ The years (these, and no others, for anything before Christ):
   of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why.",
   `nevada.gate.2f`). Nobody explains it yet.
 - **Where the game says it.** Big Sister made her timeline with Ussher's dates, and says
-  so once: "I used Archbishop Ussher's dates. He counted the years from the Bible's own
-  genealogies." (`home.timeline.1`). The first time any of the three looks along it they
+  so once: "I used Archbishop Ussher's dates. He counted from the Bible's own genealogies." (`home.timeline.1`). The first time any of the three looks along it they
   read it between them (`home.timeline.1` to `.6`, then the red mark and what B.C. and
   A.D. mean): 4004, 2348, 1921, 1491 and 44 B.C. are named there, and no others. Mom's
   "A matter of record" is that the Archbishop's book was published in 1650. Little
@@ -305,7 +344,7 @@ woman a stiff one ("We shall look", "Let us begin", "That was most instructive")
   never "shall", "Let us" or "One does not". She keeps the whole word only where she
   means it to land ("I am not clearing two of them away"; "I am not ready to look at
   that room with nobody in it"), and in prayer. What stays refined is her choice of
-  words: "a great deal", "Precisely", "I have opinions about the other one".
+  words: "a great deal", "Precisely", "I have opinions about the other hat".
 - Endearments: darling, sweetheart, my love. She uses them when she is worried or
   tender, not on every line.
 - She understates. Where another person would shout, she gets quieter and more exact.
@@ -318,7 +357,7 @@ woman a stiff one ("We shall look", "Let us begin", "That was most instructive")
   running gag, two or three times an act, best where it answers one of her daughter's
   facts ("Fifty years to the day after the Declaration. A matter of record. And I told
   YOU that one."): not a habit. Her other facts she just says.
-- A stage manager's words under pressure: "Places, girls." "That is your cue." "We do
+- A stage manager's words under pressure: "Places, girls." "Your cue." "We do
   not stop the show for a missing cast member."
 - One touch of what she knows to a line, never three. She is not a lecturer: most of
   her lines stay short and dry.
@@ -350,14 +389,14 @@ do is to make a scene.
 > "He has hidden a key in MY piano."
 > "And I cannot reach it. My arms are a civilized length."
 > "A lady does not squeeze into closets, darling. A lady has a seven-year-old."
-> "He promised me he would never ask for directions. It is the one promise he has always kept."
+> "He promised never to ask for directions. It's the one promise he's always kept."
 > "I do not need to hear it twice. He sounded happy."
 > "We are going to be perfectly polite, and completely impossible to get rid of."
-> "Your brother has never been scared of anything in his life. That's the part that scares me."
-> "Her sound machine. One slow tune, in D major. Sensible girl. D major never panics."
-> "Reformation Day, darling. A matter of record: Martin Luther's ninety-five theses, 1517."
+> "Your brother has never been scared of anything. That's the part that scares me."
+> "One slow tune, in D major. Sensible girl. D major never panics."
+> "Reformation Day. A matter of record: Martin Luther's ninety-five theses, 1517."
 > "Then you have not read one of them. Good morning."
-> "Abram going down into Egypt. I've read that my whole life. I never once thought of it as an ordinary morning."
+> "Abram going down into Egypt. I never once thought of it as an ordinary morning."
 > "'My times are in thy hand'... All of them, girls. Even that one."
 <!-- PASS-17N: the two quotes above are round seventeen's lines (the author's rule of 16 October: the reference is not
 said aloud, and lives in "Scripture quoted in the game"). They were "Genesis 12. I have known that chapter all my
@@ -422,10 +461,10 @@ puts a hand to her chin, or points.
 **How she changes (draft).** She learns to say "I don't know", and that it is where
 finding out begins. The first step is in "Some when", in Act Four ("...I don't know why.").
 
-> "Fun fact: sliced bread was first sold on the seventh of July, 1928, in Chillicothe, Missouri."
-> "We don't have a destination. A journey without a destination is just Dad."
-> "Nobody numbers sectors like that. Those aren't places, Mother. I think those are years."
-> "Sector 44. Sector 1921. Years. I am almost certain. 'Almost' is the part I don't like."
+> "Sliced bread: first sold on the seventh of July, 1928, in Chillicothe, Missouri."
+> "We do not have a destination. A journey without one is just Dad."
+> "Those aren't places, Mother. I think those are years."
+> "Sector 44. Sector 1921. Years. Almost certain. I don't like the 'almost.'"
 > "It is as long as it was."
 > "No. ...A little. Do not tell the room."
 > "The Ides of March. Abram in Egypt. The holes open on years that MATTER. ...I don't know why."
@@ -486,12 +525,11 @@ started before you have finished explaining.
 - "I FIT!" "I'm small but I'm MIGHTY." "I'm not scared. I'm BRAVE-scared."
 - Spunky. Brave declarations and little challenges ("We'll SEE about that."); orders, to
   the flock, to her sister, to the General in her absence ("Keep an eye on Daddy,
-  General!") and to her mother when she can get away with it ("Mommy, sit down. You've
-  been standing up since dinner. I'll do the worrying for a while."); she will not be
-  left out ("Come ON, everybody. I know the way!"); and she is ready before anyone has
+  General!") and to her mother when she can get away with it ("Mommy, sit down. I'll do
+  the worrying for a while."); she will not be
+  left out ("I need my pink flashlight, from my fort. I know the way!"); and she is ready before anyone has
   finished explaining ("I'm ALREADY going.").
-- A seven-year-old's logic, stated as law: "NO GIRLS ALLOWED? I'm not a girl. I'm a
-  SISTER. That's a whole different thing." She says hi to things and names them (the
+- A seven-year-old's logic, stated as law: "'NO GIRLS ALLOWED'? I'm not a girl. I'm a SISTER." She says hi to things and names them (the
   vacuum, the spiders, the dot on the map), counts on her fingers ("THREE fingers past my
   bedtime"), and has one word in a room that comes out nearly right, never more.
 - Questions in chains: why, and why, and why.
@@ -515,19 +553,19 @@ what needs doing.
 **In Act Four (round twelve).** <!-- NEVADA-12W --> The old-timer is Grandpa Joe now, and she
 asks him whether he is HER grandpa ("I'm everybody's, little miss. Says so on the
 sign." "...I have one of those already. But he lives far away."), and keeps him as a SPARE
-one: "Grandpa Joe the Rock Wizard. That's your WHOLE name now." She is the only one Grandma
+one: "Grandpa Joe the Rock Wizard. That's your whole name." She is the only one Grandma
 Jolene's hens will listen to; she talks to Ranger in conversations in which she does both
 parts; she takes four pennies from a dish that says take a penny, and posts one through a
 door the size of a coin to her brother, for luck. She cannot do Ranger's trade, and it is
-the first time in the game that she minds: "I would have been GOOD at that. If he'd let me."
+the first time in the game that she minds: "I'd have been GOOD at that. If he'd let me."
 
 **In Act Four (round three).** She names everything: the old-timer is the Rock Wizard
 ("I just decided"), the man in gray is Mister Gray, the place where the tracks stop is the
 Hummy Place, the notice's radiation sign is a yellow spinny flower. She counts the man in
-gray's questions on her fingers as she asks them ("That's EIGHT fingers. I have TOES
-too."), gives him orders ("You stay RIGHT there. Next question."), and will not be left
+gray's questions on her fingers as she asks them ("That's five fingers. I have
+TOES."), gives him orders ("You stay RIGHT there. Next question: why is the sky?"), and will not be left
 out ("I get to HOLD it? Finally!"). She is ready before anyone has finished explaining
-("So we need a flash. I'm READY."). Her loose tooth is not for sale: it is waiting for
+("We need a flash. I'm READY."). Her loose tooth is not for sale: it is waiting for
 Daddy. And she is right: about the chickens, about the hiding ("Nobody EVER finds me";
 her sister: "That is, regrettably, true."), and about Daddy being EARLY.
 
@@ -540,18 +578,18 @@ talks she throws both arms up, shows her muscles, or points.
 **How she changes (draft).** She learns that sometimes the brave thing is to wait.
 
 > "I FIT!"
-> "The red light went GREEN! I fixed the internet! I'm a ENGINEER!"
-> "That's not an ANSWER. Number two: is your car gray? Three: is your DOG gray? Four: do you HAVE a dog?"
-> "I don't HAVE a dollar. I have a loose tooth. But it's not for sale. It's waiting for Daddy."
+> "The red light went green. I fixed the internet. I'm a ENGINEER!"
+> "That's not an ANSWER. Two: is your car gray? Three: do you have a dog?"
+> "I don't have a dollar. I have a loose tooth. It's waiting for Daddy."
 > "They know something's up. They knew before I did. Chickens KNOW."
-> "I'm not worried about the General. I'm a LITTLE worried about Daddy. That's why I SENT her. He needs supervising."
+> "I'm not worried about the General. Daddy's the one who needs supervising."
 > "THIS IS MY WHISPER."
-> "SHH! Everybody SHH! ...CHICKENS. Three! No, FOUR! I can hear CHICKENS in there!"
-> "Mommy, I miss General Feathers. But Daddy needs her MORE. She's keeping an eye on him. He has to do what she SAYS."
-> "Not without my flashlight! I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."
-> "NO GIRLS ALLOWED? I'm not a girl. I'm a SISTER. That's a whole different thing."
-> "It said CORRECT! You can't say ten out of ten and then SHOOT people! ...It was a GOOD trap, though."
-> "Daddy's puzzle. He lets me do the three-letter ones. I always put HEN. It's right more than you'd think."
+> "Shh. Everybody SHH. ...Chickens. Three. No, four. I can hear chickens in there."
+> "I miss General Feathers. But Daddy needs her MORE. She keeps an eye on him."
+> "I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."
+> "'NO GIRLS ALLOWED'? I'm not a girl. I'm a SISTER."
+> "It said 'CORRECT.' Then it SHOT me. ...It was a good trap, though."
+> "I do the three-letter ones. Always HEN. It's right more than you'd think."
 
 ---
 
@@ -643,9 +681,13 @@ that Jolene really will sell his rocks.)
 his tune twice.
 
 **How he talks.**
-- Slow and Southern, and the kinder he is the slower he talks. He drops his g's ("mornin'",
-  "holdin'"), says ain't, and calls Mom "ma'am", the girls "little miss" and "miss", and every
-  man in a suit "son".
+<!-- PASS-19H1: round nineteen; the author, 25 October: "Stiff, written-sounding", "Too long", "Jokes fall flat" -->
+- Slow and Southern, and the kinder he is the slower he talks: slow is short sentences and box
+  breaks, not long boxes. His South is in word order and word choice ("Reckon I might could use the
+  yellow form"; ain't), never in spelling: **one dropped g a box at most** ("mornin'" or "holdin'",
+  not both), and his age or his accent is never the joke. "Well," is his signature, once a scene.
+  He calls Mom "ma'am", the girls "little miss" and "miss", and every man in a suit "son". The
+  author's "You ain't goin' nowhere flat foot!" stays exactly as it is.
 - His lines from the old act that the design keeps are exactly as they were, with no accent
   added ("Technically, I'm closed."; "That's what the gray suits drive. Try again.").
 - He tells a story without knowing which part of it matters (the flash).
@@ -681,11 +723,11 @@ hold the light at the Nevada end.
 
 > "Lemonade's a dollar, little miss. Stories are extra."
 > "Technically, I'm closed."
-> "Well, good MORNIN'. Ma'am. Nobody's said good mornin' to me out here in forty years."
+> "Well, good mornin', ma'am. First one I've had out here in forty years."
 > "He don't steal. He trades. You just weren't there for your half."
 > "I been holdin' things for Jolene since 1974, ma'am. I can hold a sun shade."
 > "You ain't goin' nowhere flat foot!" (the author's line)
-> "Son, I been questioned by a seven-year-old this mornin'. You ain't got anything she didn't."
+> "Been questioned once this mornin', son. By a seven-year-old."
 > "Can't, son. It's a medical condition."
 
 ### Grandma Jolene
@@ -781,7 +823,7 @@ the ringed tail. He sits up with his hands folded, walks and scampers on all fou
 turns things over in his hands. With the shades on he is the same raccoon in mirror shades, every
 frame, and in his portrait.
 
-> "..." (Grandpa Joe: "He says you're welcome. He's shy with strangers and bold with their sandwiches.")
+> "..." (Grandpa Joe: "He says you're welcome. Shy with strangers, bold with their sandwiches.")
 > "..." (Grandpa Joe: "He says he knows exactly what to do and I'm in the way.")
 > "Bit of both, miss. Mostly I'm his." "..." "He says 'mostly' is generous." <!-- PASS-17N: new in round seventeen -->
 
@@ -857,7 +899,7 @@ They still say sir to everybody, raccoons included ("Sir. Er. Raccoon."), and so
 pushed, grabbed or shouted at, and the door is locked "for your comfort". In `js/content/world.js` all four are still
 "Man in Gray", one colour; their names could go on the cast when the author likes them.
 
-> "Sir, you will now be processed." "Son, I been processed. Jolene does it every Sunday before church."
+> "Sir, you will now be processed." "You might could ask nicely first, son."
 > "Did you strike an officer of this Office with a banjo?" "Once." "...Once." "Thank you for your honesty, sir."
 > "Regulation 9. 'The Comfortable Room shall be comfortable.'" "It is not comfortable, Dale."
 > "Dale, it is my BIRTHDAY." "...Sir, we are now authorized."
@@ -993,8 +1035,7 @@ Roman togas were made to be ridiculous.
 - Dry, never bitter for long. He tells the Roman joke about himself before anyone else can:
   "It is a joke. I am it." The city's song about Gauls he tells in his own words; the verses
   are never quoted.
-- He says what matters over to himself: "Pompey's hall, by the theater. I say it to myself
-  as I walk. It is the Latin I am surest of."
+- He says what matters over to himself: "I say it to myself as I walk. It is the Latin I am surest of."
 - He calls the boy "child", and thanks him properly.
 
 **Running gags.** Twelve Romans smiled, and walked faster. Along the fence, and back ("I am
@@ -1019,8 +1060,7 @@ stage), asks the air and shrugs, tugs the short toga down, looks up at the crane
 arms; for the boy he points at the hole where the House was, and bows, deep and formal, his
 hand to his heart.
 
-**How he changes (draft).** From the joke to the man who spoiled it: "Someone has shown a new
-senator the way. The joke is spoiled, and I thank you for spoiling it."
+**How he changes (draft).** From the joke to the man who spoiled it: "The joke is spoiled, child, and I thank you for spoiling it."
 
 > "It is a joke. I am it."
 > "I do not know that word. I am a Gaul. For Rome, that is usually enough."
@@ -1048,10 +1088,8 @@ Corinth", and to hear him say he will come and say goodbye before he sails.
 far. It did.
 
 **How she talks.**
-- A seller's patter, fast and warm: "Violets! Laurel for your doorpost! Myrtle for your
-  sweetheart! A garland for Anna Perenna!"
-- Sharp with fools and with customers who only look; soft about her son ("Felix, Corinth,
-  Corinth, Felix. You're as bad as I am, child. I talk of nothing else.").
+- A seller's patter, fast and warm: "Myrtle for your sweetheart. Garlands for Anna Perenna!"
+- Sharp with fools and with customers who only look; soft about her son ("Felix, Corinth. You're as bad as I am, child. I talk of nothing else.").
 - One-word verdicts: "Child."
 - What she has given, she does not take back: "A wish once thrown is not mine to take back."
 
@@ -1075,7 +1113,7 @@ the square. For the boy she unwraps the lamp and holds it out in both hands.
 answered, and it was a good one."
 
 > "Hands off the merchandise, child. Smell with your nose. That part's free."
-> "No dog and no sweetheart. Then violets for your mother. Every boy has one of those."
+> "No dog, no sweetheart. Then violets for your mother. Every boy has one."
 > "A bird? For a wish? Child."
 > "Keep the coin, child. It has done its work, and it was borrowed honestly."
 
@@ -1098,8 +1136,7 @@ father talking at him for a WEEK.
 **Gets wrong.** That nobody can tell he is stuck.
 
 **How he talks.**
-- Like his father: in one breath, commas and no stops ("Stuck? Me? I'm SITTING, I like
-  sitting, I can see the whole city from up here, you can't, you're down there.").
+- Like his father: in one breath, commas and no stops ("Stuck? Me? I'm SITTING, I like sitting, I can see the whole city.").
 - Boasting, then honest: "I've been sitting since first light. On purpose. Mostly on purpose."
 - "Father", who knows everything and worries loud.
 
@@ -1123,7 +1160,7 @@ grin hardly.
 
 **How he changes (draft).** From sitting to running.
 
-> "I'm not a statue, statues don't have breakfasts, I've got a breakfast. ...Not mine. But I've got it."
+> "Statues don't have breakfasts. I've got one. ...Not mine. But I've got it."
 > "She had ribbons. She went up the hill like a senator."
 > "Over THEM? They bite like Father's creditors."
 > "I wasn't scared. I was SITTING."
@@ -1145,8 +1182,7 @@ night the geese saved the city to anybody, at any excuse, and nobody listens. Ov
 
 **How he talks.**
 - Mournful, slow and devoted.
-- Every answer comes round to the night the geese saved the city: "These are no ordinary
-  geese, child. These geese saved the city."
+- Every answer comes round to the night the geese saved the city: "...Mister Goose. These geese saved the city, child."
 - He tells the tale the way an old man tells it, the same every time, and always "Long ago":
   no year.
 
@@ -1277,7 +1313,7 @@ stand she is about 70 pixels tall: the design reckoned the yard nearer.
 > "They won't eat. They won't lay. Hens are sensible. Something over there is not."
 > "Grandfather says hens don't pray. They only look."
 > "You don't ASK a hen. You look her in the eye."
-> "That's the stone, silly. It's a tree that hasn't started yet. He ought to charge you for the tree."
+> "That's the stone, silly. It's a tree that hasn't started yet."
 
 ### Felix (Gaius Fannius Felix)
 
@@ -1296,7 +1332,7 @@ a fountain, for him.)
 **How he talks.**
 - Cheerful and impatient; he talks while he walks.
 - Short lists when he is happy: "Ostia. Sea. Ships. Barges. Me. Up and down. That's the whole
-  of it." "Corinth! A house! TWO seas! ...Sorry. I get like this."
+  of it." "Corinth. A house. TWO seas! ...Sorry."
 - Soft about his mother: "So I wave at the Forum. She can't see me. I wave anyway."
 
 **Running gags.** Busy. Telling the bales things. The ninth hour ("Tell her again, in case!").
@@ -1318,7 +1354,7 @@ goodbye first.
 
 > "It's a barge. A table doesn't go down to Ostia and back."
 > "...She never throws anything. She keeps string."
-> "Tell her I'll come over the bridge at the ninth hour, before the barge goes down."
+> "Tell her I'll come over the bridge at the ninth hour. Before the barge goes."
 > "And tell her I'll light it in Corinth. The first night. In the first window."
 
 ---
@@ -1355,7 +1391,7 @@ say about their own times is in the tables at the end of
 | --- | --- | --- |
 | Sliced bread was first sold on 7 July 1928, in Chillicothe, Missouri | `home.note.solve.2` (it is the password) | **Checked** |
 | Atomic bombs were tested in Nevada from 1951 until 1992 | `nevada.notice.big.1` | **Checked** (first test 27 January 1951; last underground test 23 September 1992) |
-| The first message sent on the network that became the internet was "LO": they were typing LOGIN and it crashed. October 1969 | `home.pc.offline.bigsis` | Headlines agree |
+| In October 1969 the network that became the internet sent its first message: they were typing LOGIN, and it crashed at "LO" | `home.pc.offline.bigsis` <!-- PASS-19H2: reworded with the line, round nineteen --> | Headlines agree |
 | Nevada became a state on 31 October 1864 | `nevada.arrive.2`; and `nevada.talk.mom.bigsis.quarter.b` ("The year Nevada became a state") | **Checked** (`us.nevada`). Abraham Lincoln, Proclamation 119, "Done at the city of Washington, this 31st day of October, A.D. 1864": https://www.presidency.ucsb.edu/node/202435 ; State of Nevada: https://jic.nv.gov/About/History_of_Nevada |
 | Julius Caesar was killed on the Ides of March, 44 B.C. | `nevada.gate.2`; and `nevada.gate.2f` ("The Ides of March") | Headlines agree. (Read by the writer of the Rome act: the first row of the table in [PUZZLES-rome.md](PUZZLES-rome.md)) |
 | Bartolomeo Cristofori built the first piano, in Florence, around 1700. It was called a harpsichord with soft and loud | `home.piano.look.bigsis`, `home.piano.look.bigsis2` | **Checked** (the fact-check of 7 October) |
@@ -1380,7 +1416,7 @@ say about their own times is in the tables at the end of
 | A rooster never lays an egg | `nevada.jolene.fact.4b` | **Checked**: extension.org (poultry): "A hen (female chicken) does not need the help of a rooster (male chicken) in order to lay an egg"; the rooster's part is to fertilize, and to guard. https://poultry.extension.org/articles/poultry-related-youth-programs/do-you-need-a-rooster-for-a-hen-to-lay-an-egg/ |
 | A hen lays less when she is frightened | `nevada.jolene.opt.hens.big` | **Checked**: Oregon State University Extension, PNW 565, "Why did my chickens stop laying?": "Moving, handling, overheating, fright, and lack of food or water are stresses that can be detrimental to egg production." https://extension.oregonstate.edu/catalog/pnw-565-why-did-my-chickens-stop-laying |
 | The raccoon's Latin name is Procyon lotor, and "lotor" means "washer" | `nevada.ranger.opt.latin` | **Checked**, through a tool that fetches a page and quotes it: Wikipedia, Raccoon: "lotor is Latin for 'washer'". https://en.wikipedia.org/wiki/Raccoon |
-| A raccoon's most important sense is touch, and water is thought to make his front paws feel even more | `nevada.ranger.fact` (it solves #10); `hint.nevada.ranger.bigsis` ("A raccoon feels with his front paws") | **Checked**: Wikipedia, Raccoon: "The most important sense for the raccoon is its sense of touch"; the front paws' tactile sensitivity "is increased if this rubbing action is performed underwater, since the water softens the hard layer covering the paws". Northern Woodlands, "Raccoons' Hands": "it's thought that water contact increases a raccoon's tactile ability". Worded with "is thought to", as the second source is. She does not say that he is "washing" or that he is not: in the method line ("Let him read it") that is her way of putting it, not a fact. https://northernwoodlands.org/outside_story/article/raccoons-hands |
+| A raccoon's most important sense is touch, and water is thought to make his front paws feel even more | `nevada.ranger.fact` (it solves #10); `hint.nevada.ranger.bigsis` (the method: "Something shinier than a coin, flat on both hands, held very still."; the raccoon fact itself is `nevada.ranger.fact`'s) <!-- FINAL-19: requoted, REVIEW-19 --> | **Checked**: Wikipedia, Raccoon: "The most important sense for the raccoon is its sense of touch"; the front paws' tactile sensitivity "is increased if this rubbing action is performed underwater, since the water softens the hard layer covering the paws". Northern Woodlands, "Raccoons' Hands": "it's thought that water contact increases a raccoon's tactile ability". Worded with "is thought to", as the second source is. She does not say that he is "washing" or that he is not: in the method line ("Let him read it") that is her way of putting it, not a fact. https://northernwoodlands.org/outside_story/article/raccoons-hands |
 | "No, thank you", in French and in German: "Non, merci." "Nein, danke." | `nevada.store.eggs.bigsis` | To check (written from knowledge) |
 | The Son is in Rome, in 44 B.C. (she pins it through the coin door, from a new coin of 44 B.C., sector 44 on the notice, and what he can smell and hear) | `nevada.letterbox.big.pin.1`, `.pin.2` | Rome's own date, the same in every count (the row for `nevada.gate.2`); the game's story <!-- NEVADA-12W: end of round twelve's rows --> |
 | Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (Grandpa Joe says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
@@ -1453,7 +1489,7 @@ same rule as for her daughter: every one is true, and nothing goes on this list 
 | When the Constitution was signed, Benjamin Franklin said of the sun on the back of Washington's chair that it was "a rising and not a setting Sun" | `nevada.flash.sun` (only when it is Mom who holds the coin up) | **Checked** (`us.franklin.sun`). The seven words are James Madison's record of him, 17 September 1787, capital S and full stop included. The chair's sun is carved (National Park Service); Madison's word was "painted", so "carved" stays outside the quotation marks. https://avalon.law.yale.edu/18th_century/debates_917.asp ; https://www.nps.gov/articles/000/assembly-room-furnishings.htm |
 | Julius Caesar's coins bore his own portrait; American money bears the motto "In God We Trust" | `nevada.talk.mom.bigsis.quarter.a` | **Checked**: the portrait as in Big Sister's table (the coin); the motto `us.in.god.we.trust` (its sources are in Big Sister's table). She does not say whose face is on the quarter: "on the quarter since 1932" is no longer true of every quarter (`us.quarter`). |
 | B.C. means "before Christ" | `nevada.gate.2d` (she tells Little Sister) | **Checked** (`time.bc.ad`). https://www.britannica.com/topic/Christian-Era |
-| Abram goes down into Egypt (Genesis 12:10) | `nevada.gate.2e` ("Abram going down into Egypt. I've read that my whole life.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She tells it in her own words and quotes nothing of it; since round seventeen she no longer names the chapter aloud (the author's rule of 16 October). <!-- PASS-17N --> |
+| Abram goes down into Egypt (Genesis 12:10) | `nevada.gate.2e` ("Abram going down into Egypt. I never once thought of it as an ordinary morning.") | **Checked** (`kjv.gen12.10`): https://biblehub.com/kjv/genesis/12-10.htm ; https://www.bibleserver.com/KJV/Genesis12 . She tells it in her own words and quotes nothing of it; since round seventeen she no longer names the chapter aloud (the author's rule of 16 October). <!-- PASS-17N --> |
 | Nevada is the driest state in the Union <!-- NEVADA-12W --> | `nevada.store.survival.mom` (at the survival shelf, before she buys three waters; since round seventeen without "A matter of record:", which she says three times in the act) <!-- PASS-17N --> | **Checked**: NOAA National Centers for Environmental Information / NCICS, State Climate Summaries 2022, Nevada: "Nevada is the driest state in the United States" (statewide annual average precipitation 10.2 inches, 1895-2020). https://statesummaries.ncics.org/chapter/nv/ |
 
 <!-- PASS-17H --> Since round seventeen Mom no longer says that Psalm 46 is the psalm behind the hymn
@@ -1490,7 +1526,7 @@ gives who says it, and where.
 
 | Verse | The words quoted | Line | Who says it, and where | Said aloud | Status |
 | --- | --- | --- | --- | --- | --- |
-| Psalm 121:1 | "I will lift up mine eyes unto the hills, from whence cometh my help." | `home.bible.bigsis` | Big Sister, at the family Bible | Big Sister, in the same line: "Psalm 121, where Dad left it." | **Checked** (the fact-check of 7 October) |
+| Psalm 121:1 | "I will lift up mine eyes unto the hills, from whence cometh my help." | `home.bible.bigsis` | Big Sister, at the family Bible | Big Sister, in the same line: "Psalm 121, where Dad left it." <!-- FINAL-19 --> | **Checked** (the fact-check of 7 October) |
 | Psalm 121:2 | "My help cometh from the LORD, which made heaven and earth." | `home.bible.mom` | Mom, at the family Bible | No. (It was "Psalm 121.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
 | Psalm 23:1 | "The LORD is my shepherd; I shall not want." | `home.bible.lilsis` | Little Sister, at the family Bible, by heart | No. (It was "Psalm 23.", until round seventeen.) | **Checked** (the fact-check of 7 October) |
 | Psalm 121:8 | "The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore." | `home.door.psalm.3` | Little Sister, at the front door, before they leave | Big Sister, the line before (`home.door.psalm.2`): "Psalm 121, verse 8. She always does this part." | **Checked** (the fact-check of 7 October) |
@@ -1501,9 +1537,9 @@ gives who says it, and where.
 | Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | Before round seventeen: Mom, in the same line ("Psalm 31, verse 15.") | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close with no stop inside them. |
 | Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it) | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | Before round seventeen: Mom, after her half ("Psalm 121, verse 8.") | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
 | Micah 5:2, its first clause <!-- ROME-13W: Rome's five, the first two in the game since 7 October --> | "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | `rome.dateseller.ans.pray.2` | The date seller, in the street in Rome | Before round seventeen: the Son, the next line (`rome.dateseller.ans.pray.3`), with where he knows it from: his line in the Christmas program | **Checked** (`kjv.mic5.2`). The verse runs on: the quotation ends on its comma |
-| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` | The date seller, blessing the boy | No: the Son now answers "Whoa. That's how church ends!" <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.dateseller.bless.2`) | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
+| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` | The date seller, blessing the boy | No: the Son now answers "That's how church ends. The very same words. ...Thanks, mister." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.dateseller.bless.2`) | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
 | Isaiah 40:31, its first clause | "But they that wait upon the LORD shall renew their strength;" | `rome.eleazar.heart.2` | Eleazar, across the Tiber (round thirteen) | No: the Son now answers "That's on our fridge! On a magnet, with an eagle." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.heart.son.1`), with where he knows it from: "It's on our fridge." | **Checked**: Bible Hub and Bibleserver, King James Version, read 13 October: https://biblehub.com/kjv/isaiah/40.htm ; https://www.bibleserver.com/KJV/Isaiah40 . The verse runs on: the quotation ends on its semicolon |
-| Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` | Eleazar, his hand on the boy's head (round thirteen) | No: the Son now answers "That's the blessing! Pastor says it at the end of church!" <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.bless.son`) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
+| Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` | Eleazar, his hand on the boy's head (round thirteen) | No: the Son now answers "Pastor says that one! ...You only did the middle. I know all three." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.bless.son`) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
 | Numbers 6:26 | "The LORD lift up his countenance upon thee, and give thee peace." | `rome.eleazar.last.son` | The Son, giving the old man the last part of the blessing (round thirteen) | Before round seventeen: the Son, in the same line ("Numbers 6:26.") | **Checked** (the same) |
 | Exodus 2:3, its last clause <!-- PASS-17H: Act One's four, from PUZZLES-egypt.md --> | "...and she laid it in the flags by the river's brink." | `egypt.reeds.basket.1` | Dad, at the reeds by the river, in Act One | Before round seventeen: Dad, in the same line ("Exodus 2:3.") | **Checked** (`kjv.exod2.3`): the last clause of the verse, word for word. "Basket" is Dad's word for its "ark of bulrushes"; "flags" are reeds |
 | Exodus 1:11, five words | "treasure cities, Pithom and Raamses." | `egypt.site.bricks.use.3` | Dad, at the bricks on the building site, in Act One | Before round seventeen: Dad, in the same line ("Exodus 1:11.") | **Checked** (`kjv.exod1.11`): five words of the verse, word for word; "treasure cities" is the King James wording and "Raamses" its spelling |

@@ -27,11 +27,14 @@ const home = (g) => THREE.every((id) => g.actor(id));
 // and the glow the monitor throws, which takes the color of whatever is on the screen.
 const BLINK = [193, 317];                        // the machine's light
 const SCREEN = [352, 284];                       // the middle of the monitor's screen
-const GLOW = { offline: "#7f8ea3", login: "#5aa0e6", map: "#f2e3b0" };
+const GLOW = { offline: "#e9dcc0", login: "#8fc0f0", map: "#f6e9bc" };      // STAGE-19H: warmer and lighter (GUIDE-19 S1: the desk is the focus; the grey glow lit nothing)
 function light(g) {
   const led = g.q("#machine-led"), glow = g.q("#pc-glow");
   if (led) { const heard = !!g.flag("home.heardMessage"); led.classList.toggle("tw", !heard); led.setAttribute("opacity", heard ? 0.35 : 1); }
-  if (glow) glow.setAttribute("fill", GLOW[g.flag("home.foundPing") ? "map" : g.flag("home.online") ? "login" : "offline"]);
+  const now = GLOW[g.flag("home.foundPing") ? "map" : g.flag("home.online") ? "login" : "offline"];
+  if (glow) glow.setAttribute("fill", now);
+  const pool = g.q("#pc-pool");                  // STAGE-19H: and the pool it throws on the desk top
+  if (pool) pool.setAttribute("fill", now);
 }
 
 /** The other two come and stand where they can see, and turn to it. */
@@ -42,7 +45,7 @@ async function gather(g, marks, at) {
 
 // ---------- chain C: the note. Whoever holds it, only Big Sister can read what it means ----------
 async function solveNote(g) {
-  await g.say("home.note.solve.1", "home.note.solve.2", "home.note.solve.3");
+  await g.say("home.note.solve.1", "home.note.solve.1.b", "home.note.solve.2", "home.note.solve.3");      // PASS-19H2: Mom between, so Big Sister is never three boxes running
   g.flag("home.knowsYear", true);
 }
 async function takeNote(g) {
@@ -94,6 +97,7 @@ async function useComputer(g) {
   show(screens.map());
   g.flag("home.foundPing", true);                // (and the screen on the desk shows the map from now on)
   light(g);
+  await g.wait(800);                             // STAGE-19H: the reveal, held (GUIDE-19 C10): the dot on the map before anyone speaks
   await g.say("home.pc.right", "home.pc.map.1", "home.pc.map.2");
   if (g.flag("home.heardMessage")) await g.say("home.pc.map.six");      // the tape said 5:41. The dot says 5:47.
   await g.say("home.pc.map.3", "home.pc.map.4");
@@ -116,7 +120,7 @@ async function playMessage(g) {
   await g.reach();
   g.sfx("machine");
   await g.wait(900);
-  await g.say("home.msg.1", "home.msg.2", "home.msg.3", "home.msg.4");
+  await g.say("home.msg.1", "home.msg.2", "home.msg.2.b", "home.msg.3", "home.msg.4");      // PASS-19H2: the Son speaks for himself on the tape
   g.sfx("hiss");
   await g.wait(1300);
   g.flag("home.heardMessage", true);
@@ -211,8 +215,11 @@ export default {
   walk: { area: [[247, 374], [322, 376], [314, 389], [374, 391], [380, 376], [624, 382], [653, 391], [718, 497], [226, 473], [205, 418]] },
 
   party: ["mom", "bigsis", "lilsis"],
-  spawn: { default: [298, 448], mom: [298, 448], bigsis: [251, 432], lilsis: [360, 457], fromLanding: [298, 448] },
-  arrive: { fromLanding: [[251, 432], [360, 457]] },
+  // STAGE-19H: the third place is on the rug's left half, [480, 455], not in front of the desk ([360, 457]): the desk (the
+  // room's focus: the computer, Dad's note) is no longer hidden behind three heads, and she stands on the lighter rug,
+  // clear of the desk's top edge and its drawer line (GUIDE-19 S16, S7, S4). layout.json and home_study_layout.py agree.
+  spawn: { default: [298, 448], mom: [298, 448], bigsis: [251, 432], lilsis: [480, 455], fromLanding: [298, 448] },
+  arrive: { fromLanding: [[251, 432], [480, 455]] },
   exits: ["home-landing"],
   // The way out across the edges of the picture: the door to the landing stands open at the front left, so the left
   // edge and the bottom both lead out to the landing.
@@ -241,7 +248,9 @@ export default {
   live() {
     return `<defs><radialGradient id="pc-halo"><stop offset="0" stop-color="#fff" stop-opacity="0.55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
         <mask id="pc-mask"><ellipse cx="${SCREEN[0]}" cy="${SCREEN[1]}" rx="38" ry="30" fill="url(#pc-halo)"/></mask></defs>
-      <rect id="pc-glow" x="${SCREEN[0] - 38}" y="${SCREEN[1] - 30}" width="76" height="60" fill="${GLOW.offline}" mask="url(#pc-mask)" opacity="0.5"/>
+        <mask id="pc-pool-mask"><ellipse cx="${SCREEN[0]}" cy="${SCREEN[1] + 34}" rx="70" ry="15" fill="url(#pc-halo)"/></mask>
+      <rect id="pc-glow" x="${SCREEN[0] - 38}" y="${SCREEN[1] - 30}" width="76" height="60" fill="${GLOW.offline}" mask="url(#pc-mask)" opacity="0.6"/>
+      <rect id="pc-pool" x="${SCREEN[0] - 70}" y="${SCREEN[1] + 19}" width="140" height="30" fill="${GLOW.offline}" mask="url(#pc-pool-mask)" opacity="0.45"/>
       <g id="machine-led" class="tw" fill="#ff4a3d" shape-rendering="geometricPrecision"><circle cx="${BLINK[0]}" cy="${BLINK[1]}" r="5" opacity="0.3"/><circle cx="${BLINK[0]}" cy="${BLINK[1]}" r="1.8"/></g>`;
   },
 

@@ -89,7 +89,7 @@ async function firstHelping(g) {
   if (g.has("breakfast")) return g.say("rome.keeper.carrying.1", "rome.keeper.carrying.2", "rome.keeper.carrying.3");      // ROME-13S2
   if (titusHome(g)) return g.say("rome.keeper.titus.1", "rome.keeper.titus.2");                                           // ROME-13S2 (and taken up the street already)
   if (g.flag("rome.metTitus")) return g.say("rome.keeper.met.1", "rome.keeper.met.2");                                    // ROME-13S2
-  await g.say("rome.keeper.errand.1", "rome.keeper.errand.2", "rome.keeper.errand.ewe", "rome.keeper.errand.3");          // ROME-13S2 (the errand re-worded: his boy)
+  await g.say("rome.keeper.errand.1", "rome.keeper.errand.2", "rome.keeper.errand.2.b", "rome.keeper.errand.3");          // ROME-13S2 (the errand re-worded: his boy); PASS-19R1: errand.2.b breaks the run
   g.flag("rome.knowsBoy", true);                                                                                          // ROME-13S2
   await g.say("rome.keeper.errand.4");
 }
@@ -112,7 +112,7 @@ async function talkToKeeper(g) {
     ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "pay") await g.say(...payWithQuarter);
     else if (pick === "pizza") await g.say("rome.keeper.ask.pizza", "rome.keeper.ans.pizza.1", "rome.keeper.ans.pizza.2", "rome.keeper.ans.pizza.3", "rome.keeper.ans.pizza.4", "rome.keeper.ans.pizza.5");
-    else if (pick === "owe") await g.say("rome.keeper.ask.owe", "rome.keeper.ans.owe.1", "rome.keeper.ans.owe.2", "rome.keeper.ans.owe.3");
+    else if (pick === "owe") await g.say("rome.keeper.ask.owe", "rome.keeper.ans.owe.1", "rome.keeper.ans.owe.2");      // PASS-19R1: the author's complaints of 25 October (box cut)
     else if (pick === "dad") await g.say("rome.keeper.ask.dad", "rome.keeper.ans.dad.1", "rome.keeper.ans.dad.2");
     else return g.say("rome.keeper.ask.bye", "rome.keeper.ans.bye");
   }
@@ -152,11 +152,11 @@ async function talkToWasher(g) {
       { id: "bye", line: "rome.washer.ask.bye", exit: true },
     ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "white") {                                       // the best fact he has ever heard
-      await g.say("rome.washer.ask.white", "rome.washer.ans.white.1", "rome.washer.ans.white.2", "rome.washer.ans.white.3", "rome.washer.ans.white.4", "rome.washer.ans.white.5");
+      await g.say("rome.washer.ask.white", "rome.washer.ans.white.1", "rome.washer.ans.white.2", "rome.washer.ans.white.3", "rome.washer.ans.white.4");      // PASS-19R1: the author's complaints of 25 October (box cut)
       g.flag("rome.knowsWash", true);
       if (g.has("toga")) await g.say("rome.washer.ans.white.6", "rome.washer.ans.white.7", "rome.washer.ans.white.8");
     } else if (pick === "tunic") await g.say("rome.washer.ask.tunic", "rome.washer.ans.tunic");
-    else if (pick === "dad") await g.say("rome.washer.ask.dad", "rome.washer.ans.dad.1", "rome.washer.ans.dad.2");
+    else if (pick === "dad") await g.say("rome.washer.ask.dad", "rome.washer.ans.dad.1");      // PASS-19R1: the author's complaints of 25 October (box cut)
     else return g.say("rome.washer.ask.bye", "rome.washer.ans.bye");
   }
 }
@@ -201,7 +201,7 @@ async function borrowWish(g) {
   // His first hard look at it. It is the coin of the story he knows (Matthew 22:17-21, in his own words), and it
   // is not: he has known since he walked into this street that he is on the wrong side of that story. "Not yet."
   await g.wait(450);
-  await g.say("rome.fountain.caesar.1", "rome.fountain.caesar.2", "rome.fountain.caesar.3", "rome.fountain.caesar.4");
+  await g.say("rome.fountain.caesar.2", "rome.fountain.caesar.2.b", "rome.fountain.caesar.3", "rome.fountain.caesar.4");      // PASS-19R1: caesar.1 cut into .2; Walnut answers (.2.b)
 }
 
 // ---------- the street boy: a friend, and the act's hints ----------
@@ -274,7 +274,7 @@ async function tryDate(g, seller) {
   hold(seller, true);                                             // a date, held out on his open hand
   await g.reach();                                                // and taken
   hold(seller, false);
-  await g.say("rome.dateseller.ans.try.2", "rome.dateseller.ans.try.3", "rome.dateseller.ans.try.4");
+  await g.say("rome.dateseller.ans.try.2", "rome.dateseller.ans.try.3");      // PASS-19R1: the author's complaints of 25 October (box cut)
 }
 
 /** What the man prays for. The boy knows the town the prophet names, and a great deal more, and it is not his to
@@ -284,7 +284,7 @@ async function whatHePraysFor(g, seller) {
   const me = g.lead, toEachOther = () => { if (seller && me) { seller.look(me.x, me.y); me.look(seller.x, seller.y); } };
   await g.say("rome.dateseller.ask.pray", "rome.dateseller.ans.pray.1", "rome.dateseller.ans.pray.2");
   if (me) me.face("S");                                           // he turns away, to us: this part is not for the man
-  await g.say("rome.dateseller.ans.pray.3", "rome.dateseller.ans.pray.4");
+  await g.say("rome.dateseller.ans.pray.3", "rome.dateseller.ans.pray.4", "rome.dateseller.ans.pray.4.b");      // PASS-19R1: pray.4.b breaks the run
   toEachOther();
   await g.say("rome.dateseller.ans.pray.5");
   await g.wait(500);                                              // the man looks at him for a moment
@@ -314,14 +314,14 @@ async function talkToDateSeller(g) {
   await meetDateSeller(g);
   for (;;) {
     const pick = await g.choose([
-      { id: "try", line: "rome.dateseller.ask.try", when: (g) => !heard(g, "rome.dateseller.ans.try.4") },      // one gift
+      { id: "try", line: "rome.dateseller.ask.try", when: (g) => !heard(g, "rome.dateseller.ans.try.3") },      // PASS-19R1: try.4 cut; try.3 ends the gift      // one gift
       { id: "god", line: "rome.dateseller.ask.god" },
       // what he prays for comes up once the boy knows whom he prays to; and a blessing is not given twice for the asking
       { id: "pray", line: "rome.dateseller.ask.pray", when: (g) => heard(g, "rome.dateseller.ans.god.6") && !heard(g, "rome.dateseller.bless.2") },
       { id: "bye", line: "rome.dateseller.ask.bye", exit: true },
     ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "try") await tryDate(g, seller);
-    else if (pick === "god") await g.say("rome.dateseller.ask.god", "rome.dateseller.ans.god.1", "rome.dateseller.ans.god.2", "rome.dateseller.ans.god.3", "rome.dateseller.ans.god.4", "rome.dateseller.ans.god.5", "rome.dateseller.ans.god.6");
+    else if (pick === "god") await g.say("rome.dateseller.ask.god", "rome.dateseller.ans.god.1", "rome.dateseller.ans.god.2", "rome.dateseller.ans.god.3", "rome.dateseller.ans.god.4", "rome.dateseller.ans.god.4.b", "rome.dateseller.ans.god.5", "rome.dateseller.ans.god.6");      // PASS-19R1: god.4.b breaks the run
     else if (pick === "pray") await whatHePraysFor(g, seller);
     else {
       await g.say("rome.dateseller.ask.bye", "rome.dateseller.ans.bye");
@@ -520,7 +520,7 @@ export default {
       look: twice("rome.keeper.look", "rome.keeper.look2"), use: talkToKeeper,
       useWith: {
         quarter: payWithQuarter,
-        coin: ["rome.keeper.coin.1", "rome.keeper.coin.2", "rome.keeper.coin.3", "rome.keeper.coin.4"],
+        coin: ["rome.keeper.coin.1", "rome.keeper.coin.2", "rome.keeper.coin.3"],      // PASS-19R1: coin.4 cut
         gum: ["rome.keeper.gum.1", "rome.keeper.gum.2"],
         toga: "rome.keeper.toga", breakfast: "rome.keeper.breakfast",
         gaultoga: "rome.keeper.gaultoga", lamp: "rome.keeper.lamp",          // ROME-13S2: the bigger Rome's two new things
@@ -584,10 +584,10 @@ export default {
       if (me && keeper) me.look(keeper.x, keeper.y);              // he looks round at the snack bar
       await g.say("rome.street.bc.1");
       if (me) me.face("S");                                       // and then at nothing at all
-      await g.say("rome.street.bc.2", "rome.street.bc.3", "rome.street.bc.4");
+      await g.say("rome.street.bc.2");      // PASS-19R1: the author's complaints of 25 October (box cut)
       g.flag("rome.knowsBC", true);
     }
-    if (first) await g.say("rome.street.arrive.2");
+    // PASS-19R1: rome.street.arrive.2 cut (the author's complaints of 25 October): the B.C. beat ends the arrival
     g.flag("rome.sawStreet", true);
   },
 };

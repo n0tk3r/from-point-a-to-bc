@@ -22,7 +22,9 @@ export const defaultSettings = {
   music: 0.7, sfx: 0.8, voice: 1.0,
   subtitles: true,       // text on screen; stays on by default even with voices
   voices: true,          // play recorded lines when they exist
-  textSpeed: 1,          // 0.6 slow, 1 normal, 1.6 fast
+  textSpeed: 12,         // ENGINE-19A: the reader's rate, in characters a second: 9 slow, 12 normal, 18 fast (before: 0.6, 1, 1.6, as a factor)
+  backing: true,         // ENGINE-19A: a soft dark plate behind the words spoken on the stage
+  textSize: 1,           // ENGINE-19A: the words spoken on the stage at 1 (Normal) or 1.25 (Large)
   calm: false,           // less motion and no flashes (also on when the system asks for reduced motion)
   seenIntro: false,      // the intro plays by itself once; after that it is on the title menu
 };
@@ -149,8 +151,23 @@ export async function importFile(file) {
 
 // ---- settings: kept apart from saves, so loading a save never changes the volume ----
 export function loadSettings() {
-  try { return { ...defaultSettings, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; }
-  catch { return { ...defaultSettings }; }
+  let s;
+  try { s = { ...defaultSettings, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; }
+  catch { s = { ...defaultSettings }; }
+  s.textSpeed = textRate(s.textSpeed);             // ENGINE-19A: a setting stored before (a factor) becomes the nearest rate
+  s.textSize = Number(s.textSize) > 1 ? 1.25 : 1;  // ENGINE-19A
+  return s;
+}
+
+/** ENGINE-19A: the reader's rates (characters a second) for "Text speed": Slow, Normal, Fast. */
+export const TEXT_RATES = [9, 12, 18];
+/** ENGINE-19A: a stored "Text speed" as one of the rates: a rate is kept (the nearest), a factor from before round nineteen
+    (0.6, 1, 1.6: under 5) is taken as that many times the normal rate, then the nearest (0.6 is Slow, 1 Normal, 1.6 Fast). */
+export function textRate(v) {
+  let n = Number(v);
+  if (!Number.isFinite(n) || n <= 0) return 12;
+  if (n < 5) n *= 12;
+  return TEXT_RATES.reduce((best, r) => (Math.abs(r - n) < Math.abs(best - n) ? r : best), 12);
 }
 
 export function storeSettings(settings) {

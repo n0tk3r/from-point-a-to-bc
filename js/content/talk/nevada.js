@@ -71,6 +71,9 @@
 
 const who = (g) => g.store.data.active;
 const is = (g, fact) => !!g.flag(fact);
+/** STAGE-19N: the little door is open and Big Sister's rule ("Not a bigger sun, Mother. A bigger SHINE.") has been said: it is
+    the first thing that happens at the little door now, not the end of the flash. The tries of #12 wait for it. */
+const shine = (g) => is(g, "nevada.doorOpen") && !!g.store.data.seenLines["nevada.shade.rule.3"];
 const visits = (g) => g.flag("nevada.visits") || 0;
 const factsTold = (g) => g.flag("nevada.factsTold") || 0;
 
@@ -110,7 +113,7 @@ export const joeTree = (h = {}) => ({
       ],
     },
     ranger: {
-      say: ["nevada.joe.ranger.1", "nevada.ranger.dots", "nevada.joe.ranger.2", "nevada.ranger.dots", "nevada.joe.ranger.3"],      // PASS-17N: a second translation (the handbag)
+      say: ["nevada.joe.ranger.1", "nevada.ranger.dots", "nevada.joe.ranger.2"],      // PASS-19N1: the handbag (nevada.joe.ranger.3) removed: a third joke in a row      // PASS-17N: a second translation (the handbag)
       options: [
         { id: "always", line: "nevada.joe.opt.always", say: ["nevada.joe.always"] },
         { id: "eat", clue: true, line: "nevada.joe.opt.eat", say: ["nevada.joe.eat"] },                     // the clue: shiny, he keeps
@@ -148,7 +151,7 @@ export const joeTree = (h = {}) => ({
     cars: {
       options: [
         { id: "sedan", line: "nevada.car.sedan", say: ["nevada.car.no.sedan"] },
-        { id: "wagon", line: "nevada.car.wagon", say: ["nevada.old.saw.1", "nevada.old.saw.1b", "nevada.old.saw.2", "nevada.old.saw.3"], set: "nevada.storyTold", do: h.witness, then: "after" },
+        { id: "wagon", line: "nevada.car.wagon", say: ["nevada.old.saw.1", "nevada.old.saw.1.b", "nevada.old.saw.1b", "nevada.old.saw.2", "nevada.old.saw.3"], set: "nevada.storyTold", do: h.witness, then: "after" },
         { id: "black", line: "nevada.car.black", say: ["nevada.car.no.black"] },
       ],
     },
@@ -167,7 +170,7 @@ export const joeTree = (h = {}) => ({
         { id: "hubcaps", line: "nevada.joe.opt.hubcaps", when: (g) => visits(g) > 0, say: ["nevada.joe.hubcaps"] },
         { id: "laying", line: "nevada.joe.opt.laying", once: true, when: (g) => is(g, "nevada.jolene"), say: ["nevada.joe.laying"] },
         // #12: the banjo, asked for nicely (the half-answer), and then the sun shade, held
-        { id: "banjo", clue: true, line: "nevada.shade.banjo.ask", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.shade.banjo.1"],
+        { id: "banjo", clue: true, line: "nevada.shade.banjo.ask", when: (g) => shine(g) && !is(g, "nevada.banjoTried"), say: ["nevada.shade.banjo.1"],
           set: "nevada.banjoTried", do: h.banjo, then: "banjo" },
         { id: "hold", line: "nevada.shade.ask", when: (g) => is(g, "nevada.shadeGiven") && is(g, "nevada.doorOpen") && !is(g, "nevada.wideOpen"),
           say: ["nevada.shade.need", "nevada.shade.joe"], do: h.hold, then: "wide" },
@@ -204,7 +207,7 @@ export const joeTree = (h = {}) => ({
         { id: "raccoonLil", line: "nevada.joe.opt.raccoon.lil", say: ["nevada.joe.raccoon.lil", "nevada.ranger.dots", "nevada.joe.raccoon.lil.2"], set: "nevada.rangerMet" },
         { id: "play", line: "nevada.joe.opt.play", say: { 1: ["nevada.joe.play.1"], 2: ["nevada.joe.play.2"], more: ["nevada.joe.play.more"] }, set: "nevada.banjoFlash",
           do: h.play, then: (g) => (g.asked("joe/play") === 1 ? "played" : null) },
-        { id: "banjoLil", clue: true, line: "nevada.joe.opt.banjo.lil", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.lil"] },
+        { id: "banjoLil", clue: true, line: "nevada.joe.opt.banjo.lil", when: (g) => shine(g) && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.lil"] },
         { id: "lilBye", line: "nevada.joe.opt.lilbye", say: ["nevada.joe.lilbye"], then: "exit" },
       ],
     },
@@ -216,13 +219,13 @@ export const joeTree = (h = {}) => ({
         { id: "observe", line: "nevada.old.bigsis.1", when: (g) => !is(g, "nevada.witness"), say: ["nevada.old.bigsis.2"], then: "double" },
         { id: "raccoonBig", line: "nevada.joe.opt.raccoon.big", say: ["nevada.joe.raccoon.big", "nevada.ranger.dots", "nevada.joe.raccoon.big.2"] },      // PASS-17N: and Ranger answers back
         { id: "geiger", line: "nevada.old.after.bigsis.1", when: (g) => is(g, "nevada.witness"), say: ["nevada.old.after.bigsis.2", "nevada.old.after.bigsis.3"] },
-        { id: "banjoBig", clue: true, line: "nevada.joe.opt.banjo.big", when: (g) => is(g, "nevada.doorOpen") && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.big"] },
+        { id: "banjoBig", clue: true, line: "nevada.joe.opt.banjo.big", when: (g) => shine(g) && !is(g, "nevada.banjoTried"), say: ["nevada.joe.banjo.big"] },
         { id: "bigBye", line: "nevada.joe.opt.bigbye", say: ["nevada.joe.bigbye"], then: "exit" },
       ],
     },
     double: {
       options: [
-        { id: "technically", line: "nevada.old.bigsis.3", say: ["nevada.old.bigsis.4", "nevada.joe.big.note"], then: "root" },
+        { id: "technically", line: "nevada.old.bigsis.3", say: ["nevada.old.bigsis.4"], then: "root" },      // PASS-19N1: "Technically, I'm closed." is the last word (nevada.joe.big.note removed)
         { id: "oath", line: "nevada.joe.opt.oath", say: ["nevada.joe.oath"] },
         { id: "bigBack", line: "nevada.joe.opt.bigback", say: ["nevada.joe.bigback"], then: "exit" },
       ],
@@ -237,7 +240,7 @@ export const joeTree = (h = {}) => ({
 const fact = (n) => ({ say: FACTS[n], then: (g) => { g.flag("nevada.factsTold", n); return "back"; } });
 const FACTS = {
   1: ["nevada.jolene.fact.1", "nevada.jolene.fact.1b", "nevada.jolene.fact.1c", "nevada.jolene.fact.1d"],
-  2: ["nevada.jolene.fact.2", "nevada.jolene.fact.2b", "nevada.jolene.fact.2c", "nevada.jolene.fact.2d"],
+  2: ["nevada.jolene.fact.2", "nevada.jolene.fact.2b", "nevada.jolene.fact.2b.b", "nevada.jolene.fact.2c", "nevada.jolene.fact.2d"],      // PASS-19N2: the basket, in a box of its own
   3: ["nevada.jolene.fact.3", "nevada.jolene.fact.3b", "nevada.jolene.fact.3c"],
   4: ["nevada.jolene.fact.4", "nevada.jolene.fact.4b", "nevada.jolene.fact.4c", "nevada.jolene.fact.4d"],
 };
@@ -262,7 +265,7 @@ export const joleneTree = (h = {}) => {
           windowGive(h, "giveMom", "nevada.jolene.opt.window.mom"),
           { id: "factMom", line: "nevada.jolene.opt.fact.mom", when: factReady, then: nextFact },
           { id: "joeMom", line: "nevada.jolene.opt.joe.mom", say: ["nevada.jolene.joe.1"] },
-          { id: "grayMom", clue: true, line: "nevada.jolene.opt.gray.mom", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
+          { id: "grayMom", clue: true, line: "nevada.jolene.opt.gray.mom", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.grill.2.b", "nevada.jolene.gray.3"] },      // PASS-19N2: Big Sister breaks the run
           { id: "hatsMom", line: "nevada.jolene.opt.hats.mom", say: ["nevada.jolene.hats"] },
           { id: "phoneMom", line: "nevada.jolene.opt.phone.mom", say: ["nevada.jolene.phone.1", "nevada.jolene.phone.2"], do: h.phone },
           { id: "byeMom", line: "nevada.jolene.opt.bye.mom", say: ["nevada.jolene.bye.mom"], then: "exit" },
@@ -282,7 +285,7 @@ export const joleneTree = (h = {}) => {
           windowGive(h, "giveBig", "nevada.jolene.opt.window.big"),
           { id: "factBig", line: "nevada.jolene.opt.fact.big", when: factReady, then: nextFact },
           { id: "joeBig", line: "nevada.jolene.opt.joe.big", say: ["nevada.jolene.joe.2"] },
-          { id: "grayBig", clue: true, line: "nevada.jolene.opt.gray.big", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.gray.3"] },
+          { id: "grayBig", clue: true, line: "nevada.jolene.opt.gray.big", say: ["nevada.jolene.grill.1", "nevada.jolene.grill.2", "nevada.jolene.grill.2.b", "nevada.jolene.gray.3"] },      // PASS-19N2: as grayMom
           { id: "hatsBig", line: "nevada.jolene.opt.hats.big", say: ["nevada.jolene.hats.big"] },
           { id: "phoneBig", line: "nevada.jolene.opt.phone.big", say: ["nevada.jolene.phone.1", "nevada.jolene.phone.2"], do: h.phone },
           { id: "byeBig", line: "nevada.jolene.opt.bye.big", say: ["nevada.jolene.bye.big"], then: "exit" },
@@ -338,8 +341,7 @@ export const rangerTree = (h = {}) => ({
         { id: "latin", line: "nevada.ranger.opt.latin", once: true, say: ["nevada.ranger.dots", "nevada.ranger.latin.joe"] },
         { id: "coinBig", line: "nevada.ranger.opt.coin.big", when: (g) => is(g, "nevada.witness") && !is(g, "nevada.traded"), say: ["nevada.ranger.dots", "nevada.ranger.coin.joe"] },
         // #10: the fact, the method, and the trade
-        { id: "trade", line: "nevada.ranger.opt.trade", when: (g) => g.has("mirrorshades") && !is(g, "nevada.traded"), say: ["nevada.ranger.fact", "nevada.ranger.method"], do: h.trade, then: "traded" },
-        { id: "bargain", line: "nevada.ranger.opt.big.after", when: (g) => is(g, "nevada.traded"), say: ["nevada.ranger.dots", "nevada.ranger.after.joe"] },
+        { id: "trade", line: "nevada.ranger.opt.trade", when: (g) => g.has("mirrorshades") && !is(g, "nevada.traded"), say: ["nevada.ranger.fact", "nevada.ranger.dots", "nevada.ranger.method"], do: h.trade, then: "traded" },
         { id: "byeBigR", line: "nevada.ranger.opt.bye.big", say: { 1: ["nevada.ranger.dots", "nevada.ranger.dismissed.joe"], more: ["nevada.ranger.dots"] }, then: "exit" },      // PASS-17N: and what he means (once)
       ],
     },
@@ -351,12 +353,10 @@ export const rangerTree = (h = {}) => ({
         { id: "color", clue: true, line: "nevada.ranger.opt.color", say: ["nevada.ranger.dots", "nevada.ranger.color.2"] },                  // the clue: SHINY
         { id: "chickens", line: "nevada.ranger.opt.chickens", say: ["nevada.ranger.dots", "nevada.ranger.chickens.2"] },
         { id: "wash", clue: true, line: "nevada.ranger.opt.wash", say: ["nevada.ranger.dots", "nevada.ranger.wash.2"] },
-        // PASS-17N: her spare grandpa comes round once more (once she has asked Grandpa Joe for one)
-        { id: "spare", line: "nevada.ranger.opt.spare", once: true, when: (g) => g.asked("joe/grandpa") > 0, say: ["nevada.ranger.dots", "nevada.ranger.spare.2"] },
+        // PASS-19N1: her spare raccoon ("spare"), Big Sister's "bargain" and her "shades2" are gone: running gags rationed
         { id: "coinLil", line: "nevada.ranger.opt.coin.lil", when: (g) => is(g, "nevada.witness") && !is(g, "nevada.traded"),
           say: ["nevada.ranger.lil.evidence", "nevada.ranger.dots"], do: h.tail, then: "noLil" },
         { id: "shadesLil", line: "nevada.ranger.opt.shades.lil", when: (g) => g.has("mirrorshades") && !is(g, "nevada.traded"), do: h.snatch, then: "holder" },
-        { id: "shades2", line: "nevada.ranger.opt.shades2", when: (g) => is(g, "nevada.traded"), say: ["nevada.ranger.dots", "nevada.ranger.shades2.2"] },
         { id: "byeLilR", line: "nevada.ranger.opt.bye.lil", say: ["nevada.ranger.bye.joe"], then: "exit" },
       ],
     },
@@ -384,17 +384,20 @@ export const hensTree = (h = {}) => ({
       ],
     },
     guarding: {
-      say: ["nevada.hens.look.1", "nevada.hens.look.2", "nevada.hens.look.3", "nevada.hens.look.4"],
+      // PASS-19N2: Mom and Big Sister, in the doorway, each ask once: no more than two boxes of hers before someone speaks
+      say: ["nevada.hens.look.1", "nevada.hens.look.1.b", "nevada.hens.look.2", "nevada.hens.look.2.b", "nevada.hens.look.3", "nevada.hens.look.4"],
       options: [
         { id: "salute", line: "nevada.hens.opt.salute", once: true, say: ["nevada.hens.salute.2"] },
         { id: "tell", line: "nevada.hens.opt.tell", then: "tell1" },
       ],
     },
     tell1: { say: ["nevada.hens.tell.1"], then: async (g) => { if (h.sit) await h.sit(g, 1); return "tell2"; } },
-    tell2: { say: ["nevada.hens.tell.2"], then: async (g) => { if (h.sit) await h.sit(g, 2); return "tell3"; } },
-    tell3: { say: ["nevada.hens.tell.3"], then: async (g) => { if (h.egg) await h.egg(g); return "egg"; } },
+    // PASS-19N2: Jolene's "Twenty-two years" comes as Darlene sits (she is on her way to the door), and Big Sister counts
+    // after Charlene: so Little Sister never has more than two boxes in a row, and Jolene two
+    tell2: { say: ["nevada.hens.jolene.1", "nevada.hens.tell.2"], then: async (g) => { if (h.sit) await h.sit(g, 2); return "tell3"; } },
+    tell3: { say: ["nevada.hens.tell.2.b", "nevada.hens.tell.3"], then: async (g) => { if (h.egg) await h.egg(g); return "egg"; } },
     egg: {
-      say: ["nevada.hens.egg.1", "nevada.hens.jolene.1", "nevada.hens.jolene.2", "nevada.hens.jolene.3"],
+      say: ["nevada.hens.egg.1", "nevada.hens.jolene.2", "nevada.hens.jolene.3"],
       then: async (g) => { if (h.giveEgg) await h.giveEgg(g); g.flag("nevada.jolene", true); return "egg2"; },
     },
     egg2: { say: ["nevada.hens.egg.2"], then: "exit" },
@@ -415,6 +418,8 @@ export const hensTree = (h = {}) => ({
 // where it was, after "You're BACK!". Every time after, the rest of the talk, and goodbye.
 // ======================================================================================================
 const CLUES = ["smell", "chickens", "caesar", "togas", "temple"];
+/** STAGE-19N: a held beat inside the talk (a silence after a line), on the game's clock; nothing where there is no clock. */
+const hold = (g, ms) => (g && typeof g.wait === "function" ? g.wait(ms) : null);
 const cluesHeard = (g) => CLUES.filter((c) => g.asked("letterbox/" + c) > 0).length;
 
 export const letterboxTree = (h = {}) => {
@@ -433,12 +438,19 @@ export const letterboxTree = (h = {}) => {
       voice: { say: ["nevada.letterbox.son.0"], then: (g) => { going = h.kneel ? h.kneel(g) : null; return "hello"; } },
       hello: {
         say: ["nevada.letterbox.lilsis.1", "nevada.letterbox.son.1", "nevada.letterbox.lilsis.2", "nevada.letterbox.son.2"],
-        then: async () => { if (going) await going; going = null; return "mom"; },
+        // STAGE-19N: and before her first word, everyone else's eyes go to her (h.eyes: the girls, Grandpa Joe, Ranger)
+        then: async (g) => { if (going) await going; going = null; if (h.eyes) await h.eyes(g, "mom"); return "mom"; },
       },
       // Mom; and the girls, very quietly
+      // STAGE-19N: the girls' aside is its own beat. Mom holds still at the door; the two of them turn to each other for it
+      // (h.eyes "aside"), and then their eyes go back to her (h.eyes "mom"): Keaton's character, object, character.
       mom: {
-        say: ["nevada.letterbox.mom.1", "nevada.letterbox.son.3", "nevada.letterbox.mom.2", "nevada.letterbox.bigsis.1", "nevada.letterbox.lilsis.3"],
-        then: (g) => { g.flag("nevada.sonMet", true); return "explain"; },
+        say: ["nevada.letterbox.mom.1", "nevada.letterbox.son.3", "nevada.letterbox.mom.2"],
+        then: async (g) => { if (h.eyes) await h.eyes(g, "aside"); return "aside"; },
+      },
+      aside: {
+        say: ["nevada.letterbox.bigsis.1", "nevada.letterbox.lilsis.3"],
+        then: async (g) => { g.flag("nevada.sonMet", true); if (h.eyes) await h.eyes(g, "mom"); return "explain"; },
       },
       // he explains, as best he can: each try once, in any order ("not THAT Rome" once he has said Rome)
       explain: {
@@ -452,10 +464,15 @@ export const letterboxTree = (h = {}) => {
           { id: "temple", line: "nevada.letterbox.opt.temple", once: true, say: ["nevada.letterbox.mom.temple", "nevada.letterbox.son.temple"] },
           // with three of the clues in: it is B.C., Big Sister pins the year, and Mom understands. She sits back on her
           // heels, and the girls come and stand either side of her (h.heels).
+          // STAGE-19N: a held silence after her "...Before." (a still face: drama), and again after Big Sister's conclusion,
+          // before Mom says it herself. The same four lines in the same order. (The fact is set at her "...Before." now, so
+          // a game saved in the silence picks up at "Have you eaten?" and never at a menu with nothing left in it.)
           { id: "pin", line: "nevada.letterbox.opt.when", when: (g) => cluesHeard(g) >= 3,
-            say: ["nevada.letterbox.mom.before", "nevada.letterbox.big.pin.1", "nevada.letterbox.big.pin.2", "nevada.letterbox.mom.then"], set: "nevada.sonPinned", do: h.heels, then: "okay" },
+            say: ["nevada.letterbox.mom.before"], set: "nevada.sonPinned", do: (g) => hold(g, 1800), then: "pinned" },
         ],
       },
+      pinned: { say: ["nevada.letterbox.big.pin.1", "nevada.letterbox.big.pin.2"], then: async (g) => { await hold(g, 1400); return "understands"; } },
+      understands: { say: ["nevada.letterbox.mom.then"], then: async (g) => { if (h.heels) await h.heels(g); return "okay"; } },
       okay: { say: ["nevada.letterbox.son.confirm"], then: async (g) => { if (h.lean) await h.lean(g); return "eaten"; } },
       // she comes back: the next thing she can fix
       eaten: {
@@ -487,16 +504,28 @@ export const letterboxTree = (h = {}) => {
         then: "back",
       },
       // his warning, and her answer: she does not promise
+      // STAGE-19N: the same lines in the same order, in three beats with the player's hand back between them (C13: it ran
+      // 19 boxes with no input). A held silence after her "...I hear you, baby." (she does not promise: Big Sister's line
+      // reads it); then his last two lines are his to say, each a menu of one (the player says "Love you too" for him, and
+      // has the last word of the hello's joke, "I asked EARLIER!").
       warning: {
-        say: ["nevada.letterbox.son.warn", "nevada.letterbox.mom.heard", "nevada.letterbox.big.no", "nevada.letterbox.mom.find", "nevada.letterbox.lil.coming", "nevada.letterbox.son.snacks",
-          "nevada.letterbox.mom.love", "nevada.letterbox.son.love", "nevada.letterbox.big.noted", "nevada.letterbox.lil.bye", "nevada.letterbox.son.bye"],
-        then: async (g) => { g.flag("nevada.heardSon", true); if (h.rise) await h.rise(g); return "joe"; },
+        say: ["nevada.letterbox.son.warn", "nevada.letterbox.mom.heard"],
+        then: async (g) => { await hold(g, 1500); return "answer"; },
+      },
+      answer: {
+        say: ["nevada.letterbox.big.no", "nevada.letterbox.mom.find", "nevada.letterbox.lil.coming", "nevada.letterbox.son.snacks", "nevada.letterbox.mom.love"],
+        options: [{ id: "love", line: "nevada.letterbox.son.love", then: "noted" }],
+      },
+      noted: {
+        say: ["nevada.letterbox.big.noted", "nevada.letterbox.lil.bye"],
+        options: [{ id: "bye", line: "nevada.letterbox.son.bye", then: async (g) => { g.flag("nevada.heardSon", true); if (h.rise) await h.rise(g); return "joe"; } }],
       },
       // Grandpa Joe, who heard all of it; and Ranger brings her the handbag (Ranger's "...", and Grandpa Joe says what he means)
       joe: { say: ["nevada.letterbox.joe.1"], then: async (g) => { if (h.turn) await h.turn(g); return "joe2"; } },
       joe2: { say: ["nevada.letterbox.joe.2", "nevada.letterbox.mom.he", "nevada.letterbox.joe.3"], then: async (g) => { if (h.bring) await h.bring(g); return "bag"; } },
       bag: { say: ["nevada.ranger.dots", "nevada.letterbox.joe.bag"], then: async (g) => { if (h.take) await h.take(g); return "thanks"; } },
-      thanks: { say: ["nevada.letterbox.mom.ranger"], then: "exit" },
+      // STAGE-19N: and it ends on a still picture (her handbag on her arm, Ranger at her feet), held, before the hand-off
+      thanks: { say: ["nevada.letterbox.mom.ranger"], then: async (g) => { await hold(g, 1000); return "exit"; } },
       // spoken into again; or a first talk broken off, picked up where it was
       again: {
         say: ["nevada.letterbox.son.again"],

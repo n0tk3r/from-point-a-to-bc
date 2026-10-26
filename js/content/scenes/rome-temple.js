@@ -58,7 +58,7 @@ function openDoor(g, k, scale = 1) {
 /** Touching the place that hums. The first time he works out what it wants. */
 async function tryTheHum(g) {
   if (heard(g, "rome.hum.try.4")) return g.say("rome.hum.again");
-  await g.say("rome.hum.try.1", "rome.hum.try.2");
+  await g.say("rome.hum.try.1", "rome.hum.try.2", "rome.hum.try.2.b");      // PASS-19R1: try.2.b breaks the run
   await g.reach();                                                // the phone, held up to the wall
   await g.say("rome.hum.try.3", "rome.hum.try.4");
 }
@@ -78,18 +78,19 @@ async function spark(g) {
   await g.say("rome.spark.2");
   shine(g, false);                                                // the coin goes behind his back
   if (me) me.face("E");
+  await g.wait(500);                                              // STAGE-19R: the take, turned to the clerk, before "Sorry" (C10: 0.5 to 1 s)
   await g.say("rome.spark.3", "rome.spark.4", "rome.spark.5", "rome.spark.6");
   // The second try, while the clerk counts.
   if (me) me.face("W");
   aim(g, RIGHT[0][0], RIGHT[0][1]);
   shine(g, true);
-  await Promise.all([sweep(g, RIGHT, 2600), g.say("rome.spark.7")]);
+  await sweep(g, RIGHT, 2600);      // PASS-19R1: rome.spark.7 cut (the author's complaints of 25 October): the sweep shows the aiming
   // The light is on the place that hums. A little light: a little door.
   g.flag("rome.doorOpen", true);
   g.sfx("portal");
   await g.tween(900, (k) => openDoor(g, k), g.ease.out);
   shine(g, false);
-  await g.say("rome.spark.8", "rome.spark.9");
+  await g.say("rome.spark.8");      // PASS-19R1: the author's complaints of 25 October (box cut)
   await g.walkTo(264, 384);                                       // over to it, for a look through (the same place as the hotspot's, below)
   if (me) me.face("W");
   await g.say("rome.spark.10");
@@ -114,7 +115,7 @@ async function tossCoin(g) {
   await g.wait(900);
   await g.say("rome.hole.coin2");
   g.flag("rome.tossed", true);
-  await g.wait(400);
+  await g.wait(1200);                                             // STAGE-19R: the act's button, then a held beat on the boy alone at the little door before the fade (C14; was 400)
   await backHome(g);
 }
 
@@ -138,7 +139,7 @@ async function offerIncense(g) {
   await g.reach();
   g.take("incense");
   g.flag("rome.offered", true);
-  await g.say("rome.statue.incense.2", "rome.statue.incense.3");
+  await g.say("rome.statue.incense.2");      // PASS-19R1: the author's complaints of 25 October (box cut)
 }
 
 /** Every time he is spoken to, he loses count. */
@@ -363,7 +364,7 @@ export default {
         phone: ["rome.clerk.phone.1", "rome.clerk.phone.2", "rome.clerk.phone.3"],
       },
     },
-    { id: "out", ...wayOut, poly: [[290, 586], [510, 586], [510, 600], [290, 600]] },   // the doors are behind us: the bottom edge
+    { id: "out", ...wayOut, poly: [[290, 560], [510, 560], [510, 600], [290, 600]] },   // the doors are behind us: the bottom edge (STAGE-19R: 40 tall, was 14: scene audit S9)
   ],
 
   // Runs when the lead arrives. It must be safe to run twice, so it checks its own facts.
@@ -371,7 +372,7 @@ export default {
     if (g.flag("rome.tossed") && !g.flag("home.arrived")) return backHome(g);     // a save from just after the coin went through
     if (g.flag("rome.sawInside")) return;
     await g.wait(400);
-    await g.say("rome.inside.1", "rome.inside.2", "rome.inside.3", "rome.inside.4", "rome.inside.5");
+    await g.say("rome.inside.1", "rome.inside.2", "rome.inside.4", "rome.inside.5");      // PASS-19R1: the author's complaints of 25 October (box cut)
     g.flag("rome.sawInside", true);
   },
 };

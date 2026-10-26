@@ -833,9 +833,9 @@
    "what": "the rivets: a row each side of the joint in the duct's back wall, between ROOM C and PROP & EFF (and all along the duct)",
    "shape": {
     "rect": [
-     286,
+     284,
      351,
-     14,
+     18,
      108
     ]
    },
@@ -843,7 +843,8 @@
     293,
     470
    ],
-   "face": "N"
+   "face": "N",
+   "stage19": "STAGE-19O: the clickable box grown to at least 18x108 px (S9); the painting is unchanged"
   },
   {
    "id": "cup",
@@ -868,16 +869,17 @@
    "shape": {
     "rect": [
      492,
-     513,
+     509,
      23,
-     10
+     18
     ]
    },
    "stand": [
     504,
     470
    ],
-   "face": "S"
+   "face": "S",
+   "stage19": "STAGE-19O: the clickable box grown to at least 23x18 px (S9); the painting is unchanged"
   },
   {
    "id": "wrapper",
@@ -885,16 +887,17 @@
    "shape": {
     "rect": [
      520,
-     510,
+     507,
      23,
-     12
+     18
     ]
    },
    "stand": [
     532,
     470
    ],
-   "face": "S"
+   "face": "S",
+   "stage19": "STAGE-19O: the clickable box grown to at least 23x18 px (S9); the painting is unchanged"
   },
   {
    "id": "fitting",
@@ -918,17 +921,18 @@
    "what": "the gate valve on the pipe, its red handwheel",
    "shape": {
     "rect": [
-     428,
-     288,
-     14,
-     14
+     426,
+     286,
+     18,
+     18
     ]
    },
    "stand": [
     435,
     470
    ],
-   "face": "N"
+   "face": "N",
+   "stage19": "STAGE-19O: the clickable box grown to at least 18x18 px (S9); the painting is unchanged"
   },
   {
    "id": "bulb",

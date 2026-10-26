@@ -282,5 +282,7 @@ def write(st, fan_crop, fan_foot):
                           "the top's (over it the insulation) and the floor's (under it the gap down to the tiles, whose cut line is tiles_cut); "
                           "plate is the front of the fan's ring plate")},
     }
+    import stage19_boxes                                      # STAGE-19O: the small clickable things grown to be hit (S9)
+    stage19_boxes.grow(L["things"], "office-ducts")
     json.dump(L, open(f"{OUT}/layout.json", "w"), indent=1)
     return L

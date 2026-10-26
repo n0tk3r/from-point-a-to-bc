@@ -851,6 +851,26 @@ def show(picture, name):
     Image.fromarray((np.clip(picture, 0, 1) * 255).astype(np.uint8)).save(name)
 
 
+def stage19(pic):
+    """STAGE-19R (round nineteen's scene audit, S1, S4 and the outdoor rooms' clouds): a light and value pass laid on
+    the graded picture, the layout and every mark as they were.
+      - The shade of the eaves on the sunlit wall behind Eleazar's bench (x 465 to 550, y 330 to 405), about 15 L* down
+        and cooler: the old man's white robe reads against it, and the faith talk gets its quiet pocket.
+      - The clouds calmed: their whites held down and their edges softened, so the sky is not the brightest thing."""
+    h, w = pic.shape[:2]
+    yy = np.mgrid[0:h, 0:w][0].astype(F32)
+    eaves = mask_poly((h, w), [(456, 312), (562, 308), (562, 412), (456, 414)], soft=12.0, wobble=2.0, seed=193)
+    ramp_ = np.clip((yy - 300) / 60.0, 0.25, 1.0)                    # soft above, full where he sits
+    tint(pic, "#a7b0d2", eaves * ramp_ * 0.8)
+    lum = pic @ np.array([0.3, 0.59, 0.11], dtype=F32)
+    sky_ = (yy < 240).astype(F32) * np.clip((lum - 0.74) / 0.12, 0, 1)
+    sky_ = blur(sky_, 2.0)
+    calm = blur(pic, 1.6) * 0.35 + pic * 0.65
+    calm = calm * np.minimum(1.0, 0.86 / np.maximum(calm @ np.array([0.3, 0.59, 0.11], dtype=F32), 1e-3))[..., None]
+    pic[...] = pic * (1 - sky_[..., None]) + calm * sky_[..., None]
+    return pic
+
+
 if __name__ == "__main__":
     t0 = time.time()
     fast = "fast" in sys.argv
@@ -873,6 +893,7 @@ if __name__ == "__main__":
     ground = pic.copy()
     details(pic, info)
     pic = grade(pic)
+    stage19(pic)                                                   # STAGE-19R: the shade behind the bench, calmer clouds
     show(pic, f"{WORK}/2-back.png")
     print("details", round(time.time() - t0, 1))
     raw = planes(fast)

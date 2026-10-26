@@ -491,16 +491,17 @@
    "shape": {
     "rect": [
      472,
-     322,
+     319,
      24,
-     12
+     18
     ]
    },
    "stand": [
     400,
     416
    ],
-   "face": "N"
+   "face": "N",
+   "stage19": "STAGE-19O: the clickable box grown to at least 24x18 px (S9); the painting is unchanged"
   },
   {
    "id": "door",

@@ -400,8 +400,7 @@ export default {
     await g.wait(300);
     if (me) me.face("N");                                         // the temple, at the far end of the precinct
     await g.say("rome.capitol.arrive.1");
-    if (me) me.face("W");                                         // and the city, over the parapet
-    await g.say("rome.capitol.arrive.2");
+    // PASS-19R2: rome.capitol.arrive.2 (the city, over the parapet) removed: the arrival goes from the temple to the kid
     if (titus && !g.flag("rome.hasBreakfast")) {                  // (a game saved before the bigger Rome may have its breakfast already: then nobody is up there)
       if (me) me.look(titus.x, titus.y - 60);                     // and the kings, and who is sitting on top of one of them
       g.sfx("honk");

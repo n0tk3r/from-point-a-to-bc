@@ -357,9 +357,9 @@
    "what": "the little case fixed upright on the right-hand post of Eleazar's door (words of the Law: not seen)",
    "shape": {
     "rect": [
-     600,
+     596,
      351,
-     12,
+     20,
      20
     ]
    },
@@ -1140,15 +1140,15 @@
   ],
   "felix": {
    "at": [
-    82,
-    463
+    68,
+    465
    ],
    "face": "W"
   },
   "felix_spots": [
    [
-    75,
-    453,
+    72,
+    485,
     "NW"
    ],
    [

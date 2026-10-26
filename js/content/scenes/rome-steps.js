@@ -179,7 +179,7 @@ function followPigeons(g) {
     A boy who has run an errand or two before asking is scored on what he is carrying. */
 async function explainRule(g) {
   turnTo(g, "doorkeeper");
-  await g.say("rome.doorkeeper.hi.1", "rome.doorkeeper.hi.2", "rome.doorkeeper.hi.3", "rome.doorkeeper.rule.1", "rome.doorkeeper.rule.2");
+  await g.say("rome.doorkeeper.hi.1", "rome.doorkeeper.hi.2", "rome.doorkeeper.hi.3", "rome.doorkeeper.rule.2");      // PASS-19R1: the author's complaints of 25 October (box cut)
   g.flag("rome.knowsRule", true);
   const tunic = g.has("tunic"), gift = g.has("incense");
   if (tunic && gift) return letIn(g);
@@ -191,7 +191,11 @@ async function letIn(g) {
   turnTo(g, "doorkeeper");
   await g.say("rome.gate.1");
   await g.reach();                                                // the tunic goes on over everything (see the note in PUZZLES-rome.md)
-  await g.say("rome.gate.2", "rome.gate.3", "rome.gate.4", "rome.gate.5", "rome.gate.6", "rome.gate.7", "rome.gate.8");
+  await g.say("rome.gate.2", "rome.gate.3", "rome.gate.4");
+  await g.wait(500);                                              // STAGE-19R: his "YES.", and the doorkeeper's long look (C10: a take)
+  await g.say("rome.gate.5");
+  await g.wait(600);                                              // STAGE-19R: "The hair." lands before the boy answers (the hold goes after the punch)
+  await g.say("rome.gate.6", "rome.gate.7", "rome.gate.8");
   g.flag("rome.inside", true);
   await g.goto("rome-temple");
 }
@@ -250,7 +254,7 @@ async function feedSoothsayer(g) {
   await g.say(fedLine(g));                                        // ROME-13S1 (was rome.soothsayer.fed.1 always)
   await g.reach();
   g.take("breakfast");
-  await g.say("rome.soothsayer.fed.2", "rome.soothsayer.fed.3", "rome.soothsayer.fed.4", "rome.soothsayer.fed.5");
+  await g.say("rome.soothsayer.fed.2", "rome.soothsayer.fed.3", "rome.soothsayer.fed.3.b", "rome.soothsayer.fed.5");      // PASS-19R1: fed.3.b breaks the run
   await g.reach();
   g.give("incense");
   g.flag("rome.hasIncense", true);
@@ -395,6 +399,14 @@ export default {
   // minScale is the painter's: people hold the size they have at row 392 from there upward, instead of shrinking
   // away toward the horizon as they climb.
   horizon: 260, full: 590, minScale: 0.4,
+  // STAGE-19R (the people in the room's light, for the engine's figure light, ENGINE-19 item 9; DESIGN.md decision 180):
+  // the people were lost on the white marble (scene audit S4), and rome_steps.py's stage19 paints the cure: a cool shade
+  // across the steps behind the soothsayer, the altar's longer shadow behind the senator, and a warm lamp glow in the
+  // open doors. The people on the sunlit steps keep their drawn light (no figureLight: S14 scored 2). The one exception
+  // is the threshold: the glow came up to about the doorkeeper's own value (his ring L* about 39 -> 53, his figure 52),
+  // so whoever stands in the doors, under the porch roof with the lamp behind, is a shade darker: the keeper reads dark
+  // against the one lit opening, the gate.
+  lightZones: [{ ellipse: [500, 294, 45, 10], k: -0.15, soft: 8 }],
 
   // The pavement, the whole flight of steps, and the narrow strip of porch behind the columns.
   walk: { area: [[0, 597], [797, 597], [797, 433], [797, 298], [763, 298], [648, 291], [342, 296], [396, 305], [382, 306], [461, 461], [400, 462], [340, 452], [240, 446], [120, 442], [0, 438]] },
@@ -414,7 +426,7 @@ export default {
     [[556, 293], [595, 293], [586, 292], [547, 292]],             // the doorkeeper's bench
   ],
   spawn: {
-    default: [470, 508],                                          // the foot of the steps: where the doorkeeper put him down
+    default: [470, 540],                                          // the foot of the steps: where the doorkeeper put him down (STAGE-19R: 32 lower, so no step nosing runs through his head: scene audit S7; feet still above the inventory bar)
     fromStreet: [52, 472],                                        // coming in from the street, at the left edge, behind the laurel (see `enter`)
     fromTemple: [517, 295],                                       // coming out of the doors (the same place as the doors' walkTo, below)
     fromForum: TO_FORUM,                                          // ROME-13S1: back from the Forum, at the bottom edge (see `enter`)
@@ -606,9 +618,10 @@ export default {
     if (doorkeeper && me) doorkeeper.look(me.x, me.y);
     await g.say("rome.arrive.out");
     if (me) me.face("S");                                         // he turns and sees where he is
+    await g.wait(700);                                            // STAGE-19R: the take, on the reveal of Rome (C10: 0.5 to 1 s), before he speaks
     await g.say("rome.arrive.1", "rome.arrive.2");
     if (me) me.face("N");                                         // and back to the temple: the door is in there
-    await g.say("rome.arrive.4", "rome.arrive.5", "rome.arrive.3", "rome.arrive.6");
+    await g.say("rome.arrive.5", "rome.arrive.3");      // PASS-19R1: the author's complaints of 25 October (box cut)
     if (me) me.face("W");                                         // the street is off the left edge, behind the laurel: his nose says so
     await g.say("rome.arrive.7");
     if (lift) old.flag("clear", was);                             // ROME-13T

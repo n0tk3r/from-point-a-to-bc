@@ -290,6 +290,98 @@ def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=
     return os.path.getsize(name), pal, idx
 
 
+# ---------------------------------------------------------------- STAGE-19R: round nineteen's value pass (scene audit S1, S2)
+# The square read as one even brightness with nothing saying "look here" (SCORE-19B: S1 1, S2 1). Three steps, laid on
+# the picture as painted, with the layout, the cut-outs' shapes and every mark as they were:
+#   1. stage19_paving (after the brushwork): the paving's mottle at half its amplitude, toward its own sunlit and shaded
+#      values, so the square is one light value and the hoarding and Castor's shade stand as the two dark masses;
+#   2. stage19_back (after the details, on the picture and on the picture the crane's frames are cut from): the sky's
+#      deep blue eased and the clouds calmed (their whites held down, their edges softer); a warm pool of light on
+#      Phyllis's stall; a sunlit slot down the Tuscan street's mouth (the way to the river);
+#   3. stage19_light (on the cut-outs): the hoarding's boards lit a step brighter where the Gaul stands, and the edge of
+#      Phyllis's pool where it reaches Castor's corner and the basin.
+def _lab(p):
+    from skimage.color import rgb2lab
+    return rgb2lab(np.clip(p, 0, 1).astype(np.float64))
+
+
+def _rgb(lab):
+    from skimage.color import lab2rgb
+    return np.clip(lab2rgb(lab), 0, 1).astype(F32)
+
+
+def _nblur(a, w, s):
+    return blur(a * w, s) / np.maximum(blur(w, s), 1e-4)
+
+
+BUILT = ("capitol", "tuscan", "concord", "saturn", "rostra", "people", "paullus", "julia", "site", "works")
+
+
+def _cover(info, names):
+    cov = np.zeros(SHAPE, F32)
+    for nm in names:
+        if nm in info["layers"]:
+            cov = np.maximum(cov, np.clip(info["layers"][nm].a, 0, 1))
+    return cov
+
+
+def stage19_paving(pic, info):
+    """STAGE-19R S2: the paving's mottle halved, in L* only, toward the sunlit paving's own value and the shade's."""
+    paving = info["ground"] * (1 - np.clip(blur(_cover(info, BUILT), 1.5) * 1.3, 0, 1))
+    lab = _lab(pic)
+    L = lab[..., 0]
+    sh = np.clip(info["cut"], 0, 1)
+    lit_w, sh_w = (paving * (1 - sh)).astype(np.float64), (paving * sh).astype(np.float64)
+    t_lit, t_sh = _nblur(L, lit_w + 1e-6, 9.0), _nblur(L, sh_w + 1e-6, 9.0)
+    trend = t_lit * (1 - sh) + t_sh * sh
+    lab[..., 0] = L + (trend - L) * 0.5 * paving
+    pic[...] = _rgb(lab)
+    return pic
+
+
+def _pools(lab, cut_name=None):
+    x, y = grid(SHAPE)
+    pool = mask_ellipse(SHAPE, 198, 462, 80, 52, soft=14.0)                       # Phyllis's stall
+    lab[..., 0] += 8.0 * pool
+    lab[..., 1] += 1.5 * pool
+    lab[..., 2] += 6.0 * pool
+    if cut_name in ("hoarding", "hoarding-near"):
+        face = mask_ellipse(SHAPE, 650, 362, 96, 60, soft=18.0)                     # the boards behind the Gaul
+        lab[..., 0] += 7.0 * face
+        lab[..., 2] += 4.0 * face
+    return lab
+
+
+def stage19_back(pic, info):
+    """STAGE-19R S1: on the backdrop (and on the picture the crane's frames are cut from, so frame 0 is still back.png)."""
+    x, y = grid(SHAPE)
+    lab = _lab(pic)
+    L = lab[..., 0]
+    sky = ((y < HZ - 1) * (1 - np.clip(blur(_cover(info, BUILT + ("crane", "garlands")), 1.2) * 1.5, 0, 1))).astype(np.float64)
+    m = _nblur(L, sky + 1e-6, 30.0)
+    Lc = m + (L - m) * 0.6                                                         # the clouds' edges softer
+    Lc = np.where(Lc > 82.0, 82.0 + (Lc - 82.0) * 0.3, Lc)                         # their whites held down
+    up = np.clip(1 - y / HZ, 0, 1) ** 1.5
+    Lc = Lc + 7.0 * up                                                             # the deep blue at the top eased
+    chroma = 0.92 - 0.22 * up
+    lab[..., 0] = L + (Lc - L) * sky
+    lab[..., 1] = lab[..., 1] * (1 - sky + sky * chroma)
+    lab[..., 2] = lab[..., 2] * (1 - sky + sky * chroma)
+    slot = mask_poly(SHAPE, [(188, 276), (232, 276), (234, 334), (186, 334)], soft=8.0)   # the Tuscan street's mouth
+    lab[..., 0] += 10.0 * slot
+    lab[..., 2] += 3.0 * slot
+    _pools(lab)
+    pic[...] = _rgb(lab)
+    return pic
+
+
+def stage19_light(c, name):
+    """STAGE-19R S1: the same light on a cut-out's colour (only where the pools reach it)."""
+    lab = _lab(c)
+    _pools(lab, name)
+    return _rgb(lab)
+
+
 if __name__ == "__main__":
     t0 = time.time()
     fast = "fast" in sys.argv
@@ -300,8 +392,11 @@ if __name__ == "__main__":
     print("under", round(time.time() - t0, 1))
     pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
     print("brushed", round(time.time() - t0, 1))
+    stage19_paving(pic, info)                                    # STAGE-19R: the paving one light value
     ground = pic.copy()
     details(pic, info)
+    stage19_back(pic, info)                                      # STAGE-19R: calmer sky, Phyllis's pool, the Tuscan slot
+    stage19_back(info["before_crane"], info)                     # (the same, so the crane's frame 0 is still back.png)
     print("details", round(time.time() - t0, 1))
     cut = cutouts()
     whole = pic.copy()
@@ -313,6 +408,7 @@ if __name__ == "__main__":
             a = (a > 0.5).astype(F32)
         else:
             c, a = brushed(layer, pic, seed=20 + i)
+        c = stage19_light(c, name)                               # STAGE-19R: the hoarding lit behind the Gaul
         finished_cuts[name] = (c, a)
         over(whole, c, a)
     show(pic, f"{WORK}/2-back.png")

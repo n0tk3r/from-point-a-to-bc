@@ -109,7 +109,9 @@ def walk_roof():
 def marks():
     m = {}
     # Ranger: out from under the limousine's open door (to the left of the open leaf), on the gravel
-    m["fromLimo"] = pt(375.0 + 0.0, 0.0, 612.0)
+    # STAGE-19O: a metre nearer us than round eighteen's pt(375, 0, 612) [597.5, 398]: the limousine's waist line (y 382) ran
+    # through his head there (S7); here, on the gravel in front of the open door, his head is below it
+    m["fromLimo"] = pt(348.0, 0.0, 510.0)
     # Wendell's place: on the door, at its left side (the keypad is on its right), facing the gate (W)
     m["door"] = pt(-282.0, 0.0, 436.0)
     # the can as it stands: Ranger beside it, on its left, facing it (E), to tip it over to the right
@@ -394,6 +396,8 @@ def write(info, cuts, frames):
         "exits_note": "no way out across the picture's edges: Ranger goes into the building by the unit's intake (a script, into office-ducts at "
                       "its mark `intake`), and the lot is left by the Office's map",
     }
+    import stage19_boxes                                      # STAGE-19O: the small clickable things grown to be hit (S9)
+    stage19_boxes.grow(lay["things"], "office-lot")
     with open(f"{OUT}/layout.json", "w") as f:
         json.dump(lay, f, indent=1)
     return lay

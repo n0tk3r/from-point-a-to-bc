@@ -1881,6 +1881,10 @@ def layout():
         {"to": "home-bigsis-room", "way": "ladder", "shape": {"poly": ladder_poly}, "stand": P2(*M.STANDS["ladder"][0])},
     ]
     L["marks"] = {way: {who: P2(X, Z) for who, (X, Z) in folk.items()} for way, folk in M.WAYS.items()}
+    # STAGE-19H: off the spot the study's and the ladder's ways out share, and clear of the ladder rail's line (GUIDE-19
+    # S16, S12): picture pixels, laid over the model's (its sizes below are still the model's places')
+    L["marks"]["fromLadder"] = {"bigsis": [604, 314], "mom": [560, 302], "lilsis": [516, 295]}
+    L["marks"]["fromStudy"]["mom"] = [742, 336]
     L["stands"] = {name: P2(X, Z) for name, ((X, Z), face) in M.STANDS.items()}
     L["sizes"] = {way: {who: int(round(V.person(X, Z, {"lilsis": 118.0, "bigsis": 158.0, "mom": 168.0}[who])[2])) for who, (X, Z) in folk.items()} for way, folk in M.WAYS.items()}
     L["vanishing"] = {"along_the_landing": [round(V.vanishing()[1][0]), 135], "out_toward_us": [round(V.vanishing()[0][0]), 135]}

@@ -126,6 +126,9 @@ async function shine(g) {
     relight(g);
     holdOut(g, false);
   }
+  await g.walkTo(500, 500);                                                        // STAGE-19E: back a step, under the place that hums (clear of the king's last chest)
+  g.lead.face("N");
+  await g.wait(250);
   await g.say("egypt.flash.dies");
   if (!g.flag("egypt.heardBoy")) await g.say("egypt.flash.son");                   // he has worked out for himself what the lamp boy would have told him
   await g.say("egypt.flash.rule.1", "egypt.flash.rule.2");
@@ -161,7 +164,7 @@ async function talkToGoldsmith(g) {
 
 /** The sunglasses for the mirror. Kindness is not kept waiting: this works whether or not Dad knows yet what a mirror is for. */
 async function trade(g) {
-  await g.say("egypt.goldsmith.trade.1", "egypt.goldsmith.trade.2");
+  await g.say("egypt.goldsmith.trade.1");     // PASS-19E: trade.2 (one mishearing too many) gone
   await g.reach();
   g.take("sunglasses");
   redraw(g, "goldsmith", "goldsmith-shades");     // he puts them on
@@ -199,16 +202,27 @@ async function useDoor(g) {
   if (g.flag("egypt.ready")) return g.say("egypt.hole.wait");
   // The hole in time is in front of him: Psalm 90:4, once. What he makes of "A Prayer of Moses" depends on whether
   // Lot, by the river, has told him when he is.
-  const knows = !!g.flag("egypt.heardAbram");
-  await g.say("egypt.gate.psalm.1", "egypt.gate.psalm.2", knows ? "egypt.gate.psalm.3b" : "egypt.gate.psalm.3", knows ? "egypt.gate.psalm.4b" : "egypt.gate.psalm.4");
+  // STAGE-19E: the act's last step is the player's. The first time he steps up to it he stops and says the psalm, and
+  // the player has him back after a hold on his still face; the next "Go through" goes (his old line, and he walks in as
+  // the black comes down). That ends the Egypt half of the act gate on a button, where it was one locked stretch of 14
+  // boxes and about 90 s with the Son's arrival in Rome.
+  if (!count(g, "egypt.gate.psalm.1")) {
+    const knows = !!g.flag("egypt.heardAbram");
+    await g.say("egypt.gate.psalm.1", "egypt.gate.psalm.2", ...(knows ? ["egypt.gate.psalm.3b", "egypt.gate.psalm.4b"] : ["egypt.gate.psalm.4"]));     // PASS-19E: the plain tenses repeat (psalm.3) gone; the reversal (3b) stays
+    await g.wait(900);                            // the hold on his face; then he is the player's again
+    return;
+  }
   await g.say("egypt.hole.go");
   g.flag("egypt.ready", true);
   // Act break: leave Dad at the door and pick the story up with the Son, in Rome.
   const d = g.store.data;
-  g.rememberPlace();
+  g.rememberPlace();                              // (he is left standing at the door, where the story finds him again)
   d.act = 2;
   d.active = "son";
+  const stepIn = g.walkTo(500, 452);              // the exit rides his line: he steps in, and the black comes down on him mid-stride
+  await g.wait(250);
   await g.fade(1, 500);
+  await stepIn;
   await g.card("Meanwhile", "nearly nineteen hundred years later", { plain: true });
   await g.goto("rome-steps", { via: "wormhole" });
 }
@@ -220,8 +234,11 @@ export default {
   travel: (g) => !g.flag("egypt.ready"),                   // MAP-15: not by the map once the act has ended: he waits at the door (whatever a save catches it in)
 
   // Every number below is a pixel of the painting, measured by the painter (art/scenes/egypt-chamber/layout.json).
-  // DEPTH: a room, so people shrink only a little toward the back wall.
-  horizon: -200, full: 585,
+  // DEPTH (STAGE-19E): the painting's own eye level is about y 175, a camera about twice a man's height (read off the
+  // side walls' courses: SCORE-19A, chamber-walls.png), so people grow as they come toward us and shrink at the back
+  // wall: Dad is 139 px where he stood before (470, 480), about 123 px at the back of the floor and about 190 px at the
+  // front edge. (It was -200/585 until round nineteen: he hardly changed size anywhere on the floor, and floated.)
+  horizon: 175, full: 527, maxScale: 1.2,
 
   // The granite floor, less the king's furniture along the back wall and the sarcophagus on the right. In front of
   // the place that hums the floor runs right up to the wall.
@@ -288,7 +305,9 @@ export default {
     // other end, by the lamp and his jug; and back to his stool. His mark is at the bench's back edge, off the floor:
     // he walks straight along there and back. (Places on the floor behind him would bring him home a few pixels short
     // of his stool, which stands just inside the margin the engine keeps round the bench.)
-    { id: "goldsmith", kind: "goldsmith", at: [330, 494], face: "SE",
+    // STAGE-19E: his stool mark 3 px lower, on the line his two walking spots keep (y 497): with the chamber re-scaled
+    // (horizon 175) he sits 3% larger, and at y 494 his head touched a painted line of the back wall (scene audit S7)
+    { id: "goldsmith", kind: "goldsmith", at: [330, 497], face: "SE",
       life: { every: [22, 42], spots: [[372, 497, "S"], [276, 497, "SW"]], stay: [3, 7] } },
   ],
 

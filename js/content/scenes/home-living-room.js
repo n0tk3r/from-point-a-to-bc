@@ -130,7 +130,7 @@ async function thunk(g, me) {
 /** They know it is in there. Mom can see it, Big Sister can hear it, and Little Sister can go and get it. */
 async function fetchKey(g) {
   const me = who(g), lil = g.lead;
-  if (me === "mom") { await g.reach(); return g.say("home.key.mom.1", "home.key.mom.2", "home.key.mom.3"); }
+  if (me === "mom") { await g.reach(); return g.say("home.key.mom.1", "home.key.mom.2", "home.key.mom.2.b", "home.key.mom.3"); }
   if (me === "bigsis") { await g.reach(); g.sfx("thunk"); await g.wait(500); return g.say("home.key.bigsis.1", "home.key.bigsis.2"); }
   await makeRoom(g, STOOL, BESIDE);
   lil.face("N");
@@ -189,7 +189,7 @@ async function takePencil(g) {
 
 // ---------- handing things on ----------
 async function solveNote(g) {
-  await g.say("home.note.solve.1", "home.note.solve.2", "home.note.solve.3");
+  await g.say("home.note.solve.1", "home.note.solve.1.b", "home.note.solve.2", "home.note.solve.3");      // PASS-19H2: Mom between, so Big Sister is never three boxes running
   g.flag("home.knowsYear", true);
 }
 /** Batteries and flashlight in the same pockets: in they go, and it works. */
@@ -197,6 +197,7 @@ async function loadFlash(g, to) {
   const pockets = g.store.data.inventory[to];
   pockets.splice(pockets.indexOf("batteries"), 1);
   g.sfx("click");
+  await g.wait(400);                             // STAGE-19H: the click, then the light: a beat before she says it works (C10)
   g.flag("home.flashWorks", true);
   await g.say(`home.flash.load.${to}`);
 }
@@ -231,9 +232,11 @@ async function leave(g) {
   for (const id of THREE) pray(g.actor(id), true);
   await g.say("home.door.psalm.3", "home.door.psalm.4");
   for (const id of THREE) pray(g.actor(id), false);
+  await g.wait(600);                             // STAGE-19H: heads come up before the coats
   await g.say("home.leave.1", "home.leave.2", "home.leave.3", "home.leave.4");
   g.flag("home.left", true);
   g.store.data.act = 4;
+  await g.wait(1000);                            // STAGE-19H: the act's button ("impossible to get rid of"), held, then the fade
   await g.fade(1, 700);
   await g.goto("nevada-roadside", { via: "cut" });
 }
@@ -338,7 +341,8 @@ export default {
     },
     { id: "crossword", name: "Dad's crossword", poly: [[180, 534], [226, 516], [236, 529], [234, 540], [192, 551]], walkTo: [285, 525], face: "SW", look: each("home.crossword") },
     {
-      id: "pencil", name: "Dad's pencil", verb: "Take", rect: [189, 525, 37, 11], walkTo: [285, 525], face: "SW", plane: "pencil", when: (g) => !g.flag("home.pencilTaken"),
+      id: "pencil", name: "Dad's pencil", verb: "Take", rect: [189, 521, 37, 18],   // STAGE-19H: 11 px tall was a pixel hunt (GUIDE-19 S9); the box grows round the pencil.png cut-out
+      walkTo: [285, 525], face: "SW", plane: "pencil", when: (g) => !g.flag("home.pencilTaken"),
       look: each("home.pencil.look"), use: takePencil,
     },
     {
@@ -389,20 +393,30 @@ export default {
   // Runs on arrival. It must be safe to run twice, so it checks its own fact.
   async enter(g) {
     if (g.flag("home.arrived") || !home(g)) return;
-    await g.wait(600);
-    g.sfx("ring"); await g.wait(1100);
-    g.sfx("ring"); await g.wait(1100);
-    g.sfx("beep"); await g.wait(600);
-    await g.say("home.arrive.vm1", "home.arrive.vm2", "home.arrive.1", "home.arrive.2", "home.arrive.2b", "home.arrive.3", "home.arrive.4");
+    // STAGE-19H: the act's opening (a full scene by GUIDE-19 C1: an act opening). Sound before picture: the phone is heard
+    // ringing out over the still room before anyone speaks; the beep comes after Dad's greeting, as an answering
+    // service's does, and Mom speaks into the silence after it. Holds: a take after the punch (Little Sister's "EARLY",
+    // the author's line, and Big Sister's deadpan), two seconds on the still family after the five places (the drama
+    // of the scene), and a beat after the "Amen" before the plan. Every line is kept, in its old order
+    // (docs/PUZZLES-the-present.md); the rings are 200 ms shorter each to pay for the holds.
+    await g.wait(500);
+    g.sfx("ring"); await g.wait(900);
+    g.sfx("ring"); await g.wait(900);
+    await g.say("home.arrive.vm1", "home.arrive.vm2");
+    g.sfx("beep"); await g.wait(500);
+    await g.say("home.arrive.1", "home.arrive.2");
+    await g.wait(500);                             // (the take: let the author's line land before the answer)
+    await g.say("home.arrive.2b", "home.arrive.3", "home.arrive.4");
+    await g.wait(1800);                            // (five places, two of them empty: a still room)
     // First things first.
     await g.say("home.arrive.pray.1");
     for (const id of THREE) pray(g.actor(id), true);
     await g.wait(500);
     await g.say("home.arrive.pray.2", "home.arrive.pray.3", "home.arrive.pray.4", "home.arrive.pray.5");
     for (const id of THREE) pray(g.actor(id), false);
-    await g.wait(300);
+    await g.wait(800);                             // (heads come up; a breath before anyone has an idea)
     await g.say("home.arrive.5", "home.arrive.6", "home.arrive.6b", "home.pc.router", "home.arrive.7");
     g.flag("home.arrived", true);
-    g.ui.toast("Play as any of the three: use the portraits", 5200);
+    g.ui.toast("Play as any of the three: use the portraits", 5200);      // (the button is Mom's "Places, girls": control comes back at once)
   },
 };

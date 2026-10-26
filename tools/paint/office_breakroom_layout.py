@@ -328,6 +328,8 @@ def write(stA, stB, covers, frames, wob=None):
                    "vending": [int(round(c)) for c in v.pt((M.VEND_GLASS[0] + M.VEND_GLASS[1]) / 2, 120, M.VENDING[5])],
                    "door-window": [int(round(c)) for c in v.pt(M.DOOR[1] - 22, 152, 0)]},
     }
+    import stage19_boxes                                      # STAGE-19O: the small clickable things grown to be hit (S9)
+    stage19_boxes.grow(L["things"], "office-breakroom")
     json.dump(L, open(f"{OUT}/layout.json", "w"), indent=1)
     return L
 

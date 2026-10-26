@@ -1718,7 +1718,8 @@ def layout(info):
             {"id": "cat", "what": "a ginger cat asleep on the chest nearest the brazier (set dressing; a hotspot only if the story wants one)",
              "shape": {"rect": rect([P(CAT[0] - 24, CAT[1], CAT[2]), P(CAT[0] + 26, CAT[1] + 20, CAT[2])], 3)}, "stand": fl(-262, 150), "face": "W"},
         ],
-        "exits": [{"to": "rome-steps", "shape": {"poly": [[290, 586], [510, 586], [510, 600], [290, 600]]}, "stand": [400, 594]}],
+        # STAGE-19R (scene audit S9): the way out is 40 pixels tall, from y 560 (it was 14, along the bottom edge only)
+        "exits": [{"to": "rome-steps", "shape": {"poly": [[290, 560], [510, 560], [510, 600], [290, 600]]}, "stand": [400, 594]}],
         "marks": {"son": fl(0, 29.2), "clerk": fl((STOOL[0] + STOOL[1]) / 2, STOOL[2] + 6)},
         "lights": {"sun": sun, "brazier": [int(round(v)) for v in P(BRAZIER1[0], BRAZIER1[1], BRAZIER1[2])],
                    "brazier2": [int(round(v)) for v in P(BRAZIER2[0], BRAZIER2[1], BRAZIER2[2])],

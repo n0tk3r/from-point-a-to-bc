@@ -654,7 +654,8 @@ def layout(steam_foot):
         "palms_split": {"note": "palms.png cut into its three palms, pixel for pixel (any order): use these three in place of 'palms' so that somebody standing between two palms is sorted rightly with each",
                         "planes": [{"id": f"palm-{i + 1}", "file": f"palm-{i + 1}.png", "base": int(p[1])} for i, p in enumerate(PALMS)]},
         "things": things, "exits": exits,
-        "marks": {"dad": [420, 570], "lot": list(LOT), "talkToLot": list(LOT_TALK), "muzzle": [round(v, 1) for v in egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)],
+        # STAGE-19E: Dad's mark where he climbs out 80 px left (it was (420, 570), his head over Lot's lap at the act's opening)
+        "marks": {"dad": [340, 570], "lot": list(LOT), "talkToLot": list(LOT_TALK), "muzzle": [round(v, 1) for v in egypt1_donkey.muzzle(DONKEY, DONKEY_SCALE, egypt1_donkey.DRINK)],
                   "fromCar": stand(642)},                                                          # CAR-13P: out of the wagon, at his door
 
         "lot": lot,

@@ -185,6 +185,8 @@ def write(stA, stB, covers):
         "exits_note": "none for the leads: Grandpa Joe is locked in his room and Ranger comes and goes by the grille (mark `vent`). Opal goes by the door "
                       "(`door` inside it, `hall` outside it)",
     }
+    import stage19_boxes                                      # STAGE-19O: the small clickable things grown to be hit (S9)
+    stage19_boxes.grow(L["things"], "office-property")
     json.dump(L, open(f"{OUT}/layout.json", "w"), indent=1)
     print("layout.json:", len(things), "things,", len(planes), "planes")
     return L

@@ -152,6 +152,19 @@ h1 {
    way off. The portrait's frame is the speaker's own colour, as their portrait in the team bar is. */
 .say.through { display: flex; align-items: center; gap: 1.2cqw; text-align: left; font-weight: 400; font-style: italic; max-width: 60cqw; }
 .say.through .face { flex: none; display: block; aspect-ratio: 1; image-rendering: crisp-edges; image-rendering: pixelated; background: var(--letterbox); border: 0.3cqw solid currentColor; box-shadow: 0 0 0 0.2cqw var(--ink); }
+/* ENGINE-19A: words over paint (S5). A soft backing: a dark plate in the interface's ink, half seen through, a little larger than
+   the words, its edges feathered, behind every line spoken on the stage (and its "under" and "through" kinds; not a thought's
+   bubble). On by default; Options turns it off (game.js, applyWords). Not in the opening (the cut-scene "intro"), which keeps
+   its look as the author approved it in round eighteen. And the words a quarter larger, for "Text size: Large". */
+.say { isolation: isolate; }
+.stage.backing:not([data-cut="intro"]) .say:not(.thinking)::before { content: ""; position: absolute; inset: -0.35cqw -0.9cqw -0.3cqw; z-index: -1;
+  background: var(--backing); border-radius: 1.4cqw; box-shadow: 0 0 0.9cqw 0.5cqw var(--backing); pointer-events: none; }
+.stage.large-text .say { font-size: max(3.375cqw, 15px); }
+/* ENGINE-19A: a line that waits for a click (Slow, and too long for the 7 s cap): a small mark after its words */
+.say.wait::after, #dialogue .pa.wait::after { content: "\25B8"; content: "\25B8" / ""; display: inline-block; margin-left: 0.35em; font-size: 0.8em; font-style: normal; animation: wait-mark 1.1s ease-in-out infinite alternate; }
+@keyframes wait-mark { from { opacity: 1; } to { opacity: 0.35; } }
+.stage.calm .say.wait::after { animation: none; }
+@media (prefers-reduced-motion: reduce) { .say.wait::after { animation: none; } }
 .choices.through li.voice { display: flex; align-items: center; gap: 1cqw; padding: 0.2cqw 0.8cqw 0.6cqw; color: var(--who, var(--cream)); font: 400 max(2cqw, 11px)/1.2 var(--font-display); letter-spacing: 0.08em; }
 .choices.through li.voice .face { display: block; image-rendering: pixelated; background: var(--letterbox); border: 0.3cqw solid currentColor; box-shadow: 0 0 0 0.2cqw var(--ink); }
 .choices.through button { color: var(--who, var(--cream)); font-weight: 400; font-style: italic; }
