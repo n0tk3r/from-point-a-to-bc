@@ -79,6 +79,15 @@
   --ground-1: #ecd3a4; --ground-2: #dfc08d; --ground-3: #caa773;
   --line: #4a2f20; --light: #fffbe8; --feature: #56504f; --feature-2: #8f8a86;
 }
+/* ROUND-20: Japan, spring 1830 (a stub for the act's painters and ENGINE-20 to tune): the prints' Prussian blue
+   graded to a pale paper sky, green-grey hills, sand and wood. */
+[data-era="edo"] {
+  --sky-1: #1a2846; --sky-2: #24406e; --sky-3: #2f5f93; --sky-4: #5a86b3;
+  --sky-5: #8fb0cf; --sky-6: #c4d4df; --sky-7: #e8e6d8; --sky-8: #f3ead2;
+  --far: #7f9a94; --near: #4f6e62;
+  --ground-1: #e3d2b0; --ground-2: #cdb78f; --ground-3: #ab946c;
+  --line: #1a2846; --light: #fbf5e6; --feature: #c9375e; --feature-2: #d63f2a;
+}
 [data-era="tunnel"] {
   --sky-1: #07040d; --sky-2: #0b0616; --sky-3: #100820; --sky-4: #160b2c;
   --sky-5: #1d0f3a; --sky-6: #251349; --sky-7: #2e1859; --sky-8: #381d6b;

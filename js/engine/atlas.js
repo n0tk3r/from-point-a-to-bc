@@ -87,13 +87,19 @@ export function checkMaps({ maps = {}, scenes = {}, eras = {}, sceneIds = [], ga
     for (const way of map.paths || []) {
       const name = `${it}, the way from "${way.a}" to "${way.b}"`;
       if (!map.places[way.a] || !map.places[way.b]) { problems.push(`${name}: both its places must be places of this map.`); continue; }
+      if (way.journey) continue;                                                   // ENGINE-20: a way only a journey goes along (never travelled): no marks to arrive on
       for (const end of [way.a, way.b]) {
+        if (!((map.places[end].scenes || []).length)) continue;                   // ENGINE-20: a way's end at a landmark with no scene: nowhere to arrive
         let mark = way.spawn && way.spawn[end];
         if (typeof mark === "function") { try { mark = mark(game); } catch (err) { problems.push(`${name}: its mark for "${end}" is a function that stopped (${err.message}).`); continue; } }
         const sid = map.places[end].scenes[0], scene = scenes[sid];
         if (!mark) problems.push(`${name} has no mark to arrive on at "${end}" (spawn: { ${end}: "<a mark of ${sid}>" }).`);
         else if (scene && !((scene.spawn || {})[mark])) problems.push(`${name} arrives at "${end}" on the mark "${mark}", which the scene "${sid}" has no spawn for.`);
       }
+    }
+    for (const [pid, place] of Object.entries(map.places)) {                      // ENGINE-20: the legs
+      if (place && place.leg != null && typeof place.leg !== "number" && typeof place.leg !== "function") problems.push(`${it}, place "${pid}": its leg must be a number (or a function of the game giving one).`);
+      if (place && place.far != null && typeof place.far !== "string" && typeof place.far !== "function") problems.push(`${it}, place "${pid}": its far must be a line id (or a function of the game giving one).`);
     }
   }
   for (const sid of sceneIds) if (!home[sid]) problems.push(`The scene "${sid}" is on no map, so it has no Map button: give it a place in js/content/maps.js.`);
@@ -224,6 +230,8 @@ export class Atlas {
       they are part of the place, not one of the family left there. */
   facesOn(mapId) {
     const g = this.g, d = g.store.data, team = d.team.includes(d.active) ? d.team : [d.active, ...d.team], out = [];
+    const j = this._journey;                                                     // ENGINE-20: a journey under way: the travellers at the place it starts from
+    if (j && j.map === mapId) return j.ids.map((id) => ({ id, scene: null, place: j.from, team: true, active: id === d.active }));
     for (const id of [...team, ...g.leads.filter((who) => !team.includes(who))]) {
       const at = d.where[id], m = at && at.scene ? this.mapOf(at.scene) : null;
       if (!m || m.id !== mapId) continue;
@@ -238,10 +246,12 @@ export class Atlas {
       script can put one somewhere first, as the proof does); a place not visited that a way joins to a visited one is faint. */
   stateOf(mapId) {
     const map = this.maps[mapId], seen = new Set(this.g.store.data.visited || []);
-    for (const f of this.facesOn(mapId)) if (f.team) seen.add(f.scene);
+    for (const f of this.facesOn(mapId)) if (f.team && f.scene) seen.add(f.scene);
     // (ENGINE-17: `entered`, the places really been to; `visited`, what is drawn in: those and the landmarks, `shown`, which
     // neither make a map known nor make the places beside them faint)
     const entered = new Set(Object.keys(map.places).filter((pid) => (map.places[pid].scenes || []).some((s) => seen.has(s))));
+    const j = this._journey;                                                     // ENGINE-20: a journey draws in where it starts and where it goes (and the places passed)
+    if (j && j.map === mapId) for (const pid of j.places) if (map.places[pid]) entered.add(pid);
     const visited = new Set([...entered, ...Object.keys(map.places).filter((pid) => shownPlace(map.places[pid], this.g))]);
     const faint = new Set();
     for (const p of map.paths || []) {
@@ -288,17 +298,47 @@ export class Atlas {
     if (!entry) { this.once(`The landmark "${pid}" names the line "${line}", which is not in the lines files: it says nothing.`); return null; }
     return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${line}"`) } : { text: entry[1], pictures: null };
   }
-  /** The fewest ways from one place of a map to another through visited places only: { places, ways }, or null. */
+  /**
+   * ENGINE-20: the legs of a journey. A place of a map can have a `leg` (a number, or a function of the game giving one: in
+   * js/content/maps.js): the family may travel by the map only between places of the leg they are in, which is the leg of the
+   * place whose scenes hold the lead's scene. A place of another leg shows as visited (drawn in, its name), but refuses, with a
+   * line of its own (`far` on the place: a line id, or a function of the game giving one; "Twelve days by sea."), on the label
+   * line as the map's refusals are. Places with no `leg` behave as before (they are of every leg). A way between two legs is
+   * drawn as any way is, once both its places are visited, but no route goes along it.
+   */
+  legOf(mapId, pid) {
+    const place = this.maps[mapId] && this.maps[mapId].places[pid], leg = place ? (typeof place.leg === "function" ? place.leg(this.g) : place.leg) : null;
+    return typeof leg === "number" && Number.isFinite(leg) ? leg : null;
+  }
+  /** Is a place of a map in the lead's own leg (or of no leg, or the lead's own place of no leg)? On another map: yes. */
+  sameLeg(mapId, pid) {
+    const own = this.own();
+    if (!own || own.id !== mapId) return true;
+    const mine = this.legOf(mapId, own.place), theirs = this.legOf(mapId, pid);
+    return mine == null || theirs == null || mine === theirs;
+  }
+  /** ENGINE-20: why a place of another leg is refused: its `far` line as the label line shows it ({ text } or { pictures }), or
+      the engine's own words; null for a place of the lead's own leg. */
+  farSays(mapId, pid) {
+    if (this.sameLeg(mapId, pid)) return null;
+    const place = this.maps[mapId].places[pid], line = typeof place.far === "function" ? place.far(this.g) : place.far, entry = typeof line === "string" ? this.g.lines[line] : null;
+    if (typeof line === "string" && !entry) this.once(`The place "${pid}" of the map "${mapId}" names the line "${line}" for its far, which is not in the lines files: "Too far to go back." is said instead.`);
+    if (!entry) return { text: "Too far to go back.", pictures: null };
+    return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${line}"`) } : { text: entry[1], pictures: null };
+  }
+  /** The fewest ways from one place of a map to another through visited places only: { places, ways }, or null. (ENGINE-20:
+      through places of the lead's own leg only, and never along a way that is only a journey's.) */
   route(mapId, from, to) {
     const map = this.maps[mapId], { entered: visited } = this.stateOf(mapId);      // (ENGINE-17: through places really been to, never a landmark only drawn)
-    if (!visited.has(from) || !visited.has(to)) return null;
+    if (!visited.has(from) || !visited.has(to) || !this.sameLeg(mapId, to)) return null;
     const back = { [from]: null }, queue = [from];
     while (queue.length) {
       const here = queue.shift();
       if (here === to) break;
       for (const way of map.paths || []) {
+        if (way.journey) continue;
         const next = way.a === here ? way.b : way.b === here ? way.a : null;
-        if (next && visited.has(next) && !(next in back)) { back[next] = { from: here, way }; queue.push(next); }
+        if (next && visited.has(next) && !(next in back) && this.sameLeg(mapId, next)) { back[next] = { from: here, way }; queue.push(next); }
       }
     }
     if (!(to in back)) return null;
@@ -314,6 +354,7 @@ export class Atlas {
     if (pid === own.place) return "the lead is there already";
     if (!(own.map.places[pid].scenes || []).length) return `"${pid}" has no scene to go to`;                     // ENGINE-17: a landmark
     if (!this.stateOf(own.id).entered.has(pid)) return `the player has not been to "${pid}" yet`;                 // (ENGINE-17: entered)
+    if (!this.sameLeg(own.id, pid)) return `"${pid}" is in another leg of the journey (its far)`;                 // ENGINE-20: the legs
     if (!this.may()) return `the scene "${this.g.here.id}" (or its place) does not let the lead leave by the map now (its travel)`;
     if (!this.route(own.id, own.place, pid)) return `there is no way to "${pid}" through the places visited`;
     return null;
@@ -644,7 +685,7 @@ export class Atlas {
     const era = this.era(mapId), list = this.known();
     if (!list.includes(mapId)) list.push(mapId);
     this.whenEl.querySelector("b").textContent = era.name;
-    this.whenEl.querySelector("span").textContent = era.date || "";
+    this.whenEl.querySelector("span").textContent = this.g.dateOf(era);      // (MERGE-20: dateOf: Act Six's year shows once #21 is solved)
     this.el.setAttribute("aria-label", `Map: ${era.name}`);
     const had = this.chipsEl.contains(document.activeElement);          // (the keyboard on a chip stays on the chips: on the one now pressed)
     this.chipsEl.innerHTML = list.map((id) => `<button class="tool" type="button" data-act="chip" data-map="${esc(id)}" aria-pressed="${id === mapId}" aria-label="${esc(this.chipText(id))}">${esc(this.maps[id].name)}</button>`).join("");
@@ -655,7 +696,7 @@ export class Atlas {
 
   // ---------- the label line ----------
   /** A chip's words: "Rome, 44 B.C." */
-  chipText(id) { const era = this.era(id); return era.name + (era.date ? ", " + era.date.replace(/^The\b/, "the") : ""); }
+  chipText(id) { const era = this.era(id), date = this.g.dateOf(era); return era.name + (date ? ", " + date.replace(/^The\b/, "the") : ""); }      // (MERGE-20: dateOf)
   faceText(f) {
     const name = this.g.cast[f.id].name;
     if (!f.team) return `${name} is here. Not playable just now.`;
@@ -669,6 +710,7 @@ export class Atlas {
     if (!own || own.id !== mapId) return place.label;
     if (pid === own.place) return `${place.label}: you are here`;
     { const lm = this.landmarkSays(mapId, pid); if (lm) return lm.pictures ? `${place.label}. (${lm.pictures.join(", ")})` : lm.text.startsWith(place.label) ? lm.text : `${place.label}. ${lm.text}`; }      // (SCENES-17: a landmark's own words)
+    { const far = this.farSays(mapId, pid); if (far) return `${place.label}. ${far.pictures ? `(${far.pictures.join(", ")})` : far.text}`; }      // (ENGINE-20: a place of another leg: its own words)
     if (!this.may()) { const r = this.refused(); return `${place.label}. ${r.pictures ? `(${r.pictures.join(", ")})` : r.text}`; }      // (ENGINE-17: the scene's or the place's own words, if it names a line)
     if (!this.route(mapId, own.place, pid)) return place.label;
     return "Go " + (place.go || "to " + afterTo(place.label));
@@ -680,6 +722,8 @@ export class Atlas {
     if (own && own.id === mapId && pid !== own.place && this.stateOf(mapId).visited.has(pid)) {      // (SCENES-17: a landmark's own thought first)
       const lm = this.landmarkSays(mapId, pid);
       if (lm && lm.pictures) return { text: `${place.label}. `, pictures: lm.pictures };
+      const far = !lm && this.farSays(mapId, pid);                                 // (ENGINE-20: a far place's, if it is a thought)
+      if (far && far.pictures) return { text: `${place.label}. `, pictures: far.pictures };
     }
     if (own && own.id === mapId && pid !== own.place && this.stateOf(mapId).visited.has(pid) && !this.may()) {
       const r = this.refused();
@@ -732,7 +776,7 @@ export class Atlas {
 
   // ---------- doing things ----------
   onClick(event) {
-    if (!this.open || this.moving || this.busy) return;
+    if (!this.open || this.moving || this.busy || this.mode === "journey") return;      // (ENGINE-20: a journey takes no clicks but to hurry it)
     const it = this.whatIs(event.target);
     if (!it) return;
     if (event.detail && it.kind !== "close" && document.activeElement && document.activeElement.blur) document.activeElement.blur();     // (a mouse click leaves no focus ring behind)
@@ -748,6 +792,7 @@ export class Atlas {
     const own = this.own();
     if (!own || this.shown !== own.id || pid === own.place || !this.stateOf(own.id).visited.has(pid)) return;
     { const lm = this.landmarkSays(own.id, pid); if (lm) { this.say(lm.pictures ? lm : lm.text); return; } }      // (SCENES-17: a landmark says its own words, whoever clicks it)
+    { const far = this.farSays(own.id, pid); if (far) { this.say(far.pictures ? { text: `${own.map.places[pid].label}. `, pictures: far.pictures } : `${own.map.places[pid].label}. ${far.text}`); return; } }      // (ENGINE-20: a place of another leg refuses with its own line)
     if (!this.may()) { const r = this.refused(); this.say(r.pictures ? r : r.text); return; }      // (ENGINE-17: the scene's or the place's own words, if it names a line)
     if (!this.cannot(pid)) this.travel(pid);
   }
@@ -810,10 +855,6 @@ export class Atlas {
     const party = new Set([d.active, ...(((typeof scene.party === "function" ? scene.party(g) : scene.party) || [])
       .filter((id) => d.team.includes(id) && d.where[id] && d.where[id].scene === scene.id))]);
     const movers = ((this.rows || {})[route.places[0]] || []).filter((r) => party.has(r.id));
-    this.walked = [];
-    if (!movers.length) return;
-    const mid = movers.reduce((a, r) => a + r.cx, 0) / movers.length, y0 = movers[0].cy;
-    const els = movers.map((r) => ({ r, el: this.el.querySelector(`.atlas-face[data-lead="${r.id}"]`) })).filter((m) => m.el);
     // the line walked: each way's via, turned round where it is walked from b to a; and where it passes a place
     const line = [], passing = [];
     route.ways.forEach((way, n) => {
@@ -821,6 +862,17 @@ export class Atlas {
       for (const p of line.length ? pts.slice(1) : pts) line.push(p);
       if (n < route.ways.length - 1) passing.push(line.length - 1);
     });
+    await this.walkLine(movers, line, passing, { speed: SPEED, longest: LONGEST });
+  }
+  /** ENGINE-20: the portraits (`movers`: rows of faces(), the ones who go) along a line of points of the map, a soft click at
+      each index in `passing`, at `speed` pixels a second and never longer than `longest` (or exactly `ms`); the last point at
+      once with less motion. A click or a key hurries it. (The walk of travel, taken out of walk() so that a journey can use it.) */
+  async walkLine(movers, line, passing, { speed = SPEED, longest = LONGEST, ms = null } = {}) {
+    const g = this.g;
+    this.walked = [];
+    if (!movers.length || line.length < 2) return;
+    const mid = movers.reduce((a, r) => a + r.cx, 0) / movers.length, y0 = movers[0].cy;
+    const els = movers.map((r) => ({ r, el: this.el.querySelector(`.atlas-face[data-lead="${r.id}"]`) })).filter((m) => m.el);
     const lens = [0];
     for (let i = 1; i < line.length; i++) lens.push(lens[i - 1] + Math.hypot(line[i][0] - line[i - 1][0], line[i][1] - line[i - 1][1]));
     const total = lens[lens.length - 1];
@@ -835,17 +887,72 @@ export class Atlas {
       for (const { r, el } of els) { el.style.left = px(x + (r.cx - mid) - r.size / 2); el.style.top = px(y + (r.cy - y0) - r.size / 2); }
     };
     for (const { el } of els) el.classList.add("walking");
-    if (g.calm || total <= 0) { put(line[line.length - 1]); return; }
+    if (g.calm || total <= 0 || g.clock.skipping) { put(line[line.length - 1]); return; }
     this.moving = true; this.rush = false;
-    const ms = Math.min(LONGEST, (total / SPEED) * 1000), marks = passing.map((i) => lens[i]);
+    const took = ms != null ? ms : Math.min(longest, (total / speed) * 1000), marks = passing.map((i) => lens[i]);
     let next = 0;
-    await this.tween(ms, (k) => {
+    await this.tween(took, (k) => {
       const s = total * k;
       put(at(s));
       for (; next < marks.length && s >= marks[next]; next++) if (!this.rush) g.sfx("notch");
     }, linear);
     put(line[line.length - 1]);
     this.moving = this.rush = false;
+  }
+
+  /**
+   * ENGINE-20: a journey shown on the map, for a cut-scene (the voyage down the coast; the walk to Himeji):
+   *     await g.journey("edo", "yui", "hills", { via: ["osaka"], sound: "creak" })
+   * The map comes up (a rustle), with the place the journey starts from, the places it passes and the place it goes to drawn
+   * in and named (whether or not the player has been there yet: the journey is how they get there), and the team's portraits
+   * at the first place (the one being played and the rest of the team: `who` names others); they go along the path, a soft
+   * click at each place passed (`via`: the ids of the places between, in order); the map fades out to the dark; it is put
+   * away; and the cut-scene goes on (its goto finds the stage dark: `via: "map"` or "cut"). The path is each hop's way on the
+   * map (`via` in the painters' layout, turned round where it is gone along from its far end; a straight line between the pins
+   * where the map has no way), or `path`, a list of points of the map given outright. `ms` is how long the whole trip takes
+   * (3200; a slow journey, slower than travel's walk); `sound` a sound played as it starts (the ship's timbers: `creak`; the
+   * road: `sandals`), none if not said. Resolves true when it has been shown; false at once, and nothing done, with no such
+   * map or place, with the map up already, or while the cut-scene is skipped (the console says why, but for skipping). With
+   * less motion the portraits are at the far end at once. Nothing of it is saved: the scene the cut-scene goes to next is.
+   */
+  async journey(mapId, from, to, { via = [], path = null, ms = 3200, sound = null, who = null } = {}) {
+    const g = this.g, d = g.store.data, map = this.maps[mapId];
+    const why = !map ? `no map called "${mapId}"` : ![from, to, ...via].every((pid) => map.places[pid]) ? `"${[from, to, ...via].find((pid) => !map.places[pid])}" is not a place of the map "${mapId}"`
+      : this.open ? "the map is up already" : !this.el ? "there is no map layer" : null;
+    if (why) { console.warn(`g.journey("${mapId}", "${from}", "${to}"): ${why}, so nothing happens.`); return false; }
+    if (g.clock.skipping) return false;
+    const ids = [d.active, ...(Array.isArray(who) ? who : d.team)].filter((id, i, all) => g.leads.includes(id) && all.indexOf(id) === i);
+    const places = [from, ...via, to];
+    this._journey = { map: mapId, from, to, places, ids };
+    try {
+      this.enter();
+      this.mode = "journey";
+      g.sfx("rustle");
+      const L = await this.layout(mapId);
+      await this.draw(mapId);
+      this.band(mapId);
+      await this.tween(220, (k) => { this.el.style.opacity = k; });
+      this.busy = false;
+      // the line: the given points, or each hop's way (its via, turned round as needed), else straight between the pins
+      let line = [], passing = [];
+      if (Array.isArray(path) && path.length >= 2) line = path.filter((p) => Array.isArray(p) && p.length === 2);
+      else for (let n = 0; n < places.length - 1; n++) {
+        const a = places[n], b = places[n + 1], way = L.paths.find((p) => (p.a === a && p.b === b) || (p.a === b && p.b === a));
+        const pts = way ? (way.a === a ? way.via : [...way.via].reverse()) : [L.places[a].pin, L.places[b].pin];
+        for (const p of line.length ? pts.slice(1) : pts) line.push(p);
+        if (n < places.length - 2) passing.push(line.length - 1);
+      }
+      if (sound) g.sfx(sound);
+      const movers = ((this.rows || {})[from] || []).filter((r) => ids.includes(r.id));
+      await this.walkLine(movers, line, passing, { ms });
+      await this.wait(260);
+      g.sfx("rustle");
+      await this.blackout();
+    } finally {
+      this._journey = null;
+      this.exit();
+    }
+    return true;
   }
 
   /** The map fades out to the dark: to the stage's own fade, which the scene that comes next fades in from. */
@@ -863,7 +970,7 @@ export class Atlas {
   key(event) {
     const key = event.key, g = this.g;
     if (this.moving) { if (!event.repeat) this.rush = true; if (key !== "Tab") event.preventDefault(); return; }
-    if (this.busy) { event.preventDefault(); return; }
+    if (this.busy || this.mode === "journey") { event.preventDefault(); return; }      // (ENGINE-20: a journey is put away by itself)
     if (key === "Escape" || key.toLowerCase() === "m") { event.preventDefault(); this.close(); }
     else if (key === "ArrowRight" || key === "ArrowLeft") { event.preventDefault(); const n = this.next(key === "ArrowRight" ? 1 : -1); if (n) this.turnTo(n); }
     else if (key >= "1" && key <= "9") { const to = g.ui.team()[Number(key) - 1]; if (to) this.pick(to); }

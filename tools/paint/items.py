@@ -1678,6 +1678,100 @@ def peanuts(b, l):
     l.line(T(body[:2]), yel[0], 0.8, 0.8)
 
 
+# ---------------------------------------------------------------- PAINT-20B: Act Six's things (Japan, 1830)
+def sushibox(b, l):
+    """The rest of Kihei's pressed mackerel sushi, wrapped in a bamboo leaf and tied with straw cord for the road: a
+    flat oblong parcel seen a little from above, the leaf's ribs, one end open where a slice shows (rice, mackerel)."""
+    leaf = ("#b9cf86", "#8faa5e", "#6a8a44", "#476331")
+    cord = ("#e2c98a", "#a78949")
+    body = rrect(31, 34, 23, 11, 3, -12)
+    b.poly([(x + 1.5, y + 2.0) for x, y in body], "#2c3a2c")                          # its shadow on the ground
+    b.poly(body, leaf[1])
+    b.poly(rrect(31, 30, 21, 6, 2.5, -12), leaf[0])                                   # the top face, lit
+    b.poly(rot([(10, 38), (53, 29), (54, 41), (11, 46)], -12 + 12, (32, 34)), leaf[2])  # the near side, in shade
+    for k in range(-3, 4):                                                            # the leaf's ribs
+        pts = rot([(14 + k * 0.6, 24 + k * 2.4), (50 - k * 0.6, 24 + k * 2.4)], -12, (32, 34))
+        l.line(pts, leaf[3], 0.55, 0.5)
+    for cx in (22, 40):                                                               # two turns of cord
+        band = rot([(cx - 2, 21), (cx + 2, 21), (cx + 2, 47), (cx - 2, 47)], -12, (32, 34))
+        b.poly(band, cord[0])
+        l.line(rot([(cx + 1.5, 21), (cx + 1.5, 47)], -12, (32, 34)), cord[1], 0.6, 0.8)
+    knot = rot([(31, 23), (34, 20), (36, 24), (33, 26)], -12, (32, 34))
+    b.poly(knot, cord[0])
+    l.line(rot([(33, 22), (29, 18)], -12, (32, 34)), cord[1], 1.0, 0.9)
+    l.line(rot([(34, 23), (38, 19)], -12, (32, 34)), cord[1], 1.0, 0.9)
+    end = rot([(52, 31), (55, 30), (56, 40), (53, 41)], -12, (32, 34))                # the open end: a slice shows
+    b.poly(end, "#f1ead8")
+    l.line(rot([(53, 33), (55.5, 32.5)], -12, (32, 34)), "#7f95a8", 1.6, 0.95)          # the mackerel's blue-silver on the rice
+    l.line(body[:14], "#dfe9c0", 0.8, 0.5)                                            # light along the top edge
+
+
+MIRROR_TONES = ("#d9b878", "#b89050", "#8c6a34", "#5e4520", "#3a2a12")                 # the bronze: light rim, lit face, body, shade, the cast lines
+MIRROR_PATINA = "#5f7f68"
+
+
+def mirror(b, l):
+    """The grandmother's bronze mirror seen from its BACK: a round disc with a short handle, the back cast with a pine and
+    a crane (a raised rim, a knob in the middle), the bronze warm and a little green in its hollows. PAINT-20F paints the
+    same mirror on its stand in the room: MIRROR_TONES and MIRROR_PATINA are its colours."""
+    t = MIRROR_TONES
+    cx, cy, r = 32.0, 27.0, 19.0
+    b.poly([(x + 1.5, y + 2.0) for x, y in oval(cx, cy, r, r)], "#2a2418")             # shadow
+    b.poly(rot([(28, 44), (36, 44), (37, 60), (27, 60)], 8, (32, 52)), t[3])          # the handle
+    b.poly(rot([(30, 44), (34, 44), (34.5, 59), (29.5, 59)], 8, (32, 52)), t[2])
+    b.poly(oval(cx, cy, r, r), t[2])                                                  # the disc
+    b.poly(oval(cx, cy, r - 2.2, r - 2.2), t[1])
+    b.poly(oval(cx, cy, r - 3.4, r - 3.4), t[2], 0.5)
+    l.line(oval(cx, cy, r - 1.2, r - 1.2) + oval(cx, cy, r - 1.2, r - 1.2)[:1], t[0], 0.9, 0.7)     # the raised rim catches light
+    l.line(oval(cx, cy, r - 3.2, r - 3.2) + oval(cx, cy, r - 3.2, r - 3.2)[:1], t[4], 0.6, 0.6)
+    l.ellipse(cx, cy, 2.6, 2.6, t[3])                                                 # the knob in the middle (the cord went through it)
+    l.ellipse(cx - 0.6, cy - 0.6, 1.0, 1.0, t[0], 0.8)
+    # the pine, left of the knob, and the crane, right of it: cast in relief, so each line is a pale ridge (lit from the
+    # upper left) with its dark shadow just below and to the right
+    def ridge(pts, w=1.1):
+        l.line([(x + 0.7, y + 0.8) for x, y in pts], t[4], w, 0.9)
+        l.line(pts, "#efd9a0", w * 0.8, 0.95)
+    ridge(curve([(20.0, 39.0), (21.5, 33.0), (19.0, 27.0), (22.0, 21.0)], 5), 1.3)       # the trunk
+    for (px, py, w) in ((19.0, 20.0, 8.0), (25.0, 25.5, 7.0), (16.0, 30.0, 6.0)):      # three flat crowns of needles
+        ridge([(px - w / 2, py + 1.0), (px + w / 2, py + 1.0)], 1.5)
+        for k in range(-2, 3):
+            ridge([(px + k * w / 5, py + 1.0), (px + k * w / 5 - 0.6, py - 2.2)], 0.6)
+    ridge(curve([(37.0, 30.0), (40.0, 24.0), (44.5, 19.0), (48.0, 20.5)], 5), 1.1)       # the crane's neck
+    ridge([(48.0, 20.5), (51.0, 21.8)], 0.9)                                           # the bill
+    body = oval(38.5, 32.5, 5.0, 3.0, -20)
+    b.poly(body, t[3])
+    ridge(body + body[:1], 0.7)
+    ridge(curve([(36.0, 31.0), (34.0, 25.0), (30.0, 22.0)], 4), 1.1)                   # the wing, raised
+    ridge([(38.0, 35.0), (37.0, 41.5)], 0.7)                                           # the legs
+    ridge([(40.0, 35.0), (40.5, 42.0)], 0.7)
+    l.ellipse(27.0, 36.5, 2.4, 1.4, MIRROR_PATINA, 0.55)                              # green in the hollows
+    l.ellipse(43.0, 37.5, 1.8, 1.1, MIRROR_PATINA, 0.5)
+    l.ellipse(cx - 7, cy - 8, 3.2, 2.0, t[0], 0.35)                                   # a soft light on the lit side
+
+
+def trowel(b, l):
+    """Tomezō's plasterer's trowel (a kote): a flat steel blade, its face white with lime, a short neck rising to a wooden
+    handle set above it, like a small hand plane. Seen from above and a little to one side."""
+    steel = ("#dfe3e6", "#a9b1b8", "#6f7880", "#3e454c")
+    lime = "#f4f1e8"
+    wood = ("#cfa060", "#a37838", "#6e4c22")
+    blade = rot([(8, 32), (55, 29), (57, 40), (10, 44)], -6, (32, 36))
+    b.poly([(x + 1.2, y + 2.2) for x, y in blade], "#2a2c30")                         # shadow
+    b.poly(blade, steel[1])
+    b.poly(rot([(10, 33), (54, 30), (55, 36), (11, 39)], -6, (32, 36)), steel[0])    # the upper face, lit
+    b.poly(rot([(12, 33.5), (46, 31), (49, 35.5), (14, 38)], -6, (32, 36)), lime, 0.9)   # lime dried white on it
+    l.line(rot([(8, 32), (55, 29)], -6, (32, 36)), steel[0], 0.7, 0.9)                 # the back edge bright
+    l.line(rot([(10, 44), (57, 40)], -6, (32, 36)), steel[3], 0.8, 0.9)                # the front edge dark
+    b.poly(rot([(30, 31), (34, 31), (34.5, 24), (29.5, 24)], -6, (32, 36)), steel[2])  # the neck
+    b.poly(rot([(18, 20), (46, 18), (47, 25), (19, 27)], -6, (32, 36)), wood[1])      # the handle
+    b.poly(rot([(19, 20), (45, 18), (45.5, 21.5), (19.5, 23.5)], -6, (32, 36)), wood[0])
+    l.line(rot([(19, 26.5), (46.5, 24.5)], -6, (32, 36)), wood[2], 0.8, 0.9)
+    l.line(rot([(22, 21), (42, 19.5)], -6, (32, 36)), "#e8c890", 0.6, 0.6)
+    for (x, y) in ((24.0, 36.0), (38.0, 34.5), (31.0, 37.5)):                         # flecks of lime, dry
+        l.ellipse(x, y, 1.2, 0.8, "#ffffff", 0.8)
+    l.ellipse(44.0, 33.0, 1.6, 1.0, steel[1], 0.7)                                    # where the lime has worn through
+
+
 ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
              coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
 ITEMS["pass"] = pass_
@@ -1694,6 +1788,8 @@ ORDER = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", 
          "penny", "pennies", "mirrorshades", "egg", "waters", "storeshade", "sectormap", "receipt"]                    # NEVADA-12B: the store's things
 ORDER += ["gaultoga", "lamp"]                                                               # ROME-13R1: the bigger Rome's two
 ORDER += ["banjo-broken", "pietin", "banjo-pie", "schedule", "bottlecap", "peanuts"]         # OFFICE-17D: the Office's six
+ITEMS.update(sushibox=sushibox, mirror=mirror, trowel=trowel)                               # PAINT-20B: Act Six's three
+ORDER += ["sushibox", "mirror", "trowel"]                                                    # PAINT-20B
 
 
 # ---------------------------------------------------------------- painting one

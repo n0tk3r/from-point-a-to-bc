@@ -493,7 +493,7 @@ async function rag(g) {
   if (j) j.look(AT_DOOR.suit1[0], AT_DOOR.suit1[1]);
   if (!heard(g, "office.room.wendell.grandpajoe")) await g.say("office.room.wendell.grandpajoe");
   await g.talk(RAG_TREE);
-  if (is(g, "office.done")) { await g.title(); return; }                     // Going Down has played: the end of the demo
+  if (is(g, "office.done")) return;                                           // Going Down has played, and handed the game on to Act Six (ENGINE-20; until round twenty: the title, the end of the demo)
   if (room.playing || g.actor("suit1")) {                                      // (however else the talk ended: he stops, they go)
     room.playing = false;
     g.music(g.musicOf(g.scene));

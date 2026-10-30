@@ -63,6 +63,33 @@ export const cast = {
   // 25.7 from Big Sister's lilac, the nearest of the family's five; 17.4 from the man in gray's, the nearest of everyone else's).
   // Her sprite is the kind she is found as (on her stool); `opal-standing` and `opal-banjo` are the same woman on her feet.
   opal:     { name: "Opal", color: "#f0d0ec", sprite: "opal" },
+  // PEOPLE-20: Act Six, Japan in 1830 (round twenty). Each colour by round twelve's rule: at least 20 (CIE Lab) from the
+  // family's five (the nearest: Isuke 20.0 from Mom's green, Shinnosuke 20.3 from Big Sister's lilac) and at least 10 from
+  // everyone they share a scene with (the villagers and the guards, the grandmother and Tomezō, are 7 to 8 apart: different
+  // legs of the journey). The sprite is the kind they are found as; their other states (`tami-baby`, `tomezo-ladder`,
+  // `shinnosuke-floor`, `basketwoman-dropped`) are swapped in under the same id. Mom, Big Sister and Little Sister are
+  // themselves, in O-Tami's clothes (g.dress).
+  kihei:    { name: "Kihei", color: "#a4cfc4", sprite: "kihei" },
+  tami:     { name: "O-Tami", color: "#f6c58e", sprite: "tami" },
+  sankichi: { name: "Sankichi", color: "#e2f27e", sprite: "sankichi" },
+  tokuzo:   { name: "Tokuz\u014d", color: "#cfd3d8", sprite: "tokuzo" },
+  gonroku:  { name: "Gonroku", color: "#a9bedc", sprite: "gonroku" },
+  masa:     { name: "O-Masa", color: "#f0b49c", sprite: "masa" },
+  sei:      { name: "Grandmother Sei", color: "#ece6d4", sprite: "sei" },
+  jinsuke:  { name: "Jinsuke", color: "#c0b29c", sprite: "jinsuke" },
+  orin:     { name: "O-Rin", color: "#ffdcb4", sprite: "orin" },
+  isuke:    { name: "Isuke", color: "#b5d9a4", sprite: "isuke" },
+  tomezo:   { name: "Tomez\u014d", color: "#f0f4d8", sprite: "tomezo" },
+  guard1:   { name: "Gate Guard", color: "#c9c9a0", sprite: "guard1" },           // the guards count with one voice, as the haulers share theirs
+  guard2:   { name: "Gate Guard", color: "#c9c9a0", sprite: "guard2" },
+  shinnosuke: { name: "Shinnosuke", color: "#e2c4e8", sprite: "shinnosuke" },
+  netmender: { name: "Net-Mender", color: "#d9c7a6", sprite: "netmender" },
+  basketwoman: { name: "Village Woman", color: "#d9c7a6", sprite: "basketwoman" },
+  pilgrim1: { name: "Pilgrim", color: "#ead29a", sprite: "pilgrim1" },
+  pilgrim2: { name: "Pilgrim", color: "#ead29a", sprite: "pilgrim2" },
+  pilgrim3: { name: "Pilgrim", color: "#ead29a", sprite: "pilgrim3" },
+  plasterer1: { name: "Plasterer", color: "#ccd9c4", sprite: "plasterer1" },
+  plasterer2: { name: "Plasterer", color: "#ccd9c4", sprite: "plasterer2" },
   // NEVADA-12E: the engine's own painted creature, for the proof scene only (js/content/scenes/engine-proof.js)
   critter:  { name: "Critter", color: "#d6ef8a", sprite: "critter", lead: true, keeps: "stash" },
   narrator: { name: "Narrator", color: "#f6e3b8" },
@@ -81,6 +108,9 @@ export const eras = {
   rome:    { name: "Rome", date: "44 B.C.", music: "rome", dial: 4 },                      // (MAP-15: dial)
   home:    { name: "Home", date: "The present", music: "home", dial: 0 },                   // (MAP-15: dial)
   nevada:  { name: "The Middle of Nevada", date: "The next morning", music: "nevada", dial: 0 },     // (MAP-15: dial)
+  // ROUND-20: Act Six, Japan in the spring of 1830 (Bunsei 13, the year of the metal tiger): Mom and the girls. Its notch
+  // on the Timer is 1, not the rule's 0 (8 x 196 / 3,945 = 0.4): a past time is never on today's notch, so the dial turns.
+  edo:     { name: "Japan", date: "spring 1830", dateAfter: "edo.when", music: "edo", dial: 1 },      // MERGE-20: `dateAfter`: the year is #21's answer, so the game shows it (cards, the map, save slots) only once that fact is true
   tunnel:  { name: "Between whens", date: "", music: "tunnel" },
 };
 
@@ -143,6 +173,12 @@ export const items = {
   schedule: { name: "test schedule", icon: "schedule.png", look: { grandpajoe: "item.schedule.grandpajoe", ranger: thought("item.schedule.ranger"), any: "item.schedule.grandpajoe" } },
   bottlecap: { name: "bottle cap", icon: "bottlecap.png", look: { ranger: thought("item.bottlecap.ranger"), any: thought("item.bottlecap.ranger") } },
   peanuts: { name: "packet of peanuts", icon: "peanuts.png", look: { ranger: thought("item.peanuts.ranger"), grandpajoe: "item.peanuts.grandpajoe", any: thought("item.peanuts.ranger") } },
+  // MERGE-20: Act Six's three things (WRITE-20A's looks, lines/edo-a.en.js; PAINT-20B's pictures): Kihei's box of pressed
+  // sushi (#23, eaten on the ship), Grandmother Sei's bronze mirror (#27, to the warden for Tomezo in #30), Tomezo's trowel
+  // (#27, back to him in #28).
+  sushibox: { name: "box of sushi", icon: "sushibox.png", look: { mom: "item.sushibox.mom", bigsis: "item.sushibox.bigsis", lilsis: "item.sushibox.lilsis", any: "item.sushibox.mom" } },
+  mirror: { name: "bronze mirror", icon: "mirror.png", look: { mom: "item.mirror.mom", bigsis: "item.mirror.bigsis", lilsis: "item.mirror.lilsis", any: "item.mirror.mom" } },
+  trowel: { name: "plasterer's trowel", icon: "trowel.png", look: { mom: "item.trowel.mom", bigsis: "item.trowel.bigsis", lilsis: "item.trowel.lilsis", any: "item.trowel.mom" } },
 };
 
 /** SCENES-17: is the lead in the Office (a scene of its building, or looking down into one)? */

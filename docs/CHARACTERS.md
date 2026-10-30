@@ -1357,6 +1357,279 @@ goodbye first.
 > "Tell her I'll come over the bridge at the ninth hour. Before the barge goes."
 > "And tell her I'll light it in Corinth. The first night. In the first window."
 
+## Japan, spring 1830 (Act Six)
+
+<!-- WRITE-20A: new in round twenty. The people of Yui; their lines are in js/content/lines/edo-a.en.js (edo.village.*,
+edo.shop.*, edo.tami.*, edo.kihei.*, edo.sankichi.*, edo.tokuzo.*, edo.gonroku.*, edo.masa.*), their talks are the trees of
+js/content/talk/edo-a.js; the design is briefs/out/edo-design.md (sections 6 and 7). WRITE-20B writes the sub-heading "The
+hills and Himeji" (Grandmother Sei, Jinsuke, O-Rin, Isuke, Tomezō, the guards, Shinnosuke). -->
+
+The author asked for Japan in the golden Edo years, and chose spring 1830 (Bunsei 13, the year of the metal tiger). Mom
+and the girls come through the coin door onto a beach under Fuji, expecting the Son. The act's people are our own: names
+of the time for commoners (given names only, women's with "O-"); none is a real person of 1830. One rule holds for the
+family all act: **nobody lies**, and the comedy is in exactly true answers. Big Sister cannot read a thing here and has
+about forty words of Japanese, all of them food; Little Sister learns one, "arigatō", from Sankichi, and uses it on
+everyone. The Japanese people speak as everybody in the game speaks, use their own words for their own things (a few,
+glossed once), and nobody remarks on the language. No one says "itadakimasu": a family bows to the god-shelf and says
+nothing, and a guest thanks the host.
+
+### Yui
+
+**Kihei, the fishmonger.** Sixty this tiger year, born in one, so his wife has him in a red sleeveless vest and a red hood
+all year, as a sixtieth year is kept; big hands, a gruff kindness, and as few words as a man can get by on. His shop is
+open to the street, with the bay and Fuji in the opening; he presses mackerel sushi in a wooden box (the kind 1830 had
+everywhere but Edo) and feeds anyone who sits on the step of his raised room, before money is mentioned and whether or
+not it ever is. **Wants:** that nobody leaves his door hungry; for his sixtieth year to pass without fuss. **Gets wrong:**
+nothing; he has decided about the three of them before they have said a word, and the right way. **How he talks:** in
+single words and short orders, "Sit." most of all; "Ask my wife." for anything about the red; a true thing plainly when
+he says a whole sentence ("Eat first. Money is for after. There is no after for money today."); and "Okage-sama de" when
+he is thanked, which gives the act its name. **In play:** #21's third clue (the print of Fuji in the new blue, bought
+from a pedlar: "Everybody in Edo wants the mountain this year."), #23 (the price that is not a price: the meal, the
+grace, the bow, the cat), #24's roads (the Tōkaidō west, and his sister's husband's ship: "Ask the right one."). He turns
+Little Sister's penny over ("No hole. How do you carry it?") and gives it back. **How he looks and moves:** PEOPLE-20
+draws him: short, broad, a twisted towel under the red hood, a short apron, bare forearms; at his board, his knife down,
+his weight on the press; his face does one thing nobody has seen it do, when a child says the word.
+
+> "...Sit."
+> "No hole. How do you carry it?"
+> "Eat first. Money is for after. There is no after for money today."
+> "Okage-sama de."
+> "In MY fish."
+
+**O-Tami, his wife.** Runs the house, the shop and him; teeth blackened, as married women's were; a quick laugh and a
+quicker tongue; a baby who has not slept in three days. She has the three strangers behind her curtain in one movement
+the first time the clerk turns into the street, and talks to him about the weather with her back to them. **Wants:** for
+the baby to sleep; three proper kimonos on three improper strangers; to be asked something, for once, instead of told.
+**Gets wrong:** that nobody can get her baby to sleep. Mom hums four bars. **How she talks:** a lot, fast, in lists and
+orders ("In. In, in, in."), with the baby in every sentence; verdicts on clothes; the facts of her house (he is sixty, a
+tiger year, the metal one, the same as the year he was born; sandals fifteen mon a pair and good for a day or two of
+road). She calls Mom "dear" once, with her hand on her sleeve: "Not like that, dear. Not in that." **In play:** #22 is
+hers to half-solve: the clerk's first pass, the baby (Mom's lever: she looks at Mom as at a sorceress: "...What did you
+DO."), the chest (Mom in emerald, Big Sister in indigo to the knee, Little Sister in pink, and the boots stay: "Nobody who
+sees them will believe them anyway."); #21's first clue (why her husband wears red). She wraps the rest of the sushi for
+the road. **How she looks and moves:** PEOPLE-20 draws her, with the baby on her back (`tami-baby`) until it sleeps;
+sleeves tied back, a towel on her hair.
+
+> "In. In, in, in. Behind the curtain, all of you, and not a word."
+> "Fish, clerk. Fish and wind. Same as every morning since my grandmother's."
+> "...What did you DO."
+> "Travellers hitch them up anyway. You're ahead of everybody."
+> "Husband. Your face."
+
+**Sankichi, their grandson.** Nine; goes to the temple school and can read; reads the notice boards aloud to anyone who
+stands still, the Kirishitan board included, because nobody asked him not to. He asks questions in exactly Little
+Sister's rhythm (numbered, in threes), which delights her, and answers hers properly, which delights him: nobody answers
+his. **Wants:** to see the foreigners' boots up close ("One touch. The LEFT one."). **Gets wrong:** nothing he can read.
+**How he talks:** like a child who can read and knows it; "Teacher says"; the true answer that is no help ("The
+thirteenth year of Bunsei. Everybody knows that."). **In play:** the board, read once and answered once (Mom: "Then we
+pray quietly here." Little Sister: "That's MEAN." "It is."): the plant the act's second leg lives under; the word
+"arigatō", which Little Sister takes and uses on everyone; "Bunsei thirteen" for the act's card; the car key, which Mom
+will not lie about ("To a cart that goes without a horse."). **How he looks and moves:** PEOPLE-20 draws him at 1.25 m,
+a boy's short kimono and a shaved pate, beside the board.
+
+> "Are those your feet? The yellow. Are they feet or are they boots?"
+> "The thirteenth year of Bunsei. Everybody knows that."
+> "Arigatō. It means thank you. Say it to Grandfather and watch his face."
+> "You've said it nine times. It still means thank you."
+
+**Tokuzō, the headman's clerk.** Making his rounds with the headman's paper (strangers on the beach at dawn, in strange
+clothes); fussy, polite, very short-sighted; he apologizes before he asks and peers while he writes. **Wants:** to write
+"nothing seen" and go home. **Gets wrong:** everything he cannot see from a foot away, which is everything. **How he
+talks:** "Forgive me." A question, and a note of the answer ("I'll write 'the east'."). He has been to Okitsu, once.
+**In play:** #22's end. Before the kimonos the talk does not happen (O-Tami's hand on Mom's sleeve). Dressed, he asks
+and the family answers with nothing but true things: "Travellers?" "We are. We're going west." "From where?" "From the
+east." "You are very tall." "I am." He writes "travellers, three, going west" and goes home, pleased. **How he looks and
+moves:** PEOPLE-20 draws him: a townsman's kimono, a brush-case, a paper held close to his nose, a squint.
+
+> "Fish and wind. ...I'll write 'nothing'. It's shorter."
+> "The east. ...Yes. Most people are. I'll write 'the east'."
+> "...So you are. Well. One can't write 'tall'. There's no box for it."
+> "Glasses. I've heard of them. They sound expensive. Squinting's free."
+
+**Gonroku, the captain.** O-Masa's husband, Kihei's sister's husband; master of the one-masted freighter at anchor in
+the bay, sailing for Osaka on the morning tide with dried bonito; weathered, and superstitious the way sailors were: the
+Funadama, the ship's own lady, has her things sealed in the mast (dice, two dolls, coins, a woman's hair) and does not
+care for other women aboard. **Wants:** a fair wind; no trouble from the Funadama. **Gets wrong:** that the wind will not
+be kind. It is, twelve days running. **How he talks:** in weather. Every refusal ends in a forecast ("Clouds building
+over the pass. No."); every argument is weather too ("You don't argue with it. You wait for it to change. ...It won't.").
+**In play:** #24: a tree whose options are mostly funny and none of which work (Big Sister: the hair in the mast means a
+woman is aboard already, technically; Little Sister: "We're not BAD luck. We're GOOD luck. The hens LIKE us."); the clue
+is his wife ("Mind how you ask."); the lever is O-Masa, and his answer after her is "...They sit in the stern, and they
+don't whistle." In Osaka he gives the act its one line about the arrests ("The magistrates have been thick in Osaka since
+the Kirishitan business.") and sends them north. **How he looks and moves:** PEOPLE-20 draws him by his boat at the
+water's edge, looking at the sky as if it owed him money.
+
+> "Wind's coming round. Rain behind it, two days off. ...You want something."
+> "Asked. No."
+> "Hens don't sail. ...Wind's freshening. No."
+> "...They sit in the stern, and they don't whistle."
+> "Twelve days of fair wind. Never had twelve in a row. ...Don't tell the Funadama."
+
+**O-Masa, his wife.** Kihei's sister, at the net racks; the one person on the beach everybody looks at before they do a
+thing, and the one person Gonroku obeys. **Wants:** to be asked properly: a question, not a favour. **Gets wrong:**
+nothing; she has a verdict on everything and has not been wrong yet. **How she talks:** in verdicts, short and final
+("He's a sailor. Reason is for land."), with a joke in the last word ("I married the wrong one for lunch."). **In play:**
+#24's lever. Her verdicts until the three are ready (not in those clothes; not unfed; not before the clerk has seen them
+go out), and the hint in her first answer to Mom ("That's a favour. Favours I give my brother. Questions I'll take from
+anybody."); then Mom's question, properly asked, and she goes down the beach, and the player hears the end: "The Funadama
+is a lady. A lady likes company with manners." **How she looks and moves:** PEOPLE-20 draws her at the racks, a net
+across her knees, a needle; she does not look up for anybody until she does.
+
+> "You've been to my husband. I saw his shoulders. ...Well?"
+> "That's a favour. Favours I give my brother. Questions I'll take from anybody."
+> "A thousand holes with string round them, and it holds fish. Think about that."
+> "...The Funadama is a lady. A lady likes company with manners."
+
+**The villagers.** A net-mender who has looked at the three of them eleven times and mended one knot ("Big morning. Big
+strangers. Big mountain. Same mountain."), and the woman with the basket, who put it down at the sight of them and came
+back for it ("Most people would say something now."). Each sends the family to Kihei, and to his wife's chest.
+
+### The hills and Himeji
+
+<!-- WRITE-20B: their lines are in js/content/lines/edo-b.en.js (edo.chapel.*, edo.store.*, edo.castle.*, edo.keep.*,
+edo.top.*, edo.step.*); their talks are the trees in js/content/talk/edo-b.js. The cast entries (colours by round twelve's
+rule) are PEOPLE-20's and MERGE-20's. -->
+
+#### Grandmother Sei
+
+**Who she is.** About sixty, small (1.40 m), straight-backed. The keeper of the prayers and the church calendar in a family
+that has kept the faith for nearly two hundred years without a priest, by heart, in the hills north of Osaka: her mother's
+mother's feasts are in her head, and on a folded paper "for after me". She fled Osaka with her son and granddaughter the
+night the magistrates took six people they called Kirishitan, and lives in a room dug under a charcoal-burner's storehouse,
+with a closet altar: a white Kannon holding a child ("To anyone who asks, she is Kannon-sama: the one who hears. To us, she
+is Maria."), the calendar, a bowl of water, and her mother's bronze mirror. The lamp that gave the family away was hers.
+
+**Wants.** That the prayers outlive her; that someone hear them who understands them. (A child says the first words of the
+same prayer out loud in her house, in another language, and she opens the doors.)
+
+**Fears.** Nothing she says. She has counted feasts, not years.
+
+**How she talks.** Short, plain, kind sentences, whole words, verdicts ("Strangers, yes. Wet, yes. The third I will see.").
+She gives orders to her son and he obeys them ("Jinsuke. The doors."). She asks for a thing once ("Say it." "Again.").
+
+**In play.** #26: the recognition ("...Ten ni mashimasu...", the only words of the hidden family's prayer the game writes),
+the altar opened, the one verse Mom gives her (John 1:5), which she says after her and keeps "in the only safe place". #27's
+end: she takes the mirror into the morning sun down the trapdoor and turns its light onto the earth wall, and there is a cross
+in the light that is nowhere on the mirror ("In the dark we keep it. In the light it speaks."), and she sends it with Mom:
+"Take it where it can be held up in the light."
+
+> "A child said it out loud in my house. The doors."
+> "You are very tall." "I am." "Good. Somebody should be."
+> "You are not taking it. I am sending it. It is different, and I am older."
+
+#### Jinsuke
+
+**Who he is.** Her son, about forty; a charcoal-burner now, and a real one, partly: the kiln, the sacks and the tools are
+his. He keeps the water: when a child is born to them he says the words over it, and he said them over O-Rin. The nearest
+thing the family has to a missionary. Careful, steady, frightened for his daughter. He has a cousin at Himeji, Tomezō, a
+plasterer, and one of them has the other's trowel.
+
+**Wants.** To keep them hidden until they can slip away east among the pilgrims, "with ladles, like everyone".
+
+**How he talks.** A careful man: whole words, short true answers that give nothing away ("What is this room?" "Charcoal."),
+and he never lies either: "A lie needs remembering. I have enough to remember." Dry when he can be ("He has my trowel, or I
+his." "Which is it?" "It depends who is asked.").
+
+**In play.** #26: his arms out in front of his daughter at the ladder's foot; the one line about Osaka. #27: he plans the
+constable's visit (truth, and not much of it), lets him in, says "Guests." and "Do not help."; refuses to open the door
+before the room is ready, with the reason. Then the trowel for his cousin ("say Jinsuke is well, and he will understand the
+rest") and the castle's two stories.
+
+> "We are charcoal-burners. This is where we keep the charcoal dry." "...It's a room with lamps and mats." "Dry charcoal likes a lamp."
+> "Do not help."
+> "I do not rest. I listen. It is the same thing, nearly."
+
+#### O-Rin
+
+**Who she is.** Eight (1.18 m), Jinsuke's daughter. She keeps watch on the path and sees a man before her father hears him;
+she has never said her prayers above a whisper, and does not know how loud she is, because she has never tried. Little
+Sister's friend within the hour ("Then you're the boss of me till my birthday. That's the RULE.").
+
+**Wants.** A friend who prays out loud.
+
+**How she talks.** In whispers, with a trail-off before most of them ("...They are just hands."), until she doesn't: her
+first laugh out loud is the room's first joke, and she covers her mouth. Three hens in Osaka, minded by a neighbour.
+
+**In play.** Part of #26's tree (the hands), her own talk with Little Sister (the whisper, the chickens, the light with no
+fire, her prayer "quietly loud"), #27's warning ("Father. A man on the path. Alone. The stick with no tassel."), and the
+sacks with Big Sister. Her last word is "...Goodbye. Out loud."
+
+> "...That is not a whisper." "It's my best one."
+> "...Nobody sees me. That is the job."
+
+#### Isuke
+
+**Who he is.** A constable's man from Osaka: an okappiki, hired and unofficial, a truncheon without a tassel in his belt, no
+power to arrest anyone without an order; wet through, hungry, sleepy, polite. Looking for three foreign women seen at the
+river mouth, and for anyone not living where their temple's register says.
+
+**Wants.** To report "nothing" and get dry.
+
+**How he talks.** Yawns between sentences ("...Pardon. Long night, and a wet one."), writes down the best answer he has had
+all week ("Most things come from the sea, eventually."), and does not write down the boots ("Too much writing."). The act's
+gentlest comic figure: nobody has ever given him anything on duty, not a radish.
+
+**In play.** #27, the tree in the storehouse: he asks, the girls answer, every answer true; Little Sister gives him her
+warm egg (carried since Nevada; or the rest of Kihei's sushi), and he goes down the path with it in both hands: "Nothing here
+but charcoal and a kind child."
+
+> "The sea?" "Most things come from the sea, eventually." "...I'm writing that down. It's the best answer I've had all week."
+> "Nothing here but charcoal and a kind child."
+> "I'll tell them nothing. It's what I'm best at."
+
+#### Tomezō
+
+**Who he is.** Jinsuke's cousin, the plaster foreman at Himeji's castle this spring: white from his hair to his sandals,
+cheerful, short-handed, three of his crew having run off to Ise that morning with ladles while the lime goes off in the tubs.
+He shouts from the top of a ladder and cannot hear anyone over himself.
+
+**Wants.** His trowel back; eight on his crew at the gate by sundown.
+
+**How he talks.** Shouts, in short sentences (never more than one exclamation mark); a foreman's rule for everything
+("You're a bucket. Everybody starts as a bucket."). When the trowel comes back he asks nothing more, and the family knows he
+knows.
+
+**In play.** #28: Little Sister's holler gets him down the ladder; the trowel and "Jinsuke is well"; three hands, white
+head-cloths, a bucket each; how the gate counts.
+
+> "You've READ about lime." "Tall one, the day a book plasters a wall, I'll retire and read it. Bucket."
+> "Are you a GHOST? You're all white." "I'm a plasterer. It's similar. Less sleep."
+
+#### The gate guards
+
+Two, two swords each, stiff, and they count everybody, in and out: the number must be the same by sundown, and it always is.
+One word each, in turn ("Name." "House." "Business."); they answer a seven-year-old's question about the swords ("One is for
+wearing." "The other is also for wearing."), know about the cross tile and count people, not tiles. With the crew: "One. Two.
+Three. Four. Five." "Six. Seven." "...Eight." Nobody lies to them, and nobody needs to.
+
+#### Shinnosuke
+
+**Who he is.** Nineteen, the keep's young warden, dared by his fellows at noon ("It was very bright at noon") to keep the
+top floor tonight, where the lady of the keep lives; no fire may go up, so he will go up into the dark alone at sunset. He
+makes up poems when frightened, five, seven and five, each more frightened than the last, and Big Sister cannot stop counting
+the syllables on her fingers.
+
+**Wants.** To come down in the morning and say he saw nothing. Then: the most wonderful thing in Harima, a light with no fire
+in it, which is pink.
+
+**How he talks.** In poems when frightened (the game's own: "Sunset. Stairs. Dark. Me. / Everyone I know is down. / I am the
+top part."), whole words, rules found in four seconds when the reason arrives ("The lime may come up. To carry the light.").
+At the top, to a tall woman in a pale kimono with a mirror, he tells the truth first, as the story says, and she tells him
+hers.
+
+**In play.** #29: the poems, the lady, the dare, no fire; Little Sister's flashlight, lent; the stairs. #30: he kneels, asks
+"Are you the lady of the keep?", lifts the bar of the west shutters, sees a light nobody lit at the top of the keep, and
+carries the grandmother's mirror down for Tomezō. The act ends on him, alone with a pink flashlight and a bronze mirror,
+sitting on the floor, with one more poem, not frightened at all: "She was not a ghost. / She was somebody's mother, / and she
+told the truth. ...The dark is just dark."
+
+> "No one goes up. Except me. Tonight. Alone. With the lady."
+> "If she asks me why, / I will say the truth: a dare. / Politely, I'll faint."
+> "...You did not have to tell me that. I had already knelt." "I know. That's why I told you."
+
+Also: the pilgrims on the road below Himeji (three, ladles in hand, going east: "My mistress thinks I am at the well. The
+well is at Ise."), and Tomezō's two plasterers, who have never once looked at the stairs.
+
 ---
 
 ## For whoever draws them
@@ -1420,6 +1693,24 @@ say about their own times is in the tables at the end of
 | "No, thank you", in French and in German: "Non, merci." "Nein, danke." | `nevada.store.eggs.bigsis` | To check (written from knowledge) |
 | The Son is in Rome, in 44 B.C. (she pins it through the coin door, from a new coin of 44 B.C., sector 44 on the notice, and what he can smell and hear) | `nevada.letterbox.big.pin.1`, `.pin.2` | Rome's own date, the same in every count (the row for `nevada.gate.2`); the game's story <!-- NEVADA-12W: end of round twelve's rows --> |
 | Bombs were being tested above ground in Nevada in 1957, so a Geiger counter there had something to click at. (Grandpa Joe says this one, not Big Sister.) | `nevada.old.after.bigsis.2` | To check |
+| Mount Fuji keeps its snow into the summer <!-- WRITE-20A: the rows to the next comment are round twenty's (Act Six, the first leg); the sources are the round's two fact-checks, S/work-20-facts/facts-edo.md ("facts-edo") and S/work-20-factsB/facts-edo-2.md ("facts-edo-2"), kept with the project's working papers --> | `edo.village.fuji.bigsis` ("It stays white into the summer.") | **Checked** (facts-edo, item 3: snow above the fifth station until the end of June; the climbing season opens 1 July). https://www.yamanashi-kankou.jp/english/english002.html |
+| Cherries bloom on Suruga Bay at the start of April | `edo.village.cherry.bigsis` ("Cherries bloom here at the start of April. So: April.") | **Checked** (facts-edo, item 3: Shizuoka's normal full bloom 2 April). https://www.data.jma.go.jp/shizuoka/shosai/info/pdf/20220330_sakuramankai.pdf |
+| Married women in Japan blackened their teeth | `edo.shop.tami.bigsis` ("Married women do that here.") | **Checked** (facts-edo-2, item 12: National Diet Library, "women blackened their teeth when they married"). https://www.ndl.go.jp/kaleido/entry/29/1.html |
+| The copper coins with square holes are Kan'ei Tsūhō, of the Edo period: "sixteen-thirties to eighteen-sixties" (minted 1636 to 1860) | `edo.shop.money.clue` (#21's second clue; she has seen one in a museum case, and quotes its label) | **Checked** (facts-edo, item 22: Kotobank, 寛永通宝, minted 1636-1860 and used into Meiji). https://kotobank.jp/word/寛永通宝-48461 |
+| The deep blue of the print is Prussian blue, which Japan's printmakers had only just got | `edo.shop.print.clue` (#21's third clue: "Their printers only just got it.") | **Checked** (facts-edo, item 27: Prussian blue in demand about 1829-31; the Met on the Fuji series, "ca. 1830-32", its blues its hallmark). https://www.metmuseum.org/articles/great-wave |
+| A metal tiger year comes round every sixty years; the last was 2010; 2010 less sixty, less sixty, less sixty is 1830 | `edo.when.solve.1`, `.2` (#21's solution), `edo.tami.red.big`, `edo.when.sum.bigsis` | **Checked** (facts-edo, item 1: 1830 was 庚寅, kanoe-tora, the metal tiger; facts-edo-2, item 5: kanreki is the return of one's birth sign after sixty years; the design, section 2: "tiger years come round every sixty years (1770, 1830 ... 2010)"). O-Tami says which tiger it is (`edo.tami.red.1`, "the metal one"), and Big Sister needs that: a tiger year alone comes every twelve. |
+| In Edo they have just started making sushi by hand, one piece at a time; elsewhere it is pressed in a box | `edo.shop.meal.6` ("Fun fact: in Edo they've just started making it by hand, one piece at a time."), `item.sushibox.bigsis` | **Checked** (facts-edo, item 21: Hanaya Yohei's nigiri, a stall and then a shop in 1824; Kyoto, Osaka and the provinces kept pressed sushi, typically vinegared mackerel). https://www.nippon.com/ja/japan-topics/g00962/ |
+| "Okage-sama de" means "thanks to you", or "by your grace": what one says when something good happened and it was not only oneself | `edo.shop.meal.14`, `.15` (the act's name) | **Checked** (facts-edo-2, item 9: okage, "help or benefit received from others, including the protection of gods and buddhas"; the Ise pilgrims' "okage" is the same word). https://kotobank.jp/word/御蔭 |
+| A bronze magic mirror is slightly convex, and the picture on its back shows in the light it throws, if it is made so | `item.mirror.bigsis` (the physics only; WRITE-20B's #27 and #30 have the rest) | **Checked** (facts-edo, item 10: the polished face slightly convex, relief-induced unevenness of about a micron shows the back's picture in reflected sunlight; the design, section 2, Scott on the convexity). https://www.christiantoday.co.jp/articles/6925/20061209/news.htm |
+| The Kirishitan board is "a hundred and nineteen years old, by the look of it": a guess, and she says so | `edo.village.board2.bigsis`, `.bigsis.2` ("...I can't read it, so that is a guess. I'm allowed one.") | Not a fact she states: a guess, marked as one. It happens to be right (facts-edo-2, item 1: the boards re-issued in 1711 hung unchanged to the late Edo period; 1830 is 119 years on), which is the joke. <!-- WRITE-20A: end of round twenty's rows --> |
+| There has been no priest in Japan since 1644: nearly two hundred years (186, in 1830); the hidden families kept the faith themselves, by heart <!-- WRITE-20B: the rows to the next comment are round twenty's, the second and third legs --> | `edo.chapel.sei.priest.2`, `.3`; and `edo.chapel.altar.open.bigsis` ("nearly two hundred years") | **Checked** (`facts-edo.md` item 10: the last priest martyred in 1644, "leaving the country without any priests", the official Nagasaki World Heritage text) |
+| On the west gable of the castle gate at Himeji is a roof tile with a cross on it, and nobody knows who put it there | `edo.castle.gable.bigsis`, `edo.castle.gable.found.1` | **Checked** (`facts-edo.md` item 16: the tile's "actual provenance remains a mystery"). She footnotes nothing else about it: the Kuroda Kanbei story is not in the game |
+| A double cherry opens a week or two after the single ones | `edo.castle.cherry.bigsis` | **Checked** (`facts-edo-2.md` item 6: yaezakura open "one to two weeks after" Somei-yoshino) |
+| The pilgrims' ladle is their badge: held out, and people fill it; they are walking to Ise | `edo.castle.pilgrims.bigsis` | **Checked** (`facts-edo.md` item 2: the ladle "the badge of the pilgrim, held out to ask for alms"; the okage-mairi of 1830 to Ise) |
+| Himeji's keep: five roofs outside, six floors inside | `edo.castle.keep.bigsis` | **Checked** (`facts-edo.md` item 14: five roofs, six floors and a basement) |
+| The keep's gun ports are round, triangular and square | `edo.keep.porttri.bigsis` | **Checked** (`facts-edo.md` item 14: loopholes "round, triangular and square for guns") |
+| A bronze mirror's back picture can show in the light reflected off its face, if the mirror is made so | `edo.chapel.show.5` | **Checked** (`facts-edo.md` item 10: a makyō's face carries relief-induced unevenness so that sunlight reflected onto a wall shows the picture cast on its back). The cross in this family's mirror is the game's own: she says she has no physics for it (`edo.chapel.show.6`) |
+| Such mirrors are a little convex, so the patch of light grows the farther the mirror is from the wall | `edo.top.mirror.5`, `.6`; `hint.edo.door.bigsis.4` | **Checked** (`facts-edo.md` item on magic mirrors, and the design's section 2: "the disc's slight convexity is important because it magnifies the reflected image") <!-- WRITE-20B: end of round twenty's rows --> |
 
 What the words mean:
 
@@ -1545,13 +1836,17 @@ gives who says it, and where.
 | Exodus 1:11, five words | "treasure cities, Pithom and Raamses." | `egypt.site.bricks.use.3` | Dad, at the bricks on the building site, in Act One | Before round seventeen: Dad, in the same line ("Exodus 1:11.") | **Checked** (`kjv.exod1.11`): five words of the verse, word for word; "treasure cities" is the King James wording and "Raamses" its spelling |
 | Psalm 90:4 | "For a thousand years in thy sight are but as yesterday when it is past, and as a watch in the night." | `egypt.gate.psalm.1` | Dad, at the door in time in the chamber, in Act One | Before round seventeen: Dad, the next line (`egypt.gate.psalm.2`: "Psalm 90:4.") | **Checked** (`kjv.ps90.4`): the whole verse, word for word |
 | The heading of Psalm 90, its first four words | "A Prayer of Moses" | `egypt.gate.psalm.2` | Dad, in the same breath as the psalm's number | Before round seventeen: in the same line, after "Psalm 90:4." | **Checked** (`kjv.ps90.title`: "A Prayer of Moses the man of God.") |
+| Psalm 139:9-10 <!-- WRITE-20A: round twenty, Act Six --> | "If I take the wings of the morning, and dwell in the uttermost parts of the sea; Even there shall thy hand lead me, and thy right hand shall hold me." | `edo.sail.1` (verse 9, to its semicolon: the opening quotation mark and no stop) and `edo.sail.2` (verse 10, closing the quotation) | Mom, at the stern rail of Gonroku's ship by night, quietly, to the sea: the cut-scene "The Uttermost Parts" | Big Sister, the next line (`edo.sail.4`): "Psalm 139." (she was not asleep) | **Checked** (facts-edo-2, item 7, read at kingjamesbibleonline.org: both verses word for word, capitals and punctuation included; the two boxes together are the two verses, letter for letter, and `tools/check-edo-a.mjs` holds it). https://www.kingjamesbibleonline.org/Psalms-139-9/ |
 
+| Matthew 6:9, its prayer (the verse begins "After this manner therefore pray ye:", so the quotation opens with "...") <!-- WRITE-20B: Act Six's second leg --> | "...Our Father which art in heaven, Hallowed be thy name." | `edo.chapel.pray.lilsis` | Little Sister, in the room under the storehouse, out loud, in her clearest voice (#26, Our Father); Grandmother Sei answers with the first three words of the same prayer in the old Japanese, "Ten ni mashimasu" (`edo.chapel.pray.sei`), and Big Sister glosses them without quotation marks (`edo.chapel.pray.bigsis`) | No | **Checked** (`facts-edo-2.md` item 7, from kingjamesbibleonline.org: "After this manner therefore pray ye: Our Father which art in heaven, Hallowed be thy name.") |
+| John 1:5 | "And the light shineth in darkness; and the darkness comprehended it not." | `edo.chapel.verse.mom` (said twice: she is asked to say it again), `edo.chapel.verse.sei` (the grandmother says it after her) | Mom, to Grandmother Sei, in the room (#26: "May I give you something? It's from the book.") | No | **Checked** (`facts-edo-2.md` item 7, Bible Gateway KJV) |
 Told and not quoted: Genesis 12:10 (Abram goes down into Egypt: `home.timeline.5` and
 `nevada.gate.2b`, in Big Sister's own words; in Act Four her mother names the chapter,
 `nevada.gate.2e`, and quotes nothing of it).
 Told and not quoted, in Egypt: PUZZLES-egypt.md has each, with its source and status (Lot and the scribe tell
 Genesis 11 to 13 in their own words; Dad has said Genesis 12:3, 7:19-20 and 10:6 with the reference until now, and Act
 One's pass says where it is said now). <!-- PASS-17H -->
+Told and not quoted, in Japan (round twenty, WRITE-20B): nothing; the hidden family's own prayer is never written beyond its first three words. Mom's prayer at the door (`edo.step.pray.1` to `.3`) and Little Sister's goodnight are their own words.
 Told and not quoted, in Rome (round thirteen; PUZZLES-rome.md has each): Daniel 6:10 (and
 the lions' story, 6:16), Psalm 55:17 and 122:6, Isaiah 9:7, 32:1 and 60:3 (with 11:10 and
 49:6), Numbers 15:38-39, Deuteronomy 6:9, Acts 18:1-3 and 18:11, each in the speaker's own

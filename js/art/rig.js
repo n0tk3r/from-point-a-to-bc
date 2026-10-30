@@ -514,7 +514,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     }
     // ----- feet: a heel, a sloping instep and a broad front, flat on the sole -----
     const fpart = FOOT[k], kind = shoes.kind || "shoes", pumps = kind === "pumps", bareFoot = kind === "bare" || kind === "sandals";
-    const footMat = far(k, kind === "bare" ? skin : kind === "sandals" ? (socks ? socks.mat : skin) : shoes.mat);
+    const footMat = far(k, kind === "bare" ? skin : kind === "sandals" ? (shoes.foot || (socks ? socks.mat : skin)) : shoes.mat);      // (PEOPLE-20: shoes.foot, what shows in a sandal when it is not the sock: white tabi under indigo leg wraps)
     const fr = d.footR, lift = (pt, hgt) => add(pt, mul(L.nrm, hgt));
     const rH = fr * 0.90, rB = fr * (bareFoot ? 0.64 : 0.72), rTip = fr * (bareFoot ? 0.54 : 0.60);
     const heelC = lift(add(L.heel, mul(L.along, rH)), rH), ballC = lift(L.ball, rB), toeC = lift(add(L.toe, mul(L.toeDir, -rTip)), rTip);
@@ -533,7 +533,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     limb(ballC, toeC, rB, rTip, footMat, { part: fpart, flatten: 1.3 });
     ball(lift(mix(L.ball, L.toe, 0.10), rB * 1.0), [fr * (bareFoot ? 1.30 : 1.36), rB * 1.0, fr * 1.7], footMat, { part: fpart, flatten: 1.3 }, L.footYaw);     // the front of the foot is broad
     const instep = pumps || strap ? legMat : footMat;
-    limb(L.ankle, lift(mix(L.heel, L.ball, 0.72), rB * 0.95), rA + sockThick, rB * 0.80, pumps ? legMat : strap ? far(k, socks ? socks.mat : skin) : instep, { part: fpart });
+    limb(L.ankle, lift(mix(L.heel, L.ball, 0.72), rB * 0.95), rA + sockThick, rB * 0.80, pumps ? legMat : strap ? far(k, shoes.foot || (socks ? socks.mat : skin)) : instep, { part: fpart });      // (PEOPLE-20: shoes.foot)
     limb(L.ankle, mix(L.ankle, heelC, 0.85), rA + sockThick, rH * 0.95, pumps ? legMat : footMat, { part: fpart });
     if (strap && fine) limb(add(L.ankle, mul(L.nrm, -0.004)), add(L.ankle, mul(L.nrm, -0.010)), rA + sockThick + 0.003, rA + sockThick + 0.004, strap, { part: fpart, squareStart: true, squareEnd: true });   // and one round the ankle
     if (shoes.shaft) limb(mix(L.knee, L.ankle, 1 - shoes.shaft), L.ankle, lerp(rC, rA, 1 - shoes.shaft) + 0.008, rA + 0.009, footMat, { part: fpart, cuff: true });     // a boot comes up the shin
@@ -980,7 +980,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
     let a = Math.round(x0), b = Math.max(a, Math.round(x1) - 1);
     if (!faceFine) { a = b = Math.round(mq[0] - 0.5); }
     else if (frontOn) { const half = Math.max(1, Math.round((x1 - x0) / 2)); a = Math.round(mid) - half; b = Math.round(mid) + half - 1; }
-    const lip = ink.lip, inside = ink.inside, smile = face.smile || 0;
+    const lip = ink.lip, inside = ink.inside, smile = pose.smile ?? face.smile ?? 0;      // (PEOPLE-20: pose.smile, a smile a pose asks for: Kihei's rare one, in a hold of his)
     const dot = (x, y, col) => { sf.dot(x, y, col, HEAD); if (face.beard) sf.dot(x, y, col, HAIR); };      // (on the skin, or on a beard)
     const hidden = face.beard && !open && !face.mouthShows;             // (a long beard hides a shut mouth; a trimmed one does not)
     if (!hidden) for (let x = a; x <= b; x++) {
@@ -1391,6 +1391,7 @@ const ARM_KEYS = ["arm", "elbow", "fore", "tuck", "hand", "bend", "grip", "curl"
  *   "stool"   on something low, knees high and apart
  *   "step"    on a kerb or a step, feet on the ground below it, knees drawn up
  *   "floor"   on the ground, the legs out in front and leaning back on both hands, like a man who has been sat down (NEVADA-12P)
+ *   "kneel"   on the heels, the knees together in front, the hands in the lap: seiza, as people of Japan sit on a mat (PEOPLE-20)
  *   or a number: the height of the seat, as a fraction of a grown person's height.
  * o.gesture: 0 at rest; 1 talking, with this person's own main gesture (o.main); any other number is that
  * gesture from talkPose, made sitting down. o.dim is the build and o.height the sitter's height (1 for an adult).
@@ -1403,7 +1404,19 @@ export function sitPose(f = 0, o = {}) {
   const d = o.dim || ADULT, sp = spots(d);
   const seat = o.chair ? "chair" : o.seat || "ground";
   let p;
-  if (seat !== "ground" && seat !== "floor") {                         // (floor: NEVADA-12P, below)
+  if (seat === "kneel") {
+    // PEOPLE-20: sitting on the heels, as people of Japan sit on a mat (seiza): the knees together on the ground in front,
+    // the shins back along it, the tops of the feet down, the weight on the heels; the back straight, the hands in the lap.
+    // (kneelPose's "back", found sitting: Grandmother Sei in the room under the storehouse.) The anchor is the point on the
+    // ground under the hips, as for anyone seated; the knees are a thigh's length in front of it.
+    const pitch = 1.32, knee = pitch + Math.PI / 2 - 0.05;
+    const side = (sd) => ({ leg: [pitch, 0.06], knee, foot: Math.PI + 0.30, footYaw: 0.04, hand: [sd * 0.034, sp.hip + 0.024, sp.belly + 0.150], bend: [sd * 0.7, -0.3, -0.6], curl: 0.5 });
+    p = { seated: true, lap: true, breath: br, lean: o.lean ?? 0.04, R: side(1), L: side(-1), head: { nod: o.nod ?? 0.06, turn: o.turn || 0 } };
+    const J = skeleton(d, { ...p, ground: 0 });
+    let low = Infinity;
+    for (const k of ["R", "L"]) { const L = J[k]; low = Math.min(low, L.heel[1], L.ball[1], L.toe[1], L.knee[1] - d.legR[1], L.ankle[1] - d.legR[2]); }
+    p.ground = low;
+  } else if (seat !== "ground" && seat !== "floor") {                         // (floor: NEVADA-12P, below)
     // The hips are at the height of the seat and the feet flat on the floor in front: the knees go where they must.
     const h = (typeof seat === "number" ? seat : SEATS[seat] ?? SEATS.chair) / (o.height || 1), low = h < 0.21, lowest = h < 0.15;
     const hipH = h + d.pelvisR[1] * 0.62, tilt = o.feet ?? (lowest ? 0.30 : low ? 0.14 : 0.05);          // how far the feet are set out in front of the knees
@@ -1501,7 +1514,11 @@ const seatOf = (spec) => (spec.seated === true ? "ground" : spec.seated || "chai
 const mainGesture = (spec) => (spec.gestures || DEFAULT_GESTURES).find((g) => g !== 0) ?? 1;
 /** OFFICE-17P: spec.nod, how someone on their feet holds their head, added to whatever the pose does with it (less than
     0: looking up, as Grandpa Joe does on his chair under the vent). */
-const headed = (spec, p) => { if (spec.nod) p.head = { ...(p.head || {}), nod: ((p.head && p.head.nod) || 0) + spec.nod }; return p; };
+const headed = (spec, p) => {
+  if (spec.nod) p.head = { ...(p.head || {}), nod: ((p.head && p.head.nod) || 0) + spec.nod };
+  if (spec.pitch) p.pitch = spec.pitch;                                 // PEOPLE-20: spec.pitch, the whole figure tipped (pose.pitch, NEVADA-12P): Little Sister lying flat on her back (-1.52)
+  return p;
+};
 /** Standing, walking, talking, reaching and sitting the way one particular character does them. */
 export const poses = {
   stand: (spec, f) => spec.stance === "prayer" ? holding(spec, prayerStand(spec, f)) : headed(spec, holding(spec, resting(spec, standPose(f, { stance: spec.stance, dim: spec.dim, lean: spec.lean })))),      // (ROME-13P: "prayer"; OFFICE-17P: headed)
@@ -1618,7 +1635,7 @@ const RISES = new WeakMap();
 export function riseOf(spec) {
   let r = RISES.get(spec);
   if (r) return r;
-  const how = sitHow(spec), ground = how.seat === "ground" || how.seat === "floor";       // (floor: NEVADA-12P)
+  const how = sitHow(spec), ground = how.seat === "ground" || how.seat === "floor" || how.seat === "kneel";       // (floor: NEVADA-12P; kneel: PEOPLE-20, up off the heels as off the ground)
   const J0 = skeleton(spec.dim, poses.sit(spec, 0));
   const feet = (J0.R.ankle[2] + J0.L.ankle[2]) / 2 - J0.hipC[2];
   // (OFFICE-17P: sit.up, how far in front of the seat they stand once up, in their own heights, when it is not the usual:

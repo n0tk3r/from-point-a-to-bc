@@ -302,6 +302,221 @@ KEYS = {
     },
 }
 
+# ROUND-20: the six keys of Act Six (Japan, spring 1830), as STUBS: clones of the nearest existing keys, so the base
+# runs. Each painter replaces their own key with a full entry of its own in this place (PAINT-20A: edo-morning;
+# PAINT-20C: edo-rain, edo-lamp; PAINT-20D: edo-castle; PAINT-20E: edo-keep, edo-sunset), in the woodblock manner
+# of S/briefs/out/edo-design.md section 4, and touches no other key.
+# PAINT-20A: Suruga Bay on a clear spring morning (Yui, about 8 April 1830, soon after sunrise). The sun is in the east,
+# behind us and to the left; the air is washed and clear, Fuji white across the water. The key is written for the
+# woodblock manner of S/briefs/out/edo-design.md section 4 (and S/work-20-paintA/style.md): lead white as the paper
+# (the lights warm only a little, toward naples yellow); the blues lead and the shadows are BLUE, not violet (the
+# prints' ai and the new prussian blue: cobalt, ultramarine, prussian; lilac and cobalt violet count for little); veronese
+# green and viridian on the fields and pines; geranium lake with white for the cherry; vermilion and burnt sienna in
+# small amounts. A firmer snap to fewer paints (flat areas), less added chroma, the sky pulled harder toward the key's
+# blues (the graded band), the darkest darks lifted to prussian blue (the keyblock's line), and fewer, lighter marks of
+# broken colour, so that a flat area stays flat. Kihei's shop (edo-fishshop, PAINT-20B) is keyed in it too.
+KEYS["edo-morning"] = {
+    "title": "Suruga Bay in the morning",
+    "pair": ("naples-yellow", "cobalt-blue"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.45), "naples-yellow"],   # the paper in the sun, barely warmed
+    "shadow": {
+        # blue shade: the prints' indigo, from a pale grey-blue through cobalt to ultramarine and the line's prussian blue
+        "warm": [mix("lilac", "cerulean", 0.55), mix("cobalt-blue", "lilac", 0.45), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "geranium-lake", 0.5), mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5)],
+    },
+    "sky": ["lead-white", "cerulean", "cobalt-blue", mix("cobalt-blue", "prussian-blue", 0.45)],   # the graded sky: paper at the horizon, deep at the top
+    "weight": {"cobalt-blue": 2.2, "lead-white": 2.0, "prussian-blue": 1.7, "ultramarine": 1.6, "cerulean": 1.6, "naples-yellow": 1.6,
+               "veronese-green": 1.4, "viridian": 1.4, "geranium-lake": 1.3, "yellow-ochre": 1.2, "burnt-sienna": 1.2, "vermilion": 1.1,
+               "emerald-green": 1.0, "chrome-yellow": 0.9, "lilac": 0.9, "cobalt-violet": 0.7, "chrome-orange": 0.7, "deep-violet": 0.8},
+    "warm_light": 0.42,      # a lit surface goes only a little toward naples yellow: the paper stays pale
+    "shade": 0.66,           # a shadow goes well toward its (blue) shadow ramp
+    "turn": 50,              # a coloured thing's hue turned toward its shadow paint: less than Rome's (flat colour keeps its hue)
+    "snap": 0.54,            # a firmer pull toward the nearest paints: fewer colours, flatter areas
+    "chroma": 0.22,          # less added chroma: the prints are quiet
+    "shade_lo": 0.20, "shade_hi": 0.42,
+    "lift": 0.08,            # the darkest darks lifted toward prussian blue: there is no black, only the keyblock's line
+    "sky_pull": 0.36,        # open sky pulled toward the key's blues: the graded band
+    "cast": 0.6,             # cast shadows on grey sand are painted cool already
+    "light_chroma": 0.6,
+    "turn_orange": 0.10,     # the turn from light to shade hardly glows: a print has no orange edge
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,   # fewer, quieter marks
+}
+# PAINT-20C: edo-rain, the cedar path and the storehouse at dusk in spring rain (round twenty). Little light and all of it
+# cool and soft: lead white and cerulean for the last of the sky, cobalt and ultramarine and viridian for the trees and
+# their shade, burnt sienna and yellow ochre for wet bark and thatch; the lamp-glow the one warm thing (chrome yellow
+# and chrome orange, very little, and capped as lights, not lit surfaces). Pair: the lamp against the rain's blue.
+KEYS["edo-rain"] = {
+    "title": "A cedar path at dusk in spring rain",
+    "pair": ("chrome-orange", "cobalt-blue"),
+    "light": ["lead-white", mix("lead-white", "cerulean", 0.45), mix("cerulean", "lead-white", 0.35), mix("yellow-ochre", "cerulean", 0.4)],
+    "shadow": {
+        # (the act's style sheet, S/work-20-paintA/style.md section 2: the prints' shade is blue, not violet: no lilac, cobalt
+        # violet or deep violet in the ramps; the darks go through cobalt and ultramarine to prussian blue)
+        "warm": [mix("cerulean", "cobalt-blue", 0.35), mix("cobalt-blue", "cerulean", 0.25), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 "ultramarine", "prussian-blue"],
+        "green": [mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "ultramarine", 0.4), mix("viridian", "prussian-blue", 0.6)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "geranium-lake", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5), mix("burnt-sienna", "prussian-blue", 0.75)],
+    },
+    "sky": ["lead-white", mix("lead-white", "cerulean", 0.5), "cerulean", mix("cerulean", "cobalt-blue", 0.5)],
+    # chrome yellow and chrome orange stay, lightly weighted: PAINT-20C's brief asks for them for the lamp-glow (the one
+    # warm thing), where the style sheet leaves them out of the act; the brief wins, in very small amounts
+    "weight": {"cobalt-blue": 2.0, "cerulean": 1.8, "viridian": 1.8, "ultramarine": 1.6, "lead-white": 1.5, "burnt-sienna": 1.5,
+               "yellow-ochre": 1.4, "prussian-blue": 1.4, "chrome-yellow": 1.1, "chrome-orange": 1.1, "veronese-green": 1.1,
+               "emerald-green": 1.0, "vermilion": 1.0},
+    "warm_light": 0.40,      # what light there is hardly warms anything
+    "shade": 0.64,
+    "turn": 55,
+    "snap": 0.46,
+    "chroma": 0.22,          # a wet dusk is low in chroma: little to add
+    "shade_lo": 0.14, "shade_hi": 0.40,
+    "lit_lo": 0.42, "lit_hi": 0.70,
+    "lift": 0.07,            # no black under rain: the darks lean to prussian blue
+    "sky_pull": 0.28,
+    "cast": 0.5,
+    "cool": 0.45,            # the picture is painted cool already: a cool colour here is mostly paint, not shadow
+    "env_cap": 0.55,         # the lamp line, the lantern and the floorgaps are lights, not lit surfaces: they keep their yellow
+    "turn_orange": 0.10,
+    "density": 0.016, "mark_len": 3, "film": 0.50, "stroke_value": 0.045, "stroke_colour": 0.035,
+}
+# PAINT-20F: edo-lamp, the room under the storehouse by oil lamp (round twenty). Its own entry, not a clone, in the act's
+# manner (S/work-20-paintA/style.md): ochre and sienna flats, the shade going blue (cobalt and ultramarine toward prussian,
+# never violet, never brown), the lamps' warmth naples yellow with chrome yellow at the flames' oil only (the one exception,
+# as the sunset's is), and at morning the cool shaft of daylight down the open trapdoor: the sky ramp lead white and cerulean.
+KEYS["edo-lamp"] = {
+    "title": "A room underground by oil lamp",
+    "pair": ("naples-yellow", "ultramarine"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.5), "naples-yellow", mix("naples-yellow", "yellow-ochre", 0.5), "yellow-ochre"],
+    "shadow": {
+        "warm": [mix("cobalt-blue", "lilac", 0.35), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5), "ultramarine",
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5), "prussian-blue"],
+    },
+    "sky": ["lead-white", mix("lead-white", "cerulean", 0.5), "cerulean", "cobalt-blue"],     # the daylight down the open trapdoor
+    "weight": {"naples-yellow": 2.0, "yellow-ochre": 2.0, "burnt-sienna": 1.8, "ultramarine": 2.0, "prussian-blue": 1.7, "cobalt-blue": 1.6,
+               "lead-white": 1.5, "cerulean": 1.3, "vermilion": 1.0, "chrome-yellow": 0.9, "lilac": 0.8, "deep-violet": 0.7, "cobalt-violet": 0.7,
+               "chrome-orange": 0.6, "geranium-lake": 0.8},
+    "warm_light": 0.46,
+    "shade": 0.66,
+    "turn": 50,
+    "snap": 0.52,
+    "chroma": 0.22,
+    "shade_lo": 0.10, "shade_hi": 0.30,
+    "lit_lo": 0.32, "lit_hi": 0.58,
+    "lift": 0.08,
+    "sky_pull": 0.34,
+    "cast": 0.5,
+    "cool": 0.55,            # the room's darks are painted blue already: a cool colour here is mostly shadow
+    "env_cap": 0.60,         # the lamps and the daylight are lights, not lit surfaces
+    "turn_orange": 0.10,
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,
+}
+# PAINT-20D: Himeji in the late afternoon of a spring day (edo-castle), the stub replaced. The sun low in the west, to the
+# right and a little behind us: the last light warm on the white plaster (lead white and naples yellow, a touch of chrome
+# orange), the sky cerulean to cobalt (the new blue leads), the cherry geranium lake with white, the stone base yellow ochre
+# and burnt sienna. The shade is the act's blue (style.md section 2, the coordinator's call over the brief's lilac and
+# cobalt violet): cobalt and ultramarine to prussian. The pair is the warmed white against cobalt.
+KEYS["edo-castle"] = {
+    "title": "Himeji in the late afternoon",
+    "pair": ("naples-yellow", "cobalt-blue"),
+    "light": ["lead-white", "naples-yellow", mix("naples-yellow", "chrome-orange", 0.3)],   # white plaster in the last light
+    "shadow": {
+        "warm": [mix("lilac", "cerulean", 0.55), mix("cobalt-blue", "lilac", 0.45), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("geranium-lake", "lead-white", 0.3), "geranium-lake", mix("geranium-lake", "cobalt-blue", 0.45),   # the blossom's shade turns toward the blue
+                mix("burnt-sienna", "prussian-blue", 0.5), "prussian-blue"],
+    },
+    "sky": ["lead-white", "cerulean", mix("cerulean", "cobalt-blue", 0.5), "cobalt-blue"],
+    "weight": {"cobalt-blue": 2.2, "lead-white": 2.0, "naples-yellow": 1.9, "prussian-blue": 1.7, "ultramarine": 1.6, "cerulean": 1.6,
+               "geranium-lake": 1.5, "yellow-ochre": 1.3, "burnt-sienna": 1.3, "viridian": 1.3, "veronese-green": 1.2, "chrome-orange": 0.9,
+               "lilac": 0.9, "emerald-green": 0.9, "deep-violet": 0.8, "cobalt-violet": 0.7},
+    "warm_light": 0.48,
+    "shade": 0.64,
+    "turn": 55,
+    "snap": 0.52,
+    "chroma": 0.26,
+    "shade_lo": 0.20, "shade_hi": 0.44,
+    "lift": 0.07,
+    "sky_pull": 0.34,        # the year the prints went deep blue: the sky toward cerulean and cobalt
+    "cast": 0.75,            # the long evening shadows across the ramp and the terrace go to the shade's blue
+    "light_chroma": 0.70,
+    "turn_orange": 0.12,     # the last light: a little orange where light turns into shadow (the act's 0.10, a touch more for the hour)
+    "density": 0.014, "mark_len": 3, "film": 0.58, "stroke_value": 0.048, "stroke_colour": 0.038,
+}
+# PAINT-20E: inside Himeji's keep, a lower floor, late afternoon: dark wood and darkness cut by beams of warm sun through
+# the gun ports. In the act's manner (S/work-20-paintA/style.md): the shade is BLUE (cobalt, ultramarine, prussian: never
+# violet, never black), the light is the paper and naples yellow (the beams and their patches: naples with lead white),
+# wood is ochre lit and burnt sienna in shade. The pair is the beams' naples yellow against the keep's prussian blue.
+KEYS["edo-keep"] = {
+    "title": "Inside the keep, late afternoon: dark wood, beams of sun through the gun ports",
+    "pair": ("naples-yellow", "prussian-blue"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.45), "naples-yellow", mix("naples-yellow", "yellow-ochre", 0.5)],
+    "shadow": {
+        "warm": [mix("cobalt-blue", "lilac", 0.35), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5), mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "geranium-lake", 0.5), mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5)],
+    },
+    "sky": ["lead-white", mix("lead-white", "naples-yellow", 0.5), "naples-yellow"],       # (the gun ports: the sun's paper seen through them)
+    "weight": {"prussian-blue": 2.2, "naples-yellow": 1.8, "burnt-sienna": 1.8, "yellow-ochre": 1.7, "ultramarine": 1.6, "cobalt-blue": 1.5,
+               "lead-white": 1.5, "cerulean": 1.0, "viridian": 1.0, "vermilion": 1.0, "geranium-lake": 0.9, "chrome-yellow": 0.8,
+               "lilac": 0.8, "deep-violet": 0.7, "cobalt-violet": 0.6, "chrome-orange": 0.6},
+    "warm_light": 0.42,
+    "shade": 0.66,
+    "turn": 50,
+    "snap": 0.54,
+    "chroma": 0.22,
+    "shade_lo": 0.10, "shade_hi": 0.30,
+    "lit_lo": 0.34, "lit_hi": 0.62,
+    "lift": 0.08,            # the keep's darkness lifted to prussian blue: it is never black
+    "sky_pull": 0.30,
+    "cast": 0.6,
+    "cool": 0.45,
+    "env_cap": 0.60,         # the beams are light, not lit wood
+    "turn_orange": 0.10,
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,
+}
+# PAINT-20E: the keep's top floor at sunset. Shut, the room is near dark, its shade blue (ultramarine to prussian); with
+# the west shutters open the low sun fills it: the light is the paper and naples yellow, the walls a warm rose-cream
+# (lead white with a whisper of geranium), the long shadows cobalt to ultramarine. The sky through the west bay is the
+# one place the act allows chrome orange and geranium lake: as bands (style.md, section 2). The pair is the sun's naples
+# against the blue of the shade.
+KEYS["edo-sunset"] = {
+    "title": "The keep's top floor at sunset",
+    "pair": ("naples-yellow", "ultramarine"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.45), "naples-yellow", mix("naples-yellow", "yellow-ochre", 0.5)],
+    "shadow": {
+        "warm": [mix("cobalt-blue", "lilac", 0.35), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5), mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("veronese-green", "viridian", 0.5), "viridian", mix("viridian", "prussian-blue", 0.5)],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "geranium-lake", 0.5), mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5)],
+    },
+    "sky": ["lead-white", "naples-yellow", "chrome-orange", mix("chrome-orange", "geranium-lake", 0.5), "geranium-lake", "cobalt-blue"],     # the sunset's bands
+    "weight": {"ultramarine": 2.0, "prussian-blue": 2.0, "naples-yellow": 1.8, "lead-white": 1.7, "cobalt-blue": 1.6, "burnt-sienna": 1.6,
+               "yellow-ochre": 1.5, "geranium-lake": 1.3, "chrome-orange": 1.2, "cerulean": 1.0, "vermilion": 1.0, "viridian": 0.9,
+               "lilac": 0.8, "deep-violet": 0.7, "cobalt-violet": 0.6, "chrome-yellow": 0.7},
+    "warm_light": 0.42,
+    "shade": 0.66,
+    "turn": 50,
+    "snap": 0.54,
+    "chroma": 0.22,
+    "shade_lo": 0.12, "shade_hi": 0.32,
+    "lit_lo": 0.40, "lit_hi": 0.68,
+    "lift": 0.08,
+    "sky_pull": 0.36,
+    "cast": 0.6,
+    "cool": 0.45,
+    "env_cap": 0.60,         # the sun in the window is a light, not a lit wall
+    "turn_orange": 0.10,
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,
+}
 # The people (the rig's flat four-tone figures) take the scene's key with a few numbers of their own: small and flat,
 # they need a firmer pull to the paints and a more decided coloured shade to sit in the painted picture. And the shadow
 # on the ground under each (today a see-through black) becomes the key's shadow paint, laid a little thicker, so that
@@ -309,7 +524,9 @@ KEYS = {
 PEOPLE = {"snap": 0.62, "shade": 0.85, "warm_light": 0.52, "chroma": 0.34, "turn": 40}
 GROUND_SHADOW = {"rome-morning": 0.46, "egypt-noon": 0.46, "home-night": 0.30,     # the lightness of the shadow paint
                  "lamp-interior": 0.30, "nevada-morning": 0.46, "highway-dusk": 0.34,
-                 "office-fluorescent": 0.34}                                     # OFFICE-17
+                 "office-fluorescent": 0.34,                                     # OFFICE-17
+                 "edo-morning": 0.44, "edo-rain": 0.28, "edo-lamp": 0.30, "edo-castle": 0.44,     # ROUND-20: PAINT-20A, 20C, 20F, 20D
+                 "edo-keep": 0.30, "edo-sunset": 0.34}                                 # PAINT-20E: the keep's floors (a blue shade, as the act's)
 GROUND_ALPHA_GAIN = 0.7                                                            # alpha x (1 + gain * strength)
 
 
@@ -339,10 +556,15 @@ SCENE_KEY = {
     "office-ducts": "office-fluorescent",                                         # OFFICE-17B: the ducts, lit by the rooms' tubes through the grilles
     "office-room": "office-fluorescent", "office-property": "office-fluorescent", # OFFICE-17C: the Comfortable Room and Property & Effects
     "office-breakroom": "office-fluorescent",                                     # OFFICE-17D: the Office's break room, under its tubes
+    "edo-village": "edo-morning", "edo-fishshop": "edo-morning",                  # ROUND-20: Act Six, Japan, spring 1830
+    "edo-cedars": "edo-rain", "edo-chapel": "edo-lamp",
+    "edo-storehouse": "edo-rain",                                                 # PAINT-20C: inside the storehouse, the same dusk in rain (it was not in the base's table)
+    "edo-castle": "edo-castle", "edo-keep": "edo-keep", "edo-keeptop": "edo-sunset",
 }
 # A scene that is not in the table yet: its era's daylight key (an interior lit by lamps should be put in the table
 # with "lamp-interior").
-ERA_KEY = {"egypt": "egypt-noon", "rome": "rome-morning", "home": "home-night", "nevada": "nevada-morning"}
+ERA_KEY = {"egypt": "egypt-noon", "rome": "rome-morning", "home": "home-night", "nevada": "nevada-morning",
+           "edo": "edo-morning"}                                                  # ROUND-20
 
 
 def key_for(scene):

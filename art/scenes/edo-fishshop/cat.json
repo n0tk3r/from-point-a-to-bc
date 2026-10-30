@@ -1,0 +1,62 @@
+{
+  "id": "cat",
+  "face": "E",
+  "foot": [
+    32,
+    38
+  ],
+  "canvas": [
+    64,
+    40
+  ],
+  "tall": {
+    "stand": 23,
+    "sit": 30,
+    "run": 21,
+    "under": 23,
+    "sleep": 16
+  },
+  "stride": {
+    "walk": 14.0,
+    "run": 30.0
+  },
+  "pace": 60.0,
+  "frames": {
+    "sit": [
+      "cat-sit-0.png",
+      "cat-sit-1.png"
+    ],
+    "walk": [
+      "cat-walk-0.png",
+      "cat-walk-1.png",
+      "cat-walk-2.png",
+      "cat-walk-3.png"
+    ],
+    "run": [
+      "cat-run-0.png",
+      "cat-run-1.png",
+      "cat-run-2.png"
+    ],
+    "under": [
+      "cat-under-0.png",
+      "cat-under-1.png",
+      "cat-under-2.png"
+    ],
+    "sleep": [
+      "cat-sleep-0.png",
+      "cat-sleep-1.png"
+    ]
+  },
+  "fps": {
+    "sit": 1.2,
+    "walk": 8,
+    "run": 12,
+    "under": 6,
+    "sleep": 0.8
+  },
+  "fidgets": [
+    "sit"
+  ],
+  "sizeAt": 401,
+  "note": "PAINT-20B: Kihei's cat, ginger and white, a short tail. Frames at the scene's row full (401); `under` is her going east under the raised floor at mark `under` (her head end first: the frames are cut at the gap's edge)."
+}

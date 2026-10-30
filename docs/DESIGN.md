@@ -19,8 +19,8 @@ It ends with [the tools](#11-the-tools), [what is finished and what is not](#12-
 Everything described here is working code in this repository.
 
 Companion documents: [CHARACTERS.md](CHARACTERS.md) says who the people are and how each of
-them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome.md) and
-[PUZZLES-the-present.md](PUZZLES-the-present.md) map the acts puzzle by puzzle.
+them talks. [PUZZLES-egypt.md](PUZZLES-egypt.md), [PUZZLES-rome.md](PUZZLES-rome.md),
+[PUZZLES-the-present.md](PUZZLES-the-present.md) and [PUZZLES-japan.md](PUZZLES-japan.md) map the acts puzzle by puzzle.
 
 ## The short version
 
@@ -397,13 +397,17 @@ The marks go into the scene file as they are: the field names are the same in bo
 | `ripples` | Rings that spread and fade on still water, with a light edge and a darker trough just inside it | `at`; `radius` (where a ring has gone, or `[where it starts, where it has gone]`: `[1, 16]`); `flat` (0.32, its height over its width); `every` (a number of seconds: steadily; `[low, high]`: now and then; `[1.5, 4]`); `rings` (2 from each drop); `speed` (13 px a second); `color`, `trough`; `opacity` (0.6) |
 | `stream` | Water running along a path, light running down it, and a splash where it lands: foam, rings and drops | `path` (from the spout's mouth to where it lands, smoothed); `width` (3, or `[at the mouth, at the end]`); `color`, `light`; `opacity` (0.55); `speed` (55 px a second); `splash` (5 px; 0: none) |
 | `shimmer` | A few glints of light that come, drift and go on a water surface, kept inside its shape: very quiet | `poly` (or `area`, or `rect`); `holes` (shapes kept clear: a boat, reeds); `count` (the water's area / 1100); `size` (6 px at the near edge, shorter farther off); `flow` (`[4, 0]` px a second); `life` (1.8 s); `color`; `opacity` (0.45) |
-| `birds`, flyers | Small birds crossing the sky now and then along `lanes`, or wheeling round a `circle` (kites): beating their wings in bursts and gliding between, banking at the ends of a circle | `lanes` (lines across the sky, beginning and ending off the picture) or `circle` (`{ at, r: [rx, ry] }`); `every` (`[6, 14]` s between crossings); `group` (`[1, 3]` birds); `count` (2, wheeling); `speed` (70 crossing, 14 wheeling); `size` (7 px across, drawn); `scale` (or `[low, high]`: each bird its own size); `frames` (`glide`, `flap`, `bank`, `middle`, `mirror`); without frames, small dark silhouettes drawn by the engine |
+| `birds`, flyers | Small birds crossing the sky now and then along `lanes`, or wheeling round a `circle` (kites): beating their wings in bursts and gliding between, banking at the ends of a circle | `lanes` (lines across the sky, beginning and ending off the picture) or `circle` (`{ at, r: [rx, ry] }`); `every` (`[6, 14]` s between crossings); `group` (`[1, 3]` birds); `count` (2, wheeling); `speed` (70 crossing, 14 wheeling); `size` (7 px across, drawn); `scale` (or `[low, high]`: each bird its own size); `frames` (`glide`, `flap`, `bank`, `middle`, `mirror`); without frames, small dark silhouettes drawn by the engine; <!-- ENGINE-20 --> `clip` (shapes they are seen inside only: the herons going past the keep's window openings) and `behind` (shapes they are hidden in), as a drawn kind takes them |
 | `birds`, a flock | Birds on the ground (`area`) or along a ledge (`perch`) that stand, look about, peck, walk a few steps and turn; go up when somebody comes near and land again a little way off, the ones beside them going too; with nowhere clear to land, fly off and come back later. A script can send the flock running to another place on the ground (`herd`), and give every bird one pose at once (`pose`): "A flock that is sent somewhere", below <!-- ROME-13E --> | `area` (or `poly`, `rect`) or `perch`; `count` (5); `frames` (below), or birds drawn by the engine: `look` (`pigeon`, `dove`, `sparrow`) and `size` (26 px long where a person is 160 tall); `depth` (smaller farther off: on an area); `moves` (`{ stand: 2, look: 2, peck: 4, walk: 3, turn: 1, away: 0 }`; `away`: one flies off by itself and comes back); `shy` (150 px at full size, about a metre and a half; half that from someone standing still; 0: never startled); `fly`, `turn` (false: never); `back` (`[8, 20]` s away); `treads` (`[y, ...]`) or `tread` (px): birds on steps keep to the treads and hop from one to the next; `walk` (12), `flight` (95) |
 | `sway` | A cut-out of the scene (washing on a line, a banner, a palm's crown) stirring in the air from a fixed edge, with a ripple running along it | `plane` (the cut-out's id); `anchor` (`"top"`: it hangs; `"bottom"`: it is rooted; `"left"`, `"right"`: it flies from a pole at that side; or a line); `at` (the foot row, the pin row or the pole's column); `amount` (2.5 px at the far edge); `period` (3.4 s); `wave`; `lean` (0.3 of the amount, with the wind) |
 | `bob` | A cut-out of the scene (a boat, a barge at its mooring) riding the water: it rises and falls on the swell, as two slow waves added together so that it never ticks like a clock, and with a `tilt` it rocks as well, about the middle of its base line. It is drawn on whole pixels from its own picture (a turned copy for each quarter of a degree it rocks, made once and kept), only its place changing, a few times a second at most; its base (who is in front of it and who behind), its clickable area, its `solid` ground and anything a script does to it are as they were. One that also sways does both: it rises and falls as it stirs, without rocking. For less motion half the amount (a bob of one pixel is then still) at half the pace <!-- ROME-13E --> | `plane` (the cut-out's id); `amount` (1 px up and down); `period` (5 s); `tilt` (0 degrees: none) |
 | `strip` | The country going by the windows of a car on the move: one long painting, painted to run on from its right edge into its left, scrolling past behind the windows and drawn only inside them, with hard edges, over the backdrop. In the proof the car is a cut-out with its windows cut clear, laid over it; in the limousine (`nevada-limo`) the windows are the backdrop's own, and two strips went by, outward on each side, until round sixteen: two drives now (below) <!-- DRIVE-16M --> | `src` (the picture, in the scene's folder unless its name begins `art/`); `windows` (the glass of each window, the shapes it shows through; or `clip`; with neither, the whole width of the stage); `row` (the row of the stage its bottom edge is on: needed); `speed` (0 px a second; more than 0, the world goes by to the left, as from a car driving right; `set({ speed })` from a script, and it goes on from where it is); `loop` (true: drawn twice where the seam is in a window; false: it goes by once); `offset` (0: the column of the picture at the stage's left edge when it begins); `fps` (20) |
 | `drive` | The world outside a car's side windows as a pinhole camera that is moving forward sees it, drawn from the scene's own camera: the ground in perspective, panoramas standing at their distances, upright things beside the road growing and sweeping past, wires; each side of the road its own place. See "The world going by a car's side windows", below <!-- DRIVE-16E --> And each thing's shadow laid on the ground in perspective, from the sun the scene gives <!-- DRIVE-16F --> Or, with `side: "ahead"`, the whole stage looking straight down the road, both sides and the road between: "Straight ahead: the road coming at us", below <!-- ROAD-18E --> | `side` (`"L"`, `"R"`; `"ahead"`: ROAD-18E); `windows` (or `clip`); `vanish`, `focal`, `eye` (1.6 m); `speed` (0 m a second; `set({ speed })`); `start` (0 m); `sky`; `bands` (`[{ src, distance, ppm }]`); `ground` (`{ src, from, ppm }`); `things` (`{ src, rows }`); `haze` (`#d9dde6`), `haze_far` (4000 m); `streak` (0.6); `slices` (2); `wire` (`#2f2a26`); `phase` (0 on the left, 0.5 on the right); `fps` (30); `sun` (`[forward, left]`; none: no shadows), `shade` (`#6664ac`), `shade_k` (0.6) <!-- DRIVE-16F --> |
 | `portal` | The door in time: a ripple in the paint. See "The door in time", below | `at` (its middle, wide open); `r` (half its height, wide open); `wide` (1: a round hole; the chamber's doorway 0.48); `keep` (the bare wall it is in, `[x0, x1]`); `rise`; `under`; `light`; `open` (0); `strength` (0.45); `bend` (0.6); `rate` (1.5); `size` (1.11); `pale` |
+| `rain` <!-- ENGINE-20 --> | Fine straight slanting lines falling over the picture, as the prints draw rain (each drop one thin stroke, all of one slant), splashes where they land on a floor line, and its hiss: a loop of sound on while the rain shows, quieter under a line | `area` (the whole stage); `behind` (eaves, a roof: not drawn there); `count` (the area / 1600, 40 to 400 drops in the air); `slant` (12 px sideways per 100 px of fall; negative: leftward); `speed` (520 px a second); `length` (14, or `[low, high]`); `width` (1); `color` (`#dfe9f2`); `opacity` (0.32); `floor` (a row, a line, or lines: where the splashes are; none: no splashes); `splash` (3; 0: none); `splashes` (count / 12 a second); `sound` (`rain`, a loop of `sound.js`'s `loops`; false: none); `level` (0.5; 1 on thatch); behind everybody unless given a `base` |
+| `petals` <!-- ENGINE-20 --> | Cherry petals drifting down and sideways on a little wind from a region (a tree's crown) to the ground, a few at a time, tumbling; they settle where they land and fade | `from` (the region: needed); `floor` (a row or a line; the bottom of the stage); `count` (6 in the air); `rate` (count / 3 a second); `wind` (18 px a second; negative: leftward); `fall` (26 px a second); `size` (4, or `[low, high]`); `color` (`#f6c9d6`), `color2` (`#eaa7bd`: each petal one or the other); `settle` (2.2 s lying there before it has faded); `opacity` (0.9) |
+| `waves` <!-- ENGINE-20 --> | Waves in rows on a bay or the sea, as the prints draw them: short curling crests in rows inside a shape, smaller and closer farther off, each coming, travelling a little toward the shore and going; ten pictures a second | `area` (needed); `holes` (a boat, a rock: kept clear); `rows` (the height / 16, 3 to 30); `per` (crests across a row: the width / 44); `color` (`#f4f8fb`); `opacity` (0.5); `size` (10 at the near edge); `speed` (6 px a second); `toward` (`"S"`: the shore is below; `"N"`, `"E"`, `"W"`); `life` (3.5 s); behind everybody unless given a `base` |
+| `mirror` <!-- ENGINE-20 --> | Light from a hand mirror on a wall: a soft bright patch whose size grows with the mirror's distance from the wall, dimmer as it grows, trembling with the hand; a plain cross of light inside it, shown or not; and the door in time opened in it to the patch's size. See "The mirror's light, and the door", below | `target` (the point on the wall: needed); `mirror` (`[x, y]`) or `holder` (a person's id) with `hand` (`[ahead, up]` from his feet at full size: `[18, 100]`); `sizes` (`[[d1, r1], [d2, r2]]`: the radius at two distances; `[[60, 10], [400, 60]]`); `flat` (1.15); `dim` (0.45); `tremble` (1.6 px); `image` (`"cross"`; null: none), `shown` (false), `arms` (0.72 of the radius), `bar` (0.11); `door` (a portal's id), `doorK` (0); `on` (1); `color` (`#fff2cc`, never keyed); `opacity` (0.78); `reach` (a rect the mirror can be in: with it, a faint beam from the mirror to the patch; `beam: false` keeps it off) |
 
 Every kind also takes: `id` (its name, for scripts and tests; on the stage it is `fx:<id>`); `base` or `plane`, its
 depth among the people exactly as for a cut-out (section 3: a row, a line, `"front"`, `"back"`); `when` (on the stage
@@ -511,7 +515,8 @@ things go **slower and fainter**, eased in and out over a quarter of a second in
 times each way, not every frame): smoke at half its pace and 0.7 of its opacity; shimmer at half and 0.65; ripples half
 and 0.7; a stream 0.6 and 0.7; a flame and embers at about half pace and 0.85 and 0.8; birds 0.6 of their pace and 0.85; a
 sway (washing, a palm's crown) and a boat on the swell only slow, never fade; a strip and a drive at a car's side windows
-(the limousine's desert) 0.8 and 0.85 (`HUSH` in `effects.js`). Never the door in time, a drive straight ahead (the
+(the limousine's desert) 0.8 and 0.85; <!-- ENGINE-20 --> rain 0.6 and 0.7 (its hiss turned down with its opacity), petals 0.6
+and 0.85, waves 0.5 and 0.7 (`HUSH` in `effects.js`). Never the door in time, the mirror's light (it is the moment), a drive straight ahead (the
 opening's road), a flock a script is herding or posing, a strip or a drive whose speed a script has set in the last two
 seconds, or anything whose description says `hush: false`; and a scene with `hush: false` is never hushed. A small
 movement of someone's own (`life.js`'s fidgets, which it marks `life`) under way while a line is up goes at half its
@@ -814,6 +819,57 @@ motion the clock runs at half speed, the bend is 0.6 as big, and it is drawn fif
 dead, as the author asked. The study, with the six looks and the author's settings, is kept as a private page
 (`claude.ai/artifact/WCRWEAbF2DfeouYApqQewm`).
 
+
+### The mirror's light, and the door <!-- ENGINE-20 -->
+
+Act Six's two great moments are light from a hand mirror (the design, `briefs/out/edo-design.md`, #27 and #30): the
+grandmother's bronze mirror turned to the morning sun down the open trapdoor, and in the bright patch on the earth wall a cross
+that is nowhere on the mirror; and at the top of Himeji's keep the same mirror in the sunset, its patch on the hum, and the door
+in time opening in it, a hand's size near the wall and a doorway's from the window's mouth, because a bronze mirror is a little
+convex and its patch grows with the distance (a real property: the fact files). The engine has this as one moving thing a scene
+sets up, the `mirror` kind (`effects.js`, `MirrorLight`), and it drives the door in time (the `portal` kind, round ten):
+
+```js
+fx: [
+  { id: "hum", type: "portal", at: HUM, r: 48, keep: WALL, under: ["east-wall"], base: 430, pale: "#fff4d8", strength: 0.6 },
+  { id: "light", type: "mirror", target: HUM, holder: "mom", sizes: [[60, 10], [400, 60]], image: "cross", shown: false,
+    door: "hum", doorK: 0, on: 0, reach: [40, 300, 720, 290], base: 430.1 },
+],
+```
+
+- **The source, the mirror, the target.** The light comes in somewhere (a window's beam, the sun down the trapdoor): the scene
+  paints or draws that; the kind draws what the mirror makes of it. The mirror is a point (`mirror: [x, y]`, on its stand) or a
+  person's held-thing point (`holder: "mom"`: at her hand, `hand` `[ahead, up]` from her feet at full size, `[18, 100]`, read every
+  picture, so the patch follows her as she walks); the target is a point on the wall (`target`), the patch's middle.
+- **The patch** is a soft bright ellipse (`flat`: its height over its width, 1.15 for a wall seen a little from the side) whose
+  radius is fitted through two sizes the scene gives (`sizes: [[d1, r1], [d2, r2]]`: at those two distances of the mirror from the
+  target, in pixels of the stage, the engine fits r = a + b·d, held between half the smaller and two and a half times the
+  larger), a little dimmer as it grows (its brightness (r1 / r)^`dim`), trembling with the hand (`tremble` px, about six times a
+  second, from a seeded wobble; a third of that with less motion), in the light's own colour (`color`, never keyed: it is light, as
+  the portal's `pale` is). `on` (0 to 1) is the light's strength: at 0 nothing is drawn, and a script tweens it up as the shutter
+  opens: `g.tween(600, (k) => g.effects.get("light").set({ on: k }))`.
+- **The image in the patch**: `image: "cross"`, a plain thin cross of light, a shade brighter than the patch, its arms `arms` of the
+  patch's radius long (0.72) and `bar` of it thick (0.11), shown while `shown` is true (`set({ shown: true })` as the grandmother
+  turns it to the light). `image: null` for a mirror with nothing in its light.
+- **The door**: `door` names a `portal` of the scene (the hum, shut, in the wall). While `doorK` is above 0 the light keeps the
+  portal open that far (times `on`), with the portal's size the patch's: its `scale` is set so that its rings run out to the patch's
+  edge (r / (R0 × 1.32)); so the door is a letterbox with the mirror near the wall and a doorway from the window's mouth, and grows
+  with every step back (more light, more door: the game's first rule). A script opens it with `g.tween(900, (k) => light.set({
+  doorK: k }))` and the portal's own opening does the rest; the image stays in the middle of it (the light lies a hair nearer than
+  the door: give it a `base` just past the portal's). `patch()` gives `{ x, y, r, d, alpha, mirror }` as it is now, for a script
+  that waits on the size ("the size of a plate, of a door, of a doorway").
+- **`fit: "height"`** <!-- SCENES-20C -->: sizes the door by the patch's height (`r × flat`) instead of its width (`r`). For a
+  patch squeezed as its wall is seen from the side (`flat` 1 / the portal's `wide`), so that the rings reach the patch's edge
+  both ways: the keep's top floor, where the east wall is seen at a slant.
+- **Cost.** With `reach` (a rect of the stage the mirror can be anywhere in) a faint beam is drawn from the mirror to the patch and
+  the canvas is that big, redrawn twenty times a second while the hand moves (ten with less motion; a picture only when the hand
+  has moved or the tremble's step has come); without it the patch alone, in a canvas its own size. The door is the portal's own cost
+  ("The door in time", above). Never hushed under a line: it is the moment.
+
+The proof: `index.html?scene=engine-proof&lead=dad&flags=proof.mirror,proof.arrived`: the house front of the window proof stands on
+the sand with the door shut in its wall; Dad holds the mirror up to the sunlit wall (Use): the light comes on, the cross shows, the
+door opens to the patch's size, and he walks back from the wall step by step while the patch and the door grow. The engine test's
+`mirror20` part checks the rule through the two sizes, the picture, the door's scale, and `set`.
 
 ### Cuts between scenes: the dip, the black, and the sound first <!-- ENGINE-19B -->
 
@@ -1202,6 +1258,10 @@ his hands (`titus-free`), Eleazar at his upper window, his way of standing his p
 other in place, under the same id, so the person keeps their name and the color of their words.
 Since round seventeen there are eighteen more, for the Office (below, "The Office's people"), which makes forty-two.
 <!-- OFFICE-17P -->
+Since round twenty, Japan in 1830 (below, "Japan, 1830"): twenty-five people (`kihei`, `tami`, `sankichi`, `tokuzo`, `gonroku`,
+`masa`, `netmender`, `basketwoman`, `sei`, `jinsuke`, `orin`, `isuke`, `tomezo`, `guard1`, `guard2`, `shinnosuke`, `pilgrim1` to
+`pilgrim3`, `plasterer1`, `plasterer2`, and the states `tami-baby`, `tomezo-ladder`, `shinnosuke-floor`, `basketwoman-dropped`),
+and the family's outfits, fourteen pages that are the three of them in other clothes. <!-- PEOPLE-20 -->
 
 ### The Office's people, and how a script calls their poses <!-- OFFICE-17P -->
 
@@ -1281,6 +1341,87 @@ Tiber are moving things of their scenes, painted frame by frame (section 2).
 The painted ones are in `js/art/painted.js`, not in `people.js`: `ranger`, the raccoon (his frames are painted with the
 Nevada roadside), and `critter`, the engine's own, for its proof scene.
 
+### Japan, 1830: the outfits, and the people of Act Six <!-- PEOPLE-20 -->
+
+**Outfits.** A lead can be dressed in other clothes: Mom, Big Sister and Little Sister wear O-Tami's travel kimonos from #22
+on, and the plasterers' white head-cloths over them in #28. An outfit is a page of its own in `people.js`, made from the
+lead's own page (`dressed(who, name, state)`), so that face, build, stance, walk, gestures, prayer and kneeling stay theirs,
+and it is named `<lead>-<outfit>` (`mom-edo`, `lilsis-edo-crew`). A script puts one on with **`g.dress(who, name)`** and takes
+it off with `g.dress(who, null)`; `g.dressOf(who)` says what they wear. The choice is kept in the save (`data.dress`, by lead:
+a save from before outfits means everyone in their own clothes) and applied wherever a lead is made: the figure on the stage
+changes at once, where it stands (whatever it was doing goes on: a hold or a small movement under way is let go), and every
+scene after builds the lead in it (`cast.wardrobe`, which the game sets; `figure.dress(name)` is the figure's own side, and
+`figure.outfit` the name). The team bar's portraits, the map's and the door's keep the leads' own faces. A name a lead has no
+page for is refused with a console warning. The outfits and their states:
+
+| Outfit | Mom | Big Sister | Little Sister |
+| --- | --- | --- | --- |
+| `edo` | a plain travel kimono in her emerald, hitched a little for walking, a darker obi; indigo leg wraps, white tabi, straw sandals; a white head-cloth over her own hair (her pearls in her pocket: over a collar they read as a beard), and a broad shallow sedge hat set low over the brow | a kimono in her indigo, too short for her (it ends at mid-calf, her pale leg wraps showing below), tabi and sandals, a hat; her own hair and headband | a child's kimono in her pink tied with a pale sash, a sedge hat, her hair as it is, and her own yellow boots |
+| `edo-hatback` | the same, the hat hanging on her back by its cord (indoors, at rest) | the same | the same |
+| `edo-crew` | the same, a plasterer's white head-cloth tied over the hair, no hat | the same | the same |
+| `edo-baby` | with O-Tami's baby cradled in her arms (the hat on her back); her life rocks it (`rockbaby`) | | |
+| `edo-mirror`, `edo-crew-mirror` | the bronze mirror held up in both hands, standing and walking so (backwards, slowly, across the top floor: a scene moves her; the arms stay up); her life tilts it (`tilt`) | | |
+| `edo-lying` | | | flat on her back on the ground (under the double cherry): the whole figure tipped flat (`spec.pitch`); her head lies away from the way she faces (facing E, her head is to the west); her words are put low (`crown`). Also `lilsis-lying`, in her own clothes |
+
+Their poses and walks are their own in every outfit (Mom glides, Big Sister holds an elbow, Little Sister stomps). The
+rig gained for them: `shoes.foot` (what shows in a sandal when it is not the sock: white tabi under indigo wraps),
+`pose.smile` (a smile a pose asks for), `spec.pitch` (a whole figure tipped, as the lying kind is), and sitting on the heels
+(`sit.seat: "kneel"`, seiza: Grandmother Sei).
+
+**The family's poses for the act**, on their own pages (so every outfit has them), called as the Office's are (a state is a
+kind swapped in, or an outfit; a movement is `fidget(name)`, holdable ones take `{ hold: true }`; a hold is `hold(true,
+name)` until `hold(false)`):
+
+| Who | Pose | How a script calls it |
+| --- | --- | --- |
+| Mom | rocking the baby in her arms (the baby a held thing) | outfit `edo-baby` (her life rocks it; or `fidget("rockbaby")`) |
+| | the mirror held up in both hands, tilting it; walking backwards with it | outfit `edo-mirror` / `edo-crew-mirror` (`fidget("tilt")`, holdable); or standing in any clothes, `hold(true, "mirror")` |
+| | kneeling; sitting back on her heels | `kneel()`, `kneel("back")`, `kneel(false)` (LETTER-17: she has it) |
+| | praying | `pray(true)` (hers: hands at her breast) |
+| Big Sister | counting on her fingers | `fidget("count")` (her cue; also gesture 17 in anyone's list) |
+| Little Sister | crawling under something low (on hands and knees; a scene moves her while she holds it) | `hold(true, "crawl")` |
+| | climbing up and through a high window (both hands up on the sill, a knee up; the scene tweens her up) | `hold(true, "climb")` |
+| | lying on her back | outfit `edo-lying` (or kind `lilsis-lying`) |
+| | holding out the egg in both hands, carefully | `hold(true, "egg")` (the egg is drawn in her hands; Isuke has the same) |
+| | praying | `pray(true)` (hers: with all her might) |
+| | hollering with her hands cupped | `hold(true, "holler")`, or the movement `fidget("holler")` (holdable) |
+| the three of them | walking hand in hand | the rig has no linked walk: Nevada #13 walked them in a row, Little Sister in the middle, each 60 ms after the other (`nevada-roadside.js`, `into`); do the same (the lines there: `LINE`) |
+
+**The people of 1830** (`people.js`, PEOPLE-20; their colours in `world.js` `cast`, by round twelve's rule). Heights: men
+about 1.56 m, women 1.46 m (the rig's scale: Dad at 1.0 is about 181 cm), so Mom stands a head over every Japanese woman.
+Men: the crown shaved and the hair drawn up to a topknot (`chonmage`); work jackets, tight work trousers, a towel round the
+head. Women: the round chignon (`marumage`); a married woman's blackened teeth (face.inside near black: a dark mouth when she
+talks) and, after a child, no eyebrows. Samurai: hakama (the rig's long pleated skirt), a jacket, two swords at the left hip,
+always sheathed. Every kind has a life of small movements (`fidgets`) and cues a script plays (`cues`); the sprites page shows
+all of them (`tools/sprites.html`, "Japan, 1830").
+
+| Kind | Who | Found | Poses: holds (`hold(true, name)`), movements (`fidget(name)`; * holdable), states |
+| --- | --- | --- | --- |
+| `kihei` | the fishmonger, sixty (1.56 m): stocky, big forearms, a towel round the head, grey work jacket, fish-scaled apron, the red sleeveless vest and red hood | standing, arms folded | holds `cut` (at his board, the knife in his right), `press` (both hands down on the sushi box's lid, his weight on it), `board` (holding out a board of sushi), `smile` (his rare one); movements `turnout` (turns the box out), `apron` (wipes his hands), `ojigi`* (a short bow), `fold`* (arms folded) |
+| `tami` | his wife (1.46 m): small, quick, sleeves tied back, teeth blackened, no brows (the baby) | standing, fists on hips | holds `clothes` (three folded kimonos held out), `pull` (pulling someone in by the sleeve, her right arm out to her side); movements `laugh`* (behind her hand), `tasuki` (tightens her cord), `ojigi`* |
+| `tami-baby` | the same, the baby in a sling on her back | | her life jogs it (`jog`) |
+| `sankichi` | their grandson, nine (1.25 m): a boy's short kimono, bare legs, a forelock | standing, hands behind | holds `read` (a finger up on the board), `stare` (bent over, hands on knees, at Little Sister's boots); movements `hop`, `trace`* (a finger along the lines), `point`* |
+| `tokuzo` | the headman's clerk (1.57 m): thin, neat, short-sighted (he squints always), a brush and the register book in his hands | standing | holds `peerclose` (leaning right in), `writing` (the brush going, the book up close); movements `squint`*, `jot`, `ojigi`* |
+| `gonroku` | the captain (1.58 m): weathered, broad, a sailor's indigo jacket, a towel round the head | standing, arms folded | movements `headshake` (a slow no), `grumble` (a hand up to the sky and let fall), `fold`* |
+| `masa` | his wife, Kihei's sister (1.50 m): sturdy, decided, teeth blackened, a head-cloth | standing, fists on hips | movements `hips2`* (hands to her hips, a look round), `march` (two marching steps on the spot: for the march down the beach, walk her), `point`* (at her husband) |
+| `sei` | the grandmother (1.40 m): small, bent, grey hair, a dark plain kimono, no brows, teeth blackened | **kneeling** on her heels (`sit.seat` "kneel"; `sit(false)` gets her up, 1.9 s) | holds `mirror` (the bronze mirror held up in both hands, kneeling or standing), `doors` (opening the altar's doors); `pray(true)` (kneeling: hands folded before her breast, head well down); movements `slownod`, `beads` (her fingers over something small in her lap), `tilt`* (the mirror tilted toward the light), `ojigi`* (standing) |
+| `jinsuke` | her son, the charcoal-burner (1.57 m): soot in his skin and on his face, a brown jacket, dark trousers | standing, hands clasped | holds `shield` (his arms out at his sides in front of his daughter), `sack` (a charcoal sack lifted onto his shoulder); `kneel()`; movements `ojigi`* (deep: 0.62), `wipehands` |
+| `orin` | his daughter, eight (1.18 m): a plain brown kimono, her hair tied up in a knot | standing, hands clasped | hold `peek` (turned half away, looking back over her shoulder, a hand by her cheek); `pray(true)`; movements `whisper`* (behind her hand, leaning to whoever is beside her), `laugh`* (out loud, then the hand over her mouth), `giggle`; running down the ladder is a walk (pace 185) |
+| `isuke` | the constable's man (1.56 m): a townsman's clothes under a straw raincoat, a dripping sedge hat, the short iron truncheon in his sash (never drawn out) | standing, hands clasped | holds `egg` (the egg in both hands, carefully), `writing`; movements `shiver`, `yawn`, `jot`, `ojigi`*; climbing the path is his walk (lean 0.10) |
+| `tomezo` | the plaster foreman (1.59 m): spattered white, a towel round the head, a plasterer's jacket, the trowel in his right hand | standing | holds `holler` (both hands cupped: shouting), `wavetrowel` (the trowel waved over his head); movements `laugh`, `wipebrow`; gestures loud (both arms up, hands wide) |
+| `tomezo-ladder` | the same up his ladder: `standOn` `LADDER_RUNG` (137 cm: PAINT-20D's ladder has eleven rungs 25 cm apart and he stands on rung 6, 1.37 m up), his left arm hooked through a rung; his place is the ground under his feet ([604, 464] in `edo-castle`, the ladder's foot row), as Grandpa Joe's on the chair: the rig draws him up on rung 6 (row 391) and his base is his place's row, in front of the gate | | his life waves the trowel (`wavetrowelmove`); he never walks on it: swap him down to `tomezo` first |
+| `guard1`, `guard2` | the gate guards (samurai): 1.62 m and 1.50 m, black jackets, pale hakama (grey, the short one's), two swords each | standing stiff, hands behind | movements `tally2` (counting people off with a finger), `ojigi`* (slight: 0.14) |
+| `shinnosuke` | the keep's young warden, nineteen (1.58 m): slight, pale, a new (small) topknot, two swords | standing, hands clasped | hold `light` (the pink flashlight lit, in both hands); `kneel()`; movements `tremble`, `count`* (syllables on his fingers; and gesture 17 is in his list), `ojigi`* |
+| `shinnosuke-floor` | the same sat down on the floor, legs out, leaning back on his hands (`sit.seat` "floor") | sitting | hold `light` sitting; `sit(false)` gets him up |
+| `netmender` | an old villager at Yui (1.52 m): grey, a towel round the head, brown jacket | sitting cross-legged, a net across his knees | his life mends it (`mend`); `sit(false)` |
+| `basketwoman` | a village woman with a big wicker basket on her back (1.47 m) | standing, thumbs in the straps | hold `gasp` (both hands up to her face: the arrival) |
+| `basketwoman-dropped` | the same, the basket dropped (the scene puts the basket on the ground) | standing | swap her in under `basketwoman` at the moment it falls |
+| `pilgrim1` to `pilgrim3` | Himeji people setting out for Ise (1.57, 1.54, 1.50 m): travel clothes, sedge hats, a wooden ladle held up in the right hand | standing | hold `ladleout` (the ladle held out, for alms); they walk east along the road (pace 145) |
+| `plasterer1`, `plasterer2` | Tomezō's crew (1.56, 1.54 m): white head-cloths, spattered clothes; one carries a bucket of lime, one a trowel | standing | holds `trowelwall` (trowelling a wall in front), `mix` (both hands on the pole in a tub); movements `trowelling`*, `mixing` |
+
+Nothing frightening: nobody handles anybody, and the swords and the truncheon are never drawn out. `ojigi` is the Japanese
+bow (the back straight, the hands flat on the thighs); how deep is `bowDeep` on each page.
+
 ### Making someone themselves
 
 Colors and clothes say who a person is when they stand still. These settings in
@@ -1303,6 +1444,8 @@ Colors and clothes say who a person is when they stand still. These settings in
 | `kneel` <!-- LETTER-17 --> | That they kneel, and how far they lean in: on both knees, upright, the thighs straight down and the shins along the ground, the hands on the thighs (`figure.kneel()`); sat back on the heels, the hands in the lap and the head a little bowed (`figure.kneel("back")`); up again (`figure.kneel(false)`). Each eases over a third of a second (half a second to sit back), lasts through whatever is said (the lips move), and is for someone standing still. On her knees her words come down with her head (`figure.h`). Kept to whoever has it: anyone else is left as they are | Mom only: at the little door in Act Four, the night she hears her son (round seventeen), with her handbag down on the gravel beside her (`figure.bare = "bag"`: she is drawn without it, and the roadside draws it on the ground, `handbag` in `props.js`) |
 | `seated`, `sit` | For someone who is found sitting: `"ground"` or `"chair"`, and what exactly they sit on (a chair, a bench, a stool, a step, a height, or the `"floor"`: legs out, leaning back on the hands) | The scribe, the lamp boy, the goldsmith, the street boy, the soothsayer, the clerk, Grandpa Joe (in his rocking chair, and on the limousine's seat), and Jed in the dust (`"floor"`); since round thirteen Phyllis (on a low stool drawn with her, which stays where it is when she gets up), Titus (on a statue's base, high: he hops down) and Eleazar (on his bench); since round seventeen Opal (on her counter stool: she hops down), the suits and Grandpa Joe at the table (`sit.up: 0`: they stand where they sat, pushing the chair back), Floyd on the couch (`sit.turn`: his head lolled) and Jed in the break room's chair <!-- OFFICE-17P --> |
 | `rest` | Where an arm lies when a pose leaves it alone | The scribe's pen hand |
+| `outfit`, `wears` <!-- PEOPLE-20 --> | A page that is a lead in other clothes: the outfit's name, and whose page it was made from (`dressed()`); `g.dress(who, name)` puts `people[<lead>-<name>]` on | `mom-edo`, `lilsis-edo-crew` |
+| `bowDeep`, `pitch`, `sit.seat "kneel"`, `shoes.foot` <!-- PEOPLE-20 --> | How deep their bow (`ojigi`) is; the whole figure tipped (lying down); found sitting on the heels (seiza); what shows in a sandal when it is not the sock | Jinsuke bows to 0.62, a guard to 0.14; Little Sister lying under the cherry; Grandmother Sei; white tabi under indigo leg wraps |
 
 The twenty gestures: a nod, one hand making a point, a shrug, a hand on the hip, both
 arms up, a hand to the heart, a hand to the chin, showing off muscles, an open hand,
@@ -1496,6 +1639,25 @@ cut-scene's name in it (`cutscene`). Loading that save takes the name out of the
 run (Backup's roadside and the Office's lot and limousine play their cut-scenes themselves for a save made there), and
 plays the named one if the arrival did not play a cut-scene. So a player who quits in one comes back just before it, and
 sees it again, not the last room before it.
+
+<!-- ENGINE-20 --> **An act handed on.** A cut-scene that closes an act and opens the next ends with one call, `await g.handOn({ act,
+team, active, scene, spawn, via, card, cutscene, pockets, gone })` (`game.js`), which does what "Backup" and the Office's arrival
+did by hand: the save's `act`, the new team (`team`, `active` the one played first: the team's first if not said or not on it),
+`gone` leads who are in no scene of this game's from now on (`where` null: the family at "Backup"), the **pockets' rule**
+(`pockets: { who: [things] }`: each thing that is in nobody's pockets is given to that lead, with nothing said; a thing somebody
+already carries stays theirs), the end of the skippable part (whatever was skipped, the new act's opening plays as itself), and
+then the act's arrival cut-scene (`cutscene`, which dresses the stage itself and ends in the scene, as the Office's arrival does)
+or, without one, `g.goto(scene, { via: "cut", spawn, card: false })`; if the cut-scene did not end in the scene, the goto follows.
+True when the scene is up. It saves nothing itself: the goto saves on arrival, and the action that started it all saves after.
+Going Down hands Act Six on this way (`office-down.js`, `EDO_HANDON`): the card LAMPLIGHTER / "to be continued" and `office.done`
+as before (that thread waits), then the card "Meanwhile" / "in another time" (WRITE-20A's `edo.card.meanwhile.1` and `.2`), then
+`g.handOn({ act: 7, team: ["mom", "bigsis", "lilsis"], active: "mom", scene: "edo-village", spawn: "arrive", cutscene: "edo-arrive",
+pockets: { bigsis: ["coin"], lilsis: ["egg", "lilflash"] } })`: the coin (the Son's denarius) in somebody's pockets, else Big
+Sister's; Little Sister's egg and pink flashlight in hers, else given (the Office's checkpoints carry the girls' pockets from Nevada:
+they survive into the act). The village's own `enter` plays the arrival for a game that has not had it (a save at the hand-on, the
+`?scene=` shortcut), as the Office's lot does. The demo no longer ends at Going Down: `demo.done` is set at the end of Act Six
+(`edo-step.js`, with `save = false`, as Going Down had it until round twenty: the autosave before Going Down is right again, and the
+Office's room script no longer goes to the title after it).
 
 ### The opening
 
@@ -1719,6 +1881,16 @@ greeting to his "Go in peace", so that the river is heard, very softly, and come
 voice falling by steps down a plain F major sequence over a bass that walks under it, a little flat (a track's `detune`,
 in cents, on its tune: -20, as a tape played too often); and Grandpa Joe's Last Stop Rag on the pie-tin banjo (`rag-tin`):
 the notes of `rag`, plucked short and bright, a little louder than his humming, never sung. Both written for the game.
+<!-- ENGINE-20 --> Since round twenty, Act Six's three tunes (`edo`, the act's; `edo-hidden`, the room underground; `edo-keep`,
+inside the keep), written for the game in two Japanese pentatonic modes (the bright `yo` scale, D E G A B, for the sea and the
+spring; the `in` scale, with its half step over the root, for the room underground and the keep), on two voices the synth gained
+for them (`audio.js`, `playPattern`): `voice: "pluck"`, a plucked string (a triangle with a brighter octave over it that is gone in
+a tenth of a second, the plectrum's attack, the note then falling away fast), and `voice: "flute"`, a breathy flute (a sine that
+comes in over `attack` seconds with a little filtered breath under it, `breath`); a track can carry a second line, `alt` (notes of
+the scale, as `lead`, in `altVoice`, `altLevel`, `altHold`, `altOctave`), so the plucked tune has a flute answering the ends of its
+phrases; `level`, `bassLevel` set the voices' loudness. Nothing borrowed: no real song, no folk tune, no famous melody. The synth
+cannot make a shakuhachi's breath-tones or a koto's bends: a real recording of either goes in as any track does, below.
+
 To use a real recording, add one line:
 
 ```js
@@ -1754,6 +1926,31 @@ may slide to another, `[note, start, length, the note it slides to]`, as a fan r
 The round's brief named the date stamp `thunk` and the tin banjo's string `twang`. Both names were the game's already
 (`thunk`, the piano's dead note in the living room and the limousine's divider; `twang`, the banjo over Jed's head in
 "Backup", every string at once), and are kept as they were: the Office's are `stamp` and `twang-tin`.
+
+<!-- ENGINE-20 -->
+**Act Six's sounds**, made by code as every sound in the game is (`sfx` in `sound.js`):
+
+| Sound | What it is |
+| --- | --- |
+| `gull` | A gull: two falling cries |
+| `noren` | Wind lifting a noren curtain: a soft flap of cloth |
+| `creak` | A ship's timbers working in a swell (the voyage's journey plays it) |
+| `press` | The wooden sushi press: a soft knock of wood on wood |
+| `lime` | Wet lime slapped on a wall |
+| `shutter` | A wooden shutter swung open: a groan and a knock |
+| `bar` | A bar lifted out of its brackets |
+| `trapdoor` | A trapdoor lifted and let down |
+| `knock` | Three knocks on wood (a trapdoor knocked on: "a very particular kind of polite") |
+| `bell` | A temple bell a long way off at dusk: one stroke |
+| `sandals` | Straw sandals on stone: four steps (the walk's journey plays it) |
+
+And **loops of sound** (`loops` in `sound.js`; `audio.js` `loop`, `loopLevel`, `stopLoop`): ambience that goes on until stopped,
+each made of noise through a filter that drifts (`noise: [low, high]` Hz over `sweep` seconds and back, `q`) and/or steady notes
+(`[midi, level]`, with a slow `wobble`), at `level`: `rain` (a soft steady hiss: the `rain` kind starts and stops it itself, louder
+on thatch by its `level`, turned down under a line with the rain), `waves` (the sea on a shingle beach: a slow wash up and back) and
+`hum` (the door in time's hum at the top of the keep: low, wavering a little). A script starts one with `g.loop("waves")` (or
+`g.loop("hum", { level: 0.6 })`) and stops it with `g.stopLoop("waves")`; every loop stops as a scene is left and behind the title.
+They are on the effects' bus, each with a gain of its own, so a loop fades in and out and is never cut.
 
 ### Dialogue, and the road to full voices
 
@@ -2192,6 +2389,10 @@ section 10 shows how a scene says where each of them arrives.) In a party:
 - **They hand things over.** Hold something and click a companion, or her portrait, to
   give it to her. The scene can react (`given`): Big Sister, handed her father's note,
   reads what it means.
+- **Two things in one pair of pockets go together** <!-- SCENES-20A, MERGE-20 -->: hold one and click the other, and a
+  scene's `combine` (`{ "pencil+note": async (g) => ..., }`, the two ids either way round) runs, if it has one for the pair
+  (Yui: Dad's pencil on the sticky note, and Big Sister writes #21's sum down). Without one, as before, the second thing
+  clicked becomes the one held. A small addition to `useItem` in `js/engine/game.js`.
 - **Each has her own pockets, and the screen says whose.** The inventory along the
   bottom is always there, with a tag: "Mom's handbag", or "Mom's handbag: empty". (What
   each lead's pockets are called is `keeps` in `world.js`.) A portrait carries a small
@@ -2539,6 +2740,35 @@ as "Not from here.", with a note in the console. `g.travel` says no at once, and
 have no scene at all: the Office's B-7, on the blueprint and marked RESTRICTED, where nobody goes in stage one (there is no
 travel to a place with no scene: "has no scene to go to"). The maps' check lets a place that is `shown` list no scene.
 
+<!-- ENGINE-20 -->
+**The legs of a journey.** Act Six goes west down Japan in three legs (Yui; the hills north of Osaka; Himeji), by sea and on foot,
+with cards between, and the family never goes back. A place of a map can have a `leg` (a number, or a function of the game giving
+one; `maps.js`): the family may travel by the map only between places of the leg they are in, which is the leg of the place whose
+scenes hold the lead's scene (`legOf`, `sameLeg` in `atlas.js`). A place of another leg shows as visited (drawn in, its name) but
+is no target: it refuses with a line of its own, `far` on the place (a line id, or a function of the game giving one: "Twelve days
+by sea."), on the label line as the map's refusals are ("The hills. Twelve days by sea."; a line that is a thought shows its
+pictures), and a click on it says it again and nothing happens; `g.travel` to it is false, and the console says why; a route never
+passes through a place of another leg. Without the line in the lines files it says "Too far to go back.", and the console says so
+once. Places with no `leg` behave as before (they are of every leg). A way can be a **journey's only** (`journey: true` on the path):
+it is drawn as any way is once both its places are visited, but no route goes along it and it needs no marks to arrive on; a way's
+end at a landmark with no scene needs none either. The act's map (`edo`: Yui, Osaka (a landmark), the hills, Himeji; the sea, the
+road north, the coast road, all journeys') is in `maps.js` with its legs and far lines; its places are PAINT-20B's.
+
+**A journey on the map** (`await g.journey(mapId, from, to, { via, path, ms, sound, who })`, from a cut-scene): the map comes up
+(a rustle), with the place the journey starts from, the places it passes (`via`: their ids, in order) and the place it goes to drawn
+in and named whether or not the player has been there (the journey is how they get there), and the team's portraits at the first
+place (the one played and the rest of the team; `who` names others); they go along the path (each hop's way on the map, its `via`
+in the painters' layout, turned round where it is gone along from its far end, or a straight line between the pins where the map
+has no way; or `path`, points of the map given outright), a soft click at each place passed, over `ms` (3200: slower than travel's
+walk), with `sound` played as it starts (the ship's timbers, `creak`; the road, `sandals`); then the map fades out to the dark and
+is put away, and the cut-scene goes on (its goto finds the stage dark: `via: "map"` or `"cut"`). While it is up the world stops as
+under the Map button; a click or a key hurries the walk and does nothing else; nothing of it is saved. With less motion the
+portraits are at the far end at once. False at once, and nothing done, with no such map or place (the console says why) and while
+the cut-scene is skipped. The voyage: `g.journey("edo", "yui", "hills", { via: ["osaka"], sound: "creak" })`; the walk:
+`g.journey("edo", "hills", "himeji", { sound: "sandals" })`. The proof: `index.html?scene=engine-proof&lead=dad&flags=proof.legs`
+(the sand leg 1, the room under it leg 2: each far from the other) and `flags=proof.journey` (the palm tree: a cut-scene of the
+proof's own goes round by the dunes, a landmark, into the room under the sand); the engine test's `legs20` part plays both.
+
 **The Office's map** (`office` in `maps.js`: era `nevada`, "The Office", `art/maps/office/`, PAINT-17B's blueprint, drawn as
 a sketch until it is in): the lot, the ducts, the Comfortable Room, Property & Effects, the break room, and B-7. One way: the
 lot to the ducts, by the roof and the unit's intake (arriving on the ducts' mark `intake`, or the lot's `roof`). The rooms
@@ -2566,7 +2796,12 @@ notch, a tenth of a notch past it, a settle of 0.06 s back and a hold of 0.08 s,
 small bell (`ding`) at the end. Then the dial shrinks and rises into the small dial's place at the top of their map (0.4 s)
 as the map fades in under it. A click or a key hurries it to its end. Each time's notch is `dial` in `eras` (`world.js`):
 A, today, is 0 (the present, home and Nevada), B.C., the furthest back the game goes, is 8 (Egypt, about 1920 B.C.), and Rome
-is 4; the bow is at `rotate(48deg)` at A and 12 degrees less at each notch, about the point 50% across and 58.59375% down,
+is 4 (<!-- ENGINE-20 --> and Japan in 1830, `edo`, is 1: the rule's 0.4 would put it on today's notch, and a past time is never
+there: the dial turns one notch between the present and 1830, and nothing assumes a time past the present has a notch above 1).
+<!-- MERGE-20 --> An era can keep its date back: `dateAfter` names a fact, and until it is true the game shows the era's name
+alone, on its card, in the map's band and on its chip, and in a saved game's label (`g.dateOf(era)` in `game.js`, used by
+all of them; tools such as the storyboard show `date` as written). Japan has `dateAfter: "edo.when"`, because the year
+is #21's answer. The bow is at `rotate(48deg)` at A and 12 degrees less at each notch, about the point 50% across and 58.59375% down,
 as on the begin screen. Two times on one notch (home and Nevada) have no turn: a fade to the map. On the map, the chips, a
 click on the small dial (the next map) and the Left and Right keys turn the small dial the same way, notch by notch from the
 shown map's time to the chosen one's, a click at each and the bell at the end (two maps on one notch: one click, no turn),
@@ -2593,7 +2828,8 @@ are sketches.
 **At every start** the engine checks the maps against the scenes and the eras, beside the edge check ("Map check: ..."): a
 place's scene that is not in `index.js`, on two maps or listed twice; a way whose places are not on its map; a way's mark
 that its scene has no spawn for (a mark that is a function of the game is asked which mark it gives); a map whose time is
-not in `eras` or has no notch; and any scene of the list that is on no map.
+not in `eras` or has no notch; and any scene of the list that is on no map (<!-- ENGINE-20 --> a way that is a journey's only, and
+a way's end at a landmark with no scene, need no marks; a place's `leg` must be a number and its `far` a line id, or functions).
 
 **The proof.** The engine's proof scene and the sketch of a market street are on two maps of their own, drawn as sketches
 (`proof-sand`, in Egypt, and `proof-street`, in Rome). With the letterbox proof (Dad on the sand, the Son in the street),
@@ -3201,6 +3437,10 @@ loads the game, by the plain addresses, with the old risk.
 | `g.team(["mom", "bigsis", "lilsis"])` | Says which leads the player can switch between from now on |
 | `await g.switchLead("son")` | Changes who the player controls (they must be on the team). One who is in another scene is switched to through their map, the Timer first when the two scenes are in different eras (section 8, "The map, and the Timer"); `g.switchLead("son", { map: false })` keeps the old way: the short tunnel across the eras, a fade within one. <!-- MAP-15 --> |
 | `await g.travel("forum")`, `g.mapOf("rome-forum")`, `g.atlas.show()` | (MAP-15) The lead travels to a place of their own map as a click on it does (true when the new scene is up; false, and nothing done, when they may not go); the map and the place a scene is on (`{ id, map, place }`, or null); the map screen comes up, as the Map button brings it (section 8, "The map, and the Timer"). |
+| `await g.journey("edo", "yui", "hills", { via: ["osaka"], sound: "creak" })` | (ENGINE-20) In a cut-scene: the map comes up, the team's portraits go along the way from one place to another (through the places named in `via`), and the map fades out to the dark; `{ path, ms, who }` (section 8, "A journey on the map"). True when shown; false, nothing done, while skipped or with no such place. |
+| `await g.handOn({ act: 7, team, active, scene, spawn, cutscene, pockets, gone })` | (ENGINE-20) At the end of a cut-scene: the game is handed on to the next act (section 5, "An act handed on"). |
+| `g.effects.get("light").set({ on: k })`, `.set({ doorK: k })`, `.set({ shown: true })`, `.patch()` | (ENGINE-20) The mirror's light: its strength, the door in it, the image in it; the patch as it is now (section 2, "The mirror's light, and the door"). |
+| `g.loop("waves")`, `g.loop("hum", { level: 0.6 })`, `g.stopLoop("waves")`, `g.stopLoop()` | (ENGINE-20) A loop of sound on until stopped (section 7); every loop stops as a scene is left. |
 | `await g.think("ranger", ["piepan", "plus", "banjo"])`, `g.think("suit4", "zzz", { loop: true })`, `g.think("suit4", null)` | (ENGINE-17) A thought: a bubble of one to three pictures over someone's head in place of words, for as long as a line of three words (`{ ms }`: another length), skippable; `{ loop: true }` keeps it over him until `null` (section 7, "Thought pictures"). A line with a third element is said this way by `g.say`. |
 | `await g.pa("office.pa.jed")`, `await g.pa(id, { building: "office" })` | (ENGINE-17) A line on the building's speakers: a banner at the top with a loudspeaker, after a chime; timed, counted, skippable. Heard only in a scene of a building (`building`) and in a grille's view of one, and with `{ building }` only in that one (in a cut-scene: the building it names); elsewhere not shown, false (section 7, "The building's speakers") |
 | `g.pass("receipt", "ranger")`, `g.handed("ranger")` | (ENGINE-17) The lead being played hands a thing to another lead, wherever he is: into his pockets, the mark on his portrait, a note, the game saved; true if it went. What has been handed to a lead and not yet seen as him: `[{ item, from, to, at }]` (section 8, "Seven leads, apart and together") |
@@ -3312,23 +3552,28 @@ and climbing back (section 8), a thing handed to a lead in another scene, a lead
 map's travel for each lead (section 8), several floors in one scene, joined by a climb (section 3), and a scene's own
 `tick` (section 10). <!-- ENGINE-17 -->
 
-**Painted:** the highway of the intro and the title, and nineteen scenes: five in Egypt (the
-inside of the wagon among them), six in Rome, the five rooms of the house, and in Nevada the
-roadside, the store inside and the back of the limousine. Ranger, frame by frame; and the birds
+**Painted:** the highway of the intro and the title, and thirty-two scenes: five in Egypt (the
+inside of the wagon among them), six in Rome, the five rooms of the house, in Nevada the
+roadside, the store inside and the back of the limousine, five at the Office Of Peculiar Sectors
+(since round seventeen), and since round twenty eight in Japan: Yui on Suruga Bay and Kihei's
+fish shop, the cedar path in rain, the charcoal-burner's storehouse and the room under it, the
+castle approach at Himeji and two floors of its keep, in the woodblock manner (section 9). <!-- MERGE-20 --> Ranger, frame by frame; and the birds
 of the Capitol and across the Tiber, the geese and Mariam's hens, frame by frame as the pigeons
-are. Thirty-four things to carry. The game's emblem, in nine pictures of the interface's own
+are. Forty-three things to carry (MERGE-20: round twenty's count). The game's emblem, in nine pictures of the interface's own
 (twelve since round fifteen, with the Timer's three pieces at 1024). <!-- MAP-15D --> Since round
-fifteen, the four maps of the story, each its own kind of map (section 9, "The maps"): thirty-five
-pictures, with their measurements. Since round sixteen, the world outside the limousine's windows for the `drive`:
+fifteen, the maps of the story, each its own kind of map (section 9, "The maps"), six since round
+twenty (the Office's blueprint, round seventeen; Japan's woodblock travel map, round twenty), with
+their measurements. Since round sixteen, the world outside the limousine's windows for the `drive`:
 a sky, each side's far ranges, middle distance and ground, and a sheet of seventeen things beside the road, each in two lights (section 2,
 "The world going by a car's side windows"). <!-- DRIVE-16M -->
 
-**Drawn:** thirty-eight people, and twenty-four more states of them (section 4).
+**Drawn:** every person in the story, sixty-two in the cast since round twenty, with their states and, for the family in
+Japan, their outfits (section 4). <!-- MERGE-20 -->
 
-**Written:** a prologue and five acts, the fifth only as far as its opening: Egypt, Rome,
-home, the Nevada desert, and the limousine of Act Five, whose last card is the end of the
-demo. Each part has its puzzle document (the present's has Acts Three and Four and the
-opening of Act Five). None of it has been signed off by the author yet: Acts One and Two
+**Written:** a prologue and six acts: Egypt, Rome, home, the Nevada desert, Act Five (the
+limousine, and the Office's stage one since round seventeen), and since round twenty Act Six,
+Japan in the spring of 1830, whose last cut-scene, "Hold Hands", is the end of the demo. Each
+part has its puzzle document (the present's has Acts Three to Five; PUZZLES-japan.md, Act Six). <!-- MERGE-20 --> None of it has been signed off by the author yet: Acts One and Two
 were rewritten in October 2026 from his brief, Act Three was remade on 7 October, Act Four
 was expanded and Act Five begun on 10 to 12 October, and on 13 October Act Two gained the
 bigger Rome's first stage (three places, seven people, three puzzles that each add a step to a
@@ -4329,6 +4574,50 @@ continued: the Office (stage one)". -->
      the ground for his whole upper body is in front of the table's end, at the floor's front edge (about [410, 477]),
      where he would stand over the table's corner and be drawn larger still (the audit's S14 asks for him no larger).
      So `atjoe` stays at [361, 469], beside his chair; the mirror's edge behind his shoulder is the price.
+
+<!-- MERGE-20: round twenty, Act Six (Japan, spring 1830). The design is briefs/out/edo-design.md (its section 11 has the
+first thirteen); the rest are the builders' (SCENES-20A, 20B, 20C) and the merge's. -->
+217. **Spring 1830, and Japanese believers, not missionaries** (Ilya's answer): the hidden family keep the faith
+     themselves; Jinsuke keeps the water (he baptizes), the nearest thing they have to a missionary.
+218. **The journey**: Yui on Suruga Bay (Fuji across the water), the hills north of Osaka (where hidden Christians really
+     lived in 1830), Himeji; by sea and on foot, with cards between, three legs on the map (`leg`, `far`).
+219. **The cedar path** is a path into the hills in spring rain, in the spirit of Hasui's road to Nikkō, not the Nikkō
+     avenue itself (north of Edo, off the family's way). **The room under the storehouse** is the game's invention, in the
+     spirit of the hidden rooms that were real.
+220. **The mirror with the cross in its light** is the family's treasure and the act's last image (the historical tradition
+     of such mirrors is in doubt; the notes say so). If the author would rather the door had no cross in it, the mirror
+     can show the pine and crane of its back instead (`image`), and the scene still works.
+221. **The sushi** is pressed mackerel from a box, as 1830 had it outside Edo; Big Sister says Edo has just begun making it
+     by hand. Nobody says "itadakimasu" (it was not yet a custom): Kihei and O-Tami bow to the god-shelf and say nothing.
+222. **The Timer's notch for 1830 is 1**, not 0, so that the dial turns.
+223. **The title**, "Act Six: By Your Grace" (from "okage-sama de"). Other candidates: "The Year of the Tiger", "Hidden".
+224. **Nobody in the family lies**, all act: every option the player can pick for them is true.
+225. **The demo ends at the top of Himeji's keep**, on "to be continued", the family stepping through with the coin;
+     where they come out is the next round's. Shinnosuke keeps the mirror's light on the door while they walk in (he holds
+     it as Mom did: `people.js`, SCENES-20C), then sits on the floor and says his last poem.
+226. **Inside the keep** is an adventure game's liberty (in 1830 it was a locked storehouse), taken behind a repair crew,
+     the plausible way; **the double cherry** at the castle is one old tree, blooming late, at the end of April.
+227. **The Our Father is the recognition**: Little Sister in the King James words, Grandmother Sei in the old Japanese
+     ones, of which the game writes only the first three, "Ten ni mashimasu".
+228. **The year is kept back until #21 is solved** (an era's `dateAfter`, section 9): the arrival has no era card, and the
+     map's band, its chip and the saved games say "Japan" alone until Big Sister works out 1830. **The ship waits for
+     #21 too** (`edo.sail` needs `edo.when`): "Not yet. I won't sail out of a year I can't name."
+229. **The act's card comes twice**: at the end of the arrival with no year, and when #21 is solved, with Big Sister's
+     words under it ("Spring, 1830. Bunsei thirteen. The year of the metal tiger.").
+230. **Yui's staging** (SCENES-20A): the clerk's first pass plays the first time they go into the shop; Mom hums the baby to
+     sleep in her own clothes, before the kimonos; O-Tami dresses them one at a time; the three eat on the step; the
+     night at sea and Osaka are close-ups drawn by code, not paintings. Hats are on outdoors and on the back indoors.
+231. **The map's places of another leg** say where they are from where Mom stands (her lines, `edo.map.far.*`): Yui
+     "twelve days back, by sea", the hills "three days back", Osaka (faint beyond the bay before the voyage) "a long way
+     by sea", Himeji (faint beyond the hills) "three days' walk from here". With six maps known, the map's chips wrap
+     into two rows (SCENES-20A), so that Home's is never under the small dial.
+232. **Words under a close-up stop short of Skip** while it shows (`css/game.css`), so a two-line line never runs under it.
+233. **Left as they are, for the author to say**: words lie across O-Masa's and Gonroku's faces on the crowded beach (they
+     could stand a little apart); #28's third hint ("not yet crew") never shows at rest, because Tomezō's talk goes from
+     the trowel straight to the head-cloths; Big Sister's last #21 hint is never heard, because the year is worked out
+     the moment the third clue is in; twenty-one lines of the top floor (the other shutters opened, the flashlight on the
+     hum) are reachable only by a script; the act's later threads (a letterbox from Japan, the hidden family's journey
+     east, what Shinnosuke tells his fellows) are for later rounds.
 
 ---
 

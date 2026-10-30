@@ -22,6 +22,7 @@ export function newGame(leads = ["dad", "son"]) {
     asked: {},                // TALK-11: what has been asked in dialogue trees, and how many times: asked["joe/car"] = 2 (the tree's id and the option's; dialogue.js talk)
     visited: [],              // MAP-15: the ids of the scenes the player has entered, in order (the map draws the places they are in)
     handed: [],               // ENGINE-17: things handed to a lead in another scene (g.pass) whom the player has not played as since: { item, from, to, at } (his portrait's mark)
+    dress: {},                // PEOPLE-20: the outfit each lead wears, by id ("edo", "edo-crew"); a lead not in it is in their own clothes (g.dress)
   }, leads);
 }
 
@@ -39,6 +40,10 @@ export function complete(data, leads) {
   data.tunnel = Array.isArray(data.tunnel) ? data.tunnel : [];      // LETTERBOX-11: a save from before the letterbox has no tunnel, which means an empty one
   data.asked = data.asked && typeof data.asked === "object" ? data.asked : {};     // TALK-11: a save from before dialogue trees has nothing asked
   data.handed = Array.isArray(data.handed) ? data.handed.filter((e) => e && leads.includes(e.to)) : [];     // ENGINE-17: a save from before g.pass has nothing handed
+  // PEOPLE-20: the outfits: a save from before them (or anything that is not a lead's name of an outfit) means everyone in their own clothes
+  const dress = data.dress && typeof data.dress === "object" ? data.dress : {};
+  data.dress = {};
+  for (const [who, name] of Object.entries(dress)) if (leads.includes(who) && typeof name === "string" && name) data.dress[who] = name;
   // MAP-15: a list of the scenes entered is kept as it is; anything else (a save from before the map has none) is left out,
   // for the game to fill when the save is loaded (game.js visitedOf: from the story's facts and where the team stands)
   if (Array.isArray(data.visited)) data.visited = data.visited.filter((id) => typeof id === "string");

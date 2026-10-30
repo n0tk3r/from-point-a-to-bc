@@ -34,6 +34,7 @@ import { AudioEngine } from "./audio.js";
 import { Dialogue } from "./dialogue.js";
 import { SceneView, footOf, picturesIn } from "./scene.js";
 import { Cutout } from "./cast.js";
+import { people } from "../art/people.js";                    // PEOPLE-20: the outfits a lead can be dressed in (g.dress)
 import * as castKit from "./cast.js";               // (castKit.forget: the paints, below)
 import { keyScene } from "../art/look.js";
 import { WalkMap, scaleAt, scaleOn, floorsOf } from "./walk.js";          // (ENGINE-17: scaleOn and floorsOf: a scene's floors, and a floor's own size)
@@ -103,6 +104,7 @@ export class Game {
     this.audio = new AudioEngine(this.settings, content.sound);
     this.view = new SceneView(this.stage);
     this.view.cast.calm = this.calm;
+    this.view.cast.wardrobe = (id) => this.dressOf(id);      // PEOPLE-20: every lead made on the stage is in the outfit the save says (g.dress)
     this.dialogue = new Dialogue(this);
     this.ui = new UI(this);
     this.outlines = new Outlines(this);   // what Show draws (outline.js)
@@ -195,6 +197,7 @@ export class Game {
     this.ui.close();
     this.ui.hud(false);
     this.view.clear();
+    if (this.audio.stopLoop) this.audio.stopLoop();                             // ENGINE-20: no loops of sound behind the title
     this.view.cast.light = null;                 // ENGINE-19B (9): no room's light behind the title
     this.view.setEra("present");
     // What is behind the title belongs to the story, not to the engine: the cutscene called "title"
@@ -272,6 +275,8 @@ export class Game {
       option's; with no tree id, the scene's id, the node's and the option's). 0 if never. */
   asked(key) { return (this.store.data.asked || {})[key] || 0; }
   flag(name, value) { return this.store.flag(name, value); }
+  /** MERGE-20: an era's date as the game shows it: none while its `dateAfter` fact is false (Act Six: the year is #21's answer). */
+  dateOf(era) { return !era ? "" : era.dateAfter && !this.flag(era.dateAfter) ? "" : era.date || ""; }
   has(item) { return this.store.has(item); }
   take(item) { if (this.held === item) this.held = null; this.store.take(item); }
   give(item) {
@@ -385,6 +390,26 @@ export class Game {
       building (`building`), its grille's view too; elsewhere not shown, and the console says so. { ambient: true }: without
       taking the controls. True if it was heard. */
   pa(id, opts = {}) { return this.dialogue.pa(id, opts); }
+
+  /** PEOPLE-20: dress a lead in an outfit (js/art/people.js: `people[<lead>-<name>]`, made from their own page: the family's
+      Edo travel clothes, "edo"; with the hat on the back, "edo-hatback"; the plasterers' head-cloth, "edo-crew"; Mom with the
+      baby, "edo-baby", and with the mirror up, "edo-mirror", "edo-crew-mirror"; Little Sister lying down, "edo-lying"), or in
+      their own clothes (null). It is kept in the save, and the lead is drawn in it wherever a lead is drawn, now (if they
+      are on the stage) and in every scene after; the portraits keep their faces. True if it changed; not a lead, or a name
+      their kind has no page for: a console warning, and nothing happens. g.dressOf(who) says what they wear (null: their own). */
+  dress(who, name = null) {
+    const d = this.store.data, want = name || null;
+    if (!this.leads.includes(who)) { console.warn(`g.dress: "${who}" is not a lead; the leads are ${this.leads.join(", ")}.`); return false; }
+    if (want && !people[`${this.cast[who].sprite}-${want}`]) { console.warn(`g.dress: there is no outfit "${want}" for ${who} ("${this.cast[who].sprite}-${want}" is not in js/art/people.js), so nothing changes.`); return false; }
+    if ((d.dress[who] || null) === want) return false;
+    if (want) d.dress[who] = want; else delete d.dress[who];
+    const f = this.view.cast.get(who);
+    if (f) { f.dress(want); this.rebuildSpots(); }
+    this.store.emit();
+    return true;
+  }
+  /** PEOPLE-20: the outfit a lead wears ("edo"), or null for their own clothes. */
+  dressOf(who) { const d = this.store.data; return (d.dress && d.dress[who]) || null; }
 
   /** The lead being played hands a thing to another lead, wherever he is: in another scene (up through a vent, down
       through a grille) as well as this one. It goes from these pockets into his; his portrait carries a mark (something
@@ -586,11 +611,57 @@ export class Game {
 
   /** Say which leads the player can switch between from now on. */
   team(list) { this.store.data.team = list.filter((id) => this.leads.includes(id)); this.store.emit(); }
+  /**
+   * ENGINE-20: an act hands the game on to the next, at the end of a cut-scene (as "Backup" hands Act Four on to the
+   * limousine, and the Office's arrival hands the limousine on to the lot; before round twenty each did it by hand):
+   *     await g.handOn({ act: 7, team: ["mom", "bigsis", "lilsis"], active: "mom", scene: "edo-village", spawn: "arrive",
+   *                      cutscene: "edo-arrive", pockets: { bigsis: ["coin"], lilsis: ["egg", "lilflash"] }, gone: [] })
+   *   act        the act's number in the code (the save's `act`)
+   *   team       the leads the player can switch between from now on; `active` the one played first (the team's first if not said)
+   *   scene      the scene the act opens in, and `spawn` the mark it opens on (`default` if not said); `card` (false) and
+   *              `via` ("cut") as g.goto takes them
+   *   cutscene   the act's arrival cut-scene, played in place of the plain goto (it dresses the stage itself and ends in the
+   *              scene, as the Office's arrival does); if it does not end there, the goto follows
+   *   pockets    the pockets' rule at the hand-on: { who: [things] }: each thing that is in nobody's pockets is given to
+   *              that lead (the family's coin to Big Sister, Little Sister's egg and flashlight to her), with nothing said;
+   *              a thing somebody already carries stays where it is
+   *   gone       leads who are in no scene of this game's from now on (through a door: the family at "Backup"); `where` null
+   * It ends the skippable part of the cut-scene (whatever was skipped, the new act's opening plays as itself), saves nothing
+   * itself (the goto does, on arrival), and resolves when the new scene is up. The hand-on is the same skipped or played.
+   */
+  async handOn({ act = null, team = [], active = null, scene = null, spawn = "default", via = "cut", card = false, cutscene = null, pockets = null, gone = [] } = {}) {
+    const d = this.store.data;
+    for (const id of gone) if (this.leads.includes(id)) d.where[id] = null;
+    const list = team.filter((id) => this.leads.includes(id));
+    if (Number.isInteger(act)) d.act = act;
+    if (list.length) { d.team = list; d.active = this.leads.includes(active) && list.includes(active) ? active : list[0]; }
+    else if (this.leads.includes(active)) d.active = active;
+    if (pockets && typeof pockets === "object") {
+      for (const [id, things] of Object.entries(pockets)) {
+        if (!this.leads.includes(id)) { console.warn(`g.handOn: pockets for "${id}", who is not a lead.`); continue; }
+        for (const item of [].concat(things || [])) {
+          if (!this.items[item]) { console.warn(`g.handOn: no item called "${item}" to put in ${id}'s pockets.`); continue; }
+          if (this.holder(item)) continue;                                        // (in someone's pockets already: it stays theirs)
+          (d.inventory[id] = d.inventory[id] || []).push(item);
+        }
+      }
+    }
+    this.store.emit();
+    this.clock.skipping = false;                                                   // the skippable part ends here
+    this.ui.showSkip(false);
+    if (cutscene && this.cutscenes[cutscene]) await this.cutscene(cutscene);
+    else if (cutscene) console.warn(`g.handOn: no cut-scene called "${cutscene}": the game goes straight to "${scene}".`);
+    if (scene && (!this.scene || this.scene.id !== scene)) await this.goto(scene, { via, spawn, card });      // (the cut-scene did not end there, or there was none)
+    return !!this.scene && this.scene.id === scene;
+  }
   music(id) { this.audio.music(id); }
   /** The track a scene plays: its own `music` (a track id, or a function of the game that returns one, so that the
       story can change it), or else its era's. A script that has just changed the story calls g.music(g.musicOf(g.scene)). */
   musicOf(scene) { const m = typeof scene.music === "function" ? scene.music(this) : scene.music; return m || this.eras[scene.era].music; }
   sfx(id) { if (!this.clock.skipping) this.audio.sfx(id); }
+  /** ENGINE-20: a loop of sound (sound.js `loops`: waves, the hum) on until stopped; every loop stops as a scene is left. */
+  loop(id, options) { return this.audio.loop ? this.audio.loop(id, options) : false; }
+  stopLoop(id = null) { if (this.audio.stopLoop) this.audio.stopLoop(id); }
   actor(id) { return this.view.cast.get(id); }
   /** One of the scene's painted cut-outs, by the id it has under `planes`: .show(bool), .set(state), .fade(opacity), .place(x, y, scale).
       What a script shows or sets by hand holds until the scene is built again; left alone, a cut-out follows its `when` and `state`. */
@@ -839,7 +910,7 @@ export class Game {
       await this.fade(0, dip ? dip.in : via === "wormhole" ? 700 : 400, via === "wormhole" ? "#fff" : "#000");      // (ENGINE-19B: DIP.in next door)
       if ((!from || from.era !== scene.era) && via !== "map" && card) {        // (MAP-15: none after the map, which has said where and when; ENGINE-17: nor when asked)
         const era = this.eras[scene.era];
-        await this.card(era.name, era.date);
+        await this.card(era.name, this.dateOf(era));      // (MERGE-20: dateOf)
       }
       if (fall) await this.grilles.fall(fall);                                 // ENGINE-17
       if (scene.enter) await scene.enter(this, came !== undefined ? came : from ? from.id : null);     // (MAP-15: came)
@@ -861,6 +932,7 @@ export class Game {
     this.lookMode = false;
     this._leaving = null;
     this.view.clear();
+    if (this.audio.stopLoop) this.audio.stopLoop();                             // ENGINE-20: the last scene's loops of sound (waves, a hum) go with it
     // ENGINE-17: `peek`: the scene is built as a view through a grille (grille.js), the lead up above it and not in it: his
     // place, the save's scene and the party are left as they are, he is not put on the stage, and only the areas that say
     // what they do from above are there (rebuildSpots). Any other build ends a view.
@@ -1338,6 +1410,11 @@ export class Game {
       this.lookMode = false;
       return this.run(() => this.act(this.item(item).look), { settle: false });      // (only the lead speaks: anyone away stands still till it is said)
     }
+    // SCENES-20A: a thing held, used on another thing in the pockets: the scene's `combine` script for the two ({ "a+b":
+    // script }, in either order), if it has one (Dad's pencil on the sticky note, in Yui). Otherwise, as before, the other
+    // thing is the one held now.
+    const both = this.held && this.held !== item && this.scene && this.scene.combine && (this.scene.combine[`${this.held}+${item}`] || this.scene.combine[`${item}+${this.held}`]);
+    if (both) { this.held = null; this.ui.refresh(); return this.run(() => both(this), { settle: false }); }
     this.held = this.held === item ? null : item;
     this.ui.refresh();
   }
@@ -1416,6 +1493,9 @@ export class Game {
       their portrait walks the ways, and the scene changes. Resolves true when the new scene is up; false at once, with
       nothing done, if they may not go there now (the console says why). */
   travel(placeId) { return this.atlas.travel(placeId, { script: true }); }
+  /** ENGINE-20: a journey shown on a map, for a cut-scene: the map comes up, the team's portraits go along the path from one
+      place to another (the voyage by the sea path, the walk by the road), and the map fades out to the dark (atlas.js journey). */
+  journey(mapId, from, to, options) { return this.atlas.journey(mapId, from, to, options); }
   /** The scenes a save from before the map is taken to have visited (and the ?scene= shortcut's): the scenes of every beat
       of every act whose gate is done, those of the beats done in the act under way, and the scenes where the team stands
       (the one being played among them); only scenes this game has. */
@@ -1439,7 +1519,8 @@ export class Game {
   snapshot() { this.rememberPlace(); return copy(this.store.data); }
   meta() {
     const here = this.here, era = this.eras[here.era];      // (ENGINE-17: the lead's own scene, while he looks down through a grille)
-    return { scene: here.name, era: `${era.name}${era.date ? ", " + era.date : ""}`, lead: this.cast[this.store.data.active].name, playMs: Math.round(this.store.data.playMs) };
+    const date = this.dateOf(era);      // (MERGE-20: dateOf)
+    return { scene: here.name, era: `${era.name}${date ? ", " + date : ""}`, lead: this.cast[this.store.data.active].name, playMs: Math.round(this.store.data.playMs) };
   }
   autosave({ before = null } = {}) {
     // ENGINE-19A: { before: a cut-scene's id }, from cutscene(): written whatever is under way (the script that starts it), with

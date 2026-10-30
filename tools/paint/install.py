@@ -32,6 +32,7 @@ PLACES["map-rome"] = "maps/rome"                  # MAP-15R: the map of Rome, a 
 PLACES["map-home"] = "maps/home"                  # MAP-15H: the map of the house, a pencil floor plan (installed as painted, never keyed)
 PLACES["map-nevada"] = "maps/nevada"              # MAP-15N: the map of Nevada, a fold-out road map (installed as painted, never keyed)
 PLACES["map-office"] = "maps/office"              # OFFICE-17B: the map of the Office, a blueprint (installed as painted, never keyed)
+PLACES["map-edo"] = "maps/edo"                    # PAINT-20B: the map of Japan, an Edo travel map (installed as painted, never keyed)
 # Everything that `python3 install.py` installs, in the order of the story.
 SCENES = [
     "highway",
@@ -47,9 +48,14 @@ SCENES = [
     "office-ducts",                                                                           # OFFICE-17B: the Office's air ducts (Act Five, stage one)
     "office-room", "office-property",                                                         # OFFICE-17C: the Office's interview room and Property & Effects
     "office-breakroom",                                                                       # OFFICE-17D: the Office's break room (round seventeen)
+    "edo-village",                                                                            # PAINT-20A: Yui on Suruga Bay (Act Six, round twenty)
+    "edo-cedars", "edo-storehouse",                                                           # PAINT-20C: the cedar path in rain and the storehouse (round twenty)
+    "edo-castle",                                                                             # PAINT-20D: the castle approach at Himeji (Act Six)
+    "edo-fishshop", "edo-chapel", "edo-keep", "edo-keeptop",                                  # MERGE-20: PAINT-20B, 20F, 20E (round twenty)
     "items", "portraits",
     "map-egypt", "map-rome", "map-home", "map-nevada",                                        # MAP-15E/R/H/N: the four maps
     "map-office",                                                                             # OFFICE-17B: the Office's blueprint
+    "map-edo",                                                                                # PAINT-20B: Japan's travel map (round twenty)
 ]
 
 

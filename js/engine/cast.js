@@ -157,6 +157,7 @@ export class Sprite {
   flag(name, on) { this.flags[name] = on; return this; }
   face() { return this; }
   pose() { return this; }              // ENGINE-17: one picture of a painted set held (PaintedFigure.pose); anyone else has none to hold
+  dress() { return this; }             // PEOPLE-20: an outfit (Figure.dress); nothing else wears one
   get h() { return 0; }
   /** Where this meets the ground, measured at a given x. */
   baseAt(x) {
@@ -190,6 +191,27 @@ export class Figure extends Sprite {
     this.move = null;                   // getting up or sitting down, under way
     this.fid = null;                    // a small movement under way (see fidget)
     this.bare = null;                   // LETTER-17: something of theirs they have set down, and are drawn without ("bag": Mom's handbag, on the gravel)
+    this.outfit = null;                 // PEOPLE-20: the outfit they are dressed in ("edo"), or null for their own clothes (see dress)
+  }
+
+  /** PEOPLE-20: dress them in an outfit: `people[<kind>-<name>]`, a page made from their own (the family's Edo travel clothes,
+      "edo"; the crew's head-cloth, "edo-crew"; and their states, "edo-baby", "edo-mirror"), or null for their own clothes. The
+      figure is redrawn in it where it stands, as it is (standing, walking, talking: the pose goes on); a hold or a small
+      movement under way is let go, since those are the page's. A name their kind has no page for: a console warning, and
+      nothing changes. The game keeps a lead's outfit in the save and puts it on whenever the lead is made (g.dress). */
+  dress(name = null) {
+    const want = name ? `${this.kind}-${name}` : this.kind, spec = people[want];
+    if (!spec) { console.warn(`cast.dress: there is no "${want}" in js/art/people.js, so ${this.kind} stays as dressed.`); return this; }
+    if ((this.outfit || null) === (name || null)) return this;
+    if (this.up) this.seatDown();                                        // (a sitter up from a seat: back on it, in the new clothes)
+    this.endFidget(); this.act = null; this.move = null;
+    this.outfit = name || null;
+    this.home = this.spec = spec;
+    this.stride = strideOf(spec) * spec.height * BASE;
+    this.tall = tallOf(spec) * spec.height * BASE;
+    this.tallUp = undefined;
+    this.t = 0;
+    return this;
   }
 
   /** How far the top of the head is above the ground, in pixels at scale 1. For placing words just over it, seated or standing. */
@@ -491,7 +513,7 @@ export class Figure extends Sprite {
   picture(palette, calm) {
     const full = BASE * this.spec.height, want = full * this.scale, f = this.frame(calm);
     const even = (size) => Math.max(10, Math.round(size / 2) * 2);                              // in steps of two pixels, so pictures can be reused
-    const who = (this.spec === this.home ? this.kind : this.kind + "^up") + (this.bare ? "-" + this.bare : "");      // (someone found sitting, on their feet; LETTER-17: and without what they have set down)
+    const who = (this.outfit ? `${this.kind}-${this.outfit}` : this.kind) + (this.spec === this.home ? "" : "^up") + (this.bare ? "-" + this.bare : "");      // (someone found sitting, on their feet; LETTER-17: and without what they have set down; PEOPLE-20: in the outfit they wear)
     const lit = this.cast && this.cast.light ? litOf(this.cast.light, this.x, this.y) : null;      // ENGINE-19B (9): the room's light on them, if it asks
     const at = (size) => remember(`${who}|${f.key}|${this.yaw}|${size}${lit ? lit.key : ""}`, () => litDraw(lit, () => drawFigure(this.spec, this.bare ? { ...f.pose(), bare: this.bare } : f.pose(), this.yaw, size)));
     if (!f.moving) return at(even(want));                                                       // standing, talking, reaching: exactly the size they are
@@ -774,6 +796,8 @@ export class PaintedFigure extends Sprite {
 
   /** No gesture and no mouth: the stand (or sit) pictures go on while his words are over his head. */
   talk(on) { if (on && !this.talking) { this.t = 0; this.endFidget(); } this.talking = on; return this; }
+  /** PEOPLE-20: a painted figure has no outfits: asked to dress, nothing happens (his other states are his variants). */
+  dress() { return this; }
 
   /** Walk through a list of points in turn, as a Figure does, at his own pace: the walk cycle goes by the ground covered
       (stride). Hurried (a double click), he scampers: the run set, with its own stride. A walk ends whatever he was playing. */
@@ -1116,6 +1140,7 @@ export class Cast {
     this.calm = false;                   // true: no idle motion
     this.last = "";                      // what is on the layer now, in a few characters (see update)
     this.shots = [];                     // and in full: each picture painted, where, and the box of pixels it touches
+    this.wardrobe = null;                // PEOPLE-20: (id, kind) => the outfit this person wears, or null (the game sets it from the save: g.dress), asked as each figure is made
   }
 
   get(id) { return this.items.get(id); }
@@ -1133,7 +1158,9 @@ export class Cast {
       preparePainted(kind).then(() => { for (const path of f.paths()) fetchPicture(path); });
       return f;
     }
-    const f = this.add(new Figure(id, kind).place(x, y, scale)); f.cast = this; return f;      // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
+    const f = this.add(new Figure(id, kind).place(x, y, scale)); f.cast = this;      // (a figure that gets up from a seat drawn with it puts the seat on the stage: Figure.sit)
+    if (this.wardrobe) { const name = this.wardrobe(id, kind); if (name) f.dress(name); }      // PEOPLE-20: in the outfit the save says
+    return f;
   }
   addThing(id, kind, x, y, scale = 1, options) { return this.add(new Thing(id, kind, options).place(x, y, scale)); }
   /** A painted cut-out from a scene's `planes`. Its pictures are asked for at once; load() says when they are here. */

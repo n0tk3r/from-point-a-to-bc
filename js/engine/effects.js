@@ -20,6 +20,11 @@
 //   drive     the world going by a car's side windows, as a pinhole camera moving forward sees it: the ground in perspective,
 //             panoramas at their distances, posts and poles growing and sweeping past. DRIVE-16E, `Drive` below
 //             (DRIVE-16F: and each thing's shadow laid on the ground in perspective, from the sun the scene gives)
+//   rain      fine straight slanting lines over the picture, splashes where they land, a hiss (ENGINE-20, `Rain` below)
+//   petals    cherry petals drifting down and sideways from a tree's crown to the ground, settling and fading (ENGINE-20)
+//   waves     waves in rows on a bay, as the prints draw them: short curling crests, smaller farther off (ENGINE-20)
+//   mirror    light from a hand mirror on a wall: a patch that grows with the mirror's distance, a cross in it, and the door
+//             in time opened in it (ENGINE-20, `MirrorLight` below)
 //
 // ROME-13E: a flock can also be sent somewhere by a script (`herd`: the geese into their pen) and made to strike a pose
 // all at once (`pose`: the geese hissing): see Flock.herd.
@@ -305,15 +310,15 @@ class Drawn extends Effect {
   update(calm) {
     if (!this.pair || this.step === null) return;
     const fps = calm ? this.calmFps : this.fps;
-    this.sprite.want = Math.floor((this.time * fps) / 1000) !== this.step || calm !== this.drawnCalm;
+    this.sprite.want = !!this.dirty || Math.floor((this.time * fps) / 1000) !== this.step || calm !== this.drawnCalm;      // (ENGINE-20: `dirty`, a kind that knows its picture is stale: the mirror's light when the hand moves)
   }
   grant() { this.go = true; }
   picture(sprite, calm) {
     if (!this.pair) return null;
     const fps = calm ? this.calmFps : this.fps, step = Math.floor((this.time * fps) / 1000), go = this.go;
     this.go = false;
-    if (this.step === null || (go && (step !== this.step || calm !== this.drawnCalm))) {      // (the first picture at once; after that, in its turn)
-      this.step = step; this.drawnCalm = calm;
+    if (this.step === null || (go && (this.dirty || step !== this.step || calm !== this.drawnCalm))) {      // (the first picture at once; after that, in its turn)
+      this.step = step; this.drawnCalm = calm; this.dirty = false;
       const ctx = this.pair.next();
       if (this.clipPath) { ctx.save(); ctx.clip(this.clipPath); }
       this.drawn = 0;
@@ -1154,6 +1159,12 @@ class Flyers extends Effect {
     if (!s.pair || s.pair.w < x1 - x0 || s.pair.h < y1 - y0) s.pair = new Pair(x1 - x0 + 6, y1 - y0 + 6);
     const ctx = s.pair.next();
     for (const [x, y, p] of list) ctx.drawImage(p.canvas, Math.round(x - p.ox) - x0, Math.round(y - p.oy) - y0);
+    // ENGINE-20: flyers kept inside shapes (`clip`: the herons going past the keep's windows, seen only in the openings) or
+    // hidden where they pass behind something painted nearer (`behind`): as a drawn kind takes them
+    const shapes = (list_, out) => { const polys = polysOf(list_); if (!polys.length) return; const p = new Path2D(); for (const poly of polys) { poly.forEach(([px, py], i) => (i ? p.lineTo(px - x0, py - y0) : p.moveTo(px - x0, py - y0))); p.closePath(); }
+      ctx.save(); ctx.globalCompositeOperation = out ? "destination-out" : "destination-in"; ctx.fillStyle = "#000"; ctx.fill(p); ctx.restore(); };
+    if (this.spec.clip) shapes(this.spec.clip, false);
+    if (this.spec.behind) shapes(this.spec.behind, true);
     s.place(x0, y0); s.pic = { canvas: s.pair.canvas, ox: 0, oy: 0 }; s.sig = s.nextSig; s.hidden = false;
   }
   picture(sprite) { return sprite.pic || null; }
@@ -3264,6 +3275,335 @@ class Portal extends Effect {
   }
 }
 
+// ---------------------------------------------------------------- ENGINE-20: weather as pattern (round twenty, Act Six)
+/**
+ * rain: fine straight slanting lines falling over the picture, and splashes where they land on a floor line. Drawn as the
+ * woodblock prints draw rain: each drop a thin stroke, all of one slant, never a blur.
+ *   area        the shape the rain falls in (a poly, rect or circle; the whole stage if not said); `behind`: shapes it is not
+ *               drawn in (eaves, a roof: as every kind takes it), so that the rain is hidden under them
+ *   count       drops in the air at once (the area's size / 1600, 40 to 400)
+ *   slant       how far a drop drifts sideways for every 100 px it falls (12; negative: to the left)
+ *   speed       px a second (520); `length` a drop's length (14, or [low, high])
+ *   width       a drop's line width (1); `color` (#dfe9f2), `opacity` (0.32)
+ *   floor       where the drops land and splash: a row, a line [[x, y], [x, y]], or a list of lines; none: no splashes
+ *   splash      a splash's size (3; 0: none) and `splashes` how many a second along the floor (count / 12)
+ *   sound       the hiss: a loop of sound.js's `loops` (`rain`), on while the rain is on the stage; `level` its loudness (0.5;
+ *               1 on thatch; 0: silent). It goes quieter under a line, as the rain itself does (the hush).
+ *   seed, base or plane (its depth: `back`, behind everybody, if not said), when, scale: as every kind. 20 pictures a second.
+ */
+class Rain extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, k = this.k;
+    this.plane = "back";
+    this.area = polyOf(s.area) || polyOf(s.poly) || polyOf(s.rect) || [[0, 0], [W, 0], [W, H], [0, H]];
+    const [x0, y0, x1, y1] = boxOf(this.area).map((v, i) => (i < 2 ? Math.floor(v) : Math.ceil(v)));
+    this.box = [Math.max(0, x0), Math.max(0, y0), Math.min(W, x1), Math.min(H, y1)];
+    this.count = Math.round(num(s.count, clamp(areaOf(this.area) / 1600, 40, 400)));
+    this.slant = num(s.slant, 12); this.speed = num(s.speed, 520);
+    this.len = isPair(s.length) ? s.length : [num(s.length, 14) * 0.8, num(s.length, 14) * 1.2];
+    this.lineWidth = num(s.width, 1);
+    this.rgb = rgbOf(s.color, [223, 233, 242]); this.alpha = num(s.opacity, 0.32);
+    this.floors = typeof s.floor === "number" ? [[[this.box[0], s.floor], [this.box[2], s.floor]]] : Array.isArray(s.floor) && s.floor.length === 2 && isPoint(s.floor[0]) ? [s.floor] : Array.isArray(s.floor) ? s.floor.filter((l) => Array.isArray(l) && l.length === 2 && isPoint(l[0]) && isPoint(l[1])) : [];
+    this.splash = num(s.splash, 3); this.splashes = num(s.splashes, this.count / 12);
+    this.sound = s.sound === false || s.sound === "none" ? null : typeof s.sound === "string" ? s.sound : "rain";
+    this.level = clamp(num(s.level, 0.5), 0, 1.5);
+    this.fps = 20; this.calmFps = 10; this.slow = 0.6;
+    const [bx0, by0, bx1, by1] = this.box;
+    this.setup(bx1 - bx0 + 1, by1 - by0 + 1, 0, by1 - by0, [bx0, by1]);        // placed by its bottom left corner
+    if (!this.clipPath) { this.clipPath = new Path2D(); this.area.forEach(([x, y], i) => (i ? this.clipPath.lineTo(x - bx0, y - by0) : this.clipPath.moveTo(x - bx0, y - by0))); this.clipPath.closePath(); }
+  }
+  /** The hiss comes and goes with the rain (reveal), and follows the hush (Effects.hushing tells every loop: Effect.hushed). */
+  reveal(on) { super.reveal(on); this.loop(on); }
+  loop(on) {
+    const a = this.game && this.game.audio;
+    if (!a || !this.sound || !a.loop) return;
+    if (on && this.level > 0) { a.loop(this.sound, { level: this.level }); this.looping = true; }
+    else if (this.looping) { a.stopLoop(this.sound); this.looping = false; }
+  }
+  end() { this.loop(false); }
+  update(calm) {
+    super.update(calm);
+    if (this.looping && this.game.audio.loopLevel) this.game.audio.loopLevel(this.sound, this.level * (calm ? 0.8 : 1) * this.hushed("opacity"));
+  }
+  draw(ctx, t, calm) {
+    const [x0, y0, x1, y1] = this.box, w = x1 - x0, h = y1 - y0, k = this.k, seed = this.seed, n = calm ? Math.ceil(this.count * 0.6) : this.count;
+    const slant = this.slant / 100, drift = h * Math.abs(slant) + 20, span = h + 30;
+    ctx.strokeStyle = rgba(this.rgb, this.alpha); ctx.lineWidth = this.lineWidth * k; ctx.lineCap = "butt";
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const len = within(this.len, rnd(seed, i, 1)) * k, v = this.speed * (0.85 + 0.3 * rnd(seed, i, 2));
+      const fall = (t * v + rnd(seed, i, 3) * span) % span, y = fall - 15;                 // (born above the box, gone below it)
+      const x = -drift * (slant > 0 ? 1 : 0) + rnd(seed, i, 4) * (w + drift) + slant * y;
+      if (y + len < 0 || y > h || x < -2 || x > w + 2) continue;
+      ctx.moveTo(x, y); ctx.lineTo(x - slant * len, y - len);
+      this.drawn++;
+    }
+    ctx.stroke();
+    // the splashes: short ticks on the floor lines, each for a sixth of a second, where a drop has landed
+    if (this.splash > 0 && this.floors.length && !calm) {
+      ctx.strokeStyle = rgba(this.rgb, this.alpha * 1.1); ctx.lineWidth = Math.max(1, 0.8 * k); ctx.beginPath();
+      const rate = this.splashes, S = this.splash * k;
+      for (let j = Math.floor((t - 0.2) * rate); j <= Math.ceil(t * rate); j++) {
+        const born = (j + rnd(seed, j, 11)) / rate, age = t - born;
+        if (age < 0 || age > 0.17) continue;
+        const line = this.floors[Math.floor(rnd(seed, j, 12) * this.floors.length)], u = rnd(seed, j, 13), [[ax, ay], [bx, by]] = line;
+        const px = ax + (bx - ax) * u - x0, py = ay + (by - ay) * u - y0, r = S * (0.4 + age * 4);
+        ctx.moveTo(px - r, py); ctx.lineTo(px - r * 0.4, py - r * 0.9); ctx.moveTo(px + r, py); ctx.lineTo(px + r * 0.4, py - r * 0.9);
+        this.drawn++;
+      }
+      ctx.stroke();
+    }
+  }
+}
+
+/**
+ * petals: cherry petals drifting down and sideways on a little wind, from a region (the tree's crown) to the ground, a few at
+ * a time; they settle where they land and fade.
+ *   from        the region they fall from (a poly, rect or circle: needed)
+ *   floor       where they land: a row, or a line [[x, y], [x, y]] (its y under the petal's x); none: the bottom of the stage
+ *   count       how many are in the air at once (6); `rate` how many set off a second (count / 3)
+ *   wind        px a second sideways (18; negative: to the left); `fall` px a second down (26)
+ *   size        a petal's length (4, or [low, high]); `color` (#f6c9d6) and `color2` (#eaa7bd): each petal one or the other
+ *   settle      seconds a petal lies where it landed before it has faded (2.2)
+ *   opacity (0.9), seed, base or plane (its depth), when, scale: as every kind. 20 pictures a second.
+ */
+class Petals extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, k = this.k;
+    this.from = polyOf(s.from) || polyOf(s.area) || polyOf(s.poly) || polyOf(s.rect);
+    if (!this.from) throw new Error("petals need `from`: the region they fall from");
+    this.floorLine = typeof s.floor === "number" ? [[0, s.floor], [W, s.floor]] : Array.isArray(s.floor) && s.floor.length === 2 && isPoint(s.floor[0]) ? s.floor : [[0, H - 2], [W, H - 2]];
+    this.count = Math.max(1, Math.round(num(s.count, 6)));
+    this.rate = num(s.rate, this.count / 3);
+    this.wind = num(s.wind, 18); this.fall = num(s.fall, 26);
+    this.size = isPair(s.size) ? s.size : [num(s.size, 4) * 0.8, num(s.size, 4) * 1.25];
+    this.rgb = rgbOf(s.color, [246, 201, 214]); this.rgb2 = rgbOf(s.color2, [234, 167, 189]);
+    this.settle = num(s.settle, 2.2); this.alpha = num(s.opacity, 0.9);
+    this.fps = 20; this.calmFps = 10; this.slow = 0.6;
+    const [fx0, fy0, fx1, fy1] = boxOf(this.from), floorY = Math.max(this.floorLine[0][1], this.floorLine[1][1]);
+    const drop = Math.max(10, floorY - fy0), sideways = Math.abs(this.wind) * (drop / this.fall) + 30;
+    const left = Math.max(0, Math.floor(fx0 - (this.wind < 0 ? sideways : 30))), right = Math.min(W, Math.ceil(fx1 + (this.wind > 0 ? sideways : 30)));
+    const top = Math.max(0, Math.floor(fy0) - 4), bottom = Math.min(H, Math.ceil(floorY) + 6);
+    this.setup(right - left + 1, bottom - top + 1, 0, bottom - top, [left, bottom]);
+  }
+  floorAt(x) { const [[ax, ay], [bx, by]] = this.floorLine; const u = bx === ax ? 0 : clamp((x - ax) / (bx - ax)); return ay + (by - ay) * u; }
+  draw(ctx, t, calm) {
+    const k = this.k, seed = this.seed, [ox, oy] = this.origin, rate = calm ? this.rate * 0.6 : this.rate;
+    const [fx0, fy0, fx1, fy1] = boxOf(this.from), drop0 = Math.max(10, this.floorAt((fx0 + fx1) / 2) - fy0), longest = drop0 / this.fall + this.settle + 2;
+    const first = Math.floor((t - longest) * rate) - 1, last = Math.ceil(t * rate);
+    for (let i = first; i <= last; i++) {
+      const born = (i + rnd(seed, i, 1) * 0.9) / rate, age = t - born;
+      if (age < 0) continue;
+      let sx = null, sy = 0;
+      for (let tries = 0; tries < 6 && sx === null; tries++) { const x = fx0 + rnd(seed, i, 2 + tries * 2) * (fx1 - fx0), y = fy0 + rnd(seed, i, 3 + tries * 2) * (fy1 - fy0); if (inside(this.from, x, y)) { sx = x; sy = y; } }
+      if (sx === null) continue;
+      const wob = 1.3 + rnd(seed, i, 20) * 1.1, ph = rnd(seed, i, 21) * TAU, fall = this.fall * (0.8 + 0.4 * rnd(seed, i, 22));
+      const x = sx + this.wind * age * (0.7 + 0.3 * rnd(seed, i, 23)) + 7 * Math.sin(age * wob + ph);
+      const ground = this.floorAt(x), flight = Math.max(0.1, (ground - sy) / fall);
+      const landed = age >= flight, y = landed ? ground : sy + fall * age + 2 * Math.sin(age * wob * 2 + ph);
+      const lie = landed ? age - flight : 0;
+      if (lie > this.settle) continue;
+      const a = this.alpha * (landed ? 1 - lie / this.settle : 1) * Math.min(1, age / 0.3);
+      const len = within(this.size, rnd(seed, i, 24)) * k, rgb = rnd(seed, i, 25) < 0.5 ? this.rgb : this.rgb2;
+      const turn = landed ? ph : age * (1.5 + rnd(seed, i, 26)) + ph;
+      ctx.save(); ctx.translate(x - ox, y - oy); ctx.rotate(turn); ctx.scale(1, landed ? 0.45 : 0.55 + 0.45 * Math.abs(Math.sin(age * 2.3 + ph)));
+      ctx.fillStyle = rgba(rgb, a); ctx.beginPath(); ctx.ellipse(0, 0, len / 2, len / 3.2, 0, 0, TAU); ctx.fill(); ctx.restore();
+      this.drawn++;
+    }
+  }
+}
+
+/**
+ * waves: waves in rows on a bay or the sea, as the prints draw them: short curling crests in rows inside a shape, smaller
+ * and closer farther off, each crest coming, travelling a little toward the shore and going. Very quiet, drawn ten times a
+ * second, behind everybody unless given a base.
+ *   area        the water's shape (a poly, rect or circle: needed); `holes`: shapes kept clear (a boat, a rock)
+ *   rows        how many rows of crests (the area's height / 16, 3 to 30); `per` crests across a full row (the width / 44)
+ *   color       the crests' colour (#f4f8fb); `opacity` (0.5); `size` a crest's width at the near edge (10), shorter farther
+ *   speed       px a second the crests travel (6; `toward`: "S" (the shore is below), "N", "E" or "W")
+ *   life        seconds a crest shows (3.5)
+ *   seed, base or plane, when, scale: as every kind.
+ */
+class Waves extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    this.plane = "back";
+    this.area = polyOf(s.area) || polyOf(s.poly) || polyOf(s.rect);
+    if (!this.area) throw new Error("waves need a shape: area, poly or rect");
+    this.holes = polysOf(s.holes);
+    const [x0, y0, x1, y1] = boxOf(this.area).map((v, i) => (i < 2 ? Math.floor(v) : Math.ceil(v)));
+    this.box = [x0, y0, x1, y1];
+    this.rows = Math.round(num(s.rows, clamp((y1 - y0) / 16, 3, 30)));
+    this.per = Math.round(num(s.per, clamp((x1 - x0) / 44, 3, 40)));
+    this.rgb = rgbOf(s.color, [244, 248, 251]); this.alpha = num(s.opacity, 0.5);
+    this.size = num(s.size, 10); this.speed = num(s.speed, 6); this.life = num(s.life, 3.5);
+    this.toward = ["N", "S", "E", "W"].includes(s.toward) ? s.toward : "S";
+    this.fps = 10; this.calmFps = 5; this.slow = 0.5;
+    this.setup(x1 - x0 + 1, y1 - y0 + 1, 0, y1 - y0, [x0, y1]);
+    if (!this.clipPath) { this.clipPath = new Path2D(); this.area.forEach(([x, y], i) => (i ? this.clipPath.lineTo(x - x0, y - y0) : this.clipPath.moveTo(x - x0, y - y0))); this.clipPath.closePath(); }
+  }
+  draw(ctx, t, calm) {
+    const [x0, y0, x1, y1] = this.box, w = x1 - x0, h = y1 - y0, k = this.k, seed = this.seed, rows = this.rows;
+    const dir = this.toward === "S" ? [0, 1] : this.toward === "N" ? [0, -1] : this.toward === "E" ? [1, 0] : [-1, 0];
+    ctx.strokeStyle = rgba(this.rgb, 1); ctx.lineCap = "round";
+    for (let r = 0; r < rows; r++) {
+      const depth = Math.pow((r + 0.5) / rows, 1.4), ry = depth * h, scale = 0.35 + 0.65 * depth, size = this.size * k * scale, per = Math.max(2, Math.round(this.per * (0.6 + 0.4 * depth)));
+      ctx.lineWidth = Math.max(0.8, 1.4 * scale * k);
+      for (let c = 0; c < per; c++) {
+        const i = r * 97 + c, life = this.life * (0.8 + 0.4 * rnd(seed, i, 1)), cycle = life * (1.3 + 0.9 * rnd(seed, i, 2));
+        const shifted = t + rnd(seed, i, 3) * cycle, j = Math.floor(shifted / cycle), age = shifted - j * cycle;
+        if (age >= life) continue;
+        const u = age / life, a = this.alpha * Math.pow(Math.sin(Math.PI * u), 1.2) * (0.5 + 0.5 * scale);
+        const bx = ((c + 0.5 + (rnd(seed, i, j, 4) - 0.5) * 0.9) / per) * w + dir[0] * this.speed * scale * age, by = ry + (rnd(seed, i, j, 5) - 0.5) * (h / rows) * 0.8 + dir[1] * this.speed * scale * age;
+        const X = bx + x0, Y = by + y0;
+        if (!inside(this.area, X, Y) || this.holes.some((hole) => inside(hole, X, Y))) continue;
+        ctx.globalAlpha = a;
+        ctx.beginPath(); ctx.moveTo(bx - size / 2, by); ctx.quadraticCurveTo(bx - size / 6, by - size * 0.28, bx + size * 0.15, by - size * 0.1); ctx.quadraticCurveTo(bx + size * 0.3, by - size * 0.02, bx + size / 2, by + size * 0.06); ctx.stroke();
+        if (!calm && size > 6) { ctx.beginPath(); ctx.moveTo(bx + size * 0.15, by - size * 0.1); ctx.quadraticCurveTo(bx + size * 0.02, by - size * 0.26, bx - size * 0.05, by - size * 0.12); ctx.stroke(); }
+        this.drawn++;
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ---------------------------------------------------------------- ENGINE-20: the mirror's light
+/**
+ * mirror: light from a hand mirror on a wall (the act's two great moments: a cross in the light; the door in time opened by it).
+ * A soft bright ellipse (the patch) on the target, its size growing with the mirror's distance from the target (a bronze
+ * mirror is a little convex: the farther, the bigger), a little dimmer as it grows, trembling with the hand; a plain cross of
+ * light drawn faint inside it, shown or not; and, where the target is the hum, the door in time (a `portal` of the scene)
+ * opened in the patch, its size the patch's, its rings running out to the patch's edge, the image in the middle of it.
+ *   mirror      [x, y]: where the mirror is; or `holder`, the id of the person holding it, with `hand` [ahead, up] (px at
+ *               full size, from his feet, `ahead` the way he faces: [18, 100] if not said), read every picture
+ *   target      [x, y]: the point on the wall the light falls on (the patch's middle)
+ *   sizes       [[d1, r1], [d2, r2]]: the patch's radius at two distances of the mirror from the target (px): the engine fits
+ *               r = a + b * d through them ([[60, 10], [400, 60]] if not said); `flat` the patch's height over its width (1.15:
+ *               a wall seen a little from the side; 1 for a round patch)
+ *   dim         how much dimmer it is as it grows: its brightness is (r1 / r) ^ dim (0.45)
+ *   tremble     the hand's tremble, px at the patch (1.6), about six times a second; 0: steady
+ *   image       "cross", or null; `shown` whether the image shows at the start (false); its arms are `arms` of the patch's
+ *               radius long (0.72) and `bar` of it thick (0.11); a shade brighter than the patch
+ *   door        the id of a `portal` of the scene (the hum): while `doorK` > 0 the portal is kept open that far with its size
+ *               the patch's; `doorK` how far (0). SCENES-20C: `fit: "height"` sizes the door by the patch's height (r * flat)
+ *               instead of its width (r): for a patch squeezed as the wall is (flat 1 / the portal's `wide`), so that the
+ *               rings reach the patch's edge both ways (the keep's top floor: the east wall seen from the side)
+ *   on          the light's strength, 0 to 1 (1); at 0 nothing is drawn (the window is shut, the sun is off the mirror)
+ *   color       the light's colour (#fff2cc), `opacity` (0.78)
+ *   reach       a rect [x, y, w, h] of the stage the mirror can be anywhere in: with it (or a fixed `mirror` point) a faint beam
+ *               is drawn from the mirror to the patch (`beam: false` keeps it off), and the canvas is that big; with neither the
+ *               patch alone is drawn, in a canvas its own size (cheap). set({ target }) keeps the canvas: a new target must lie
+ *               within the old one's reach
+ *   seed, base or plane (its depth: give the wall's row), when, scale: as every kind. 20 pictures a second.
+ * A script steers it with set({ on, mirror, target, doorK, shown, image }): g.effects.get("light").set({ on: k }) as the shutter
+ * opens; set({ doorK: k }) as the door opens. `patch()` gives { x, y, r, d, alpha } as it is now.
+ */
+class MirrorLight extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    if (!isPoint(s.target)) throw new Error("a mirror's light needs `target`: [x, y], the point on the wall");
+    this.target = [s.target[0], s.target[1]];
+    this.mirrorAt = isPoint(s.mirror) ? [s.mirror[0], s.mirror[1]] : null;
+    this.holder = typeof s.holder === "string" ? s.holder : null;
+    this.hand = isPair(s.hand) ? s.hand : [18, 100];
+    const sz = Array.isArray(s.sizes) && s.sizes.length === 2 && s.sizes.every(isPair) ? s.sizes : [[60, 10], [400, 60]];
+    const [[d1, r1], [d2, r2]] = sz;
+    this.b = d2 === d1 ? 0 : (r2 - r1) / (d2 - d1); this.a = r1 - this.b * d1; this.r1 = r1;
+    this.rMin = Math.max(2, Math.min(r1, r2) * 0.5); this.rMax = Math.max(r1, r2) * 2.5;
+    this.flat = num(s.flat, 1.15); this.dim = num(s.dim, 0.45); this.tremble = num(s.tremble, 1.6);
+    this.image = s.image === null || s.image === false ? null : typeof s.image === "string" ? s.image : "cross";
+    this.shownImage = !!s.shown; this.arms = num(s.arms, 0.72); this.bar = num(s.bar, 0.11);
+    this.door = typeof s.door === "string" ? s.door : null; this.doorK = clamp(num(s.doorK, 0));
+    this.fitTall = s.fit === "height";                                       // SCENES-20C: the door sized by the patch's height
+    this.on = clamp(num(s.on, 1));
+    this.rgb = rgbOf(s.color, [255, 242, 204]); this.alpha = num(s.opacity, 0.78);
+    this.fps = 20; this.calmFps = 10; this.slow = 0.5;
+    // the canvas: the box the light can reach: the biggest patch round the target (its radius at the farthest the mirror can
+    // be: `sizes`), and, for the beam from the mirror to the patch, where the mirror can be (`reach`, a rect [x, y, w, h] of
+    // the stage; or the fixed `mirror` point). With neither, no beam: the patch alone, in a small canvas (cheap).
+    const R = Math.ceil(this.rMax * Math.max(1, this.flat) * this.k) + 6;
+    let x0 = this.target[0] - R, y0 = this.target[1] - R, x1 = this.target[0] + R, y1 = this.target[1] + R;
+    const reach = Array.isArray(s.reach) && s.reach.length === 4 && s.reach.every((v) => typeof v === "number") ? s.reach : this.mirrorAt && !this.holder ? [this.mirrorAt[0] - 8, this.mirrorAt[1] - 8, 16, 16] : null;
+    this.beam = s.beam !== false && !!reach;
+    if (reach) { x0 = Math.min(x0, reach[0]); y0 = Math.min(y0, reach[1]); x1 = Math.max(x1, reach[0] + reach[2]); y1 = Math.max(y1, reach[1] + reach[3]); }
+    x0 = Math.max(0, Math.floor(x0)); y0 = Math.max(0, Math.floor(y0)); x1 = Math.min(W, Math.ceil(x1)); y1 = Math.min(H, Math.ceil(y1));
+    this.setup(x1 - x0 + 1, y1 - y0 + 1, this.target[0] - x0, this.target[1] - y0, this.target);
+  }
+  set(o = {}) {
+    if (typeof o.on === "number") this.on = clamp(o.on);
+    if (isPoint(o.mirror)) { this.mirrorAt = [o.mirror[0], o.mirror[1]]; this.holder = null; }
+    if (typeof o.holder === "string") { this.holder = o.holder; this.mirrorAt = null; }
+    if (isPoint(o.target)) this.target = [o.target[0], o.target[1]];
+    if (typeof o.doorK === "number") this.doorK = clamp(o.doorK);
+    if (o.shown !== undefined) this.shownImage = !!o.shown;
+    if (o.image !== undefined) this.image = o.image === null || o.image === false ? null : typeof o.image === "string" ? o.image : "cross";
+    this.dirty = true; this.host.frame(0);
+    return this;
+  }
+  /** Where the mirror is now: the point given, or the holder's hand. */
+  mirrorNow() {
+    if (this.holder) {
+      const a = this.game.actor(this.holder);
+      if (a && !a.hidden) { const ahead = Math.sin((a.yaw || 90) * Math.PI / 180), sc = a.scale || 1; return [a.x + this.hand[0] * sc * ahead, a.y - this.hand[1] * sc]; }
+    }
+    return this.mirrorAt || [this.target[0] - 100, this.target[1]];
+  }
+  /** The patch as it is now: { x, y, r, d, alpha } (r its radius across, before the tremble). */
+  patch() {
+    const m = this.mirrorNow(), d = Math.hypot(this.target[0] - m[0], this.target[1] - m[1]);
+    const r = clamp(this.a + this.b * d, this.rMin, this.rMax) * this.k, alpha = this.alpha * Math.pow(this.r1 / Math.max(this.r1, r / this.k), this.dim) * this.on;
+    return { x: this.target[0], y: this.target[1], r, d, alpha, mirror: m };
+  }
+  update(calm) {
+    if (!this.pair) return;
+    const m = this.mirrorNow();                                               // (the hand has moved: a new picture at its next turn)
+    if (!this.lastM || Math.abs(m[0] - this.lastM[0]) > 0.5 || Math.abs(m[1] - this.lastM[1]) > 0.5) { this.dirty = true; this.lastM = m; }
+    super.update(calm);
+    this.sprite.hidden = !this.shown || this.on <= 0;
+    // the door in the patch: the scene's portal, open as far as doorK, its size the patch's (its rings reach REACH of its radius)
+    if (this.door) {
+      const p = this.host.get(this.door);
+      if (p && p.open && p.R0) {
+        const { r } = this.patch(), want = this.doorK * this.on;
+        if (want > 0) { const scale = clamp((this.fitTall ? r * this.flat : r) / (p.R0 * REACH), 0.01, 4); if (Math.abs((p.openK || 0) - want) > 1e-5 || Math.abs((p.opts.scale || 1) - scale) > 0.004) p.open(want, { scale }); }      // (SCENES-20C: fitTall)
+        else if (p.openK > 0) p.open(0);
+      }
+    }
+  }
+  draw(ctx, t, calm) {
+    const { x, y, r, alpha, mirror } = this.patch();
+    if (this.on <= 0 || alpha <= 0.002) return;
+    const [ox, oy] = this.origin, seed = this.seed, tr = calm ? this.tremble * 0.3 : this.tremble;
+    const dx = tr * wobble(seed, t * 6.5, 1), dy = tr * wobble(seed, t * 5.8, 2);
+    const cx = x - ox + dx, cy = y - oy + dy, ry = r * this.flat;
+    // the beam: a faint fan from the mirror to the patch
+    if (this.beam) {
+      const mx = mirror[0] - ox, my = mirror[1] - oy, nx = -(cy - my), ny = cx - mx, nl = Math.hypot(nx, ny) || 1;
+      const ux = nx / nl, uy = ny / nl;
+      const grad = ctx.createLinearGradient(mx, my, cx, cy);
+      grad.addColorStop(0, rgba(this.rgb, alpha * 0.16)); grad.addColorStop(1, rgba(this.rgb, alpha * 0.04));
+      ctx.fillStyle = grad; ctx.beginPath(); ctx.moveTo(mx - ux * 3, my - uy * 3); ctx.lineTo(mx + ux * 3, my + uy * 3); ctx.lineTo(cx + ux * r * 0.9, cy + uy * ry * 0.9); ctx.lineTo(cx - ux * r * 0.9, cy - uy * ry * 0.9); ctx.closePath(); ctx.fill();
+    }
+    // the patch: soft at the edge, bright in the middle
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    grad.addColorStop(0, rgba(this.rgb, alpha)); grad.addColorStop(0.72, rgba(this.rgb, alpha * 0.85)); grad.addColorStop(1, rgba(this.rgb, 0));
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, this.flat); ctx.translate(-cx, -cy);
+    ctx.fillStyle = grad; ctx.beginPath(); ctx.ellipse(cx, cy, r, r, 0, 0, TAU); ctx.fill();
+    // the image: a plain thin cross of light, a shade brighter, its arms in proportion to the patch
+    if (this.image === "cross" && this.shownImage) {
+      const L = r * this.arms, T = Math.max(1, r * this.bar);
+      ctx.fillStyle = rgba([255, 255, 255], Math.min(1, alpha * 0.9));
+      ctx.fillRect(cx - T / 2, cy - L, T, L * 2); ctx.fillRect(cx - L * 0.72, cy - L * 0.28 - T / 2, L * 1.44, T);
+    }
+    ctx.restore();
+    this.drawn = 1;
+  }
+}
+
 // ENGINE-19B (8): how far each kind goes on while a line is up, as a share of itself (Effect.hushed): `speed`, of its
 // time; `opacity`, of how solid it is drawn. Chosen by eye on the noon site, the Rome steps, the night house and the
 // limousine: still alive, no longer pulling at the words (smoke and water keep 0.7: the scenes' smoke is faint already, and the half pace does the quieting). Things that are a painted object (a sway's washing, a boat on the
@@ -3274,12 +3614,14 @@ const HUSH = {
   stream: { speed: 0.6, opacity: 0.7 }, flame: { speed: 0.45, opacity: 0.85 }, embers: { speed: 0.5, opacity: 0.8 },
   birds: { speed: 0.6, opacity: 0.85 }, sway: { speed: 0.5, opacity: 1 }, bob: { speed: 0.6, opacity: 1 },
   strip: { speed: 0.8, opacity: 0.85 }, drive: { speed: 0.8, opacity: 0.85 },      // (a drive: a car's side windows; never one straight ahead)
+  rain: { speed: 0.6, opacity: 0.7 }, petals: { speed: 0.6, opacity: 0.85 }, waves: { speed: 0.5, opacity: 0.7 },      // ENGINE-20: the weather (the rain's hiss goes down with its opacity); never the mirror's light (not listed: it is the moment)
 };
 const HUSH_EASE = 250, HUSH_GAP = 400;          // ms: the ease in and out; and how long after a line it stays hushed
 const STEERED = 2000;                           // ms after a script last set a strip's or a drive's speed that it is left as the script has it
 const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, stream: Stream, shimmer: Shimmer, birds: Birds, sway: Sway, portal: Portal, strip: Strip };      // (strip: NEVADA-12E)
 KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rides the water
 KINDS.drive = Drive;                             // DRIVE-16E: the world going by a car's side windows
+KINDS.rain = Rain; KINDS.petals = Petals; KINDS.waves = Waves; KINDS.mirror = MirrorLight;      // ENGINE-20: rain, falling petals, waves in rows, the mirror's light
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**
@@ -3410,12 +3752,14 @@ const DEFAULTS = {
   stream: { color: "#b9d6e4", light: "#f4fbff" },
   shimmer: { color: "#fff4d6" },
   drive: { haze: "#d9dde6", wire: "#2f2a26", shade: "#6664ac" },              // DRIVE-16E (DRIVE-16F: shade, the things' shadows)
+  rain: { color: "#dfe9f2" }, petals: { color: "#f6c9d6", color2: "#eaa7bd" }, waves: { color: "#f4f8fb" },      // ENGINE-20 (the mirror's light is never keyed: it is light, as the portal's pale is)
 };
 /** A moving thing's description with its colours in the key of the scene; the same object when no key is in use. */
 function keyedSpec(spec) {
   if (!keyId()) return spec;
   const out = { ...spec }, own = DEFAULTS[spec.type] || {};
-  for (const k of ["color", "edge", "core", "cool", "light", "trough", "glowColor", "haze", "wire", "shade"]) {      // (DRIVE-16E: a drive's haze and wires; DRIVE-16F: and its shadows' shade)
+  if (spec.type === "mirror") return spec;                                                                                 // ENGINE-20: light, never keyed
+  for (const k of ["color", "edge", "core", "cool", "light", "trough", "glowColor", "haze", "wire", "shade", "color2"]) {      // (DRIVE-16E: a drive's haze and wires; DRIVE-16F: and its shadows' shade; ENGINE-20: the petals' second colour)
     let v = spec[k];
     if (v === false || v === "none") continue;
     if (v === undefined) v = own[k];

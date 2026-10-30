@@ -44,6 +44,13 @@
 //   sit.turn   the head turned on its own, sitting (Floyd's, lolled against the couch)
 //   hold[k].stroke, .strokes   a held hand that goes there and back in time as they walk or talk (strumming)
 //   and, in rig.js, the gestures 22 (a stamp brought down onto the other palm) and 23 (a look over the glasses)
+//   (PEOPLE-20, round twenty: Japan, 1830, at the end of the file:)
+//   outfit, wears   a page that is a lead in other clothes (dressed(): `people[<lead>-<outfit>]`, g.dress(who, name) in a scene)
+//   bowDeep    how deep their bow is (the movement `ojigi`: 0.14 a guard's nod, 0.30 polite, 0.62 Jinsuke's)
+//   pitch      the whole figure tipped (pose.pitch), for someone lying flat: Little Sister under the cherry
+//   sit.seat "kneel"   found sitting on the heels (seiza): Grandmother Sei
+//   shoes.foot what shows in a sandal when it is not the sock: white tabi under indigo leg wraps
+//   and, in rig.js, pose.smile (a smile a pose asks for: Kihei's rare one)
 //
 // The family comes from the present, so their colors never change with the era.
 // Each of them owns one color nobody else in the family wears.
@@ -191,7 +198,8 @@ export const mom = {
   // LETTER-17: she kneels (figure.kneel() in a script: the rig's kneelPose): at the little door in Act Four, the night she
   // hears her son, and nowhere else. Leaning in a little, upright; and sat back on her heels when she understands.
   kneel: { lean: 0.10, backLean: 0.02 },
-  extras({ ball, limb, hp, wide, deep, d, hy, tw, J, S, parts, pose }) {
+  extras(c) {
+    const { ball, limb, hp, wide, deep, d, hy, tw, J, S, parts, pose } = c;      // (PEOPLE-20: c itself, for `spec.outfit` below)
     // her hair: long dark curls from the crown down her back, past her shoulders, and a fall of them over each shoulder
     const fall = [0.078, 0.030], foot = [0.070, 0.024], r0 = wide(fall), r1 = wide(foot);
     limb(hp(0, -0.02, -0.72), add(J.spine(d.shoulderY - 0.175), J.torso([0, 0, -(d.trunkTop[1] + 0.018)])), r0, r1, MOM_HAIR, { part: parts.HAIR, depth: deep(fall) / r0, bias: S * 0.012, fn: (t, a) => (curls(t * 5, a, 2.4) ? MOM_CURL : undefined) });
@@ -200,9 +208,10 @@ export const mom = {
       limb(from, to, 0.024, 0.020, MOM_HAIR, { part: parts.HAIR, fn: (t, a) => (curls(t * 4, a, 1.4) ? MOM_CURL : undefined) });
       ball(to, [0.022, 0.016, 0.018], MOM_HAIR, { part: parts.HAIR }, tw);      // the ends, curling up
     }
-    // pearls: one at each ear, and a string of them at the neck
+    // pearls: one at each ear, and a string of them at the neck (PEOPLE-20: not over a kimono's collar, where at this size
+    // the string read as a white beard: in her Edo clothes the pearls are in her pocket)
     for (const sd of [1, -1]) ball(hp(sd * 1.0, -0.34, -0.06), [0.007, 0.008, 0.007], PEARL, { part: parts.EXTRA }, hy);
-    ball(add(J.sh, J.torso([0, -0.016, d.trunkTop[1] * 0.50])), [0.046, 0.034, 0.042], PEARL, {
+    if (!c.spec.outfit) ball(add(J.sh, J.torso([0, -0.016, d.trunkTop[1] * 0.50])), [0.046, 0.034, 0.042], PEARL, {
       part: parts.EXTRA, bias: S * 0.03, fn: (ux, uy) => { const q = ux * ux * 0.8 + (uy + 1.05) ** 2; return q > 0.92 && q < 1.50 ? undefined : null; },
     }, tw);
     // a handbag, hanging from her left forearm: it swings clear of her skirt
@@ -274,22 +283,26 @@ export const lilsis = {
   gestures: [0, 4, 0, 10],                              // a nod (fists on her hips); both hands up, "ta-da"; a nod; pointing ahead (round twelve: her muscles are for the walk and the talk of it, not every line)
   pray: { high: 0.97, bow: 0.15, tight: true },         // with all her might: hands clasped tight under her chin, eyes squeezed shut
   pace: 145,
-  extras({ sf, P, ball, limb, hp, wide, deep, d, hy, th, J, S, fine, parts }) {
-    // her hair: a wild mop that falls to just past her shoulders, down her back and in a lock in front of each shoulder, the ends flicking out
-    const fall = [0.062, 0.026], foot = [0.070, 0.024], r0 = wide(fall), r1 = wide(foot);
-    limb(hp(0, -0.10, -0.66), add(J.spine(d.shoulderY - 0.062), J.torso([0, 0, -(d.trunkTop[1] + 0.014)])), r0, r1, LIL_HAIR, { part: parts.HAIR, depth: deep(fall) / r0, bias: S * 0.012, fn: (t, a) => (Math.sin(a * 7 + t * 9) > 0.86 ? LIL_STRAND : undefined) });
-    for (const sd of [1, -1]) {
-      const from = hp(sd * 0.92, -0.26, 0.00), to = add(J.sh, J.torso([sd * 0.066, -0.040, 0.014]));
-      limb(from, to, 0.020, 0.016, LIL_HAIR, { part: parts.HAIR });
-      ball(add(to, J.torso([sd * 0.012, -0.010, 0.004])), [0.022, 0.014, 0.018], LIL_HAIR, { part: parts.HAIR }, hy);      // the ends, flicking out
-    }
+  extras(c) {
+    lilHair(c);                                                           // (PEOPLE-20: her hair is its own function, so that her Edo clothes keep it)
     // a star on the bib of her overalls
+    const { sf, P, d, th, J, fine, parts } = c;
     if (fine && Math.cos(th) > 0.5) {
-      const c = P(add(J.spine(d.shoulderY - 0.150), J.torso([0, 0, d.trunkTop[1] * 0.98]))), x = Math.round(c[0] - 0.5), y = Math.round(c[1] - 0.5), star = SUN.tones[0];
+      const q = P(add(J.spine(d.shoulderY - 0.150), J.torso([0, 0, d.trunkTop[1] * 0.98]))), x = Math.round(q[0] - 0.5), y = Math.round(q[1] - 0.5), star = SUN.tones[0];
       for (const [i, k] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) sf.dot(x + i, y + k, star, parts.TORSO);
     }
   },
 };
+/** Little Sister's hair: a wild mop that falls to just past her shoulders, down her back and in a lock in front of each shoulder, the ends flicking out. */
+function lilHair({ ball, limb, hp, wide, deep, d, hy, J, S, parts }) {
+  const fall = [0.062, 0.026], foot = [0.070, 0.024], r0 = wide(fall), r1 = wide(foot);
+  limb(hp(0, -0.10, -0.66), add(J.spine(d.shoulderY - 0.062), J.torso([0, 0, -(d.trunkTop[1] + 0.014)])), r0, r1, LIL_HAIR, { part: parts.HAIR, depth: deep(fall) / r0, bias: S * 0.012, fn: (t, a) => (Math.sin(a * 7 + t * 9) > 0.86 ? LIL_STRAND : undefined) });
+  for (const sd of [1, -1]) {
+    const from = hp(sd * 0.92, -0.26, 0.00), to = add(J.sh, J.torso([sd * 0.066, -0.040, 0.014]));
+    limb(from, to, 0.020, 0.016, LIL_HAIR, { part: parts.HAIR });
+    ball(add(to, J.torso([sd * 0.012, -0.010, 0.004])), [0.022, 0.014, 0.018], LIL_HAIR, { part: parts.HAIR }, hy);      // the ends, flicking out
+  }
+}
 
 // =====================================================================================
 // Egypt, about 2560 B.C.
@@ -3074,6 +3087,856 @@ function takeDown(o, wide) {
   return [[0, b], [0.28, up], [0.40, up], [0.48, got], [0.70, chest], [0.90, chest], [1, b]];
 }
 
+// =====================================================================================
+// PEOPLE-20 (round twenty): Act Six, "By Your Grace": Japan in the spring of 1830
+// =====================================================================================
+// Two things are new here. OUTFITS: the family in other clothes (O-Tami's travel kimonos, and the plasterers' white
+// head-cloths over them), each a kind of its own named `<lead>-<outfit>` ("mom-edo", "lilsis-edo-crew"), made from the
+// lead's own page so that face, build, stance, walk, gestures and prayer stay theirs; a script puts one on with
+// g.dress(who, outfit) (js/engine/game.js), it is kept in the save, and the lead is drawn in it wherever a lead is drawn
+// (the portraits keep their faces). And THE PEOPLE OF 1830: the fishmonger's house at Yui, the hidden family in the hills
+// north of Osaka, and Himeji's gate, with their poses and their small lives. Heights: men about 1.56 m, women 1.46 m, so
+// Mom (1.68 m) stands a head over every Japanese woman in the act. Everyone is our own: nobody's likeness.
+//   Men: the crown shaved and the hair oiled up into a topknot (`chonmage`); short work jackets, tight work trousers, a
+//   twisted towel round the head. Women: the hair in the round chignon of a married woman (`marumage`) or a girl's tied-up
+//   knot; a married woman's teeth blackened (face.inside near black: a dark mouth when she talks) and, after a child, no
+//   eyebrows (face.brows null). Samurai: two swords at the left hip, always sheathed; hakama (the wide pleated trousers,
+//   which the rig draws as a long pleated skirt) and a jacket.
+// How a script calls each pose is in docs/DESIGN.md, section 4 ("Japan, 1830: the outfits and the people").
+
+const EDO_SKIN = ramp("#f8dcbe", "#e8bc98", "#bc8662", "#80553c");         // townspeople
+const EDO_SUN = ramp("#ecc49c", "#d6a078", "#a87452", "#704a36");          // fishermen and sailors: a lifetime on the water
+const EDO_PALE = ramp("#fbe6d0", "#f0ccae", "#c89a7c", "#8a6652");         // indoors: the clerk, the young warden
+const EDO_SOOT = ramp("#d8bca4", "#c09a80", "#8e6a52", "#5c4436");         // the charcoal-burner: soot worked into the skin
+const EDO_HAIR = ramp("#4c4854", "#2c2932", "#19171e", "#0b0a0e");         // black
+const EDO_GREY = ramp("#dcd8d0", "#aca79e", "#7c7770", "#4e4a45");         // the grandmother's
+const PATE = new Map([[EDO_SKIN, ramp("#e2c0a2", "#cfa284", "#a97856", "#80553c")], [EDO_SUN, ramp("#d4ac88", "#bc8c68", "#946648", "#704a36")], [EDO_PALE, ramp("#e8ccb4", "#d8b49a", "#b08a70", "#8a6652")], [EDO_SOOT, ramp("#c4a890", "#aa8870", "#7e5e4a", "#5c4436")]]);
+const pateOf = (skin) => PATE.get(skin) || PATE.get(EDO_SKIN);             // the shaved crown: the skin a shade darker and bluer, where the hair would be
+const AI = ramp("#7488c0", "#4c5c96", "#323f6a", "#1e2646");               // indigo cotton, washed a hundred times
+const AI_DEEP = ramp("#5868a0", "#38447e", "#242e58", "#151b36");          // indigo, dark and new
+const KAKI = ramp("#cc9470", "#a46e4a", "#784c30", "#4e301e");             // persimmon-dyed cotton: brown
+const NEZUMI = ramp("#bcb8b0", "#908c84", "#66625c", "#423f3a");           // mouse grey
+const CHA = ramp("#ac8e68", "#826848", "#5c4832", "#3c2e20");              // tea brown
+const SUMI = ramp("#5e5c66", "#3c3a42", "#26242b", "#151417");             // ink black: a samurai's jacket
+const ASAGI = ramp("#a8c8d4", "#78a0b0", "#527684", "#345058");            // a pale blue-green: the guards' hakama
+const TENUGUI = ramp("#ffffff", "#f4f2ea", "#c8c4b8", "#8e8a80");          // white cotton: the head-cloths
+const SUGE = ramp("#f0dca4", "#d4b874", "#a0884c", "#6a5a32");             // sedge: the hats
+const WARAJI = ramp("#dcc48c", "#b89e60", "#886f3e", "#584a24");           // straw sandals, and a straw raincoat
+const BENI = ramp("#ff7c5c", "#e24c30", "#aa3422", "#6e2016");             // vermilion: Kihei's sixtieth-year red
+const SHIKKUI = ramp("#ffffff", "#f6f6f2", "#d4d4ce", "#9c9c96");          // lime plaster: white
+const EDO_WOOD = ramp("#d8b080", "#b08852", "#7e5e34", "#50391e");         // a ladle, a trowel's handle, a bucket
+const EDO_IRON = ramp("#b8bcc4", "#80868e", "#565c64", "#34383e");         // a trowel's blade, the truncheon
+const LACQUER = ramp("#3a3238", "#231e22", "#141114", "#080607");          // a sword's scabbard: black lacquer
+const SWORD_WRAP = ramp("#f0e8d0", "#d4c8a8", "#a0946e", "#6c6248");       // the hilt's braid
+const EDO_BRONZE = ramp("#f6dc98", "#d8ae58", "#a07a34", "#6a4e1e", { shine: true });      // the mirror
+const PINK_LIGHT = ramp("#ffc4d8", "#ff8ab0", "#d05080", "#8a3254");       // Little Sister's flashlight, lent
+const GLOW = ramp("#ffffff", "#fff6c8", "#ffe070", "#d8a820", { shine: true });
+const EGG = ramp("#fff8ea", "#f2e2c8", "#c8b494", "#90805e");
+const SWADDLE = ramp("#f8e8c8", "#e8d0a4", "#b89c70", "#7c6646");          // the baby's wrap
+const INK_BLACK_MOUTH = "#141016";                                         // blackened teeth: the inside of the mouth, near black
+const EDO_EYE = "#1c1410", EDO_IRIS = "#3a2418", EDO_LID = "#3a2418";
+
+// ---- hair ----
+/** A man's hair of the time: the crown shaved from the forehead back (the pate shows the scalp), the hair at the sides
+    and the back oiled and drawn up to a knot behind the crown. The rig's `where` gives the hair; the pate and the knot
+    are drawn in `extras` (chonmageTop). */
+const chonmage = (x, y, z) => {
+  if (z < -0.30) return y > -0.62 && y < 0.92;                          // the back: up toward the knot
+  if (y > 0.40) return false;                                           // the pate: shaved
+  if (z > 0.30) return Math.abs(x) > 0.80 && y > -0.16 && y < 0.38;     // the front: the sideburns only
+  return y > -0.30;                                                     // the sides
+};
+/** The top of a topknot head: the shaved pate (the skin a shade darker), and the knot, a short oiled queue lying forward
+    along the top of the head from a tie at the back. `small`: a young man's new topknot (Shinnosuke's). */
+function chonmageTop(c, o = {}) {
+  const { ball, limb, hp, headPt, onHead, d, hy, parts, spec } = c, hr = d.headR, pate = o.pate || pateOf(spec.skin), mat = o.mat || EDO_HAIR, k = o.small ? 0.78 : 1;
+  ball(headPt([0, 0.002, 0]), [hr[0] * 1.015, hr[1] * 1.015, hr[2] * 1.015], pate, { part: parts.HEAD, tone: 1, fn: (ux, uy, uz) => { const q = onHead(ux, uy, uz); return q[1] > 0.42 && q[2] > -0.30 && !(q[2] > 0.30 && q[1] < 0.60) ? undefined : null; } }, hy);
+  ball(hp(0, 0.74, -0.74), [0.015 * k, 0.014 * k, 0.015 * k], mat, { part: parts.HAIR }, hy);                                     // the tie
+  limb(hp(0, 0.86, -0.62), hp(0, 1.04, 0.30 * k), 0.0095 * k, 0.0080 * k, mat, { part: parts.HAIR, squareEnd: true });            // the queue, forward over the pate
+}
+/** A married woman's hair: smooth from a high forehead, full at the sides, and a round knot on top toward the back. */
+const marumage = hairline({ front: 0.58, temple: 0.40, side: -0.20, back: -0.70, brow: 0.50, temples: 1.10 });
+const MARUMAGE_PUFFS = [[0, 0.98, -0.30, 0.44, 0.34, 0.46]];
+/** A girl's: tied up in a small knot high at the back; a fringe. */
+const girlknot = hairline({ front: 0.30, temple: 0.26, side: -0.10, back: -0.60, brow: 0.55, temples: 1.15 });
+const GIRLKNOT_PUFFS = [[0, 1.02, -0.34, 0.30, 0.26, 0.30]];
+/** A boy's: cropped all round, with the forelock left long over the brow and a small knot behind. */
+const boyhair = hairline({ front: 0.44, temple: 0.42, side: 0.02, back: -0.40, brow: 0.50, temples: 1.10 });
+const BOY_PUFFS = [[0, 0.70, 0.86, 0.34, 0.22, 0.20], [0, 0.90, -0.60, 0.22, 0.18, 0.22]];
+const EDO_MAN_FACE = { eyes: "plain", eye: EDO_EYE, iris: EDO_IRIS, lid: EDO_LID, brows: EDO_HAIR.tones[2], browW: 3, lip: "#9a5648", nose: [0.85, 0.7, 0.85], noseShade: true, mouthW: 0.20, eyeX: 0.40 };
+const EDO_WOMAN_FACE = { eyes: "girl", eye: EDO_EYE, iris: EDO_IRIS, lid: EDO_LID, brows: EDO_HAIR.tones[2], brow: { full: [0, 0, 0] }, lip: "#b85a62", lips: "#d07a80", nose: [0.65, 0.6, 0.7], noseShade: true, mouthW: 0.18, eyeX: 0.42,
+  big: { eyeW: 0.44, eyeH: 0.44, lashes: 1, arch: 0.22 } };
+const EDO_CHILD_FACE = { eyes: "bright", eye: EDO_EYE, iris: EDO_IRIS, lid: EDO_LID, brows: EDO_HAIR.tones[2], browW: 2, blush: "#f2a890", lip: "#b8605a", nose: [0.55, 0.6, 0.7], mouthW: 0.22, eyeX: 0.43, eyeY: -0.06, mouthY: -0.64, smile: 1, jaw: 0.86, chin: 0.56, chinY: -0.52, chinZ: 0.44 };
+
+// ---- clothes ----
+/** A kimono's own lines, drawn on the figure's clothes: the two collar bands crossing on the chest (the wearer's left over
+    the right, as the living wear it), the sash (obi) round the waist, with its knot behind, and the sleeves (sode) hanging
+    below each forearm. The cloth itself is the figure's `top` and `bottom` (a long sleeved top and a narrow long skirt).
+      o.mat      the cloth                      o.eri     the collar bands (the cloth a tone darker if not said; the under-robe's white shows as top.under)
+      o.obi      the sash (none: no sash)        o.obiUp, o.obiDown   how far above and below the waist it reaches (a woman's is wide: 0.070 and 0.040; a man's narrow, low: 0.018, 0.026)
+      o.knot     "big" (a woman's box knot behind), "small" (a man's), or none
+      o.sleeve   how far the sleeves hang below the forearm, in heights (0: none; a working sleeve, tied back, is 0)
+      o.jacket   true: a short jacket (a happi, a plasterer's or a sailor's): the collar bands run straight down, open, to its hem */
+function kimono(c, o) {
+  const { J, limb, ball, trunkAt, wide, deep, d, cloth, under, parts, far } = c, mat = o.mat, eri = o.eri || shifted(mat, 1);
+  const lie = { [parts.TORSO]: under, [parts.COLLAR]: under, [parts.PELVIS]: under, [parts.SKIRT]: under, [parts.BELT]: under };
+  const hem = o.jacket ? d.hipY - 0.040 : d.waistY + 0.016;
+  // the collar bands: the right side first, the left over it; each from beside the neck down across the chest
+  for (const sd of [1, -1]) {
+    const a = trunkAt(d.shoulderY - 0.012, sd * 0.42, 0.006), b = o.jacket ? trunkAt(hem, sd * 0.16, 0.006) : trunkAt(hem, -sd * 0.10, 0.006);
+    limb(a, b, 0.0105, 0.0095, eri, { part: parts.COLLAR, over: lie, bias: cloth * 2.2, squareStart: true, squareEnd: true });
+  }
+  if (o.obi) {
+    const up = o.obiUp ?? 0.070, down = o.obiDown ?? 0.040, rw = wide(d.trunkLow) + 0.007, dw = deep(d.trunkLow) + 0.007;
+    limb(J.spine(d.waistY + up), J.spine(d.waistY - down), rw, rw + 0.003, o.obi, { part: parts.BELT, depth: dw / rw, bias: cloth * 1.8, squareStart: true, squareEnd: true });
+    if (o.knot === "big") ball(add(J.spine(d.waistY + 0.010), J.torso([0, 0, -(d.trunkLow[1] + 0.034)])), [0.046, 0.034, 0.030], o.obi, { part: parts.EXTRA, bias: cloth * 2 }, c.tw);
+    else if (o.knot === "small") ball(add(J.spine(d.waistY - down + 0.012), J.torso([0, 0, -(d.trunkLow[1] + 0.022)])), [0.028, 0.016, 0.018], o.obi, { part: parts.EXTRA, bias: cloth * 2 }, c.tw);
+  }
+  if (o.sleeve) for (const k of ["R", "L"]) {                             // the sleeve: a flat pocket of cloth hanging from the whole forearm
+    const A = J[k], len = o.sleeve, e = mix(A.elbow, A.wrist, 0.10), w = mix(A.elbow, A.wrist, 0.92), r = len * 0.5;
+    limb([e[0], e[1] - r - 0.004, e[2]], [w[0], w[1] - r - 0.004, w[2]], r, r * 0.92, far(k, mat), { part: parts.SLEEVE[k], depth: 0.24, squareStart: true, squareEnd: true, bias: cloth });
+  }
+}
+/** A sedge hat (sugegasa): a broad shallow cone, about twice the width of the head, set low so that it shades the brow;
+    a thin dark cord from its sides down past the jaw (it ties under the chin, where it is not drawn: at this size a cord
+    under the chin reads as a beard). `back`: hanging on the back by its cord, a big disc behind the shoulders, the point out.
+    o.r: its radius in heights (0.115, a grown woman's; a child's is set by her head: 1.65 of its half width). */
+function sugegasa(c, o = {}) {
+  const { J, limb, hp, headPt, d, parts, cloth } = c, hr = d.headR, mat = o.mat || SUGE, r = Math.max(o.r ?? 0.115, hr[0] * 1.65);
+  if (o.back) {
+    const T = (v) => add(J.sh, J.torso(v)), base = T([0, -0.150, -(d.trunkTop[1] + 0.016)]), apex = T([0, -0.140, -(d.trunkTop[1] + 0.064)]);
+    limb(apex, base, 0.004, r, mat, { part: parts.EXTRA3, squareEnd: true, bias: cloth });
+    for (const sd of [1, -1]) limb(T([sd * (d.shoulderW - 0.012), -0.034, -(d.trunkTop[1] - 0.004)]), T([sd * 0.026, -0.016, d.trunkTop[1] + 0.004]), 0.0022, 0.0022, SUMI, { part: parts.EXTRA3, over: { [parts.TORSO]: c.under, [parts.COLLAR]: c.under }, bias: cloth * 2.5 });
+    return;
+  }
+  const apex = headPt([0, hr[1] * 1.46, 0.012]), brim = headPt([0, hr[1] * 0.70, 0.022]);
+  limb(apex, brim, 0.004, r, mat, { part: parts.HAT, squareEnd: true });
+  for (const sd of [1, -1]) limb(hp(sd * 0.96, 0.56, 0.12), hp(sd * 0.74, -0.70, 0.30), 0.0022, 0.0022, SUMI, { part: parts.HAT });      // the cord, down past the jaw
+}
+/** A head-cloth (a tenugui) tied over the hair, knotted behind: the plasterers' white, a workman's. */
+const headcloth = (c, mat = TENUGUI, o = {}) => wear.headcloth(c, { mat, brow: 0.42, nape: 0.70, tails: 0.30, ...o });
+/** A towel twisted into a rope and tied round the head (hachimaki): a fisherman's, a plasterer's, a sailor's. */
+function hachimaki(c, mat = TENUGUI, at = 0.46) { headband(c, mat, at); }
+/** The sleeves tied back with a cord (tasuki): a cord from each shoulder across the back to the other hip and over the chest. */
+function tasuki(c, mat = KAKI) { strap(c, mat, 1, 0.0045); strap(c, mat, -1, 0.0045); }
+/** A short apron (maekake) tied over the front: Kihei's, scaled like fish. */
+function apronOf(c, mat, len = 0.30, fishy = false) {
+  const { J, limb, trunkAt, d, cloth, under, parts, S } = c;
+  const top = trunkAt(d.waistY - 0.006, 0, 0.010), bottom = add(J.spine(d.hipY - len), J.torso([0, 0, d.pelvisR[2] + 0.018]));
+  const w = [d.pelvisR[0] * 0.92, 0.004], r = c.wide(w);
+  limb(top, bottom, r * 0.96, r, mat, { part: parts.DRAPE, over: { [parts.TORSO]: under, [parts.PELVIS]: under, [parts.SKIRT]: under, [parts.LEG.R]: under, [parts.LEG.L]: under, [parts.BELT]: under }, bias: cloth * 2.4, depth: c.deep(w) / r, squareStart: true, hem: true,
+    fn: fishy && S >= 64 ? (t, nx, ny, x, y) => (((x + ((y >> 1) & 1) * 2) % 4 === 0 && (y % 2 === 0)) ? shifted(mat, 1) : undefined) : null });
+}
+/** Two swords at the left hip, sheathed, thrust through the sash edge up: the long one and the short one. Never drawn. */
+function daisho(c) {
+  const { J, limb, ball, trunkAt, d, parts, cloth } = c, hip = trunkAt(d.hipY + 0.036, -1.30, 0.012);
+  for (const [len, up, out] of [[0.52, 0.045, 0.000], [0.30, 0.028, 0.016]]) {
+    const back = [hip[0] - 0.010, hip[1] - 0.030 - up * 0.3, hip[2] - len * 0.80 - out], front = [hip[0] + 0.006, hip[1] + up + 0.070, hip[2] + len * 0.34 + out];
+    limb(back, front, 0.0075, 0.0070, LACQUER, { part: parts.EXTRA2, bias: cloth * 1.5 });                   // the scabbard
+    const h0 = front, h1 = [front[0] + 0.004, front[1] + 0.055, front[2] + 0.070 * (len > 0.4 ? 1.3 : 0.8)];
+    limb(h0, h1, 0.0085, 0.0075, SWORD_WRAP, { part: parts.EXTRA2, bias: cloth * 1.5 });                    // the hilt
+    ball(h0, [0.014, 0.014, 0.006], EDO_IRON, { part: parts.EXTRA2 }, 0);                                    // the guard
+  }
+}
+/** A plasterer's spatter: flecks of lime over the front of the clothes, fixed to the cloth. */
+function spatter(c, n = 14) {
+  const { sf, P, trunkAt, trunkFacing, d, th, parts, fine } = c;
+  if (!fine) return;
+  for (let i = 0; i < n; i++) {
+    const h = cell(i, 7) % 1000 / 1000, round = (cell(i, 3) % 1000 / 1000 - 0.5) * 2.4;
+    const facing = trunkFacing(round);
+    if (facing[0] * Math.sin(th) + facing[2] * Math.cos(th) < 0.25) continue;
+    const q = P(trunkAt(d.hipY + 0.02 + h * (d.shoulderY - d.hipY - 0.06), round, 0.008));
+    sf.dot(Math.round(q[0] - 0.5), Math.round(q[1] - 0.5), SHIKKUI.tones[i % 3 ? 0 : 1], parts.TORSO);
+  }
+}
+/** A held thing between two hands, at the middle of the palms: where it is, and the way from one hand to the other. */
+const between2 = (J) => ({ at: mix(J.L.palm, J.R.palm, 0.5), across: unit(sub(J.R.palm, J.L.palm)) });
+/** The bronze mirror, held up in both hands: a disc the size of a face, its polished front toward whatever the holder faces. */
+function mirror(c) {
+  const { J, ball, limb, parts, tw } = c, { at } = between2(J);
+  ball(add(at, J.torso([0, 0.034, 0.006])), [0.046, 0.046, 0.007], EDO_BRONZE, { part: parts.HELD }, tw);
+  limb(add(at, J.torso([0, -0.012, 0.006])), add(at, J.torso([0, -0.052, 0.006])), 0.006, 0.005, EDO_WOOD, { part: parts.HELD });      // its handle, in the hands
+}
+/** A baby, wrapped, lying across both forearms: a pale bundle and a small dark head at the holder's left. */
+function baby(c) {
+  const { J, ball, limb, parts, tw } = c, l = mix(J.L.elbow, J.L.wrist, 0.45), r = mix(J.R.elbow, J.R.wrist, 0.55);
+  limb(add(l, [0, 0.030, 0.006]), add(r, [0, 0.034, 0.006]), 0.036, 0.028, SWADDLE, { part: parts.HELD, squareStart: true });
+  ball(add(l, [0, 0.060, 0.016]), [0.034, 0.032, 0.034], EDO_SKIN, { part: parts.HELD }, tw);
+  ball(add(l, [0, 0.072, 0.010]), [0.035, 0.024, 0.035], EDO_HAIR, { part: parts.HELD, fn: (ux, uy) => (uy > -0.25 ? null : undefined) }, tw);
+}
+/** An egg, held carefully in two cupped hands. */
+function egg(c) { const { J, ball, parts } = c, { at } = between2(J); ball(add(at, [0, 0.012, 0.004]), [0.014, 0.018, 0.014], EGG, { part: parts.HELD }); }
+/** Little Sister's pink flashlight, lit, in two hands: a short cylinder with a glowing end. */
+function flashlight(c) {
+  const { J, limb, ball, parts } = c, { at, across } = between2(J), a = add(at, mul(across, -0.045)), b = add(at, mul(across, 0.050));
+  limb(add(a, [0, 0.016, 0]), add(b, [0, 0.016, 0]), 0.013, 0.015, PINK_LIGHT, { part: parts.HELD, squareStart: true });
+  ball(add(b, [0, 0.016, 0]), [0.016, 0.016, 0.016], GLOW, { part: parts.HELD });
+}
+/** A pilgrim's wooden ladle, held up in the right hand: a long handle and a cup at the top. */
+function ladle(c, up = true) {
+  const { J, limb, ball, parts } = c, g = J.R.palm, dir = up ? unit(add(J.R.hDir, [0, 1.2, 0])) : J.R.hDir;
+  const foot = add(g, mul(dir, -0.030)), top = add(g, mul(dir, 0.170));
+  limb(foot, top, 0.006, 0.006, EDO_WOOD, { part: parts.HELD });
+  ball(add(top, mul(dir, 0.016)), [0.022, 0.016, 0.022], EDO_WOOD, { part: parts.HELD, fn: (ux, uy) => (uy < -0.4 ? shifted(EDO_WOOD, 1) : undefined) });
+}
+/** A plasterer's trowel in the right hand: a flat blade on a short handle. */
+function trowel(c, side = "R") {
+  const { J, limb, ball, parts } = c, A = J[side], h = A.palm, dir = A.hDir;
+  const grip = add(h, mul(dir, 0.010)), neck = add(h, mul(dir, 0.050)), up = unit(add(mul(dir, 0.3), [0, 1, 0]));
+  limb(add(h, mul(dir, -0.020)), grip, 0.007, 0.007, EDO_WOOD, { part: parts.HELD });
+  limb(grip, neck, 0.004, 0.004, EDO_IRON, { part: parts.HELD });
+  ball(add(neck, mul(up, -0.016)), [0.034, 0.005, 0.024], EDO_IRON, { part: parts.HELD }, 0);
+}
+/** A bucket of lime hanging from a hand, by its handle. */
+function bucket(c, side = "R") {
+  const { J, limb, ball, parts } = c, h = J[side].palm, top = add(h, [0, -0.018, 0.004]), bottom = add(h, [0, -0.090, 0.004]);
+  limb(add(h, [0, 0.004, 0]), top, 0.003, 0.003, EDO_IRON, { part: parts.HELD });
+  limb(top, bottom, 0.036, 0.030, EDO_WOOD, { part: parts.HELD, squareStart: true, squareEnd: true, fn: (t) => (t < 0.10 ? SHIKKUI : undefined) });
+}
+/** A charcoal sack on the shoulder (Jinsuke lifting one): a dark bulging bale. */
+function sack(c) {
+  const { J, ball, parts, tw } = c, at = add(J.R.shoulder, J.torso([0.016, 0.070, -0.010]));
+  ball(at, [0.062, 0.050, 0.082], SUMI, { part: parts.EXTRA, bias: 2 }, tw + 0.3);
+}
+/** A clerk's register book in the left hand and a brush in the right. */
+function registerBook(c) {
+  const { J, limb, ball, parts } = c, L = J.L.palm, R = J.R;
+  limb(add(L, J.torso([-0.010, 0.000, -0.030])), add(L, J.torso([-0.010, 0.000, 0.046])), 0.030, 0.030, TENUGUI, { part: parts.HELD, depth: 0.22, squareStart: true, squareEnd: true, bias: 1 });
+  limb(add(R.palm, mul(R.hDir, -0.016)), add(R.palm, mul(R.hDir, 0.050)), 0.0035, 0.0030, EDO_WOOD, { part: parts.HELD });
+  ball(add(R.palm, mul(R.hDir, 0.054)), [0.005, 0.009, 0.005], EDO_HAIR, { part: parts.HELD });
+}
+/** A short iron truncheon (a jitte without its tassel) tucked in the sash at the left hip: never drawn out. */
+function truncheon(c) {
+  const { J, limb, trunkAt, d, parts, cloth } = c, hip = trunkAt(d.hipY + 0.030, -1.10, 0.014);
+  limb([hip[0], hip[1] - 0.060, hip[2] + 0.010], [hip[0] + 0.004, hip[1] + 0.090, hip[2] + 0.030], 0.0055, 0.0050, EDO_IRON, { part: parts.EXTRA2, bias: cloth * 1.5 });
+}
+/** A straw raincoat (mino): a shaggy cape of straw from the shoulders to the hips, over everything, dripping. */
+function mino(c) {
+  const { J, limb, ball, wide, deep, d, tw, under, cloth, parts, S } = c, T = (v) => add(J.sh, J.torso(v));
+  const lie = { [parts.TORSO]: under, [parts.BELT]: under, [parts.COLLAR]: under, [parts.ARM.R]: under, [parts.ARM.L]: under, [parts.SLEEVE.R]: under, [parts.SLEEVE.L]: under, [parts.PELVIS]: under, [parts.SKIRT]: under, [parts.EXTRA2]: under };
+  const top = [d.shoulderW + 0.030, d.trunkTop[1] + 0.024], low = [d.shoulderW + 0.064, d.trunkTop[1] + 0.060], r0 = wide(top), r1 = wide(low);
+  const streaks = S >= 64 ? (t, nx, ny, x) => ((x + (t * 40 | 0)) % 3 === 0 ? shifted(WARAJI, 1) : undefined) : null;
+  limb(T([0, -0.006, 0]), T([0, -0.255, -0.010]), r0, r1, WARAJI, { part: parts.DRAPE, over: lie, bias: cloth * 2.4, depth: deep(top) / r0, squareStart: true, hem: true, fn: streaks });
+  ball(T([0, 0.000, -0.006]), [r0 * 0.96, 0.022, deep(top) * 0.96], WARAJI, { part: parts.DRAPE, bias: cloth * 2.4, fn: (ux, uy) => (uy > 0.2 && Math.abs(ux) < 0.40 ? null : undefined) }, tw);      // the collar of it, round the neck (open at the throat)
+}
+/** A big wicker basket on the back, in its straps. */
+function backBasket(c) {
+  const { J, ball, limb, d, tw, parts, cloth } = c, T = (v) => add(J.sh, J.torso(v)), at = T([0, -0.150, -(d.trunkTop[1] + 0.090)]);
+  ball(at, [0.085, 0.120, 0.075], WICKER, { part: parts.EXTRA, fn: (ux, uy, uz, x, y) => ((x + y) % 3 === 0 ? shifted(WICKER, 1) : undefined) }, tw);
+  for (const sd of [1, -1]) limb(T([sd * 0.052, 0.012, 0.0]), T([sd * 0.076, -0.120, d.trunkTop[1] * 0.80]), 0.009, 0.009, KAKI, { part: parts.EXTRA, bias: cloth * 2 });
+}
+/** A net across the knees of a man sitting mending it: a few crossing lines over the lap. */
+function netOnLap(c) {
+  const { J, sf, P, parts, pose, S } = c;
+  if (!pose.seated || S < 52) return;
+  const a = P(add(J.L.knee, [0, 0.030, 0.02])), b = P(add(J.R.knee, [0, 0.030, 0.02])), mid = P(add(mix(J.L.knee, J.R.knee, 0.5), [0, 0.070, -0.06]));
+  for (let i = 0; i <= 4; i++) { const t = i / 4, x0 = a[0] + (b[0] - a[0]) * t, y0 = a[1] + (b[1] - a[1]) * t; sf.stroke(x0, y0, mid[0] + (x0 - mid[0]) * 0.2, mid[1] - 2 + (y0 - mid[1]) * 0.2, 1, parts.HELD); }
+  sf.stroke(a[0], a[1], b[0], b[1], 1, parts.HELD); sf.stroke(a[0], a[1] + 4, b[0], b[1] + 4, 1, parts.HELD);
+}
+/** A baby in a sling on the back, its head showing over the right shoulder (O-Tami with the baby). */
+function babyOnBack(c) {
+  const { J, ball, limb, d, tw, parts, cloth } = c, T = (v) => add(J.sh, J.torso(v)), at = T([0.010, -0.110, -(d.trunkTop[1] + 0.052)]);
+  ball(at, [0.060, 0.078, 0.046], SWADDLE, { part: parts.EXTRA }, tw);
+  ball(T([0.034, 0.012, -(d.trunkTop[1] + 0.030)]), [0.030, 0.030, 0.030], EDO_SKIN, { part: parts.EXTRA }, tw);
+  ball(T([0.034, 0.024, -(d.trunkTop[1] + 0.034)]), [0.031, 0.024, 0.031], EDO_HAIR, { part: parts.EXTRA, fn: (ux, uy) => (uy > -0.2 ? null : undefined) }, tw);
+  for (const sd of [1, -1]) limb(T([sd * 0.050, 0.010, -0.004]), T([sd * 0.030, -0.150, d.trunkTop[1] * 0.90]), 0.008, 0.008, KAKI, { part: parts.EXTRA, bias: cloth * 2 });
+}
+/** A folded pile of clothes held out in both hands (O-Tami's kimonos). */
+function foldedClothes(c) {
+  const { J, limb, parts } = c, { at, across } = between2(J);
+  let y = 0.016;
+  for (const m of [EMERALD, INDIGO, PINK]) { limb(add(add(at, mul(across, -0.060)), [0, y, 0.01]), add(add(at, mul(across, 0.060)), [0, y, 0.01]), 0.016, 0.016, m, { part: parts.HELD, depth: 2.2, squareStart: true, squareEnd: true }); y += 0.026; }
+}
+/** A board of sushi held out in both hands: a flat wooden board with a row of pale pieces on it. */
+function sushiBoard(c) {
+  const { J, limb, ball, parts } = c, { at, across } = between2(J), a = add(add(at, mul(across, -0.075)), [0, 0.010, 0.02]), b = add(add(at, mul(across, 0.075)), [0, 0.010, 0.02]);
+  limb(a, b, 0.040, 0.040, EDO_WOOD, { part: parts.HELD, depth: 0.12, squareStart: true, squareEnd: true });
+  for (let i = 0; i < 5; i++) ball(add(mix(a, b, 0.14 + i * 0.18), [0, 0.012, 0]), [0.011, 0.008, 0.016], WHITE, { part: parts.HELD, fn: (ux, uy) => (uy < -0.25 ? EDO_SUN : undefined) });
+}
+
+const MIRROR_UP = { R: { hand: [0.034, -0.090, 0.150], bend: [0.8, -0.7, -0.3], grip: true, point: [-0.6, 0.6, 0.5] }, L: { hand: [-0.034, -0.090, 0.150], bend: [-0.8, -0.7, -0.3], grip: true, point: [0.6, 0.6, 0.5] } };      // Mom's hands with the mirror up in both hands
+// ---- the family's poses for the act: their own holds and cues (on their pages, so that every outfit has them) ----
+/** A hold of both hands cupped round the mouth, the head up: a holler (Little Sister's, Tomezō's shout). */
+const hollerHold = (o) => {
+  const b = o.base, hr = o.d.headR, p = { ...cloneP(b), mouth: 2, breath: 1, lean: (b.lean || 0) - 0.04, head: { nod: nodOf(b) - 0.16 }, held: "holler" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * (hr[0] + 0.016), o.sp.chinY - 0.006, hr[2] * 0.62], bend: [sd, -0.7, 0.3], curl: 0.6, point: [-sd * 0.3, 0.9, 0.3] });
+  return p;
+};
+/** Both hands cupped together in front at the chest, something small and precious in them (an egg). */
+const eggHold = (o) => {
+  const b = o.base, sp = o.sp, p = { ...cloneP(b), lean: (b.lean || 0) + 0.04, head: { nod: nodOf(b) + 0.14 }, held: "egg" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.024, sp.waist + 0.090, sp.belly + 0.120], bend: [sd * 0.9, -0.5, -0.4], curl: 0.9, point: [-sd * 0.5, 0.5, 0.7], thumb: [0, 1, 0] });
+  return p;
+};
+/** Both hands up at the chest holding the mirror, tilting it a little toward the light. */
+const mirrorHold = (o) => {
+  const b = o.base, p = { ...cloneP(b), head: { nod: nodOf(b) + 0.04 }, held: "mirror" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { ...MIRROR_UP[s], hand: [sd * 0.034, -0.090 + (o.seated ? -0.03 : 0), 0.150] });
+  return p;
+};
+/** On hands and knees, to go under something low: the back level, the knees and the toes on the ground behind, the hands
+    flat on the ground under the shoulders, the head up to see where she is going. */
+const crawlHold = (o) => {
+  const b = o.base, d = o.d, L = 1.34, len = (d.upperArm + d.foreArm) * 0.90, p = { ...cloneP(b), lean: L, breath: 0, head: { nod: -0.58 }, held: "crawl" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) {
+    p[s] = { ...p[s], leg: [0.06, 0.10], knee: 0.06 + Math.PI / 2 - 0.04, foot: Math.PI + 0.30, footYaw: 0.04, hand: [sd * (d.shoulderW + 0.004), -len * Math.cos(L), len * Math.sin(L)], bend: [sd * 0.8, -0.3, -0.5], flat: true, point: [0, -0.3, 0.95], thumb: [-sd, 0, 0] };
+  }
+  p.rise = -(d.hipY - d.thigh - d.legR[1] - 0.004);
+  return p;
+};
+/** Up at a high window: both hands over the head gripping the sill, one knee up high, the body stretched. */
+const climbHold = (o) => {
+  const b = o.base, p = { ...cloneP(b), lean: 0.08, breath: 1, head: { nod: -0.30 }, held: "climb" };
+  for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { arm: [2.95, 0.18 + (sd > 0 ? 0.06 : 0)], elbow: 0.06, grip: true });
+  p.R = { ...p.R, leg: [1.30, 0.20], knee: 1.90, foot: 0.3 };
+  p.L = { ...p.L, leg: [0.05, 0.03], knee: 0.02, foot: 0.9 };
+  return p;
+};
+mom.holds = { ...(mom.holds || {}), mirror: mirrorHold };                                     // PEOPLE-20: hold(true, "mirror") in her own clothes or any outfit
+mom.cues = { stand: ["tilt"] };
+bigsis.cues = { stand: ["count"] };                                                          // PEOPLE-20: counting on her fingers (fidget("count"), holdable)
+lilsis.holds = { ...(lilsis.holds || {}), crawl: crawlHold, climb: climbHold, egg: eggHold, holler: hollerHold };      // PEOPLE-20
+lilsis.cues = { stand: ["holler"] };
+// (the things in their hands during a hold: drawn by the base pages' extras, which every outfit calls first)
+const familyHeld = (c) => { const h = c.pose.held; if (h === "mirror") mirror(c); else if (h === "egg") egg(c); };
+{ const was = mom.extras; mom.extras = (c) => { was(c); familyHeld(c); }; }
+{ const was = lilsis.extras; lilsis.extras = (c) => { was(c); familyHeld(c); }; }
+
+// ---- the family's clothes: outfits ----
+const KYAHAN = AI;                                                        // leg wraps: indigo cotton
+const MOM_OBI = ramp("#2a7a5c", "#1c5a44", "#133f30", "#0c2a20");         // Mom's obi: a darker green than her emerald
+const BIG_OBI = ramp("#4a4a8c", "#333468", "#232448", "#15162e");          // Big Sister's: a deeper indigo
+const LIL_OBI = ramp("#ffd6e2", "#f0a8c0", "#c07a90", "#844c60");          // Little Sister's sash: a pale pink
+const TRAVEL = { socks: { mat: KYAHAN, from: 0.06, thick: 0.006 }, shoes: { kind: "sandals", mat: WARAJI, foot: WHITE, sole: shifted(WARAJI, 1) } };      // leg wraps from under the knee, white tabi, straw sandals
+/** The outfits, by name: what each does to a lead's page (`how(spec)` gives the changed settings), and what it adds to the
+    drawing (`gear(c, spec)`). Every outfit keeps the lead's face, build, stance, walk, gestures, prayer and kneeling. */
+const OUTFITS = {
+  edo: {
+    name: "in Edo travel clothes",
+    mom: { top: { mat: EMERALD, sleeves: 2, ease: 0.006, open: 0.012, under: WHITE }, bottom: { kind: "skirt", mat: EMERALD, len: 1.68, flare: 1.04, wrap: [0.55, -0.30], folds: [[0.9, 0.3, 1.6]] }, ...TRAVEL, span: 1.15 },
+    bigsis: { top: { mat: INDIGO, sleeves: 2, ease: 0.006, open: 0.012, under: WHITE }, bottom: { kind: "skirt", mat: INDIGO, len: 1.35, flare: 1.04, wrap: [0.55, -0.30] }, ...TRAVEL, socks: { mat: ASAGI, from: 0.06, thick: 0.006 }, span: 1.15 },        // too short for her: it ends at mid-calf, and her leg wraps (pale, not her indigo) show below it
+    lilsis: { top: { mat: PINK, sleeves: 2, ease: 0.006, open: 0.010, under: WHITE }, bottom: { kind: "skirt", mat: PINK, len: 1.70, flare: 1.08, wrap: [0.55, -0.30] }, shoes: lilsis.shoes, socks: undefined, span: 1.15 },      // her own yellow boots
+    gear(c, who, o = {}) {
+      const { pose } = c;
+      if (who === "mom") { mom.extras({ ...c, pose: { ...pose, bare: "bag" } }); kimono(c, { mat: EMERALD, obi: MOM_OBI, knot: "big", sleeve: 0.075 }); if (!o.cloth) headcloth(c, TENUGUI, { tails: 0 }); }
+      else if (who === "bigsis") { bigsis.extras(c); kimono(c, { mat: INDIGO, obi: BIG_OBI, knot: "big", sleeve: 0.070 }); }
+      else { lilHair(c); kimono(c, { mat: PINK, obi: LIL_OBI, obiUp: 0.040, obiDown: 0.028, knot: "small", sleeve: 0.050 }); }
+      if (o.cloth) headcloth(c, TENUGUI);                                 // (edo-crew: the plasterer's head-cloth, over the hair, and no hat)
+      else if (who !== "lilsis" || o.hat !== "none") sugegasa(c, { back: o.hat === "back", r: who === "lilsis" ? 0.10 : 0.115 });
+      if (who !== "mom") familyHeld(c);                                   // (what is in the hands during a hold: the egg, the mirror; Mom's own extras draw hers)
+    },
+  },
+};
+/** A lead's page in an outfit: `people[<lead>-<name>]`. `o`: the outfit's state (hat worn or on the back; the crew's cloth; what is in the hands). */
+function dressed(who, name, o = {}) {
+  const base = { mom, bigsis, lilsis }[who], fit = OUTFITS.edo, label = o.label || fit.name;
+  const spec = { ...base, ...fit[who], name: `${base.name}, ${label}`, outfit: name, wears: who, extras(c) { fit.gear(c, who, o); if (o.extra) o.extra(c); } };
+  if (o.hold) { spec.hold = o.hold; spec.rest = undefined; spec.gestures = o.gestures || [0, 0, 20, 0]; }
+  if (o.fidgets) spec.fidgets = o.fidgets;
+  if (o.span) spec.span = o.span;
+  return spec;
+}
+// Mom's hands with the baby: cradled across her front, the left arm under its head; and with the mirror up in both hands.
+const CRADLE = { R: { hand: [0.040, -0.170, 0.150], bend: [0.9, -0.6, -0.4], curl: 0.8, point: [-0.7, 0.2, 0.7] }, L: { hand: [-0.070, -0.160, 0.140], bend: [-0.9, -0.6, -0.4], curl: 0.8, point: [0.7, 0.3, 0.65] } };
+export const momEdo = dressed("mom", "edo"), momEdoHatback = dressed("mom", "edo-hatback", { hat: "back", label: "in Edo travel clothes, the hat on her back" });
+export const momEdoCrew = dressed("mom", "edo-crew", { cloth: true, label: "in Edo clothes and the plasterers' head-cloth" });
+export const momEdoBaby = dressed("mom", "edo-baby", { hat: "back", label: "in Edo clothes, with O-Tami's baby in her arms", hold: CRADLE, extra: baby, fidgets: { only: true, stand: ["rockbaby"] }, span: 1.25 });
+export const momEdoMirror = dressed("mom", "edo-mirror", { hat: "back", label: "in Edo clothes, the bronze mirror held up", hold: MIRROR_UP, extra: mirror, fidgets: { only: true, stand: ["tilt", "look"] }, span: 1.2 });
+export const momEdoCrewMirror = dressed("mom", "edo-crew-mirror", { cloth: true, label: "in the crew's head-cloth, the bronze mirror held up", hold: MIRROR_UP, extra: mirror, fidgets: { only: true, stand: ["tilt", "look"] }, span: 1.2 });
+export const bigsisEdo = dressed("bigsis", "edo"), bigsisEdoHatback = dressed("bigsis", "edo-hatback", { hat: "back", label: "in Edo travel clothes, the hat on her back" });
+export const bigsisEdoCrew = dressed("bigsis", "edo-crew", { cloth: true, label: "in Edo clothes and the plasterers' head-cloth" });
+export const lilsisEdo = dressed("lilsis", "edo"), lilsisEdoHatback = dressed("lilsis", "edo-hatback", { hat: "back", label: "in Edo travel clothes, the hat on her back" });
+export const lilsisEdoCrew = dressed("lilsis", "edo-crew", { cloth: true, label: "in Edo clothes and the plasterers' head-cloth" });
+/** Little Sister flat on her back on the ground (under the double cherry, the petals landing on her face): the whole figure
+    tipped flat (spec.pitch: rig.js, headed), her arms a little out, her eyes open. Her head lies away from the way she faces
+    (facing E she lies with her head to the west); her words are put low (crown). A kind, not a hold: lying, she is twice as
+    wide as standing, and a hold would be cut off at the picture's edge. In her own clothes and in Edo clothes. */
+const LYING = { pitch: -1.52, span: 2.3, tall: 0.6, shadow: 0.001, crown: -0.44, stance: undefined, lean: 0, nod: -0.10, gestures: [0, 0, 8, 0], fidgets: { only: true, stand: ["look"] },
+  hold: { R: { arm: [0.12, 0.50], elbow: 0.12, flat: true }, L: { arm: [-0.06, 0.50], elbow: 0.12, flat: true } } };
+export const lilsisLying = { ...lilsis, ...LYING, name: "Little Sister, lying on her back", holds: undefined, cues: undefined };
+export const lilsisEdoLying = { ...lilsisEdoHatback, ...LYING, name: "Little Sister, in Edo clothes, lying on her back", holds: undefined, cues: undefined };
+/** The outfits a lead can be dressed in (g.dress): by lead, the names, each the kind `people[<lead>-<name>]`. */
+export const OUTFIT_NAMES = { mom: ["edo", "edo-hatback", "edo-crew", "edo-baby", "edo-mirror", "edo-crew-mirror"], bigsis: ["edo", "edo-hatback", "edo-crew"], lilsis: ["edo", "edo-hatback", "edo-crew", "edo-lying"] };
+
+// ---- the people of 1830 ----
+const EDO_MAN = { ...ADULT, headR: [0.056, 0.066, 0.063], shoulderW: 0.098 };
+const EDO_WOMAN = { ...WOMAN, headR: [0.056, 0.066, 0.063] };
+const H = (cm) => cm / 181;                                               // a height in cm as the rig has it (the family's scale: Dad at 1.0 is about 181 cm)
+const workman = (skin, o = {}) => ({
+  dim: { ...EDO_MAN, ...(o.dim || {}) }, skin, hair: { mat: EDO_HAIR, bulk: [1.06, 1.0, 1.06], where: chonmage },
+  face: { ...EDO_MAN_FACE, ...(o.face || {}) },
+  top: { mat: o.jacket || AI, sleeves: 2, ease: 0.006, hem: 0.085, open: 0.040, under: skin, cuffs: undefined },      // a short jacket to mid-thigh, open at the neck
+  bottom: { kind: "trousers", mat: o.trousers || AI_DEEP, ease: 0.004 },                                       // tight work trousers (momohiki)
+  shoes: { kind: "sandals", mat: WARAJI, sole: shifted(WARAJI, 1) },
+  gestures: [0, 1, 0, 8], pace: 150,
+});
+/** A kimono-wearing townsperson's clothes (a long robe, an obi): the figure's own top and bottom, and the lines kimono() draws. */
+const robe = (mat, len = 1.92, o = {}) => ({ top: { mat, sleeves: 2, ease: 0.006, open: o.open ?? 0.034, under: o.under || WHITE }, bottom: { kind: "skirt", mat, len, flare: o.flare ?? 1.03, wrap: [0.55, -0.30], under: mat } });
+const WOMAN_EDO = (skin, mat, o = {}) => ({
+  dim: { ...EDO_WOMAN, ...(o.dim || {}) }, skin, hair: { mat: EDO_HAIR, bulk: [1.14, 1.04, 1.12], where: marumage, puffs: MARUMAGE_PUFFS },
+  face: { ...EDO_WOMAN_FACE, inside: INK_BLACK_MOUTH, ...(o.face || {}) },
+  ...robe(mat, o.len ?? 1.80, { open: 0.030 }),
+  socks: undefined, shoes: { kind: "sandals", mat: WARAJI, foot: skin, sole: shifted(WARAJI, 1) },
+  gestures: o.gestures || [0, 8, 0, 9], pace: o.pace ?? 150,
+});
+const bowOf = (deep) => ({ bowDeep: deep });
+
+// Kihei, the fishmonger, sixty this tiger year: stocky, big forearms, a towel round his head, work clothes and a scaled
+// apron, and over them the red sleeveless vest and the red hood his wife made him wear all year. Few words, big hands.
+const KIHEI_VEST = BENI;
+function kiheiGear(c) {
+  const { J, limb, ball, trunkAt, wide, deep, d, tw, under, cloth, parts, pose, headPt, onHead, hy } = c, T = (v) => add(J.sh, J.torso(v));
+  chonmageTop(c);
+  // the hood: a soft red cap over the crown and down round the back of the head and the neck
+  const hr = d.headR;
+  ball(headPt([0, 0.006, -0.004]), [hr[0] * 1.16, hr[1] * 1.12, hr[2] * 1.16], BENI, { part: parts.HAT, fn: (ux, uy, uz) => { const q = onHead(ux, uy, uz); return q[1] > 0.12 || (q[2] < -0.20 && q[1] > -0.70) ? undefined : null; } }, hy);
+  apronOf(c, NEZUMI, 0.34, true);
+  // the sleeveless vest: a short padded body over the jacket, open down the front, its edges bound
+  const lie = { [parts.TORSO]: under, [parts.COLLAR]: under, [parts.BELT]: under, [parts.DRAPE]: under };
+  const top = [d.trunkTop[0] + 0.012, d.trunkTop[1] + 0.014], low = [d.trunkLow[0] + 0.018, d.trunkLow[1] + 0.016], r0 = wide(top), r1 = wide(low);
+  limb(T([0, -0.030, 0]), J.spine(d.waistY - 0.020), r0, r1, KIHEI_VEST, { part: parts.DRAPE, over: lie, bias: cloth * 2.2, depth: deep(top) / r0, squareStart: true, squareEnd: true,
+    fn: (t, nx) => { const round = c.roundAt(nx, c.tw * 0.6); return Math.abs(round) < 0.16 ? null : Math.abs(round) < 0.26 ? shifted(KIHEI_VEST, 1) : undefined; } });      // open down the front, a darker binding at the edges
+  if (pose.held === "board") sushiBoard(c);
+  void tw; void trunkAt;
+}
+const KIHEI_PRESS = { R: { hand: [0.050, -0.330, 0.190], bend: [0.9, -0.3, -0.5], flat: true, point: [-0.2, -0.2, 0.95], thumb: [0, 0, 1] }, L: { hand: [-0.050, -0.330, 0.190], bend: [-0.9, -0.3, -0.5], flat: true, point: [0.2, -0.2, 0.95], thumb: [0, 0, 1] } };
+const kiheiHolds = {
+  /** at his board: cutting: the left hand holding the fish down, the right with the knife, the head down to the work */
+  cut: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.22, head: { nod: nodOf(b) + 0.26 }, held: "cut" };
+    withArm(p, "L", { hand: [-0.070, -0.300, 0.200], bend: [-0.9, -0.3, -0.5], flat: true, point: [0.2, -0.3, 0.9] });
+    withArm(p, "R", { hand: [0.050, -0.290, 0.190], bend: [0.9, -0.3, -0.5], grip: true, point: [-0.9, -0.2, 0.3] }); return p; },
+  /** pressing the sushi box: both hands flat on the lid in front of him, his weight on it, the elbows locked */
+  press: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.34, breath: 1, head: { nod: nodOf(b) + 0.16 }, held: "press" }; withArm(p, "R", KIHEI_PRESS.R); withArm(p, "L", KIHEI_PRESS.L); return p; },
+  /** holding out a board of sushi in both hands, with a small bow of the head */
+  board: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) + 0.12 }, held: "board" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.090, -0.220, 0.210], bend: [sd * 0.9, -0.5, -0.4], curl: 0.7, point: [-sd * 0.3, 0.2, 0.9], thumb: [0, 1, 0] }); return p; },
+  /** his rare smile: nothing moves but his face */
+  smile: (o) => ({ ...cloneP(o.base), smile: 2, head: { nod: nodOf(o.base) + 0.02 }, held: "smile" }),
+};
+export const kihei = {
+  ...workman(EDO_SUN, { dim: { shoulderW: 0.108, trunkTop: [0.114, 0.076], trunkLow: [0.108, 0.080], bellyFwd: 0.010, armR: [0.036, 0.032, 0.022], handR: 0.026, legR: [0.054, 0.035, 0.024] }, jacket: NEZUMI, trousers: AI_DEEP,
+    face: { eyes: "heavy", lines: 2, jaw: 0.94, chin: 0.66, brow: { full: [1, 0, 0] } } }),
+  name: "Kihei, the fishmonger", height: H(156),
+  stance: "folded", lean: 0.03,
+  walk: { swing: 0.40, arm: 0.22, elbow: 0.30, lean: 0.05, lift: 0.9 }, pace: 135,
+  gestures: [0, 8, 0, 20],                                              // few words: a nod, an open hand, a nod aside
+  fidgets: { stand: ["apron", "fold"], not: ["sleeve"] }, holds: kiheiHolds, cues: { stand: ["turnout", "ojigi", "fold"] }, ...bowOf(0.28),
+  extras(c) { hachimaki(c, TENUGUI, 0.40); kiheiGear(c); },
+};
+// O-Tami, his wife: small, quick, teeth blackened and no eyebrows (the baby); sleeves tied back with a cord; a dark apron.
+const tamiHolds = {
+  clothes: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) + 0.10 }, held: "clothes" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.080, -0.210, 0.200], bend: [sd * 0.9, -0.5, -0.4], flat: true, point: [-sd * 0.2, 0.1, 0.95], thumb: [0, 1, 0] }); return p; },
+  /** pulling someone in by the sleeve: her right arm out to her right, gripping, her body turned that way, a quick look over her shoulder */
+  pull: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.06, twist: 0.30, head: { nod: nodOf(b), turn: 0.70 }, held: "pull" };
+    withArm(p, "R", { hand: [0.200, -0.190, 0.050], bend: [1, -0.3, -0.6], grip: true, point: [1, -0.2, 0.2] }); return p; },
+};
+export const tami = {
+  ...WOMAN_EDO(EDO_SKIN, KAKI, { face: { brows: null, blush: "#eea090", smile: 1 }, len: 1.70, gestures: [0, 9, 1, 8], pace: 165, dim: { shoulderW: 0.080 } }),
+  name: "O-Tami, the fishmonger's wife", height: H(146),
+  stance: "akimbo", walk: { swing: 0.42, arm: 0.34, elbow: 0.40, lean: 0.06, lift: 1.1, sway: 0.014 },
+  fidgets: { stand: ["laugh", "shift", "look", "tasuki"], not: ["sleeve", "scratch"] }, holds: tamiHolds, cues: { stand: ["laugh", "ojigi"] }, ...bowOf(0.30),
+  extras(c) { kimono(c, { mat: KAKI, obi: AI_DEEP, knot: "big", sleeve: 0 }); tasuki(c, TENUGUI); apronOf(c, AI, 0.42); if (c.pose.held === "clothes") foldedClothes(c); },
+};
+export const tamiBaby = { ...tami, name: "O-Tami, with the baby on her back", span: 1.15, fidgets: { stand: ["shift", "look", "jog"], not: ["sleeve", "scratch"] }, extras(c) { tami.extras(c); babyOnBack(c); } };
+// Sankichi, their grandson, nine: a boy's short kimono over bare legs, a forelock; he can read.
+const sankichiHolds = {
+  /** reading the notice board: his right hand up on it, a finger along the lines, his head up and to it */
+  read: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.02, head: { nod: nodOf(b) - 0.22 }, held: "read" };
+    withArm(p, "R", { hand: [0.060, 0.060, 0.190], bend: [0.8, -0.3, -0.5], finger: true, point: [0.3, 0.2, 0.93] }); return p; },
+  /** staring at Little Sister's boots: bent right over, his hands on his knees, his head down */
+  stare: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.50, head: { nod: nodOf(b) + 0.30 }, held: "stare" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * (o.d.hipW + 0.026), -(o.d.shoulderY - o.d.hipY) - 0.120, 0.150], bend: [sd * 0.6, -0.3, -0.6], curl: 0.6 }); return p; },
+};
+export const sankichi = {
+  name: "Sankichi, the fishmonger's grandson", height: H(125),
+  dim: { ...CHILD, headR: [0.068, 0.079, 0.075] }, skin: EDO_SKIN,
+  hair: { mat: EDO_HAIR, bulk: [1.08, 1.04, 1.08], where: boyhair, puffs: BOY_PUFFS, ears: true },
+  face: { ...EDO_CHILD_FACE },
+  top: { mat: ASAGI, sleeves: 2, ease: 0.006, open: 0.030, under: WHITE }, bottom: { kind: "skirt", mat: ASAGI, len: 1.10, flare: 1.08, wrap: [0.55, -0.30], under: ASAGI },      // a boy's kimono to the knee
+  shoes: { kind: "sandals", mat: WARAJI, foot: EDO_SKIN, sole: shifted(WARAJI, 1) },
+  stance: "behind", walk: { swing: 0.50, arm: 0.50, elbow: 0.30, lean: 0.08, lift: 1.3, bob: 0.03 }, pace: 175,
+  gestures: [0, 10, 0, 11, 4],                                          // he asks and points, in Little Sister's rhythm
+  fidgets: { stand: ["shift", "look", "scratch", "hop"] }, holds: sankichiHolds, cues: { stand: ["point", "trace", "hop"] },
+  extras(c) { kimono(c, { mat: ASAGI, obi: CHA, obiUp: 0.028, obiDown: 0.024, knot: "small", sleeve: 0.040 }); },
+};
+// Tokuzō, the headman's clerk: thin, neat, very short-sighted; a brush in one hand, the register book in the other.
+const tokuzoHolds = {
+  /** peering close at someone: leaning right in from the hips, the head forward, the eyes screwed up (his always are) */
+  peerclose: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.30, head: { nod: nodOf(b) - 0.26 }, held: "peerclose" }; return p; },
+  /** writing in his book, the brush going, the book held up close to his face */
+  writing: (o) => { const b = o.base, p = { ...cloneP(b), head: { nod: nodOf(b) + 0.30 }, held: "writing" };
+    withArm(p, "L", { hand: [-0.030, -0.110, 0.150], bend: [-0.9, -0.6, -0.3], flat: true, point: [0.2, 0.3, 0.93], thumb: [1, 0, 0] });
+    withArm(p, "R", { hand: [0.010, -0.080, 0.170], bend: [0.9, -0.5, -0.3], grip: true, point: [-0.3, -0.8, 0.5] }); return p; },
+};
+const TOKUZO_HANDS = { L: { hand: [-0.060, -0.200, 0.120], bend: [-0.9, -0.6, -0.3], flat: true, point: [0.2, 0.3, 0.93], thumb: [1, 0, 0] }, R: { hand: [0.070, -0.250, 0.090], bend: [0.8, -0.5, -0.4], grip: true, point: [-0.3, -0.6, 0.7] } };
+export const tokuzo = {
+  ...workman(EDO_PALE, { dim: { shoulderW: 0.090, trunkTop: [0.094, 0.060], trunkLow: [0.080, 0.058], armR: [0.027, 0.023, 0.016] }, face: { eyes: "squint", lines: 1, jaw: 0.84, chin: 0.52 } }),
+  ...robe(NEZUMI, 1.90, { open: 0.030 }), name: "Tokuzō, the headman's clerk", height: H(157),
+  hold: TOKUZO_HANDS, gestures: [0, 0, 20, 0], lean: 0.06,
+  walk: { swing: 0.36, arm: 0.10, elbow: 0.60, lean: 0.08, lift: 0.9, bob: 0.02 }, pace: 125,
+  fidgets: { only: true, stand: ["shift", "look", "squint"] }, holds: tokuzoHolds, cues: { stand: ["ojigi", "squint"] }, ...bowOf(0.34),
+  extras(c) { chonmageTop(c); kimono(c, { mat: NEZUMI, obi: SUMI, obiUp: 0.018, obiDown: 0.026, knot: "small", sleeve: 0.060 }); registerBook(c); },
+};
+// Gonroku, the captain: weathered, broad, a sailor's short jacket and a towel round his head; he speaks in weather.
+export const gonroku = {
+  ...workman(EDO_SUN, { dim: { shoulderW: 0.110, trunkTop: [0.116, 0.078], trunkLow: [0.104, 0.074], armR: [0.034, 0.030, 0.021] }, jacket: AI_DEEP, trousers: CHA, face: { eyes: "deep", lines: 2, jaw: 0.96, chin: 0.68, short: { mat: shifted(EDO_SUN, 2), stubble: shifted(EDO_SUN, 2), from: 0.3 } } }),
+  name: "Gonroku, the captain", height: H(158),
+  stance: "folded", lean: -0.01, walk: { swing: 0.42, arm: 0.26, elbow: 0.30, lean: 0.03, lift: 0.9, sway: 0.020 }, pace: 130,
+  gestures: [12, 2, 12, 15, 11],                                         // arms folded; a shrug; waving it away; a finger up (the weather)
+  fidgets: { stand: ["fold", "look", "headshake", "grumble"], not: ["sleeve", "neck"] }, cues: { stand: ["headshake", "grumble", "fold"] },
+  extras(c) { hachimaki(c, AI, 0.44); chonmageTop(c); kimono(c, { mat: AI_DEEP, obi: CHA, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0, jacket: true }); },
+};
+// O-Masa, his wife and Kihei's sister: sturdy, decided, teeth blackened; the one person Gonroku obeys.
+export const masa = {
+  ...WOMAN_EDO(EDO_SUN, AI, { face: { brow: { full: [0, 0, 1] }, lines: 1 }, len: 1.66, gestures: [0, 3, 10, 0], pace: 160, dim: { shoulderW: 0.090, trunkTop: [0.094, 0.066], trunkLow: [0.082, 0.062] } }),
+  name: "O-Masa, the captain's wife", height: H(150),
+  stance: "akimbo", lean: 0.02, walk: { swing: 0.46, arm: 0.40, elbow: 0.20, lean: 0.09, lift: 1.1 },
+  fidgets: { stand: ["shift", "look", "hips2"], not: ["sleeve", "scratch"] }, cues: { stand: ["point", "march"] },
+  extras(c) { kimono(c, { mat: AI, obi: KAKI, knot: "big", sleeve: 0 }); tasuki(c, TENUGUI); wear.headcloth(c, { mat: TENUGUI, brow: 0.48, nape: 0.72, tails: 0.2 }); },
+};
+// Grandmother Sei: small, bent a little, grey hair, a dark plain kimono, no eyebrows, teeth blackened. Found kneeling
+// (seiza: `sit.seat` "kneel"), on the mats of the room under the storehouse; she keeps the prayers and the calendar.
+const seiHolds = {
+  mirror: (o) => mirrorHold(o),
+  /** opening the altar's doors: both hands out in front, apart, at the height of the doors' handles */
+  doors: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.10, head: { nod: nodOf(b) - 0.08 }, held: "doors" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.120, -0.090, 0.200], bend: [sd * 0.8, -0.6, -0.3], curl: 0.6, point: [sd * 0.2, 0.1, 0.95] }); return p; },
+};
+export const sei = {
+  ...WOMAN_EDO(EDO_SKIN, SUMI, { face: { brows: null, lines: 2, eyes: "heavy", jaw: 0.78, chin: 0.50 }, len: 1.92, gestures: [0, 5, 0, 8], pace: 95, dim: { shoulderW: 0.078, trunkTop: [0.084, 0.064], trunkLow: [0.078, 0.062] } }),
+  name: "Grandmother Sei", height: H(140),
+  hair: { mat: EDO_GREY, bulk: [1.10, 1.02, 1.08], where: marumage, puffs: [[0, 0.96, -0.36, 0.36, 0.28, 0.38]] },
+  seated: "ground", sit: { seat: "kneel", lean: 0.10, nod: 0.08 }, riseMs: 1900, shadow: 0.20, span: 1.12,
+  stance: "clasped", lean: 0.14, nod: 0.06, walk: { swing: 0.28, arm: 0.10, elbow: 0.30, lean: 0.14, lift: 0.7 },
+  pray: { fold: true, high: 0.62, bow: 0.40, lean: 0.06 },             // kneeling, the hands folded together before her breast, the head well down
+  fidgets: { only: true, sit: ["shift", "slownod", "beads"], stand: ["shift", "look"] }, holds: seiHolds, cues: { sit: ["slownod", "tilt"], stand: ["slownod", "tilt", "ojigi"] }, ...bowOf(0.30),
+  stood: { pray: { high: 0.55, bow: 0.40 } },
+  extras(c) { kimono(c, { mat: SUMI, obi: NEZUMI, obiUp: 0.060, obiDown: 0.034, knot: "big", sleeve: 0.070 }); if (c.pose.held === "mirror") mirror(c); },
+};
+// Jinsuke, her son, the charcoal-burner: soot in his skin and on his face, work clothes; careful, steady; he kneels and bows deep.
+const jinsukeHolds = {
+  /** his arms out at his sides in front of his daughter, the palms back, planted */
+  shield: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.02, breath: 1, head: { nod: nodOf(b) + 0.02 }, held: "shield" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) { withArm(p, s, { arm: [0.30, 0.95], elbow: 0.10, flat: true, point: [sd * 0.9, -0.3, -0.2], thumb: [0, 0, -1] }); p[s] = { ...p[s], leg: [0.02, 0.18], knee: 0.06 }; } return p; },
+  /** a sack lifted onto his right shoulder, both hands steadying it, the knees a little bent under the weight */
+  sack: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.04, breath: 1, head: { nod: nodOf(b) + 0.06, turn: -0.20 }, held: "sack" };
+    withArm(p, "R", { hand: [0.120, 0.040, 0.040], bend: [1, -0.2, -0.3], curl: 0.8, point: [-0.3, 1, 0.2] }); withArm(p, "L", { hand: [0.040, 0.030, 0.090], bend: [-0.6, -0.4, 0.1], curl: 0.8, point: [0.6, 0.8, 0.2] });
+    for (const s of ["R", "L"]) p[s] = { ...p[s], leg: [0.08, 0.06], knee: 0.22 }; return p; },
+};
+export const jinsuke = {
+  ...workman(EDO_SOOT, { dim: { shoulderW: 0.102, armR: [0.032, 0.028, 0.020] }, jacket: CHA, trousers: SUMI, face: { lines: 1, freckles: true, freckle: "#4a4038", jaw: 0.90, chin: 0.60 } }),
+  name: "Jinsuke, the charcoal-burner", height: H(157),
+  stance: "clasped", lean: 0.04, walk: { swing: 0.40, arm: 0.22, elbow: 0.30, lean: 0.06, lift: 0.9 }, pace: 135,
+  gestures: [0, 8, 0, 5], kneel: { lean: 0.06, backLean: 0.02 },
+  fidgets: { stand: ["shift", "look", "wipehands"], not: ["sleeve"] }, holds: jinsukeHolds, cues: { stand: ["ojigi", "wipehands"] }, ...bowOf(0.62),
+  extras(c) { hachimaki(c, NEZUMI, 0.42); chonmageTop(c); kimono(c, { mat: CHA, obi: NEZUMI, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0, jacket: true }); if (c.pose.held === "sack") sack(c); },
+};
+// O-Rin, his daughter, eight: a plain girl's kimono, her hair tied up; she has never prayed above a whisper.
+const orinHolds = {
+  /** peeking: turned half away, looking back over her shoulder, a hand up by her cheek */
+  peek: (o) => { const b = o.base, p = { ...cloneP(b), twist: -0.30, lean: (b.lean || 0) + 0.04, head: { nod: nodOf(b) + 0.04, turn: 0.75 }, held: "peek" };
+    withArm(p, "R", { hand: [0.040, o.sp.chinY - 0.010, o.d.headR[2] + 0.030], bend: [1, -0.6, 0.1], curl: 0.9, point: [-0.3, 0.9, 0.2] }); return p; },
+};
+export const orin = {
+  name: "O-Rin, the charcoal-burner's daughter", height: H(118),
+  dim: { ...CHILD, headR: [0.070, 0.081, 0.077], shoulderW: 0.086 }, skin: EDO_SKIN,
+  hair: { mat: EDO_HAIR, bulk: [1.10, 1.06, 1.10], where: girlknot, puffs: GIRLKNOT_PUFFS, ears: true },
+  face: { ...EDO_CHILD_FACE, eyes: "big", smile: 0.5, blush: "#f0a898" },
+  top: { mat: KAKI, sleeves: 2, ease: 0.006, open: 0.024, under: WHITE }, bottom: { kind: "skirt", mat: KAKI, len: 1.78, flare: 1.06, wrap: [0.55, -0.30], under: KAKI },
+  shoes: { kind: "sandals", mat: WARAJI, foot: EDO_SKIN, sole: shifted(WARAJI, 1) },
+  stance: "clasped", lean: 0.03, walk: { swing: 0.48, arm: 0.40, elbow: 0.30, lean: 0.06, lift: 1.2, bob: 0.02 }, pace: 185,
+  gestures: [0, 5, 0, 13], pray: { high: 0.70, bow: 0.30 },
+  fidgets: { stand: ["shift", "look", "whisper"], not: ["sleeve", "scratch"] }, holds: orinHolds, cues: { stand: ["whisper", "laugh", "giggle"] },
+  extras(c) { kimono(c, { mat: KAKI, obi: ASAGI, obiUp: 0.036, obiDown: 0.026, knot: "big", sleeve: 0.045 }); },
+};
+// Isuke, the constable's man: a townsman's clothes under a straw raincoat, a sedge hat dripping, the short iron truncheon
+// (no tassel) in his sash: never drawn. Wet, hungry, sleepy, polite.
+export const isuke = {
+  ...workman(EDO_SKIN, { dim: { shoulderW: 0.098 }, jacket: NEZUMI, trousers: AI, face: { eyes: "heavy", jaw: 0.90, chin: 0.58 } }),
+  name: "Isuke, the constable's man", height: H(156), span: 1.3,
+  stance: "clasped", lean: 0.05, walk: { swing: 0.38, arm: 0.14, elbow: 0.40, lean: 0.10, lift: 0.9 }, pace: 125,
+  gestures: [0, 8, 0, 16, 2],                                           // an open hand; wiping his brow (the rain); a shrug
+  fidgets: { only: true, stand: ["shiver", "yawn", "look", "shift"] }, holds: { egg: eggHold, writing: tokuzoHolds.writing }, cues: { stand: ["shiver", "yawn", "ojigi", "jot"] }, ...bowOf(0.26),
+  extras(c) { chonmageTop(c); kimono(c, { mat: NEZUMI, obi: SUMI, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0.030, jacket: true }); truncheon(c); mino(c); sugegasa(c, { r: 0.118 }); if (c.pose.held === "egg") egg(c); if (c.pose.held === "writing") registerBook(c); },
+};
+// Tomezō, the plaster foreman: spattered white head to foot, a towel round his head, a plasterer's jacket, a trowel in his
+// hand; cheerful, loud, three hands short. `tomezo` on the ground; `tomezo-ladder` up the ladder (standOn), his left arm through a rung.
+const TOMEZO_TROWEL = { R: { hand: [0.090, -0.250, 0.100], bend: [0.7, -0.8, -0.4], grip: true, point: [0.2, -0.3, 0.9] } };
+const tomezoHolds = {
+  holler: hollerHold,
+  /** waving the trowel over his head at nobody */
+  wavetrowel: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.04, breath: 1, mouth: 2, head: { nod: nodOf(b) - 0.20 }, held: "wavetrowel" };
+    withArm(p, "R", { arm: [2.70, 0.40], elbow: 0.30, grip: true, point: [0.3, 0.9, 0.2] }); return p; },
+};
+export const tomezo = {
+  ...workman(EDO_SUN, { dim: { shoulderW: 0.104, armR: [0.033, 0.029, 0.020] }, jacket: AI, trousers: AI_DEEP, face: { lines: 1, smile: 1, jaw: 0.92, chin: 0.62, brow: { full: [0, -1, -1] } } }),
+  name: "Tomezō, the plaster foreman", height: H(159),
+  hold: TOMEZO_TROWEL, gestures: [0, 4, 9, 18, 11], lean: 0.02,          // loud: both arms up, hands going, hands wide, a finger up
+  walk: { swing: 0.44, arm: 0.30, elbow: 0.30, lean: 0.06, lift: 1.0, bob: 0.02 }, pace: 150,
+  fidgets: { stand: ["shift", "look", "laugh", "wipebrow"], not: ["sleeve", "scratch"] }, holds: tomezoHolds, cues: { stand: ["laugh", "wipebrow"] },
+  extras(c) { hachimaki(c, TENUGUI, 0.42); chonmageTop(c); kimono(c, { mat: AI, obi: KAKI, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0, jacket: true }); spatter(c, 16); trowel(c, "R"); },
+};
+export const LADDER_RUNG = 137 * CM;                                      // how high Tomezō's feet are on his ladder: PAINT-20D's ladder has eleven rungs 25 cm apart and he
+                                                                          // stands on rung 6, 1.37 m up (S/work-20-paintD/ready.md, layout.json `ladder`); his place is the ground under his feet
+export const tomezoLadder = {
+  ...tomezo, name: "Tomezō, up his ladder", standOn: LADDER_RUNG, span: 1.2, tall: 1.25 + LADDER_RUNG / 0.86,      // (tall: room in the picture for what he stands on, in his own heights)
+  hold: { ...TOMEZO_TROWEL, L: { hand: [-0.070, 0.090, 0.150], bend: [-0.8, -0.3, -0.4], grip: true, point: [-0.3, 0.9, 0.3] } },      // the left arm hooked up through a rung
+  gestures: [0, 0, 14, 0, 11], fidgets: { only: true, stand: ["look", "laugh", "wavetrowelmove"] }, cues: { stand: ["laugh", "wavetrowelmove"] },
+};
+// The gate guards: samurai, two swords each, hakama and a jacket, the topknot; one tall and one short. Stiff; they count.
+const samurai = (skin, height, name, o = {}) => ({
+  name, height, dim: { ...EDO_MAN, ...(o.dim || {}) }, skin, hair: { mat: EDO_HAIR, bulk: [1.06, 1.0, 1.06], where: chonmage },
+  face: { ...EDO_MAN_FACE, ...(o.face || {}) },
+  top: { mat: o.jacket || SUMI, sleeves: 2, ease: 0.008, open: 0.036, under: WHITE, hem: 0.11 },                  // the jacket (haori), open, to mid-thigh
+  bottom: { kind: "skirt", mat: o.hakama || ASAGI, len: 1.88, flare: 1.30, pleats: 7, under: o.hakama || ASAGI },   // hakama: wide and pleated, to the ankle
+  socks: { mat: WHITE, from: 0.88, thick: 0.004 }, shoes: { kind: "sandals", mat: WARAJI, foot: WHITE, sole: shifted(WARAJI, 1) },
+  stance: o.stance || "behind", lean: 0, walk: { swing: 0.40, arm: 0.12, elbow: 0.20, lean: 0.02, lift: 0.9 }, pace: 140,
+  gestures: o.gestures || [0, 17, 0, 10], span: 1.2,
+  fidgets: { only: true, stand: ["shift", "look", "tally2"] }, cues: { stand: ["tally2", "ojigi"] }, bowDeep: 0.14,
+  extras(c) { chonmageTop(c, { small: !!o.young }); kimono(c, { mat: o.jacket || SUMI, obi: NEZUMI, obiUp: 0.014, obiDown: 0.022, knot: "small", sleeve: 0.080, jacket: true }); daisho(c); if (o.extra) o.extra(c); },
+});
+export const guard1 = samurai(EDO_SKIN, H(162), "the gate guard (the tall one)", { dim: { shoulderW: 0.104 }, face: { jaw: 0.94, chin: 0.64 } });
+export const guard2 = samurai(EDO_SUN, H(150), "the gate guard (the short one)", { dim: { shoulderW: 0.100, trunkTop: [0.110, 0.072] }, face: { eyes: "heavy", jaw: 0.96, chin: 0.68 }, hakama: NEZUMI });
+// Shinnosuke, the keep's young warden: nineteen, slight, his topknot new, two swords; he makes up poems when frightened.
+// `shinnosuke` on his feet (at the foot of the stairs, at the top of them); `shinnosuke-floor` sat down on the floor.
+const shinnosukeHolds = {
+  /** holding the pink flashlight in both hands in front of him, lit, like something holy */
+  light: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.02, head: { nod: nodOf(b) + 0.14 }, held: "light" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.040, -0.150 + (o.seated ? -0.04 : 0), 0.170], bend: [sd * 0.9, -0.5, -0.4], curl: 0.9, point: [-sd * 0.3, 0.3, 0.9], thumb: [0, 1, 0] }); return p; },
+  /** SCENES-20C: the bronze mirror held up in both hands, as Mom holds it (#30's end: she puts it in his hands in the west
+      window, and he keeps its light on the hum while the three of them walk in) */
+  mirror: (o) => mirrorHold(o),
+};
+const shinnosukeBase = samurai(EDO_PALE, H(158), "Shinnosuke, the keep's young warden", { dim: { shoulderW: 0.090, trunkTop: [0.094, 0.062], trunkLow: [0.078, 0.058], armR: [0.027, 0.023, 0.016] },
+  face: { eyes: "wide", jaw: 0.84, chin: 0.50, brow: { full: [0, -1, -1] }, browUp: 3 }, young: true, stance: "clasped", gestures: [0, 17, 5, 0, 6] });
+export const shinnosuke = {
+  ...shinnosukeBase, lean: 0.04, kneel: { lean: 0.10, backLean: 0.02 },
+  fidgets: { only: true, stand: ["tremble", "look", "count", "shift"] }, holds: shinnosukeHolds, cues: { stand: ["tremble", "count", "ojigi"] }, bowDeep: 0.40,
+  extras(c) { shinnosukeBase.extras(c); if (c.pose.held === "light") flashlight(c); else if (c.pose.held === "mirror") mirror(c); },      // (SCENES-20C: and the mirror)
+};
+export const shinnosukeFloor = {
+  ...shinnosuke, name: "Shinnosuke, sat down on the floor", seated: "ground", sit: { seat: "floor", lean: -0.20 }, shadow: 0.22, span: 1.3,
+  fidgets: { only: true, sit: ["look", "shift"], stand: ["tremble", "look", "count", "shift"] }, cues: { sit: ["count"], stand: ["tremble", "count", "ojigi"] },
+};
+// The villagers of Yui: an old man mending a net on the sand, and a woman with a basket on her back.
+export const netmender = {
+  ...workman(EDO_SUN, { jacket: KAKI, trousers: AI, face: { eyes: "heavy", lines: 2, jaw: 0.90, chin: 0.56, short: { mat: EDO_GREY, stubble: EDO_GREY, from: 0.2 } } }),
+  name: "the net-mender", height: H(152), hair: { mat: EDO_GREY, bulk: [1.04, 1.0, 1.04], where: chonmage },
+  seated: "ground", sit: { lean: 0.12, nod: 0.10 }, riseMs: 1600, shadow: 0.20,
+  rest: { R: { hand: [0.040, -0.300, 0.180], bend: [0.9, -0.4, -0.4], grip: true, point: [-0.6, 0.3, 0.7] }, L: { hand: [-0.060, -0.290, 0.170], bend: [-0.9, -0.4, -0.4], grip: true, point: [0.6, 0.2, 0.7] } },
+  gestures: [0, 8, 0, 20], fidgets: { only: true, sit: ["mend", "mend", "look", "shift"], stand: ["look", "shift", "back"] }, cues: { sit: ["mend"] }, stood: { rest: undefined },
+  extras(c) { hachimaki(c, AI, 0.40); chonmageTop(c, { mat: EDO_GREY, pate: pateOf(EDO_SUN) }); kimono(c, { mat: KAKI, obi: NEZUMI, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0, jacket: true }); netOnLap(c); },
+};
+export const basketwoman = {
+  ...WOMAN_EDO(EDO_SUN, AI, { face: { brow: { full: [0, 0, 0] } }, len: 1.60, gestures: [0, 9, 0, 4], pace: 140, dim: { shoulderW: 0.088 } }),
+  name: "a village woman, with a basket on her back", height: H(147), span: 1.25, lean: 0.10,
+  stance: "straps", walk: { swing: 0.40, arm: 0.10, elbow: 0.60, lean: 0.12, lift: 0.9 },
+  fidgets: { stand: ["shift", "look"], not: ["sleeve", "scratch", "neck"] }, holds: { gasp: (o) => { const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) - 0.08, breath: 1, mouth: 2, head: { nod: nodOf(b) - 0.10 }, held: "gasp" };
+    for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.030, o.sp.chinY - 0.030, o.d.headR[2] + 0.040], bend: [sd, -0.6, 0.1], flat: true, point: [-sd * 0.3, 0.9, 0.3] }); return p; } },
+  extras(c) { kimono(c, { mat: AI, obi: KAKI, knot: "big", sleeve: 0 }); tasuki(c, TENUGUI); wear.headcloth(c, { mat: TENUGUI, brow: 0.48, nape: 0.72, tails: 0.2 }); if (!c.spec.dropped) backBasket(c); },
+};
+export const basketwomanDropped = { ...basketwoman, name: "the village woman, the basket dropped", dropped: true, span: 1.1, lean: 0.02, stance: "clasped", hold: undefined,
+  fidgets: { stand: ["shift", "look"], not: ["sleeve", "scratch", "neck"] } };
+// The pilgrims of Himeji, setting out for Ise: travel clothes, sedge hats, a wooden ladle held up (the pilgrim's badge, held out for alms).
+const pilgrim = (skin, height, mat, name, o = {}) => ({
+  ...workman(skin, { jacket: mat, trousers: o.trousers || AI_DEEP, face: o.face || {} }), name, height,
+  ...robe(mat, 1.60), ...TRAVEL,
+  hold: { R: { hand: [0.090, -0.150, 0.130], bend: [0.7, -0.8, -0.3], grip: true, point: [0, 1, 0.2] } },
+  gestures: [0, 0, 20, 0], walk: { swing: 0.44, arm: 0.20, elbow: 0.30, lean: 0.07, lift: 1.0 }, pace: 145, span: 1.2,
+  fidgets: { only: true, stand: ["shift", "look"] }, holds: { ladleout: (p) => { const b = p.base, q = { ...cloneP(b), lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) + 0.08 }, held: "ladleout" }; withArm(q, "R", { hand: [0.080, -0.180, 0.230], bend: [0.6, -0.8, -0.2], grip: true, point: [0.1, 0.3, 0.95] }); return q; } },
+  extras(c) { chonmageTop(c); kimono(c, { mat, obi: o.obi || CHA, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0.050 }); sugegasa(c, { r: 0.112 }); ladle(c, c.pose.held !== "ladleout"); },
+});
+export const pilgrim1 = pilgrim(EDO_SKIN, H(157), KAKI, "a pilgrim for Ise");
+export const pilgrim2 = pilgrim(EDO_SUN, H(154), NEZUMI, "a pilgrim for Ise (the second)", { obi: AI_DEEP, face: { lines: 1 } });
+export const pilgrim3 = pilgrim(EDO_PALE, H(150), ASAGI, "a pilgrim for Ise (the third)", { trousers: CHA, face: { eyes: "bright" } });
+// Tomezō's crew: white head-cloths, spattered clothes; a bucket, a trowel at a wall, the mixing pole.
+const plasterer = (skin, height, name, o = {}) => ({
+  ...workman(skin, { jacket: o.jacket || AI, trousers: AI_DEEP, face: o.face || {} }), name, height,
+  hold: o.hold, gestures: [0, 8, 0, 9], span: 1.2,
+  fidgets: { only: true, stand: ["shift", "look", ...(o.fidgets || [])] }, holds: { trowelwall: (p) => { const b = p.base, q = { ...cloneP(b), lean: (b.lean || 0) - 0.02, head: { nod: nodOf(b) - 0.20 }, held: "trowelwall" }; withArm(q, "R", { hand: [0.080, 0.060, 0.190], bend: [0.8, -0.3, -0.5], grip: true, point: [0.2, 0.9, 0.3] }); return q; },
+    mix: (p) => { const b = p.base, q = { ...cloneP(b), lean: (b.lean || 0) + 0.24, head: { nod: nodOf(b) + 0.16 }, held: "mix" }; withArm(q, "R", { hand: [0.060, -0.200, 0.200], bend: [0.9, -0.4, -0.4], grip: true, point: [-0.4, -0.6, 0.7] }); withArm(q, "L", { hand: [-0.020, -0.120, 0.170], bend: [-0.9, -0.5, -0.3], grip: true, point: [0.2, -0.8, 0.5] }); return q; } },
+  cues: { stand: ["trowelling", "mixing"] },
+  extras(c) { headcloth(c, TENUGUI); kimono(c, { mat: o.jacket || AI, obi: KAKI, obiUp: 0.016, obiDown: 0.024, knot: "small", sleeve: 0, jacket: true }); spatter(c, 12); const h = c.pose.held; if (o.bucket && h !== "trowelwall" && h !== "mix") bucket(c, "R"); if (h === "trowelwall" || o.trowel) trowel(c, "R"); if (h === "mix") mixPole(c); },
+});
+/** The pole a plasterer mixes lime with, in both hands, its foot in the tub. */
+function mixPole(c) { const { J, limb, parts } = c, top = add(J.L.palm, [0, 0.040, 0]), foot = add(J.R.palm, [0.02, -0.220, 0.06]); limb(top, foot, 0.006, 0.007, EDO_WOOD, { part: parts.HELD }); }
+export const plasterer1 = plasterer(EDO_SUN, H(156), "a plasterer (with a bucket)", { bucket: true, hold: { R: { hand: [0.100, -0.330, 0.020], bend: [0.6, -0.9, -0.3], grip: true, point: [0, -1, 0.1] } }, face: { jaw: 0.92 } });
+export const plasterer2 = plasterer(EDO_SKIN, H(154), "a plasterer (with a trowel)", { trowel: true, jacket: NEZUMI, hold: { R: { hand: [0.080, -0.240, 0.110], bend: [0.7, -0.8, -0.4], grip: true, point: [0.2, -0.3, 0.9] } }, fidgets: ["trowelling"], face: { eyes: "heavy" } });
+
+// ---- their own small movements (figure.fidget(name); each page's `fidgets` says which are theirs for their life, `cues` what a script plays) ----
+addMoves({
+  /** a bow from the hips, Japanese: the back straight, the hands flat on the thighs, the eyes down (spec.bowDeep: how far: 0.14 a guard's nod, 0.30 polite, 0.62 Jinsuke's deep one) (holdable) */
+  ojigi: { ms: 2200, hold: 0.5, make(o) {
+    const b = o.base, deep = o.spec.bowDeep ?? 0.30, p = { ...cloneP(b), lean: (b.lean || 0) + deep, head: { nod: nodOf(b) + deep * 0.5 } };
+    for (const s of free(o)) { const sd = s === "R" ? 1 : -1; withArm(p, s, { hand: [sd * (o.d.hipW + 0.030), -(o.d.shoulderY - o.d.hipY) - 0.030, 0.090], bend: [sd * 0.7, -0.3, -0.6], flat: true, point: [0, -0.9, 0.4] }); }
+    return [[0, b], [0.30, p], [0.72, p], [1, b]];
+  } },
+  /** Kihei: turns the sushi box out: both hands take the box in front of him, lift it, turn it over and set it down */
+  turnout: { ms: 2600, make(o) {
+    const b = o.base, at = (y, z, lean, nod, pt) => { const p = { ...cloneP(b), lean: (b.lean || 0) + lean, head: { nod: nodOf(b) + nod } }; for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.080, y, z], bend: [sd * 0.9, -0.4, -0.4], grip: true, point: pt(sd) }); return p; };
+    const down = at(-0.300, 0.200, 0.26, 0.20, (sd) => [-sd * 0.5, -0.5, 0.7]), up = at(-0.180, 0.200, 0.10, 0.16, (sd) => [-sd * 0.5, 0.2, 0.8]), over = at(-0.190, 0.210, 0.12, 0.18, (sd) => [-sd * 0.4, -0.8, 0.4]);
+    return [[0, b], [0.20, down], [0.38, up], [0.54, over], [0.72, down], [1, b]];
+  } },
+  /** Kihei: wipes his big hands on his apron */
+  apron: { ms: 2000, make(o) {
+    const b = o.base, at = (dy) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.12 } }; for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.040, -(o.d.shoulderY - o.d.hipY) + 0.020 + dy, o.sp.belly + 0.070], bend: [sd * 0.9, -0.4, -0.3], flat: true, point: [0, -0.8, 0.5] }); return p; };
+    const a1 = at(0), a2 = at(-0.040);
+    return [[0, b], [0.24, a1], [0.40, a2], [0.56, a1], [0.72, a2], [1, b]];
+  } },
+  /** O-Tami, O-Rin: a laugh behind the hand, the head back a little, then the hand over the mouth (holdable) */
+  laugh: { ms: 2400, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const up = withArm({ ...cloneP(b), mouth: 2, breath: 1, lean: (b.lean || 0) - 0.06, head: { nod: nodOf(b) - 0.22, turn: sd * 0.08 } }, s, { hand: [sd * 0.030, o.sp.chinY - 0.020, hr[2] + 0.050], bend: [sd, -0.6, 0.1], flat: true, point: [-sd * 0.3, 0.9, 0.3] });
+    const over = withArm({ ...cloneP(b), lean: (b.lean || 0) + 0.04, head: { nod: nodOf(b) + 0.12, turn: -sd * 0.06 } }, s, { hand: [sd * 0.010, o.sp.chinY - 0.010, hr[2] + 0.046], bend: [sd, -0.6, 0.1], flat: true, point: [-sd * 0.6, 0.5, 0.5] });
+    return [[0, b], [0.22, up], [0.46, up], [0.62, over], [0.84, over], [1, b]];
+  } },
+  /** O-Rin: a giggle she cannot help, both hands over her mouth, her shoulders going */
+  giggle: { ms: 2000, make(o) {
+    const b = o.base, hr = o.d.headR, at = (br, nod) => { const p = { ...cloneP(b), breath: br, mouth: 1, blink: br > 0.5, head: { nod: nodOf(b) + nod } }; for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.014, o.sp.chinY - 0.010, hr[2] + 0.046], bend: [sd, -0.6, 0.1], flat: true, point: [-sd * 0.6, 0.5, 0.5] }); return p; };
+    const g1 = at(1, 0.10), g2 = at(0.2, 0.16);
+    return [[0, b], [0.20, g1], [0.32, g2], [0.44, g1], [0.56, g2], [0.68, g1], [1, b]];
+  } },
+  /** O-Rin: whispers behind her hand, leaning toward whoever is beside her (holdable) */
+  whisper: { ms: 2600, hold: 0.5, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const p = withArm({ ...cloneP(b), mouth: 1, lean: (b.lean || 0) + 0.06, twist: -sd * 0.16, head: { nod: nodOf(b) + 0.06, turn: -sd * 0.40 } }, s, { hand: [sd * (hr[0] + 0.004), o.sp.chinY + 0.004, hr[2] * 0.62], bend: [sd, -0.7, 0.3], flat: true, point: [-sd * 0.3, 0.9, 0.3], thumb: [0, 0, 1] });
+    return [[0, b], [0.26, p], [0.76, p], [1, b]];
+  } },
+  /** O-Tami: tightens the cord that holds her sleeves back, with a tug at her shoulder */
+  tasuki: { ms: 1800, make(o) {
+    const b = o.base, at = (dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.08, turn: -0.20 } }, "R", { hand: [-0.040, -0.030 + dy, 0.060], bend: [1, -0.6, -0.1], grip: true, point: [-0.8, 0.4, 0.2] });
+    return [[0, b], [0.30, at(0)], [0.44, at(0.024)], [0.58, at(0)], [1, b]];
+  } },
+  /** O-Tami with the baby: a little jog from the knees, side to side, that never settles it */
+  jog: { ms: 2400, make(o) {
+    const b = o.base, at = (sw, k) => ({ ...cloneP(b), sway: sw, rise: -k, R: { ...b.R, knee: (b.R.knee || 0) + k * 6 }, L: { ...b.L, knee: (b.L.knee || 0) + k * 6 }, head: { nod: nodOf(b) + 0.02, turn: sw * 6 } });
+    return [[0, b], [0.16, at(0.012, 0.010)], [0.33, at(-0.012, 0.002)], [0.50, at(0.012, 0.010)], [0.66, at(-0.012, 0.002)], [0.83, at(0.010, 0.008)], [1, b]];
+  } },
+  /** Sankichi: a hop from foot to foot, as a boy waits who cannot wait */
+  hop: { ms: 1600, make(o) {
+    const b = o.base, at = (sd) => ({ ...cloneP(b), sway: sd * 0.020, rise: 0.010, R: { ...b.R, leg: [0.10, 0.04], knee: sd > 0 ? 0.6 : 0.1 }, L: { ...b.L, leg: [0.10, 0.04], knee: sd > 0 ? 0.1 : 0.6 }, head: { nod: nodOf(b) - 0.04 } });
+    return [[0, b], [0.25, at(1)], [0.50, b], [0.75, at(-1)], [1, b]];
+  } },
+  /** Sankichi: a finger along the lines of the board, right to left and down (holdable) */
+  trace: { ms: 3000, hold: 0.5, make(o) {
+    const b = o.base, at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.20, turn: dx * 2 } }, "R", { hand: [0.070 + dx, 0.060 + dy, 0.190], bend: [0.8, -0.3, -0.5], finger: true, point: [0.3, 0.2, 0.93] });
+    return [[0, b], [0.16, at(0.020, 0)], [0.40, at(-0.030, -0.010)], [0.52, at(0.020, -0.050)], [0.78, at(-0.030, -0.060)], [1, b]];
+  } },
+  /** Tokuzō: squints closer at whatever is in front of him, leaning in from the hips, and back (holdable) */
+  squint: { ms: 2400, hold: 0.5, make(o) {
+    const b = o.base, p = { ...cloneP(b), lean: (b.lean || 0) + 0.28, head: { nod: nodOf(b) - 0.24, turn: 0.06 } };
+    return [[0, b], [0.30, p], [0.74, p], [1, b]];
+  } },
+  /** Tokuzō, Isuke: a note in the book, the brush going, the head down to it */
+  jot: { ms: 2400, make(o) {
+    const b = o.base, at = (dx) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.28 } };
+      withArm(p, "L", { hand: [-0.030, -0.110, 0.150], bend: [-0.9, -0.6, -0.3], flat: true, point: [0.2, 0.3, 0.93], thumb: [1, 0, 0] });
+      return withArm(p, "R", { hand: [0.010 + dx, -0.085, 0.172], bend: [0.9, -0.5, -0.3], grip: true, point: [-0.3, -0.8, 0.5] }); };
+    return [[0, b], [0.20, at(0)], [0.34, at(-0.016)], [0.48, at(0.004)], [0.62, at(-0.014)], [0.76, at(0.006)], [1, b]];
+  } },
+  /** Gonroku: a slow shake of the head, no */
+  headshake: { ms: 2600, make(o) {
+    const b = o.base, at = (t) => ({ ...cloneP(b), head: { nod: nodOf(b) + 0.04, turn: t } });
+    return [[0, b], [0.20, at(0.30)], [0.42, at(-0.30)], [0.64, at(0.24)], [0.82, at(-0.16)], [1, b]];
+  } },
+  /** Gonroku: grumbles at the sky, one hand up and open to it, and lets it fall */
+  grumble: { ms: 2600, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    const up = withArm({ ...cloneP(b), mouth: 1, head: { nod: nodOf(b) - 0.18, turn: sd * 0.10 } }, s, { hand: [sd * 0.140, 0.020, 0.120], bend: [sd, -0.6, -0.2], flat: true, point: [sd * 0.3, 0.8, 0.5], thumb: [sd, 0, 0] });
+    const down = withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.06 } }, s, { arm: [0.10, 0.20], elbow: 0.20, flat: true });
+    return [[0, b], [0.26, up], [0.50, up], [0.68, down], [1, b]];
+  } },
+  /** O-Masa: her hands go to her hips, and she stands so, a look round */
+  hips2: { ms: 3000, hold: 0.4, make(o) {
+    const b = o.base, p = cloneP(b); moveKit.STANCES.akimbo(p, o.sp); p.lean = (b.lean || 0) - 0.02; p.head = { nod: nodOf(b) - 0.04, turn: 0.26 };
+    const q = cloneP(p); q.head = { nod: nodOf(b) - 0.02, turn: -0.16 };
+    return [[0, b], [0.24, p], [0.56, q], [0.80, q], [1, b]];
+  } },
+  /** O-Masa: two marching steps on the spot, the arms going, the chin up (for a march down the beach, walk her: this is the look of it) */
+  march: { ms: 1800, make(o) {
+    const b = o.base, at = (s) => { const p = { ...cloneP(b), lean: (b.lean || 0) + 0.06, head: { nod: nodOf(b) - 0.06 } }; const sd = s === "R" ? 1 : -1; p[s] = { ...p[s], leg: [0.40, 0.04], knee: 0.90 }; withArm(p, s === "R" ? "L" : "R", { arm: [0.70, 0.12], elbow: 0.6, grip: true }); withArm(p, s, { arm: [-0.40, 0.12], elbow: 0.3, grip: true }); void sd; return p; };
+    return [[0, b], [0.25, at("R")], [0.50, b], [0.75, at("L")], [1, b]];
+  } },
+  /** Grandmother Sei: a slow nod, yes, the eyes shut a moment */
+  slownod: { ms: 2800, make(o) {
+    const b = o.base, at = (n, bl) => ({ ...cloneP(b), blink: bl, head: { nod: nodOf(b) + n } });
+    return [[0, b], [0.30, at(0.22, true)], [0.52, at(0.22, true)], [0.78, at(0.04, false)], [1, b]];
+  } },
+  /** Grandmother Sei, kneeling: her fingers move over something small in her lap, her head bowed */
+  beads: { ms: 3000, make(o) {
+    const b = o.base, at = (dx) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.20 } }; withArm(p, "L", { hand: [-0.030, -0.300, 0.150], bend: [-0.9, -0.4, -0.5], curl: 0.8 }); return withArm(p, "R", { hand: [0.010 + dx, -0.290, 0.156], bend: [0.9, -0.4, -0.5], finger: true, point: [-0.6, -0.6, 0.4] }); };
+    return [[0, b], [0.20, at(0)], [0.36, at(-0.014)], [0.52, at(0.004)], [0.68, at(-0.012)], [1, b]];
+  } },
+  /** the mirror, held up: tilted a little this way and that toward the light (Mom in `mom-edo-mirror`, Sei in her hold) (holdable) */
+  tilt: { ms: 3200, hold: 0.5, make(o) {
+    const b = o.base, held = b.held || (o.spec.outfit && /mirror/.test(o.spec.outfit) ? "mirror" : null);
+    if (!held && !(o.spec.hold && o.spec.hold.R && o.spec.hold.L) && !(o.spec.holds && o.spec.holds.mirror)) return [[0, b], [1, b]];
+    const at = (dy, turn) => { const p = { ...cloneP(b), held: "mirror", head: { nod: nodOf(b) + 0.06, turn } }; for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [sd * 0.034, -0.090 + (o.seated ? -0.03 : 0) + sd * dy, 0.150 + dy * 0.5], bend: [sd * 0.8, -0.7, -0.3], grip: true, point: [-sd * 0.6, 0.6, 0.5] }); return p; };
+    const base = { ...cloneP(b), held: "mirror" };
+    return [[0, base], [0.22, at(0.016, 0.10)], [0.46, at(-0.016, -0.08)], [0.70, at(0.012, 0.06)], [1, base]];
+  } },
+  /** Mom with the baby (`mom-edo-baby`): rocks her, a slow sway from the hips, the head bent to her */
+  rockbaby: { ms: 3600, make(o) {
+    const b = o.base, at = (sw) => ({ ...cloneP(b), sway: sw, hipTwist: sw * 2, twist: -sw * 2, head: { nod: nodOf(b) + 0.16, turn: -0.20 + sw * 3 } });
+    return [[0, b], [0.25, at(0.018)], [0.50, b], [0.75, at(-0.018)], [1, b]];
+  } },
+  /** Jinsuke: wipes the soot off his hands, one on the other */
+  wipehands: { ms: 2000, make(o) {
+    const b = o.base, at = (dx) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.14 } }; withArm(p, "L", { hand: [-0.020, -0.230, 0.160], bend: [-0.9, -0.5, -0.4], flat: true, point: [0.9, 0.1, 0.3], thumb: [0, 1, 0] }); return withArm(p, "R", { hand: [0.010 + dx, -0.215, 0.165], bend: [0.9, -0.5, -0.4], curl: 0.7, point: [-0.9, 0.1, 0.3] }); };
+    return [[0, b], [0.22, at(0.020)], [0.38, at(-0.020)], [0.54, at(0.020)], [0.70, at(-0.020)], [1, b]];
+  } },
+  /** Isuke: shivers, wet through: the shoulders up, the arms in, a shudder */
+  shiver: { ms: 1800, make(o) {
+    const b = o.base, at = (sw) => { const p = { ...cloneP(b), breath: 1, sway: sw, lean: (b.lean || 0) + 0.04, blink: true, head: { nod: nodOf(b) + 0.10, turn: sw * 4 } }; for (const [s, sd] of [["R", 1], ["L", -1]]) withArm(p, s, { hand: [-sd * 0.010, -0.120, o.sp.chest + 0.030], bend: [sd, -0.6, 0.1], curl: 0.9 }); return p; };
+    return [[0, b], [0.20, at(0.006)], [0.32, at(-0.006)], [0.44, at(0.006)], [0.56, at(-0.006)], [0.68, at(0.004)], [1, b]];
+  } },
+  /** Shinnosuke: trembles: a fine shake, the hands clasped tight, the knees not quite steady */
+  tremble: { ms: 2200, make(o) {
+    const b = o.base, at = (sw, k) => { const p = { ...cloneP(b), sway: sw, breath: 1, blink: k > 0, head: { nod: nodOf(b) + 0.06, turn: sw * 3 } }; for (const [s, sd] of [["R", 1], ["L", -1]]) { withArm(p, s, { hand: [sd * 0.014, -0.160, o.sp.belly + 0.080], bend: [sd * 0.8, -0.5, -0.4], grip: true }); p[s] = { ...p[s], knee: (b[s].knee || 0) + 0.06 + k * 0.04 }; } return p; };
+    return [[0, b], [0.14, at(0.005, 0)], [0.26, at(-0.005, 1)], [0.38, at(0.005, 0)], [0.50, at(-0.005, 0)], [0.62, at(0.004, 1)], [0.74, at(-0.004, 0)], [1, b]];
+  } },
+  /** the gate guards: counting people off with a finger, one, two, three, the head going with it */
+  tally2: { ms: 2600, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (turn, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.06, turn } }, s, { arm: [0.80 + dy, 0.20 + turn * 0.3], elbow: 0.50, finger: true });
+    return [[0, b], [0.18, at(0.30, 0)], [0.34, at(0.30, -0.08)], [0.46, at(0.06, 0)], [0.60, at(0.06, -0.08)], [0.72, at(-0.20, 0)], [0.86, at(-0.20, -0.08)], [1, b]];
+  } },
+  /** Tomezō: a big laugh, the head back, a hand to his belly */
+  wipebrow: { ms: 2000, make(o) {
+    const b = o.base, s = freeOf(o), sd = s === "R" ? 1 : -1, hr = o.d.headR;
+    if (o.held(s)) return [[0, b], [1, b]];
+    const at = (dx) => withArm({ ...cloneP(b), head: { nod: nodOf(b) + 0.06 } }, s, { hand: [sd * (0.012 + dx), o.sp.headY + hr[1] * 0.42, hr[2] + 0.030], bend: [sd, -0.3, 0.3], curl: 0.7, point: [-sd, 0.2, 0] });
+    return [[0, b], [0.30, at(0)], [0.46, at(0.020)], [0.62, at(0)], [1, b]];
+  } },
+  /** Tomezō, up the ladder: the trowel waved over his head, twice (his life up there) */
+  wavetrowelmove: { ms: 2200, make(o) {
+    const b = o.base, at = (a) => withArm({ ...cloneP(b), mouth: 2, head: { nod: nodOf(b) - 0.16, turn: a } }, "R", { arm: [2.60, 0.40 + a], elbow: 0.30, grip: true, point: [0.3, 0.9, 0.2] });
+    return [[0, b], [0.20, at(0.16)], [0.36, at(-0.16)], [0.52, at(0.16)], [0.68, at(-0.16)], [1, b]];
+  } },
+  /** the net-mender, sitting: his hands work along the net across his knees */
+  mend: { ms: 2800, make(o) {
+    const b = o.base, at = (dx) => { const p = { ...cloneP(b), head: { nod: nodOf(b) + 0.22 } }; withArm(p, "L", { hand: [-0.060 + dx, -0.290, 0.170], bend: [-0.9, -0.4, -0.4], grip: true, point: [0.6, 0.2, 0.7] }); return withArm(p, "R", { hand: [0.040 - dx, -0.300 + Math.abs(dx), 0.180], bend: [0.9, -0.4, -0.4], grip: true, point: [-0.6, 0.3, 0.7] }); };
+    return [[0, b], [0.18, at(0.020)], [0.34, at(-0.016)], [0.50, at(0.020)], [0.66, at(-0.016)], [0.82, at(0.010)], [1, b]];
+  } },
+  /** a plasterer: the trowel goes up and across the wall in front of him, twice (holdable) */
+  trowelling: { ms: 2800, hold: 0.5, make(o) {
+    const b = o.base, at = (dx, dy) => withArm({ ...cloneP(b), head: { nod: nodOf(b) - 0.18 + dy } }, "R", { hand: [0.060 + dx, 0.060 + dy, 0.190], bend: [0.8, -0.3, -0.5], grip: true, point: [0.2, 0.9, 0.3] });
+    return [[0, b], [0.16, at(-0.030, -0.060)], [0.34, at(0.040, 0.030)], [0.50, at(-0.030, -0.040)], [0.68, at(0.040, 0.040)], [1, b]];
+  } },
+  /** a plasterer: mixes the lime, both hands on the pole, round and round */
+  mixing: { ms: 3000, make(o) {
+    const b = o.base, at = (dx, dz) => { const p = { ...cloneP(b), lean: (b.lean || 0) + 0.24, head: { nod: nodOf(b) + 0.16 } }; withArm(p, "R", { hand: [0.060 + dx, -0.200, 0.200 + dz], bend: [0.9, -0.4, -0.4], grip: true, point: [-0.4, -0.6, 0.7] }); return withArm(p, "L", { hand: [-0.020 + dx, -0.120, 0.170 + dz], bend: [-0.9, -0.5, -0.3], grip: true, point: [0.2, -0.8, 0.5] }); };
+    return [[0, b], [0.16, at(0.030, 0)], [0.32, at(0, 0.030)], [0.48, at(-0.030, 0)], [0.64, at(0, -0.030)], [0.80, at(0.030, 0)], [1, b]];
+  } },
+  /** everyone's: a holler, both hands cupped to the mouth (Little Sister's cue; the hold is `holler`) */
+  holler: { ms: 2400, hold: 0.5, make(o) { const p = hollerHold(o); return [[0, o.base], [0.24, p], [0.76, p], [1, o.base]]; } },
+});
+
 export const people = {
   dad, son, mom, bigsis, lilsis,
   scribe, carrier, overseer, hauler1, hauler2, hauler3, mason1, mason2, guard, lampboy, goldsmith,
@@ -3102,4 +3965,11 @@ export const people = {
   "grandpajoe-table": grandpajoeTable, "grandpajoe-room": grandpajoeRoom, "grandpajoe-chair": grandpajoeChair,
   "grandpajoe-banjo-broken": grandpajoeBanjoBroken, "grandpajoe-banjo-pie": grandpajoeBanjoPie,
   "grandpajoe-play-broken": grandpajoePlayBroken, "grandpajoe-play-pie": grandpajoePlayPie,
+  // PEOPLE-20: Japan, 1830. The family's outfits (g.dress(who, name) puts `people[<lead>-<name>]` on), and the people of the act
+  "mom-edo": momEdo, "mom-edo-hatback": momEdoHatback, "mom-edo-crew": momEdoCrew, "mom-edo-baby": momEdoBaby, "mom-edo-mirror": momEdoMirror, "mom-edo-crew-mirror": momEdoCrewMirror,
+  "bigsis-edo": bigsisEdo, "bigsis-edo-hatback": bigsisEdoHatback, "bigsis-edo-crew": bigsisEdoCrew,
+  "lilsis-edo": lilsisEdo, "lilsis-edo-hatback": lilsisEdoHatback, "lilsis-edo-crew": lilsisEdoCrew, "lilsis-edo-lying": lilsisEdoLying, "lilsis-lying": lilsisLying,
+  kihei, tami, "tami-baby": tamiBaby, sankichi, tokuzo, gonroku, masa, sei, jinsuke, orin, isuke, tomezo, "tomezo-ladder": tomezoLadder,
+  guard1, guard2, shinnosuke, "shinnosuke-floor": shinnosukeFloor, netmender, basketwoman, "basketwoman-dropped": basketwomanDropped,
+  pilgrim1, pilgrim2, pilgrim3, plasterer1, plasterer2,
 };

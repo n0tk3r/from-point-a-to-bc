@@ -1,0 +1,1118 @@
+{
+ "scene": "edo-fishshop",
+ "size": [
+  800,
+  600
+ ],
+ "horizon": 200,
+ "full": 401,
+ "view": {
+  "horizon": 200,
+  "full": 401,
+  "cam": [
+   300,
+   1000
+  ],
+  "yaw": 6,
+  "focal": 680,
+  "centre_x": 400
+ },
+ "key": "edo-morning",
+ "camera_note": "the lens 2.20 m up (below the lintel at 2.80 m, so that the sea's horizon and Fuji show through the open front): people at the street line are 119 px, at full (Z 373) 160; the walk's front edge keeps them under 195",
+ "walk": [
+  [
+   240.4,
+   355.5
+  ],
+  [
+   532.4,
+   348.6
+  ],
+  [
+   566.8,
+   373.7
+  ],
+  [
+   414.0,
+   377.9
+  ],
+  [
+   441.5,
+   435.2
+  ],
+  [
+   261.3,
+   444.9
+  ],
+  [
+   113.9,
+   449.6
+  ],
+  [
+   127.9,
+   433.3
+  ],
+  [
+   234.0,
+   429.7
+  ],
+  [
+   241.3,
+   411.9
+  ],
+  [
+   131.5,
+   415.4
+  ],
+  [
+   166.6,
+   377.1
+  ],
+  [
+   229.0,
+   375.4
+  ]
+ ],
+ "blocked": {
+  "tubs": [
+   [
+    [
+     138.9,
+     359.5
+    ],
+    [
+     183.6,
+     358.4
+    ],
+    [
+     173.9,
+     369.1
+    ],
+    [
+     126.0,
+     370.3
+    ]
+   ],
+   [
+    [
+     188.2,
+     364.9
+    ],
+    [
+     228.1,
+     363.9
+    ],
+    [
+     222.0,
+     373.8
+    ],
+    [
+     179.7,
+     374.9
+    ]
+   ],
+   [
+    [
+     110.7,
+     377.7
+    ],
+    [
+     150.8,
+     376.7
+    ],
+    [
+     140.1,
+     387.2
+    ],
+    [
+     97.6,
+     388.4
+    ]
+   ]
+  ],
+  "board": [
+   [
+    93.3,
+    381.1
+   ],
+   [
+    151.2,
+    379.5
+   ],
+   [
+    118.6,
+    412.5
+   ],
+   [
+    49.7,
+    414.7
+   ]
+  ],
+  "stand": [
+   [
+    154.8,
+    415.8
+   ],
+   [
+    229.0,
+    413.4
+   ],
+   [
+    222.2,
+    428.0
+   ],
+   [
+    142.8,
+    430.7
+   ]
+  ],
+  "hearth": [
+   [
+    -12.1,
+    455.1
+   ],
+   [
+    113.2,
+    450.4
+   ],
+   [
+    79.1,
+    490.1
+   ],
+   [
+    -67.2,
+    496.3
+   ]
+  ]
+ },
+ "marks": {
+  "door": {
+   "at": [
+    328.5,
+    361.6
+   ],
+   "face": "S",
+   "grownup_px": 128.7,
+   "cm": [
+    300,
+    70
+   ]
+  },
+  "kihei": {
+   "at": [
+    167.3,
+    393.7
+   ],
+   "face": "W",
+   "grownup_px": 154.2,
+   "cm": [
+    118,
+    205
+   ]
+  },
+  "press": {
+   "at": [
+    274.1,
+    420.3
+   ],
+   "face": "W",
+   "grownup_px": 175.4,
+   "cm": [
+    246,
+    312
+   ]
+  },
+  "tami": {
+   "at": [
+    214.5,
+    439.7
+   ],
+   "face": "W",
+   "grownup_px": 190.8,
+   "cm": [
+    196,
+    362
+   ]
+  },
+  "step": {
+   "at": [
+    421.9,
+    400.2
+   ],
+   "face": "W",
+   "grownup_px": 159.4,
+   "cm": [
+    402,
+    260
+   ]
+  },
+  "stepmom": {
+   "at": [
+    415.0,
+    385.4
+   ],
+   "face": "W",
+   "grownup_px": 147.6,
+   "cm": [
+    402,
+    200
+   ]
+  },
+  "stepbig": {
+   "at": [
+    421.9,
+    400.2
+   ],
+   "face": "W",
+   "grownup_px": 159.4,
+   "cm": [
+    402,
+    260
+   ]
+  },
+  "steplil": {
+   "at": [
+    430.1,
+    417.6
+   ],
+   "face": "W",
+   "grownup_px": 173.2,
+   "cm": [
+    402,
+    320
+   ]
+  },
+  "baby": {
+   "at": [
+    412.3,
+    429.0
+   ],
+   "face": "E",
+   "grownup_px": 182.3,
+   "cm": [
+    380,
+    352
+   ]
+  },
+  "hearth": {
+   "at": [
+    259.9,
+    441.9
+   ],
+   "face": "W",
+   "grownup_px": 192.5,
+   "cm": [
+    238,
+    372
+   ]
+  },
+  "print": {
+   "at": [
+    399.8,
+    362.3
+   ],
+   "face": "N",
+   "grownup_px": 129.2,
+   "cm": [
+    396,
+    84
+   ]
+  },
+  "money": {
+   "at": [
+    393.8,
+    387.9
+   ],
+   "face": "E",
+   "grownup_px": 149.6,
+   "cm": [
+    376,
+    208
+   ]
+  },
+  "godshelf": {
+   "at": [
+    408.3,
+    423.6
+   ],
+   "face": "E",
+   "grownup_px": 178.0,
+   "cm": [
+    378,
+    336
+   ]
+  },
+  "cat": {
+   "at": [
+    328.5,
+    403.7
+   ],
+   "face": "W",
+   "grownup_px": 162.1,
+   "cm": [
+    300,
+    262
+   ]
+  },
+  "under": {
+   "at": [
+    410.0,
+    397.9
+   ],
+   "face": "E",
+   "grownup_px": 157.6,
+   "cm": [
+    390,
+    250
+   ]
+  },
+  "tubs": {
+   "at": [
+    204.9,
+    380.2
+   ],
+   "face": "W",
+   "grownup_px": 143.4,
+   "cm": [
+    150,
+    150
+   ]
+  },
+  "board": {
+   "at": [
+    196.2,
+    392.9
+   ],
+   "face": "W",
+   "grownup_px": 153.6,
+   "cm": [
+    150,
+    205
+   ]
+  },
+  "chest": {
+   "at": [
+    402.8,
+    408.1
+   ],
+   "face": "E",
+   "grownup_px": 165.7,
+   "cm": [
+    378,
+    286
+   ]
+  },
+  "noren": {
+   "at": [
+    344.6,
+    359.5
+   ],
+   "face": "N",
+   "grownup_px": 127.0,
+   "cm": [
+    322,
+    60
+   ]
+  }
+ },
+ "seats": {
+  "stepmom": {
+   "at": [
+    415.0,
+    385.4
+   ],
+   "face": "W",
+   "seat": 0.257,
+   "seat_cm": 45,
+   "seat_row": 347.5,
+   "grownup_px": 147.6,
+   "note": "the three of them seated on the kamachi (the raised room's edge, 45 cm up), facing W into the shop, feet on the earth floor: a seated person's `at` is the ground under the hips (X 402, 18 cm in front of the edge at X 420); the rig sits them with the hips `seat` of 175 cm above it: 0.257 is 45 cm (the rig's SEATS.chair, 0.262, is 46 cm: `sit: { seat: \"chair\" }` does as well; NOT the rig's \"step\", which is a kerb of 18 cm). seat_row is the kamachi's top at the mark. Guests' knees come out over the earth floor; nothing covers them"
+  },
+  "stepbig": {
+   "at": [
+    421.9,
+    400.2
+   ],
+   "face": "W",
+   "seat": 0.257,
+   "seat_cm": 45,
+   "seat_row": 359.2,
+   "grownup_px": 159.4,
+   "note": "the three of them seated on the kamachi (the raised room's edge, 45 cm up), facing W into the shop, feet on the earth floor: a seated person's `at` is the ground under the hips (X 402, 18 cm in front of the edge at X 420); the rig sits them with the hips `seat` of 175 cm above it: 0.257 is 45 cm (the rig's SEATS.chair, 0.262, is 46 cm: `sit: { seat: \"chair\" }` does as well; NOT the rig's \"step\", which is a kerb of 18 cm). seat_row is the kamachi's top at the mark. Guests' knees come out over the earth floor; nothing covers them"
+  },
+  "steplil": {
+   "at": [
+    430.1,
+    417.6
+   ],
+   "face": "W",
+   "seat": 0.257,
+   "seat_cm": 45,
+   "seat_row": 373.1,
+   "grownup_px": 173.2,
+   "note": "the three of them seated on the kamachi (the raised room's edge, 45 cm up), facing W into the shop, feet on the earth floor: a seated person's `at` is the ground under the hips (X 402, 18 cm in front of the edge at X 420); the rig sits them with the hips `seat` of 175 cm above it: 0.257 is 45 cm (the rig's SEATS.chair, 0.262, is 46 cm: `sit: { seat: \"chair\" }` does as well; NOT the rig's \"step\", which is a kerb of 18 cm). seat_row is the kamachi's top at the mark. Guests' knees come out over the earth floor; nothing covers them"
+  }
+ },
+ "things": {
+  "street": {
+   "shape": [
+    [
+     183,
+     182
+    ],
+    [
+     618,
+     182
+    ],
+    [
+     618,
+     352
+    ],
+    [
+     183,
+     352
+    ]
+   ],
+   "what": "the open front: the street, the beach, the bay and Fuji"
+  },
+  "fuji": {
+   "shape": [
+    [
+     487,
+     162
+    ],
+    [
+     667,
+     162
+    ],
+    [
+     667,
+     202
+    ],
+    [
+     487,
+     202
+    ]
+   ],
+   "what": "Fuji across the water, in the right bay"
+  },
+  "noren": {
+   "shape": [
+    [
+     269.6,
+     158.5
+    ],
+    [
+     416.7,
+     159.4
+    ],
+    [
+     416.7,
+     213.4
+    ],
+    [
+     269.6,
+     213.7
+    ]
+   ]
+  },
+  "tubs": {
+   "shape": [
+    [
+     76.3,
+     321.0
+    ],
+    [
+     238.0,
+     321.0
+    ],
+    [
+     238.0,
+     394.7
+    ],
+    [
+     76.3,
+     394.7
+    ]
+   ]
+  },
+  "cuttingboard": {
+   "shape": [
+    [
+     46.7,
+     313.0
+    ],
+    [
+     145.7,
+     313.0
+    ],
+    [
+     145.7,
+     349.3
+    ],
+    [
+     46.7,
+     349.3
+    ]
+   ]
+  },
+  "kihei": {
+   "at": [
+    167.3,
+    393.7
+   ]
+  },
+  "sushibox": {
+   "shape": [
+    [
+     140.8,
+     350.9
+    ],
+    [
+     246.8,
+     350.9
+    ],
+    [
+     246.8,
+     432.7
+    ],
+    [
+     140.8,
+     432.7
+    ]
+   ],
+   "states": [
+    "sushibox-empty",
+    "sushibox-filled",
+    "sushibox-cut"
+   ]
+  },
+  "hearth": {
+   "shape": [
+    [
+     0.0,
+     339.1
+    ],
+    [
+     115.2,
+     339.1
+    ],
+    [
+     115.2,
+     498.3
+    ],
+    [
+     0.0,
+     498.3
+    ]
+   ],
+   "pot": [
+    30.6,
+    365.3
+   ]
+  },
+  "driedfish": {
+   "shape": [
+    [
+     0.0,
+     200.2
+    ],
+    [
+     104.5,
+     200.2
+    ],
+    [
+     104.5,
+     263.2
+    ],
+    [
+     0.0,
+     263.2
+    ]
+   ]
+  },
+  "print": {
+   "shape": [
+    [
+     406.5,
+     205.2
+    ],
+    [
+     416.3,
+     205.2
+    ],
+    [
+     416.3,
+     252.5
+    ],
+    [
+     406.5,
+     252.5
+    ]
+   ]
+  },
+  "money": {
+   "shape": [
+    [
+     409.9,
+     318.4
+    ],
+    [
+     495.9,
+     318.4
+    ],
+    [
+     495.9,
+     356.8
+    ],
+    [
+     409.9,
+     356.8
+    ]
+   ]
+  },
+  "godshelf": {
+   "shape": [
+    [
+     619.3,
+     149.7
+    ],
+    [
+     687.0,
+     149.7
+    ],
+    [
+     687.0,
+     190.7
+    ],
+    [
+     619.3,
+     190.7
+    ]
+   ]
+  },
+  "step": {
+   "shape": [
+    [
+     427.6,
+     343.6
+    ],
+    [
+     601.7,
+     339.7
+    ],
+    [
+     800.0,
+     556.1
+    ],
+    [
+     592.4,
+     582.4
+    ],
+    [
+     592.4,
+     600.0
+    ],
+    [
+     427.6,
+     380.5
+    ]
+   ],
+   "what": "the raised room (the tatami) and its edge, the step guests sit on"
+  },
+  "sandals": {
+   "shape": [
+    [
+     136.8,
+     163.8
+    ],
+    [
+     222.9,
+     163.8
+    ],
+    [
+     222.9,
+     216.1
+    ],
+    [
+     136.8,
+     216.1
+    ]
+   ]
+  },
+  "hats": {
+   "shape": [
+    [
+     73.5,
+     190.2
+    ],
+    [
+     117.1,
+     190.2
+    ],
+    [
+     117.1,
+     238.0
+    ],
+    [
+     73.5,
+     238.0
+    ]
+   ]
+  },
+  "chest": {
+   "shape": [
+    [
+     552.6,
+     278.5
+    ],
+    [
+     662.7,
+     278.5
+    ],
+    [
+     662.7,
+     374.4
+    ],
+    [
+     552.6,
+     374.4
+    ]
+   ]
+  },
+  "baby": {
+   "shape": [
+    [
+     521.0,
+     360.6
+    ],
+    [
+     634.2,
+     360.6
+    ],
+    [
+     634.2,
+     425.3
+    ],
+    [
+     521.0,
+     425.3
+    ]
+   ]
+  },
+  "tami": {
+   "at": [
+    214.5,
+    439.7
+   ]
+  },
+  "cat": {
+   "at": [
+    328.5,
+    403.7
+   ]
+  },
+  "under": {
+   "shape": [
+    [
+     430.1,
+     385.0
+    ],
+    [
+     430.1,
+     354.7
+    ],
+    [
+     444.3,
+     376.4
+    ],
+    [
+     444.3,
+     410.9
+    ]
+   ]
+  }
+ },
+ "planes": [
+  {
+   "id": "noren",
+   "picture": "noren.png",
+   "base": "back",
+   "note": "the noren in the middle bay: a sway (anchor top)"
+  },
+  {
+   "id": "driedfish",
+   "picture": "driedfish.png",
+   "base": "back",
+   "note": "fish drying on the line along the left wall: a sway"
+  },
+  {
+   "id": "tub-1",
+   "picture": "tub-1.png",
+   "base": 369.7,
+   "solid": [
+    [
+     138.9,
+     359.5
+    ],
+    [
+     183.6,
+     358.4
+    ],
+    [
+     173.9,
+     369.1
+    ],
+    [
+     126.0,
+     370.3
+    ]
+   ]
+  },
+  {
+   "id": "tub-2",
+   "picture": "tub-2.png",
+   "base": 374.3,
+   "solid": [
+    [
+     188.2,
+     364.9
+    ],
+    [
+     228.1,
+     363.9
+    ],
+    [
+     222.0,
+     373.8
+    ],
+    [
+     179.7,
+     374.9
+    ]
+   ]
+  },
+  {
+   "id": "tub-3",
+   "picture": "tub-3.png",
+   "base": 387.8,
+   "solid": [
+    [
+     110.7,
+     377.7
+    ],
+    [
+     150.8,
+     376.7
+    ],
+    [
+     140.1,
+     387.2
+    ],
+    [
+     97.6,
+     388.4
+    ]
+   ]
+  },
+  {
+   "id": "stand",
+   "picture": "stand.png",
+   "base": 428.0,
+   "solid": [
+    [
+     154.8,
+     415.8
+    ],
+    [
+     229.0,
+     413.4
+    ],
+    [
+     222.2,
+     428.0
+    ],
+    [
+     142.8,
+     430.7
+    ]
+   ]
+  },
+  {
+   "id": "sushibox",
+   "picture": "sushibox-empty.png",
+   "base": 428.0,
+   "states": {
+    "empty": "sushibox-empty.png",
+    "filled": "sushibox-filled.png",
+    "cut": "sushibox-cut.png"
+   }
+  },
+  {
+   "id": "hearth",
+   "picture": "hearth.png",
+   "base": 490.1,
+   "solid": [
+    [
+     -12.1,
+     455.1
+    ],
+    [
+     113.2,
+     450.4
+    ],
+    [
+     79.1,
+     490.1
+    ],
+    [
+     -67.2,
+     496.3
+    ]
+   ]
+  },
+  {
+   "id": "basket",
+   "picture": "basket.png",
+   "base": 479.5,
+   "note": "on the tatami: its base is the earth floor's row under its near edge"
+  },
+  {
+   "id": "front",
+   "picture": "front.png",
+   "base": "front"
+  }
+ ],
+ "fx": [
+  {
+   "id": "steam",
+   "type": "smoke",
+   "at": [
+    30.6,
+    365.3
+   ],
+   "base": 490.1,
+   "height": 120,
+   "width": [
+    4,
+    26
+   ],
+   "lean": [
+    -12,
+    -120
+   ],
+   "rate": 2.5,
+   "color": "#f0ece4",
+   "opacity": 0.4,
+   "what": "steam from the pot on the hearth"
+  },
+  {
+   "id": "noren-sway",
+   "type": "sway",
+   "plane": "noren",
+   "anchor": "top",
+   "amount": 3,
+   "period": 3.2,
+   "what": "the noren lifting in the sea wind"
+  },
+  {
+   "id": "fish-sway",
+   "type": "sway",
+   "plane": "driedfish",
+   "anchor": "top",
+   "amount": 1.5,
+   "period": 4.1
+  },
+  {
+   "id": "hearth-fire",
+   "type": "flame",
+   "at": [
+    96.1,
+    446.8
+   ],
+   "base": 491.1,
+   "size": 7,
+   "lull": 0.4,
+   "glow": 20,
+   "glowColor": "#ff9a40",
+   "glowOpacity": 0.18,
+   "what": "the fire in the hearth's mouth"
+  },
+  {
+   "id": "tub-flip",
+   "type": "ripples",
+   "at": [
+    204.7,
+    338.4
+   ],
+   "radius": [
+    1,
+    8
+   ],
+   "flat": 0.3,
+   "every": [
+    6,
+    14
+   ],
+   "base": 374.3,
+   "what": "a fish in the second tub flipping now and then: rings on its water (a painted flip is ENGINE-20's if wanted)"
+  }
+ ],
+ "cat": {
+  "sidecar": "cat.json",
+  "sizeAt": 401,
+  "at": [
+   328.5,
+   403.7
+  ],
+  "under": [
+   [
+    430.1,
+    385.0
+   ],
+   [
+    430.1,
+    354.7
+   ],
+   [
+    444.3,
+    376.4
+   ],
+   [
+    444.3,
+    410.9
+   ]
+  ],
+  "note": "the cat's frames (edo_fishshop_cat.py) are painted at the size of the row `full`; the engine scales them by depth as it does Ranger's"
+ },
+ "edges": {
+  "street": {
+   "shape": [
+    [
+     183,
+     182
+    ],
+    [
+     618,
+     182
+    ],
+    [
+     618,
+     352
+    ],
+    [
+     183,
+     352
+    ]
+   ],
+   "to": "edo-village",
+   "mark": "shop",
+   "note": "out through the open front (mark `door` inside it)"
+  }
+ },
+ "notes": [
+  "People walk only on the earth floor (walk) and sit on the step (seats). The tatami is nobody's floor.",
+  "The gap under the raised floor (things.under) is the cat's way and Little Sister's: she goes in at `under` and comes back with the fish.",
+  "The kamachi board's row at a given Z is V.pt(420, 45, Z): someone seated there is drawn in front of it; the raised room's things (chest, money box, god-shelf, back wall) are the backdrop's."
+ ]
+}

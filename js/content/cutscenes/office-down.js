@@ -15,8 +15,10 @@
 //      shades ("...!"), and goes.
 //   4. Houston, to nobody in particular: "Lamplighter test at seventeen hundred hours. Sector 44. Please do not look
 //      directly at the sector."
-//   5. The card: LAMPLIGHTER, and smaller, "to be continued". The end of the demo (office.done, demo.done).
-// Skipped, the same: the card is after the skippable part, so it always shows; then the title (the room's script).
+//   5. The card: LAMPLIGHTER, and smaller, "to be continued" (office.done). ENGINE-20: then the card "Meanwhile" / "in another
+//      time", and the game is handed on to Act Six (the family, the beach at Yui: g.handOn, EDO_HANDON below). Until round
+//      twenty this was the end of the demo (demo.done, then the title); the demo ends at the end of Act Six now.
+// Skipped, the same: the cards are after the skippable part, so they always show; then the arrival plays as itself.
 
 import { scaleAt } from "../../engine/walk.js";
 import { WORDS } from "../scenes/office-common.js";
@@ -119,7 +121,7 @@ export default async function down(g) {
   await g.pa("office.pa.test", { building: "office" });
   await g.wait(1200);                                                           // STAGE-19O: the button's hold before the fade (C14; was 600)
 
-  // ---- 5. the card (after the skippable part: it always shows), and the end of the demo
+  // ---- 5. the card (after the skippable part: it always shows), and the end of the Office's stage one
   g.clock.skipping = false;
   g.ui.showSkip(false);
   await g.fade(1, 1000);
@@ -127,9 +129,22 @@ export default async function down(g) {
   await g.card(L("office.card.1", "LAMPLIGHTER"), L("office.card.2", "to be continued"), { plain: true, ms: 4200 });
   for (const id of ["office.card.1", "office.card.2"]) g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
   g.flag("office.done", true);
-  g.flag("demo.done", true);
+  // ENGINE-20 (round twenty): the demo no longer ends here (`demo.done` is set at the end of Act Six, by its own last cut-scene,
+  // edo-step.js: SCENES-20). That thread waits on its card; then, as "Backup" does, this one hands the game on: the card
+  // "Meanwhile" / "in another time" (WRITE-20A's edo.card.meanwhile.1 and .2; the words below until they are in), and Act Six's
+  // arrival: the family the team again (Mom played first), their pockets as Act Four left them, normalised (the coin in
+  // somebody's pockets, else Big Sister's; Little Sister's egg and pink flashlight in hers, else given), the arrival cut-scene
+  // "edo-arrive" on the beach at Yui (js/engine/game.js, handOn).
+  await g.card(L("edo.card.meanwhile.1", "Meanwhile"), L("edo.card.meanwhile.2", "in another time"), { plain: true, ms: 2600 });
+  for (const id of ["edo.card.meanwhile.1", "edo.card.meanwhile.2"]) if (g.lines[id]) g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
+  await g.handOn(EDO_HANDON);
 }
 
-// FINAL-19: the end of the demo is not saved before (js/engine/game.js, cutscene): Continue after the end brings Grandpa Joe
-// back to the Comfortable Room as the game last saved it at rest, before the Rag, as in round eighteen (play-office.py checks it).
-down.save = false;
+/** ENGINE-20: how Act Six is handed on (the arrival cut-scene plays it, and the village's `enter` plays the cut-scene for a game
+    that has not had it); exported for the tests and for the village. */
+export const EDO_HANDON = { act: 7, team: ["mom", "bigsis", "lilsis"], active: "mom", scene: "edo-village", spawn: "arrive", cutscene: "edo-arrive",
+  pockets: { bigsis: ["coin"], lilsis: ["egg", "lilflash"] } };
+
+// ENGINE-20: round nineteen's `down.save = false` (the demo's end was not saved before, so that Continue after the end came back
+// to the last save at rest) is gone: the autosave before this cut-scene is right again, since the game goes on into Act Six.
+// The act's own last cut-scene (edo-step.js) carries `save = false` now, as the demo's end.

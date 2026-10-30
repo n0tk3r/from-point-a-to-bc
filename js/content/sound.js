@@ -104,6 +104,50 @@ export const sound = {
       lead: [0, 2, 4, 5, 4, 2, 0, 2, 1, 3, 5, 6, 5, 3, 1, 3],
       bass: [0, null, null, null, 3, null, null, null],
     },
+    // ENGINE-20: Act Six, Japan in the spring of 1830 (the era `edo`, world.js). Three tunes written for the game, in the game's
+    // own synth (audio.js playPattern, with two new voices: `pluck`, a plucked string, and `flute`, a breathy flute, and a second
+    // line, `alt`): nothing borrowed, no real song, no folk tune, no famous melody. The modes are two Japanese pentatonic scales:
+    //   yo      [0, 2, 5, 7, 9]  (D E G A B on D): the bright one of the folk songs: the sea, the spring, the road
+    //   in      [0, 1, 5, 7, 8]  (E F A B C on E, "miyako-bushi"): the half step above the root: the town, the shadow, the night
+    // `edo`: the act's track, unhurried, in spring: a plucked tune in the yo scale on D (a koto's plectrum: the triangle with a
+    // bright octave gone at once, falling fast), a breathy flute answering the ends of its phrases (the `alt` line, mostly
+    // rests), over a slow bass that moves once a bar. About thirteen seconds round.
+    edo: {
+      bpm: 72, root: 62, scale: [0, 2, 5, 7, 9], voice: "pluck", hold: 1.9, volume: 0.62, level: 0.11,
+      lead: [0, null, 2, 3, null, 4, null, 3, 2, null, null, 0, null, null, null, null, 1, null, 2, 4, null, 5, null, 4, 3, null, 2, null, 0, null, null, null],
+      alt: [null, null, null, null, null, null, null, null, null, null, 4, null, 3, null, 2, null, null, null, null, null, null, null, null, null, null, null, null, 4, null, 3, 2, null],
+      altVoice: "flute", altLevel: 0.065, altHold: 2.6, attack: 0.1, breath: 0.4,
+      bass: [0, null, null, null, null, null, null, null, 3, null, null, null, null, null, null, null, 1, null, null, null, null, null, null, null, 0, null, null, null, null, null, null, null],
+      bassLevel: 0.13,
+    },
+    // `edo-hidden`: the room underground (edo-chapel names it with `music`): one breathy flute, very quiet, very slow, in the in
+    // scale on A, more silence than sound, and no bass at all. The game's own.
+    "edo-hidden": {
+      bpm: 50, root: 57, scale: [0, 1, 5, 7, 8], voice: "flute", hold: 3.4, volume: 0.38, level: 0.08, attack: 0.16, breath: 0.5,
+      lead: [0, null, null, null, 1, null, null, null, 0, null, null, null, null, null, null, null, 2, null, null, null, 3, null, 2, null, null, null, null, null, null, null, null, null,
+        1, null, null, null, 0, null, null, null, null, null, null, null, null, null, null, null, 4, null, null, null, 3, null, null, null, 2, null, null, null, null, null, null, null],
+      bass: [null],
+    },
+    // `edo-keep`: inside the keep (edo-keep and edo-keeptop name it): the in scale low on D, plucked, slow and sparse, a bass note
+    // every two bars like a far drum, and the flute once, high, near the end. The game's own.
+    "edo-keep": {
+      bpm: 60, root: 50, scale: [0, 1, 5, 7, 8], voice: "pluck", hold: 2.4, volume: 0.5, level: 0.1,
+      lead: [0, null, null, null, 2, null, null, null, 1, null, 0, null, null, null, null, null, 3, null, null, null, 2, null, null, null, 4, null, 3, null, 2, null, null, null],
+      alt: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7, null, null, null, 6, null, null, null],
+      altVoice: "flute", altLevel: 0.05, altHold: 3, altOctave: 1, attack: 0.14, breath: 0.45,
+      bass: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+      bassLevel: 0.12,
+    },
+  },
+
+  // ENGINE-20: loops of sound (audio.js loop / stopLoop / loopLevel): ambience that goes on while something is on the stage,
+  // each made of noise through a filter that drifts (`noise: [low, high]` Hz, `sweep` seconds there and back, `q`) and/or
+  // steady notes ([midi, level], `wobble` Hz: a slow waver), at `level`. The rain's is started by the rain itself (the `rain`
+  // kind, effects.js: louder on thatch, quieter under a line); the others by a scene's script: g.loop("waves"), g.stopLoop("waves").
+  loops: {
+    rain: { noise: [2400, 3600], sweep: 5, q: 0.35, level: 0.05 },                          // a soft steady hiss (a thatched roof: level 1 on the rain)
+    waves: { noise: [380, 1500], sweep: 7.5, q: 0.55, level: 0.045 },                       // the sea on a shingle beach: a slow wash up and back
+    hum: { notes: [[40, 0.6], [47, 0.3], [52, 0.18]], wave: "sine", wobble: 0.3, level: 0.03 },      // the door in time's hum (the keep's top floor): low, wavering a little
   },
 
   // Effects: `notes` are [MIDI note, start, length]; `noise` sweeps a filter from one pitch to another.
@@ -207,5 +251,28 @@ export const sound = {
     slurp: { noise: [700, 2600], len: 0.32, q: 3, notes: [[60, 0, 0.24, 72]], level: 0.05, wave: "sine" },
     // One string of a banjo with a pie tin for a head: a hard, bright, loud pluck (the old `twang` is every string, and dull).
     "twang-tin": { noise: [6000, 2500], len: 0.05, q: 1, notes: [[74, 0, 0.9], [86, 0, 0.5], [93, 0, 0.25]], level: 0.07, wave: "square" },
+
+    // ---- ENGINE-20: Act Six, Japan in 1830, every one made by code, the game's own (the rain, the waves and the hum are loops: above) ----
+    gull: { notes: [[86, 0, 0.2, 79], [88, 0.3, 0.24, 78]], level: 0.03, wave: "triangle" },                     // a gull: two falling cries
+    noren: { noise: [800, 2000], len: 0.7, q: 1.6, level: 0.028 },                                               // wind lifting a noren curtain: a soft flap of cloth
+    creak: { noise: [200, 90], len: 1.0, q: 4, notes: [[40, 0, 0.55, 36], [47, 0.35, 0.6, 43]], level: 0.035, wave: "sawtooth" },      // a ship's timbers working in a swell
+    press: { noise: [520, 180], len: 0.1, q: 1.5, notes: [[52, 0, 0.09]], level: 0.1, wave: "sine" },             // the wooden sushi press: a soft knock of wood on wood
+    lime: { noise: [1300, 280], len: 0.18, q: 0.9, notes: [[45, 0, 0.08]], level: 0.09, wave: "sine" },           // wet lime slapped on a wall
+    shutter: { noise: [600, 240], len: 0.5, q: 2, notes: [[43, 0, 0.12], [50, 0.3, 0.2]], level: 0.08, wave: "triangle" },      // a wooden shutter swung open: a groan and a knock
+    bar: { noise: [320, 900], len: 0.35, q: 2, notes: [[38, 0, 0.1], [62, 0.25, 0.06]], level: 0.09, wave: "triangle" },      // a bar lifted out of its brackets
+    trapdoor: { noise: [260, 110], len: 0.45, q: 1.5, notes: [[36, 0, 0.2], [41, 0.15, 0.3]], level: 0.12, wave: "sine" },    // a trapdoor lifted and let down
+    knock: { noise: [700, 300], len: 0.06, q: 1.2, notes: [[48, 0, 0.07], [48, 0.24, 0.07], [48, 0.48, 0.07]], level: 0.14, wave: "sine" },      // three knocks on wood (a trapdoor knocked on)
+    bell: { notes: [[55, 0, 3.6], [67, 0, 2.2], [74, 0.01, 1.3], [84, 0.02, 0.5]], level: 0.028, wave: "sine" },   // a temple bell a long way off at dusk: one stroke
+    sandals: { noise: [1500, 900], len: 0.06, q: 2, notes: [[70, 0, 0.03], [66, 0.42, 0.03], [70, 0.84, 0.03], [66, 1.26, 0.03]], level: 0.045, wave: "triangle" },      // straw sandals on stone: four steps
+
+    // ---- SCENES-20A: Yui (the arrival, the shop), every one made by code, the game's own ----
+    // The door in time closing behind the three on the beach: a sound like a breath let go (a soft sweep of air, falling).
+    breath: { noise: [1600, 260], len: 1.1, q: 0.6, level: 0.06 },
+    // A rooster somewhere up the beach, far off: four rising cries and a long falling one, thin and quiet.
+    rooster: { notes: [[76, 0, 0.12, 81], [81, 0.15, 0.12, 83], [83, 0.32, 0.2, 86], [86, 0.56, 0.6, 79]], level: 0.02, wave: "sawtooth" },
+    // Mom humming O-Tami's baby to sleep: four bars of a tune of her own (no words; not any real lullaby), soft and slow,
+    // round the D a baby likes (she hummed in the right key), settling on it at the end.
+    lullaby: { notes: [[66, 0, 0.8], [69, 0.8, 0.4], [66, 1.2, 0.4], [64, 1.6, 0.8], [62, 2.4, 0.8], [64, 3.2, 0.4], [66, 3.6, 0.4], [69, 4.0, 0.8],
+      [66, 4.8, 0.6], [64, 5.4, 0.4], [62, 5.8, 1.4], [50, 5.8, 1.4]], level: 0.045, wave: "sine" },
   },
 };

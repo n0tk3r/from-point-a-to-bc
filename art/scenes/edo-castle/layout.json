@@ -1,0 +1,2019 @@
+{
+ "id": "edo-castle",
+ "horizon": 290,
+ "full": 588,
+ "minScale": 0.3,
+ "light": "late afternoon, 29 April 1830: the sun low in the west, to our right and a little behind us (about 17 degrees up): faces turned to us and to the right are warm (the last light on white plaster), left faces lilac; shadows run far to the left and a little away, about three times a thing's height. Key: edo-castle.",
+ "note": "The land camera (persp.Camera 290/588): the lens 3.26 m above the road, level. The road is the near ground (a grown-up 160 px at the bottom edge's full row); the ramp climbs to the terrace before the gate (rows 470 to 436: 0.60 to 0.49 of full, a 1.56 m guard 70 px at the threshold); the keep is far and high (not on the ground plane: its stone base's foot, row 332, is on the hill behind the wall). East is to the left of the picture: the pilgrims go off that way.",
+ "walk": [
+  [
+   6,
+   596
+  ],
+  [
+   794,
+   596
+  ],
+  [
+   794,
+   544
+  ],
+  [
+   584,
+   542
+  ],
+  [
+   604,
+   472
+  ],
+  [
+   784,
+   466
+  ],
+  [
+   784,
+   442
+  ],
+  [
+   725,
+   442
+  ],
+  [
+   725,
+   422
+  ],
+  [
+   633,
+   422
+  ],
+  [
+   633,
+   442
+  ],
+  [
+   453,
+   442
+  ],
+  [
+   453,
+   464
+  ],
+  [
+   450,
+   472
+  ],
+  [
+   430,
+   542
+  ],
+  [
+   418,
+   534
+  ],
+  [
+   430,
+   492
+  ],
+  [
+   300,
+   494
+  ],
+  [
+   120,
+   492
+  ],
+  [
+   6,
+   490
+  ]
+ ],
+ "walk_note": "one floor: the road, the bank under the cherry, the ramp and the terrace, into the gate's opening (rows 422 to 436 inside the posts: whoever walks in there is behind gate.png's base and vanishes into the passage). The water, the parapets and the ground behind the wall are outside it.",
+ "blocked": [
+  [
+   [
+    496,
+    467
+   ],
+   [
+    544,
+    467
+   ],
+   [
+    542,
+    456
+   ],
+   [
+    498,
+    456
+   ]
+  ]
+ ],
+ "blocked_note": "the tub's ground (its cut-out is also solid); the scaffold's poles and the buckets give solid ground of their own (planes)",
+ "planes": [
+  {
+   "id": "ladder",
+   "file": "ladder.png",
+   "plane": "back",
+   "what": "Tomezo's ladder against the gate's outer wall, left of the opening: behind everybody (he climbs its front; nobody passes behind a ladder on a wall). The scene may hide it when the crew goes in."
+  },
+  {
+   "id": "gate",
+   "file": "gate.png",
+   "base": 436,
+   "what": "the Ni-no-mon gate: its opening is clear (the backdrop's passage shows through). Whoever walks past the threshold (feet above row 436) is drawn behind it: into the gate. The guards stand in front (row 448).",
+   "solid": [
+    [
+     575,
+     438
+    ],
+    [
+     627,
+     438
+    ],
+    [
+     627,
+     406
+    ],
+    [
+     575,
+     406
+    ]
+   ]
+  },
+  {
+   "id": "scaffold",
+   "file": "scaffold.png",
+   "base": 450,
+   "what": "the plasterers' bamboo scaffold against the wall by the gate: people pass in front of it (on the terrace, rows 451 to 470) and behind it (between its poles and the wall, rows 437 to 449)",
+   "solid": [
+    [
+     [
+      459,
+      452
+     ],
+     [
+      465,
+      452
+     ],
+     [
+      465,
+      447
+     ],
+     [
+      459,
+      447
+     ]
+    ],
+    [
+     [
+      507,
+      452
+     ],
+     [
+      513,
+      452
+     ],
+     [
+      513,
+      447
+     ],
+     [
+      507,
+      447
+     ]
+    ],
+    [
+     [
+      555,
+      452
+     ],
+     [
+      561,
+      452
+     ],
+     [
+      561,
+      447
+     ],
+     [
+      555,
+      447
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "tub",
+   "file": "tub.png",
+   "base": 466,
+   "what": "the mixing tub of lime on the terrace",
+   "solid": [
+    [
+     497,
+     467
+    ],
+    [
+     543,
+     467
+    ],
+    [
+     541,
+     457
+    ],
+    [
+     499,
+     457
+    ]
+   ]
+  },
+  {
+   "id": "bucket-1",
+   "file": "bucket-1.png",
+   "base": 494,
+   "what": "bucket 1 of lime, full, by the ramp's top: the crew carries it away (the scene hides it; the backdrop is complete under it)",
+   "solid": [
+    [
+     490,
+     495
+    ],
+    [
+     510,
+     495
+    ],
+    [
+     509,
+     488
+    ],
+    [
+     491,
+     488
+    ]
+   ],
+   "state": "full (hidden once carried)"
+  },
+  {
+   "id": "bucket-2",
+   "file": "bucket-2.png",
+   "base": 503,
+   "what": "bucket 2 of lime, full, by the ramp's top: the crew carries it away (the scene hides it; the backdrop is complete under it)",
+   "solid": [
+    [
+     517,
+     504
+    ],
+    [
+     537,
+     504
+    ],
+    [
+     536,
+     497
+    ],
+    [
+     518,
+     497
+    ]
+   ],
+   "state": "full (hidden once carried)"
+  },
+  {
+   "id": "bucket-3",
+   "file": "bucket-3.png",
+   "base": 490,
+   "what": "bucket 3 of lime, full, by the ramp's top: the crew carries it away (the scene hides it; the backdrop is complete under it)",
+   "solid": [
+    [
+     543,
+     491
+    ],
+    [
+     563,
+     491
+    ],
+    [
+     562,
+     484
+    ],
+    [
+     544,
+     484
+    ]
+   ],
+   "state": "full (hidden once carried)"
+  },
+  {
+   "id": "cherry",
+   "file": "cherry.png",
+   "base": 548,
+   "what": "the double cherry: its trunk and all its boughs. People on the bank (feet above row 548) are behind it, under the boughs; people on the road pass in front of its foot.",
+   "solid": [
+    [
+     70,
+     550
+    ],
+    [
+     108,
+     550
+    ],
+    [
+     108,
+     538
+    ],
+    [
+     70,
+     538
+    ]
+   ]
+  }
+ ],
+ "cutouts": {
+  "ladder": [
+   592,
+   316,
+   29,
+   150
+  ],
+  "gate": [
+   564,
+   179,
+   222,
+   257
+  ],
+  "scaffold": [
+   453,
+   350,
+   116,
+   102
+  ],
+  "tub": [
+   500,
+   440,
+   40,
+   26
+  ],
+  "bucket-1": [
+   491,
+   466,
+   18,
+   29
+  ],
+  "bucket-2": [
+   518,
+   473,
+   19,
+   31
+  ],
+  "bucket-3": [
+   544,
+   463,
+   18,
+   28
+  ],
+  "cherry": [
+   0,
+   12,
+   275,
+   537
+  ]
+ },
+ "things": [
+  {
+   "id": "cherry",
+   "what": "the one old double cherry in full late bloom, its heavy pink clusters; petals coming down",
+   "shape": {
+    "poly": [
+     [
+      -1,
+      346
+     ],
+     [
+      -2,
+      206
+     ],
+     [
+      2,
+      157
+     ],
+     [
+      12,
+      67
+     ],
+     [
+      24,
+      48
+     ],
+     [
+      34,
+      42
+     ],
+     [
+      173,
+      10
+     ],
+     [
+      181,
+      10
+     ],
+     [
+      213,
+      11
+     ],
+     [
+      233,
+      18
+     ],
+     [
+      239,
+      23
+     ],
+     [
+      241,
+      27
+     ],
+     [
+      275,
+      118
+     ],
+     [
+      277,
+      224
+     ],
+     [
+      277,
+      232
+     ],
+     [
+      272,
+      398
+     ],
+     [
+      264,
+      443
+     ],
+     [
+      105,
+      549
+     ],
+     [
+      80,
+      551
+     ],
+     [
+      72,
+      551
+     ]
+    ]
+   },
+   "stand": [
+    176,
+    526
+   ],
+   "face": "N"
+  },
+  {
+   "id": "petals",
+   "what": "the petals drifting down from the cherry (the engine's: fx petals)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      300
+     ],
+     [
+      300,
+      300
+     ],
+     [
+      300,
+      470
+     ],
+     [
+      0,
+      470
+     ]
+    ]
+   },
+   "stand": [
+    228,
+    512
+   ],
+   "face": "S"
+  },
+  {
+   "id": "keep",
+   "what": "the keep: white, five roofs, on its tall sloping stone base, high on its hill",
+   "shape": {
+    "poly": [
+     [
+      244,
+      334
+     ],
+     [
+      478,
+      334
+     ],
+     [
+      466,
+      266
+     ],
+     [
+      440,
+      222
+     ],
+     [
+      404,
+      56
+     ],
+     [
+      380,
+      34
+     ],
+     [
+      340,
+      34
+     ],
+     [
+      316,
+      56
+     ],
+     [
+      280,
+      222
+     ],
+     [
+      254,
+      266
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stonebase",
+   "what": "the keep's stone base, its sides curving out to the foot",
+   "shape": {
+    "poly": [
+     [
+      244,
+      334
+     ],
+     [
+      478,
+      334
+     ],
+     [
+      446,
+      264
+     ],
+     [
+      274,
+      264
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "gate",
+   "what": "the Ni-no-mon: a gate in a white wall under a small tiled tower, standing open; two guards in it",
+   "shape": {
+    "poly": [
+     [
+      562,
+      300
+     ],
+     [
+      562,
+      297
+     ],
+     [
+      565,
+      221
+     ],
+     [
+      624,
+      177
+     ],
+     [
+      726,
+      177
+     ],
+     [
+      784,
+      221
+     ],
+     [
+      785,
+      222
+     ],
+     [
+      788,
+      297
+     ],
+     [
+      788,
+      300
+     ],
+     [
+      776,
+      438
+     ],
+     [
+      574,
+      438
+     ]
+    ]
+   },
+   "stand": [
+    679,
+    444
+   ],
+   "face": "N"
+  },
+  {
+   "id": "gable",
+   "what": "the gable on the gate's tower, toward us: at its peak the round end tile, and on the tile, small, a cross",
+   "shape": {
+    "poly": [
+     [
+      646,
+      227
+     ],
+     [
+      704,
+      227
+     ],
+     [
+      675,
+      188
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N",
+   "tile": {
+    "at": [
+     675,
+     201
+    ],
+    "r": 4.2
+   },
+   "note": "a look from the mark tile; the tile is 9 px across at 800 x 600: it reads when told it is there"
+  },
+  {
+   "id": "guards",
+   "what": "the two gate guards, two swords each, counting everybody in and out (PEOPLE-20 draws them at guard1 and guard2)",
+   "shape": {
+    "poly": [
+     [
+      621,
+      452
+     ],
+     [
+      737,
+      452
+     ],
+     [
+      737,
+      362
+     ],
+     [
+      621,
+      362
+     ]
+    ]
+   },
+   "stand": [
+    679,
+    444
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ladder",
+   "what": "a ladder against the gate's outer wall, lime dripped down it",
+   "shape": {
+    "poly": [
+     [
+      601,
+      314
+     ],
+     [
+      602,
+      313
+     ],
+     [
+      621,
+      313
+     ],
+     [
+      622,
+      314
+     ],
+     [
+      622,
+      318
+     ],
+     [
+      615,
+      469
+     ],
+     [
+      593,
+      469
+     ],
+     [
+      592,
+      464
+     ],
+     [
+      594,
+      415
+     ],
+     [
+      600,
+      329
+     ]
+    ]
+   },
+   "stand": [
+    586,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tomezo",
+   "what": "Tomezo the plaster foreman, up the ladder, white from head to foot, shouting at nobody",
+   "shape": {
+    "poly": [
+     [
+      586,
+      400
+     ],
+     [
+      626,
+      400
+     ],
+     [
+      626,
+      322
+     ],
+     [
+      586,
+      322
+     ]
+    ]
+   },
+   "stand": [
+    586,
+    468
+   ],
+   "face": "N",
+   "note": "his figure at marks.tomezo (PEOPLE-20): the area is his"
+  },
+  {
+   "id": "scaffold",
+   "what": "a bamboo scaffold lashed with rope against the wall, two lifts of planks, a bucket hung on it",
+   "shape": {
+    "poly": [
+     [
+      560,
+      454
+     ],
+     [
+      460,
+      454
+     ],
+     [
+      452,
+      445
+     ],
+     [
+      451,
+      354
+     ],
+     [
+      456,
+      350
+     ],
+     [
+      458,
+      349
+     ],
+     [
+      560,
+      349
+     ],
+     [
+      566,
+      351
+     ],
+     [
+      571,
+      353
+     ],
+     [
+      570,
+      443
+     ]
+    ]
+   },
+   "stand": [
+    494,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "buckets",
+   "what": "three wooden buckets of lime by the ramp's top, full",
+   "shape": {
+    "poly": [
+     [
+      563,
+      491
+     ],
+     [
+      536,
+      507
+     ],
+     [
+      521,
+      507
+     ],
+     [
+      493,
+      496
+     ],
+     [
+      489,
+      493
+     ],
+     [
+      488,
+      475
+     ],
+     [
+      495,
+      465
+     ],
+     [
+      554,
+      461
+     ],
+     [
+      560,
+      464
+     ],
+     [
+      565,
+      473
+     ]
+    ]
+   },
+   "stand": [
+    526,
+    520
+   ],
+   "face": "N",
+   "each": [
+    {
+     "id": "bucket-1",
+     "shape": [
+      [
+       512,
+       474
+      ],
+      [
+       512,
+       486
+      ],
+      [
+       509,
+       497
+      ],
+      [
+       495,
+       498
+      ],
+      [
+       490,
+       494
+      ],
+      [
+       488,
+       474
+      ],
+      [
+       498,
+       463
+      ],
+      [
+       505,
+       464
+      ]
+     ],
+     "stand": [
+      500,
+      512
+     ]
+    },
+    {
+     "id": "bucket-2",
+     "shape": [
+      [
+       536,
+       507
+      ],
+      [
+       521,
+       507
+      ],
+      [
+       516,
+       502
+      ],
+      [
+       515,
+       481
+      ],
+      [
+       520,
+       474
+      ],
+      [
+       525,
+       470
+      ],
+      [
+       533,
+       473
+      ],
+      [
+       540,
+       484
+      ]
+     ],
+     "stand": [
+      527,
+      521
+     ]
+    },
+    {
+     "id": "bucket-3",
+     "shape": [
+      [
+       548,
+       494
+      ],
+      [
+       543,
+       490
+      ],
+      [
+       541,
+       473
+      ],
+      [
+       548,
+       462
+      ],
+      [
+       558,
+       462
+      ],
+      [
+       565,
+       473
+      ],
+      [
+       563,
+       491
+      ],
+      [
+       559,
+       494
+      ]
+     ],
+     "stand": [
+      553,
+      508
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tub",
+   "what": "the mixing tub, lime in it, a paddle",
+   "shape": {
+    "poly": [
+     [
+      543,
+      452
+     ],
+     [
+      543,
+      467
+     ],
+     [
+      507,
+      469
+     ],
+     [
+      499,
+      467
+     ],
+     [
+      497,
+      466
+     ],
+     [
+      497,
+      451
+     ],
+     [
+      498,
+      450
+     ],
+     [
+      512,
+      437
+     ],
+     [
+      515,
+      437
+     ],
+     [
+      542,
+      451
+     ]
+    ]
+   },
+   "stand": [
+    520,
+    484
+   ],
+   "face": "N"
+  },
+  {
+   "id": "wall",
+   "what": "the white wall on its stone footing, loopholes along it; grey with the winter at the far end, new white where the plasterers have been",
+   "shape": {
+    "poly": [
+     [
+      0,
+      344
+     ],
+     [
+      574,
+      348
+     ],
+     [
+      574,
+      400
+     ],
+     [
+      0,
+      404
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    506
+   ],
+   "face": "N"
+  },
+  {
+   "id": "moat",
+   "what": "the inner moat under the wall, still, the wall and the cherry in it",
+   "shape": {
+    "poly": [
+     [
+      0,
+      438
+     ],
+     [
+      444,
+      438
+     ],
+     [
+      450,
+      484
+     ],
+     [
+      0,
+      486
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    506
+   ],
+   "face": "N"
+  },
+  {
+   "id": "herons",
+   "what": "herons standing in the moat, every one facing the top of the keep (the engine's flocks: fx herons and egrets)",
+   "shape": {
+    "poly": [
+     [
+      40,
+      440
+     ],
+     [
+      420,
+      440
+     ],
+     [
+      420,
+      484
+     ],
+     [
+      40,
+      484
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    506
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pilgrims",
+   "what": "Himeji people going by on the road now and then, east, ladles in hand (PEOPLE-20's pilgrim1 to pilgrim3, along marks.pilgrimsVia)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      560
+     ],
+     [
+      800,
+      556
+     ],
+     [
+      800,
+      598
+     ],
+     [
+      0,
+      598
+     ]
+    ]
+   },
+   "stand": [
+    420,
+    584
+   ],
+   "face": "S"
+  },
+  {
+   "id": "road",
+   "what": "the road below the castle, dusty, trodden",
+   "shape": {
+    "poly": [
+     [
+      0,
+      540
+     ],
+     [
+      432,
+      540
+     ],
+     [
+      582,
+      540
+     ],
+     [
+      800,
+      542
+     ],
+     [
+      800,
+      598
+     ],
+     [
+      0,
+      598
+     ]
+    ]
+   },
+   "stand": [
+    420,
+    584
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ramp",
+   "what": "the stone ramp up to the gate, a low parapet each side",
+   "shape": {
+    "poly": [
+     [
+      422,
+      540
+     ],
+     [
+      592,
+      540
+     ],
+     [
+      612,
+      470
+     ],
+     [
+      442,
+      470
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "terrace",
+   "what": "the paved ground before the gate, spattered white",
+   "shape": {
+    "poly": [
+     [
+      445,
+      436
+     ],
+     [
+      800,
+      436
+     ],
+     [
+      800,
+      476
+     ],
+     [
+      606,
+      470
+     ],
+     [
+      448,
+      470
+     ],
+     [
+      445,
+      468
+     ]
+    ]
+   },
+   "stand": [
+    494,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hills",
+   "what": "the hills of Harima, pale in the evening air",
+   "shape": {
+    "poly": [
+     [
+      430,
+      240
+     ],
+     [
+      800,
+      236
+     ],
+     [
+      800,
+      300
+     ],
+     [
+      430,
+      300
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sky",
+   "what": "the sky over the castle, cerulean to cobalt, one long flat cloud",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      800,
+      0
+     ],
+     [
+      800,
+      230
+     ],
+     [
+      470,
+      230
+     ],
+     [
+      470,
+      36
+     ],
+     [
+      250,
+      36
+     ],
+     [
+      250,
+      0
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  }
+ ],
+ "marks": {
+  "enter": [
+   150,
+   580
+  ],
+  "cherry": [
+   176,
+   526
+  ],
+  "ladder": [
+   586,
+   468
+  ],
+  "tomezo": [
+   604,
+   392
+  ],
+  "crew": [
+   494,
+   466
+  ],
+  "gate": [
+   679,
+   444
+  ],
+  "guard1": [
+   642,
+   448
+  ],
+  "guard2": [
+   716,
+   448
+  ],
+  "tile": [
+   560,
+   520
+  ],
+  "moat": [
+   300,
+   506
+  ],
+  "road": [
+   420,
+   584
+  ],
+  "pilgrimsFrom": [
+   812,
+   574
+  ],
+  "pilgrimsTo": [
+   -14,
+   590
+  ],
+  "pilgrimsVia": [
+   [
+    700,
+    578
+   ],
+   [
+    560,
+    586
+   ],
+   [
+    400,
+    590
+   ],
+   [
+    240,
+    586
+   ],
+   [
+    100,
+    590
+   ]
+  ],
+  "scaffold1": [
+   486,
+   404
+  ],
+  "scaffold2": [
+   536,
+   372
+  ],
+  "underBoughs": [
+   228,
+   512
+  ],
+  "toKeep": [
+   679,
+   426
+  ]
+ },
+ "faces": {
+  "enter": "E",
+  "cherry": "N",
+  "ladder": "N",
+  "tomezo": "N",
+  "crew": "E",
+  "gate": "N",
+  "guard1": "E",
+  "guard2": "W",
+  "tile": "N",
+  "moat": "N",
+  "road": "W",
+  "pilgrimsFrom": "W",
+  "pilgrimsTo": "W",
+  "scaffold1": "N",
+  "scaffold2": "N",
+  "underBoughs": "S",
+  "toKeep": "N"
+ },
+ "stands": {
+  "enter": {
+   "at": [
+    150,
+    580
+   ],
+   "grownup_px": 156,
+   "floor": "ground"
+  },
+  "cherry": {
+   "at": [
+    176,
+    526
+   ],
+   "grownup_px": 127,
+   "floor": "ground"
+  },
+  "ladder": {
+   "at": [
+    586,
+    468
+   ],
+   "grownup_px": 96,
+   "floor": "ground"
+  },
+  "tomezo": {
+   "at": [
+    604,
+    392
+   ],
+   "grownup_px": 93,
+   "scale": 0.584,
+   "floor": "ladder",
+   "base": 465,
+   "note": "on the ladder, 1.6 m up its rungs: his size is the ladder's depth (its foot row 464), not his own row; a 1.56 m man is 83 px. face N (he faces the wall), turning to shout. Hands on the rails at x 600 and 616. He must sort at base 465 (in front of gate.png, whose base is 436, and of the ladder): by his feet he would be behind the gate's wall and hidden. SCENES-20: a person with a base of his own (as g.climbTo's base), not sorted by his row. The ladder's rungs: `ladder` below (LADDER_RUNG 25 cm, 13.3 px; his feet on rung 6)."
+  },
+  "crew": {
+   "at": [
+    494,
+    466
+   ],
+   "grownup_px": 94,
+   "floor": "ground"
+  },
+  "gate": {
+   "at": [
+    679,
+    444
+   ],
+   "grownup_px": 83,
+   "floor": "ground"
+  },
+  "guard1": {
+   "at": [
+    642,
+    448
+   ],
+   "grownup_px": 85,
+   "floor": "ground"
+  },
+  "guard2": {
+   "at": [
+    716,
+    448
+   ],
+   "grownup_px": 85,
+   "floor": "ground"
+  },
+  "tile": {
+   "at": [
+    560,
+    520
+   ],
+   "grownup_px": 123,
+   "floor": "ground"
+  },
+  "moat": {
+   "at": [
+    300,
+    506
+   ],
+   "grownup_px": 116,
+   "floor": "ground"
+  },
+  "road": {
+   "at": [
+    420,
+    584
+   ],
+   "grownup_px": 158,
+   "floor": "ground"
+  },
+  "pilgrimsFrom": {
+   "at": [
+    812,
+    574
+   ],
+   "grownup_px": 152,
+   "floor": "ground"
+  },
+  "pilgrimsTo": {
+   "at": [
+    -14,
+    590
+   ],
+   "grownup_px": 161,
+   "floor": "ground"
+  },
+  "scaffold1": {
+   "at": [
+    486,
+    404
+   ],
+   "grownup_px": 84,
+   "scale": 0.523,
+   "floor": "scaffold",
+   "base": 451,
+   "note": "a plasterer on the lift at row 412 (the plank's top row is 406): the scaffold's depth (its front poles' feet, row 450); a 1.56 m man is 75 px; drawn in front of scaffold.png (the engine sorts him by his feet, above its base: give him base 451 or draw him as a scene person with his own base)"
+  },
+  "scaffold2": {
+   "at": [
+    536,
+    372
+   ],
+   "grownup_px": 84,
+   "scale": 0.523,
+   "floor": "scaffold",
+   "base": 451,
+   "note": "a plasterer on the lift at row 380 (the plank's top row is 374): the scaffold's depth (its front poles' feet, row 450); a 1.56 m man is 75 px; drawn in front of scaffold.png (the engine sorts him by his feet, above its base: give him base 451 or draw him as a scene person with his own base)"
+  },
+  "underBoughs": {
+   "at": [
+    228,
+    512
+   ],
+   "grownup_px": 119,
+   "floor": "ground"
+  },
+  "toKeep": {
+   "at": [
+    679,
+    426
+   ],
+   "grownup_px": 73,
+   "floor": "ground"
+  }
+ },
+ "ladder": {
+  "foot": [
+   [
+    594,
+    464
+   ],
+   [
+    612,
+    464
+   ]
+  ],
+  "top": [
+   [
+    603,
+    318
+   ],
+   [
+    619,
+    318
+   ]
+  ],
+  "rungs": 11,
+  "length_px": 146.3,
+  "length_cm": 274,
+  "rung_px": 13.3,
+  "rung_cm": 25,
+  "scale": 0.584,
+  "rung_rows": [
+   457.4,
+   444.1,
+   430.8,
+   417.5,
+   404.3,
+   391.0,
+   377.7,
+   364.5,
+   351.2,
+   337.9,
+   324.6
+  ],
+  "rails_x_at_tomezo": [
+   598.4,
+   615.5
+  ],
+  "note": "LADDER_RUNG 25 cm: eleven rungs 13.3 px apart at the ladder's depth (0.534 px/cm, the foot row 464; the ladder is 2.74 m long and leans 4 degrees to the right, its top on the gate's wall at row 318). Rung n is on row 464 - (n - 0.5) x 13.3: rung 6 is row 391, where marks.tomezo puts his feet (1.37 m up). The rails are 18 px apart at the foot, 16 at the top."
+ },
+ "sizes": {
+  "man_px_at_enter": 155.7,
+  "man_px_at_gate": 82.7,
+  "guard_156cm_px_at_guard1": 75.6,
+  "man_px_at_crew": 94.5,
+  "man_px_at_tile": 123.5,
+  "man_px_at_cherry": 126.7,
+  "mom_168cm_px_at_enter": 149.5,
+  "lilsis_122cm_px_at_underBoughs": 83.1,
+  "heron_95cm_px_in_moat": 50.1,
+  "gate_opening_px": [
+   100,
+   126
+  ]
+ },
+ "exits": [
+  {
+   "to": "edo-keep",
+   "id": "in",
+   "name": "into the gate",
+   "walkTo": [
+    679,
+    444
+   ],
+   "via": [
+    679,
+    426
+   ],
+   "spawn": "enter",
+   "band": [
+    [
+     629,
+     422
+    ],
+    [
+     729,
+     422
+    ],
+    [
+     729,
+     448
+    ],
+    [
+     629,
+     448
+    ]
+   ],
+   "note": "the way in is the gate's opening, past the guards (the scene opens it with #28: until then the guards turn people back). No way out at the picture's edges: the family came by the road (the walk cut-scene), and leaves the castle by the map."
+  }
+ ],
+ "fx": [
+  {
+   "id": "petals",
+   "type": "petals",
+   "what": "the double cherry's petals drifting down: ENGINE-20's moving thing",
+   "from": [
+    [
+     10,
+     70
+    ],
+    [
+     270,
+     70
+    ],
+    [
+     290,
+     300
+    ],
+    [
+     260,
+     440
+    ],
+    [
+     120,
+     440
+    ],
+    [
+     0,
+     340
+    ]
+   ],
+   "to": [
+    [
+     0,
+     470
+    ],
+    [
+     330,
+     470
+    ],
+    [
+     330,
+     600
+    ],
+    [
+     0,
+     600
+    ]
+   ],
+   "count": 22,
+   "every": [
+    0.4,
+    1.6
+   ],
+   "drift": [
+    10,
+    -2
+   ],
+   "fall": 18,
+   "size": [
+    2,
+    3
+   ],
+   "color": "#eeaac0",
+   "light": "#f8d5de",
+   "plane": "front",
+   "wind": "from the right, light: they drift a little to the left as they fall, turning",
+   "note": "ENGINE-20 names the fields: this is what the painter asks for. About 22 on the stage at once, leaving the crown anywhere in `from` (the clusters), falling to the bank and the road in `to` at about 18 px a second at full size, drifting left, each turning as a petal does; pink (#eeaac0) with the lit ones paler. In front of everybody (plane front): they fall across whoever stands under the tree."
+  },
+  {
+   "id": "herons",
+   "type": "birds",
+   "kind": "flock",
+   "what": "three grey herons standing in the moat, every one facing the keep",
+   "area": [
+    [
+     60,
+     450
+    ],
+    [
+     330,
+     448
+    ],
+    [
+     330,
+     476
+    ],
+    [
+     60,
+     478
+    ]
+   ],
+   "count": 3,
+   "frames": {
+    "set": "heron",
+    "foot": [
+     48,
+     98
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "heron-1.png",
+     "heron-2.png"
+    ],
+    "look": [
+     "heron-3.png",
+     "heron-4.png"
+    ],
+    "walk": [
+     "heron-5.png",
+     "heron-6.png",
+     "heron-7.png",
+     "heron-8.png"
+    ],
+    "peck": [
+     "heron-9.png",
+     "heron-10.png"
+    ],
+    "turn": [
+     "heron-11.png"
+    ]
+   },
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "depth": true,
+   "moves": {
+    "stand": 5,
+    "look": 3,
+    "peck": 1,
+    "walk": 1,
+    "turn": 0
+   },
+   "walk": 5,
+   "plane": "back",
+   "note": "Facing E (toward the keep, up and to the right); turn false: none ever faces away from it (the design: every heron faces the top of the keep). `look` is the neck stretched up at the keep; `peck` the strike at the water; `walk` a slow stalk. They stand their ground (shy 0, fly false). In the water, behind everybody (plane back: nobody can be in the water)."
+  },
+  {
+   "id": "egrets",
+   "type": "birds",
+   "kind": "flock",
+   "what": "two white egrets among them, facing the keep too",
+   "area": [
+    [
+     200,
+     452
+    ],
+    [
+     424,
+     448
+    ],
+    [
+     424,
+     472
+    ],
+    [
+     200,
+     474
+    ]
+   ],
+   "count": 2,
+   "frames": {
+    "set": "egret",
+    "foot": [
+     48,
+     98
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "egret-1.png",
+     "egret-2.png"
+    ],
+    "look": [
+     "egret-3.png",
+     "egret-4.png"
+    ],
+    "walk": [
+     "egret-5.png",
+     "egret-6.png",
+     "egret-7.png",
+     "egret-8.png"
+    ],
+    "peck": [
+     "egret-9.png",
+     "egret-10.png"
+    ],
+    "turn": [
+     "egret-11.png"
+    ]
+   },
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "depth": true,
+   "moves": {
+    "stand": 5,
+    "look": 3,
+    "peck": 1,
+    "walk": 1,
+    "turn": 0
+   },
+   "walk": 5,
+   "plane": "back",
+   "seed": 3,
+   "note": "the same frames in white, drawn a little smaller (egret-<n>: 0.86 of the heron); a flock of its own, as a flock takes one set"
+  },
+  {
+   "id": "moat-light",
+   "type": "shimmer",
+   "what": "a few glints on the still water of the moat",
+   "poly": [
+    [
+     0,
+     442
+    ],
+    [
+     442,
+     442
+    ],
+    [
+     450,
+     482
+    ],
+    [
+     0,
+     484
+    ]
+   ],
+   "count": 5,
+   "size": 3,
+   "flow": [
+    -1.5,
+    0
+   ],
+   "life": 2.4,
+   "color": "#f4fbff",
+   "opacity": 0.28,
+   "plane": "back",
+   "note": "quiet: the moat is still; the herons stand in it (their feet are drawn over the glints)"
+  }
+ ],
+ "fx_note": "Moving: the petals (ENGINE-20), the herons and the egrets (frames here), the glints; and the people's small lives (PEOPLE-20): the guards at guard1 and guard2, the plasterers on scaffold1 and scaffold2 and at crew, Tomezo on the ladder, the pilgrims along pilgrimsVia. No flags are painted on the gate tower (none to stir). The cherry does not sway: the air is nearly still, the petals say what wind there is.",
+ "frames": {
+  "herons": {
+   "set": "heron",
+   "foot": [
+    48,
+    98
+   ],
+   "face": "E",
+   "sizeAt": 590,
+   "stand": [
+    "heron-1.png",
+    "heron-2.png"
+   ],
+   "look": [
+    "heron-3.png",
+    "heron-4.png"
+   ],
+   "walk": [
+    "heron-5.png",
+    "heron-6.png",
+    "heron-7.png",
+    "heron-8.png"
+   ],
+   "peck": [
+    "heron-9.png",
+    "heron-10.png"
+   ],
+   "turn": [
+    "heron-11.png"
+   ],
+   "files": "heron-<n>.png and egret-<n>.png, n 1 to 11",
+   "acts": {
+    "stand": [
+     1,
+     2
+    ],
+    "look": [
+     3,
+     4
+    ],
+    "walk": [
+     5,
+     6,
+     7,
+     8
+    ],
+    "peck": [
+     9,
+     10
+    ],
+    "turn": [
+     11
+    ]
+   },
+   "size": [
+    100,
+    104
+   ],
+   "note": "Grey herons, facing E (the engine turns them for W; the flocks never turn); every frame on one canvas with the feet at the foot point; painted at full size (sizeAt 590: a heron with its neck up is 87 px there, 46 px in the moat at row 462). egret-<n> is the same drawing in white at 0.86."
+  }
+ }
+}

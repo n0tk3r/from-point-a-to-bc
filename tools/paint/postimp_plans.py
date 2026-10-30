@@ -208,12 +208,97 @@ PLANS = {
     # (the empty tin and the bottle cap) and the pie gone (the card fallen flat, the cap left on it) each replace the whole
     # pie; the peanuts in the tray replace the full machine, and the tray empty again is a state of that (the same painting
     # with less in it). The clock's second hand is frames.
+    # PAINT-20B: Kihei's fish shop at Yui (edo_fishshop.py). Back to front with nobody on stage: the noren and the drying
+    # fish (sways, at the back), the three tubs, the sushi-box stand with the box empty on it, the hearth, the baby's
+    # basket, the front plane; the box filled and pressed, and turned out and cut, replace the empty one; the cat's frames.
+    "edo-fishshop": {
+        "planes": ["noren", "driedfish", "tub-1", "tub-2", "tub-3", "stand", "sushibox-empty", "hearth", "basket", "front"],
+        "alt": {"sushibox-filled": ["sushibox-empty"], "sushibox-cut": ["sushibox-empty"]},
+        "union": {},
+        "frames": ["cat-*"],
+    },
     "office-breakroom": {
         "planes": ["vent", "door", "schedule", "pie", "vending", "chair", "front"],
         "alt": {"vent-eyes": ["vent"], "door-open": ["door"], "pie-eaten": ["pie"], "pie-gone": ["pie"], "vending-peanuts": ["vending"]},
         "states": {"vending-peanuts": ["vending-taken"]},
         "union": {},
         "frames": ["clock-*"],
+    },
+    # PAINT-20A: Yui on Suruga Bay (edo_village.py). Back to front as the scene lays them with nobody there: Gonroku's
+    # freighter at anchor (it bobs), the net racks, his tender at the water's edge (it bobs), the notice-board place,
+    # Kihei's noren in the open front (it sways), the big boat on its props, the hen yard's fence, the front plane. No
+    # other states. The hens are frames (edo_village_hens.py).
+    "edo-village": {
+        "planes": ["ship", "racks", "tender", "board", "noren", "boat", "fence", "front"],
+        "alt": {},
+        "union": {},
+        "frames": ["hen-*"],
+    },
+    # PAINT-20C: the cedar path in rain (edo_cedars.py). With nobody on stage: the two near cedars on each side of the
+    # path's foot (each with a slanted base), the two nearest trunks at the picture's edges (the front plane). The line
+    # of lamplight under the storehouse's floor lies over the backdrop while the lamp below is lit.
+    "edo-cedars": {
+        "planes": ["cedar-l", "cedar-r", "front"],
+        "alt": {"light-on": [], "window-lit": []},                  # (window-lit: the high window lit from inside, while the lantern is)
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-20C: inside the storehouse (edo_storehouse.py). With nobody on stage: the lantern unlit, the sacks under the
+    # window, the door shut with the bar across it, the trapdoor under the mat. Each other state replaces its first:
+    # the lantern lit, the sacks heaped over the mat, the door open, the bar lifted, the mat pulled aside, the trapdoor
+    # open; the floorgaps' light lies over the backdrop (under the mat) while the room below is lit.
+    "edo-storehouse": {
+        "planes": ["lantern", "sacks", "door", "bar", "trapdoor", "mat"],
+        "alt": {"lantern-lit": ["lantern"], "sacks-heaped": ["sacks"], "door-open": ["door"], "bar-up": ["bar"], "mat-aside": ["mat"],
+                "trapdoor-open": ["trapdoor", "mat"], "floorgaps-on": ["mat"]},
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-20D: the castle approach at Himeji (edo_castle.py). Back to front as the scene lays them with nobody there: the
+    # ladder (behind everybody), the gate (its opening clear), the scaffold, the tub, the three buckets of lime (each hidden
+    # as the crew carries it: no second state), the cherry (the trunk and all its boughs: the front of the picture). The
+    # herons and the egrets are frames.
+    "edo-castle": {
+        "planes": ["ladder", "gate", "scaffold", "tub", "bucket-1", "bucket-2", "bucket-3", "cherry"],
+        "alt": {},
+        "union": {},
+        "frames": ["heron-*", "egret-*"],
+    },
+    # PAINT-20E: inside Himeji's keep, a lower floor (edo_keep.py). Back to front with nobody there: the weapon racks on
+    # the right wall, the steep stairs with their rail, the great pillar, the plasterers' tubs and lime, the front plane.
+    # The three beams of sun through the gun ports are LIGHT, not in the backdrop: each is a light picture (RGBA, soft
+    # alpha) for the live layer, keyed colour by colour as a frame.
+    "edo-keep": {
+        "planes": ["racks", "stairs", "pillar", "tubs", "front"],
+        "alt": {},
+        "union": {},
+        "frames": ["beam-*"],
+    },
+    # PAINT-20E: the keep's top floor at sunset (edo_keeptop.py). With nobody there and the story at its start: the
+    # stairwell's rail, the stored chests, the old lantern, the three shutters seen (north, east, west) shut; the room is
+    # near dark. The west shutters open replace the shut ones. The LIT ROOM is a state: `lit` is a second backdrop (the
+    # whole stage) laid over everything when the west shutters are open, with the sun flooding in, and each cut-out has
+    # its `-lit` twin for that state (the same painting in the sunset light). The north and east shutters open (dark, and
+    # lit) replace their shut ones.
+    "edo-keeptop": {
+        "planes": ["rail", "chests", "lantern", "northshutter", "eastshutter", "westshutter", "front"],
+        "alt": {"westshutter-open": ["westshutter"], "northshutter-open": ["northshutter"], "eastshutter-open": ["eastshutter"],
+                "lit": [], "rail-lit": ["rail"], "chests-lit": ["chests"], "lantern-lit": ["lantern"], "front-lit": ["front"],
+                "northshutter-lit": ["northshutter"], "eastshutter-lit": ["eastshutter"], "westshutter-open-lit": ["westshutter"],
+                "northshutter-open-lit": ["northshutter"], "eastshutter-open-lit": ["eastshutter"]},
+        "union": {},
+        "frames": ["heron-fly-*"],                                  # the herons going past the west bay: three small flight frames
+    },
+    # PAINT-20F: the room under the storehouse (edo_chapel.py). With nobody on stage: the trapdoor shut, the wall props, the
+    # closet altar shut, the mirror on its stand, the lamps alight, the ladder, the centre prop near us. The other states replace
+    # them: the trapdoor open on the dark storehouse, and open on the morning (with the sun on the mats, on the back plane); the
+    # altar open (the Kannon, the calendar, the bowl); the lamps cold; the ladder in the morning sun.
+    "edo-chapel": {
+        "planes": ["trapdoor-shut", "props", "altar-shut", "mirror", "lamps", "ladder", "front"],
+        "alt": {"trapdoor-lamp": ["trapdoor-shut"], "trapdoor-day": ["trapdoor-shut"], "altar-open": ["altar-shut"],
+                "lamps-out": ["lamps"], "ladder-day": ["ladder"]},
+        "union": {},
+        "frames": [],
     },
 }
 

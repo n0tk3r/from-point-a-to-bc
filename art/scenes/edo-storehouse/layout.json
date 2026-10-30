@@ -1,0 +1,945 @@
+{
+ "id": "edo-storehouse",
+ "horizon": 285,
+ "full": 480,
+ "view": {
+  "camera": "persp.Camera",
+  "horizon": 285,
+  "full": 480,
+  "vanish_x": 400,
+  "focal": 400,
+  "eye_cm": 213.3,
+  "room_cm": {
+   "x": [
+    -210.0,
+    210.0
+   ],
+   "z": [
+    -170.0,
+    245.0
+   ],
+   "wall_h": 240.0
+  }
+ },
+ "light": "dim and cool: the grey rain-light of the window down the back wall and over the sacks, a little round the door's cracks; the corners and the foreground deep blue; the lantern unlit (lantern-lit is the warm state) and the floorgaps' light (floorgaps-on) the only warm things",
+ "walk": [
+  [
+   286,
+   412
+  ],
+  [
+   430,
+   412
+  ],
+  [
+   438,
+   422
+  ],
+  [
+   539,
+   433
+  ],
+  [
+   546,
+   441
+  ],
+  [
+   597,
+   500
+  ],
+  [
+   614,
+   554
+  ],
+  [
+   729,
+   604
+  ],
+  [
+   26,
+   604
+  ],
+  [
+   188,
+   511
+  ],
+  [
+   264,
+   433
+  ],
+  [
+   304,
+   431
+  ],
+  [
+   311,
+   421
+  ],
+  [
+   279,
+   421
+  ]
+ ],
+ "walk_note": "one outline: the floor between the sacks, clear of the baskets, the mat walkable (people stand on it: marks.mat); 14 px off the walls; its front edge where a grown-up is about 200 px tall",
+ "blocked": [
+  [
+   [
+    500,
+    437
+   ],
+   [
+    546,
+    437
+   ],
+   [
+    524,
+    414
+   ],
+   [
+    485,
+    414
+   ]
+  ],
+  [
+   [
+    257,
+    431
+   ],
+   [
+    304,
+    431
+   ],
+   [
+    319,
+    409
+   ],
+   [
+    278,
+    409
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "lantern",
+   "file": "lantern.png",
+   "box": [
+    259,
+    298,
+    19,
+    45
+   ],
+   "plane": "back"
+  },
+  {
+   "id": "sacks",
+   "file": "sacks.png",
+   "box": [
+    437,
+    356,
+    94,
+    67
+   ],
+   "base": [
+    [
+     438,
+     421
+    ],
+    [
+     534,
+     421
+    ]
+   ],
+   "solid": [
+    [
+     438,
+     422
+    ],
+    [
+     535,
+     422
+    ],
+    [
+     523,
+     410
+    ],
+    [
+     435,
+     410
+    ]
+   ]
+  },
+  {
+   "id": "door",
+   "file": "door.png",
+   "box": [
+    555,
+    303,
+    36,
+    176
+   ],
+   "plane": "back"
+  },
+  {
+   "id": "bar",
+   "file": "bar.png",
+   "box": [
+    546,
+    370,
+    44,
+    36
+   ],
+   "plane": "back"
+  },
+  {
+   "id": "trapdoor",
+   "file": "trapdoor.png",
+   "box": [
+    363,
+    434,
+    66,
+    25
+   ],
+   "plane": "back"
+  },
+  {
+   "id": "mat",
+   "file": "mat.png",
+   "box": [
+    341,
+    430,
+    109,
+    34
+   ],
+   "plane": "back"
+  },
+  {
+   "id": "lantern-lit",
+   "file": "lantern-lit.png",
+   "alt": "lantern",
+   "box": [
+    250,
+    287,
+    28,
+    93
+   ],
+   "note": "the lantern lit: replaces lantern",
+   "plane": "back"
+  },
+  {
+   "id": "sacks-heaped",
+   "file": "sacks-heaped.png",
+   "alt": "sacks",
+   "box": [
+    352,
+    390,
+    179,
+    68
+   ],
+   "note": "#27: the sacks heaped over the mat (the pile under the window thinner): replaces sacks; its base is the heap's front",
+   "base": [
+    [
+     352,
+     457
+    ],
+    [
+     448,
+     457
+    ]
+   ],
+   "solid": [
+    [
+     350,
+     457
+    ],
+    [
+     447,
+     457
+    ],
+    [
+     439,
+     430
+    ],
+    [
+     358,
+     430
+    ]
+   ]
+  },
+  {
+   "id": "door-open",
+   "file": "door-open.png",
+   "alt": "door",
+   "box": [
+    491,
+    303,
+    100,
+    176
+   ],
+   "note": "the door standing open inward, the rain and the path outside in the opening: replaces door",
+   "plane": "back"
+  },
+  {
+   "id": "bar-up",
+   "file": "bar-up.png",
+   "alt": "bar",
+   "box": [
+    537,
+    353,
+    53,
+    84
+   ],
+   "note": "the bar lifted, leaning by the door: replaces bar",
+   "plane": "back"
+  },
+  {
+   "id": "mat-aside",
+   "file": "mat-aside.png",
+   "alt": "mat",
+   "box": [
+    239,
+    425,
+    115,
+    32
+   ],
+   "note": "the mat pulled aside to the left, the trapdoor bare: replaces mat",
+   "plane": "back"
+  },
+  {
+   "id": "trapdoor-open",
+   "file": "trapdoor-open.png",
+   "alt": "trapdoor",
+   "box": [
+    351,
+    376,
+    90,
+    87
+   ],
+   "note": "the trapdoor open, the ladder's top and the lamplight coming up: replaces trapdoor (show with mat-aside)",
+   "plane": "back"
+  },
+  {
+   "id": "floorgaps-on",
+   "file": "floorgaps-on.png",
+   "alt": true,
+   "box": [
+    333,
+    417,
+    134,
+    71
+   ],
+   "note": "the light between the floorboards round the trapdoor, while the room below is lit: lies over the backdrop (and under the mat: list it before mat)",
+   "plane": "back"
+  }
+ ],
+ "things": [
+  {
+   "id": "sacks",
+   "what": "charcoal sacks of straw piled against the back wall under the window (and more along the left wall): fat, bound with rope, black at the mouth",
+   "shape": {
+    "poly": [
+     [
+      438,
+      421
+     ],
+     [
+      534,
+      421
+     ],
+     [
+      523,
+      410
+     ],
+     [
+      435,
+      410
+     ]
+    ]
+   },
+   "stand": [
+    455,
+    433
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mat",
+   "what": "a straw mat on the floor in the middle of the room; a line of light shows at its edge when the room below is lit",
+   "shape": {
+    "poly": [
+     [
+      341,
+      464
+     ],
+     [
+      450,
+      464
+     ],
+     [
+      441,
+      430
+     ],
+     [
+      352,
+      430
+     ]
+    ]
+   },
+   "stand": [
+    396,
+    445
+   ],
+   "face": "N"
+  },
+  {
+   "id": "trapdoor",
+   "what": "the trapdoor under the mat: boards flush with the floor and an iron ring; the way down to edo-chapel",
+   "shape": {
+    "poly": [
+     [
+      363,
+      458
+     ],
+     [
+      428,
+      458
+     ],
+     [
+      424,
+      434
+     ],
+     [
+      369,
+      434
+     ]
+    ]
+   },
+   "stand": [
+    460,
+    445
+   ],
+   "face": "W"
+  },
+  {
+   "id": "floorgaps",
+   "what": "light between the floorboards round the trapdoor, when the room below is lit (the cut-out floorgaps-on)",
+   "shape": {
+    "poly": [
+     [
+      296,
+      487
+     ],
+     [
+      504,
+      487
+     ],
+     [
+      468,
+      418
+     ],
+     [
+      332,
+      418
+     ]
+    ]
+   },
+   "stand": [
+    396,
+    445
+   ],
+   "face": "N"
+  },
+  {
+   "id": "door",
+   "what": "the front door, inside: planks in a frame, the wooden bar across it",
+   "shape": {
+    "poly": [
+     [
+      590,
+      478
+     ],
+     [
+      556,
+      443
+     ],
+     [
+      556,
+      304
+     ],
+     [
+      590,
+      308
+     ]
+    ]
+   },
+   "stand": [
+    526,
+    464
+   ],
+   "face": "E"
+  },
+  {
+   "id": "bar",
+   "what": "the wooden bar across the door in its two iron brackets (across; lifted)",
+   "shape": {
+    "poly": [
+     [
+      589,
+      410
+     ],
+     [
+      549,
+      384
+     ],
+     [
+      549,
+      366
+     ],
+     [
+      589,
+      388
+     ]
+    ]
+   },
+   "stand": [
+    526,
+    464
+   ],
+   "face": "E"
+  },
+  {
+   "id": "window",
+   "what": "the small high square window in the back wall, grey with the rain's light; the sacks under it",
+   "shape": {
+    "poly": [
+     [
+      430,
+      313
+     ],
+     [
+      466,
+      313
+     ],
+     [
+      466,
+      278
+     ],
+     [
+      430,
+      278
+     ]
+    ]
+   },
+   "stand": [
+    455,
+    433
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tools",
+   "what": "a saw and a rake on the back wall, a broom by the door",
+   "shape": {
+    "poly": [
+     [
+      359,
+      275
+     ],
+     [
+      371,
+      275
+     ],
+     [
+      371,
+      340
+     ],
+     [
+      359,
+      340
+     ]
+    ]
+   },
+   "stand": [
+    362,
+    421
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lantern",
+   "what": "a paper lantern on a hook on the left wall (unlit; lit)",
+   "shape": {
+    "rect": [
+     254,
+     303,
+     28,
+     48
+    ]
+   },
+   "stand": [
+    320,
+    430
+   ],
+   "face": "W"
+  },
+  {
+   "id": "baskets",
+   "what": "two baskets on the floor by the right wall",
+   "shape": {
+    "poly": [
+     [
+      506,
+      435
+     ],
+     [
+      541,
+      435
+     ],
+     [
+      522,
+      415
+     ],
+     [
+      491,
+      415
+     ]
+    ]
+   },
+   "stand": [
+    486,
+    425
+   ],
+   "face": "E"
+  },
+  {
+   "id": "straw",
+   "what": "coils of straw rope on pegs on the right wall",
+   "shape": {
+    "poly": [
+     [
+      545,
+      346
+     ],
+     [
+      532,
+      340
+     ],
+     [
+      532,
+      312
+     ],
+     [
+      545,
+      315
+     ]
+    ]
+   },
+   "stand": [
+    512,
+    425
+   ],
+   "face": "E"
+  },
+  {
+   "id": "isuke",
+   "what": "Isuke, the constable's man, inside the door in #27 (PEOPLE-20 draws him); at marks.isuke",
+   "shape": {
+    "rect": [
+     481,
+     301,
+     48,
+     172
+    ]
+   },
+   "stand": [
+    435,
+    475
+   ],
+   "face": "E",
+   "when": "edo.isukeIn"
+  },
+  {
+   "id": "jinsuke",
+   "what": "Jinsuke, when he is up here with the girls in #27 (PEOPLE-20 draws him); by the door",
+   "shape": {
+    "rect": [
+     466,
+     294,
+     48,
+     172
+    ]
+   },
+   "stand": [
+    416,
+    464
+   ],
+   "face": "E",
+   "when": "edo.jinsukeUp"
+  }
+ ],
+ "marks": {
+  "door": [
+   526,
+   464
+  ],
+  "windowIn": [
+   486,
+   361
+  ],
+  "sacks": [
+   455,
+   433
+  ],
+  "mat": [
+   396,
+   445
+  ],
+  "trapdoor": [
+   460,
+   445
+  ],
+  "lantern": [
+   320,
+   430
+  ],
+  "isuke": [
+   505,
+   471
+  ],
+  "default": [
+   345,
+   480
+  ],
+  "bigsis": [
+   344,
+   456
+  ],
+  "lilsis": [
+   427,
+   430
+  ]
+ },
+ "stands": {
+  "door": {
+   "at": [
+    526,
+    464
+   ],
+   "grownup_px": 146.9
+  },
+  "windowIn": {
+   "at": [
+    486,
+    361
+   ],
+   "grownup_px": 107.3,
+   "scale": 0.67,
+   "note": "on top of the sacks under the window (90 cm up): her feet on the sacks' top, drawn at this scale, sorted behind nothing (the sacks' base is nearer)"
+  },
+  "sacks": {
+   "at": [
+    455,
+    433
+   ],
+   "grownup_px": 121.4
+  },
+  "mat": {
+   "at": [
+    396,
+    445
+   ],
+   "grownup_px": 131.3
+  },
+  "trapdoor": {
+   "at": [
+    460,
+    445
+   ],
+   "grownup_px": 131.3
+  },
+  "lantern": {
+   "at": [
+    320,
+    430
+   ],
+   "grownup_px": 119.0
+  },
+  "isuke": {
+   "at": [
+    505,
+    471
+   ],
+   "grownup_px": 152.6
+  },
+  "default": {
+   "at": [
+    345,
+    480
+   ],
+   "grownup_px": 160.0
+  },
+  "bigsis": {
+   "at": [
+    344,
+    456
+   ],
+   "grownup_px": 140.3
+  },
+  "lilsis": {
+   "at": [
+    427,
+    430
+   ],
+   "grownup_px": 119.0
+  }
+ },
+ "exits": [
+  {
+   "to": "edo-cedars",
+   "via": "door",
+   "name": "out of the door (once it is unbarred and open)",
+   "walkTo": [
+    526,
+    464
+   ],
+   "spawn": "door"
+  },
+  {
+   "to": "edo-chapel",
+   "via": "trapdoor",
+   "name": "down the ladder (once the trapdoor is open)",
+   "walkTo": [
+    460,
+    445
+   ],
+   "spawn": "ladder"
+  }
+ ],
+ "cutouts": {
+  "lantern": [
+   259,
+   298,
+   19,
+   45
+  ],
+  "lantern-lit": [
+   250,
+   287,
+   28,
+   93
+  ],
+  "sacks": [
+   437,
+   356,
+   94,
+   67
+  ],
+  "sacks-heaped": [
+   352,
+   390,
+   179,
+   68
+  ],
+  "door": [
+   555,
+   303,
+   36,
+   176
+  ],
+  "door-open": [
+   491,
+   303,
+   100,
+   176
+  ],
+  "bar": [
+   546,
+   370,
+   44,
+   36
+  ],
+  "bar-up": [
+   537,
+   353,
+   53,
+   84
+  ],
+  "mat": [
+   341,
+   430,
+   109,
+   34
+  ],
+  "mat-aside": [
+   239,
+   425,
+   115,
+   32
+  ],
+  "trapdoor": [
+   363,
+   434,
+   66,
+   25
+  ],
+  "trapdoor-open": [
+   351,
+   376,
+   90,
+   87
+  ],
+  "floorgaps-on": [
+   333,
+   417,
+   134,
+   71
+  ]
+ },
+ "fx": [
+  {
+   "id": "rain-roof",
+   "type": "sound",
+   "what": "the rain loud on the thatch: no moving thing to draw inside; a sound (ENGINE-20)"
+  }
+ ],
+ "fx_note": "nothing moves by nature inside but the rain's sound on the thatch and, through the open door (door-open), the rain outside: a `rain` mark clipped to the door's opening would serve (ENGINE-20's kind), given here as rain-door",
+ "rain_door": {
+  "type": "rain",
+  "clip": [
+   [
+    588,
+    476
+   ],
+   [
+    558,
+    445
+   ],
+   [
+    558,
+    310
+   ],
+   [
+    588,
+    315
+   ]
+  ],
+  "slant": [
+   -8,
+   1.0
+  ],
+  "density": 0.0011,
+  "when": "door-open shown"
+ },
+ "sizes": {
+  "door": 146.9,
+  "windowIn": 62.4,
+  "sacks": 121.4,
+  "mat": 131.3,
+  "trapdoor": 131.3,
+  "lantern": 119.0,
+  "isuke": 152.6,
+  "default": 160.0,
+  "bigsis": 140.3,
+  "lilsis": 119.0
+ }
+}

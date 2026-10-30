@@ -1,0 +1,1305 @@
+{
+ "id": "edo-chapel",
+ "horizon": 243,
+ "full": 362,
+ "view": {
+  "horizon": 243,
+  "full": 362,
+  "cam": [
+   240.0,
+   598.0
+  ],
+  "yaw": 3.0,
+  "focal": 470.0,
+  "centre_x": 400.0
+ },
+ "eye_cm": 130,
+ "ceiling_cm": 182.0,
+ "beams_cm": 170.0,
+ "vanishing": [
+  375,
+  243
+ ],
+ "light": "night, by oil lamp: three small clay lamps, one on a ledge in the left wall by the ladder's foot, one on a lamp stand on the floor before the altar's left side (it lights the altar's front and the Kannon), one in a niche in the back wall right of the mirror (naples-yellow pools cut into flats; the shade ultramarine toward prussian); at morning (trapdoor-day) a cool shaft of daylight down the open trapdoor onto the mats at `sunpatch`. The flames are fx.",
+ "walk": [
+  [
+   205,
+   352
+  ],
+  [
+   361,
+   350
+  ],
+  [
+   359,
+   361
+  ],
+  [
+   472,
+   359
+  ],
+  [
+   467,
+   353
+  ],
+  [
+   508,
+   352
+  ],
+  [
+   503,
+   348
+  ],
+  [
+   571,
+   347
+  ],
+  [
+   640,
+   384
+  ],
+  [
+   142,
+   392
+  ]
+ ],
+ "blocked": [
+  [
+   [
+    364,
+    355
+   ],
+   [
+    380,
+    355
+   ],
+   [
+    380,
+    359
+   ],
+   [
+    364,
+    359
+   ]
+  ]
+ ],
+ "feet": {
+  "altar": [
+   [
+    381,
+    345
+   ],
+   [
+    451,
+    345
+   ],
+   [
+    457,
+    353
+   ],
+   [
+    381,
+    354
+   ]
+  ],
+  "stand": [
+   [
+    469,
+    346
+   ],
+   [
+    492,
+    346
+   ],
+   [
+    498,
+    351
+   ],
+   [
+    473,
+    351
+   ]
+  ],
+  "lampstand": [
+   [
+    364,
+    355
+   ],
+   [
+    380,
+    355
+   ],
+   [
+    380,
+    359
+   ],
+   [
+    364,
+    359
+   ]
+  ],
+  "ladder": [
+   [
+    250,
+    397
+   ],
+   [
+    291,
+    396
+   ],
+   [
+    288,
+    401
+   ],
+   [
+    246,
+    402
+   ]
+  ],
+  "posts": [
+   [
+    [
+     156,
+     364
+    ],
+    [
+     170,
+     364
+    ],
+    [
+     164,
+     367
+    ],
+    [
+     149,
+     367
+    ]
+   ],
+   [
+    [
+     606,
+     358
+    ],
+    [
+     619,
+     358
+    ],
+    [
+     626,
+     361
+    ],
+    [
+     613,
+     361
+    ]
+   ],
+   [
+    [
+     72,
+     410
+    ],
+    [
+     92,
+     409
+    ],
+    [
+     80,
+     417
+    ],
+    [
+     60,
+     417
+    ]
+   ],
+   [
+    [
+     688,
+     399
+    ],
+    [
+     706,
+     398
+    ],
+    [
+     719,
+     405
+    ],
+    [
+     701,
+     405
+    ]
+   ]
+  ],
+  "frontpost": [
+   [
+    683,
+    543
+   ],
+   [
+    723,
+    542
+   ],
+   [
+    756,
+    571
+   ],
+   [
+    712,
+    572
+   ]
+  ]
+ },
+ "planes": [
+  {
+   "id": "trapdoor",
+   "states": {
+    "shut": "trapdoor-shut.png",
+    "lamp": "trapdoor-lamp.png",
+    "day": "trapdoor-day.png"
+   },
+   "plane": "back",
+   "note": "the hatch overhead: the leaf shut; open on the dark storehouse (its lantern's faint warmth); open on the morning, and with it the sun on the mats and the wall (the back plane: people walk over the patch)"
+  },
+  {
+   "id": "props",
+   "file": "props.png",
+   "base": [
+    [
+     76,
+     413
+    ],
+    [
+     703,
+     402
+    ]
+   ],
+   "solid": [
+    [
+     72,
+     410
+    ],
+    [
+     92,
+     409
+    ],
+    [
+     80,
+     417
+    ],
+    [
+     60,
+     417
+    ]
+   ],
+   "note": "the two wall props before the mats: everyone on the mats is behind them"
+  },
+  {
+   "id": "altar",
+   "states": {
+    "shut": "altar-shut.png",
+    "open": "altar-open.png"
+   },
+   "base": [
+    [
+     381,
+     354
+    ],
+    [
+     457,
+     353
+    ]
+   ],
+   "solid": [
+    [
+     381,
+     345
+    ],
+    [
+     451,
+     345
+    ],
+    [
+     457,
+     353
+    ],
+    [
+     381,
+     354
+    ]
+   ],
+   "note": "shut: an ordinary cupboard; open: the Kannon, the calendar, the bowl, the doors swung out either side"
+  },
+  {
+   "id": "mirror",
+   "file": "mirror.png",
+   "base": [
+    [
+     473,
+     351
+    ],
+    [
+     498,
+     351
+    ]
+   ],
+   "note": "on its stand until the grandmother takes it down (#27); the stand is painted into the backdrop"
+  },
+  {
+   "id": "lamps",
+   "states": {
+    "lit": "lamps.png",
+    "out": "lamps-out.png"
+   },
+   "plane": "back",
+   "note": "the three lamps alight (the oil's surface bright) or cold; with them out the engine lays its dark glaze over the room and hides the flames"
+  },
+  {
+   "id": "ladder",
+   "states": {
+    "lamp": "ladder.png",
+    "day": "ladder-day.png"
+   },
+   "base": [
+    [
+     253,
+     399
+    ],
+    [
+     284,
+     398
+    ]
+   ],
+   "solid": [
+    [
+     250,
+     397
+    ],
+    [
+     291,
+     396
+    ],
+    [
+     288,
+     401
+    ],
+    [
+     246,
+     402
+    ]
+   ],
+   "note": "everyone on the walk is behind it; its upper rungs in the sun by day"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "note": "the centre prop under the near beam, at the right, cut off by the picture's bottom edge"
+  }
+ ],
+ "things": [
+  {
+   "id": "altar",
+   "what": "the closet altar: a plain cupboard of two doors on a low plinth against the back wall (cut-out altar-shut.png; open: altar-open.png)",
+   "shape": {
+    "rect": [
+     381,
+     258,
+     77,
+     97
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N",
+   "open": [
+    370,
+    258,
+    105,
+    97
+   ]
+  },
+  {
+   "id": "kannon",
+   "what": "inside the open altar: the small white Kannon holding a child, on a red cloth (Kannon-sama to anyone who asks; Maria to them)",
+   "shape": {
+    "rect": [
+     409,
+     279,
+     17,
+     36
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N",
+   "when": "altar open"
+  },
+  {
+   "id": "calendar",
+   "what": "the folded sheet of the calendar, leaning inside the altar at the left: columns of marks, brown at the folds",
+   "shape": {
+    "rect": [
+     391,
+     292,
+     18,
+     22
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N",
+   "when": "altar open"
+  },
+  {
+   "id": "bowl",
+   "what": "the plain wooden bowl of water on the altar's shelf, at the right (Jinsuke keeps the water)",
+   "shape": {
+    "rect": [
+     430,
+     304,
+     16,
+     11
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N",
+   "when": "altar open"
+  },
+  {
+   "id": "mirror",
+   "what": "the grandmother's bronze mirror, round, on its small wooden stand, its face toward the room (cut-out mirror.png)",
+   "shape": {
+    "rect": [
+     473,
+     295,
+     20,
+     19
+    ]
+   },
+   "stand": [
+    492,
+    358
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stand",
+   "what": "the mirror's stand: a small post of plain wood with a ledge and a back-rest",
+   "shape": {
+    "rect": [
+     469,
+     302,
+     30,
+     49
+    ]
+   },
+   "stand": [
+    492,
+    358
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lamps",
+   "what": "the three small clay oil lamps: on the left wall's ledge, on the stand before the altar, in the niche right of the mirror (cut-outs lamps.png alight, lamps-out.png cold); the flames are the engine's",
+   "shape": {
+    "rect": [
+     105,
+     246,
+     401,
+     57
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N",
+   "each": {
+    "lamp-left": [
+     105,
+     261,
+     27,
+     15
+    ],
+    "lamp-stand": [
+     362,
+     291,
+     19,
+     12
+    ],
+    "lamp-altar-r": [
+     489,
+     246,
+     17,
+     12
+    ]
+   }
+  },
+  {
+   "id": "lamp-left",
+   "what": "the clay lamp on its ledge in the left wall, by the ladder's foot",
+   "shape": {
+    "rect": [
+     105,
+     261,
+     27,
+     15
+    ]
+   },
+   "stand": [
+    167,
+    383
+   ],
+   "face": "W"
+  },
+  {
+   "id": "lamp-stand",
+   "what": "the clay lamp on its wooden stand on the floor before the altar's left side: it lights the altar and the Kannon",
+   "shape": {
+    "rect": [
+     362,
+     291,
+     19,
+     12
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lampstand",
+   "what": "the lamp stand: a post of plain wood with a top board, before the altar's left side",
+   "shape": {
+    "rect": [
+     364,
+     298,
+     16,
+     61
+    ]
+   },
+   "stand": [
+    428,
+    364
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lamp-altar-r",
+   "what": "the clay lamp in its niche in the back wall, right of the mirror",
+   "shape": {
+    "rect": [
+     489,
+     246,
+     17,
+     12
+    ]
+   },
+   "stand": [
+    501,
+    361
+   ],
+   "face": "N"
+  },
+  {
+   "id": "wall",
+   "what": "the bare earth wall left of the altar, between the ladder and the lamp's niche: where the grandmother turns the mirror's light (#27)",
+   "shape": {
+    "rect": [
+     278,
+     228,
+     67,
+     70
+    ]
+   },
+   "stand": [
+    303,
+    360
+   ],
+   "face": "N",
+   "patch": [
+    312,
+    263
+   ],
+   "patch_px": 29
+  },
+  {
+   "id": "ladder",
+   "what": "the ladder up to the trapdoor, leaning down from the hatch toward us to the mats' near edge (cut-out ladder.png; in the morning sun ladder-day.png)",
+   "shape": {
+    "rect": [
+     212,
+     151,
+     76,
+     250
+    ]
+   },
+   "stand": [
+    326,
+    388
+   ],
+   "face": "W"
+  },
+  {
+   "id": "mats",
+   "what": "the straw mats on the floor, old gold, laid in strips, bound with dark cloth; the family sits here",
+   "shape": {
+    "poly": [
+     [
+      210,
+      351
+     ],
+     [
+      566,
+      346
+     ],
+     [
+      700,
+      419
+     ],
+     [
+      86,
+      431
+     ]
+    ]
+   },
+   "stand": [
+    357,
+    373
+   ],
+   "face": "N"
+  },
+  {
+   "id": "props",
+   "what": "the rough timber props holding the beams: the two at the walls before the mats (cut-out props.png) and the near ones",
+   "shape": {
+    "rect": [
+     55,
+     188,
+     637,
+     201
+    ]
+   },
+   "stand": [
+    167,
+    383
+   ],
+   "face": "W"
+  },
+  {
+   "id": "beams",
+   "what": "the cross beams under the earth ceiling, and the boards laid between them",
+   "shape": {
+    "rect": [
+     0,
+     107,
+     800,
+     100
+    ]
+   },
+   "stand": [
+    357,
+    373
+   ],
+   "face": "N"
+  },
+  {
+   "id": "trapdoor",
+   "what": "the trapdoor overhead, in the hatch at the top of the ladder (states: shut; open by lamplight; open by morning light)",
+   "shape": {
+    "rect": [
+     99,
+     144,
+     210,
+     33
+    ]
+   },
+   "stand": [
+    326,
+    388
+   ],
+   "face": "W",
+   "open": [
+    101,
+    146,
+    206,
+    29
+   ],
+   "day": [
+    100,
+    146,
+    277,
+    259
+   ]
+  },
+  {
+   "id": "basket",
+   "what": "a charcoal basket of woven bamboo, heaped, near us at the left",
+   "shape": {
+    "rect": [
+     52,
+     378,
+     91,
+     85
+    ]
+   },
+   "stand": [
+    167,
+    383
+   ],
+   "face": "W"
+  },
+  {
+   "id": "jar",
+   "what": "a water jar, near us at the right",
+   "shape": {
+    "rect": [
+     645,
+     357,
+     56,
+     80
+    ]
+   },
+   "stand": [
+    473,
+    384
+   ],
+   "face": "E"
+  },
+  {
+   "id": "sack",
+   "what": "a charcoal sack by the centre prop",
+   "shape": {
+    "rect": [
+     522,
+     483,
+     136,
+     105
+    ]
+   },
+   "stand": [
+    473,
+    384
+   ],
+   "face": "S"
+  },
+  {
+   "id": "sei",
+   "what": "Grandmother Sei (1.40 m), by her mirror",
+   "shape": {
+    "rect": [
+     480,
+     234,
+     43,
+     127
+    ]
+   },
+   "stand": [
+    501,
+    361
+   ],
+   "face": "S"
+  },
+  {
+   "id": "jinsuke",
+   "what": "Jinsuke (1.56 m), his arms out in front of his daughter",
+   "shape": {
+    "rect": [
+     551,
+     217,
+     54,
+     158
+    ]
+   },
+   "stand": [
+    578,
+    375
+   ],
+   "face": "S"
+  },
+  {
+   "id": "orin",
+   "what": "O-Rin (1.18 m), behind her father, near the right wall",
+   "shape": {
+    "rect": [
+     573,
+     254,
+     37,
+     109
+    ]
+   },
+   "stand": [
+    591,
+    363
+   ],
+   "face": "S"
+  }
+ ],
+ "exits": [
+  {
+   "to": "edo-storehouse",
+   "id": "ladder",
+   "shape": {
+    "rect": [
+     212,
+     151,
+     76,
+     250
+    ]
+   },
+   "stand": [
+    326,
+    388
+   ],
+   "face": "W",
+   "note": "up the ladder through the trapdoor"
+  }
+ ],
+ "marks": {
+  "fromLadder": {
+   "mom": [
+    346,
+    381
+   ],
+   "bigsis": [
+    401,
+    382
+   ],
+   "lilsis": [
+    288,
+    386
+   ]
+  },
+  "ladder": [
+   326,
+   388
+  ],
+  "altar": [
+   428,
+   364
+  ],
+  "sei": [
+   501,
+   361
+  ],
+  "jinsuke": [
+   578,
+   375
+  ],
+  "orin": [
+   591,
+   363
+  ],
+  "sit": [
+   357,
+   373
+  ],
+  "sit1": [
+   306,
+   376
+  ],
+  "sit2": [
+   358,
+   371
+  ],
+  "sit3": [
+   408,
+   376
+  ],
+  "sunpatch": [
+   333,
+   380
+  ],
+  "atwall": [
+   303,
+   360
+  ],
+  "atmirror": [
+   492,
+   358
+  ],
+  "atlamp": [
+   167,
+   383
+  ],
+  "front": [
+   473,
+   384
+  ],
+  "wall": [
+   312,
+   263
+  ]
+ },
+ "stands": {
+  "ladder": {
+   "at": [
+    326,
+    388
+   ],
+   "grownup_px": 194
+  },
+  "altar": {
+   "at": [
+    428,
+    364
+   ],
+   "grownup_px": 163
+  },
+  "sei": {
+   "at": [
+    501,
+    361
+   ],
+   "grownup_px": 159
+  },
+  "jinsuke": {
+   "at": [
+    578,
+    375
+   ],
+   "grownup_px": 177
+  },
+  "orin": {
+   "at": [
+    591,
+    363
+   ],
+   "grownup_px": 161
+  },
+  "sit": {
+   "at": [
+    357,
+    373
+   ],
+   "grownup_px": 175
+  },
+  "sit1": {
+   "at": [
+    306,
+    376
+   ],
+   "grownup_px": 179
+  },
+  "sit2": {
+   "at": [
+    358,
+    371
+   ],
+   "grownup_px": 172
+  },
+  "sit3": {
+   "at": [
+    408,
+    376
+   ],
+   "grownup_px": 178
+  },
+  "sunpatch": {
+   "at": [
+    333,
+    380
+   ],
+   "grownup_px": 185
+  },
+  "atwall": {
+   "at": [
+    303,
+    360
+   ],
+   "grownup_px": 157
+  },
+  "mom": {
+   "at": [
+    346,
+    381
+   ],
+   "grownup_px": 185
+  },
+  "bigsis": {
+   "at": [
+    401,
+    382
+   ],
+   "grownup_px": 188
+  },
+  "lilsis": {
+   "at": [
+    288,
+    386
+   ],
+   "grownup_px": 192
+  },
+  "atlamp": {
+   "at": [
+    167,
+    383
+   ],
+   "grownup_px": 188
+  },
+  "atmirror": {
+   "at": [
+    492,
+    358
+   ],
+   "grownup_px": 154
+  },
+  "front": {
+   "at": [
+    473,
+    384
+   ],
+   "grownup_px": 189
+  }
+ },
+ "heights_px": {
+  "at_back_wall": 143,
+  "at_front": 195,
+  "note": "a 175 cm grown-up; Mom 168 is 0.96 of it, Sei 140 0.80, Jinsuke 156 0.89, O-Rin 118 0.67"
+ },
+ "ceiling_rows": {
+  "back_wall": 202,
+  "walk_front": 185,
+  "beam_under_at_back": 206,
+  "note": "Mom's head at the back wall is 13 px under the earth and 2 px under a beam: she clears them, just; the rig has no stoop"
+ },
+ "cutouts": {
+  "altar-shut": [
+   381,
+   258,
+   77,
+   97
+  ],
+  "mirror": [
+   476,
+   298,
+   14,
+   13
+  ],
+  "props": [
+   55,
+   188,
+   637,
+   201
+  ],
+  "front": [
+   674,
+   138,
+   91,
+   433
+  ],
+  "lamps": [
+   110,
+   250,
+   393,
+   50
+  ],
+  "trapdoor-shut": [
+   101,
+   146,
+   206,
+   29
+  ],
+  "trapdoor-lamp": [
+   101,
+   146,
+   206,
+   29
+  ],
+  "ladder": [
+   212,
+   151,
+   76,
+   250
+  ],
+  "trapdoor-day": [
+   100,
+   146,
+   277,
+   259
+  ],
+  "ladder-day": [
+   212,
+   151,
+   76,
+   250
+  ],
+  "altar-open": [
+   370,
+   258,
+   105,
+   97
+  ],
+  "kannon": [
+   412,
+   282,
+   11,
+   30
+  ],
+  "calendar": [
+   394,
+   295,
+   12,
+   16
+  ],
+  "bowl": [
+   433,
+   307,
+   10,
+   5
+  ],
+  "lamps-out": [
+   110,
+   250,
+   393,
+   50
+  ]
+ },
+ "lights": {
+  "flames": {
+   "lamp-left": [
+    117,
+    266
+   ],
+   "lamp-stand": [
+    372,
+    294
+   ],
+   "lamp-altar-r": [
+    498,
+    250
+   ]
+  },
+  "hatch": [
+   [
+    183,
+    167
+   ],
+   [
+    295,
+    168
+   ],
+   [
+    269,
+    144
+   ],
+   [
+    119,
+    143
+   ]
+  ],
+  "sunpatch": {
+   "rect": [
+    273,
+    372,
+    100,
+    29
+   ],
+   "centre": [
+    333,
+    380
+   ],
+   "stand": [
+    333,
+    380
+   ],
+   "note": "the morning sun through the open hatch lands here (painted in trapdoor-day.png); the beam in the air is the engine's, from `hatch` to this"
+  },
+  "mirror": {
+   "centre": [
+    483,
+    305
+   ],
+   "radius_px": 6,
+   "held": {
+    "at": [
+     333,
+     256
+    ],
+    "note": "where the grandmother holds it up in the sun, at her breast, facing the back wall"
+   }
+  },
+  "wall": {
+   "patch": [
+    312,
+    263
+   ],
+   "patch_px": 29,
+   "rect": [
+    278,
+    228,
+    67,
+    70
+   ],
+   "rule": "the mirror is 16 cm across and a little convex: its patch is about 16 x (1 + distance / 120 cm) across; from SUNPATCH to the wall is 155 cm, so 37 cm, 29 px on the back wall; the cross is the engine's, inside the patch"
+  }
+ },
+ "fx": [
+  {
+   "id": "lamp-left",
+   "type": "flame",
+   "at": [
+    117,
+    266
+   ],
+   "size": 9,
+   "width": 4,
+   "glow": 26,
+   "glowColor": "#ffb060",
+   "glowOpacity": 0.26,
+   "flicker": 0.5,
+   "base": "back",
+   "when": "lamps lit",
+   "what": "the flame of lamp-left"
+  },
+  {
+   "id": "lamp-stand",
+   "type": "flame",
+   "at": [
+    372,
+    294
+   ],
+   "size": 9,
+   "width": 4,
+   "glow": 26,
+   "glowColor": "#ffb060",
+   "glowOpacity": 0.26,
+   "flicker": 0.5,
+   "base": "back",
+   "when": "lamps lit",
+   "what": "the flame of lamp-stand"
+  },
+  {
+   "id": "lamp-altar-r",
+   "type": "flame",
+   "at": [
+    498,
+    250
+   ],
+   "size": 9,
+   "width": 4,
+   "glow": 26,
+   "glowColor": "#ffb060",
+   "glowOpacity": 0.26,
+   "flicker": 0.5,
+   "base": "back",
+   "when": "lamps lit",
+   "what": "the flame of lamp-altar-r"
+  }
+ ],
+ "dark": {
+  "note": "lamps out: a glaze of prussian blue #1a2846 at 0.82 over the backdrop and every cut-out (figureLight exposure -0.6), the flames hidden; trapdoor-lamp's faint warmth, or trapdoor-shut's line of light, is then the only light"
+ }
+}

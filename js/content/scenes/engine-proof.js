@@ -497,6 +497,73 @@ async function wake(g) {
   g.think("dozer", "zzz", { loop: true });
 }
 
+// ---------- ENGINE-20: round twenty's proofs: the legs of a journey, a journey on the map, the weather, the mirror's light ----------
+// What Act Six (Japan, 1830) needs of the engine, each on the stage while its fact is true (add ",proof.arrived"):
+//   index.html?scene=engine-proof&lead=dad&flags=proof.legs      the sand is leg 1 of a journey and the room under it leg 2 (js/content/maps.js,
+//                                                                 "proof-sand"): on the map each refuses the other with its own line ("far")
+//   index.html?scene=engine-proof&lead=dad&flags=proof.journey   a journey shown on the map (g.journey): from the sand round by the dunes (a
+//                                                                 landmark) to the room under it, the portraits going along the way; the
+//                                                                 palm tree is the thing to use (it is a cut-scene, "proof-journey")
+//   index.html?scene=engine-proof&lead=dad&flags=proof.weather   spring rain over the sand with splashes on the bank and its hiss, hidden
+//                                                                 under the wagon's roof; petals falling from the palms' crowns; waves in
+//                                                                 rows on the river; the swallows kept to a window in the sky (flyers' clip)
+//   index.html?scene=engine-proof&lead=dad&flags=proof.mirror    Dad holds a mirror up in the sun: a patch of light on the house's wall that
+//                                                                 grows as he walks back from it, a cross in the patch, and the door in time
+//                                                                 opening in it to the patch's size (the "mirror" kind driving a "portal")
+// The lines are the proof's own, added to the game's as the scene is built (setup), as the others are.
+const LINES20 = {
+  "proof.far.sand": ["dad", "Twelve days by sea. We are not going back for a sandwich."],
+  "proof.far.below": ["dad", "...", ["down", "no"]],
+  "proof.journey.use": ["dad", "A palm tree. I'll go round by the dunes, and I'll go on the map, because I'm a very modern man."],
+  "proof.journey.done": ["dad", "And here I am, under the sand, by way of the dunes. The map is wonderful."],
+  "proof.mirror.look": ["dad", "A bronze mirror, a little convex. The farther the wall, the bigger the light. Physics."],
+  "proof.mirror.use": ["dad", "Light on the wall. And something in the light."],
+  "proof.mirror.back": ["dad", "Back a step. Bigger. Back again. Bigger again. More light, more door."],
+  "proof.weather.look": ["dad", "Rain, falling petals and the river running in rows. It's raining in EGYPT."],
+};
+const legsProof = (g) => !!g.flag("proof.legs");
+const journeyProof = (g) => !!g.flag("proof.journey");
+const weatherProof = (g) => !!g.flag("proof.weather");
+const mirrorProof = (g) => !!g.flag("proof.mirror");
+// The mirror's light (proof.mirror): the house front of the window proof stands on the sand (its wall is the target), Dad holds
+// the mirror (the light's `holder`: it is at his hand), and the sun is behind him (no source is drawn: the beam runs from his
+// hand to the patch, `reach` the sand he can stand on). The patch is 10 px across with him 60 px from the wall and 60 px at 400
+// (`sizes`); the door in time is a portal in the wall ("mirror-door", shut), which the light opens to its own size (`door`).
+const MIRROR_WALL = [340, 300];                                         // the point on the house's wall the light falls on
+const MIRROR_SIZES = [[60, 10], [400, 60]];
+/** Dad holds the mirror up to the sun: the light comes on, the cross shows, and the door opens in it; then he walks back from the
+    wall, step by step, and the patch and the door grow (the proof of the rule: more light, more door). */
+async function shine(g) {
+  const light = g.effects.get("mirror-light");
+  if (!light) return;
+  await g.say("proof.mirror.use");
+  g.lead.hold(true);
+  await g.tween(600, (k) => light.set({ on: k }));
+  light.set({ shown: true });
+  await g.wait(400);
+  g.sfx("portal");
+  await g.tween(900, (k) => light.set({ doorK: k }));
+  g.flag("proof.shone", true);
+  await g.say("proof.mirror.back");
+  g.lead.hold(false);
+  await g.walkTo(560, 520);
+  await g.wait(300);
+  await g.walkTo(720, 560);
+  g.flag("proof.mirrorFar", true);
+}
+/** The journey (proof.journey): a cut-scene of the proof's own, "proof-journey": the map comes up and Dad's portrait goes from the
+    sand round by the dunes to the room under the sand; then the room. */
+async function journeyRun(g) {
+  await g.say("proof.journey.use");
+  await g.fade(1, 300);
+  const went = await g.journey("proof-sand", "sand", "below", { via: ["dunes"], sound: "sandals", ms: 2600 });
+  g.flag("proof.journeyed", true);
+  g.clock.skipping = false;
+  g.ui.showSkip(false);
+  await g.goto("proof-below", { via: went ? "map" : "cut", spawn: "fromSand" });
+  await g.say("proof.journey.done");
+}
+
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
   for (const entry of g.waiting()) {
@@ -599,8 +666,8 @@ export default {
     // ROME-13E: the boat on the river (see the top), its base its waterline: it bobs (`fx`, below)
     { id: "boat", src: "art/proof/boat.png", base: 456, when: bobProof },
     // ROME-13E: the house front (see the top): the dark room behind its window, behind everybody; the wall, its base its foot
-    { id: "room", src: "art/proof/room.png", plane: "back", when: windowProof },
-    { id: "wall", src: "art/proof/wall.png", base: 430, solid: [[250, 400], [430, 400], [430, 432], [250, 432]], when: windowProof },
+    { id: "room", src: "art/proof/room.png", plane: "back", when: (g) => windowProof(g) || mirrorProof(g) },
+    { id: "wall", src: "art/proof/wall.png", base: 430, solid: [[250, 400], [430, 400], [430, 432], [250, 432]], when: (g) => windowProof(g) || mirrorProof(g) },      // (ENGINE-20: and for the mirror's light: its wall)
     // DRIVE-16E: the car's side, seen from the back seat, with a window each side of the vanishing point (see the top)
     { id: "car", src: DRIVE_ART + "car.png", plane: "back", when: driveProof },
     // ROAD-18E: the proof's car, standing still in the lane at row 548 while the road goes by under it (see the top)
@@ -657,6 +724,20 @@ export default {
     // ROAD-18E: the drive straight ahead, the hole on the vanishing point, the sign's rings (see the top): on the stage only
     // when the scene is built with the fact proof.road (so that the other proofs' lists of moving things are as they were)
     ...(roadProof(g) ? proofRoad() : []),
+    // ENGINE-20: the weather (see the top). Rain over the whole picture, slanting from the left, hidden under the wagon's roof
+    // (behind), splashing where it lands on the bank and the front of the sand (floor), with its hiss; petals from the palms'
+    // crowns (from) drifting right and settling on the sand (floor); waves in rows on the river, kept off the reeds (holes); and
+    // the swallows crossing only inside a window of the sky (clip), as the herons pass the keep's windows
+    { id: "rain", type: "rain", slant: 14, count: 220, behind: [[[462, 492], [560, 470], [600, 420], [650, 388], [750, 394], [790, 440], [790, 520], [740, 544], [462, 520]]],
+      floor: [[[60, 596], [780, 596]], [[150, 470], [312, 322]]], level: 1, when: weatherProof },
+    { id: "petals", type: "petals", from: [[150, 250], [330, 250], [330, 330], [150, 330]], floor: 560, count: 8, wind: 22, base: 520, when: weatherProof },
+    { id: "waves", type: "waves", area: [[0, 264], [344, 264], [321, 276], [295, 300], [261, 336], [213, 384], [149, 440], [83, 492], [19, 530], [0, 532]], holes: [[84, 280, 98, 62]], rows: 12, when: weatherProof },
+    { id: "clipped-swallows", type: "birds", lanes: [[[-20, 46], [820, 22]]], every: [2, 4], group: [2, 3], clip: [[300, 10], [500, 10], [500, 60], [300, 60]], when: weatherProof },
+    // ENGINE-20: the mirror's light (see the top): the door in time in the house's wall (shut: the light opens it), and the light
+    // itself, held by Dad, falling on the wall, a cross in it; both at the wall's depth, the light a hair nearer than the door
+    { id: "mirror-door", type: "portal", at: MIRROR_WALL, r: 48, keep: [252, 428], under: ["wall"], base: 430.5, pale: "#fff4d8", strength: 0.6, when: mirrorProof },
+    { id: "mirror-light", type: "mirror", target: MIRROR_WALL, holder: "dad", sizes: MIRROR_SIZES, image: "cross", shown: false, door: "mirror-door", doorK: 0, on: 0,
+      reach: [60, 300, 740, 300], base: 430.6, when: mirrorProof },
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -763,6 +844,13 @@ export default {
       look: "proof.dozer.look", use: wake },
     { id: "napper", name: "man asleep in the sand", rect: [362, 404, 40, 30], walkTo: [400, 470], face: "N", when: thoughtProof, look: "proof.napper.look" },
     { id: "sky", name: "sky", verb: "Wonder about", rect: [60, 20, 300, 110], when: thoughtProof, look: "proof.sky.look", use: farThought },
+    // ENGINE-20: the journey (proof.journey): the nearest palm is the way round by the dunes (a cut-scene of the proof's own)
+    { id: "palm-journey", name: "palm tree", verb: "Go round by the dunes from", rect: [150, 180, 70, 230], walkTo: [230, 430], face: "W", when: journeyProof,
+      look: "egypt.reeds.look", use: (g) => g.cutscene("proof-journey") },
+    // ENGINE-20: the mirror's light (proof.mirror): the sun on the wall is where the mirror is used; the rain is looked at (proof.weather)
+    { id: "sunwall", name: "sunlit wall", verb: "Hold the mirror up to", poly: HOUSE, walkTo: [400, 452], face: "W", when: mirrorProof,
+      look: "proof.mirror.look", use: shine },
+    { id: "weather", name: "rain", rect: [440, 60, 340, 120], when: weatherProof, look: "proof.weather.look" },
   ],
 
   // NEVADA-12E: Dad and the creature, talking (each exchange is what the one clicked on says, then what Dad makes of it)
@@ -778,6 +866,9 @@ export default {
     for (const [id, line] of Object.entries(LINES)) if (!g.lines[id]) g.lines[id] = line;
     for (const [id, line] of Object.entries(LINES13)) if (!g.lines[id]) g.lines[id] = line;          // ROME-13E: round thirteen's
     for (const [id, line] of Object.entries(LINES17)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-17: round seventeen's
+    for (const [id, line] of Object.entries(LINES20)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-20: round twenty's
+    if (!g.cutscenes["proof-journey"]) g.cutscenes["proof-journey"] = journeyRun;                       // ENGINE-20: the journey, a cut-scene of the proof's own (proof.journey)
+    if (mirrorProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                          // ENGINE-20: the papyrus cleared away, so that the whole walk back is seen
     if (thoughtProof(g)) {                                                                            // ENGINE-17: the two asleep, each thinking zzz, kept up
       if (!g.story.acts.some((a) => a.id === THOUGHT_ACT.id)) g.story.acts.push(THOUGHT_ACT);      // (and the thoughts' own beat, for the critter's hint)
       for (const [id, name, color] of [["dozer", "Sleeper", "#ffb48a"], ["napper", "Sleeper", "#c9ced6"]]) if (!g.cast[id]) g.cast[id] = { name, color };

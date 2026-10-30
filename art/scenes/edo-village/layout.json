@@ -1,0 +1,1801 @@
+{
+ "id": "edo-village",
+ "horizon": 300,
+ "full": 590,
+ "view": {
+  "horizon": 300,
+  "full": 590,
+  "camera": "persp.Camera(300, 590): eye 317 cm, Z0 875, focal 800, vanishing x 400",
+  "street": "x = -400 + 0.6 z (cm), half width 175; shore x = -1700 + 0.6 z; fronts x = -50 + 0.6 z; the street 30 cm above the beach"
+ },
+ "light": "early morning, the sun in the east, behind us and to the left, 30 degrees up: faces toward us and the left are lit; shadows fall to the right and away, flat and blue",
+ "walk": [
+  [
+   384,
+   373
+  ],
+  [
+   342,
+   379
+  ],
+  [
+   293,
+   386
+  ],
+  [
+   233,
+   395
+  ],
+  [
+   160,
+   406
+  ],
+  [
+   69,
+   419
+  ],
+  [
+   0,
+   419
+  ],
+  [
+   0,
+   596
+  ],
+  [
+   520,
+   596
+  ],
+  [
+   565,
+   584
+  ],
+  [
+   518,
+   503
+  ],
+  [
+   925,
+   503
+  ],
+  [
+   790,
+   503
+  ],
+  [
+   813,
+   498
+  ],
+  [
+   554,
+   469
+  ],
+  [
+   547,
+   466
+  ],
+  [
+   615,
+   433
+  ],
+  [
+   660,
+   410
+  ],
+  [
+   692,
+   394
+  ],
+  [
+   715,
+   382
+  ],
+  [
+   734,
+   373
+  ]
+ ],
+ "walk_note": "one area: the beach and the street (the street a little higher than the beach, joined by a sand slope: no second floor); the hen yard, the shop and the water are outside it",
+ "blocked": [
+  [
+   [
+    -26,
+    446
+   ],
+   [
+    -12,
+    454
+   ],
+   [
+    14,
+    460
+   ],
+   [
+    46,
+    467
+   ],
+   [
+    86,
+    473
+   ],
+   [
+    132,
+    478
+   ],
+   [
+    190,
+    481
+   ],
+   [
+    228,
+    471
+   ],
+   [
+    199,
+    462
+   ],
+   [
+    165,
+    455
+   ],
+   [
+    131,
+    450
+   ],
+   [
+    95,
+    445
+   ],
+   [
+    58,
+    442
+   ],
+   [
+    14,
+    440
+   ]
+  ],
+  [
+   [
+    177,
+    398
+   ],
+   [
+    188,
+    400
+   ],
+   [
+    202,
+    402
+   ],
+   [
+    219,
+    404
+   ],
+   [
+    237,
+    405
+   ],
+   [
+    257,
+    406
+   ],
+   [
+    281,
+    407
+   ],
+   [
+    298,
+    404
+   ],
+   [
+    285,
+    402
+   ],
+   [
+    269,
+    400
+   ],
+   [
+    252,
+    398
+   ],
+   [
+    235,
+    397
+   ],
+   [
+    217,
+    396
+   ],
+   [
+    196,
+    395
+   ]
+  ],
+  [
+   [
+    131,
+    438
+   ],
+   [
+    262,
+    425
+   ],
+   [
+    266,
+    421
+   ],
+   [
+    140,
+    433
+   ]
+  ],
+  [
+   [
+    297,
+    421
+   ],
+   [
+    389,
+    412
+   ],
+   [
+    389,
+    409
+   ],
+   [
+    300,
+    418
+   ]
+  ],
+  [
+   [
+    460,
+    419
+   ],
+   [
+    496,
+    409
+   ],
+   [
+    459,
+    406
+   ],
+   [
+    421,
+    415
+   ]
+  ],
+  [
+   [
+    534,
+    387
+   ],
+   [
+    573,
+    387
+   ],
+   [
+    566,
+    384
+   ],
+   [
+    529,
+    384
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "ship",
+   "file": "ship.png",
+   "plane": "back",
+   "what": "Gonroku's freighter at anchor far out (it rides: fx ship-bob)"
+  },
+  {
+   "id": "racks",
+   "file": "racks.png",
+   "base": 436,
+   "what": "the nets drying on their bamboo racks; people on the beach beyond pass behind them"
+  },
+  {
+   "id": "tender",
+   "file": "tender.png",
+   "base": 399,
+   "what": "Gonroku's small boat, its stern in the water"
+  },
+  {
+   "id": "board",
+   "file": "board.png",
+   "base": 413,
+   "what": "the notice-board place: posts, roof and the row of boards; people on the beach pass behind it"
+  },
+  {
+   "id": "noren",
+   "file": "noren.png",
+   "base": 468,
+   "what": "Kihei's noren in the open front (it stirs: fx noren-sway); whoever goes in passes behind it"
+  },
+  {
+   "id": "boat",
+   "file": "boat.png",
+   "base": 451,
+   "what": "the big boat on its props, bottom left; the beach between it and the water is behind it"
+  },
+  {
+   "id": "fence",
+   "file": "fence.png",
+   "base": 512,
+   "what": "the hen yard's bamboo fence; the hens (fx hens-*) and anyone at the shop are behind it"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "a coil of rope and three net floats at the very front, bottom left"
+  }
+ ],
+ "cutouts": {
+  "ship": [
+   151,
+   279,
+   33,
+   39
+  ],
+  "racks": [
+   142,
+   352,
+   241,
+   85
+  ],
+  "tender": [
+   179,
+   369,
+   116,
+   38
+  ],
+  "board": [
+   422,
+   316,
+   67,
+   101
+  ],
+  "noren": [
+   590,
+   368,
+   105,
+   59
+  ],
+  "boat": [
+   0,
+   377,
+   218,
+   97
+  ],
+  "fence": [
+   551,
+   468,
+   249,
+   112
+  ],
+  "front": [
+   24,
+   579,
+   158,
+   21
+  ]
+ },
+ "things": [
+  {
+   "id": "fuji",
+   "what": "Mount Fuji across the bay, white well down its flanks",
+   "shape": {
+    "rect": [
+     60,
+     70,
+     560,
+     232
+    ]
+   },
+   "stand": [
+    330,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bay",
+   "what": "Suruga Bay",
+   "shape": {
+    "poly": [
+     [
+      0,
+      302
+     ],
+     [
+      560,
+      302
+     ],
+     [
+      700,
+      330
+     ],
+     [
+      760,
+      320
+     ],
+     [
+      700,
+      345
+     ],
+     [
+      420,
+      365
+     ],
+     [
+      260,
+      388
+     ],
+     [
+      130,
+      410
+     ],
+     [
+      0,
+      442
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ship",
+   "what": "Gonroku's freighter at anchor, its sail furled",
+   "shape": {
+    "rect": [
+     148,
+     276,
+     39,
+     45
+    ]
+   },
+   "stand": [
+    300,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "boats",
+   "what": "the boats pulled up on their props",
+   "shape": {
+    "rect": [
+     -2,
+     375,
+     222,
+     101
+    ]
+   },
+   "stand": [
+    92,
+    484
+   ],
+   "face": "W"
+  },
+  {
+   "id": "underboat",
+   "what": "the gap under the big boat, between its props",
+   "shape": {
+    "rect": [
+     30,
+     446,
+     90,
+     26
+    ]
+   },
+   "stand": [
+    83,
+    457
+   ],
+   "face": "W"
+  },
+  {
+   "id": "nets",
+   "what": "the nets drying on bamboo racks",
+   "shape": {
+    "rect": [
+     140,
+     350,
+     245,
+     89
+    ]
+   },
+   "stand": [
+    182,
+    447
+   ],
+   "face": "N"
+  },
+  {
+   "id": "board",
+   "what": "the notice-board place: a row of boards under a little roof, dense with writing",
+   "shape": {
+    "rect": [
+     420,
+     314,
+     71,
+     105
+    ]
+   },
+   "stand": [
+    505,
+    415
+   ],
+   "face": "N"
+  },
+  {
+   "id": "roofs",
+   "what": "the village's roofs: shingles weighted with stones, a few of thatch",
+   "shape": {
+    "rect": [
+     520,
+     318,
+     110,
+     58
+    ]
+   },
+   "stand": [
+    585,
+    388
+   ],
+   "face": "N"
+  },
+  {
+   "id": "smoke",
+   "what": "smoke from a kitchen",
+   "shape": {
+    "rect": [
+     556,
+     262,
+     40,
+     62
+    ]
+   },
+   "stand": [
+    585,
+    388
+   ],
+   "face": "E"
+  },
+  {
+   "id": "hens",
+   "what": "the hens in their yard, every one facing west",
+   "shape": {
+    "rect": [
+     540,
+     505,
+     250,
+     75
+    ]
+   },
+   "stand": [
+    487,
+    530
+   ],
+   "face": "E"
+  },
+  {
+   "id": "fence",
+   "what": "the hen yard's low bamboo fence",
+   "shape": {
+    "rect": [
+     549,
+     466,
+     253,
+     116
+    ]
+   },
+   "stand": [
+    487,
+    530
+   ],
+   "face": "E"
+  },
+  {
+   "id": "cherry",
+   "what": "the cherry by the shrine path, past its best",
+   "shape": {
+    "rect": [
+     642,
+     214,
+     84,
+     76
+    ]
+   },
+   "stand": [
+    640,
+    375
+   ],
+   "face": "N"
+  },
+  {
+   "id": "shrinepath",
+   "what": "the shrine path going up the slope",
+   "shape": {
+    "rect": [
+     704,
+     206,
+     92,
+     94
+    ]
+   },
+   "stand": [
+    640,
+    375
+   ],
+   "face": "N"
+  },
+  {
+   "id": "gulls",
+   "what": "gulls over the bay",
+   "shape": {
+    "rect": [
+     0,
+     180,
+     460,
+     110
+    ]
+   },
+   "stand": [
+    300,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "shop",
+   "what": "Kihei's fish shop: its open front and the noren (the way in)",
+   "shape": {
+    "poly": [
+     [
+      578,
+      466
+     ],
+     [
+      849,
+      496
+     ],
+     [
+      849,
+      354
+     ],
+     [
+      578,
+      346
+     ]
+    ]
+   },
+   "stand": [
+    595,
+    480
+   ],
+   "face": "E"
+  },
+  {
+   "id": "road",
+   "what": "the Tokaido, running along behind the beach",
+   "shape": {
+    "poly": [
+     [
+      238,
+      571
+     ],
+     [
+      522,
+      451
+     ],
+     [
+      707,
+      373
+     ],
+     [
+      627,
+      373
+     ],
+     [
+      355,
+      451
+     ],
+     [
+      -61,
+      571
+     ]
+    ]
+   },
+   "stand": [
+    89,
+    571
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pass",
+   "what": "the Satta pass: the headland at the end of the shore, the road climbing it",
+   "shape": {
+    "poly": [
+     [
+      520,
+      300
+     ],
+     [
+      600,
+      262
+     ],
+     [
+      680,
+      214
+     ],
+     [
+      750,
+      180
+     ],
+     [
+      800,
+      166
+     ],
+     [
+      800,
+      300
+     ]
+    ]
+   },
+   "stand": [
+    666,
+    373
+   ],
+   "face": "N"
+  },
+  {
+   "id": "well",
+   "what": "the well",
+   "shape": {
+    "rect": [
+     534,
+     315,
+     32,
+     70
+    ]
+   },
+   "stand": [
+    585,
+    388
+   ],
+   "face": "W"
+  },
+  {
+   "id": "sand",
+   "what": "the beach: grey sand and pebbles",
+   "shape": {
+    "poly": [
+     [
+      0,
+      460
+     ],
+     [
+      120,
+      440
+     ],
+     [
+      300,
+      420
+     ],
+     [
+      440,
+      400
+     ],
+     [
+      500,
+      430
+     ],
+     [
+      360,
+      470
+     ],
+     [
+      300,
+      500
+     ],
+     [
+      250,
+      540
+     ],
+     [
+      230,
+      596
+     ],
+     [
+      0,
+      596
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    500
+   ],
+   "face": "S"
+  },
+  {
+   "id": "sankichi",
+   "what": "Sankichi, 9, beside the board (drawn by the game)",
+   "shape": {
+    "rect": [
+     513,
+     367,
+     14,
+     44
+    ]
+   },
+   "stand": [
+    505,
+    415
+   ],
+   "face": "E"
+  },
+  {
+   "id": "tokuzo",
+   "what": "Tokuzo, the headman's clerk, on his rounds along the street (drawn by the game)",
+   "shape": {
+    "rect": [
+     476,
+     373,
+     23,
+     70
+    ]
+   },
+   "stand": [
+    447,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "gonroku",
+   "what": "Gonroku, the captain, by his boat at the water's edge (drawn by the game)",
+   "shape": {
+    "rect": [
+     270,
+     349,
+     15,
+     48
+    ]
+   },
+   "stand": [
+    322,
+    407
+   ],
+   "face": "W"
+  },
+  {
+   "id": "masa",
+   "what": "O-Masa at the net racks (drawn by the game)",
+   "shape": {
+    "rect": [
+     148,
+     377,
+     21,
+     65
+    ]
+   },
+   "stand": [
+    182,
+    447
+   ],
+   "face": "N"
+  },
+  {
+   "id": "kihei",
+   "what": "Kihei, out in front of his shop (drawn by the game)",
+   "shape": {
+    "rect": [
+     708,
+     397,
+     30,
+     94
+    ]
+   },
+   "stand": [
+    595,
+    480
+   ],
+   "face": "E"
+  },
+  {
+   "id": "netmender",
+   "what": "a villager mending a net by the racks (drawn by the game)",
+   "shape": {
+    "rect": [
+     250,
+     377,
+     24,
+     75
+    ]
+   },
+   "stand": [
+    226,
+    466
+   ],
+   "face": "E"
+  },
+  {
+   "id": "basketwoman",
+   "what": "a woman with a basket on the street (drawn by the game)",
+   "shape": {
+    "rect": [
+     381,
+     378,
+     21,
+     66
+    ]
+   },
+   "stand": [
+    356,
+    458
+   ],
+   "face": "E"
+  }
+ ],
+ "marks": {
+  "arrive": [
+   150,
+   520
+  ],
+  "board": [
+   505,
+   415
+  ],
+  "sankichi": [
+   520,
+   411
+  ],
+  "hens": [
+   487,
+   530
+  ],
+  "shop": [
+   595,
+   480
+  ],
+  "boat": [
+   92,
+   484
+  ],
+  "underboat": [
+   83,
+   457
+  ],
+  "racks": [
+   182,
+   447
+  ],
+  "gonroku": [
+   278,
+   397
+  ],
+  "cherry": [
+   640,
+   375
+  ],
+  "clerkFrom": [
+   664,
+   374
+  ],
+  "clerkTo": [
+   89,
+   571
+  ],
+  "east": [
+   71,
+   577
+  ],
+  "west": [
+   666,
+   373
+  ],
+  "well": [
+   585,
+   388
+  ],
+  "masa": [
+   158,
+   442
+  ],
+  "kihei_out": [
+   723,
+   491
+  ],
+  "tokuzo_talk": [
+   487,
+   443
+  ]
+ },
+ "stands": {
+  "arrive": {
+   "at": [
+    150,
+    520
+   ],
+   "grownup_px": 121,
+   "face": "S"
+  },
+  "board": {
+   "at": [
+    505,
+    415
+   ],
+   "grownup_px": 63,
+   "face": "N"
+  },
+  "sankichi": {
+   "at": [
+    520,
+    411
+   ],
+   "grownup_px": 61,
+   "face": "W"
+  },
+  "hens": {
+   "at": [
+    487,
+    530
+   ],
+   "grownup_px": 127,
+   "face": "E"
+  },
+  "shop": {
+   "at": [
+    595,
+    480
+   ],
+   "grownup_px": 99,
+   "face": "E"
+  },
+  "boat": {
+   "at": [
+    92,
+    484
+   ],
+   "grownup_px": 102,
+   "face": "W"
+  },
+  "underboat": {
+   "at": [
+    83,
+    457
+   ],
+   "grownup_px": 87,
+   "face": "W"
+  },
+  "racks": {
+   "at": [
+    182,
+    447
+   ],
+   "grownup_px": 81,
+   "face": "N"
+  },
+  "gonroku": {
+   "at": [
+    278,
+    397
+   ],
+   "grownup_px": 54,
+   "face": "N"
+  },
+  "cherry": {
+   "at": [
+    640,
+    375
+   ],
+   "grownup_px": 41,
+   "face": "N"
+  },
+  "clerkFrom": {
+   "at": [
+    664,
+    374
+   ],
+   "grownup_px": 41,
+   "face": "S"
+  },
+  "clerkTo": {
+   "at": [
+    89,
+    571
+   ],
+   "grownup_px": 150,
+   "face": "N"
+  },
+  "east": {
+   "at": [
+    71,
+    577
+   ],
+   "grownup_px": 153,
+   "face": "N"
+  },
+  "west": {
+   "at": [
+    666,
+    373
+   ],
+   "grownup_px": 40,
+   "face": "S"
+  },
+  "well": {
+   "at": [
+    585,
+    388
+   ],
+   "grownup_px": 49,
+   "face": "W"
+  },
+  "masa": {
+   "at": [
+    158,
+    442
+   ],
+   "grownup_px": 78,
+   "face": "S"
+  },
+  "kihei_out": {
+   "at": [
+    723,
+    491
+   ],
+   "grownup_px": 105,
+   "face": "W"
+  },
+  "tokuzo_talk": {
+   "at": [
+    487,
+    443
+   ],
+   "grownup_px": 79,
+   "face": "S"
+  },
+  "arrive_mom": {
+   "at": [
+    150,
+    520
+   ],
+   "grownup_px": 121,
+   "face": "S"
+  },
+  "arrive_bigsis": {
+   "at": [
+    196,
+    538
+   ],
+   "grownup_px": 131,
+   "face": "S"
+  },
+  "arrive_lilsis": {
+   "at": [
+    112,
+    548
+   ],
+   "grownup_px": 137,
+   "face": "S"
+  },
+  "netmender": {
+   "at": [
+    262,
+    452
+   ],
+   "grownup_px": 84,
+   "face": "W"
+  },
+  "basketwoman": {
+   "at": [
+    392,
+    444
+   ],
+   "grownup_px": 79,
+   "face": "E"
+  }
+ },
+ "door": {
+  "at": [
+   150,
+   462
+  ],
+  "r": 62,
+  "kind": "portal",
+  "what": "the door in time the three come out of, on the beach at `arrive`: a walk-in door, its middle a metre over their feet (as the roadside's coin door, bigger)"
+ },
+ "fx": [
+  {
+   "id": "bay-shimmer",
+   "type": "shimmer",
+   "what": "the morning light on the bay: a few glints that come and go",
+   "poly": [
+    [
+     0,
+     303
+    ],
+    [
+     540,
+     303
+    ],
+    [
+     660,
+     322
+    ],
+    [
+     740,
+     318
+    ],
+    [
+     700,
+     332
+    ],
+    [
+     793,
+     312
+    ],
+    [
+     762,
+     317
+    ],
+    [
+     721,
+     322
+    ],
+    [
+     666,
+     330
+    ],
+    [
+     596,
+     340
+    ],
+    [
+     508,
+     352
+    ],
+    [
+     399,
+     367
+    ],
+    [
+     270,
+     385
+    ],
+    [
+     123,
+     406
+    ],
+    [
+     -37,
+     428
+    ],
+    [
+     0,
+     434
+    ]
+   ],
+   "count": 36,
+   "size": 5,
+   "flow": [
+    3,
+    0
+   ],
+   "life": 1.8,
+   "color": "#f6eed8",
+   "opacity": 0.5,
+   "plane": "back",
+   "note": "The far rows of wave-curls are painted still (beyond about a kilometre nothing moves at this size); the near water is bands only, and this moves on it"
+  },
+  {
+   "id": "shore-ripples",
+   "type": "ripples",
+   "what": "the wash at the water's edge by Gonroku's tender",
+   "at": [
+    179,
+    399
+   ],
+   "radius": [
+    2,
+    12
+   ],
+   "flat": 0.22,
+   "every": [
+    1.6,
+    3.4
+   ],
+   "rings": 1,
+   "speed": 9,
+   "color": "#f6eed8",
+   "trough": "#2e3a93",
+   "opacity": 0.4,
+   "plane": "back"
+  },
+  {
+   "id": "ship-bob",
+   "type": "bob",
+   "plane": "ship",
+   "amount": 1,
+   "period": 6,
+   "what": "Gonroku's freighter riding at anchor"
+  },
+  {
+   "id": "tender-bob",
+   "type": "bob",
+   "plane": "tender",
+   "amount": 1,
+   "period": 5,
+   "tilt": 1.0,
+   "what": "the tender nodding where its stern lies in the water"
+  },
+  {
+   "id": "noren-sway",
+   "type": "sway",
+   "plane": "noren",
+   "anchor": "top",
+   "amount": 2.5,
+   "period": 3.2,
+   "wave": 30,
+   "lean": 0.35,
+   "what": "the noren lifting in the wind off the bay"
+  },
+  {
+   "id": "kitchen-smoke",
+   "type": "smoke",
+   "plane": "back",
+   "what": "smoke from a kitchen in the village, beyond the shop",
+   "at": [
+    574,
+    322
+   ],
+   "height": 58,
+   "width": [
+    2,
+    11
+   ],
+   "lean": [
+    16,
+    -58
+   ],
+   "rise": 9,
+   "rate": 2.5,
+   "gust": 0.3,
+   "color": "#e4e6ea",
+   "opacity": 0.3
+  },
+  {
+   "id": "gulls",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "gulls over the bay (the engine's own silhouettes: no frames)",
+   "lanes": [
+    [
+     [
+      -12,
+      262
+     ],
+     [
+      160,
+      236
+     ],
+     [
+      340,
+      250
+     ],
+     [
+      520,
+      228
+     ],
+     [
+      640,
+      -12
+     ]
+    ],
+    [
+     [
+      -12,
+      206
+     ],
+     [
+      120,
+      222
+     ],
+     [
+      300,
+      200
+     ],
+     [
+      470,
+      212
+     ],
+     [
+      560,
+      300
+     ]
+    ],
+    [
+     [
+      600,
+      240
+     ],
+     [
+      420,
+      262
+     ],
+     [
+      220,
+      248
+     ],
+     [
+      -12,
+      270
+     ]
+    ]
+   ],
+   "every": [
+    7,
+    15
+   ],
+   "group": [
+    1,
+    3
+   ],
+   "speed": 60,
+   "size": 8,
+   "scale": [
+    0.6,
+    1.1
+   ],
+   "color": "#f6eed8"
+  },
+  {
+   "id": "petals",
+   "type": "petals",
+   "what": "petals falling from the cherry by the shrine path (ENGINE-20's kind): few, far and small",
+   "area": [
+    [
+     650,
+     218
+    ],
+    [
+     726,
+     218
+    ],
+    [
+     736,
+     290
+    ],
+    [
+     660,
+     290
+    ]
+   ],
+   "count": 6,
+   "size": 1.5,
+   "color": "#e6a5b8",
+   "plane": "back",
+   "note": "They fall on the ground under the tree: the drift painted there is their bed"
+  },
+  {
+   "id": "hen-1",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a hen in the yard (brown), facing west with the others (Little Sister calls her Komachi)",
+   "perch": [
+    [
+     619,
+     562
+    ],
+    [
+     676,
+     562
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     25,
+     42
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "hen-brown-1.png",
+     "hen-brown-2.png",
+     "hen-brown-1.png",
+     "hen-brown-3.png"
+    ],
+    "look": [
+     "hen-brown-4.png"
+    ],
+    "walk": [
+     "hen-brown-5.png",
+     "hen-brown-6.png"
+    ],
+    "peck": [
+     "hen-brown-8.png",
+     "hen-brown-7.png",
+     "hen-brown-7.png",
+     "hen-brown-8.png",
+     "hen-brown-1.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 5,
+   "moves": {
+    "stand": 3,
+    "look": 1.5,
+    "peck": 2.5,
+    "walk": 0.6,
+    "turn": 0
+   },
+   "seed": 1,
+   "note": "frames painted facing right (east on the stage is west along this coast: the street runs south-west); peck is the beak to the ground and the head coming back up to face west again"
+  },
+  {
+   "id": "hen-2",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a hen in the yard (speckled), facing west with the others (Little Sister calls her Oume)",
+   "perch": [
+    [
+     672,
+     543
+    ],
+    [
+     725,
+     543
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     25,
+     42
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "hen-speckled-1.png",
+     "hen-speckled-2.png",
+     "hen-speckled-1.png",
+     "hen-speckled-3.png"
+    ],
+    "look": [
+     "hen-speckled-4.png"
+    ],
+    "walk": [
+     "hen-speckled-5.png",
+     "hen-speckled-6.png"
+    ],
+    "peck": [
+     "hen-speckled-8.png",
+     "hen-speckled-7.png",
+     "hen-speckled-7.png",
+     "hen-speckled-8.png",
+     "hen-speckled-1.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 5,
+   "moves": {
+    "stand": 3,
+    "look": 1.5,
+    "peck": 2.5,
+    "walk": 0.6,
+    "turn": 0
+   },
+   "seed": 2,
+   "note": "frames painted facing right (east on the stage is west along this coast: the street runs south-west); peck is the beak to the ground and the head coming back up to face west again"
+  },
+  {
+   "id": "hen-3",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a hen in the yard (brown), facing west with the others (Little Sister calls her Tora)",
+   "perch": [
+    [
+     726,
+     558
+    ],
+    [
+     783,
+     558
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     25,
+     42
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "hen-brown-1.png",
+     "hen-brown-2.png",
+     "hen-brown-1.png",
+     "hen-brown-3.png"
+    ],
+    "look": [
+     "hen-brown-4.png"
+    ],
+    "walk": [
+     "hen-brown-5.png",
+     "hen-brown-6.png"
+    ],
+    "peck": [
+     "hen-brown-8.png",
+     "hen-brown-7.png",
+     "hen-brown-7.png",
+     "hen-brown-8.png",
+     "hen-brown-1.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 5,
+   "moves": {
+    "stand": 3,
+    "look": 1.5,
+    "peck": 2.5,
+    "walk": 0.6,
+    "turn": 0
+   },
+   "seed": 3,
+   "note": "frames painted facing right (east on the stage is west along this coast: the street runs south-west); peck is the beak to the ground and the head coming back up to face west again"
+  },
+  {
+   "id": "hen-4",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a hen in the yard (speckled), facing west with the others (Little Sister calls her Kiku)",
+   "perch": [
+    [
+     745,
+     526
+    ],
+    [
+     795,
+     526
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     25,
+     42
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "hen-speckled-1.png",
+     "hen-speckled-2.png",
+     "hen-speckled-1.png",
+     "hen-speckled-3.png"
+    ],
+    "look": [
+     "hen-speckled-4.png"
+    ],
+    "walk": [
+     "hen-speckled-5.png",
+     "hen-speckled-6.png"
+    ],
+    "peck": [
+     "hen-speckled-8.png",
+     "hen-speckled-7.png",
+     "hen-speckled-7.png",
+     "hen-speckled-8.png",
+     "hen-speckled-1.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 5,
+   "moves": {
+    "stand": 3,
+    "look": 1.5,
+    "peck": 2.5,
+    "walk": 0.6,
+    "turn": 0
+   },
+   "seed": 4,
+   "note": "frames painted facing right (east on the stage is west along this coast: the street runs south-west); peck is the beak to the ground and the head coming back up to face west again"
+  },
+  {
+   "id": "hen-5",
+   "type": "birds",
+   "kind": "flock",
+   "what": "a hen in the yard (brown), facing west with the others (Little Sister calls her Cho)",
+   "perch": [
+    [
+     664,
+     518
+    ],
+    [
+     712,
+     518
+    ]
+   ],
+   "count": 1,
+   "frames": {
+    "foot": [
+     25,
+     42
+    ],
+    "face": "E",
+    "sizeAt": 590,
+    "stand": [
+     "hen-brown-1.png",
+     "hen-brown-2.png",
+     "hen-brown-1.png",
+     "hen-brown-3.png"
+    ],
+    "look": [
+     "hen-brown-4.png"
+    ],
+    "walk": [
+     "hen-brown-5.png",
+     "hen-brown-6.png"
+    ],
+    "peck": [
+     "hen-brown-8.png",
+     "hen-brown-7.png",
+     "hen-brown-7.png",
+     "hen-brown-8.png",
+     "hen-brown-1.png"
+    ]
+   },
+   "depth": true,
+   "shy": 0,
+   "fly": false,
+   "turn": false,
+   "walk": 5,
+   "moves": {
+    "stand": 3,
+    "look": 1.5,
+    "peck": 2.5,
+    "walk": 0.6,
+    "turn": 0
+   },
+   "seed": 5,
+   "note": "frames painted facing right (east on the stage is west along this coast: the street runs south-west); peck is the beak to the ground and the head coming back up to face west again"
+  }
+ ],
+ "fx_note": "the waves near the shore are the shimmer on the bands (no frames: say so to ENGINE-20 if a wave kind arrives); the ship and the tender bob; the noren sways; the smoke, the gulls (engine-drawn) and the petals (ENGINE-20's kind) are marks; the hens are a flock of five, each her own, on painted frames (edo_village_hens.py)",
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "sankichi_cm": 125,
+  "grownup_at_full_px": 160
+ }
+}

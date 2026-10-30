@@ -1,0 +1,68 @@
+{
+  "map": "edo",
+  "size": [800, 600],
+  "sheet": [44, 170, 756, 540],
+  "material": "A travel map printed from woodblocks on a long sheet of soft paper, folded in six panels and worn at the folds: the coast road from Suruga to Harima, the land soft green with its mountains as cones, the sea in rows of blue waves, Fuji white at the east end, the places as small pictures with their names.",
+  "label": {
+    "color": "#1f2d59",
+    "halo": "#f3e1b7",
+    "upper": false,
+    "spacing": 0.04,
+    "size": 15
+  },
+  "places": [
+    {
+      "id": "yui",
+      "picture": "place-yui.png",
+      "shape": [[633, 335], [644, 337], [654, 346], [678, 348], [682, 354], [681, 370], [675, 374], [668, 370], [655, 381], [638, 381], [634, 378], [611, 378], [606, 371], [607, 364], [604, 364], [599, 357], [599, 350], [610, 343], [618, 343], [622, 345], [622, 342], [625, 339]],
+      "pin": [640, 312],
+      "label": [632, 392],
+      "label_max": 30
+    },
+    {
+      "id": "osaka",
+      "picture": "place-osaka.png",
+      "shape": [[328, 370], [337, 371], [344, 378], [346, 391], [369, 396], [376, 402], [374, 413], [362, 426], [356, 427], [353, 437], [348, 438], [341, 433], [321, 437], [317, 431], [320, 424], [306, 420], [301, 413], [307, 396], [316, 390], [318, 378]],
+      "pin": [300, 448],
+      "label": [300, 388],
+      "label_max": 50
+    },
+    {
+      "id": "hills",
+      "picture": "place-hills.png",
+      "shape": [[302, 238], [306, 239], [310, 246], [316, 242], [320, 243], [335, 260], [339, 282], [332, 292], [325, 292], [317, 283], [311, 289], [289, 288], [282, 293], [264, 279], [265, 269], [260, 262], [263, 247], [267, 243], [274, 243], [279, 255], [287, 256], [294, 251], [295, 243]],
+      "pin": [300, 308],
+      "label": [300, 222],
+      "label_max": 69
+    },
+    {
+      "id": "himeji",
+      "picture": "place-himeji.png",
+      "shape": [[127, 307], [136, 308], [144, 315], [146, 334], [152, 337], [157, 345], [155, 351], [165, 350], [175, 356], [175, 364], [170, 370], [140, 377], [112, 377], [98, 375], [92, 371], [91, 360], [103, 354], [109, 347], [111, 336], [116, 333], [113, 325], [116, 315]],
+      "pin": [130, 296],
+      "label": [130, 396],
+      "label_max": 50
+    }
+  ],
+  "paths": [
+    {
+      "a": "yui",
+      "b": "osaka",
+      "picture": "path-yui-osaka.png",
+      "via": [[640, 312], [596, 402], [590, 440], [574, 484], [530, 516], [482, 532], [436, 518], [398, 492], [366, 466], [350, 442], [300, 448]]
+    },
+    {
+      "a": "osaka",
+      "b": "hills",
+      "picture": "path-osaka-hills.png",
+      "via": [[300, 448], [352, 392], [344, 356], [326, 318], [310, 290], [306, 284], [300, 308]]
+    },
+    {
+      "a": "hills",
+      "b": "himeji",
+      "picture": "path-hills-himeji.png",
+      "via": [[300, 308], [272, 268], [236, 300], [204, 338], [176, 356], [156, 360], [130, 296]]
+    }
+  ],
+  "note": "East at the right. yui on the west shore of Suruga Bay under the Satta headland, Fuji across the water (drawn on the sheet: the lie of the land); osaka at its river mouth west of the Kii peninsula's bulge (a landmark: no scene); hills north of Osaka up the river (the hollow in the wooded hills: cedars and the storehouse); himeji at the west end on its hill above the town, the Inland Sea below. The sea way goes out from Yui's shore round the Kii tip into Osaka's bay (a ship drawn on it at its fifth point); road1 follows the river up into the hills; road2 comes down to the coast road and west. Each via is a pin, the way's drawn points, the other pin. The pins (rows of three portraits, 116 x 36) stand on the land above each place (Osaka's on the sea below it); the names below each place (the hills' above)."
+}

@@ -1,0 +1,869 @@
+{
+ "scene": "edo-keeptop",
+ "size": [
+  800,
+  600
+ ],
+ "view": {
+  "horizon": 270,
+  "full": 430,
+  "cam": [
+   380.0,
+   760.0
+  ],
+  "yaw": 0.0,
+  "focal": 400.0
+ },
+ "horizon": 270,
+ "full": 430,
+ "room_cm": {
+  "X": [
+   0,
+   760.0
+  ],
+  "Z": [
+   0,
+   700.0
+  ],
+  "H": 300.0,
+  "ridge": 480.0,
+  "note": "west wall X 0, east wall X 760, north wall Z 0; the camera in the south bay at (380, 760), the lens 175 cm up"
+ },
+ "walk": [
+  [
+   194,
+   367
+  ],
+  [
+   598,
+   367
+  ],
+  [
+   799,
+   470
+  ],
+  [
+   183,
+   470
+  ],
+  [
+   210,
+   445
+  ],
+  [
+   30,
+   445
+  ]
+ ],
+ "blocked": [
+  {
+   "id": "chests",
+   "poly": [
+    [
+     216,
+     362
+    ],
+    [
+     337,
+     362
+    ],
+    [
+     325,
+     379
+    ],
+    [
+     181,
+     379
+    ]
+   ]
+  },
+  {
+   "id": "lantern",
+   "poly": [
+    [
+     345,
+     366
+    ],
+    [
+     367,
+     366
+    ],
+    [
+     365,
+     371
+    ],
+    [
+     342,
+     371
+    ]
+   ]
+  },
+  {
+   "id": "stairwell",
+   "poly": [
+    [
+     41,
+     449
+    ],
+    [
+     185,
+     449
+    ],
+    [
+     35,
+     574
+    ],
+    [
+     0,
+     574
+    ]
+   ]
+  }
+ ],
+ "marks": {
+  "stairs": {
+   "at": [
+    217,
+    464
+   ],
+   "face": "N"
+  },
+  "shinnosuke": {
+   "at": [
+    278,
+    450
+   ],
+   "face": "W"
+  },
+  "west": {
+   "at": [
+    91,
+    433
+   ],
+   "face": "W"
+  },
+  "south": {
+   "at": [
+    400,
+    464
+   ],
+   "face": "N"
+  },
+  "north": {
+   "at": [
+    400,
+    371
+   ],
+   "face": "N"
+  },
+  "east": {
+   "at": [
+    670,
+    422
+   ],
+   "face": "E"
+  },
+  "hum": {
+   "at": [
+    617,
+    389
+   ],
+   "face": "E"
+  },
+  "m1": {
+   "at": [
+    536,
+    402
+   ],
+   "face": "E"
+  },
+  "m2": {
+   "at": [
+    416,
+    410
+   ],
+   "face": "E"
+  },
+  "m3": {
+   "at": [
+    281,
+    419
+   ],
+   "face": "E"
+  },
+  "farwest": {
+   "at": [
+    82,
+    422
+   ],
+   "face": "E"
+  },
+  "mid": {
+   "at": [
+    417,
+    422
+   ],
+   "face": "S"
+  }
+ },
+ "stands": {
+  "stairs": {
+   "at": [
+    217,
+    464
+   ],
+   "grownup_px": 178
+  },
+  "shinnosuke": {
+   "at": [
+    278,
+    450
+   ],
+   "grownup_px": 165
+  },
+  "west": {
+   "at": [
+    91,
+    433
+   ],
+   "grownup_px": 149
+  },
+  "south": {
+   "at": [
+    400,
+    464
+   ],
+   "grownup_px": 178
+  },
+  "north": {
+   "at": [
+    400,
+    371
+   ],
+   "grownup_px": 93
+  },
+  "east": {
+   "at": [
+    670,
+    422
+   ],
+   "grownup_px": 139
+  },
+  "hum": {
+   "at": [
+    617,
+    389
+   ],
+   "grownup_px": 108
+  },
+  "m1": {
+   "at": [
+    536,
+    402
+   ],
+   "grownup_px": 121
+  },
+  "m2": {
+   "at": [
+    416,
+    410
+   ],
+   "grownup_px": 128
+  },
+  "m3": {
+   "at": [
+    281,
+    419
+   ],
+   "grownup_px": 136
+  },
+  "farwest": {
+   "at": [
+    82,
+    422
+   ],
+   "grownup_px": 139
+  },
+  "mid": {
+   "at": [
+    417,
+    422
+   ],
+   "grownup_px": 139
+  }
+ },
+ "planes": [
+  {
+   "id": "rail",
+   "src": "rail.png",
+   "base": [
+    [
+     34,
+     568
+    ],
+    [
+     177,
+     452
+    ]
+   ],
+   "lit": "rail-lit.png"
+  },
+  {
+   "id": "chests",
+   "src": "chests.png",
+   "base": 378,
+   "lit": "chests-lit.png"
+  },
+  {
+   "id": "lantern",
+   "src": "lantern.png",
+   "base": 370,
+   "lit": "lantern-lit.png"
+  },
+  {
+   "id": "northshutter",
+   "src": "northshutter.png",
+   "plane": "back",
+   "open": "northshutter-open.png",
+   "lit": "northshutter-lit.png",
+   "open_lit": "northshutter-open-lit.png"
+  },
+  {
+   "id": "eastshutter",
+   "src": "eastshutter.png",
+   "plane": "back",
+   "open": "eastshutter-open.png",
+   "lit": "eastshutter-lit.png",
+   "open_lit": "eastshutter-open-lit.png"
+  },
+  {
+   "id": "westshutter",
+   "src": "westshutter.png",
+   "plane": "back",
+   "open": "westshutter-open.png",
+   "open_lit": "westshutter-open-lit.png"
+  },
+  {
+   "id": "front",
+   "src": "front.png",
+   "plane": "front",
+   "lit": "front-lit.png"
+  }
+ ],
+ "states": {
+  "shut": "back.png with the planes in their first state (the three shutters shut): the room near dark",
+  "lit": "lit.png (an alt covering the whole stage) with westshutter-open-lit and every other plane's -lit twin: the west shutters open, the sun in",
+  "note": "a shutter opened while the room is dark takes its -open file; in the lit room its -open-lit file"
+ },
+ "things": {
+  "hum": {
+   "at": [
+    641,
+    295
+   ],
+   "poly": [
+    [
+     655,
+     295
+    ],
+    [
+     653,
+     306
+    ],
+    [
+     648,
+     314
+    ],
+    [
+     641,
+     317
+    ],
+    [
+     635,
+     314
+    ],
+    [
+     630,
+     306
+    ],
+    [
+     628,
+     295
+    ],
+    [
+     630,
+     284
+    ],
+    [
+     635,
+     276
+    ],
+    [
+     641,
+     273
+    ],
+    [
+     648,
+     276
+    ],
+    [
+     653,
+     284
+    ]
+   ],
+   "size_px": [
+    27,
+    44
+   ],
+   "stand": [
+    617,
+    389
+   ],
+   "note": "a shimmer in the air before this panel: the engine's; nothing painted"
+  },
+  "lantern": {
+   "stand": [
+    400,
+    371
+   ]
+  },
+  "floor": {
+   "stand": [
+    417,
+    422
+   ]
+  },
+  "rafters": {
+   "poly": [
+    [
+     200,
+     204
+    ],
+    [
+     600,
+     204
+    ],
+    [
+     800,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ]
+  },
+  "view": {
+   "poly": [
+    [
+     129,
+     331
+    ],
+    [
+     -22,
+     364
+    ],
+    [
+     -22,
+     153
+    ],
+    [
+     129,
+     195
+    ]
+   ],
+   "stand": [
+    91,
+    433
+   ],
+   "note": "through the west bay, open: the town and the Inland Sea under the sun"
+  },
+  "herons": {
+   "poly": [
+    [
+     129,
+     331
+    ],
+    [
+     -22,
+     364
+    ],
+    [
+     -22,
+     153
+    ],
+    [
+     129,
+     195
+    ]
+   ],
+   "note": "going past the west bay, clipped to its opening"
+  },
+  "shinnosuke": {
+   "stand": [
+    278,
+    450
+   ]
+  },
+  "southshutter": {
+   "poly": [
+    [
+     0,
+     584
+    ],
+    [
+     799,
+     584
+    ],
+    [
+     799,
+     599
+    ],
+    [
+     0,
+     599
+    ]
+   ],
+   "stand": [
+    400,
+    464
+   ],
+   "note": "at the player's back: the camera stands in the south bay; its shutters are not in the picture (a look only)"
+  },
+  "northshutter": {
+   "poly": [
+    [
+     347,
+     315
+    ],
+    [
+     453,
+     315
+    ],
+    [
+     453,
+     231
+    ],
+    [
+     347,
+     231
+    ]
+   ],
+   "stand": [
+    400,
+    371
+   ],
+   "states": [
+    "shut",
+    "open"
+   ]
+  },
+  "westshutter": {
+   "poly": [
+    [
+     129,
+     331
+    ],
+    [
+     -22,
+     364
+    ],
+    [
+     -22,
+     153
+    ],
+    [
+     129,
+     195
+    ]
+   ],
+   "stand": [
+    91,
+    433
+   ],
+   "states": [
+    "shut",
+    "open"
+   ]
+  },
+  "eastshutter": {
+   "poly": [
+    [
+     671,
+     331
+    ],
+    [
+     822,
+     364
+    ],
+    [
+     822,
+     153
+    ],
+    [
+     671,
+     195
+    ]
+   ],
+   "stand": [
+    670,
+    422
+   ],
+   "states": [
+    "shut",
+    "open"
+   ]
+  }
+ },
+ "sun": {
+  "elevation_deg": 14.0,
+  "from": "due west, through the west bay",
+  "beam_floor": [
+   [
+    386,
+    395
+   ],
+   [
+    671,
+    395
+   ],
+   [
+    799,
+    464
+   ],
+   [
+    379,
+    464
+   ]
+  ],
+  "note": "the beam lies on the floor from the room's middle (X 361 cm) to the east wall and climbs its foot to 91 cm (the shut east shutters' lowest board); the hum, 135 cm up, is out of the direct light"
+ },
+ "hum": {
+  "at": [
+   641,
+   295
+  ],
+  "room_cm": [
+   760.0,
+   135.0,
+   130.0
+  ],
+  "scale_px_per_cm": 0.635
+ },
+ "door": {
+  "type": "portal",
+  "at": [
+   641,
+   295
+  ],
+  "r": 63,
+  "wide": 0.6,
+  "keep": [
+   607,
+   660
+  ],
+  "base": 381,
+  "under": [
+   "eastshutter"
+  ],
+  "note": "a doorway 200 cm tall at the hum, as PORTAL-9's open: r is half its height in px wide open; wide squeezes it to the wall's foreshortening"
+ },
+ "patch": {
+  "rule": "D(d) = 12 + 0.254 d (cm): the mirror 12 cm across, d its distance from the east wall",
+  "at_marks": {
+   "hum": {
+    "distance_cm": 60,
+    "diameter_cm": 27,
+    "radius_px": 8.6,
+    "distance_px": 96.7
+   },
+   "m1": {
+    "distance_cm": 200,
+    "diameter_cm": 63,
+    "radius_px": 19.9,
+    "distance_px": 149.8
+   },
+   "m2": {
+    "distance_cm": 360,
+    "diameter_cm": 103,
+    "radius_px": 32.8,
+    "distance_px": 252.7
+   },
+   "m3": {
+    "distance_cm": 520,
+    "diameter_cm": 144,
+    "radius_px": 45.7,
+    "distance_px": 380.9
+   },
+   "farwest": {
+    "distance_cm": 746,
+    "diameter_cm": 201,
+    "radius_px": 64.0,
+    "distance_px": 573.4
+   }
+  },
+  "sizes_for_engine": [
+   [
+    96.7,
+    8.6
+   ],
+   [
+    573.4,
+    64.0
+   ]
+  ],
+  "note": "sizes_for_engine: [distance of the holder's mark from the hum in px, the patch's radius in px] at `hum` and at `farwest`; the marks m1, m2, m3 step between"
+ },
+ "fx": [
+  {
+   "id": "door",
+   "type": "portal",
+   "at": [
+    641,
+    295
+   ],
+   "r": 63,
+   "wide": 0.6,
+   "keep": [
+    607,
+    660
+   ],
+   "base": 381,
+   "pale": "#fff4d8",
+   "light": true
+  },
+  {
+   "id": "mirror",
+   "type": "mirror",
+   "target": [
+    641,
+    295
+   ],
+   "holder": "mom",
+   "door": "door",
+   "image": "cross",
+   "sizes": [
+    [
+     96.7,
+     8.6
+    ],
+    [
+     573.4,
+     64.0
+    ]
+   ],
+   "reach": [
+    -47,
+    365,
+    800,
+    111
+   ],
+   "when": "edo.lit (the west shutters open)"
+  },
+  {
+   "id": "herons",
+   "type": "birds",
+   "lanes": [
+    [
+     [
+      -40,
+      250
+     ],
+     [
+      220,
+      236
+     ]
+    ],
+    [
+     [
+      200,
+      262
+     ],
+     [
+      -40,
+      272
+     ]
+    ]
+   ],
+   "every": [
+    18,
+    40
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "speed": 55,
+   "scale": 0.9,
+   "clip": [
+    [
+     [
+      129,
+      331
+     ],
+     [
+      -22,
+      364
+     ],
+     [
+      -22,
+      153
+     ],
+     [
+      129,
+      195
+     ]
+    ]
+   ],
+   "frames": {
+    "foot": [
+     28,
+     24
+    ],
+    "face": "E",
+    "glide": [
+     "heron-fly-1.png"
+    ],
+    "flap": [
+     "heron-fly-2.png",
+     "heron-fly-3.png"
+    ]
+   },
+   "when": "the west shutters open",
+   "note": "the flyers kept inside the west bay's opening (ENGINE-20's clip); the north bay could take the same lanes mirrored"
+  },
+  {
+   "id": "dust",
+   "type": "shimmer",
+   "poly": [
+    [
+     180,
+     240
+    ],
+    [
+     620,
+     240
+    ],
+    [
+     800,
+     520
+    ],
+    [
+     0,
+     520
+    ]
+   ],
+   "count": 40,
+   "size": 2,
+   "flow": [
+    1,
+    0
+   ],
+   "life": 3.0,
+   "color": "#f6eed8",
+   "opacity": 0.25,
+   "note": "PROPOSED: motes in the lit room's beam (shown only when lit)"
+  }
+ ],
+ "notes": "Two backdrops: back.png (shut, near dark) and lit.png (the west shutters open, the sun in: an alt over the whole stage); each cut-out has a -lit twin for the lit room, and each shutter -open and -open-lit. The south bay is behind the camera. The hum and the door are the engine's at the numbers under `hum`, `door` and `patch`. PAINT-20E."
+}

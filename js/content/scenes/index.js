@@ -13,6 +13,9 @@ export const sceneIds = [
   "nevada-roadside", "nevada-store",                                 // Act Four (NEVADA-12SB: the store)
   "nevada-limo",                                                     // Act Five (NEVADA-12SC)
   "office-lot", "office-ducts", "office-room", "office-property", "office-breakroom",     // Act Five, continued: the Office (SCENES-17; office-common.js, beside them, is what they share: not a scene)
+  // ENGINE-20: Act Six, Japan in 1830 (briefs/out/edo-design.md). The eight are the engine's sketch stubs until SCENES-20 writes
+  // them (each file says so): the village first, where Going Down hands the game on (cutscenes/office-down.js, edo-arrive.js).
+  "edo-village", "edo-fishshop", "edo-cedars", "edo-storehouse", "edo-chapel", "edo-castle", "edo-keep", "edo-keeptop",
   "engine-proof",        // not part of the story: the worked example of a painted scene
   "sketch-example",      // not part of the story: shows how to storyboard a scene before it is painted
   "proof-below",         // not part of the story: ENGINE-17's room under the proof's sand, for the grille, a thing handed across, travel per lead

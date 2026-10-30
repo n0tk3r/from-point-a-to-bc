@@ -101,20 +101,40 @@ export class AudioEngine {
 
   /** A placeholder tune: a 16-step pattern played by two oscillators.
       Notes are scheduled a little ahead on the audio clock, so timing stays tight
-      even when the page is busy drawing. */
+      even when the page is busy drawing.
+      ENGINE-20: two more voices a track can ask for, for Act Six's tunes (sound.js `edo`): `voice: "pluck"`, a plucked
+      string (a triangle with a brighter octave over it that dies at once: the attack of a plectrum; the note then falls
+      away fast), and `voice: "flute"`, a breathy flute (a sine that comes in over `attack` seconds, with a little filtered
+      breath under it, `breath`); and a second line, `alt` (notes of the scale, as `lead`), in `altVoice` ("flute"), so a
+      plucked tune can have a flute answer it. A `lull` of silent steps at the end of the pattern is simply rests. */
   playPattern(track, out) {
     const ctx = this.ctx;
     const stepLen = 60 / track.bpm / (track.div || 2);
     let step = 0, next = ctx.currentTime + 0.06;
-    const voice = (midi, when, len, wave, level, cents = 0) => {
+    const voice = (midi, when, len, wave, level, cents = 0, kind = null) => {
       const osc = ctx.createOscillator(), env = ctx.createGain();
-      osc.type = wave; osc.frequency.value = NOTE(midi);
+      osc.type = kind === "flute" ? "sine" : wave; osc.frequency.value = NOTE(midi);
       if (cents) osc.detune.value = cents;           // ENGINE-17: a tune a little flat (`detune`, in cents, on its lead): a building's waiting music
+      const attack = kind === "flute" ? Math.max(0.03, track.attack || 0.09) : 0.012;
       env.gain.setValueAtTime(0, when);
-      env.gain.linearRampToValueAtTime(level, when + 0.012);
+      env.gain.linearRampToValueAtTime(level, when + attack);
+      if (kind === "pluck") { env.gain.setValueAtTime(level, when + 0.02); env.gain.exponentialRampToValueAtTime(level * 0.25, when + Math.min(len, 0.35)); }      // (the string's quick fall)
       env.gain.exponentialRampToValueAtTime(0.0008, when + len);
       osc.connect(env).connect(out);
       osc.start(when); osc.stop(when + len + 0.03);
+      if (kind === "pluck") {                        // the bright attack: the octave above, gone in a tenth of a second
+        const o2 = ctx.createOscillator(), e2 = ctx.createGain();
+        o2.type = "triangle"; o2.frequency.value = NOTE(midi + 12); if (cents) o2.detune.value = cents;
+        e2.gain.setValueAtTime(level * 0.5, when); e2.gain.exponentialRampToValueAtTime(0.0008, when + 0.1);
+        o2.connect(e2).connect(out); o2.start(when); o2.stop(when + 0.13);
+      }
+      if (kind === "flute" && (track.breath ?? 0.35) > 0) {      // the breath: a little noise through a band at the note, under it
+        const b = this.breathBuffer(), src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), e3 = ctx.createGain();
+        src.buffer = b; src.loop = true; f.type = "bandpass"; f.frequency.value = NOTE(midi) * 2; f.Q.value = 2.5;
+        const lv = level * (track.breath ?? 0.35) * 0.6;
+        e3.gain.setValueAtTime(0, when); e3.gain.linearRampToValueAtTime(lv, when + attack * 0.8); e3.gain.exponentialRampToValueAtTime(0.0008, when + len);
+        src.connect(f).connect(e3).connect(out); src.start(when); src.stop(when + len + 0.03);
+      }
     };
     const pitch = (degree, octave) => {
       const n = track.scale.length, d = ((degree % n) + n) % n;
@@ -123,14 +143,82 @@ export class AudioEngine {
     const timer = setInterval(() => {
       while (next < ctx.currentTime + 0.14) {
         const i = step % track.lead.length;
-        if (track.lead[i] != null) voice(pitch(track.lead[i], 1), next, stepLen * (track.hold || 1.7), track.wave || "triangle", 0.12, track.detune || 0);      // (ENGINE-17: detune)
+        if (track.lead[i] != null) voice(pitch(track.lead[i], 1), next, stepLen * (track.hold || 1.7), track.wave || "triangle", track.level ?? 0.12, track.detune || 0, track.voice || null);      // (ENGINE-17: detune; ENGINE-20: voice)
+        if (track.alt && track.alt[step % track.alt.length] != null) voice(pitch(track.alt[step % track.alt.length], track.altOctave ?? 1), next, stepLen * (track.altHold || track.hold || 1.7), "sine", track.altLevel ?? 0.07, 0, track.altVoice || "flute");      // ENGINE-20: the second line
         const b = track.bass[step % track.bass.length];
-        if (b != null) voice(pitch(b, -1), next, stepLen * 3.4, track.bassWave || "sine", 0.17);
+        if (b != null) voice(pitch(b, -1), next, stepLen * 3.4, track.bassWave || "sine", track.bassLevel ?? 0.17);
         step++; next += stepLen;
       }
     }, 30);
     return () => { clearInterval(timer); out.disconnect(); };
   }
+  /** ENGINE-20: a second of noise, made once, for the flute's breath and the loops below. */
+  breathBuffer() {
+    if (this._breath) return this._breath;
+    const ctx = this.ctx, b = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = b.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < d.length; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = w * 0.6 + last * 8; }      // (white, with a little brown under it)
+    return (this._breath = b);
+  }
+
+  // ---------- ENGINE-20: loops of sound (ambience): rain on thatch, waves on a shingle beach, the keep's hum ----------
+  /** A loop from sound.js `loops` (noise through a filter, or notes, or both: { noise: [low, high] (a slow sweep between
+      them and back, `sweep` seconds; one number: steady), q, notes: [[midi, level]], wave, level }) starts, or goes on if it is
+      playing, at `level` times its own (1). Loops are on the effects' bus; each has a gain of its own, so stopLoop fades it out
+      over `fade` seconds and loopLevel turns it up or down (the hush). */
+  loop(id, { level = 1, fade = 0.6 } = {}) {
+    if (!this.ready) return false;
+    const spec = this.sound.loops && this.sound.loops[id];
+    if (!spec) return false;
+    this.loops = this.loops || {};
+    const ctx = this.ctx, t = ctx.currentTime, want = (spec.level ?? 0.05) * level;
+    let L = this.loops[id];
+    if (!L) {
+      const gain = ctx.createGain(); gain.gain.setValueAtTime(0, t); gain.connect(this.sfxBus);
+      const nodes = [];
+      if (spec.noise) {
+        const src = ctx.createBufferSource(), f = ctx.createBiquadFilter();
+        src.buffer = this.breathBuffer(); src.loop = true; f.type = spec.kind || "bandpass"; f.Q.value = spec.q ?? 0.7;
+        const lo = Array.isArray(spec.noise) ? spec.noise[0] : spec.noise, hi = Array.isArray(spec.noise) ? spec.noise[1] : spec.noise;
+        f.frequency.setValueAtTime(lo, t);
+        if (hi !== lo) { const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = 1 / Math.max(0.5, spec.sweep || 6); depth.gain.value = (hi - lo) / 2; f.frequency.setValueAtTime((lo + hi) / 2, t); lfo.connect(depth).connect(f.frequency); lfo.start(t); nodes.push(lfo); }
+        src.connect(f).connect(gain); src.start(t); nodes.push(src);
+      }
+      for (const [midi, lv] of spec.notes || []) {
+        const osc = ctx.createOscillator(), e = ctx.createGain();
+        osc.type = spec.wave || "sine"; osc.frequency.value = NOTE(midi); e.gain.value = lv ?? 1;
+        if (spec.wobble) { const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = spec.wobble; depth.gain.value = NOTE(midi) * 0.004; lfo.connect(depth).connect(osc.frequency); lfo.start(t); nodes.push(lfo); }
+        osc.connect(e).connect(gain); osc.start(t); nodes.push(osc);
+      }
+      L = this.loops[id] = { gain, nodes, level: want };
+    }
+    L.level = want; L.stopping = false;
+    L.gain.gain.cancelScheduledValues(t); L.gain.gain.setValueAtTime(L.gain.gain.value, t); L.gain.gain.linearRampToValueAtTime(want, t + fade);
+    return true;
+  }
+  /** The loop's loudness, as a share of what it was started at (the hush: 0.7 under a line). */
+  loopLevel(id, k = 1) {
+    const L = this.loops && this.loops[id];
+    if (!L || L.stopping || !this.ctx) return;
+    const want = L.level * Math.max(0, k), t = this.ctx.currentTime;
+    if (Math.abs(want - L.gain.gain.value) < 1e-4) return;
+    L.gain.gain.cancelScheduledValues(t); L.gain.gain.setValueAtTime(L.gain.gain.value, t); L.gain.gain.linearRampToValueAtTime(want, t + 0.25);
+  }
+  /** Stop a loop (fading it out over `fade` seconds), or every loop (no id): a scene change, the title. */
+  stopLoop(id = null, fade = 0.8) {
+    if (!this.loops || !this.ctx) return;
+    for (const key of id ? [id] : Object.keys(this.loops)) {
+      const L = this.loops[key];
+      if (!L) continue;
+      const t = this.ctx.currentTime;
+      L.stopping = true;
+      L.gain.gain.cancelScheduledValues(t); L.gain.gain.setValueAtTime(L.gain.gain.value, t); L.gain.gain.linearRampToValueAtTime(0, t + fade);
+      delete this.loops[key];
+      setTimeout(() => { for (const n of L.nodes) { try { n.stop(); } catch { /* stopped */ } } L.gain.disconnect(); }, fade * 1000 + 100);
+    }
+  }
+  /** Which loops are playing now (for tests). */
+  get looping() { return Object.keys(this.loops || {}); }
 
   // ---------- effects ----------
   sfx(id) {

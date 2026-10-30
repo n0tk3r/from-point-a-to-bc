@@ -387,7 +387,35 @@ export const props = {
       return pen.sf.finish();
     },
   },
+
+  /** SCENES-20A: the village woman's basket, dropped on the sand at Yui when three strangers step out of the air (the
+      arrival: js/content/cutscenes/edo-arrive.js; she will come back for it). Her back-basket of wicker (people.js
+      backBasket's colours) lying on its side, its mouth to the left, banded; and what was in it, spilled: two long white
+      radishes with their green tops, and a cabbage. A grown-up's size at scale 1, as people's are (give it the scale of
+      where it lies); its foot is the middle of its bottom. */
+  basket: {
+    frames: 1,
+    draw(scale) {
+      const pen = new Pen([-40, -26, 26, 3], scale);
+      pen.shadow(0, 24, 2.6);
+      pen.poly([[-12, -21], [17, -17], [19, -1], [-12, 0]], 1, WICKER, 1);                       // the body, wide at the mouth
+      pen.poly([[11, -17.5], [17, -17], [19, -1], [13, -0.5]], 1.05, WICKER, 2);                  // its far end in shade
+      for (const x of [-4, 4, 11]) pen.rect(x, -19 + (x + 4) * 0.12, 1.6, 18 - (x + 4) * 0.1, 1.2, WICKER, 2);      // the bands
+      pen.oval(-12, -10.5, 4, 10.5, 1.3, WICKER, 3);                                              // the mouth, dark inside
+      pen.oval(-12.5, -10.5, 2.4, 8, 1.4, WICKER_IN, 1);
+      pen.limb(-15, -3, -34, -1.5, 2.6, 1.0, RADISH, { z: 2 });                                   // a radish, rolled out
+      pen.limb(-14, -2, -10, -9, 1.5, 2.2, PEAS, { z: 1.9 });                                     //   its green top
+      pen.limb(-20, -1.5, -36, 1, 2.3, 0.9, RADISH, { z: 2.2 });                                  // another
+      pen.limb(-19, -1, -24, -8, 1.3, 2.0, PEAS, { z: 2.1 });
+      pen.ball(22, -4.5, 5, 4.5, CABBAGE, { z: 2.3 });                                            // and a cabbage, the other way
+      return pen.sf.finish();
+    },
+  },
 };
+const WICKER = ramp("#ecd296", "#cca862", "#9a7838", "#685022");          // SCENES-20A: the village woman's basket (people.js WICKER)
+const WICKER_IN = ramp("#7a5c2a", "#5c4420", "#3e2e16", "#26190c");
+const RADISH = ramp("#ffffff", "#f3f0e2", "#cbc5ae", "#8f8970");
+const CABBAGE = ramp("#e4f3c0", "#b4d886", "#80aa56", "#507236");
 const ICEBAG = ramp("#ecf7ff", "#a9d2f2", "#6f9fcc", "#466a92");          // OFFICE-17P: the ice pack's cloth
 const shiftedTone = (m) => ({ ...m, tones: [m.tones[1], m.tones[2], m.tones[2], m.tones[3]] });   // (its quilting: a line a tone down)
 

@@ -134,18 +134,55 @@ export const maps = {
     sketch: { places: { lot: [479, 479], ducts: [474, 174], room: [511, 317], property: [369, 269], breakroom: [247, 277], b7: [106, 174] } },
   },
 
+  // ENGINE-20: Act Six, Japan in the spring of 1830 (briefs/out/edo-design.md, section 3): an Edo travel map (PAINT-20B paints
+  // it, art/maps/edo/; a sketch until its pictures and layout.json are in), the coast from Suruga Bay in the east to Harima in
+  // the west. Its places are PAINT-20B's names (yui, osaka, hills, himeji) and its ways theirs (sea: yui to osaka, over the
+  // water; road1: osaka to hills; road2: hills to himeji). The family goes west down it in THREE LEGS (`leg`: Yui; the hills;
+  // Himeji): travel by the map only between places of the leg they are in (there is one place to a leg here, so the map is a
+  // map and not a vehicle), and a place of a leg behind them shows as visited, drawn in with its name, but refuses with its own
+  // line (`far`: WRITE-20A's edo.map.far.yui, "Twelve days by sea."; WRITE-20B's edo.map.far.hills; until they are in, "Too far
+  // to go back."). Nobody travels along the ways (`journey: true`: no marks to arrive on): they are the journeys' lines, along
+  // which the portraits go in the cut-scenes (g.journey("edo", "yui", "hills", { via: ["osaka"] }) for the voyage and the river
+  // mouth; g.journey("edo", "hills", "himeji") for the walk). Osaka is a landmark (no scene: the voyage's card and the river mouth
+  // are told, not played). The scenes are ENGINE-20's sketch stubs until SCENES-20's; MERGE-20 joins this entry with PAINT-20B's
+  // (theirs has the art and the pins; this one the legs, the far lines and the journeys' ways).
+  // PAINT-20B: this entry is ENGINE-20's (S/work-20-engine), copied whole so that MERGE-20 joins the two as a union: theirs has
+  // the legs, the far lines and the journeys' ways; the painted map is in art/maps/edo/ (map_edo.py) and its pins are below.
+  edo: {
+    era: "edo", name: "Japan", art: "art/maps/edo/",
+    places: {
+      yui: { scenes: ["edo-village", "edo-fishshop"], label: "Yui", leg: 1, far: "edo.map.far.yui" },
+      osaka: { scenes: [], label: "Osaka", shown: (g) => !!g.flag("edo.sailed"), leg: 2, far: "edo.map.far.osaka" },      // (MERGE-20: far, for Osaka faint beyond the bay from Yui)
+      hills: { scenes: ["edo-cedars", "edo-storehouse", "edo-chapel"], label: "The hills", leg: 2, far: "edo.map.far.hills" },
+      himeji: { scenes: ["edo-castle", "edo-keep", "edo-keeptop"], label: "Himeji", leg: 3, far: "edo.map.far.himeji" },
+    },
+    paths: [
+      { a: "yui", b: "osaka", journey: true },        // the sea: the voyage (twelve days)
+      { a: "osaka", b: "hills", journey: true },      // the road north into the hills
+      { a: "hills", b: "himeji", journey: true },     // the coast road west (three days)
+    ],
+    // PAINT-20B: the sketch's pins where the painted map has them (art/maps/edo/layout.json), for a page that draws the sketch
+    sketch: { places: { yui: [640, 312], osaka: [300, 448], hills: [300, 308], himeji: [130, 296] } },
+  },
+
   // The engine's own proof (js/content/scenes/engine-proof.js, the letterbox): a map for each of its two scenes, drawn as
   // sketches. Dad on the sand in Egypt, the Son in the sketch of a market street in Rome: switching between them is the
   // Timer turning four notches, then the street's map.
   // ENGINE-17: and under the sand, a room of the same time (proof-below.js), joined to the sand by a way: two leads in two
   // scenes of one time switch through this map with no Timer; its travel is per lead (Dad may not leave it by the map: the
   // place says so here; the critter may not: the scene says so).
+  // ENGINE-20: and the legs, proved here: while the fact "proof.legs" is true the sand is leg 1 and the room under it leg 2, so
+  // that from either the other is "far" (the sand's far is a line of the proof's, the room's a thought); without the fact,
+  // neither has a leg and the map is as it was. The way between them is kept for travel; a second way, `journey` only, runs
+  // round by the dunes (the proof's journey goes along it: proof.journey in engine-proof.js).
   "proof-sand": {
     era: "egypt", name: "Proof sand",
-    places: { sand: { scenes: ["engine-proof"], label: "Where the wagon came down" },
-      below: { scenes: ["proof-below"], label: "Under the sand", travel: { dad: "proof.travel.dad" } } },      // ENGINE-17
-    paths: [{ a: "sand", b: "below", spawn: { sand: "grate", below: "fromSand" } }],                           // ENGINE-17
-    sketch: { places: { sand: [400, 280], below: [400, 440] } },
+    places: { sand: { scenes: ["engine-proof"], label: "Where the wagon came down", leg: (g) => (g.flag("proof.legs") ? 1 : null), far: "proof.far.sand" },
+      below: { scenes: ["proof-below"], label: "Under the sand", travel: { dad: "proof.travel.dad" }, leg: (g) => (g.flag("proof.legs") ? 2 : null), far: "proof.far.below" },      // ENGINE-17 (ENGINE-20: the legs)
+      dunes: { scenes: [], label: "The dunes", shown: (g) => !!g.flag("proof.journey"), leg: (g) => (g.flag("proof.legs") ? 2 : null) } },      // ENGINE-20: a landmark the journey passes
+    paths: [{ a: "sand", b: "below", spawn: { sand: "grate", below: "fromSand" } },                           // ENGINE-17
+      { a: "sand", b: "dunes", journey: true }, { a: "dunes", b: "below", journey: true }],                   // ENGINE-20: the journey's way, round by the dunes
+    sketch: { places: { sand: [400, 280], below: [400, 440], dunes: [620, 360] } },
   },
   "proof-street": {
     era: "rome", name: "Proof street",
