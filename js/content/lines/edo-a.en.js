@@ -40,6 +40,9 @@
 // here."); the clerk peers and apologizes; the captain grumbles and relents; the arrests in Osaka are one line of
 // Gonroku's (edo.sail.osaka.3). Nobody is threatened, grabbed or shouted at.
 //
+// WRITE-21B (round twenty-one, the history pass): edo.map.far.himeji is changed (four days from the hills, not three),
+// marked where it stands; the far lines for five legs are in edo-d.en.js (edo.map.far.<place>.<leg>).
+//
 // The round-nineteen box: at most 80 characters, one idea, the punch word last. S/work-20-writeA/ids.md says when every
 // line is said, and which hooks and facts the trees (js/content/talk/edo-a.js) use.
 
@@ -944,11 +947,14 @@ export const lines = {
   // MERGE-20: the other two places the map can show from a leg that is not theirs: Osaka, faint beyond the bay before the
   // voyage (a place of the next leg); Himeji, faint beyond the hills (the next leg). Mom's, and true from where she stands.
   "edo.map.far.osaka": ["mom", "Osaka is a long way by sea. We'd need a ship, and a captain who says yes."],
-  "edo.map.far.himeji": ["mom", "Himeji is three days' walk from here. When it's time, we'll walk it."],
+  "edo.map.far.himeji": ["mom", "Himeji is four days' walk from here. When it's time, we'll walk it."],  // WRITE-21B: was "Himeji is three days' walk from here. When it's time, we'll walk it." (four days from the hills, not three; the per-leg lines are edo.map.far.himeji.<leg> (edo-d.en.js))
 
   // ======================================================================================================
   // SCENES-20A: new lines of the first leg's staging (one block, marked; WRITE-20A's rules: nobody in the family lies)
   // ======================================================================================================
   // #24's gate, the year not yet worked out (#21): the passage agreed, the boat at hand, and Big Sister will not go
   "edo.sail.notyet.bigsis": ["bigsis", "Not yet. I won't sail out of a year I can't name. The year first, then the sea."],
+  // ---- SCENES-21A: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
+  // SCENES-21A: O-Masa asked properly, dressed and fed, before they have tried the road west (round twenty-one: #25 after #24)
+  "edo.masa.notroad": ["masa", "Walk up that road first. He'll say you could have walked. Then ask me."],
 };

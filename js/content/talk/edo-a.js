@@ -52,7 +52,8 @@
 //                   the first leg's gate. The goodbyes, edo.west.bye.*, and the voyage are the scene's, after.)
 //
 // THE FACTS. Set by the trees: edo.tamiMet, edo.babySleeps, edo.clothes (#22's clothes), edo.clue.red (#21), edo.kiheiMet,
-// edo.pennyShown, edo.clue.blue (#21; the scene sets it too, at the print), edo.kiheiWest (he has named the ship),
+// edo.pennyShown, edo.clue.blue (#21; the scene sets it too, at the print), edo.kiheiRoad (he has named the road: WRITE-21A),
+// edo.kiheiWest (he has named the ship: since round twenty-one only after the road, edo.noRoad, which it reads: WRITE-21A),
 // edo.saidArigato, edo.catGone, edo.fed (#23's beat), edo.boxGiven, edo.sankichiMet, edo.boardRead, edo.arigato (she has
 // the word), edo.bunsei, edo.dressed (#22's beat), edo.gonrokuMet, edo.gonrokuNo, edo.gonrokuWife (he has sent them to his
 // wife), edo.masaMet, edo.masaAsked, edo.west (#24's beat). Set by the scenes, and read here: edo.clerkPassed (the first
@@ -136,8 +137,14 @@ export const kiheiTree = (h = {}) => {
   const hook = (name, next) => async (g) => { if (h[name]) await h[name](g); return next; };
   const print = (id, line) => ({ id, line, clue: true, when: (g) => !is(g, "edo.when"),
     say: ["edo.kihei.print.1", "edo.kihei.print.2", "edo.shop.print.clue", "edo.shop.print.clue.2"], set: "edo.clue.blue" });
-  const west = (id, line, say) => ({ id, line, clue: true, when: (g) => !is(g, "edo.west"), say, set: "edo.kiheiWest" });
-  const WEST = ["edo.kihei.west.1", "edo.kihei.west.2", "edo.kihei.west.3", "edo.kihei.west.4"];
+  // WRITE-21A: round twenty-one puts the road before the ship (briefs/out/edo2-design.md, #25: "Kihei now names the ship when
+  // the family comes back from the pass"). Before the road has been tried (edo.noRoad) he names the road only, and sends
+  // them up it (edo.road.kihei.before; the fact edo.kiheiRoad); after it, the ship (edo.road.kihei.1, .2, then his own .3
+  // and .4; edo.kiheiWest, as before). Was: one option, before or after anything, saying west.1 to .4, setting edo.kiheiWest.
+  const west = (id, line, say) => ({ id, line, clue: true, when: (g) => !is(g, "edo.west") && !is(g, "edo.noRoad"), say, set: "edo.kiheiRoad" });
+  const WEST = ["edo.kihei.west.1", "edo.kihei.west.2", "edo.road.kihei.before"];
+  const ship = (id, line) => ({ id, line, clue: true, when: (g) => is(g, "edo.noRoad") && !is(g, "edo.west"),
+    say: ["edo.road.kihei.1", "edo.road.kihei.2", "edo.kihei.west.3", "edo.kihei.west.4"], set: "edo.kiheiWest" });      // WRITE-21A
   return {
     id: "kihei",
     start: (g) => (is(g, "edo.kiheiMet") ? node(g) : "open"),
@@ -149,6 +156,7 @@ export const kiheiTree = (h = {}) => {
           { id: "redMom", line: "edo.kihei.opt.red.mom", clue: true, when: (g) => !is(g, "edo.clue.red"), say: ["edo.kihei.red"] },
           print("printMom", "edo.kihei.opt.print.mom"),
           west("westMom", "edo.kihei.opt.west.mom", WEST),
+          ship("shipMom", "edo.road.kihei.opt.mom"),      // WRITE-21A
           { id: "thanksMom", line: "edo.kihei.opt.thanks.mom", once: true, when: (g) => is(g, "edo.fed"), say: ["edo.kihei.thanks.mom"] },
           { id: "byeMom", line: "edo.kihei.opt.bye.mom", say: ["edo.kihei.bye"], then: "exit" },
         ],
@@ -159,6 +167,7 @@ export const kiheiTree = (h = {}) => {
           { id: "redBig", line: "edo.kihei.opt.red.big", clue: true, when: (g) => !is(g, "edo.clue.red"), say: ["edo.kihei.red"] },
           print("printBig", "edo.kihei.opt.print.big"),
           west("westBig", "edo.kihei.opt.west.big", WEST),
+          ship("shipBig", "edo.road.kihei.opt.big"),      // WRITE-21A
           { id: "byeBig", line: "edo.kihei.opt.bye.big", say: ["edo.kihei.bye"], then: "exit" },
         ],
       },
@@ -169,7 +178,8 @@ export const kiheiTree = (h = {}) => {
           { id: "penniesLil", line: "edo.kihei.opt.pennies.lil", when: (g) => g.has("pennies") && !is(g, "edo.pennyShown"),
             say: ["edo.shop.penny.1", "edo.shop.penny.2", "edo.shop.penny.3", "edo.shop.penny.4"], set: "edo.pennyShown", then: (g) => (is(g, "edo.fed") ? null : "meal") },
           { id: "redLil", line: "edo.kihei.opt.red.lil", clue: true, when: (g) => !is(g, "edo.clue.red"), say: ["edo.kihei.red.lil"] },
-          west("westLil", "edo.kihei.opt.west.lil", ["edo.kihei.west.lil", "edo.kihei.west.1", "edo.kihei.west.3", "edo.kihei.west.4"]),
+          west("westLil", "edo.kihei.opt.west.lil", ["edo.kihei.west.lil", "edo.kihei.west.1", "edo.road.kihei.before"]),      // WRITE-21A: was west.lil, .1, .3, .4
+          ship("shipLil", "edo.road.kihei.opt.lil"),      // WRITE-21A
           // the word, brought back after the meal (if she had it at the table she has said it there)
           { id: "arigatoLil", line: "edo.kihei.opt.arigato.lil", once: true, when: (g) => is(g, "edo.arigato") && is(g, "edo.fed") && !is(g, "edo.saidArigato"),
             say: ["edo.shop.arigato.1", "edo.shop.arigato.2", "edo.shop.arigato.3"], set: "edo.saidArigato" },

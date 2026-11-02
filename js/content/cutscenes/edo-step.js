@@ -6,7 +6,8 @@
 // doorway open in it (edo.door), the coin in Mom's hand:
 //   1. The title: "Hold Hands".
 //   2. "Places, girls. Hold hands. All the way through." The three of them in a row before the door, Little Sister in the
-//      middle: "I'm in the MIDDLE." / "Left hand, right hand. Count of four."
+//      middle: "I'm in the MIDDLE." / "Left hand, right hand. Count of four." (SCENES-21C: Little Sister first, "My brother
+//      SAID.", the Son's "Hold hands." from the women's hall the evening before; and Mom's prayer is WRITE-21B's, edited)
 //   3. Mom looks once round the room, at the warden in the window with the mirror, at the sunset over the Inland Sea behind
 //      him, and prays a short prayer of her own (that He knows where her son is, and she doesn't).
 //   4. The goodbyes: Little Sister to the poem man ("Keep my flashlight SAFE"), his answer, Big Sister's thanks for the
@@ -21,7 +22,7 @@
 // It carries save = false (the end of the demo is not saved before: Continue after the end comes back to the last save at
 // rest, as round nineteen's end did).
 
-import { STEP } from "../talk/edo-b.js";
+import { STEP } from "../talk/edo-d.js";          // SCENES-21C: WRITE-21B's STEP (round twenty's, with Little Sister's "My brother SAID." first)
 
 const FAMILY = ["mom", "lilsis", "bigsis"];
 // In a row before the door (on the east wall, its foot at the wall's), facing it, Little Sister in the middle: set by eye on
@@ -59,15 +60,18 @@ export default async function step(g) {
   seen(STEP.title);
   await g.fade(0, 500);
 
-  // ---- 2. places: in a row before the door, Little Sister in the middle
+  // ---- 2. places: in a row before the door, Little Sister in the middle. SCENES-21C: she says it first now ("My brother
+  // SAID.": his "Hold hands." at the women's hall, the evening before), and Mom's "Places, girls. Hold hands." answers him
   turn(g, "mom", "E");
+  lookAt(g, "lilsis", "mom");
   await g.say(STEP.places[0]);
+  await g.say(STEP.places[1]);
   await Promise.all(FAMILY.map((id, n) => (g.actor(id) ? g.wait(n * 200).then(() => g.walkTo(ROW[id][0], ROW[id][1], id)) : null)));
   for (const id of FAMILY) turn(g, id, "E");
   lookAt(g, "lilsis", "mom");
-  await g.say(STEP.places[1]);
-  turn(g, "lilsis", "E");
   await g.say(STEP.places[2]);
+  turn(g, "lilsis", "E");
+  await g.say(STEP.places[3]);
 
   // ---- 3. Mom looks once round the room: the warden, the sunset behind him; and prays
   const mom = g.actor("mom");

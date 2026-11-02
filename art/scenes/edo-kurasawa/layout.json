@@ -1,0 +1,1666 @@
+{
+ "id": "edo-kurasawa",
+ "horizon": 300,
+ "full": 590,
+ "view": {
+  "horizon": 300,
+  "full": 590,
+  "camera": "persp.Camera(300, 590): eye 317 cm, Z0 875, focal 800, vanishing x 400 (as Yui's)",
+  "road": "the Tokaido across the picture, z 40 to 560 cm (rows 576 to 477); the ledge beyond it, its wall's top at z 900 (left) to 1100 (middle); the rest place before the mound to z 1700 (row 399)",
+  "compass": "the act's (as Yui's): the bay in front, Fuji across it, the way west to the right; the left edge is the road back to Yui"
+ },
+ "light": "morning: the act's sun in the east, behind us and to the left, about 30 degrees up (an hour after Yui, a little more behind us: shadows fall right and away, 1.15 : 0.85); the hill behind us throws its shadow across the near verge and the near edge of the road from the left",
+ "walk": [
+  [
+   0,
+   476
+  ],
+  [
+   178,
+   476
+  ],
+  [
+   184,
+   470
+  ],
+  [
+   212,
+   468
+  ],
+  [
+   262,
+   468
+  ],
+  [
+   276,
+   474
+  ],
+  [
+   300,
+   466
+  ],
+  [
+   336,
+   462
+  ],
+  [
+   392,
+   452
+  ],
+  [
+   430,
+   444
+  ],
+  [
+   470,
+   436
+  ],
+  [
+   520,
+   428
+  ],
+  [
+   560,
+   426
+  ],
+  [
+   580,
+   428
+  ],
+  [
+   632,
+   436
+  ],
+  [
+   652,
+   458
+  ],
+  [
+   672,
+   478
+  ],
+  [
+   700,
+   482
+  ],
+  [
+   740,
+   472
+  ],
+  [
+   780,
+   458
+  ],
+  [
+   800,
+   452
+  ],
+  [
+   800,
+   596
+  ],
+  [
+   0,
+   596
+  ]
+ ],
+ "walk_note": "one area: the road (rows 476 to 596), the strip before the teahouse's door (O-Kuni's place behind the grill), the ledge's strip before the wall, and the rest place before the mound (up to row 426 under the hackberry); the climb is the way out at the right edge, not walked up here",
+ "blocked": [
+  [
+   [
+    164,
+    482
+   ],
+   [
+    246,
+    482
+   ],
+   [
+    252,
+    475
+   ],
+   [
+    172,
+    475
+   ]
+  ],
+  [
+   [
+    281,
+    473
+   ],
+   [
+    300,
+    473
+   ],
+   [
+    302,
+    471
+   ],
+   [
+    283,
+    471
+   ]
+  ],
+  [
+   [
+    308,
+    476
+   ],
+   [
+    366,
+    476
+   ],
+   [
+    364,
+    468
+   ],
+   [
+    314,
+    469
+   ]
+  ],
+  [
+   [
+    458,
+    449
+   ],
+   [
+    511,
+    449
+   ],
+   [
+    505,
+    441
+   ],
+   [
+    455,
+    441
+   ]
+  ],
+  [
+   [
+    710,
+    411
+   ],
+   [
+    686,
+    405
+   ],
+   [
+    650,
+    401
+   ],
+   [
+    611,
+    400
+   ],
+   [
+    574,
+    400
+   ],
+   [
+    547,
+    403
+   ],
+   [
+    535,
+    408
+   ],
+   [
+    542,
+    414
+   ],
+   [
+    570,
+    419
+   ],
+   [
+    614,
+    423
+   ],
+   [
+    662,
+    424
+   ],
+   [
+    699,
+    421
+   ],
+   [
+    716,
+    416
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "cloud",
+   "file": "cloud.png",
+   "plane": "back",
+   "state": "on (Fuji's cap of cloud) / off: hidden once edo.noRoad's cloud has lifted at the top of the pass (the same cloud: a player who has seen it lift sees it gone here too)",
+   "what": "the cap of cloud on Fuji's top; the backdrop under it is the clear summit"
+  },
+  {
+   "id": "kago",
+   "file": "kago.png",
+   "base": 448,
+   "what": "the bearers' palanquin set down by the mound (empty); whoever stands by the mound is behind it"
+  },
+  {
+   "id": "noren",
+   "file": "noren.png",
+   "base": 467,
+   "what": "the noren over the teahouse's door (it stirs: fx noren-sway); whoever goes in at the door passes behind it"
+  },
+  {
+   "id": "trunks",
+   "file": "trunks.png",
+   "base": 475,
+   "what": "Soshichi's willow trunks set down at the road's edge (show them while he stands at `peddler`; his sprite carries them on the road)"
+  },
+  {
+   "id": "grill",
+   "file": "grill.png",
+   "base": 481,
+   "what": "O-Kuni's grill with the turban shells; she stands behind it (at `kuni`)"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "the near verge at the bottom edge: grass, two stones and a worn-out straw sandal"
+  }
+ ],
+ "cutouts": {
+  "cloud": [
+   185,
+   65,
+   185,
+   45
+  ],
+  "kago": [
+   389,
+   387,
+   187,
+   61
+  ],
+  "noren": [
+   168,
+   368,
+   99,
+   33
+  ],
+  "trunks": [
+   309,
+   412,
+   57,
+   64
+  ],
+  "grill": [
+   179,
+   437,
+   70,
+   44
+  ],
+  "front": [
+   4,
+   577,
+   736,
+   23
+  ]
+ },
+ "things": [
+  {
+   "id": "fuji",
+   "what": "Mount Fuji across the head of the bay, white well down its flanks (its cap of cloud: `cloud`)",
+   "shape": {
+    "rect": [
+     150,
+     64,
+     300,
+     238
+    ]
+   },
+   "stand": [
+    300,
+    476
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cloud",
+   "what": "the cap of cloud on Fuji's top (a cut-out: on / off)",
+   "shape": {
+    "poly": [
+     [
+      185,
+      101
+     ],
+     [
+      196,
+      93
+     ],
+     [
+      208,
+      88
+     ],
+     [
+      219,
+      83
+     ],
+     [
+      231,
+      80
+     ],
+     [
+      243,
+      78
+     ],
+     [
+      254,
+      76
+     ],
+     [
+      266,
+      76
+     ],
+     [
+      277,
+      77
+     ],
+     [
+      289,
+      78
+     ],
+     [
+      301,
+      81
+     ],
+     [
+      312,
+      84
+     ],
+     [
+      324,
+      89
+     ],
+     [
+      335,
+      95
+     ],
+     [
+      335,
+      100
+     ],
+     [
+      324,
+      101
+     ],
+     [
+      312,
+      103
+     ],
+     [
+      301,
+      106
+     ],
+     [
+      289,
+      108
+     ],
+     [
+      277,
+      109
+     ],
+     [
+      266,
+      110
+     ],
+     [
+      254,
+      110
+     ],
+     [
+      243,
+      109
+     ],
+     [
+      231,
+      107
+     ],
+     [
+      219,
+      105
+     ],
+     [
+      208,
+      103
+     ],
+     [
+      196,
+      101
+     ],
+     [
+      185,
+      100
+     ],
+     [
+      231,
+      76
+     ],
+     [
+      239,
+      73
+     ],
+     [
+      246,
+      70
+     ],
+     [
+      254,
+      68
+     ],
+     [
+      261,
+      67
+     ],
+     [
+      268,
+      66
+     ],
+     [
+      276,
+      65
+     ],
+     [
+      283,
+      65
+     ],
+     [
+      291,
+      66
+     ],
+     [
+      298,
+      67
+     ],
+     [
+      306,
+      69
+     ],
+     [
+      313,
+      71
+     ],
+     [
+      320,
+      74
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    476
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bay",
+   "what": "Suruga Bay, morning",
+   "shape": {
+    "poly": [
+     [
+      300,
+      302
+     ],
+     [
+      520,
+      304
+     ],
+     [
+      510,
+      372
+     ],
+     [
+      546,
+      410
+     ],
+     [
+      552,
+      428
+     ],
+     [
+      527,
+      435
+     ],
+     [
+      495,
+      436
+     ],
+     [
+      461,
+      438
+     ],
+     [
+      426,
+      439
+     ],
+     [
+      391,
+      440
+     ],
+     [
+      356,
+      441
+     ],
+     [
+      320,
+      442
+     ],
+     [
+      283,
+      443
+     ],
+     [
+      300,
+      360
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    476
+   ],
+   "face": "N"
+  },
+  {
+   "id": "yuishore",
+   "what": "the shore curving back east toward Yui (the way they came): a thread of sand, low hills, Yui's roofs",
+   "shape": {
+    "poly": [
+     [
+      270,
+      286
+     ],
+     [
+      460,
+      297
+     ],
+     [
+      460,
+      310
+     ],
+     [
+      360,
+      316
+     ],
+     [
+      300,
+      324
+     ],
+     [
+      270,
+      336
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    476
+   ],
+   "face": "N"
+  },
+  {
+   "id": "boats",
+   "what": "fishing boats far out on the bay",
+   "shape": {
+    "rect": [
+     338,
+     306,
+     160,
+     50
+    ]
+   },
+   "stand": [
+    300,
+    476
+   ],
+   "face": "N"
+  },
+  {
+   "id": "teahouse",
+   "what": "O-Kuni's teahouse: a thatched roof, its front open to the road, the matted room behind with the bay through its back",
+   "shape": {
+    "poly": [
+     [
+      -301,
+      358
+     ],
+     [
+      313,
+      358
+     ],
+     [
+      178,
+      197
+     ],
+     [
+      -12,
+      197
+     ],
+     [
+      0,
+      470
+     ]
+    ]
+   },
+   "stand": [
+    96,
+    494
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bench",
+   "what": "the bench under the eaves, a tea tray on it",
+   "shape": {
+    "rect": [
+     2,
+     442,
+     151,
+     34
+    ]
+   },
+   "stand": [
+    96,
+    494
+   ],
+   "face": "N"
+  },
+  {
+   "id": "grill",
+   "what": "the grill: a clay firebox of charcoal before the door (a cut-out)",
+   "shape": {
+    "rect": [
+     177,
+     435,
+     74,
+     48
+    ]
+   },
+   "stand": [
+    212,
+    500
+   ],
+   "face": "N"
+  },
+  {
+   "id": "shells",
+   "what": "turban shells grilling in their own shells on the coals, mouth up",
+   "shape": {
+    "rect": [
+     190,
+     439,
+     47,
+     11
+    ]
+   },
+   "stand": [
+    212,
+    500
+   ],
+   "face": "N"
+  },
+  {
+   "id": "signboard",
+   "what": "the signboard at the teahouse's corner: a turban shell painted on it, a column of brush marks under it (our own: no shop's name)",
+   "shape": {
+    "rect": [
+     279,
+     384,
+     24,
+     90
+    ]
+   },
+   "stand": [
+    282,
+    492
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mound",
+   "what": "the 40th distance mound from Edo: a grassed mound by the road",
+   "shape": {
+    "rect": [
+     542,
+     328,
+     162,
+     83
+    ]
+   },
+   "stand": [
+    598,
+    434
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hackberry",
+   "what": "the hackberry on the mound, planted for the travellers' shade, in new leaf",
+   "shape": {
+    "rect": [
+     449,
+     61,
+     344,
+     195
+    ]
+   },
+   "stand": [
+    598,
+    434
+   ],
+   "face": "N"
+  },
+  {
+   "id": "palanquin",
+   "what": "the bearers' palanquin, set down: an open-sided bamboo kago on one long pole (a cut-out)",
+   "shape": {
+    "rect": [
+     387,
+     385,
+     191,
+     65
+    ]
+   },
+   "stand": [
+    446,
+    462
+   ],
+   "face": "N"
+  },
+  {
+   "id": "trunks",
+   "what": "Soshichi's willow trunks, five tiers, set down and opened (a cut-out)",
+   "shape": {
+    "rect": [
+     307,
+     410,
+     61,
+     68
+    ]
+   },
+   "stand": [
+    376,
+    486
+   ],
+   "face": "N"
+  },
+  {
+   "id": "road",
+   "what": "the Tokaido: packed earth, from Yui (left) to the climb (right)",
+   "shape": {
+    "poly": [
+     [
+      -387,
+      577
+     ],
+     [
+      1187,
+      577
+     ],
+     [
+      800,
+      478
+     ],
+     [
+      0,
+      478
+     ]
+    ]
+   },
+   "stand": [
+    400,
+    540
+   ],
+   "face": "S"
+  },
+  {
+   "id": "cliffroad",
+   "what": "the road west cut across Mount Satta's face, climbing round to the right (the way to the pass)",
+   "shape": {
+    "poly": [
+     [
+      640,
+      262
+     ],
+     [
+      700,
+      252
+     ],
+     [
+      800,
+      226
+     ],
+     [
+      800,
+      412
+     ],
+     [
+      700,
+      410
+     ],
+     [
+      690,
+      380
+     ]
+    ]
+   },
+   "stand": [
+    784,
+    466
+   ],
+   "face": "E"
+  },
+  {
+   "id": "smoke",
+   "what": "smoke from the grill (the engine's: fx grill-smoke)",
+   "shape": {
+    "rect": [
+     196,
+     380,
+     50,
+     64
+    ]
+   },
+   "stand": [
+    212,
+    500
+   ],
+   "face": "N"
+  },
+  {
+   "id": "kuni",
+   "what": "O-Kuni at her grill (drawn by the game)",
+   "shape": {
+    "rect": [
+     211,
+     392,
+     27,
+     79
+    ]
+   },
+   "stand": [
+    184,
+    485
+   ],
+   "face": "E"
+  },
+  {
+   "id": "sakuji",
+   "what": "Sakuji, squatting on the palanquin's pole end (drawn by the game)",
+   "shape": {
+    "rect": [
+     432,
+     382,
+     27,
+     80
+    ]
+   },
+   "stand": [
+    406,
+    476
+   ],
+   "face": "E"
+  },
+  {
+   "id": "tora",
+   "what": "Tora, huge and gentle, beside him (drawn by the game)",
+   "shape": {
+    "rect": [
+     456,
+     386,
+     28,
+     84
+    ]
+   },
+   "stand": [
+    430,
+    484
+   ],
+   "face": "E"
+  },
+  {
+   "id": "soshichi",
+   "what": "Soshichi the medicine peddler by his trunks (drawn by the game)",
+   "shape": {
+    "rect": [
+     360,
+     395,
+     31,
+     91
+    ]
+   },
+   "stand": [
+    336,
+    500
+   ],
+   "face": "E"
+  },
+  {
+   "id": "komuso",
+   "what": "the komuso under his basket hat, playing (drawn by the game)",
+   "shape": {
+    "rect": [
+     651,
+     405,
+     34,
+     101
+    ]
+   },
+   "stand": [
+    628,
+    520
+   ],
+   "face": "E"
+  },
+  {
+   "id": "courier",
+   "what": "the relay courier running through (fx courier) (drawn by the game)",
+   "shape": {
+    "rect": [
+     382,
+     408,
+     35,
+     104
+    ]
+   },
+   "stand": [
+    400,
+    540
+   ],
+   "face": "E"
+  }
+ ],
+ "marks": {
+  "yui": [
+   16,
+   532
+  ],
+  "teahouse": [
+   96,
+   494
+  ],
+  "kuni": [
+   224,
+   471
+  ],
+  "mound": [
+   598,
+   434
+  ],
+  "bearers": [
+   446,
+   462
+  ],
+  "peddler": [
+   376,
+   486
+  ],
+  "komuso": [
+   668,
+   506
+  ],
+  "courierFrom": [
+   6,
+   516
+  ],
+  "courierTo": [
+   794,
+   508
+  ],
+  "climb": [
+   784,
+   466
+  ],
+  "view": [
+   300,
+   476
+  ],
+  "tora": [
+   470,
+   470
+  ],
+  "arrive_mom": [
+   40,
+   524
+  ],
+  "arrive_bigsis": [
+   26,
+   546
+  ],
+  "arrive_lilsis": [
+   58,
+   540
+  ]
+ },
+ "stands": {
+  "yui": {
+   "at": [
+    16,
+    532
+   ],
+   "grownup_px": 128,
+   "face": "E",
+   "note": "the left edge: the road back east to Yui (edo-village, its west end)"
+  },
+  "teahouse": {
+   "at": [
+    96,
+    494
+   ],
+   "grownup_px": 107,
+   "face": "N"
+  },
+  "kuni": {
+   "at": [
+    224,
+    471
+   ],
+   "grownup_px": 94,
+   "face": "S"
+  },
+  "mound": {
+   "at": [
+    598,
+    434
+   ],
+   "grownup_px": 74,
+   "face": "N"
+  },
+  "bearers": {
+   "at": [
+    446,
+    462
+   ],
+   "grownup_px": 89,
+   "face": "S"
+  },
+  "peddler": {
+   "at": [
+    376,
+    486
+   ],
+   "grownup_px": 103,
+   "face": "S"
+  },
+  "komuso": {
+   "at": [
+    668,
+    506
+   ],
+   "grownup_px": 114,
+   "face": "W"
+  },
+  "courierFrom": {
+   "at": [
+    6,
+    516
+   ],
+   "grownup_px": 119,
+   "face": "E"
+  },
+  "courierTo": {
+   "at": [
+    794,
+    508
+   ],
+   "grownup_px": 115,
+   "face": "W"
+  },
+  "climb": {
+   "at": [
+    784,
+    466
+   ],
+   "grownup_px": 92,
+   "face": "W",
+   "note": "the road turns up the mountain's foot at the right edge: the way west to the pass (edo-satta)"
+  },
+  "view": {
+   "at": [
+    300,
+    476
+   ],
+   "grownup_px": 97,
+   "face": "N"
+  },
+  "tora": {
+   "at": [
+    470,
+    470
+   ],
+   "grownup_px": 94,
+   "face": "S"
+  },
+  "arrive_mom": {
+   "at": [
+    40,
+    524
+   ],
+   "grownup_px": 124,
+   "face": "E"
+  },
+  "arrive_bigsis": {
+   "at": [
+    26,
+    546
+   ],
+   "grownup_px": 136,
+   "face": "E"
+  },
+  "arrive_lilsis": {
+   "at": [
+    58,
+    540
+   ],
+   "grownup_px": 132,
+   "face": "E"
+  }
+ },
+ "exits": [
+  {
+   "to": "edo-village",
+   "edge": "left",
+   "at": [
+    16,
+    532
+   ],
+   "what": "the road back east to Yui (its west end)"
+  },
+  {
+   "to": "edo-satta",
+   "edge": "right",
+   "at": [
+    784,
+    466
+   ],
+   "what": "up the cliff road to the top of the pass (once the family is dressed: #22)"
+  }
+ ],
+ "fx": [
+  {
+   "id": "grill-smoke",
+   "type": "smoke",
+   "what": "smoke off the turban shells on O-Kuni's grill, leaning away up the road with the wind off the bay",
+   "at": [
+    214,
+    445
+   ],
+   "base": 481,
+   "height": 70,
+   "width": [
+    4,
+    22
+   ],
+   "lean": [
+    26,
+    -70
+   ],
+   "rise": 12,
+   "rate": 3,
+   "gust": 0.35,
+   "color": "#e4e6ea",
+   "opacity": 0.34
+  },
+  {
+   "id": "grill-embers",
+   "type": "embers",
+   "what": "the charcoal under the shells, glowing a little in the daylight",
+   "at": [
+    214,
+    445
+   ],
+   "size": [
+    26,
+    4
+   ],
+   "base": 481,
+   "glowOpacity": 0.1,
+   "sparks": 0.08
+  },
+  {
+   "id": "bay-waves",
+   "type": "waves",
+   "what": "the bay's rows of small waves, far (ENGINE-20's kind), toward the shore below us",
+   "area": [
+    [
+     300,
+     302
+    ],
+    [
+     520,
+     304
+    ],
+    [
+     510,
+     372
+    ],
+    [
+     546,
+     410
+    ],
+    [
+     552,
+     428
+    ],
+    [
+     527,
+     435
+    ],
+    [
+     495,
+     436
+    ],
+    [
+     461,
+     438
+    ],
+    [
+     426,
+     439
+    ],
+    [
+     391,
+     440
+    ],
+    [
+     356,
+     441
+    ],
+    [
+     320,
+     442
+    ],
+    [
+     283,
+     443
+    ],
+    [
+     300,
+     360
+    ]
+   ],
+   "rows": 9,
+   "per": 8,
+   "size": 4,
+   "speed": 3,
+   "toward": "S",
+   "color": "#f4f8fb",
+   "opacity": 0.38,
+   "plane": "back"
+  },
+  {
+   "id": "bay-shimmer",
+   "type": "shimmer",
+   "what": "the morning glitter on the bay",
+   "poly": [
+    [
+     300,
+     302
+    ],
+    [
+     520,
+     304
+    ],
+    [
+     510,
+     372
+    ],
+    [
+     546,
+     410
+    ],
+    [
+     552,
+     428
+    ],
+    [
+     527,
+     435
+    ],
+    [
+     495,
+     436
+    ],
+    [
+     461,
+     438
+    ],
+    [
+     426,
+     439
+    ],
+    [
+     391,
+     440
+    ],
+    [
+     356,
+     441
+    ],
+    [
+     320,
+     442
+    ],
+    [
+     283,
+     443
+    ],
+    [
+     300,
+     360
+    ]
+   ],
+   "count": 22,
+   "size": 4,
+   "flow": [
+    3,
+    0
+   ],
+   "life": 1.8,
+   "color": "#f6eed8",
+   "opacity": 0.45,
+   "plane": "back"
+  },
+  {
+   "id": "noren-sway",
+   "type": "sway",
+   "plane": "noren",
+   "anchor": "top",
+   "amount": 2.2,
+   "period": 3.4,
+   "wave": 26,
+   "lean": 0.35,
+   "what": "the noren stirring in the wind off the bay"
+  },
+  {
+   "id": "cloud-drift",
+   "type": "bob",
+   "plane": "cloud",
+   "amount": 1,
+   "period": 11,
+   "what": "Fuji's cap of cloud breathing on its top (very slow); the scene hides it when it has lifted"
+  },
+  {
+   "id": "gulls",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "gulls over the bay (the engine's own silhouettes, pale)",
+   "lanes": [
+    [
+     [
+      -12,
+      150
+     ],
+     [
+      200,
+      168
+     ],
+     [
+      360,
+      236
+     ],
+     [
+      452,
+      214
+     ],
+     [
+      470,
+      -12
+     ]
+    ],
+    [
+     [
+      520,
+      -12
+     ],
+     [
+      430,
+      232
+     ],
+     [
+      330,
+      262
+     ],
+     [
+      180,
+      160
+     ],
+     [
+      -12,
+      140
+     ]
+    ]
+   ],
+   "every": [
+    8,
+    16
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "speed": 55,
+   "size": 7,
+   "scale": [
+    0.6,
+    1.0
+   ],
+   "color": "#f6eed8",
+   "behind": [
+    [
+     [
+      -301,
+      358
+     ],
+     [
+      313,
+      358
+     ],
+     [
+      178,
+      197
+     ],
+     [
+      -12,
+      197
+     ],
+     [
+      0,
+      470
+     ]
+    ],
+    [
+     [
+      452,
+      60
+     ],
+     [
+      800,
+      60
+     ],
+     [
+      800,
+      300
+     ],
+     [
+      452,
+      300
+     ]
+    ]
+   ],
+   "note": "they cross the bay between the teahouse and the hackberry; behind the teahouse's roof and the hackberry's crown"
+  },
+  {
+   "id": "courier",
+   "type": "birds",
+   "kind": "flyers",
+   "what": "the relay courier: he runs along the road now and then, left to right and back, the letter box on his shoulder",
+   "lanes": [
+    [
+     [
+      -30,
+      512
+     ],
+     [
+      830,
+      512
+     ]
+    ],
+    [
+     [
+      830,
+      520
+     ],
+     [
+      -30,
+      520
+     ]
+    ]
+   ],
+   "every": [
+    18,
+    34
+   ],
+   "group": [
+    1,
+    1
+   ],
+   "speed": 150,
+   "frames_note": "PEOPLE-21A's courier, running, both ways (until its frames are given, the engine would draw a bird's silhouette: SCENES-21A gives the frames, or walks him as a person on these lines)",
+   "sizeAt": 512,
+   "base": 512,
+   "behind": [],
+   "note": "His lane is the road's middle (rows 512 going right, 520 coming back): there a grown-up is 117 px and a man of 1.56 m 104 px; he passes IN FRONT of everything on the far side of the road (the grill, the trunks, the palanquin, the teahouse) and BEHIND only the front plane; nobody stands in his lane at `teahouse` or `peddler` (those are above it), so he never runs through the family unless they stand in the road's middle. If the engine walks him as a person instead, the same two lines are his path (courierFrom -> courierTo)."
+  }
+ ],
+ "fx_note": "the grill's smoke and embers; the bay's far waves and its glitter; the noren sways; Fuji's cloud bobs a pixel (very slow) and is hidden once it has lifted (the state is the scene's, from the pass); gulls (engine-drawn); the courier's run is a flyer along the road (PEOPLE-21A's frames) or a walk along the same line",
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "grownup_at_full_px": 160
+ },
+ "sizes": {
+  "yui": {
+   "grownup": 128,
+   "mom": 123,
+   "lilsis": 89,
+   "man": 114,
+   "woman": 107
+  },
+  "teahouse": {
+   "grownup": 107,
+   "mom": 103,
+   "lilsis": 75,
+   "man": 95,
+   "woman": 89
+  },
+  "kuni": {
+   "grownup": 94,
+   "mom": 91,
+   "lilsis": 66,
+   "man": 84,
+   "woman": 79
+  },
+  "mound": {
+   "grownup": 74,
+   "mom": 71,
+   "lilsis": 52,
+   "man": 66,
+   "woman": 62
+  },
+  "bearers": {
+   "grownup": 89,
+   "mom": 86,
+   "lilsis": 62,
+   "man": 80,
+   "woman": 75
+  },
+  "peddler": {
+   "grownup": 103,
+   "mom": 99,
+   "lilsis": 72,
+   "man": 91,
+   "woman": 86
+  },
+  "komuso": {
+   "grownup": 114,
+   "mom": 109,
+   "lilsis": 79,
+   "man": 101,
+   "woman": 95
+  },
+  "courierFrom": {
+   "grownup": 119,
+   "mom": 114,
+   "lilsis": 83,
+   "man": 106,
+   "woman": 99
+  },
+  "courierTo": {
+   "grownup": 115,
+   "mom": 110,
+   "lilsis": 80,
+   "man": 102,
+   "woman": 96
+  },
+  "climb": {
+   "grownup": 92,
+   "mom": 88,
+   "lilsis": 64,
+   "man": 82,
+   "woman": 76
+  },
+  "view": {
+   "grownup": 97,
+   "mom": 93,
+   "lilsis": 68,
+   "man": 87,
+   "woman": 81
+  },
+  "tora": {
+   "grownup": 94,
+   "mom": 90,
+   "lilsis": 65,
+   "man": 84,
+   "woman": 78
+  },
+  "arrive_mom": {
+   "grownup": 124,
+   "mom": 119,
+   "lilsis": 86,
+   "man": 110,
+   "woman": 103
+  },
+  "arrive_bigsis": {
+   "grownup": 136,
+   "mom": 130,
+   "lilsis": 95,
+   "man": 121,
+   "woman": 113
+  },
+  "arrive_lilsis": {
+   "grownup": 132,
+   "mom": 127,
+   "lilsis": 92,
+   "man": 118,
+   "woman": 110
+  }
+ }
+}

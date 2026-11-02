@@ -90,9 +90,72 @@ export const cast = {
   pilgrim3: { name: "Pilgrim", color: "#ead29a", sprite: "pilgrim3" },
   plasterer1: { name: "Plasterer", color: "#ccd9c4", sprite: "plasterer1" },
   plasterer2: { name: "Plasterer", color: "#ccd9c4", sprite: "plasterer2" },
+  // PEOPLE-21A: Act Six made bigger (round twenty-one): the people of the Satta Pass, the ship and Osaka. Each colour by
+  // round twelve's rule, as round twenty read it (CIE Lab): at least 21 from the family's five and the narrator (the
+  // nearest: Senzo 21.0 from the Son's blue), at least 11 from every one of round twenty's people of Japan (Sakuji 11.3
+  // from O-Tami), at least 11 from each other (Mosuke and Kyuhachi 11.1) and 19 from everyone they share a scene with
+  // (Kyuhachi and Tatsu 19.4); people of other acts, who never meet them, 6 or more (Soshichi 6.1 from the old water
+  // carrier, whom no scene uses). The sailors share one voice, as the pilgrims of the alms line do. The
+  // sprite is the kind they are found as; their other states (`soshichi-free`, `komuso-play`, `shige-stone`,
+  // `kyuzo-nopass`, `natsu-nocomb`, `tatsu-seated`, `jubei-stage`) are swapped in under the same id. The komuso, the shamisen player and
+  // the boy puppet say nothing (no entry: a scene's `actors` takes their kind).
+  kuni:     { name: "O-Kuni", color: "#ddf0a3", sprite: "kuni" },
+  sakuji:   { name: "Sakuji", color: "#dbb56e", sprite: "sakuji" },
+  tora:     { name: "Tora", color: "#84e673", sprite: "tora" },
+  soshichi: { name: "Sōshichi", color: "#75d1c8", sprite: "soshichi" },
+  courier:  { name: "Courier", color: "#ffa39e", sprite: "courier" },
+  mosuke:   { name: "Mosuke", color: "#bfd175", sprite: "mosuke" },
+  shige:    { name: "O-Shige", color: "#ff9ef0", sprite: "shige" },
+  kyuzo:    { name: "Kyūzō", color: "#b1f0e3", sprite: "kyuzo" },
+  kanbei:   { name: "Kanbei", color: "#ceeef0", sprite: "kanbei" },
+  denzo:    { name: "Denzō", color: "#80ffa6", sprite: "denzo" },
+  seijiro:  { name: "Seijirō", color: "#bff799", sprite: "seijiro" },
+  kota:     { name: "Kōta", color: "#ffe38f", sprite: "kota" },
+  kako1:    { name: "Sailor", color: "#dd9eff", sprite: "kako1" },             // the two at the windlass: one voice
+  kako2:    { name: "Sailor", color: "#dd9eff", sprite: "kako2" },
+  natsu:    { name: "O-Natsu", color: "#d1c769", sprite: "natsu" },
+  rihei:    { name: "Rihei", color: "#b3f77c", sprite: "rihei" },
+  kyuhachi: { name: "Kyūhachi", color: "#a3d175", sprite: "kyuhachi" },
+  kurata:   { name: "Kurata", color: "#dbe1ff", sprite: "kurata" },
+  tatsu:    { name: "Tatsu", color: "#69d173", sprite: "tatsu" },
+  yomiuri1: { name: "Broadsheet Seller", color: "#d1b4be", sprite: "yomiuri1" },   // the pair chant in turn, line for line:
+  yomiuri2: { name: "Broadsheet Seller", color: "#80ff80", sprite: "yomiuri2" },   //   two colours, so the turns read
+  senzo:    { name: "Senzō", color: "#80c6ff", sprite: "senzo" },              // (a Berlin blue)
+  jubei:    { name: "Jūbei", color: "#f98fff", sprite: "jubei" },
+  chanter:  { name: "Chanter", color: "#ffcccc", sprite: "chanter" },
+  awafather: { name: "Pilgrim", color: "#ff9f80", sprite: "awafather" },         // the alms line: one voice
+  awamother: { name: "Pilgrim", color: "#ff9f80", sprite: "awamother" },
+  oldpilgrim: { name: "Pilgrim", color: "#ff9f80", sprite: "oldpilgrim" },
+  ladleboy: { name: "Pilgrim Boy", color: "#ff9f80", sprite: "ladleboy" },
+  // PEOPLE-21B: Act Six made bigger (round twenty-one): the Akashi shore, Himeji town, the women's hall at the foot of
+  // Mount Shosha. Each colour by round twelve's rule as round twenty and PEOPLE-21A read it (CIE Lab): at least 21 from the
+  // family's five and the narrator (the nearest: Heita 21.1 from the Son), at least 11 from every person of Japan (round
+  // twenty's, PEOPLE-21A's, and each other), at least 14 from everyone in the same scene (the Son, in the hall), at least 6
+  // from the people of other acts (the nearest: O-Sato 6.3 from Rome's clerk). The sprite is the kind they are found as;
+  // their other states (`fusa-ladle`, `heita-standing`, `awapilgrim1-ashore`, `kiku-hand`, `tobei-night`, `ume-kneel`,
+  // `ryokai-standing`) are swapped in under the same id. The two Awa pilgrims share a voice, and so do the two pupils.
+  fusa:     { name: "O-Fusa", color: "#f0f090", sprite: "fusa" },
+  leader:   { name: "Group Leader", color: "#70b0f8", sprite: "leader" },
+  heita:    { name: "Heita", color: "#a8c8d0", sprite: "heita" },
+  sato:     { name: "O-Sato", color: "#d8a098", sprite: "sato" },
+  satosister: { name: "Sister-in-Law", color: "#f8d8e8", sprite: "satosister" },
+  awapilgrim1: { name: "Awa Pilgrim", color: "#d0a880", sprite: "awapilgrim1" },
+  awapilgrim2: { name: "Awa Pilgrim", color: "#d0a880", sprite: "awapilgrim2" },
+  tane:     { name: "O-Tane", color: "#80b0d8", sprite: "tane" },
+  kiku:     { name: "O-Kiku", color: "#f88888", sprite: "kiku" },
+  shizu:    { name: "O-Shizu", color: "#c0a8c8", sprite: "shizu" },
+  pupil1:   { name: "Pupil", color: "#b8c080", sprite: "pupil1" },
+  pupil2:   { name: "Pupil", color: "#b8c080", sprite: "pupil2" },
+  tobei:    { name: "Tōbei", color: "#e8a878", sprite: "tobei" },
+  ume:      { name: "O-Ume", color: "#b0b8b0", sprite: "ume" },
+  ryokai:   { name: "Ryōkai", color: "#a8a8b8", sprite: "ryokai" },
+  tome:     { name: "Grandmother Tome", color: "#a8d0b0", sprite: "tome" },
+  wife:     { name: "Young Wife", color: "#88f8f0", sprite: "wife" },
+  girl:     { name: "Girl", color: "#d890d8", sprite: "girl" },
   // NEVADA-12E: the engine's own painted creature, for the proof scene only (js/content/scenes/engine-proof.js)
   critter:  { name: "Critter", color: "#d6ef8a", sprite: "critter", lead: true, keeps: "stash" },
   narrator: { name: "Narrator", color: "#f6e3b8" },
+  foodboat: { name: "Food boat", color: "#a0f860" },      // MERGE-21: the Hirakata food boats' call (WRITE-21A, edo.boat.6): a voice off, no sprite (CIE Lab 50 from the family, 14.6 from anyone)
 };
 
 /** Time periods. The id matches a palette in css/tokens.css and a track in sound.js.
@@ -115,6 +178,10 @@ export const eras = {
 };
 
 /** Things that can be carried. `icon` is a painted picture in art/items/. `look` is a line ID, or one for each lead who might be holding it. */
+/** MERGE-21: a thing's look that changes with a fact: says `then` (a line, or several in turn) once the fact is true, else
+    `before`; its `lines` list every line it can say (SCENES-17's way: the checks read them). */
+const afterFact = (fact, then, before) => Object.assign((g) => g.say(...[].concat(g.flag(fact) ? then : before)), { lines: [...[].concat(then), ...[].concat(before)] });
+
 export const items = {
   // Act One: Dad's
   reed:         { name: "reed", icon: "reed.png", look: "item.reed.look" },
@@ -142,7 +209,12 @@ export const items = {
   // The coin goes on from the Son to Mom and the girls, so each of them has a line for it.
   coin: { name: "silver coin", icon: "coin.png", look: { son: "item.coin.look", mom: "item.coin.mom", bigsis: "item.coin.bigsis", lilsis: "item.coin.lilsis", any: "item.coin.look" } },
   // Act Three: each of the three has her own line for each thing
-  note: { name: "sticky note", icon: "note.png", look: { mom: "item.note.mom", bigsis: "item.note.bigsis", lilsis: "item.note.lilsis", any: "item.note.mom" } },
+  // MERGE-21: after #27 the note carries the Funadama's list (WRITE-21A's lines; Big Sister's is two boxes: SCENES-21A); each look
+  // is a function of the game that lists every line it can say as its `lines` (SCENES-17's way, which the checks read)
+  note: { name: "sticky note", icon: "note.png", look: { mom: afterFact("edo.funadamaList", "item.note.list.mom", "item.note.mom"),
+    bigsis: afterFact("edo.funadamaList", ["item.note.list.bigsis", "item.note.list.bigsis.2"], "item.note.bigsis"),
+    lilsis: afterFact("edo.funadamaList", "item.note.list.lilsis", "item.note.lilsis"),
+    any: afterFact("edo.funadamaList", "item.note.list.mom", "item.note.mom") } },
   studykey: { name: "study key", icon: "studykey.png", look: { mom: "item.studykey.mom", bigsis: "item.studykey.bigsis", lilsis: "item.studykey.lilsis", any: "item.studykey.mom" } },
   lilflash: { name: "pink flashlight", icon: "lilflash.png", look: { mom: "item.lilflash.mom", bigsis: "item.lilflash.bigsis", lilsis: "item.lilflash.lilsis", any: "item.lilflash.lilsis" } },
   pencil: { name: "Dad's pencil", icon: "pencil.png", look: { mom: "item.pencil.mom", bigsis: "item.pencil.bigsis", lilsis: "item.pencil.lilsis", any: "item.pencil.mom" } },
@@ -179,6 +251,20 @@ export const items = {
   sushibox: { name: "box of sushi", icon: "sushibox.png", look: { mom: "item.sushibox.mom", bigsis: "item.sushibox.bigsis", lilsis: "item.sushibox.lilsis", any: "item.sushibox.mom" } },
   mirror: { name: "bronze mirror", icon: "mirror.png", look: { mom: "item.mirror.mom", bigsis: "item.mirror.bigsis", lilsis: "item.mirror.lilsis", any: "item.mirror.mom" } },
   trowel: { name: "plasterer's trowel", icon: "trowel.png", look: { mom: "item.trowel.mom", bigsis: "item.trowel.bigsis", lilsis: "item.trowel.lilsis", any: "item.trowel.mom" } },
+  // ENGINE-21: Act Six made bigger: the new things (ROUND-21.md's list; the looks are the writers' item.<id>.<who>, the pictures
+  // PAINT-21F's art/items/<id>.png). Until those pictures are in this build each `icon` is the bare id, which the pockets show as
+  // the thing's name; at the merge each becomes "<id>.png". `lastpenny`'s name is "a penny", so it is said as it is (proper).
+  ...Object.fromEntries([["kanzashi", "hairpin"], ["toyamaprint", "peddler's print"], ["twopennies", "two pennies"], ["lastpenny", "a penny", true],
+    ["mon", "one-mon coin"], ["paddle", "rice paddle"], ["comb", "boxwood comb"], ["natsuslip", "O-Natsu's slip"], ["sheet", "broadsheet"],
+    ["blueprint", "blurry print"], ["ladle", "O-Fusa's ladle"], ["crab", "small crab"], ["fusaslip", "O-Fusa's slip"], ["riceball", "rice balls"]]
+    .map(([id, name, proper]) => [id, { name, ...(proper ? { proper: true } : {}), icon: `${id}.png`,      // MERGE-21: PAINT-21F's pictures are in
+      look: { mom: `item.${id}.mom`, bigsis: `item.${id}.bigsis`, lilsis: `item.${id}.lilsis`, any: `item.${id}.mom` } }])),
+  // MERGE-21: the broadsheet once Senzo has read it to them (#30, edo.sheetRead: WRITE-21A's item.sheet.read.*); O-Shige's pass
+  // (#24: lifted off the Jizo's hat and given back the same morning; PAINT-21F's picture, WRITE-21A's looks)
+  sheet: { name: "broadsheet", icon: "sheet.png", look: { mom: afterFact("edo.sheetRead", "item.sheet.read.mom", "item.sheet.mom"),
+    bigsis: afterFact("edo.sheetRead", "item.sheet.read.bigsis", "item.sheet.bigsis"), lilsis: afterFact("edo.sheetRead", "item.sheet.read.lilsis", "item.sheet.lilsis"),
+    any: afterFact("edo.sheetRead", "item.sheet.read.mom", "item.sheet.mom") } },
+  shigepass: { name: "O-Shige's pass", icon: "shigepass.png", look: { mom: "item.shigepass.mom", bigsis: "item.shigepass.bigsis", lilsis: "item.shigepass.lilsis", any: "item.shigepass.mom" } },
 };
 
 /** SCENES-17: is the lead in the Office (a scene of its building, or looking down into one)? */

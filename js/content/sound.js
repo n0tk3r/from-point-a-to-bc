@@ -138,6 +138,65 @@ export const sound = {
       bass: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
       bassLevel: 0.12,
     },
+
+    // ENGINE-21: Act Six made bigger (briefs/out/edo2-design.md, section 9): four more tunes written for the game, in its own synth,
+    // in the act's two modes (yo, the bright one; in, the one with the half step: as `edo` above). Nothing borrowed: no folk song,
+    // no real play's music, no famous melody; each one's own line, made here.
+    // `edo-sea`: the deck at noon, the fifth day out: bright and rolling, in six-eight (three steps to a beat: `div` 3), the yo scale
+    // on A, a plucked tune that climbs and settles like a swell, a flute answering at the end of each half, a bass on the beats,
+    // and a soft wash of the sea under it all (`bed`). About fourteen seconds round.
+    "edo-sea": {
+      bpm: 66, div: 3, root: 57, scale: [0, 2, 5, 7, 9], voice: "pluck", hold: 2.1, volume: 0.6, level: 0.11,
+      lead: [0, null, 2, 3, null, 2, 4, null, null, 3, 2, null, 1, null, 2, 4, null, 5, 4, null, null, null, null, null,
+        5, null, 4, 3, null, 4, 2, null, null, 1, 0, null, 1, null, 3, 2, null, 1, 0, null, null, null, null, null],
+      alt: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 6, null, 5,
+        null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 4, null, 2],
+      altVoice: "flute", altLevel: 0.06, altHold: 2.8, attack: 0.08, breath: 0.35,
+      bass: [0, null, null, 4, null, null, 3, null, null, 1, null, null, 1, null, null, 3, null, null, 3, null, null, 0, null, null,
+        4, null, null, 2, null, null, 2, null, null, 0, null, null, 1, null, null, 3, null, null, 0, null, null, null, null, null],
+      bassLevel: 0.11, bassHold: 2.6,
+      bed: { noise: [320, 1250], sweep: 6.5, q: 0.5, level: 0.018 },
+    },
+    // `edo-city`: Osaka, the Dōjima shore and the merchant street: quick and plucked, busy, the yo scale on G, a tune that runs up
+    // and tumbles down, a second plucked voice high up now and then (a shamisen's bite, made by the pluck an octave up), a bass
+    // that walks, and under it all the soft murmur of a crowd (`bed`: noise in the band of voices, drifting). About seventeen seconds.
+    "edo-city": {
+      bpm: 116, root: 55, scale: [0, 2, 5, 7, 9], voice: "pluck", hold: 1.3, volume: 0.58, level: 0.1,
+      lead: [0, 2, 3, 2, 4, null, 3, 2, 1, 2, 0, null, 2, null, null, null, 3, 4, 5, 4, 3, null, 2, 3, 4, 3, 2, 1, 2, null, null, null,
+        5, null, 4, 3, 4, 5, 4, null, 3, 2, 1, 2, 3, null, null, null, 1, 2, 3, 1, 2, null, 0, 1, 2, 1, 0, null, 0, null, null, null],
+      alt: [null, null, null, null, null, null, null, null, null, null, null, null, null, 7, null, 6, null, null, null, null, null, null, null, null, null, null, null, null, null, 8, null, 7,
+        null, null, null, null, null, null, null, null, null, null, null, null, null, 6, null, 5, null, null, null, null, null, null, null, null, null, null, null, null, null, 5, null, null],
+      altVoice: "pluck", altOctave: 1, altLevel: 0.05, altHold: 0.9,
+      bass: [0, null, 2, null, 3, null, 2, null, 1, null, 2, null, 0, null, null, null, 3, null, 4, null, 3, null, 2, null, 1, null, 0, null, 2, null, null, null,
+        3, null, 2, null, 1, null, 2, null, 3, null, 4, null, 3, null, null, null, 1, null, 2, null, 0, null, 1, null, 2, null, 0, null, 0, null, null, null],
+      bassLevel: 0.1, bassHold: 1.6, bassVoice: "pluck",
+      bed: { noise: [420, 1700], sweep: 3.4, q: 0.9, level: 0.016 },
+    },
+    // `edo-theatre`: the Inari theatre, backstage and the show: a low, grave plucked-string loop in the in scale on B, slow, a figure
+    // that repeats and darkens (the half step above the root leaning on it), a high pluck now and then like a string snapped at,
+    // and a low drone note twice round. The game's own: nothing of any real play's music.
+    "edo-theatre": {
+      bpm: 54, root: 47, scale: [0, 1, 5, 7, 8], voice: "pluck", hold: 1.6, volume: 0.6, level: 0.12,
+      lead: [0, null, 0, null, 2, null, 1, 0, null, null, 3, null, 2, null, null, null, 0, null, 0, null, 2, null, 3, 4, null, null, 3, 2, 1, null, null, null,
+        0, null, 0, null, 1, null, 2, null, 3, null, 4, null, 3, null, null, null, 2, null, 1, null, 0, null, 1, null, 0, null, null, null, null, null, null, null],
+      alt: [null, null, null, null, null, null, null, null, null, null, null, 5, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 6, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null, null, 7, null, null, null, null, null, null, null, null, null, null, null, null, null, 5, null, null, null, null, null, null],
+      altVoice: "pluck", altOctave: 2, altLevel: 0.045, altHold: 0.7,
+      bass: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 3, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+      bassLevel: 0.12, bassHold: 6,
+    },
+    // `edo-shosha`: the women's hall at the foot of Mount Shosha, and the sunset: slow, one breathy flute over the wind off the
+    // mountain (`bed`), the in scale on A, long notes and longer rests, rising at the end of each phrase as if asking. The game's
+    // own: no pilgrim hymn, no song.
+    "edo-shosha": {
+      bpm: 44, root: 57, scale: [0, 1, 5, 7, 8], voice: "flute", hold: 3.2, volume: 0.5, level: 0.085, attack: 0.18, breath: 0.55,
+      lead: [0, null, null, null, 2, null, 1, null, 0, null, null, null, null, null, null, null, 3, null, null, 2, 1, null, null, null, 2, null, 3, null, null, null, null, null,
+        4, null, null, 3, 2, null, null, null, 1, null, 2, null, 0, null, null, null, 2, null, null, 1, 0, null, null, null, 1, null, 2, null, null, null, null, null],
+      bass: [0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+        2, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+      bassLevel: 0.06, bassHold: 8,
+      bed: { noise: [480, 1350], sweep: 9, q: 0.6, level: 0.022 },
+    },
   },
 
   // ENGINE-20: loops of sound (audio.js loop / stopLoop / loopLevel): ambience that goes on while something is on the stage,
@@ -148,6 +207,12 @@ export const sound = {
     rain: { noise: [2400, 3600], sweep: 5, q: 0.35, level: 0.05 },                          // a soft steady hiss (a thatched roof: level 1 on the rain)
     waves: { noise: [380, 1500], sweep: 7.5, q: 0.55, level: 0.045 },                       // the sea on a shingle beach: a slow wash up and back
     hum: { notes: [[40, 0.6], [47, 0.3], [52, 0.18]], wave: "sine", wobble: 0.3, level: 0.03 },      // the door in time's hum (the keep's top floor): low, wavering a little
+    // ENGINE-21: Act Six made bigger
+    crowd: { noise: [420, 1700], sweep: 3.4, q: 0.9, level: 0.04 },                                                    // a city crowd: the murmur of voices, rising and falling
+    sea: { noise: [260, 1100], sweep: 5.5, q: 0.45, level: 0.04 },                                                     // the sea along a ship's side at sea: a steady wash
+    frogs: { notes: [[64, 0.5], [66.2, 0.35], [71, 0.2]], wave: "square", pulse: 7.5, gate: 0.32, level: 0.006 },        // frogs in the fields at night: a croaking chorus that swells and lulls
+    sizzle: { noise: [4800, 7600], sweep: 2.2, q: 0.5, level: 0.03 },                                                   // turban shells hissing in their own juice on a grill
+    wind: { noise: [500, 1400], sweep: 8, q: 0.6, level: 0.035 },                                                       // wind on a mountain path, or at the top of a pass
   },
 
   // Effects: `notes` are [MIDI note, start, length]; `noise` sweeps a filter from one pitch to another.
@@ -274,5 +339,35 @@ export const sound = {
     // round the D a baby likes (she hummed in the right key), settling on it at the end.
     lullaby: { notes: [[66, 0, 0.8], [69, 0.8, 0.4], [66, 1.2, 0.4], [64, 1.6, 0.8], [62, 2.4, 0.8], [64, 3.2, 0.4], [66, 3.6, 0.4], [69, 4.0, 0.8],
       [66, 4.8, 0.6], [64, 5.4, 0.4], [62, 5.8, 1.4], [50, 5.8, 1.4]], level: 0.045, wave: "sine" },
+
+    // ---- ENGINE-21: Act Six made bigger (the pass, the ship, Osaka, Akashi, Himeji, Shosha), every one made by code, the game's own.
+    // (The crowd, the sea's wash, the frogs, the shells' hiss and the wind are loops: above. `noises`: several short bursts in one
+    // sound, audio.js.) ----
+    // The windlass: the pawl clicking over the ratchet four times as the bars go round, the rope's creak under it, and a clunk.
+    windlass: { noise: [260, 140], len: 1.25, q: 5, notes: [[82, 0, 0.02], [82, 0.27, 0.02], [82, 0.54, 0.02], [82, 0.81, 0.02], [40, 0.05, 0.9, 37], [36, 1.05, 0.18]], level: 0.05, wave: "triangle" },
+    // The great sail filling: a soft, deep whump of cloth taking the wind.
+    sail: { noise: [200, 70], len: 0.55, q: 0.8, notes: [[33, 0, 0.42]], level: 0.09, wave: "sine" },
+    // The Funadama's chirp ("chin-chin"; the lock's chirp is the same sound): two small bright notes, the second a fourth up, like a
+    // tiny bell struck twice.
+    chirp: { notes: [[93, 0, 0.18], [105, 0, 0.06], [98, 0.14, 0.26], [110, 0.14, 0.08]], level: 0.035, wave: "sine" },
+    // Wooden clappers (the night man's): two sharp clacks, a beat apart.
+    clappers: { noises: [[3200, 1800, 0, 0.05, 0.22], [3200, 1800, 0.42, 0.05, 0.22]], q: 2.4, notes: [[86, 0, 0.025], [86, 0.42, 0.025], [62, 0, 0.03], [62, 0.42, 0.03]], level: 0.05, wave: "square" },
+    // A great temple bell a long way off, up the mountain: one long stroke, deep, its partials dying at their own pace, beating a little.
+    greatbell: { noise: [500, 220], len: 0.18, q: 1.5, notes: [[43, 0, 7.5], [42.92, 0, 7.0], [55, 0.01, 5.0], [62.1, 0.01, 3.4], [67, 0.02, 2.2], [74.4, 0.03, 1.2]], level: 0.026, wave: "sine" },
+    // The komusō's flute: a few notes of a phrase of his own, bending into each other, with his breath under them.
+    komuso: { noise: [1500, 900], len: 3.4, q: 1.4, notes: [[74, 0, 0.95, 76], [76, 0.98, 0.5], [74, 1.52, 0.42, 72], [69, 2.0, 1.4, 68.5]], level: 0.03, wave: "sine" },
+    // Feet stamping on boards (the puppet's feet operator): four stamps, a run of them.
+    stampfeet: { noises: [[320, 110, 0, 0.09, 0.3], [320, 110, 0.19, 0.09, 0.28], [320, 110, 0.38, 0.09, 0.3], [320, 110, 0.57, 0.09, 0.26]], q: 1.4, notes: [[40, 0, 0.08], [40, 0.19, 0.08], [40, 0.38, 0.08], [40, 0.57, 0.08]], level: 0.12, wave: "sine" },
+    // The audience laughing at a sad play (soft, wordless): a ripple of breathy "ha"s across the house, falling away.
+    laugh: { noises: [[1100, 800, 0, 0.12, 0.05], [1200, 850, 0.15, 0.12, 0.06], [1050, 760, 0.31, 0.12, 0.05], [950, 700, 0.48, 0.15, 0.04], [900, 650, 0.68, 0.18, 0.03]], q: 1.1,
+      notes: [[64, 0, 0.12, 62], [67, 0.15, 0.12, 64], [63, 0.31, 0.12, 60], [60, 0.48, 0.16, 57]], level: 0.022, wave: "triangle" },
+    // The audience moved (soft, wordless): a breath drawn in, and a long falling sigh across the house.
+    sob: { noise: [1300, 480], len: 1.8, q: 1.1, notes: [[67, 0.15, 0.6, 63], [64, 0.75, 0.9, 58]], level: 0.022, wave: "sine" },
+    // A comic octopus: a squelch, and a bloop up and a bloop down.
+    octopus: { noise: [500, 2000], len: 0.38, q: 3, notes: [[48, 0, 0.17, 60], [60, 0.2, 0.2, 45], [50, 0.45, 0.28, 66]], level: 0.055, wave: "sine" },
+    // A splash: a bucket's worth of water thrown, or a foot in the shallows.
+    splash: { noise: [3400, 600], len: 0.45, q: 0.7, notes: [[50, 0, 0.07]], level: 0.07, wave: "sine" },
+    // The Kyoto boat hauled upriver (a journey's river part): the rope's creak as the gang on the bank leans on it, twice, and water.
+    haul: { noise: [700, 260], len: 1.4, q: 1.2, notes: [[43, 0, 0.5, 40], [45, 0.7, 0.5, 41]], level: 0.03, wave: "sawtooth" },
   },
 };

@@ -416,7 +416,12 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   // person's heights as a seat's is (people.js CM). The figure is drawn that much above the point it is placed at (the
   // ground under what it stands on), so that the depth of the scene sizes it as anyone standing there; its shadow is on
   // what it stands on, under the feet.
-  const J = skeleton(d, spec.standOn ? { ...pose, raise: spec.standOn / (spec.height || 1) } : pose);
+  // PEOPLE-21A: spec.doll, a puppet (the boy puppet at the Inari theatre): it does not breathe, blink or move its lips; and
+  // spec.float, how far a figure's feet hang above the ground (in its own heights) unless its pose says otherwise
+  // (pose.raise: 0 when the doll's feet come down on the boards, as when they stamp). Its shadow stays on the ground.
+  if (spec.doll) pose = { ...pose, breath: 0, blink: false, squeeze: false, mouth: 0 };
+  const float = pose.raise ?? spec.float ?? 0;
+  const J = skeleton(d, spec.standOn || float ? { ...pose, raise: (spec.standOn || 0) / (spec.height || 1) + float } : pose);      // (PEOPLE-21A: + float)
   const fine = S >= 84, coarse = S < 52;
 
   const limb = (a, b, ra, rb, mat, o) => {
@@ -472,7 +477,7 @@ export function drawFigure(spec, pose, yawDeg, size, opt = null) {
   if (only) sf.oval(ox, oy - 0.5, S * (spec.seatShadow ?? 0.11), Math.max(1.5, S * 0.026), -1e8, SHADOW);     // (a seat by itself: its own shadow)
   else if ((pose.seated && spec.sit && spec.sit.solid) || spec.standOn) {      // (OFFICE-17P: or standing on something: the shadow on it, under the feet)
     const f = P(mix(J.R.ball, J.L.ball, 0.5)), wide = Math.abs(P(J.R.ball)[0] - P(J.L.ball)[0]) / 2;
-    sf.oval(f[0], f[1] + 0.5, wide + S * 0.075, Math.max(1.5, S * 0.026), -1e8, SHADOW);
+    sf.oval(f[0], f[1] + 0.5 + float * S, wide + S * 0.075, Math.max(1.5, S * 0.026), -1e8, SHADOW);      // (PEOPLE-21A: a floating doll's shadow on the boards under it)
   } else sf.oval(ox, oy - 0.5, S * (spec.shadow || 0.18), Math.max(1.5, S * 0.032), -1e8, SHADOW);
 
   // ----- legs -----
@@ -1364,6 +1369,7 @@ export function shadePose(o = {}) {
 function between(d, a, b, e) {
   const A = skeleton(d, a), B = skeleton(d, b), num = (x, y) => lerp(x || 0, y || 0, e), late = e >= 0.5, p = { ...(late ? b : a) };
   for (const name of ["lean", "twist", "hipTwist", "sway", "rise", "shift", "breath", "pitch"]) if (a[name] != null || b[name] != null) p[name] = num(a[name], b[name]);      // (pitch: NEVADA-12P)
+  if (a.raise != null && b.raise != null) p.raise = num(a.raise, b.raise);      // PEOPLE-21A: a doll's feet coming down (a pose that does not say floats as its figure does)
   p.head = { nod: num(a.head && a.head.nod, b.head && b.head.nod), turn: num(a.head && a.head.turn, b.head && b.head.turn) };
   for (const k of ["R", "L"]) {
     const qa = a[k] || {}, qb = b[k] || {}, q = { ...(late ? qb : qa) };
@@ -2223,7 +2229,7 @@ export function headPoint(spec, pose, yawDeg, size) {
 
 export function tallOf(spec) {
   const J = skeleton(spec.dim, spec.seated ? poses.sit(spec, 0) : poses.stand(spec, 0));
-  return J.head[1] + spec.dim.headR[1] * 1.2 + (spec.crown || 0) + (spec.standOn ? spec.standOn / (spec.height || 1) : 0);        // (crown, NEVADA-12P: how much higher than the head a hairdo or a hat rises, in heights: Grandma Jolene's tower; OFFICE-17P: and what they stand on)
+  return J.head[1] + spec.dim.headR[1] * 1.2 + (spec.crown || 0) + (spec.standOn ? spec.standOn / (spec.height || 1) : 0) + (spec.float || 0);      // (PEOPLE-21A: + float: Jubei on his stage clogs)        // (crown, NEVADA-12P: how much higher than the head a hairdo or a hat rises, in heights: Grandma Jolene's tower; OFFICE-17P: and what they stand on)
 }
 
 // =====================================================================================

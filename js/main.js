@@ -18,8 +18,12 @@ import edoArrive from "./content/cutscenes/edo-arrive.js";            // ENGINE-
 import edoSail from "./content/cutscenes/edo-sail.js";                // MERGE-20: "The Uttermost Parts", the voyage (SCENES-20A)
 import edoWalk from "./content/cutscenes/edo-walk.js";                // MERGE-20: "Three days later", the walk to Himeji (SCENES-20B)
 import edoStep from "./content/cutscenes/edo-step.js";                // MERGE-20: "Hold Hands", the step and the end of the demo (SCENES-20C)
+import edoCastoff from "./content/cutscenes/edo-castoff.js";          // MERGE-21: "Casting Off", the ship at first light (SCENES-21A)
+import edoBoat from "./content/cutscenes/edo-boat.js";                // MERGE-21: "The Kyoto Boat", up the river round Osaka (SCENES-21B)
+import edoWalk2 from "./content/cutscenes/edo-walk2.js";              // MERGE-21: "The next day", Akashi to Himeji (SCENES-21C)
+import edoNight from "./content/cutscenes/edo-night.js";              // MERGE-21: "Mind The Fire", the walk back from Shosha (SCENES-21C)
 
-const cutscenes = { intro, title, backup, "office-arrive": officeArrive, "office-down": officeDown, "edo-arrive": edoArrive, "edo-sail": edoSail, "edo-walk": edoWalk, "edo-step": edoStep };      // "title" is not played: it dresses the stage behind the title screen (NEVADA-12SC: backup; SCENES-17: the Office's two; ENGINE-20: Act Six's arrival)
+const cutscenes = { intro, title, backup, "office-arrive": officeArrive, "office-down": officeDown, "edo-arrive": edoArrive, "edo-sail": edoSail, "edo-walk": edoWalk, "edo-step": edoStep, "edo-castoff": edoCastoff, "edo-boat": edoBoat, "edo-walk2": edoWalk2, "edo-night": edoNight };      // MERGE-21: Act Six's four new cut-scenes      // "title" is not played: it dresses the stage behind the title screen (NEVADA-12SC: backup; SCENES-17: the Office's two; ENGINE-20: Act Six's arrival)
 
 const game = new Game({ sceneIds, loadScene, cutscenes, cast, eras, items, lines, story, sound, maps });      // (MAP-15: maps)
 window.game = game;      // for the browser console while building the game

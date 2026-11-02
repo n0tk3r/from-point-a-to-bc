@@ -1,0 +1,846 @@
+{
+ "id": "edo-lock",
+ "closeup": true,
+ "horizon": 290,
+ "full": 590,
+ "light": "late afternoon: the low gold sun from the left, raking across the carving (every raised edge lit on its upper left, shaded on its lower right); the lock's shadow falls down and to the right on the stile. Key: edo-sunset (PAINT-20E's).",
+ "note": "A close-up: a whole-stage picture of the lock on the women's hall's doors, nobody standing in it, flat and frontal at 22 px to the centimetre (the lock's body 21 x 10 cm is 462 x 220 px, its top-left at (204, 196)). Behind: the doors' lattice and the seam (x 176) where the leaves meet; the hasp's plate and staple on the left leaf; slips on the stiles. The tiny walk patch at the bottom middle is the Egypt car's way, until ENGINE-21's close-up mode makes it unneeded.",
+ "scale_px_per_cm": 22.0,
+ "walk": [
+  [
+   410,
+   580
+  ],
+  [
+   450,
+   580
+  ],
+  [
+   450,
+   598
+  ],
+  [
+   410,
+   598
+  ]
+ ],
+ "walk_note": "nobody walks: a tiny patch for the lead to stand on, undrawn (egypt-car's way); not needed once the engine's close-up mode is in",
+ "blocked": [],
+ "marks": {
+  "default": [
+   430,
+   590
+  ]
+ },
+ "faces": {
+  "default": "N"
+ },
+ "stands": {
+  "default": {
+   "at": [
+    430,
+    590
+   ],
+   "grownup_px": 160,
+   "floor": "none",
+   "note": "undrawn"
+  }
+ },
+ "planes": [
+  {
+   "id": "wave",
+   "file": "wave.png",
+   "plane": "back",
+   "what": "the middle wave, in place in its groove",
+   "states": {
+    "in": "wave.png",
+    "slid": "wave-slid.png"
+   },
+   "note": "slid: aside to the right, over the third wave's foot (3.6 cm), the recess and the post showing"
+  },
+  {
+   "id": "ear",
+   "file": "ear.png",
+   "plane": "back",
+   "what": "the long ear laid back along the rabbit's back, its tiny hole black with dust",
+   "states": {
+    "dusty": "ear.png",
+    "clean": "ear-clean.png"
+   }
+  },
+  {
+   "id": "bolt",
+   "file": "bolt.png",
+   "plane": "back",
+   "what": "the bolt through the staple",
+   "states": {
+    "in": "bolt.png",
+    "out": "bolt-out.png"
+   }
+  }
+ ],
+ "parts": [
+  {
+   "id": "post",
+   "plane": "back",
+   "what": "the square post in the recess (in the backdrop: seen when the wave is slid); with the coin on it (post-coin.png), turned a quarter (post-turned.png: the groove across its end and the coin's marks turned)",
+   "states": {
+    "bare": null,
+    "coin": "post-coin.png",
+    "turned": "post-turned.png"
+   }
+  },
+  {
+   "id": "back",
+   "plane": "back",
+   "what": "along the rabbit's back, a carved line (the backdrop); opened, a row of thin slits (back-open.png)",
+   "states": {
+    "shut": null,
+    "open": "back-open.png"
+   }
+  }
+ ],
+ "parts_note": "the post and the back line are painted in the backdrop; their other states are the alts named (no cut-out of their own)",
+ "cutouts": {
+  "wave": [
+   355,
+   327,
+   149,
+   84
+  ],
+  "ear": [
+   309,
+   214,
+   159,
+   51
+  ],
+  "bolt": [
+   76,
+   283,
+   132,
+   42
+  ],
+  "ear-clean": [
+   309,
+   214,
+   159,
+   51
+  ],
+  "wave-slid": [
+   434,
+   326,
+   149,
+   85
+  ],
+  "post-coin": [
+   405,
+   346,
+   58,
+   58
+  ],
+  "post-turned": [
+   405,
+   346,
+   58,
+   58
+  ],
+  "back-open": [
+   463,
+   248,
+   74,
+   15
+  ],
+  "bolt-out": [
+   195,
+   291,
+   22,
+   30
+  ]
+ },
+ "things": [
+  {
+   "id": "lock",
+   "what": "the lock: a block of dark wood bound with iron, carved",
+   "shape": {
+    "poly": [
+     [
+      204,
+      196
+     ],
+     [
+      666,
+      196
+     ],
+     [
+      666,
+      416
+     ],
+     [
+      204,
+      416
+     ]
+    ]
+   }
+  },
+  {
+   "id": "rabbit",
+   "what": "a rabbit carved running over waves, stretched out, its long ears laid back",
+   "shape": {
+    "poly": [
+     [
+      255,
+      275
+     ],
+     [
+      285,
+      253
+     ],
+     [
+      327,
+      251
+     ],
+     [
+      393,
+      244
+     ],
+     [
+      464,
+      248
+     ],
+     [
+      519,
+      260
+     ],
+     [
+      552,
+      260
+     ],
+     [
+      536,
+      277
+     ],
+     [
+      591,
+      313
+     ],
+     [
+      585,
+      326
+     ],
+     [
+      525,
+      299
+     ],
+     [
+      446,
+      306
+     ],
+     [
+      356,
+      299
+     ],
+     [
+      283,
+      326
+     ],
+     [
+      252,
+      321
+     ],
+     [
+      305,
+      295
+     ],
+     [
+      261,
+      286
+     ]
+    ]
+   }
+  },
+  {
+   "id": "ear",
+   "what": "its long ear laid back along its back, a tiny hole in it",
+   "shape": {
+    "poly": [
+     [
+      305,
+      254
+     ],
+     [
+      327,
+      229
+     ],
+     [
+      362,
+      216
+     ],
+     [
+      406,
+      210
+     ],
+     [
+      449,
+      214
+     ],
+     [
+      469,
+      222
+     ],
+     [
+      472,
+      226
+     ],
+     [
+      471,
+      230
+     ],
+     [
+      458,
+      238
+     ],
+     [
+      325,
+      267
+     ],
+     [
+      323,
+      266
+     ],
+     [
+      310,
+      259
+     ]
+    ]
+   }
+  },
+  {
+   "id": "earhole",
+   "what": "the tiny hole in the ear (black with forty years of dust / clean)",
+   "shape": {
+    "poly": [
+     [
+      394,
+      214
+     ],
+     [
+      422,
+      214
+     ],
+     [
+      422,
+      238
+     ],
+     [
+      394,
+      238
+     ]
+    ]
+   },
+   "note": "a generous shape round a 5 px hole: the pin goes here"
+  },
+  {
+   "id": "waves",
+   "what": "three carved waves under the rabbit, curling to the left",
+   "shape": {
+    "poly": [
+     [
+      226,
+      326
+     ],
+     [
+      635,
+      326
+     ],
+     [
+      635,
+      407
+     ],
+     [
+      226,
+      407
+     ]
+    ]
+   }
+  },
+  {
+   "id": "wave",
+   "what": "the middle wave: a hair loose in its groove / slid aside",
+   "shape": {
+    "poly": [
+     [
+      361,
+      348
+     ],
+     [
+      385,
+      331
+     ],
+     [
+      405,
+      324
+     ],
+     [
+      430,
+      327
+     ],
+     [
+      455,
+      343
+     ],
+     [
+      474,
+      362
+     ],
+     [
+      499,
+      388
+     ],
+     [
+      507,
+      412
+     ],
+     [
+      357,
+      413
+     ],
+     [
+      353,
+      410
+     ],
+     [
+      354,
+      385
+     ],
+     [
+      357,
+      359
+     ]
+    ]
+   },
+   "slid": [
+    [
+     436,
+     359
+    ],
+    [
+     442,
+     347
+    ],
+    [
+     464,
+     331
+    ],
+    [
+     486,
+     323
+    ],
+    [
+     509,
+     327
+    ],
+    [
+     533,
+     343
+    ],
+    [
+     550,
+     359
+    ],
+    [
+     578,
+     388
+    ],
+    [
+     586,
+     408
+    ],
+    [
+     586,
+     412
+    ],
+    [
+     436,
+     413
+    ],
+    [
+     431,
+     410
+    ]
+   ]
+  },
+  {
+   "id": "post",
+   "what": "under the wave, a square post the size of a coin's hole (showing once the wave is slid; then with the coin on it, turned)",
+   "shape": {
+    "poly": [
+     [
+      402,
+      343
+     ],
+     [
+      462,
+      343
+     ],
+     [
+      462,
+      403
+     ],
+     [
+      402,
+      403
+     ]
+    ]
+   }
+  },
+  {
+   "id": "back",
+   "what": "a line carved along the rabbit's back, behind the ear (shut / a row of thin slits, as close as a fine comb's teeth)",
+   "shape": {
+    "poly": [
+     [
+      459,
+      238
+     ],
+     [
+      541,
+      238
+     ],
+     [
+      541,
+      271
+     ],
+     [
+      459,
+      271
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bolt",
+   "what": "the bolt through the hasp's staple (in / drawn back)",
+   "shape": {
+    "poly": [
+     [
+      211,
+      293
+     ],
+     [
+      211,
+      319
+     ],
+     [
+      105,
+      328
+     ],
+     [
+      103,
+      328
+     ],
+     [
+      78,
+      321
+     ],
+     [
+      73,
+      312
+     ],
+     [
+      73,
+      302
+     ],
+     [
+      79,
+      292
+     ],
+     [
+      103,
+      280
+     ],
+     [
+      105,
+      280
+     ]
+    ]
+   },
+   "out": [
+    [
+     192,
+     312
+    ],
+    [
+     192,
+     300
+    ],
+    [
+     200,
+     289
+    ],
+    [
+     210,
+     288
+    ],
+    [
+     220,
+     300
+    ],
+    [
+     220,
+     312
+    ],
+    [
+     214,
+     322
+    ],
+    [
+     202,
+     324
+    ]
+   ]
+  },
+  {
+   "id": "hasp",
+   "what": "the hasp's iron plate on the other leaf, riveted, its staple",
+   "shape": {
+    "poly": [
+     [
+      98,
+      220
+     ],
+     [
+      168,
+      216
+     ],
+     [
+      172,
+      398
+     ],
+     [
+      102,
+      402
+     ]
+    ]
+   }
+  },
+  {
+   "id": "lattice",
+   "what": "the doors' lattice: the dim hall between the bars",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      84,
+      0
+     ],
+     [
+      84,
+      600
+     ],
+     [
+      0,
+      600
+     ]
+    ]
+   },
+   "also": [
+    [
+     [
+      690,
+      0
+     ],
+     [
+      800,
+      0
+     ],
+     [
+      800,
+      600
+     ],
+     [
+      690,
+      600
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "slips",
+   "what": "name slips pasted on the doors' stiles, old and new",
+   "shape": {
+    "poly": [
+     [
+      96,
+      16
+     ],
+     [
+      146,
+      16
+     ],
+     [
+      146,
+      176
+     ],
+     [
+      96,
+      176
+     ]
+    ]
+   },
+   "also": [
+    [
+     [
+      606,
+      16
+     ],
+     [
+      662,
+      16
+     ],
+     [
+      662,
+      176
+     ],
+     [
+      606,
+      176
+     ]
+    ],
+    [
+     [
+      90,
+      426
+     ],
+     [
+      144,
+      426
+     ],
+     [
+      144,
+      584
+     ],
+     [
+      90,
+      584
+     ]
+    ],
+    [
+     [
+      634,
+      446
+     ],
+     [
+      684,
+      446
+     ],
+     [
+      684,
+      594
+     ],
+     [
+      634,
+      594
+     ]
+    ]
+   ]
+  }
+ ],
+ "hands": {
+  "handEar": {
+   "at": [
+    409,
+    226
+   ],
+   "who": "lilsis",
+   "holds": "pin",
+   "from": [
+    228,
+    40
+   ],
+   "angle_deg": 214,
+   "note": "Little Sister's small hand with the hairpin: the pin's ear-pick tip in the ear's hole; the hand comes in from the upper left (her wrist about (228, 40)), the pin pointing down and to the right into the hole. Her hand is about 12 cm long: ~260 px here."
+  },
+  "handPost": {
+   "at": [
+    433,
+    373
+   ],
+   "who": "mom",
+   "holds": "coin",
+   "from": [
+    470,
+    600
+   ],
+   "angle_deg": 270,
+   "note": "Mom's hand with the one-mon coin: her fingertips on the coin's rim at the post (the coin is painted on the post in post-coin and post-turned: draw the hand without its own coin there, or the scene hides the painted one); the hand comes up from below (her wrist about (470, 600)). A woman's hand about 17 cm: ~370 px here."
+  },
+  "handComb": {
+   "at": [
+    500,
+    256
+   ],
+   "who": "bigsis",
+   "holds": "comb",
+   "from": [
+    660,
+    40
+   ],
+   "angle_deg": 300,
+   "note": "Big Sister's hand with the boxwood comb: the comb's teeth pressed down into the slits along the rabbit's back (the slits run 68 px from [466, 251] to [534, 251]); the hand comes in from the upper right (her wrist about (660, 40)). A girl's hand about 16 cm: ~350 px here; the comb about 9 cm: ~200 px."
+  }
+ },
+ "hands_note": "All three at once at the last moment (the ear held, the post held, the comb pressed): the ear's hand from the upper left, the comb's from the upper right, the post's from below, so that none covers another's working point. The scale is 22 px to the cm. The engine draws the hands as overlay sprites at these points (ENGINE-21 close-ups).",
+ "exits": [
+  {
+   "id": "back",
+   "to": "edo-shosha",
+   "spawn": "lock",
+   "name": "Step back.",
+   "band": [
+    [
+     0,
+     560
+    ],
+    [
+     800,
+     560
+    ],
+    [
+     800,
+     600
+    ],
+    [
+     0,
+     600
+    ]
+   ],
+   "note": "leaving lets everything go (the scene's event: the ear, the post and the comb spring back)"
+  }
+ ],
+ "fx": [
+  {
+   "id": "dust",
+   "type": "shimmer",
+   "what": "a few motes of dust in the low sun across the lock",
+   "rect": [
+    180,
+    140,
+    520,
+    320
+   ],
+   "count": 8,
+   "size": 2,
+   "flow": [
+    3,
+    -1
+   ],
+   "life": 3.0,
+   "color": "#fff2cc",
+   "opacity": 0.35
+  }
+ ],
+ "sequence_note": "The puzzle's order (#37): the pin cleans the hole (ear -> ear-clean) and, held in, slides the middle wave aside (wave -> wave-slid: the post shows); the coin on the post (post-coin), turned (post-turned): the back's line opens into slits (back-open); the comb's teeth in the slits: the bolt can move (bolt -> bolt-out), and the lock chirps. Let go of the pin and the wave slides back (hide post-coin/post-turned/back-open with it); let go of the coin and the slits close."
+}

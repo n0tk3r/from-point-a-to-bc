@@ -517,6 +517,118 @@ KEYS["edo-sunset"] = {
     "turn_orange": 0.10,
     "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,
 }
+# ROUND-21: three new keys of Act Six, as STUBS (clones of edo-morning, so the base runs). Each painter replaces their own
+# with a full entry of its own in this place (PAINT-21B: edo-sea; PAINT-21C: edo-city; PAINT-21D: edo-shore), in the
+# woodblock manner of S/briefs/out/edo2-design.md section 4 and S/work-20-paintA/style.md, and touches no other key.
+# PAINT-21B: edo-sea, Gonroku's coaster at sea off Daiozaki at noon, the fifth day out (edo-deck, and the close-up of
+# its compass, edo-compass): the brightest light in the act. The sun is high in the south, behind the camera; the air
+# over open water is clear and white. Lead white leads the lights (the great sail, the sky's paper, the compass card),
+# barely warmed (the light ramp only touches naples yellow); the deep blues lead the darks and every shade, hard: the
+# sea's rows go to prussian and ultramarine, the sky's band to cerulean and cobalt, and a shadow on the deck's wood is
+# blue (cobalt, ultramarine, prussian: never violet, never brown: the act's rule). The ship's wood is yellow ochre in
+# the sun and burnt sienna in its own dark; almost no green anywhere (green's weight is low, and the ramp is kept only
+# for a rope's or a mat's greenish grey). The pair is the sun on wood (naples yellow) against the sea (ultramarine).
+KEYS["edo-sea"] = {
+    "title": "At sea off Daiozaki, noon",
+    "pair": ("naples-yellow", "ultramarine"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.30), mix("naples-yellow", "lead-white", 0.35), "naples-yellow"],   # the noon paper, hardly warmed
+    "shadow": {
+        # blue shade: a pale cerulean-cobalt on sunlit planks, deepening through cobalt and ultramarine to prussian blue
+        "warm": [mix("cerulean", "cobalt-blue", 0.30), mix("cobalt-blue", "cerulean", 0.35), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": [mix("veronese-green", "cerulean", 0.5), mix("viridian", "cobalt-blue", 0.4), mix("viridian", "prussian-blue", 0.5), "prussian-blue"],
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5), "prussian-blue"],   # wood in its own shade
+    },
+    "sky": ["lead-white", "cerulean", "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.40)],   # the band: paper at the horizon, cobalt high up
+    "weight": {"lead-white": 2.3, "prussian-blue": 2.0, "ultramarine": 2.0, "cobalt-blue": 1.9, "cerulean": 1.8, "burnt-sienna": 1.6,
+               "yellow-ochre": 1.6, "naples-yellow": 1.4, "vermilion": 1.0, "geranium-lake": 0.7, "chrome-yellow": 0.7, "chrome-orange": 0.6,
+               "lilac": 0.6, "veronese-green": 0.55, "viridian": 0.55, "emerald-green": 0.45, "cobalt-violet": 0.5, "deep-violet": 0.6},
+    "warm_light": 0.38,      # noon light is white: a lit surface goes only a little toward naples (the sail stays lead white)
+    "shade": 0.68,           # a shadow goes well toward its (blue) ramp: the hard noon shade under the sail and the boat
+    "turn": 50,
+    "snap": 0.56,            # a firm pull to few paints: flat areas
+    "chroma": 0.24,
+    "shade_lo": 0.20, "shade_hi": 0.42,
+    "lift": 0.08,            # no black: the darks lean to prussian blue
+    "sky_pull": 0.38,        # the open sky toward the key's band
+    "cast": 0.65,            # the short noon shadows on the deck go to the shade's blue
+    "light_chroma": 0.50,    # sunlit ochre wood keeps its own colour, warmed a little
+    "turn_orange": 0.08,     # no orange edge at noon
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,   # few, quiet marks: the flats stay flat
+}
+# PAINT-21C: edo-city, Osaka in the afternoon of a late April day (the Dojima shore, about four o'clock; the merchant
+# street, a little later), the stub replaced. A warm haze over the water and the roofs: the paper whites a little warmer
+# than Suruga's (lead white toward naples yellow), the canal water brown-green with the sky in it (viridian and yellow
+# ochre count more than in the morning key, and the green shade ramp passes through ochre), plaster and warehouse white,
+# roof tiles grey-blue, timber burnt sienna; indigo cloth leading among the people. The shade is the act's blue (cobalt,
+# ultramarine, prussian: style.md section 2), and the light is low enough for long soft shadows, which go to that blue
+# (cast). The pair is the warmed paper against cobalt.
+KEYS["edo-city"] = {
+    "title": "Osaka in the afternoon",
+    "pair": ("naples-yellow", "cobalt-blue"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.5), "naples-yellow", mix("naples-yellow", "yellow-ochre", 0.35)],   # the paper in the haze, warmer
+    "shadow": {
+        "warm": [mix("lilac", "cerulean", 0.55), mix("cobalt-blue", "lilac", 0.40), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": ["veronese-green", mix("viridian", "yellow-ochre", 0.35), "viridian", mix("viridian", "prussian-blue", 0.5)],     # the river's brown-green in shade
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "burnt-sienna", 0.5), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5), "prussian-blue"],  # timber
+    },
+    "sky": ["lead-white", mix("lead-white", "naples-yellow", 0.4), "cerulean", "cobalt-blue"],        # the haze low down, then the blue
+    "weight": {"cobalt-blue": 2.0, "lead-white": 2.0, "naples-yellow": 1.8, "prussian-blue": 1.7, "ultramarine": 1.6, "cerulean": 1.6,
+               "burnt-sienna": 1.5, "yellow-ochre": 1.5, "viridian": 1.4, "veronese-green": 1.1, "vermilion": 1.0, "geranium-lake": 0.9,
+               "lilac": 0.8, "emerald-green": 0.8, "chrome-yellow": 0.7, "chrome-orange": 0.7, "deep-violet": 0.7, "cobalt-violet": 0.6},
+    "warm_light": 0.48,      # the lit things warm toward naples yellow a little more than in the morning
+    "shade": 0.64,
+    "turn": 52,
+    "snap": 0.52,
+    "chroma": 0.24,
+    "shade_lo": 0.20, "shade_hi": 0.44,
+    "lift": 0.08,            # no black: the darkest darks lifted toward prussian blue
+    "sky_pull": 0.32,
+    "cast": 0.70,            # the long shadows on the street go to the shade's blue
+    "light_chroma": 0.70,
+    "turn_orange": 0.12,     # the afternoon light turning: a touch more orange than the act's 0.10
+    "density": 0.013, "mark_len": 3, "film": 0.58, "stroke_value": 0.044, "stroke_colour": 0.035,
+}
+# PAINT-21D: edo-shore, the Akashi shore on an afternoon in late April 1830 (round twenty-one): white sand and green
+# pines, the strait, Awaji. The sun in the west, to the right and a little ahead. In the act's manner (S/work-20-paintA/
+# style.md): the sand near the paper's white and warm (the light ramp barely leaves the paper: lead white, then naples);
+# the pines a deep viridian going to prussian (the green ramp darker than the morning's); the strait the hardest blue in
+# the act after the sea at noon (ultramarine weighted high, the blue ramp to prussian) with lead-white tide lines (the
+# paper counts); Awaji a cool blue-green mass (cerulean, veronese); the castle's plaster white and its roofs blue-grey;
+# the shade BLUE (cobalt, ultramarine, prussian; no violet). The pair is the sand's naples against the strait's
+# ultramarine. A firm snap to few paints (flats stay flat), the sky pulled to its blues (the graded band), quiet marks.
+KEYS["edo-shore"] = {
+    "title": "The Akashi shore in the afternoon",
+    "pair": ("naples-yellow", "ultramarine"),
+    "light": ["lead-white", mix("lead-white", "naples-yellow", 0.35), mix("lead-white", "naples-yellow", 0.7), "naples-yellow"],   # sun on white sand: the paper, warm
+    "shadow": {
+        # a shadow on white sand is a clear cool blue: cerulean and cobalt, deepening through ultramarine to prussian
+        "warm": [mix("cerulean", "cobalt-blue", 0.30), mix("cobalt-blue", "cerulean", 0.30), "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.5),
+                 mix("ultramarine", "prussian-blue", 0.5), "prussian-blue"],
+        "green": [mix("veronese-green", "viridian", 0.45), "viridian", mix("viridian", "prussian-blue", 0.40), mix("viridian", "prussian-blue", 0.70)],   # the pines' deep green going to prussian
+        "blue": ["cerulean", "cobalt-blue", "ultramarine", "prussian-blue"],
+        "red": [mix("vermilion", "burnt-sienna", 0.4), mix("burnt-sienna", "yellow-ochre", 0.3), "burnt-sienna", mix("burnt-sienna", "prussian-blue", 0.5)],   # clay pots, boats, the road
+    },
+    "sky": ["lead-white", "cerulean", "cobalt-blue", mix("cobalt-blue", "ultramarine", 0.35), mix("ultramarine", "prussian-blue", 0.35)],   # the graded sky
+    "weight": {"ultramarine": 2.2, "cobalt-blue": 2.1, "lead-white": 2.1, "naples-yellow": 1.7, "prussian-blue": 1.7, "viridian": 1.6, "cerulean": 1.6,
+               "veronese-green": 1.2, "burnt-sienna": 1.2, "yellow-ochre": 1.1, "vermilion": 0.9, "geranium-lake": 0.9, "emerald-green": 0.8,
+               "chrome-yellow": 0.7, "chrome-orange": 0.6, "lilac": 0.7, "cobalt-violet": 0.6, "deep-violet": 0.6},
+    "warm_light": 0.40,      # the sand goes only a little toward naples: it stays near the paper
+    "shade": 0.66,
+    "turn": 50,
+    "snap": 0.55,            # firm: few paints, flat areas
+    "chroma": 0.26,          # a little more than the morning's: the strait's hard blue, the pines' deep green
+    "shade_lo": 0.20, "shade_hi": 0.42,
+    "lift": 0.08,            # no black: the darkest darks (the pines' undersides, the near water) lean to prussian
+    "sky_pull": 0.38,        # the sky toward cerulean, cobalt and ultramarine: the graded band
+    "cast": 0.68,            # the cast shadows on the sand go to the shade's clear blue
+    "light_chroma": 0.50,    # the sun on white sand keeps near the paper (not a beige)
+    "turn_orange": 0.10,
+    "density": 0.012, "mark_len": 3, "film": 0.6, "stroke_value": 0.040, "stroke_colour": 0.032,
+}
 # The people (the rig's flat four-tone figures) take the scene's key with a few numbers of their own: small and flat,
 # they need a firmer pull to the paints and a more decided coloured shade to sit in the painted picture. And the shadow
 # on the ground under each (today a see-through black) becomes the key's shadow paint, laid a little thicker, so that
@@ -526,7 +638,8 @@ GROUND_SHADOW = {"rome-morning": 0.46, "egypt-noon": 0.46, "home-night": 0.30,  
                  "lamp-interior": 0.30, "nevada-morning": 0.46, "highway-dusk": 0.34,
                  "office-fluorescent": 0.34,                                     # OFFICE-17
                  "edo-morning": 0.44, "edo-rain": 0.28, "edo-lamp": 0.30, "edo-castle": 0.44,     # ROUND-20: PAINT-20A, 20C, 20F, 20D
-                 "edo-keep": 0.30, "edo-sunset": 0.34}                                 # PAINT-20E: the keep's floors (a blue shade, as the act's)
+                 "edo-keep": 0.30, "edo-sunset": 0.34,                                 # PAINT-20E: the keep's floors (a blue shade, as the act's)
+                 "edo-sea": 0.42, "edo-city": 0.42, "edo-shore": 0.48}                 # ROUND-21: PAINT-21B (a short, hard, blue shadow at noon), PAINT-21C, PAINT-21D (a shadow on bright sand)
 GROUND_ALPHA_GAIN = 0.7                                                            # alpha x (1 + gain * strength)
 
 
@@ -560,6 +673,11 @@ SCENE_KEY = {
     "edo-cedars": "edo-rain", "edo-chapel": "edo-lamp",
     "edo-storehouse": "edo-rain",                                                 # PAINT-20C: inside the storehouse, the same dusk in rain (it was not in the base's table)
     "edo-castle": "edo-castle", "edo-keep": "edo-keep", "edo-keeptop": "edo-sunset",
+    "edo-kurasawa": "edo-morning", "edo-satta": "edo-morning",                   # ROUND-21: Act Six made bigger (S/briefs/out/edo2-design.md)
+    "edo-deck": "edo-sea", "edo-compass": "edo-sea",
+    "edo-dojima": "edo-city", "edo-street": "edo-city", "edo-theatre": "edo-lamp",
+    "edo-akashi": "edo-shore", "edo-town": "edo-castle",
+    "edo-shosha": "edo-sunset", "edo-hall": "edo-sunset", "edo-lock": "edo-sunset",
 }
 # A scene that is not in the table yet: its era's daylight key (an interior lit by lamps should be put in the table
 # with "lamp-interior").

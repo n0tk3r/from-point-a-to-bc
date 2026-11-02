@@ -1,0 +1,1817 @@
+{
+ "id": "edo-dojima",
+ "horizon": 262,
+ "full": 590,
+ "view": {
+  "horizon": 262,
+  "full": 590,
+  "camera": "room.View(262, 590, cam=(0, 0), yaw=-12, focal=800): eye 358.75 cm; we look south-south-east across the river, upstream to the left",
+  "world": "cm; X to the right (west), Z toward us (north), Y up; the bank's lip Z -1550, the river 180 below the street, the island's bank Z -5550; O-Natsu's house X -880..-380, front Z -1450"
+ },
+ "light": "about four in the afternoon, the sun west-south-west, 28 degrees up, to our right: faces turned to the right lit warm, the fronts facing us (north) in a luminous blue shade, the street warm; shadows fall to the left and a little toward us",
+ "walk": [
+  [
+   0,
+   596
+  ],
+  [
+   800,
+   596
+  ],
+  [
+   800,
+   470
+  ],
+  [
+   800,
+   470
+  ],
+  [
+   708,
+   466
+  ],
+  [
+   619,
+   461
+  ],
+  [
+   534,
+   457
+  ],
+  [
+   453,
+   453
+  ],
+  [
+   375,
+   449
+  ],
+  [
+   368,
+   456
+  ],
+  [
+   114,
+   443
+  ],
+  [
+   128,
+   437
+  ],
+  [
+   0,
+   431
+  ]
+ ],
+ "walk_note": "one area: the shore street, from the bottom to O-Natsu's house front (left) and the stone lip of the bank (clear of its coping); the steps go down beyond the lip (outside it: the family arrives at `landing`, at their top)",
+ "blocked": [
+  [
+   [
+    73,
+    472
+   ],
+   [
+    344,
+    489
+   ],
+   [
+    359,
+    473
+   ],
+   [
+    105,
+    459
+   ]
+  ],
+  [
+   [
+    120,
+    441
+   ],
+   [
+    178,
+    444
+   ],
+   [
+    155,
+    455
+   ],
+   [
+    94,
+    451
+   ]
+  ],
+  [
+   [
+    489,
+    465
+   ],
+   [
+    835,
+    483
+   ],
+   [
+    809,
+    462
+   ],
+   [
+    496,
+    447
+   ]
+  ],
+  [
+   [
+    491,
+    475
+   ],
+   [
+    528,
+    477
+   ],
+   [
+    530,
+    467
+   ],
+   [
+    495,
+    465
+   ]
+  ],
+  [
+   [
+    601,
+    623
+   ],
+   [
+    1012,
+    660
+   ],
+   [
+    934,
+    589
+   ],
+   [
+    596,
+    563
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "lighter",
+   "file": "lighter.png",
+   "base": [
+    [
+     356,
+     441
+    ],
+    [
+     603,
+     453
+    ]
+   ],
+   "what": "a lighter moored off the foot of the steps, loaded with rice bales under mats, nobody aboard: the family's, or any lighter unloading (it rides: fx lighter-bob). The scene may hide it once the family's lighter has gone. Its base is the bank's lip: everyone on the street is in front of it, the lighters going by on the river (flyers, behind everything) behind it"
+  },
+  {
+   "id": "market",
+   "file": "market.png",
+   "base": [
+    [
+     489,
+     465
+    ],
+    [
+     834,
+     483
+    ]
+   ],
+   "what": "the rice dealers who will not stop, in the road at the right, hands up; the two water men with their buckets at their left end (the splash is frames: `splash`)"
+  },
+  {
+   "id": "noren",
+   "file": "noren.png",
+   "base": [
+    [
+     175,
+     444
+    ],
+    [
+     252,
+     448
+    ]
+   ],
+   "what": "O-Natsu's house-name noren in her doorway (it stirs: fx noren-sway); whoever goes in passes behind it"
+  },
+  {
+   "id": "sandals",
+   "file": "sandals.png",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "states": {
+    "full": "sandals.png",
+    "few": "sandals-few.png"
+   },
+   "what": "a heap of new straw sandals on a mat at the stall's left end (alms): full, then fewer as they are given out"
+  },
+  {
+   "id": "pot",
+   "file": "pot.png",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "the portable clay hearth and the great rice pot on it, its lid off and leaning by it (where Mom serves: mark `pot`); its steam is fx pot-steam, its fire fx hearth-embers"
+  },
+  {
+   "id": "stall",
+   "file": "stall.png",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "the trestle table, and the tub of pickled radish on it (Little Sister's: mark `pickle`)"
+  },
+  {
+   "id": "tray",
+   "file": "tray.png",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "states": {
+    "full": "tray.png",
+    "half": "tray-half.png",
+    "empty": "tray-empty.png"
+   },
+   "what": "the tray of rice balls on the table, bale-shaped (Big Sister's: mark `balls`): full, emptying, empty",
+   "order": "after stall (the same base: listed later, drawn over it)"
+  },
+  {
+   "id": "kettle",
+   "file": "kettle.png",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "the tea kettle on its little brazier at the stall's right end (O-Natsu's: mark `natsu`); its steam is fx kettle-steam"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "rice bales stacked on a mat, their round ends to us, and a bucket at the very front, bottom right"
+  },
+  {
+   "id": "splash",
+   "frames": [
+    "splash-1.png",
+    "splash-2.png",
+    "splash-3.png",
+    "splash-4.png",
+    "splash-5.png"
+   ],
+   "fps": 10,
+   "at": [
+    559,
+    424
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "base": [
+    [
+     489,
+     465
+    ],
+    [
+     835,
+     483
+    ]
+   ],
+   "size": [
+    95,
+    44
+   ],
+   "what": "a bucket's splash, thrown by the nearer water man at the dealers (five frames: the water leaving the bucket, the arc opening into drops, falling)",
+   "note": "FRAMES, not ENGINE-21's kind: a plane with frames (as egypt-crash's steam). Show it now and then (every 6 to 12 s) for one run of its five frames (half a second), and hide it between: the scene's script, or a plane `when` on a clock flag. Its foot is the bucket's mouth."
+  }
+ ],
+ "cutouts": {
+  "lighter": [
+   439,
+   409,
+   138,
+   32
+  ],
+  "market": [
+   496,
+   362,
+   294,
+   113
+  ],
+  "noren": [
+   176,
+   339,
+   75,
+   46
+  ],
+  "sandals": [
+   79,
+   455,
+   77,
+   20
+  ],
+  "sandals-few": [
+   79,
+   458,
+   77,
+   17
+  ],
+  "pot": [
+   146,
+   420,
+   70,
+   62
+  ],
+  "stall": [
+   205,
+   412,
+   112,
+   72
+  ],
+  "tray": [
+   212,
+   423,
+   58,
+   13
+  ],
+  "tray-half": [
+   212,
+   425,
+   58,
+   11
+  ],
+  "tray-empty": [
+   212,
+   426,
+   58,
+   10
+  ],
+  "kettle": [
+   300,
+   439,
+   49,
+   46
+  ],
+  "front": [
+   620,
+   519,
+   180,
+   81
+  ]
+ },
+ "states": {
+  "tray": [
+   "tray",
+   "tray-half",
+   "tray-empty"
+  ],
+  "sandals": [
+   "sandals",
+   "sandals-few"
+  ]
+ },
+ "frames": {
+  "lighter-near": {
+   "size": [
+    189,
+    68
+   ],
+   "foot": [
+    92,
+    65
+   ],
+   "box": [
+    308,
+    235,
+    189,
+    68
+   ]
+  },
+  "lighter-far": {
+   "size": [
+    116,
+    47
+   ],
+   "foot": [
+    58,
+    45
+   ],
+   "box": [
+    342,
+    255,
+    116,
+    47
+   ]
+  },
+  "runner-1": {
+   "size": [
+    66,
+    78
+   ],
+   "foot": [
+    27,
+    75
+   ],
+   "box": [
+    373,
+    225,
+    66,
+    78
+   ]
+  },
+  "runner-2": {
+   "size": [
+    66,
+    78
+   ],
+   "foot": [
+    27,
+    75
+   ],
+   "box": [
+    373,
+    225,
+    66,
+    78
+   ]
+  },
+  "runner-3": {
+   "size": [
+    66,
+    78
+   ],
+   "foot": [
+    27,
+    75
+   ],
+   "box": [
+    373,
+    225,
+    66,
+    78
+   ]
+  },
+  "runner-4": {
+   "size": [
+    66,
+    78
+   ],
+   "foot": [
+    27,
+    75
+   ],
+   "box": [
+    373,
+    225,
+    66,
+    78
+   ]
+  },
+  "splash-1": {
+   "size": [
+    95,
+    44
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "box": [
+    554,
+    398,
+    95,
+    44
+   ]
+  },
+  "splash-2": {
+   "size": [
+    95,
+    44
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "box": [
+    554,
+    398,
+    95,
+    44
+   ]
+  },
+  "splash-3": {
+   "size": [
+    95,
+    44
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "box": [
+    554,
+    398,
+    95,
+    44
+   ]
+  },
+  "splash-4": {
+   "size": [
+    95,
+    44
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "box": [
+    554,
+    398,
+    95,
+    44
+   ]
+  },
+  "splash-5": {
+   "size": [
+    95,
+    44
+   ],
+   "foot": [
+    5,
+    26
+   ],
+   "box": [
+    554,
+    398,
+    95,
+    44
+   ]
+  }
+ },
+ "things": [
+  {
+   "id": "river",
+   "what": "the river (the Dojima river): brown-green, the sky in it, lighters going by",
+   "shape": {
+    "poly": [
+     [
+      432,
+      300
+     ],
+     [
+      800,
+      300
+     ],
+     [
+      800,
+      462
+     ],
+     [
+      800,
+      462
+     ],
+     [
+      685,
+      457
+     ],
+     [
+      576,
+      452
+     ],
+     [
+      473,
+      447
+     ],
+     [
+      375,
+      442
+     ],
+     [
+      432,
+      440
+     ]
+    ]
+   },
+   "stand": [
+    479,
+    461
+   ],
+   "face": "S"
+  },
+  {
+   "id": "lighters",
+   "what": "lighters poling past on the river, loaded (fx lighters-near, lighters-far)",
+   "shape": {
+    "rect": [
+     440,
+     330,
+     250,
+     90
+    ]
+   },
+   "stand": [
+    479,
+    461
+   ],
+   "face": "S"
+  },
+  {
+   "id": "warehouses",
+   "what": "the domains' white warehouses across the water on the island, with their gates, roof on roof",
+   "shape": {
+    "rect": [
+     576,
+     192,
+     224,
+     150
+    ]
+   },
+   "stand": [
+    479,
+    461
+   ],
+   "face": "S"
+  },
+  {
+   "id": "bridge",
+   "what": "a timber bridge, high-arched, crossing the river at the right; people on it",
+   "shape": {
+    "rect": [
+     667,
+     254,
+     132,
+     215
+    ]
+   },
+   "stand": [
+    788,
+    546
+   ],
+   "face": "S"
+  },
+  {
+   "id": "castle",
+   "what": "far off up the river, the castle: stone walls and three corner turrets, and no keep",
+   "shape": {
+    "rect": [
+     418,
+     196,
+     186,
+     72
+    ]
+   },
+   "stand": [
+    479,
+    461
+   ],
+   "face": "S"
+  },
+  {
+   "id": "steps",
+   "what": "the stone steps down to the water at a gap in the bank (where the family landed; the way back is gone with the lighter)",
+   "shape": {
+    "poly": [
+     [
+      429,
+      452
+     ],
+     [
+      544,
+      458
+     ],
+     [
+      550,
+      422
+     ],
+     [
+      460,
+      419
+     ]
+    ]
+   },
+   "stand": [
+    479,
+    461
+   ],
+   "face": "S"
+  },
+  {
+   "id": "house",
+   "what": "O-Natsu's house, a rice dealer's: its front to the street (the lattice, the bales stacked, the signboard), its back on the water",
+   "shape": {
+    "poly": [
+     [
+      121,
+      441
+     ],
+     [
+      362,
+      454
+     ],
+     [
+      434,
+      388
+     ],
+     [
+      434,
+      223
+     ],
+     [
+      429,
+      145
+     ],
+     [
+      198,
+      152
+     ],
+     [
+      83,
+      210
+     ]
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N"
+  },
+  {
+   "id": "noren",
+   "what": "the house-name noren in her doorway, indigo with a white mark",
+   "shape": {
+    "rect": [
+     174,
+     337,
+     79,
+     50
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stall",
+   "what": "O-Natsu's alms stall: the hearth and pot, the table, the tray, the tub, the sandals, the kettle",
+   "shape": {
+    "rect": [
+     79,
+     412,
+     270,
+     73
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "E"
+  },
+  {
+   "id": "pot",
+   "what": "the great rice pot on its portable hearth, steaming",
+   "shape": {
+    "rect": [
+     144,
+     418,
+     74,
+     66
+    ]
+   },
+   "stand": [
+    215,
+    493
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tub",
+   "what": "the tub of pickled radish, yellow slices",
+   "shape": {
+    "rect": [
+     276,
+     409,
+     30,
+     30
+    ]
+   },
+   "stand": [
+    235,
+    513
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tray",
+   "what": "the tray of rice balls, bale-shaped (full / emptying / empty)",
+   "shape": {
+    "rect": [
+     209,
+     420,
+     64,
+     19
+    ]
+   },
+   "stand": [
+    215,
+    493
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sandals",
+   "what": "a heap of straw sandals for the pilgrims",
+   "shape": {
+    "rect": [
+     76,
+     452,
+     83,
+     26
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N"
+  },
+  {
+   "id": "kettle",
+   "what": "the tea kettle on its brazier",
+   "shape": {
+    "rect": [
+     297,
+     436,
+     55,
+     52
+    ]
+   },
+   "stand": [
+    341,
+    500
+   ],
+   "face": "N"
+  },
+  {
+   "id": "market",
+   "what": "the rice market spilling into the road after the close",
+   "shape": {
+    "rect": [
+     496,
+     362,
+     294,
+     113
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "N"
+  },
+  {
+   "id": "dealers",
+   "what": "the dealers, hands up, still calling prices",
+   "shape": {
+    "rect": [
+     572,
+     361,
+     225,
+     116
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "N"
+  },
+  {
+   "id": "watermen",
+   "what": "the water men with their buckets",
+   "shape": {
+    "rect": [
+     512,
+     367,
+     86,
+     101
+    ]
+   },
+   "stand": [
+    548,
+    481
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bucket",
+   "what": "the water men's buckets, full",
+   "shape": {
+    "rect": [
+     489,
+     446,
+     54,
+     34
+    ]
+   },
+   "stand": [
+    548,
+    481
+   ],
+   "face": "W"
+  },
+  {
+   "id": "runner",
+   "what": "a lad sprinting off with the day's price (now and then: fx runner)",
+   "shape": {
+    "rect": [
+     520,
+     380,
+     280,
+     120
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "E"
+  },
+  {
+   "id": "natsu",
+   "what": "O-Natsu, at her stall (drawn by the game)",
+   "shape": {
+    "rect": [
+     336,
+     382,
+     28,
+     82
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 146,
+   "mark": "natsu"
+  },
+  {
+   "id": "rihei",
+   "what": "Rihei among the dealers (drawn by the game)",
+   "shape": {
+    "rect": [
+     687,
+     385,
+     32,
+     95
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "rihei"
+  },
+  {
+   "id": "kyuhachi",
+   "what": "Kyuhachi, going round again (drawn by the game)",
+   "shape": {
+    "rect": [
+     368,
+     430,
+     44,
+     130
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "kyuhachi"
+  },
+  {
+   "id": "kurata",
+   "what": "Kurata the doshin, walking the shore (drawn by the game)",
+   "shape": {
+    "rect": [
+     323,
+     397,
+     35,
+     103
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "kurataTo"
+  },
+  {
+   "id": "tatsu",
+   "what": "Tatsu, his thief-taker (drawn by the game)",
+   "shape": {
+    "rect": [
+     363,
+     404,
+     37,
+     110
+    ]
+   },
+   "stand": [
+    687,
+    496
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "tatsuTo"
+  },
+  {
+   "id": "awafather",
+   "what": "the Awa father, first in the line (drawn by the game)",
+   "shape": {
+    "rect": [
+     198,
+     393,
+     34,
+     100
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "line1"
+  },
+  {
+   "id": "awamother",
+   "what": "the Awa mother with the baby on her back (drawn by the game)",
+   "shape": {
+    "rect": [
+     218,
+     411,
+     35,
+     102
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 146,
+   "mark": "line2"
+  },
+  {
+   "id": "oldpilgrim",
+   "what": "the old pilgrim from Kii (drawn by the game)",
+   "shape": {
+    "rect": [
+     241,
+     423,
+     39,
+     115
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 150,
+   "mark": "line3"
+  },
+  {
+   "id": "ladleboy",
+   "what": "the boy with a ladle bigger than his face (drawn by the game)",
+   "shape": {
+    "rect": [
+     284,
+     476,
+     32,
+     94
+    ]
+   },
+   "stand": [
+    154,
+    490
+   ],
+   "face": "N",
+   "height_cm": 110,
+   "mark": "line4"
+  }
+ ],
+ "marks": {
+  "landing": [
+   479,
+   461
+  ],
+  "stall": [
+   154,
+   490
+  ],
+  "natsu": [
+   350,
+   464
+  ],
+  "pot": [
+   209,
+   456
+  ],
+  "balls": [
+   265,
+   460
+  ],
+  "pickle": [
+   311,
+   463
+  ],
+  "line1": [
+   215,
+   493
+  ],
+  "line2": [
+   235,
+   513
+  ],
+  "line3": [
+   261,
+   538
+  ],
+  "line4": [
+   300,
+   570
+  ],
+  "kyuhachi": [
+   390,
+   560
+  ],
+  "market": [
+   687,
+   496
+  ],
+  "rihei": [
+   703,
+   480
+  ],
+  "watermen": [
+   548,
+   481
+  ],
+  "kurataFrom": [
+   784,
+   524
+  ],
+  "kurataTo": [
+   341,
+   500
+  ],
+  "town": [
+   788,
+   546
+  ],
+  "landing_mom": [
+   479,
+   461
+  ],
+  "landing_bigsis": [
+   407,
+   459
+  ],
+  "landing_lilsis": [
+   435,
+   468
+  ],
+  "tatsuFrom": [
+   770,
+   541
+  ],
+  "tatsuTo": [
+   382,
+   514
+  ],
+  "steps": [
+   481,
+   457
+  ]
+ },
+ "stands": {
+  "landing": {
+   "at": [
+    479,
+    461
+   ],
+   "grownup_px": 97,
+   "face": "S"
+  },
+  "stall": {
+   "at": [
+    154,
+    490
+   ],
+   "grownup_px": 111,
+   "face": "E"
+  },
+  "natsu": {
+   "at": [
+    350,
+    464
+   ],
+   "grownup_px": 99,
+   "face": "S"
+  },
+  "pot": {
+   "at": [
+    209,
+    456
+   ],
+   "grownup_px": 95,
+   "face": "S"
+  },
+  "balls": {
+   "at": [
+    265,
+    460
+   ],
+   "grownup_px": 97,
+   "face": "S"
+  },
+  "pickle": {
+   "at": [
+    311,
+    463
+   ],
+   "grownup_px": 98,
+   "face": "S"
+  },
+  "line1": {
+   "at": [
+    215,
+    493
+   ],
+   "grownup_px": 113,
+   "face": "N"
+  },
+  "line2": {
+   "at": [
+    235,
+    513
+   ],
+   "grownup_px": 122,
+   "face": "N"
+  },
+  "line3": {
+   "at": [
+    261,
+    538
+   ],
+   "grownup_px": 135,
+   "face": "N"
+  },
+  "line4": {
+   "at": [
+    300,
+    570
+   ],
+   "grownup_px": 150,
+   "face": "N"
+  },
+  "kyuhachi": {
+   "at": [
+    390,
+    560
+   ],
+   "grownup_px": 145,
+   "face": "W"
+  },
+  "market": {
+   "at": [
+    687,
+    496
+   ],
+   "grownup_px": 114,
+   "face": "N"
+  },
+  "rihei": {
+   "at": [
+    703,
+    480
+   ],
+   "grownup_px": 106,
+   "face": "S"
+  },
+  "watermen": {
+   "at": [
+    548,
+    481
+   ],
+   "grownup_px": 107,
+   "face": "N"
+  },
+  "kurataFrom": {
+   "at": [
+    784,
+    524
+   ],
+   "grownup_px": 128,
+   "face": "W"
+  },
+  "kurataTo": {
+   "at": [
+    341,
+    500
+   ],
+   "grownup_px": 116,
+   "face": "W"
+  },
+  "town": {
+   "at": [
+    788,
+    546
+   ],
+   "grownup_px": 139,
+   "face": "E"
+  },
+  "landing_mom": {
+   "at": [
+    479,
+    461
+   ],
+   "grownup_px": 97,
+   "face": "S"
+  },
+  "landing_bigsis": {
+   "at": [
+    407,
+    459
+   ],
+   "grownup_px": 96,
+   "face": "S"
+  },
+  "landing_lilsis": {
+   "at": [
+    435,
+    468
+   ],
+   "grownup_px": 100,
+   "face": "S"
+  },
+  "tatsuFrom": {
+   "at": [
+    770,
+    541
+   ],
+   "grownup_px": 136,
+   "face": "W"
+  },
+  "tatsuTo": {
+   "at": [
+    382,
+    514
+   ],
+   "grownup_px": 123,
+   "face": "W"
+  },
+  "steps": {
+   "at": [
+    481,
+    457
+   ],
+   "grownup_px": 95,
+   "face": "N"
+  }
+ },
+ "fx": [
+  {
+   "id": "pot-steam",
+   "type": "smoke",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "steam from the rice pot",
+   "at": [
+    182,
+    425
+   ],
+   "height": 74,
+   "width": [
+    5,
+    30
+   ],
+   "lean": [
+    -22,
+    -74
+   ],
+   "rise": 14,
+   "rate": 3.0,
+   "gust": 0.25,
+   "color": "#f2f0ea",
+   "opacity": 0.34
+  },
+  {
+   "id": "kettle-steam",
+   "type": "smoke",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "a thread of steam from the kettle's spout",
+   "at": [
+    347,
+    446
+   ],
+   "height": 28,
+   "width": [
+    1,
+    6
+   ],
+   "lean": [
+    -8,
+    -28
+   ],
+   "rise": 8,
+   "rate": 2.0,
+   "gust": 0.3,
+   "color": "#f2f0ea",
+   "opacity": 0.28
+  },
+  {
+   "id": "hearth-embers",
+   "type": "embers",
+   "base": [
+    [
+     102,
+     473
+    ],
+    [
+     351,
+     488
+    ]
+   ],
+   "what": "the charcoal in the hearth's fire mouth",
+   "at": [
+    171,
+    471
+   ],
+   "size": [
+    5,
+    2
+   ],
+   "glowOpacity": 0.15,
+   "sparks": 0.1
+  },
+  {
+   "id": "noren-sway",
+   "type": "sway",
+   "plane": "noren",
+   "anchor": "top",
+   "amount": 2.0,
+   "period": 3.6,
+   "wave": 24,
+   "lean": 0.3,
+   "what": "the noren stirring in the air off the river"
+  },
+  {
+   "id": "lighter-bob",
+   "type": "bob",
+   "plane": "lighter",
+   "amount": 1,
+   "period": 5.5,
+   "tilt": 0.8,
+   "what": "the moored lighter riding at the steps"
+  },
+  {
+   "id": "river-shimmer",
+   "type": "shimmer",
+   "plane": "back",
+   "what": "the afternoon light moving on the river",
+   "poly": [
+    [
+     432,
+     300
+    ],
+    [
+     800,
+     300
+    ],
+    [
+     800,
+     462
+    ],
+    [
+     800,
+     462
+    ],
+    [
+     685,
+     457
+    ],
+    [
+     576,
+     452
+    ],
+    [
+     473,
+     447
+    ],
+    [
+     375,
+     442
+    ],
+    [
+     432,
+     440
+    ]
+   ],
+   "count": 26,
+   "size": 5,
+   "flow": [
+    3,
+    0
+   ],
+   "life": 2.0,
+   "color": "#f6eed8",
+   "opacity": 0.42,
+   "note": "the river flows to the right (downstream, west): the glints drift that way"
+  },
+  {
+   "id": "lighters-near",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "a loaded lighter poled past on the river, the nearer lane",
+   "lanes": [
+    [
+     [
+      -160,
+      382
+     ],
+     [
+      960,
+      423
+     ]
+    ]
+   ],
+   "every": [
+    28,
+    56
+   ],
+   "group": [
+    1,
+    1
+   ],
+   "speed": 12,
+   "size": 189,
+   "frames": {
+    "glide": [
+     "lighter-near.png"
+    ],
+    "foot": [
+     92,
+     65
+    ],
+    "face": "E"
+   },
+   "clip": [
+    [
+     [
+      432,
+      300
+     ],
+     [
+      702,
+      300
+     ],
+     [
+      702,
+      452
+     ],
+     [
+      432,
+      452
+     ]
+    ]
+   ],
+   "note": "painted at its size (no sizeAt): 180 px long (about 6.5 m) at about 30 m. Both ways (the engine turns the frame). `clip` keeps it in the river between O-Natsu's house and the bridge (it passes behind the moored lighter and the crowd, which are cut-outs). The engine's flyers lift each crossing up to 7 px off its lane: that is the river's width, not a fault"
+  },
+  {
+   "id": "lighters-far",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "a lighter going back light, the farther lane",
+   "lanes": [
+    [
+     [
+      -160,
+      345
+     ],
+     [
+      960,
+      375
+     ]
+    ]
+   ],
+   "every": [
+    22,
+    46
+   ],
+   "group": [
+    1,
+    1
+   ],
+   "speed": 9,
+   "size": 116,
+   "frames": {
+    "glide": [
+     "lighter-far.png"
+    ],
+    "foot": [
+     58,
+     45
+    ],
+    "face": "E"
+   },
+   "clip": [
+    [
+     [
+      432,
+      300
+     ],
+     [
+      702,
+      300
+     ],
+     [
+      702,
+      452
+     ],
+     [
+      432,
+      452
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "runner",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "the price runner sprinting off from the market to the town, now and then",
+   "lanes": [
+    [
+     [
+      553,
+      464
+     ],
+     [
+      820,
+      541
+     ]
+    ]
+   ],
+   "both": false,
+   "every": [
+    26,
+    50
+   ],
+   "group": [
+    1,
+    1
+   ],
+   "speed": 150,
+   "size": 66,
+   "frames": {
+    "flap": [
+     "runner-1.png",
+     "runner-2.png",
+     "runner-3.png",
+     "runner-4.png",
+     "runner-1.png",
+     "runner-2.png",
+     "runner-3.png",
+     "runner-4.png",
+     "runner-1.png",
+     "runner-2.png",
+     "runner-3.png",
+     "runner-4.png"
+    ],
+    "glide": [
+     "runner-2.png",
+     "runner-4.png"
+    ],
+    "foot": [
+     27,
+     75
+    ],
+    "face": "E"
+   },
+   "behind": [
+    [
+     [
+      505,
+      468
+     ],
+     [
+      594,
+      473
+     ],
+     [
+      592,
+      456
+     ],
+     [
+      510,
+      452
+     ]
+    ]
+   ],
+   "note": "a run cycle (runner-1 to -4) listed three times in `flap`, so that at the flyers' beat it strides about twice a second. The flyers' kind glides between bursts (it would freeze him mid-stride): ENGINE-21's running courier, if it has one, or a flyer that never glides (`flap` only), suits him better. He comes out from behind the water men (`behind`) and is gone off the right edge, toward the bridge and the town; painted at the size of a man at the market (no sizeAt)"
+  }
+ ],
+ "fx_note": "steam (smoke) from the pot and the kettle; embers in the hearth; the noren sways; the moored lighter bobs; the river shimmers; the lighters and the runner are flyers on painted frames; the splash is a plane of frames the scene shows now and then (planes: splash). The pilgrims' line's life (shuffling forward) is the people's",
+ "notes": [
+  "The view is composed, as the design's plan asks: the castle's walls and turrets show far off up the river at the left; from where we stand it lies further left than the picture's edge. A print would bring it in, and so does this.",
+  "The steps are drawn as a print draws them (as if from a little higher): from a street's height a flight going away and down would hide its own treads.",
+  "O-Natsu's house stands on the river side of the street, its front to the street and its back on the water (the arrangement is the game's: the facts say only that the rice dealers' quarter is on the river).",
+  "Rihei stands in front of the dealers (they are painted); the pilgrims' line runs from the stall toward the bottom right (line1 at the stall)."
+ ],
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "ladleboy_cm": 110,
+  "grownup_at_full_px": 160
+ }
+}

@@ -1,0 +1,2403 @@
+{
+ "id": "edo-town",
+ "horizon": 290,
+ "full": 590,
+ "minScale": 0.3,
+ "light": "midday, 29 April 1830: the sun high in the south, behind us and a little to the left (about 68 degrees up). The fronts face us and are in full light; each deep eave lays a hard band of shade across the top of its front; shadows on the ground are short and fall away from us, a little to the right (0.36 of a thing's height away, 0.10 across). Key: edo-castle (PAINT-20D's).",
+ "note": "The land camera (persp.Camera 290/590, focal 800, lens 3.28 m up), its vanishing point at x 444.5 (the middle of O-Tane's side yard, which is seen straight down). The far side's fronts stand on row 450 (16.4 m off: a grown-up 85 px at their feet, Mom 80, Little Sister 58); the street runs from there to the bottom edge (8.5 m off at row 600). Looking north: east is the right edge, the castle is ahead, above the roofs.",
+ "view": {
+  "horizon": 290,
+  "full": 590,
+  "focal": 800.0,
+  "vanish_x": 444.5,
+  "eye_cm": 328.1,
+  "fronts_row": 450,
+  "fronts_cm": 1640.6
+ },
+ "walk": [
+  [
+   6,
+   597
+  ],
+  [
+   794,
+   597
+  ],
+  [
+   794,
+   455
+  ],
+  [
+   796,
+   455
+  ],
+  [
+   796,
+   449
+  ],
+  [
+   722,
+   449
+  ],
+  [
+   722,
+   455
+  ],
+  [
+   508,
+   455
+  ],
+  [
+   498,
+   426
+  ],
+  [
+   391,
+   426
+  ],
+  [
+   381,
+   455
+  ],
+  [
+   6,
+   455
+  ]
+ ],
+ "walk_note": "the street floor: the highway up to the gutter along the fronts (row 455), a pocket into the side yard back to the kitchen door (row 428), and the ward gate's mouth (to row 448). The school's room is a floor of its own (floors.school).",
+ "floors": [
+  {
+   "name": "street",
+   "area": [
+    [
+     6,
+     597
+    ],
+    [
+     794,
+     597
+    ],
+    [
+     794,
+     455
+    ],
+    [
+     796,
+     455
+    ],
+    [
+     796,
+     449
+    ],
+    [
+     722,
+     449
+    ],
+    [
+     722,
+     455
+    ],
+    [
+     508,
+     455
+    ],
+    [
+     498,
+     426
+    ],
+    [
+     391,
+     426
+    ],
+    [
+     381,
+     455
+    ],
+    [
+     6,
+     455
+    ]
+   ],
+   "note": "the usual floor"
+  },
+  {
+   "name": "school",
+   "area": [
+    [
+     252,
+     423
+    ],
+    [
+     368,
+     423
+    ],
+    [
+     378,
+     407
+    ],
+    [
+     275,
+     407
+    ]
+   ],
+   "scale": 0.482,
+   "away": null,
+   "note": "the school's raised room (45 cm up), seen through the open front: a floor of its own at its own size (0.482: a girl kneeling behind a desk), its people sorted by their feet (no base), so that the desks (base 419) are in front of the girls behind them and the school's front (base 450) in front of everybody inside. Little Sister and O-Kiku go up from the step stone at the right end (marks kiku -> desk / kikuDesk: g.climbTo with a path [[372, 452], [366, 432]])."
+  }
+ ],
+ "blocked": [
+  [
+   [
+    506,
+    441
+   ],
+   [
+    501,
+    439
+   ],
+   [
+    490,
+    438
+   ],
+   [
+    478,
+    438
+   ],
+   [
+    468,
+    439
+   ],
+   [
+    464,
+    441
+   ],
+   [
+    469,
+    443
+   ],
+   [
+    479,
+    445
+   ],
+   [
+    493,
+    445
+   ],
+   [
+    503,
+    443
+   ]
+  ],
+  [
+   [
+    473,
+    429
+   ],
+   [
+    470,
+    428
+   ],
+   [
+    461,
+    427
+   ],
+   [
+    453,
+    428
+   ],
+   [
+    450,
+    429
+   ],
+   [
+    453,
+    430
+   ],
+   [
+    462,
+    431
+   ],
+   [
+    470,
+    430
+   ]
+  ],
+  [
+   [
+    454,
+    426
+   ],
+   [
+    451,
+    425
+   ],
+   [
+    443,
+    424
+   ],
+   [
+    435,
+    425
+   ],
+   [
+    431,
+    426
+   ],
+   [
+    435,
+    427
+   ],
+   [
+    443,
+    427
+   ],
+   [
+    451,
+    427
+   ]
+  ],
+  [
+   [
+    460,
+    440
+   ],
+   [
+    457,
+    439
+   ],
+   [
+    449,
+    438
+   ],
+   [
+    441,
+    439
+   ],
+   [
+    438,
+    440
+   ],
+   [
+    441,
+    441
+   ],
+   [
+    449,
+    442
+   ],
+   [
+    457,
+    441
+   ]
+  ],
+  [
+   [
+    404,
+    446
+   ],
+   [
+    400,
+    445
+   ],
+   [
+    392,
+    445
+   ],
+   [
+    383,
+    445
+   ],
+   [
+    379,
+    446
+   ],
+   [
+    382,
+    447
+   ],
+   [
+    391,
+    447
+   ],
+   [
+    400,
+    447
+   ]
+  ],
+  [
+   [
+    -175,
+    453
+   ],
+   [
+    -144,
+    453
+   ],
+   [
+    -127,
+    449
+   ],
+   [
+    -157,
+    449
+   ]
+  ],
+  [
+   [
+    -162,
+    458
+   ],
+   [
+    -131,
+    458
+   ],
+   [
+    -113,
+    453
+   ],
+   [
+    -144,
+    453
+   ]
+  ],
+  [
+   [
+    74,
+    453
+   ],
+   [
+    105,
+    453
+   ],
+   [
+    115,
+    449
+   ],
+   [
+    85,
+    449
+   ]
+  ],
+  [
+   [
+    94,
+    453
+   ],
+   [
+    125,
+    453
+   ],
+   [
+    134,
+    449
+   ],
+   [
+    104,
+    449
+   ]
+  ],
+  [
+   [
+    73,
+    458
+   ],
+   [
+    105,
+    458
+   ],
+   [
+    115,
+    453
+   ],
+   [
+    84,
+    453
+   ]
+  ]
+ ],
+ "blocked_note": "the well's curb, the pickle tub, the rice pot on its stand, the mortar, the pan against the wall, the bales of cloth",
+ "planes": [
+  {
+   "id": "noren-cotton",
+   "file": "noren-cotton.png",
+   "plane": "back",
+   "what": "the cotton office's long indigo noren across its doorway (it stirs: fx sway)"
+  },
+  {
+   "id": "noren",
+   "file": "noren.png",
+   "plane": "back",
+   "what": "O-Tane's indigo noren in her doorway (it stirs: fx sway)"
+  },
+  {
+   "id": "desks",
+   "file": "desks.png",
+   "base": 419,
+   "what": "the row of four low desks inside the school: the girls (pupil1, pupil2) kneel behind the first two, the third is free (Little Sister's: desk), the fourth too (O-Kiku's: kikuDesk)"
+  },
+  {
+   "id": "shutters",
+   "file": "shutters.png",
+   "base": 450,
+   "what": "the writing school's front: the corner posts, the sill, the upper shutters hooked up under the eave, the lower ones stacked at the left post, the step stone; its opening clear (the room and everybody in it are behind it)",
+   "states": {
+    "open": "shutters.png",
+    "shut": "shutters-shut.png"
+   }
+  },
+  {
+   "id": "kitchendoor",
+   "file": "kitchendoor.png",
+   "base": 423,
+   "what": "the kitchen door in the lean-to at the yard's back",
+   "states": {
+    "shut": "kitchendoor.png",
+    "open": "kitchendoor-open.png"
+   }
+  },
+  {
+   "id": "saltjar",
+   "file": "saltjar.png",
+   "base": 424,
+   "what": "the salt jar on the shelf (Bizen ware, a wooden lid)"
+  },
+  {
+   "id": "plumjar",
+   "file": "plumjar.png",
+   "base": 424,
+   "what": "the plum jar on the shelf, its mouth papered and tied"
+  },
+  {
+   "id": "cloth",
+   "file": "cloth.png",
+   "base": 424,
+   "what": "a cloth on the shelf: folded; then a bundle of rice balls",
+   "states": {
+    "folded": "cloth.png",
+    "bundle": "cloth-bundle.png"
+   }
+  },
+  {
+   "id": "ricepot",
+   "file": "ricepot.png",
+   "base": 427,
+   "what": "the rice pot on its stand under the shelf (cooked), the paddle across the lid",
+   "solid": [
+    [
+     454,
+     426
+    ],
+    [
+     450,
+     425
+    ],
+    [
+     443,
+     424
+    ],
+    [
+     435,
+     425
+    ],
+    [
+     432,
+     426
+    ],
+    [
+     435,
+     427
+    ],
+    [
+     443,
+     427
+    ],
+    [
+     450,
+     427
+    ]
+   ]
+  },
+  {
+   "id": "pickletub",
+   "file": "pickletub.png",
+   "base": 431,
+   "what": "the pickle tub (pickled radish), its drop-lid and pressing stone",
+   "solid": [
+    [
+     472,
+     429
+    ],
+    [
+     469,
+     428
+    ],
+    [
+     461,
+     427
+    ],
+    [
+     454,
+     428
+    ],
+    [
+     450,
+     429
+    ],
+    [
+     454,
+     430
+    ],
+    [
+     462,
+     431
+    ],
+    [
+     469,
+     430
+    ]
+   ]
+  },
+  {
+   "id": "well",
+   "file": "well.png",
+   "base": 444,
+   "what": "the stone-lined well and its pulley frame: Mom stands before it (mark well), and goes past its left to the kitchen door",
+   "solid": [
+    [
+     505,
+     441
+    ],
+    [
+     500,
+     439
+    ],
+    [
+     490,
+     438
+    ],
+    [
+     478,
+     438
+    ],
+    [
+     469,
+     439
+    ],
+    [
+     465,
+     441
+    ],
+    [
+     469,
+     443
+    ],
+    [
+     480,
+     445
+    ],
+    [
+     492,
+     445
+    ],
+    [
+     502,
+     443
+    ]
+   ]
+  },
+  {
+   "id": "bucket",
+   "file": "bucket.png",
+   "base": 445,
+   "what": "the bucket on its rope, up (hanging under the pulley)",
+   "states": {
+    "up": "bucket.png",
+    "down": "bucket-down.png"
+   }
+  },
+  {
+   "id": "gate",
+   "file": "gate.png",
+   "base": 452,
+   "what": "the ward gate across the lane north: two posts, a tie-beam, a little gabled roof, the doors open by day (shut: gate-shut, for the night). Whoever walks into its mouth (mark north, row 451) is behind it.",
+   "states": {
+    "open": "gate.png",
+    "shut": "gate-shut.png"
+   },
+   "solid": [
+    [
+     710,
+     455
+    ],
+    [
+     721,
+     455
+    ],
+    [
+     721,
+     450
+    ],
+    [
+     710,
+     450
+    ]
+   ]
+  }
+ ],
+ "cutouts": {
+  "noren-cotton": [
+   0,
+   327,
+   76,
+   55
+  ],
+  "noren": [
+   515,
+   359,
+   46,
+   41
+  ],
+  "desks": [
+   257,
+   404,
+   107,
+   15
+  ],
+  "shutters": [
+   216,
+   315,
+   166,
+   140
+  ],
+  "kitchendoor": [
+   389,
+   348,
+   38,
+   76
+  ],
+  "saltjar": [
+   430,
+   371,
+   11,
+   14
+  ],
+  "plumjar": [
+   444,
+   370,
+   13,
+   15
+  ],
+  "cloth": [
+   456,
+   382,
+   15,
+   4
+  ],
+  "ricepot": [
+   432,
+   400,
+   25,
+   26
+  ],
+  "pickletub": [
+   450,
+   406,
+   22,
+   23
+  ],
+  "well": [
+   463,
+   347,
+   43,
+   97
+  ],
+  "bucket": [
+   477,
+   356,
+   30,
+   87
+  ],
+  "gate": [
+   696,
+   303,
+   104,
+   150
+  ],
+  "shutters-shut": [
+   216,
+   315,
+   166,
+   140
+  ],
+  "kitchendoor-open": [
+   364,
+   348,
+   63,
+   76
+  ],
+  "bucket-down": [
+   481,
+   356,
+   26,
+   87
+  ],
+  "cloth-bundle": [
+   454,
+   373,
+   19,
+   12
+  ],
+  "gate-shut": [
+   696,
+   303,
+   104,
+   150
+  ]
+ },
+ "things": [
+  {
+   "id": "keep",
+   "what": "the keep, white, roof on roof, far up on its hill above the town's roofs (PAINT-20D's keep, from the town side)",
+   "shape": {
+    "poly": [
+     [
+      522.0,
+      180.0
+     ],
+     [
+      610.0,
+      180.0
+     ],
+     [
+      596.0,
+      136.0
+     ],
+     [
+      580.0,
+      66.0
+     ],
+     [
+      552.0,
+      66.0
+     ],
+     [
+      536.0,
+      136.0
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "roofs",
+   "what": "the town's tiled roofs, row behind row up to the castle's hill",
+   "shape": {
+    "poly": [
+     [
+      236,
+      214
+     ],
+     [
+      800,
+      206
+     ],
+     [
+      800,
+      252
+     ],
+     [
+      236,
+      252
+     ]
+    ]
+   },
+   "stand": [
+    560,
+    520
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cottonoffice",
+   "what": "the domain's cotton office: a big two-storey front, white above, its wide doorway, an indigo noren, bales of white cloth going in",
+   "shape": {
+    "poly": [
+     [
+      0,
+      452
+     ],
+     [
+      127,
+      452
+     ],
+     [
+      127,
+      104
+     ],
+     [
+      0,
+      104
+     ]
+    ]
+   },
+   "stand": [
+    51,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "noteoffice",
+   "what": "the domain's paper-note office beside it: a sober front, a latticed door, a small hanging board",
+   "shape": {
+    "poly": [
+     [
+      127,
+      452
+     ],
+     [
+      234,
+      452
+     ],
+     [
+      234,
+      104
+     ],
+     [
+      127,
+      104
+     ]
+    ]
+   },
+   "stand": [
+    154,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bales",
+   "what": "bales of white cotton cloth in straw wrappers, stacked at the cotton office's front, going in",
+   "shape": {
+    "poly": [
+     [
+      0,
+      459
+     ],
+     [
+      0,
+      404
+     ],
+     [
+      659,
+      404
+     ],
+     [
+      672,
+      423
+     ],
+     [
+      672,
+      459
+     ]
+    ]
+   },
+   "stand": [
+    51,
+    460
+   ],
+   "face": "N"
+  },
+  {
+   "id": "house",
+   "what": "O-Tane's house: a weaver's house, a fine lattice over the front room's window, her doorway with its indigo noren, the bench under the lattice",
+   "shape": {
+    "poly": [
+     [
+      513,
+      452
+     ],
+     [
+      640,
+      452
+     ],
+     [
+      640,
+      336
+     ],
+     [
+      513,
+      336
+     ]
+    ]
+   },
+   "stand": [
+    552,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "passage",
+   "what": "O-Tane's side yard, open to the street: packed earth back to the kitchen lean-to, the well, the jars (the way to the back)",
+   "shape": {
+    "poly": [
+     [
+      376,
+      452
+     ],
+     [
+      513,
+      452
+     ],
+     [
+      502,
+      423
+     ],
+     [
+      502,
+      330
+     ],
+     [
+      387,
+      330
+     ],
+     [
+      387,
+      423
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "well",
+   "what": "the stone-lined well, the pulley frame over it",
+   "shape": {
+    "poly": [
+     [
+      462,
+      345
+     ],
+     [
+      507,
+      345
+     ],
+     [
+      507,
+      350
+     ],
+     [
+      505,
+      443
+     ],
+     [
+      501,
+      445
+     ],
+     [
+      498,
+      446
+     ],
+     [
+      475,
+      446
+     ],
+     [
+      470,
+      445
+     ],
+     [
+      467,
+      444
+     ],
+     [
+      465,
+      443
+     ],
+     [
+      462,
+      350
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bucket",
+   "what": "the bucket on its rope (up / down)",
+   "shape": {
+    "poly": [
+     [
+      475,
+      378
+     ],
+     [
+      480,
+      353
+     ],
+     [
+      489,
+      353
+     ],
+     [
+      502,
+      385
+     ],
+     [
+      504,
+      394
+     ],
+     [
+      508,
+      441
+     ],
+     [
+      508,
+      446
+     ],
+     [
+      507,
+      446
+     ],
+     [
+      482,
+      417
+     ],
+     [
+      474,
+      390
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "kitchendoor",
+   "what": "the kitchen door in the lean-to at the yard's back",
+   "shape": {
+    "poly": [
+     [
+      388,
+      346
+     ],
+     [
+      428,
+      346
+     ],
+     [
+      428,
+      426
+     ],
+     [
+      388,
+      426
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ricepot",
+   "what": "the rice pot on its stand, cooked rice in it, the paddle across the lid",
+   "shape": {
+    "poly": [
+     [
+      453,
+      429
+     ],
+     [
+      432,
+      429
+     ],
+     [
+      431,
+      423
+     ],
+     [
+      429,
+      414
+     ],
+     [
+      429,
+      401
+     ],
+     [
+      440,
+      398
+     ],
+     [
+      457,
+      398
+     ],
+     [
+      458,
+      398
+     ],
+     [
+      459,
+      399
+     ],
+     [
+      460,
+      400
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "saltjar",
+   "what": "the salt jar on the shelf",
+   "shape": {
+    "poly": [
+     [
+      428,
+      388
+     ],
+     [
+      427,
+      371
+     ],
+     [
+      430,
+      368
+     ],
+     [
+      441,
+      368
+     ],
+     [
+      444,
+      371
+     ],
+     [
+      443,
+      388
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pickletub",
+   "what": "the pickle tub of pickled radish, its stone on the lid",
+   "shape": {
+    "poly": [
+     [
+      473,
+      431
+     ],
+     [
+      450,
+      431
+     ],
+     [
+      448,
+      429
+     ],
+     [
+      447,
+      415
+     ],
+     [
+      448,
+      410
+     ],
+     [
+      460,
+      403
+     ],
+     [
+      466,
+      403
+     ],
+     [
+      469,
+      405
+     ],
+     [
+      475,
+      411
+     ],
+     [
+      474,
+      429
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "plumjar",
+   "what": "the jar of pickled plums on the shelf",
+   "shape": {
+    "poly": [
+     [
+      442,
+      387
+     ],
+     [
+      441,
+      371
+     ],
+     [
+      444,
+      368
+     ],
+     [
+      455,
+      367
+     ],
+     [
+      458,
+      370
+     ],
+     [
+      460,
+      377
+     ],
+     [
+      459,
+      382
+     ],
+     [
+      457,
+      388
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cloth",
+   "what": "a cotton cloth on the shelf (folded; then knotted round the rice balls)",
+   "shape": {
+    "poly": [
+     [
+      472,
+      388
+     ],
+     [
+      455,
+      388
+     ],
+     [
+      454,
+      386
+     ],
+     [
+      451,
+      374
+     ],
+     [
+      451,
+      373
+     ],
+     [
+      455,
+      371
+     ],
+     [
+      471,
+      371
+     ],
+     [
+      476,
+      373
+     ],
+     [
+      476,
+      374
+     ],
+     [
+      474,
+      385
+     ]
+    ]
+   },
+   "stand": [
+    406,
+    428
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pan",
+   "what": "the roasting pan (horoku), stood on its rim against the wall to dry",
+   "shape": {
+    "poly": [
+     [
+      378,
+      420
+     ],
+     [
+      407,
+      420
+     ],
+     [
+      407,
+      449
+     ],
+     [
+      378,
+      449
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mortar",
+   "what": "the Bizen mortar, reddish-brown, combed inside, on the ground by the well",
+   "shape": {
+    "poly": [
+     [
+      438,
+      429
+     ],
+     [
+      459,
+      429
+     ],
+     [
+      459,
+      440
+     ],
+     [
+      438,
+      440
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "school",
+   "what": "the writing school: its shutters propped open, the raised room, the low desks, the girls and their teacher",
+   "shape": {
+    "poly": [
+     [
+      234,
+      452
+     ],
+     [
+      376,
+      452
+     ],
+     [
+      376,
+      336
+     ],
+     [
+      234,
+      336
+     ]
+    ]
+   },
+   "stand": [
+    287,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "desks",
+   "what": "four low desks: two with practice books open, inkstones, brushes; two free",
+   "shape": {
+    "poly": [
+     [
+      254,
+      420
+     ],
+     [
+      254,
+      407
+     ],
+     [
+      256,
+      405
+     ],
+     [
+      278,
+      404
+     ],
+     [
+      366,
+      404
+     ],
+     [
+      367,
+      405
+     ],
+     [
+      367,
+      406
+     ],
+     [
+      366,
+      420
+     ]
+    ]
+   },
+   "stand": [
+    287,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "gate",
+   "what": "the ward gate across the lane north, its doors open by day; the lane goes north toward the castle",
+   "shape": {
+    "poly": [
+     [
+      799,
+      319
+     ],
+     [
+      799,
+      455
+     ],
+     [
+      711,
+      455
+     ],
+     [
+      694,
+      330
+     ],
+     [
+      694,
+      329
+     ],
+     [
+      756,
+      301
+     ],
+     [
+      759,
+      301
+     ],
+     [
+      799,
+      318
+     ]
+    ]
+   },
+   "stand": [
+    757,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hut",
+   "what": "Tobei's hut by the gate: a little board hut, its shutter propped over a counter",
+   "shape": {
+    "poly": [
+     [
+      646,
+      454
+     ],
+     [
+      707,
+      454
+     ],
+     [
+      707,
+      335
+     ],
+     [
+      646,
+      335
+     ]
+    ]
+   },
+   "stand": [
+    688,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hutsandals",
+   "what": "straw sandals hung in pairs from the hut's shutter, for sale",
+   "shape": {
+    "poly": [
+     [
+      657,
+      371
+     ],
+     [
+      707,
+      371
+     ],
+     [
+      707,
+      405
+     ],
+     [
+      657,
+      405
+     ]
+    ]
+   },
+   "stand": [
+    688,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sweets",
+   "what": "a jar of cheap sweets on the hut's counter",
+   "shape": {
+    "poly": [
+     [
+      657,
+      397
+     ],
+     [
+      675,
+      397
+     ],
+     [
+      675,
+      415
+     ],
+     [
+      657,
+      415
+     ]
+    ]
+   },
+   "stand": [
+    688,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "clappers",
+   "what": "the night man's wooden clappers on a peg on the hut's post",
+   "shape": {
+    "poly": [
+     [
+      644,
+      390
+     ],
+     [
+      657,
+      390
+     ],
+     [
+      657,
+      419
+     ],
+     [
+      644,
+      419
+     ]
+    ]
+   },
+   "stand": [
+    688,
+    463
+   ],
+   "face": "N"
+  },
+  {
+   "id": "highway",
+   "what": "the Saigoku-kaido, the highway through Watamachi: broad packed earth; east the way they came",
+   "shape": {
+    "poly": [
+     [
+      0,
+      458
+     ],
+     [
+      800,
+      458
+     ],
+     [
+      800,
+      598
+     ],
+     [
+      0,
+      598
+     ]
+    ]
+   },
+   "stand": [
+    772,
+    556
+   ],
+   "face": "E"
+  },
+  {
+   "id": "lane",
+   "what": "the lane north through the gate, toward the castle",
+   "shape": {
+    "poly": [
+     [
+      722,
+      448
+     ],
+     [
+      796,
+      448
+     ],
+     [
+      796,
+      330
+     ],
+     [
+      722,
+      330
+     ]
+    ]
+   },
+   "stand": [
+    757,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "storehouse",
+   "what": "a white storehouse behind the lot, over the kitchen's roof",
+   "shape": {
+    "poly": [
+     [
+      391,
+      340
+     ],
+     [
+      505,
+      340
+     ],
+     [
+      505,
+      300
+     ],
+     [
+      391,
+      300
+     ]
+    ]
+   },
+   "stand": [
+    466,
+    450
+   ],
+   "face": "N"
+  },
+  {
+   "id": "tane",
+   "what": "O-Tane, a cotton weaver's wife, at her door",
+   "shape": {
+    "poly": [
+     [
+      521,
+      459
+     ],
+     [
+      546,
+      459
+     ],
+     [
+      546,
+      385
+     ],
+     [
+      521,
+      385
+     ]
+    ]
+   },
+   "stand": [
+    534,
+    457
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "tane",
+   "floor": "street"
+  },
+  {
+   "id": "kiku",
+   "what": "O-Kiku, seven, in her best, outside the school, not going in",
+   "shape": {
+    "poly": [
+     [
+      338,
+      459
+     ],
+     [
+      359,
+      459
+     ],
+     [
+      359,
+      400
+     ],
+     [
+      338,
+      400
+     ]
+    ]
+   },
+   "stand": [
+    349,
+    457
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "kiku",
+   "floor": "street"
+  },
+  {
+   "id": "shizu",
+   "what": "O-Shizu, the teacher, kneeling at the right end of the room",
+   "shape": {
+    "poly": [
+     [
+      363,
+      412
+     ],
+     [
+      376,
+      412
+     ],
+     [
+      376,
+      371
+     ],
+     [
+      363,
+      371
+     ]
+    ]
+   },
+   "stand": [
+    370,
+    410
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "shizu",
+   "floor": "school"
+  },
+  {
+   "id": "pupil1",
+   "what": "a girl at her desk, kneeling",
+   "shape": {
+    "poly": [
+     [
+      267,
+      417
+     ],
+     [
+      280,
+      417
+     ],
+     [
+      280,
+      380
+     ],
+     [
+      267,
+      380
+     ]
+    ]
+   },
+   "stand": [
+    274,
+    415
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "pupil1",
+   "floor": "school"
+  },
+  {
+   "id": "pupil2",
+   "what": "a girl at her desk, kneeling",
+   "shape": {
+    "poly": [
+     [
+      293,
+      417
+     ],
+     [
+      306,
+      417
+     ],
+     [
+      306,
+      380
+     ],
+     [
+      293,
+      380
+     ]
+    ]
+   },
+   "stand": [
+    300,
+    415
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "pupil2",
+   "floor": "school"
+  },
+  {
+   "id": "tobei",
+   "what": "old Tobei, the night man of the ward, on his stool by his hut",
+   "shape": {
+    "poly": [
+     [
+      688,
+      462
+     ],
+     [
+      709,
+      462
+     ],
+     [
+      709,
+      399
+     ],
+     [
+      688,
+      399
+     ]
+    ]
+   },
+   "stand": [
+    699,
+    460
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "tobei",
+   "floor": "street"
+  }
+ ],
+ "marks": {
+  "east": [
+   772,
+   556
+  ],
+  "house": [
+   552,
+   463
+  ],
+  "tane": [
+   534,
+   457
+  ],
+  "well": [
+   466,
+   450
+  ],
+  "kitchen": [
+   406,
+   428
+  ],
+  "school": [
+   287,
+   463
+  ],
+  "kiku": [
+   349,
+   457
+  ],
+  "desk": [
+   327,
+   415
+  ],
+  "kikuDesk": [
+   353,
+   415
+  ],
+  "shizu": [
+   370,
+   410
+  ],
+  "pupil1": [
+   274,
+   415
+  ],
+  "pupil2": [
+   300,
+   415
+  ],
+  "gate": [
+   757,
+   466
+  ],
+  "north": [
+   757,
+   451
+  ],
+  "tobei": [
+   699,
+   460
+  ],
+  "hut": [
+   688,
+   463
+  ],
+  "cotton": [
+   51,
+   460
+  ],
+  "note": [
+   154,
+   460
+  ],
+  "keep": [
+   560,
+   520
+  ]
+ },
+ "faces": {
+  "east": "W",
+  "house": "N",
+  "tane": "S",
+  "well": "N",
+  "kitchen": "N",
+  "school": "N",
+  "kiku": "S",
+  "desk": "S",
+  "kikuDesk": "S",
+  "shizu": "W",
+  "pupil1": "S",
+  "pupil2": "S",
+  "gate": "N",
+  "north": "N",
+  "tobei": "S",
+  "hut": "N",
+  "cotton": "N",
+  "note": "N",
+  "keep": "N"
+ },
+ "stands": {
+  "east": {
+   "at": [
+    772,
+    556
+   ],
+   "grownup_px": 142,
+   "floor": "street"
+  },
+  "house": {
+   "at": [
+    552,
+    463
+   ],
+   "grownup_px": 92,
+   "floor": "street"
+  },
+  "tane": {
+   "at": [
+    534,
+    457
+   ],
+   "grownup_px": 89,
+   "floor": "street"
+  },
+  "well": {
+   "at": [
+    466,
+    450
+   ],
+   "grownup_px": 85,
+   "floor": "street"
+  },
+  "kitchen": {
+   "at": [
+    406,
+    428
+   ],
+   "grownup_px": 74,
+   "floor": "street"
+  },
+  "school": {
+   "at": [
+    287,
+    463
+   ],
+   "grownup_px": 92,
+   "floor": "street"
+  },
+  "kiku": {
+   "at": [
+    349,
+    457
+   ],
+   "grownup_px": 89,
+   "floor": "street"
+  },
+  "desk": {
+   "at": [
+    327,
+    415
+   ],
+   "grownup_px": 77,
+   "scale": 0.482,
+   "floor": "school",
+   "note": "kneeling on the raised floor (45 cm): the scale of the floor, not of the row"
+  },
+  "kikuDesk": {
+   "at": [
+    353,
+    415
+   ],
+   "grownup_px": 77,
+   "scale": 0.482,
+   "floor": "school",
+   "note": "kneeling on the raised floor (45 cm): the scale of the floor, not of the row"
+  },
+  "shizu": {
+   "at": [
+    370,
+    410
+   ],
+   "grownup_px": 77,
+   "scale": 0.482,
+   "floor": "school",
+   "note": "kneeling on the raised floor (45 cm): the scale of the floor, not of the row"
+  },
+  "pupil1": {
+   "at": [
+    274,
+    415
+   ],
+   "grownup_px": 77,
+   "scale": 0.482,
+   "floor": "school",
+   "note": "kneeling on the raised floor (45 cm): the scale of the floor, not of the row"
+  },
+  "pupil2": {
+   "at": [
+    300,
+    415
+   ],
+   "grownup_px": 77,
+   "scale": 0.482,
+   "floor": "school",
+   "note": "kneeling on the raised floor (45 cm): the scale of the floor, not of the row"
+  },
+  "gate": {
+   "at": [
+    757,
+    466
+   ],
+   "grownup_px": 94,
+   "floor": "street"
+  },
+  "north": {
+   "at": [
+    757,
+    451
+   ],
+   "grownup_px": 86,
+   "floor": "street"
+  },
+  "tobei": {
+   "at": [
+    699,
+    460
+   ],
+   "grownup_px": 91,
+   "floor": "street"
+  },
+  "hut": {
+   "at": [
+    688,
+    463
+   ],
+   "grownup_px": 92,
+   "floor": "street"
+  },
+  "cotton": {
+   "at": [
+    51,
+    460
+   ],
+   "grownup_px": 91,
+   "floor": "street"
+  },
+  "note": {
+   "at": [
+    154,
+    460
+   ],
+   "grownup_px": 91,
+   "floor": "street"
+  },
+  "keep": {
+   "at": [
+    560,
+    520
+   ],
+   "grownup_px": 123,
+   "floor": "street"
+  }
+ },
+ "sizes": {
+  "grownup_px_at_fronts": 89.1,
+  "mom_px_at_house": 85.6,
+  "mom_px_at_well": 79.2,
+  "mom_px_at_kitchen": 68.3,
+  "lilsis_px_at_kiku": 60.0,
+  "kiku_115cm_px": 56.6,
+  "man_156cm_px_at_tobei": 78.1,
+  "school_floor_scale": 0.482,
+  "px_per_cm_at_fronts": 0.4876,
+  "px_per_cm_at_kitchen": 0.406
+ },
+ "exits": [
+  {
+   "id": "east",
+   "to": null,
+   "name": "the highway east",
+   "edge": "right",
+   "walkTo": [
+    772,
+    556
+   ],
+   "band": [
+    [
+     786,
+     458
+    ],
+    [
+     800,
+     458
+    ],
+    [
+     800,
+     598
+    ],
+    [
+     786,
+     598
+    ]
+   ],
+   "note": "the way they came: refuses (design: 'the highway east (refuses)')"
+  },
+  {
+   "id": "north",
+   "to": "edo-castle",
+   "spawn": "enter",
+   "name": "the lane north, toward the castle",
+   "walkTo": [
+    757,
+    466
+   ],
+   "via": [
+    757,
+    451
+   ],
+   "band": [
+    [
+     722,
+     448
+    ],
+    [
+     796,
+     448
+    ],
+    [
+     796,
+     458
+    ],
+    [
+     722,
+     458
+    ]
+   ],
+   "note": "the next day only (Mom: 'Tomorrow. Tonight we go and listen.')"
+  }
+ ],
+ "fx": [
+  {
+   "id": "kitchen-smoke",
+   "type": "smoke",
+   "what": "smoke from the kitchen's smoke-hole under the lean-to's eave ('Don't let the fire out')",
+   "at": [
+    436,
+    344
+   ],
+   "base": 423,
+   "height": 90,
+   "width": [
+    3,
+    16
+   ],
+   "lean": [
+    14,
+    -90
+   ],
+   "rise": 12,
+   "rate": 2,
+   "color": "#e4e6ea",
+   "opacity": 0.28,
+   "behind": [
+    [
+     [
+      236,
+      0
+     ],
+     [
+      380,
+      0
+     ],
+     [
+      380,
+      330
+     ],
+     [
+      236,
+      330
+     ]
+    ],
+    [
+     [
+      509,
+      0
+     ],
+     [
+      660,
+      0
+     ],
+     [
+      660,
+      330
+     ],
+     [
+      509,
+      330
+     ]
+    ]
+   ],
+   "behindOpacity": 0.0,
+   "note": "it rises from under the lean-to's eave and drifts up between the two houses, a little to the right (the noon air nearly still); hidden behind the houses' upper storeys on either side"
+  },
+  {
+   "id": "noren",
+   "type": "sway",
+   "plane": "noren",
+   "anchor": "top",
+   "amount": 1.2,
+   "period": 3.8
+  },
+  {
+   "id": "noren-cotton",
+   "type": "sway",
+   "plane": "noren-cotton",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 4.2
+  },
+  {
+   "id": "kite",
+   "type": "birds",
+   "what": "a kite (the bird) wheeling slowly over the castle's hill",
+   "circle": {
+    "at": [
+     600,
+     110
+    ],
+    "r": [
+     70,
+     24
+    ]
+   },
+   "count": 1,
+   "speed": 12,
+   "size": 7,
+   "plane": "back"
+  },
+  {
+   "id": "sparrows",
+   "type": "birds",
+   "what": "a few sparrows on the street, pecking; they go up when someone comes near",
+   "area": [
+    [
+     120,
+     500
+    ],
+    [
+     420,
+     494
+    ],
+    [
+     440,
+     560
+    ],
+    [
+     100,
+     566
+    ]
+   ],
+   "count": 4,
+   "look": "sparrow",
+   "size": 14,
+   "depth": true,
+   "shy": 120
+  }
+ ],
+ "fx_note": "Moving: the kitchen's smoke, the two noren stirring, a kite over the castle, sparrows on the street; and the people's own small lives (PEOPLE-21B): O-Tane at her door, O-Kiku fidgeting, the girls writing, O-Shizu at her table, Tobei on his stool. The komuso passes along the street now and then (the design: he is in Himeji too): left to right along row 520 or so.",
+ "school_note": "The school's front is the cut-out `shutters` (base 450), its opening clear: the room is painted in the backdrop behind it, and the girls, the teacher, Little Sister and O-Kiku are the game's people on the floor `school` (scale 0.482), sorted by their feet: the `desks` cut-out (base 419) is in front of a girl kneeling behind it (her knees on row 415)."
+}

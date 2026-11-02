@@ -23,6 +23,8 @@
 import { picture, url, hold, listed } from "./assets.js";
 import { afterTo } from "./edges.js";
 import { picturesOf as thoughtNames, thoughtURL } from "../art/thoughts.js";         // ENGINE-17: a refusal that is a thought shows its pictures on the label line
+import { lineMs } from "./dialogue.js";                                              // ENGINE-21: a stop's line, said on the map, stays as long as a line on the stage
+import { textRate } from "./save.js";
 
 /**
  * ENGINE-17: what a `travel` (a scene's, or a place's in js/content/maps.js) says for the lead being played: true, he may
@@ -43,6 +45,11 @@ export function travelFor(t, g, who) {
 /** ENGINE-17: is a place drawn on its map whatever the visits say (`shown`: true, or a function of the game): a landmark,
     as the Office's B-7 is on its blueprint, which may have no scene at all. */
 const shownPlace = (place, g) => !!place && (place.shown === true || (typeof place.shown === "function" && !!place.shown(g)));
+/** ENGINE-21: is a place with `known` (a function of the game, or true or false) known now: true, false; undefined for a
+    place with no `known` (as every place was before). */
+const knownOf = (place, g) => (!place || place.known == null ? undefined : typeof place.known === "function" ? !!place.known(g) : !!place.known);
+/** ENGINE-21: a stop drawn on its map now (`shown`: true, or a function of the game; none: only while a journey passes it). */
+const shownStop = (stop, g) => !!stop && (stop.shown === true || (typeof stop.shown === "function" && !!stop.shown(g)));
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const px = (v) => `${(v / 8).toFixed(3)}cqw`;          // a length in picture pixels, in the stage's own unit (800 pixels are 100cqw)
@@ -76,7 +83,7 @@ export function checkMaps({ maps = {}, scenes = {}, eras = {}, sceneIds = [], ga
       const list = (place && place.scenes) || [];
       if (!list.length && !(place && place.shown)) problems.push(`${it}, place "${pid}", lists no scene.`);      // (ENGINE-17: a landmark that is `shown` may have none)
       if (!place.label) problems.push(`${it}, place "${pid}", has no label to write on the map.`);
-      if (!(map.sketch && map.sketch.places && Array.isArray(map.sketch.places[pid]))) problems.push(`${it}, place "${pid}", has no pin in its sketch, so the map cannot be drawn before it is painted.`);
+      if (!(place && place.on) && !(map.sketch && map.sketch.places && Array.isArray(map.sketch.places[pid]))) problems.push(`${it}, place "${pid}", has no pin in its sketch, so the map cannot be drawn before it is painted.`);      // (ENGINE-21: a place on a way is placed on it)
       list.forEach((sid, n) => {
         if (list.indexOf(sid) !== n) { problems.push(`${it}, place "${pid}", lists the scene "${sid}" twice.`); return; }
         if (!sceneIds.includes(sid)) problems.push(`${it}, place "${pid}": the scene "${sid}" is not in js/content/scenes/index.js.`);
@@ -99,7 +106,20 @@ export function checkMaps({ maps = {}, scenes = {}, eras = {}, sceneIds = [], ga
     }
     for (const [pid, place] of Object.entries(map.places)) {                      // ENGINE-20: the legs
       if (place && place.leg != null && typeof place.leg !== "number" && typeof place.leg !== "function") problems.push(`${it}, place "${pid}": its leg must be a number (or a function of the game giving one).`);
-      if (place && place.far != null && typeof place.far !== "string" && typeof place.far !== "function") problems.push(`${it}, place "${pid}": its far must be a line id (or a function of the game giving one).`);
+      if (place && place.far != null && typeof place.far !== "string" && typeof place.far !== "function" && !(typeof place.far === "object" && !Array.isArray(place.far))) problems.push(`${it}, place "${pid}": its far must be a line id (or a function of the game, or one for each leg).`);      // (ENGINE-21: or { leg: id, any: id })
+      // ENGINE-21: a place that is a point of a way (`on`: the family at sea), and a place known only once a fact is true (`known`)
+      if (place && place.on != null) {
+        const o = place.on, w = o && (map.paths || []).find((p) => (p.a === o.a && p.b === o.b) || (p.a === o.b && p.b === o.a));
+        if (!o || !w) problems.push(`${it}, place "${pid}": it is on a way (on: { a, b, at }), and "${o && o.a}" to "${o && o.b}" is no way of this map.`);
+        else if (!(Number.isFinite(o.at) && o.at >= 0 && o.at <= 1) && !isPoint(o.near)) problems.push(`${it}, place "${pid}": where it is on its way is \`at\` (0 to 1, from ${o.a}) or \`near\` (a point of the map).`);
+      }
+      if (place && place.known != null && typeof place.known !== "function" && typeof place.known !== "boolean") problems.push(`${it}, place "${pid}": its known must be a function of the game (or true or false).`);
+    }
+    for (const [sid, stop] of Object.entries(map.stops || {})) {                   // ENGINE-21: the stops (a journey's pictures by the way, each with a line)
+      const o = stop && stop.on, w = o && (map.paths || []).find((p) => (p.a === o.a && p.b === o.b) || (p.a === o.b && p.b === o.a));
+      if (!stop || (!o && !(map.sketch && map.sketch.stops && isPoint(map.sketch.stops[sid])))) problems.push(`${it}, stop "${sid}": it needs a way it is on (on: { a, b, at }) or a pin in the sketch (sketch.stops).`);
+      else if (o && !w) problems.push(`${it}, stop "${sid}": "${o.a}" to "${o.b}" is no way of this map.`);
+      if (stop && stop.line != null && typeof stop.line !== "string") problems.push(`${it}, stop "${sid}": its line must be a line id.`);
     }
   }
   for (const sid of sceneIds) if (!home[sid]) problems.push(`The scene "${sid}" is on no map, so it has no Map button: give it a place in js/content/maps.js.`);
@@ -107,7 +127,8 @@ export function checkMaps({ maps = {}, scenes = {}, eras = {}, sceneIds = [], ga
 }
 
 // ---------------------------------------------------------------- the layouts
-/** A sketch's layout: the map's pins from maps.js, a box round each, straight ways, a plain sheet. */
+/** A sketch's layout: the map's pins from maps.js, a box round each, straight ways, a plain sheet. (ENGINE-21: a place on a
+    way has its pin on that way's line and nothing to draw; and the stops, from the sketch's own pins or their ways.) */
 function sketchOf(id, map) {
   const places = {}, pins = (map.sketch && map.sketch.places) || {};
   for (const pid of Object.keys(map.places)) {
@@ -116,35 +137,117 @@ function sketchOf(id, map) {
     places[pid] = { picture: null, pin: [x, y], label: [x, t + 21], label_max: BOX.w - 14, shape: [[l, t], [r, t], [r, b], [l, b]] };
   }
   const paths = (map.paths || []).map((p) => ({ a: p.a, b: p.b, picture: null, via: [places[p.a].pin, places[p.b].pin] }));
-  return { map: id, painted: false, sheet: SHEET, back: null, material: "a sketch", label: { color: INK, halo: null, upper: false, spacing: 0.04, size: 15 }, places, paths };
+  const L = { map: id, painted: false, sheet: SHEET, back: null, material: "a sketch", label: { color: INK, halo: null, upper: false, spacing: 0.04, size: 15 }, places, paths };
+  return onWays(map, L, (pid) => pins[pid], (sid) => map.sketch && map.sketch.stops && map.sketch.stops[sid]);
 }
 
 const isPoint = (p) => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite);
-/** The painters' layout.json, read into the engine's own form. It throws, saying why, when it does not fit the map. */
+/** The painters' layout.json, read into the engine's own form. It throws, saying why, when it does not fit the map.
+    ENGINE-21: a place or a way the painters have not drawn yet (a map that has grown since it was painted: Act Six's Akashi,
+    Shosha and Osaka as a place, round twenty-one) is a stand-in on the painting (`standin`: a pin from the sketch, a plain
+    box and a line in the map's ink), and the console says so once; a place on a way (`on`) needs nothing of the painters, and
+    takes their pin if they give one; the stops are theirs (`stops`: [{ id, picture, pin, label }]) or stand-ins. */
 function paintedOf(id, map, json) {
   const art = map.art, why = (text) => { throw new Error(text); };
   if (!json || typeof json !== "object") why("is not a layout");
   if (!(Array.isArray(json.sheet) && json.sheet.length === 4 && json.sheet.every(Number.isFinite))) why("has no sheet [left, top, right, bottom]");
   const label = { color: INK, halo: null, upper: false, spacing: 0.04, size: 15, ...(json.label || {}) };
   label.size = Math.min(18, Math.max(13, Number(label.size) || 15));
-  const places = {}, given = Object.fromEntries((json.places || []).map((p) => [p.id, p]));
-  for (const pid of Object.keys(map.places)) {
+  const places = {}, given = Object.fromEntries((json.places || []).map((p) => [p.id, p])), sketch = (map.sketch && map.sketch.places) || {}, standins = [];
+  for (const [pid, place] of Object.entries(map.places)) {
     const p = given[pid];
-    if (!p) why(`has no place "${pid}"`);
+    if (place.on) continue;                                                        // (ENGINE-21: placed on its way, below)
+    if (!p) {                                                                       // ENGINE-21: not painted yet: a stand-in
+      if (!isPoint(sketch[pid])) why(`has no place "${pid}"`);
+      const [x, y] = sketch[pid], l = x - 44, r = x + 44, t = y - 34, b = y + 16;
+      places[pid] = { picture: null, standin: true, shape: [[l, t], [r, t], [r, b], [l, b]], pin: [x, y], label: [x, t - 6], label_max: 150 };
+      standins.push(`the place "${pid}"`);
+      continue;
+    }
     if (!p.picture || !(Array.isArray(p.shape) && p.shape.length >= 3 && p.shape.every(isPoint)) || !isPoint(p.pin) || !isPoint(p.label)) why(`needs a picture, a shape, a pin and a label for the place "${pid}"`);
     places[pid] = { picture: art + p.picture, shape: p.shape, pin: p.pin, label: p.label, label_max: Number(p.label_max) || 150 };
   }
   const paths = (map.paths || []).map((way) => {
     const p = (json.paths || []).find((q) => (q.a === way.a && q.b === way.b) || (q.a === way.b && q.b === way.a));
+    if (!p && places[way.a] && places[way.b]) { standins.push(`the way from "${way.a}" to "${way.b}"`); return { a: way.a, b: way.b, picture: null, standin: true, via: [places[way.a].pin, places[way.b].pin] }; }      // ENGINE-21
     if (!p) why(`has no way between "${way.a}" and "${way.b}"`);
     if (!p.picture || !(Array.isArray(p.via) && p.via.length >= 2 && p.via.every(isPoint))) why(`needs a picture and a via for the way between "${way.a}" and "${way.b}"`);
     return { a: way.a, b: way.b, picture: art + p.picture, via: p.a === way.a ? p.via : [...p.via].reverse() };      // (kept in maps.js's order: from a to b)
   });
-  return { map: id, painted: true, sheet: json.sheet, back: art + "back.png", material: json.material || "", label, places, paths };
+  const L = { map: id, painted: true, sheet: json.sheet, back: art + "back.png", material: json.material || "", label, places, paths, standins };
+  const theirs = Object.fromEntries((json.stops || []).filter((s) => s && s.id).map((s) => [s.id, s]));
+  onWays(map, L, (pid) => (given[pid] && isPoint(given[pid].pin) ? given[pid].pin : null), (sid) => (theirs[sid] && isPoint(theirs[sid].pin) ? theirs[sid].pin : null));
+  for (const [sid, s] of Object.entries(L.stops)) {                                // ENGINE-21: a stop's own picture, if the painters gave one
+    const t = theirs[sid];
+    if (t && t.picture) { s.picture = art + t.picture; s.standin = false; if (isPoint(t.label)) s.label = t.label; }
+    else standins.push(`the stop "${sid}"`);
+  }
+  return L;
 }
 
-/** Every picture a layout shows. */
-const picturesOf = (L) => [L.back, ...Object.values(L.places).map((p) => p.picture), ...L.paths.map((p) => p.picture)].filter(Boolean);
+// ---------------------------------------------------------------- ENGINE-21: points along the ways
+/** The length along a line of points at each of its points: [0, ...]. */
+const lensOf = (line) => { const out = [0]; for (let i = 1; i < line.length; i++) out.push(out[i - 1] + Math.hypot(line[i][0] - line[i - 1][0], line[i][1] - line[i - 1][1])); return out; };
+/** The point at distance s along a line (its lengths `lens`). */
+function pointAt(line, lens, s) {
+  if (line.length < 2) return line[0] ? [line[0][0], line[0][1]] : [0, 0];
+  s = Math.max(0, Math.min(lens[lens.length - 1], s));
+  let i = 1;
+  while (i < lens.length - 1 && lens[i] < s) i++;
+  const k = lens[i] > lens[i - 1] ? (s - lens[i - 1]) / (lens[i] - lens[i - 1]) : 1;
+  return [line[i - 1][0] + (line[i][0] - line[i - 1][0]) * k, line[i - 1][1] + (line[i][1] - line[i - 1][1]) * k];
+}
+/** The distance along a line of the point of it nearest p, at or after `from` (the first nearest, for a line that comes back on itself). */
+function nearestS(line, lens, p, from = 0) {
+  let best = Infinity, at = from;
+  for (let i = 1; i < line.length; i++) {
+    if (lens[i] < from) continue;
+    const [x1, y1] = line[i - 1], [x2, y2] = line[i], vx = x2 - x1, vy = y2 - y1, L2 = vx * vx + vy * vy;
+    let k = L2 ? ((p[0] - x1) * vx + (p[1] - y1) * vy) / L2 : 0;
+    k = Math.max(lens[i - 1] < from ? (from - lens[i - 1]) / (lens[i] - lens[i - 1] || 1) : 0, Math.min(1, k));
+    const d = Math.hypot(x1 + vx * k - p[0], y1 + vy * k - p[1]);
+    if (d < best - 0.01) { best = d; at = lens[i - 1] + (lens[i] - lens[i - 1]) * k; }
+  }
+  return at;
+}
+/** The part of a line between two distances along it (from s0 to s1; s1 below s0: the part turned round). */
+function cutLine(line, lens, s0, s1) {
+  const back = s1 < s0, a = Math.min(s0, s1), b = Math.max(s0, s1), out = [pointAt(line, lens, a)];
+  for (let i = 0; i < line.length; i++) if (lens[i] > a && lens[i] < b) out.push([line[i][0], line[i][1]]);
+  out.push(pointAt(line, lens, b));
+  return back ? out.reverse() : out;
+}
+/** A way's line from one of its places to the other (its `via`, turned round as needed); null if the layout has no such way. */
+function wayLine(L, a, b) {
+  const w = L.paths.find((p) => (p.a === a && p.b === b) || (p.a === b && p.b === a));
+  return w ? (w.a === a ? w.via : [...w.via].reverse()) : null;
+}
+/** ENGINE-21: the places of a map that are a point of a way (`on: { a, b, at | near }`: the family at sea, between Yui and Osaka),
+    and the map's stops, placed on the layout L: each a pin, and nothing of its own to draw or click. `pinOf(pid)` and
+    `stopPin(sid)` give a pin the layout (or the sketch) has for one, which is used as it is. */
+function onWays(map, L, pinOf, stopPin) {
+  const at = (o) => {
+    const line = wayLine(L, o.a, o.b) || (L.places[o.a] && L.places[o.b] ? [L.places[o.a].pin, L.places[o.b].pin] : null);
+    if (!line) return null;
+    const lens = lensOf(line);
+    return isPoint(o.near) ? pointAt(line, lens, nearestS(line, lens, o.near)) : pointAt(line, lens, Math.max(0, Math.min(1, Number(o.at) || 0)) * lens[lens.length - 1]);
+  };
+  for (const [pid, place] of Object.entries(map.places)) {
+    if (!place.on) continue;
+    const pin = (pinOf && pinOf(pid)) || at(place.on) || [400, 350];
+    L.places[pid] = { picture: null, pin: pin.map((v) => Math.round(v * 10) / 10), label: null, label_max: 0, shape: null, onWay: { a: place.on.a, b: place.on.b } };
+  }
+  L.stops = {};
+  for (const [sid, stop] of Object.entries(map.stops || {})) {
+    const pin = (stopPin && stopPin(sid)) || (stop.on ? at(stop.on) : null);
+    if (!pin) continue;
+    L.stops[sid] = { picture: null, standin: true, pin: pin.map((v) => Math.round(v * 10) / 10), label: [Math.round(pin[0]), Math.round(pin[1] - 12)] };
+  }
+  return L;
+}
+
+/** Every picture a layout shows. (ENGINE-21: and its stops' pictures.) */
+const picturesOf = (L) => [L.back, ...Object.values(L.places).map((p) => p.picture), ...L.paths.map((p) => p.picture), ...Object.values(L.stops || {}).map((s) => s.picture)].filter(Boolean);
 
 // The Timer's three pieces (the emblem's, in art/emblem/): at 1024 once the game has them (DIAL-15's), else the 512s that
 // the begin screen gives a sharp screen. The small dial on the map is a quarter of the Timer's size: the 512s are enough.
@@ -247,18 +350,23 @@ export class Atlas {
   stateOf(mapId) {
     const map = this.maps[mapId], seen = new Set(this.g.store.data.visited || []);
     for (const f of this.facesOn(mapId)) if (f.team && f.scene) seen.add(f.scene);
+    // ENGINE-21: a place with `known` (a function of the game: Shosha, once the family knows the way, `edo.knowWay`) is not on
+    // the map at all until it is true (not even faint, nor its ways), and then is drawn in and can be travelled to, as a place
+    // been to is, before anyone has set foot in it: the way there is known.
+    const knows = (pid) => knownOf(map.places[pid], this.g);
+    const hidden = new Set(Object.keys(map.places).filter((pid) => knows(pid) === false));
     // (ENGINE-17: `entered`, the places really been to; `visited`, what is drawn in: those and the landmarks, `shown`, which
     // neither make a map known nor make the places beside them faint)
-    const entered = new Set(Object.keys(map.places).filter((pid) => (map.places[pid].scenes || []).some((s) => seen.has(s))));
+    const entered = new Set(Object.keys(map.places).filter((pid) => !hidden.has(pid) && (knows(pid) === true || (map.places[pid].scenes || []).some((s) => seen.has(s)))));
     const j = this._journey;                                                     // ENGINE-20: a journey draws in where it starts and where it goes (and the places passed)
-    if (j && j.map === mapId) for (const pid of j.places) if (map.places[pid]) entered.add(pid);
-    const visited = new Set([...entered, ...Object.keys(map.places).filter((pid) => shownPlace(map.places[pid], this.g))]);
+    if (j && j.map === mapId) for (const pid of j.places) if (map.places[pid]) { entered.add(pid); hidden.delete(pid); }
+    const visited = new Set([...entered, ...Object.keys(map.places).filter((pid) => !hidden.has(pid) && shownPlace(map.places[pid], this.g))]);
     const faint = new Set();
     for (const p of map.paths || []) {
-      if (entered.has(p.a) && !visited.has(p.b)) faint.add(p.b);
-      if (entered.has(p.b) && !visited.has(p.a)) faint.add(p.a);
+      if (entered.has(p.a) && !visited.has(p.b) && !hidden.has(p.b)) faint.add(p.b);
+      if (entered.has(p.b) && !visited.has(p.a) && !hidden.has(p.a)) faint.add(p.a);
     }
-    return { visited, faint, entered };
+    return { visited, faint, entered, hidden };
   }
   /** The maps the player knows (one of their places visited, or someone standing on it), in the dial's order: A first. */
   known() {
@@ -321,10 +429,19 @@ export class Atlas {
       the engine's own words; null for a place of the lead's own leg. */
   farSays(mapId, pid) {
     if (this.sameLeg(mapId, pid)) return null;
-    const place = this.maps[mapId].places[pid], line = typeof place.far === "function" ? place.far(this.g) : place.far, entry = typeof line === "string" ? this.g.lines[line] : null;
+    // ENGINE-21: the far line may differ with the leg the lead is in ("Yui is twelve days back by sea." from Osaka, something else
+    // from the hills): `far` is a line id, and a line of that id with the leg after it ("edo.map.far.yui.3") is said first if
+    // the lines files have it; or one for each leg ({ 2: id, 3: id, any: id }); or a function of the game and the leg.
+    const place = this.maps[mapId].places[pid], own = this.own(), leg = own && own.id === mapId ? this.legOf(mapId, own.place) : null;
+    let line = place.far;
+    if (typeof line === "function") line = line(this.g, leg);
+    else if (line && typeof line === "object") line = Object.prototype.hasOwnProperty.call(line, leg) ? line[leg] : line.any;
+    const lines = this.g.lines, perLeg = typeof line === "string" && leg != null && lines[`${line}.${leg}`] ? `${line}.${leg}` : null;
+    if (perLeg) line = perLeg;
+    const entry = typeof line === "string" ? lines[line] : null;
     if (typeof line === "string" && !entry) this.once(`The place "${pid}" of the map "${mapId}" names the line "${line}" for its far, which is not in the lines files: "Too far to go back." is said instead.`);
     if (!entry) return { text: "Too far to go back.", pictures: null };
-    return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${line}"`) } : { text: entry[1], pictures: null };
+    return entry[2] != null ? { text: "", pictures: thoughtNames(entry[2], `the line "${line}"`) } : { text: entry[1], pictures: null, line };      // (ENGINE-21: and which line it was)
   }
   /** The fewest ways from one place of a map to another through visited places only: { places, ways }, or null. (ENGINE-20:
       through places of the lead's own leg only, and never along a way that is only a journey's.) */
@@ -377,6 +494,7 @@ export class Atlas {
           let json;
           try { json = await (await fetch(address)).json(); } catch { throw new Error("is not JSON"); }
           L = paintedOf(mapId, map, json);
+          if (L.standins && L.standins.length) this.once(`The map "${mapId}" is painted, but ${file} has nothing yet for ${L.standins.join(", ")}: each is drawn as a stand-in on the painting until it is painted (ENGINE-21).`);
         } catch (err) { this.once(`The map "${mapId}" is drawn as a sketch, because ${file} ${err.message}.`); }
       }
       return (this.layouts[mapId] = L || sketchOf(mapId, map));
@@ -585,9 +703,12 @@ export class Atlas {
       `under`, the new sheet is put under the one showing, clear, for a cross-fade. Resolves with it, once every picture it
       shows has arrived. */
   async draw(mapId, { under = false } = {}) {
-    const g = this.g, L = await this.layout(mapId), map = this.maps[mapId], own = this.own(), { visited, faint } = this.stateOf(mapId);
+    const g = this.g, L = await this.layout(mapId), map = this.maps[mapId], own = this.own(), { visited, faint, entered, hidden } = this.stateOf(mapId);
     const shows = (pid) => (visited.has(pid) ? 1 : faint.has(pid) ? FAINT : 0);
-    const wayShows = (p) => (visited.has(p.a) && visited.has(p.b) ? 1 : visited.has(p.a) || visited.has(p.b) ? FAINT : 0);
+    // (ENGINE-21: a way to a place not known yet is not drawn; a way with somebody on it, been to (the sea path while the family
+    // is at sea, and after), is drawn whole)
+    const onIt = (p) => Object.entries(map.places).some(([pid, pl]) => pl.on && entered.has(pid) && ((pl.on.a === p.a && pl.on.b === p.b) || (pl.on.a === p.b && pl.on.b === p.a)));
+    const wayShows = (p) => (hidden.has(p.a) || hidden.has(p.b) ? 0 : (visited.has(p.a) && visited.has(p.b)) || onIt(p) ? 1 : visited.has(p.a) || visited.has(p.b) ? FAINT : 0);
     if (L.painted) await Promise.all(picturesOf(L).map((p) => picture(p)));      // here before it is shown, so nothing pops in
     const sheet = document.createElement("div");
     sheet.className = "atlas-sheet " + (L.painted ? "painted" : "sketch");
@@ -599,19 +720,32 @@ export class Atlas {
     // the drawing: the sheet, the ways, the places (each picture whole, at 1 or faint); the sketch: ways dashed, a box for each place
     const image = (path, o, attrs) => `<image ${attrs} href="${esc(url(path))}" x="0" y="0" width="800" height="600" preserveAspectRatio="none" opacity="${o}"/>`;
     const points = (list) => list.map((v) => v.join(",")).join(" ");
+    // ENGINE-21: on a painted map, a place or a way not painted yet is a stand-in in the map's own ink (a box, a dashed line)
+    const standin = `fill="none" stroke="${esc(L.label.color)}" stroke-width="2.4" stroke-dasharray="7 6" stroke-linecap="round"`;
     if (L.painted) ink += image(L.back, 1, `class="back"`);
     for (const p of L.paths) {
       const o = wayShows(p);
-      if (o) ink += L.painted ? image(p.picture, o, `class="way" data-way="${p.a}-${p.b}"`) : `<polyline class="way" data-way="${p.a}-${p.b}" points="${points(p.via)}" opacity="${o}"/>`;
+      if (o) ink += L.painted && p.picture ? image(p.picture, o, `class="way" data-way="${p.a}-${p.b}"`) : `<polyline class="way${p.standin ? " standin" : ""}" data-way="${p.a}-${p.b}" points="${points(p.via)}" opacity="${o}"${p.standin ? " " + standin : ""}/>`;
     }
     for (const [pid, p] of Object.entries(L.places)) {
-      const o = shows(pid);
-      if (o) ink += L.painted ? image(p.picture, o, `class="site" data-place="${pid}"`) : `<polygon class="site" data-place="${pid}" points="${points(p.shape)}" opacity="${o}"/>`;
+      const o = p.onWay ? 0 : shows(pid);                                          // (ENGINE-21: a place on a way has nothing of its own to draw)
+      if (o) ink += L.painted && p.picture ? image(p.picture, o, `class="site" data-place="${pid}"`)
+        : `<polygon class="site${p.standin ? " standin" : ""}" data-place="${pid}" points="${points(p.shape)}" opacity="${o}"${p.standin ? ` fill="rgba(255,244,214,0.35)" stroke="${esc(L.label.color)}" stroke-width="2" stroke-linejoin="round"` : ""}/>`;
+    }
+    // ENGINE-21: the stops (a journey's pictures by the way): shown when the map says so (`shown`), or while a journey passes them
+    // (drawn at 0 until the portraits come to them: journey); a stand-in is a small ring in the map's ink, with its name
+    const j = this._journey && this._journey.map === mapId ? this._journey : null, lab = L.label;
+    for (const [sid, s] of Object.entries(L.stops || {})) {
+      const st = (map.stops || {})[sid], on = shownStop(st, g), passing = !!j && j.stops.includes(sid);
+      if (!on && !passing) continue;
+      const o = on ? 1 : 0;
+      if (s.picture) ink += image(s.picture, o, `class="stop" data-stop="${sid}"`);
+      else ink += `<g class="stop standin" data-stop="${sid}" opacity="${o}"><circle cx="${s.pin[0]}" cy="${s.pin[1]}" r="5" fill="${esc(lab.color)}"/>` +
+        `<text x="${s.label[0]}" y="${s.label[1]}" text-anchor="middle" font-size="${Math.max(11, lab.size - 3)}" fill="${esc(lab.color)}"${lab.halo ? ` stroke="${esc(lab.halo)}" stroke-width="3" paint-order="stroke"` : ""}>${esc(st.label || sid)}</text></g>`;
     }
     // the names, in the game's own face, in the map's style: only where the player has been
-    const lab = L.label;
     for (const pid of Object.keys(L.places)) {
-      if (!visited.has(pid)) continue;
+      if (!visited.has(pid) || L.places[pid].onWay) continue;
       const p = L.places[pid], text = lab.upper ? map.places[pid].label.toUpperCase() : map.places[pid].label;
       const halo = lab.halo ? ` stroke="${esc(lab.halo)}" stroke-width="${(lab.size / 4).toFixed(2)}" stroke-linejoin="round" paint-order="stroke"` : "";
       ink += `<text class="name" data-place="${pid}" data-max="${p.label_max}" x="${p.label[0]}" y="${p.label[1]}" text-anchor="middle" font-size="${lab.size}" fill="${esc(lab.color)}" style="letter-spacing:${Number(lab.spacing) || 0}em"${halo}>${esc(text)}</text>`;
@@ -621,7 +755,7 @@ export class Atlas {
     const mine = !!own && own.id === mapId;
     let hot = "";
     for (const [pid, p] of Object.entries(L.places)) {
-      if (!visited.has(pid) && !faint.has(pid)) continue;
+      if ((!visited.has(pid) && !faint.has(pid)) || p.onWay) continue;             // (ENGINE-21: a place on a way is not clicked: its portraits are)
       const button = mine && visited.has(pid);
       hot += `<polygon class="site${visited.has(pid) ? "" : " faint"}${button && !this.cannot(pid) ? " target" : ""}" data-place="${pid}" points="${points(p.shape)}"` +
         (button ? ` tabindex="0" role="button"` : ` role="img"`) + ` aria-label="${esc(this.placeText(mapId, pid))}"/>`;
@@ -915,15 +1049,25 @@ export class Atlas {
    * map or place, with the map up already, or while the cut-scene is skipped (the console says why, but for skipping). With
    * less motion the portraits are at the far end at once. Nothing of it is saved: the scene the cut-scene goes to next is.
    */
-  async journey(mapId, from, to, { via = [], path = null, ms = 3200, sound = null, who = null } = {}) {
+  async journey(mapId, from, to, { via = [], path = null, ms = 3200, sound = null, who = null, stops = [], segments = null } = {}) {
     const g = this.g, d = g.store.data, map = this.maps[mapId];
+    // ENGINE-21: `stops` (ids of the map's stops, or { id, line, ms }: a picture by the way, and a line said over it as the portraits
+    // come to it), and `segments` ([{ to, sound, ms, stops }]: the journey in parts, each to a place or a stop on the line, with a
+    // sound and a pace of its own: the river path, then the road). A place may be a point of a way (`on`: the family at sea).
+    const segs = Array.isArray(segments) && segments.length ? segments : null;
+    const stopIds = [...(stops || []), ...(segs ? segs.flatMap((s) => s.stops || []) : [])].map((s) => (typeof s === "string" ? s : s && s.id));
+    const ends = segs ? segs.map((s) => s.to).filter((t) => t != null && t !== to) : [];
+    const known = (pid) => !!(map && (map.places[pid] || (map.stops || {})[pid]));
     const why = !map ? `no map called "${mapId}"` : ![from, to, ...via].every((pid) => map.places[pid]) ? `"${[from, to, ...via].find((pid) => !map.places[pid])}" is not a place of the map "${mapId}"`
+      : !stopIds.every((sid) => (map.stops || {})[sid]) ? `"${stopIds.find((sid) => !(map.stops || {})[sid])}" is not a stop of the map "${mapId}"`
+      : !ends.every(known) ? `the segment's end "${ends.find((t) => !known(t))}" is not a place or a stop of the map "${mapId}"`
       : this.open ? "the map is up already" : !this.el ? "there is no map layer" : null;
     if (why) { console.warn(`g.journey("${mapId}", "${from}", "${to}"): ${why}, so nothing happens.`); return false; }
     if (g.clock.skipping) return false;
     const ids = [d.active, ...(Array.isArray(who) ? who : d.team)].filter((id, i, all) => g.leads.includes(id) && all.indexOf(id) === i);
     const places = [from, ...via, to];
-    this._journey = { map: mapId, from, to, places, ids };
+    this._journey = { map: mapId, from, to, places, ids, stops: stopIds, said: [] };
+    this.journeyed = { stops: [], segments: [], said: [] };                     // (ENGINE-21: what the last journey did, for tests)
     try {
       this.enter();
       this.mode = "journey";
@@ -931,28 +1075,153 @@ export class Atlas {
       const L = await this.layout(mapId);
       await this.draw(mapId);
       this.band(mapId);
-      await this.tween(220, (k) => { this.el.style.opacity = k; });
+      // (ENGINE-21: from a stage already dark, a cut-scene's fade or the last journey's end, the dark lifts off the map)
+      if (Number(g.fadeEl.style.opacity) > 0.5) { this.el.style.opacity = 1; await this.tween(260, (k) => { g.fadeEl.style.opacity = 1 - k; }, linear); g.fadeEl.style.opacity = 0; g._fade = 0; }
+      else await this.tween(220, (k) => { this.el.style.opacity = k; });
       this.busy = false;
-      // the line: the given points, or each hop's way (its via, turned round as needed), else straight between the pins
+      // the line: the given points, or each hop's way (its via, turned round as needed; ENGINE-21: from or to a place on a way, the
+      // part of that way's line), else straight between the pins
       let line = [], passing = [];
       if (Array.isArray(path) && path.length >= 2) line = path.filter((p) => Array.isArray(p) && p.length === 2);
       else for (let n = 0; n < places.length - 1; n++) {
-        const a = places[n], b = places[n + 1], way = L.paths.find((p) => (p.a === a && p.b === b) || (p.a === b && p.b === a));
-        const pts = way ? (way.a === a ? way.via : [...way.via].reverse()) : [L.places[a].pin, L.places[b].pin];
+        const pts = this.hop(map, L, places[n], places[n + 1]);
         for (const p of line.length ? pts.slice(1) : pts) line.push(p);
         if (n < places.length - 2) passing.push(line.length - 1);
       }
-      if (sound) g.sfx(sound);
+      const lens = lensOf(line), total = lens[lens.length - 1] || 0;
       const movers = ((this.rows || {})[from] || []).filter((r) => ids.includes(r.id));
-      await this.walkLine(movers, line, passing, { ms });
+      // ENGINE-21: the parts: each segment's end, and each stop, as a distance along the line (in order, each after the last)
+      const pinOf = (id) => (L.places[id] ? L.places[id].pin : L.stops && L.stops[id] ? L.stops[id].pin : null);
+      const plan = segs || [{ to, sound, ms, stops }];
+      let s = 0;
+      const parts = plan.map((seg, n) => {
+        const last = n === plan.length - 1, end = last || seg.to == null || seg.to === to ? total : nearestS(line, lens, pinOf(seg.to) || line[line.length - 1], s);
+        const st = (seg.stops || []).map((x) => (typeof x === "string" ? { id: x } : x)).map((x) => ({ ...x, at: nearestS(line, lens, pinOf(x.id), s) })).sort((a, b) => a.at - b.at);
+        const part = { from: s, to: Math.max(s, end), sound: seg.sound ?? (segs ? null : sound), ms: seg.ms, stops: st };
+        s = part.to;
+        return part;
+      });
+      const marks = passing.map((i) => lens[i]);
+      const share = (a, b) => (total > 0 ? ((b - a) / total) * ms : 0);
+      this.walked = [];
+      for (const part of parts) {
+        if (part.sound) g.sfx(part.sound);
+        this.journeyed.segments.push({ from: Math.round(part.from), to: Math.round(part.to), sound: part.sound || null });
+        const long = part.ms != null ? part.ms : share(part.from, part.to), span = part.to - part.from || 1;
+        let at = part.from;
+        for (const stop of [...part.stops, null]) {
+          const end = stop ? stop.at : part.to;
+          await this.walkSpan(movers, line, lens, at, end, marks, (long * (end - at)) / span);
+          at = end;
+          if (stop) await this.atStop(mapId, L, stop);
+        }
+      }
       await this.wait(260);
       g.sfx("rustle");
       await this.blackout();
     } finally {
       this._journey = null;
+      this.sayOn(null);
       this.exit();
     }
     return true;
+  }
+  /** ENGINE-21: one hop of a journey's line, from a place to the next: the way between them (turned round as needed); from or to a
+      place that is a point of a way (`on`: at sea), the part of that way's line between it and the other end; else straight. */
+  hop(map, L, a, b) {
+    const pa = map.places[a], pb = map.places[b], pin = (pid) => L.places[pid].pin;
+    const whole = wayLine(L, a, b);
+    if (whole) return whole;
+    const part = (onP, end, from) => {                                            // the line of the way `onP` is on, from it to `end` (or back)
+      const o = map.places[onP].on, line = wayLine(L, o.a, o.b);
+      if (!line || (end !== o.a && end !== o.b)) return null;
+      const lens = lensOf(line), s = nearestS(line, lens, pin(onP)), e = end === o.a ? 0 : lens[lens.length - 1];
+      return from ? cutLine(line, lens, s, e) : cutLine(line, lens, e, s);
+    };
+    if (pa && pa.on) { const p = part(a, b, true); if (p) return p; }
+    if (pb && pb.on) { const p = part(b, a, false); if (p) return p; }
+    if (pa && pb && pa.on && pb.on && pa.on.a === pb.on.a && pa.on.b === pb.on.b) {      // two points of one way
+      const line = wayLine(L, pa.on.a, pa.on.b), lens = lensOf(line);
+      return cutLine(line, lens, nearestS(line, lens, pin(a)), nearestS(line, lens, pin(b)));
+    }
+    return [pin(a), pin(b)];
+  }
+  /** ENGINE-21: the portraits along a line from one distance to another over `ms` (a click at each place passed, `marks`); at once
+      with less motion; a click or a key hurries the walk to the end of this span (the next stop's line is still said). */
+  async walkSpan(movers, line, lens, s0, s1, marks, ms) {
+    const g = this.g;
+    this.walked = this.walked || [];
+    if (!movers.length || s1 <= s0) return;
+    const mid = movers.reduce((a, r) => a + r.cx, 0) / movers.length, y0 = movers[0].cy;
+    const els = movers.map((r) => ({ r, el: this.el.querySelector(`.atlas-face[data-lead="${r.id}"]`) })).filter((m) => m.el);
+    const put = ([x, y]) => { this.walked.push([x, y]); for (const { r, el } of els) { el.style.left = px(x + (r.cx - mid) - r.size / 2); el.style.top = px(y + (r.cy - y0) - r.size / 2); } };
+    for (const { el } of els) el.classList.add("walking");
+    if (g.calm || g.clock.skipping) { put(pointAt(line, lens, s1)); return; }
+    this.moving = true; this.rush = false;
+    put(pointAt(line, lens, s0));                                                // (where they are as it begins: the span's start)
+    const ahead = marks.filter((m) => m > s0 && m <= s1);
+    let next = 0;
+    await this.tween(Math.max(0, ms), (k) => {
+      const s = s0 + (s1 - s0) * k;
+      put(pointAt(line, lens, s));
+      for (; next < ahead.length && s >= ahead[next]; next++) if (!this.rush) g.sfx("notch");
+    }, linear);
+    put(pointAt(line, lens, s1));
+    this.moving = this.rush = false;
+  }
+  /** ENGINE-21: the portraits have come to a stop: its picture comes in (if it was not on the map already), and its line is said
+      over it, on the map (sayOn); then they go on. A stop's `line` is the map's (maps.js `stops`) unless the journey gives one. */
+  async atStop(mapId, L, stop) {
+    const map = this.maps[mapId], spec = (map.stops || {})[stop.id] || {}, s = (L.stops || {})[stop.id];
+    const el = this.sheetsEl.querySelector(`[data-stop="${stop.id}"]`);
+    this.journeyed.stops.push(stop.id);
+    if (el && Number(el.getAttribute("opacity")) < 1) await this.tween(this.g.calm ? 0 : 360, (k) => el.setAttribute("opacity", k.toFixed(3)));
+    const line = stop.line !== undefined ? stop.line : spec.line;
+    // SCENES-21B: a stop's line may be a list (Suma's two: Mom's, then Big Sister's), each said over it in turn
+    if (line) for (const id of [].concat(line)) await this.sayOn(id, s ? s.pin : null, { ms: stop.ms });
+    else await this.wait(stop.ms ?? 500);
+  }
+  /**
+   * ENGINE-21: a line said on the map screen itself (the words' own layer is under it, and the game clock is stopped while the map
+   * is up): the words in the speaker's colour over a point of the map (a stop's picture), with the backing words on the stage have,
+   * for as long as a line of that length stays (dialogue.js lineMs, the reader's rate), or until a click or a key; counted as seen.
+   * A recorded voice is played as anywhere. sayOn(null) takes a line away. A line not in the lines files is said by nobody (the
+   * console says so once) and the journey goes on.
+   */
+  async sayOn(id, at = null, { ms = null } = {}) {
+    const g = this.g;
+    if (this._sayEl) { this._sayEl.remove(); this._sayEl = null; }
+    if (!id) return;
+    const entry = g.lines[id];
+    if (!entry) { this.once(`A journey's stop names the line "${id}", which is not in the lines files: nothing is said there.`); await this.wait(ms ?? 500); return; }
+    const [who, text, thought] = entry;
+    g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
+    if (g.clock.skipping) return;
+    const p = document.createElement("p"), [x, y] = at || [400, 300];
+    p.className = "say atlas-say";
+    p.dataset.line = id;
+    p.style.color = (g.cast[who] || {}).color || "#fff";
+    if (thought != null) {                                                       // a thought: its pictures, as the label line shows them
+      const pics = thoughtNames(thought, `the line "${id}"`);
+      for (const n of pics) p.appendChild(Object.assign(document.createElement("img"), { src: thoughtURL(n), alt: n, className: "pic" }));
+      p.setAttribute("aria-label", `(a thought: ${pics.join(", ")})`);
+      p.classList.add("thought-line");
+    } else p.textContent = text;
+    p.style.left = `${(Math.min(Math.max(x, 210), 590) / 800) * 100}%`;
+    p.style.top = `${(Math.max(150, y - 18) / 600) * 100}%`;
+    this.el.appendChild(p);
+    this._sayEl = p;
+    if (this._journey) this._journey.said.push(id);
+    this.journeyed && this.journeyed.said.push(id);
+    const voiced = g.settings.voices ? g.audio.voice(id) : null;
+    const rate = textRate(g.settings.textSpeed), long = ms ?? lineMs(text.length, rate);
+    this.rush = false; this.moving = true;                                        // (a click or a key ends the line, as it would on the stage)
+    if (voiced) await Promise.race([voiced, this.wait(30000)]);
+    else await this.wait(long);
+    this.moving = this.rush = false;
+    g.audio.stopVoice();
+    if (this._sayEl === p) { p.remove(); this._sayEl = null; }
+    await this.wait(120);
   }
 
   /** The map fades out to the dark: to the stage's own fade, which the scene that comes next fades in from. */

@@ -1772,6 +1772,474 @@ def trowel(b, l):
     l.ellipse(44.0, 33.0, 1.6, 1.0, steel[1], 0.7)                                    # where the lime has worn through
 
 
+# ---------------------------------------------------------------- PAINT-21F: Act Six made bigger: the things of the road west
+def kanzashi(b, l):
+    """O-Tami's hairpin: plain metal, two prongs, a small ear-pick at its head (a tiny scoop, bent forward), a plain
+    collar under it. Lying corner to corner, the head at the top right. PAINT-21F"""
+    metal = ("#ffffff", "#d8d6d0", "#a6a39c", "#6c6862", "#3a3834")          # a dull silver: light, lit, body, shade, dark
+    c = (32.0, 32.0)
+    deg = -45.0
+    T = lambda pts: rot(pts, deg, c)
+    b.poly(T([(x + 1.0, y + 2.6) for x, y in [(1.0, 29.6), (52.0, 29.6), (60.0, 30.6), (60.0, 33.4), (52.0, 34.4), (1.0, 34.4)]]), "#262422")
+    for dy in (-2.6, 2.6):                                                   # the two prongs, from the collar to their points
+        b.poly(T([(2.0, 32 + dy * 0.45 - 0.5), (38.0, 32 + dy - 1.3), (38.0, 32 + dy + 1.3), (2.0, 32 + dy * 0.45 + 0.5)]), metal[2])
+        l.line(T([(4.0, 32 + dy * 0.45 - 0.3), (37.5, 32 + dy - 0.9)]), metal[0], 0.7, 0.85)
+        l.line(T([(4.0, 32 + dy * 0.45 + 0.4), (37.5, 32 + dy + 1.0)]), metal[3], 0.6, 0.7)
+    b.poly(T([(37.0, 27.6), (46.0, 27.6), (46.0, 36.4), (37.0, 36.4)]), metal[2])          # the collar
+    b.poly(T([(37.0, 27.6), (46.0, 27.6), (46.0, 30.4), (37.0, 30.4)]), metal[1])
+    l.line(T([(40.0, 27.8), (40.0, 36.2)]), metal[3], 0.8, 0.85)
+    l.line(T([(43.0, 27.8), (43.0, 36.2)]), metal[3], 0.8, 0.85)
+    b.poly(T([(46.0, 30.6), (55.0, 31.0), (55.0, 33.0), (46.0, 33.4)]), metal[2])          # the neck
+    l.line(T([(46.0, 30.9), (54.6, 31.3)]), metal[0], 0.7, 0.9)
+    cup = T(oval(58.0, 31.4, 3.6, 2.8, 0, 18))                                              # the ear-pick: a tiny scoop, bent forward
+    b.poly(cup, metal[2])
+    b.poly(T(oval(57.6, 30.8, 2.4, 1.6, 0, 14)), metal[4])
+    l.line(cup[10:18] + cup[:3], metal[0], 0.8, 0.95)
+    gx, gy = T([(41.5, 28.6)])[0]                                            # a glint on the collar
+    l.poly([(gx, gy - 4.0), (gx + 0.8, gy - 0.8), (gx + 4.0, gy), (gx + 0.8, gy + 0.8), (gx, gy + 4.0), (gx - 0.8, gy + 0.8), (gx - 4.0, gy), (gx - 0.8, gy - 0.8)], "#ffffff", 0.95)
+
+def toyamaprint(b, l):
+    """Sōshichi's gift: a small cheap print on soft paper, an actor (nobody's likeness: a stage hero of the game's own) in
+    a striped red robe, arms flung out, his face white, his topknot black; the colours crude and a little off their lines,
+    a yellow name box with marks that are not letters, the paper creased. PAINT-21F"""
+    R_ = lambda pts: rot(pts, 4, (32, 32))
+    sheet = [(13.0, 6.0), (51.0, 7.0), (52.0, 58.0), (12.0, 57.0)]
+    b.poly(R_([(x + 1.3, y + 1.6) for x, y in sheet]), "#4a4036")
+    b.poly(R_(sheet), "#efe4c6")
+    b.poly(R_([(13.0, 31.5), (51.6, 32.5), (52.0, 58.0), (12.0, 57.0)]), "#e8dcbc")        # the lower half, a fold across
+    # the robe: red, striped, wide sleeves flung out (printed a hair off the outline, as cheap prints were)
+    robe = [(22, 25), (42, 25), (49, 33), (44, 36), (40, 32), (42, 51), (22, 51), (24, 32), (20, 36), (15, 33)]
+    b.poly(R_([(x + 1.2, y + 0.8) for x, y in robe]), "#c8402c")
+    for k in range(4):                                                       # its stripes
+        y = 30 + k * 5.5
+        l.line(R_([(25 + 1.2, y + 0.8), (40 + 1.2, y + 1.4)]), "#e8b040", 1.1, 0.95)
+    b.poly(R_([(27, 37), (37, 37), (38, 51), (26, 51)]), "#3a6a48")                        # an under-robe, green
+    l.line(R_(robe + robe[:1]), "#1e1c22", 0.8, 0.95)                                       # the keyblock's outline
+    # the head: white face, a black topknot, a red line about the eyes (the actor's look)
+    face = oval(32.0, 19.0, 4.6, 5.2, 0, 18)
+    b.poly(R_(face), "#f6eee0")
+    l.line(R_(face + face[:1]), "#1e1c22", 0.7, 0.95)
+    b.poly(R_([(27.6, 15.4), (36.4, 15.4), (35.0, 12.0), (32.0, 10.6), (29.0, 12.0)]), "#1e1c22")
+    b.poly(R_([(31.0, 9.0), (33.0, 9.0), (33.6, 11.0), (30.4, 11.0)]), "#1e1c22")
+    l.line(R_([(29.4, 18.0), (31.2, 17.0)]), "#1e1c22", 0.8, 0.95)                         # brows and eyes, glaring
+    l.line(R_([(32.8, 17.0), (34.6, 18.0)]), "#1e1c22", 0.8, 0.95)
+    l.line(R_([(29.0, 19.6), (35.2, 19.6)]), "#d03a30", 0.7, 0.8)
+    l.line(R_([(30.6, 22.4), (33.4, 22.4)]), "#a02a24", 0.7, 0.9)
+    # the hands out at the sleeves' ends
+    for (hx, hy) in ((14.0, 33.6), (50.0, 33.6)):
+        b.poly(R_(oval(hx, hy, 1.8, 1.5, 0, 10)), "#f6eee0")
+    # the name box at the top right: yellow, with marks that are not letters
+    box_ = [(41.0, 9.0), (48.5, 9.4), (48.5, 22.0), (41.0, 21.6)]
+    b.poly(R_(box_), "#f0d050")
+    l.line(R_(box_ + box_[:1]), "#1e1c22", 0.6, 0.9)
+    for (y0, y1) in ((11.0, 15.0), (16.0, 20.0)):
+        l.line(R_([(44.8, y0), (44.8, y1)]), "#1e1c22", 0.8, 0.95)
+        l.line(R_([(43.6, y0 + 1.2), (46.0, y0 + 1.6)]), "#1e1c22", 0.6, 0.9)
+    l.line(R_([(13.0, 31.5), (51.6, 32.5)]), "#c8b890", 0.8, 0.9)                          # the fold
+    l.line(R_([(13.0, 32.3), (51.6, 33.3)]), "#fff8e8", 0.6, 0.8)
+
+
+def _penny_pair(b, l, pairs):
+    """Copper pennies lying together, as the pennies' picture has them (NEVADA-12B's coins and tones). PAINT-21F"""
+    for (cx, cy, rx, ry, deg, th, tones, face) in pairs:
+        cover = oval(cx, cy, rx + 0.6, ry + 0.6, deg, 36)
+        l.clear(cover + [(x, y + th + 0.6) for x, y in cover[:18]])
+        _copper_coin(b, l, cx, cy, rx, ry, deg, th, tones, face)
+
+
+def twopennies(b, l):
+    """Two pennies (one gone to Kōta for his coin): one flat showing its back, one on it showing the head. PAINT-21F"""
+    old = ("#f0c8a0", "#c88050", "#a8643a", "#7a4224", "#4a2616")
+    new = ("#fff0d8", "#f4a874", "#d8844a", "#a05a30", "#62341c")
+    _penny_pair(b, l, [(26, 40, 18.0, 12.6, 6, 3.8, old, "back"), (37, 28, 19.0, 14.2, -8, 4.0, new, "head")])
+    l.poly([(50.0, 14.4), (50.8, 17.0), (53.4, 17.8), (50.8, 18.6), (50.0, 21.2), (49.2, 18.6), (46.6, 17.8), (49.2, 17.0)], "#fff6e0")
+
+
+def lastpenny(b, l):
+    """The last penny (one to Kōta, one to O-Fusa for luck): the one that showed the head, a little darker with handling,
+    a glint. PAINT-21F"""
+    tones = ("#fbe2c4", "#e8955c", "#c47038", "#8c4a26", "#5a2c16")
+    _copper_coin(b, l, 31, 31, 24.0, 18.6, 8, 4.4, tones, "head")
+    sx, sy = 49.0, 15.0
+    l.poly([(sx, sy - 5.0), (sx + 1.0, sy - 1.0), (sx + 5.0, sy), (sx + 1.0, sy + 1.0), (sx, sy + 5.0), (sx - 1.0, sy + 1.0), (sx - 5.0, sy), (sx - 1.0, sy - 1.0)], "#fff6e0")
+
+
+def mon(b, l):
+    """Kōta's one-mon coin: round copper with a square hole, a raised rim and a raised edge round the hole, four marks
+    about the hole that are a pattern, not characters; worn brown, green in the hollows. PAINT-21F"""
+    cop = ("#f2c99a", "#c48a52", "#9c6634", "#6c4420", "#3e2612")
+    cx, cy, rx, ry, deg = 32.0, 30.0, 23.0, 18.4, -6.0
+    T = lambda pts: rot(pts, deg, (cx, cy))
+    rim = oval(cx, cy, rx, ry, deg, 40)
+    b.poly([(x + 0.4, y + 4.0) for x, y in rim], cop[4])                    # its edge, toward us
+    b.poly([(x + 0.2, y + 2.0) for x, y in rim], cop[3])
+    b.poly(rim, cop[1])
+    b.poly(oval(cx, cy, rx * 0.86, ry * 0.86, deg, 40), cop[2])             # the field, inside the raised rim
+    k = ry / rx
+    S_ = lambda pts: T([(cx + x, cy + y * k) for x, y in pts])
+    hole = S_([(-4.6, -4.6), (4.6, -4.6), (4.6, 4.6), (-4.6, 4.6)])
+    lip = S_([(-6.6, -6.6), (6.6, -6.6), (6.6, 6.6), (-6.6, 6.6)])
+    b.poly(lip, cop[1])                                                      # the raised edge round the hole
+    b.poly(hole, "#1c1410")
+    l.line(S_([(-4.6, 4.6), (-4.6, -4.6), (4.6, -4.6)]), cop[4], 0.9, 0.9)  # the hole's far walls in shadow
+    l.line(S_([(-6.6, 6.6), (-6.6, -6.6), (6.6, -6.6)]), cop[0], 0.8, 0.85)
+    l.clear(hole)                                                            # the hole goes right through
+    b.clear(hole)
+    # four marks about the hole (above, below, right, left): raised strokes, lit at the top left
+    def mark(ox, oy, kind):
+        rs = np.random.RandomState(40 + kind)
+        segs = []
+        for j in range(3):                                                   # short raised strokes, worn nearly smooth
+            a = rs.uniform(-1.2, 1.2)
+            L = rs.uniform(1.6, 2.8)
+            dx, dy = rs.uniform(-1.6, 1.6), rs.uniform(-1.8, 1.8)
+            segs.append([(ox + dx - L * math.cos(a) * 0.5, oy + dy - L * math.sin(a)), (ox + dx + L * math.cos(a) * 0.5, oy + dy + L * math.sin(a) * 0.4)])
+        for seg in segs:
+            l.line(S_([(x + 0.5, y + 0.6) for x, y in seg]), cop[4], 1.0, 0.55)
+            l.line(S_(seg), cop[0], 0.8, 0.7)
+    for (ox, oy, kd) in ((0.0, -12.0, 0), (0.0, 12.0, 1), (12.4, 0.0, 2), (-12.4, 0.0, 3)):
+        mark(ox, oy, kd)
+    l.line(rim[2:20], cop[4], 0.9, 0.6)                                      # the near lip
+    l.line(rim[22:38], cop[0], 1.1, 0.9)                                     # the far lip, in the light
+    for (px, py, rr) in ((18.0, 34.0, 1.8), (44.0, 22.0, 1.4), (28.0, 18.0, 1.0)):     # green in the hollows
+        l.ellipse(px, py, rr, rr * 0.7, "#5f8a6c", 0.55)
+
+
+def paddle(b, l):
+    """O-Natsu's rice paddle: pale wood, a broad round blade and a straight handle, worn smooth, three grains of rice still
+    on it. PAINT-21F"""
+    wood = ("#fff6e2", "#f2dcb0", "#d6b27a", "#94703c", "#4a3418")
+    c, deg = (32.0, 32.0), 38.0
+    T = lambda pts: rot(pts, deg, c)
+    blade = oval(20.0, 32.0, 15.0, 11.0, 0, 30)
+    handle = [(32.0, 29.2), (60.0, 30.2), (60.6, 33.8), (32.0, 34.8)]
+    b.poly([(x + 1.4, y + 2.2) for x, y in T(blade)], "#3a2c1c")
+    b.poly([(x + 1.4, y + 2.2) for x, y in T(handle)], "#3a2c1c")
+    b.poly(T(handle), wood[2])
+    b.poly(T([(32.0, 29.2), (60.0, 30.2), (60.2, 31.6), (32.0, 30.8)]), wood[1])
+    b.poly(T(blade), wood[2])
+    b.poly(T(oval(19.0, 31.0, 13.0, 9.0, 0, 30)), wood[1])
+    b.poly(T(oval(15.0, 28.0, 6.0, 3.0, -10, 20)), wood[0], 0.55)            # a soft sheen where it is worn smooth
+    l.line(T(blade + blade[:1]), wood[4], 1.0, 0.85)                       # its outline, so it shows on the pockets' tan
+    l.line(T([(32.0, 34.8), (60.0, 33.8), (60.6, 33.8), (60.0, 30.2), (32.0, 29.2)]), wood[4], 0.9, 0.85)
+    for (x0, x1, y) in ((10, 30, 27), (8, 32, 32), (11, 30, 37)):            # the grain
+        l.line(T([(x0, y), (x1, y + 0.6)]), wood[3], 0.5, 0.45)
+    l.line(T([(36, 32.6), (58, 33.2)]), wood[3], 0.5, 0.5)
+    for (gx, gy, a) in ((14.0, 33.0, 20), (22.0, 29.0, -30), (25.5, 35.0, 60)):        # three grains of rice
+        p = T([(gx, gy)])[0]
+        l.poly(rot(oval(p[0], p[1], 1.6, 0.9, 0, 10), a, p), "#ffffff")
+        l.line([(p[0] + 0.6, p[1] + 0.8), (p[0] + 1.4, p[1] + 0.9)], "#b8a890", 0.5, 0.7)
+
+
+def comb(b, l):
+    """O-Natsu's boxwood comb: honey-coloured, a rounded back and fine teeth close as a comb's should be, polished with
+    camellia oil to a soft shine. PAINT-21F"""
+    wood = ("#ffe6a8", "#e2ac48", "#c8862a", "#8c5a1c", "#4a2c0c")
+    c, deg = (32.0, 32.0), -10.0
+    T = lambda pts: rot(pts, deg, c)
+    back = [(8.0, 30.0)] + [(32.0 + 24.0 * math.cos(a), 30.0 - 15.0 * math.sin(a)) for a in np.linspace(math.pi, 0, 24)] + [(56.0, 30.0)]
+    body = back + [(56.0, 34.0), (8.0, 34.0)]
+    teeth_box = [(9.0, 33.0), (55.0, 33.0), (54.0, 50.0), (10.0, 50.0)]
+    b.poly([(x + 1.4, y + 2.2) for x, y in T(body + [(54.0, 50.0), (10.0, 50.0)])], "#3a2810")
+    b.poly(T(teeth_box), wood[2])
+    b.poly(T(body), wood[2])
+    b.poly(T([(12.0, 30.0)] + [(32.0 + 20.0 * math.cos(a), 30.0 - 11.5 * math.sin(a)) for a in np.linspace(math.pi, 0, 20)] + [(52.0, 30.0)]), wood[1])
+    b.poly(T([(16.0, 26.0), (26.0, 19.5), (36.0, 18.6), (30.0, 22.0), (20.0, 27.0)]), wood[0])    # the shine on its back
+    l.line(T(back), wood[4], 0.8, 0.55)
+    l.line(T([(8.0, 33.6), (56.0, 33.6)]), wood[4], 0.9, 0.9)                # where the teeth begin
+    # the teeth: the gaps between them cut through (fine: 24 teeth)
+    n = 24
+    for i in range(1, n):
+        x = 10.0 + 44.0 * i / n
+        gap = T([(x - 0.35, 34.4), (x + 0.35, 34.4), (x + 0.35, 50.4), (x - 0.35, 50.4)])
+        b.clear(gap)
+        l.clear(gap)
+    l.line(T([(10.0, 49.6), (54.0, 49.6)]), wood[4], 0.8, 0.8)
+    l.line(T(back + [(56.0, 34.0)]), wood[4], 1.0, 0.85)                   # its outline, so it shows on the pockets' tan
+    l.line(T([(8.0, 30.0), (8.0, 34.0), (10.0, 34.0), (10.0, 50.0)]), wood[4], 0.9, 0.85)
+    l.line(T([(56.0, 34.0), (54.0, 34.0), (54.0, 50.0)]), wood[4], 0.9, 0.85)
+    for i in range(0, n, 3):                                                 # light on a few teeth
+        x = 10.0 + 44.0 * (i + 0.5) / n
+        l.line(T([(x - 0.2, 36.0), (x - 0.2, 46.0)]), wood[0], 0.4, 0.5)
+
+
+def _slip_paper(b, l, pts, paper):
+    b.poly([(x + 1.2, y + 1.6) for x, y in pts], "#4a4236")
+    b.poly(pts, paper)
+
+
+def _writing(l, R_, x, y0, y1, n, size, ink, rs, wobble=0.0, width=1.0):
+    """A column of writing that is our own: n marks down a slip, each two or three short strokes (a slant, a shorter
+    slant, a dot), never crossing at right angles, no hooks or loops, so that nobody can read it as anything. PAINT-21F"""
+    step = (y1 - y0) / n
+    for i in range(n):
+        cy = y0 + step * (i + 0.5) + rs.uniform(-wobble, wobble)
+        cx = x + rs.uniform(-wobble, wobble) * 0.6
+        sz = size * rs.uniform(0.8, 1.2)
+        a = rs.uniform(-0.35, 0.35)
+        l.line(R_([(cx - sz * 0.15 + a * sz, cy - sz * 0.5), (cx + sz * 0.1 - a * sz, cy + sz * 0.45)]), ink, width * 1.1, 0.95)
+        if rs.rand() < 0.8:
+            sx = rs.choice([-1, 1])
+            l.line(R_([(cx + sx * sz * 0.45, cy - sz * 0.3), (cx + sx * sz * 0.15, cy + sz * 0.05)]), ink, width * 0.8, 0.9)
+        if rs.rand() < 0.6:
+            l.ellipse(*R_([(cx - rs.choice([-1, 1]) * sz * 0.45, cy + sz * 0.35)])[0], width * 0.6, width * 0.6, ink, 0.9)
+
+
+def natsuslip(b, l):
+    """O-Natsu's slip for her boy: a tall narrow paper slip in a grown woman's neat brush hand (writing of our own: see
+    _writing): the pilgrimage's name down the middle, small lines at the sides. PAINT-21F"""
+    R_ = lambda pts: rot(pts, 10, (32, 32))
+    pts = R_([(22.0, 4.0), (42.0, 4.0), (42.0, 60.0), (22.0, 60.0)])
+    _slip_paper(b, l, pts, "#f6f0e2")
+    b.poly(R_([(22.0, 4.0), (42.0, 4.0), (42.0, 8.0), (22.0, 8.0)]), "#ece4d0")
+    ink = "#1e1c26"
+    rs = np.random.RandomState(7)
+    _writing(l, R_, 32.0, 10.0, 50.0, 6, 5.0, ink, rs, wobble=0.2, width=1.0)
+    _writing(l, R_, 26.0, 30.0, 52.0, 4, 3.0, ink, rs, wobble=0.2, width=0.7)
+    _writing(l, R_, 38.0, 34.0, 52.0, 3, 3.0, ink, rs, wobble=0.2, width=0.7)
+    l.line(R_([(22.0, 4.0), (42.0, 4.0)]), "#ffffff", 0.6, 0.8)
+
+def fusaslip(b, l):
+    """O-Fusa's slip for her grandmother: paper a little crumpled from her sash, written in a child's big uneven hand
+    (writing of our own: see _writing), the marks too big and wandering off the middle, one blot. PAINT-21F"""
+    R_ = lambda pts: rot(pts, -8, (32, 32))
+    pts = R_([(21.0, 6.0), (31.0, 5.0), (43.0, 6.4), (42.4, 32.0), (43.6, 58.0), (32.0, 59.0), (21.6, 58.4), (22.4, 30.0)])
+    _slip_paper(b, l, pts, "#f2ead6")
+    for (a, bb) in (((24.0, 20.0), (40.0, 24.0)), ((23.0, 44.0), (41.0, 40.0))):        # crumples: soft folds
+        l.line(R_([a, bb]), "#d8ccb0", 1.0, 0.8)
+        l.line(R_([(a[0], a[1] + 1.0), (bb[0], bb[1] + 1.0)]), "#fffaf0", 0.6, 0.7)
+    ink = "#22202a"
+    rs = np.random.RandomState(9)
+    _writing(l, R_, 32.0, 9.0, 56.0, 4, 8.5, ink, rs, wobble=2.2, width=1.6)
+    l.ellipse(*R_([(35.0, 47.0)])[0], 1.8, 1.5, ink, 0.85)                  # a blot where the brush rested
+
+def sheet_(b, l):
+    """The broadsheet caught in the air at the crossroads: cheap grey paper printed in black, a crude picture in the middle
+    (a small hall with deep eaves and, big beside it, a rabbit lock running on waves), lines of writing round it that are a
+    pattern, not letters; a corner torn where it was snatched. PAINT-21F"""
+    R_ = lambda pts: rot(pts, -5, (32, 32))
+    paper = [(5.0, 9.0), (59.0, 8.0), (59.5, 52.0), (54.0, 56.0), (5.5, 56.0)]
+    b.poly(R_([(x + 1.3, y + 1.6) for x, y in paper]), "#3c3a36")
+    b.poly(R_(paper), "#e2dccc")
+    ink = "#1a1a20"
+    # the picture box
+    box_ = [(18.0, 16.0), (46.0, 16.0), (46.0, 44.0), (18.0, 44.0)]
+    l.line(R_(box_ + box_[:1]), ink, 0.8, 0.95)
+    # the hall: a deep roof, a dark doorway
+    l.poly(R_([(21.0, 24.0), (31.0, 18.0), (41.0, 24.0), (37.5, 24.0), (31.0, 20.6), (24.5, 24.0)]), ink, 0.95)
+    l.line(R_([(24.0, 24.0), (24.0, 30.0), (38.0, 30.0), (38.0, 24.0)]), ink, 0.8, 0.9)
+    l.poly(R_([(29.4, 25.4), (32.6, 25.4), (32.6, 30.0), (29.4, 30.0)]), ink, 0.85)
+    # the rabbit lock, big in the lower half of the picture: a rabbit running on waves (our own carving), ears laid back
+    body = oval(33.0, 37.4, 6.4, 3.4, -8, 20)
+    l.poly(R_(body), ink, 0.95)
+    l.poly(R_(oval(39.6, 35.0, 2.8, 2.2, 0, 14)), ink, 0.95)                 # the head
+    l.line(R_([(40.0, 33.6), (44.6, 31.4)]), ink, 1.1, 0.95)                 # the long ears, laid back along the run
+    l.line(R_([(39.0, 33.4), (43.4, 30.2)]), ink, 0.9, 0.95)
+    l.line(R_([(28.6, 38.6), (25.4, 41.4)]), ink, 1.0, 0.9)                  # the hind leg flung back
+    l.line(R_([(37.0, 39.4), (39.4, 41.6)]), ink, 0.9, 0.9)                  # the forefoot reaching
+    l.ellipse(*R_([(26.8, 36.0)])[0], 1.2, 1.2, ink, 0.9)                    # the tail
+    l.ellipse(*R_([(40.4, 34.6)])[0], 0.5, 0.5, "#e2dccc", 0.95)             # its eye, the paper
+    for wx in (22.0, 28.5, 35.0, 41.5):                                      # the waves under it
+        l.line(R_(curve([(wx, 43.6), (wx + 2.0, 41.8), (wx + 4.2, 42.2), (wx + 5.4, 43.8)], 4)), ink, 0.8, 0.9)
+    # the writing round it: columns of marks
+    for x in (8.5, 11.5, 14.5, 49.5, 52.5, 55.5):
+        y = 12.0
+        while y < 52.0:
+            hh = 1.6 + (int(x * 13 + y * 7) % 3) * 0.7
+            sl = 0.6 if int(x * 7 + y * 3) % 2 else -0.5
+            l.line(R_([(x + sl, y), (x - sl, y + hh)]), ink, 0.7, 0.85)
+            if int(x * 5 + y) % 3 == 0:
+                l.ellipse(*R_([(x + 0.9, y + 0.4)])[0], 0.4, 0.4, ink, 0.8)
+            y += hh + 1.5
+    for x in np.arange(20.0, 45.0, 3.0):                                     # a line over the picture (its title) and under it
+        l.line(R_([(x + 0.5, 11.0), (x - 0.4, 13.4)]), ink, 0.8, 0.9)
+        l.line(R_([(x - 0.4, 47.0), (x + 0.4, 49.0)]), ink, 0.6, 0.8)
+    l.line(R_([(54.0, 56.0), (55.0, 53.5), (57.0, 54.0), (59.5, 52.0)]), "#8a8476", 0.8, 0.9)   # the torn corner
+
+
+def blueprint(b, l):
+    """Senzō's spoiled first print, given to Little Sister: an actor at home in a robe (nobody's likeness), his black
+    outline where it should be and the new Berlin blue of his robe landed a finger's width to the left of it: a blurry
+    famous man. PAINT-21F"""
+    R_ = lambda pts: rot(pts, 3, (32, 32))
+    paper = [(9.0, 6.0), (55.0, 6.0), (55.0, 58.0), (9.0, 58.0)]
+    b.poly(R_([(x + 1.3, y + 1.6) for x, y in paper]), "#3c3a36")
+    b.poly(R_(paper), "#f2ead2")
+    blue = "#2a4fa0"
+    robe = [(24.0, 24.0), (40.0, 24.0), (46.0, 50.0), (18.0, 50.0)]
+    b.poly(R_([(x - 5.0, y + 1.0) for x, y in robe]), blue)                 # the blue, printed off its mark
+    b.poly(R_([(x - 5.0, y + 1.0) for x, y in [(21.0, 30.0), (16.0, 40.0), (20.0, 41.0), (24.0, 32.0)]]), blue)
+    sky = [(12.0, 9.0), (52.0, 9.0), (52.0, 14.0), (12.0, 14.0)]
+    b.poly(R_([(x - 5.0, y + 1.0) for x, y in sky]), "#6a86c4")              # a band of blue sky above, off its mark too
+    ink = "#1c1c24"
+    l.line(R_(robe + robe[:1]), ink, 0.9, 0.95)                              # the keyblock: where everything should be
+    l.line(R_([(21.0, 30.0), (16.0, 40.0), (20.0, 41.0), (24.0, 32.0)]), ink, 0.8, 0.95)
+    l.line(R_([(43.0, 30.0), (48.0, 38.0), (44.0, 40.0), (40.0, 33.0)]), ink, 0.8, 0.95)
+    l.line(R_(sky + sky[:1]), ink, 0.6, 0.8)
+    face = oval(32.0, 18.6, 4.0, 4.6, 0, 16)
+    l.line(R_(face + face[:1]), ink, 0.8, 0.95)
+    l.poly(R_([(28.4, 16.0), (35.6, 16.0), (34.6, 13.4), (32.0, 12.4), (29.4, 13.4)]), ink, 0.95)
+    l.line(R_([(30.2, 18.6), (31.4, 18.4)]), ink, 0.6, 0.9)
+    l.line(R_([(32.8, 18.4), (34.0, 18.6)]), ink, 0.6, 0.9)
+    for k in range(3):                                                       # folds of the robe (outline only)
+        l.line(R_([(27.0 + k * 4.0, 28.0), (25.0 + k * 5.0, 48.0)]), ink, 0.5, 0.7)
+    l.line(R_([(16.0, 50.0), (48.0, 50.0)]), ink, 0.7, 0.9)                 # the floor he sits on
+
+
+def ladle(b, l):
+    """O-Fusa's pilgrim's ladle: a small round cup of bent wood on a long straight handle, still wet from the sea at the
+    cup's lip. PAINT-21F"""
+    wood = ("#fff2d8", "#ead0a0", "#c99c58", "#7c5a2c", "#3e2a10")
+    c, deg = (32.0, 32.0), 32.0
+    T = lambda pts: rot(pts, deg, c)
+    handle = [(26.0, 30.4), (61.0, 31.0), (61.0, 33.4), (26.0, 34.2)]
+    b.poly([(x + 1.4, y + 2.0) for x, y in T(handle)], "#2c2418")
+    b.poly(T(handle), wood[2])
+    b.poly(T([(26.0, 30.4), (61.0, 31.0), (61.0, 31.9), (26.0, 31.6)]), wood[0])
+    cx_, cy_ = T([(16.0, 32.0)])[0]                                          # the cup, seen a little from above, its mouth toward us
+    side = [(cx_ - 11.0, cy_ - 4.0), (cx_ + 11.0, cy_ - 4.0), (cx_ + 10.0, cy_ + 9.0), (cx_ - 10.0, cy_ + 9.0)]
+    b.poly([(x + 1.4, y + 2.0) for x, y in side], "#2c2418")
+    b.poly(side, wood[2])
+    b.poly([(cx_ + 4.0, cy_ - 4.0), (cx_ + 11.0, cy_ - 4.0), (cx_ + 10.0, cy_ + 9.0), (cx_ + 3.6, cy_ + 9.0)], wood[3])
+    b.poly(oval(cx_, cy_ + 9.0, 10.0, 3.0, 0, 20), wood[3])
+    mouth = oval(cx_, cy_ - 4.0, 11.0, 4.2, 0, 26)
+    b.poly(mouth, wood[1])
+    b.poly(oval(cx_, cy_ - 3.6, 9.4, 3.2, 0, 24), wood[4])                   # inside, dark
+    l.line(mouth[13:26] + mouth[:1], wood[0], 0.8, 0.95)
+    l.line(side[1:3] + [side[3]], wood[4], 0.9, 0.85)                     # its outline, so it shows on the pockets' tan
+    l.line([side[0], side[3]], wood[4], 0.9, 0.85)
+    l.line(T([(26.0, 34.2), (61.0, 33.4), (61.0, 31.0)]), wood[4], 0.9, 0.85)
+    for yy in (cy_ + 1.0, cy_ + 5.0):                                        # the bent wood's bands
+        l.line([(cx_ - 10.6, yy), (cx_ + 10.6, yy)], wood[4], 0.6, 0.6)
+    for (dx, dy) in ((-6.0, 10.6), (2.0, 11.2)):                             # drops of the sea
+        l.ellipse(cx_ + dx, cy_ + dy, 0.9, 1.3, "#cfe4ee", 0.9)
+    l.ellipse(cx_ - 6.0, cy_ - 5.4, 2.2, 0.8, "#ffffff", 0.7)
+
+
+def crab(b, l):
+    """The small shore crab Mom caught under the rocks: a broad olive-green shell, two stout claws held up and open, short
+    jointed legs splayed, eyes on their stalks; seen from above. PAINT-21F"""
+    shell = ("#b4bc84", "#748252", "#526038", "#343e22", "#1c2210")
+    cx, cy = 32.0, 36.0
+    for side in (-1, 1):                                                     # the legs, four a side: short, jointed, thick
+        for i, (ang, L) in enumerate(((28, 9.0), (10, 10.5), (-8, 10.0), (-26, 8.5))):
+            a = math.radians(ang)
+            x0, y0 = cx + side * 12.0, cy + 4.0 - i * 2.6
+            x1, y1 = x0 + side * L * math.cos(a), y0 + L * math.sin(a)
+            x2, y2 = x1 + side * 3.0, y1 + 5.6
+            l.line([(x0 + 0.9, y0 + 1.2), (x1 + 0.9, y1 + 1.2), (x2 + 0.9, y2 + 1.2)], "#141210", 3.0, 0.55)
+            b.line([(x0, y0), (x1, y1), (x2, y2)], shell[2], 2.8)
+            l.line([(x0, y0 - 0.6), (x1, y1 - 0.6)], shell[1], 0.8, 0.85)
+            l.ellipse(x1, y1, 0.9, 0.9, shell[3], 0.8)
+    for side in (-1, 1):                                                     # the claws: stout, held up and open
+        ax, ay = cx + side * 10.0, cy - 6.0
+        bx, by = cx + side * 15.0, cy - 13.0
+        b.line([(ax, ay), (bx, by)], shell[2], 4.4)
+        palm = rot(oval(bx + side * 1.5, by - 4.0, 5.6, 4.2, 0, 20), side * 30, (bx + side * 1.5, by - 4.0))
+        b.poly([(x + 1.0, y + 1.4) for x, y in palm], "#141210")
+        b.poly(palm, "#c06c3c")
+        finger = [(bx + side * 2.0, by - 7.0), (bx + side * 6.5, by - 12.5), (bx + side * 8.5, by - 10.5), (bx + side * 5.0, by - 6.0)]
+        b.poly(finger, "#c06c3c")
+        l.line([(bx + side * 2.6, by - 7.4), (bx + side * 7.0, by - 11.6)], "#5a2a14", 0.8, 0.95)
+        l.ellipse(bx + side * 0.2, by - 5.4, 1.6, 1.0, "#f4c8a0", 0.8)
+        l.ellipse(bx + side * 6.6, by - 12.0, 0.8, 0.8, "#2a1408", 0.9)
+    body = oval(cx, cy, 15.5, 11.0, 0, 34)
+    b.poly([(x + 1.6, y + 2.2) for x, y in body], "#141210")
+    b.poly(body, shell[2])
+    b.poly(oval(cx - 1.8, cy - 2.2, 12.6, 8.0, 0, 30), shell[1])
+    b.poly(oval(cx - 5.0, cy - 4.6, 5.4, 2.8, -12, 18), shell[0])          # the light on its back
+    l.line([(cx - 10.0, cy - 7.6), (cx - 5.0, cy - 10.4), (cx + 5.0, cy - 10.4), (cx + 10.0, cy - 7.6)], shell[3], 0.9, 0.8)   # the front edge
+    for (mx, my) in ((cx + 5.0, cy + 1.0), (cx - 6.0, cy + 3.5), (cx + 1.0, cy + 6.0), (cx + 8.0, cy - 3.0)):     # mottling
+        l.ellipse(mx, my, 1.6, 1.1, shell[3], 0.6)
+    l.line(body[17:34], shell[4], 0.9, 0.6)
+    for side in (-1, 1):                                                     # the eyes on their stalks
+        l.line([(cx + side * 3.0, cy - 10.4), (cx + side * 4.0, cy - 13.6)], shell[3], 1.2, 0.95)
+        l.ellipse(cx + side * 4.0, cy - 14.2, 1.5, 1.5, "#141410")
+        l.ellipse(cx + side * 3.6, cy - 14.6, 0.5, 0.5, "#ffffff", 0.9)
+
+def riceball(b, l):
+    """Mom's rice balls from O-Tane's kitchen: bale-shaped, shaped with salted hands, a slice of yellow pickled radish by
+    each, on an indigo cotton cloth opened out (no seaweed on any of them). Three of them, big. PAINT-21F"""
+    cloth = ("#7a96d0", "#3e5ca4", "#2c427c", "#1a2a52")
+    pts = [(2.0, 34.0), (28.0, 16.0), (62.0, 30.0), (36.0, 54.0)]
+    b.poly([(x + 1.2, y + 2.0) for x, y in pts], "#141420")
+    b.poly(pts, cloth[1])
+    b.poly([(2.0, 34.0), (28.0, 16.0), (31.0, 20.0), (8.0, 36.0)], cloth[0])
+    for k in (1, 2, 3):                                                      # a plain check woven in
+        t = k / 4.0
+        p0 = (2.0 + (28.0 - 2.0) * t, 34.0 + (16.0 - 34.0) * t)
+        p1 = (36.0 + (62.0 - 36.0) * t, 54.0 + (30.0 - 54.0) * t)
+        l.line([p0, p1], cloth[3], 0.6, 0.35)
+        q0 = (2.0 + (36.0 - 2.0) * t, 34.0 + (54.0 - 34.0) * t)
+        q1 = (28.0 + (62.0 - 28.0) * t, 16.0 + (30.0 - 16.0) * t)
+        l.line([q0, q1], cloth[3], 0.6, 0.35)
+    b.poly([(62.0, 30.0), (63.0, 44.0), (52.0, 41.0)], cloth[2])             # a corner turned back
+    rice = ("#ffffff", "#f4f2ea", "#d8d4c8", "#a6a094")
+    def bale(x, y, w=17.0, h=10.0, deg=-18):
+        T = lambda p: rot(p, deg, (x, y))
+        side = [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
+        b.poly([(px + 1.2, py + 2.0) for px, py in T(side)], "#1a2036")
+        b.poly(T(side), rice[2])
+        b.poly(T([(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y - h / 8), (x - w / 2, y - h / 8)]), rice[1])
+        b.poly(T(oval(x - w / 2, y, 2.4, h / 2, 0, 16)), rice[2])           # the far round end
+        end = T(oval(x + w / 2, y, 3.6, h / 2, 0, 18))                     # the near round end, toward the light
+        b.poly(end, rice[0])
+        l.line(end[5:14], rice[3], 0.6, 0.6)
+        l.line(T([(x - w / 2, y + h / 2), (x + w / 2, y + h / 2)]), rice[3], 0.7, 0.7)
+        rs = np.random.RandomState(int(x * 31 + y))
+        for _ in range(16):                                                  # grains
+            gx, gy = x + rs.uniform(-w / 2 + 1, w / 2 - 1), y + rs.uniform(-h / 2 + 0.8, h / 2 - 0.6)
+            l.poly(T(oval(gx, gy, 1.0, 0.55, rs.uniform(-30, 30), 8)), rice[0] if rs.rand() < 0.55 else rice[3], 0.85)
+    def pickle(x, y, deg):
+        half = [(x + 4.4 * math.cos(a), y - 4.4 * math.sin(a) * 0.75) for a in np.linspace(0, math.pi, 14)]
+        T = lambda p: rot(p, deg, (x, y))
+        b.poly([(px + 0.8, py + 1.2) for px, py in T(half)], "#1a2036")
+        b.poly(T(half), "#f0cc30")
+        l.line(T(half), "#b88a10", 0.7, 0.9)
+        l.line(T([(x - 2.6, y - 0.8), (x + 2.0, y - 1.8)]), "#fff6b8", 0.6, 0.85)
+    for (x, y) in ((20.0, 31.0), (40.0, 26.0), (33.0, 40.0)):
+        bale(x, y)
+    for (x, y, d) in ((13.0, 42.0, -14), (52.0, 36.0, 10), (46.0, 47.0, -20)):
+        pickle(x, y, d)
+
+
+def shigepass(b, l):
+    """O-Shige's woman's pass, as it came down on the Jizo's hat: the pass, folded, inside a wrapper of oiled paper gone a
+    little yellow and half clear, its top folded down over the front; through it, a few columns of the pass's writing
+    (our own marks, small, in the broadsheet's manner: see sheet_) and, low down, the small red seal of the office that
+    wrote it. PAINT-21F (MERGE-21's follow-up)"""
+    R_ = lambda pts: rot(pts, -12, (32, 32))
+    x0, x1, y0, y1 = 17.0, 47.0, 7.0, 57.0
+    wrap = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    _slip_paper(b, l, R_(wrap), "#c48a3a")                                     # the oiled paper, deeper amber where nothing is under it
+    paper = [(x0 + 2.6, y0 + 2.0), (x1 - 2.6, y0 + 2.0), (x1 - 2.6, y1 - 2.4), (x0 + 2.6, y1 - 2.4)]
+    b.poly(R_(paper), "#f1dfaa")                                               # the white pass under it: pale through the yellow
+    l.line(R_([(x0 + 2.6, 33.0), (x1 - 2.6, 33.0)]), "#c9a868", 0.7, 0.55)     # the pass's own fold, across, showing through
+    ink = "#4a3c30"                                                            # its ink, a little softened by the wrapper
+    rs = np.random.RandomState(24)
+    for cx, a, z in ((40.4, 20.5, 50.0), (35.4, 21.5, 50.0), (30.4, 21.5, 43.0), (25.4, 24.0, 41.0)):    # columns, from the right
+        y = a                                                                  # (small, so in the broadsheet's manner: a slant, now and
+        while y < z - 1.0:                                                     # then a dot beside it; never two strokes crossing)
+            hh = rs.uniform(1.7, 3.1)
+            sl = 0.5 if rs.rand() < 0.5 else -0.45
+            l.line(R_([(cx + sl, y), (cx - sl, min(z, y + hh))]), ink, 0.95, 0.9)
+            if rs.rand() < 0.4:
+                l.ellipse(*R_([(cx + (1.15 if rs.rand() < 0.5 else -1.15), y + hh * 0.45)])[0], 0.45, 0.45, ink, 0.85)
+            y += hh + rs.uniform(1.5, 2.2)
+    seal = [(22.0, 45.4), (27.0, 45.4), (27.0, 50.4), (22.0, 50.4)]              # the seal, square, a pale line cut round inside it
+    l.poly(R_(seal), "#c65036", 0.92)
+    l.line(R_([(23.0, 46.4), (26.0, 46.4), (26.0, 49.4), (23.0, 49.4), (23.0, 46.4)]), "#f0b08e", 0.45, 0.7)
+    flap = [(x0 - 0.4, y0), (x1 + 0.4, y0), (x1 - 0.6, y0 + 10.5), (x0 + 0.8, y0 + 12.0)]   # the wrapper's top, folded down over the front
+    l.poly(R_(flap), "#cc9446", 0.84)                                          # (half clear: the pass's top shows faintly through it)
+    l.line(R_([(x0 + 0.8, y0 + 12.0), (x1 - 0.6, y0 + 10.5)]), "#7a4e20", 0.85, 0.9)       # its edge, and the light along it
+    l.line(R_([(x0 + 1.4, y0 + 11.0), (x1 - 1.2, y0 + 9.6)]), "#fff0c4", 0.5, 0.7)
+    l.line(R_([(x0 + 3.0, y0 + 3.0), (x0 + 12.0, y0 + 9.6)]), "#fff6da", 1.6, 0.35)        # oiled paper's sheen
+    l.line(R_([(x1 - 6.0, y0 + 16.0), (x1 - 2.0, y1 - 8.0)]), "#fff6da", 1.2, 0.25)
+    for (a, bb) in (((x0 + 3.0, 52.0), (x0 + 11.0, 55.4)), ((x1 - 6.0, 55.4), (x1 - 1.2, 50.4))):   # soft creases in the wrapper (clear of the writing)
+        l.line(R_([a, bb]), "#a8783a", 0.6, 0.55)
+    l.line(R_(wrap + wrap[:1]), "#5a3818", 0.95, 0.9)                           # the wrapper's edge (dark enough to hold on the papyrus bar)
+
+
 ITEMS = dict(reed=reed, map=map_, flashlight=flashlight, rootbeer=rootbeer, shade=shade, carmirror=carmirror, sunglasses=sunglasses,
              coppermirror=coppermirror, toga=toga, tunic=tunic, breakfast=breakfast, incense=incense, coin=coin, note=note)
 ITEMS["pass"] = pass_
@@ -1790,6 +2258,12 @@ ORDER += ["gaultoga", "lamp"]                                                   
 ORDER += ["banjo-broken", "pietin", "banjo-pie", "schedule", "bottlecap", "peanuts"]         # OFFICE-17D: the Office's six
 ITEMS.update(sushibox=sushibox, mirror=mirror, trowel=trowel)                               # PAINT-20B: Act Six's three
 ORDER += ["sushibox", "mirror", "trowel"]                                                    # PAINT-20B
+NEW21 = ["kanzashi", "toyamaprint", "twopennies", "lastpenny", "mon", "paddle", "comb", "natsuslip", "sheet", "blueprint",
+         "ladle", "crab", "fusaslip", "riceball"]                                            # PAINT-21F: the road west's fourteen
+ITEMS.update({n: globals()[n + "_" if n == "sheet" else n] for n in NEW21})                  # PAINT-21F (sheet_: items.py's sheet() is the contact sheet)
+ORDER += NEW21                                                                               # PAINT-21F
+ITEMS.update(shigepass=shigepass)                                                           # PAINT-21F (MERGE-21's follow-up): O-Shige's pass, #24
+ORDER += ["shigepass"]                                                                       # PAINT-21F
 
 
 # ---------------------------------------------------------------- painting one

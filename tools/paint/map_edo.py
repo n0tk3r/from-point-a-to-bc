@@ -76,21 +76,48 @@ COAST = [(44, 418), (90, 404), (150, 408), (200, 416), (240, 428), (280, 446), (
          (700, 350), (734, 326), (756, 318)]
 HEADLAND = [(588, 396), (598, 372), (612, 362), (624, 378), (614, 392)]          # the Satta pass's headland, west of Yui
 FUJI = (700.0, 232.0, 150.0, 64.0)                                                 # x of the peak, y of the peak, half the base, the height
-RIVER = [(306, 284), (318, 320), (326, 360), (332, 392), (336, 426)]               # the river from the hills down to Osaka's mouth
+# PAINT-21F: the Yodo comes down from the north-east (from Kyoto, off the sheet's top) past Hirakata to Osaka's mouth
+YODO = [(462, 262), (446, 282), (428, 302), (410, 322), (394, 342), (378, 362), (362, 384), (348, 406), (336, 426)]
+HIRAKATA = (394, 342)                      # the Kyoto boat's relay port on the Yodo (the river path's turn north)
+# PAINT-21F: Awaji, low and long across the strait from Akashi (the island's north tip by Akashi, its length to the south-west)
+AWAJI = [(206, 433), (222, 431), (230, 438), (220, 456), (196, 478), (170, 500), (146, 520), (122, 534), (104, 538),
+         (100, 528), (116, 510), (140, 488), (166, 466), (188, 448)]
 MOUNTAINS = [(100, 300, 26), (150, 262, 22), (210, 290, 30), (250, 240, 20), (340, 232, 26), (390, 300, 32), (430, 262, 24), (470, 320, 28),
              (520, 240, 22), (560, 300, 30), (596, 250, 24), (640, 290, 20), (180, 350, 16), (440, 400, 18), (470, 430, 14), (700, 300, 14), (740, 270, 18)]
 HILLS_C = (300, 262)                       # the hollow in the wooded hills north of Osaka
-PLACES = {                                 # id: (the drawing's middle, the pin, the name's baseline middle, the name)
+HILL_CONES = [(-34, 8, 22), (34, 10, 24), (0, -14, 26), (-14, 16, 14), (18, 18, 14)]   # PAINT-21F: the hollow's cones about HILLS_C (lifted out of back(): a stop's name keeps off them)
+AWAJI_CONES = [(176, 470, 10), (146, 496, 9)]                                       # PAINT-21F: a cone or two on Awaji (lifted out of back())
+# the coast road, dotted along the shore (the Tōkaidō east of Osaka, the Sanyō road west of it): the lie of the land
+COAST_ROAD = [(756, 330), (720, 346), (690, 364), (660, 382), (632, 376), (606, 396), (576, 410), (548, 410), (530, 440), (500, 476), (470, 488),
+              (440, 470), (404, 452), (370, 440), (352, 432), (326, 420), (304, 408), (286, 402), (272, 414), (258, 420), (244, 420), (232, 414),
+              (222, 404), (204, 398), (184, 396), (164, 386), (140, 378), (112, 380), (84, 394), (54, 404)]      # PAINT-21F: west of Osaka, the Saigoku road the ways follow (lifted out of back())
+CARTOUCHE = (400, 185)                     # PAINT-21F: the title block's top left (it was at the top left of the sheet: Shosha is there now)
+PLACES = {                                 # id: (the drawing's middle, the pin, the name's baseline middle, the name)   (PAINT-21F: six, in maps.js's order)
     "yui": ((632, 350), (640, 312), (632, 392), "Yui"),
-    "osaka": ((335, 408), (300, 448), (300, 388), "Osaka"),
+    "osaka": ((338, 408), (382, 474), (402, 440), "Osaka"),
     "hills": ((300, 262), (300, 308), (300, 222), "The hills"),
-    "himeji": ((130, 346), (130, 296), (130, 396), "Himeji"),
+    "akashi": ((198, 410), (240, 352), (186, 472), "Akashi"),
+    "himeji": ((118, 344), (118, 296), (106, 400), "Himeji"),
+    "shosha": ((88, 228), (166, 230), (86, 192), "Shosha"),
 }
-WAYS = {
-    ("yui", "osaka"): [(596, 402), (590, 440), (574, 484), (530, 516), (482, 532), (436, 518), (398, 492), (366, 466), (350, 442)],
-    ("osaka", "hills"): [(352, 392), (344, 356), (326, 318), (310, 290), (306, 284)],
-    ("hills", "himeji"): [(272, 268), (236, 300), (204, 338), (176, 356), (156, 360)],
+WAYS = {                                   # (PAINT-21F: five, in maps.js's order; each the drawn points between the two pins)
+    ("yui", "osaka"): [(596, 402), (590, 440), (574, 484), (530, 516), (482, 532), (436, 518), (404, 496)],
+    ("osaka", "hills"): [(362, 452), (340, 430), (348, 406), (362, 384), (378, 362), (394, 342), (380, 334), (366, 330), (346, 322), (324, 314)],
+    ("hills", "akashi"): [(304, 330), (300, 348), (292, 368), (286, 388), (282, 402), (272, 414), (258, 420), (244, 420), (232, 414),
+                          (222, 404), (228, 386), (234, 370)],
+    ("akashi", "himeji"): [(232, 372), (224, 392), (204, 398), (184, 396), (164, 386), (148, 372), (132, 352), (122, 326)],
+    ("himeji", "shosha"): [(112, 278), (116, 262), (130, 250), (148, 238)],
 }
+RIVER_LEG = 6                              # PAINT-21F: the river path's via: Osaka's pin, then its first RIVER_LEG points are on the water (to Hirakata), the rest the road
+STOPS = {                                  # PAINT-21F: the stops (maps.js `stops`, its order): (the drawing's middle, the way, its pin: the point of the way the picture is for)
+    "hirakata": ((410, 354), ("osaka", "hills"), (394, 342)),         # (MERGE-21's follow-up: the river's turn, where the river ends and the road begins: the Kyoto boat's first segment ends here)
+    # the walk's three: each pin is on the way's line where the portraits stop for it, so that their row (116 x 36 about the pin)
+    # stands just above the picture and leaves it clear, and the stop's line, said above the row, does not cover it either
+    "koriyama": ((318, 352), ("hills", "akashi"), (302, 320)),        # (just down out of the hills: there is no room lower for the row above the picture)
+    "suma": ((262, 434), ("hills", "akashi"), (282, 402)),
+    "maiko": ((236, 432), ("hills", "akashi"), (223, 400)),
+}
+ROW = (116, 36)                            # PAINT-21F: a row of three portraits about a pin (atlas.js faces: 36 across, 4 apart)
 
 
 # ---------------------------------------------------------------- drawing helpers
@@ -159,7 +186,7 @@ def back():
     under = under * (1 - 0.05 * tooth[..., None])
     # the land: everything above the coast, soft green, deeper toward the hills' feet
     land_poly = [(x0 - 4, y0 - 4), (x1 + 4, y0 - 4)] + [(x1 + 4, COAST[-1][1])] + COAST[::-1] + [(x0 - 4, COAST[0][1])]
-    land = mask_poly((H, W), land_poly, soft=0.0)
+    land = np.maximum(mask_poly((H, W), land_poly, soft=0.0), mask_poly((H, W), AWAJI, soft=0.0) * sheet_mask)      # PAINT-21F: and Awaji
     under = lerp(under, LAND, (land * (0.72 + 0.12 * noise((H, W), 90, SEED + 1, octaves=3)))[..., None])
     land_edge = np.clip(land - blur(land, 9), 0, 1)
     under = lerp(under, LAND_DK, (land_edge * 0.35)[..., None])
@@ -194,28 +221,31 @@ def back():
     pen.line(wobble(COAST, 0.6, 5), PRUSSIAN, 1.0, 0.9)
     pen.poly(HEADLAND, LAND_DK, 0.8)
     pen.line(HEADLAND + HEADLAND[:1], PRUSSIAN, 0.8, 0.85)
-    pen.line(RIVER, COBALT, 1.4, 0.8)
-    pen.line(RIVER, mixp(CERULEAN, "lead-white", 0.4), 0.5, 0.8)
+    aw = wobble(AWAJI, 0.5, 6)                                                       # PAINT-21F: Awaji's shore, and a cone or two on it
+    pen.line(aw + aw[:1], PRUSSIAN, 0.9, 0.85)
+    for (mx, my, mh) in AWAJI_CONES:                                                 # (PAINT-21F: the constant)
+        cone(pen, mx, my, mh * 1.4, mh)
+    pen.line(YODO, COBALT, 1.4, 0.8)                                                 # PAINT-21F: the Yodo from the north-east (was a river from the hills)
+    pen.line(YODO, mixp(CERULEAN, "lead-white", 0.4), 0.5, 0.8)
     # the mountains as cones, the hollow's wooded hills a cluster of deeper ones
     for (mx, my, mh) in MOUNTAINS:
         cone(pen, mx, my, mh * 1.3, mh)
     hx, hy = HILLS_C
-    for (dx, dy, mh) in ((-34, 8, 22), (34, 10, 24), (0, -14, 26), (-14, 16, 14), (18, 18, 14)):
+    for (dx, dy, mh) in HILL_CONES:                                                  # (PAINT-21F: the constant)
         cone(pen, hx + dx, hy + dy - mh, mh * 1.25, mh, lit=mixp(HILL, CEDAR, 0.3), shade=mixp(HILL_SHADE, CEDAR, 0.4))
     # Fuji, white at the right end: a wide cone, snow well down its flanks, its foot lost in the land's green
     fxp, fyp, fhalf, fh = FUJI
     cone(pen, fxp, fyp, fhalf, fh, lit=mixp(COBALT, "lead-white", 0.45), shade=mixp(COBALT, "ultramarine", 0.4), snow=0.62)
     pen.line([(fxp - fhalf * 0.62, fyp + fh * 0.62), (fxp - fhalf * 0.3, fyp + fh * 0.5), (fxp, fyp + fh * 0.68), (fxp + fhalf * 0.32, fyp + fh * 0.52), (fxp + fhalf * 0.62, fyp + fh * 0.62)], PRUSSIAN, 0.6, 0.5)
-    # the coast road, dotted along the shore (the Tōkaidō east of Osaka, the Sanyō road west of it): the lie of the land
-    road = [(756, 330), (720, 346), (690, 364), (660, 382), (632, 376), (606, 396), (576, 410), (548, 410), (530, 440), (500, 476), (470, 488),
-            (440, 470), (404, 452), (370, 440), (352, 432), (330, 440), (300, 452), (270, 446), (240, 436), (200, 424), (156, 416), (110, 414), (60, 424)]
-    pen.dots(road, ROAD, 1.1, 4.5)
+    # the coast road, dotted along the shore (PAINT-21F: COAST_ROAD, lifted out to the constants)
+    pen.dots(COAST_ROAD, ROAD, 1.1, 4.5)
     # the sheet's title block at the top left, in the manner of a printed map: a small cartouche with a red seal
-    pen.poly([(x0 + 14, y0 + 12), (x0 + 112, y0 + 12), (x0 + 112, y0 + 46), (x0 + 14, y0 + 46)], PAPER)
-    pen.line([(x0 + 14, y0 + 12), (x0 + 112, y0 + 12), (x0 + 112, y0 + 46), (x0 + 14, y0 + 46), (x0 + 14, y0 + 12)], PRUSSIAN, 0.9, 0.9)
+    cx0, cy0 = CARTOUCHE[0] - 14, CARTOUCHE[1] - 12                                 # PAINT-21F: moved to the top middle (Shosha is at the top left)
+    pen.poly([(cx0 + 14, cy0 + 12), (cx0 + 112, cy0 + 12), (cx0 + 112, cy0 + 46), (cx0 + 14, cy0 + 46)], PAPER)
+    pen.line([(cx0 + 14, cy0 + 12), (cx0 + 112, cy0 + 12), (cx0 + 112, cy0 + 46), (cx0 + 14, cy0 + 46), (cx0 + 14, cy0 + 12)], PRUSSIAN, 0.9, 0.9)
     for i in range(3):
-        pen.line([(x0 + 22, y0 + 20 + i * 9), (x0 + 72 - i * 10, y0 + 20 + i * 9)], PRUSSIAN, 1.6, 0.7)
-    pen.poly([(x0 + 86, y0 + 20), (x0 + 104, y0 + 20), (x0 + 104, y0 + 38), (x0 + 86, y0 + 38)], RED, 0.85)
+        pen.line([(cx0 + 22, cy0 + 20 + i * 9), (cx0 + 72 - i * 10, cy0 + 20 + i * 9)], PRUSSIAN, 1.6, 0.7)
+    pen.poly([(cx0 + 86, cy0 + 20), (cx0 + 104, cy0 + 20), (cx0 + 104, cy0 + 38), (cx0 + 86, cy0 + 38)], RED, 0.85)
     # a compass note: east at the right, a small sun
     pen.s.ellipse(x1 - 30, y0 + 28, 7, 7, RED, 0.9)
     pen.line([(x1 - 30, y0 + 40), (x1 - 30, y0 + 52)], PRUSSIAN, 0.8, 0.7)
@@ -238,19 +268,89 @@ def place_yui(pen):
 
 
 def place_osaka(pen):
+    """PAINT-21F: Osaka in 1830, at its river mouth: roofs on roofs, the white warehouses of the rice dealers on the river,
+    a bridge, and upstream on its rise the CASTLE'S WALLS AND TURRETS, NO KEEP (it burned in 1665 and was not rebuilt
+    until 1931: round twenty's picture had one)."""
     cx, cy = PLACES["osaka"][0]
-    for (dx, dy, w) in ((-20, 6, 12), (-8, 10, 13), (6, 8, 12), (18, 12, 12), (-14, -4, 12), (0, -2, 12), (14, -2, 11), (28, 2, 10)):
+    for (dx, dy, w) in ((-24, 8, 12), (-12, 12, 13), (2, 10, 12), (16, 14, 12), (-18, -2, 12), (-4, 0, 12), (10, 2, 11), (26, 6, 10)):
         roof_house(pen, cx + dx, cy + dy, w, 8)
-    # a castle tower above the town (the city's keep), and a bridge over the river mouth
-    tx, ty = cx - 4, cy - 14
-    pen.poly([(tx - 6, ty + 6), (tx + 6, ty + 6), (tx + 5, ty - 6), (tx - 5, ty - 6)], WALL)
-    pen.poly([(tx - 9, ty - 6), (tx + 9, ty - 6), (tx + 4, ty - 12), (tx - 4, ty - 12)], ROOF)
-    pen.poly([(tx - 7, ty - 12), (tx + 7, ty - 12), (tx + 2, ty - 17), (tx - 2, ty - 17)], ROOF)
-    pen.line([(tx - 6, ty + 6), (tx + 6, ty + 6), (tx + 5, ty - 6), (tx + 9, ty - 6), (tx + 4, ty - 12), (tx + 7, ty - 12), (tx + 2, ty - 17), (tx - 2, ty - 17),
-              (tx - 7, ty - 12), (tx - 4, ty - 12), (tx - 9, ty - 6), (tx - 5, ty - 6), (tx - 6, ty + 6)], PRUSSIAN, 0.7, 0.9)
-    bx, by = cx + 2, cy + 20
+    for (dx, dy) in ((-30, 20), (-20, 22)):                                          # two white warehouses on the water: tall walls, dark roofs
+        x, y = cx + dx, cy + dy
+        pen.poly([(x - 5, y), (x + 5, y), (x + 5, y - 9), (x - 5, y - 9)], WALL)
+        pen.poly([(x - 6.5, y - 9), (x + 6.5, y - 9), (x + 4.5, y - 13), (x - 4.5, y - 13)], ROOF)
+        pen.line([(x - 5, y), (x - 5, y - 9), (x - 6.5, y - 9), (x - 4.5, y - 13), (x + 4.5, y - 13), (x + 6.5, y - 9), (x + 5, y - 9), (x + 5, y)], PRUSSIAN, 0.6, 0.85)
+        pen.line([(x - 2, y - 3), (x + 2, y - 3)], PRUSSIAN, 0.6, 0.6)
+    # the castle upstream on its rise: a long stone base, a white wall along it, three small turrets, and nothing on top
+    bx, by = cx + 22, cy - 14
+    pen.poly([(bx - 20, by + 6), (bx + 20, by + 6), (bx + 16, by), (bx - 16, by)], mixp(WOOD, WALL, 0.45))
+    pen.line([(bx - 20, by + 6), (bx - 16, by), (bx + 16, by), (bx + 20, by + 6)], PRUSSIAN, 0.6, 0.8)
+    pen.poly([(bx - 16, by), (bx + 16, by), (bx + 16, by - 3), (bx - 16, by - 3)], WALL)
+    pen.line([(bx - 16, by - 3), (bx + 16, by - 3)], ROOF, 1.0, 0.9)
+    for (tx, h) in ((bx - 13, 6), (bx + 1, 7), (bx + 13, 6)):
+        pen.poly([(tx - 3.5, by - 3), (tx + 3.5, by - 3), (tx + 3.5, by - 3 - h * 0.6), (tx - 3.5, by - 3 - h * 0.6)], WALL)
+        pen.poly([(tx - 5, by - 3 - h * 0.6), (tx + 5, by - 3 - h * 0.6), (tx + 2.5, by - 3 - h), (tx - 2.5, by - 3 - h)], ROOF)
+        pen.line([(tx - 3.5, by - 3), (tx - 3.5, by - 3 - h * 0.6), (tx - 5, by - 3 - h * 0.6), (tx - 2.5, by - 3 - h), (tx + 2.5, by - 3 - h), (tx + 5, by - 3 - h * 0.6), (tx + 3.5, by - 3 - h * 0.6), (tx + 3.5, by - 3)], PRUSSIAN, 0.6, 0.85)
+    bx, by = cx - 10, cy + 26                                                        # a bridge over the river mouth
     pen.line([(bx - 12, by + 2), (bx - 6, by - 3), (bx + 6, by - 3), (bx + 12, by + 2)], WOOD, 2.2, 0.95)
     pen.line([(bx - 12, by + 2), (bx - 6, by - 3), (bx + 6, by - 3), (bx + 12, by + 2)], PRUSSIAN, 0.6, 0.7)
+
+
+def place_akashi(pen):
+    """PAINT-21F: Akashi above its strait: the castle on its rise with FOUR CORNER TURRETS AND NO KEEP (none was ever built),
+    the town's roofs at its foot, the shore's pines bent toward the sea, the white sand; Awaji low across the strait is the
+    sheet's own."""
+    cx, cy = PLACES["akashi"][0]
+    # the castle: a stone base, a white wall round its top, a turret at each corner (three storeys: three small roofs), no keep
+    bx, by = cx + 2, cy - 10
+    pen.poly([(bx - 18, by + 6), (bx + 18, by + 6), (bx + 14, by - 1), (bx - 14, by - 1)], mixp(WOOD, WALL, 0.45))
+    pen.line([(bx - 18, by + 6), (bx - 14, by - 1), (bx + 14, by - 1), (bx + 18, by + 6)], PRUSSIAN, 0.6, 0.8)
+    pen.poly([(bx - 14, by - 1), (bx + 14, by - 1), (bx + 14, by - 3.5), (bx - 14, by - 3.5)], WALL)
+    pen.line([(bx - 14, by - 3.5), (bx + 14, by - 3.5)], ROOF, 1.0, 0.9)
+    for tx in (bx - 12, bx + 12):
+        ty = by - 3.5
+        for k in range(3):                                                           # three storeys, each a little smaller
+            w = 4.2 - k * 0.9
+            pen.poly([(tx - w, ty), (tx + w, ty), (tx + w, ty - 2.4), (tx - w, ty - 2.4)], WALL)
+            pen.poly([(tx - w - 1.4, ty - 2.4), (tx + w + 1.4, ty - 2.4), (tx + w - 0.6, ty - 4.0), (tx - w + 0.6, ty - 4.0)], ROOF)
+            ty -= 4.0
+        pen.line([(tx - 4.2, by - 3.5), (tx - 4.2, ty + 1.6), (tx + 4.2, ty + 1.6), (tx + 4.2, by - 3.5)], PRUSSIAN, 0.5, 0.6)
+    for tx in (bx - 6, bx + 6):                                                      # the two far turrets, smaller, behind the wall
+        pen.poly([(tx - 2.4, by - 3.5), (tx + 2.4, by - 3.5), (tx + 2.4, by - 6.5), (tx - 2.4, by - 6.5)], WALL)
+        pen.poly([(tx - 3.4, by - 6.5), (tx + 3.4, by - 6.5), (tx + 1.6, by - 8.6), (tx - 1.6, by - 8.6)], ROOF)
+    # the town at its foot, along the shore
+    for (dx, dy, w) in ((-22, 10, 10), (-10, 12, 11), (14, 12, 11), (24, 9, 9)):
+        roof_house(pen, cx + dx, cy + dy, w, 6.5)
+    # the white sand and the pines along it, bent toward the sea (south)
+    pen.poly([(cx - 26, cy + 15), (cx + 30, cy + 15), (cx + 28, cy + 19), (cx - 24, cy + 19)], mixp(WALL, "lead-white", 0.5), 0.95)
+    for (px, h) in ((cx - 24, 7), (cx - 17, 8), (cx + 20, 7), (cx + 27, 6)):
+        pen.line([(px, cy + 16), (px + 1.5, cy + 16 - h * 0.6), (px + 3.5, cy + 16 - h)], mixp("burnt-sienna", "prussian-blue", 0.4), 1.0, 0.9)
+        pen.s.ellipse(px + 4.0, cy + 16 - h, 3.4, 1.7, CEDAR, 0.95)
+
+
+def place_shosha(pen):
+    """PAINT-21F: Mount Shosha north-west of Himeji: a wooded mountain (pines and maples, deeper green than the far cones),
+    the east path a dotted line climbing into the trees, and at its foot the small women's hall, deep-roofed on a low base."""
+    cx, cy = PLACES["shosha"][0]
+    apex = (cx - 4, cy - 30)
+    base_y = cy + 22
+    pen.poly([(cx - 34, base_y), apex, (cx + 30, base_y)], mixp(HILL, CEDAR, 0.45))
+    pen.poly([apex, (cx + 30, base_y), (cx + 6, base_y)], mixp(HILL_SHADE, CEDAR, 0.5), 0.85)
+    pen.line([(cx - 34, base_y), apex, (cx + 30, base_y)], PRUSSIAN, 0.7, 0.85)
+    rs = np.random.RandomState(27)
+    for _ in range(16):                                                              # the trees on its slopes
+        t = rs.uniform(0.25, 0.95)
+        side = rs.uniform(-0.85, 0.85)
+        x = apex[0] + side * 30 * t
+        y = apex[1] + 52 * t
+        h = rs.uniform(5, 8)
+        c = CEDAR if rs.rand() < 0.6 else mixp(CEDAR, "burnt-sienna", 0.35)
+        pen.poly([(x - 2.4, y), (x, y - h), (x + 2.4, y)], c, 0.95)
+    pen.dots([(cx + 14, base_y - 2), (cx + 8, cy + 8), (cx + 2, cy - 4), (cx - 2, cy - 16)], mixp("burnt-sienna", "yellow-ochre", 0.4), 0.7, 3.0)   # the east path
+    hx, hy = cx + 18, base_y + 1                                                     # the women's hall at the path's foot
+    pen.poly([(hx - 5, hy), (hx + 5, hy), (hx + 5, hy - 4), (hx - 5, hy - 4)], WOOD)
+    pen.poly([(hx - 8, hy - 4), (hx + 8, hy - 4), (hx + 4, hy - 9), (hx - 4, hy - 9)], ROOF)
+    pen.line([(hx - 8, hy - 4), (hx + 8, hy - 4), (hx + 4, hy - 9), (hx - 4, hy - 9), (hx - 8, hy - 4)], PRUSSIAN, 0.6, 0.9)
+    pen.line([(hx - 6, hy + 1), (hx + 6, hy + 1)], mixp(WALL, "prussian-blue", 0.3), 1.2, 0.9)
 
 
 def place_hills(pen):
@@ -288,7 +388,8 @@ def place_himeji(pen):
     pen.line([(kx + 15, ky + 2), (kx + 15, ky + 7)], mixp("burnt-sienna", "prussian-blue", 0.4), 1.0, 0.9)
 
 
-PLACE_PAINTERS = {"yui": place_yui, "osaka": place_osaka, "hills": place_hills, "himeji": place_himeji}
+PLACE_PAINTERS = {"yui": place_yui, "osaka": place_osaka, "hills": place_hills, "akashi": place_akashi, "himeji": place_himeji,
+                  "shosha": place_shosha}                                            # PAINT-21F: six
 
 
 def way_sea(pen):
@@ -301,16 +402,134 @@ def way_sea(pen):
     pen.poly([(sx - 6, sy - 11), (sx + 6, sy - 11), (sx + 6, sy - 1), (sx - 6, sy - 1)], WALL)
     pen.line([(sx - 6, sy - 11), (sx + 6, sy - 11), (sx + 6, sy - 1), (sx - 6, sy - 1), (sx - 6, sy - 11)], PRUSSIAN, 0.6, 0.8)
     pen.line([(sx - 9, sy + 2), (sx + 9, sy + 2), (sx + 7, sy + 6), (sx - 7, sy + 6), (sx - 9, sy + 2)], PRUSSIAN, 0.6, 0.8)
+    pen.dots([pts[-1], PLACES["osaka"][1]], PRUSSIAN, 1.3, 6.0)                     # PAINT-21F: on to Osaka's pin (it moved east of the city)
 
 
-def way_road(key):
+def way_river(pen):
+    """PAINT-21F: the river path: from Osaka's pin into the river mouth and up the Yodo to Hirakata (a boat's course, dashed
+    in blue, with the Kyoto boat drawn on it, hauled from the bank), across by the ferry, and a road north into the hills
+    (dotted, as the roads are)."""
+    pin = PLACES["osaka"][1]
+    pts = [pin] + WAYS[("osaka", "hills")]
+    water = pts[:RIVER_LEG + 1]
+    road = pts[RIVER_LEG:] + [PLACES["hills"][1]]
+    d, carry = 0.0, 0.0
+    for (x0, y0), (x1, y1) in zip(water, water[1:]):                                 # the boat's course: short dashes
+        L = math.hypot(x1 - x0, y1 - y0)
+        t = carry
+        while t < L:
+            u0, u1 = t / L, min(1.0, (t + 3.0) / L)
+            pen.line([(x0 + (x1 - x0) * u0, y0 + (y1 - y0) * u0), (x0 + (x1 - x0) * u1, y0 + (y1 - y0) * u1)], PRUSSIAN, 1.2, 0.95)
+            t += 6.0
+        carry = t - L
+    bx, by = (water[4][0] + water[5][0]) / 2, (water[4][1] + water[5][1]) / 2         # the Kyoto boat, hauled up the river below Hirakata (the stop's landing has its own boat): long, low, a mat roof, its tow line to the bank
+    ang = math.atan2(water[5][1] - water[4][1], water[5][0] - water[4][0])
+    ca, sa = math.cos(ang), math.sin(ang)
+    R_ = lambda pts_: [(bx + x * ca - y * sa, by + x * sa + y * ca) for x, y in pts_]
+    pen.poly(R_([(-8, -1.6), (8, -1.6), (9.5, 0), (8, 1.8), (-8, 1.8), (-9.5, 0)]), WOOD)
+    pen.poly(R_([(-5, -1.6), (5, -1.6), (4, -3.6), (-4, -3.6)]), mixp("yellow-ochre", "lead-white", 0.3))
+    pen.line(R_([(-8, -1.6), (8, -1.6), (9.5, 0), (8, 1.8), (-8, 1.8), (-9.5, 0), (-8, -1.6)]), PRUSSIAN, 0.5, 0.85)
+    pen.line([R_([(7, -1)])[0], (bx + 13 * ca + 6 * sa, by + 13 * sa - 6 * ca)], mixp("burnt-sienna", "yellow-ochre", 0.4), 0.9, 0.95)      # (PAINT-21F: a little heavier, so it holds as one line)
+    pen.dots(road, ROAD, 1.5, 5.0)
+    pen.dots(road, PRUSSIAN, 0.7, 5.0)
+
+
+def way_road(key, extra=None):
     def f(pen):
-        pen.dots(WAYS[key], ROAD, 1.5, 5.0)
-        pen.dots(WAYS[key], PRUSSIAN, 0.7, 5.0)
+        pts = [PLACES[key[0]][1]] + WAYS[key] + [PLACES[key[1]][1]]
+        pen.dots(pts, ROAD, 1.5, 5.0)
+        pen.dots(pts, PRUSSIAN, 0.7, 5.0)
     return f
 
 
-WAY_PAINTERS = {("yui", "osaka"): way_sea, ("osaka", "hills"): way_road(("osaka", "hills")), ("hills", "himeji"): way_road(("hills", "himeji"))}
+WAY_PAINTERS = {("yui", "osaka"): way_sea, ("osaka", "hills"): way_river, ("hills", "akashi"): way_road(("hills", "akashi")),
+                ("akashi", "himeji"): way_road(("akashi", "himeji")), ("himeji", "shosha"): way_road(("himeji", "shosha"))}   # PAINT-21F: five
+
+
+def stop_hirakata(pen):
+    """PAINT-21F (MERGE-21's follow-up): Hirakata, the Kyoto boats' relay port on the Yodo's east bank, where the river path
+    ends and the ferry crosses to the road north: a little landing of planks out into the river, a passenger boat moored
+    at it (long and low, its mat roof), and the boat-waiting inn's roofs on the bank behind."""
+    tx, ty = STOPS["hirakata"][2]                                                    # the river's turn (the pin)
+    d = (0.625, -0.781)                                                              # the river's way here (upstream, north-east)
+    n = (0.781, 0.625)                                                               # toward the east bank
+    P_ = lambda a, b: (tx + d[0] * a + n[0] * b, ty + d[1] * a + n[1] * b)           # a point a along the river, b toward the bank
+    landing = [P_(-3, 2), P_(3, 2), P_(3, 11), P_(-3, 11)]                          # the landing: planks from the bank into the river
+    pen.poly(landing, WOOD)
+    pen.line(landing + landing[:1], PRUSSIAN, 0.5, 0.85)
+    for k in (4.5, 7.5):
+        pen.line([P_(-3, k), P_(3, k)], mixp("burnt-sienna", "prussian-blue", 0.3), 0.4, 0.7)
+    hull = [P_(-11, -1.6), P_(6, -1.6), P_(8.5, 0.2), P_(6, 1.8), P_(-11, 1.8), P_(-12.5, 0.2)]       # the moored boat, alongside
+    pen.poly(hull, WOOD)
+    pen.poly([P_(-8, -1.6), P_(3, -1.6), P_(2, -3.6), P_(-7, -3.6)], mixp("yellow-ochre", "lead-white", 0.3))
+    pen.line(hull + hull[:1], PRUSSIAN, 0.5, 0.85)
+    pen.line([P_(-2, 1.8), P_(-2, 3.5)], mixp("burnt-sienna", "yellow-ochre", 0.4), 0.6, 0.9)        # its mooring line
+    for (a, b, w) in ((-6, 20, 11), (6, 16, 10)):                                     # the inn's roofs on the bank
+        x, y = P_(a, b)
+        roof_house(pen, x, y, w, 7.5)
+    x, y = P_(-6, 20)
+    pen.line([(x + 6.5, y), (x + 6.5, y - 9)], WOOD, 0.8, 0.95)                      # a lantern on a post at its door
+    pen.s.ellipse(x + 6.5, y - 9.6, 1.4, 1.8, mixp("lead-white", "naples-yellow", 0.4), 0.95)
+
+
+def stop_koriyama(pen):
+    """PAINT-21F: Koriyama: the inn for lords with its gate, and the big camellia by the gate (dark round leaves, red
+    flowers) that gave the inn its name."""
+    cx, cy = STOPS["koriyama"][0]
+    pen.poly([(cx - 9, cy + 5), (cx + 3, cy + 5), (cx + 3, cy - 1), (cx - 9, cy - 1)], WALL)            # the inn's wall
+    pen.poly([(cx - 11, cy - 1), (cx + 5, cy - 1), (cx + 2, cy - 5), (cx - 8, cy - 5)], ROOF)
+    pen.line([(cx - 11, cy - 1), (cx + 5, cy - 1), (cx + 2, cy - 5), (cx - 8, cy - 5), (cx - 11, cy - 1)], PRUSSIAN, 0.6, 0.85)
+    gx = cx + 6                                                                      # the gate: two posts and a roofed lintel
+    pen.line([(gx, cy + 5), (gx, cy - 2)], WOOD, 1.2, 0.95)
+    pen.line([(gx + 6, cy + 5), (gx + 6, cy - 2)], WOOD, 1.2, 0.95)
+    pen.poly([(gx - 2, cy - 2), (gx + 8, cy - 2), (gx + 6.5, cy - 4.5), (gx - 0.5, cy - 4.5)], ROOF)
+    pen.line([(gx - 2, cy - 2), (gx + 8, cy - 2)], PRUSSIAN, 0.6, 0.85)
+    tx, ty = cx + 14, cy - 2                                                         # the camellia: a big round dark crown, red flowers
+    pen.line([(tx, cy + 5), (tx, ty + 2)], mixp("burnt-sienna", "prussian-blue", 0.4), 1.4, 0.95)
+    pen.s.ellipse(tx, ty - 3, 7.0, 6.0, mixp(CEDAR, "prussian-blue", 0.25), 0.98)
+    pen.s.ellipse(tx - 1.6, ty - 4.6, 4.0, 3.2, CEDAR, 0.9)
+    for (fx, fy) in ((-3.5, -5), (2.5, -7), (4.5, -2), (-1, -1), (0.5, -4.5), (-5, -1.5)):
+        pen.s.ellipse(tx + fx, ty + fy, 1.1, 1.1, RED, 0.98)
+
+
+def stop_suma(pen):
+    """PAINT-21F: Suma: the stone stupa of five stacked stones for the boy warrior (a cube, a ball, a roof, a bowl, a jewel)
+    and beside it the teahouse where travellers rested and ate its soba (a little house, a flag on a pole)."""
+    cx, cy = STOPS["suma"][0]
+    sx, sy = cx - 6, cy + 5
+    stone = mixp("lead-white", "prussian-blue", 0.28)
+    stone_d = mixp("lead-white", "prussian-blue", 0.45)
+    pen.poly([(sx - 3.4, sy), (sx + 3.4, sy), (sx + 3.4, sy - 4), (sx - 3.4, sy - 4)], stone)            # the cube
+    pen.s.ellipse(sx, sy - 6.4, 3.0, 2.6, stone)                                     # the ball
+    pen.poly([(sx - 4.4, sy - 8.6), (sx + 4.4, sy - 8.6), (sx + 1.6, sy - 11.2), (sx - 1.6, sy - 11.2)], stone_d)      # the roof
+    pen.poly([(sx - 2.0, sy - 11.2), (sx + 2.0, sy - 11.2), (sx + 1.2, sy - 12.8), (sx - 1.2, sy - 12.8)], stone)      # the bowl
+    pen.s.ellipse(sx, sy - 14.2, 1.1, 1.5, stone)                                    # the jewel
+    pen.line([(sx - 3.4, sy), (sx - 3.4, sy - 4), (sx + 3.4, sy - 4), (sx + 3.4, sy)], PRUSSIAN, 0.5, 0.8)
+    hx, hy = cx + 8, cy + 5                                                          # the soba teahouse and its flag
+    pen.poly([(hx - 6, hy), (hx + 6, hy), (hx + 6, hy - 5), (hx - 6, hy - 5)], WALL)
+    pen.poly([(hx - 8, hy - 5), (hx + 8, hy - 5), (hx + 5, hy - 9), (hx - 5, hy - 9)], mixp("yellow-ochre", "lead-white", 0.25))
+    pen.line([(hx - 8, hy - 5), (hx + 8, hy - 5), (hx + 5, hy - 9), (hx - 5, hy - 9), (hx - 8, hy - 5)], PRUSSIAN, 0.6, 0.85)
+    pen.poly([(hx - 3, hy), (hx + 1, hy), (hx + 1, hy - 3.5), (hx - 3, hy - 3.5)], ROOF)                  # its open front, a noren
+    pen.line([(hx + 9, hy), (hx + 9, hy - 13)], WOOD, 0.9, 0.95)
+    pen.poly([(hx + 9, hy - 13), (hx + 13.5, hy - 12), (hx + 13, hy - 8.5), (hx + 9, hy - 9)], mixp("lead-white", "naples-yellow", 0.3))
+    pen.line([(hx + 10.4, hy - 12), (hx + 10.4, hy - 9.6)], PRUSSIAN, 0.5, 0.8)
+
+
+def stop_maiko(pen):
+    """PAINT-21F: Maiko: the shore's pines bent by the sea wind, leaning out over the white sand toward the water."""
+    cx, cy = STOPS["maiko"][0]
+    pen.poly([(cx - 11, cy + 5), (cx + 11, cy + 5), (cx + 9, cy + 8), (cx - 9, cy + 8)], mixp(WALL, "lead-white", 0.5), 0.95)
+    trunk = mixp("burnt-sienna", "prussian-blue", 0.4)
+    for (px, h, lean) in ((-7, 11, 6), (0, 13, 8), (6, 10, 5)):
+        x0, y0 = cx + px, cy + 5
+        mid = (x0 + lean * 0.3, y0 - h * 0.55)
+        top = (x0 + lean, y0 - h)
+        pen.line([(x0, y0), mid, top], trunk, 1.1, 0.95)
+        for (dx, dy, rx) in ((0.0, 0.0, 3.6), (-2.4, 2.6, 2.6), (2.0, -1.2, 2.4)):
+            pen.s.ellipse(top[0] + dx, top[1] + dy, rx, rx * 0.5, CEDAR, 0.95)
+
+
+STOP_PAINTERS = {"hirakata": stop_hirakata, "koriyama": stop_koriyama, "suma": stop_suma, "maiko": stop_maiko}     # PAINT-21F
 
 
 # ---------------------------------------------------------------- layout.json: shapes measured from the pictures
@@ -388,6 +607,93 @@ def shape_of(mask, limit=24):
         eps *= 1.25
 
 
+def lie_of_land():
+    """PAINT-21F: what back() draws that a stop's name keeps off: the cones (Fuji, the mountains, the hollow's, Awaji's), the
+    coast road, the Yodo, the coast and Awaji's shore."""
+    m = np.zeros((H, W), bool)
+    cones = [(FUJI[0], FUJI[1], FUJI[2], FUJI[3])] + [(mx, my, mh * 1.3, mh) for (mx, my, mh) in MOUNTAINS]
+    cones += [(mx, my, mh * 1.4, mh) for (mx, my, mh) in AWAJI_CONES]
+    cones += [(HILLS_C[0] + dx, HILLS_C[1] + dy - mh, mh * 1.25, mh) for (dx, dy, mh) in HILL_CONES]
+    for (x, y, half, h) in cones:
+        m |= mask_poly((H, W), [(x - half, y + h), (x, y), (x + half, y + h)], soft=0.0) > 0.5
+
+    def line(pts, r):
+        im = Image.new("L", (W, H), 0)
+        ImageDraw.Draw(im).line([tuple(q) for q in pts], fill=255, width=1)
+        return dilate(np.asarray(im) > 0, r)
+    return m | line(COAST_ROAD, 2) | line(YODO, 2) | line(COAST, 1) | line(AWAJI + AWAJI[:1], 1)
+
+
+STOP_NAME = max(11, LABEL["size"] - 3)     # PAINT-21F: a stop's name is written smaller than a place's: the map's size less 3, as the engine writes a stop's
+STOP_ASC, STOP_DESC = int(round(STOP_NAME * 1.3)), int(round(STOP_NAME * 0.35))    # its box about the baseline (a place's, at 15: 20 above, 5 below)
+
+
+def stop_names(stops, alphas, taken, land):
+    """PAINT-21F: each stop's name near its picture, clear of `taken` (and, where it can be, of the lie of the land), the
+    names apart: the nearest clear point to each picture (below or beside it before above), the order of placing the one
+    that keeps them nearest all together. stops: {sid: (name, label_max)}. Gives {sid: [x, y]} (the baseline's middle)."""
+    import itertools
+
+    def sat(m):
+        S = np.zeros((H + 1, W + 1), np.int64)
+        S[1:, 1:] = m.astype(np.int64).cumsum(0).cumsum(1)
+        return S
+
+    def cands(S, box, lm):
+        x0, y0, x1, y1 = box
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        LY, LX = np.mgrid[y0 - 30:y1 + 50, x0 - 70:x1 + 71]
+        bx0, bx1, by0, by1 = LX - lm // 2, LX + (lm - lm // 2), LY - STOP_ASC, LY + STOP_DESC
+        ok = (bx0 >= SHEET[0] + 4) & (bx1 <= SHEET[2] - 4) & (by0 >= SHEET[1] + 4) & (by1 <= SHEET[3] - 4)
+        bx0, bx1 = np.clip(bx0, 0, W - 1), np.clip(bx1, 0, W - 1)
+        by0, by1 = np.clip(by0, 0, H - 1), np.clip(by1, 0, H - 1)
+        ok &= (S[by1 + 1, bx1 + 1] - S[by0, bx1 + 1] - S[by1 + 1, bx0] + S[by0, bx0]) == 0
+        dx, dy = LX - cx, (LY - STOP_NAME * 0.4) - cy
+        key = np.hypot(dx, dy * np.where(dy > 0, 1.0, 1.6))
+        ok &= key < 60
+        return sorted(zip(key[ok].tolist(), LX[ok].tolist(), LY[ok].tolist()))
+
+    every, things = sat(taken | land), sat(taken)
+    info = {}
+    for sid, (name, lm) in stops.items():
+        ys, xs = np.nonzero(alphas["stop-" + sid] > 0.5)
+        box = (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+        info[sid] = (lm, cands(every, box, lm) or cands(things, box, lm), box)
+
+    def apart(a, b):
+        return a[2] + 6 < b[0] or b[2] + 6 < a[0] or a[3] + 4 < b[1] or b[3] + 4 < a[1]
+    best = None
+    for order in itertools.permutations(info):
+        placed, total = {}, 0.0
+        for sid in order:
+            lm, cs, box = info[sid]
+            for (k, lx, ly) in cs:
+                b = (lx - lm // 2, ly - STOP_ASC, lx + (lm - lm // 2), ly + STOP_DESC)
+                if all(apart(b, pb) for (_, pb) in placed.values()):
+                    placed[sid], total = ([int(lx), int(ly)], b), total + k
+                    break
+            else:
+                lm, cs, box = info[sid]
+                placed[sid], total = ([(box[0] + box[2]) // 2, box[3] + STOP_ASC + 2], (0, 0, 0, 0)), total + 1000     # (nowhere clear: under it)
+        if best is None or total < best[0]:
+            best = (total, placed)
+    return {sid: best[1][sid][0] for sid in stops}
+
+
+def on_via(via, p, near=1.5):
+    """PAINT-21F: the index of the via point p is at, or of the one before the stretch of the line p is on (None: off the line)."""
+    for i, q in enumerate(via):
+        if math.hypot(q[0] - p[0], q[1] - p[1]) < 0.5:
+            return i
+    for i in range(len(via) - 1):
+        (x1, y1), (x2, y2) = via[i], via[i + 1]
+        vx, vy = x2 - x1, y2 - y1
+        k = max(0.0, min(1.0, ((p[0] - x1) * vx + (p[1] - y1) * vy) / float(vx * vx + vy * vy or 1)))
+        if math.hypot(x1 + vx * k - p[0], y1 + vy * k - p[1]) <= near:
+            return i
+    return None
+
+
 def layout(alphas):
     places = []
     for pid, (mid, pin, label, name) in PLACES.items():
@@ -402,20 +708,56 @@ def layout(alphas):
     paths = []
     for (a, b), pts in WAYS.items():
         paths.append({"a": a, "b": b, "picture": f"path-{a}-{b}.png", "via": [pins[a]] + [list(p) for p in pts] + [pins[b]]})
+    paths[1]["river"] = {"via_to": RIVER_LEG, "turn": list(HIRAKATA),
+                         "note": "PAINT-21F: via[0..via_to] is the boat up the Yodo (Osaka to Hirakata); the rest the ferry and the road north into the hills"}
+    stops = []                                                                       # PAINT-21F: the stops (MERGE-21: with a pin and a label, as places have)
+    from PIL import ImageFont
+    from letter import KOINE
+    font = ImageFont.truetype(KOINE, STOP_NAME)
+    names = {"hirakata": "Hirakata", "koriyama": "Kōriyama", "suma": "Suma", "maiko": "Maiko"}
+    taken = np.zeros((H, W), bool)                                                   # what a stop's name must keep clear of
+    for p in places:
+        taken |= dilate(alphas[p["id"]] > 0.5, 2)
+        px_, py_ = p["pin"]
+        taken[max(0, py_ - 18):py_ + 19, max(0, px_ - 58):px_ + 59] = True          # its row of portraits
+        lx, ly = p["label"]
+        taken[max(0, ly - 24):ly + 10, max(0, int(lx - p["label_max"] / 2) - 6):int(lx + p["label_max"] / 2) + 7] = True    # its name, and a margin
+    for (a_, b_) in WAYS:
+        taken |= dilate(alphas["path-%s-%s" % (a_, b_)] > 0.5, 2)
+    for sid in STOPS:
+        taken |= dilate(alphas["stop-" + sid] > 0.5, 2)
+    lms = {sid: int(math.ceil(font.getlength(names[sid]) + LABEL["spacing"] * STOP_NAME * (len(names[sid]) - 1))) + 8 for sid in STOPS}
+    at_names = stop_names({sid: (names[sid], lms[sid]) for sid in STOPS}, alphas, taken, lie_of_land())
+    for sid, (mid, way, at) in STOPS.items():
+        via = [p for p in paths if (p["a"], p["b"]) == way][0]["via"]
+        idx = on_via(via, at)                                                        # the via point it is at, or the one before it on the line
+        assert idx is not None, f"the stop {sid}: its pin {at} is not on its way's line"
+        m = alphas["stop-" + sid] > 0.5
+        if sid != "hirakata":                                                        # the walk's: the row of portraits at the pin leaves the picture clear
+            rx0, ry0, rx1, ry1 = int(at[0] - ROW[0] / 2) - 2, int(at[1] - ROW[1] / 2) - 2, int(at[0] + ROW[0] / 2) + 3, int(at[1] + ROW[1] / 2) + 3
+            assert not m[max(0, ry0):ry1, max(0, rx0):rx1].any(), f"the stop {sid}: the portraits at its pin would stand on its picture"
+        stops.append({"id": sid, "picture": f"stop-{sid}.png", "way": list(way), "pin": list(at), "label": at_names[sid], "label_max": lms[sid],
+                      "at": list(at), "via_index": idx, "shape": shape_of(dilate(m, 3)), "middle": list(mid)})
     return {
         "map": "edo", "size": [800, 600], "sheet": SHEET,
         "material": ("A travel map printed from woodblocks on a long sheet of soft paper, folded in six panels and worn at the folds: the "
                      "coast road from Suruga to Harima, the land soft green with its mountains as cones, the sea in rows of blue waves, Fuji "
                      "white at the east end, the places as small pictures with their names."),
         "label": LABEL,
-        "places": places, "paths": paths,
+        "places": places, "paths": paths, "stops": stops,
         "note": ("East at the right. yui on the west shore of Suruga Bay under the Satta headland, Fuji across the water (drawn on the sheet: the "
-                 "lie of the land); osaka at its river mouth west of the Kii peninsula's bulge (a landmark: no scene); hills north of Osaka up the "
-                 "river (the hollow in the wooded hills: cedars and the storehouse); himeji at the west end on its hill above the town, the "
-                 "Inland Sea below. The sea way goes out from Yui's shore round the Kii tip into Osaka's bay (a ship drawn on it at its fifth "
-                 "point); road1 follows the river up into the hills; road2 comes down to the coast road and west. Each via is a pin, the way's "
-                 "drawn points, the other pin. The pins (rows of three portraits, 116 x 36) stand on the land above each place (Osaka's on the "
-                 "sea below it); the names below each place (the hills' above)."),
+                 "lie of the land); osaka at its river mouth west of the Kii peninsula's bulge (PAINT-21F: a place now; its castle has walls and "
+                 "turrets and no keep); hills north of Osaka (the hollow in the wooded hills: cedars and the storehouse); akashi on the shore "
+                 "above its strait, Awaji across it (PAINT-21F); himeji at the west end on its hill above the town, the Inland Sea below; shosha "
+                 "north-west of Himeji, a wooded mountain with the women's hall at its foot (PAINT-21F). The sea way goes out from Yui's shore "
+                 "round the Kii tip into Osaka's bay (a ship drawn on it); the river path goes up the Yodo to Hirakata (the Kyoto boat drawn on "
+                 "it), across by the ferry at Hirakata and north into the hills (`river`: where the water ends; the stop `hirakata` there); "
+                 "the road west comes down by Koriyama, round to Nishinomiya and along the shore by Suma and Maiko to Akashi (`stops`: each a "
+                 "picture with its `pin`, the point of its way's line it is for, where the portraits stop: for the walk's three, where their row "
+                 "stands just above the picture, the line said above them; Hirakata's at the river's turn; and a `label`, its name's "
+                 "baseline middle, for a name written at the map's size less 3, as the engine writes a stop's); the road on to Himeji; "
+                 "the walk between Himeji and Shosha. Each via is a pin, the way's drawn points, the other pin. "
+                 "The pins (rows of three portraits, 116 x 36) stand beside each place (Osaka's on the sea east of it)."),
     }
 
 
@@ -444,6 +786,13 @@ if __name__ == "__main__":
         fn(pen)
         c, a = pen.done()
         files[f"path-{a_}-{b_}"] = (over(pic.copy(), c, a), a)
+        alphas[f"path-{a_}-{b_}"] = a                                                 # (PAINT-21F: the stops' names keep clear of the ways)
+    for sid, fn in STOP_PAINTERS.items():                                            # PAINT-21F: the three road pictures
+        pen = Pen()
+        fn(pen)
+        c, a = pen.done()
+        files[f"stop-{sid}"] = (over(pic.copy(), c, a), a)
+        alphas["stop-" + sid] = a
     # one palette for all of a map's files: the sheet with everything laid on it
     everything = pic.copy()
     for name, (c, a) in files.items():

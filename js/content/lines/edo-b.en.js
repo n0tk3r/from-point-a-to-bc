@@ -31,6 +31,11 @@
 //     frightened than the last (and a fourth, for the asking), and the last at the top, not frightened at all.
 //   - The Japanese people keep whole words (Sei, Jinsuke, the guards, Shinnosuke in his poems); Isuke and Tomezō
 //     contract, one sleepy, one shouting. The family contract as they do everywhere.
+// WRITE-21B (round twenty-one, the history pass: briefs/out/edo2-design.md, section 10): ten lines here are changed, each
+// marked "// WRITE-21B: was ..." with its old words and why: the walk is four days from the hills and its card ends at
+// Akashi (edo.walk.card.2; Jinsuke's cousin, the castle road, two hints of #27's end); no named weekdays (Tomezō and a
+// plasterer); Mom's prayer at the door, now that she has heard her son (edo.step.pray.1); and the hills' far line, now the
+// fallback for the per-leg lines in edo-d.en.js. Every id is kept.
 
 export const lines = {
   // ======================================================================================================
@@ -489,7 +494,7 @@ export const lines = {
   "edo.chapel.jinsuke.watch.1": ["jinsuke", "She sees a man before I hear him. She is eight, and she is the best of us at it."],
   "edo.chapel.jinsuke.watch.2": ["bigsis", "...My sister's seven and the best of us at fitting through things. I understand."],
   "edo.chapel.jinsuke.opt.cousin": ["lilsis", "Do you have any other family? Besides the ones here?"],
-  "edo.chapel.jinsuke.cousin.1": ["jinsuke", "A cousin at Himeji, three days west. A plasterer. He has my trowel, or I his."],
+  "edo.chapel.jinsuke.cousin.1": ["jinsuke", "A cousin at Himeji, four days west. A plasterer. He has my trowel, or I his."],  // WRITE-21B: was "A cousin at Himeji, three days west. A plasterer. He has my trowel, or I his." (Himeji is four days from the hills (facts-21b item 8), not three)
   "edo.chapel.jinsuke.cousin.2": ["lilsis", "Which is it?"],
   "edo.chapel.jinsuke.cousin.3": ["jinsuke", "It depends who is asked."],
   "edo.chapel.jinsuke.opt.lie": ["mom", "You told the truth all evening, even when it would have been easier not to."],
@@ -625,9 +630,11 @@ export const lines = {
 
   // ======================================================================================================
   // The walk: the card "Three days later" / "Himeji" (js/content/cutscenes/edo-walk.js)
+  // WRITE-21B: now "Three days later" / "Akashi"; the card "The next day" / "Himeji" and the road's three pictures are in
+  // edo-d.en.js (edo.walk2.card.*, edo.walk.stop.*).
   // ======================================================================================================
   "edo.walk.card": ["narrator", "Three days later"],
-  "edo.walk.card.2": ["narrator", "Himeji"],
+  "edo.walk.card.2": ["narrator", "Akashi"],  // WRITE-21B: was "Himeji" (the walk now ends at Akashi; "The next day" / "Himeji" is its own card (edo.walk2.card.*, edo-d.en.js))
   "edo.walk.lilsis": ["lilsis", "Everybody else was going the OTHER way."],
 
   // ======================================================================================================
@@ -735,9 +742,9 @@ export const lines = {
   "edo.castle.pilgrim.3": ["pilgrim3", "My mistress thinks I am at the well. The well is at Ise."],
   // the road
   "edo.castle.road.mom": ["mom", "The road below, going east toward Osaka, with half the town on it."],
-  "edo.castle.road.bigsis": ["bigsis", "The road to Osaka. Three days back the way we came, full of people who disagree."],
+  "edo.castle.road.bigsis": ["bigsis", "The road east, the way we came. Four days of it, full of people who disagree."],  // WRITE-21B: was "The road to Osaka. Three days back the way we came, full of people who disagree." (four days from the hills, by the shore road; the family did not come from Osaka by it)
   "edo.castle.road.lilsis": ["lilsis", "The road. We WALKED that. All of it. My boots know."],
-  "edo.castle.road.use.mom": ["mom", "Not the road, darling. The castle. We walked three days to stand here."],
+  "edo.castle.road.use.mom": ["mom", "Not the road, darling. The castle. We walked four days to stand here."],  // WRITE-21B: was "Not the road, darling. The castle. We walked three days to stand here." (four days, not three)
   "edo.castle.road.use.bigsis": ["bigsis", "I'm not going back down. My feet have lodged a protest."],
   "edo.castle.road.use.lilsis": ["lilsis", "I'm not walking any more roads today. My boots are on STRIKE."],
   // the stone ramp
@@ -763,7 +770,7 @@ export const lines = {
   "edo.castle.tomezo.polite.1": ["tomezo", "And the gate wants eight back by sundown, and I've got FIVE--"],
   "edo.castle.tomezo.polite.2": ["mom", "He can't hear courtesy from down here. It doesn't carry."],
   "edo.castle.tomezo.opt.wait": ["bigsis", "We could wait till he runs out of breath."],
-  "edo.castle.tomezo.wait.1": ["tomezo", "--and the lord's steward coming Thursday, and who's he going to shout at? ME."],
+  "edo.castle.tomezo.wait.1": ["tomezo", "--and the lord's steward due in three days, and who'll he shout at? ME."],  // WRITE-21B: was "--and the lord's steward coming Thursday, and who's he going to shout at? ME." (no named weekdays in 1830 Japan: no fact file has them, and the act gives no dates)
   "edo.castle.tomezo.wait.2": ["bigsis", "He isn't going to run out. He's got a system."],
   "edo.castle.tomezo.opt.holler": ["lilsis", "Hey. Mister Plaster. DOWN here."],
   "edo.castle.tomezo.holler.1": ["tomezo", "...Who said that?"],
@@ -808,7 +815,7 @@ export const lines = {
   "edo.castle.tomezo.bye.lilsis": ["lilsis", "Arigatō, Mister Plaster."],
   "edo.castle.tomezo.bye.lilsis.2": ["tomezo", "...See? Can't manage it."],
   // the crew, a line or two (the scene says them now and then; and when a bucket is set down)
-  "edo.castle.plasterer.1": ["plasterer1", "Three gone to Ise. Three. He'll shout at the five of us for it till Thursday."],
+  "edo.castle.plasterer.1": ["plasterer1", "Three gone to Ise. Three. He'll shout at the five of us till the steward comes."],  // WRITE-21B: was "Three gone to Ise. Three. He'll shout at the five of us for it till Thursday." (no named weekdays (as edo.castle.tomezo.wait.1))
   "edo.castle.plasterer.2": ["plasterer2", "Tall one. Bucket from the bottom. ...Like that. Now you're a plasterer."],
 
   // ---------- #28: the guards (guardTree): before the crew they ask; with the crew they count ----------
@@ -1202,7 +1209,7 @@ export const lines = {
   "edo.step.2": ["lilsis", "I'm in the MIDDLE. I'm always in the middle. It's the safest part of a sandwich."],
   "edo.step.3": ["bigsis", "Left hand, right hand. Count of four. ...I'm not counting. I'm holding."],
   // Mom, with the coin in her fist, looks once round the room: the warden, the sunset on the sea, the door; her own words
-  "edo.step.pray.1": ["mom", "Father, You know where my son is, and I don't."],
+  "edo.step.pray.1": ["mom", "Father, You know where my son is. Last night, for a minute, so did I."],  // WRITE-21B: was "Father, You know where my son is, and I don't." (the design, section 7: she has heard her son at the women's hall the evening before; her honesty joke (.3) is kept)
   "edo.step.pray.2": ["mom", "You knew at home. You knew in Nevada. You know now. Take us where You want us."],
   "edo.step.pray.3": ["mom", "If it's where he is, I'll never ask for another thing. ...That's not true. Amen."],
   "edo.step.4": ["lilsis", "Amen. Bye, poem man. Keep my flashlight SAFE."],
@@ -1355,7 +1362,7 @@ export const lines = {
   "hint.edo.door.lilsis.5": ["lilsis", "Give Mommy the coin. It's my brother's. It knows the way HOME. Well. To him."],
 
   // MERGE-20: the map's refusal for the hills once they are at Himeji (maps.js `far`).
-  "edo.map.far.hills": ["mom", "The hills are three days back. We said our goodbyes."],
+  "edo.map.far.hills": ["mom", "The hills are behind us. We said our goodbyes."],  // WRITE-21B: was "The hills are three days back. We said our goodbyes." (the fallback for any leg now: the per-leg lines are edo.map.far.hills.<leg> (edo-d.en.js))
   // SCENES-20B: new lines the stage needed (briefs/SCENES-20.md, "Lines"). O-Rin putting the sacks back after someone has gone
   // through the trapdoor under them (#27); the hint of #27 at night, before O-Rin's warning (`.0`: until then the constable is
   // not on the path), after the constable has gone (`.5`: down to the grandmother), and after the mirror (`.6`: up the ladder,
@@ -1367,7 +1374,9 @@ export const lines = {
   "hint.edo.mirror.mom.5": ["mom", "He's gone, with the egg. The grandmother has something for us. Go to her."],
   "hint.edo.mirror.bigsis.5": ["bigsis", "Sun down the ladder, a mirror on a stand, a grandmother waiting. Ask her."],
   "hint.edo.mirror.lilsis.5": ["lilsis", "The wet man went. Grandma Sei's got a SURPRISE for Mommy. Go see."],
-  "hint.edo.mirror.mom.6": ["mom", "Himeji, then. Up the ladder, girls. It's three days west."],
-  "hint.edo.mirror.bigsis.6": ["bigsis", "A light nobody lit, three days west. Up the ladder, and walk."],
+  "hint.edo.mirror.mom.6": ["mom", "Himeji, then. Up the ladder, girls. It's four days west."],  // WRITE-21B: was "Himeji, then. Up the ladder, girls. It's three days west." (four days, not three)
+  "hint.edo.mirror.bigsis.6": ["bigsis", "A light nobody lit, four days west. Up the ladder, and walk."],  // WRITE-21B: was "A light nobody lit, three days west. Up the ladder, and walk." (four days, not three)
   "hint.edo.mirror.lilsis.6": ["lilsis", "We're going to the CASTLE. Up the ladder, then lots of walking."],
+  // ---- SCENES-21B: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
+  // ---- SCENES-21C: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
 };

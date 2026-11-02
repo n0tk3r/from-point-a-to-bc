@@ -46,6 +46,9 @@ export class UI {
       <div class="peekbar" id="peekbar" role="group" aria-label="Looking down through a grille" hidden>
         <button class="tool" id="t-drop" type="button">Drop down</button>
         <button class="tool" id="t-back" type="button" title="Back up (Esc)">Back up</button>
+      </div>
+      <div class="peekbar stepbar" id="stepbar" role="group" aria-label="A close look" hidden>
+        <button class="tool" id="t-step" type="button" title="Step back (Esc)">Step back</button>
       </div>`;
     this.placeEl = q("#place"); this.toolsEl = q("#tools"); this.labelEl = q("#label"); this.invEl = q("#inv");
     this.teamEl = q("#team"); this.lookEl = q("#t-look");
@@ -54,6 +57,9 @@ export class UI {
     this.peekEl = q("#peekbar"); this.dropEl = q("#t-drop");
     q("#t-back").addEventListener("click", () => g.leaveView());
     this.dropEl.addEventListener("click", () => { if (g.peeking && !g.busy && g.mode === "play") g.run(() => g.dropIn(), { settle: false }).then(() => g.autosave()); });
+    // ENGINE-21: a close-up scene (the compass seen from above, the lock): "Step back", in the same corner (Esc does the same)
+    this.stepEl = q("#stepbar");
+    q("#t-step").addEventListener("click", () => g.leaveCloseup());
 
     this.lookEl.addEventListener("click", () => { g.lookMode = !g.lookMode; this.refresh(); });
     q("#t-hint").addEventListener("click", () => g.hint());
@@ -126,7 +132,13 @@ export class UI {
   /** If the player is holding something and this lead is standing in the same scene, the clickable area that is her: the thing can be handed over. */
   reach(id) {
     const g = this.g;
-    return g.held && id !== g.store.data.active ? g.view.spots.find((spot) => spot.mate === id) || null : null;
+    if (!g.held || id === g.store.data.active) return null;
+    const spot = g.view.spots.find((s) => s.mate === id);
+    if (spot) return spot;
+    // ENGINE-21: in a scene where nobody is drawn (a close-up; a scene seen through the lead's own eyes), a companion standing in it
+    // has no box of her own to click: the thing is handed to her by her portrait all the same (the lock's hand-round)
+    const w = g.store.data.where[id];
+    return g.unseen && g.scene && w && w.scene === g.scene.id && g.actor(id) ? { id: "mate." + id, name: g.cast[id].name, verb: "Give to", mate: id } : null;
   }
 
   /** The leads the player can switch between right now, in order. */
@@ -185,6 +197,7 @@ export class UI {
     this.mapEl.hidden = !(g.here && g.atlas && g.mapOf(g.here.id));      // MAP-15: only where the lead's scene is on a map (ENGINE-17: his own, while he looks down through a grille)
     this.placeEl.textContent = g.scene && g.mode === "play" ? (g.peeking ? `From above: ${g.scene.name}` : g.scene.name) : "";      // (ENGINE-17)
     this.peekEl.hidden = !free || !g.peeking;                                                                                     // ENGINE-17
+    if (this.stepEl) this.stepEl.hidden = !free || !g.closeupScene;                                                              // ENGINE-21: a close-up's way back
     this.dropEl.hidden = !g.peeking || !g.peeking.grille.spawn;
     if (g.peeking) this.dropEl.title = `Drop down into ${g.scene.name.replace(/^(The|A|An) /, (w) => w.toLowerCase())}`;
     this.lookEl.setAttribute("aria-pressed", String(g.lookMode));

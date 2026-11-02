@@ -3716,5 +3716,697 @@
         "keyed": "89fc9c64e573986b701454691a4e4d4fe6b67b5ad3726394913d9e9393e5b4f5"
       }
     }
+  },
+  "edo-akashi": {
+    "key": "edo-shore",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "cb4c09282daa5cb0b356cfccc98899ed7be893e94a75ec1dbe21747bae599737",
+        "keyed": "3ebcc1d3d97b305800c69fbf22116a2911e9da387d1443838762cfdd5c109660"
+      },
+      "boat-1.png": {
+        "raw": "bcde88d8349dfd22fb953202fa5b2b4aaced7eab3bcf6ce1ff0e1ed1a821220a",
+        "keyed": "115ff7deb6a2492effd71f6c984875314b7e0e4a3e52891b114c08809ff2a1d2"
+      },
+      "floats.png": {
+        "raw": "f41174a7a75c3f9785652de0bad7b49c2759a091f0e1e75a842cd589f393e7c5",
+        "keyed": "8e7da7a9f0ec9ec89463acdd50cb65e62baf8ffb2b5f1d7d519ad0d007901310"
+      },
+      "front.png": {
+        "raw": "d438a8523102b9f7b7e70a9522297f543e1862cf75a8e46c2dcfbe6e28605234",
+        "keyed": "31c657291f0dd5cc81bb7ec776d7d78cd30623170732d477af03714ce9c31299"
+      },
+      "heitaboat.png": {
+        "raw": "8f955ceacda77938166d9d1241c3a84e940fa24ab98cba32d14123821950aa5c",
+        "keyed": "ae2f5b59e96e97969760acb4e30fc8b7d47628d4e60f2db4908ba7d5db6cfa3a"
+      },
+      "ladle.png": {
+        "raw": "617c9d1c5ce344630d7c26070a834d6ec0589948e25685f6867d81cc108a705e",
+        "keyed": "ab297f12bee93c643b7cd6f66a788547bcc0658f3f5ba0d27a39c83d6f94808e"
+      },
+      "pilgrimboat-beached.png": {
+        "raw": "f0b9b06e86c4c3470987d541047c19fa6166f133d73da95aeeb3e26c51d9c822",
+        "keyed": "f5686700f1e9d99d4cbc3117f049aa74f71a444cd62b3cd9710c3741e0c80ead"
+      },
+      "pilgrimboat.png": {
+        "raw": "e1563e1eebafd346335d5eea46f53135e45b42c4f86699dcb5d1e85c1fef32b2",
+        "keyed": "691f9afc6c8d35356a0b4b04fac2961e7d3904483c80cf103d5673ef2e15aaa7"
+      },
+      "pine-l.png": {
+        "raw": "69b1e0e08cac1f538aec6c601cfae17edfbe966ff42a1a012ba89ad936e1e592",
+        "keyed": "3ea78a99e81b8c43c3872b00dae05ce6f05b33dc48d0d2c8b0131b5658638668"
+      },
+      "pine-r.png": {
+        "raw": "fed067c637d35340e81bda7c4f04913f46fdbaeeecd8797b03849b36aa3553a6",
+        "keyed": "3b781972b9fc4770ff6e2ffc30b2ccbcec65441335b1f924bdf269c32b13193c"
+      },
+      "pots.png": {
+        "raw": "676eabf4c246962cbd3305041002bda122e4aee339eb1dd61fda56b4481e370e",
+        "keyed": "82fcdb868fa2a4f8bd6612f2f2464ccacc1ec044de3bfe8a026158a8b0c6c67c"
+      },
+      "rocks.png": {
+        "raw": "7da9adfbf8e23ba2022405098cdcd62f93b9a0ed0f0010552d72b7342036cdce",
+        "keyed": "c5098302843ecb978711f8e34d8c226764299ae1e2bdce74407c08320266b4db"
+      },
+      "tub.png": {
+        "raw": "2f19476bfa7748c94c4fbfeab9d6405287dc936a47d0bf16e4f954dbc581acb7",
+        "keyed": "f784cf68fe4a44292aa3ab3302b8ea597bb214e851f1456069e6f3dc362c45ca"
+      }
+    }
+  },
+  "edo-compass": {
+    "key": "edo-sea",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "ea387d34e9e6a2802b11b8ec4bbab43b8dfae87155d93db33121c3a721ef77f3",
+        "keyed": "bbb2c370372721f33499be361f1dda689cd376b92942dfaa56164ce6b00d1540"
+      },
+      "needle-l.png": {
+        "raw": "9948149a35fc289ab513820b5a6e71dbe6bf74e792ac41c7d4ec59092af7faef",
+        "keyed": "09360c083d2b6fe90262cd9bf27e0797002473a19ca0b4b2aa92bc901dfc5c1f"
+      },
+      "needle-r.png": {
+        "raw": "2d0fa2e23284717d0df704a80be4cd7d0d078a15ccb847bc294846ae8b765a7a",
+        "keyed": "8953c6ecc544a816e35b955041ae1b8973ff21a5d41b56079548f3d5238322b9"
+      },
+      "needle.png": {
+        "raw": "f8a18c1dfae5f32baf530afbe9c08e3f257b4bcbca7f3c86f952cfe1e7f1766c",
+        "keyed": "c223b08fa3520573341dd81efc1cf7d70c784e169080a88555a79e8ab22881e8"
+      },
+      "thumb.png": {
+        "raw": "8a9daa6d9903443f2f7245130c233f0f7cdcde2f27026a5d6492279ddb60124c",
+        "keyed": "eab174e91da9ded6ba4fe2358c36a05f8f4f9aa4ca657c8fddca118bdb218c5e"
+      }
+    }
+  },
+  "edo-deck": {
+    "key": "edo-sea",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "5769e24fe1ae4b4fa4e5f55544b85522c2da7eaedcc13094924e6c63dfed21d8",
+        "keyed": "33e4dcb11c334ff838104512c16bd3719f4da93803d2e4f6d81c3c6d57c211ae"
+      },
+      "cask-1.png": {
+        "raw": "dade5ca1433715bb882cf34fe2c2514c552fa3085962a6d9e20b933fda258817",
+        "keyed": "296b883cd1f0a491e12ec4e149a20f6ffa0e9dba2dab360a47d448ecb76f6220"
+      },
+      "cask-2.png": {
+        "raw": "ad088d3845c9f39d4b0dda54f588dcbda08fcfd2f04927f51103e1215287cc90",
+        "keyed": "595658b9bec30f97b225f95fcd453c028bbfbe6d248ce94fc0523648b3911002"
+      },
+      "cask-3.png": {
+        "raw": "f99c5eff1a9c5793b76131e1afd3bcf3c8fd4493fbd9bcc0490ace63300ed28d",
+        "keyed": "6da936c531ced86b1670150147b95ef4ec1cc5a36cc65da18e28ce3c7294cac7"
+      },
+      "compass-open.png": {
+        "raw": "ade39d5664a500067afb43a87bf8c2d8fb0c999147550dd7fa2f4770bac6aa8d",
+        "keyed": "eb9ee387a12fdbbe1a1d36d37e67ce8e5348e00a4c41c887007c63541bdfa111"
+      },
+      "compass-shut.png": {
+        "raw": "c60122b6b31c1bd801d453f98344885cd6b86a8a1e2eda254ba490c24f5489ba",
+        "keyed": "4383fe79709b91d0834a7938b083adacda3c895b4f1a3d99cf94785125999b8d"
+      },
+      "front.png": {
+        "raw": "e040eccaf9b654f7029e11ec3b5b6d1f30aee6afb50d4bde85a6a51b4a0369a5",
+        "keyed": "dae652364a41c77a09e00414fa2e30035f296197b91d1b7cd86ec7ec5b422fe1"
+      },
+      "mast.png": {
+        "raw": "45a6b773e62ff3ae45e53b9f3bd5318452581c6490a867e64eaf511241d4b840",
+        "keyed": "952889da4933f13db19d59f3734db0d989c09c8db4d5405be6e376f41517f674"
+      },
+      "pot-lifted.png": {
+        "raw": "a36aa51ba1f06086148c543d4dd43c3c1ce38d3c52ebdf5f18459b769474a528",
+        "keyed": "22d3b598f3f65767bc66f0207e0766dabe364f35936d0e915ece2caab8006fe7"
+      },
+      "pot-steam.png": {
+        "raw": "106f2051c1e6515a55ce00f0e90c59862a5df0d2074b5a9c7f379eb88fe82830",
+        "keyed": "78af5840f552d9a03b95fe1ef638a6dd89525c89836b6638b4054cf2eb0219c4"
+      },
+      "pot.png": {
+        "raw": "48babbe8354f21a6aaa2b77ceff48ca315f9efd2413ec302f5ce6252634daa7a",
+        "keyed": "b434646835418b6848258a067648ac09883f4e1999c18854759931ff355f21d4"
+      },
+      "rigging.png": {
+        "raw": "e1319b6cf72bf3009b127112a55ba51200021d676815dea83dbb1f4d8db50888",
+        "keyed": "2476e68dd249f4f484b4884698cfad4353e4b8a2658ed6f71d8b8032ba469f04"
+      },
+      "sail.png": {
+        "raw": "150beea78069aecae8287827525779cce08ca69bdcdc5b0f323e20405b8de976",
+        "keyed": "c3967a13f485ef2ce7294aa635b4fd46946d71ada34801d3a10946e33b543f9e"
+      },
+      "swell.png": {
+        "raw": "3366eeb30ca50c70f13281024a09d5b1bf32d710e3645c4c9fa8aa4dc8a183a9",
+        "keyed": "706d221830703cf5523af607388bf9478c0cee4a9117f75cfd55befd91418208"
+      },
+      "tiller.png": {
+        "raw": "2734ed3cea777e537e128ff36ece80668456e97f39cd1b14320f4709f16aa9fb",
+        "keyed": "cb9ee21e198eac8de6e50eeeba76938892f5f9276cd66b535d8193ce73d865ad"
+      },
+      "windlass.png": {
+        "raw": "3dca8cad81c02a83d1644ead48baee7e96e81919bb39883ae5471379c3f993ab",
+        "keyed": "11b48ece6e248783e011feb11553d715da92716eba0cc404b3b89e9d7498f5e4"
+      }
+    }
+  },
+  "edo-dojima": {
+    "key": "edo-city",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "91a9cb513c6163db6533cdc028caf41a7c467ce34b8fffa4aa6fa1b19e8f29e6",
+        "keyed": "52c14144606e3b30476eaf1967f92bb567d09769cb52574ce618e798a2be2076"
+      },
+      "front.png": {
+        "raw": "acc1e6d3d53c01ac48a1a32d297ff8eef33e6a22192d4732d38d15a44f1e64c1",
+        "keyed": "0276d9d8aa08de41867d6ec0174526059722e369610d63ccab28d71982af29cb"
+      },
+      "kettle.png": {
+        "raw": "88cc62aab9aee3520ef280c2c43c10a4561f5915ba847811a52bf36580f19c6c",
+        "keyed": "f8887e9f381c2c9acd25525fb4ecb40879bd4a06630649fc0b481aad65d7245a"
+      },
+      "lighter-far.png": {
+        "raw": "b61881246f2912367e630e54bc06c5e8c25287b90a69ab833bb946b626f9176a",
+        "keyed": "8d865492b1767245e86df8cd648ab34cc88e8851c610d0689c9193c2563856cb"
+      },
+      "lighter-near.png": {
+        "raw": "8671d20312c0a552d7fb8cf438b569638504fd5eb826145d61e280a1a45fa94e",
+        "keyed": "57c9d469d73febbb6bd56fff85a7a5227556b3751e8e3813293e6ce922d69f51"
+      },
+      "lighter.png": {
+        "raw": "95aabc3ca1809b37cc7c505aa6accbbb2160a12961b62f6ff411935b645ab7a2",
+        "keyed": "67e4d6f3ff1b67de2b9b1ecb7662cc1c24305c07734acd8a486dfc57724bb520"
+      },
+      "market.png": {
+        "raw": "f28ef1b73925605d9ad5e3027c41403a6fb64bf1816799b4206f0da64ab85cd2",
+        "keyed": "f16091b4ea84e846358e0f65c856b05b87ceb1d8a6a2ccfadd980152e68dd15a"
+      },
+      "noren.png": {
+        "raw": "af71a5c2b6de3fc038de4b1364d7e1b9a25dbad941adf1c9142e7b4885e05178",
+        "keyed": "938640b19cc0f19e0202732e7b9dc7f211044e6b3453eec5fc6740d3641d2779"
+      },
+      "pot.png": {
+        "raw": "c2d79aafd082dd03a61d0e67aaa578cdb1e949d4368ddc32eb28740165181c0a",
+        "keyed": "bb802e7dd28ab48ad5885b6059ae9fcdaefb24d7e4d962e7c75b6a662e4028b1"
+      },
+      "runner-1.png": {
+        "raw": "b80331ab7a6d19a3cdbef3121d418e2a390c787557d111f78a5e31dce24de696",
+        "keyed": "21fdf668187d8a8bb1fd6cebc2c6b4f4b05aeb53b996ccd648febad167d48465"
+      },
+      "runner-2.png": {
+        "raw": "24566f678d48952e425b4b5fa8a427162bc7d7bf08863931f81a693b07e2f768",
+        "keyed": "385c0dfb9f87d63db203464a13fc82ed5ee6a15a5563b398091478a97f4508f2"
+      },
+      "runner-3.png": {
+        "raw": "b035f95186dc492f1dcb22b54558bc01c24e7efc0ce78e3f06501de915964a84",
+        "keyed": "0669ff5825b92db7a8dcd6b46319c2b0f4be68a32ddaf62e1aec7a08753ab72e"
+      },
+      "runner-4.png": {
+        "raw": "8df84720941160de8a0297ec8785db1c2db93500f3a5732b3aba89aa9958c719",
+        "keyed": "7fcda33dc081b4f75e79bf5073cdd8b0b770a70bcea358b0f2dc3b2b4c3b7db4"
+      },
+      "sandals-few.png": {
+        "raw": "d08a1cd5e850b6440967f5ec8e3095156c5abdb864ff8316452cf84e963e3d22",
+        "keyed": "f8ce5dde43ee44c4b1ed72865c20b1fbae4be71734607bdf94643734fd09ace6"
+      },
+      "sandals.png": {
+        "raw": "32989e1e841b632e4e02709f3bac47f947c06b591615f23a015bb164f12c5d9d",
+        "keyed": "da47b110ec735423ae69fd761c632e323fb6eebdc1e7964ef4aa797d97c0ce4b"
+      },
+      "splash-1.png": {
+        "raw": "4a1a1f98e4f66855cc749f497ed14023614bf5f74d85bedf699071b32062c7f5",
+        "keyed": "3530492ad71d823c3c2ee76617a62112f747717906f131060a8985d382035b71"
+      },
+      "splash-2.png": {
+        "raw": "030cf8f14edd76aa78c5fd3b22fa5b10c6f97355de0183b454f304074d3e07d4",
+        "keyed": "973cef1219e634e632148819665e507136ee8daf7e07afc8fdd24aee3b05e8dd"
+      },
+      "splash-3.png": {
+        "raw": "386564cf04a4ecd659a78aace3db0439136feacb0533d5e3a010b89570c0796c",
+        "keyed": "7ca48b6c4db7b702caf6c2e91b32e9ed3c3c5fb2b55eeaf25cd452e91b3bb36a"
+      },
+      "splash-4.png": {
+        "raw": "26893117894e65f1c52c5245c060632b4cf70f28166d5cc7331b6957d665d817",
+        "keyed": "9075092f59c0fe458262110f5395586f53f55ab63408e4517189126b19329f89"
+      },
+      "splash-5.png": {
+        "raw": "66c8e8efc0c69de83926880bd02fc419e5b57e16d49fc916eeeba740898bb23d",
+        "keyed": "0b7f936690652d75c58ac75fef3e088175f11951e2c26897814fbb67924dc4aa"
+      },
+      "stall.png": {
+        "raw": "355c5e7e39b4e8fdbbeb37db22ae947adde29a03a6d13f85e2a690da86e84a8f",
+        "keyed": "4040e9e8e527e80305535353e952bf259ae5a7076e4dc376a80a13f45a6b3b0d"
+      },
+      "tray-empty.png": {
+        "raw": "e0eb323b7195b9d8be5d00e6bced9e11ce48c67e90c6d0d54004bf65bfb8c50f",
+        "keyed": "1bededed73f1b0341b8b6cea1d12ee88d91d2b42c03746f6157f839a5633a44e"
+      },
+      "tray-half.png": {
+        "raw": "0d5fda81feb0c51e26bcba2529c55860ef79a6d9ac568d16a8e35083e1f31af6",
+        "keyed": "c3e16a37716c28d5ff88d02d454ff23302f3e864b761a73614545997248f6fd3"
+      },
+      "tray.png": {
+        "raw": "5b8972f722b23363cf8ecefb6a40e934e5b752e75cd530bb938f0d0db3c4d0fd",
+        "keyed": "9054ab5a46ba92b172b48499e68961ac9c00c6c1c8d1bde7e8bd042f65dae8ad"
+      }
+    }
+  },
+  "edo-hall": {
+    "key": "edo-sunset",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "b269cef666698d38dedda0b2d6ffd62c651d45e59d34c1c1473e30f5b861cbe2",
+        "keyed": "4b62b45b10812509673bf861f5ecd8543e1e36089b73fd3e6400af6bb997c60b"
+      },
+      "bars-air.png": {
+        "raw": "af2d2f70a7ed3b37226d6fe9bf886cd68c5aa5b2966831e23d82247735171422",
+        "keyed": "b4c238b8a6f1d27f0cd23c2d4a9629c1ba1cb1d83194ca6f404b61844e06a1d6"
+      },
+      "bars-floor.png": {
+        "raw": "14e4a03d52590ea9aaacade2883e81bc2691b4a77fe970440448f5e464df3bd3",
+        "keyed": "4543113456096975047d77e9d3e0c5513ac3507b4194ee029271f30b7e89ab60"
+      },
+      "bars-wall.png": {
+        "raw": "7990c502c1a696bee2efda527e1423afc8d1bfd4000ea887b9672d228b767470",
+        "keyed": "572f23f5ac50158de646a28aea2cbf4c83453c6cd912e38d3f58944f9de0b3ed"
+      },
+      "dusk.png": {
+        "raw": "1aec5f99f4a0f5d2cba87de23938a98c28675c8f6b171850f64368b9a730537d",
+        "keyed": "b457ecd677ec03776fedc807d67a817633225a60348ee88eb58de31e1c2b35ad"
+      },
+      "front-dusk.png": {
+        "raw": "2bb4db832bc0d403a2fa830488ad8ed2b5fac7731aa1dbf2e5ae64aaa84fbf04",
+        "keyed": "4f7e7d0ad18f4e75915faa92edd0f5eed3d470de789d4485b7efc63c45c7363f"
+      },
+      "front.png": {
+        "raw": "3dbae5ca229cf32563459d404e4807bf60babb237acf2ef621937cd2dd664577",
+        "keyed": "7777977ad249baae79dd58e60f680a93ea04a3f411894c71a0873821979e0567"
+      },
+      "lattice-dusk.png": {
+        "raw": "48c6df664b92b8765ffcf30cc025ed7ebca49258d7a8266369e14a589190dd1b",
+        "keyed": "ad928e1211fe294ec2547b6c883a42c1e61015bd1b422b2f0e823a4db65c567e"
+      },
+      "lattice.png": {
+        "raw": "0325d1bd8b4fc45de9e61b2f0da9c52233c9b71ba445c0ba34c3d61e09c5f1b6",
+        "keyed": "58452fef9e5b4550227b5a470e4090ebed4812cc91c02d1a92a02354d56d87f6"
+      }
+    }
+  },
+  "edo-kurasawa": {
+    "key": "edo-morning",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "f8b28294b10fddb43b14c46308d7af7f89e142a7fac4984146ecf0e62e7cde34",
+        "keyed": "28d460efa1b7329c3c8eb9d0d7595fe624563c3c50e2a7cfa5ada27ff127e852"
+      },
+      "cloud.png": {
+        "raw": "73d91f778f8fd3f51b66da41b5f128c88dfbe411ec69d3bccebdfef5e5052730",
+        "keyed": "837e30c84df912a379211d93e5e3ea9ef2182921aa1f5ef0e76af3990554f2ed"
+      },
+      "front.png": {
+        "raw": "a5ff526cac34d6fc441a6ae9c58cc848cf0dcdd46e7d0452125d1cc128e5bd8d",
+        "keyed": "ad86e5fc87886f74bea2ca7fa011d1549bfca34cdc55da880b53c43df159a263"
+      },
+      "grill.png": {
+        "raw": "2fa2007473762fc75208a29ee9fa9edf2b4a57eb1da1aed1979b42c03161abd1",
+        "keyed": "335f2511eb667c99bcc8e8455e1169463fea7bf58936820a22dd29578157cd63"
+      },
+      "kago.png": {
+        "raw": "0c42e9fa06ef0f022d8c7e56a5869250c70aec84235761be6ccdb032dfcb9e1c",
+        "keyed": "e0e86bde921697535a16cf821962309d7f6c66c2e70b62c378508ae8f4f44932"
+      },
+      "noren.png": {
+        "raw": "b3806406c3eaf630c314e431a1b01ddf300cd3252d3edf2c63ee04190f40bb85",
+        "keyed": "590af15a8fd66fedeb7b4372a588911da6e45c00b8e53898e00c71fa87d71aa5"
+      },
+      "trunks.png": {
+        "raw": "1db683eb1dbffd58d994d2b6670294f8964b0a043f575c3038652ef6440a437d",
+        "keyed": "b2bb9d0370f269e26b8ee44c4bf4f0e22a28b33f0569590dc4506f6971a8f188"
+      }
+    }
+  },
+  "edo-lock": {
+    "key": "edo-sunset",
+    "strength": 50,
+    "files": {
+      "back-open.png": {
+        "raw": "934713e0c4ab6a7827ab8816bcc740bde94b27d5dbd4e238b8dc4f84251e5064",
+        "keyed": "f9b1200ba76ec30a82b098002750860a07361b76f991de8b4b5881a3e40aea7e"
+      },
+      "back.png": {
+        "raw": "a98c2c0cf842ff57405f99509d17910d85543c0810b2740e71cb37cbe51f047a",
+        "keyed": "37c984fbc35932c2757ad1fd03594b77433c4ff3ea064f4d17f8ff5d1c939a2e"
+      },
+      "bolt-out.png": {
+        "raw": "adbaa1900d74fd68b02f51eb011a4b386b589a09ef0f5a6af467101d41855cea",
+        "keyed": "dc423ca013c69655bcc4e6f834670b890b864e8ac1afc9b56e5e26d2a2f82ae4"
+      },
+      "bolt.png": {
+        "raw": "e08f194f60c3ab5202ff37eeb71457ee7a279bc5258e3559645b851736579a82",
+        "keyed": "a8fa903469073ad66b7e9e8f7fdc41b4a7fe4cf21443a15662aaf57dfa70bede"
+      },
+      "ear-clean.png": {
+        "raw": "6898e6ac70e1f7c463bf27dbb56d8110ce4ab64eb718d7ee36924a1699df88f1",
+        "keyed": "8bd3b321c0de999e6595db8e836b6e890249eeccf479a846c7c69c023f03ea3d"
+      },
+      "ear.png": {
+        "raw": "9d95ad9eb86449e08bc8aa979f9b9ebd8dd5e5ca83dc8281c56e6ca453fb1908",
+        "keyed": "92b475d75f2dc8029ca124c9a8bc068b53c4a16155217c9157f95738a20ac710"
+      },
+      "post-coin.png": {
+        "raw": "715a94292071a2509c5270e97e70043d00c48422b61d1f9b5f5333ec3f43fec1",
+        "keyed": "4212249248767b3be12ce8a35c632cb427c9e7626f599f43e811cf0a5a8de871"
+      },
+      "post-turned.png": {
+        "raw": "bc309fedac353771176a928c69584dee2eb2aca09075a8b919adc497d555aa92",
+        "keyed": "7e4efc761f31223fdca0c0080d66b31a8daa4716cdeaec009434a1650a9cc22c"
+      },
+      "wave-slid.png": {
+        "raw": "d6a38241f1daf0d29044f59546430b2c97a254f2e0f9b7d351eca639996c790f",
+        "keyed": "336cae48002d4e0901caed28a769f1950fc11277e363622fe21197813eda7996"
+      },
+      "wave.png": {
+        "raw": "3e24d365d86d9dfe81f2830477441b970535a3374d6fe6ac3da08e1c17706b4a",
+        "keyed": "56be35ab9ade33ce39c2ea07b6df7a2925570951c9d9f3c62602e2ffdce6d9f5"
+      }
+    }
+  },
+  "edo-satta": {
+    "key": "edo-morning",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "863cf4d333bf979901f70e9a9feb384e6a4af14d58a361fa34ace057c4008cc2",
+        "keyed": "1e1fd68e1713c24eb13db935a556a729b1f74be44e7de5613977848cdbf57988"
+      },
+      "cloud.png": {
+        "raw": "c5ab18c235f29e7f7882f8d3676810e003da65ddb9c673b406fe16c8f4f5de94",
+        "keyed": "1afe6e224cb1d6ad1c41d43793a87cb029de9931d37b1fbf24ea983b6f6cce4c"
+      },
+      "front.png": {
+        "raw": "f407e06820ea6629fd41cf5dc31810ccc5aa1d13fddfb17fc3f8ba888257ab42",
+        "keyed": "a90903d5549f2c7d29745a0736d3077e63577dcba6aa5ee7337bf2248f28b202"
+      },
+      "pass.png": {
+        "raw": "a68a7ed3fef7de2db23b7f35c6d73a0115909a4d1d2e5f3923ac81a4aeef6090",
+        "keyed": "22afbbeb72366edd22eaa30c6278a180b3190a6e1031ff366a74540f3f006173"
+      },
+      "pine.png": {
+        "raw": "878d912a4814c5b41177a292788667206414bf6e9199faa6815049a5951762a6",
+        "keyed": "65811f75b74f2f998e991d3b6996a85ede0676c9cb64779b3123333d9a6e15b6"
+      }
+    }
+  },
+  "edo-shosha": {
+    "key": "edo-sunset",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "2d6dfd52b389812308401bdc44309cf313a821c9ce4194f18c4f62fbcf01b38a",
+        "keyed": "fbbe4a440136601db59352edf60bba6c8dfd0550ddaff30ceba8d013686d65e9"
+      },
+      "bench-sunset.png": {
+        "raw": "80a9b55d9318240f3efd8869ee31051c28698f9cfc2d7f2406cc0270d02ad24b",
+        "keyed": "f6c2cd9243387c2f9fee5d631e8becc077950d7ce22c4693ca60985a9aba4126"
+      },
+      "bench.png": {
+        "raw": "d1c1c93a79e9aa856c8aada2c7167d7dab2d3ea20ad11cc90e0910b018d44651",
+        "keyed": "457762f7acde57dafb68b2bd97e8194e21e74c9291ff95244c7426a4fc0cf1de"
+      },
+      "doors-half-sunset.png": {
+        "raw": "8e778f85ac3bd72fb7b005ed140e84bfa97ba90a79918d04c6363a74475f4bb8",
+        "keyed": "843fc7c2637800946f643632d5add6b1aeb0593251b4ed4b1fda1fb85e048ff5"
+      },
+      "doors-half.png": {
+        "raw": "d181766fc9bc1e5016c219e945de469c0694bafb10e8147495db2f21857a0be7",
+        "keyed": "5d9a5ebb94cf67954bde90c74c82625801c4040935e7e79995e72c541fe1c114"
+      },
+      "doors-open-sunset.png": {
+        "raw": "1089340af05047880a36a3e2f7332208d5523c6768a945b858368c8901f6e602",
+        "keyed": "ab0faf1d55ed4eda5201b2db8075307c197809fbe226f7d6a2248153c9b54dd3"
+      },
+      "doors-open.png": {
+        "raw": "4066df911923de8471ae5f11d226e1251467398d9a8d229fa473f052e1962e12",
+        "keyed": "f5cb24ff04c280170373d3b0e55d17c0c1bd2179b904047ff3bd221b6dcaf916"
+      },
+      "doors-sunset.png": {
+        "raw": "453fb8199451ad0887f12dcc360011bbd77375a0fcc11c6f2353be350f644b6f",
+        "keyed": "92711df3ba4cad9273270b5b6f0a0753a8e8309ac70f1574f6c559d50bf85444"
+      },
+      "doors.png": {
+        "raw": "ae28d129d06046def1d09a807ad58924ceedc5ac4c4a93b7f1129eb2fd4fc491",
+        "keyed": "84cda1a78a0499e4d6e47535dcd0aaf5bb5377b077165b43a43e8289514ea0c6"
+      },
+      "lock-open-sunset.png": {
+        "raw": "2902336a9daad34eb8d039596964ed4e24afdc54ce3eda971199465827fb4329",
+        "keyed": "9083aa4474bcfdd2975583103915a8c795c1168af9918a61e3425b962238c427"
+      },
+      "lock-open.png": {
+        "raw": "21ac4f287fde4db1915440ef4ee60e487edc3a055d605879e74128a063339be2",
+        "keyed": "b297b6f24537ea9e81046407922c61efd9dab6cf06a1eecbbf538d03335b822d"
+      },
+      "lock-sunset.png": {
+        "raw": "3a73b6a12c5599a48eef205829a1161127bc0292355c1755960fa452202a3f00",
+        "keyed": "e247d4e381fa0fd9368452180a9078aae12c12c4ed07843827d16a6a56f96475"
+      },
+      "lock.png": {
+        "raw": "959a5e0d1b6358d8b87446471433c4e93b1a9637986fee4cb427f008709aba0a",
+        "keyed": "61afdc4fa34739fcaa24da949af478368d63f1013aee1bbe9b2eb5778c4d99dc"
+      },
+      "pine-sunset.png": {
+        "raw": "0ea7294227df59c159af8efe1eaa6003ddb78a310f72a320676c52b22a6762e8",
+        "keyed": "dcfcf3248f6df4f803dbbe12dfcecec4d8f84746cfa522266026bbcc7d512c07"
+      },
+      "pine.png": {
+        "raw": "41a727b8fa927d60a8da6225a13f30101306b98e5f4022964fbbf2acefc4f900",
+        "keyed": "d9199c6f7590ec75ab1307919277573766d84acb7ec77b97c251e55a5cd7d61a"
+      },
+      "stepball-sunset.png": {
+        "raw": "47f9e7eacbbcc133672044ca92d3d562d77d09d88de91c0cf4f09a386074c20a",
+        "keyed": "8279c08c337ee7376a11454a488197bf94fa2d2e554481f35bac2da0ad92fc23"
+      },
+      "stepball.png": {
+        "raw": "1a560a76d95e0a4a48a2248ef9cf7ef3639c44b5558b7ab055f5154f85dd83ee",
+        "keyed": "aafd769a91c273338139c0a17344a91cd5df39de7a6d14237260ff97381cb94d"
+      },
+      "stone-sunset.png": {
+        "raw": "49bd4cacba0c965821225135ec408763d49e3de2ac8d6b84419f0bcab9fb759a",
+        "keyed": "be0cb47a9b1481654f784dcb91ef278b467b5fe3028c889e8314e05a36b33556"
+      },
+      "stone.png": {
+        "raw": "30f788aeb025f7c76bc0034484003bec63d437dbc39ebd048beb352ebf69f8b7",
+        "keyed": "35aa80e9fecc258f4bde4a944d1e1891c4774144334579e403f0163c1211d956"
+      },
+      "sunset.png": {
+        "raw": "b1e65786b2b1a60fa17555481fe55987394045b92c6e1cf3fbcc13088aa508a0",
+        "keyed": "ab03d29f0e33442f6b35b9256bc1bdae660b59ad585eec66b6d2dffca6f77213"
+      }
+    }
+  },
+  "edo-street": {
+    "key": "edo-city",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "7787bace769d5007aff37fc83db2268a900b41b066a1c26ac4d3ac39d8a6516a",
+        "keyed": "5c91639b42c1941d73da3362c419f6a6cfd158abc2b18f4f69200202fc2ab23a"
+      },
+      "bench.png": {
+        "raw": "1d54fd12830e8a600fdd90e00790095375c84728564cd174f207b3a7e537f9a1",
+        "keyed": "850a8a513d048b5b729c3c2465af022ecc3ade8c10126bb9b828150f841bc5f7"
+      },
+      "noren-comb.png": {
+        "raw": "56fdf1f14cc81f940c06a4215e5e29d9fc3cdeea8f8a1f7db03c9e1fba1f0ada",
+        "keyed": "d0852e620bca9eaf2390f0e402972c3ca5f0dacb3bce958b3a133c604eec7eb1"
+      },
+      "noren-kelp.png": {
+        "raw": "d277b88116cdd2f2e231d2563ba3e7b9725e97dfa94ad606ab874ed676aae14c",
+        "keyed": "aedba53812c11837c5e01d57d32fcd965d0f99b56244a3fc2738c8c663e9a3a7"
+      },
+      "noren-med.png": {
+        "raw": "5d605a47ef036cc5432d44b4741087f37b43a86ace3dc9eeef0f3d8dd17fd789",
+        "keyed": "28f0e6c1defa65fd447f15f6c9ef1d7b4e7cf542f47e915533bc51fc92356e7b"
+      },
+      "print-clean.png": {
+        "raw": "b196ae92cca624e8506b0d1a7e8091bffd008180479c9f988827476f6ea6e926",
+        "keyed": "02310396bb2e7cd3abf1eee540928bf1e753ff99f892f380434fe239ce1fd7ef"
+      },
+      "print-ghost.png": {
+        "raw": "91a65319d5456dab6e6a275f32f9c41afefcd236023aaf34eb6b96de79b088af",
+        "keyed": "e2f375518da370e07cc3b409b9be682fe3d135136fe2b0ac3618469f783487e3"
+      },
+      "print.png": {
+        "raw": "25d314f0ea72d4d270876b9c9387f904fb6a5b97eabd9df1334c406fc324ac2e",
+        "keyed": "cb838b7a91ec474396f9aa7f3fe56d8b172003d0cd045aed25120a2a2c65dbc3"
+      },
+      "prints-1.png": {
+        "raw": "09de9c5d1e6272874f4c79215510c193a69a69fea65f458c161314d05305cf04",
+        "keyed": "4e5d3297617a65e6cd6c1379fc8cb95bcf84772bda3a1d4f2ff6f535cc6d9069"
+      },
+      "prints-2.png": {
+        "raw": "3692996af1d887fe971fc81be4e7c11dfcc878e5db94c8313c2c953fb792a626",
+        "keyed": "8641ab0060e2d1d2971f47b883fc2720e6f18693b0ad574f1b3eef2741faff8d"
+      },
+      "roadgod.png": {
+        "raw": "bd5a2bd89c45bcc1b3da7bc4cd930aeb9db98ec2c252f595536326e355fb18c4",
+        "keyed": "655f2c5d7870b0d2743879e174c606d701357c881f068cb25b98909b7bd8e285"
+      },
+      "sign.png": {
+        "raw": "a57e0996e2a6fd6833a2bc90a53a95acccf53bec8a1e8e4da7dbeaf6c7e604be",
+        "keyed": "acf67c2799d653b9ebcc07937e0b96289adc68acd089a295a24424f751c0a359"
+      },
+      "watervendor.png": {
+        "raw": "281eb55fcf485893b5571ab12c56a9dcb2b0bda202a6e27221de42879049aa3c",
+        "keyed": "51f81c44b4e1a47038c6a0ff82f428fe2691a30442ea1a1b2e64f2de74f213f8"
+      }
+    }
+  },
+  "edo-theatre": {
+    "key": "edo-lamp",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "e206261f447bf5037ae29424afb40e3aaf51032591ba247ef66b1b5c14c1e2d6",
+        "keyed": "fabe54128aa603a68cc5ce4c55df63418408af4036467441972ffef9b891a696"
+      },
+      "boypuppet.png": {
+        "raw": "9c766dc71780a0aab3c1be01441cedcccad90916766e3434e6816821a4217566",
+        "keyed": "debcaf271a69f7ae4360f5054428e1b7c428043535e930ac64190f1cf0e960c5"
+      },
+      "curtain.png": {
+        "raw": "6e85dba5b9d7a66a6b6632665d99c613375e051efeffec36a55302ce26f9f99c",
+        "keyed": "a19c80e9d4f09a313c232200848558ae9ed73f7fdaf3ac0d085864c9918a6ca4"
+      },
+      "front.png": {
+        "raw": "5a4f80f544c67c199c6212290c53a7fee51f07bedd85aa8ea059af8c290c7002",
+        "keyed": "8c1709f9b8248d6f52595c6c32cded95e152bbdaf03af45845ab892c3e614fba"
+      },
+      "gate-show.png": {
+        "raw": "9ebc8ef4202b004e847d897f8169c4e2ed774c38e640432ec59c631c87734ca8",
+        "keyed": "4c2669d3c2b76c8fca700fb97f9e9654cfb5ccbeef2c03e2f6a5cb844140d65f"
+      },
+      "gate.png": {
+        "raw": "76d7285cfea0c57cbd64a1b7c217cb1420795cb9aa2047cbaa42e57331d05444",
+        "keyed": "af20b4e15ea04039aefc8562acd66369155f74fbdd326709cdc2e25232086fed"
+      },
+      "housefront-show.png": {
+        "raw": "c2d898a611cf1b25208ced0233ce660e2decbf36c47e6cf170beed52c07100e3",
+        "keyed": "3e12988616b7f3cca31c91a680759f22d73c66251496a38e97648b5f26a8c57b"
+      },
+      "housefront.png": {
+        "raw": "7364870d81cc21a31f0c703a318168919f18ad5f3092776bc440c7e23ce9cebc",
+        "keyed": "b2fafde758aed9354191b99fc2b90157caa09bc4074fbfbc421b2d6f1020b7e1"
+      },
+      "lamp.png": {
+        "raw": "be7b27c70c4c164440c7d40e9fa9372170de7fde2f5bff80ff0765d61543b441",
+        "keyed": "ed03157a7623f6bd3d1023d9039d31cac930e8ccbe5febc40ab259f6201504ea"
+      },
+      "robes.png": {
+        "raw": "13ef859d95d99eb87e4a25603c2c19363fe78c7517a858be383eeced4f98d04c",
+        "keyed": "28121c21e9705d3f61b3b3b43158a8e1f5c88137837ea111b9140c9122ed4e80"
+      },
+      "shaft-house.png": {
+        "raw": "9cd59fea684dbf7433aa498b3dc1d6e85db00fdf37ce7830202635920d672dfe",
+        "keyed": "ce394f3f6073467c1a38f3e98a7dbea2c9760d64bf50b280c979a85319994446"
+      },
+      "shaft-stage.png": {
+        "raw": "7ada5b5b53f7b7e4d3db18c5ecb674697cc3617b3f730aed61f953e995c246df",
+        "keyed": "bf06c9066921836d9aa89743d59966550e32fbfa250465aed91b861baccb261a"
+      },
+      "show.png": {
+        "raw": "12742de36a081eb29e7f460d61c95ccd35a6dd6cbbb75c8e5353029d0b43c8eb",
+        "keyed": "1b47a33109da4a6bf4531343eaa4176938a5f4f5a9783582f18c733fda7c9eb6"
+      },
+      "stagerail.png": {
+        "raw": "260a955fa26022a6506389da6ab9d3cde76266b961f46e4297d723e9aa481999",
+        "keyed": "bdc67dea7d7fd0817dcc7f4202b8db6ad0ce9c2d719cf5b8f3fac60a5acce326"
+      }
+    }
+  },
+  "edo-town": {
+    "key": "edo-castle",
+    "strength": 50,
+    "files": {
+      "back.png": {
+        "raw": "033a20c0251a060c3e810b22f0a24b4d360b7f958f865d3d69576a06af6814cc",
+        "keyed": "3f00b19f01daf36e6d0b3e81087e4bde7fdacf815c2562c16ccb761d69c429cf"
+      },
+      "bucket-down.png": {
+        "raw": "d34721e93e3257b2e818f9d11b2f5c8ac75a367c1e9b617aa4fbc6e800caa033",
+        "keyed": "4f2bdf7a1a7615fa0cbb8af614639c59bcbbe84ada32fbc84d7508916bbc64d8"
+      },
+      "bucket.png": {
+        "raw": "55b1bd78f884bbc39f0d14ba567f4f3ed645eb3212c8e455c33010473c51a61f",
+        "keyed": "658399f93f4716b8330cc228da87eb79acfc4c8510661ae6fa3610388cd467ab"
+      },
+      "cloth-bundle.png": {
+        "raw": "ee1addab892690865d34912a307525e913ae5d28c64bf33e87f2b4777ce8e25d",
+        "keyed": "c8d0e7e7df61023b0b247b31b8ab98f0d03acf60d4c0dd3909812dc94100d55b"
+      },
+      "cloth.png": {
+        "raw": "a63c09efb348ee50728131ecd98c4c5dfde4b9923e340102074496dac10ae469",
+        "keyed": "e31fb979af89574df9683cbf9958f22947a8b105a575cd01d23a1e8a99c63456"
+      },
+      "desks.png": {
+        "raw": "dd2b919f40ead6fd9f94a811ae300c51ed09ad7d5f533ba9d9cb40af2b56cc4d",
+        "keyed": "74865088ec6e2094731a929f0135f381a5a3aa4532667d87999e8a586b585723"
+      },
+      "gate-shut.png": {
+        "raw": "f9e4465da041853c1fc8b0d9f70222770653ca9b50427fe2564fec7604fca788",
+        "keyed": "2b5c3c85034f7d84ecc0a7081cf0d97391b5f69a64b5c9c82a7163be5665c5af"
+      },
+      "gate.png": {
+        "raw": "aa20cf56ed81d422eac9511e6b4c9ade01eb1bc07a9a7d8932d7912ddef84b49",
+        "keyed": "6b04e51c6de0ea29dd92d597cda347431f75396370be9c2ed3479a0b6aaa4ee4"
+      },
+      "kitchendoor-open.png": {
+        "raw": "bfe24768273574c0ec0209b79e0785a9eace8d22e8f7400cead6efc0d68b37b9",
+        "keyed": "a652b8354296d4ff6c4fb079fbfbebef524aa5060dc183953b5f85b153310427"
+      },
+      "kitchendoor.png": {
+        "raw": "2ef7e51ed47197437116d4a8bcf6abf7360b714c4e07b1346b68c7b5a7b2f2d6",
+        "keyed": "33bedab3233b9b19324948304f574368b55b137b3cb08e8c8f6e0e70eca5b510"
+      },
+      "noren-cotton.png": {
+        "raw": "1eda7d0cd4124aebc41e42463affad662c9bcf30065298859fe7bc851016bcd1",
+        "keyed": "33b9da3a2ed73f4c6d945b2c41725b32b27fbad2a168843236b72c4871baef81"
+      },
+      "noren.png": {
+        "raw": "e1e16708c5a49ddd886afc0c05a5388f79f65e8433b43a1c04b04b6e187170d1",
+        "keyed": "dbf3f260feb231c1ce08c8f4442a41c85f1b56b47b09a12f6b135c64674f24b6"
+      },
+      "pickletub.png": {
+        "raw": "0062775d294d93b22dc6499c0e45a3bffbf86cc3e23510cc6fdfad96716119d2",
+        "keyed": "7485c7d6b3a0e172de2efb80d53f326bcab128b58073d85b0a3b47e2a98a2db9"
+      },
+      "plumjar.png": {
+        "raw": "4b3103391c354d5ac606fc2649a54f2572741f736c4ca5802763635c7a30e945",
+        "keyed": "53de0a3cbd2852a05334cdf6daac669a5b1d7947212c84b883777cfa6cd0483d"
+      },
+      "ricepot.png": {
+        "raw": "01c264377cb76a9ee29402885c25b842ff5971e839de808604df7f68aedc7a06",
+        "keyed": "0cd075a5100d66d56881410b8efd9a5fcafb11898955026336951f8b4a5e5a66"
+      },
+      "saltjar.png": {
+        "raw": "ecb08e087b0b0d4c2c17ea917c1b6d69405e90519d501d979dc03a6d8a644176",
+        "keyed": "6f0d7f182523ad590dcf0ccf3d9294b5741ed33de95d52163a4ea0b37b5152ac"
+      },
+      "shutters-shut.png": {
+        "raw": "c3c9d72e91f5cdfbc9e04eb17c1954c4411bb2a55d5dd600471cd790e32f9f11",
+        "keyed": "73220fa0ec1cfa616e43a2e6bc4049afafacac76c16e1f67436be5e6e10d2f6e"
+      },
+      "shutters.png": {
+        "raw": "c5c714c982a129ec576ea98b40a0b3f663fba6f691eaf4ca8684ca52e15ff8dc",
+        "keyed": "31b2fb5045fa91f902f62cad3cc298ac8e49a7bdf0d9373541c48a16cfcd6588"
+      },
+      "well.png": {
+        "raw": "2dd5fae194835d39aaafa5d912225dfb6ccf5fe5f2dce5bac86aaa5cfae55f42",
+        "keyed": "d7483a846a2859260ade46fcd104e40e4a4515590460204ebb43dc97cba09b5b"
+      }
+    }
   }
 }

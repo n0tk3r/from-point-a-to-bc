@@ -52,6 +52,12 @@ SCENES = [
     "edo-cedars", "edo-storehouse",                                                           # PAINT-20C: the cedar path in rain and the storehouse (round twenty)
     "edo-castle",                                                                             # PAINT-20D: the castle approach at Himeji (Act Six)
     "edo-fishshop", "edo-chapel", "edo-keep", "edo-keeptop",                                  # MERGE-20: PAINT-20B, 20F, 20E (round twenty)
+    "edo-kurasawa", "edo-satta",                                                              # PAINT-21A: the foot and the top of the Satta Pass (round twenty-one)
+    "edo-deck", "edo-compass",                                                                # PAINT-21B: the ship by day and its compass (round twenty-one)
+    "edo-dojima", "edo-street",                                                               # PAINT-21C: Osaka, the Dojima shore and the merchant street (round twenty-one)
+    "edo-theatre", "edo-akashi",                                                              # PAINT-21D: the Inari theatre, the Akashi shore (round twenty-one)
+    "edo-town", "edo-shosha", "edo-lock",                                                     # PAINT-21E: Himeji town, the women's hall at Shosha, its lock (round twenty-one)
+    "edo-hall",                                                                               # PAINT-21F: inside the women's hall at sunset (round twenty-one)
     "items", "portraits",
     "map-egypt", "map-rome", "map-home", "map-nevada",                                        # MAP-15E/R/H/N: the four maps
     "map-office",                                                                             # OFFICE-17B: the Office's blueprint

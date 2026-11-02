@@ -1,0 +1,1925 @@
+{
+ "id": "edo-theatre",
+ "scene": "edo-theatre",
+ "size": [
+  800,
+  600
+ ],
+ "horizon": 190,
+ "full": 560,
+ "view": {
+  "horizon": 190,
+  "full": 560,
+  "cam": [
+   -330.0,
+   1700.0
+  ],
+  "yaw": 25.0,
+  "focal": 600.0
+ },
+ "room_cm": "edo_theatre_model.py: X across (the stage X 0..570), Y up, Z from the house's far wall toward us; one floor level",
+ "light": "day: the house's high lattice windows (far wall and right wall) laying flat lit patches on the mats; backstage dim, the lamp's warm pool and a blade of the alley's day from the back door; the stage in half light before the show, in the roof hatch's day in the show",
+ "walk": [
+  [
+   19,
+   509
+  ],
+  [
+   45,
+   504
+  ],
+  [
+   69,
+   499
+  ],
+  [
+   93,
+   495
+  ],
+  [
+   116,
+   491
+  ],
+  [
+   138,
+   486
+  ],
+  [
+   160,
+   482
+  ],
+  [
+   161,
+   486
+  ],
+  [
+   161,
+   489
+  ],
+  [
+   162,
+   493
+  ],
+  [
+   162,
+   497
+  ],
+  [
+   163,
+   501
+  ],
+  [
+   163,
+   505
+  ],
+  [
+   184,
+   501
+  ],
+  [
+   204,
+   497
+  ],
+  [
+   224,
+   493
+  ],
+  [
+   244,
+   489
+  ],
+  [
+   262,
+   485
+  ],
+  [
+   281,
+   481
+  ],
+  [
+   279,
+   478
+  ],
+  [
+   277,
+   474
+  ],
+  [
+   275,
+   471
+  ],
+  [
+   273,
+   467
+  ],
+  [
+   271,
+   464
+  ],
+  [
+   270,
+   461
+  ],
+  [
+   278,
+   460
+  ],
+  [
+   286,
+   458
+  ],
+  [
+   294,
+   456
+  ],
+  [
+   303,
+   455
+  ],
+  [
+   311,
+   453
+  ],
+  [
+   319,
+   452
+  ],
+  [
+   322,
+   457
+  ],
+  [
+   327,
+   462
+  ],
+  [
+   331,
+   468
+  ],
+  [
+   335,
+   474
+  ],
+  [
+   340,
+   480
+  ],
+  [
+   344,
+   486
+  ],
+  [
+   351,
+   484
+  ],
+  [
+   358,
+   483
+  ],
+  [
+   365,
+   481
+  ],
+  [
+   372,
+   480
+  ],
+  [
+   378,
+   478
+  ],
+  [
+   385,
+   477
+  ],
+  [
+   379,
+   471
+  ],
+  [
+   373,
+   465
+  ],
+  [
+   368,
+   459
+  ],
+  [
+   363,
+   453
+  ],
+  [
+   358,
+   448
+  ],
+  [
+   353,
+   443
+  ],
+  [
+   405,
+   433
+  ],
+  [
+   453,
+   424
+  ],
+  [
+   498,
+   415
+  ],
+  [
+   540,
+   407
+  ],
+  [
+   578,
+   400
+  ],
+  [
+   615,
+   393
+  ],
+  [
+   619,
+   395
+  ],
+  [
+   623,
+   397
+  ],
+  [
+   627,
+   399
+  ],
+  [
+   632,
+   400
+  ],
+  [
+   636,
+   402
+  ],
+  [
+   641,
+   404
+  ],
+  [
+   637,
+   406
+  ],
+  [
+   632,
+   407
+  ],
+  [
+   628,
+   409
+  ],
+  [
+   647,
+   417
+  ],
+  [
+   668,
+   427
+  ],
+  [
+   691,
+   437
+  ],
+  [
+   716,
+   448
+  ],
+  [
+   743,
+   461
+  ],
+  [
+   773,
+   474
+  ],
+  [
+   785,
+   475
+  ],
+  [
+   798,
+   475
+  ],
+  [
+   798,
+   594
+  ],
+  [
+   2,
+   594
+  ],
+  [
+   2,
+   564
+  ],
+  [
+   3,
+   560
+  ]
+ ],
+ "walk_floors": [
+  {
+   "name": "stage",
+   "area": [
+    [
+     19,
+     509
+    ],
+    [
+     45,
+     504
+    ],
+    [
+     69,
+     499
+    ],
+    [
+     93,
+     495
+    ],
+    [
+     116,
+     491
+    ],
+    [
+     138,
+     486
+    ],
+    [
+     160,
+     482
+    ],
+    [
+     161,
+     486
+    ],
+    [
+     161,
+     489
+    ],
+    [
+     162,
+     493
+    ],
+    [
+     162,
+     497
+    ],
+    [
+     163,
+     501
+    ],
+    [
+     163,
+     505
+    ],
+    [
+     184,
+     501
+    ],
+    [
+     204,
+     497
+    ],
+    [
+     224,
+     493
+    ],
+    [
+     244,
+     489
+    ],
+    [
+     262,
+     485
+    ],
+    [
+     281,
+     481
+    ],
+    [
+     279,
+     478
+    ],
+    [
+     277,
+     474
+    ],
+    [
+     275,
+     471
+    ],
+    [
+     273,
+     467
+    ],
+    [
+     271,
+     464
+    ],
+    [
+     270,
+     461
+    ],
+    [
+     278,
+     460
+    ],
+    [
+     286,
+     458
+    ],
+    [
+     294,
+     456
+    ],
+    [
+     303,
+     455
+    ],
+    [
+     311,
+     453
+    ],
+    [
+     319,
+     452
+    ],
+    [
+     322,
+     457
+    ],
+    [
+     327,
+     462
+    ],
+    [
+     331,
+     468
+    ],
+    [
+     335,
+     474
+    ],
+    [
+     340,
+     480
+    ],
+    [
+     344,
+     486
+    ],
+    [
+     351,
+     484
+    ],
+    [
+     358,
+     483
+    ],
+    [
+     365,
+     481
+    ],
+    [
+     372,
+     480
+    ],
+    [
+     378,
+     478
+    ],
+    [
+     385,
+     477
+    ],
+    [
+     379,
+     471
+    ],
+    [
+     373,
+     465
+    ],
+    [
+     368,
+     459
+    ],
+    [
+     363,
+     453
+    ],
+    [
+     358,
+     448
+    ],
+    [
+     353,
+     443
+    ],
+    [
+     405,
+     433
+    ],
+    [
+     453,
+     424
+    ],
+    [
+     498,
+     415
+    ],
+    [
+     540,
+     407
+    ],
+    [
+     578,
+     400
+    ],
+    [
+     615,
+     393
+    ],
+    [
+     619,
+     395
+    ],
+    [
+     623,
+     397
+    ],
+    [
+     627,
+     399
+    ],
+    [
+     632,
+     400
+    ],
+    [
+     636,
+     402
+    ],
+    [
+     641,
+     404
+    ],
+    [
+     637,
+     406
+    ],
+    [
+     632,
+     407
+    ],
+    [
+     628,
+     409
+    ],
+    [
+     647,
+     417
+    ],
+    [
+     668,
+     427
+    ],
+    [
+     691,
+     437
+    ],
+    [
+     716,
+     448
+    ],
+    [
+     743,
+     461
+    ],
+    [
+     773,
+     474
+    ],
+    [
+     785,
+     475
+    ],
+    [
+     798,
+     475
+    ],
+    [
+     798,
+     594
+    ],
+    [
+     2,
+     594
+    ],
+    [
+     2,
+     564
+    ],
+    [
+     3,
+     560
+    ]
+   ],
+   "note": "the wing (backstage), the stage behind the rail, backstage behind the stage: one floor"
+  },
+  {
+   "name": "house",
+   "area": [
+    [
+     274,
+     429
+    ],
+    [
+     306,
+     424
+    ],
+    [
+     337,
+     418
+    ],
+    [
+     367,
+     413
+    ],
+    [
+     396,
+     409
+    ],
+    [
+     423,
+     404
+    ],
+    [
+     449,
+     400
+    ],
+    [
+     452,
+     402
+    ],
+    [
+     456,
+     404
+    ],
+    [
+     459,
+     406
+    ],
+    [
+     462,
+     408
+    ],
+    [
+     466,
+     410
+    ],
+    [
+     470,
+     412
+    ],
+    [
+     447,
+     417
+    ],
+    [
+     423,
+     421
+    ],
+    [
+     398,
+     425
+    ],
+    [
+     373,
+     430
+    ],
+    [
+     346,
+     435
+    ],
+    [
+     318,
+     440
+    ],
+    [
+     320,
+     442
+    ],
+    [
+     322,
+     445
+    ],
+    [
+     324,
+     447
+    ],
+    [
+     318,
+     448
+    ],
+    [
+     312,
+     449
+    ],
+    [
+     307,
+     451
+    ],
+    [
+     301,
+     452
+    ],
+    [
+     295,
+     453
+    ],
+    [
+     289,
+     454
+    ],
+    [
+     286,
+     449
+    ],
+    [
+     284,
+     445
+    ],
+    [
+     281,
+     441
+    ],
+    [
+     278,
+     437
+    ],
+    [
+     276,
+     433
+    ]
+   ],
+   "note": "the house's front aisle and Mom's place in the front row: reached by a script (Mom goes round the front, through the gap at the wing wall's end, `gap` -> `aisle` -> `momseat`); nobody walks there by a click",
+   "away": "(the scene's line: the house is for the audience)"
+  }
+ ],
+ "blocked": [
+  {
+   "id": "lamp",
+   "poly": [
+    [
+     269,
+     478
+    ],
+    [
+     300,
+     472
+    ],
+    [
+     309,
+     485
+    ],
+    [
+     277,
+     492
+    ]
+   ]
+  },
+  {
+   "id": "stand",
+   "poly": [
+    [
+     286,
+     509
+    ],
+    [
+     331,
+     499
+    ],
+    [
+     346,
+     522
+    ],
+    [
+     298,
+     534
+    ]
+   ]
+  },
+  {
+   "id": "gate-l",
+   "poly": [
+    [
+     376,
+     465
+    ],
+    [
+     395,
+     461
+    ],
+    [
+     405,
+     470
+    ],
+    [
+     384,
+     475
+    ]
+   ]
+  },
+  {
+   "id": "gate-r",
+   "poly": [
+    [
+     437,
+     453
+    ],
+    [
+     455,
+     449
+    ],
+    [
+     465,
+     457
+    ],
+    [
+     447,
+     461
+    ]
+   ]
+  },
+  {
+   "id": "front",
+   "poly": [
+    [
+     632,
+     566
+    ],
+    [
+     872,
+     480
+    ],
+    [
+     1054,
+     551
+    ],
+    [
+     805,
+     693
+    ]
+   ]
+  }
+ ],
+ "planes": [
+  {
+   "id": "show",
+   "file": "show.png",
+   "plane": "back",
+   "alt": true,
+   "state": "the show (alt): the stage in the roof hatch's day, the audience all turned to the stage; laid over the backdrop (the scene fades it in), under every cut-out",
+   "with": {
+    "gate": "gate-show.png",
+    "housefront": "housefront-show.png"
+   }
+  },
+  {
+   "id": "robes",
+   "file": "robes.png",
+   "plane": "back",
+   "what": "the two black robes and hoods on the peg; hidden once the girls wear them (the empty peg is painted under them)"
+  },
+  {
+   "id": "stagerail",
+   "file": "stagerail.png",
+   "base": [
+    [
+     344,
+     439
+    ],
+    [
+     609,
+     389
+    ]
+   ],
+   "what": "the rail along the stage's front: whoever is beyond it (the house, Mom in her seat) shows only from the shoulders up; the operators (in front of it) are drawn over it"
+  },
+  {
+   "id": "lamp",
+   "file": "lamp.png",
+   "base": 486,
+   "what": "the lamp on its stand, backstage (its flame: fx lamp-flame)"
+  },
+  {
+   "id": "boypuppet",
+   "file": "boypuppet.png",
+   "base": 523,
+   "what": "the boy puppet hanging on his stand; hidden when he is taken off it (the puppet sprite, PEOPLE-21A, works him); the stand is painted under him"
+  },
+  {
+   "id": "curtain",
+   "file": "curtain.png",
+   "base": [
+    [
+     329,
+     440
+    ],
+    [
+     359,
+     476
+    ]
+   ],
+   "what": "the black masking curtain at the stage's left end: whoever is on the stage beyond it is behind it"
+  },
+  {
+   "id": "gate",
+   "file": "gate.png",
+   "states": {
+    "before": "gate.png",
+    "show": "gate-show.png"
+   },
+   "base": [
+    [
+     377,
+     471
+    ],
+    [
+     462,
+     452
+    ]
+   ],
+   "what": "the village gate (the set), near the rail at stage left; lit in the show"
+  },
+  {
+   "id": "housefront",
+   "file": "housefront.png",
+   "states": {
+    "before": "housefront.png",
+    "show": "housefront-show.png"
+   },
+   "base": [
+    [
+     778,
+     467
+    ],
+    [
+     651,
+     407
+    ]
+   ],
+   "what": "the house front (the set) at stage right, raked toward the wing and the house; its door at the puppets' height; lit in the show"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "the troupe's wicker boxes stacked behind the stage, cut by the picture's edge (bottom right)"
+  }
+ ],
+ "cutouts": {
+  "stagerail": [
+   361,
+   346,
+   252,
+   91
+  ],
+  "robes": [
+   103,
+   354,
+   55,
+   82
+  ],
+  "lamp": [
+   276,
+   397,
+   26,
+   91
+  ],
+  "boypuppet": [
+   300,
+   414,
+   33,
+   79
+  ],
+  "curtain": [
+   328,
+   81,
+   33,
+   382
+  ],
+  "gate": [
+   364,
+   308,
+   114,
+   162
+  ],
+  "housefront": [
+   637,
+   292,
+   160,
+   168
+  ],
+  "front": [
+   711,
+   450,
+   89,
+   150
+  ],
+  "show": [
+   222,
+   235,
+   578,
+   354
+  ],
+  "gate-show": [
+   364,
+   308,
+   114,
+   162
+  ],
+  "housefront-show": [
+   637,
+   292,
+   160,
+   168
+  ]
+ },
+ "things": [
+  {
+   "id": "puppets",
+   "what": "the troupe's puppets hanging on their rail by their heads, quiet as coats",
+   "shape": {
+    "rect": [
+     -2,
+     265,
+     302,
+     67
+    ]
+   },
+   "stand": [
+    143,
+    522
+   ],
+   "face": "N"
+  },
+  {
+   "id": "heads",
+   "what": "carved heads on a shelf (one under a cloth)",
+   "shape": {
+    "rect": [
+     178,
+     351,
+     76,
+     18
+    ]
+   },
+   "stand": [
+    231,
+    501
+   ],
+   "face": "N"
+  },
+  {
+   "id": "boxes",
+   "what": "the troupe's wicker boxes under the shelf (and stacked behind the stage)",
+   "shape": {
+    "rect": [
+     174,
+     432,
+     96,
+     45
+    ]
+   },
+   "stand": [
+    231,
+    501
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lamp",
+   "what": "a lamp on its stand (a dish of oil on a post), alight",
+   "shape": {
+    "rect": [
+     276,
+     397,
+     26,
+     91
+    ]
+   },
+   "stand": [
+    301,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "robes",
+   "what": "two black robes and hoods on a peg (the robes / gone: the girls wear them)",
+   "shape": {
+    "rect": [
+     103,
+     354,
+     55,
+     82
+    ]
+   },
+   "stand": [
+    143,
+    522
+   ],
+   "face": "N"
+  },
+  {
+   "id": "boypuppet",
+   "what": "the boy puppet on his stand, 0.9 m, a carved boy's head",
+   "shape": {
+    "rect": [
+     300,
+     414,
+     33,
+     79
+    ]
+   },
+   "stand": [
+    303,
+    563
+   ],
+   "face": "N"
+  },
+  {
+   "id": "set",
+   "what": "the set: a village gate and a house front, low painted scenery (empty / the show: lit)",
+   "shape": {
+    "rect": [
+     364,
+     292,
+     433,
+     178
+    ]
+   },
+   "stand": [
+    342,
+    491
+   ],
+   "face": "E",
+   "parts": [
+    "gate",
+    "housefront"
+   ]
+  },
+  {
+   "id": "gate",
+   "what": "the set's village gate",
+   "shape": {
+    "rect": [
+     364,
+     308,
+     114,
+     162
+    ]
+   },
+   "stand": [
+    342,
+    491
+   ],
+   "face": "E"
+  },
+  {
+   "id": "housefront",
+   "what": "the set's house front, its door at the puppets' height, an indigo noren",
+   "shape": {
+    "rect": [
+     637,
+     292,
+     160,
+     168
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "E"
+  },
+  {
+   "id": "stagerail",
+   "what": "the stage rail: a low partition of black lacquer the operators stand behind",
+   "shape": {
+    "poly": [
+     [
+      343,
+      437
+     ],
+     [
+      345,
+      387
+     ],
+     [
+      607,
+      346
+     ],
+     [
+      612,
+      348
+     ],
+     [
+      607,
+      389
+     ],
+     [
+      345,
+      440
+     ]
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "N"
+  },
+  {
+   "id": "dais",
+   "what": "the chanter's dais at stage right, out in the house",
+   "shape": {
+    "poly": [
+     [
+      537,
+      338
+     ],
+     [
+      604,
+      330
+     ],
+     [
+      724,
+      364
+     ],
+     [
+      724,
+      386
+     ],
+     [
+      649,
+      401
+     ],
+     [
+      537,
+      357
+     ]
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "E"
+  },
+  {
+   "id": "book",
+   "what": "the chanter's book on its lectern (nobody touches a chanter's book)",
+   "shape": {
+    "rect": [
+     593,
+     324,
+     33,
+     19
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "E"
+  },
+  {
+   "id": "audience",
+   "what": "the audience on their mats, row behind row, facing the stage",
+   "shape": {
+    "poly": [
+     [
+      221,
+      303
+     ],
+     [
+      444,
+      286
+     ],
+     [
+      589,
+      366
+     ],
+     [
+      280,
+      416
+     ]
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "N"
+  },
+  {
+   "id": "windows",
+   "what": "the high lattice windows: daylight",
+   "shape": {
+    "poly": [
+     [
+      257,
+      167
+     ],
+     [
+      634,
+      164
+     ],
+     [
+      634,
+      200
+     ],
+     [
+      257,
+      199
+     ]
+    ]
+   },
+   "stand": [
+    342,
+    491
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rafters",
+   "what": "the rafters of the hall, dark, and the backstage ceiling's edge",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      799,
+      0
+     ],
+     [
+      799,
+      150
+     ],
+     [
+      0,
+      150
+     ]
+    ]
+   },
+   "stand": [
+    342,
+    491
+   ],
+   "face": "N"
+  },
+  {
+   "id": "backdoor",
+   "what": "the back door, open a hand's breadth on the alley (the way out to the street)",
+   "shape": {
+    "rect": [
+     10,
+     353,
+     88,
+     132
+    ]
+   },
+   "stand": [
+    61,
+    522
+   ],
+   "face": "N"
+  },
+  {
+   "id": "curtain",
+   "what": "the black masking curtain at the stage's left end",
+   "shape": {
+    "rect": [
+     328,
+     81,
+     33,
+     382
+    ]
+   },
+   "stand": [
+    342,
+    491
+   ],
+   "face": "E"
+  },
+  {
+   "id": "stage",
+   "what": "the stage's polished boards",
+   "shape": {
+    "poly": [
+     [
+      347,
+      442
+     ],
+     [
+      615,
+      391
+     ],
+     [
+      820,
+      475
+     ],
+     [
+      478,
+      588
+     ]
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stand",
+   "what": "the boy puppet's stand",
+   "shape": {
+    "rect": [
+     291,
+     415,
+     51,
+     105
+    ]
+   },
+   "stand": [
+    303,
+    563
+   ],
+   "face": "N"
+  },
+  {
+   "id": "jubei",
+   "what": "Jubei, the chief puppeteer, by the boy puppet (drawn by the game)",
+   "shape": {
+    "rect": [
+     352,
+     390,
+     50,
+     125
+    ]
+   },
+   "stand": [
+    303,
+    563
+   ],
+   "face": "E"
+  },
+  {
+   "id": "chanter",
+   "what": "the chanter on his dais, at his lectern (drawn by the game, seated)",
+   "shape": {
+    "rect": [
+     617,
+     312,
+     15,
+     38
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "E"
+  },
+  {
+   "id": "shamisen",
+   "what": "the shamisen player on the dais (drawn by the game, seated)",
+   "shape": {
+    "rect": [
+     653,
+     320,
+     16,
+     41
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "E"
+  },
+  {
+   "id": "tatsu",
+   "what": "Tatsu, the thief-taker, in the front row (drawn by the game, seated)",
+   "shape": {
+    "rect": [
+     425,
+     360,
+     18,
+     46
+    ]
+   },
+   "stand": [
+    553,
+    423
+   ],
+   "face": "S"
+  }
+ ],
+ "marks": {
+  "back": [
+   61,
+   522
+  ],
+  "jubei": [
+   377,
+   515
+  ],
+  "stand": [
+   303,
+   563
+  ],
+  "peg": [
+   143,
+   522
+  ],
+  "rail": [
+   553,
+   423
+  ],
+  "wing": [
+   342,
+   491
+  ],
+  "momseat": [
+   408,
+   410
+  ],
+  "tatsuseat": [
+   434,
+   406
+  ],
+  "chanter": [
+   625,
+   350
+  ],
+  "shamisen": [
+   661,
+   361
+  ],
+  "back_mom": [
+   63,
+   526
+  ],
+  "back_bigsis": [
+   124,
+   529
+  ],
+  "back_lilsis": [
+   62,
+   561
+  ],
+  "railLeft": [
+   474,
+   423
+  ],
+  "railFeet": [
+   517,
+   424
+  ],
+  "aisle": [
+   301,
+   436
+  ],
+  "gap": [
+   309,
+   449
+  ],
+  "lamp": [
+   301,
+   502
+  ],
+  "boxes": [
+   231,
+   501
+  ],
+  "behind": [
+   605,
+   560
+  ]
+ },
+ "stands": {
+  "back": {
+   "at": [
+    61,
+    522
+   ],
+   "grownup_px": 143,
+   "face": "S"
+  },
+  "jubei": {
+   "at": [
+    377,
+    515
+   ],
+   "grownup_px": 140,
+   "face": "W"
+  },
+  "stand": {
+   "at": [
+    303,
+    563
+   ],
+   "grownup_px": 161,
+   "face": "N"
+  },
+  "peg": {
+   "at": [
+    143,
+    522
+   ],
+   "grownup_px": 144,
+   "face": "N"
+  },
+  "rail": {
+   "at": [
+    553,
+    423
+   ],
+   "grownup_px": 101,
+   "face": "N"
+  },
+  "wing": {
+   "at": [
+    342,
+    491
+   ],
+   "grownup_px": 130,
+   "face": "E"
+  },
+  "momseat": {
+   "at": [
+    408,
+    410
+   ],
+   "grownup_px": 95,
+   "face": "S"
+  },
+  "tatsuseat": {
+   "at": [
+    434,
+    406
+   ],
+   "grownup_px": 93,
+   "face": "S"
+  },
+  "chanter": {
+   "at": [
+    625,
+    350
+   ],
+   "grownup_px": 78,
+   "face": "N",
+   "scale": 0.486,
+   "note": "on the dais, 45 cm up: draw them at this scale (the floor's under them), seated, facing the house"
+  },
+  "shamisen": {
+   "at": [
+    661,
+    361
+   ],
+   "grownup_px": 83,
+   "face": "N",
+   "scale": 0.521,
+   "note": "on the dais, 45 cm up: draw them at this scale (the floor's under them), seated, facing the house"
+  },
+  "back_mom": {
+   "at": [
+    63,
+    526
+   ],
+   "grownup_px": 145,
+   "face": "S"
+  },
+  "back_bigsis": {
+   "at": [
+    124,
+    529
+   ],
+   "grownup_px": 147,
+   "face": "S"
+  },
+  "back_lilsis": {
+   "at": [
+    62,
+    561
+   ],
+   "grownup_px": 160,
+   "face": "S"
+  },
+  "railLeft": {
+   "at": [
+    474,
+    423
+   ],
+   "grownup_px": 101,
+   "face": "N"
+  },
+  "railFeet": {
+   "at": [
+    517,
+    424
+   ],
+   "grownup_px": 101,
+   "face": "N"
+  },
+  "aisle": {
+   "at": [
+    301,
+    436
+   ],
+   "grownup_px": 106,
+   "face": "S"
+  },
+  "gap": {
+   "at": [
+    309,
+    449
+   ],
+   "grownup_px": 112,
+   "face": "S"
+  },
+  "lamp": {
+   "at": [
+    301,
+    502
+   ],
+   "grownup_px": 135,
+   "face": "N"
+  },
+  "boxes": {
+   "at": [
+    231,
+    501
+   ],
+   "grownup_px": 135,
+   "face": "N"
+  },
+  "behind": {
+   "at": [
+    605,
+    560
+   ],
+   "grownup_px": 160,
+   "face": "N"
+  }
+ },
+ "puppet": {
+  "at": [
+   497,
+   421
+  ],
+  "feet": [
+   497,
+   370
+  ],
+  "scale": 0.623,
+  "rail_top_row": 365,
+  "rail_height_cm": 86.0,
+  "doll_cm": 90.0,
+  "doll_px": 51,
+  "jubei": [
+   553,
+   423
+  ],
+  "left_hand": [
+   474,
+   423
+  ],
+  "feet_operator": [
+   517,
+   424
+  ],
+  "note": "The doll (0.9 m) walks on the rail's top, 86 cm up: draw it at `scale` with its feet at `feet` (it floats over the floor point `at`, which is between the operators and the rail). Jubei stands behind it at `rail` (his face shows), Big Sister at its left hand (`left_hand`, the wing side, nearer us), Little Sister at its feet (`feet_operator`, crouched low). We see the group from behind and to the left, about 35 degrees off its back: the doll shows to the right of Big Sister and in front of Jubei; its left hand (raised to the ear) is on our side."
+ },
+ "fx": [
+  {
+   "id": "lamp-flame",
+   "type": "flame",
+   "what": "the lamp's flame backstage",
+   "at": [
+    291,
+    396
+   ],
+   "size": 7,
+   "glow": 22,
+   "glowColor": "#f4d88e",
+   "glowOpacity": 0.22,
+   "flicker": 0.5,
+   "base": 486
+  },
+  {
+   "id": "shaft-house",
+   "type": "light",
+   "src": "shaft-house.png",
+   "layer": "live",
+   "blend": "screen",
+   "air": null,
+   "note": "PROPOSED: the right wall's high windows' daylight in the air, slanting down onto the mats (the patches it makes are painted): a light picture (RGBA, soft) for the live layer, as the keep's beams; dust may drift in it"
+  },
+  {
+   "id": "shaft-stage",
+   "type": "light",
+   "src": "shaft-stage.png",
+   "layer": "live",
+   "blend": "screen",
+   "when": "the show",
+   "note": "PROPOSED: in the show only, the roof hatch's daylight falling onto the stage (the lit boards are in show.png): fade it in with the show"
+  },
+  {
+   "id": "dust",
+   "type": "birds",
+   "kind": "flyers",
+   "what": "motes turning in the house's shafts of day (a few pale specks: the flyer kind, very small, slow)",
+   "lanes": [
+    [
+     [
+      560,
+      250
+     ],
+     [
+      430,
+      330
+     ]
+    ],
+    [
+     [
+      600,
+      240
+     ],
+     [
+      470,
+      340
+     ]
+    ]
+   ],
+   "every": [
+    6,
+    14
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "size": 2,
+   "speed": 8,
+   "color": "#f6eed8",
+   "note": "PROPOSED, optional"
+  }
+ ],
+ "states": {
+  "stage": "empty (before: back.png + gate.png + housefront.png) / the show (show.png + gate-show.png + housefront-show.png; the scene fades the three together)",
+  "robes": "on the peg (robes.png) / gone (hidden)",
+  "boypuppet": "on his stand (boypuppet.png) / gone (hidden: the puppet sprite)"
+ },
+ "exits": {
+  "backdoor": {
+   "to": "edo-street",
+   "at": [
+    61,
+    522
+   ],
+   "rect": [
+    10,
+    353,
+    88,
+    132
+   ]
+  }
+ },
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "boypuppet_cm": 90,
+  "grownup_at_full_px": 160
+ },
+ "notes": "PAINT-21D. The theatre's inside is the game's own (not in the sources): a hut theatre of one floor level, the stage open behind to the wing; the low set, the dais, the hatch are invented in the spirit of the art."
+}

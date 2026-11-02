@@ -20,7 +20,7 @@
 // Every place is PAINT-20F's own measurement of the finished picture (art/scenes/edo-chapel/layout.json and its ready.md);
 // where a place was set by eye the comment says so.
 //
-// Try it: index.html?scene=edo-chapel&lead=mom&flags=edo.sailed,edo.unbarred,edo.matMoved,edo.knocked,edo.hidden
+// Try it: index.html?scene=edo-chapel&lead=mom&flags=edo.sailed,edo.boated,edo.unbarred,edo.matMoved,edo.knocked,edo.hidden   (SCENES-21B: and edo.boated)
 
 import { STOCK_DRESSED, is } from "./edo-common.js";
 import { THREE, who, heard, evening, night, morning, sunUp, hats, TALK, keepBelow, passing, partyOf, sceneOf, afterStep, talkToIsuke,

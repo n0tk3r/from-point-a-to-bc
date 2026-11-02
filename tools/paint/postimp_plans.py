@@ -289,6 +289,35 @@ PLANS = {
         "union": {},
         "frames": ["heron-fly-*"],                                  # the herons going past the west bay: three small flight frames
     },
+    # PAINT-21A: Nishikurasawa at the foot of the Satta Pass (edo_kurasawa.py). Back to front as the scene lays them with
+    # nobody there: Fuji's cap of cloud (on; hidden once it has lifted at the top of the pass), the bearers' palanquin, the
+    # noren over the teahouse's door (it sways), Soshichi's trunks set down, O-Kuni's grill, the front plane. No other states.
+    "edo-kurasawa": {
+        "planes": ["cloud", "kago", "noren", "trunks", "grill", "front"],
+        "alt": {},
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-21A: the top of the Satta Pass (edo_satta.py). Back to front with nobody there: Fuji's cap of cloud (on; the
+    # scene fades it out when it lifts), the bent pine (it sways), the front plane. The folded pass on the Jizo's hat is an
+    # alt that lies over the picture while it is there (from the gust to when it is lifted off).
+    "edo-satta": {
+        "planes": ["cloud", "pine", "front"],
+        "alt": {"pass": []},
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-21F: inside the women's hall at sunset (edo_hall.py). With nobody on stage: the west wall with the lattice (its
+    # gaps clear: Ryōkai's face shows in them from outside), the women's writing desk near us (the front plane). The DUSK
+    # state (after the sun has gone) is a second backdrop over the whole stage, with the planes' -dusk twins. The light (the
+    # bars on the east wall and the floor, the shafts in the air) is NOT in the backdrop: three RGBA light pictures for the
+    # live layer, keyed colour by colour as frames, moved by the scene as the sun goes down (layout.json `bars`).
+    "edo-hall": {
+        "planes": ["lattice", "front"],
+        "alt": {"dusk": [], "lattice-dusk": ["lattice"], "front-dusk": ["front"]},
+        "union": {},
+        "frames": ["bars-*"],
+    },
     # PAINT-20F: the room under the storehouse (edo_chapel.py). With nobody on stage: the trapdoor shut, the wall props, the
     # closet altar shut, the mirror on its stand, the lamps alight, the ladder, the centre prop near us. The other states replace
     # them: the trapdoor open on the dark storehouse, and open on the morning (with the sun on the mats, on the back plane); the
@@ -300,6 +329,110 @@ PLANS = {
         "union": {},
         "frames": [],
     },
+    # PAINT-21B: the ship by day (edo_deck.py). Back to front as the scene lays them with nobody there: the swell layer
+    # (the far sea and the cape: it rocks on the swell), the sail (it breathes), the rigging, the mast, the windlass, the
+    # tiller and the rudder's head, the compass box (shut), Kota's rice pot (the lid on), the front plane. The compass box
+    # propped open replaces the shut one; the pot with its lid lifted, and the pot boiling, each replace the quiet one.
+    # The floating cask is frames.
+    "edo-deck": {
+        "planes": ["swell", "sail", "rigging", "mast", "windlass", "tiller", "compass-shut", "pot", "front"],
+        "alt": {"compass-open": ["compass-shut"], "pot-lifted": ["pot"], "pot-steam": ["pot"]},
+        "union": {},
+        "frames": ["cask-*"],
+    },
+    # PAINT-21B: the ship's clock (edo_compass.py), a close-up from above with nobody in it. The needle (still) and
+    # Kanbei's thumb lie over the card and the box; the needle a hair to the left and a hair to the right replace the still
+    # one (its tremble: three positions in turn).
+    "edo-compass": {
+        "planes": ["needle", "thumb"],
+        "alt": {"needle-l": ["needle"], "needle-r": ["needle"]},
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-21C: Osaka, the Dojima shore (edo_dojima.py). Back to front with nobody there: the lighter moored at the steps
+    # (it bobs), the dealers and the water men at the right, O-Natsu's noren (it sways), and her stall: the sandals' heap,
+    # the hearth and pot, the table with the tub, the tray of rice balls (full), the kettle; the front plane. The tray
+    # emptying and empty replace the full one; the smaller heap of sandals the full one. The lighters on the river, the
+    # price runner and the water men's splash are frames.
+    "edo-dojima": {
+        "planes": ["lighter", "market", "noren", "sandals", "pot", "stall", "tray", "kettle", "front"],
+        "alt": {"tray-half": ["tray"], "tray-empty": ["tray"], "sandals-few": ["sandals"]},
+        "union": {},
+        "frames": ["lighter-near", "lighter-far", "runner-*", "splash-*"],
+    },
+    # PAINT-21C: Osaka, the merchant street at a crossroads (edo_street.py). Back to front with nobody there: the two lines
+    # of prints across the print shop's open front (they flutter), the three noren (they sway), the printing bench and the
+    # sheet on its stand (blank), the medicine shop's standing signboard, the road god, the water-seller. The sheet
+    # printed ghost-blurred, and printed clean, replace the blank one (#30).
+    "edo-street": {
+        "planes": ["prints-1", "prints-2", "noren-kelp", "noren-med", "noren-comb", "bench", "print", "sign", "roadgod", "watervendor"],
+        "alt": {"print-ghost": ["print"], "print-clean": ["print"]},
+        "union": {},
+        "frames": [],
+    },
+    # PAINT-21D: the Inari puppet theatre (edo_theatre.py). With nobody there and the stage empty: the black robes on their
+    # peg (behind everybody), the rail along the stage's front, the lamp, the boy puppet on his stand, the masking curtain,
+    # the set's gate and house front, the troupe's boxes at the front. The show is a layer over the backdrop (`show`: the
+    # stage in the roof hatch's day, the audience turned to the stage), with the set's two cut-outs lit (their -show twins
+    # replace them). The daylight's shafts in the air are light pictures for the live layer (frames, keyed colour by colour).
+    "edo-theatre": {
+        "planes": ["robes", "stagerail", "lamp", "boypuppet", "curtain", "gate", "housefront", "front"],
+        "alt": {"show": [], "gate-show": ["gate"], "housefront-show": ["housefront"]},
+        "union": {},
+        "frames": ["shaft-*"],
+    },
+    # PAINT-21D: the Akashi shore (edo_akashi.py). Back to front with nobody there: the floats of the pots' lines and the
+    # ladle afloat (both bob), the Awa boat coming in (it bobs; beached, its other state replaces it), Heita's boat and his
+    # tub, the octopus pots, the rocks, the two shore pines (they sway), the grass at the front. The boat's approach is a
+    # frame (boat-1).
+    "edo-akashi": {
+        "planes": ["floats", "ladle", "pilgrimboat", "heitaboat", "tub", "pots", "rocks", "pine-l", "pine-r", "front"],
+        "alt": {"pilgrimboat-beached": ["pilgrimboat"]},
+        "union": {},
+        "frames": ["boat-*"],
+    },
+}
+
+
+# PAINT-21E: Himeji town, Watamachi on the highway at midday (edo_town.py). Back to front as the scene lays them with nobody
+# there: the two noren (sways, at the back), the school's desks, the school's front (its shutters propped open), the kitchen
+# door, the salt jar, the plum jar and the cloth on the shelf, the rice pot, the pickle tub, the well, its bucket (up), the
+# ward gate (open by day). The other states replace their first: the school shut up (for the night), the kitchen door open,
+# the bucket down in the well, the cloth knotted round the rice balls, the gate shut (for the night).
+PLANS["edo-town"] = {
+    "planes": ["noren-cotton", "noren", "desks", "shutters", "kitchendoor", "saltjar", "plumjar", "cloth", "ricepot", "pickletub", "well", "bucket", "gate"],
+    "alt": {"shutters-shut": ["shutters"], "kitchendoor-open": ["kitchendoor"], "bucket-down": ["bucket"], "cloth-bundle": ["cloth"], "gate-shut": ["gate"]},
+    "union": {},
+    "frames": [],
+}
+
+
+# PAINT-21E: the foot of Mount Shosha, the women's hall (edo_shosha.py), in two lights. With nobody there and the story at
+# its start (the gold afternoon): the hall's doors shut, the lock on the hasp, O-Ume's rice ball on the step, the stone at
+# the path's foot, the bench, the near pine (the front plane: it sways). The doors half open and open replace the shut
+# ones; the lock opened replaces the shut one. SUNSET is a second backdrop: `sunset` covers the whole stage (the scene
+# fades it in over back.png, under everybody), and every cut-out has its `-sunset` twin in that light, replacing its
+# first state as the light changes.
+PLANS["edo-shosha"] = {
+    "planes": ["doors", "lock", "stepball", "stone", "bench", "pine"],
+    "alt": {"doors-half": ["doors"], "doors-open": ["doors"], "lock-open": ["lock"],
+            "sunset": [], "doors-sunset": ["doors"], "doors-half-sunset": ["doors"], "doors-open-sunset": ["doors"],
+            "lock-sunset": ["lock"], "lock-open-sunset": ["lock"], "stepball-sunset": ["stepball"], "stone-sunset": ["stone"],
+            "bench-sunset": ["bench"], "pine-sunset": ["pine"]},
+    "union": {},
+    "frames": [],
+}
+
+
+# PAINT-21E: the shipwright's lock, a close-up (edo_lock.py). With the story at its start: the middle wave in place, the
+# ear with its hole dusty, the bolt through the staple (all on the back plane: nobody stands in a close-up). The others
+# replace their first or lie over the picture: the ear's hole clean, the wave slid aside (the post in its recess is the
+# backdrop's), the coin on the post, the post and coin turned, the slits open along the rabbit's back, the bolt drawn.
+PLANS["edo-lock"] = {
+    "planes": ["wave", "ear", "bolt"],
+    "alt": {"ear-clean": ["ear"], "wave-slid": ["wave"], "post-coin": [], "post-turned": [], "back-open": [], "bolt-out": ["bolt"]},
+    "union": {},
+    "frames": [],
 }
 
 

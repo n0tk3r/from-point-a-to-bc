@@ -7,6 +7,10 @@
 //
 // The three of them come here by the road ("Three days later", js/content/cutscenes/edo-walk.js: SCENES-20B's), at the
 // mark `enter`. The leg's start is LEG_START.himeji (edo-common.js).
+// SCENES-21C (round twenty-one): they come here the next day now, from Himeji town (the end of "Mind The Fire",
+// js/content/cutscenes/edo-night.js: edo.nightDone), at the same mark `enter`, the road from the town; and the road back into
+// the town is a way out at the left edge (edo-town, at its gate), as the town's lane north is the way here. By the map,
+// Shosha has done its part (SHOSHA_MAP.done).
 //
 //   #28 Eight At The Gate   Tomezō, up his ladder, cannot hear anyone over himself: Little Sister hollers him down
 //                           (tomezoTree, js/content/talk/edo-b.js). His own trowel back, and Jinsuke's name: he asks nothing
@@ -25,12 +29,13 @@
 // Every place is the painter's own measurement of the finished picture (art/scenes/edo-castle/layout.json, PAINT-20D's
 // ready.md), or was set by eye against the picture with the people in it; where the two differ the comment says why.
 //
-// Try it: index.html?scene=edo-castle&lead=mom&flags=edo.walked   (and LEG_START.himeji's pockets and clothes, which a
-// jump does not give: the play sets them up as the leg begins)
+// Try it: index.html?scene=edo-castle&lead=mom&flags=edo.nightDone   (and LEG_START.himeji's pockets and clothes, which a
+// jump does not give: the play sets them up as the leg begins)      (SCENES-21C: edo.nightDone, was edo.walked)
 
 import { STOCK_DRESSED } from "./edo-common.js";
 import { THREE, who, is, heard, each, holderOf, idle, chatter, swap, dressAll, TALK } from "./edo-himeji.js";
 import { tomezoTree, guardTree } from "../talk/edo-b.js";
+import { SHOSHA_MAP } from "../talk/edo-d.js";      // SCENES-21C: Shosha refused by the map, the next day
 import { scaleAt } from "../../engine/walk.js";
 
 const art = "art/scenes/edo-castle/";
@@ -298,6 +303,10 @@ export default {
   facing: "E",
   stock: STOCK_DRESSED,
   talk: TALK,
+  // SCENES-21C: the road back into the town (its gate), at the left edge; and by the map, Shosha has done its part
+  edges: { W: { to: "edo-town", spawn: "gate", name: "back into the town", walkTo: [10, 586] } },
+  exits: ["edo-town"],
+  travel: (g) => (g.flag("edo.nightDone") ? SHOSHA_MAP.done : true),
   tick(g, dt) { workTick(g, dt); pilgrimTick(g, dt); CHAT.tick(g, dt); },
 
   picture: art + "back.png",

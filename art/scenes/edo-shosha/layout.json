@@ -1,0 +1,1659 @@
+{
+ "id": "edo-shosha",
+ "horizon": 280,
+ "full": 590,
+ "minScale": 0.3,
+ "light": "two states, the same geometry. GOLD (back.png and the plain cut-outs): the late afternoon sun from the left and a little behind us, about 30 degrees up: the hall's west side lit, its front at a slant, shadows to the right and a little away. SUNSET (sunset.png and every cut-out's -sunset twin): the sun low at the left, seen red through the trees of the glade (7 degrees up, a little beyond the hall): the hall's west side red, its front in blue shade, the terrace in the trees' long shadow with streaks of red light across it to the right and toward us; the sky in bands (the act's licence for chrome orange and geranium lake). Key: edo-sunset.",
+ "note": "The land camera (persp.Camera 280/590, focal 800, lens 3.39 m up), its vanishing point at x 400. The hall is turned 22 degrees so its west side (with the lattice window) shows; its front corner 14.5 m off (row 467). Mom before the doors (mark hall) is 94.4 px. The castle on the plain is drawn about four times larger than the eye would see it 6 km off (the prints' way), and the plain is put at the picture's right though it lies south-east of the hall (the mountain is at the left): a painter's liberty.",
+ "view": {
+  "horizon": 280,
+  "full": 590,
+  "focal": 800.0,
+  "vanish_x": 400.0,
+  "eye_cm": 339.1,
+  "hall_turn_deg": 22
+ },
+ "walk": [
+  [
+   6,
+   598
+  ],
+  [
+   794,
+   598
+  ],
+  [
+   794,
+   452
+  ],
+  [
+   700,
+   436
+  ],
+  [
+   600,
+   446
+  ],
+  [
+   561,
+   456
+  ],
+  [
+   537,
+   467
+  ],
+  [
+   419,
+   478
+  ],
+  [
+   353,
+   474
+  ],
+  [
+   318,
+   450
+  ],
+  [
+   262,
+   450
+  ],
+  [
+   256,
+   452
+  ],
+  [
+   196,
+   452
+  ],
+  [
+   180,
+   458
+  ],
+  [
+   40,
+   460
+  ],
+  [
+   6,
+   464
+  ]
+ ],
+ "walk_note": "one floor: the terrace before the hall, the path's foot, the hut's front, the road up at the bottom right",
+ "blocked": [
+  [
+   [
+    246,
+    469
+   ],
+   [
+    273,
+    469
+   ],
+   [
+    276,
+    465
+   ],
+   [
+    249,
+    465
+   ]
+  ],
+  [
+   [
+    675,
+    511
+   ],
+   [
+    739,
+    511
+   ],
+   [
+    720,
+    498
+   ],
+   [
+    660,
+    498
+   ]
+  ],
+  [
+   [
+    0,
+    598
+   ],
+   [
+    52,
+    598
+   ],
+   [
+    50,
+    556
+   ],
+   [
+    0,
+    556
+   ]
+  ],
+  [
+   [
+    164,
+    451
+   ],
+   [
+    199,
+    451
+   ],
+   [
+    205,
+    445
+   ],
+   [
+    171,
+    445
+   ]
+  ]
+ ],
+ "blocked_note": "the stone, the heap of combs on its cloth, the near pine's foot, the hut's firewood; the bench gives solid ground of its own",
+ "planes": [
+  {
+   "id": "sunset",
+   "file": "sunset.png",
+   "plane": "back",
+   "what": "the whole stage at sunset: a layer the scene fades in over back.png (under everybody and under the cut-outs, which take their -sunset twins as it comes): ENGINE-21's layer fade",
+   "state": "shown (faded in) once the sun goes low: when the lock opens (the design: the scene changes state when the lock is open)"
+  },
+  {
+   "id": "doors",
+   "file": "doors.png",
+   "plane": "back",
+   "what": "the hall's latticed double doors (they part in the middle and swing out toward us)",
+   "states": {
+    "shut": "doors.png",
+    "half": "doors-half.png",
+    "open": "doors-open.png",
+    "shut-sunset": "doors-sunset.png",
+    "half-sunset": "doors-half-sunset.png",
+    "open-sunset": "doors-open-sunset.png"
+   },
+   "note": "the swing: shut -> half -> open, two or three tenths of a second each; open shows the dim hall inside, its cabinet at the back and the bars of light from the west lattice across the floor (painted in the backdrop behind the doors, so the doorway is never empty)"
+  },
+  {
+   "id": "lock",
+   "file": "lock.png",
+   "plane": "back",
+   "what": "the shipwright's lock on the hasp (small: the close-up edo-lock is where it is seen)",
+   "states": {
+    "shut": "lock.png",
+    "open": "lock-open.png",
+    "shut-sunset": "lock-sunset.png",
+    "open-sunset": "lock-open-sunset.png"
+   },
+   "note": "open: the bolt drawn, the lock hanging from the staple. Hide it once the doors swing (it is on the leaves)"
+  },
+  {
+   "id": "stepball",
+   "file": "stepball.png",
+   "plane": "back",
+   "what": "O-Ume's rice ball on its leaf on the step",
+   "states": {
+    "there": "stepball.png",
+    "there-sunset": "stepball-sunset.png"
+   },
+   "note": "hidden once it is taken in"
+  },
+  {
+   "id": "stone",
+   "file": "stone.png",
+   "base": 468,
+   "what": "the small stone at the path's foot (women may not pass: our own marks cut in it)",
+   "states": {
+    "gold": "stone.png",
+    "sunset": "stone-sunset.png"
+   },
+   "solid": [
+    [
+     246,
+     469
+    ],
+    [
+     273,
+     469
+    ],
+    [
+     276,
+     465
+    ],
+    [
+     249,
+     465
+    ]
+   ]
+  },
+  {
+   "id": "bench",
+   "file": "bench.png",
+   "base": 488,
+   "what": "the bench where the women wait: they sit on it (feet on row 490, in front of it)",
+   "states": {
+    "gold": "bench.png",
+    "sunset": "bench-sunset.png"
+   },
+   "solid": [
+    [
+     585,
+     489
+    ],
+    [
+     708,
+     489
+    ],
+    [
+     700,
+     483
+    ],
+    [
+     580,
+     483
+    ]
+   ]
+  },
+  {
+   "id": "pine",
+   "file": "pine.png",
+   "plane": "front",
+   "what": "the pine near us at the left edge, its pads over the top-left (it stirs: fx sway)",
+   "states": {
+    "gold": "pine.png",
+    "sunset": "pine-sunset.png"
+   }
+  }
+ ],
+ "cutouts": {
+  "doors": [
+   415,
+   328,
+   80,
+   107
+  ],
+  "lock": [
+   452,
+   380,
+   10,
+   6
+  ],
+  "stepball": [
+   478,
+   447,
+   14,
+   8
+  ],
+  "stone": [
+   248,
+   406,
+   24,
+   65
+  ],
+  "bench": [
+   580,
+   458,
+   128,
+   30
+  ],
+  "pine": [
+   4,
+   0,
+   218,
+   600
+  ],
+  "doors-half": [
+   415,
+   328,
+   80,
+   110
+  ],
+  "doors-open": [
+   415,
+   328,
+   99,
+   115
+  ],
+  "lock-open": [
+   456,
+   382,
+   9,
+   7
+  ]
+ },
+ "things": [
+  {
+   "id": "mountain",
+   "what": "Mount Shosha going up into the trees (the temple is up there, out of sight: an hour's climb by the east path)",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      180,
+      0
+     ],
+     [
+      300,
+      52
+     ],
+     [
+      400,
+      124
+     ],
+     [
+      480,
+      190
+     ],
+     [
+      560,
+      244
+     ],
+     [
+      620,
+      288
+     ],
+     [
+      420,
+      200
+     ],
+     [
+      270,
+      200
+     ],
+     [
+      0,
+      190
+     ]
+    ]
+   },
+   "stand": [
+    214,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pathup",
+   "what": "the east path: stone steps climbing steeply into the trees, out of sight",
+   "shape": {
+    "poly": [
+     [
+      188,
+      458
+     ],
+     [
+      262,
+      458
+     ],
+     [
+      256,
+      380
+     ],
+     [
+      236,
+      320
+     ],
+     [
+      196,
+      316
+     ],
+     [
+      190,
+      380
+     ]
+    ]
+   },
+   "stand": [
+    214,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stone",
+   "what": "a small upright stone at the path's foot, cut with writing (women may not pass)",
+   "shape": {
+    "poly": [
+     [
+      247,
+      469
+     ],
+     [
+      250,
+      409
+     ],
+     [
+      256,
+      405
+     ],
+     [
+      261,
+      403
+     ],
+     [
+      269,
+      407
+     ],
+     [
+      270,
+      417
+     ],
+     [
+      273,
+      470
+     ],
+     [
+      270,
+      473
+     ],
+     [
+      256,
+      474
+     ],
+     [
+      247,
+      472
+     ]
+    ]
+   },
+   "stand": [
+    248,
+    484
+   ],
+   "face": "N"
+  },
+  {
+   "id": "trees",
+   "what": "pines and maples in fresh leaf on the mountain's foot; the glade of trunks at the left",
+   "shape": {
+    "poly": [
+     [
+      0,
+      186
+     ],
+     [
+      270,
+      200
+     ],
+     [
+      266,
+      352
+     ],
+     [
+      0,
+      356
+     ]
+    ]
+   },
+   "stand": [
+    62,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cherry",
+   "what": "a late cherry in the shade of the slope, still in flower",
+   "shape": {
+    "poly": [
+     [
+      150,
+      218
+     ],
+     [
+      270,
+      214
+     ],
+     [
+      276,
+      290
+     ],
+     [
+      150,
+      292
+     ]
+    ]
+   },
+   "stand": [
+    214,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hall",
+   "what": "the women's hall: small, deep-roofed, on a low stone base, a jewel on its roof's peak",
+   "shape": {
+    "poly": [
+     [
+      324,
+      304
+     ],
+     [
+      619,
+      301
+     ],
+     [
+      418,
+      147
+     ],
+     [
+      251,
+      297
+     ],
+     [
+      295,
+      431
+     ],
+     [
+      355,
+      472
+     ],
+     [
+      559,
+      453
+     ]
+    ]
+   },
+   "stand": [
+    493,
+    477
+   ],
+   "face": "N"
+  },
+  {
+   "id": "doors",
+   "what": "the latticed double doors, shut; dark inside",
+   "shape": {
+    "poly": [
+     [
+      414,
+      437
+     ],
+     [
+      414,
+      328
+     ],
+     [
+      428,
+      327
+     ],
+     [
+      483,
+      326
+     ],
+     [
+      496,
+      326
+     ],
+     [
+      496,
+      429
+     ],
+     [
+      495,
+      430
+     ],
+     [
+      447,
+      435
+     ],
+     [
+      422,
+      437
+     ]
+    ]
+   },
+   "stand": [
+    493,
+    477
+   ],
+   "face": "N",
+   "open": [
+    [
+     515,
+     330
+    ],
+    [
+     515,
+     437
+    ],
+    [
+     436,
+     445
+    ],
+    [
+     433,
+     445
+    ],
+    [
+     425,
+     442
+    ],
+    [
+     415,
+     437
+    ],
+    [
+     414,
+     436
+    ],
+    [
+     414,
+     328
+    ],
+    [
+     496,
+     326
+    ],
+    [
+     500,
+     326
+    ],
+    [
+     514,
+     328
+    ]
+   ]
+  },
+  {
+   "id": "lock",
+   "what": "on the hasp, a lock: a dark block bound with iron, carved (too small to see from here: Look closer)",
+   "shape": {
+    "poly": [
+     [
+      444,
+      374
+     ],
+     [
+      469,
+      374
+     ],
+     [
+      469,
+      392
+     ],
+     [
+      444,
+      392
+     ]
+    ]
+   },
+   "stand": [
+    485,
+    473
+   ],
+   "face": "N",
+   "note": "the close-up edo-lock opens from here (Look closer / Use)"
+  },
+  {
+   "id": "slips",
+   "what": "name slips pasted round the doors and up the posts, hundreds: paper and thin wood, old and new",
+   "shape": {
+    "poly": [
+     [
+      368,
+      429
+     ],
+     [
+      413,
+      425
+     ],
+     [
+      413,
+      323
+     ],
+     [
+      368,
+      324
+     ]
+    ]
+   },
+   "stand": [
+    493,
+    477
+   ],
+   "face": "N",
+   "also": [
+    [
+     [
+      497,
+      419
+     ],
+     [
+      536,
+      416
+     ],
+     [
+      536,
+      320
+     ],
+     [
+      497,
+      321
+     ]
+    ]
+   ]
+  },
+  {
+   "id": "step",
+   "what": "the step before the doors: one broad dressed stone",
+   "shape": {
+    "poly": [
+     [
+      421,
+      476
+     ],
+     [
+      535,
+      465
+     ],
+     [
+      516,
+      446
+     ],
+     [
+      406,
+      455
+     ]
+    ]
+   },
+   "stand": [
+    514,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "stepball",
+   "what": "a rice ball on a leaf on the step (O-Ume's, each evening)",
+   "shape": {
+    "poly": [
+     [
+      476,
+      445
+     ],
+     [
+      484,
+      442
+     ],
+     [
+      492,
+      445
+     ],
+     [
+      497,
+      453
+     ],
+     [
+      494,
+      456
+     ],
+     [
+      484,
+      460
+     ],
+     [
+      473,
+      456
+     ],
+     [
+      473,
+      453
+     ]
+    ]
+   },
+   "stand": [
+    514,
+    470
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lattice",
+   "what": "the lattice window in the hall's west side",
+   "shape": {
+    "poly": [
+     [
+      346,
+      398
+     ],
+     [
+      327,
+      389
+     ],
+     [
+      327,
+      336
+     ],
+     [
+      346,
+      340
+     ]
+    ]
+   },
+   "stand": [
+    248,
+    484
+   ],
+   "face": "N"
+  },
+  {
+   "id": "hut",
+   "what": "O-Ume's hut by the path: a little thatched hut, its straw curtain half rolled up",
+   "shape": {
+    "poly": [
+     [
+      10,
+      456
+     ],
+     [
+      182,
+      456
+     ],
+     [
+      182,
+      357
+     ],
+     [
+      162,
+      284
+     ],
+     [
+      92,
+      284
+     ],
+     [
+      10,
+      357
+     ]
+    ]
+   },
+   "stand": [
+    62,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "lantern",
+   "what": "a paper lantern on a hook by the hut's door, unlit",
+   "shape": {
+    "poly": [
+     [
+      94,
+      367
+     ],
+     [
+      112,
+      367
+     ],
+     [
+      112,
+      395
+     ],
+     [
+      94,
+      395
+     ]
+    ]
+   },
+   "stand": [
+    62,
+    466
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bench",
+   "what": "a long plain bench, worn: the women wait on it",
+   "shape": {
+    "poly": [
+     [
+      705,
+      489
+     ],
+     [
+      586,
+      489
+     ],
+     [
+      583,
+      485
+     ],
+     [
+      576,
+      458
+     ],
+     [
+      576,
+      457
+     ],
+     [
+      705,
+      457
+     ],
+     [
+      710,
+      460
+     ],
+     [
+      712,
+      463
+     ],
+     [
+      712,
+      467
+     ]
+    ]
+   },
+   "stand": [
+    642,
+    508
+   ],
+   "face": "N"
+  },
+  {
+   "id": "combs",
+   "what": "a heap of combs and hairpins on a cloth: boxwood, tortoiseshell, lacquer: the ones that failed",
+   "shape": {
+    "poly": [
+     [
+      674,
+      511
+     ],
+     [
+      741,
+      511
+     ],
+     [
+      721,
+      490
+     ],
+     [
+      658,
+      490
+     ]
+    ]
+   },
+   "stand": [
+    686,
+    518
+   ],
+   "face": "N"
+  },
+  {
+   "id": "plain",
+   "what": "far below, the Harima plain: fields, villages, a river",
+   "shape": {
+    "poly": [
+     [
+      560,
+      284
+     ],
+     [
+      800,
+      270
+     ],
+     [
+      800,
+      410
+     ],
+     [
+      560,
+      420
+     ]
+    ]
+   },
+   "stand": [
+    690,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "castle",
+   "what": "on its hill on the plain, small and white: the castle",
+   "shape": {
+    "poly": [
+     [
+      708,
+      250
+     ],
+     [
+      772,
+      250
+     ],
+     [
+      772,
+      290
+     ],
+     [
+      708,
+      290
+     ]
+    ]
+   },
+   "stand": [
+    690,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "sky",
+   "what": "the sky over the plain (gold; then the sunset's bands)",
+   "shape": {
+    "poly": [
+     [
+      300,
+      0
+     ],
+     [
+      800,
+      0
+     ],
+     [
+      800,
+      262
+     ],
+     [
+      640,
+      262
+     ],
+     [
+      470,
+      160
+     ],
+     [
+      300,
+      40
+     ]
+    ]
+   },
+   "stand": [
+    690,
+    455
+   ],
+   "face": "E"
+  },
+  {
+   "id": "ume",
+   "what": "O-Ume, the hall's keeper, small and bent",
+   "shape": {
+    "poly": [
+     [
+      558,
+      458
+     ],
+     [
+      585,
+      458
+     ],
+     [
+      585,
+      387
+     ],
+     [
+      558,
+      387
+     ]
+    ]
+   },
+   "stand": [
+    572,
+    456
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "ume"
+  },
+  {
+   "id": "ryokai",
+   "what": "Ryokai, the novice, sitting on the bottom step by the stone",
+   "shape": {
+    "poly": [
+     [
+      225,
+      458
+     ],
+     [
+      246,
+      458
+     ],
+     [
+      246,
+      401
+     ],
+     [
+      225,
+      401
+     ]
+    ]
+   },
+   "stand": [
+    236,
+    456
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "ryokai"
+  },
+  {
+   "id": "tome",
+   "what": "Grandmother Tome, on the bench",
+   "shape": {
+    "poly": [
+     [
+      592,
+      491
+     ],
+     [
+      615,
+      491
+     ],
+     [
+      615,
+      429
+     ],
+     [
+      592,
+      429
+     ]
+    ]
+   },
+   "stand": [
+    604,
+    489
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "tome"
+  },
+  {
+   "id": "wife",
+   "what": "a young wife with a baby on her back, on the bench",
+   "shape": {
+    "poly": [
+     [
+      634,
+      491
+     ],
+     [
+      659,
+      491
+     ],
+     [
+      659,
+      426
+     ],
+     [
+      634,
+      426
+     ]
+    ]
+   },
+   "stand": [
+    647,
+    489
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "wife"
+  },
+  {
+   "id": "girl",
+   "what": "a girl of eleven with her grandmother's slip, on the bench",
+   "shape": {
+    "poly": [
+     [
+      678,
+      491
+     ],
+     [
+      701,
+      491
+     ],
+     [
+      701,
+      429
+     ],
+     [
+      678,
+      429
+     ]
+    ]
+   },
+   "stand": [
+    690,
+    489
+   ],
+   "face": "N",
+   "person": true,
+   "mark": "girl"
+  }
+ ],
+ "marks": {
+  "road": [
+   735,
+   548
+  ],
+  "stone": [
+   248,
+   484
+  ],
+  "path": [
+   214,
+   468
+  ],
+  "ryokai": [
+   236,
+   456
+  ],
+  "hall": [
+   493,
+   477
+  ],
+  "lock": [
+   485,
+   473
+  ],
+  "step": [
+   514,
+   470
+  ],
+  "ume": [
+   572,
+   456
+  ],
+  "hut": [
+   62,
+   466
+  ],
+  "bench": [
+   642,
+   508
+  ],
+  "tome": [
+   604,
+   489
+  ],
+  "wife": [
+   647,
+   489
+  ],
+  "girl": [
+   690,
+   489
+  ],
+  "view": [
+   690,
+   455
+  ],
+  "combs": [
+   686,
+   518
+  ]
+ },
+ "faces": {
+  "road": "W",
+  "stone": "N",
+  "path": "N",
+  "ryokai": "E",
+  "hall": "N",
+  "lock": "N",
+  "step": "N",
+  "ume": "W",
+  "hut": "N",
+  "bench": "N",
+  "tome": "S",
+  "wife": "S",
+  "girl": "S",
+  "view": "E",
+  "combs": "N"
+ },
+ "stands": {
+  "road": {
+   "at": [
+    735,
+    548
+   ],
+   "grownup_px": 138,
+   "floor": "ground"
+  },
+  "stone": {
+   "at": [
+    248,
+    484
+   ],
+   "grownup_px": 105,
+   "floor": "ground"
+  },
+  "path": {
+   "at": [
+    214,
+    468
+   ],
+   "grownup_px": 97,
+   "floor": "ground"
+  },
+  "ryokai": {
+   "at": [
+    236,
+    456
+   ],
+   "grownup_px": 91,
+   "floor": "ground"
+  },
+  "hall": {
+   "at": [
+    493,
+    477
+   ],
+   "grownup_px": 102,
+   "floor": "ground"
+  },
+  "lock": {
+   "at": [
+    485,
+    473
+   ],
+   "grownup_px": 100,
+   "floor": "ground"
+  },
+  "step": {
+   "at": [
+    514,
+    470
+   ],
+   "grownup_px": 98,
+   "floor": "ground"
+  },
+  "ume": {
+   "at": [
+    572,
+    456
+   ],
+   "grownup_px": 91,
+   "floor": "ground"
+  },
+  "hut": {
+   "at": [
+    62,
+    466
+   ],
+   "grownup_px": 96,
+   "floor": "ground"
+  },
+  "bench": {
+   "at": [
+    642,
+    508
+   ],
+   "grownup_px": 118,
+   "floor": "ground"
+  },
+  "tome": {
+   "at": [
+    604,
+    489
+   ],
+   "grownup_px": 108,
+   "floor": "ground"
+  },
+  "wife": {
+   "at": [
+    647,
+    489
+   ],
+   "grownup_px": 108,
+   "floor": "ground"
+  },
+  "girl": {
+   "at": [
+    690,
+    489
+   ],
+   "grownup_px": 108,
+   "floor": "ground"
+  },
+  "view": {
+   "at": [
+    690,
+    455
+   ],
+   "grownup_px": 90,
+   "floor": "ground"
+  },
+  "combs": {
+   "at": [
+    686,
+    518
+   ],
+   "grownup_px": 123,
+   "floor": "ground"
+  }
+ },
+ "sizes": {
+  "mom_px_at_hall": 94.4,
+  "lilsis_px_at_lock": 67.1,
+  "ume_136cm_px": 68.3,
+  "ryokai_150cm_px_standing": 75.3,
+  "mom_px_at_road": 128.4,
+  "doors_px": [
+   329,
+   431
+  ],
+  "lock_center": [
+   456,
+   383
+  ]
+ },
+ "exits": [
+  {
+   "id": "road",
+   "to": null,
+   "name": "the road back to the town",
+   "edge": "right",
+   "walkTo": [
+    735,
+    548
+   ],
+   "band": [
+    [
+     690,
+     560
+    ],
+    [
+     800,
+     470
+    ],
+    [
+     800,
+     598
+    ],
+    [
+     690,
+     598
+    ]
+   ],
+   "note": "to Himeji by the map ('An hour and a half's walk'), or the cut-scene Mind The Fire after #38"
+  },
+  {
+   "id": "path",
+   "to": null,
+   "name": "the path up the mountain",
+   "walkTo": [
+    214,
+    468
+   ],
+   "band": [
+    [
+     188,
+     452
+    ],
+    [
+     262,
+     452
+    ],
+    [
+     262,
+     300
+    ],
+    [
+     188,
+     300
+    ]
+   ],
+   "note": "refuses, for every one of them (Ryokai: 'Women may not climb.')"
+  },
+  {
+   "id": "doors",
+   "to": "edo-hall",
+   "spawn": "door",
+   "name": "into the hall",
+   "walkTo": [
+    493,
+    477
+   ],
+   "band": [
+    [
+     415,
+     435
+    ],
+    [
+     415,
+     330
+    ],
+    [
+     429,
+     329
+    ],
+    [
+     482,
+     328
+    ],
+    [
+     495,
+     328
+    ],
+    [
+     495,
+     428
+    ],
+    [
+     494,
+     429
+    ],
+    [
+     423,
+     435
+    ]
+   ],
+   "note": "once the lock is open and the doors have swung (edo.hallOpen)"
+  },
+  {
+   "id": "lock",
+   "to": "edo-lock",
+   "name": "the lock (close-up)",
+   "walkTo": [
+    485,
+    473
+   ],
+   "note": "the close-up; 'Step back.' returns here"
+  }
+ ],
+ "fx": [
+  {
+   "id": "pine",
+   "type": "sway",
+   "plane": "pine",
+   "anchor": "bottom",
+   "amount": 1.0,
+   "period": 4.6,
+   "what": "the near pine's pads stirring in the evening air"
+  },
+  {
+   "id": "petals",
+   "type": "petals",
+   "what": "a few petals from the late cherry on the slope, drifting down the slope",
+   "from": [
+    [
+     156,
+     226
+    ],
+    [
+     266,
+     222
+    ],
+    [
+     270,
+     286
+    ],
+    [
+     156,
+     290
+    ]
+   ],
+   "floor": 470,
+   "count": 4,
+   "wind": 10,
+   "fall": 18,
+   "size": [
+    2,
+    3
+   ],
+   "color": "#f2c9d4",
+   "color2": "#e2a8bc",
+   "plane": "back"
+  },
+  {
+   "id": "crows",
+   "type": "birds",
+   "what": "a crow or two going home to the mountain across the evening sky",
+   "lanes": [
+    [
+     [
+      830,
+      150
+     ],
+     [
+      260,
+      40
+     ]
+    ],
+    [
+     [
+      830,
+      200
+     ],
+     [
+      360,
+      70
+     ]
+    ]
+   ],
+   "every": [
+    9,
+    18
+   ],
+   "group": [
+    1,
+    2
+   ],
+   "speed": 50,
+   "size": 8,
+   "plane": "back",
+   "note": "engine-drawn dark silhouettes; at sunset most of all (the scene's `when`)"
+  }
+ ],
+ "fx_note": "Moving: the pine's pads, a few cherry petals, crows going home; the light (the sunset layer fading in over back.png, ENGINE-21); the bell from the mountain is a sound (ENGINE-21). The people's own small lives (PEOPLE-21B): O-Ume's rice ball on its leaf, Ryokai counting his beads, the women on the bench.",
+ "sunset_note": "The two lights: back.png + the plain cut-outs (gold), sunset.png + the -sunset twins. The engine fades sunset.png in over back.png on the back plane (under everybody), and switches each cut-out to its twin as it does (or cross-fades them too, if it can). The open doors show the dim hall with its bars of light in both lights (gold bars by day, red at sunset)."
+}

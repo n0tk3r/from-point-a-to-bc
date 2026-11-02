@@ -140,17 +140,31 @@ export class AudioEngine {
       const n = track.scale.length, d = ((degree % n) + n) % n;
       return track.root + 12 * (octave + Math.floor(degree / n)) + track.scale[d];
     };
+    // ENGINE-21: a bed under the tune, going on as long as the track does and fading with it: noise through a filter that drifts
+    // between two pitches (`bed: { noise: [low, high], sweep, q, level }`): the crowd under Osaka's tune, the wind under Shosha's
+    let bedStop = null;
+    if (track.bed && track.bed.noise) {
+      const bd = track.bed, src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(), t = ctx.currentTime;
+      src.buffer = this.breathBuffer(); src.loop = true; f.type = bd.kind || "bandpass"; f.Q.value = bd.q ?? 0.8;
+      const [lo, hi] = Array.isArray(bd.noise) ? bd.noise : [bd.noise, bd.noise];
+      f.frequency.setValueAtTime((lo + hi) / 2, t);
+      const nodes = [src];
+      if (hi !== lo) { const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = 1 / Math.max(0.5, bd.sweep || 6); depth.gain.value = (hi - lo) / 2; lfo.connect(depth).connect(f.frequency); lfo.start(t); nodes.push(lfo); }
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(bd.level ?? 0.02, t + 1.5);
+      src.connect(f).connect(g).connect(out); src.start(t);
+      bedStop = () => { for (const n of nodes) { try { n.stop(); } catch { /* stopped */ } } };
+    }
     const timer = setInterval(() => {
       while (next < ctx.currentTime + 0.14) {
         const i = step % track.lead.length;
         if (track.lead[i] != null) voice(pitch(track.lead[i], 1), next, stepLen * (track.hold || 1.7), track.wave || "triangle", track.level ?? 0.12, track.detune || 0, track.voice || null);      // (ENGINE-17: detune; ENGINE-20: voice)
         if (track.alt && track.alt[step % track.alt.length] != null) voice(pitch(track.alt[step % track.alt.length], track.altOctave ?? 1), next, stepLen * (track.altHold || track.hold || 1.7), "sine", track.altLevel ?? 0.07, 0, track.altVoice || "flute");      // ENGINE-20: the second line
         const b = track.bass[step % track.bass.length];
-        if (b != null) voice(pitch(b, -1), next, stepLen * 3.4, track.bassWave || "sine", track.bassLevel ?? 0.17);
+        if (b != null) voice(pitch(b, -1), next, stepLen * (track.bassHold || 3.4), track.bassWave || "sine", track.bassLevel ?? 0.17, 0, track.bassVoice || null);      // (ENGINE-21: bassHold, bassVoice)
         step++; next += stepLen;
       }
     }, 30);
-    return () => { clearInterval(timer); out.disconnect(); };
+    return () => { clearInterval(timer); if (bedStop) bedStop(); out.disconnect(); };
   }
   /** ENGINE-20: a second of noise, made once, for the flute's breath and the loops below. */
   breathBuffer() {
@@ -184,11 +198,21 @@ export class AudioEngine {
         if (hi !== lo) { const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = 1 / Math.max(0.5, spec.sweep || 6); depth.gain.value = (hi - lo) / 2; f.frequency.setValueAtTime((lo + hi) / 2, t); lfo.connect(depth).connect(f.frequency); lfo.start(t); nodes.push(lfo); }
         src.connect(f).connect(gain); src.start(t); nodes.push(src);
       }
+      // ENGINE-21: `pulse` (Hz): the notes throb on and off (frogs croaking); `gate` (Hz): and the whole chorus swells and lulls slowly
+      let into = gain;
+      if (spec.pulse || spec.gate) {
+        const pg = ctx.createGain(); pg.gain.value = 0.5; pg.connect(gain); into = pg;
+        for (const [rate, depthK] of [[spec.pulse, 0.5], [spec.gate, 0.35]]) {
+          if (!rate) continue;
+          const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.type = "sine"; lfo.frequency.value = rate; depth.gain.value = depthK;
+          lfo.connect(depth).connect(pg.gain); lfo.start(t); nodes.push(lfo);
+        }
+      }
       for (const [midi, lv] of spec.notes || []) {
         const osc = ctx.createOscillator(), e = ctx.createGain();
         osc.type = spec.wave || "sine"; osc.frequency.value = NOTE(midi); e.gain.value = lv ?? 1;
         if (spec.wobble) { const lfo = ctx.createOscillator(), depth = ctx.createGain(); lfo.frequency.value = spec.wobble; depth.gain.value = NOTE(midi) * 0.004; lfo.connect(depth).connect(osc.frequency); lfo.start(t); nodes.push(lfo); }
-        osc.connect(e).connect(gain); osc.start(t); nodes.push(osc);
+        osc.connect(e).connect(into); osc.start(t); nodes.push(osc);
       }
       L = this.loops[id] = { gain, nodes, level: want };
     }
@@ -239,6 +263,18 @@ export class AudioEngine {
       env.gain.linearRampToValueAtTime(0, t + len);
       src.connect(filter).connect(env).connect(this.sfxBus);
       src.start(t);
+    }
+    // ENGINE-21: several short bursts of noise in one sound (`noises`: [[from Hz, to Hz, start, length, level]]): two clacks of
+    // wooden clappers, feet stamping on boards, the beats of a laugh
+    for (const [f0, f1, at, len, lv] of fx.noises || []) {
+      const n = Math.max(1, Math.ceil(ctx.sampleRate * len)), buffer = ctx.createBuffer(1, n, ctx.sampleRate), data = buffer.getChannelData(0);
+      for (let i = 0; i < n; i++) data[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), env = ctx.createGain(), t0 = t + at;
+      src.buffer = buffer; filter.type = "bandpass"; filter.Q.value = fx.q || 1.2;
+      filter.frequency.setValueAtTime(f0, t0); filter.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t0 + len);
+      env.gain.setValueAtTime(0, t0); env.gain.linearRampToValueAtTime(lv ?? fx.level ?? 0.2, t0 + Math.min(0.006, len * 0.2)); env.gain.exponentialRampToValueAtTime(0.0008, t0 + len);
+      src.connect(filter).connect(env).connect(this.sfxBus);
+      src.start(t0);
     }
     for (const [midi, at, len, to] of fx.notes || []) {  // a few notes: clicks and pick-ups
       const osc = ctx.createOscillator(), env = ctx.createGain();

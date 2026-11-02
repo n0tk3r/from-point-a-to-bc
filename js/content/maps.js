@@ -148,21 +148,58 @@ export const maps = {
   // (theirs has the art and the pins; this one the legs, the far lines and the journeys' ways).
   // PAINT-20B: this entry is ENGINE-20's (S/work-20-engine), copied whole so that MERGE-20 joins the two as a union: theirs has
   // the legs, the far lines and the journeys' ways; the painted map is in art/maps/edo/ (map_edo.py) and its pins are below.
+  // ENGINE-21: Act Six made bigger (briefs/out/edo2-design.md, sections 3 and 9): FIVE LEGS. Yui (leg 1: the village, the fish
+  // shop, Nishikurasawa and the top of the Satta Pass), Osaka (leg 2: a place now, its three scenes), the hills (leg 3), Akashi
+  // (leg 4, new) and Himeji (leg 5: the town, the castle and the keep), with Shosha (leg 5, new: the women's hall, inside it, and
+  // its lock), which is not on the map at all until the family knows the way (`known`: edo.knowWay, #36), and then is a place to
+  // go to by the map from the town, and back ("An hour and a half's walk, north-west"). Every place behind the family refuses
+  // with its own line for the leg they are in (`far`: the line "edo.map.far.<place>.<leg>" if the lines files have it, else
+  // "edo.map.far.<place>": WRITE-21B's; "Too far to go back." until either is written).
+  // AT SEA: the deck and its compass are a place that is a point of the sea way (`on`, about five days of twelve out: off
+  // Daiōzaki): the map shows the family's portraits there on the sea path, and every place refuses with one line (its `travel`:
+  // "edo.map.atsea", "We're at sea. The map can wait.": the writers').
+  // The journeys' ways are as before; the walk of three days (the hills to Akashi) passes three STOPS, small pictures by the road
+  // (Kōriyama, Suma, Maiko: PAINT-21F's), each with a line said over it as the portraits pass (WRITE-21B's edo.walk.stop.*); and
+  // the Kyoto boat goes up the river path to Hirakata (a stop with no line: where the river ends and the road begins), then by the
+  // road north to the hills. Until PAINT-21F's layout.json has Akashi, Shosha, the new ways and the stops, each is a stand-in on
+  // the painting (atlas.js, paintedOf), at the sketch's pins below, near where it belongs; the sea place and the stops on ways
+  // are placed on their ways, whatever the painting.
+  // The cut-scenes' journeys (phase B's: the calls, docs/DESIGN.md "A journey on the map", ENGINE-21):
+  //   Casting Off            g.journey("edo", "yui", "sea", { sound: "creak" })
+  //   The Uttermost Parts    g.journey("edo", "sea", "osaka", { sound: "creak" })
+  //   The Kyoto Boat         g.journey("edo", "osaka", "hills", { segments: [{ to: "hirakata", sound: "haul" }, { to: "hills", sound: "sandals" }] })
+  //   Three days later       g.journey("edo", "hills", "akashi", { sound: "sandals", stops: ["koriyama", "suma", "maiko"], ms: 5200 })
+  //   The next day           g.journey("edo", "akashi", "himeji", { sound: "sandals" })
   edo: {
     era: "edo", name: "Japan", art: "art/maps/edo/",
     places: {
-      yui: { scenes: ["edo-village", "edo-fishshop"], label: "Yui", leg: 1, far: "edo.map.far.yui" },
-      osaka: { scenes: [], label: "Osaka", shown: (g) => !!g.flag("edo.sailed"), leg: 2, far: "edo.map.far.osaka" },      // (MERGE-20: far, for Osaka faint beyond the bay from Yui)
-      hills: { scenes: ["edo-cedars", "edo-storehouse", "edo-chapel"], label: "The hills", leg: 2, far: "edo.map.far.hills" },
-      himeji: { scenes: ["edo-castle", "edo-keep", "edo-keeptop"], label: "Himeji", leg: 3, far: "edo.map.far.himeji" },
+      yui: { scenes: ["edo-village", "edo-fishshop", "edo-kurasawa", "edo-satta"], label: "Yui", leg: 1, far: "edo.map.far.yui" },      // (ENGINE-21: and the pass)
+      sea: { scenes: ["edo-deck", "edo-compass"], label: "At sea", on: { a: "yui", b: "osaka", at: 0.42 },
+        travel: { mom: "edo.map.atsea.mom", bigsis: "edo.map.atsea.bigsis", lilsis: "edo.map.atsea.lilsis" } },      // ENGINE-21: at sea (SCENES-21A: WRITE-21A's line for each of the three; was "edo.map.atsea", not written)
+      osaka: { scenes: ["edo-dojima", "edo-street", "edo-theatre"], label: "Osaka", leg: 2, far: "edo.map.far.osaka" },      // (ENGINE-21: a place now, not a landmark)
+      hills: { scenes: ["edo-cedars", "edo-storehouse", "edo-chapel"], label: "The hills", leg: 3, far: "edo.map.far.hills" },
+      akashi: { scenes: ["edo-akashi"], label: "Akashi", leg: 4, far: "edo.map.far.akashi" },      // ENGINE-21
+      himeji: { scenes: ["edo-town", "edo-castle", "edo-keep", "edo-keeptop"], label: "Himeji", leg: 5, far: "edo.map.far.himeji" },      // (ENGINE-21: the town first)
+      shosha: { scenes: ["edo-shosha", "edo-hall", "edo-lock"], label: "Shosha", leg: (g) => (g.flag("edo.nightDone") ? 0 : 5), far: "edo.map.shosha.done", known: (g) => !!g.flag("edo.knowWay"), go: "to the women's hall at Shosha" },      // ENGINE-21 (SCENES-21C: the next day, Shosha is behind them: "Shosha's done its part. Today it's the castle.")
     },
     paths: [
       { a: "yui", b: "osaka", journey: true },        // the sea: the voyage (twelve days)
-      { a: "osaka", b: "hills", journey: true },      // the road north into the hills
-      { a: "hills", b: "himeji", journey: true },     // the coast road west (three days)
+      { a: "osaka", b: "hills", journey: true },      // the river path up the Yodo, then the road north into the hills (ENGINE-21: the Kyoto boat)
+      { a: "hills", b: "akashi", journey: true },     // ENGINE-21: the road west, three days (Kōriyama, Suma, Maiko)
+      { a: "akashi", b: "himeji", journey: true },    // ENGINE-21: the road on to Himeji, a day
+      { a: "himeji", b: "shosha", spawn: { himeji: "gate", shosha: "road" } },      // ENGINE-21: an hour and a half's walk, north-west (travelled)
     ],
+    // ENGINE-21: the stops, small pictures by the way: each `on` a way (or with a pin of the painters'), its `line` said as a
+    // journey's portraits come to it, `shown` once the family has gone by (so the map keeps them after)
+    stops: {
+      hirakata: { label: "Hirakata", on: { a: "osaka", b: "hills", near: [344, 356] } },
+      koriyama: { label: "Kōriyama", on: { a: "hills", b: "akashi", at: 0.14 }, line: "edo.walk.stop.koriyama", shown: (g) => !!g.flag("edo.walked") },
+      suma: { label: "Suma", on: { a: "hills", b: "akashi", at: 0.52 }, line: "edo.walk.stop.suma", shown: (g) => !!g.flag("edo.walked") },
+      maiko: { label: "Maiko", on: { a: "hills", b: "akashi", at: 0.78 }, line: "edo.walk.stop.maiko", shown: (g) => !!g.flag("edo.walked") },
+    },
     // PAINT-20B: the sketch's pins where the painted map has them (art/maps/edo/layout.json), for a page that draws the sketch
-    sketch: { places: { yui: [640, 312], osaka: [300, 448], hills: [300, 308], himeji: [130, 296] } },
+    // (ENGINE-21: and the new places' stand-ins near where they belong: Akashi on the coast road east of Himeji, Shosha north-west of it)
+    sketch: { places: { yui: [640, 312], osaka: [300, 448], hills: [300, 308], akashi: [205, 368], himeji: [130, 296], shosha: [100, 262] } },
   },
 
   // The engine's own proof (js/content/scenes/engine-proof.js, the letterbox): a map for each of its two scenes, drawn as
@@ -175,13 +212,19 @@ export const maps = {
   // that from either the other is "far" (the sand's far is a line of the proof's, the room's a thought); without the fact,
   // neither has a leg and the map is as it was. The way between them is kept for travel; a second way, `journey` only, runs
   // round by the dunes (the proof's journey goes along it: proof.journey in engine-proof.js).
+  // ENGINE-21: and round twenty-one's: the close-up of the strongbox is part of the sand (proof-near); a boat on the river is a
+  // place that is a point of the way round by the dunes (`on`: at sea, as Act Six's deck is: its travel says why not); the way
+  // round by the dunes has two stops, each with a line (the journeys' pictures by the way: proof.stops)
   "proof-sand": {
     era: "egypt", name: "Proof sand",
-    places: { sand: { scenes: ["engine-proof"], label: "Where the wagon came down", leg: (g) => (g.flag("proof.legs") ? 1 : null), far: "proof.far.sand" },
+    places: { sand: { scenes: ["engine-proof", "proof-near"], label: "Where the wagon came down", leg: (g) => (g.flag("proof.legs") ? 1 : null), far: "proof.far.sand" },      // (ENGINE-21: and its close-up)
+      boat: { scenes: ["proof-boat"], label: "On the river", on: { a: "sand", b: "dunes", at: 0.5 }, travel: "proof.atsea" },      // ENGINE-21: at sea
       below: { scenes: ["proof-below"], label: "Under the sand", travel: { dad: "proof.travel.dad" }, leg: (g) => (g.flag("proof.legs") ? 2 : null), far: "proof.far.below" },      // ENGINE-17 (ENGINE-20: the legs)
       dunes: { scenes: [], label: "The dunes", shown: (g) => !!g.flag("proof.journey"), leg: (g) => (g.flag("proof.legs") ? 2 : null) } },      // ENGINE-20: a landmark the journey passes
     paths: [{ a: "sand", b: "below", spawn: { sand: "grate", below: "fromSand" } },                           // ENGINE-17
       { a: "sand", b: "dunes", journey: true }, { a: "dunes", b: "below", journey: true }],                   // ENGINE-20: the journey's way, round by the dunes
+    stops: { well: { label: "A well", on: { a: "sand", b: "dunes", at: 0.25 }, line: "proof.stop.well" },          // ENGINE-21: a journey's stops
+      oasis: { label: "An oasis", on: { a: "dunes", b: "below", at: 0.5 }, line: "proof.stop.oasis", shown: (g) => !!g.flag("proof.stopped") } },
     sketch: { places: { sand: [400, 280], below: [400, 440], dunes: [620, 360] } },
   },
   "proof-street": {

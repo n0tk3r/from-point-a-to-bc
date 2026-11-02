@@ -1,22 +1,27 @@
 // Cut-scene: "The Uttermost Parts", the voyage (SCENES-20A, in place of MERGE-20's stub; the beat edo.sail; the design,
-// briefs/out/edo-design.md, "Cut-Scene: The Uttermost Parts"; the lines are WRITE-20A's, edo.card.sail*, edo.sail.*). It is
-// played by the village after the goodbyes (#24's gate: edo.west, with the year worked out), from edo-village.js `depart`.
+// briefs/out/edo-design.md, "Cut-Scene: The Uttermost Parts"; the lines are WRITE-20A's, edo.card.sail*, edo.sail.*).
+// SCENES-21A (round twenty-one: briefs/out/edo2-design.md, "Cut-Scene: The Uttermost Parts (as built, edited)"; WRITE-21A's
+// SAIL_EDIT, talk/edo-c.js): it is played on the deck now (edo-deck.js, edo-sea.js `uttermost`), when #26 and #27 are both
+// done; the box of sushi is eaten on the first night, in Casting Off; after the night the card is WRITE-21A's "Eight days
+// later" (the deck is the fifth day of twelve); and the quick Osaka passage (round twenty's osakaQuay picture and
+// edo.sail.osaka.1, .2) is the river mouth, the lighter, Gonroku's goodbye at the Dōjima steps and the landing.
 //
 //   the card    "The Uttermost Parts"
-//   the rail    Gonroku's ship at night under its one great sail, the sea dark and enormous, the coast a line of low lights,
-//               a moon on the water. First the box, eaten at the rail (edo.sail.box.1, .2: the sushibox is taken from whoever
-//               carries it); then Big Sister asleep on a coil of rope, Little Sister asleep on Big Sister, and Mom at the stern
+//   the rail    the ship at night under its one great sail, the sea dark and enormous, the coast a line of low lights, a moon
+//               on the water; Big Sister asleep on a coil of rope, Little Sister asleep on Big Sister, and Mom at the stern
 //               rail, saying it to the sea, quietly: Psalm 139:9-10, King James, in two lines (edo.sail.1, .2); Big Sister,
 //               not asleep, gives the reference (the only one of them who says one aloud); "Go to sleep, darling."
-//               Nobody painted a ship: the night is drawn here, as a picture over the stage (g.closeup), the three in it as
-//               shapes against the moonlit sea, the deck riding the swell.
-//   the card    "Twelve days later" / "Osaka"; edo.sailed (the map shows Osaka); the map: the portraits along the coast by the
-//               sea path, through Osaka to the hills (g.journey, the ship's timbers creaking)
-//   Osaka       briefly, in a picture over the stage as the night is (the river mouth, the quay, the crowds with ladles going
-//               east, the constable's man who looks twice, the three going west) and its lines (edo.sail.osaka.*), Gonroku's
-//               advice (north, into the hills)
-//   the hills   g.goto("edo-cedars", { spawn: "enter" }) in the dark of the map (no era card: the same time): the second leg.
-// Skipped, the same: the box gone, edo.sailed, the cedar path.
+//               Nobody painted a ship by night: the night is drawn here, as a picture over the stage (g.closeup).
+//   the card    "Eight days later" / "Osaka" (edo.card.sail.later, edo.card.osaka); edo.sailed; the map: the portraits along
+//               the sea path from the ship's place at sea to Osaka (g.journey("edo", "sea", "osaka"), the timbers creaking)
+//   the mouth   masts crowding the two river mouths, the city beyond, and on its skyline a castle with walls and turrets and
+//               no top (Gonroku: "Burned before my grandfather."); the lighter alongside: the ship stays at the mouth;
+//               Kōta's goodbye and Denzō's
+//   the steps   up the river in the lighter to the Dōjima steps; Gonroku's goodbye (round twenty's edo.sail.osaka.3, .3b, .4,
+//               then "And don't tell anybody anything true." "That's the only kind I've got."; .5 as the lighter goes)
+//   Osaka       g.goto("edo-dojima", { spawn: "landing" }) in the dark (no era card: the same time): the second leg. The
+//               Dōjima shore says its own first words there (WRITE-21A's LANDING: the scene's, SCENES-21B).
+// Skipped, the same: edo.sailed, the hats on, the Dōjima shore at `landing`.
 
 import { THREE, cardWords } from "../scenes/edo-yui.js";
 
@@ -82,84 +87,85 @@ export function nightAtSea(asleep = false) {
   return s;
 }
 
-/** Osaka, twelve days later, briefly (not a scene: a picture over the stage, as the night is): the river mouth in the late
-    afternoon, warehouses and roofs beyond, boats; on the quay a crowd going east, ladles held up (pilgrims for Ise), and
-    three taller travellers in hats going the other way, west, the smallest in pink; at the left a constable's man in a
-    belt, turned to look at them; Gonroku's ship tied up at the right. */
-export function osakaQuay() {
-  let seed = 23;
+/** SCENES-21A: the river mouth, eight days later: ships at anchor off the mouths of the two rivers, masts crowding them like
+    reeds; the low city beyond, white storehouses, roofs; on the skyline a long line of castle walls and corner turrets, and
+    no keep; Gonroku's ship anchored near, the lighter alongside her (`lighter`: the three in it, Kōta waving from the rail). */
+export function riverMouth(lighter = false) {
+  let seed = 53;
   const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-  let s = `<defs><linearGradient id="s20a-osaka-sky" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270"><stop offset="0" stop-color="#5a6a8e"/><stop offset="0.62" stop-color="#a3a2b0"/><stop offset="1" stop-color="#e8cf9c"/></linearGradient></defs>`;
-  s += `<rect width="800" height="600" fill="url(#s20a-osaka-sky)"/>`;
-  // the hills far beyond the town in the morning haze, and gulls over the river mouth
-  s += `<path d="M0 238 C90 214 150 206 230 220 C300 232 350 204 430 198 C520 192 590 222 660 214 C720 208 770 196 800 200 L800 270 L0 270 Z" fill="#7d84a0" opacity="0.5"/>`;
-  for (const [x, y, k] of [[180, 122, 1], [214, 140, 0.8], [520, 98, 0.9], [548, 112, 0.7], [610, 150, 0.6]]) {
-    s += `<path d="M${x - 9 * k} ${y} Q${x - 4 * k} ${y - 5 * k} ${x} ${y} Q${x + 4 * k} ${y - 5 * k} ${x + 9 * k} ${y}" fill="none" stroke="#3a3f52" stroke-width="1.6" stroke-linecap="round"/>`;
+  let s = `<defs><linearGradient id="s21a-mouth-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a5a96"/><stop offset="0.7" stop-color="#9fb2cc"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient>`;
+  s += `<linearGradient id="s21a-mouth-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a7096"/><stop offset="1" stop-color="#2a3a62"/></linearGradient></defs>`;
+  s += `<rect width="800" height="600" fill="url(#s21a-mouth-sky)"/>`;
+  for (const [y, h, o] of [[70, 20, 0.06], [130, 24, 0.08], [188, 26, 0.1]]) s += `<rect y="${y}" width="800" height="${h}" fill="#e8dcc0" opacity="${o}"/>`;      // the sky in soft bands
+  // the castle on its rise above the city: long stone walls, white plaster, four corner turrets roofed in grey, and no top
+  s += `<path d="M330 262 C380 236 430 226 520 224 C610 222 660 232 720 262 Z" fill="#7d8aa0"/>`;
+  s += `<path d="M400 238 L640 238 L652 252 L388 252 Z" fill="#9aa3b4"/><rect x="404" y="222" width="232" height="18" fill="#eeeef0"/><rect x="404" y="220" width="232" height="4" fill="#4e5670"/>`;
+  for (const x of [398, 478, 560, 626]) s += `<rect x="${x}" y="196" width="22" height="28" fill="#f4f4f6"/><rect x="${x + 7}" y="206" width="8" height="6" fill="#4e5670"/><path d="M${x - 6} 200 L${x + 11} 186 L${x + 28} 200 Z" fill="#4e5670"/><path d="M${x - 5} 212 L${x + 11} 203 L${x + 27} 212 Z" fill="#4e5670"/>`;
+  // the city, low and wide; white storehouses among the roofs
+  for (let x = -20; x < 820; x += 30 + rnd() * 26) { const w = 26 + rnd() * 24, h = 10 + rnd() * 10, kura = rnd() < 0.25, top = 268 - h - (kura ? 6 : 0);
+    s += `<rect x="${x.toFixed(0)}" y="${top.toFixed(0)}" width="${w.toFixed(0)}" height="${(272 - top).toFixed(0)}" fill="${kura ? "#efe9da" : "#9a9488"}"/><path d="M${(x - 3).toFixed(0)} ${top.toFixed(0)} L${(x + w * 0.2).toFixed(0)} ${(top - 7).toFixed(0)} L${(x + w * 0.8).toFixed(0)} ${(top - 7).toFixed(0)} L${(x + w + 3).toFixed(0)} ${top.toFixed(0)} Z" fill="#4a5068"/>`; }
+  s += `<rect y="270" width="800" height="330" fill="url(#s21a-mouth-sea)"/>`;
+  for (let i = 0; i < 50; i++) s += `<rect x="${(rnd() * 800).toFixed(0)}" y="${(276 + rnd() * 320).toFixed(0)}" width="${(10 + rnd() * 30).toFixed(0)}" height="1.6" fill="#c8d4e6" opacity="0.5"/>`;
+  // masts: hundreds of them, standing in the river mouths like reeds
+  for (let i = 0; i < 70; i++) { const x = 20 + rnd() * 760, base = 274 + rnd() * 26, h = 40 + rnd() * 70;
+    s += `<rect x="${x.toFixed(0)}" y="${(base - h).toFixed(0)}" width="2" height="${h.toFixed(0)}" fill="#3a2e24" opacity="${(0.55 + rnd() * 0.4).toFixed(2)}"/><path d="M${(x - 9).toFixed(0)} ${(base + 2).toFixed(0)} L${(x + 11).toFixed(0)} ${(base + 2).toFixed(0)} L${(x + 7).toFixed(0)} ${(base + 7).toFixed(0)} L${(x - 5).toFixed(0)} ${(base + 7).toFixed(0)} Z" fill="#3a2e24" opacity="0.8"/>`; }
+  // Gonroku's ship, anchored near: hull, mast, the sail furled on its yard
+  s += `<path d="M90 420 L470 420 L440 470 L120 470 Z" fill="#2c2116"/><rect x="268" y="150" width="9" height="272" fill="#2c2116"/><rect x="170" y="390" width="200" height="12" rx="6" fill="#d8ccb4"/>`;
+  s += `<rect x="100" y="408" width="360" height="8" fill="#5a4030"/>`;
+  // Kōta at the rail, waving
+  s += `<g transform="translate(330 408)"><path d="M-7 -36 L7 -36 L9 0 L-9 0 Z" fill="#3e4e8a"/><circle cx="0" cy="-42" r="6" fill="#d9b38c"/><rect x="-6" y="-49" width="12" height="4" fill="#e8e2d2"/><line x1="6" y1="-34" x2="16" y2="-52" stroke="#3e4e8a" stroke-width="3" stroke-linecap="round"/></g>`;
+  if (lighter) {                                                                                              // the lighter alongside: a long flat boat, a man poling, the three among bales
+    s += `<path d="M300 500 L700 492 L684 530 L316 536 Z" fill="#4a3624"/><path d="M300 500 L700 492" stroke="#7a5a3a" stroke-width="3"/>`;
+    for (const x of [420, 460, 500]) s += `<rect x="${x}" y="486" width="34" height="18" rx="5" fill="#c8b070"/>`;
+    s += `<g transform="translate(650 498)"><path d="M-9 -44 L9 -44 L11 0 L-11 0 Z" fill="#4a5a7a"/><circle cx="0" cy="-51" r="6" fill="#c89a72"/></g><line x1="640" y1="448" x2="610" y2="560" stroke="#7a5a3a" stroke-width="3"/>`;
+    const fig = (x, y, k, coat, boots = false) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-10 -52 L10 -52 L12 0 L-12 0 Z" fill="${coat}"/><circle cx="0" cy="-60" r="7" fill="#d9b38c"/><path d="M-16 -60 L0 -73 L16 -60 Z" fill="#c8b070"/>${boots ? `<rect x="-8" y="-4" width="6" height="5" fill="#f2c230"/><rect x="2" y="-4" width="6" height="5" fill="#f2c230"/>` : ""}</g>`;
+    s += fig(344, 500, 0.95, "#2e8a5a") + fig(372, 498, 0.9, "#3e4e9a") + fig(396, 500, 0.7, "#d86a96", true);
+    s += `<g transform="translate(560 496)"><path d="M-10 -52 L10 -52 L12 0 L-12 0 Z" fill="#2e3c5a"/><circle cx="0" cy="-60" r="7" fill="#c89a72"/><rect x="-7" y="-68" width="14" height="5" fill="#e8e2d2"/></g>`;      // Gonroku, going up with them
   }
-  // the town beyond the river: two rows of houses on the far bank (the far row hazier), white storehouses among them
-  for (const [base, k, wall, roof, haze] of [[262, 0.7, "#8a8a96", "#4a5068", 0.55], [282, 1, "#a09884", "#3a3f52", 1]]) {
-    for (let x = -30; x < 830; x += (44 + rnd() * 26) * k) {
-      const w = (36 + rnd() * 24) * k, h = (16 + rnd() * 10) * k, kura = rnd() < 0.2, top = base - h - (kura ? 8 * k : 0);
-      s += `<g opacity="${haze}"><rect x="${x.toFixed(0)}" y="${top.toFixed(0)}" width="${w.toFixed(0)}" height="${(base - top).toFixed(0)}" fill="${kura ? "#ebe5d6" : wall}"/>`;
-      s += `<path d="M${(x - 4 * k).toFixed(0)} ${top.toFixed(0)} L${(x + w * 0.2).toFixed(0)} ${(top - 9 * k).toFixed(0)} L${(x + w * 0.8).toFixed(0)} ${(top - 9 * k).toFixed(0)} L${(x + w + 4 * k).toFixed(0)} ${top.toFixed(0)} Z" fill="${roof}"/></g>`;
-    }
-  }
-  s += `<rect y="282" width="800" height="6" fill="#6e6a62"/>`;                        // the far bank's stones
-  // the river, and boats on it
-  s += `<rect y="286" width="800" height="120" fill="#3a5078"/>`;
-  for (let i = 0; i < 30; i++) s += `<rect x="${(rnd() * 800).toFixed(0)}" y="${(292 + rnd() * 108).toFixed(0)}" width="${(10 + rnd() * 30).toFixed(0)}" height="1.6" fill="#9cb0d0" opacity="0.6"/>`;
-  for (const [x, y, w] of [[90, 318, 60], [260, 352, 74], [430, 330, 52]]) s += `<path d="M${x} ${y} L${x + w} ${y} L${x + w - 8} ${y + 9} L${x + 8} ${y + 9} Z" fill="#2a2018"/><rect x="${x + w / 2 - 1}" y="${y - 30}" width="2" height="30" fill="#2a2018"/>`;
-  // Gonroku's ship, tied up at the right
-  s += `<path d="M560 372 L780 372 L760 402 L580 402 Z" fill="#2c2116"/><rect x="664" y="250" width="6" height="122" fill="#2c2116"/><path d="M600 262 L740 266 L736 352 L604 348 Z" fill="#cfcabb" opacity="0.85"/>`;
-  // the quay
-  s += `<rect y="406" width="800" height="194" fill="#8a8170"/><rect y="406" width="800" height="8" fill="#6e6656"/>`;
-  for (let i = 0; i < 12; i++) s += `<rect x="${i * 70 + (i % 2) * 20}" y="${430 + (i % 3) * 50}" width="60" height="2" fill="#7a725f"/>`;
-  // the crowd going east with their ladles up
-  const person = (x, y, k, coat, hat, ladle, faceL = false) => {
-    let p = `<g transform="translate(${x.toFixed(0)} ${y.toFixed(0)}) scale(${k.toFixed(2)})">`;
-    p += `<path d="M-9 -58 L9 -58 L12 0 L-12 0 Z" fill="${coat}"/><circle cx="0" cy="-66" r="7" fill="#d9b38c"/>`;
-    p += hat ? `<path d="M-15 -66 L0 -78 L15 -66 Z" fill="#c8b070"/>` : `<rect x="-6" y="-76" width="12" height="6" fill="#2a2420"/>`;
-    if (ladle) p += `<rect x="${faceL ? -16 : 12}" y="-92" width="2" height="40" fill="#7a5a32"/><ellipse cx="${faceL ? -15 : 13}" cy="-93" rx="5" ry="3" fill="#a07a42"/>`;
-    return p + `</g>`;
-  };
-  const coats = ["#5a6f8f", "#7d6a52", "#4f6a5a", "#8a5a4a", "#6a6a7a", "#9a8a6a"];
-  for (let i = 0; i < 26; i++) { const y = 440 + rnd() * 120; s += person(30 + rnd() * 740, y, 0.7 + (y - 440) / 300, coats[i % coats.length], rnd() < 0.7, rnd() < 0.8); }
-  // the three of them, going west, taller than everybody, in their hats; the smallest in pink
-  s += person(486, 548, 1.30, "#2e8a5a", true, false) + person(452, 556, 1.22, "#3e4e9a", true, false) + person(424, 566, 0.92, "#d86a96", true, false);
-  // a constable's man in a belt, at the left, turned to look at them twice
-  s += `<g transform="translate(92 560) scale(1.25)"><path d="M-10 -58 L10 -58 L12 0 L-12 0 Z" fill="#3a3a44"/><rect x="-11" y="-30" width="22" height="4" fill="#b08a3a"/><rect x="8" y="-34" width="3" height="26" fill="#5a4a3a"/><circle cx="2" cy="-66" r="7" fill="#d9b38c"/><rect x="-5" y="-76" width="12" height="6" fill="#2a2420"/></g>`;
-  // Gonroku, by his ship
-  s += `<g transform="translate(624 520) scale(1.15)"><path d="M-10 -58 L10 -58 L12 0 L-12 0 Z" fill="#2e3c5a"/><circle cx="0" cy="-66" r="7" fill="#c89a72"/><rect x="-7" y="-74" width="14" height="5" fill="#e8e2d2"/></g>`;
   return s;
 }
 
-/** The sushibox goes from whoever has it (eaten at the rail, the whole box). */
-function eatBox(g) {
-  const who = g.holder ? g.holder("sushibox") : null;
-  if (!who) return;
-  const pockets = g.store.data.inventory[who], i = pockets.indexOf("sushibox");
-  if (i >= 0) { pockets.splice(i, 1); g.store.emit(); }
+/** SCENES-21A: the Dōjima steps from the river: the stone steps up from the water, a rice dealer's house front and white
+    warehouses above, the lighter at the foot of the steps with Gonroku in it; the three on the steps, going up. */
+export function dojimaSteps() {
+  let seed = 61;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  let s = `<defs><linearGradient id="s21a-steps-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a5e9e"/><stop offset="1" stop-color="#e2d6b8"/></linearGradient></defs>`;
+  s += `<rect width="800" height="600" fill="url(#s21a-steps-sky)"/>`;
+  // the shore street above: the house fronts and the white storehouses, roofs
+  for (let x = -10; x < 820; x += 120 + rnd() * 40) { const w = 110 + rnd() * 30, kura = rnd() < 0.5;
+    s += `<rect x="${x.toFixed(0)}" y="150" width="${w.toFixed(0)}" height="130" fill="${kura ? "#efe9da" : "#7a3e2a"}"/>`;
+    s += `<path d="M${(x - 12).toFixed(0)} 156 L${(x + 10).toFixed(0)} 116 L${(x + w - 10).toFixed(0)} 116 L${(x + w + 12).toFixed(0)} 156 Z" fill="#4e5670"/>`;      // a tiled roof, overhanging
+    for (let r = 124; r < 154; r += 7) s += `<line x1="${(x - 6).toFixed(0)}" y1="${r}" x2="${(x + w + 6).toFixed(0)}" y2="${r}" stroke="#3a4058" stroke-width="1"/>`;
+    if (!kura) { s += `<rect x="${(x + 16).toFixed(0)}" y="196" width="${(w - 32).toFixed(0)}" height="50" fill="#2a2e46"/>`;      // a dealer's open front, its noren
+      for (let n = 0; n < 4; n++) s += `<rect x="${(x + 18 + n * (w - 36) / 4).toFixed(0)}" y="196" width="${((w - 40) / 4).toFixed(0)}" height="20" fill="#3a5a8a"/>`; }
+    else s += `<rect x="${(x + w / 2 - 12).toFixed(0)}" y="200" width="24" height="44" fill="#2a2e46"/><rect x="${(x + 10).toFixed(0)}" y="252" width="${(w - 20).toFixed(0)}" height="6" fill="#8a8274"/>`; }
+  s += `<rect y="280" width="800" height="40" fill="#d8c494"/>`;                                            // the shore street, sand
+  // the stone steps down to the water
+  for (let i = 0; i < 8; i++) s += `<rect x="${260 - i * 6}" y="${318 + i * 18}" width="${280 + i * 12}" height="18" fill="${i % 2 ? "#b8ab92" : "#c8bca2"}"/><rect x="${260 - i * 6}" y="${318 + i * 18}" width="${280 + i * 12}" height="2" fill="#8a7e68"/>`;
+  s += `<rect y="462" width="800" height="138" fill="#4a6a7e"/>`;                                           // the river
+  for (let i = 0; i < 40; i++) s += `<rect x="${(rnd() * 800).toFixed(0)}" y="${(468 + rnd() * 128).toFixed(0)}" width="${(10 + rnd() * 30).toFixed(0)}" height="1.6" fill="#b8ccd8" opacity="0.6"/>`;
+  // the lighter at the foot of the steps, Gonroku standing in it, the boatman with his pole
+  s += `<path d="M180 486 L640 480 L622 520 L196 526 Z" fill="#4a3624"/><path d="M180 486 L640 480" stroke="#7a5a3a" stroke-width="3"/>`;
+  s += `<g transform="translate(420 490)"><path d="M-11 -56 L11 -56 L13 0 L-13 0 Z" fill="#2e3c5a"/><circle cx="0" cy="-64" r="8" fill="#c89a72"/><rect x="-8" y="-73" width="16" height="5" fill="#e8e2d2"/></g>`;
+  s += `<g transform="translate(590 488)"><path d="M-9 -44 L9 -44 L11 0 L-11 0 Z" fill="#4a5a7a"/><circle cx="0" cy="-51" r="6" fill="#c89a72"/></g><line x1="584" y1="436" x2="560" y2="560" stroke="#7a5a3a" stroke-width="3"/>`;
+  // the three on the steps, going up, turned back to him
+  const fig = (x, y, k, coat, boots = false) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-12 -62 L12 -62 L14 0 L-14 0 Z" fill="${coat}"/><circle cx="0" cy="-71" r="8" fill="#d9b38c"/><path d="M-18 -70 L0 -84 L18 -70 Z" fill="#c8b070"/>${boots ? `<rect x="-9" y="-5" width="7" height="6" fill="#f2c230"/><rect x="2" y="-5" width="7" height="6" fill="#f2c230"/>` : ""}</g>`;
+  s += fig(352, 426, 1.0, "#2e8a5a") + fig(392, 408, 0.95, "#3e4e9a") + fig(428, 394, 0.74, "#d86a96", true);
+  return s;
 }
 
 export default async function sail(g) {
   g.dialogue.clear();
-  // the people of the village, and the three, off the stage under the night (their lines are said from off it)
-  for (const id of [...THREE, "gonroku", "kihei", "tami", "sankichi", "masa"]) { const f = g.actor(id); if (f) f.fade(0); }
+  // the people of the deck, and the three, off the stage under the night (their lines are said from off it)
+  for (const id of [...THREE, "gonroku", "kanbei", "denzo", "seijiro", "kota", "kako1", "kako2"]) { const f = g.actor(id); if (f) f.fade(0); }      // SCENES-21A: the deck's people (was the village's)
   await g.fade(1, 900);
   await g.card(cardWords(g, "edo.card.sail.title", "The Uttermost Parts"), "", { plain: true, ms: 2600 });
-  // the ship at night: the box, eaten at the rail
-  g.closeup(nightAtSea(false), "Gonroku's ship at night: the sea, the coast's lights, the great sail; the three of them at the stern rail", { grid: [800, 600] });
-  g.sfx("creak");
-  await g.fade(0, 900);
-  await g.wait(800);
-  await g.say("edo.sail.box.1", "edo.sail.box.2");
-  eatBox(g);
-  await g.wait(600);
-  // later: the girls asleep on the rope; Mom at the stern rail, to the sea, quietly
-  await g.fade(1, 700);
+  // the ship at night: the girls asleep on the rope; Mom at the stern rail, to the sea, quietly (SCENES-21A: the box was eaten
+  // on the first night, in Casting Off)
   g.closeup(nightAtSea(true), "Gonroku's ship at night: Big Sister and Little Sister asleep on a coil of rope; Mom at the stern rail", { grid: [800, 600] });
-  await g.fade(0, 900);
   g.sfx("creak");
+  await g.fade(0, 900);
   await g.wait(1600);
   await g.say("edo.sail.1", "edo.sail.2");
   await g.wait(1200);
@@ -167,23 +173,35 @@ export default async function sail(g) {
   await g.wait(500);
   await g.say("edo.sail.5", "edo.sail.6", "edo.sail.7");
   await g.wait(1400);
-  // twelve days later: Osaka
+  // eight days later: Osaka (SCENES-21A: WRITE-21A's card; the night is the fifth day's)
   await g.fade(1, 1000);
   g.closeup();
-  await g.card(cardWords(g, "edo.card.sail", "Twelve days later"), cardWords(g, "edo.card.osaka", "Osaka"), { plain: true, ms: 3000 });
+  await g.card(cardWords(g, "edo.card.sail.later", "Eight days later"), cardWords(g, "edo.card.osaka", "Osaka"), { plain: true, ms: 3000 });
   g.flag("edo.sailed", true);
   for (const id of THREE) if (g.dressOf(id) !== "edo") g.dress(id, "edo");          // (on the road from here: the hats on)
-  await g.journey("edo", "yui", "hills", { via: ["osaka"], sound: "creak" });
-  // Osaka, briefly: the river mouth, the crowds with ladles going east, a constable's man who looks twice
-  g.closeup(osakaQuay(), "Osaka: the river mouth, a crowd with ladles going east, and the three of them going west", { grid: [800, 600] });
+  await g.journey("edo", "sea", "osaka", { sound: "creak" });                       // SCENES-21A: from the ship's place at sea (was yui to the hills by Osaka)
+  // SCENES-21A: the river mouth; the castle with no top; the lighter alongside
+  g.closeup(riverMouth(false), "Osaka from the sea: masts crowding the river mouths, the city beyond, a castle on the skyline with walls and turrets and no top", { grid: [800, 600] });
+  await g.fade(0, 800);
+  await g.wait(600);
+  await g.say("edo.sail.mouth.1", "edo.sail.mouth.2", "edo.sail.mouth.3", "edo.sail.mouth.4");
+  await g.wait(400);
+  g.closeup(riverMouth(true), "The lighter alongside Gonroku's ship at the river mouth: the three of them in it among the bales, Gonroku with them, Kōta waving from the rail", { grid: [800, 600] });
+  g.sfx("creak");
+  await g.wait(500);
+  await g.say("edo.sail.lighter.1", "edo.sail.lighter.2", "edo.sail.lighter.3", "edo.sail.lighter.4");
+  await g.wait(500);
+  // SCENES-21A: up the river to the Dōjima steps; Gonroku's goodbye
+  await g.fade(1, 700);
+  g.closeup(dojimaSteps(), "The Dōjima steps from the river: the lighter at their foot with Gonroku in it, the three of them going up, the rice dealers' houses above", { grid: [800, 600] });
   await g.fade(0, 700);
   await g.wait(500);
-  await g.say("edo.sail.osaka.1", "edo.sail.osaka.2", "edo.sail.osaka.3", "edo.sail.osaka.3b", "edo.sail.osaka.4", "edo.sail.osaka.5");
+  await g.say("edo.sail.osaka.3", "edo.sail.osaka.3b", "edo.sail.osaka.4", "edo.sail.bye.1", "edo.sail.bye.2", "edo.sail.osaka.5");
   await g.wait(500);
   await g.fade(1, 700);
   g.closeup();
-  // the skippable part ends here: whatever was skipped, the hills are reached the same way
+  // the skippable part ends here: whatever was skipped, the Dōjima shore is reached the same way
   g.clock.skipping = false;
   g.ui.showSkip(false);
-  await g.goto("edo-cedars", { via: "cut", spawn: "enter", card: false });
+  await g.goto("edo-dojima", { via: "cut", spawn: "landing", card: false });      // SCENES-21A: was edo-cedars, enter
 }

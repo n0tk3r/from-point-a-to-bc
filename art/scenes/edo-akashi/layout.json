@@ -1,0 +1,1712 @@
+{
+ "id": "edo-akashi",
+ "horizon": 262,
+ "full": 590,
+ "view": {
+  "horizon": 262,
+  "full": 590,
+  "camera": "persp.Camera(262, 590): eye 359 cm, Z0 875, focal 800, vanishing x 400",
+  "place": "the road z -60..150 (cm from the full row), the pines' roots at z 170; the water's edge from far at the left to z ~420 at the right (edo_akashi_kit.EDGE)"
+ },
+ "light": "afternoon, the sun in the west, to the right and a little ahead, 35 degrees up: faces turned to the right are lit; shadows fall to the left and a little toward us, flat and blue",
+ "walk": [
+  [
+   797,
+   596
+  ],
+  [
+   797,
+   493
+  ],
+  [
+   718,
+   484
+  ],
+  [
+   627,
+   472
+  ],
+  [
+   544,
+   459
+  ],
+  [
+   471,
+   447
+  ],
+  [
+   405,
+   437
+  ],
+  [
+   347,
+   428
+  ],
+  [
+   294,
+   420
+  ],
+  [
+   249,
+   409
+  ],
+  [
+   212,
+   399
+  ],
+  [
+   180,
+   390
+  ],
+  [
+   155,
+   380
+  ],
+  [
+   141,
+   369
+  ],
+  [
+   129,
+   360
+  ],
+  [
+   119,
+   352
+  ],
+  [
+   110,
+   345
+  ],
+  [
+   106,
+   339
+  ],
+  [
+   104,
+   333
+  ],
+  [
+   2,
+   357
+  ],
+  [
+   2,
+   596
+  ]
+ ],
+ "walk_floors": [
+  {
+   "name": "sand",
+   "area": [
+    [
+     797,
+     596
+    ],
+    [
+     797,
+     493
+    ],
+    [
+     718,
+     484
+    ],
+    [
+     627,
+     472
+    ],
+    [
+     544,
+     459
+    ],
+    [
+     471,
+     447
+    ],
+    [
+     405,
+     437
+    ],
+    [
+     347,
+     428
+    ],
+    [
+     294,
+     420
+    ],
+    [
+     249,
+     409
+    ],
+    [
+     212,
+     399
+    ],
+    [
+     180,
+     390
+    ],
+    [
+     155,
+     380
+    ],
+    [
+     141,
+     369
+    ],
+    [
+     129,
+     360
+    ],
+    [
+     119,
+     352
+    ],
+    [
+     110,
+     345
+    ],
+    [
+     106,
+     339
+    ],
+    [
+     104,
+     333
+    ],
+    [
+     2,
+     357
+    ],
+    [
+     2,
+     596
+    ]
+   ],
+   "note": "the road and the white sand down to the water's edge"
+  },
+  {
+   "name": "shallows",
+   "area": [
+    [
+     372,
+     428
+    ],
+    [
+     394,
+     431
+    ],
+    [
+     417,
+     435
+    ],
+    [
+     440,
+     438
+    ],
+    [
+     465,
+     442
+    ],
+    [
+     490,
+     446
+    ],
+    [
+     517,
+     451
+    ],
+    [
+     545,
+     455
+    ],
+    [
+     533,
+     438
+    ],
+    [
+     487,
+     428
+    ],
+    [
+     427,
+     427
+    ],
+    [
+     374,
+     418
+    ]
+   ],
+   "note": "the shallows: from the water's edge a step out to the ladle among the pots' lines; Little Sister alone may wade (her yellow boots: 'Boots are for WATER.'); 22 cm of water at the ladle, to her boot tops",
+   "away": {
+    "any": "(the scene's line: nobody in sandals wants to wade)"
+   },
+   "depth_cm": {
+    "at_edge": 0,
+    "at_ladle": 22
+   }
+  }
+ ],
+ "blocked": [
+  {
+   "id": "pots",
+   "poly": [
+    [
+     45,
+     522
+    ],
+    [
+     291,
+     522
+    ],
+    [
+     310,
+     477
+    ],
+    [
+     106,
+     477
+    ]
+   ]
+  },
+  {
+   "id": "heitaboat",
+   "poly": [
+    [
+     75,
+     419
+    ],
+    [
+     306,
+     429
+    ],
+    [
+     276,
+     448
+    ],
+    [
+     22,
+     436
+    ]
+   ]
+  },
+  {
+   "id": "tub",
+   "poly": [
+    [
+     287,
+     460
+    ],
+    [
+     347,
+     460
+    ],
+    [
+     350,
+     448
+    ],
+    [
+     294,
+     448
+    ]
+   ]
+  },
+  {
+   "id": "rocks",
+   "poly": [
+    [
+     614,
+     510
+    ],
+    [
+     856,
+     510
+    ],
+    [
+     801,
+     480
+    ],
+    [
+     588,
+     480
+    ]
+   ]
+  },
+  {
+   "id": "pine-l",
+   "poly": [
+    [
+     37,
+     543
+    ],
+    [
+     90,
+     543
+    ],
+    [
+     103,
+     531
+    ],
+    [
+     52,
+     531
+    ]
+   ]
+  },
+  {
+   "id": "pine-r",
+   "poly": [
+    [
+     703,
+     540
+    ],
+    [
+     755,
+     540
+    ],
+    [
+     741,
+     529
+    ],
+    [
+     690,
+     529
+    ]
+   ]
+  }
+ ],
+ "planes": [
+  {
+   "id": "floats",
+   "file": "floats.png",
+   "plane": "back",
+   "what": "the floats of the octopus pots' lines in the shallows (they bob: fx floats-bob)"
+  },
+  {
+   "id": "ladle",
+   "file": "ladle.png",
+   "plane": "back",
+   "what": "O-Fusa's ladle afloat among the pots' lines, its bowl up: the octopus sits in it (PEOPLE-21B's sprite, at `octopus`); hidden once Little Sister has it (it bobs: fx ladle-bob)",
+   "states": {
+    "afloat": "ladle.png",
+    "gone": null
+   }
+  },
+  {
+   "id": "pilgrimboat",
+   "file": "pilgrimboat.png",
+   "base": 366,
+   "states": {
+    "coming in": "pilgrimboat.png",
+    "beached": "pilgrimboat-beached.png"
+   },
+   "what": "the Awa pilgrims' boat, sail down: coming in (afloat in the strait, where its approach stops: fx boat-approach), then beached (its bow on the sand, at the water's edge further left); the beached one's base is its own",
+   "beached_base": 393
+  },
+  {
+   "id": "heitaboat",
+   "file": "heitaboat.png",
+   "base": [
+    [
+     47,
+     428
+    ],
+    [
+     276,
+     439
+    ]
+   ],
+   "what": "old Heita's boat drawn up on the sand along the shore; whoever is beyond it is behind it"
+  },
+  {
+   "id": "tub",
+   "file": "tub.png",
+   "base": 450,
+   "what": "Heita's tub (the octopus goes in it)"
+  },
+  {
+   "id": "pots",
+   "file": "pots.png",
+   "base": 515,
+   "what": "the octopus pots stacked on the sand in rows (clay bells)"
+  },
+  {
+   "id": "rocks",
+   "file": "rocks.png",
+   "base": 506,
+   "what": "the rocks at the water's edge at the right, with pools among them (the crab's place)"
+  },
+  {
+   "id": "pine-l",
+   "file": "pine-l.png",
+   "base": 537,
+   "what": "a shore pine at the road's edge, bent by the wind (it stirs: fx pine-l-sway)"
+  },
+  {
+   "id": "pine-r",
+   "file": "pine-r.png",
+   "base": 535,
+   "what": "a shore pine at the road's edge (it stirs: fx pine-r-sway)"
+  },
+  {
+   "id": "front",
+   "file": "front.png",
+   "plane": "front",
+   "what": "tufts of shore grass at the road's edge, bottom left and right"
+  }
+ ],
+ "cutouts": {
+  "floats": [
+   343,
+   399,
+   213,
+   46
+  ],
+  "ladle": [
+   456,
+   428,
+   26,
+   7
+  ],
+  "pilgrimboat": [
+   311,
+   215,
+   112,
+   152
+  ],
+  "heitaboat": [
+   39,
+   395,
+   246,
+   44
+  ],
+  "tub": [
+   301,
+   433,
+   38,
+   24
+  ],
+  "pots": [
+   81,
+   448,
+   217,
+   72
+  ],
+  "rocks": [
+   603,
+   464,
+   197,
+   40
+  ],
+  "pine-l": [
+   0,
+   27,
+   370,
+   510
+  ],
+  "pine-r": [
+   452,
+   20,
+   348,
+   515
+  ],
+  "front": [
+   3,
+   562,
+   794,
+   38
+  ],
+  "pilgrimboat-beached": [
+   156,
+   199,
+   137,
+   195
+  ]
+ },
+ "things": [
+  {
+   "id": "strait",
+   "what": "the strait, four kilometres across to Awaji, the tide running hard (lines on the water)",
+   "shape": {
+    "poly": [
+     [
+      160,
+      263
+     ],
+     [
+      797,
+      263
+     ],
+     [
+      797,
+      480
+     ],
+     [
+      600,
+      470
+     ],
+     [
+      420,
+      436
+     ],
+     [
+      300,
+      418
+     ],
+     [
+      200,
+      398
+     ],
+     [
+      140,
+      380
+     ],
+     [
+      100,
+      330
+     ]
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "awaji",
+   "what": "Awaji Island across the strait, long and low",
+   "shape": {
+    "poly": [
+     [
+      212,
+      262
+     ],
+     [
+      236,
+      258
+     ],
+     [
+      320,
+      248
+     ],
+     [
+      440,
+      238
+     ],
+     [
+      560,
+      236
+     ],
+     [
+      690,
+      234
+     ],
+     [
+      797,
+      226
+     ],
+     [
+      797,
+      263
+     ],
+     [
+      212,
+      263
+     ]
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "castle",
+   "what": "Akashi castle on its hill: white corner turrets, and no keep",
+   "shape": {
+    "rect": [
+     2,
+     201,
+     74,
+     30
+    ]
+   },
+   "stand": [
+    79,
+    468
+   ],
+   "face": "N"
+  },
+  {
+   "id": "pilgrimboat",
+   "what": "the Awa pilgrims' boat, sail down (coming in / beached)",
+   "shape": {
+    "rect": [
+     308,
+     212,
+     118,
+     158
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N",
+   "beached": {
+    "rect": [
+     153,
+     196,
+     143,
+     201
+    ]
+   }
+  },
+  {
+   "id": "pilgrims",
+   "what": "Awa pilgrims wading ashore with their banners and ladles (drawn by the game)",
+   "shape": {
+    "rect": [
+     336,
+     340,
+     110,
+     80
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "banner",
+   "what": "the group's banner, on the leader's pole (the leader's sprite carries it: PEOPLE-21B)",
+   "shape": {
+    "rect": [
+     280,
+     306,
+     30,
+     60
+    ]
+   },
+   "stand": [
+    380,
+    437
+   ],
+   "face": "N"
+  },
+  {
+   "id": "ladlething",
+   "what": "the ladle afloat among the pots' lines, with the octopus in its bowl (afloat / gone)",
+   "shape": {
+    "rect": [
+     450,
+     422,
+     38,
+     19
+    ]
+   },
+   "stand": [
+    451,
+    445
+   ],
+   "face": "N",
+   "octopus": [
+    461,
+    430
+   ]
+  },
+  {
+   "id": "pots",
+   "what": "octopus pots stacked on the sand: clay bells",
+   "shape": {
+    "rect": [
+     79,
+     446,
+     221,
+     76
+    ]
+   },
+   "stand": [
+    164,
+    527
+   ],
+   "face": "N"
+  },
+  {
+   "id": "potlines",
+   "what": "the pots' lines and floats in the shallows",
+   "shape": {
+    "poly": [
+     [
+      296,
+      396
+     ],
+     [
+      574,
+      445
+     ],
+     [
+      578,
+      440
+     ],
+     [
+      313,
+      392
+     ]
+    ]
+   },
+   "stand": [
+    451,
+    445
+   ],
+   "face": "N"
+  },
+  {
+   "id": "heitaboat",
+   "what": "old Heita's boat drawn up on the sand",
+   "shape": {
+    "rect": [
+     37,
+     393,
+     250,
+     48
+    ]
+   },
+   "stand": [
+    295,
+    444
+   ],
+   "face": "W"
+  },
+  {
+   "id": "tub",
+   "what": "Heita's tub",
+   "shape": {
+    "rect": [
+     298,
+     430,
+     44,
+     30
+    ]
+   },
+   "stand": [
+    316,
+    464
+   ],
+   "face": "N"
+  },
+  {
+   "id": "rocks",
+   "what": "the rocks at the water's edge, pools among them",
+   "shape": {
+    "rect": [
+     600,
+     461,
+     203,
+     46
+    ]
+   },
+   "stand": [
+    612,
+    516
+   ],
+   "face": "E"
+  },
+  {
+   "id": "pines",
+   "what": "the shore pines along the road, bent by the wind",
+   "shape": {
+    "poly": [
+     [
+      2,
+      0
+     ],
+     [
+      380,
+      0
+     ],
+     [
+      380,
+      160
+     ],
+     [
+      210,
+      200
+     ],
+     [
+      120,
+      530
+     ],
+     [
+      2,
+      540
+     ]
+    ]
+   },
+   "stand": [
+    108,
+    570
+   ],
+   "face": "N",
+   "also": {
+    "rect": [
+     452,
+     20,
+     348,
+     515
+    ]
+   }
+  },
+  {
+   "id": "sand",
+   "what": "white sand",
+   "shape": {
+    "poly": [
+     [
+      2,
+      359
+     ],
+     [
+      90,
+      330
+     ],
+     [
+      200,
+      400
+     ],
+     [
+      400,
+      440
+     ],
+     [
+      600,
+      470
+     ],
+     [
+      797,
+      486
+     ],
+     [
+      797,
+      540
+     ],
+     [
+      2,
+      540
+     ]
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "S"
+  },
+  {
+   "id": "road",
+   "what": "the Saigoku-kaido, behind the pines, east (left) to west (right)",
+   "shape": {
+    "poly": [
+     [
+      797,
+      596
+     ],
+     [
+      797,
+      542
+     ],
+     [
+      2,
+      542
+     ],
+     [
+      2,
+      596
+     ]
+    ]
+   },
+   "stand": [
+    299,
+    565
+   ],
+   "face": "W"
+  },
+  {
+   "id": "fusa",
+   "what": "O-Fusa, nine, an Awa girl, in tears by the water's edge (drawn by the game)",
+   "shape": {
+    "rect": [
+     369,
+     376,
+     22,
+     61
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "leader",
+   "what": "her group's leader, with the banner (drawn by the game)",
+   "shape": {
+    "rect": [
+     281,
+     355,
+     26,
+     71
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "heita",
+   "what": "old Heita, by his boat (drawn by the game)",
+   "shape": {
+    "rect": [
+     281,
+     365,
+     28,
+     79
+    ]
+   },
+   "stand": [
+    295,
+    444
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sato",
+   "what": "O-Sato, a Harima woman with a ladle, going east along the road (drawn by the game)",
+   "shape": {
+    "rect": [
+     277,
+     442,
+     44,
+     123
+    ]
+   },
+   "stand": [
+    108,
+    570
+   ],
+   "face": "N"
+  },
+  {
+   "id": "satosister",
+   "what": "her sister-in-law, with a ladle (drawn by the game)",
+   "shape": {
+    "rect": [
+     330,
+     443,
+     45,
+     125
+    ]
+   },
+   "stand": [
+    108,
+    570
+   ],
+   "face": "N"
+  },
+  {
+   "id": "awapilgrim1",
+   "what": "an Awa pilgrim wading ashore (drawn by the game)",
+   "shape": {
+    "rect": [
+     365,
+     342,
+     22,
+     61
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  },
+  {
+   "id": "awapilgrim2",
+   "what": "an Awa pilgrim wading ashore (drawn by the game)",
+   "shape": {
+    "rect": [
+     418,
+     350,
+     22,
+     60
+    ]
+   },
+   "stand": [
+    411,
+    451
+   ],
+   "face": "N"
+  }
+ ],
+ "marks": {
+  "road": [
+   108,
+   570
+  ],
+  "shore": [
+   411,
+   451
+  ],
+  "fusa": [
+   380,
+   437
+  ],
+  "leader": [
+   294,
+   426
+  ],
+  "pots": [
+   164,
+   527
+  ],
+  "heita": [
+   295,
+   444
+  ],
+  "tub": [
+   316,
+   464
+  ],
+  "shallows": [
+   451,
+   445
+  ],
+  "ladle": [
+   462,
+   435
+  ],
+  "rocks": [
+   612,
+   516
+  ],
+  "sato": [
+   299,
+   565
+  ],
+  "west": [
+   770,
+   569
+  ],
+  "satosister": [
+   352,
+   568
+  ],
+  "road_mom": [
+   115,
+   572
+  ],
+  "road_bigsis": [
+   87,
+   558
+  ],
+  "road_lilsis": [
+   143,
+   585
+  ],
+  "shoreLeft": [
+   79,
+   468
+  ]
+ },
+ "stands": {
+  "road": {
+   "at": [
+    108,
+    570
+   ],
+   "grownup_px": 150,
+   "face": "E"
+  },
+  "shore": {
+   "at": [
+    411,
+    451
+   ],
+   "grownup_px": 92,
+   "face": "N"
+  },
+  "fusa": {
+   "at": [
+    380,
+    437
+   ],
+   "grownup_px": 86,
+   "face": "S"
+  },
+  "leader": {
+   "at": [
+    294,
+    426
+   ],
+   "grownup_px": 80,
+   "face": "S"
+  },
+  "pots": {
+   "at": [
+    164,
+    527
+   ],
+   "grownup_px": 129,
+   "face": "W"
+  },
+  "heita": {
+   "at": [
+    295,
+    444
+   ],
+   "grownup_px": 89,
+   "face": "E"
+  },
+  "tub": {
+   "at": [
+    316,
+    464
+   ],
+   "grownup_px": 98,
+   "face": "N"
+  },
+  "shallows": {
+   "at": [
+    451,
+    445
+   ],
+   "grownup_px": 89,
+   "face": "N"
+  },
+  "ladle": {
+   "at": [
+    462,
+    435
+   ],
+   "grownup_px": 84,
+   "face": "N",
+   "floor": "shallows",
+   "note": "in the shallows, 22 cm of water: Little Sister's boots are in it to their tops (PEOPLE-21B's wading pose or overlay)"
+  },
+  "rocks": {
+   "at": [
+    612,
+    516
+   ],
+   "grownup_px": 124,
+   "face": "E"
+  },
+  "sato": {
+   "at": [
+    299,
+    565
+   ],
+   "grownup_px": 148,
+   "face": "W"
+  },
+  "west": {
+   "at": [
+    770,
+    569
+   ],
+   "grownup_px": 150,
+   "face": "W"
+  },
+  "satosister": {
+   "at": [
+    352,
+    568
+   ],
+   "grownup_px": 149,
+   "face": "W"
+  },
+  "road_mom": {
+   "at": [
+    115,
+    572
+   ],
+   "grownup_px": 151,
+   "face": "E"
+  },
+  "road_bigsis": {
+   "at": [
+    87,
+    558
+   ],
+   "grownup_px": 144,
+   "face": "E"
+  },
+  "road_lilsis": {
+   "at": [
+    143,
+    585
+   ],
+   "grownup_px": 157,
+   "face": "E"
+  },
+  "shoreLeft": {
+   "at": [
+    79,
+    468
+   ],
+   "grownup_px": 100,
+   "face": "N"
+  }
+ },
+ "places": {
+  "crab": {
+   "at": [
+    714,
+    503
+   ],
+   "grownup_px": 117,
+   "note": "under the nearest rock's foot, by the pool: where Mom reaches in (stand at `rocks`)"
+  },
+  "awapilgrim1": {
+   "at": [
+    376,
+    403
+   ],
+   "grownup_px": 69,
+   "note": "wading ashore from the boat (in the water, on no floor: they wade by script, their legs in the water to the knee)"
+  },
+  "awapilgrim2": {
+   "at": [
+    429,
+    410
+   ],
+   "grownup_px": 72,
+   "note": "wading ashore from the boat (in the water, on no floor: they wade by script, their legs in the water to the knee)"
+  }
+ },
+ "octopus": {
+  "at": [
+   461,
+   430
+  ],
+  "note": "the octopus sits in the ladle's bowl (PEOPLE-21B's sprite): put its foot here, at the size of the ladle's row; it rides fx ladle-bob"
+ },
+ "fx": [
+  {
+   "id": "shore-waves",
+   "type": "waves",
+   "what": "small waves running in on the sand at the water's edge (ENGINE-20's waves kind)",
+   "area": [
+    [
+     107,
+     332
+    ],
+    [
+     109,
+     339
+    ],
+    [
+     116,
+     346
+    ],
+    [
+     127,
+     354
+    ],
+    [
+     140,
+     364
+    ],
+    [
+     156,
+     376
+    ],
+    [
+     183,
+     387
+    ],
+    [
+     221,
+     398
+    ],
+    [
+     265,
+     410
+    ],
+    [
+     321,
+     420
+    ],
+    [
+     384,
+     430
+    ],
+    [
+     456,
+     441
+    ],
+    [
+     539,
+     454
+    ],
+    [
+     633,
+     467
+    ],
+    [
+     738,
+     481
+    ],
+    [
+     797,
+     487
+    ],
+    [
+     797,
+     465
+    ],
+    [
+     746,
+     439
+    ],
+    [
+     664,
+     433
+    ],
+    [
+     584,
+     424
+    ],
+    [
+     511,
+     416
+    ],
+    [
+     446,
+     407
+    ],
+    [
+     387,
+     400
+    ],
+    [
+     334,
+     393
+    ],
+    [
+     287,
+     386
+    ],
+    [
+     248,
+     377
+    ],
+    [
+     214,
+     370
+    ],
+    [
+     188,
+     361
+    ],
+    [
+     170,
+     352
+    ],
+    [
+     156,
+     345
+    ],
+    [
+     144,
+     338
+    ],
+    [
+     135,
+     332
+    ],
+    [
+     131,
+     326
+    ]
+   ],
+   "holes": [
+    [
+     [
+      452,
+      424
+     ],
+     [
+      486,
+      424
+     ],
+     [
+      486,
+      439
+     ],
+     [
+      452,
+      439
+     ]
+    ],
+    [
+     [
+      309,
+      213
+     ],
+     [
+      425,
+      213
+     ],
+     [
+      425,
+      369
+     ],
+     [
+      309,
+      369
+     ]
+    ]
+   ],
+   "rows": 6,
+   "per": 9,
+   "color": "#f6eed8",
+   "opacity": 0.55,
+   "size": 9,
+   "speed": 7,
+   "toward": "S",
+   "life": 3.0,
+   "plane": "back"
+  },
+  {
+   "id": "strait-shimmer",
+   "type": "shimmer",
+   "what": "the afternoon sun on the strait: glints, thickest to the right (the sun's side)",
+   "poly": [
+    [
+     260,
+     266
+    ],
+    [
+     800,
+     264
+    ],
+    [
+     800,
+     330
+    ],
+    [
+     300,
+     320
+    ]
+   ],
+   "count": 34,
+   "size": 5,
+   "flow": [
+    -6,
+    0
+   ],
+   "life": 1.6,
+   "color": "#f6eed8",
+   "opacity": 0.55,
+   "plane": "back",
+   "note": "the tide runs east to west here (flow leftward); the far tide lines are painted still"
+  },
+  {
+   "id": "pine-l-sway",
+   "type": "sway",
+   "plane": "pine-l",
+   "anchor": "bottom",
+   "amount": 1.2,
+   "period": 5.5,
+   "wave": 40,
+   "lean": 0.3,
+   "what": "the left pine's crown stirring in the sea wind"
+  },
+  {
+   "id": "pine-r-sway",
+   "type": "sway",
+   "plane": "pine-r",
+   "anchor": "bottom",
+   "amount": 1.0,
+   "period": 6.0,
+   "wave": 40,
+   "lean": 0.3,
+   "what": "the right pine's crown stirring"
+  },
+  {
+   "id": "ladle-bob",
+   "type": "bob",
+   "plane": "ladle",
+   "amount": 0.5,
+   "period": 4.0,
+   "what": "the ladle riding the little waves (the octopus sprite rides with it: offset it by the same)"
+  },
+  {
+   "id": "floats-bob",
+   "type": "bob",
+   "plane": "floats",
+   "amount": 1,
+   "period": 4.5,
+   "what": "the floats of the pots' lines"
+  },
+  {
+   "id": "boat-bob",
+   "type": "bob",
+   "plane": "pilgrimboat",
+   "amount": 1,
+   "period": 5.5,
+   "tilt": 0.8,
+   "what": "the Awa boat riding where it has stopped (coming in)"
+  },
+  {
+   "id": "gulls",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "gulls over the strait (the engine's own silhouettes)",
+   "lanes": [
+    [
+     [
+      -12,
+      200
+     ],
+     [
+      180,
+      186
+     ],
+     [
+      360,
+      204
+     ],
+     [
+      560,
+      180
+     ],
+     [
+      812,
+      196
+     ]
+    ],
+    [
+     [
+      812,
+      150
+     ],
+     [
+      600,
+      170
+     ],
+     [
+      420,
+      152
+     ],
+     [
+      200,
+      176
+     ],
+     [
+      -12,
+      160
+     ]
+    ]
+   ],
+   "every": [
+    8,
+    16
+   ],
+   "group": [
+    1,
+    3
+   ],
+   "speed": 55,
+   "size": 8,
+   "scale": [
+    0.6,
+    1.0
+   ],
+   "color": "#f6eed8"
+  },
+  {
+   "id": "boat-approach",
+   "type": "birds",
+   "kind": "flyers",
+   "what": "PROPOSED: the Awa boat's approach, a flyer that stops: it comes in from far out along the lane, growing with the depth, and stops where the cut-out `pilgrimboat` stands (then the cut-out shows and this goes)",
+   "frames": {
+    "foot": [
+     53,
+     153
+    ],
+    "sizeAt": 366,
+    "glide": [
+     "boat-1.png"
+    ]
+   },
+   "lane": [
+    [
+     397,
+     291
+    ],
+    [
+     362,
+     366
+    ]
+   ],
+   "speed": 6,
+   "stop": [
+    362,
+    366
+   ],
+   "note": "ENGINE-21's 'flyer that stops'; boat-1.png is the coming-in cut-out cropped (box [309, 213, 116, 156]), its foot the point under its bow"
+  }
+ ],
+ "frames": {
+  "boat-1.png": {
+   "foot": [
+    53,
+    153
+   ],
+   "box": [
+    309,
+    213,
+    116,
+    156
+   ],
+   "what": "the Awa boat coming in, for its approach"
+  }
+ },
+ "exits": {
+  "east": {
+   "at": [
+    108,
+    570
+   ],
+   "note": "the road east: refuses ('Three days of that. No.')"
+  },
+  "west": {
+   "at": [
+    770,
+    569
+   ],
+   "note": "west to Himeji only by the card, once #35 is done"
+  }
+ },
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "fusa_cm": 125,
+  "grownup_at_full_px": 160
+ },
+ "notes": "PAINT-21D. Checked: the castle with no keep (four three-storey corner turrets), the strait about 4 km to Awaji with a fast tide, white sand and green pines, octopus caught in clay pots on lines, Awa pilgrims landing by boat, the ladle, the road behind the pines. Invented: this stretch of shore, the rocks, Heita's boat and tub, the bearings of the view (the castle placed at the far left, Awaji to the right), the Awa boat's look."
+}

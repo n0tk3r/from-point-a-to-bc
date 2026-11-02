@@ -21,7 +21,7 @@
 // Every place is PAINT-20C's own measurement of the finished picture (art/scenes/edo-storehouse/layout.json and its
 // ready.md); where a place was set by eye the comment says so.
 //
-// Try it: index.html?scene=edo-storehouse&lead=lilsis&flags=edo.sailed  (dressed by script as LEG_START.hills has them)
+// Try it: index.html?scene=edo-storehouse&lead=lilsis&flags=edo.sailed,edo.boated  (dressed by script as LEG_START.hills has them; SCENES-21B: and edo.boated)
 
 import { STOCK_DRESSED, is } from "./edo-common.js";
 import { GIRLS, who, each, heard, morning, sunUp, raining, hats, TALK, keepBelow, passing, partyOf, sceneOf, STORE, ISUKE_WAY, isukeAt,

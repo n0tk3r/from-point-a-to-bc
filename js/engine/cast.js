@@ -218,7 +218,8 @@ export class Figure extends Sprite {
   get h() {
     const full = this.spec === this.home ? this.tall : (this.tallUp ??= tallOf(this.spec) * this.spec.height * BASE);
     const a = this.act;                 // LETTER-17: on her knees her head is lower, and so are her words
-    if (a && a.low === "kneel") { const k = (n) => (n === "stand" ? 1 : kneelTall(this.spec, n)), e = a.at(); return full * (k(a.from) + (k(a.to) - k(a.from)) * e); }
+    // SCENES-21B: a hold that is named "kneel" (the boy puppet's pose, held: hold(true, "kneel")) is not the kneel act (it has no `at`)
+    if (a && a.low === "kneel" && typeof a.at === "function") { const k = (n) => (n === "stand" ? 1 : kneelTall(this.spec, n)), e = a.at(); return full * (k(a.from) + (k(a.to) - k(a.from)) * e); }
     return full;
   }
 
@@ -359,7 +360,7 @@ export class Figure extends Sprite {
       "kneel": frame() asks it what to draw.) */
   kneel(how = true) {
     if (!this.spec.kneel || this.spec.seated) return this;
-    const to = how === "back" ? "back" : how ? "up" : "stand", was = this.act && this.act.low === "kneel" ? this.act : null;
+    const to = how === "back" ? "back" : how ? "up" : "stand", was = this.act && this.act.low === "kneel" && typeof this.act.at === "function" ? this.act : null;      // (SCENES-21B: not a hold named "kneel")
     const from = was ? (was.at() >= 0.5 ? was.to : was.from) : "stand";
     if (!was && to === "stand") return this;                                // not kneeling: nothing to get up from
     const SPAN = to === "back" ? 520 : 380, start = performance.now();

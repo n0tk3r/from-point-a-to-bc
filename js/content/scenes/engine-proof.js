@@ -564,6 +564,96 @@ async function journeyRun(g) {
   await g.say("proof.journey.done");
 }
 
+// ---------- ENGINE-21: round twenty-one's proofs: a close-up, the journeys' stops and parts, at sea, the moving things, a show ----------
+// What Act Six made bigger needs of the engine (briefs/out/edo2-design.md, section 9), each on the stage while its fact is true
+// (add ",proof.arrived"; ",proof.party" for the critter too):
+//   index.html?scene=engine-proof&lead=dad&flags=proof.near      a strongbox on the sand: Use opens its close-up (proof-near.js:
+//                                                                 nobody drawn, hands, the moment's facts, Step back)
+//   index.html?scene=engine-proof&lead=dad&flags=proof.stops     the palm tree is a journey in two parts (by boat to the dunes, then
+//                                                                 on foot), past two stops, each with a line said on the map; and the
+//                                                                 boat on the river is "at sea" (proof-boat.js): the bank sails to it
+//   index.html?scene=engine-proof&lead=dad&flags=proof.passer    a water carrier going by now and then along the front of the sand
+//                                                                 (`passer`), his clickable area going with him
+//   index.html?scene=engine-proof&lead=dad&flags=proof.slide     bars of warm light sliding slowly up the wagon and fading (`slide`)
+//   index.html?scene=engine-proof&lead=dad&flags=proof.fade      a cap of cloud on the far mountain that lifts (g.fadePlane: a
+//                                                                 cross-fade between a cut-out's two states)
+//   index.html?scene=engine-proof&lead=dad&flags=proof.zones,proof.party   the wet sand at the right, where only the critter may go
+//   index.html?scene=engine-proof&lead=dad&flags=proof.puppet,proof.party  a show: a doll and its operators at one mark (g.troupe),
+//                                                                 three cues (g.cues), each waiting for the right one's part
+const LINES21 = {
+  "proof.near.look": ["dad", "A strongbox, with a latch of three parts. I should look closer."],
+  "proof.stop.well": ["dad", "A well. We can't stop. We can wave."],
+  "proof.stop.oasis": ["critter", "...", ["water", "heart"]],
+  "proof.stops.use": ["dad", "By boat to the dunes, and then on foot. Two kinds of travel, one trip."],
+  "proof.stops.done": ["dad", "Here, by boat and by foot. And I waved at a well."],
+  "proof.sea.use": ["dad", "A boat, on the river. All aboard."],
+  "proof.passer.look": ["dad", "A man going by with water. Everyone's busy but me."],
+  "proof.slide.look": ["dad", "The light, going up the wagon as the sun goes down."],
+  "proof.cloud.look": ["dad", "A cap of cloud on the mountain."],
+  "proof.cloud.use": ["dad", "Watch. It's lifting."],
+  "proof.zone.no.dad": ["dad", "Not in these shoes. That's the critter's sand."],
+  "proof.show.start": ["dad", "Places. The show begins."],
+  "proof.cue.1": ["overseer", "The boy hears his mother calling."],
+  "proof.cue.2": ["overseer", "He runs, he runs home."],
+  "proof.cue.3": ["overseer", "He lies down at her door."],
+  "proof.cue.notyet": ["overseer", "Not yet."],
+  "proof.show.done": ["dad", "And the house weeps. Bravo, everybody."],
+  "proof.doll.look": ["dad", "A doll, on its mark, and its operators."],
+};
+const nearProof = (g) => !!g.flag("proof.near");
+const stopsProof = (g) => !!g.flag("proof.stops");
+const passerProof = (g) => !!g.flag("proof.passer");
+const slideProof = (g) => !!g.flag("proof.slide");
+const fadeProof = (g) => !!g.flag("proof.fade");
+const zonesProof = (g) => !!g.flag("proof.zones");
+const puppetProof = (g) => !!g.flag("proof.puppet");
+const WET = [[600, 470], [780, 470], [780, 596], [600, 596]];                 // the wet sand (proof.zones): the critter's alone
+const RAIL = [300, 500];                                                       // the doll's mark (proof.puppet)
+/** The journey in parts (proof.stops): a cut-scene of the proof's own, "proof-stops": by boat to the dunes (the creak), then on
+    foot (the sandals) to the room under the sand, past the well and the oasis, each with its line; then the room. */
+async function stopsRun(g) {
+  await g.say("proof.stops.use");
+  const went = await g.journey("proof-sand", "sand", "below", { via: ["dunes"], segments: [{ to: "dunes", sound: "creak", stops: ["well"], ms: 1800 }, { to: "below", sound: "sandals", stops: ["oasis"], ms: 1400 }] });
+  g.flag("proof.stopped", true);
+  g.clock.skipping = false;
+  g.ui.showSkip(false);
+  await g.goto("proof-below", { via: went ? "map" : "cut", spawn: "fromSand" });
+  await g.say("proof.stops.done");
+}
+/** At sea (proof.stops): a cut-scene of the proof's own, "proof-sea": the map, Dad's portrait from the sand to the boat on the way
+    round by the dunes (a place that is a point of it), then the boat. */
+async function seaRun(g) {
+  await g.say("proof.sea.use");
+  const went = await g.journey("proof-sand", "sand", "boat", { sound: "creak", ms: 1600 });
+  g.clock.skipping = false;
+  g.ui.showSkip(false);
+  await g.goto("proof-boat", { via: went ? "map" : "cut", spawn: "deck" });
+}
+/** The show (proof.puppet): three cues, each the overseer's line kept up as a caption until it is answered; the doll's left
+    hand is Dad's part (its area), the boards the critter's; the third cue wants both. A part at the wrong moment: the audience
+    laughs, "Not yet.", and the cue comes round again. */
+const SHOW = { cues: null };
+function show(g) {
+  if (SHOW.cues) return SHOW.cues;
+  return (SHOW.cues = g.cues({ id: "proof.show",
+    cues: [
+      { line: "proof.cue.1", who: "dad", action: "hand", fact: "proof.cue1", done: (g) => g.pose("doll", "holler") },
+      { line: "proof.cue.2", who: "critter", action: "stamp", fact: "proof.cue2", done: async (g) => { g.sfx("stampfeet"); await g.pose("doll", "climb"); } },
+      { line: "proof.cue.3", parts: [{ who: "dad", action: "ground" }, { who: "critter", action: "fold" }], fact: "proof.cue3", done: (g) => g.pose("doll", "lying") },
+    ],
+    wrong: async (g) => { g.sfx("laugh"); await g.say("proof.cue.notyet"); },
+    done: async (g) => { g.sfx("sob"); await g.pose("doll", "stand"); await g.say("proof.show.done"); g.flag("proof.showDone", true); },
+  }));
+}
+async function startShow(g) {
+  const s = show(g);
+  if (s.on) return;
+  g.troupe(RAIL, { doll: "doll", head: "dad", feet: g.actor("critter") ? "critter" : null, face: "S" });
+  await g.say("proof.show.start");
+  await s.start(g);
+}
+const answer = (what) => async (g) => { const s = show(g); if (!(await s.answer(g, typeof what === "function" ? what(s) : what))) await g.say("proof.doll.look"); };
+
 /** Whatever waits in the tunnel for whoever is here comes out of the door, one thing at a time: the pop, a word, and into the pockets. */
 async function postArrives(g) {
   for (const entry of g.waiting()) {
@@ -672,6 +762,10 @@ export default {
     { id: "car", src: DRIVE_ART + "car.png", plane: "back", when: driveProof },
     // ROAD-18E: the proof's car, standing still in the lane at row 548 while the road goes by under it (see the top)
     { id: "road-car", src: ROAD_ART + "car.png", at: [521, 548], foot: [73.5, 121], base: 548, when: roadProof },
+    // ENGINE-21: the bars of warm light on the wagon (proof.slide: a `slide` moves them up and fades them); the cap of cloud on the
+    // far mountain, in two states the scene cross-fades between (proof.fade: g.fadePlane)
+    { id: "bars", src: "art/proof/bars.png", plane: "back", when: slideProof },
+    { id: "cloud", states: { on: "art/proof/cloud-on.png", off: "art/proof/cloud-off.png" }, state: (g) => (g.flag("proof.cloudOff") ? "off" : "on"), plane: "back", when: fadeProof },
   ],
   // A cut-out can also follow the story. These are the other forms (none is needed here):
   //   { id: "trunk", src: art + "trunk-open.png", base: 541, when: (g) => g.flag("egypt.trunkOpen") }      a row for a base; shown only while the test passes
@@ -738,6 +832,10 @@ export default {
     { id: "mirror-door", type: "portal", at: MIRROR_WALL, r: 48, keep: [252, 428], under: ["wall"], base: 430.5, pale: "#fff4d8", strength: 0.6, when: mirrorProof },
     { id: "mirror-light", type: "mirror", target: MIRROR_WALL, holder: "dad", sizes: MIRROR_SIZES, image: "cross", shown: false, door: "mirror-door", doorK: 0, on: 0,
       reach: [60, 300, 740, 300], base: 430.6, when: mirrorProof },
+    // ENGINE-21: someone going by now and then (proof.passer): a water carrier along the front of the sand, both ways, his area
+    // ("passer", below) going with him; the bars of light sliding up the wagon over ten seconds and fading (proof.slide)
+    { id: "passer", type: "passer", kind: "carrier", path: [[-40, 560], [840, 560]], every: [2, 4], area: "passer", when: passerProof },
+    { id: "bars-slide", type: "slide", plane: "bars", by: [-30, -110], period: 10, fade: [0.95, 0.2], when: slideProof },
   ],
 
   // Light that must stay smooth (a wormhole, a beam, a glow) is not painted. A scene draws it live, in the same pixels:
@@ -851,7 +949,31 @@ export default {
     { id: "sunwall", name: "sunlit wall", verb: "Hold the mirror up to", poly: HOUSE, walkTo: [400, 452], face: "W", when: mirrorProof,
       look: "proof.mirror.look", use: shine },
     { id: "weather", name: "rain", rect: [440, 60, 340, 120], when: weatherProof, look: "proof.weather.look" },
+    // ENGINE-21: the strongbox (proof.near) opens its close-up; the palm tree is a journey in two parts with stops, and the river
+    // is the boat, at sea (proof.stops); the water carrier going by (proof.passer: the passer's `area`, its shape his box while he
+    // is seen); the bars of light (proof.slide); the cloud (proof.fade); the doll, its left hand and the boards (proof.puppet)
+    { id: "strongbox", name: "strongbox", verb: "Look closer at", rect: [380, 470, 40, 30], walkTo: [400, 530], face: "N", when: nearProof,
+      look: "proof.near.look", use: (g) => g.openCloseup("proof-near") },
+    { id: "palm-stops", name: "palm tree", verb: "Go round by boat and foot from", rect: [150, 180, 70, 230], walkTo: [230, 430], face: "W", when: stopsProof,
+      look: "egypt.reeds.look", use: (g) => g.cutscene("proof-stops") },
+    { id: "river-boat", name: "boat on the river", verb: "Board", rect: [20, 300, 120, 80], walkTo: [200, 440], face: "W", when: stopsProof,
+      look: "egypt.river.look", use: (g) => g.cutscene("proof-sea") },
+    { id: "passer", name: "water carrier", rect: [0, 0, 1, 1], when: passerProof, look: "proof.passer.look" },
+    { id: "bars", name: "light on the wagon", rect: [420, 120, 300, 300], when: slideProof, look: "proof.slide.look" },
+    { id: "cloud", name: "cloud", rect: [520, 50, 170, 80], when: fadeProof, look: "proof.cloud.look",
+      use: async (g) => { if (g.flag("proof.cloudOff")) return g.say("proof.cloud.look"); await g.say("proof.cloud.use"); await g.fadePlane("cloud", "off", { ms: 1200 }); g.flag("proof.cloudOff", true); } },
+    { id: "doll", name: "doll", verb: "Begin the show with", rect: [282, 452, 36, 50], walkTo: [330, 540], face: "N", when: (g) => puppetProof(g) && !show(g).on,
+      look: "proof.doll.look", use: startShow },
+    { id: "dollhand", name: "doll's left hand", rect: [282, 452, 36, 50], when: (g) => puppetProof(g) && show(g).on,
+      look: "proof.doll.look", use: answer((s) => (s.index === 2 ? "ground" : "hand")) },
+    { id: "boards", name: "boards", rect: [230, 505, 140, 30], when: (g) => puppetProof(g) && show(g).on,
+      look: "proof.doll.look", use: answer((s) => (s.index === 2 ? "fold" : "stamp")) },
   ],
+  // ENGINE-21: a part of the floor only one lead may walk into (proof.zones): the wet sand, the critter's alone; Dad stops at its
+  // edge, and a click in it says his line
+  zones: (g) => (zonesProof(g) ? [{ area: WET, leads: ["critter"], no: { dad: "proof.zone.no.dad" } }] : []),
+  // ENGINE-21: during the show (proof.puppet) Dad and the critter do their parts from where they stand (the cue helper's areas)
+  still: (g) => puppetProof(g) && !!SHOW.cues && SHOW.cues.on,
 
   // NEVADA-12E: Dad and the creature, talking (each exchange is what the one clicked on says, then what Dad makes of it)
   talk: {
@@ -868,6 +990,11 @@ export default {
     for (const [id, line] of Object.entries(LINES17)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-17: round seventeen's
     for (const [id, line] of Object.entries(LINES20)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-20: round twenty's
     if (!g.cutscenes["proof-journey"]) g.cutscenes["proof-journey"] = journeyRun;                       // ENGINE-20: the journey, a cut-scene of the proof's own (proof.journey)
+    for (const [id, line] of Object.entries(LINES21)) if (!g.lines[id]) g.lines[id] = line;          // ENGINE-21: round twenty-one's
+    if (!g.cutscenes["proof-stops"]) g.cutscenes["proof-stops"] = stopsRun;                             // ENGINE-21: a journey in parts, with stops (proof.stops)
+    if (!g.cutscenes["proof-sea"]) g.cutscenes["proof-sea"] = seaRun;                                   // ENGINE-21: to the boat, at sea (proof.stops)
+    SHOW.cues = null;                                                                                 // ENGINE-21: a show starts afresh with the scene (its cues' facts say how far it got)
+    if (slideProof(g) || puppetProof(g) || zonesProof(g)) for (const id of ["palms", "papyrus"]) if (g.plane(id)) g.plane(id).show(false);      // ENGINE-21: cleared away, to see them
     if (mirrorProof(g) && g.plane("papyrus")) g.plane("papyrus").show(false);                          // ENGINE-20: the papyrus cleared away, so that the whole walk back is seen
     if (thoughtProof(g)) {                                                                            // ENGINE-17: the two asleep, each thinking zzz, kept up
       if (!g.story.acts.some((a) => a.id === THOUGHT_ACT.id)) g.story.acts.push(THOUGHT_ACT);      // (and the thoughts' own beat, for the critter's hint)
@@ -926,6 +1053,9 @@ export default {
     // gray in the dust), each with a thought kept over his head (setup), so that a bubble is seen over a seated head
     { id: "dozer", kind: "scribe", at: [220, 520], face: "E", life: { fidget: false }, when: thoughtProof },
     { id: "napper", kind: "agent-collar", at: [382, 432], face: "S", life: { fidget: false }, when: thoughtProof },
+    // ENGINE-21: the doll of the show (proof.puppet): a figure of the rig (Little Sister's page stands in for the boy puppet, which
+    // is PEOPLE-21A's: her holds "holler" and "climb" are two of its poses, her page "lilsis-lying" a third), small, on its mark
+    { id: "doll", kind: "lilsis", at: RAIL, scale: 0.55, face: "S", life: { fidget: false }, solid: false, when: puppetProof },
   ],
 
   // Runs when the lead arrives. It must be safe to run twice (a save can be loaded in the middle of it), so it checks its own fact.

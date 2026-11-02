@@ -22,9 +22,9 @@
     {
       "id": "osaka",
       "picture": "place-osaka.png",
-      "shape": [[328, 370], [337, 371], [344, 378], [346, 391], [369, 396], [376, 402], [374, 413], [362, 426], [356, 427], [353, 437], [348, 438], [341, 433], [321, 437], [317, 431], [320, 424], [306, 420], [301, 413], [307, 396], [316, 390], [318, 378]],
-      "pin": [300, 448],
-      "label": [300, 388],
+      "shape": [[358, 377], [379, 379], [387, 399], [363, 428], [339, 425], [348, 435], [341, 444], [332, 439], [315, 444], [308, 435], [297, 431], [296, 414], [310, 394], [337, 393], [335, 387], [341, 379]],
+      "pin": [382, 474],
+      "label": [402, 440],
       "label_max": 50
     },
     {
@@ -36,12 +36,28 @@
       "label_max": 69
     },
     {
+      "id": "akashi",
+      "picture": "place-akashi.png",
+      "shape": [[186, 377], [193, 378], [199, 386], [210, 377], [217, 378], [221, 382], [224, 390], [222, 400], [225, 406], [232, 409], [240, 419], [230, 435], [174, 436], [167, 431], [163, 413], [176, 405], [177, 387]],
+      "pin": [240, 352],
+      "label": [186, 472],
+      "label_max": 55
+    },
+    {
       "id": "himeji",
       "picture": "place-himeji.png",
-      "shape": [[127, 307], [136, 308], [144, 315], [146, 334], [152, 337], [157, 345], [155, 351], [165, 350], [175, 356], [175, 364], [170, 370], [140, 377], [112, 377], [98, 375], [92, 371], [91, 360], [103, 354], [109, 347], [111, 336], [116, 333], [113, 325], [116, 315]],
-      "pin": [130, 296],
-      "label": [130, 396],
+      "shape": [[115, 305], [124, 306], [132, 313], [134, 332], [140, 335], [145, 343], [143, 349], [153, 348], [163, 354], [163, 362], [158, 368], [128, 375], [100, 375], [86, 373], [80, 369], [79, 358], [91, 352], [97, 345], [99, 334], [104, 331], [101, 323], [104, 313]],
+      "pin": [118, 296],
+      "label": [106, 400],
       "label_max": 50
+    },
+    {
+      "id": "shosha",
+      "picture": "place-shosha.png",
+      "shape": [[84, 191], [91, 195], [124, 246], [124, 253], [116, 259], [100, 260], [96, 257], [54, 257], [48, 253], [48, 246], [76, 197]],
+      "pin": [166, 230],
+      "label": [86, 192],
+      "label_max": 57
     }
   ],
   "paths": [
@@ -49,20 +65,99 @@
       "a": "yui",
       "b": "osaka",
       "picture": "path-yui-osaka.png",
-      "via": [[640, 312], [596, 402], [590, 440], [574, 484], [530, 516], [482, 532], [436, 518], [398, 492], [366, 466], [350, 442], [300, 448]]
+      "via": [[640, 312], [596, 402], [590, 440], [574, 484], [530, 516], [482, 532], [436, 518], [404, 496], [382, 474]]
     },
     {
       "a": "osaka",
       "b": "hills",
       "picture": "path-osaka-hills.png",
-      "via": [[300, 448], [352, 392], [344, 356], [326, 318], [310, 290], [306, 284], [300, 308]]
+      "via": [[382, 474], [362, 452], [340, 430], [348, 406], [362, 384], [378, 362], [394, 342], [380, 334], [366, 330], [346, 322], [324, 314], [300, 308]],
+      "river": {
+        "via_to": 6,
+        "turn": [394, 342],
+        "note": "PAINT-21F: via[0..via_to] is the boat up the Yodo (Osaka to Hirakata); the rest the ferry and the road north into the hills"
+      }
     },
     {
       "a": "hills",
+      "b": "akashi",
+      "picture": "path-hills-akashi.png",
+      "via": [[300, 308], [304, 330], [300, 348], [292, 368], [286, 388], [282, 402], [272, 414], [258, 420], [244, 420], [232, 414], [222, 404], [228, 386], [234, 370], [240, 352]]
+    },
+    {
+      "a": "akashi",
       "b": "himeji",
-      "picture": "path-hills-himeji.png",
-      "via": [[300, 308], [272, 268], [236, 300], [204, 338], [176, 356], [156, 360], [130, 296]]
+      "picture": "path-akashi-himeji.png",
+      "via": [[240, 352], [232, 372], [224, 392], [204, 398], [184, 396], [164, 386], [148, 372], [132, 352], [122, 326], [118, 296]]
+    },
+    {
+      "a": "himeji",
+      "b": "shosha",
+      "picture": "path-himeji-shosha.png",
+      "via": [[118, 296], [112, 278], [116, 262], [130, 250], [148, 238], [166, 230]]
     }
   ],
-  "note": "East at the right. yui on the west shore of Suruga Bay under the Satta headland, Fuji across the water (drawn on the sheet: the lie of the land); osaka at its river mouth west of the Kii peninsula's bulge (a landmark: no scene); hills north of Osaka up the river (the hollow in the wooded hills: cedars and the storehouse); himeji at the west end on its hill above the town, the Inland Sea below. The sea way goes out from Yui's shore round the Kii tip into Osaka's bay (a ship drawn on it at its fifth point); road1 follows the river up into the hills; road2 comes down to the coast road and west. Each via is a pin, the way's drawn points, the other pin. The pins (rows of three portraits, 116 x 36) stand on the land above each place (Osaka's on the sea below it); the names below each place (the hills' above)."
+  "stops": [
+    {
+      "id": "hirakata",
+      "picture": "stop-hirakata.png",
+      "way": [
+        "osaka",
+        "hills"
+      ],
+      "pin": [394, 342],
+      "label": [410, 377],
+      "label_max": 57,
+      "at": [394, 342],
+      "via_index": 6,
+      "shape": [[396, 333], [402, 334], [402, 340], [408, 336], [412, 336], [419, 340], [420, 344], [417, 347], [415, 361], [398, 361], [396, 356], [397, 352], [395, 350], [389, 355], [384, 354], [383, 348], [385, 342], [388, 340], [390, 336]],
+      "middle": [410, 354]
+    },
+    {
+      "id": "koriyama",
+      "picture": "stop-koriyama.png",
+      "way": [
+        "hills",
+        "akashi"
+      ],
+      "pin": [302, 320],
+      "label": [328, 376],
+      "label_max": 59,
+      "at": [302, 320],
+      "via_index": 0,
+      "shape": [[329, 338], [335, 338], [339, 340], [342, 344], [342, 350], [338, 355], [336, 355], [335, 360], [323, 361], [307, 359], [304, 350], [308, 345], [323, 345], [324, 341], [326, 341]],
+      "middle": [318, 352]
+    },
+    {
+      "id": "suma",
+      "picture": "stop-suma.png",
+      "way": [
+        "hills",
+        "akashi"
+      ],
+      "pin": [282, 402],
+      "label": [294, 464],
+      "label_max": 37,
+      "at": [282, 402],
+      "via_index": 5,
+      "shape": [[255, 420], [259, 421], [262, 429], [265, 427], [276, 427], [279, 423], [286, 425], [287, 429], [285, 432], [283, 432], [282, 441], [250, 441], [249, 429], [250, 427], [252, 427], [252, 423]],
+      "middle": [262, 434]
+    },
+    {
+      "id": "maiko",
+      "picture": "stop-maiko.png",
+      "way": [
+        "hills",
+        "akashi"
+      ],
+      "pin": [223, 400],
+      "label": [249, 459],
+      "label_max": 40,
+      "at": [223, 400],
+      "via_index": 10,
+      "shape": [[245, 418], [251, 420], [251, 422], [255, 425], [253, 430], [247, 433], [247, 435], [249, 435], [250, 437], [248, 442], [225, 442], [222, 437], [223, 435], [227, 434], [227, 428], [229, 423], [236, 420], [240, 421]],
+      "middle": [236, 432]
+    }
+  ],
+  "note": "East at the right. yui on the west shore of Suruga Bay under the Satta headland, Fuji across the water (drawn on the sheet: the lie of the land); osaka at its river mouth west of the Kii peninsula's bulge (PAINT-21F: a place now; its castle has walls and turrets and no keep); hills north of Osaka (the hollow in the wooded hills: cedars and the storehouse); akashi on the shore above its strait, Awaji across it (PAINT-21F); himeji at the west end on its hill above the town, the Inland Sea below; shosha north-west of Himeji, a wooded mountain with the women's hall at its foot (PAINT-21F). The sea way goes out from Yui's shore round the Kii tip into Osaka's bay (a ship drawn on it); the river path goes up the Yodo to Hirakata (the Kyoto boat drawn on it), across by the ferry at Hirakata and north into the hills (`river`: where the water ends; the stop `hirakata` there); the road west comes down by Koriyama, round to Nishinomiya and along the shore by Suma and Maiko to Akashi (`stops`: each a picture with its `pin`, the point of its way's line it is for, where the portraits stop: for the walk's three, where their row stands just above the picture, the line said above them; Hirakata's at the river's turn; and a `label`, its name's baseline middle, for a name written at the map's size less 3, as the engine writes a stop's); the road on to Himeji; the walk between Himeji and Shosha. Each via is a pin, the way's drawn points, the other pin. The pins (rows of three portraits, 116 x 36) stand beside each place (Osaka's on the sea east of it)."
 }

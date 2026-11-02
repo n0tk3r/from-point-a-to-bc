@@ -55,6 +55,7 @@ const LEAD = 800, SOON = 540, DIP = { out: 70, in: 80 };
 import * as art from "../art/kit.js";
 import { checkpoints } from "../content/checkpoints.js";      // TESTING-9 (temporary): the testers' parts. See "parts" below.
 import { Atlas, checkMaps } from "./atlas.js";                 // MAP-15: the map screen, the Timer, travel and switching through the map
+import { Hand, Cues } from "./near.js";                         // ENGINE-21: the hands in a close-up scene, and the cue helper (a puppet show)
 
 const esc =(s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const copy = (data) => JSON.parse(JSON.stringify(data));
@@ -79,6 +80,23 @@ function peekOf(h) {
   return { ...h, look: p.look, use: drop || p.use, useWith: p.useWith, verb: p.verb || (drop ? "Drop down onto" : p.use ? h.verb || "Use" : "Look at"),
     walkTo: null, face: null, grille: null, climb: null, mate: null, plane: h.plane || h.mate || undefined, peek: p };
 }
+
+/** ENGINE-21: a scene's `closeup` as it is now: { back, spawn } (true counts as {}), or null for a scene that is not a close-up.
+    It may be a function of the game. */
+function closeupSpec(scene, g) {
+  if (!scene) return null;
+  let c = scene.closeup;
+  if (typeof c === "function") { try { c = c(g); } catch { c = null; } }
+  return c ? (typeof c === "object" ? c : {}) : null;
+}
+/** ENGINE-21: a scene's `momentary` facts (a list of names, or a function of the game giving one): the ones it never saves. */
+function momentsOf(scene, g) {
+  let m = scene && scene.momentary;
+  if (typeof m === "function") { try { m = m(g); } catch { m = null; } }
+  return Array.isArray(m) ? m.filter((f) => typeof f === "string") : [];
+}
+/** ENGINE-21: is a point inside an outline? (for the walk zones) */
+const within = (poly, x, y) => Array.isArray(poly) && poly.length > 2 && inside(poly, x, y);
 
 export class Game {
   constructor(content) {
@@ -703,6 +721,180 @@ export class Game {
   /** Is a close-up showing? */
   get near() { return !!this.closeEl && !this.closeEl.hasAttribute("hidden"); }
 
+  // =============== ENGINE-21: close looks that are scenes, the hands in them, the moment's facts (near.js) ===============
+  /** The close-up scene on the stage (a scene with `closeup`: the compass seen from above, the lock on the hall's doors), or null. */
+  get closeupScene() { return this.scene && this._closeup === this.scene ? this.scene : null; }
+  /**
+   * Open a close-up scene from the scene the lead is in (a thing's `use`: the compass box, the lock): where everyone of the team
+   * there stands is remembered (in the save: `closeup`), and the game goes into it (a dip: it is the same place), the party with
+   * the lead, nobody drawn. Resolves true when it is up; false, nothing done, for a scene that is no close-up (the console says why).
+   */
+  async openCloseup(id) {
+    const d = this.store.data, from = this.here;
+    let scene = null;
+    try { scene = await this.getScene(id); } catch (err) { console.warn(`g.openCloseup: "${id}" would not load:`, err); return false; }
+    if (!closeupSpec(scene, this)) { console.warn(`g.openCloseup: "${id}" is not a close-up (it has no \`closeup\`), so nothing happens.`); return false; }
+    if (!from || from.id === id) return false;
+    const places = {};
+    for (const who of new Set([d.active, ...d.team])) { const w = d.where[who]; if (w && w.scene === from.id) { this.rememberPlace(who); places[who] = { ...d.where[who] }; } }
+    d.closeup = { from: from.id, places };
+    await this.goto(id, { card: false });
+    return !!this.scene && this.scene.id === id;
+  }
+  /**
+   * "Step back": out of the close-up to the scene it was opened from, everyone of the team where they stood (the one being played
+   * at his place, the others at theirs), or, with nothing remembered (a save loaded in it; a goto straight into it), to the scene's
+   * own `closeup.back` and its `spawn`. The close-up hears it as it is left (`leaving`: the lock lets go of everything). Resolves
+   * true when the scene is up.
+   */
+  async stepBack() {
+    const d = this.store.data, scene = this.closeupScene, spec = closeupSpec(scene, this), c = d.closeup;
+    if (!scene) { console.warn("g.stepBack: there is no close-up on the stage, so nothing happens."); return false; }
+    const to = (c && c.from) || (spec && spec.back);
+    if (!to || !this.sceneIds.includes(to)) { console.warn(`g.stepBack: "${scene.id}" says no scene to step back to (closeup: { back }), so nothing happens.`); return false; }
+    const places = (c && c.from === to && c.places) || {}, mine = places[d.active];
+    for (const [who, at] of Object.entries(places)) if (who !== d.active && this.leads.includes(who) && at) d.where[who] = { ...at };
+    d.closeup = null;
+    await this.goto(to, mine && mine.x != null ? { at: [mine.x, mine.y] } : { spawn: (spec && spec.spawn) || "default" });
+    if (mine && mine.face != null && this.lead && this.scene && this.scene.id === to) { this.lead.face(mine.face); this.rememberPlace(); }
+    return !!this.scene && this.scene.id === to;
+  }
+  /** The player steps back from a close-up (the button in the corner, Esc): as a script, then saved. */
+  async leaveCloseup() {
+    if (!this.closeupScene || this.busy || this.mode !== "play") return;
+    await this.run(() => this.stepBack(), { settle: false });
+    this.autosave();
+  }
+  /**
+   * A hand on the stage of a close-up (or any scene): `id` its name ("lilsis": Little Sister's, holding the pin); `at` a hand point
+   * of the scene's (`hands: { handEar: [x, y] }`, the painter's) or a point; `spec` the picture: PEOPLE-21B's painted one ({ src,
+   * foot } or { frames, fps, foot } or { states, state, foot }: a cut-out of the cast's, with `foot` its fingertips), a drawing ({
+   * draw(scale) }, or { prop: "<a thing of js/art/props.js>" }), or, with none, the engine's stand-in (a plain hand in the lead's
+   * skin coming in from `from`: "S", "E", "W", "N"; `holding`: an item's id). `scale`, `plane` ("front"), `base`. It stays until
+   * g.hand(id, null) or the scene is built again; nothing of it is saved (a scene puts its hands back from its facts in `setup`).
+   * Gives the sprite, or null.
+   */
+  hand(id, at = null, spec = {}) {
+    const cast = this.view.cast, key = "hand:" + id;
+    if (at == null) { cast.remove(key); return null; }
+    const named = typeof at === "string" ? ((this.scene && this.scene.hands) || {})[at] : at;
+    if (!Array.isArray(named) || named.length < 2) { console.warn(`g.hand: "${at}" is not a hand point of "${this.scene && this.scene.id}" (its \`hands\`), so no hand is drawn.`); return null; }
+    cast.remove(key);
+    const kind = (this.cast[id] && this.cast[id].sprite) || id, scale = spec.scale ?? 1;
+    let s;
+    if (spec.src || spec.frames || spec.states) { s = cast.addPicture(key, { ...spec, foot: spec.foot || [0, 0], plane: spec.plane || "front" }, named[0], named[1], scale); s.refresh && s.refresh(this); }
+    else s = cast.add(new Hand(key, spec, kind).place(named[0], named[1], scale));
+    s.handAt = typeof at === "string" ? at : null;
+    return s;
+  }
+  /** ENGINE-21: the hands on the stage: [{ id, at, x, y }] (`at` the hand point's name). */
+  hands() { return [...this.view.cast.items.values()].filter((s) => typeof s.id === "string" && s.id.startsWith("hand:")).map((s) => ({ id: s.id.slice(5), at: s.handAt || null, x: s.x, y: s.y })); }
+  /** ENGINE-21: let go of a scene's facts that are only for the moment (its `momentary`): the lock's held ear and post. */
+  forgetMoments(scene) { const f = this.store.data.flags; let n = 0; for (const name of momentsOf(scene, this)) if (name in f) { delete f[name]; n++; } if (n) this.store.emit(); }
+  /**
+   * ENGINE-21: a line kept on the stage as a caption (the chanter's cue, while it waits for the player: the cue helper's), small, at
+   * the top middle, in the speaker's colour, until caption(null) or the scene changes. Not a line being said: it does not hold up
+   * the game or hush anything. A line not in the lines files shows nothing (the console says so once).
+   */
+  caption(id = null) {
+    const layer = this.dialogue && this.dialogue.el;
+    if (this._caption) { this._caption.remove(); this._caption = null; }
+    if (!id || !layer || this.clock.skipping) return null;
+    const entry = this.lines[id];
+    if (!entry) { if (!(this._uncaptioned = this._uncaptioned || new Set()).has(id)) { this._uncaptioned.add(id); console.warn(`g.caption: no line "${id}" in the lines files.`); } return null; }
+    const p = document.createElement("p");
+    p.className = "say caption"; p.dataset.line = id;
+    p.style.color = (this.cast[entry[0]] || {}).color || "#fff";
+    p.textContent = entry[1];
+    p.style.left = "50%"; p.style.top = `${(64 / H) * 100}%`;
+    layer.appendChild(p);
+    return (this._caption = p);
+  }
+  /**
+   * ENGINE-21: a painted layer of the scene fades, called by a scene (Fuji's cloud lifting; Shosha's gold light going red; the
+   * theatre's empty stage giving way to the show): `to` an opacity (0 to 1), or the name of another of its states, to which it
+   * cross-fades (the new state drawn over the old, coming in as the old goes) over `ms` (900), on the game clock (at once while a
+   * cut-scene is skipped). The state it ends in holds as one a script has set (until the scene is built again: let the story's
+   * fact say the same, so that a game loaded later agrees). Resolves when done; false for no such layer.
+   */
+  async fadePlane(id, to, { ms = 900 } = {}) {
+    const p = this.plane(id);
+    if (!p) { console.warn(`g.fadePlane: "${id}" is not one of this scene's cut-outs, so nothing fades.`); return false; }
+    if (typeof to === "number") {
+      const from = p.opacity;
+      if (p.hidden && to > 0) { p.show(true); }
+      await this.tween(ms, (k) => p.fade(from + (to - from) * k), ease.linear);
+      if (to <= 0) p.fade(0);
+      return true;
+    }
+    if (!p.spec.states || !p.spec.states[to]) { console.warn(`g.fadePlane: the cut-out "${id}" has no state "${to}".`); return false; }
+    if (p.state === to) return true;
+    const cast = this.view.cast, twin = "fade:" + id, op = p.opacity;
+    cast.remove(twin);
+    const old = cast.addCutout(twin, { ...p.spec, state: p.state });
+    old.set(p.state); old.show(true); old.place(p.x, p.y, p.scale); old.plane = p.plane; old.base = p.base; old.fade(op);      // (shown whatever its `when` says meanwhile)
+    await cast.load();
+    p.set(to); p.fade(0);
+    await this.tween(ms, (k) => { p.fade(op * k); old.fade(op * (1 - k)); }, ease.linear);
+    p.fade(op);
+    cast.remove(twin);
+    return true;
+  }
+  /**
+   * ENGINE-21: someone takes a pose by name and keeps it (the boy puppet: "stand", "ear", "run", "kneel"), as their page in
+   * js/art/people.js gives it: one of their `holds` (figure.hold(true, name), eased in over `ms`), or a page of their own with
+   * the name after their kind ("boypuppet-ear": dressed in it); "stand" or null lets it go. False for a pose they have not got
+   * (the console says so once).
+   */
+  async pose(id, name = null, { ms = 220 } = {}) {
+    const f = this.actor(id);
+    if (!f || !f.spec) { console.warn(`g.pose: nobody called "${id}" is on the stage.`); return false; }
+    const kind = f.kind, page = name && people[`${kind}-${name}`], wasPage = !!f.posed && f.outfit === f.posed;
+    if (!name || name === "stand") { if (f.hold) f.hold(false); if (wasPage) f.dress(null); f.posed = null; return true; }
+    const holds = (f.home && f.home.holds) || f.spec.holds;
+    if (holds && holds[name]) {
+      if (wasPage) f.dress(null);
+      f.hold(true, name);
+      if (f.act) { f.act.k = 0; await this.tween(ms, (k) => { if (f.act) f.act.k = k; }); }
+      f.posed = name;
+      return true;
+    }
+    if (page) { if (f.hold) f.hold(false); f.dress(name); f.posed = name; return true; }
+    if (!(this._unposed = this._unposed || new Set()).has(kind + name)) { this._unposed.add(kind + name); console.warn(`g.pose: ${kind} has no pose "${name}" (neither a hold of that name in js/art/people.js nor a page "${kind}-${name}").`); }
+    return false;
+  }
+  /**
+   * ENGINE-21: a puppet and its three operators placed together at one point (the stage's `rail` mark: a mark's name, or [x, y]),
+   * in the scene's depth there: the doll in front (its feet at the point), the main operator at its head and right hand just behind
+   * it, the left-hand operator at its left, the feet operator low at its right, each `face` (the way the audience is: "S" if not
+   * said). `offsets` ([dx, dy] at full size for head, left and feet) as the painter's stage wants. Each one named is put on the
+   * stage if he is not (a lead: moved there). Gives { doll, head, left, feet } (the figures).
+   */
+  troupe(at, { doll = "boypuppet", head = null, left = null, feet = null, face = "S", offsets = {} } = {}) {
+    const p = typeof at === "string" ? ((this.scene && this.scene.spawn) || {})[at] : at;
+    if (!Array.isArray(p)) { console.warn(`g.troupe: "${at}" is not a mark of this scene.`); return null; }
+    const k = this.sizeAt(p[0], p[1]), off = { head: [6, -4], left: [-26, -3], feet: [24, -2], ...offsets }, cast = this.view.cast, out = {};
+    const put = (id, dx, dy, base) => {
+      if (!id) return null;
+      let f = cast.get(id);
+      const x = p[0] + dx * k, y = p[1] + dy;
+      if (!f) f = cast.addFigure(id, (this.cast[id] && this.cast[id].sprite) || id, x, y, this.sizeAt(x, y));
+      if (f._stop) f._stop();
+      f.place(x, y, this.sizeAt(x, y)).face(face);
+      f.base = base;
+      if (this.leads.includes(id)) this.rememberPlace(id);
+      return f;
+    };
+    out.doll = put(doll, 0, 0, p[1] + 0.5);
+    out.head = put(head, off.head[0], off.head[1], p[1] - 0.5);
+    out.left = put(left, off.left[0], off.left[1], p[1] - 0.25);
+    out.feet = put(feet, off.feet[0], off.feet[1], p[1] - 0.75);
+    this.rebuildSpots();
+    return out;
+  }
+  /** ENGINE-21: a show of cues, each waiting for the player (near.js Cues): `g.cues({ cues: [...], wrong, done })`. */
+  cues(spec) { return new Cues(spec); }
+
   /** Wait for a click or a key (or for `max` milliseconds, whichever comes first). */
   tap(max = 60000) {
     if (this.clock.skipping) return Promise.resolve();
@@ -926,6 +1118,9 @@ export class Game {
       It returns once every picture the scene can show has arrived, so the caller can fade in on a finished stage. */
   async enterScene(scene, pos, way = "default", { peek = null } = {}) {
     const d = this.store.data, cast = this.view.cast;
+    // ENGINE-21: the facts the scene left and this one say are only for the moment (`momentary`: the lock's held states) are let go
+    this.forgetMoments(this.scene); this.forgetMoments(scene);
+    this.caption(null);
     this.dialogue.clear();
     this.closeup();
     this.held = null;
@@ -1012,7 +1207,10 @@ export class Game {
     // He is on the stage for everything that reaches for him (his place and facing, g.reach, what is saved), but never drawn:
     // faded to nothing, which the cast does not draw and nothing in the engine sets back. Nor is anyone of the team who stands
     // here. He walks and turns to nothing (stays), leaves by an edge at once (leave), and speaks from off the stage (dialogue.js).
-    this._unseen = (typeof scene.unseen === "function" ? scene.unseen(this) : scene.unseen) ? scene : null;
+    // ENGINE-21: a close-up scene (`closeup`: true, { back, spawn }, or a function of the game) is one with nobody drawn in it as
+    // well: everything `unseen` does, and a way back ("Step back": stepBack), its hands (g.hand), a portrait-give (ui.js reach)
+    this._closeup = closeupSpec(scene, this) ? scene : null;
+    this._unseen = (typeof scene.unseen === "function" ? scene.unseen(this) : scene.unseen) || this._closeup ? scene : null;
     if (this._unseen) for (const id of new Set([d.active, ...d.team])) { const f = cast.get(id); if (f) f.fade(0); }
     if (scene.setup) scene.setup(this);          // anything the scene still does by hand to match the story facts (ENGINE-17: g.peeking says it is a view)
     this.rebuildSpots();
@@ -1034,12 +1232,25 @@ export class Game {
       story changes; the map is built again only when the answer would be different. */
   remap(anyway = false) {
     if (!this.scene) return;
-    const { solid, people } = this.ground();
-    const key = solid.map((c) => c.id).join("|") + "#" + people.map((p) => p.flat().map(Math.round).join(",")).join("|");
+    const { solid, people, closed } = this.ground();
+    const key = solid.map((c) => c.id).join("|") + "#" + people.map((p) => p.flat().map(Math.round).join(",")).join("|") + "#" + closed.map((z) => z.n).join(",");      // (ENGINE-21: and the zones closed to the one being played)
     if (!anyway && key === this._solid) return;
     this._solid = key;
-    this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people], this);      // (ENGINE-17: the game, for a walk that is a function of it)
+    this.map = new WalkMap(this.scene, [...(this.blocked || []), ...solid.map((c) => c.spec.solid), ...people, ...closed.map((z) => z.area)], this);      // (ENGINE-17: the game, for a walk that is a function of it)
   }
+  /**
+   * ENGINE-21: the parts of a scene's floor that only some leads may walk into (`zones`: [{ area, leads, no, when }]: the Akashi
+   * shallows, Little Sister's alone, in her boots). For anyone else a zone is ground they cannot stand on: they walk to its edge and
+   * no further, and a click in it says the zone's `no` line for them (a line id, or one for each lead), if it has one. `when` (a
+   * function of the game): the zone is there only while it holds. `zones` may be a function of the game. Each: { n, area, leads, no }.
+   */
+  zones() {
+    let z = this.scene && this.scene.zones;
+    if (typeof z === "function") { try { z = z(this); } catch { z = null; } }
+    return (Array.isArray(z) ? z : []).map((zone, n) => ({ ...zone, n })).filter((zone) => Array.isArray(zone.area) && zone.area.length > 2 && (!zone.when || zone.when(this)));
+  }
+  /** ENGINE-21: the zones closed to a lead (the one being played, unless another is named). */
+  closedTo(who = this.store.data.active) { return this.zones().filter((z) => !(Array.isArray(z.leads) ? z.leads : [z.leads]).includes(who)); }
 
   /** The ground that things and people take up: the cut-outs that are showing ({ solid }), and the people who are not
       leads ({ people }: outlines). A person blocks their own `solid` while they are on their mark, and a patch under
@@ -1065,13 +1276,13 @@ export class Game {
       const moved = Math.abs(f.x - a.at[0]) > 4 || Math.abs(f.y - a.at[1]) > 4;
       people.push(a.solid && !moved ? a.solid : patch(f.x, f.y, f.scale));
     }
-    return { solid, people };
+    return { solid, people, closed: this.closedTo() };      // (ENGINE-21: the zones the one being played may not walk into)
   }
 
   /** Where one of the scene's people may walk on a walk of their own (life.js): the ground as the lead has it, less
       their own place and with the family standing in it, so that they go round the family and not through them. */
   groundFor(id) {
-    const { solid, people } = this.ground(id), d = this.store.data, family = [];
+    const { solid, people } = this.ground(id), d = this.store.data, family = [];      // (ENGINE-21: the zones are the leads', not the people's)
     for (const who of new Set([d.active, ...(d.team || [])])) {
       const f = this.actor(who);
       if (f && !f.hidden) family.push([[f.x - 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y - 8], [f.x + 20 * f.scale, f.y + 6], [f.x - 20 * f.scale, f.y + 6]]);
@@ -1322,6 +1533,12 @@ export class Game {
     // ENGINE-17: on one floor of several, he walks on his own: a click on another floor does nothing (or says that floor's
     // `away` line), and a click off every floor goes to the nearest place on his.
     let to = [x, y];
+    // ENGINE-21: a click in a zone of the floor this lead may not walk into: its line for them, if it has one, and nobody moves
+    const shut = this.closedTo().find((z) => within(z.area, x, y));
+    if (shut) {
+      const no = shut.no && typeof shut.no === "object" && !Array.isArray(shut.no) ? shut.no[this.store.data.active] ?? shut.no.any : shut.no;
+      if (no && this.lines[[].concat(no)[0]]) { this.run(() => this.act(no), { settle: false }); return; }
+    }
     const floor = this.floors.length > 1 ? this.floorOf(lead) : null;
     if (floor) {
       const on = this.map.floorAt(x, y);
@@ -1516,7 +1733,12 @@ export class Game {
     const d = this.store.data, a = this.actor(who);
     if (a && this.scene && this.leads.includes(who)) d.where[who] = { scene: this.scene.id, x: Math.round(a.x), y: Math.round(a.y), face: a.yaw };
   }
-  snapshot() { this.rememberPlace(); return copy(this.store.data); }
+  snapshot() {
+    this.rememberPlace();
+    const data = copy(this.store.data);
+    for (const name of momentsOf(this.scene, this)) delete data.flags[name];      // ENGINE-21: the moment's facts are never saved (a reload finds the lock shut)
+    return data;
+  }
   meta() {
     const here = this.here, era = this.eras[here.era];      // (ENGINE-17: the lead's own scene, while he looks down through a grille)
     const date = this.dateOf(era);      // (MERGE-20: dateOf)
@@ -1748,6 +1970,7 @@ export class Game {
         else if (this.mode === "cutscene") { if (this.ui.open) this.ui.back(); else this.ui.pauseMenu(); }      // ENGINE-19A: Esc pauses a cut-scene (Skip is in the menu); it no longer skips at once
         else if (this.ui.open) this.ui.back();
         else if (this.peeking && !this.busy && !this.dialogue.choosing && this.mode === "play") this.leaveView();      // ENGINE-17: Esc backs up from a grille's view
+        else if (this.closeupScene && !this.busy && !this.dialogue.choosing && this.mode === "play") this.leaveCloseup();      // ENGINE-21: and steps back from a close-up
         else this.ui.pauseMenu();
       } else if (this.mode === "cutscene" && this.ui.open) {
         // ENGINE-19A: while the pause menu is up in a cut-scene, the other keys are the menu's (Enter and Space press its buttons)

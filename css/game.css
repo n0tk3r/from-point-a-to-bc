@@ -147,6 +147,8 @@ h1 {
   animation: line-in 0.2s ease-out;
 }
 .say.under { max-width: 92cqw; }      /* while a close-up is showing, lines run along the bottom */
+/* ENGINE-21: a line kept up as a caption (g.caption: the chanter's cue while it waits for the player): smaller, lighter, leaning */
+.say.caption { font-size: max(2.1cqw, 11px); font-weight: 400; font-style: italic; opacity: 0.92; max-width: 60cqw; animation: none; }
 body:has(#skip:not([hidden])) .say.under { max-width: 76cqw; }      /* MERGE-20 (SCENES-20A's note): and stop short of Skip while it shows (it sits at about 88 to 98cqw) */
 /* LETTERBOX-11: a voice through a small door in time. The speaker is in another century, so their portrait (drawn by the
    interface, never in the scene's paints) stands beside the words, and the words are lighter and lean, as from a little
@@ -332,6 +334,9 @@ body:has(#skip:not([hidden])) .say.under { max-width: 76cqw; }      /* MERGE-20 
 #atlas .atlas-label { position: absolute; z-index: 2; left: 0; right: 0; top: 72cqw; margin: 0; text-align: center; font: 700 max(2.2cqw, 11px)/1.2 var(--font-text); color: var(--cream); text-shadow: var(--outline); pointer-events: none; }
 /* The Timer: the emblem's three pictures as the begin screen lays them, 440 across in the middle of the dark (atlas.js timer). */
 #atlas .atlas-timer { position: absolute; z-index: 3; pointer-events: none; transform-origin: 50% 50%; }
+/* ENGINE-21: a stop's line on a journey, said on the map itself (atlas.js sayOn): the words of the stage (.say), over the stop */
+#atlas .atlas-say { z-index: 3; pointer-events: none; }
+#atlas .atlas-say img.pic { display: inline-block; width: max(3.6cqw, 20px); height: auto; margin: 0 0.4cqw; vertical-align: middle; image-rendering: pixelated; background: #fff; border-radius: 0.5cqw; }      /* (a stop's line that is a thought: its pictures) */
 
 /* ---------- menus ---------- */
 #menu { display: grid; place-items: center; background: rgba(7, 4, 13, 0.6); }

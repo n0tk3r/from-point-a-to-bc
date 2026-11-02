@@ -6,6 +6,10 @@
 // prayer comes out); a charcoal kiln of earth. Rain as the prints draw it: fine straight lines.
 //
 // The three of them come up the path from Osaka (the voyage, SCENES-20A's edo-sail, ends here on the mark `enter`):
+// SCENES-21B (round twenty-one): from the Kyoto boat now (cutscenes/edo-boat.js: up the river with the puppet troupe, the ferry at
+// Hirakata, the road north in the rain, ends here on the mark `enter`, edo.boated), as #32 Under The Cedars (round twenty's #25;
+// acts/edo.js: it needs edo.boated); LEG_START.hills (edo-common.js) has the facts of Osaka before it. Everything below is as
+// round twenty built it: the puzzles keep their old numbers here (#25 is #32, #26 is #33, #27 is #34).
 //   #25 Under The Cedars   the door is barred from inside and nobody answers it (knock, then call out: the murmur stops,
 //                          and the light under the floor goes out for a moment); the pipe in the hill: "The ground is
 //                          PRAYING." (edo.pipeHeard); the high back window: Mom lifts Little Sister up, and she goes through
@@ -17,7 +21,7 @@
 // Every place is PAINT-20C's own measurement of the finished picture (art/scenes/edo-cedars/layout.json and its ready.md);
 // where a place was set by eye the comment says so.
 //
-// Try it: index.html?scene=edo-cedars&lead=mom&flags=edo.arrived,edo.when,edo.clothes,edo.dressed,edo.fed,edo.west,edo.sailed
+// Try it: index.html?scene=edo-cedars&lead=mom&flags=edo.arrived,edo.when,edo.clothes,edo.dressed,edo.fed,edo.west,edo.sailed,edo.boated   (SCENES-21B: and edo.boated)
 // (dressed by script: the hills always have the travel clothes on, LEG_START.hills in edo-common.js)
 
 import { STOCK_DRESSED, is } from "./edo-common.js";

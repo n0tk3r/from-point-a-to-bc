@@ -1,0 +1,1276 @@
+{
+ "id": "edo-street",
+ "horizon": 262,
+ "full": 590,
+ "view": {
+  "horizon": 262,
+  "full": 590,
+  "camera": "room.View(262, 590, cam=(0, 0), yaw=25, focal=800): eye 358.75 cm; we look east, a little south, across the street",
+  "world": "cm; X along the main street to the right (south), Z toward us (west), Y up; the far fronts Z -1300, our side's (unseen) Z -650; the cross street X 330..790"
+ },
+ "light": "about half past four, the sun west-south-west behind us and to the right, 27 degrees up: the far fronts lit from about 1.8 m up; the street and the fronts below that in our side's shadow (cool blue), but for the band of sun that comes through the cross street across the street to the crossroads, the road god and the print shop's corner and bench",
+ "walk": [
+  [
+   0,
+   596
+  ],
+  [
+   800,
+   596
+  ],
+  [
+   800,
+   422
+  ],
+  [
+   800,
+   422
+  ],
+  [
+   735,
+   430
+  ],
+  [
+   663,
+   439
+  ],
+  [
+   583,
+   449
+  ],
+  [
+   494,
+   459
+  ],
+  [
+   462,
+   451
+  ],
+  [
+   337,
+   400
+  ],
+  [
+   205,
+   411
+  ],
+  [
+   267,
+   473
+  ],
+  [
+   269,
+   487
+  ],
+  [
+   187,
+   497
+  ],
+  [
+   98,
+   508
+  ],
+  [
+   0,
+   520
+  ],
+  [
+   0,
+   520
+  ]
+ ],
+ "walk_note": "one area: the main street from the bottom to just before the far side's gutter, and the mouth of the cross street; the shops' fronts are hotspots, not walked into",
+ "blocked": [
+  [
+   [
+    642,
+    442
+   ],
+   [
+    668,
+    439
+   ],
+   [
+    658,
+    436
+   ],
+   [
+    632,
+    439
+   ]
+  ],
+  [
+   [
+    234,
+    495
+   ],
+   [
+    272,
+    491
+   ],
+   [
+    262,
+    482
+   ],
+   [
+    226,
+    486
+   ]
+  ],
+  [
+   [
+    708,
+    451
+   ],
+   [
+    761,
+    444
+   ],
+   [
+    739,
+    439
+   ],
+   [
+    687,
+    446
+   ]
+  ]
+ ],
+ "planes": [
+  {
+   "id": "prints-1",
+   "file": "prints-1.png",
+   "base": [
+    [
+     -68,
+     518
+    ],
+    [
+     290,
+     476
+    ]
+   ],
+   "what": "the upper line of prints pegged across the print shop's open front: actor prints (stars at home, a stage scene) and a toy print (it flutters: fx prints-1-sway)"
+  },
+  {
+   "id": "prints-2",
+   "file": "prints-2.png",
+   "base": [
+    [
+     -68,
+     518
+    ],
+    [
+     290,
+     476
+    ]
+   ],
+   "what": "the lower line: toy prints to cut out and build, and actor prints (fx prints-2-sway)"
+  },
+  {
+   "id": "noren-kelp",
+   "file": "noren-kelp.png",
+   "base": [
+    [
+     490,
+     452
+    ],
+    [
+     612,
+     438
+    ]
+   ],
+   "what": "the kelp shop's noren across its open front (fx noren-kelp-sway)"
+  },
+  {
+   "id": "noren-med",
+   "file": "noren-med.png",
+   "base": [
+    [
+     616,
+     438
+    ],
+    [
+     704,
+     427
+    ]
+   ],
+   "what": "the medicine shop's noren in its doorway (fx noren-med-sway)"
+  },
+  {
+   "id": "noren-comb",
+   "file": "noren-comb.png",
+   "base": [
+    [
+     707,
+     427
+    ],
+    [
+     803,
+     416
+    ]
+   ],
+   "what": "the comb-maker's noren (fx noren-comb-sway)"
+  },
+  {
+   "id": "bench",
+   "file": "bench.png",
+   "base": [
+    [
+     100,
+     499
+    ],
+    [
+     250,
+     482
+    ]
+   ],
+   "what": "the printing bench at the edge of the raised floor: paper, the block with its two marks, the round pad, brushes, the pot of the new blue, the stand at its right end (Senzo sits behind it: mark `senzo`; Big Sister stands before it: mark `bench`)"
+  },
+  {
+   "id": "print",
+   "file": "print.png",
+   "base": [
+    [
+     100,
+     499.2
+    ],
+    [
+     250,
+     482.2
+    ]
+   ],
+   "states": {
+    "blank": "print.png",
+    "ghost": "print-ghost.png",
+    "clean": "print-clean.png"
+   },
+   "what": "the sheet on the bench's stand: blank, then a ghost-blurred blue (the blue a hair to the left), then a clean print (an actor at home in a robe of the new blue): #30's three states",
+   "order": "after bench"
+  },
+  {
+   "id": "sign",
+   "file": "sign.png",
+   "base": [
+    [
+     636,
+     441
+    ],
+    [
+     667,
+     438
+    ]
+   ],
+   "what": "the medicine shop's big standing signboard: 'Uruyusu' (\u30a6\u30eb\u30e6\u30b9) in our own brush hand, white on black lacquer"
+  },
+  {
+   "id": "roadgod",
+   "file": "roadgod.png",
+   "base": [
+    [
+     232,
+     494
+    ],
+    [
+     270,
+     489
+    ]
+   ],
+   "what": "the small stone road god at the corner, a cup of water before it, in the band of sun"
+  },
+  {
+   "id": "watervendor",
+   "file": "watervendor.png",
+   "base": [
+    [
+     707,
+     451
+    ],
+    [
+     760,
+     444
+    ]
+   ],
+   "what": "a water-seller resting his two buckets by the comb-maker's (painted)"
+  }
+ ],
+ "cutouts": {
+  "prints-1": [
+   5,
+   353,
+   217,
+   33
+  ],
+  "prints-2": [
+   3,
+   382,
+   121,
+   31
+  ],
+  "noren-kelp": [
+   495,
+   324,
+   112,
+   34
+  ],
+  "noren-med": [
+   622,
+   328,
+   52,
+   46
+  ],
+  "noren-comb": [
+   744,
+   322,
+   52,
+   40
+  ],
+  "bench": [
+   110,
+   407,
+   133,
+   61
+  ],
+  "print": [
+   219,
+   408,
+   19,
+   27
+  ],
+  "print-ghost": [
+   218,
+   408,
+   20,
+   27
+  ],
+  "print-clean": [
+   219,
+   408,
+   19,
+   27
+  ],
+  "sign": [
+   637,
+   323,
+   27,
+   118
+  ],
+  "roadgod": [
+   231,
+   449,
+   34,
+   44
+  ],
+  "watervendor": [
+   697,
+   367,
+   52,
+   80
+  ]
+ },
+ "states": {
+  "print": [
+   "print",
+   "print-ghost",
+   "print-clean"
+  ]
+ },
+ "things": [
+  {
+   "id": "roofs",
+   "what": "the roofs of the street, grey-blue tiles, and the town's roofs beyond",
+   "shape": {
+    "rect": [
+     0,
+     120,
+     800,
+     70
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N"
+  },
+  {
+   "id": "firetower",
+   "what": "a fire-watch tower on the town office's roof down the cross street",
+   "shape": {
+    "rect": [
+     272,
+     51,
+     70,
+     156
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N"
+  },
+  {
+   "id": "kelpshop",
+   "what": "the kelp shop on the corner across the cross street: dried kelp hung in bundles and stacked",
+   "shape": {
+    "poly": [
+     [
+      488,
+      452
+     ],
+     [
+      610,
+      438
+     ],
+     [
+      610,
+      315
+     ],
+     [
+      488,
+      320
+     ]
+    ]
+   },
+   "stand": [
+    583,
+    456
+   ],
+   "face": "N"
+  },
+  {
+   "id": "printshop",
+   "what": "Senzo's print shop on the corner, a publisher's: its front open to the street",
+   "shape": {
+    "poly": [
+     [
+      -35,
+      513
+     ],
+     [
+      248,
+      480
+     ],
+     [
+      248,
+      325
+     ],
+     [
+      -35,
+      335
+     ]
+    ]
+   },
+   "stand": [
+    43,
+    521
+   ],
+   "face": "N"
+  },
+  {
+   "id": "printlines",
+   "what": "actor prints pegged on lines across the open front",
+   "shape": {
+    "rect": [
+     3,
+     351,
+     221,
+     37
+    ]
+   },
+   "stand": [
+    43,
+    521
+   ],
+   "face": "N"
+  },
+  {
+   "id": "toyprints",
+   "what": "toy prints, to cut out and build",
+   "shape": {
+    "rect": [
+     1,
+     380,
+     125,
+     35
+    ]
+   },
+   "stand": [
+    43,
+    521
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bench",
+   "what": "the printing bench in the open front (its three clicks for #30: the corner mark, the side mark, the pad)",
+   "shape": {
+    "rect": [
+     108,
+     405,
+     137,
+     65
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "blocks",
+   "what": "the block on the bench, cherry wood; at its near edge the two marks: the corner (an L) and the straight one",
+   "shape": {
+    "rect": [
+     140,
+     433,
+     40,
+     16
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "cornermark",
+   "what": "the corner mark cut at the block's edge (#30, first click)",
+   "shape": {
+    "rect": [
+     138,
+     435,
+     14,
+     12
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "sidemark",
+   "what": "the straight mark along the block's edge (#30, second click)",
+   "shape": {
+    "rect": [
+     164,
+     433,
+     14,
+     12
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "baren",
+   "what": "the round rubbing pad (#30, the third click: Senzo's rub)",
+   "shape": {
+    "rect": [
+     179,
+     431,
+     16,
+     12
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "bluepot",
+   "what": "the pot of the new blue (Berlin blue)",
+   "shape": {
+    "rect": [
+     204,
+     430,
+     12,
+     11
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "printsheet",
+   "what": "the sheet on the bench's stand (blank / ghost-blurred / clean)",
+   "shape": {
+    "rect": [
+     215,
+     404,
+     26,
+     34
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N"
+  },
+  {
+   "id": "medicine",
+   "what": "the medicine shop's big signboard: 'Uruyusu'",
+   "shape": {
+    "rect": [
+     635,
+     321,
+     31,
+     122
+    ]
+   },
+   "stand": [
+    664,
+    445
+   ],
+   "face": "N"
+  },
+  {
+   "id": "combsign",
+   "what": "the comb-maker's signboard, shaped like a comb",
+   "shape": {
+    "rect": [
+     745,
+     309,
+     49,
+     35
+    ]
+   },
+   "stand": [
+    775,
+    443
+   ],
+   "face": "N"
+  },
+  {
+   "id": "crossroads",
+   "what": "the crossroads: four ways",
+   "shape": {
+    "poly": [
+     [
+      305,
+      536
+     ],
+     [
+      589,
+      493
+     ],
+     [
+      382,
+      408
+     ],
+     [
+      191,
+      424
+     ]
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N"
+  },
+  {
+   "id": "roadgod",
+   "what": "the small stone road god at the corner",
+   "shape": {
+    "rect": [
+     228,
+     446,
+     40,
+     50
+    ]
+   },
+   "stand": [
+    278,
+    495
+   ],
+   "face": "N"
+  },
+  {
+   "id": "noren",
+   "what": "the shops' noren stirring",
+   "shape": {
+    "rect": [
+     493,
+     322,
+     116,
+     38
+    ]
+   },
+   "stand": [
+    583,
+    456
+   ],
+   "face": "N"
+  },
+  {
+   "id": "drumtower",
+   "what": "far off over the roofs at the right, a theatre's drum tower (the way there)",
+   "shape": {
+    "rect": [
+     662,
+     92,
+     57,
+     107
+    ]
+   },
+   "stand": [
+    786,
+    437
+   ],
+   "face": "E"
+  },
+  {
+   "id": "watervendor",
+   "what": "a water-seller with his two buckets",
+   "shape": {
+    "rect": [
+     695,
+     365,
+     56,
+     84
+    ]
+   },
+   "stand": [
+    752,
+    456
+   ],
+   "face": "N"
+  },
+  {
+   "id": "natsu",
+   "what": "O-Natsu at the crossroads with her boxwood comb (drawn by the game)",
+   "shape": {
+    "rect": [
+     300,
+     395,
+     31,
+     92
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 146,
+   "mark": "natsu"
+  },
+  {
+   "id": "yomiuri1",
+   "what": "the first broadsheet seller (when they come) (drawn by the game)",
+   "shape": {
+    "rect": [
+     415,
+     384,
+     32,
+     93
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "yomiuriTo"
+  },
+  {
+   "id": "yomiuri2",
+   "what": "the second broadsheet seller (drawn by the game)",
+   "shape": {
+    "rect": [
+     449,
+     378,
+     30,
+     90
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "yomiuri2To"
+  },
+  {
+   "id": "kurata",
+   "what": "Kurata, round the other corner (drawn by the game)",
+   "shape": {
+    "rect": [
+     514,
+     380,
+     31,
+     91
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "kurataTo"
+  },
+  {
+   "id": "tatsu",
+   "what": "Tatsu, his thief-taker (drawn by the game)",
+   "shape": {
+    "rect": [
+     561,
+     381,
+     31,
+     91
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "tatsuTo"
+  },
+  {
+   "id": "komuso",
+   "what": "the komuso, playing at a door (drawn by the game)",
+   "shape": {
+    "rect": [
+     562,
+     370,
+     28,
+     83
+    ]
+   },
+   "stand": [
+    407,
+    483
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "komuso"
+  },
+  {
+   "id": "senzo",
+   "what": "Senzo at his bench, inside the open front (drawn by the game, seated)",
+   "shape": {
+    "rect": [
+     147,
+     383,
+     33,
+     67
+    ]
+   },
+   "stand": [
+    179,
+    502
+   ],
+   "face": "N",
+   "height_cm": 156,
+   "mark": "senzo"
+  }
+ ],
+ "marks": {
+  "shore": [
+   14,
+   549
+  ],
+  "crossroads": [
+   407,
+   483
+  ],
+  "roadgod": [
+   278,
+   495
+  ],
+  "natsu": [
+   316,
+   487
+  ],
+  "prints": [
+   43,
+   521
+  ],
+  "bench": [
+   179,
+   502
+  ],
+  "medicine": [
+   664,
+   445
+  ],
+  "combshop": [
+   775,
+   443
+  ],
+  "yomiuriFrom": [
+   266,
+   411
+  ],
+  "yomiuriTo": [
+   431,
+   477
+  ],
+  "yomiuri2From": [
+   307,
+   404
+  ],
+  "yomiuri2To": [
+   464,
+   468
+  ],
+  "kurataFrom": [
+   788,
+   442
+  ],
+  "kurataTo": [
+   529,
+   471
+  ],
+  "tatsuFrom": [
+   788,
+   452
+  ],
+  "tatsuTo": [
+   577,
+   472
+  ],
+  "komuso": [
+   576,
+   453
+  ],
+  "theatre": [
+   786,
+   437
+  ],
+  "shore_mom": [
+   40,
+   536
+  ],
+  "shore_bigsis": [
+   64,
+   545
+  ],
+  "shore_lilsis": [
+   30,
+   560
+  ],
+  "kelpshop": [
+   583,
+   456
+  ],
+  "watervendor": [
+   752,
+   456
+  ],
+  "senzo": [
+   163,
+   450
+  ]
+ },
+ "stands": {
+  "shore": {
+   "at": [
+    14,
+    549
+   ],
+   "grownup_px": 140,
+   "face": "E"
+  },
+  "crossroads": {
+   "at": [
+    407,
+    483
+   ],
+   "grownup_px": 108,
+   "face": "N"
+  },
+  "roadgod": {
+   "at": [
+    278,
+    495
+   ],
+   "grownup_px": 114,
+   "face": "N"
+  },
+  "natsu": {
+   "at": [
+    316,
+    487
+   ],
+   "grownup_px": 110,
+   "face": "N"
+  },
+  "prints": {
+   "at": [
+    43,
+    521
+   ],
+   "grownup_px": 126,
+   "face": "N"
+  },
+  "bench": {
+   "at": [
+    179,
+    502
+   ],
+   "grownup_px": 117,
+   "face": "N"
+  },
+  "medicine": {
+   "at": [
+    664,
+    445
+   ],
+   "grownup_px": 89,
+   "face": "N"
+  },
+  "combshop": {
+   "at": [
+    775,
+    443
+   ],
+   "grownup_px": 88,
+   "face": "N"
+  },
+  "yomiuriFrom": {
+   "at": [
+    266,
+    411
+   ],
+   "grownup_px": 73,
+   "face": "S"
+  },
+  "yomiuriTo": {
+   "at": [
+    431,
+    477
+   ],
+   "grownup_px": 105,
+   "face": "S"
+  },
+  "yomiuri2From": {
+   "at": [
+    307,
+    404
+   ],
+   "grownup_px": 69,
+   "face": "S"
+  },
+  "yomiuri2To": {
+   "at": [
+    464,
+    468
+   ],
+   "grownup_px": 100,
+   "face": "S"
+  },
+  "kurataFrom": {
+   "at": [
+    788,
+    442
+   ],
+   "grownup_px": 88,
+   "face": "W"
+  },
+  "kurataTo": {
+   "at": [
+    529,
+    471
+   ],
+   "grownup_px": 102,
+   "face": "W"
+  },
+  "tatsuFrom": {
+   "at": [
+    788,
+    452
+   ],
+   "grownup_px": 93,
+   "face": "W"
+  },
+  "tatsuTo": {
+   "at": [
+    577,
+    472
+   ],
+   "grownup_px": 102,
+   "face": "W"
+  },
+  "komuso": {
+   "at": [
+    576,
+    453
+   ],
+   "grownup_px": 93,
+   "face": "N"
+  },
+  "theatre": {
+   "at": [
+    786,
+    437
+   ],
+   "grownup_px": 85,
+   "face": "E"
+  },
+  "shore_mom": {
+   "at": [
+    40,
+    536
+   ],
+   "grownup_px": 134,
+   "face": "E"
+  },
+  "shore_bigsis": {
+   "at": [
+    64,
+    545
+   ],
+   "grownup_px": 138,
+   "face": "E"
+  },
+  "shore_lilsis": {
+   "at": [
+    30,
+    560
+   ],
+   "grownup_px": 145,
+   "face": "E"
+  },
+  "kelpshop": {
+   "at": [
+    583,
+    456
+   ],
+   "grownup_px": 95,
+   "face": "N"
+  },
+  "watervendor": {
+   "at": [
+    752,
+    456
+   ],
+   "grownup_px": 95,
+   "face": "N"
+  },
+  "senzo": {
+   "at": [
+    163,
+    450
+   ],
+   "grownup_px": 105,
+   "face": "S",
+   "scale": 0.655,
+   "note": "on the raised floor, 45 cm up: draw him at `scale` (a man at his depth), feet at `at`, behind the bench (whose base is in front of him)"
+  }
+ },
+ "fx": [
+  {
+   "id": "prints-1-sway",
+   "type": "sway",
+   "plane": "prints-1",
+   "anchor": "top",
+   "amount": 1.2,
+   "period": 2.6,
+   "wave": 18,
+   "lean": 0.2,
+   "what": "the upper line of prints fluttering"
+  },
+  {
+   "id": "prints-2-sway",
+   "type": "sway",
+   "plane": "prints-2",
+   "anchor": "top",
+   "amount": 1.0,
+   "period": 3.1,
+   "wave": 16,
+   "lean": 0.2,
+   "what": "the lower line fluttering"
+  },
+  {
+   "id": "noren-kelp-sway",
+   "type": "sway",
+   "plane": "noren-kelp",
+   "anchor": "top",
+   "amount": 1.6,
+   "period": 3.4,
+   "wave": 24,
+   "lean": 0.3,
+   "what": "the kelp shop's noren stirring"
+  },
+  {
+   "id": "noren-med-sway",
+   "type": "sway",
+   "plane": "noren-med",
+   "anchor": "top",
+   "amount": 1.8,
+   "period": 3.8,
+   "wave": 24,
+   "lean": 0.3,
+   "what": "the medicine shop's noren stirring"
+  },
+  {
+   "id": "noren-comb-sway",
+   "type": "sway",
+   "plane": "noren-comb",
+   "anchor": "top",
+   "amount": 1.6,
+   "period": 3.0,
+   "wave": 22,
+   "lean": 0.3,
+   "what": "the comb-maker's noren stirring"
+  },
+  {
+   "id": "birds",
+   "type": "birds",
+   "kind": "flyers",
+   "plane": "back",
+   "what": "two birds wheeling high over the roofs (the engine's own silhouettes)",
+   "circle": {
+    "at": [
+     470,
+     70
+    ],
+    "r": [
+     70,
+     24
+    ]
+   },
+   "count": 2,
+   "speed": 12,
+   "size": 9,
+   "color": "#3a3a4a"
+  }
+ ],
+ "fx_note": "the two lines of prints and the three noren sway; two birds wheel high; the people's life (passers-by, a few pilgrims with ladles) is the game's",
+ "notes": [
+  "The shop signs carry the shape of writing in our own hand, never a real shop's name; the medicine signboard reads Uruyusu (\u30a6\u30eb\u30e6\u30b9) in katakana written in our own plain strokes.",
+  "Which way is south: the painting does not say; the street goes on to the right, and the drum tower is over the roofs that way (the design's 'the street goes south').",
+  "#30's three clicks: things `cornermark`, `sidemark`, `baren` (small: generous hotspots round them are the scene's); the sheet's three states are `print`'s.",
+  "The town office with the fire-watch tower is down the cross street (on its south side), its tower over the roofs."
+ ],
+ "heights": {
+  "mom_cm": 168,
+  "bigsis_cm": 160,
+  "lilsis_cm": 122,
+  "man_1830_cm": 156,
+  "woman_1830_cm": 146,
+  "grownup_at_full_px": 160
+ }
+}

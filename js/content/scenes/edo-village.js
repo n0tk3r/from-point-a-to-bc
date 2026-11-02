@@ -23,6 +23,17 @@
 // Every place is the painter's own measurement of the finished picture (art/scenes/edo-village/layout.json, PAINT-20A's
 // ready.md), or was set by eye against the picture with the people in it; where the two differ the comment says why.
 //
+// SCENES-21A (round twenty-one: briefs/out/edo2-design.md, #24 and #25, and section 10, item 8; WRITE-21A's lines, edo-c.en.js):
+//   #24 West         the hens now give Mom's plan, "West it is, then. By the road" (edo.road.plan.mom, in place of round
+//                    twenty's edo.west.hens.4); dressed (#22), the three walk out of Yui's west end (`west`, or a use of the road
+//                    or the pass) along the Tōkaidō to Nishikurasawa (edo-kurasawa.js) and up to the pass; back from the top
+//                    they come in at the new mark `fromWest`, by the well
+//   #25              Kihei names the ship only after the road (his tree, talk/edo-a.js); the rest as built
+//   Casting Off      with the passage agreed and the year worked out, the goodbyes, then cutscenes/edo-castoff.js (in place of
+//                    the voyage, which is the deck's now)
+//   the street       the relay courier running through now and then, and the komusō passing west (ENGINE-21's passers, PEOPLE-21A's
+//                    kinds), each with a look and a use
+//
 // Try it: index.html?scene=edo-village&lead=mom&flags=edo.arrived   (the arrival first, without edo.arrived)
 
 import { stockFor, STOCK } from "./edo-common.js";
@@ -37,7 +48,9 @@ const M = {
   arrive: [150, 520], board: [505, 415], sankichi: [520, 411], hens: [487, 530], shop: [595, 480], boat: [92, 484], underboat: [83, 457],
   racks: [182, 447], gonroku: [278, 397], cherry: [640, 375], clerkFrom: [664, 374], clerkTo: [89, 571], east: [71, 577], west: [666, 373],
   well: [585, 388], masa: [158, 442], kiheiOut: [723, 491], tokuzoTalk: [487, 443], netmender: [262, 452], basketwoman: [392, 444],
+  fromWest: [556, 438],                                                               // SCENES-21A: back from the road west, by the well (in view)
 };
+const FROM_WEST = [[524, 452], [500, 462]];                                           // SCENES-21A: the other two, behind on the road
 const ARRIVE = { mom: [150, 520], bigsis: [196, 538], lilsis: [112, 548] };        // stands arrive_<who>
 const DOOR = { at: [150, 462], r: 62 };                                              // layout.json door: the door in time they come out of
 const NOREN_IN = [640, 468];                                                         // in at the shop's open front, behind the noren (base 468)
@@ -229,6 +242,14 @@ const MASA = masaTree({
     if (m && m.fidget) m.fidget(null);
   },
 });
+// SCENES-21A: O-Masa is asked properly only after the road (round twenty-one's #25 comes after #24: Kihei names the ship once
+// they have tried the road, edo.noRoad). Dressed and fed before that, her verdict is the road (a line of SCENES-21A's block,
+// edo-a.en.js); the lever itself waits for edo.noRoad.
+{
+  const opts = MASA.nodes.talk.options, i = opts.findIndex((o) => o.id === "ask"), ask = opts[i];
+  opts[i] = { ...ask, when: (g) => ask.when(g) && is(g, "edo.noRoad") };
+  opts.splice(i, 0, { id: "askNotRoad", line: "edo.masa.opt.ask.mom", clue: true, when: (g) => ask.when(g) && !is(g, "edo.noRoad"), say: ["edo.masa.notroad"] });
+}
 async function masaTalk(g) {
   faceLead(g, "masa");
   await g.talk(MASA);
@@ -247,20 +268,54 @@ async function hensUse(g) {
   look(g, "bigsis", "lilsis");
   await g.say("edo.west.hens.3");
   look(g, "mom", [720, 540]);
-  await g.say("edo.west.hens.4");
+  await g.say("edo.road.plan.mom");                                                // SCENES-21A: was edo.west.hens.4 (round twenty-one: the road first)
+  if (!is(g, "edo.clothes")) await g.say("edo.road.plan.notdressed");               // SCENES-21A: before O-Tami's kimonos (#22)
   g.flag("edo.hensWest", true);
 }
-hensUse.lines = ["edo.village.hens.use.mom", "edo.village.hens.use.bigsis", "edo.village.hens.use.lilsis", "edo.west.hens.again", "edo.west.hens.1", "edo.west.hens.2", "edo.west.hens.3", "edo.west.hens.4"];
+hensUse.lines = ["edo.village.hens.use.mom", "edo.village.hens.use.bigsis", "edo.village.hens.use.lilsis", "edo.west.hens.again", "edo.west.hens.1", "edo.west.hens.2", "edo.west.hens.3",
+  "edo.road.plan.mom", "edo.road.plan.notdressed"];      // SCENES-21A
+
+// ---------- SCENES-21A: the way west, out of Yui along the Tōkaidō (#24) ----------
+/** The way west is open once they are in O-Tami's clothes and past the clerk (edo.dressed: #22) and the hens have said west
+    (edo.hensWest); after the road (edo.noRoad) it is open still, as far as the top of the pass. */
+const westOpen = (g) => is(g, "edo.dressed") && is(g, "edo.hensWest");
+async function goWest(g) {
+  const line = `edo.village.west.${is(g, "edo.noRoad") ? "again" : "go"}.${who(g)}`;
+  if (!heard(g, line)) await g.say(line);
+  await g.goto("edo-kurasawa", { spawn: "yui" });
+}
+/** The west end of the street: not in these clothes; not before the clerk has had his look (O-Tami sent them to him); not
+    before they know which way (round twenty's road lines); then west. */
+const westUse = Object.assign(async (g) => {
+  const me = who(g);
+  if (!is(g, "edo.clothes")) return g.say(`edo.village.west.notyet.${me}`);
+  if (!is(g, "edo.dressed")) return g.say(`edo.village.west.clerk.${me}`);
+  if (!is(g, "edo.hensWest")) return g.say(`edo.village.road.use.${me}`);
+  await goWest(g);
+}, { lines: THREE.flatMap((w) => [`edo.village.west.notyet.${w}`, `edo.village.west.clerk.${w}`, `edo.village.road.use.${w}`, `edo.village.west.go.${w}`, `edo.village.west.again.${w}`]) });
+/** The road and the pass, used, once the way is open: west, as the west end goes; before, their own lines (round twenty's). */
+const westOr = (thing) => Object.assign(async (g) => (westOpen(g) ? goWest(g) : g.say(`edo.village.${thing}.use.${who(g)}`)),
+  { lines: THREE.map((w) => `edo.village.${thing}.use.${w}`) });
+/** The pass, from Yui: once they have been to the top and come back (edo.noRoad), what they know of it now. */
+const passLook = Object.assign((g) => g.say(`edo.village.pass.${is(g, "edo.noRoad") ? "after." : ""}${who(g)}`),
+  { lines: THREE.flatMap((w) => [`edo.village.pass.${w}`, `edo.village.pass.after.${w}`]) });
+/** The komusō passing: a use has his few notes (a sound) after the words. */
+const komusoUse = Object.assign(async (g) => {
+  await g.say(`edo.village.komuso.use.${who(g)}`);
+  g.sfx("komuso");
+}, { lines: THREE.map((w) => `edo.village.komuso.use.${w}`) });
 
 // ---------- the goodbyes, and the voyage (#24's end: the first leg's gate) ----------
 /** With the passage agreed (edo.west) and the year worked out (#21: Big Sister will not sail out of a year she has not named),
     the goodbyes, here in the street before the shop: Kihei and O-Tami out of it, Sankichi from the board; Little Sister to the
-    shop (the baby, the cat) and to the hen yard, every hen by a name she gives it there and then. Then the ship. */
+    shop (the baby, the cat) and to the hen yard, every hen by a name she gives it there and then. Then the ship.
+    SCENES-21A: then Casting Off (cutscenes/edo-castoff.js: the ship's boat, the windlass, the sail; the deck), in place of the
+    voyage; the goodbyes are said at first light, before it, as they were. */
 async function depart(g) {
-  if (!is(g, "edo.west") || is(g, "edo.sailed")) return;
+  if (!is(g, "edo.west") || is(g, "edo.aboard")) return;                            // SCENES-21A: was edo.sailed
   if (!is(g, "edo.when")) { await g.say("edo.sail.notyet.bigsis"); return; }        // SCENES-20A: a line of my block (edo-a.en.js)
   await goodbyes(g);
-  await g.cutscene("edo-sail");
+  await g.cutscene("edo-castoff");                                                  // SCENES-21A: was edo-sail
 }
 async function goodbyes(g) {
   const cast = g.view.cast;
@@ -334,6 +389,9 @@ function tick(g, dt) {
 }
 
 // The fx of layout.json, and the waves (ENGINE-20's kind) on the near water, where PAINT-20A said it would go.
+// SCENES-21A: the street the passers take (from off the picture at the east, along the road, to the west end behind the house)
+const STREET = [[-30, 600], [71, 577], [330, 500], [520, 452], [570, 428], [640, 394], [706, 366]];
+const HOUSE = [[578, 300], [800, 300], [800, 500], [578, 470]];      // Kihei's house, at the right: whoever goes behind it is not seen
 const BAY_NEAR = [[0, 303], [540, 303], [660, 322], [740, 318], [700, 332], [596, 340], [508, 352], [399, 367], [270, 385], [123, 406], [0, 428]];
 const HEN = (n, look, perch, seed) => ({
   id: `hen-${n}`, type: "birds", perch, count: 1, depth: true, shy: 0, fly: false, turn: false, walk: 5, seed,
@@ -359,9 +417,9 @@ export default {
 
   party: THREE,
   spawn: { default: M.arrive, ...M, kihei_out: M.kiheiOut, tokuzo_talk: M.tokuzoTalk, mom: ARRIVE.mom, bigsis: ARRIVE.bigsis, lilsis: ARRIVE.lilsis },      // (the painter's names too)
-  arrive: { arrive: [ARRIVE.bigsis, ARRIVE.lilsis], shop: FROM_SHOP },
+  arrive: { arrive: [ARRIVE.bigsis, ARRIVE.lilsis], shop: FROM_SHOP, fromWest: FROM_WEST },      // (SCENES-21A: fromWest)
   facing: "S",
-  exits: ["edo-fishshop"],
+  exits: ["edo-fishshop", "edo-kurasawa"],              // (SCENES-21A: and west)
   stock: STOCK,                                          // (the act's own stock replies: setup sets them from the story, edo-common.js stockFor)
   talk: TALK,
   combine: COMBINE,                                      // SCENES-20A: Dad's pencil on the sticky note (game.js useItem: a thing on a thing in the pockets)
@@ -391,6 +449,11 @@ export default {
     { id: "gulls", type: "birds", plane: "back", lanes: [[[-12, 262], [160, 236], [340, 250], [520, 228], [640, -12]], [[-12, 206], [120, 222], [300, 200], [470, 212], [560, 300]], [[600, 240], [420, 262], [220, 248], [-12, 270]]],
       every: [7, 15], group: [1, 3], speed: 60, size: 8, scale: [0.6, 1.1], color: "#f6eed8" },
     { id: "petals", type: "petals", from: [[650, 218], [726, 218], [736, 290], [660, 290]], floor: 372, count: 6, size: 1.5, color: "#e6a5b8", plane: "back" },
+    // SCENES-21A: the Tōkaidō is Yui's street (round twenty-one, section 10, item 8): the relay courier running through now and
+    // then, both ways, and the komusō walking west (ENGINE-21's passers, PEOPLE-21A's kinds), each out of sight behind Kihei's
+    // house at the west end; their areas go with them
+    { id: "courier", type: "passer", kind: "courier", path: STREET, every: [30, 55], both: true, behind: [HOUSE], area: "courier" },
+    { id: "komuso", type: "passer", kind: "komuso", path: STREET, every: [50, 90], both: false, behind: [HOUSE], area: "komuso" },
     // the five hens, each a flock of one on her own perch inside the fence, all facing west along the coast (the frames face right)
     HEN(1, "brown", [[619, 562], [676, 562]], 1), HEN(2, "speckled", [[672, 543], [725, 543]], 2), HEN(3, "brown", [[726, 558], [783, 558]], 3),
     HEN(4, "speckled", [[745, 526], [795, 526]], 4), HEN(5, "brown", [[664, 518], [712, 518]], 5),
@@ -413,7 +476,7 @@ export default {
   hotspots: [
     { id: "gulls", name: "gulls", rect: [0, 180, 460, 110], walkTo: [300, 460], face: "N", ...lookUse("edo.village", "gulls") },
     { id: "fuji", name: "Mount Fuji", poly: [[300, 76], [612, 300], [-12, 300]], walkTo: [330, 470], face: "N", ...lookUse("edo.village", "fuji") },
-    { id: "pass", name: "the pass", poly: [[520, 300], [600, 262], [680, 214], [750, 180], [800, 166], [800, 300]], walkTo: [660, 380], face: "N", ...lookUse("edo.village", "pass") },
+    { id: "pass", name: "the pass", poly: [[520, 300], [600, 262], [680, 214], [750, 180], [800, 166], [800, 300]], walkTo: M.fromWest, face: "N", look: passLook, use: westOr("pass") },      // SCENES-21A: the look after the road; the way west
     { id: "shrinepath", name: "shrine path", rect: [704, 206, 92, 94], walkTo: [640, 380], face: "N", ...lookUse("edo.village", "shrinepath") },
     { id: "cherry", name: "cherry tree", rect: [642, 214, 84, 76], walkTo: [640, 380], face: "N", ...lookUse("edo.village", "cherry") },
     { id: "bay", name: "the bay", poly: [[0, 302], [560, 302], [700, 330], [760, 320], [700, 345], [420, 365], [260, 388], [130, 410], [0, 442]], walkTo: [300, 460], face: "N", ...lookUse("edo.village", "bay") },
@@ -421,7 +484,7 @@ export default {
     { id: "smoke", name: "smoke", rect: [556, 262, 40, 54], walkTo: [585, 400], face: "N", ...lookUse("edo.village", "smoke") },
     { id: "roofs", name: "roofs", rect: [520, 318, 110, 58], walkTo: [585, 400], face: "N", ...lookUse("edo.village", "roofs") },
     { id: "well", name: "well", rect: [534, 315, 32, 70], walkTo: [585, 395], face: "W", ...lookUse("edo.village", "well") },
-    { id: "road", name: "the road", poly: [[238, 571], [522, 451], [707, 373], [627, 373], [355, 451], [-61, 571]], walkTo: [330, 500], face: "NE", ...lookUse("edo.village", "road") },
+    { id: "road", name: "the road", poly: [[238, 571], [522, 451], [707, 373], [627, 373], [355, 451], [-61, 571]], walkTo: [330, 500], face: "NE", look: each("edo.village.road"), use: westOr("road") },      // SCENES-21A: the way west
     { id: "sand", name: "sand", poly: [[0, 460], [120, 440], [300, 420], [440, 400], [500, 430], [360, 470], [300, 500], [250, 540], [230, 596], [0, 596]], walkTo: [300, 500], face: "S", ...lookUse("edo.village", "sand") },
     // the ring on the sand where the door was (the mark `arrive`)
     { id: "arrive", name: "where the door was", poly: [[112, 494], [188, 494], [204, 510], [188, 528], [112, 528], [96, 510]], walkTo: [196, 532], face: "W", ...lookUse("edo.village", "arrive") },
@@ -430,6 +493,8 @@ export default {
     { id: "underboat", name: "gap under the boat", rect: [30, 446, 90, 26], walkTo: [92, 486], face: "W", look: each("edo.village.underboat"), use: underUse },
     { id: "board", name: "notice board", verb: "Read", plane: "board", rect: [420, 314, 71, 105], walkTo: [446, 431], face: "N", look: boardLook, use: boardUse },
     { id: "shop", name: "Kihei's shop", verb: "Go into", poly: [[578, 466], [800, 492], [800, 354], [578, 346]], walkTo: M.shop, face: "E", look: each("edo.village.shop"), use: shopUse },
+    // SCENES-21A: the west end of the street, where the Tōkaidō goes on past the well and behind Kihei's house toward the pass
+    { id: "west", name: "the road west", verb: "Go", poly: [[548, 404], [562, 384], [578, 380], [578, 424], [556, 428]], walkTo: M.fromWest, face: "NE", look: each("edo.village.west"), use: westUse },
     { id: "fence", name: "fence", rect: [549, 466, 251, 116], walkTo: M.hens, face: "E", ...lookUse("edo.village", "fence") },
     { id: "hens", name: "hens", rect: [552, 505, 238, 75], walkTo: M.hens, face: "E", look: each("edo.village.hens"), use: hensUse },
     // the people of Yui (the game draws them; their areas go with them)
@@ -445,6 +510,9 @@ export default {
       when: () => !village.masaDown, useWith: giveNo("masa") },
     { id: "kihei", name: "Kihei", verb: "Talk to", rect: [706, 396, 34, 96], walkTo: [672, 492], face: "E", look: each("edo.village.kihei"), use: kiheiOut,
       when: (g) => !is(g, "edo.clerkPassed") && !village.kiheiIn, useWith: giveNo("kihei") },
+    // SCENES-21A: the courier and the komusō on the street: each area is his figure's box while he passes (the passer moves it)
+    { id: "courier", name: "courier", rect: [300, 420, 35, 100], walkTo: [330, 500], face: "NE", ...lookUse("edo.village", "courier") },
+    { id: "komuso", name: "komusō", rect: [300, 420, 35, 100], walkTo: [330, 500], face: "NE", look: each("edo.village.komuso"), use: komusoUse },
   ],
 
   // Make the picture match the story. Runs on arrival, after loading a save, and whenever the scene is built.

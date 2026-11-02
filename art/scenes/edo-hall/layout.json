@@ -1,0 +1,1085 @@
+{
+ "scene": "edo-hall",
+ "size": [
+  800,
+  600
+ ],
+ "view": {
+  "horizon": 200,
+  "full": 410,
+  "cam": [
+   330.0,
+   640.0
+  ],
+  "yaw": 4.0,
+  "focal": 400.0
+ },
+ "horizon": 200,
+ "full": 410,
+ "key": "edo-sunset",
+ "room_cm": {
+  "X": [
+   0,
+   630.0
+  ],
+  "Z": [
+   0,
+   450.0
+  ],
+  "H": 300.0,
+  "note": "west wall X 0, east wall X 630, north wall Z 0, the south wall (the doors) at Z 450, cut away: the lens is at (330, 640), 230 cm up, outside the open doors"
+ },
+ "walk": [
+  [
+   163,
+   356
+  ],
+  [
+   313,
+   353
+  ],
+  [
+   308,
+   365
+  ],
+  [
+   414,
+   362
+  ],
+  [
+   411,
+   350
+  ],
+  [
+   553,
+   346
+  ],
+  [
+   694,
+   460
+  ],
+  [
+   561,
+   454
+  ],
+  [
+   0,
+   480
+  ]
+ ],
+ "blocked": [
+  {
+   "id": "stand",
+   "poly": [
+    [
+     321,
+     345
+    ],
+    [
+     404,
+     343
+    ],
+    [
+     408,
+     361
+    ],
+    [
+     314,
+     363
+    ]
+   ]
+  }
+ ],
+ "marks": {
+  "door": {
+   "at": [
+    372,
+    459
+   ],
+   "face": "N"
+  },
+  "ume": {
+   "at": [
+    170,
+    458
+   ],
+   "face": "NE"
+  },
+  "mats": {
+   "at": [
+    344,
+    413
+   ],
+   "face": "N"
+  },
+  "cabinet": {
+   "at": [
+    361,
+    375
+   ],
+   "face": "N"
+  },
+  "lattice": {
+   "at": [
+    138,
+    400
+   ],
+   "face": "W"
+  },
+  "hum": {
+   "at": [
+    689,
+    457
+   ],
+   "face": "N"
+  },
+  "humsit": {
+   "at": [
+    612,
+    411
+   ],
+   "face": "E"
+  },
+  "big": {
+   "at": [
+    537,
+    452
+   ],
+   "face": "NE"
+  },
+  "lil": {
+   "at": [
+    676,
+    458
+   ],
+   "face": "N"
+  },
+  "mid": {
+   "at": [
+    403,
+    435
+   ],
+   "face": "S"
+  },
+  "ryokai": {
+   "at": [
+    50,
+    398
+   ],
+   "face": "E",
+   "note": "OUTSIDE the west wall at the lattice (his feet, behind the `lattice` cut-out): only his face and shoulders show, in its gaps"
+  }
+ },
+ "stands": {
+  "door": {
+   "at": [
+    372,
+    459
+   ],
+   "grownup_px": 181
+  },
+  "ume": {
+   "at": [
+    170,
+    458
+   ],
+   "grownup_px": 180
+  },
+  "mats": {
+   "at": [
+    344,
+    413
+   ],
+   "grownup_px": 148
+  },
+  "cabinet": {
+   "at": [
+    361,
+    375
+   ],
+   "grownup_px": 122
+  },
+  "lattice": {
+   "at": [
+    138,
+    400
+   ],
+   "grownup_px": 139
+  },
+  "hum": {
+   "at": [
+    689,
+    457
+   ],
+   "grownup_px": 179
+  },
+  "humsit": {
+   "at": [
+    612,
+    411
+   ],
+   "grownup_px": 147
+  },
+  "big": {
+   "at": [
+    537,
+    452
+   ],
+   "grownup_px": 176
+  },
+  "lil": {
+   "at": [
+    676,
+    458
+   ],
+   "grownup_px": 180
+  },
+  "mid": {
+   "at": [
+    403,
+    435
+   ],
+   "grownup_px": 164
+  }
+ },
+ "seats": {
+  "humsit": {
+   "at": [
+    612,
+    411
+   ],
+   "note": "Mom sitting on the floor before the hum (sit, floor, or kneel): her head below the light's path, so the light passes over her to the hum"
+  },
+  "ume": {
+   "at": [
+    170,
+    458
+   ],
+   "seat": "kneel",
+   "note": "O-Ume kneeling (as Grandmother Sei kneels: sit.seat \"kneel\")"
+  }
+ },
+ "ryokai_face": {
+  "at": [
+   50,
+   278
+  ],
+  "feet": [
+   50,
+   398
+  ],
+  "head_cm": 140,
+  "note": "his feet outside the west wall; his head shows through the lattice's gaps at this point; the cut-out `lattice` covers the rest of him (its base is the west wall's foot)"
+ },
+ "things": {
+  "lattice": {
+   "poly": [
+    [
+     132,
+     319
+    ],
+    [
+     14,
+     377
+    ],
+    [
+     14,
+     252
+    ],
+    [
+     132,
+     235
+    ]
+   ],
+   "stand": [
+    138,
+    400
+   ],
+   "note": "the west lattice: five slats, the sunset in the gaps; a cut-out with the west wall (`lattice`)"
+  },
+  "bars": {
+   "poly": [
+    [
+     25.767028863575035,
+     367.59452961736804
+    ],
+    [
+     133.32668798509349,
+     239.33577727882883
+    ],
+    [
+     588.3394161609201,
+     286.8077913358861
+    ],
+    [
+     616.2520046751608,
+     298.00943980635486
+    ],
+    [
+     657.0753552074348,
+     314.39232818719967
+    ],
+    [
+     661.8713070326642,
+     316.31699978833456
+    ],
+    [
+     673.8949300670912,
+     321.1422204411726
+    ],
+    [
+     673.8949300670912,
+     413.4888535273487
+    ]
+   ],
+   "stand": [
+    403,
+    435
+   ],
+   "note": "the shafts and bars of light (the live layer: layout.json `bars`); the shape is where they are at the hum's moment"
+  },
+  "wall": {
+   "poly": [
+    [
+     563,
+     340
+    ],
+    [
+     799,
+     512
+    ],
+    [
+     799,
+     266
+    ],
+    [
+     563,
+     230
+    ]
+   ],
+   "stand": [
+    689,
+    457
+   ],
+   "note": "the east wall's plain plaster, where the light lands"
+  },
+  "hum": {
+   "at": [
+    652,
+    316
+   ],
+   "poly": [
+    [
+     663,
+     316
+    ],
+    [
+     661,
+     324
+    ],
+    [
+     657,
+     330
+    ],
+    [
+     652,
+     332
+    ],
+    [
+     646,
+     330
+    ],
+    [
+     642,
+     324
+    ],
+    [
+     640,
+     316
+    ],
+    [
+     642,
+     308
+    ],
+    [
+     646,
+     302
+    ],
+    [
+     652,
+     300
+    ],
+    [
+     657,
+     302
+    ],
+    [
+     661,
+     308
+    ]
+   ],
+   "size_px": [
+    22,
+    32
+   ],
+   "stand": [
+    689,
+    457
+   ],
+   "note": "a shimmer in the plaster where a bar of light crosses it (the engine's: nothing painted); the small door opens here"
+  },
+  "cabinet": {
+   "poly": [
+    [
+     335,
+     244
+    ],
+    [
+     338,
+     241
+    ],
+    [
+     387,
+     240
+    ],
+    [
+     388,
+     244
+    ],
+    [
+     388,
+     315
+    ],
+    [
+     335,
+     316
+    ]
+   ],
+   "stand": [
+    361,
+    375
+   ],
+   "note": "the small closed cabinet on its stand (a Kannon inside, its doors shut: not shown, not named)"
+  },
+  "lamp": {
+   "poly": [
+    [
+     384,
+     289
+    ],
+    [
+     393,
+     289
+    ],
+    [
+     394,
+     291
+    ],
+    [
+     394,
+     314
+    ],
+    [
+     384,
+     314
+    ],
+    [
+     384,
+     312
+    ]
+   ],
+   "stand": [
+    361,
+    375
+   ],
+   "note": "an oil lamp on a short stand, right of the cabinet (unlit: the fx `lamp-flame` if the scene lights it)"
+  },
+  "incense": {
+   "poly": [
+    [
+     355,
+     303
+    ],
+    [
+     356,
+     301
+    ],
+    [
+     368,
+     301
+    ],
+    [
+     368,
+     313
+    ],
+    [
+     368,
+     315
+    ],
+    [
+     355,
+     316
+    ]
+   ],
+   "stand": [
+    361,
+    375
+   ],
+   "note": "the bronze incense burner before the cabinet (cold: the fx `incense-smoke` if lit)"
+  },
+  "flowers": {
+   "poly": [
+    [
+     326,
+     288
+    ],
+    [
+     327,
+     286
+    ],
+    [
+     346,
+     285
+    ],
+    [
+     346,
+     312
+    ],
+    [
+     345,
+     315
+    ],
+    [
+     326,
+     316
+    ]
+   ],
+   "stand": [
+    361,
+    375
+   ],
+   "note": "flowers in a jar, left of the cabinet: two weeks shut in, they have drooped"
+  },
+  "slips": {
+   "poly": [
+    [
+     254,
+     334
+    ],
+    [
+     469,
+     329
+    ],
+    [
+     469,
+     168
+    ],
+    [
+     254,
+     167
+    ]
+   ],
+   "stand": [
+    361,
+    375
+   ],
+   "note": "slips everywhere (448 painted): this shape is the thickest of them, round the altar bay; paper and thin wood, never copper"
+  },
+  "posts": {
+   "poly": [
+    [
+     679,
+     434
+    ],
+    [
+     694,
+     446
+    ],
+    [
+     694,
+     125
+    ],
+    [
+     679,
+     128
+    ]
+   ],
+   "stand": [
+    537,
+    452
+   ],
+   "note": "the posts, each pasted with slips (this shape: the east wall's middle post, the nearest)"
+  },
+  "ceiling": {
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     121
+    ],
+    [
+     157,
+     154
+    ],
+    [
+     554,
+     157
+    ],
+    [
+     799,
+     100
+    ],
+    [
+     799,
+     0
+    ]
+   ],
+   "note": "the board ceiling on its battens, the beams across with their slips"
+  },
+  "mats": {
+   "poly": [
+    [
+     0,
+     599
+    ],
+    [
+     0,
+     496
+    ],
+    [
+     160,
+     369
+    ],
+    [
+     550,
+     358
+    ],
+    [
+     799,
+     579
+    ],
+    [
+     799,
+     599
+    ]
+   ],
+   "stand": [
+    344,
+    413
+   ],
+   "note": "twelve tatami, black-edged; two round straw cushions before the altar"
+  },
+  "doorway": {
+   "poly": [
+    [
+     0,
+     572
+    ],
+    [
+     799,
+     572
+    ],
+    [
+     799,
+     599
+    ],
+    [
+     0,
+     599
+    ]
+   ],
+   "stand": [
+    372,
+    459
+   ],
+   "note": "the open doors are BEHIND us (the south wall is cut away): the way out is the bottom edge; the evening lies on the floor near us"
+  },
+  "desk": {
+   "poly": "the cut-out `front`'s silhouette",
+   "stand": [
+    182,
+    472
+   ],
+   "note": "a low desk where women write their slips: blank slips, an inkstone, brushes"
+  },
+  "ume": {
+   "stand": [
+    170,
+    458
+   ],
+   "note": "O-Ume kneels here, by the way out, watching the hum"
+  },
+  "ryokai": {
+   "stand": [
+    50,
+    398
+   ],
+   "face": "where his face shows: see `ryokai_face`"
+  }
+ },
+ "planes": [
+  {
+   "id": "lattice",
+   "src": "lattice.png",
+   "base": [
+    [
+     157,
+     349
+    ],
+    [
+     20,
+     444
+    ]
+   ],
+   "dusk": "lattice-dusk.png",
+   "note": "the whole west wall with the lattice's frame and slats, the gaps clear: everyone in the hall is in front of it; Ry\u014dkai outside is behind it, his face in the gaps"
+  },
+  {
+   "id": "front",
+   "src": "front.png",
+   "plane": "front",
+   "dusk": "front-dusk.png",
+   "note": "the women's writing desk near us at the left"
+  }
+ ],
+ "states": {
+  "day": "back.png and the planes: the hall at sunset (the light is the live layer's: `bars`)",
+  "dusk": "dusk.png (an alt over the whole stage) with lattice-dusk.png and front-dusk.png: after the sun has gone (the bars faded out, the lattice's sky gone to its afterglow, the room a step darker)"
+ },
+ "bars": {
+  "what": "the sunset's bars of light through the lattice: across the floor and up the east wall, climbing as the sun sinks; three RGBA light pictures, keyed as frames, for the live layer (under the people), screen blend",
+  "k": "0 when the family comes in (the sun 10 degrees up), 1 when it is nearly down (2 degrees); the scene tweens it, slowly (the design: the bars climb while they talk)",
+  "sun": {
+   "el0_deg": 10.0,
+   "el1_deg": 2.0,
+   "azimuth": "from the WNW, its light 2.5 degrees south of due east across the hall"
+  },
+  "wall": {
+   "src": "bars-wall.png",
+   "clip": [
+    [
+     559,
+     343
+    ],
+    [
+     799,
+     526
+    ],
+    [
+     799,
+     263
+    ],
+    [
+     559,
+     228
+    ]
+   ],
+   "move": "straight UP: dy = -k * rise_px (rows), dx 0",
+   "rise_px": 82.9,
+   "rise_cm": 89.2,
+   "note": "painted at k 0, with the band's part below the floor included (the clip hides it): as it slides up, its foot rises out of the floor and its top climbs the wall, as the real band does. rise_px is measured at the hum; a pixel or two less at the band's far end, more at its near end"
+  },
+  "floor": {
+   "src": "bars-floor.png",
+   "clip": [
+    [
+     0,
+     599
+    ],
+    [
+     0,
+     458
+    ],
+    [
+     157,
+     349
+    ],
+    [
+     554,
+     339
+    ],
+    [
+     799,
+     526
+    ],
+    [
+     799,
+     599
+    ]
+   ],
+   "move": "dx, dy = (k / k_floor) * to, while k < k_floor",
+   "to": [
+    157.0,
+    -2.0
+   ],
+   "k_floor": 0.372,
+   "fade": [
+    0.205,
+    0.372
+   ],
+   "note": "painted at k 0 (the bars from X 408 to the wall); they slide east into the wall's foot and are gone by k_floor (opacity to 0 over `fade`)"
+  },
+  "air": {
+   "src": "bars-air.png",
+   "clip": null,
+   "move": "none",
+   "opacity": "1 to k 0.8, then down to 0 at k 1 (with the others)",
+   "note": "the shafts in the dusty air, drawn for the hum's moment; and the window's own glow"
+  },
+  "k_hum": 0.563,
+  "hum_note": "from k_hum the band's top is past the hum (105 cm up): the hum is in the light, and the small door can open",
+  "fade_out": "when the sun goes (#38 step 6): every bars picture's opacity to 0 over 3 to 4 s, after k reaches 1",
+  "table": [
+   {
+    "k": 0.0,
+    "sun_deg": 10.0,
+    "wall_band_cm": [
+     -33.2,
+     58.8
+    ],
+    "floor_from_X_cm": 441.9,
+    "wall_dy_px": -0.0
+   },
+   {
+    "k": 0.25,
+    "sun_deg": 8.02,
+    "wall_band_cm": [
+     -10.9,
+     81.1
+    ],
+    "floor_from_X_cm": 552.8,
+    "wall_dy_px": -20.7
+   },
+   {
+    "k": 0.372,
+    "sun_deg": 7.05,
+    "wall_band_cm": [
+     -0.0,
+     92.0
+    ],
+    "floor_from_X_cm": 629.8,
+    "wall_dy_px": -30.8
+   },
+   {
+    "k": 0.563,
+    "sun_deg": 5.52,
+    "wall_band_cm": [
+     17.0,
+     109.0
+    ],
+    "floor_from_X_cm": 630.0,
+    "wall_dy_px": -46.7
+   },
+   {
+    "k": 0.75,
+    "sun_deg": 4.02,
+    "wall_band_cm": [
+     33.7,
+     125.7
+    ],
+    "floor_from_X_cm": 630.0,
+    "wall_dy_px": -62.2
+   },
+   {
+    "k": 1.0,
+    "sun_deg": 2.0,
+    "wall_band_cm": [
+     56.0,
+     148.0
+    ],
+    "floor_from_X_cm": 630.0,
+    "wall_dy_px": -82.9
+   }
+  ],
+  "gaps_cm": [
+   [
+    76.0,
+    92.6
+   ],
+   [
+    99.6,
+    116.1
+   ],
+   [
+    123.1,
+    139.7
+   ],
+   [
+    146.7,
+    163.3
+   ],
+   [
+    170.3,
+    186.9
+   ],
+   [
+    193.9,
+    210.4
+   ],
+   [
+    217.4,
+    234.0
+   ]
+  ]
+ },
+ "hum": {
+  "at": [
+   652,
+   316
+  ],
+  "room_cm": [
+   630.0,
+   105.0,
+   229.6
+  ],
+  "scale_px_per_cm": 0.93,
+  "wide": 0.7,
+  "note": "on the east wall's plaster in the middle of a bar of light, a hand's height up (105 cm); match round twenty's keep: a portal held part open is the shimmer"
+ },
+ "door": {
+  "type": "portal",
+  "at": [
+   652,
+   316
+  ],
+  "r_coin": 9,
+  "r_hand": 19,
+  "coin_scale": 0.47,
+  "wide": 0.7,
+  "keep": [
+   559,
+   679
+  ],
+  "base": 414,
+  "light": true,
+  "pale": "#fff4d8",
+  "note": "the small door: a coin's size (open with scale coin_scale, or a portal of r_coin: strength 0.8, as the Nevada and Rome coin doors), then a hand's (r_hand: a hand and a rice ball through it) when the pink flashlight is on it. `light: true` bends the bars of light with the wall"
+ },
+ "fx": [
+  {
+   "id": "hum",
+   "type": "portal",
+   "at": [
+    652,
+    316
+   ],
+   "r": 14,
+   "wide": 0.7,
+   "keep": [
+    559,
+    679
+   ],
+   "base": 414.5,
+   "pale": "#fff4d8",
+   "strength": 0.9,
+   "bend": 0.8,
+   "light": true,
+   "note": "the hum's own shimmer: held part open (as the keep's, open 0.6) once the bar of light is on it (k >= k_hum)"
+  },
+  {
+   "id": "door",
+   "type": "portal",
+   "at": [
+    652,
+    316
+   ],
+   "r": 19,
+   "wide": 0.7,
+   "keep": [
+    559,
+    679
+   ],
+   "base": 415,
+   "pale": "#fff4d8",
+   "strength": 0.8,
+   "light": true,
+   "note": "the small door: open(1, { scale: coin_scale }) for the coin, open(1, { scale: 1 }) for the hand"
+  },
+  {
+   "id": "lamp-flame",
+   "type": "flame",
+   "at": [
+    389,
+    290
+   ],
+   "size": 5,
+   "base": 361.5,
+   "glow": 16,
+   "lull": 0.1,
+   "when": "only if the scene lights the lamp (it is cold when the doors are opened)"
+  },
+  {
+   "id": "incense-smoke",
+   "type": "smoke",
+   "at": [
+    362,
+    302
+   ],
+   "base": 361.5,
+   "height": 70,
+   "width": [
+    1,
+    8
+   ],
+   "lean": [
+    6,
+    -70
+   ],
+   "color": "#e4e6ea",
+   "opacity": 0.28,
+   "when": "only if O-Ume lights incense"
+  },
+  {
+   "id": "dust",
+   "type": "shimmer",
+   "poly": [
+    [
+     25.767028863575035,
+     367.59452961736804
+    ],
+    [
+     133.32668798509349,
+     239.33577727882883
+    ],
+    [
+     588.3394161609201,
+     286.8077913358861
+    ],
+    [
+     616.2520046751608,
+     298.00943980635486
+    ],
+    [
+     657.0753552074348,
+     314.39232818719967
+    ],
+    [
+     661.8713070326642,
+     316.31699978833456
+    ],
+    [
+     673.8949300670912,
+     321.1422204411726
+    ],
+    [
+     673.8949300670912,
+     413.4888535273487
+    ]
+   ],
+   "count": 26,
+   "size": 2,
+   "flow": [
+    3,
+    -0.4
+   ],
+   "life": 3.2,
+   "color": "#ffd8b0",
+   "opacity": 0.32,
+   "note": "motes turning in the light (while k < 1)"
+  }
+ ],
+ "notes": "The hall at sunset. The light (the bars on the floor and the east wall, the shafts in the air) is NOT in back.png: it is bars-wall/-floor/-air.png on the live layer, moved by k (layout.json `bars`). The hum and the small door are the engine's portals at `hum`/`door`. The way out is the bottom edge (the open doors behind the lens). PAINT-21F."
+}

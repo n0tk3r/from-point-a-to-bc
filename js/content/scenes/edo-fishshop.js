@@ -23,6 +23,10 @@
 // Every place is the painter's (art/scenes/edo-fishshop/layout.json, PAINT-20B's ready.md: the camera, the walk, the marks,
 // the seats on the step, the cut-outs and their states, the cat's frames), or was set by eye with the people in it.
 //
+// SCENES-21A (round twenty-one, briefs/out/edo2-design.md, "#22's addition"): in the kimonos, O-Tami puts up Big Sister's
+// hair with her own hairpin, which has an ear-pick at its end, and gives it to her (`kanzashi`: one of the three things that
+// will open the women's hall at Shosha, #37); and Kihei names the road first, the ship only after it (his tree, talk/edo-a.js).
+//
 // Try it: index.html?scene=edo-fishshop&lead=mom&flags=edo.arrived   (the clerk's pass first, without edo.clerkPassed)
 
 import { stockFor, STOCK } from "./edo-common.js";
@@ -325,7 +329,9 @@ async function dress(g) {
   await into("mom");
   await g.say("edo.shop.dress.2", "edo.shop.dress.3");
   await into("bigsis");
-  await g.say("edo.shop.dress.4", "edo.shop.dress.5", "edo.shop.dress.6", "edo.shop.dress.7", "edo.shop.dress.8", "edo.shop.dress.9");
+  await g.say("edo.shop.dress.4", "edo.shop.dress.5");
+  await pinUp(g);                                                                // SCENES-21A: O-Tami's hairpin (#22's addition)
+  await g.say("edo.shop.dress.6", "edo.shop.dress.7", "edo.shop.dress.8", "edo.shop.dress.9");
   look(g, "tami", "lilsis");
   await g.say("edo.shop.dress.10", "edo.shop.dress.11");
   await into("lilsis");
@@ -333,6 +339,29 @@ async function dress(g) {
   await g.say("edo.shop.dress.12", "edo.shop.dress.13");
   await walkOf(g, "tami", [M.tami]);
   if (t) t.face("W");
+}
+/** SCENES-21A (#22's addition, round twenty-one: WRITE-21A's edo.shop.pin.1 to .8): O-Tami will not let a girl go on the road
+    with her hair down. She sits Big Sister on the step, puts her hair up with her own hairpin (it has an ear-pick at its end:
+    her grandmother's story, told as a story), and lets her keep it (`kanzashi`, Big Sister's). Big Sister faces us on the step
+    while it is done (her hair is drawn up with the kimono: PEOPLE-21B's BIGSIS_HAIR_UP; from the front the knot does not show). */
+async function pinUp(g) {
+  const t = g.actor("tami");
+  if (t && t.hold) t.hold(false);
+  if (t) t.look(IN.bigsis[0], IN.bigsis[1]);
+  await g.say("edo.shop.pin.1");
+  await sitOnStep(g, "bigsis", SEAT.bigsis, "S");
+  await walkOf(g, "tami", [[404, 408]]);
+  if (t) { t.look(SEAT.bigsis[0], SEAT.bigsis[1] - 30); await t.play(g.clock, "reach"); }
+  await g.say("edo.shop.pin.2", "edo.shop.pin.3", "edo.shop.pin.4", "edo.shop.pin.5", "edo.shop.pin.6", "edo.shop.pin.7");
+  const pockets = g.store.data.inventory.bigsis || (g.store.data.inventory.bigsis = []);
+  if (!pockets.includes("kanzashi")) { pockets.push("kanzashi"); g.store.emit(); }
+  if (!g.clock.skipping) g.ui.toast("Big Sister has the hairpin");
+  await g.say("edo.shop.pin.8");
+  await standFromStep(g, "bigsis");
+  await g.walkTo(IN.bigsis[0], IN.bigsis[1], "bigsis");
+  await walkOf(g, "tami", [TAMI_DRESS]);
+  if (t && t.hold) t.hold(true, "clothes");
+  for (const id of THREE) look(g, id, TAMI_DRESS);
 }
 const TAMI = tamiTree({ lullaby, dress });
 after(TAMI, "slept", layDown);

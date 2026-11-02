@@ -25,6 +25,10 @@
 //   waves     waves in rows on a bay, as the prints draw them: short curling crests, smaller farther off (ENGINE-20)
 //   mirror    light from a hand mirror on a wall: a patch that grows with the mirror's distance, a cross in it, and the door
 //             in time opened in it (ENGINE-20, `MirrorLight` below)
+//   spray     a burst of water now and then (a bow meeting a wave) or when a script asks (a bucket thrown): ENGINE-21, `Spray`
+//   slide     a painted cut-out sliding slowly along a way and fading as it goes (the bars of sunset light on a wall): ENGINE-21
+//   passer    someone drawn by the rig going through the scene along a way now and then (the relay courier): ENGINE-21
+// ENGINE-21: and `sway` with anchor "belly" (a sail breathing), `waves` with `run` (the sea's rows running past a moving ship)
 //
 // ROME-13E: a flock can also be sent somewhere by a script (`herd`: the geese into their pen) and made to strike a pose
 // all at once (`pose`: the geese hissing): see Flock.herd.
@@ -678,7 +682,7 @@ class Sway extends Effect {
     if (!this.target) throw new Error('sway needs the id of a cut-out: plane: "<its id>"');
     this.anchor = s.anchor || "top";
     this.amount = num(s.amount, 2.5); this.period = num(s.period, num(s.speed, 3.4)); this.lean = num(s.lean, 0.3);
-    this.wave = num(s.wave, this.anchor === "bottom" ? 600 : 90);       // a plant leans as one; cloth ripples
+    this.wave = num(s.wave, this.anchor === "bottom" ? 600 : this.anchor === "belly" ? 900 : 90);       // a plant leans as one; cloth ripples (ENGINE-21: a sail breathes as one)
     this.fps = 6; this.calmFps = 3;                                  // (slow: the far edge moves a few pixels a second at most; and the whole cut-out is repainted each time)
     this.made = new WeakMap();
     this.gen = 0; this.lastStep = null;
@@ -736,6 +740,18 @@ class Sway extends Effect {
       const edge = at ? at[1] - top : a === "bottom" ? last : first;
       return { mode: "rows", w, h, far: lines(h, edge, a === "bottom" ? first : last), padX: reach, padY: 0, pair: new Pair(w + reach * 2, h), src, step: null, calm: null, gen: null, top, left };
     }
+    // ENGINE-21: "belly": a great square sail held at its yard (the top) and its foot (the bottom), breathing: the rows between swell
+    // out and in from the middle column, most at the belly (half way down), not at all at the yard and the foot (`swell: false`:
+    // they shift sideways instead, as a sway's do)
+    if (a === "belly") {
+      let first = 0, last = h - 1;
+      while (first < h && !rowHas(first)) first++;
+      while (last > first && !rowHas(last)) last--;
+      if (first >= h) return null;
+      const far = new Float32Array(h), span = Math.max(1, last - first);
+      for (let i = 0; i < h; i++) far[i] = i < first || i > last ? 0 : Math.sin((Math.PI * (i - first)) / span);
+      return { mode: "rows", belly: true, swell: s.swell !== false, w, h, far, padX: reach, padY: 0, pair: new Pair(w + reach * 2, h), src, step: null, calm: null, gen: null, top, left };
+    }
     if (a === "left" || a === "right") {
       let first = 0, last = w - 1;
       while (first < w && !colHas(first)) first++;
@@ -770,7 +786,8 @@ class Sway extends Effect {
     for (let i = 1; i <= n; i++) {
       const next = i < n ? Math.round(this.push(m.far[i], at + i, t, amp) * 4) / 4 : NaN;
       if (next === shift) continue;
-      if (rows) ctx.drawImage(m.src, 0, from, m.w, i - from, m.padX + shift, from, m.w, i - from);
+      if (rows && m.swell) { const sw = Math.max(-m.w / 4, shift); ctx.drawImage(m.src, 0, from, m.w, i - from, m.padX - sw, from, m.w + 2 * sw, i - from); }      // (ENGINE-21: a sail's belly swells out from its middle)
+      else if (rows) ctx.drawImage(m.src, 0, from, m.w, i - from, m.padX + shift, from, m.w, i - from);
       else ctx.drawImage(m.src, from, 0, i - from, m.h, from, m.padY + shift, i - from, m.h);
       from = i; shift = next;
     }
@@ -3441,7 +3458,9 @@ class Waves extends Drawn {
     this.rgb = rgbOf(s.color, [244, 248, 251]); this.alpha = num(s.opacity, 0.5);
     this.size = num(s.size, 10); this.speed = num(s.speed, 6); this.life = num(s.life, 3.5);
     this.toward = ["N", "S", "E", "W"].includes(s.toward) ? s.toward : "S";
+    this.run = !!s.run;                                               // ENGINE-21: rows running past a moving ship (below)
     this.fps = 10; this.calmFps = 5; this.slow = 0.5;
+    if (this.run) this.fps = num(s.fps, 15);
     this.setup(x1 - x0 + 1, y1 - y0 + 1, 0, y1 - y0, [x0, y1]);
     if (!this.clipPath) { this.clipPath = new Path2D(); this.area.forEach(([x, y], i) => (i ? this.clipPath.lineTo(x - x0, y - y0) : this.clipPath.moveTo(x - x0, y - y0))); this.clipPath.closePath(); }
   }
@@ -3456,8 +3475,12 @@ class Waves extends Drawn {
         const i = r * 97 + c, life = this.life * (0.8 + 0.4 * rnd(seed, i, 1)), cycle = life * (1.3 + 0.9 * rnd(seed, i, 2));
         const shifted = t + rnd(seed, i, 3) * cycle, j = Math.floor(shifted / cycle), age = shifted - j * cycle;
         if (age >= life) continue;
-        const u = age / life, a = this.alpha * Math.pow(Math.sin(Math.PI * u), 1.2) * (0.5 + 0.5 * scale);
-        const bx = ((c + 0.5 + (rnd(seed, i, j, 4) - 0.5) * 0.9) / per) * w + dir[0] * this.speed * scale * age, by = ry + (rnd(seed, i, j, 5) - 0.5) * (h / rows) * 0.8 + dir[1] * this.speed * scale * age;
+        // ENGINE-21: `run`: the sea's rows running past a moving ship, each crest travelling the whole of its life at the row's pace
+        // (the near rows faster), born across the width and as far upwind as it will travel, so that the rows stay even, and
+        // showing most of its life (a flatter rise and fall)
+        const u = age / life, a = this.alpha * Math.pow(Math.sin(Math.PI * u), this.run ? 0.5 : 1.2) * (0.5 + 0.5 * scale);
+        const travel = this.run ? this.speed * scale * life : 0, back = dir[0] > 0 ? travel : dir[0] < 0 ? 0 : 0;
+        const bx = ((c + 0.5 + (rnd(seed, i, j, 4) - 0.5) * 0.9) / per) * (w + (dir[0] ? travel : 0)) - back + dir[0] * this.speed * scale * age, by = ry + (rnd(seed, i, j, 5) - 0.5) * (h / rows) * 0.8 + dir[1] * this.speed * scale * age;
         const X = bx + x0, Y = by + y0;
         if (!inside(this.area, X, Y) || this.holes.some((hole) => inside(hole, X, Y))) continue;
         ctx.globalAlpha = a;
@@ -3604,6 +3627,244 @@ class MirrorLight extends Drawn {
   }
 }
 
+// ---------------------------------------------------------------- ENGINE-21: the ship, the river, the hall (round twenty-one)
+/**
+ * spray: a burst of water now and then, or when a script asks: spray at a ship's bow as she meets a wave (now and then, `every`),
+ * the water out of a bucket thrown at a rice dealer (when the water man's picture throws it: `burst()`).
+ *   at          the point the water leaves from (needed)
+ *   toward      [vx, vy]: its pace and way, px a second ([0, -120]: straight up); `spread` (40: degrees either side), `speed`
+ *               (a share of it, [0.6, 1.1]: each drop its own)
+ *   count       drops in a burst (14); `size` a drop's streak (5, longer as it goes faster); `gravity` (300 px/s²); `life` (0.9 s)
+ *   every       [low, high] seconds between bursts, worked out from its seed (the bow); none: only when a script calls burst()
+ *   mist        a soft puff where it leaves (true for a bow's spray; false); `sheet`: the first part of it a sheet of water
+ *               (a few broad strokes along the way it goes: a thrown bucket's)
+ *   color (#f4f8fb), opacity (0.75), seed, base or plane (its depth: give the bow's row), when, scale: as every kind. 30 pictures a second.
+ * burst() resolves when that burst has gone (at once while a cut-scene is skipped, or with the moving things off).
+ */
+class Spray extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, k = this.k;
+    if (!isPoint(s.at)) throw new Error("spray needs `at`: the point the water leaves from");
+    this.at = [s.at[0], s.at[1]];
+    this.v = isPair(s.toward) ? s.toward : [0, -120];
+    this.spread = (num(s.spread, 40) * Math.PI) / 180;
+    this.speeds = isPair(s.speed) ? s.speed : [0.6, 1.1];
+    this.count = Math.max(1, Math.round(num(s.count, 14)));
+    this.size = num(s.size, 5); this.gravity = num(s.gravity, 300); this.life = Math.max(0.1, num(s.life, 0.9));
+    this.every = isPair(s.every) ? s.every : null;
+    this.mist = s.mist === undefined ? !s.sheet : !!s.mist; this.sheet = !!s.sheet;
+    this.rgb = rgbOf(s.color, [244, 248, 251]); this.alpha = num(s.opacity, 0.75);
+    this.fps = 30; this.calmFps = 15; this.slow = 0.5;
+    this.bursts = [];                                             // the times (its own) of the bursts a script has asked for
+    // the canvas: as far as the fastest drop can go in its life, and as far down as it can fall
+    const vmax = Math.hypot(this.v[0], this.v[1]) * this.speeds[1] * k, life = this.life, R = Math.ceil(vmax * life + 12 * k);
+    const down = Math.ceil(0.5 * this.gravity * life * life * k);
+    this.setup(R * 2 + 1, R * 2 + down + 1, R, R, this.at);
+  }
+  /** A burst now (a script's: the water man throws his bucket). Resolves when it has gone. */
+  burst() {
+    if (!this.shown || !this.game || this.game.clock.skipping) return Promise.resolve(false);
+    this.bursts.push(this.time);
+    if (this.bursts.length > 12) this.bursts.shift();
+    this.dirty = true;
+    return this.game.wait(this.life * 1000 / Math.max(0.1, this.hushed("speed"))).then(() => true);
+  }
+  /** The bursts whose drops may be in the air at t (seconds of its own time): [{ at: seconds, n: its number }]. */
+  live(t) {
+    const out = [];
+    for (const b of this.bursts) { const s = b / 1000; if (t >= s && t - s < this.life) out.push({ at: s, n: Math.round(b) }); }
+    if (this.every) {
+      // the bursts, one after another from the start of its time: each a gap from the one before (seeded); a cursor is kept at a
+      // burst well before t, so that each picture looks at a few of them only (seek and a scene built again start it afresh)
+      const gap = (c) => Math.max(0.2, within(this.every, rnd(this.seed, c, 77)));
+      if (!this.cur || this.cur.at > t) this.cur = { c: 0, at: gap(0) * rnd(this.seed, 0, 78) };
+      while (this.cur.at + gap(this.cur.c) < t - this.life - 1) { this.cur.at += gap(this.cur.c); this.cur.c++; }
+      for (let c = this.cur.c, at = this.cur.at; at <= t; at += gap(c), c++) if (at > t - this.life) out.push({ at, n: c });
+    }
+    return out;
+  }
+  restart() { super.restart(); this.cur = null; }
+  draw(ctx, t, calm) {
+    const [ox, oy] = this.origin, k = this.k, seed = this.seed, base = Math.atan2(this.v[1], this.v[0]), v0 = Math.hypot(this.v[0], this.v[1]);
+    const n = calm ? Math.ceil(this.count * 0.5) : this.count;
+    ctx.lineCap = "round";
+    for (const b of this.live(t)) {
+      const age = t - b.at, u = age / this.life;
+      if (this.mist && !calm && age < 0.45) {                         // the puff where it leaves
+        const r = (6 + 30 * age) * k, g = ctx.createRadialGradient(this.at[0] - ox, this.at[1] - oy, 0, this.at[0] - ox, this.at[1] - oy, r);
+        g.addColorStop(0, rgba(this.rgb, this.alpha * 0.35 * (1 - age / 0.45))); g.addColorStop(1, rgba(this.rgb, 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(this.at[0] - ox, this.at[1] - oy, r, 0, TAU); ctx.fill();
+      }
+      if (this.sheet && age < this.life * 0.6) {                    // a thrown sheet of water: broad strokes along the way it goes
+        ctx.strokeStyle = rgba(this.rgb, this.alpha * 0.6 * (1 - age / (this.life * 0.6))); ctx.lineWidth = 3 * k;
+        for (let j = 0; j < 3; j++) {
+          const a = base + (j - 1) * this.spread * 0.25, sp = v0 * (0.85 + 0.1 * j) * k;
+          const x0 = this.at[0] - ox, y0 = this.at[1] - oy, x1 = x0 + Math.cos(a) * sp * age, y1 = y0 + Math.sin(a) * sp * age + 0.5 * this.gravity * k * age * age;
+          ctx.beginPath(); ctx.moveTo(x0 + (x1 - x0) * 0.35, y0 + (y1 - y0) * 0.35); ctx.lineTo(x1, y1); ctx.stroke();
+        }
+      }
+      for (let i = 0; i < n; i++) {
+        const a = base + (rnd(seed, b.n, i, 1) * 2 - 1) * this.spread, sp = v0 * within(this.speeds, rnd(seed, b.n, i, 2)) * k, life = this.life * (0.6 + 0.4 * rnd(seed, b.n, i, 3));
+        if (age > life) continue;
+        const vx = Math.cos(a) * sp, vy = Math.sin(a) * sp, g = this.gravity * k;
+        const x = this.at[0] - ox + vx * age, y = this.at[1] - oy + vy * age + 0.5 * g * age * age;
+        const dx = vx, dy = vy + g * age, len = Math.max(1, this.size * k * (0.6 + Math.hypot(dx, dy) / 300)), d = Math.hypot(dx, dy) || 1;
+        ctx.strokeStyle = rgba(this.rgb, this.alpha * (1 - Math.pow(age / life, 1.6))); ctx.lineWidth = Math.max(1, (1 + rnd(seed, b.n, i, 4)) * k);
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - (dx / d) * len, y - (dy / d) * len); ctx.stroke();
+        this.drawn++;
+      }
+      if (u >= 1) continue;
+    }
+  }
+}
+
+/**
+ * slide: a cut-out of the scene's (`plane`: its id: the bars of sunset light through the hall's west lattice) slides slowly
+ * along a way (`by`: [dx, dy], the whole of its course) and fades as it goes (`fade`: [its opacity at the start, at the end]),
+ * either by itself over `period` seconds of the scene's time (from `from`, 0 to 1 of the course; and it stays at the end), or as
+ * a script moves it (set({ k }): 0 to 1, tweened as the sun goes down: `period` none). Drawn on whole pixels from its own picture
+ * (only its place and its opacity change), ten times a second at most, in its turn; its depth, its clickable area and anything a
+ * script does to it otherwise are as they were. `at` (k) and `place()` ({ dx, dy, opacity }) for scripts and tests.
+ */
+class Slide extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec;
+    this.target = typeof s.plane === "string" ? s.plane : typeof s.of === "string" ? s.of : null;
+    if (!this.target) throw new Error('slide needs the id of a cut-out: plane: "<its id>"');
+    this.by = isPair(s.by) ? s.by : [0, -40];
+    this.period = num(s.period, null);
+    this.from = clamp(num(s.from, 0));
+    this.fadeTo = isPair(s.fade) ? s.fade : null;
+    this.k = this.from; this.setK = null;
+    this.fps = 10; this.calmFps = 5; this.slow = 0.5;
+    this.now = { dx: 0, dy: 0, k: this.from }; this.due = this.now;
+    this.slot = { want: false, waits: 0, urgent: false, grant: () => { this.slot.want = false; this.now = this.due; this.apply(); } };
+  }
+  slots() { return [this.slot]; }
+  attach() {
+    const cut = this.game.view.cast.get(this.target);
+    if (!(cut instanceof Cutout)) { console.warn(`Slide "${this.id}": there is no cut-out called "${this.target}" in this scene's planes.`); return; }
+    this.cut = cut;
+    const own = cut.picture;
+    cut.picture = (palette, calm) => { const pic = own.call(cut, palette, calm); return pic && this.shown && (this.now.dx || this.now.dy) ? { ...pic, ox: pic.ox - this.now.dx, oy: pic.oy - this.now.dy } : pic; };
+    this.apply();
+  }
+  /** Where along its course it is now (0 to 1). */
+  get at() { return this.setK != null ? this.setK : this.period ? clamp(this.from + (this.time / 1000) / this.period) : this.from; }
+  set(o = {}) { if (typeof o.k === "number") { this.setK = clamp(o.k); this.update(this.calm); this.slot.grant(); } return this; }
+  place() { return { dx: this.now.dx, dy: this.now.dy, k: this.now.k, opacity: this.cut ? this.cut.opacity : null }; }
+  update() {
+    const k = this.at, dx = Math.round(this.by[0] * k), dy = Math.round(this.by[1] * k);
+    this.due = { dx, dy, k };
+    this.slot.want = dx !== this.now.dx || dy !== this.now.dy || (this.fadeTo && Math.abs(k - this.now.k) > 0.01);
+    this.drawn = 1;
+  }
+  apply() { if (this.cut && this.fadeTo) this.cut.fade(clamp(this.fadeTo[0] + (this.fadeTo[1] - this.fadeTo[0]) * this.now.k)); }
+  seek(ms) { super.seek(ms); this.now = this.due; this.apply(); }
+}
+
+/**
+ * passer: someone who goes along a way through the scene now and then and is gone again (the relay courier running through
+ * Nishikurasawa, both ways, all morning): a person drawn by the rig (`kind`: a kind of js/art/people.js), along `path` (points,
+ * or the names of the scene's marks: ["courierFrom", "courierTo"]; from off the picture to off it, or from mark to mark),
+ * every `every` seconds ([20, 40]), back the other way the next time (`both`: true), at `pace` px a second at full size (the
+ * kind's own walk; `run: true`, half as fast again), sized and sorted by his feet as anyone is (behind a cut-out whose base is
+ * nearer). `behind`: shapes he is not drawn in (the teahouse's eaves); `area`: the id of one of the scene's clickable areas,
+ * which goes with him while he is seen (so a scene can let him be looked at) and is not there while he is not. `on` says
+ * whether he is passing now. The game clock, seeded, hushed under a line as a bird is; for less motion at half the pace.
+ */
+class Passer extends Effect {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, sc = host.scene || {};
+    if (typeof s.kind !== "string") throw new Error("a passer needs `kind`: a person of js/art/people.js");
+    const mark = (p) => (typeof p === "string" ? (sc.spawn || {})[p] : p);
+    this.path = (Array.isArray(s.path) ? s.path : []).map(mark).filter(isPoint);
+    if (this.path.length < 2) throw new Error("a passer needs a `path` of two points or marks at least");
+    this.lens = [0];
+    for (let i = 1; i < this.path.length; i++) this.lens.push(this.lens[i - 1] + Math.hypot(this.path[i][0] - this.path[i - 1][0], this.path[i][1] - this.path[i - 1][1]));
+    this.len = this.lens[this.lens.length - 1];
+    this.every = isPair(s.every) ? s.every : [num(s.every, 30) * 0.7, num(s.every, 30) * 1.3];
+    this.both = s.both !== false;
+    this.fig = new Figure(`fx:${this.id}`, s.kind);
+    if (s.outfit) this.fig.dress(s.outfit);
+    this.fig.cast = host.game && host.game.view ? host.game.view.cast : null;
+    this.fig.hidden = true;
+    const pace = num(s.pace, (this.fig.spec.pace || 155) * (s.run ? 1.6 : 1));
+    this.pace = pace;
+    this.sprites.push(this.fig);
+    this.slow = 0.5;
+    this.behindPolys = polysOf(s.behind);
+    this.trips = []; this.on = false;
+    if (this.behindPolys.length) {                                   // (drawn through a mask: his picture, less the shapes)
+      const fig = this.fig, own = fig.picture.bind(fig), polys = this.behindPolys;
+      fig.picture = (palette, calm) => {
+        const pic = own(palette, calm);
+        if (!pic || !pic.canvas) return pic;
+        const w = pic.w ?? pic.canvas.width, h = pic.h ?? pic.canvas.height, c = this.mask || (this.mask = new Pair(w + 4, h + 4));
+        if (c.w < w || c.h < h) this.mask = new Pair(w + 4, h + 4);
+        const ctx = this.mask.next(), x0 = fig.x - pic.ox, y0 = fig.y - pic.oy;
+        if (pic.w != null) ctx.drawImage(pic.canvas, 0, 0, pic.sw, pic.sh, 0, 0, w, h); else ctx.drawImage(pic.canvas, 0, 0);
+        ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "#000";
+        for (const poly of polys) { ctx.beginPath(); poly.forEach(([x, y], i) => (i ? ctx.lineTo(x - x0, y - y0) : ctx.moveTo(x - x0, y - y0))); ctx.closePath(); ctx.fill(); }
+        ctx.globalCompositeOperation = "source-over";
+        return { canvas: this.mask.canvas, ox: pic.ox, oy: pic.oy };
+      };
+    }
+  }
+  /** The passes from the start of the scene's time as far as t (seconds): { start, back, ms }. */
+  plan(t) {
+    while (!this.trips.length || this.trips[this.trips.length - 1].start <= t) {
+      const c = this.trips.length, prev = c ? this.trips[c - 1] : null;
+      const start = (prev ? prev.start + prev.dur : 0) + Math.max(1, within(this.every, rnd(this.seed, c, 1)));
+      const back = this.both && (prev ? !prev.back : rnd(this.seed, c, 2) < 0.5);
+      this.trips.push({ start, back, dur: this.len / Math.max(1, this.pace * 0.75) });
+    }
+  }
+  /** The point at s along the path, and which way it runs there. */
+  along(s) {
+    const L = this.lens, P = this.path;
+    let i = 1;
+    while (i < L.length - 1 && L[i] < s) i++;
+    const f = L[i] > L[i - 1] ? clamp((s - L[i - 1]) / (L[i] - L[i - 1])) : 1;
+    return [P[i - 1][0] + (P[i][0] - P[i - 1][0]) * f, P[i - 1][1] + (P[i][1] - P[i - 1][1]) * f, P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]];
+  }
+  update(calm) {
+    const t = this.time / 1000, fig = this.fig, sc = this.host.scene || {};
+    this.plan(t);
+    let trip = null;
+    for (let c = this.trips.length - 1; c >= 0; c--) { const tr = this.trips[c]; if (tr.start <= t && t < tr.start + tr.dur) { trip = tr; break; } if (tr.start + tr.dur < t - 1) break; }
+    const was = this.on;
+    this.on = !!trip;
+    if (!trip) { fig.hidden = true; fig.walking = false; this.follow(); return; }
+    fig.hidden = false; fig.walking = true;
+    // along the path at his pace, sized by the depth where his feet are (faster near, slower far, as a walk is)
+    const d = clamp((t - trip.start) / trip.dur) * this.len, s = trip.back ? this.len - d : d;
+    const [x, y, dx, dy] = this.along(s), scale = scaleAt(sc, y);
+    fig.place(x, y, scale);
+    fig.head(trip.back ? -dx : dx, trip.back ? -dy : dy, true);
+    fig.phase = ((d / Math.max(1, fig.stride * Math.max(0.3, scale))) % 1 + 1) % 1;
+    this.drawn = 1;
+    if (was !== this.on || this.on) this.follow();
+  }
+  reveal(on) { if (!on) { this.fig.hidden = true; this.on = false; this.follow(); } }
+  restart() { this.trips = []; }
+  /** The clickable area that goes with him (`area`): its box round his figure while he is seen; not there while he is not. */
+  follow() {
+    const id = this.spec.area, g = this.game;
+    if (!id || !g || !g.view) return;
+    const spots = g.view.spots, i = spots.findIndex((h) => h.id === id);
+    if (i < 0) return;
+    const el = g.view.hotEl.querySelector(`.spot[data-i="${i}"]`), fig = this.fig;
+    if (!this.on || fig.hidden) { if (el) el.style.display = "none"; return; }
+    const w = 50 * fig.scale, h = fig.h * fig.scale, r = [Math.round(fig.x - w / 2), Math.round(fig.y - h), Math.round(w), Math.round(h)];
+    if (!spots[i].rect || spots[i].rect.some((v, k) => Math.abs(v - r[k]) > 1)) { spots[i].rect = r; spots[i].poly = undefined; spots[i].circle = undefined; g.view.reshape(i); }
+    if (el) el.style.display = "";
+  }
+}
+
 // ENGINE-19B (8): how far each kind goes on while a line is up, as a share of itself (Effect.hushed): `speed`, of its
 // time; `opacity`, of how solid it is drawn. Chosen by eye on the noon site, the Rome steps, the night house and the
 // limousine: still alive, no longer pulling at the words (smoke and water keep 0.7: the scenes' smoke is faint already, and the half pace does the quieting). Things that are a painted object (a sway's washing, a boat on the
@@ -3615,6 +3876,7 @@ const HUSH = {
   birds: { speed: 0.6, opacity: 0.85 }, sway: { speed: 0.5, opacity: 1 }, bob: { speed: 0.6, opacity: 1 },
   strip: { speed: 0.8, opacity: 0.85 }, drive: { speed: 0.8, opacity: 0.85 },      // (a drive: a car's side windows; never one straight ahead)
   rain: { speed: 0.6, opacity: 0.7 }, petals: { speed: 0.6, opacity: 0.85 }, waves: { speed: 0.5, opacity: 0.7 },      // ENGINE-20: the weather (the rain's hiss goes down with its opacity); never the mirror's light (not listed: it is the moment)
+  spray: { speed: 0.6, opacity: 0.8 }, slide: { speed: 0.5, opacity: 1 }, passer: { speed: 0.6, opacity: 1 },      // ENGINE-21: a bow's spray, the bars of sunset light (a slide only slows), someone passing (slows, as a bird does)
 };
 const HUSH_EASE = 250, HUSH_GAP = 400;          // ms: the ease in and out; and how long after a line it stays hushed
 const STEERED = 2000;                           // ms after a script last set a strip's or a drive's speed that it is left as the script has it
@@ -3622,6 +3884,7 @@ const KINDS = { smoke: Smoke, flame: Flame, embers: Embers, ripples: Ripples, st
 KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rides the water
 KINDS.drive = Drive;                             // DRIVE-16E: the world going by a car's side windows
 KINDS.rain = Rain; KINDS.petals = Petals; KINDS.waves = Waves; KINDS.mirror = MirrorLight;      // ENGINE-20: rain, falling petals, waves in rows, the mirror's light
+KINDS.spray = Spray; KINDS.slide = Slide; KINDS.passer = Passer;      // ENGINE-21: spray and a thrown bucket's splash, a cut-out sliding and fading (the bars of sunset light), someone passing now and then
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**
@@ -3753,6 +4016,7 @@ const DEFAULTS = {
   shimmer: { color: "#fff4d6" },
   drive: { haze: "#d9dde6", wire: "#2f2a26", shade: "#6664ac" },              // DRIVE-16E (DRIVE-16F: shade, the things' shadows)
   rain: { color: "#dfe9f2" }, petals: { color: "#f6c9d6", color2: "#eaa7bd" }, waves: { color: "#f4f8fb" },      // ENGINE-20 (the mirror's light is never keyed: it is light, as the portal's pale is)
+  spray: { color: "#f4f8fb" },                                                                                               // ENGINE-21
 };
 /** A moving thing's description with its colours in the key of the scene; the same object when no key is in use. */
 function keyedSpec(spec) {

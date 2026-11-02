@@ -1,0 +1,1106 @@
+{
+ "id": "edo-compass",
+ "closeup": true,
+ "horizon": 300,
+ "full": 600,
+ "view": {
+  "what": "a close-up from above (nobody stands in it): the box on its post seen from over the helm, a little in front; no floor",
+  "card": {
+   "centre": [
+    400,
+    334
+   ],
+   "squash": 0.975,
+   "ring_out": 190.0,
+   "ring_in": 140.0,
+   "bowl": 214.0,
+   "order": "clockwise from the top: rat (the bow mark), boar, dog, rooster (right), monkey, sheep, horse (bottom), snake, dragon, hare (left), tiger, ox: the ship's card, cut anticlockwise to a map's"
+  }
+ },
+ "light": "noon, the sun high behind us and a little left: the rim and the card lit; the bowl's near wall throws a crescent of blue shade over the card's near edge; the needle's shadow lies a little above and right of it",
+ "walk": [
+  [
+   380,
+   586
+  ],
+  [
+   420,
+   586
+  ],
+  [
+   420,
+   598
+  ],
+  [
+   380,
+   598
+  ]
+ ],
+ "walk_note": "a tiny patch at the bottom middle, as the Egypt car's: nobody walks here (until ENGINE-21's close-up mode makes it needless)",
+ "blocked": [],
+ "marks": {
+  "default": [
+   400,
+   594
+  ]
+ },
+ "hands": {
+  "thumb": [
+   590,
+   577
+  ]
+ },
+ "hands_note": "`thumb`: the tip of Kanbei's thumb on the box's near rim (painted: the cut-out `thumb`); a hand the engine draws for whoever is active would go to the card's edge by its mark",
+ "planes": [
+  {
+   "id": "needle",
+   "file": "needle.png",
+   "plane": "front",
+   "states": {
+    "still": "needle.png",
+    "left": "needle-l.png",
+    "right": "needle-r.png"
+   },
+   "what": "the needle on its pin, its tip on the monkey; the three are its tremble (fx needle-tremble)"
+  },
+  {
+   "id": "thumb",
+   "file": "thumb.png",
+   "plane": "front",
+   "what": "Kanbei's thumb on the box's near rim"
+  }
+ ],
+ "cutouts": {
+  "needle": [
+   301,
+   273,
+   216,
+   127
+  ],
+  "needle-l": [
+   300,
+   275,
+   218,
+   122
+  ],
+  "needle-r": [
+   302,
+   271,
+   213,
+   132
+  ],
+  "thumb": [
+   578,
+   565,
+   154,
+   35
+  ]
+ },
+ "things": [
+  {
+   "id": "box",
+   "what": "the compass box: old wood, worn pale where hands have held it",
+   "shape": {
+    "poly": [
+     [
+      152,
+      84
+     ],
+     [
+      648,
+      84
+     ],
+     [
+      688,
+      598
+     ],
+     [
+      112,
+      598
+     ]
+    ]
+   }
+  },
+  {
+   "id": "lid",
+   "what": "the lid, propped open (hinged at the far edge)",
+   "shape": {
+    "poly": [
+     [
+      156,
+      84
+     ],
+     [
+      644,
+      84
+     ],
+     [
+      618,
+      2
+     ],
+     [
+      182,
+      2
+     ]
+    ]
+   }
+  },
+  {
+   "id": "card",
+   "what": "the card: the ship's clock, twelve marks cut the other way round",
+   "shape": {
+    "poly": [
+     [
+      400,
+      240
+     ],
+     [
+      426,
+      244
+     ],
+     [
+      450,
+      254
+     ],
+     [
+      470,
+      270
+     ],
+     [
+      485,
+      291
+     ],
+     [
+      494,
+      315
+     ],
+     [
+      496,
+      340
+     ],
+     [
+      490,
+      365
+     ],
+     [
+      478,
+      388
+     ],
+     [
+      461,
+      407
+     ],
+     [
+      438,
+      420
+     ],
+     [
+      413,
+      427
+     ],
+     [
+      387,
+      427
+     ],
+     [
+      362,
+      420
+     ],
+     [
+      339,
+      407
+     ],
+     [
+      322,
+      388
+     ],
+     [
+      310,
+      365
+     ],
+     [
+      304,
+      340
+     ],
+     [
+      306,
+      315
+     ],
+     [
+      315,
+      291
+     ],
+     [
+      330,
+      270
+     ],
+     [
+      350,
+      254
+     ],
+     [
+      374,
+      244
+     ],
+     [
+      400,
+      240
+     ]
+    ]
+   }
+  },
+  {
+   "id": "bowmark",
+   "what": "the bow mark: a little vermilion wedge on the rim, at the rat",
+   "shape": {
+    "rect": [
+     384,
+     113,
+     32,
+     26
+    ]
+   }
+  },
+  {
+   "id": "needle",
+   "what": "the needle on its pin, trembling; its tip on the monkey",
+   "shape": {
+    "poly": [
+     [
+      517,
+      405
+     ],
+     [
+      394,
+      343
+     ],
+     [
+      301,
+      286
+     ],
+     [
+      308,
+      274
+     ],
+     [
+      406,
+      325
+     ],
+     [
+      522,
+      398
+     ]
+    ]
+   }
+  },
+  {
+   "id": "thumb",
+   "what": "Kanbei's thumb on the box's edge, weathered",
+   "shape": {
+    "rect": [
+     576,
+     563,
+     158,
+     39
+    ]
+   }
+  },
+  {
+   "id": "rat",
+   "what": "the rat's mark: its character and, beside it, Kota's rat in ink (at the bow mark)",
+   "shape": {
+    "poly": [
+     [
+      372,
+      228
+     ],
+     [
+      386,
+      226
+     ],
+     [
+      400,
+      225
+     ],
+     [
+      414,
+      226
+     ],
+     [
+      428,
+      228
+     ],
+     [
+      450,
+      145
+     ],
+     [
+      434,
+      142
+     ],
+     [
+      417,
+      140
+     ],
+     [
+      400,
+      139
+     ],
+     [
+      383,
+      140
+     ],
+     [
+      366,
+      142
+     ],
+     [
+      350,
+      145
+     ]
+    ]
+   },
+   "deg": 0,
+   "char_at": [
+    381,
+    174
+   ],
+   "animal_at": [
+    423,
+    174
+   ]
+  },
+  {
+   "id": "boar",
+   "what": "the boar's mark: its character and, beside it, Kota's boar in ink",
+   "shape": {
+    "poly": [
+     [
+      430,
+      229
+     ],
+     [
+      443,
+      233
+     ],
+     [
+      456,
+      239
+     ],
+     [
+      468,
+      247
+     ],
+     [
+      479,
+      256
+     ],
+     [
+      540,
+      195
+     ],
+     [
+      528,
+      184
+     ],
+     [
+      514,
+      174
+     ],
+     [
+      500,
+      165
+     ],
+     [
+      485,
+      158
+     ],
+     [
+      469,
+      151
+     ],
+     [
+      453,
+      146
+     ]
+    ]
+   },
+   "deg": 30,
+   "char_at": [
+    466,
+    186
+   ],
+   "animal_at": [
+    502,
+    206
+   ]
+  },
+  {
+   "id": "dog",
+   "what": "the dog's mark: its character and, beside it, Kota's dog in ink",
+   "shape": {
+    "poly": [
+     [
+      480,
+      257
+     ],
+     [
+      489,
+      268
+     ],
+     [
+      497,
+      279
+     ],
+     [
+      503,
+      292
+     ],
+     [
+      508,
+      305
+     ],
+     [
+      593,
+      282
+     ],
+     [
+      588,
+      266
+     ],
+     [
+      581,
+      251
+     ],
+     [
+      573,
+      236
+     ],
+     [
+      564,
+      223
+     ],
+     [
+      554,
+      210
+     ],
+     [
+      543,
+      197
+     ]
+    ]
+   },
+   "deg": 60,
+   "char_at": [
+    533,
+    238
+   ],
+   "animal_at": [
+    554,
+    273
+   ]
+  },
+  {
+   "id": "rooster",
+   "what": "the rooster's mark: its character and, beside it, Kota's rooster in ink",
+   "shape": {
+    "poly": [
+     [
+      508,
+      307
+     ],
+     [
+      511,
+      320
+     ],
+     [
+      512,
+      334
+     ],
+     [
+      511,
+      348
+     ],
+     [
+      508,
+      361
+     ],
+     [
+      594,
+      383
+     ],
+     [
+      597,
+      367
+     ],
+     [
+      599,
+      350
+     ],
+     [
+      600,
+      334
+     ],
+     [
+      599,
+      318
+     ],
+     [
+      597,
+      301
+     ],
+     [
+      594,
+      285
+     ]
+    ]
+   },
+   "deg": 90,
+   "char_at": [
+    564,
+    316
+   ],
+   "animal_at": [
+    564,
+    357
+   ]
+  },
+  {
+   "id": "monkey",
+   "what": "the monkey's mark: its character and, beside it, Kota's monkey in ink (the needle's tip is on it: the heading)",
+   "shape": {
+    "poly": [
+     [
+      508,
+      363
+     ],
+     [
+      503,
+      376
+     ],
+     [
+      497,
+      389
+     ],
+     [
+      489,
+      400
+     ],
+     [
+      480,
+      411
+     ],
+     [
+      543,
+      471
+     ],
+     [
+      554,
+      458
+     ],
+     [
+      564,
+      445
+     ],
+     [
+      573,
+      431
+     ],
+     [
+      581,
+      417
+     ],
+     [
+      588,
+      402
+     ],
+     [
+      593,
+      386
+     ]
+    ]
+   },
+   "deg": 120,
+   "char_at": [
+    551,
+    398
+   ],
+   "animal_at": [
+    531,
+    434
+   ]
+  },
+  {
+   "id": "sheep",
+   "what": "the sheep's mark: its character and, beside it, Kota's sheep in ink",
+   "shape": {
+    "poly": [
+     [
+      479,
+      412
+     ],
+     [
+      468,
+      421
+     ],
+     [
+      456,
+      429
+     ],
+     [
+      443,
+      435
+     ],
+     [
+      430,
+      439
+     ],
+     [
+      453,
+      522
+     ],
+     [
+      469,
+      517
+     ],
+     [
+      485,
+      510
+     ],
+     [
+      500,
+      503
+     ],
+     [
+      514,
+      494
+     ],
+     [
+      528,
+      484
+     ],
+     [
+      540,
+      473
+     ]
+    ]
+   },
+   "deg": 150,
+   "char_at": [
+    498,
+    463
+   ],
+   "animal_at": [
+    462,
+    484
+   ]
+  },
+  {
+   "id": "horse",
+   "what": "the horse's mark: its character and, beside it, Kota's horse in ink",
+   "shape": {
+    "poly": [
+     [
+      428,
+      440
+     ],
+     [
+      414,
+      442
+     ],
+     [
+      400,
+      443
+     ],
+     [
+      386,
+      442
+     ],
+     [
+      372,
+      440
+     ],
+     [
+      350,
+      523
+     ],
+     [
+      366,
+      526
+     ],
+     [
+      383,
+      528
+     ],
+     [
+      400,
+      529
+     ],
+     [
+      417,
+      528
+     ],
+     [
+      434,
+      526
+     ],
+     [
+      450,
+      523
+     ]
+    ]
+   },
+   "deg": 180,
+   "char_at": [
+    419,
+    494
+   ],
+   "animal_at": [
+    377,
+    494
+   ]
+  },
+  {
+   "id": "snake",
+   "what": "the snake's mark: its character and, beside it, Kota's snake in ink",
+   "shape": {
+    "poly": [
+     [
+      370,
+      439
+     ],
+     [
+      357,
+      435
+     ],
+     [
+      344,
+      429
+     ],
+     [
+      332,
+      421
+     ],
+     [
+      321,
+      412
+     ],
+     [
+      260,
+      473
+     ],
+     [
+      272,
+      484
+     ],
+     [
+      286,
+      494
+     ],
+     [
+      300,
+      503
+     ],
+     [
+      315,
+      510
+     ],
+     [
+      331,
+      517
+     ],
+     [
+      347,
+      522
+     ]
+    ]
+   },
+   "deg": 210,
+   "char_at": [
+    334,
+    482
+   ],
+   "animal_at": [
+    298,
+    462
+   ]
+  },
+  {
+   "id": "dragon",
+   "what": "the dragon's mark: its character and, beside it, Kota's dragon in ink",
+   "shape": {
+    "poly": [
+     [
+      320,
+      411
+     ],
+     [
+      311,
+      400
+     ],
+     [
+      303,
+      389
+     ],
+     [
+      297,
+      376
+     ],
+     [
+      292,
+      363
+     ],
+     [
+      207,
+      386
+     ],
+     [
+      212,
+      402
+     ],
+     [
+      219,
+      417
+     ],
+     [
+      227,
+      432
+     ],
+     [
+      236,
+      445
+     ],
+     [
+      246,
+      458
+     ],
+     [
+      257,
+      471
+     ]
+    ]
+   },
+   "deg": 240,
+   "char_at": [
+    267,
+    430
+   ],
+   "animal_at": [
+    246,
+    395
+   ]
+  },
+  {
+   "id": "hare",
+   "what": "the hare's mark: its character and, beside it, Kota's hare in ink",
+   "shape": {
+    "poly": [
+     [
+      292,
+      361
+     ],
+     [
+      289,
+      348
+     ],
+     [
+      288,
+      334
+     ],
+     [
+      289,
+      320
+     ],
+     [
+      292,
+      307
+     ],
+     [
+      206,
+      285
+     ],
+     [
+      203,
+      301
+     ],
+     [
+      201,
+      318
+     ],
+     [
+      200,
+      334
+     ],
+     [
+      201,
+      350
+     ],
+     [
+      203,
+      367
+     ],
+     [
+      206,
+      383
+     ]
+    ]
+   },
+   "deg": 270,
+   "char_at": [
+    236,
+    352
+   ],
+   "animal_at": [
+    236,
+    311
+   ]
+  },
+  {
+   "id": "tiger",
+   "what": "the tiger's mark: its character and, beside it, Kota's tiger in ink",
+   "shape": {
+    "poly": [
+     [
+      292,
+      305
+     ],
+     [
+      297,
+      292
+     ],
+     [
+      303,
+      279
+     ],
+     [
+      311,
+      268
+     ],
+     [
+      320,
+      257
+     ],
+     [
+      257,
+      197
+     ],
+     [
+      246,
+      210
+     ],
+     [
+      236,
+      223
+     ],
+     [
+      227,
+      236
+     ],
+     [
+      219,
+      251
+     ],
+     [
+      212,
+      266
+     ],
+     [
+      207,
+      282
+     ]
+    ]
+   },
+   "deg": 300,
+   "char_at": [
+    249,
+    270
+   ],
+   "animal_at": [
+    269,
+    234
+   ]
+  },
+  {
+   "id": "ox",
+   "what": "the ox's mark: its character and, beside it, Kota's ox in ink",
+   "shape": {
+    "poly": [
+     [
+      321,
+      256
+     ],
+     [
+      332,
+      247
+     ],
+     [
+      344,
+      239
+     ],
+     [
+      357,
+      233
+     ],
+     [
+      370,
+      229
+     ],
+     [
+      347,
+      146
+     ],
+     [
+      331,
+      151
+     ],
+     [
+      315,
+      158
+     ],
+     [
+      300,
+      165
+     ],
+     [
+      286,
+      174
+     ],
+     [
+      272,
+      184
+     ],
+     [
+      260,
+      195
+     ]
+    ]
+   },
+   "deg": 330,
+   "char_at": [
+    302,
+    205
+   ],
+   "animal_at": [
+    338,
+    184
+   ]
+  }
+ ],
+ "fx": [
+  {
+   "id": "needle-tremble",
+   "type": "frames",
+   "plane": "needle",
+   "cycle": [
+    "needle.png",
+    "needle-l.png",
+    "needle.png",
+    "needle-r.png"
+   ],
+   "fps": 3,
+   "jitter": 0.5,
+   "what": "the needle trembling on its pin: the three positions in turn, unevenly, three or four times a second",
+   "note": "a cut-out's states flipped in turn (ENGINE-21: a 'frames' kind, or the scene's own small loop); for less motion, still"
+  }
+ ]
+}
