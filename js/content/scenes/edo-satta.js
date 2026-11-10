@@ -246,7 +246,8 @@ export default {
   // DEPTH (layout.json: persp.Camera(288, 590)): one floor, the road across the picture; the bank is not walked
   horizon: 288, full: 590,
   walk: { area: [[0, 566], [30, 544], [60, 526], [90, 510], [120, 499], [150, 493], [690, 493], [720, 497], [750, 503], [780, 511], [800, 517], [800, 596], [0, 596]] },
-  blocked: [[[111, 497], [182, 497], [192, 488], [124, 488]]],      // O-Shige's stone
+  blocked: [[[111, 497], [182, 497], [192, 488], [124, 488]],       // O-Shige's stone
+    [[660, 600], [672, 587], [700, 575], [730, 563], [760, 553], [784, 547], [800, 544], [800, 600]]],   // PAINT-23: the road under the near rock (front.png), bottom right
 
   party: THREE,
   // (the painter's `below` [24, 578] is the corner itself: the walk down goes there, but the one played comes up onto Mom's
@@ -271,9 +272,14 @@ export default {
     // O-Shige's pass on the Jizō's hat: from the gust until it is lifted off
     { id: "pass", src: art + "pass.png", base: 488, when: paperOn },
     { id: "front", src: art + "front.png", plane: "front" },
+    // PAINT-23 (round twenty-three, tools/paint/DEPTH.md): the near plane, in front of everybody: a wind-bent pine on the slope at
+    // our right, its trunk in from the right edge above Okitsu, its limbs streaming left across the top (it stirs: fx near-sway);
+    // front.png, drawn again, is the lip of the cutting we stand on, along the bottom
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   fx: [
     { id: "pine-sway", type: "sway", plane: "pine", anchor: "bottom", at: 475, amount: 2.2, period: 3.8, wave: 40, lean: -0.4 },
+    { id: "near-sway", type: "sway", plane: "near", anchor: "right", amount: 1.6, period: 4.6, wave: 260, lean: 0.2 },
     { id: "cloud-drift", type: "bob", plane: "cloud", amount: 1, period: 11, when: (g) => !is(g, "edo.fujiClear") },
     { id: "oldshore-waves", type: "waves", area: [[-10, 366], [30, 363], [70, 359], [110, 355], [150, 350], [186, 346], [214, 344], [224, 362], [196, 364], [160, 368], [120, 373], [80, 377], [40, 381], [0, 384]],
       rows: 3, per: 10, size: 3, speed: 4, toward: "N", color: "#f4f8fb", opacity: 0.7, plane: "back" },

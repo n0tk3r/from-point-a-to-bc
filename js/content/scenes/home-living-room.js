@@ -279,6 +279,7 @@ export default {
     { id: "armchair", src: art + "armchair.png", plane: "front" },   // Dad's chair from behind, his reading lamp, the crossword on its arm
     { id: "pencil", src: art + "pencil.png", plane: "front", when: (g) => !g.flag("home.pencilTaken") },   // his pencil, until somebody takes it
     { id: "table", src: art + "table.png", plane: "front" },   // the dinner table, its chairs, the lamp over it, the Bible
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // LIGHT, drawn live: the router's little light in the dark of the closet (`light`, above, gives it its color),

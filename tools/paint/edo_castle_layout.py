@@ -1,7 +1,13 @@
 """The castle approach's layout.json: every number the scene file needs, measured from the picture as painted
 (edo_castle_kit's measurements, and the painted layers themselves for the shapes that hug things). PAINT-20D.
 
-  python3 edo_castle_layout.py      writes out/edo-castle/layout.json (edo_castle.py also calls write())"""
+Round twenty-three (DEPTH.md, DEEPEN): edo_castle_depth.py paints the scene and calls write() with its cut-outs' covers
+and what the far plane measured: the keep and its stone base were staged again through the same camera, so their two
+shapes are measured again from the painting (`keep_shape`, `stonebase_shape`); the near plane (near.png, plane front) is
+listed last; every other number is round twenty's, as the scene file has them.
+
+  python3 edo_castle_layout.py      writes out/edo-castle/layout.json from round twenty's layers (the scene's painter calls
+                                    write() itself, with the round-twenty-three layers)"""
 
 import json
 import os
@@ -69,9 +75,56 @@ def walk_outline():
             [120, EC.MOAT["near"] + 10], [6, EC.MOAT["near"] + 8]]
 
 
-def write(path):
-    cuts = EC.cut_layers()
-    alpha = {k: v.a > 0.5 for k, v in cuts.items()}
+def outline_of(mask, most=12, pad=2.0, rows=None):
+    """A clicked area's shape round a painted mask: its hull, at most `most` points (rows: only the mask's part between
+    two picture rows)."""
+    m = mask > 0.5
+    if rows is not None:
+        m = m.copy()
+        m[:rows[0]] = False
+        m[rows[1]:] = False
+    return hull(m, pad, most)
+
+
+def trace(mask, most=16, pad=2, eps=2.0):
+    """A clicked area's outline that follows a painted silhouette (not its hull: the keep's sky stays sky): the largest
+    outline of the mask, grown by `pad` pixels, simplified to at most `most` points."""
+    import cv2
+    m = (np.asarray(mask) > 0.5).astype(np.uint8)
+    if pad:
+        m = cv2.dilate(m, np.ones((2 * pad + 1, 2 * pad + 1), np.uint8))
+    cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    c = max(cs, key=cv2.contourArea)
+    e = eps
+    while True:
+        a = cv2.approxPolyDP(c, e, True)
+        if len(a) <= most:
+            break
+        e *= 1.25
+    return [[int(x), int(y)] for x, y in a[:, 0, :]]
+
+
+def keep_shape(keep, base, wing):
+    """The keep's area: the keep, its stone base and the corridor turret as far as the gate tower, down to where the
+    outer wall's coping hides them (row 346); the stone base's own area lies over it (later in the scene's list)."""
+    m = np.maximum(np.maximum(keep, base), wing).copy()
+    m[346:] = 0
+    m[:, 593:] = 0
+    return trace(m, most=16, pad=2, eps=2.0)
+
+
+def stonebase_shape(base, keep):
+    """The stone base's area: the stones that show, from the keep's first wall down to the outer wall's coping."""
+    m = (base > 0.5) & ~(keep - base > 0.5)
+    return outline_of(m.astype(np.float32), most=6, pad=1.0, rows=(0, 346))
+
+
+def write(path, planes=None, info=None):
+    if planes is None:
+        cuts = EC.cut_layers()
+        alpha = {k: v.a > 0.5 for k, v in cuts.items()}
+    else:
+        alpha = {k: np.asarray(v) > 0.5 for k, v in planes.items()}
     out = {"id": "edo-castle", "horizon": HZ, "full": FULL, "minScale": 0.3,
            "light": "late afternoon, 29 April 1830: the sun low in the west, to our right and a little behind us (about 17 degrees up): "
                     "faces turned to us and to the right are warm (the last light on white plaster), left faces lilac; shadows run "
@@ -112,8 +165,13 @@ def write(path):
     planes.append({"id": "cherry", "file": "cherry.png", "base": 548, "what": "the double cherry: its trunk and all its boughs. People on the bank (feet above row 548) "
                                                                             "are behind it, under the boughs; people on the road pass in front of its foot.",
                    "solid": [[70, 550], [108, 550], [108, 538], [70, 538]]})
+    if "near" in alpha:                                                            # round twenty-three: the near plane, in front of everybody
+        planes.append({"id": "near", "file": "near.png", "plane": "front", "what": "the near plane (DEPTH.md): the old cherry's great limb up the left edge "
+                                                                                  "and its boughs of blossom across the top-left, the tips of a pine's bough at "
+                                                                                  "the top right, the moat's stone edge and its reeds along the bottom. People "
+                                                                                  "always pass behind it; nothing clicked or stood on is behind it."})
     out["planes"] = planes
-    out["cutouts"] = {k: [int(v) for v in box_of(alpha[k])] for k in EC.CUTS}
+    out["cutouts"] = {k: [int(v) for v in box_of(alpha[k])] for k in EC.CUTS + (["near"] if "near" in alpha else [])}
     # ---- the things to click (every one of ROUND-20.md's list)
     things = []
 
@@ -124,8 +182,15 @@ def write(path):
     o0, o1 = EC.GATE["open"]
     thing("cherry", "the one old double cherry in full late bloom, its heavy pink clusters; petals coming down", hull(alpha["cherry"], 2, 20), MARKS["cherry"])
     thing("petals", "the petals drifting down from the cherry (the engine's: fx petals)", [[0, 300], [300, 300], [300, 470], [0, 470]], MARKS["underBoughs"], "S")
-    thing("keep", "the keep: white, five roofs, on its tall sloping stone base, high on its hill", [[244, 334], [478, 334], [466, 266], [440, 222], [404, 56], [380, 34], [340, 34], [316, 56], [280, 222], [254, 266]], MARKS["tile"])
-    thing("stonebase", "the keep's stone base, its sides curving out to the foot", [[244, 334], [478, 334], [446, 264], [274, 264]], MARKS["tile"])
+    if info is not None:                                                           # round twenty-three: staged again, measured again
+        thing("keep", "the keep, 100 m off and turned forty degrees: white, five roofs with their gables, its long face in the low sun, its "
+                      "short face in shade, on its stone base; a corridor turret runs on from it behind the gate tower. Its top ridge's "
+                      "middle is where it was (x 360, row 34): the herons face it", keep_shape(info["keep"], info["base"], info["wing"]), MARKS["tile"])
+        thing("stonebase", "the keep's stone base of fitted stones, every one a different shape, its sides curving out toward the foot",
+              stonebase_shape(info["base"], info["keep"]), MARKS["tile"])
+    else:
+        thing("keep", "the keep: white, five roofs, on its tall sloping stone base, high on its hill", [[244, 334], [478, 334], [466, 266], [440, 222], [404, 56], [380, 34], [340, 34], [316, 56], [280, 222], [254, 266]], MARKS["tile"])
+        thing("stonebase", "the keep's stone base, its sides curving out to the foot", [[244, 334], [478, 334], [446, 264], [274, 264]], MARKS["tile"])
     thing("gate", "the Ni-no-mon: a gate in a white wall under a small tiled tower, standing open; two guards in it", hull(alpha["gate"], 2, 16), MARKS["gate"])
     thing("gable", "the gable on the gate's tower, toward us: at its peak the round end tile, and on the tile, small, a cross",
           [[EC.GABLE["base"][0][0] - 4, EC.GABLE["base"][0][1] + 4], [EC.GABLE["base"][1][0] + 4, EC.GABLE["base"][1][1] + 4], [EC.GABLE["apex"][0], EC.GABLE["apex"][1] - 6]], MARKS["tile"],

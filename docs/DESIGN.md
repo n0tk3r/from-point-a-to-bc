@@ -5148,6 +5148,30 @@ fourteen); the rest are the builders' (WRITE-21A, 21B; PEOPLE-21A, 21B; SCENES-2
      painted; and how many more scenes should be recomposed and not only deepened (the Forum's far temples still stand
      whole against the sky: a lower eye would do more there than deepening can).
 
+264. **The depth repaint, all of it (round twenty-three, 9 and 10 November).** The author, on the pilot: "yes those look
+     way better, apply the same depth to the rest of the game", and then: finish it within an hour and a half. So the
+     scenes went in two kinds. Five more were painted as the pilot was (the castle approach, the Satta Pass and Himeji
+     town deepened; Nishikurasawa and the foot of Mount Shosha recomposed with new cameras, every number of their scene
+     files measured again and played). The other thirty-five had a fast pass: each scene's own painting, run again, then
+     a script of its own (`tools/paint/<scene>_depth.py`) that adds a front plane (`near.png`), shadows on the ground in
+     the scene's light, texture where the ground was flat, and air on the far layers, and for Act Six the watercolour
+     wash; every clickable thing where it was. Every scene now passes `depth_check.py` but five whose flags were there
+     before (a cut-out of the scene's own covering its own area: the compass's thumb, the car's air freshener, the
+     landing's railing, Dojima's bales; and the laurel at the steps' street corner), and the highway, the opening
+     movie's road, which is painted in motion already and was left as it is. A few scenes took one `blocked` patch
+     behind a near post or trunk, and a few near boughs and curtains sway.
+265. **Left for the author:** the fast pass is a step below the pilot's full repaint (the far buildings and the main
+     buildings were not drawn again in those thirty-five); which scenes, if any, should have the full treatment next.
+266. **Grandpa Joe sits in the middle of the limousine's long seat (LIMO-23, 10 November).** The author: "in the limo, why
+     is grandpa joe sitting so far from the camera, he should be in the middle and closer/larger". He sat at the far end, by
+     the divider, drawn at 0.79 of a grown-up; now halfway along the seat, at 1.13 (`nevada_limo_model.py`: `JOE`). The
+     ropes' bow and the spare buckle moved to his far side, toward the divider, where Ranger perches on the cushion to
+     nibble, behind Joe's arm (so Ranger is never drawn larger than the engine's 1.25 for painted frames, and never stands
+     in front of him). From our seat Joe's lap hides the bow, so the rope's loose end now runs under his knees and hangs
+     down the cushion's face beside his shins, a little lower each time a strand goes: the count the player can see.
+     Ranger's three places by Joe, the walkable carpet's near edge, the ropes' and the belt's areas, and the five saved
+     places in the limousine's checkpoints were measured again; puzzles, lines and ids are as they were.
+
 ---
 
 ## Sources

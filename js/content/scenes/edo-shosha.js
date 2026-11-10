@@ -32,6 +32,14 @@
 // Every place is the painter's measurement (art/scenes/edo-shosha/layout.json, PAINT-21E's ready.md), or set by eye against the
 // picture with the people in it; where the two differ the comment says why.
 //
+// PAINT-23 (round twenty-three, RECOMPOSE: tools/paint/DEPTH.md): painted again from a new place, lower and turned. We stand on the
+// terrace south-west of the hall under an old pine and look north-north-east along the mountain's foot (the eye 2.5 m up): the hall
+// near at the right, three-quarters on (its west side with the lattice running back, its front with the doors running away), its
+// peak in the old pine's bough; the women's bench before its sunlit west wall; the stone, Ryōkai's step and the path climbing past
+// O-Ume's hut into the woods at the left; past the hall's corner the plain far below and the castle. Every number below was
+// measured again through the new camera (tools/paint/edo_shosha_layout.py); the ids and the logic are as they were. The front plane
+// is two files: the pine (it sways) and what grows at our feet (`near`).
+//
 // Try it: index.html?scene=edo-shosha&lead=mom&flags=edo.supperMade
 
 import { THREE, who, is, heard, each, giveTo, takeAny, carries, moveItem, dressAll, thingOf, faceEach, swap, TALK, GIVE_SILENT, stockGive } from "./edo-west.js";
@@ -39,17 +47,16 @@ import { umeTree, ryokaiTree, tomeTree, wifeTree, girlTree, hallRyokaiTree, SHOS
 
 const art = "art/scenes/edo-shosha/";
 
-// ---------- the camera and the ground (layout.json: the land camera, horizon 280, full 590) ----------
-const HORIZON = 280, FULL = 590;
-const FLOOR = [[6, 598], [794, 598], [794, 452], [700, 436], [600, 446], [561, 456], [537, 467], [419, 478], [353, 474], [318, 450], [262, 450], [256, 452], [196, 452], [180, 458], [40, 460], [6, 464]];
+// ---------- the camera and the ground (layout.json: a level camera, the eye 2.52 m up, horizon 330, full 560) ----------
+const HORIZON = 330, FULL = 560;
+const FLOOR = [[78, 598], [794, 598], [794, 452], [741, 452], [682, 469], [652, 471], [639, 486], [519, 501], [429, 498], [353, 464], [313, 463], [224, 473], [133, 466], [115, 464], [186, 443], [187, 435], [67, 443], [60, 453], [60, 520]];
 
 // ---------- the marks (layout.json marks) ----------
-const M = { road: [735, 548], stone: [248, 484], path: [214, 468], ryokai: [236, 456], hall: [493, 477], lock: [485, 473], step: [514, 470],
-  ume: [572, 456], hut: [62, 466], bench: [642, 508], tome: [604, 489], wife: [647, 489], girl: [690, 489], view: [690, 455], combs: [686, 518] };
-const LATTICE = [330, 463];             // Ryōkai standing at the hall's west lattice, outside, once it is open (set by eye: his face at it)
-const DOORWAY = [458, 470];             // the foot of the open doors (the women go in here, and come out)
-const HOMEWARD = [[600, 520], [760, 580], [830, 600]];      // the young wife and the girl, home down the road
-const TALK_AT = { ryokai: [266, 470], ume: [548, 470], tome: [612, 512], wife: [652, 514], girl: [700, 514], hall: [493, 480] };
+const M = { road: [663, 536], stone: [230, 489], path: [132, 475], ryokai: [189, 471], hall: [603, 500], lock: [584, 494], step: [619, 489], ume: [432, 502], hut: [152, 441], bench: [392, 515], tome: [317, 499], wife: [351, 496], girl: [384, 492], view: [737, 462], combs: [186, 525] };
+const LATTICE = [363, 471];             // Ryōkai standing at the hall's west lattice, outside, once it is open (58 cm out from the wall: his face at it)
+const DOORWAY = [534, 484];             // the foot of the open doors (the women go in here, and come out)
+const HOMEWARD = [[581, 525], [787, 562], [830, 612]];      // the young wife and the girl, home down the road
+const TALK_AT = { ryokai: [222, 487], ume: [512, 508], tome: [334, 510], wife: [370, 506], girl: [390, 508], hall: [595, 497] };
 
 // ---------- the story, as the picture shows it ----------
 const open = (g) => is(g, "edo.hallOpen");
@@ -166,7 +173,7 @@ export async function openDoors(g) {
     g.fadePlane("sunset", 1, { ms }),
     g.fadePlane("doors", "shut-sunset", { ms }),
     g.fadePlane("lock", "open-sunset", { ms }),
-    g.fadePlane("stone", "sunset", { ms }), g.fadePlane("bench", "sunset", { ms }), g.fadePlane("pine", "sunset", { ms }),
+    g.fadePlane("stone", "sunset", { ms }), g.fadePlane("bench", "sunset", { ms }), g.fadePlane("pine", "sunset", { ms }), g.fadePlane("near", "sunset", { ms }),
     step && !step.hidden ? g.fadePlane("stepball", "there-sunset", { ms }) : null,
   ]);
   await g.wait(400);
@@ -296,8 +303,7 @@ async function doorsUse(g) {
 // ---------- the scene ----------
 const thing = thingOf("shosha");
 const poly = (p) => ({ poly: p });
-const BOX = { ume: [560, 388, 25, 68], ryokai: [225, 404, 22, 52], ryokaiUp: [224, 380, 24, 77], lattice: [318, 388, 24, 76],
-  tome: [592, 429, 23, 62], wife: [634, 426, 25, 65], girl: [678, 405, 24, 85] };
+const BOX = { ume: [414, 407, 35, 97], ryokai: [177, 407, 24, 66], ryokaiUp: [173, 385, 32, 88], lattice: [347, 385, 32, 88], tome: [304, 428, 26, 73], wife: [337, 423, 27, 75], girl: [372, 424, 25, 70] };
 const UME_HERE = (g) => !umeIn(g);
 const ON_BENCH = (g) => !open(g);
 
@@ -309,19 +315,19 @@ export default {
 
   horizon: HORIZON, full: FULL, minScale: 0.3,
   walk: { area: FLOOR },
-  // the stone, the heap of combs on its cloth, the near pine's foot, the hut's firewood (layout.json blocked; the bench is its
-  // cut-out's solid)
-  blocked: [[[246, 469], [273, 469], [276, 465], [249, 465]], [[675, 511], [739, 511], [720, 498], [660, 498]], [[0, 598], [52, 598], [50, 556], [0, 556]], [[164, 451], [199, 451], [205, 445], [171, 445]]],
+  // the stone, the heap of combs on its cloth (layout.json blocked; the bench is its cut-out's solid; the old pine's foot and the
+  // hut's firewood are off the walked ground now)
+  blocked: [[[225, 476], [254, 476], [259, 472], [231, 472]], [[182, 515], [255, 516], [269, 503], [201, 502]]],
 
   party: THREE,
   spawn: { default: M.road, ...M },
-  arrive: { road: [[700, 560], [764, 566]], lock: [[456, 482], [512, 482]], hall: [[456, 486], [532, 486]] },
+  arrive: { road: [[600, 543], [744, 543]], lock: [[565, 499], [624, 494]], hall: [[573, 505], [646, 498]] },
   facing: "W",
   stock: GIVE_SILENT,
   talk: TALK,
   // not back to the town by the map while the sun sets here (the night's walk back is "Mind The Fire")
   travel: SHOSHA_MAP.stay,
-  edges: { E: { name: "back to the town", walkTo: [788, 560], use: stayUse } },
+  edges: { E: { name: "back to the town", walkTo: [790, 566], use: stayUse } },
   exits: ["edo-lock"],      // MERGE-21: the lock's close-up (g.openCloseup), as the deck names its compass: its pictures fetched ahead
   given: handRound,
 
@@ -338,16 +344,22 @@ export default {
     { id: "lock", plane: "back", states: { shut: art + "lock.png", open: art + "lock-open.png", "shut-sunset": art + "lock-sunset.png", "open-sunset": art + "lock-open-sunset.png" },
       state: (g) => twin(g, "shut"), when: (g) => !open(g) },
     { id: "stepball", plane: "back", states: { there: art + "stepball.png", "there-sunset": art + "stepball-sunset.png" }, state: (g) => twin(g, "there"), when: (g) => !umeIn(g) },
-    { id: "stone", base: 468, states: { gold: art + "stone.png", sunset: art + "stone-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold"), solid: [[246, 469], [273, 469], [276, 465], [249, 465]] },
-    { id: "bench", base: 488, states: { gold: art + "bench.png", sunset: art + "bench-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold"), solid: [[585, 489], [708, 489], [700, 483], [580, 483]] },
-    { id: "pine", plane: "front", states: { gold: art + "pine.png", sunset: art + "pine-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold") },
+    { id: "stone", base: 475, states: { gold: art + "stone.png", sunset: art + "stone-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold"), solid: [[225, 476], [254, 476], [259, 472], [231, 472]] },
+    // (the bench is turned with the hall: its base runs along its front edge)
+    { id: "bench", base: [[292, 495], [388, 485]], states: { gold: art + "bench.png", sunset: art + "bench-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold"), solid: [[292, 495], [388, 485], [379, 481], [286, 491]] },
+    // PAINT-23: the front plane, two files: the old pine's trunk up the left edge and its great bough across the top (it stirs:
+    // fx pine), and what grows at our feet (its roots, moss and ferns along the bottom left; the bank's lip in the bottom right).
+    // (`src` names the first state's picture as well, for the tools that measure a scene's front plane: with `states` the engine
+    // draws the state's picture and only fetches `src` ahead, and it is the same file)
+    { id: "pine", plane: "front", src: art + "pine.png", states: { gold: art + "pine.png", sunset: art + "pine-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold") },
+    { id: "near", plane: "front", src: art + "near.png", states: { gold: art + "near.png", sunset: art + "near-sunset.png" }, state: (g) => (red(g) ? "sunset" : "gold") },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json fx): the near pine stirring, a few petals from the late cherry, crows going home.
   fx: [
     { id: "pine", type: "sway", plane: "pine", anchor: "bottom", amount: 1.0, period: 4.6 },
-    { id: "petals", type: "petals", from: [[156, 226], [266, 222], [270, 286], [156, 290]], floor: 470, count: 4, wind: 10, fall: 18, size: [2, 3], color: "#f2c9d4", color2: "#e2a8bc", plane: "back" },
-    { id: "crows", type: "birds", lanes: [[[830, 150], [260, 40]], [[830, 200], [360, 70]]], every: [9, 18], group: [1, 2], speed: 50, size: 8, plane: "back" },
+    { id: "petals", type: "petals", from: [[149, 159], [313, 159], [313, 234], [149, 234]], floor: 380, count: 4, wind: 10, fall: 18, size: [2, 3], color: "#f2c9d4", color2: "#e2a8bc", plane: "back" },
+    { id: "crows", type: "birds", lanes: [[[830, 196], [520, 70]], [[830, 250], [600, 128]]], every: [9, 18], group: [1, 2], speed: 50, size: 8, plane: "back" },
   ],
 
   // The people: O-Ume by her hut, Ryōkai on the bottom step by the stone (on his feet barring the path; at the lattice once the
@@ -364,37 +376,37 @@ export default {
 
   // Back to front: a later area lies over an earlier one (layout.json things; the people's boxes against their figures).
   hotspots: [
-    { id: "sky", name: "sky", poly: [[300, 0], [800, 0], [800, 262], [640, 262], [470, 160], [300, 40]], walkTo: M.view, face: "E",
+    { id: "sky", name: "sky", poly: [[501, 0], [800, 0], [800, 300], [720, 306], [660, 312], [644, 300], [619, 240], [588, 160], [555, 80]], walkTo: M.view, face: "E",
       look: (g) => g.say(red(g) ? `edo.shosha.sky.sunset.${who(g)}` : `edo.shosha.sky.${who(g)}`), use: each("edo.shosha.sky.use") },
-    thing("mountain", "Mount Shosha", poly([[0, 0], [180, 0], [300, 52], [400, 124], [480, 190], [560, 244], [620, 288], [420, 200], [270, 200], [0, 190]]), M.path, "N", { use: climb("mountain") }),
-    thing("plain", "plain", poly([[560, 284], [800, 270], [800, 410], [560, 420]]), M.view, "E"),
-    thing("castle", "castle", poly([[708, 250], [772, 250], [772, 290], [708, 290]]), M.view, "E"),
-    thing("trees", "pines and maples", poly([[0, 186], [270, 200], [266, 352], [0, 356]]), M.hut, "N"),
-    thing("cherry", "late cherry", poly([[150, 218], [270, 214], [276, 290], [150, 292]]), M.path, "N"),
-    thing("hut", "O-Ume's hut", poly([[10, 456], [182, 456], [182, 357], [162, 284], [92, 284], [10, 357]]), M.hut, "N"),
-    thing("lantern", "lantern", poly([[94, 367], [112, 367], [112, 395], [94, 395]]), M.hut, "N"),
-    thing("pathup", "east path", poly([[188, 458], [262, 458], [256, 380], [236, 320], [196, 316], [190, 380]]), M.path, "N", { verb: "Climb", use: climb("pathup") }),
-    thing("stone", "stone", poly([[247, 469], [250, 409], [256, 405], [261, 403], [269, 407], [270, 417], [273, 470], [270, 473], [256, 474], [247, 472]]), M.stone, "N", { plane: "stone", use: stoneUse }),
-    // the hall: its roof and walls (the painter's shape crossed itself: this one goes round it)
-    thing("hall", "women's hall", poly([[251, 298], [418, 147], [619, 301], [562, 305], [560, 455], [356, 473], [297, 432], [300, 305]]), TALK_AT.hall, "N"),
-    thing("lattice", "lattice window", poly([[346, 398], [327, 389], [327, 336], [346, 340]]), M.stone, "N"),
-    thing("slips", "name slips", poly([[368, 429], [413, 425], [413, 323], [368, 324]]), M.hall, "N"),
-    { id: "slips2", name: "name slips", poly: [[497, 419], [536, 416], [536, 320], [497, 321]], walkTo: M.hall, face: "N", look: each("edo.shosha.slips"), use: each("edo.shosha.slips.use") },
-    { id: "doors", name: "doors", poly: [[414, 437], [414, 328], [428, 327], [483, 326], [496, 326], [496, 429], [495, 430], [447, 435], [422, 437]], walkTo: M.hall, face: "N", plane: "doors",
+    thing("mountain", "Mount Shosha", poly([[100, 0], [491, 0], [545, 80], [584, 160], [615, 240], [638, 300], [616, 334], [470, 300], [300, 250], [100, 240]]), M.path, "N", { use: climb("mountain") }),
+    thing("plain", "plain", poly([[618, 330], [800, 322], [800, 446], [740, 446], [680, 440], [618, 436]]), M.view, "E"),
+    thing("castle", "castle", poly([[717, 303], [777, 303], [777, 343], [717, 343]]), M.view, "E"),
+    thing("trees", "pines and maples", poly([[96, 190], [470, 190], [470, 300], [360, 300], [260, 330], [96, 330]]), M.hut, "N"),
+    thing("cherry", "late cherry", poly([[149, 159], [313, 159], [313, 234], [149, 234]]), M.path, "N"),
+    thing("hut", "O-Ume's hut", poly([[57, 441], [184, 433], [219, 361], [154, 294], [82, 292], [20, 365], [27, 359], [57, 428]]), M.hut, "N"),
+    thing("lantern", "lantern", poly([[140, 361], [160, 361], [160, 393], [140, 393]]), M.hut, "N"),
+    thing("pathup", "east path", poly([[139, 466], [216, 472], [317, 361], [256, 360]]), M.path, "N", { verb: "Climb", use: climb("pathup") }),
+    thing("stone", "stone", poly([[222, 472], [228, 408], [237, 405], [246, 405], [252, 408], [258, 472], [252, 479], [228, 479]]), M.stone, "N", { plane: "stone", use: stoneUse }),
+    // the hall: its roof and walls, round its base and up to its jewel
+    thing("hall", "women's hall", poly([[407, 304], [477, 136], [721, 310], [643, 471], [433, 495], [334, 452], [279, 314]]), TALK_AT.hall, "N"),
+    thing("lattice", "lattice window", poly([[408, 415], [379, 408], [379, 350], [408, 352]]), M.stone, "N"),
+    thing("slips", "name slips", poly([[444, 448], [494, 444], [494, 318], [444, 317]]), M.hall, "N"),
+    { id: "slips2", name: "name slips", poly: [[574, 437], [615, 434], [615, 319], [574, 318]], walkTo: M.hall, face: "N", look: each("edo.shosha.slips"), use: each("edo.shosha.slips.use") },
+    { id: "doors", name: "doors", poly: [[492, 329], [527, 327], [542, 327], [574, 329], [574, 439], [499, 452], [492, 452]], walkTo: M.hall, face: "N", plane: "doors",
       when: (g) => !open(g), look: each("edo.shosha.doors"), use: doorsUse },
-    { id: "doors", name: "open doors", verb: "Go in", poly: [[515, 330], [515, 437], [436, 445], [433, 445], [425, 442], [415, 437], [414, 436], [414, 328], [428, 327], [496, 326]], walkTo: M.hall, face: "N", plane: "doors",
+    { id: "doors", name: "open doors", verb: "Go in", poly: [[492, 329], [521, 327], [603, 327], [603, 449], [530, 460], [525, 460], [492, 449]], walkTo: M.hall, face: "N", plane: "doors",
       when: open, look: each("edo.shosha.doors.open"), use: doorsUse },
-    thing("step", "step", poly([[421, 476], [535, 465], [516, 446], [406, 455]]), M.step, "N"),
-    { id: "stepball", name: "rice ball on a leaf", poly: [[476, 445], [484, 442], [492, 445], [497, 453], [494, 456], [484, 460], [473, 456], [473, 453]], walkTo: M.step, face: "N", plane: "stepball",
+    thing("step", "step", poly([[518, 499], [630, 484], [598, 463], [491, 475]]), M.step, "N"),
+    { id: "stepball", name: "rice ball on a leaf", poly: [[563, 467], [565, 461], [571, 457], [581, 457], [587, 461], [590, 467], [588, 476], [567, 476]], walkTo: M.step, face: "N", plane: "stepball",
       look: (g) => g.say(umeIn(g) ? `edo.shosha.stepball.in.${who(g)}` : `edo.shosha.stepball.${who(g)}`), use: (g) => g.say(umeIn(g) ? `edo.shosha.stepball.in.${who(g)}` : `edo.shosha.stepball.use.${who(g)}`) },
-    { id: "lock", name: "lock", verb: "Look closer at", poly: [[444, 374], [469, 374], [469, 392], [444, 392]], walkTo: M.lock, face: "N", plane: "lock",
+    { id: "lock", name: "lock", verb: "Look closer at", poly: [[524, 380], [547, 380], [547, 400], [524, 400]], walkTo: M.lock, face: "N", plane: "lock",
       look: (g) => g.say(open(g) ? `edo.shosha.lock.open.${who(g)}` : `edo.shosha.lock.${who(g)}`), use: lockUse, when: (g) => !open(g) },
-    thing("bench", "bench", poly([[705, 489], [586, 489], [583, 485], [576, 458], [576, 457], [705, 457], [710, 460], [712, 463], [712, 467]]), M.bench, "N", { plane: "bench" }),
-    thing("combs", "heap of combs", poly([[674, 511], [741, 511], [721, 490], [658, 490]]), M.combs, "N", { use: combsUse, useWith: { note: (g) => noteRead(g, SHOSHA.combsRead) } }),
+    thing("bench", "bench", poly([[283, 464], [287, 456], [368, 453], [383, 453], [390, 456], [385, 480], [304, 496], [294, 496], [290, 488]]), M.bench, "N", { plane: "bench" }),
+    thing("combs", "heap of combs", poly([[182, 515], [255, 516], [269, 503], [201, 502]]), M.combs, "N", { use: combsUse, useWith: { note: (g) => noteRead(g, SHOSHA.combsRead) } }),
     // the people
     { id: "ryokai", name: "Ryōkai", verb: "Talk to", rect: BOX.ryokai, walkTo: TALK_AT.ryokai, face: "W", when: (g) => !open(g), look: each("edo.shosha.ryokai"), use: (g) => talkTo(g, "ryokai", RYOKAI) },
-    { id: "ryokai", name: "Ryōkai", verb: "Talk to", rect: BOX.lattice, walkTo: [356, 480], face: "W", when: open, look: each("edo.shosha.ryokai"), use: (g) => talkTo(g, "ryokai", AT_LATTICE) },
-    { id: "ume", name: "O-Ume", verb: "Talk to", rect: BOX.ume, walkTo: TALK_AT.ume, face: "E", when: UME_HERE, look: each("edo.shosha.ume"), use: (g) => talkTo(g, "ume", UME),
+    { id: "ryokai", name: "Ryōkai", verb: "Talk to", rect: BOX.lattice, walkTo: [330, 470], face: "E", when: open, look: each("edo.shosha.ryokai"), use: (g) => talkTo(g, "ryokai", AT_LATTICE) },
+    { id: "ume", name: "O-Ume", verb: "Talk to", rect: BOX.ume, walkTo: TALK_AT.ume, face: "W", when: UME_HERE, look: each("edo.shosha.ume"), use: (g) => talkTo(g, "ume", UME),
       useWith: { note: (g) => noteRead(g), natsuslip: (g) => talkTo(g, "ume", UME), fusaslip: (g) => talkTo(g, "ume", UME) } },
     { id: "tome", name: "Grandmother Tome", verb: "Talk to", rect: BOX.tome, walkTo: TALK_AT.tome, face: "N", when: ON_BENCH, look: each("edo.shosha.tome"), use: (g) => talkTo(g, "tome", TOME) },
     { id: "wife", name: "young wife", verb: "Talk to", rect: BOX.wife, walkTo: TALK_AT.wife, face: "N", when: ON_BENCH, look: each("edo.shosha.wife"), use: (g) => talkTo(g, "wife", WIFE) },

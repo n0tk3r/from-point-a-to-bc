@@ -136,8 +136,9 @@ export default async function night(g) {
   await g.goto("edo-shosha", { spawn: "hall", via: "fade", card: false });
   g.ui.hud(false);
   const mom = g.actor("mom");
-  const ume = g.view.cast.get("ume") || g.view.cast.addFigure("ume", "ume", 470, 474, g.sizeAt(470, 474));
-  ume.place(470, 474, g.sizeAt(470, 474)); ume.hidden = false; ume.fade(1); ume.face("E");
+  // (PAINT-23: her place outside the hall's doors, before the step, measured again in the repainted picture: edo_shosha_layout.py)
+  const ume = g.view.cast.get("ume") || g.view.cast.addFigure("ume", "ume", 552, 499, g.sizeAt(552, 499));
+  ume.place(552, 499, g.sizeAt(552, 499)); ume.hidden = false; ume.fade(1); ume.face("E");
   await g.view.cast.load();
   if (mom) { mom.look(ume.x, ume.y); ume.look(mom.x, mom.y); }
   const hand = mom ? [mom.x + 10 * mom.scale, mom.y - mom.h * mom.scale * 0.45] : [500, 420];

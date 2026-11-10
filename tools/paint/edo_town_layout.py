@@ -1,5 +1,7 @@
 """Himeji town's layout.json: every number the scene file needs, measured from the picture as painted (edo_town.py's
-plan through the camera, and the painted layers themselves for the shapes that hug things). PAINT-21E.
+plan through the camera, and the painted layers themselves for the shapes that hug things). PAINT-21E; PAINT-23 (round
+twenty-three: the cut-outs' shapes from their round-twenty-one outlines, which the watercolour keeps exactly; the keep's and
+the roofs' areas measured again on the new far plane; the front plane, its patch of `blocked` ground, its curtain's sway).
 
   python3 edo_town_layout.py      writes out/edo-town/layout.json (edo_town.py also calls write())"""
 
@@ -76,9 +78,40 @@ def footprint(X, D, rx, rd, n=10):
     return [foot(X + rx * math.cos(2 * math.pi * i / n), D + rd * math.sin(2 * math.pi * i / n)) for i in range(n)]
 
 
+def near_planes():
+    """The front plane's two files: their masks (edo_town_near.py)."""
+    import edo_town_near as NEAR
+    return {"near": NEAR.near_cut()[1] > 0.5, "near-noren": NEAR.noren_cut()[1] > 0.5}
+
+
+def post_patch(near):
+    """The street behind the near post at the left edge, where nobody may walk out of sight: x 6 to the post's edge."""
+    cols = np.where(near[455:598, :].any(axis=0))[0]
+    x1 = int(max(c for c in cols if c < 120)) + 3
+    return [[6, 455], [x1, 455], [x1, 597], [6, 597]]
+
+
+def far_shapes(seed=1830):
+    """The keep's area (its painted shape) and the roofs' (the near row's roofs and the town's roofs behind, row behind row
+    up to the castle's hill), measured on the far plane."""
+    import edo_town_far as FAR
+    from brush import F32 as _F
+    ka = FAR.paint_keep(seed)[1] > 0.5
+    keep = hull(ka, 2.0, 10)
+    pic = FAR.paint_sky(seed)
+    roofs = FAR.paint_roofs(pic, seed) > 0.5
+    tops = []
+    for x in range(240, 800, 4):
+        col = np.where(roofs[:, x])[0]
+        if len(col):
+            tops.append(int(col.min()))
+    top = int(np.percentile(tops, 20)) if tops else 206
+    return keep, [[236, top], [800, top], [800, 252], [236, 252]]
+
+
 def write(path):
-    cuts = ET.cut_layers()
-    alpha = {k: v.a > 0.5 for k, v in cuts.items()}
+    alpha = {k: v > 0.5 for k, v in ET.old_masks().items()}
+    near = near_planes()
     out = {"id": "edo-town", "horizon": HZ, "full": FULL, "minScale": 0.3,
            "light": "midday, 29 April 1830: the sun high in the south, behind us and a little to the left (about 68 degrees up). The fronts face us "
                     "and are in full light; each deep eave lays a hard band of shade across the top of its front; shadows on the ground are short and "
@@ -109,8 +142,10 @@ def write(path):
     for (X, row, n) in ET.BALES:
         d = ET.DF - 30 - row * 46
         blocked.append([foot(X - 4, d - 4), foot(X + 58, d - 4), foot(X + 58, d + 44), foot(X - 4, d + 44)])
+    blocked.append(post_patch(near["near"]))
     out["blocked"] = blocked
-    out["blocked_note"] = "the well's curb, the pickle tub, the rice pot on its stand, the mortar, the pan against the wall, the bales of cloth"
+    out["blocked_note"] = ("the well's curb, the pickle tub, the rice pot on its stand, the mortar, the pan against the wall, the bales of cloth; "
+                           "and (round twenty-three) the street behind the near post at the left edge, where nobody may walk out of sight")
     # ---- the cut-outs, back to front, as the scene lists them
     base_desks = int(round(P(0, ET.SCH_FLOOR, ET.DESK_D)[1]))
     base_front = int(round(row_D(ET.DF)))
@@ -144,9 +179,13 @@ def write(path):
                                                                                       "(mark north, row 451) is behind it.",
          "states": {"open": "gate.png", "shut": "gate-shut.png"},
          "solid": [[foot(ET.GATE[0], ET.GATE_D)[0] - 2, 455], [foot(ET.GATE[0] + 14, ET.GATE_D)[0] + 2, 455], [foot(ET.GATE[0] + 14, ET.GATE_D)[0] + 2, 450], [foot(ET.GATE[0], ET.GATE_D)[0] - 2, 450]]},
+        {"id": "near", "file": "near.png", "plane": "front", "what": "round twenty-three's front plane: the eave of a house on our own side of the highway "
+                                                                   "(its underside across the top left, its corner where the house ends), its post down the left edge"},
+        {"id": "near-noren", "file": "near-noren.png", "plane": "front", "what": "the hem of the next shop's indigo eave curtain across the top right corner (it stirs: fx sway)"},
     ]
     out["planes"] = planes
     out["cutouts"] = {k: list(box_of(alpha[k])) for k in ET.CUTS + ET.ALTS}
+    out["cutouts"].update({k: list(box_of(v)) for k, v in near.items()})
     # ---- the things to click (every one of ROUND-21.md's list for edo-town, and a few more)
     things = []
 
@@ -155,10 +194,10 @@ def write(path):
         d.update(more)
         things.append(d)
     M = MARKS
-    kx, ky = ET.KEEP_AT
-    thing("keep", "the keep, white, roof on roof, far up on its hill above the town's roofs (PAINT-20D's keep, from the town side)",
-          [[kx - 44, ky + 4], [kx + 44, ky + 4], [kx + 30, ky - 40], [kx + 14, ky - 110], [kx - 14, ky - 110], [kx - 30, ky - 40]], M["keep"])
-    thing("roofs", "the town's tiled roofs, row behind row up to the castle's hill", [[236, 214], [800, 206], [800, 252], [236, 252]], M["keep"])
+    keep_shape, roofs_shape = far_shapes()
+    thing("keep", "the keep, white, roof on roof, on its hill above the town's roofs (PAINT-20D's keep, from the town side, turned: its gabled face "
+                  "to the left in the sun, its end to the right)", keep_shape, M["keep"])
+    thing("roofs", "the town's tiled roofs, row behind row up to the castle's hill", roofs_shape, M["keep"])
     co = [foot(-1400, ET.DF), foot(ET.COTTON[1], ET.DF), r(P(ET.COTTON[1], 760, ET.DF + 230)), r(P(-1400, 760, ET.DF + 230))]
     thing("cottonoffice", "the domain's cotton office: a big two-storey front, white above, its wide doorway, an indigo noren, bales of white cloth going in",
           [[0, 452], [co[1][0], 452], [co[1][0], 104], [0, 104]], M["cotton"])
@@ -261,6 +300,8 @@ def write(path):
          "speed": 12, "size": 7, "plane": "back"},
         {"id": "sparrows", "type": "birds", "what": "a few sparrows on the street, pecking; they go up when someone comes near", "area": [[120, 500], [420, 494], [440, 560], [100, 566]],
          "count": 4, "look": "sparrow", "size": 14, "depth": True, "shy": 120},
+        {"id": "near-noren", "type": "sway", "plane": "near-noren", "anchor": "top", "amount": 1.6, "period": 4.6,
+         "what": "the next shop's curtain across the top right corner stirring in the noon air (round twenty-three)"},
     ]
     out["fx_note"] = ("Moving: the kitchen's smoke, the two noren stirring, a kite over the castle, sparrows on the street; and the people's own small lives "
                       "(PEOPLE-21B): O-Tane at her door, O-Kiku fidgeting, the girls writing, O-Shizu at her table, Tobei on his stool. The komuso passes "

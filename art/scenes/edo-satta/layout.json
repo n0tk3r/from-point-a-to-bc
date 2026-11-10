@@ -84,6 +84,40 @@
     124,
     488
    ]
+  ],
+  [
+   [
+    660,
+    600
+   ],
+   [
+    672,
+    587
+   ],
+   [
+    700,
+    575
+   ],
+   [
+    730,
+    563
+   ],
+   [
+    760,
+    553
+   ],
+   [
+    784,
+    547
+   ],
+   [
+    800,
+    544
+   ],
+   [
+    800,
+    600
+   ]
   ]
  ],
  "planes": [
@@ -104,7 +138,13 @@
    "id": "front",
    "file": "front.png",
    "plane": "front",
-   "what": "the foot of the cut slope behind us at the bottom edge: grass, stones"
+   "what": "the lip of the cutting we stand on, along the bottom edge: rock breaking through the turf, grass flattened to the left by the wind; a shoulder of rock and last year's pampas grass in the bottom right corner (round twenty-three)"
+  },
+  {
+   "id": "near",
+   "file": "near.png",
+   "plane": "front",
+   "what": "the near plane (round twenty-three): a wind-bent black pine on the slope at our right, its trunk in from the right edge above Okitsu, its limbs and pads streaming left across the top (it stirs: fx near-sway)"
   },
   {
    "id": "pass",
@@ -129,10 +169,16 @@
    303
   ],
   "front": [
-   17,
-   572,
-   783,
-   28
+   0,
+   506,
+   800,
+   94
+  ],
+  "near": [
+   464,
+   0,
+   336,
+   237
   ],
   "pass": [
    367,
@@ -1156,6 +1202,17 @@
    "what": "Fuji's cap of cloud breathing on its top; the scene fades the cut-out when it lifts"
   },
   {
+   "id": "near-sway",
+   "type": "sway",
+   "plane": "near",
+   "anchor": "right",
+   "amount": 1.6,
+   "period": 4.6,
+   "wave": 260,
+   "lean": 0.2,
+   "what": "the near pine's limbs lifting and falling in the wind (the trunk at the right edge holds; the tips, at the left, move most)"
+  },
+  {
    "id": "oldshore-waves",
    "type": "waves",
    "what": "the white water breaking along the foot of the cliffs: the old shore (ENGINE-20's kind, small rows, toward the cliffs)",
@@ -1605,7 +1662,7 @@
    "note": "slow (34 px a second): they hang in the wind; behind the pine (the box round it)"
   }
  ],
- "fx_note": "the pine sways; Fuji's cloud bobs a pixel and the scene fades it out when it lifts (the backdrop is the clear mountain); white water moves along the old shore and round the near flank's foot; the bay glitters and its middle rows move; gulls hang in the wind (engine-drawn); Mosuke's walk is the scene's (mosukeFrom <-> mosukeTo, the whole road)",
+ "fx_note": "the pine sways, and the near pine's limbs; Fuji's cloud bobs a pixel and the scene fades it out when it lifts (the backdrop is the clear mountain); white water moves along the old shore and round the near flank's foot; the bay glitters and its middle rows move; gulls hang in the wind (engine-drawn); Mosuke's walk is the scene's (mosukeFrom <-> mosukeTo, the whole road)",
  "heights": {
   "mom_cm": 168,
   "bigsis_cm": 160,

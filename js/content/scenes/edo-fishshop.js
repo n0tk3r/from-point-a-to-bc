@@ -539,6 +539,7 @@ export default {
     catPlane("sleep", M.cat, (g) => !is(g, "edo.catGone") && is(g, "edo.babySleeps")),
     catPlane("walk", M.cat, () => false), catPlane("run", M.cat, () => false), catPlane("under", M.under, () => false),
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   fx: [
     { id: "steam", type: "smoke", at: [30.6, 365.3], base: 490.1, height: 120, width: [4, 26], lean: [-12, -120], rate: 2.5, color: "#f0ece4", opacity: 0.4 },

@@ -226,6 +226,7 @@ export default {
   planes: [
     { id: "table", src: art + "table.png", base: 488, solid: [[501, 499], [612, 499], [586, 452], [489, 452]] },    // the clerk sits behind it
     { id: "front", src: art + "front.png", plane: "front" },      // the edges of the door leaves, and a brazier at the bottom left
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // LIGHT, drawn live.

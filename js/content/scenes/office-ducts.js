@@ -124,6 +124,7 @@ export default {
     // the B-7 fan across the shaft: turning while the building's air is on, stopped once the switch is pulled (#16)
     { id: "fan", frames: [0, 1, 2, 3].map((n) => art + `fan-${n}.png`), fps: 3, at: [693, 550], foot: [39, 23], base: 573, when: (g) => !is(g, "office.acOff") },
     { id: "fan-stopped", src: art + "fan-stopped.png", at: [693, 550], foot: [39, 23], base: 573, when: (g) => is(g, "office.acOff") },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Back to front: the big things first (the shaft, the insulation, the intake), then the smaller ones over them, and the

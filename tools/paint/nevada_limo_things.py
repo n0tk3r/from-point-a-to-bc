@@ -804,8 +804,13 @@ def m_rope(c):
 
 def rope_paths(strands=4):
     """The ropes as a list of (points, radius) lengths on the cushion: the knot, the bow's loops (slacker as strands
-    go), `strands` lengths running from the knot to Joe, and the loose end toward us, longer each time."""
+    go), `strands` lengths running from the knot to Joe, and the loose end toward us, longer each time.
+
+    LIMO-23: with Joe seated in the middle of the long seat, his lap hides the bow from our seat; so the loose end runs
+    under his knees to the cushion's front edge and hangs down its face, where it shows beside his shins, hanging lower
+    each time a strand goes (the count the player can see)."""
     rx, ry, rz = M.ROPES["at"]
+    t = M.ROPES.get("toward", 1)                                          # LIMO-23: -1, the loose end toward the divider (Joe on the near side)
     r = 2.3
     y = ry + r * 0.8
     gone = 4 - strands
@@ -819,18 +824,31 @@ def rope_paths(strands=4):
             pts.append(P3(rx + sgn * (2.6 + 12.5 * loops * math.sin(a)), y + 0.8 * math.sin(a) ** 2,
                           rz - sgn * (0.8 - 5.6 * loops * math.cos(a))))
         out.append((pts, r))
-    jz = M.JOE[1] + 20.0                                                 # the strands run back to where he sits (the game draws the rest on him)
+    jz = M.JOE[1] + 20.0 * t                                             # the strands run back to where he sits (the game draws the rest on him)
     for i in range(strands):
         off = (i - (strands - 1) / 2) * 5.6
-        pts = curve3([(rx - 2.0 + off * 0.5, y, rz - 2.5), (rx + off + 1.0 * math.sin(i * 1.7), y, (rz + jz) / 2), (rx + off * 0.7 - 2.0, y, jz)], 6)
+        pts = curve3([(rx - 2.0 + off * 0.5, y, rz - 2.5 * t), (rx + off + 1.0 * math.sin(i * 1.7), y, (rz + jz) / 2), (rx + off * 0.7 - 2.0, y, jz)], 6)
         out.append(([P3(*p) for p in pts], r * 0.92))
-    length = 16.0 + gone * 15.0
-    wig = [(rx + 2.4, rz + 2.0), (rx + 6.0, rz + length * 0.3), (rx - 1.5 + 2.5 * gone, rz + length * 0.62), (rx + 3.5 - 1.5 * gone, rz + length)]
-    pts = curve3([(x, y, z) for x, z in wig], 8)
+    if t > 0:                                                            # (the old way: along the cushion toward us)
+        length = 16.0 + gone * 15.0
+        wig = [(rx + 2.4, rz + 2.0 * t), (rx + 6.0, rz + length * 0.3 * t), (rx - 1.5 + 2.5 * gone, rz + length * 0.62 * t), (rx + 3.5 - 1.5 * gone, rz + length * t)]
+        pts = curve3([(x, y, z) for x, z in wig], 8)
+        out.append(([P3(*p) for p in pts], r))
+        ex, ey, ez = pts[-1]
+        for i in range(4):                                               # its frayed tip
+            out.append(([P3(ex, ey, ez), P3(ex + 2.0 * math.cos(i * 1.9), ey + 0.3 * (i % 2), ez + (2.6 + 0.7 * i) * t)], 0.4))
+        return out
+    # LIMO-23: under his knees to the front edge, then down the cushion's face
+    zz = M.ROPES.get("edge_z", rz + 43.0)                                 # where it goes over the edge
+    face = M.SEAT_D + r * 0.85                                           # its middle, just proud of the face
+    drop = 7.0 + gone * 8.0                                              # how far it hangs: 7, 15, 23, 31 cm
+    wig = [(rx + 2.4, y, rz + 2.0), (rx + 11.0, y, rz + 15.0), (M.SEAT_D - 5.0, y, zz - 5.0), (face - 0.6, M.SEAT_H - 0.4, zz - 0.8),
+           (face + 0.3, M.SEAT_H - drop * 0.5, zz + 0.5 + 0.9 * math.sin(gone * 1.3)), (face, M.SEAT_H - drop, zz + 1.2)]
+    pts = curve3(wig, 8)
     out.append(([P3(*p) for p in pts], r))
     ex, ey, ez = pts[-1]
-    for i in range(4):                                                   # its frayed tip
-        out.append(([P3(ex, ey, ez), P3(ex + 2.0 * math.cos(i * 1.9), ey + 0.3 * (i % 2), ez + 2.6 + 0.7 * i)], 0.4))
+    for i in range(4):                                                   # its frayed tip, hanging
+        out.append(([P3(ex, ey, ez), P3(ex + 0.5 * math.cos(i * 2.3), ey - (2.2 + 0.6 * i), ez + 1.8 * math.cos(i * 1.9))], 0.4))
     return out
 
 

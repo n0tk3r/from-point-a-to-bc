@@ -1,167 +1,381 @@
-"""PAINT-21A: layout.json for edo-kurasawa, measured through the scene's camera from the same numbers the picture was
-painted with (edo_kurasawa.py's placings), and from the finished cut-outs' pixels."""
+"""PAINT-23 (round twenty-three, RECOMPOSE): layout.json for edo-kurasawa, measured through the scene's new camera
+(edo_kurasawa_view) from the places the picture was painted with, and from the finished cut-outs' pixels. Every number
+of js/content/scenes/edo-kurasawa.js comes from here: `python3 edo_kurasawa_layout.py` prints them as the scene file
+writes them (scene_numbers), checks every mark, arriving place and standing place against the walk outline and the
+blocked patches, and writes out/edo-kurasawa-remap.json (where every old mark, arriving place and standing place of round
+twenty-one's picture is now). edo_kurasawa.py calls layout(planes, info) at the end of a run."""
 
+import json
 import math
+import os
+import sys
 
 import numpy as np
 
-import edo_kurasawa as K
-from edo_kurasawa import HZ, FULL, V, gp, kz, ROAD, TEA, BENCH, MOUND, KAGO, TRUNKS, GRILL, SIGN, FUJI, COAST, ledge_z
+import edo_kurasawa_view as V
+from edo_kurasawa_view import (HZ, FULL, P, k, G, U, NL, NR, TEA, GRILL, KUNI_AT, SIGN, BENCH, MOUND, HACK, KAGO, TRUNKS, ROAD_W,
+                               road_mid, road_edge, road_lift, S_CLIMB, S_BEND, add, grownup_px, rnd, FUJI_AT)
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Round twenty-one's places (the scene file before this round), for the remap: name -> (x, y)
+OLD = {
+    "yui": (16, 532), "teahouse": (96, 494), "kuni": (224, 471), "mound": (598, 434), "bearers": (446, 462), "peddler": (376, 486), "komuso": (668, 506),
+    "courierFrom": (6, 516), "courierTo": (794, 508), "climb": (784, 466), "view": (300, 476), "tora": (470, 470),
+    "arrive_mom": (40, 524), "arrive_bigsis": (26, 546), "arrive_lilsis": (58, 540),
+    "fromTop.0": (760, 486), "fromTop.1": (742, 500), "atGrill.mom": (190, 500), "atGrill.bigsis": (252, 504), "atGrill.lilsis": (222, 494),
+    "kagoSeat": (482, 440), "printWalk": (340, 500),
+    "walkTo.smoke": (212, 500), "walkTo.signboard": (282, 492), "walkTo.road": (400, 540), "walkTo.kuni": (184, 485), "walkTo.grill": (212, 500),
+    "walkTo.shells": (212, 500), "walkTo.sakuji": (406, 476), "walkTo.tora": (430, 484), "walkTo.soshichi": (336, 500), "walkTo.komuso": (628, 520),
+    "walkTo.courier": (400, 540),
+}
 
 
-def r(p):
+def r2(p):
     return [int(round(p[0])), int(round(p[1]))]
 
 
 def box_of(alpha, pad=0):
     ys, xs = np.where(alpha > 0.5)
-    if len(ys) == 0:
-        return [0, 0, 0, 0]
-    return [int(xs.min()) - pad, int(ys.min()) - pad, int(xs.max() - xs.min()) + 1 + 2 * pad, int(ys.max() - ys.min()) + 1 + 2 * pad]
+    if not len(ys):
+        return None
+    return [int(xs.min()) - pad, int(ys.min()) - pad, int(xs.max() - xs.min() + 1) + 2 * pad, int(ys.max() - ys.min() + 1) + 2 * pad]
 
 
-def px(y, cm=175.0):
-    """The size in pixels of someone `cm` tall with their feet on row y (the scene's straight-line rule)."""
-    return 160.0 * (y - HZ) / (FULL - HZ) * cm / 175.0
-
-
-def stand(p, face="N"):
+def inside(poly, p):
     x, y = p
-    return {"at": [int(round(x)), int(round(y))], "grownup_px": int(round(px(y))), "face": face}
+    n = len(poly)
+    ins = False
+    for i in range(n):
+        x0, y0 = poly[i]
+        x1, y1 = poly[(i + 1) % n]
+        if (y0 > y) != (y1 > y):
+            if x0 + (y - y0) * (x1 - x0) / (y1 - y0) > x:
+                ins = not ins
+    return ins
 
 
-def person_rect(p, cm):
-    h = px(p[1], cm)
-    return [int(round(p[0] - h * 0.17)), int(round(p[1] - h)), int(round(h * 0.34)), int(round(h))]
+def face_to(frm, to):
+    """The way someone standing at `frm` faces to look at `to` (picture points): E, W, N or S."""
+    dx, dy = to[0] - frm[0], (to[1] - frm[1]) * 2.2                         # (a step up the picture is a long way back)
+    if abs(dx) >= abs(dy):
+        return "E" if dx > 0 else "W"
+    return "N" if dy < 0 else "S"
 
 
-def rect_pts(pts, pad=2):
-    xs = [p[0] for p in pts]
-    ys = [p[1] for p in pts]
-    return [int(min(xs)) - pad, int(min(ys)) - pad, int(max(xs) - min(xs)) + 2 * pad, int(max(ys) - min(ys)) + 2 * pad]
+def person_rect(at, cm=156.0, wide=0.36):
+    x, y = at
+    h = grownup_px(y) * cm / 175.0
+    return [int(round(x - h * wide / 2)), int(round(y - h)), int(round(h * wide)), int(round(h))]
+
+
+# ================================================================ the places (cm), and where they are in the picture
+T = TEA
+
+
+def tea(u, w):
+    return r2(P(*T.xz(u, w)))
+
+
+def places():
+    """Every mark and standing place of the scene file, as picture points."""
+    M = {}
+    M["yui"] = [12, 592]                                                    # the left edge, on the road back to Yui (the way out)
+    M["arrive_mom"] = r2(P(*add(road_mid(250), NR, 10)))                    # the three come in from Yui on the road at the bottom left
+    M["arrive_bigsis"] = r2(P(*add(road_mid(185), NL, 110)))
+    M["arrive_lilsis"] = r2(P(*add(road_mid(300), NR, 140)))
+    M["teahouse"] = tea(190, -255)                                          # before O-Kuni's bench, a step out from the eave
+    M["kuni"] = tea(KUNI_AT["u"], KUNI_AT["w"])                             # O-Kuni's place: behind her grill, before her door
+    kc = (KAGO["X"], KAGO["Z"])
+    M["bearers"] = r2(P(*add(add(kc, U, -150), NL, -60)))                   # Sakuji squatting by the palanquin's near end
+    M["tora"] = r2(P(*add(add(kc, U, -40), NL, -112)))                      # Tora beside him, at the pole's middle
+    M["mound"] = [728, 471]                                                 # before the distance mound, under the hackberry: at its foot right of the
+                                                                            # trunks (in the picture: nothing stands in front of it there)
+    tc = (TRUNKS["X"], TRUNKS["Z"])
+    M["peddler"] = r2(P(*add(add(tc, U, 100), NR, 70)))                     # Soshichi beside his trunks, at their far side (clear of the palanquin)
+    M["komuso"] = tea(T.L + 110, -230)                                      # the komuso, at the rest place past the teahouse, playing
+    M["view"] = r2(P(*add(road_mid(S_BEND + 40), NL, 90)))                  # (mine) on the road, looking out at Fuji and the bay
+    s_c = min(np.arange(S_CLIMB - 200, S_CLIMB + 400, 4.0), key=lambda s_: abs(P(*road_mid(s_))[0] - 772))
+    M["climb"] = r2(P(*road_mid(s_c)))                                      # the right edge: the road starting up the hill to the pass
+    M["courierFrom"] = r2(P(*road_mid(150)))                                # the courier's run, edge to edge along the road
+    M["courierTo"] = r2(P(*road_mid(S_CLIMB + 300)))
+    M["courierFrom"] = [4, M["courierFrom"][1]]
+    M["courierTo"] = [796, M["courierTo"][1]]
+    extra = {}
+    extra["fromTop"] = [[706, 478], [668, 476]]                            # down from the top: beside the one played, on the road's far side
+                                                                            # (clear of Soshichi, above the trunks' top, apart from each other)
+    g = GRILL
+    extra["atGrill"] = {"mom": [218, 506], "bigsis": tea(g["u"] + 86, g["w"] - 92), "lilsis": [298, 501]}   # (Mom at its near end, not
+    #       in front of O-Kuni; Little Sister before its front, out of the margin the game keeps round it)
+    extra["printWalk"] = [M["peddler"][0] - 36, M["peddler"][1] + 22]       # Little Sister comes to Soshichi for the print (before him, at his left)
+    extra["kagoSeat"] = r2(P(*add(kc, NL, 6)))                              # the ground under her hips in the palanquin (behind its front)
+    return M, extra
+
+
+def walk_outline():
+    """The walkable ground, one floor: the road and the trodden ground either side of it, short of the bench under the
+    eave, the wall over the shore, the mound and the bank along the bottom; the climb's foot out to the right edge."""
+    pts = [(0, 600), (0, P(*T.xz(118, -96))[1])]
+    pts += [P(*T.xz(u, -96)) for u in (180.0, 300.0, 420.0, 500.0, 600.0, 690.0)]
+    pts += [P(*T.xz(T.L + 60, -60)), P(-60, 1640), P(150, 1640)]
+    m = MOUND
+    for a in np.linspace(math.pi * 1.10, math.pi * 1.58, 6):                # round the mound's front, a little off its foot
+        pts.append(P(m["X"] + (m["r"] + 50) * math.cos(a), m["Z"] + (m["r"] + 50) * 0.9 * math.sin(a)))
+    pts += [(800, P(*road_edge(S_CLIMB + 300, -1, -40))[1])]
+    pts += [(800, 556), (700, 566), (600, 574), (500, 582), (420, 588), (330, 594), (260, 600)]
+    return [r2(p) for p in pts]
+
+
+def blocked():
+    """The grill (and the ground round it O-Kuni keeps), the signboard's foot, the trunks on their cloth, the palanquin."""
+    out = []
+    g = GRILL
+    out.append([tea(g["u"] - g["len"] / 2 - 10, g["w"] - g["wid"] / 2 - 12), tea(g["u"] + g["len"] / 2 + 10, g["w"] - g["wid"] / 2 - 12),
+                tea(g["u"] + g["len"] / 2 + 10, g["w"] + g["wid"] / 2 + 4), tea(g["u"] - g["len"] / 2 - 10, g["w"] + g["wid"] / 2 + 4)])
+    out.append([tea(SIGN["u"] - 20, SIGN["w"] - 18), tea(SIGN["u"] + 20, SIGN["w"] - 18), tea(SIGN["u"] + 20, SIGN["w"] + 16), tea(SIGN["u"] - 20, SIGN["w"] + 16)])
+    tc = (TRUNKS["X"], TRUNKS["Z"])
+    w2, d2 = TRUNKS["w"] / 2, TRUNKS["d"] / 2
+    out.append([r2(P(*add(add(tc, U, a), NL, b))) for a, b in ((-w2 - 18, -d2 - 8), (w2 + 20, -d2 - 8), (w2 + 16, d2 + 10), (-w2 - 14, d2 + 8))])   # (the mat under them)
+    kc = (KAGO["X"], KAGO["Z"])
+    L2, W2 = KAGO["pole"] / 2, KAGO["width"] / 2
+    out.append([r2(P(*add(add(kc, U, a), NL, b))) for a, b in ((-L2 + 40, -W2 - 10), (L2 - 30, -W2 - 10), (L2 - 30, -14), (-L2 + 40, -14))])   # (its near half: the seat behind it stays free)
+    return out
+
+
+# ================================================================ the scene's things, areas, effects
+def things(planes, info, M, extra):
+    th = []
+    add_t = lambda id_, shape, stand, face, what: th.append({"id": id_, "shape": shape, "stand": stand, "face": face, "what": what})
+    view = M["view"]
+    # far things
+    sx, sy = FUJI_AT
+    add_t("fuji", {"rect": [int(sx - 130), int(sy - 10), 340, int(HZ - sy + 8)]}, view, "N", "Mount Fuji across the bay, white well down its flanks (as at Yui)")
+    co = info.get("cloud_outline")
+    add_t("cloud", {"poly": [r2(p) for p in co[::3]][:16]} if co else {"rect": [240, 100, 180, 50]}, view, "N", "the cap of cloud on Fuji's top (a cut-out: on / off)")
+    add_t("bay", {"poly": BAY}, view, "N", "Suruga Bay, morning, beyond the wall over the shore")
+    add_t("yuishore", {"poly": [[292, 328], [440, 330], [452, 345], [292, 345]]}, view, "N", "the far shore curving back toward Yui, a thread of sand, Yui's roofs on it")
+    add_t("boats", {"rect": [330, 330, 180, 62]}, view, "N", "fishing boats on the bay, far out and nearer")
+    add_t("hackberry", {"poly": HACK_POLY}, M["mound"], "N", "the hackberry on the mound, planted for the travellers' shade, in new leaf; its bough comes out over the road")
+    add_t("cliffroad", {"poly": CLIFF_POLY}, M["climb"], "E", "the road to the pass: up the hill from the bend, and cut across Mount Satta's face")
+    add_t("teahouse", {"poly": TEA_POLY}, M["teahouse"], "N", "O-Kuni's teahouse: thatched, its front open under a deep eave, the matted room open behind on the bay")
+    g = GRILL
+    gm_ = tea(g["u"], g["w"])
+    add_t("smoke", {"rect": [gm_[0] - 28, gm_[1] - 92, 56, 64]}, extra["atGrill"]["lilsis"], "N", "smoke from the grill (the engine's: fx grill-smoke)")
+    sb = info.get("sign_box")
+    srect = [int(round(min(p[0] for p in sb))) - 3, int(round(min(p[1] for p in sb))) - 3, int(round(abs(sb[1][0] - sb[0][0]))) + 6, int(round(abs(sb[1][1] - sb[0][1]))) + 6] if sb else [340, 380, 24, 92]
+    add_t("signboard", {"rect": srect}, tea(SIGN["u"] - 40, SIGN["w"] - 90), "N", "the signboard at the teahouse's far corner: a turban shell painted on it, a column of brush marks (our own: no shop's name)")
+    m = MOUND
+    mb = [P(m["X"] - m["r"], m["Z"]), P(m["X"] + m["r"], m["Z"]), P(m["X"], m["Z"], m["h"] + 10), P(m["X"], m["Z"] - m["r"])]
+    add_t("mound", {"rect": [int(min(p[0] for p in mb)), int(min(p[1] for p in mb)), int(min(800, max(p[0] for p in mb)) - min(p[0] for p in mb)), int(max(p[1] for p in mb) - min(p[1] for p in mb)) + 2]},
+          M["mound"], "N", "the 40th distance mound from Edo: a grassed mound by the road")
+    add_t("palanquin", {"rect": box_of(planes["kago"][1], 2)}, [560, 501], "N", "the bearers' palanquin, set down: an open bamboo kago on one long pole (a cut-out)")
+    tc = (TRUNKS["X"], TRUNKS["Z"])
+    t_at = r2(P(*add(add(tc, U, -110), NR, 15)))                            # before the trunks' near corner (Soshichi stands at their road side)
+    add_t("trunks", {"rect": box_of(planes["trunks"][1], 2)}, t_at, face_to(t_at, r2(P(*tc, 50))), "Soshichi's willow trunks, five tiers, the top one open with the ledger on it (a cut-out)")
+    bp = info.get("bench_pts")
+    brect = [max(0, int(min(p[0] for p in bp)) - 3), int(min(p[1] for p in bp)) - 6, int(max(p[0] for p in bp) - max(0, min(p[0] for p in bp))) + 6, int(max(p[1] for p in bp) - min(p[1] for p in bp)) + 10]
+    add_t("bench", {"rect": brect}, M["teahouse"], "N", "the bench under the eaves, a tea tray on it")
+    add_t("road", {"poly": ROAD_POLY}, r2(P(*road_mid(560))), "E", "the Tokaido: packed earth, from Yui (left) round the bend to the climb (right)")
+    # the people (the game draws them; their areas go with them)
+    side = lambda at, dx, dy: [at[0] + dx, at[1] + dy]                      # a standing place beside someone, in the picture
+    people = [("kuni", M["kuni"], 146.0, side(M["kuni"], -48, 18), "O-Kuni at her grill"), ("grill", None, 0, extra["atGrill"]["lilsis"], "the grill"),
+              ("sakuji", M["bearers"], 150.0, side(M["bearers"], -54, 12), "Sakuji, squatting by the palanquin"),
+              ("tora", M["tora"], 172.0, side(M["tora"], -30, 22), "Tora, beside him"),      # (talked to from between the two: behind him stand the trunks)
+              ("soshichi", M["peddler"], 156.0, side(M["peddler"], -64, 24), "Soshichi by his trunks"),
+              ("komuso", M["komuso"], 160.0, side(M["komuso"], -56, 10), "the komuso under his basket hat, playing"),
+              ("courier", [400, 520], 156.0, r2(P(*road_mid(560))), "the relay courier (fx courier)")]
+    return th, people
+
+
+# outlines drawn round what the picture shows (set by layout() from the finished pictures)
+BAY = TEA_POLY = HACK_POLY = CLIFF_POLY = ROAD_POLY = None
+
+
+def compute_polys(planes, info):
+    global BAY, TEA_POLY, HACK_POLY, CLIFF_POLY, ROAD_POLY
+    # the bay as seen: from the teahouse's far eave to Satta's seaward foot, down to the wall
+    wall = [P(X, Z, 52) for X, Z in V.WALL]
+    wy = lambda x: float(np.interp(x, [p[0] for p in wall], [p[1] for p in wall]))
+    BAY = [[300, HZ + 1], [440, HZ + 1], [522, HZ + 2], [536, 372], [552, 404], [554, int(wy(554))], [500, int(wy(500))], [440, int(wy(440))], [380, int(wy(380))],
+           [330, int(wy(330))], [300, int(wy(300))]]
+    BAY = [[int(round(a)), int(round(b))] for a, b in BAY]
+    # the teahouse: its roof and front, to the left edge (the picture's own: info)
+    roof = info["tea_roof"]
+    front = info["tea_front"]
+    TEA_POLY = [[0, int(round(min(p[1] for p in roof[:2]) - 30))]] + [r2(p) for p in roof[1:4]] + [r2(roof[4]), r2(front[1]), [int(round(front[1][0])) - 30, int(round(front[1][1])) + 22], [0, int(round(P(*T.xz(118, -96))[1]))]]
+    # the hackberry: its trunk on the mound and its crown under the top of the frame
+    near_a = planes["near"][1]
+    crown = (near_a > 0.5)
+    crown[:, :400] = False
+    crown[440:, :] = False
+    ys, xs = np.where(crown)
+    x0 = int(xs.min())
+    fork = info["fork"]
+    tr = info["trunk_shape"]
+    tx0, tx1 = int(min(p[0] for p in tr)), int(max(p[0] for p in tr))
+    ty1 = int(max(p[1] for p in tr))
+    low = lambda xa, xb: int(max(ys[(xs >= xa) & (xs < xb)])) if np.any((xs >= xa) & (xs < xb)) else 0
+    HACK_POLY = [[x0, 0], [800, 0], [800, low(760, 800)], [tx1 + 14, low(tx1, tx1 + 40)], [tx1, ty1 - 4], [tx0, ty1 - 4], [tx0 - 14, low(tx0 - 40, tx0)],
+                 [x0 + 60, low(x0 + 40, x0 + 80)], [x0, low(x0, x0 + 20)]]
+    # the cliff road: the climb at the right edge and its line across Satta's face
+    CLIFF_POLY = [[584, 314], [700, 276], [800, 246], [800, 262], [700, 292], [596, 326]]
+    clb = [r2(road_pt) for road_pt in (P(*road_edge(S_CLIMB + 40, -1)), P(*road_edge(S_CLIMB + 340, -1)), P(*road_edge(S_CLIMB + 340, 1)), P(*road_edge(S_CLIMB + 40, 1)))]
+    CLIFF_POLY = CLIFF_POLY
+    info["climb_poly"] = clb
+    # the road: short of the edges' bands (left: back to Yui; right: up to the pass) and of the bottom's
+    left = [r2(P(*road_edge(s, -1))) for s in np.linspace(200, S_CLIMB + 260, 12)]
+    right = [r2(P(*road_edge(s, 1))) for s in np.linspace(S_CLIMB + 260, 340, 12)]
+    ROAD_POLY = [[46, left[0][1] + 18]] + [p for p in left if 46 <= p[0] <= 754] + [[754, left[-1][1]], [754, 540]] + [p for p in right if 46 <= p[0] <= 754 and p[1] <= 560] + [[46, 560]]
+
+
+def fx_list(info, M, extra):
+    g = GRILL
+    top = r2(P(*T.xz(g["u"], g["w"]), g["h"] + 4))
+    base = int(round(P(*T.xz(g["u"], g["w"] - g["wid"] / 2))[1]))
+    kz = k(T.xz(g["u"], g["w"])[1])
+    path = [[-40, M["courierFrom"][1] + 14], M["courierFrom"]] + [r2(P(*road_mid(s))) for s in (230, 330, 450, 560, 680, 800, 920, 1040, 1160)] + [M["courierTo"], [840, M["courierTo"][1]]]
+    path = [p for i, p in enumerate(path) if i == 0 or i == len(path) - 1 or 0 <= p[0] <= 800]
+    roof = [r2(p) for p in info["tea_roof"]]
+    gull_behind = [TEA_POLY, HACK_POLY]
+    return [
+        {"id": "grill-smoke", "type": "smoke", "at": top, "base": base, "height": 76, "width": [4, 24], "lean": [34, -76], "rise": 12, "rate": 3, "gust": 0.35,
+         "color": "#e4e6ea", "opacity": 0.34, "what": "smoke off the turban shells on O-Kuni's grill, leaning inland with the wind off the bay, toward the mountain"},
+        {"id": "grill-embers", "type": "embers", "at": top, "size": [int(round(g["len"] * kz * 0.75)), 5], "base": base, "glowOpacity": 0.10, "sparks": 0.08,
+         "what": "the charcoal under the shells, glowing a little in the daylight"},
+        {"id": "bay-waves", "type": "waves", "area": BAY, "rows": 8, "per": 8, "size": 4, "speed": 3, "toward": "S", "color": "#f4f8fb", "opacity": 0.36, "plane": "back"},
+        {"id": "bay-shimmer", "type": "shimmer", "poly": BAY, "count": 20, "size": 4, "flow": [3, 0], "life": 1.8, "color": "#f6eed8", "opacity": 0.45, "plane": "back"},
+        {"id": "noren-sway", "type": "sway", "plane": "noren", "anchor": "top", "amount": 2.0, "period": 3.4, "wave": 22, "lean": 0.35},
+        {"id": "cloud-drift", "type": "bob", "plane": "cloud", "amount": 1, "period": 11},
+        {"id": "gulls", "type": "birds", "plane": "back", "lanes": [[[-12, 150], [180, 190], [330, 250], [440, 236], [470, -12]], [[480, -12], [440, 230], [340, 270], [200, 200], [-12, 170]]],
+         "every": [8, 16], "group": [1, 2], "speed": 50, "size": 7, "scale": [0.6, 1.0], "color": "#f6eed8", "behind": gull_behind,
+         "note": "over the bay between the teahouse and the hackberry; behind the teahouse's roof and the hackberry's crown"},
+        {"id": "courier", "type": "passer", "kind": "courier", "path": path, "every": [18, 34], "both": True, "area": "courier",
+         "note": "along the road's middle, from the bottom left corner (from Yui) round the bend to the climb at the right edge, both ways; sorted by his feet with the cut-outs: in front of the grill, the palanquin and the sign, behind Soshichi's trunks on the verge, behind the near plane"},
+    ]
 
 
 def layout(planes, info):
-    # ---- marks (ROUND-21's names, and mine), picture points on the ground
-    M = {
-        "yui": [16, 532],                                                    # the left edge: from Yui and back (the road east)
-        "teahouse": [96, 494],                                               # before O-Kuni's bench, a step back from the eaves
-        "kuni": r(gp(-325, 606)),                                            # O-Kuni's place: behind her grill, before her door
-        "mound": [598, 434],                                                 # by the distance mound, under the hackberry
-        "bearers": [446, 462],                                               # Sakuji and Tora, by their palanquin's near end
-        "peddler": [376, 486],                                               # Soshichi by his trunks
-        "komuso": [668, 506],                                                # the komuso, on the road at the climb's foot, playing
-        "courierFrom": [6, 516], "courierTo": [794, 508],                    # the courier's run, edge to edge along the road
-        "climb": [784, 466],                                                 # the right edge: on the ramp, the road up the cliff to the pass
-        "view": [300, 476],                                                  # (mine) at the road's far edge, looking out at Fuji and the bay
-        "tora": [470, 470],                                                  # (mine) the second bearer, beside Sakuji
-        "arrive_mom": [40, 524], "arrive_bigsis": [26, 546], "arrive_lilsis": [58, 540],   # (mine) the three, come in from Yui
-    }
-    faces = {"yui": "E", "teahouse": "N", "kuni": "S", "mound": "N", "bearers": "S", "peddler": "S", "komuso": "W", "courierFrom": "E",
-             "courierTo": "W", "climb": "W", "view": "N", "tora": "S", "arrive_mom": "E", "arrive_bigsis": "E", "arrive_lilsis": "E"}
-    stands = {k: stand(v, faces[k]) for k, v in M.items()}
-    stands["climb"]["note"] = "the road turns up the mountain's foot at the right edge: the way west to the pass (edo-satta)"
-    stands["yui"]["note"] = "the left edge: the road back east to Yui (edo-village, its west end)"
-    # ---- the walk: the road and the ground before the teahouse, the ledge's strip before the wall, the rest place
-    # before the mound, the climb's foot; one area (the climb is the way out, not walked up here)
-    walk = [[0, 476], [178, 476], [184, 470], [212, 468], [262, 468], [276, 474], [300, 466], [336, 462], [392, 452], [430, 444], [470, 436],
-            [520, 428], [560, 426], [580, 428], [632, 436], [652, 458], [672, 478], [700, 482], [740, 472], [780, 458], [800, 452], [800, 596], [0, 596]]
-    blocked = []
-    # the grill (and O-Kuni's bucket), the signboard's foot, the trunks on their cloth, the palanquin, the mound
-    g = GRILL
-    blocked.append([r(gp(g["x"] - g["w"] / 2 - 26, g["z"] - g["d"] / 2 - 6)), r(gp(g["x"] + g["w"] / 2 + 6, g["z"] - g["d"] / 2 - 6)),
-                    r(gp(g["x"] + g["w"] / 2 + 6, g["z"] + g["d"] / 2 + 2)), r(gp(g["x"] - g["w"] / 2 - 26, g["z"] + g["d"] / 2 + 2))])
-    blocked.append([r(gp(SIGN["x"] - 18, SIGN["z"] - 14)), r(gp(SIGN["x"] + 18, SIGN["z"] - 14)), r(gp(SIGN["x"] + 18, SIGN["z"] + 10)), r(gp(SIGN["x"] - 18, SIGN["z"] + 10))])
-    t = TRUNKS
-    blocked.append([r(gp(t["x"] - t["w"] / 2 - 22, t["z"] - t["d"] / 2 - 14)), r(gp(t["x"] + t["w"] / 2 + 26, t["z"] - t["d"] / 2 - 10)),
-                    r(gp(t["x"] + t["w"] / 2 + 20, t["z"] + t["d"] / 2 + 14)), r(gp(t["x"] - t["w"] / 2 - 18, t["z"] + t["d"] / 2 + 10))])
-    k_ = KAGO
-    blocked.append([r(gp(k_["x"] - k_["length"] / 2 - 8, k_["z"] - k_["width"] / 2 - 8)), r(gp(k_["x"] + k_["length"] / 2 + 8, k_["z"] - k_["width"] / 2 - 8)),
-                    r(gp(k_["x"] + k_["length"] / 2 + 8, k_["z"] + k_["width"] / 2 + 8)), r(gp(k_["x"] - k_["length"] / 2 - 8, k_["z"] + k_["width"] / 2 + 8))])
-    mx, mz, mr = MOUND["x"], MOUND["z"], MOUND["r"]
-    blocked.append([r(gp(mx + (mr + 20) * math.cos(a), mz + (mr + 20) * math.sin(a))) for a in np.linspace(0, 2 * math.pi, 14)[:-1]])
-    # ---- the cut-outs, back to front, with their bases and states
-    planes_out = [
-        {"id": "cloud", "file": "cloud.png", "plane": "back", "state": "on (Fuji's cap of cloud) / off: hidden once edo.noRoad's cloud has lifted at the top of the pass (the same cloud: a player who has seen it lift sees it gone here too)",
-         "what": "the cap of cloud on Fuji's top; the backdrop under it is the clear summit"},
-        {"id": "kago", "file": "kago.png", "base": r(gp(KAGO["x"], KAGO["z"] - KAGO["width"] / 2))[1], "what": "the bearers' palanquin set down by the mound (empty); whoever stands by the mound is behind it"},
-        {"id": "noren", "file": "noren.png", "base": r(gp(TEA["door"][0], TEA["z0"]))[1], "what": "the noren over the teahouse's door (it stirs: fx noren-sway); whoever goes in at the door passes behind it"},
-        {"id": "trunks", "file": "trunks.png", "base": r(gp(TRUNKS["x"], TRUNKS["z"] - TRUNKS["d"] / 2))[1], "what": "Soshichi's willow trunks set down at the road's edge (show them while he stands at `peddler`; his sprite carries them on the road)"},
-        {"id": "grill", "file": "grill.png", "base": r(gp(GRILL["x"], GRILL["z"] - GRILL["d"] / 2))[1], "what": "O-Kuni's grill with the turban shells; she stands behind it (at `kuni`)"},
-        {"id": "front", "file": "front.png", "plane": "front", "what": "the near verge at the bottom edge: grass, two stones and a worn-out straw sandal"},
-    ]
-    cutouts = {p["id"]: box_of(planes[p["id"]][1]) for p in planes_out}
-    # ---- things (ROUND-21's list, each with a shape), and the stand a look or a use walks the lead to
-    tea_roof = info["tea_roof"]
-    bench_pts = [gp(BENCH["x0"], BENCH["z0"], 0), gp(BENCH["x1"], BENCH["z0"], 0), gp(BENCH["x1"], BENCH["z1"], BENCH["h"]), gp(BENCH["x0"], BENCH["z1"], BENCH["h"])]
-    sign_pts = [gp(SIGN["x"] - SIGN["w"] / 2, SIGN["z"], 0), gp(SIGN["x"] + SIGN["w"] / 2, SIGN["z"], SIGN["h"] + 6)]
+    compute_polys(planes, info)
+    M, extra = places()
+    walk = walk_outline()
+    bl = blocked()
+    th, people = things(planes, info, M, extra)
+    for pid, at, cm, stand, what in people:
+        if at is None:
+            gx = info["grill_box"] if "grill_box" in info else box_of(planes["grill"][1], 2)
+            th.append({"id": pid, "shape": {"rect": gx}, "stand": stand, "face": "N", "what": what})
+            continue
+        th.append({"id": pid, "shape": {"rect": person_rect(at, cm)}, "stand": stand, "face": face_to(stand, at) if pid != "courier" else "S", "what": what + " (drawn by the game)"})
     shells = info.get("shells", [])
-    cloud_outline = info.get("cloud_outline", [])
-    bay_poly = [[300, 302], [520, 304], [510, 372], [546, 410], [552, 428]] + [r(gp(x_, ledge_z(x_))) for x_ in np.linspace(300, -260, 8)] + [[300, 360]]
-    things = [
-        {"id": "fuji", "what": "Mount Fuji across the head of the bay, white well down its flanks (its cap of cloud: `cloud`)", "shape": {"rect": [150, 64, 300, 238]}, "stand": M["view"], "face": "N"},
-        {"id": "cloud", "what": "the cap of cloud on Fuji's top (a cut-out: on / off)", "shape": {"poly": [r(p) for p in cloud_outline[::3]]} if cloud_outline else {"rect": [180, 60, 190, 50]}, "stand": M["view"], "face": "N"},
-        {"id": "bay", "what": "Suruga Bay, morning", "shape": {"poly": bay_poly}, "stand": M["view"], "face": "N"},
-        {"id": "yuishore", "what": "the shore curving back east toward Yui (the way they came): a thread of sand, low hills, Yui's roofs", "shape": {"poly": [[270, 286], [460, 297], [460, 310], [360, 316], [300, 324], [270, 336]]}, "stand": M["view"], "face": "N"},
-        {"id": "boats", "what": "fishing boats far out on the bay", "shape": {"rect": [338, 306, 160, 50]}, "stand": M["view"], "face": "N"},
-        {"id": "teahouse", "what": "O-Kuni's teahouse: a thatched roof, its front open to the road, the matted room behind with the bay through its back", "shape": {"poly": [r(p) for p in tea_roof[:4]] + [[0, 470]]}, "stand": M["teahouse"], "face": "N"},
-        {"id": "bench", "what": "the bench under the eaves, a tea tray on it", "shape": {"rect": rect_pts(bench_pts, 3)}, "stand": M["teahouse"], "face": "N"},
-        {"id": "grill", "what": "the grill: a clay firebox of charcoal before the door (a cut-out)", "shape": {"rect": box_of(planes["grill"][1], 2)}, "stand": [212, 500], "face": "N"},
-        {"id": "shells", "what": "turban shells grilling in their own shells on the coals, mouth up", "shape": {"rect": rect_pts(shells, 5) if shells else [190, 444, 60, 16]}, "stand": [212, 500], "face": "N"},
-        {"id": "signboard", "what": "the signboard at the teahouse's corner: a turban shell painted on it, a column of brush marks under it (our own: no shop's name)", "shape": {"rect": rect_pts(sign_pts, 3)}, "stand": [282, 492], "face": "N"},
-        {"id": "mound", "what": "the 40th distance mound from Edo: a grassed mound by the road", "shape": {"rect": info["tree"]["mound"]}, "stand": M["mound"], "face": "N"},
-        {"id": "hackberry", "what": "the hackberry on the mound, planted for the travellers' shade, in new leaf", "shape": {"rect": info["tree"]["crown"]}, "stand": M["mound"], "face": "N"},
-        {"id": "palanquin", "what": "the bearers' palanquin, set down: an open-sided bamboo kago on one long pole (a cut-out)", "shape": {"rect": box_of(planes["kago"][1], 2)}, "stand": M["bearers"], "face": "N"},
-        {"id": "trunks", "what": "Soshichi's willow trunks, five tiers, set down and opened (a cut-out)", "shape": {"rect": box_of(planes["trunks"][1], 2)}, "stand": M["peddler"], "face": "N"},
-        {"id": "road", "what": "the Tokaido: packed earth, from Yui (left) to the climb (right)", "shape": {"poly": [r(gp(-900, ROAD["z0"])), r(gp(900, ROAD["z0"])), [800, 478], [0, 478]]}, "stand": [400, 540], "face": "S"},
-        {"id": "cliffroad", "what": "the road west cut across Mount Satta's face, climbing round to the right (the way to the pass)", "shape": {"poly": [[640, 262], [700, 252], [800, 226], [800, 412], [700, 410], [690, 380]]}, "stand": M["climb"], "face": "E"},
-        {"id": "smoke", "what": "smoke from the grill (the engine's: fx grill-smoke)", "shape": {"rect": [196, 380, 50, 64]}, "stand": [212, 500], "face": "N"},
+    th.append({"id": "shells", "shape": {"rect": [int(min(p[0] for p in shells)) - 6, int(min(p[1] for p in shells)) - 12, int(max(p[0] for p in shells) - min(p[0] for p in shells)) + 12, 16]} if shells else {"rect": [250, 470, 50, 14]},
+               "stand": extra["atGrill"]["lilsis"], "face": "N", "what": "turban shells grilling in their own shells on the coals, mouth up"})
+    base_of = lambda key: [r2(p) for p in info[key]]
+    planes_out = [
+        {"id": "cloud", "file": "cloud.png", "plane": "back", "what": "the cap of cloud on Fuji's top (on until it lifts at the top of the pass: edo.fujiClear); the backdrop under it is the clear summit"},
+        {"id": "kago", "file": "kago.png", "base": base_of("kago_base"), "what": "the bearers' palanquin set down at the mound's foot (empty); Little Sister sits in it behind its front"},
+        {"id": "noren", "file": "noren.png", "base": base_of("noren_base"), "what": "the noren in the teahouse's door (it stirs: fx noren-sway)"},
+        {"id": "trunks", "file": "trunks.png", "base": base_of("trunks_base"), "what": "Soshichi's willow trunks on the inland verge; the courier passes behind them"},
+        {"id": "grill", "file": "grill.png", "base": base_of("grill_base"), "what": "O-Kuni's grill with the turban shells; she stands behind it"},
+        {"id": "front", "file": "front.png", "plane": "front", "what": "the roadside's bank along the bottom: the inland verge's lip, sasa, pampas blades, a stone"},
+        {"id": "near", "file": "near.png", "plane": "front", "what": "the hackberry's crown and its bough over the top right corner; the near end of O-Kuni's eave and its reed blind at the top left"},
     ]
-    people = [("kuni", M["kuni"], 146, "O-Kuni at her grill"), ("sakuji", M["bearers"], 156, "Sakuji, squatting on the palanquin's pole end"),
-              ("tora", M["tora"], 156, "Tora, huge and gentle, beside him"), ("soshichi", M["peddler"], 156, "Soshichi the medicine peddler by his trunks"),
-              ("komuso", M["komuso"], 156, "the komuso under his basket hat, playing"), ("courier", [400, 512], 156, "the relay courier running through (fx courier)")]
-    for pid, at, cm, what in people:
-        things.append({"id": pid, "what": what + " (drawn by the game)", "shape": {"rect": person_rect(at, cm)}, "stand": [at[0] - 40, at[1] + 14] if pid != "courier" else [400, 540], "face": "E"})
-    # ---- fx: what moves (the engine draws it)
-    gx, gz = GRILL["x"], GRILL["z"]
-    grill_mid = r(gp(gx, gz, GRILL["h"] + 4))
-    fx = [
-        {"id": "grill-smoke", "type": "smoke", "what": "smoke off the turban shells on O-Kuni's grill, leaning away up the road with the wind off the bay",
-         "at": grill_mid, "base": r(gp(gx, gz - GRILL["d"] / 2))[1], "height": 70, "width": [4, 22], "lean": [26, -70], "rise": 12, "rate": 3,
-         "gust": 0.35, "color": "#e4e6ea", "opacity": 0.34},
-        {"id": "grill-embers", "type": "embers", "what": "the charcoal under the shells, glowing a little in the daylight", "at": grill_mid, "size": [26, 4],
-         "base": r(gp(gx, gz - GRILL["d"] / 2))[1], "glowOpacity": 0.10, "sparks": 0.08},
-        {"id": "bay-waves", "type": "waves", "what": "the bay's rows of small waves, far (ENGINE-20's kind), toward the shore below us", "area": bay_poly,
-         "rows": 9, "per": 8, "size": 4, "speed": 3, "toward": "S", "color": "#f4f8fb", "opacity": 0.38, "plane": "back"},
-        {"id": "bay-shimmer", "type": "shimmer", "what": "the morning glitter on the bay", "poly": bay_poly, "count": 22, "size": 4, "flow": [3, 0], "life": 1.8,
-         "color": "#f6eed8", "opacity": 0.45, "plane": "back"},
-        {"id": "noren-sway", "type": "sway", "plane": "noren", "anchor": "top", "amount": 2.2, "period": 3.4, "wave": 26, "lean": 0.35, "what": "the noren stirring in the wind off the bay"},
-        {"id": "cloud-drift", "type": "bob", "plane": "cloud", "amount": 1, "period": 11, "what": "Fuji's cap of cloud breathing on its top (very slow); the scene hides it when it has lifted"},
-        {"id": "gulls", "type": "birds", "kind": "flyers", "plane": "back", "what": "gulls over the bay (the engine's own silhouettes, pale)",
-         "lanes": [[[-12, 150], [200, 168], [360, 236], [452, 214], [470, -12]], [[520, -12], [430, 232], [330, 262], [180, 160], [-12, 140]]],
-         "every": [8, 16], "group": [1, 2], "speed": 55, "size": 7, "scale": [0.6, 1.0], "color": "#f6eed8",
-         "behind": [[r(p) for p in tea_roof[:4]] + [[0, 470]], [[452, 60], [800, 60], [800, 300], [452, 300]]],
-         "note": "they cross the bay between the teahouse and the hackberry; behind the teahouse's roof and the hackberry's crown"},
-        {"id": "courier", "type": "birds", "kind": "flyers", "what": "the relay courier: he runs along the road now and then, left to right and back, the letter box on his shoulder",
-         "lanes": [[[-30, 512], [830, 512]], [[830, 520], [-30, 520]]], "every": [18, 34], "group": [1, 1], "speed": 150, "frames_note": "PEOPLE-21A's courier, running, both ways (until its frames are given, the engine would draw a bird's silhouette: SCENES-21A gives the frames, or walks him as a person on these lines)",
-         "sizeAt": 512, "base": 512, "behind": [], "note": "His lane is the road's middle (rows 512 going right, 520 coming back): there a grown-up is 117 px and a man of 1.56 m 104 px; he passes IN FRONT of everything on the far side of the road (the grill, the trunks, the palanquin, the teahouse) and BEHIND only the front plane; nobody stands in his lane at `teahouse` or `peddler` (those are above it), so he never runs through the family unless they stand in the road's middle. If the engine walks him as a person instead, the same two lines are his path (courierFrom -> courierTo)."},
-    ]
-    out = {
+    stands = {}
+    pts = dict(M)
+    for i, q in enumerate(extra["fromTop"]):
+        pts[f"fromTop.{i}"] = q
+    for k_, q in extra["atGrill"].items():
+        pts[f"atGrill.{k_}"] = q
+    pts["printWalk"] = extra["printWalk"]
+    for t in th:
+        pts["walkTo." + t["id"]] = t["stand"]
+    bad = []
+    # the engine keeps a figure's feet 12 px sideways and 5 px up or down off every blocked outline and off the patch each
+    # of the scene's people stands on (walk.js WalkMap, game.js ground): a place in that margin cannot be stood on
+    def spans(poly, row):
+        xs = []
+        for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
+            if (y0 <= row < y1) or (y1 <= row < y0):
+                xs.append(x0 + (row - y0) * (x1 - x0) / (y1 - y0))
+        xs.sort()
+        return list(zip(xs[0::2], xs[1::2]))
+
+    def kept_off(p_, polys):
+        for poly in polys:
+            for row in range(int(p_[1]) - 5, int(p_[1]) + 6):
+                if any(a - 12 <= p_[0] <= b + 12 for a, b in spans(poly, row + 0.5)):
+                    return True
+        return False
+    people_at = [M[n] for n in ("kuni", "bearers", "tora", "peddler", "komuso")]
+    patches = [[[x_ - 32 * sc, y_ - 12], [x_ + 32 * sc, y_ - 12], [x_ + 32 * sc, y_ + 8], [x_ - 32 * sc, y_ + 8]]
+               for x_, y_ in people_at for sc in [min(1.12, max(0.26, (y_ - HZ) / (FULL - HZ)))]]
+    for name, p in pts.items():
+        if name in ("yui", "courierFrom", "courierTo"):
+            continue
+        if not inside(walk, p):
+            bad.append(f"{name} {p} is outside the walk outline")
+        if any(inside(b, p) for b in bl):
+            bad.append(f"{name} {p} is on a blocked patch")
+        elif name not in ("kuni", "bearers", "tora", "peddler", "komuso") and kept_off(p, bl + patches):
+            bad.append(f"{name} {p} is in the margin the game keeps round a blocked patch or one of the people")
+    for name, p in pts.items():
+        stands[name] = {"at": p, "grownup_px": round(grownup_px(p[1]), 1)}
+    remap = []
+    for name, old in OLD.items():
+        if name in pts:
+            remap.append([old[0], old[1], pts[name][0], pts[name][1]])
+    remap.append([OLD["kagoSeat"][0], OLD["kagoSeat"][1], extra["kagoSeat"][0], extra["kagoSeat"][1]])
+    cut_boxes = {pl["id"]: box_of(planes[pl["id"]][1]) for pl in planes_out}
+    return {
         "id": "edo-kurasawa", "horizon": HZ, "full": FULL,
-        "view": {"horizon": HZ, "full": FULL, "camera": "persp.Camera(300, 590): eye 317 cm, Z0 875, focal 800, vanishing x 400 (as Yui's)",
-                 "road": "the Tokaido across the picture, z 40 to 560 cm (rows 576 to 477); the ledge beyond it, its wall's top at z 900 (left) to 1100 (middle); the rest place before the mound to z 1700 (row 399)",
-                 "compass": "the act's (as Yui's): the bay in front, Fuji across it, the way west to the right; the left edge is the road back to Yui"},
-        "light": "morning: the act's sun in the east, behind us and to the left, about 30 degrees up (an hour after Yui, a little more behind us: shadows fall right and away, 1.15 : 0.85); the hill behind us throws its shadow across the near verge and the near edge of the road from the left",
-        "walk": walk, "walk_note": "one area: the road (rows 476 to 596), the strip before the teahouse's door (O-Kuni's place behind the grill), the ledge's strip before the wall, and the rest place before the mound (up to row 426 under the hackberry); the climb is the way out at the right edge, not walked up here",
-        "blocked": blocked,
-        "planes": planes_out, "cutouts": cutouts,
-        "things": things,
-        "marks": M, "stands": stands,
-        "exits": [{"to": "edo-village", "edge": "left", "at": M["yui"], "what": "the road back east to Yui (its west end)"},
-                  {"to": "edo-satta", "edge": "right", "at": M["climb"], "what": "up the cliff road to the top of the pass (once the family is dressed: #22)"}],
-        "fx": fx,
-        "fx_note": "the grill's smoke and embers; the bay's far waves and its glitter; the noren sways; Fuji's cloud bobs a pixel (very slow) and is hidden once it has lifted (the state is the scene's, from the pass); gulls (engine-drawn); the courier's run is a flyer along the road (PEOPLE-21A's frames) or a walk along the same line",
-        "heights": {"mom_cm": 168, "bigsis_cm": 160, "lilsis_cm": 122, "man_1830_cm": 156, "woman_1830_cm": 146, "grownup_at_full_px": 160},
-        "sizes": {m: {"grownup": stands[m]["grownup_px"], "mom": round(px(v[1], 168)), "lilsis": round(px(v[1], 122)), "man": round(px(v[1], 156)), "woman": round(px(v[1], 146))} for m, v in M.items()},
+        "view": {"horizon": HZ, "full": FULL, "camera": f"persp.Camera({HZ}, {FULL}, focal {V.FOCAL:.0f}): the eye {V.EYE:.0f} cm above the road; the road and the teahouse turned {math.degrees(V.THETA):.0f} degrees (edo_kurasawa_view.py)",
+                 "compass": "the act's (as Yui's): looking west along the Tokaido toward the pass; the bay on the left with Fuji across it; the left edge (bottom) the road back to Yui, the right edge the climb to the pass"},
+        "light": "morning: the act's sun in the east, low along the road from Yui behind us and to the left, about 40 degrees up; the teahouse's front in shade, its near end lit; shadows to the right and away; a shore pine behind us on the left lays its shadow across the road at the bottom left",
+        "walk": walk, "walk_note": "one floor: the road from the bottom left round the bend to the climb's foot at the right edge, the trodden ground before the teahouse (short of the bench under the eave, O-Kuni's place behind the grill kept), the rest place past it short of the wall, the ground before the mound, the inland verge above the bank",
+        "blocked": bl, "planes": planes_out, "cutouts": cut_boxes, "things": th, "marks": M,
+        "fromTop": extra["fromTop"], "atGrill": extra["atGrill"], "kagoSeat": extra["kagoSeat"], "printWalk": extra["printWalk"],
+        "stands": stands, "fx": fx_list(info, M, extra),
+        "exits": [{"to": "edo-village", "edge": "left", "at": M["yui"], "what": "the road back east to Yui"},
+                  {"to": "edo-satta", "edge": "right", "at": M["climb"], "what": "up the road to the top of the pass"}],
+        "sizes": {name: round(grownup_px(p[1]), 1) for name, p in M.items()},
+        "remap": {"points": remap, "note": "round twenty-one's marks, arriving places and standing places, and where each is in this picture: [old x, old y, new x, new y]"},
+        "polys": {"teahouse": TEA_POLY, "bay": BAY, "hackberry": HACK_POLY, "cliffroad": CLIFF_POLY, "road": ROAD_POLY},
+        "problems": bad,
     }
-    return out
+
+
+def scene_numbers(lay):
+    """The scene file's numbers, as it writes them (to paste into js/content/scenes/edo-kurasawa.js)."""
+    j = lambda v_: json.dumps(v_).replace(", ", ", ")
+    M = lay["marks"]
+    th = {t["id"]: t for t in lay["things"]}
+    fx = {f["id"]: f for f in lay["fx"]}
+    pl = {p["id"]: p for p in lay["planes"]}
+    out = [f"horizon: {lay['horizon']}, full: {lay['full']}",
+           "const M = {\n  " + ", ".join(f"{k_}: {j(v_)}" for k_, v_ in M.items()) + ",\n};",
+           f"const FROM_TOP = {j(lay['fromTop'])};",
+           f"const AT_GRILL = {{ mom: {j(lay['atGrill']['mom'])}, bigsis: {j(lay['atGrill']['bigsis'])}, lilsis: {j(lay['atGrill']['lilsis'])} }};",
+           f"const KAGO_SEAT = {j(lay['kagoSeat'])};",
+           f"print walk: {j(lay['printWalk'])}",
+           f"walk: {{ area: {j(lay['walk'])} }}",
+           f"blocked: {j(lay['blocked'])}"]
+    for pid in ("kago", "noren", "trunks", "grill"):
+        out.append(f"plane {pid} base: {j(pl[pid]['base'])}")
+    out.append(f"TEAHOUSE = {j(lay['polys']['teahouse'])}")
+    out.append(f"BAY = {j(lay['polys']['bay'])}")
+    out.append(f"HACKBERRY = {j(lay['polys']['hackberry'])}")
+    for f_ in lay["fx"]:
+        out.append(f"fx {f_['id']}: " + j({k_: v_ for k_, v_ in f_.items() if k_ not in ('what', 'note', 'id', 'type')}))
+    for t in lay["things"]:
+        shape = t["shape"]
+        out.append(f"{t['id']}: " + ("poly: " + j(shape["poly"]) if "poly" in shape else "rect: " + j(shape["rect"])) + f", walkTo: {j(t['stand'])}, face: \"{t['face']}\"")
+    return "\n".join(out)
+
+
+if __name__ == "__main__":
+    lay = json.load(open(os.path.join(HERE, "out", "edo-kurasawa", "layout.json")))
+    for b in lay.get("problems", []):
+        print("LAYOUT:", b)
+    print(scene_numbers(lay))
+    with open(os.path.join(HERE, "out", "edo-kurasawa-remap.json"), "w") as f:
+        json.dump({"points": lay["remap"]["points"]}, f, indent=1)
+    print("sizes:", lay["sizes"])

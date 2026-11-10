@@ -48,16 +48,21 @@ const loose = (g) => !!g.flag("limo.loose");
 const strands = (g) => Number(g.flag("limo.strands")) || 0;
 
 // ---------- where the two of them are ----------
-const JOE = [318, 327];                // the mark `joe`: the ground under his hips, under the long seat's cushion; facing E, across the car
-const JOE_SCALE = 0.791;               // the size the painter drew him at there (the row's own is 0.793)
+// LIMO-23 (10 November): the author, "why is grandpa joe sitting so far from the camera, he should be in the middle and
+// closer/larger": he sat at the far end of the long seat, by the divider ([318, 327], 0.791); now in the middle of it, and
+// the ropes and the spare buckle are on his far side, toward the divider (tools/paint/nevada_limo_model.py, layout.json):
+// his lap hides the bow from our seat, so the rope's loose end hangs down the cushion's face under his knees, lower each strand.
+const JOE = [273, 372];                // the mark `joe`: the ground under his hips, under the long seat's cushion; facing E, across the car
+const JOE_SCALE = 1.128;               // the size the painter's camera gives him there (layout.json marks.joe)
 const RANGER = [447, 354];             // the mark `ranger`: on the carpet, near us, facing Joe (W). STAGE-19N: 25 px off
                                        // the cabin's centre line under the divider (SCORE-19A S12), as the painter's model has it
 // Ranger's places on the carpet in front of each thing (the painter's `stands`), and the cushion beside the bow.
-const AT = { ropes: [344, 340], joe: [354, 330], belt: [332, 359], phone: [376, 329], ashtray: [460, 330], divider: [419, 329],
+const AT = { ropes: [335, 354], joe: [322, 380], belt: [345, 340], phone: [376, 329], ashtray: [460, 330], divider: [419, 329],
   bag: [504, 364], juice: [514, 378], clipboard: [507, 380], fridge: [498, 381], windowL: [335, 352], windowR: [502, 353] };
 // Up on the long seat's cushion, beside the bow, to nibble: drawn at the painter's scale with his feet there, and sorted as
-// if he stood on the carpet under him (`floor`), so that he is in front of the ropes and of Grandpa Joe.
-const PERCH = { at: [309, 307], scale: 0.901, floor: 342 };
+// if he stood on the carpet under him (`floor`), so that he is in front of the ropes; LIMO-23: on Joe's far side now, so
+// behind Grandpa Joe, whose arm and tied hands are in front of him.
+const PERCH = { at: [301, 313], scale: 0.963, floor: 350 };
 
 // ---------- the divider ----------
 // A smoked window between the back and the front (PAINT-12C: divider-up.png, divider-down.png, the same pixels). Up, the
@@ -102,7 +107,7 @@ function tick(g, me, dt) {
       me.t = (me.t + dt) % 2400;
       [...n.children].forEach((note, i) => {
         const t = ((me.t / 2400) + i / 3) % 1;
-        note.setAttribute("transform", `translate(${334 + 10 * i + 6 * Math.sin(t * 6.3 + i)} ${226 - 46 * t})`);
+        note.setAttribute("transform", `translate(${296 + 10 * i + 6 * Math.sin(t * 6.3 + i)} ${228 - 46 * t})`);       // (LIMO-23: over his head where he sits now)
         note.setAttribute("opacity", Math.min(1, 4 * t) * (1 - t));
       });
     }
@@ -376,11 +381,12 @@ export default {
   name: "The back of a limousine",
   travel: false,                                           // MAP-15: nobody leaves by the map: Grandpa Joe is belted in, and the limousine has no way out
 
-  // DEPTH. The painter's camera: a seated eye, the cartoon's roomy car (layout.json "view"). maxScale 1.22, so that Ranger
+  // DEPTH. The painter's camera: a seated eye, the cartoon's roomy car (layout.json "view"). maxScale 1.24, so that Ranger
   // keeps growing to the near edge of the carpet (the engine's default is 1.12).
-  horizon: 220, full: 355, maxScale: 1.22,
-  // The carpet between the seats, from the bar under the divider to where Ranger is drawn at 1.22. Grandpa Joe is never on it.
-  walk: { area: [[345, 326], [495, 329], [532, 385], [304, 381]] },
+  horizon: 220, full: 355, maxScale: 1.24,
+  // The carpet between the seats, from the bar under the divider to where Ranger is drawn at 1.24 (LIMO-23: a little nearer,
+  // for his place by Grandpa Joe in the middle of the long seat). Grandpa Joe is never on it.
+  walk: { area: [[345, 326], [495, 329], [533, 387], [303, 383]] },
 
   party: ["grandpajoe", "ranger"],
   spawn: { default: JOE, grandpajoe: JOE, ranger: RANGER },
@@ -395,14 +401,17 @@ export default {
     // never shown, so that they are fetched with the scene's other pictures and the game's.
     { id: "divider-pictures", states: { up: art + "divider-up.png", down: art + "divider-down.png" }, plane: "back", when: () => false },
     // The bow and the loose end on the cushion beside him: four strands, then three, two, one; gone when he is loose.
-    // Its base is just in front of his ground point: he is behind it, Ranger (sorted by the carpet under him) in front.
-    { id: "ropes", states: { 4: art + "ropes-4.png", 3: art + "ropes-3.png", 2: art + "ropes-2.png", 1: art + "ropes-1.png" }, base: 329,
+    // LIMO-23: on his far side now, so its base is behind his ground point (he is in front of it) and behind Ranger's carpet
+    // under the cushion where he perches to nibble (floor 350: Ranger in front). The bow is behind his lap; what shows is the
+    // loose end hanging down the cushion's face under his knees, lower each strand.
+    { id: "ropes", states: { 4: art + "ropes-4.png", 3: art + "ropes-3.png", 2: art + "ropes-2.png", 1: art + "ropes-1.png" }, base: 346,
       state: (g) => String(Math.max(1, 4 - strands(g))), when: (g) => !loose(g) },
     // On the facing seat: lunch, paperwork and a beverage. Each goes when it is taken; a figure on the carpet is in front.
     { id: "bag", src: art + "bag.png", base: [[500, 330], [699, 616]], when: (g) => !g.flag("limo.bagTaken") },
     { id: "juice", src: art + "juice.png", base: [[500, 330], [699, 616]], when: (g) => !g.flag("limo.juiceTaken") },
     { id: "clipboard", src: art + "clipboard.png", base: [[500, 330], [699, 616]], when: (g) => !g.flag("limo.clipboardTaken") },
     { id: "front", src: art + "front.png", plane: "front" },                      // the seat we sit on, and its two armrests
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE: the desert going by the windows. DRIVE-16M: the world outside as the scene's own camera sees
@@ -464,11 +473,12 @@ export default {
   hotspots: [
     { id: "seat", name: "long seat", poly: [[145, 574], [345, 321], [345, 292], [301, 252], [0, 331], [145, 474]], walkTo: AT.joe, face: "W", look: looks("seat"), use: looks("seat") },
     { id: "facingseat", name: "facing seat", poly: [[699, 600], [687, 600], [500, 330], [500, 299], [551, 256], [800, 326], [800, 425], [699, 504]], walkTo: AT.bag, face: "E", look: looks("facingseat"), use: looks("facingseat") },
-    // Grandpa Joe, for Ranger: his figure on the seat (and not the bow and the belt beside him, which have areas of their own, over this).
-    { id: "joe", name: "Grandpa Joe", verb: "Talk to", mate: "grandpajoe", plane: "grandpajoe", poly: [[296, 232], [330, 228], [346, 262], [350, 300], [372, 316], [366, 330], [300, 330], [292, 292]],
-      when: (g) => who(g) === "ranger" },
     { id: "window-l", name: "window", rect: [0, 177, 300, 146], walkTo: AT.windowL, face: "W", look: looks("window"), use: looks("window") },
     { id: "window-r", name: "window", rect: [544, 179, 255, 140], walkTo: AT.windowR, face: "E", look: looks("window"), use: looks("window") },
+    // Grandpa Joe, for Ranger: his figure on the seat (and not the bow and the belt beside him, which have areas of their own, over this).
+    // LIMO-23: after the windows, since he sits in front of the left one now.
+    { id: "joe", name: "Grandpa Joe", verb: "Talk to", mate: "grandpajoe", plane: "grandpajoe", poly: [[242, 237], [290, 231], [313, 279], [319, 333], [350, 356], [341, 376], [247, 376], [236, 322]],
+      when: (g) => who(g) === "ranger" },
     // STAGE-19N (S9, S10: the painter's layout, nevada_limo_layout.py): the belt and the ashtray at least 20 px tall, and the
     // fridge's area only where it shows above the near seat back.
     { id: "fridge", name: "little fridge", verb: "Open", rect: [580, 388, 99, 110], walkTo: AT.fridge, face: "E", look: looks("fridge"),
@@ -480,11 +490,12 @@ export default {
       look: { grandpajoe: "limo.phone.joe", ranger: ["limo.phone.ranger", "limo.phone.ranger.look.joe"] },
       use: { grandpajoe: "limo.phone.joe", ranger: async (g) => { await g.actor("ranger").play(g.clock, "reach"); await g.say(DOTS, "limo.phone.ranger.joe"); } } },     // he lifts it off the hook, and it says nothing
     { id: "ashtray", name: "ashtray", rect: [448, 266, 22, 20], walkTo: AT.ashtray, face: "N", look: looks("ashtray"), use: looks("ashtray") },
-    { id: "belt", name: "seatbelt", rect: [271, 310, 47, 20], walkTo: AT.belt, face: "W", look: looks("belt"),
+    { id: "belt", name: "seatbelt", rect: [291, 296, 42, 20], walkTo: AT.belt, face: "W", look: looks("belt"),
       use: { grandpajoe: (g) => g.say(loose(g) ? "limo.ropes.regs" : "limo.belt.joe"), ranger: looks("belt").ranger } },
     // The ropes beside him: four strands and a bow, and after #14 what is left of them (the cut-out goes; the place stays, and
     // the two of them have a word for what Ranger has done to it).
-    { id: "ropes", name: "ropes", verb: "Nibble", plane: "ropes", rect: [287, 295, 42, 27], walkTo: AT.ropes, face: "W",
+    // LIMO-23: his tied hands in his lap, and the loose end hanging down the cushion's face below them.
+    { id: "ropes", name: "ropes", verb: "Nibble", plane: "ropes", poly: [[273, 298], [317, 298], [317, 328], [311, 328], [311, 370], [295, 370], [295, 328], [273, 328]], walkTo: AT.ropes, face: "W",
       look: (g) => g.say(...(who(g) === "ranger" ? ["limo.ropes.ranger", loose(g) ? "limo.ropes.ranger2.joe" : "limo.ropes.ranger.joe"] : [loose(g) ? "limo.ropes.look2.joe" : "limo.ropes.look.joe"])),
       use: { grandpajoe: (g) => g.say(loose(g) ? "limo.ropes.look2.joe" : HANDS), ranger: ropes } },
     { id: "bag", name: "paper bag", verb: "Open", plane: "bag", rect: [543, 292, 30, 38], walkTo: AT.bag, face: "E", when: (g) => !g.flag("limo.bagTaken"),

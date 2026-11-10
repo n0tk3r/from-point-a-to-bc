@@ -298,7 +298,8 @@ export default {
   planes: [
     { id: "dusk", src: art + "dusk.png", plane: "back", when: dusk },
     { id: "lattice", base: [[157, 349], [20, 444]], states: { day: art + "lattice.png", dusk: art + "lattice-dusk.png" }, state: (g) => (dusk(g) ? "dusk" : "day") },
-    { id: "front", plane: "front", states: { day: art + "front.png", dusk: art + "front-dusk.png" }, state: (g) => (dusk(g) ? "dusk" : "day") },
+    { id: "front", plane: "front", src: art + "front.png", states: { day: art + "front.png", dusk: art + "front-dusk.png" }, state: (g) => (dusk(g) ? "dusk" : "day") },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // LIGHT (layout.json bars): the bars on the east wall (they climb: straight up, 82.9 px as k goes 0 to 1), on the floor (east
   // into the wall's foot, gone by k 0.372), and the shafts in the air (fading after k 0.8); each clipped and screen-blended over

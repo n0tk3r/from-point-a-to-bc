@@ -343,6 +343,7 @@ export default {
     { id: "ladder", states: { lamp: art + "ladder.png", day: art + "ladder-day.png" }, state: (g) => (sunUp(g) ? "day" : "lamp"),
       base: [[253, 399], [284, 398]], solid: [[250, 397], [291, 396], [288, 401], [246, 402]] },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // The morning sun down the open trapdoor onto the mats (the painting has its patch: this is the light in the air), and her
   // flashlight's pink glow on the mats and up at the boards over it (#27, while it is on).

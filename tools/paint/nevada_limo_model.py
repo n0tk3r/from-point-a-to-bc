@@ -58,9 +58,13 @@ JUICE = dict(at=(W - 40.0, SEAT_H, 248.0), w=9.0, d=6.0, h=13.0)
 CLIPBOARD = dict(at=(W - 34.0, SEAT_H, 318.0), w=24.0, h=33.0, tilt=24.0)   # tilt: degrees it leans back from upright
 
 # ---- Grandpa Joe, the ropes beside him, the seatbelt's buckle end on the cushion
-JOE = (36.0, 62.0)                                          # X, Z of the ground point under his hips (he faces E, across the car)
-ROPES = dict(at=(40.0, SEAT_H, 104.0))                      # the bow lies on the cushion beside his hands; its loose end runs toward us
-BELT = dict(at=(SEAT_D - 12.0, SEAT_H, 168.0))              # the buckle, lying on the cushion near its edge; its strap comes out of the seat's crease
+# LIMO-23: the author, 10 November: "why is grandpa joe sitting so far from the camera, he should be in the middle and
+# closer/larger". He sat at the far end of the long seat, by the divider (Z 62, drawn at 0.79); now in the middle of it
+# (Z 205, drawn at about 1.13), with the ropes and the spare buckle moved to his far side, toward the divider, so that
+# Ranger nibbles them from carpet where the engine still draws him at his painted size (1.25 at most).
+JOE = (36.0, 205.0)                                         # X, Z of the ground point under his hips (he faces E, across the car)
+ROPES = dict(at=(40.0, SEAT_H, 163.0), toward=-1, edge_z=206.0)   # the bow lies on the cushion beside his hands, on his far side (behind his lap from our seat); its loose end runs under his knees and hangs down the cushion's face at edge_z, where it shows
+BELT = dict(at=(SEAT_D - 12.0, SEAT_H, 108.0))              # the buckle, lying on the cushion near its edge; its strap comes out of the seat's crease
 
 # ---- the ceiling: a row of small lights down the middle, from the divider to us
 LIGHTS = [(W / 2, 40.0), (W / 2, 125.0), (W / 2, 210.0), (W / 2, 295.0), (W / 2, 380.0)]     # X, Z (at Y = H)
@@ -71,7 +75,7 @@ MARKS = {
     "joe": JOE,                                             # seated on the long seat, facing E
     "ranger": (207.0, 148.0),                               # on the carpet, between the seats, near us (STAGE-19N: 27 cm toward the
                                                             # facing seat, about 25 px off the cabin's centre line under the divider)
-    "ropes": (ROPES["at"][0] + 2.0, ROPES["at"][2] + 16.0),        # where Ranger sits to nibble: ON the cushion (at SEAT_H), beside the bow, toward us
+    "ropes": (ROPES["at"][0] + 2.0, ROPES["at"][2] - 16.0),        # where Ranger sits to nibble: ON the cushion (at SEAT_H), beside the bow, away from Joe (LIMO-23)
 }
 # the master brief's fixed marks `bag`, `juice`, `clipboard` (X, Z): ON the facing seat's cushion (at SEAT_H), where each
 # thing stands. Kept apart from MARKS (which the room tools stand people on, on the carpet); layout.json gives each one
@@ -81,14 +85,14 @@ MARKS = {
 ON_FACING_SEAT = {"bag": (BAG["at"][0], BAG["at"][2]), "juice": (JUICE["at"][0], JUICE["at"][2]), "clipboard": (CLIPBOARD["at"][0], CLIPBOARD["at"][2])}
 # Ranger's stand places on the carpet, for each thing (X, Z), and which way he faces there
 STANDS = {
-    "atropes": ((SEAT_D + 18.0, 112.0), "W"), "atjoe": ((SEAT_D + 22.0, 74.0), "W"), "atbelt": ((SEAT_D + 18.0, 170.0), "W"),
+    "atropes": ((SEAT_D + 18.0, 155.0), "W"), "atjoe": ((SEAT_D + 22.0, 217.0), "W"), "atbelt": ((SEAT_D + 18.0, 110.0), "W"),     # LIMO-23
     "atphone": ((116.0, 64.0), "N"), "atashtray": ((230.0, 64.0), "N"), "atdivider": ((175.0, 60.0), "N"),
     "atbag": ((W - SEAT_D - 20.0, 170.0), "E"), "atjuice": ((W - SEAT_D - 18.0, 200.0), "E"), "atclipboard": ((W - SEAT_D - 26.0, 206.0), "E"),
     "atfridge": ((W - SEAT_D - 34.0, 208.0), "E"), "atwindow-l": ((SEAT_D + 16.0, 150.0), "W"), "atwindow-r": ((W - SEAT_D - 16.0, 140.0), "E"),
 }
 # the carpet a raccoon may walk on: between the seats, from the bar to where he is drawn at about 1.23 (the engine never
 # draws painted frames more than 1.25 of their size: the scene's maxScale must be at least the walk's, layout.json `maxScale`)
-WALK = [(SEAT_D + 6.0, 54.0), (W - SEAT_D - 6.0, 54.0), (W - SEAT_D - 6.0, 214.0), (SEAT_D + 6.0, 220.0)]
+WALK = [(SEAT_D + 6.0, 54.0), (W - SEAT_D - 6.0, 54.0), (W - SEAT_D - 6.0, 218.0), (SEAT_D + 6.0, 224.0)]     # LIMO-23: a little nearer, for his stand by Joe
 
 FLATS = [
     ("divider", "back", DIVIDER["x"][0], DIVIDER["x"][1], DIVIDER["sill"], DIVIDER["top"]),

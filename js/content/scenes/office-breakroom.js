@@ -190,7 +190,8 @@ export default {
     { name: "counter", area: COUNTER, horizon: 200, full: 300.71, away: { ranger: (g) => toCounter(g) } },
     { name: "fridge", area: FRIDGE_TOP, scale: FRIDGE_SCALE, away: { ranger: (g) => toFridge(g) } },
   ],
-  blocked: [[[490, 385], [529, 386], [538, 403], [495, 402]]],                 // Jed's chair
+  blocked: [[[490, 385], [529, 386], [538, 403], [495, 402]],                  // Jed's chair
+    [[750, 388], [772, 388], [772, 416], [750, 416]]],                         // behind the near column (PAINT-23B)
 
   spawn: { default: M.vending, ...M },
   facing: "E",
@@ -219,6 +220,7 @@ export default {
     { id: "chair", src: art + "chair.png", base: [[486, 385], [532, 385]], solid: [[490, 385], [529, 386], [538, 403], [495, 402]] },
     { id: "door-open", src: art + "door-open.png", base: [[705, 352], [731, 376]], when: () => false, solid: [[705, 352], [731, 376], [726, 376], [701, 351]] },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   fx: [
     { id: "steam", type: "smoke", at: [491, 265], height: 34, width: [2, 9], lean: [-4, -34], rise: 7, rate: 2.2, gust: 0.2, color: "#e8ece4", opacity: 0.3, base: [496, 365] },

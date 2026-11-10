@@ -43,11 +43,17 @@ async def main(argv):
         await page.wait_for_function(REST, timeout=90000)
         if walk:
             await page.evaluate(f"() => {{ game.walkTo({walk[0]}, {walk[1]}); }}")
-            await page.wait_for_timeout(300)
-            try:
-                await page.wait_for_function(REST, timeout=30000)
-            except Exception:
+            last, still = None, 0
+            for _ in range(120):                                  # (the game is at rest while she walks: wait until she stands still)
+                await page.wait_for_timeout(250)
+                at = await page.evaluate("game.lead ? [Math.round(game.lead.x), Math.round(game.lead.y)] : null")
+                still = still + 1 if at == last else 0
+                last = at
+                if still >= 3:
+                    break
+            else:
                 said.append("the walk did not come to rest")
+            print(f"  the lead stands at {last}")
         await page.wait_for_timeout(wait)
         await page.screenshot(path=out)
         await b.close()

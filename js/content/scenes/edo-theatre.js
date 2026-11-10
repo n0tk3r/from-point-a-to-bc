@@ -324,7 +324,9 @@ export default {
     { name: "house", area: HOUSE_FLOOR, away: { mom: "edo.theatre.audience.use.mom", bigsis: "edo.theatre.audience.use.bigsis", lilsis: "edo.theatre.audience.use.lilsis" } }],
   // the lamp's foot, the stand's foot, the gate's two posts, the boxes at the front (layout.json blocked)
   blocked: [[[269, 478], [300, 472], [309, 485], [277, 492]], [[286, 509], [331, 499], [346, 522], [298, 534]], [[376, 465], [395, 461], [405, 470], [384, 475]],
-    [[437, 453], [455, 449], [465, 457], [447, 461]], [[632, 566], [872, 480], [1054, 551], [805, 693]]],
+    [[437, 453], [455, 449], [465, 457], [447, 461]], [[632, 566], [872, 480], [1054, 551], [805, 693]],
+    // (round twenty-three: the near plane's post of the wing stands over the walked floor's right end, at the frame's edge)
+    [[740, 455], [800, 469], [800, 514], [740, 534]]],
 
   party: THREE,
   spawn: { default: M.back, ...M, back_mom: BACK_AT.mom, back_bigsis: BACK_AT.bigsis, back_lilsis: BACK_AT.lilsis, ...BACK_AT },
@@ -353,6 +355,7 @@ export default {
     { id: "gate", states: { before: art + "gate.png", show: art + "gate-show.png" }, state: (g) => (showOn(g) ? "show" : "before"), base: [[377, 471], [462, 452]] },
     { id: "housefront", states: { before: art + "housefront.png", show: art + "housefront-show.png" }, state: (g) => (showOn(g) ? "show" : "before"), base: [[778, 467], [651, 407]] },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // LIGHT (PAINT-21D's light pictures, laid over the painting with a screen blend, under the people, as the keep's beams are):
   // the right wall's high windows' day in the air; and in the show, the roof hatch's day falling onto the stage

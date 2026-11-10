@@ -175,6 +175,7 @@ export default {
     { id: "receipt", src: art + "receipt.png", base: [[364, 399], [618, 411]], when: () => lying.now },
     { id: "banjo", src: art + "banjo.png", base: [[276, 457], [222, 496]], when: (g) => !is(g, "office.receiptGiven") },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Opal on her stool at her window, her back to the shelves, knitting (PEOPLE-17's `opal`: her life is the needles);

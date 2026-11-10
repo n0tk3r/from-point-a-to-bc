@@ -242,6 +242,7 @@ export default {
     { id: "tape", src: art + "tape-out.png", base: [[152, 406], [196, 408]], when: (g) => !g.flag("home.tapeWound") },   // the loop of tape spilled out of the machine, until it is wound back in
     { id: "vault-open", src: art + "vault-open.png", base: [[668, 392], [727, 479]], when: (g) => !!g.flag("home.hasCarKey") },   // the cash box with its lid up, over the shut one
     { id: "front", src: art + "front.png", plane: "front" },   // the door's wall, frame and open leaf at the left; the heap of trip things at the bottom
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // LIGHT, drawn live. `light` (above) makes both match the story.

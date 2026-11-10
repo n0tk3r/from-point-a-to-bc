@@ -324,6 +324,12 @@
      538
     ]
    ]
+  },
+  {
+   "id": "near",
+   "file": "near.png",
+   "plane": "front",
+   "what": "the near plane (DEPTH.md): the old cherry's great limb up the left edge and its boughs of blossom across the top-left, the tips of a pine's bough at the top right, the moat's stone edge and its reeds along the bottom. People always pass behind it; nothing clicked or stood on is behind it."
   }
  ],
  "cutouts": {
@@ -337,7 +343,7 @@
    564,
    179,
    222,
-   257
+   258
   ],
   "scaffold": [
    453,
@@ -374,6 +380,12 @@
    12,
    275,
    537
+  ],
+  "near": [
+   0,
+   0,
+   800,
+   600
   ]
  },
  "things": [
@@ -501,48 +513,72 @@
   },
   {
    "id": "keep",
-   "what": "the keep: white, five roofs, on its tall sloping stone base, high on its hill",
+   "what": "the keep, 100 m off and turned forty degrees: white, five roofs with their gables, its long face in the low sun, its short face in shade, on its stone base; a corridor turret runs on from it behind the gate tower. Its top ridge's middle is where it was (x 360, row 34): the herons face it",
    "shape": {
     "poly": [
      [
-      244,
-      334
+      281,
+      59
      ],
      [
-      478,
-      334
+      273,
+      172
      ],
      [
-      466,
-      266
+      228,
+      192
      ],
      [
-      440,
-      222
+      255,
+      226
      ],
      [
-      404,
-      56
+      206,
+      248
      ],
      [
-      380,
-      34
+      236,
+      256
      ],
      [
-      340,
-      34
+      213,
+      347
      ],
      [
-      316,
-      56
+      594,
+      347
      ],
      [
-      280,
-      222
+      594,
+      270
      ],
      [
-      254,
-      266
+      483,
+      267
+     ],
+     [
+      513,
+      247
+     ],
+     [
+      463,
+      226
+     ],
+     [
+      491,
+      192
+     ],
+     [
+      446,
+      174
+     ],
+     [
+      439,
+      59
+     ],
+     [
+      341,
+      14
      ]
     ]
    },
@@ -554,24 +590,32 @@
   },
   {
    "id": "stonebase",
-   "what": "the keep's stone base, its sides curving out to the foot",
+   "what": "the keep's stone base of fitted stones, every one a different shape, its sides curving out toward the foot",
    "shape": {
     "poly": [
      [
-      244,
-      334
+      214,
+      345
      ],
      [
-      478,
-      334
+      231,
+      291
      ],
      [
-      446,
-      264
+      489,
+      291
      ],
      [
-      274,
-      264
+      506,
+      345
+     ],
+     [
+      506,
+      346
+     ],
+     [
+      214,
+      346
      ]
     ]
    },
@@ -586,6 +630,14 @@
    "what": "the Ni-no-mon: a gate in a white wall under a small tiled tower, standing open; two guards in it",
    "shape": {
     "poly": [
+     [
+      574,
+      439
+     ],
+     [
+      573,
+      438
+     ],
      [
       562,
       300
@@ -607,12 +659,8 @@
       177
      ],
      [
-      784,
-      221
-     ],
-     [
       785,
-      222
+      221
      ],
      [
       788,
@@ -623,12 +671,12 @@
       300
      ],
      [
-      776,
+      777,
       438
      ],
      [
-      574,
-      438
+      776,
+      439
      ]
     ]
    },

@@ -68,6 +68,7 @@ export default {
   planes: [
     { id: "needle", plane: "front", states: { still: art + "needle.png", left: art + "needle-l.png", right: art + "needle-r.png" }, state: "still" },
     { id: "thumb", src: art + "thumb.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Back to front: a later area lies over an earlier one.

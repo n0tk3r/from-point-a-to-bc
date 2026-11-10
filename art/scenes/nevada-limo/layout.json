@@ -29,15 +29,15 @@
    329
   ],
   [
-   532,
-   385
+   533,
+   387
   ],
   [
-   304,
-   381
+   303,
+   383
   ]
  ],
- "maxScale": 1.22,
+ "maxScale": 1.24,
  "blocked": [],
  "planes": [
   {
@@ -61,8 +61,8 @@
     "2": "ropes-2.png",
     "1": "ropes-1.png"
    },
-   "base": 329,
-   "note": "the bow on the cushion beside Joe; gone at 0. Its base is a row just in front of Joe's ground point: Joe is behind it, Ranger on the carpet or on the seat (sorted by the carpet under him) in front"
+   "base": 346,
+   "note": "the bow on the cushion on Joe's far side and its loose end hanging down the cushion's face; gone at 0. LIMO-23: its base is a row behind Joe's ground point and behind the carpet under Ranger's perch: Joe in front of it, and Ranger, on the carpet or on the seat (sorted by the carpet under him), in front"
   },
   {
    "id": "bag",
@@ -140,18 +140,18 @@
   },
   {
    "id": "ropes",
-   "what": "the ropes beside Grandpa Joe on the long seat: white regulation rope with a red thread, tied off in a bow, the loose end toward us (states 4, 3, 2, 1)",
+   "what": "the ropes beside Grandpa Joe on the long seat: white regulation rope with a red thread, tied off in a bow on his far side (behind his lap from our seat), the loose end hanging down the cushion's face under his knees, lower each strand (states 4, 3, 2, 1)",
    "shape": {
     "rect": [
-     287,
-     295,
-     42,
-     27
+     273,
+     309,
+     40,
+     62
     ]
    },
    "stand": [
-    344,
-    340
+    335,
+    354
    ],
    "face": "W",
    "plane": "ropes"
@@ -315,8 +315,8 @@
     ]
    },
    "stand": [
-    354,
-    330
+    322,
+    380
    ],
    "face": "W",
    "poly": [
@@ -402,15 +402,15 @@
    "what": "a spare seatbelt's buckle end lying on the long seat's cushion (the belt round Joe is drawn on him)",
    "shape": {
     "rect": [
-     271,
-     310,
-     47,
+     291,
+     296,
+     42,
      20
     ]
    },
    "stand": [
-    332,
-    359
+    345,
+    340
    ],
    "face": "W"
   }
@@ -418,12 +418,12 @@
  "marks": {
   "joe": {
    "at": [
-    318,
-    327
+    273,
+    372
    ],
    "face": "E",
-   "scale": 0.791,
-   "seat_height_px": 31,
+   "scale": 1.128,
+   "seat_height_px": 43,
    "seat_cm": 42.0,
    "note": "the ground point under his hips: it lies under the long seat's cushion; seated there his hips are seat_height_px above it. He faces E, across the car toward the facing seat."
   },
@@ -438,16 +438,16 @@
   },
   "ropes": {
    "at": [
-    309,
-    307
+    301,
+    313
    ],
-   "scale": 0.901,
+   "scale": 0.963,
    "floor": [
-    309,
-    342
+    301,
+    350
    ],
    "face": "W",
-   "note": "where Ranger sits to nibble: ON the long seat's cushion beside the bow. Draw him at `scale` (not the row's), his feet at `at`, sorted as if standing at `floor` (the carpet under him): in front of the ropes and of Joe."
+   "note": "where Ranger sits to nibble: ON the long seat's cushion beside the bow. Draw him at `scale` (not the row's), his feet at `at`, sorted as if standing at `floor` (the carpet under him): in front of the ropes, behind Joe (LIMO-23: he sits on Joe's far side, Joe's arm in front of him)."
   },
   "bag": {
    "at": [
@@ -492,27 +492,27 @@
  "stands": {
   "atropes": {
    "at": [
-    344,
-    340
+    335,
+    354
    ],
    "face": "W",
-   "scale": 0.89
+   "scale": 0.991
   },
   "atjoe": {
    "at": [
-    354,
-    330
+    322,
+    380
    ],
    "face": "W",
-   "scale": 0.818
+   "scale": 1.184
   },
   "atbelt": {
    "at": [
-    332,
-    359
+    345,
+    340
    ],
    "face": "W",
-   "scale": 1.031
+   "scale": 0.886
   },
   "atphone": {
    "at": [
@@ -752,28 +752,28 @@
    70
   ],
   "ropes-4": [
-   297,
-   297,
-   30,
-   14
+   275,
+   311,
+   36,
+   33
   ],
   "ropes-3": [
-   299,
-   297,
-   26,
-   17
+   277,
+   311,
+   32,
+   42
   ],
   "ropes-2": [
-   295,
-   297,
-   27,
-   20
+   279,
+   311,
+   31,
+   50
   ],
   "ropes-1": [
-   289,
-   297,
-   31,
-   23
+   281,
+   311,
+   29,
+   58
   ],
   "front": [
    0,

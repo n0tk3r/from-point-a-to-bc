@@ -1,80 +1,130 @@
-"""The foot of Mount Shosha (edo-shosha): the women's hall of Engyo-ji, about 29 April 1830, late afternoon and then
-sunset. The measurements, the camera, the two lights and their colours. PAINT-21E, round twenty-one.
+"""PAINT-23 (round twenty-three, RECOMPOSE and the act's watercolour): the foot of Mount Shosha (edo-shosha), its camera,
+its place measured and its two lights; shared by edo_shosha.py (the painter), edo_shosha_plan.py (the skeleton),
+edo_shosha_layout.py (every number of the scene file) and edo_shosha_play.py (the scene played). Round twenty-one's
+picture (PAINT-21E) was the flattest of the act: the hall and the hut boxes seen square-on from 3.4 m up, the mountain a
+flat green wedge. This one is seen through one camera, lower and turned.
 
-PLAN
-  The place  The east path's foot, where women stopped: the women's hall (today's Nyoirin-ji; what it looked like in 1830
-             is not recorded: a small deep-roofed hall on a low stone base, its double doors latticed, a lattice window in
-             its west side, is the game's). The mountain rises behind it and to the left, pines and maples in new leaf, a
-             late cherry in the shade; the east path climbs into the trees by stone steps and is gone; at its foot a small
-             stone that says women may not pass (such stones stood at many barred mountains; this one is the game's, its
-             writing our own marks). O-Ume's thatched hut at the right, a lantern on its hook; the bench where the women
-             wait; their failed combs and hairpins in a heap on a cloth. Beyond the terrace's edge at the right, far below,
-             the Harima plain, and on its hill, small and white, the castle (it lies south-east of the hall: the picture
-             puts the mountain at its left and the plain at its right, a liberty of the prints' kind, said in ready.md).
-  Light      Two states, the same geometry. GOLD: the late afternoon sun from the left and a little behind us (about 30
-             degrees up): the hall's west side glows, its front takes the light at a slant, the shadows lie to the right
-             and a little away. SUNSET: the sun low at the left, going down behind the trees on the mountain's flank (7
-             degrees up, a little beyond the hall): the west side red, the front in blue shade, the trees' long shadows
-             reaching right and toward us across the terrace, the sky in bands of chrome orange and geranium lake (the
-             act's one licence for them), the plain in the blue of the evening.
-  Depth      The land camera: horizon 280, full 590 (the lens 3.39 m above the terrace, level, focal 800), its vanishing
-             point at x 400. The hall's front corner stands 14.5 m off (row 467), the hall turned 22 degrees so that its
-             west side shows. Everything in centimetres in the world (X across, Y up, D from the lens)."""
+THE PLACE (the research of round twenty-one holds). The women's hall of Engyo-ji, about 29 April 1830, at the foot of the
+east path, where women stopped: women might not climb Mount Shosha (such barred mountains had a stone at the path's foot
+saying so; this one is the game's, its writing our own marks). The hall (today's Nyoirin-ji; what it looked like in 1830
+is not recorded): small and deep-roofed, two ken square on a low stone base, a pyramid roof of tiles with a jewel on its
+peak (a hoju in a lotus cup: nothing on it reads as a cross), its latticed double doors to the south with the name slips
+pasted round them, a lattice window in its west side that the sunset comes through (edo-hall, inside: the west lattice
+at the left, the doors behind the lens). The mountain rises behind it in pines and maples in new leaf, a late cherry in
+the shade; the east path climbs into the trees in worn stone steps and is gone; at its foot the small stone. O-Ume's
+thatched hut, its paper lantern on a hook by the door; the bench where the women wait, and their failed combs and pins in
+a heap on a cloth. Beyond the terrace's edge, far below, the Harima plain, and on its hill, small and white, the castle:
+it lies south-east of the hall, and the picture puts it at the right, beyond the hall, as round twenty-one did (a liberty
+of the prints' kind); it is drawn about three times larger than the eye would see it 6 km off ("the size of a thumbnail").
+
+THE CAMERA. We stand on the terrace south-west of the hall, by an old pine and a stone lantern, and look north-north-east
+along the foot of the mountain, the eye 2.52 m above the terrace (`full` - `horizon` = 230), level, the lens 700 px (a
+little wide). The hall stands near us at the right, square to the compass, so we see it three-quarters on: its west side
+(the lattice) running back toward the mountain at the left, its front (the doors) running away to the right; its two
+vanishing points lie on the horizon, one near the left edge and one far off at the right. Its roof rises into the boughs
+of the near pine's neighbour, which reach in over the top right. To the left of it the path's foot, the stone and
+Ryokai's step, the hut farther off under the trees; to its right, past its corner and the terrace's edge, the gap: the
+plain far below in layers of air, the far hills, the sky.
+
+    P(X, Y, D)      the picture point of a place: X cm across from the lens's line (right +), Y cm up, D cm away
+    foot(X, D)      the same on the ground;  G(x, y) the place on the ground (X, D) under a picture point
+    H_(a, b)        a place in the hall's own measure: a cm along its front from the south-west corner, b cm in
+
+LIGHT. Two states, the same geometry. GOLD (back.png and the plain cut-outs): the late afternoon sun from the left and
+behind us (38 degrees behind the left, 30 up): the hall's west side full in it, its front at a slant, shadows to the right
+and away, the old pine's shade across the near ground. SUNSET (sunset.png and every cut-out's -sunset twin): the sun low
+at the left, a little beyond us (15 degrees beyond the left, 6 up), going down behind the trees of the mountain's foot:
+the west side red, the front in blue shade, the terrace in the trees' long shadow with streaks of red light across it
+toward the right and toward us; the sky's glow red and orange low at the left through the trunks (the act's licence for
+chrome orange and geranium lake), the east over the plain in the evening's blue and rose."""
 
 import math
 
 import numpy as np
 
-from edo_town_kit import (PAINT, PAPER, LINE, mix, shade_of, col)
-
 W, H = 800, 600
 SHAPE = (H, W)
-HZ, FULL = 280, 590
-FOC = 800.0
-VX = 400.0
-S0 = 160.0 / 175.0
-EYE = (FULL - HZ) / S0                                       # 339.1 cm
+ID = "edo-shosha"
 OUT = "out/edo-shosha"
+
+# ---------------------------------------------------------------- the camera
+HZ, FULL = 330, 560          # the scene's `horizon` and `full`
+F = 700.0                    # the lens, px
+CX = 400.0                   # where lines running straight away meet
+S0 = 160.0 / 175.0           # px per cm at the row `full`
+EYE = (FULL - HZ) / S0       # 251.6 cm: the eye above the terrace
 
 
 def P(X, Y, D):
-    k = FOC / D
-    return (VX + X * k, HZ + (EYE - Y) * k)
+    k = F / D
+    return (CX + X * k, HZ + (EYE - Y) * k)
+
+
+def foot(X, D, h=0.0):
+    return P(X, h, D)
 
 
 def k_at(D):
-    return FOC / D
+    """Picture px per cm at a depth."""
+    return F / D
 
 
 def D_row(y):
-    return EYE * FOC / max(y - HZ, 0.5)
+    """The depth of the ground at a picture row below the horizon."""
+    return EYE * F / max(y - HZ, 0.25)
 
 
-def row_D(D):
-    return HZ + EYE * FOC / D
+def G(x, y):
+    """The place on the ground (X, D) under a picture point."""
+    D = D_row(y)
+    return ((x - CX) * D / F, D)
 
 
 def scale_at(y):
     return (y - HZ) / (FULL - HZ)
 
 
-# ---------------------------------------------------------------- the hall: a square plan turned 22 degrees
-THETA = math.radians(22.0)
-UX, UD = math.cos(THETA), math.sin(THETA)                    # along the front, left to right (the right end farther)
-VXH, VDH = -math.sin(THETA), math.cos(THETA)                 # into the hall, away from us (and to the left)
-FL = (-62.0, 1450.0)                                         # the front-left corner of the walls (X, D)
-SIDE = 360.0                                                 # the walls: 2 ken square
-BASE_H = 40.0                                                # the low stone base
-EAVE_Y, EAVE_OUT, APEX_Y, FINIAL_Y = 300.0, 112.0, 540.0, 620.0
-DOOR_A = (96.0, 264.0)                                       # the double doors along the front (a), from the floor
-DOOR_Y = (52.0, 246.0)
-LATTICE_B = (124.0, 236.0)                                   # the west side's lattice window along the side (b)
-LATTICE_Y = (118.0, 214.0)
+def grownup_px(y):
+    return 160.0 * scale_at(y)
+
+
+def r2(p):
+    return [int(round(p[0])), int(round(p[1]))]
+
+
+def ground_grid(shape=SHAPE):
+    """For every pixel below the horizon, the place on the ground it shows: (X, D, mask)."""
+    y, x = np.mgrid[0:shape[0], 0:shape[1]].astype(np.float32)
+    below = y > HZ + 0.5
+    D = EYE * F / np.maximum(y + 0.5 - HZ, 0.5)
+    X = (x + 0.5 - CX) * D / F
+    return X.astype(np.float32), D.astype(np.float32), below.astype(np.float32)
+
+
+# ---------------------------------------------------------------- the hall: square to the compass, so turned in our view
+PHI = math.radians(26.0)
+UX, UD = math.cos(PHI), math.sin(PHI)            # along the front, west to east (away to the right)
+VX, VD = -math.sin(PHI), math.cos(PHI)           # into the hall, south to north (away to the left)
+FL = (66.0, 1110.0)                              # the south-west corner of the walls (X, D)
+SIDE = 360.0                                     # the walls: two ken square
+BASE_H = 45.0                                    # the stone base
+BASE_OUT = 34.0                                  # how far the base stands out from the walls
+EAVE_Y = 300.0                                   # the wall plate (the walls' top), above the terrace
+EAVE_OUT = 124.0                                 # the deep eaves
+EAVE_DROP = 14.0                                 # the eave's edge a little below the wall plate's height, the roof's lip
+APEX_Y = 585.0                                   # the roof's peak
+DOOR_A = (98.0, 262.0)                           # the double doors along the front (a)
+DOOR_Y = (BASE_H + 8.0, 252.0)                   # the doorway: sill and lintel above the terrace
+LATTICE_B = (126.0, 234.0)                       # the west lattice along the side (b)
+LATTICE_Y = (112.0, 206.0)                       # its sill and head above the terrace (Ryokai's face at it)
+STEP = dict(a0=70.0, a1=290.0, out=74.0, h=22.0)  # the broad dressed stone before the doors (from the base's front)
+LOCK_AT = (180.0, 150.0)                         # the lock on the hasp: at the doors' meeting (a), its height (Y)
+LOCK_W, LOCK_H = 34.0, 19.0                      # the lock's carved block (cm): the rabbit on its waves (a shipwright's lock: big)
 
 
 def H_(a, b):
-    """A place in the hall's own measure (a along the front from its left corner, b in from the front) -> (X, D)."""
-    return (FL[0] + a * UX + b * VXH, FL[1] + a * UD + b * VDH)
+    """A place in the hall's own measure -> (X, D)."""
+    return (FL[0] + a * UX + b * VX, FL[1] + a * UD + b * VD)
 
 
 def HP(a, b, y):
@@ -82,11 +132,18 @@ def HP(a, b, y):
     return P(X, y, D)
 
 
+def hfoot(a, b):
+    return HP(a, b, 0.0)
+
+
+N_FRONT = (math.sin(PHI), 0.0, -math.cos(PHI))   # the doors face south: toward us and a little right
+N_WEST = (-math.cos(PHI), 0.0, -math.sin(PHI))   # the lattice faces west: left and a little toward us
+
 # ---------------------------------------------------------------- the two lights
 SUN = {
     # toward the sun: (across: negative is left, up, depth: negative is toward us)
-    "gold": (-0.78, 0.52, -0.34),
-    "sunset": (-0.95, 0.12, 0.29),
+    "gold": (-0.788 * 0.866, 0.50, -0.616 * 0.866),          # 38 degrees behind the left, 30 up
+    "sunset": (-0.966 * 0.995, 0.105, 0.259 * 0.995),        # 15 degrees beyond the left, 6 up
 }
 
 
@@ -102,101 +159,281 @@ def cast_of(light):
 
 
 def lit_of(light, normal):
-    """How much a face is lit (0 to 1) by the light's sun, given its outward normal (X, Y, D)."""
     s = unit(SUN[light])
     n = unit(normal)
     return max(0.0, s[0] * n[0] + s[1] * n[1] + s[2] * n[2])
 
 
-N_FRONT = (math.sin(THETA), 0.0, -math.cos(THETA))           # the hall's front faces us and a little right
-N_WEST = (-math.cos(THETA), 0.0, -math.sin(THETA))           # its west side faces left and a little toward us
+def shadow_pt(light, X, Y, D):
+    """Where the shadow of a point falls on the ground: (X, D)."""
+    cx, cd = cast_of(light)
+    return (X + cx * Y, D + cd * Y)
 
 
-def palette(light):
-    """The colours of each light, mixed from the box by name (style.md section 2)."""
-    P_ = PAINT
-    if light == "gold":
-        sun = mix(P_["naples"], PAPER, 0.35)
-        L = dict(
-            sky=[mix(P_["cobalt"], P_["prussian"], 0.38), mix(P_["cobalt"], P_["prussian"], 0.12), P_["cobalt"], mix(P_["cobalt"], P_["cerulean"], 0.55),
-                 P_["cerulean"], mix(P_["cerulean"], PAPER, 0.5), mix(PAPER, P_["naples"], 0.35), mix(P_["naples"], PAPER, 0.25)],
-            sun=sun, light_amt=1.0,
-            wood=mix(P_["sienna"], P_["ochre"], 0.42), wood_lit=mix(mix(P_["ochre"], P_["naples"], 0.35), P_["sienna"], 0.12),
-            wood_sh=shade_of(mix(P_["sienna"], P_["ochre"], 0.3), 0.40), wood_dark=mix(P_["sienna"], P_["prussian"], 0.55),
-            tile=mix(P_["prussian"], "#6f7890", 0.40), tile_lit=mix(mix("#8c96ae", PAPER, 0.25), P_["naples"], 0.25), tile_sh=mix(P_["prussian"], P_["ultra"], 0.25),
-            tile_edge=mix("#9aa4bc", PAPER, 0.3),
-            stone=mix(PAPER, P_["prussian"], 0.26), stone_lit=mix(mix(PAPER, P_["naples"], 0.35), P_["prussian"], 0.08), stone_sh=shade_of(mix(PAPER, P_["prussian"], 0.25), 0.40),
-            ground=mix(mix(P_["ochre"], PAPER, 0.58), P_["naples"], 0.12), ground_lit=mix(P_["naples"], PAPER, 0.38), ground_sh=shade_of(mix(P_["ochre"], PAPER, 0.5), 0.48),
-            grass=mix(P_["veronese"], P_["ochre"], 0.25), grass_lit=mix(P_["veronese"], P_["naples"], 0.4), grass_sh=mix(P_["viridian"], P_["veronese"], 0.4),
-            pine=mix(P_["viridian"], P_["prussian"], 0.38), pine_lit=mix(P_["viridian"], P_["naples"], 0.30), pine_far=mix(P_["viridian"], P_["cerulean"], 0.42),
-            maple=mix(P_["veronese"], P_["naples"], 0.18), maple_lit=mix(P_["veronese"], P_["naples"], 0.55), maple_sh=mix(P_["viridian"], P_["veronese"], 0.45),
-            cherry=mix(PAPER, P_["lake"], 0.30), cherry_sh=mix(mix(PAPER, P_["lake"], 0.42), P_["cobalt"], 0.18),
-            trunk=mix(P_["sienna"], P_["prussian"], 0.45), trunk_lit=mix(P_["sienna"], P_["ochre"], 0.35),
-            mount=mix(P_["viridian"], P_["prussian"], 0.28), mount_far=mix(mix(P_["viridian"], P_["cerulean"], 0.5), PAPER, 0.25),
-            mist=mix(PAPER, P_["naples"], 0.30),
-            glade=[mix(mix(P_["viridian"], P_["cerulean"], 0.5), PAPER, 0.35), mix(mix(P_["veronese"], PAPER, 0.4), P_["naples"], 0.2), mix(PAPER, P_["naples"], 0.38),
-                   mix(PAPER, P_["naples"], 0.5), mix(P_["naples"], PAPER, 0.25), mix(P_["naples"], PAPER, 0.15)],
-            plain=[mix(mix(P_["veronese"], P_["cerulean"], 0.5), PAPER, 0.45), mix(mix(P_["veronese"], P_["cerulean"], 0.35), PAPER, 0.3),
-                   mix(P_["veronese"], P_["ochre"], 0.25), mix(P_["veronese"], P_["viridian"], 0.25)],
-            far_hills=mix(P_["cerulean"], PAPER, 0.48), river=mix(PAPER, P_["cerulean"], 0.35),
-            castle=mix(PAPER, P_["naples"], 0.15), castle_roof=mix(P_["prussian"], P_["cerulean"], 0.35),
-            paper=mix(PAPER, P_["naples"], 0.12), paper_old=mix(PAPER, P_["ochre"], 0.25), ink=LINE,
-            inside=mix(P_["prussian"], P_["sienna"], 0.30), inside_far=mix(P_["prussian"], P_["ultra"], 0.35),
-            bar=mix(P_["naples"], PAPER, 0.35),                    # the bars of light inside (seen through the open doors)
-            thatch=mix(mix(P_["ochre"], P_["sienna"], 0.55), P_["prussian"], 0.12), thatch_lit=mix(mix(P_["ochre"], P_["sienna"], 0.3), P_["naples"], 0.2),
-            thatch_sh=shade_of(mix(P_["ochre"], P_["sienna"], 0.5), 0.42),
-            plaster=mix(PAPER, P_["ochre"], 0.22), plaster_sh=shade_of(mix(PAPER, P_["ochre"], 0.2), 0.42),
-            cast=mix(P_["cobalt"], P_["ultra"], 0.35), cast_amt=0.42,
-            lantern=mix(PAPER, P_["naples"], 0.1), cloth=mix(P_["ultra"], PAPER, 0.35), rice=PAPER, leaf=mix(P_["viridian"], P_["veronese"], 0.35),
-            boxwood=mix(P_["ochre"], P_["naples"], 0.35), shell=mix(P_["sienna"], P_["ochre"], 0.25), lacquer=mix(P_["prussian"], "#000000", 0.35), red=P_["vermilion"],
-        )
-    else:
-        red = mix(P_["vermilion"], P_["orange"], 0.45)
-        L = dict(
-            sky=[mix(P_["ultra"], P_["prussian"], 0.45), P_["ultra"], mix(P_["ultra"], P_["lake"], 0.22), mix(P_["lake"], P_["ultra"], 0.35),
-                 mix(P_["lake"], PAPER, 0.25), mix(mix(P_["lake"], P_["orange"], 0.35), PAPER, 0.25), mix(P_["orange"], PAPER, 0.35), mix(P_["naples"], PAPER, 0.35)],
-            glade=[mix(P_["lake"], P_["ultra"], 0.25), mix(P_["vermilion"], P_["lake"], 0.35), mix(P_["orange"], P_["vermilion"], 0.35), P_["orange"],
-                   mix(P_["orange"], P_["naples"], 0.45), mix(P_["naples"], PAPER, 0.35)],
-            sun=red, light_amt=1.0,
-            wood=shade_of(mix(P_["sienna"], P_["ochre"], 0.25), 0.55), wood_lit=mix(mix(P_["sienna"], red, 0.55), P_["orange"], 0.25),
-            wood_sh=mix(shade_of(mix(P_["sienna"], P_["ochre"], 0.2), 0.62), P_["prussian"], 0.15), wood_dark=mix(P_["prussian"], P_["sienna"], 0.30),
-            tile=mix(P_["prussian"], P_["ultra"], 0.30), tile_lit=mix(mix("#8c96ae", P_["lake"], 0.45), P_["orange"], 0.25), tile_sh=mix(P_["prussian"], P_["ultra"], 0.15),
-            tile_edge=mix(mix("#9aa4bc", P_["lake"], 0.35), PAPER, 0.15),
-            stone=mix(mix(PAPER, P_["prussian"], 0.38), P_["ultra"], 0.20), stone_lit=mix(mix(PAPER, P_["orange"], 0.55), P_["lake"], 0.12),
-            stone_sh=mix(mix(P_["ultra"], P_["prussian"], 0.3), mix(PAPER, P_["lake"], 0.3), 0.28),
-            ground=mix(mix(P_["ochre"], P_["lake"], 0.25), P_["ultra"], 0.30), ground_lit=mix(mix(P_["orange"], PAPER, 0.35), P_["lake"], 0.15),
-            ground_sh=mix(P_["ultra"], P_["cobalt"], 0.35),
-            grass=mix(mix(P_["viridian"], P_["veronese"], 0.4), P_["ultra"], 0.25), grass_lit=mix(P_["veronese"], P_["orange"], 0.45), grass_sh=mix(P_["viridian"], P_["prussian"], 0.45),
-            pine=mix(P_["prussian"], P_["viridian"], 0.30), pine_lit=mix(mix(P_["viridian"], P_["orange"], 0.45), P_["lake"], 0.15), pine_far=mix(P_["ultra"], P_["lake"], 0.25),
-            maple=mix(mix(P_["viridian"], P_["veronese"], 0.4), P_["ultra"], 0.25), maple_lit=mix(P_["veronese"], P_["orange"], 0.55), maple_sh=mix(P_["viridian"], P_["prussian"], 0.40),
-            cherry=mix(mix(PAPER, P_["lake"], 0.42), P_["ultra"], 0.20), cherry_sh=mix(mix(PAPER, P_["lake"], 0.45), P_["ultra"], 0.40),
-            trunk=mix(P_["prussian"], P_["sienna"], 0.30), trunk_lit=mix(P_["sienna"], red, 0.55),
-            mount=mix(P_["prussian"], P_["viridian"], 0.22), mount_far=mix(mix(P_["ultra"], P_["lake"], 0.25), PAPER, 0.25),
-            mist=mix(mix(PAPER, P_["lake"], 0.35), P_["orange"], 0.25),
-            plain=[mix(mix(P_["lake"], PAPER, 0.5), P_["ultra"], 0.2), mix(mix(P_["lake"], P_["viridian"], 0.45), PAPER, 0.25),
-                   mix(mix(P_["viridian"], P_["lake"], 0.3), P_["ultra"], 0.25), mix(mix(P_["viridian"], P_["sienna"], 0.3), P_["ultra"], 0.35)],
-            far_hills=mix(mix(P_["lake"], PAPER, 0.5), P_["cobalt"], 0.2), river=mix(mix(PAPER, P_["lake"], 0.35), P_["orange"], 0.15),
-            castle=mix(mix(PAPER, P_["lake"], 0.25), P_["orange"], 0.15), castle_roof=mix(P_["ultra"], P_["prussian"], 0.25),
-            paper=mix(mix(PAPER, P_["lake"], 0.12), P_["ultra"], 0.22), paper_old=mix(mix(PAPER, P_["ochre"], 0.25), P_["ultra"], 0.28), ink=LINE,
-            inside=mix(P_["prussian"], P_["sienna"], 0.22), inside_far=mix(P_["prussian"], P_["ultra"], 0.40),
-            bar=mix(mix(P_["orange"], P_["lake"], 0.35), PAPER, 0.15),
-            thatch=mix(mix(P_["ochre"], P_["sienna"], 0.3), P_["ultra"], 0.35), thatch_lit=mix(P_["orange"], P_["ochre"], 0.35), thatch_sh=mix(P_["ultra"], P_["sienna"], 0.30),
-            plaster=mix(mix(PAPER, P_["lake"], 0.15), P_["ultra"], 0.25), plaster_sh=mix(P_["ultra"], PAPER, 0.25),
-            cast=mix(P_["ultra"], P_["prussian"], 0.35), cast_amt=0.50,
-            lantern=mix(mix(PAPER, P_["orange"], 0.20), P_["ultra"], 0.15), cloth=mix(P_["ultra"], P_["prussian"], 0.25), rice=mix(PAPER, P_["lake"], 0.12), leaf=mix(P_["viridian"], P_["prussian"], 0.35),
-            boxwood=mix(P_["ochre"], P_["lake"], 0.30), shell=mix(P_["sienna"], P_["prussian"], 0.35), lacquer=mix(P_["prussian"], "#000000", 0.35), red=P_["vermilion"],
-        )
-    L["line"] = LINE
-    return L
+# ---------------------------------------------------------------- the place round the hall (X, D in cm; heights Y)
+# The east path: its steps climb from the terrace to the north-west, steeply, into the trees. Its centre line from the
+# front edge of the bottom step, and its width.
+PATH_FOOT = (-404.0, 1268.0)
+PATH_DIR = (0.33, 0.944)                        # up the path, in plan: away and a little to the left
+PATH_W = 150.0
+PATH_RISE = 16.0                                 # each step's riser (worn, set by hand)
+PATH_TREAD = 36.0
+PATH_N = 26                                      # how many steps there are before the trees take it
+STONE = (-276.0, 1214.0)                         # the small stone, right of the path's foot (toward the hall)
+STONE_SIZE = (34.0, 108.0, 20.0)                 # its face's width, its height, its thickness
+# O-Ume's hut, farther off under the trees, left of the path's foot, square to the compass as the hall is
+HUT = dict(sw=(-780.0, 1590.0), w=280.0, d=240.0, wall=182.0, eave=70.0, ridge=345.0)
+HUT_LANTERN_AB = (200.0, -14.0, 158.0)          # along its front from its south-west corner, out from it, the hook's height
+# The bench where the women wait: by the hall's south-east corner at the terrace's edge, square to the compass (it
+# faces south); the plain far below behind them
+BENCH = dict(w0=(-164.0, 1066.0), long=160.0, deep=34.0, h=42.0)
+COMBS = (-246.0, 986.0)                          # the heap of combs on its cloth, before the bench (X, D)
+# The terrace's edge on the right, past the hall's corner: the land drops away to the plain
+EDGE = [(260.0, 2700.0), (420.0, 2100.0), (560.0, 1700.0), (740.0, 1520.0), (1000.0, 1420.0), (1400.0, 1380.0)]
+# The road up from the town, at the bottom right: its centre line (X, D), up from below the frame to the terrace
+ROAD = [(640.0, 560.0), (560.0, 760.0), (470.0, 940.0), (390.0, 1060.0)]
+ROAD_W = 240.0
+# The near things (the front plane): the old pine at the left edge (its trunk's middle at the foot, its radius)
+NEAR_PINE = dict(X=-296.0, D=480.0, r=33.0)
+LANTERN = dict(X=-196.0, D=600.0)
+# The late cherry, in the shade at the mountain's foot behind the path and the hut
+CHERRY = (-560.0, 2250.0)
 
 
-def face_colour(L, base, base_lit, base_sh, light, normal):
-    """A face's flat colour in a light: its lit flat, its shade flat, or between (two flats, never a gradient)."""
-    t = lit_of(light, normal)
-    if t > 0.55:
-        return base_lit
-    if t > 0.18:
-        return mix(base, base_lit, 0.35)
-    if t > 0.0:
-        return base
-    return base_sh
+def bench_pts():
+    """The bench's footprint corners (X, D): front-left, front-right, back-right, back-left. It runs west to east (along
+    the hall's front, so square to the compass)."""
+    x0, d0 = BENCH["w0"]
+    L, dp = BENCH["long"], BENCH["deep"]
+    fl = (x0, d0)
+    fr = (x0 + L * UX, d0 + L * UD)
+    br = (fr[0] + dp * VX, fr[1] + dp * VD)
+    bl = (x0 + dp * VX, d0 + dp * VD)
+    return fl, fr, br, bl
+
+
+def bench_at(t, out=0.0):
+    """A place along the bench's front: t from 0 (west end) to 1 (east end), `out` cm in front of it."""
+    x0, d0 = BENCH["w0"]
+    L = BENCH["long"]
+    return (x0 + t * L * UX - out * VX, d0 + t * L * UD - out * VD)
+
+
+def hut_at(a, b):
+    sx, sd = HUT["sw"]
+    return (sx + a * UX + b * VX, sd + a * UD + b * VD)
+
+
+def path_at(s, across=0.0):
+    """A place on the path: s cm up it (in plan) from the bottom step's front edge, `across` cm to the right of its
+    middle -> (X, D)."""
+    dx, dd = PATH_DIR
+    rx, rd = dd, -dx                                       # to the right of the way up
+    return (PATH_FOOT[0] + dx * s + rx * across, PATH_FOOT[1] + dd * s + rd * across)
+
+
+# ---------------------------------------------------------------- where people stand (places on the ground)
+MARKS_W = {
+    "road": (322.0, 856.0),                       # from the town: up the road at the bottom right
+    "stone": (-270.0, 1110.0),                    # before the stone at the path's foot
+    "path": path_at(-70.0, -40.0),                     # the foot of the east path (the way up refuses)
+    "ryokai": path_at(-12.0, 34.0),               # Ryokai sitting on the bottom step, by the stone
+    "hall": H_(180.0, -168.0),                    # before the doors, a step back
+    "lock": H_(180.0, -126.0),                    # at the lock, close before the step: the close-up opens from here
+    "step": H_(250.0, -126.0),                    # by the step and the rice ball on its leaf
+    "ume": H_(-56.0, -70.0),                      # O-Ume, by the hall's south-east corner, between the hall and the bench
+    "hut": hut_at(196.0, -92.0),                  # before O-Ume's hut, its lantern on the hook
+    "bench": bench_at(0.55, 170.0),               # before the bench where the women wait
+    "tome": bench_at(0.16, 42.0),                 # Grandmother Tome, seated on the bench (her feet before it)
+    "wife": bench_at(0.50, 42.0),                 # the young wife with her baby, seated
+    "girl": bench_at(0.84, 42.0),                 # the girl with her grandmother's slip, seated
+    "view": (640.0, 1330.0),                      # at the terrace's edge past the bench: the plain far below, the castle
+    "combs": (COMBS[0] - 30.0, COMBS[1] - 84.0),  # before the heap of failed combs and pins
+}
+FACES = {"road": "W", "stone": "N", "path": "N", "ryokai": "E", "hall": "N", "lock": "N", "step": "N", "ume": "W", "hut": "N",
+         "bench": "N", "tome": "S", "wife": "S", "girl": "S", "view": "E", "combs": "N"}
+LATTICE_W = H_(-58.0, 180.0)                       # Ryokai at the west lattice, outside, once the hall is open: his face at it
+DOORWAY_W = H_(150.0, -40.0)                       # the foot of the open doors (the women go in here, and come out)
+HOMEWARD_W = [H_(60.0, -260.0), (420.0, 760.0), (700.0, 560.0)]    # the young wife and the girl, home down the road (off the frame)
+TALK_W = {"ryokai": (-285.0, 1122.0), "ume": H_(30.0, -150.0), "tome": bench_at(0.16, 112.0), "wife": bench_at(0.50, 112.0),
+          "girl": (-14.0, 989.0), "hall": H_(180.0, -150.0)}
+ARRIVE_W = {"road": [(236.0, 826.0), (406.0, 826.0)], "lock": [H_(130.0, -142.0), H_(236.0, -152.0)],
+            "hall": [H_(120.0, -172.0), H_(246.0, -186.0)]}
+EDGE_E_W = (560.0, 760.0)                          # the way back to the town: walk to here (the bottom right)
+LATTICE_TALK_W = (-126.0, 1258.0)                  # talking to Ryokai at the lattice: from beside him, clear of the bench
+NIGHT_UME_W = H_(116.0, -130.0)                     # Mind The Fire: O-Ume outside the hall with her lantern (edo-night.js)
+
+
+def walk_outline():
+    """The ground people may stand on, as picture points: the terrace from the bottom of the picture (clear of the old
+    pine's roots) up to the hall's base and its step, along the base's west side to the lattice, round to the path's
+    foot (never up it), along the hut's front; at the right up to the terrace's edge over the plain."""
+    bo = BASE_OUT
+    st = STEP
+    r_ = lambda p: (round(p[0], 1), round(p[1], 1))
+    base_se = hfoot(SIDE + bo + 10, -bo - 12)
+    step_r = hfoot(st["a1"] + 8, -bo - st["out"] - 12)
+    step_l = hfoot(st["a0"] - 8, -bo - st["out"] - 12)
+    base_sw = hfoot(-bo - 14, -bo - 12)
+    west_n = hfoot(-bo - 16, 250.0)
+    edge_r = foot(*EDGE[3])
+    pf_r = foot(*path_at(-3.0, PATH_W / 2 + 26))
+    pf_l = foot(*path_at(-3.0, -PATH_W / 2 - 20))
+    hut_r = foot(*hut_at(HUT["w"], -40.0))
+    hut_l = foot(*hut_at(20.0, -46.0))
+    bank_r = foot(*path_at(-3.0, -PATH_W / 2 - 60))                       # (the bank's flank between the path and the hut: its foot)
+    bank_m = foot(-478.0, 1560.0)
+    pts = [(78.0, 598.0), (794.0, 598.0), (794.0, edge_r[1] + 6), (edge_r[0], edge_r[1] + 6), (base_se[0] + 30, base_se[1] - 2), base_se, step_r, step_l,
+           base_sw, west_n, (west_n[0] - 40, west_n[1] - 1), pf_r, pf_l, bank_r, bank_m, hut_r, hut_l, (60.0, hut_l[1] + 10), (60.0, 520.0)]
+    return [r_(p) for p in pts]
+
+
+def mark(name):
+    return r2(foot(*MARKS_W[name]))
+
+
+def sizes():
+    return {k: round(grownup_px(foot(*v)[1]), 1) for k, v in MARKS_W.items()}
+
+
+if __name__ == "__main__":
+    print(f"eye {EYE:.1f} cm; the hall's corner {FL} at row {foot(*FL)[1]:.0f}; its vanishing points x {CX + F * UX / UD:.0f} and {CX + F * VX / VD:.0f}")
+    for k, v in MARKS_W.items():
+        p = foot(*v)
+        print(f"  {k:8s} {r2(p)}  D {v[1]:6.0f}  a grown-up {grownup_px(p[1]):5.1f} px")
+
+
+# ================================================================ the paints, the two lights, the watercolour's tools
+# (the act's watercolour, as Yui's: edo_village_kit's Wet, thin, glaze, hand, grade_cut, painted; the key line and the
+# ground's noise are this scene's own, for its own camera)
+from brush import F32, blur, grid, lerp, noise, rgb, sample, step, tint, glow as _glow
+from edo_village_kit import (P as paint, mixp, tintw, WHITE, NAPLES, CERULEAN, COBALT, ULTRA, PRUSSIAN, OCHRE, SIENNA, VERONESE,
+                             VIRIDIAN, LAKE, VERMILION, Wet, thin, hand, grade_cut, painted, resample, WPAPER)
+ORANGE, VIOLET, LILAC, DEEPV, CHROME = paint("chrome-orange"), paint("cobalt-violet"), paint("lilac"), paint("deep-violet"), paint("chrome-yellow")
+
+LIGHT = "gold"
+
+
+def set_light(name):
+    global LIGHT
+    LIGHT = name
+
+
+# how a local colour is seen in each light: lit (multiply, then the sun's own light added), and in shade (a glaze)
+_LIT_MUL = {"gold": np.array([1.0, 0.975, 0.90], F32), "sunset": np.array([0.97, 0.80, 0.70], F32)}
+_LIT_ADD = {"gold": np.array([0.15, 0.115, 0.035], F32), "sunset": np.array([0.58, 0.25, 0.07], F32)}
+_SHADE = {"gold": np.array([0.58, 0.64, 0.82], F32), "sunset": np.array([0.40, 0.42, 0.70], F32)}
+_HALF = {"gold": np.array([0.84, 0.85, 0.90], F32), "sunset": np.array([0.62, 0.56, 0.70], F32)}
+
+
+def col(c):
+    return rgb(c) if isinstance(c, str) else np.asarray(c, dtype=F32)
+
+
+def sunlit(c, t=1.0):
+    """A local colour in the light's sun, `t` how squarely (0..1)."""
+    c = col(c)
+    m = c * _LIT_MUL[LIGHT]
+    return np.clip(1 - (1 - m) * (1 - _LIT_ADD[LIGHT] * float(t)), 0, 1).astype(F32)
+
+
+def shaded(c, k=1.0):
+    """A local colour in shade: a cool glaze over it (`k` how deep)."""
+    c = col(c)
+    return np.clip(c * lerp(np.ones(3, F32), _SHADE[LIGHT], k), 0, 1).astype(F32)
+
+
+def faced(c, t):
+    """A local colour on a face that takes the sun by `t` (-1..1: below 0 it is turned away, in shade)."""
+    t = float(t)
+    if t <= 0:
+        return shaded(c, 1.0)
+    half = col(c) * _HALF[LIGHT]
+    if t < 0.3:
+        return lerp(shaded(c, 1.0), half, t / 0.3).astype(F32)
+    return lerp(half, sunlit(c, 1.0), min(1.0, (t - 0.3) / 0.55)).astype(F32)
+
+
+def face_t(normal):
+    """How squarely a face with this outward normal (X, Y, D) takes the light's sun: -1..1."""
+    s = unit(SUN[LIGHT])
+    n = unit(normal)
+    return s[0] * n[0] + s[1] * n[1] + s[2] * n[2]
+
+
+def SHADE_GLAZE():
+    """The glaze a cast shadow lays over the ground in this light (multiply)."""
+    return _SHADE[LIGHT]
+
+
+def SUNC():
+    """The colour of the sun's light itself (for rims and glows)."""
+    return np.clip(_LIT_ADD[LIGHT] * 1.6 + np.array([0.3, 0.3, 0.25], F32) * (LIGHT == "gold"), 0, 1).astype(F32)
+
+
+# ---------------------------------------------------------------- the air, by distance: toward the sky's colour at the horizon
+def horizon_c():
+    """The sky's colour at the horizon, which far things go toward (not grey)."""
+    if LIGHT == "gold":
+        return lerp(WPAPER, lerp(NAPLES, CERULEAN, 0.35), 0.16).astype(F32)
+    return lerp(lerp(WPAPER, LAKE, 0.22), VIOLET, 0.16).astype(F32)
+
+
+def air_t(D, start=1600.0, scale=40000.0, most=0.92):
+    return float(np.clip(most * (1.0 - math.exp(-max(D - start, 0.0) / scale)), 0, most))
+
+
+def aired(c, D, start=1600.0, scale=40000.0, most=0.92):
+    """A colour seen D cm off: toward the horizon's colour, more the farther."""
+    return lerp(col(c), horizon_c(), air_t(D, start, scale, most)).astype(F32)
+
+
+# ---------------------------------------------------------------- the key line, quieter (DEPTH.md), for this camera
+def keyline(layer, pts, row=None, lit=False, seed=0, weight=1.0, color=None, alpha=None):
+    """Thinner than the print's, a little broken, lost on the lit side of a thing (`lit`) and in the distance (above the
+    row HZ + 26: no line at all)."""
+    if lit or len(pts) < 2:
+        return layer
+    r = row if row is not None else max(p[1] for p in pts)
+    if r < HZ + 26:
+        return layer
+    t = float(np.clip((r - HZ) / (FULL - HZ), 0, 1))
+    w = (0.35 + 0.45 * t) * weight
+    a = alpha if alpha is not None else 0.22 + 0.34 * t
+    c = PRUSSIAN if color is None else color
+    rng = np.random.default_rng(int(seed * 7919 + pts[0][0] * 13 + pts[0][1] * 31) & 0x7FFFFFFF)
+    q = resample(pts, 3.0)
+    i = 0
+    while i < len(q) - 1:
+        n = int(rng.uniform(4, 13))
+        layer.line(q[i:i + n + 1], c, w * rng.uniform(0.8, 1.15), a * rng.uniform(0.55, 1.0))
+        i += n + (int(rng.uniform(1, 3)) if rng.random() < 0.55 else 0)
+    return layer
+
+
+# ---------------------------------------------------------------- noise that lies on the ground, by place (cm)
+_GTILES = {}
+
+
+def world_noise(X, D, cell, seed, octaves=3):
+    """Noise sampled by the place on the ground (X, D in cm), blotches `cell` cm across (or (across, along)): big near
+    us, small and flattened far off; it fades to 0.5 where a blotch would be smaller than a pixel."""
+    size = 1024
+    tile = _GTILES.get((seed, octaves))
+    if tile is None:
+        tile = _GTILES[(seed, octaves)] = noise((size, size), 64, seed, octaves)
+    cu, cv = (cell, cell) if np.isscalar(cell) else cell
+
+    def fold(t):
+        m = np.mod(t, 2 * (size - 2))
+        return np.where(m > size - 2, 2 * (size - 2) - m, m)
+    n = sample(tile, fold(X / cu * 64 + 300), fold(D / cv * 64 + 300))
+    k = F / np.maximum(D, 50.0)
+    small = np.minimum(cu * k, cv * k * k * EYE / F)
+    fade = np.clip((small - 1.0) / 2.5, 0, 1)
+    return (0.5 + (n - 0.5) * fade).astype(F32)
+
+
+def glaze(picture, mask, color=None, amount=1.0):
+    """A shadow as a glaze: the picture multiplied toward this light's shade through a mask."""
+    return tint(picture, SHADE_GLAZE() if color is None else col(color), np.clip(mask * amount, 0, 1).astype(F32))

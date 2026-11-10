@@ -260,6 +260,7 @@ export default {
     { id: "bench", src: art + "bench.png", base: 512, solid: [[185, 517], [417, 512], [417, 498], [356, 494], [251, 494], [189, 505]] },      // the bench, his jug and his brazier
     { id: "mirror", src: art + "mirror.png", base: 513, when: (g) => !g.flag("egypt.hasCopper") },                                         // propped on the bench, until he trades it away
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // The sunbeam and the flashlight's light are light, and so are drawn live, over the painting. Both start hidden:

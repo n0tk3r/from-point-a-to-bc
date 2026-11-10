@@ -394,6 +394,7 @@ export default {
     // The gang's standard's two streamers (round four), lifted out of the picture so that they can stir in the wind; the
     // pole and its board stay in back.png.
     { id: "streamers", src: art + "streamers.png", base: 398 },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). Nothing that moves is painted still: the

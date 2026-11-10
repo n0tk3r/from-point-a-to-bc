@@ -290,7 +290,9 @@ export default {
   blocked: [[[506, 441], [501, 439], [490, 438], [478, 438], [468, 439], [464, 441], [469, 443], [479, 445], [493, 445], [503, 443]], [[473, 429], [470, 428], [461, 427], [453, 428], [450, 429], [453, 430], [462, 431], [470, 430]],
     [[454, 426], [451, 425], [443, 424], [435, 425], [431, 426], [435, 427], [443, 427], [451, 427]], [[460, 440], [457, 439], [449, 438], [441, 439], [438, 440], [441, 441], [449, 442], [457, 441]],
     [[404, 446], [400, 445], [392, 445], [383, 445], [379, 446], [382, 447], [391, 447], [400, 447]], [[-175, 453], [-144, 453], [-127, 449], [-157, 449]], [[-162, 458], [-131, 458], [-113, 453], [-144, 453]],
-    [[74, 453], [105, 453], [115, 449], [85, 449]], [[94, 453], [125, 453], [134, 449], [104, 449]], [[73, 458], [105, 458], [115, 453], [84, 453]]],
+    [[74, 453], [105, 453], [115, 449], [85, 449]], [[94, 453], [125, 453], [134, 449], [104, 449]], [[73, 458], [105, 458], [115, 453], [84, 453]],
+    // PAINT-23 (round twenty-three): the street behind the near post at the left edge (the front plane): nobody walks out of sight there
+    [[6, 455], [34, 455], [34, 597], [6, 597]]],
 
   party: THREE,
   spawn: { default: M.east, ...M },
@@ -324,6 +326,11 @@ export default {
     { id: "well", src: art + "well.png", base: 444, solid: [[505, 441], [500, 439], [490, 438], [478, 438], [469, 439], [465, 441], [469, 443], [480, 445], [492, 445], [502, 443]] },
     { id: "bucket", base: 445, states: { up: art + "bucket.png", down: art + "bucket-down.png" }, state: (g) => (is(g, "edo.cook.water") && !night(g) ? "up" : "down") },
     { id: "gate", base: 452, states: { open: art + "gate.png", shut: art + "gate-shut.png" }, state: "open" },
+    // PAINT-23 (round twenty-three, tools/paint/DEPTH.md): the near plane, in front of everybody: the eave of a house on our own
+    // side of the highway across the top left and its post down the left edge; the hem of the next shop's curtain across the
+    // top right corner (it stirs). Nothing in it is clicked, and nothing clicked or stood on is behind it.
+    { id: "near", src: art + "near.png", plane: "front" },
+    { id: "near-noren", src: art + "near-noren.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json fx): the kitchen's smoke (hidden behind the houses' upper storeys), the two noren
@@ -335,6 +342,7 @@ export default {
     { id: "noren-cotton", type: "sway", plane: "noren-cotton", anchor: "top", amount: 1.0, period: 4.2 },
     { id: "kite", type: "birds", circle: { at: [600, 110], r: [70, 24] }, count: 1, speed: 12, size: 7, plane: "back" },
     { id: "sparrows", type: "birds", area: [[120, 500], [420, 494], [440, 560], [100, 566]], count: 4, look: "sparrow", size: 14, depth: true, shy: 120 },
+    { id: "near-noren", type: "sway", plane: "near-noren", anchor: "top", amount: 1.6, period: 4.6 },     // PAINT-23: the near curtain stirs
   ],
 
   // The people: O-Tane at her door, O-Kiku outside the school in her best (then in, at her desk), O-Shizu kneeling at the
@@ -352,8 +360,9 @@ export default {
 
   // Back to front: a later area lies over an earlier one (layout.json things; the people's boxes against their figures).
   hotspots: [
-    thing("roofs", "roofs", poly([[236, 214], [800, 206], [800, 252], [236, 252]]), M.keep, "N"),
-    thing("keep", "the keep", poly([[522, 180], [610, 180], [596, 136], [580, 66], [552, 66], [536, 136]]), M.keep, "N"),
+    // (PAINT-23: the town's roofs, row behind row up to the castle's hill, and the keep, larger and turned: their areas measured again)
+    thing("roofs", "roofs", poly([[236, 189], [800, 189], [800, 252], [236, 252]]), M.keep, "N"),
+    thing("keep", "the keep", poly([[633, 115], [638, 171], [633, 172], [495, 170], [500, 114], [530, 46], [538, 29], [555, 18], [577, 17], [595, 30]]), M.keep, "N"),
     thing("storehouse", "storehouse", poly([[391, 340], [505, 340], [505, 300], [391, 300]]), M.well, "N"),
     thing("cottonoffice", "cotton office", poly([[0, 452], [127, 452], [127, 104], [0, 104]]), M.cotton, "N", { use: cottonUse }),
     thing("noteoffice", "paper-note office", poly([[127, 452], [234, 452], [234, 104], [127, 104]]), M.note, "N"),

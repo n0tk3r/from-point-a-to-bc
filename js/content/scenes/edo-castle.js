@@ -324,6 +324,10 @@ export default {
     { id: "bucket-2", src: art + "bucket-2.png", base: 503, solid: [[517, 504], [537, 504], [536, 497], [518, 497]], when: crewOut },
     { id: "bucket-3", src: art + "bucket-3.png", base: 490, solid: [[543, 491], [563, 491], [562, 484], [544, 484]], when: crewOut },
     { id: "cherry", src: art + "cherry.png", base: 548, solid: [[70, 550], [108, 550], [108, 538], [70, 538]] },
+    // DEPTH-23 (round twenty-three, tools/paint/DEPTH.md): the near plane, in front of everybody: the old cherry's great limb
+    // up the left edge and its boughs of blossom across the top-left, a pine's bough tips at the top right, the moat's stone
+    // edge and its reeds along the bottom (edo_castle_near.py)
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json fx, in ENGINE-20's names): the double cherry's petals drifting down to the bank and
@@ -359,8 +363,11 @@ export default {
   hotspots: [
     thing("sky", "sky", poly([[0, 0], [800, 0], [800, 230], [470, 230], [470, 36], [250, 36], [250, 0]]), M.tile, "N"),
     thing("hills", "hills", poly([[430, 240], [800, 236], [800, 300], [430, 300]]), M.tile, "N"),
-    thing("keep", "the keep", poly([[244, 334], [478, 334], [466, 266], [440, 222], [404, 56], [380, 34], [340, 34], [316, 56], [280, 222], [254, 266]]), M.tile, "N"),
-    thing("stonebase", "the keep's stone base", poly([[244, 334], [478, 334], [446, 264], [274, 264]]), M.tile, "N"),
+    // DEPTH-23: the keep staged again through the same camera (100 m off, turned forty degrees, its corridor turret on behind
+    // the gate tower; its top ridge's middle where it was, x 360, row 34, for the herons): these two shapes measured again
+    // (edo_castle_layout.py, from the painting)
+    thing("keep", "the keep", poly([[281, 59], [273, 172], [228, 192], [255, 226], [206, 248], [236, 256], [213, 347], [594, 347], [594, 270], [483, 267], [513, 247], [463, 226], [491, 192], [446, 174], [439, 59], [341, 14]]), M.tile, "N"),
+    thing("stonebase", "the keep's stone base", poly([[214, 345], [231, 291], [489, 291], [506, 345], [506, 346], [214, 346]]), M.tile, "N"),
     thing("wall", "white wall", poly([[0, 344], [574, 348], [574, 400], [0, 404]]), M.moat, "N"),
     thing("terrace", "terrace", poly([[445, 436], [800, 436], [800, 476], [606, 470], [448, 470], [445, 468]]), M.crew, "N"),
     thing("ramp", "stone ramp", poly([[422, 540], [592, 540], [612, 470], [442, 470]]), M.tile, "N"),

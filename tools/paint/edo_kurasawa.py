@@ -1,25 +1,46 @@
 """PAINT-21A: Nishikurasawa, the rest village at the eastern foot of the Satta Pass, about 8 April 1830, morning
-(edo-kurasawa). In the woodblock manner of the act's style sheet (S/work-20-paintA/style.md): flat masses, a graded sky,
-one fine contour in prussian blue, few paints, the blue leading; keyed at 50 in `edo-morning` (PAINT-20A's key).
+(edo-kurasawa). PAINT-23 (round twenty-three, tools/paint/DEPTH.md, RECOMPOSE): seen again from a new place, through a new
+camera, in THREE PLANES and in WATERCOLOUR (the act's woodblock drawing laid in washes on paper, as Yui's pilot was).
 
-LIGHT   The act's sun: in the east, behind us and to the left, 30 degrees up (edo_kurasawa_kit.SUN3): faces turned to us
-        and to the left are lit, shadows fall to the right and away, flat and blue.
-DEPTH   horizon 300, full 590 (persp.Camera, as Yui: eye 317 cm, Z0 875, focal 800).
-TONES   light: Fuji's snow and its cap of cloud, the paper at the horizon, the sunlit road. middle: the bay, the sky, the
-        thatch, the hackberry's new leaves. dark: Mount Satta and its pines at the right, the teahouse's open front, the
-        palanquin, the trunks, the contour. Fuji owns the sky; the teahouse (left, its smoke and its sign) and the mound
-        with its palanquin (right) are where the eye goes next; the road west climbs out at the right.
-PLACE   We stand on the Tokaido at Nishikurasawa looking across the road to the bay (the act's compass, as at Yui: the bay
-        in front, Fuji across it, the way west to the right). The road runs across the picture (z 40 to 560) from the
-        left edge (from Yui) to the right edge, where it starts up the mountain. Beyond the road, on the bay's side, a
-        ledge at the cliff's foot: at the left O-Kuni's teahouse, its open front to the road (a bench under the eaves, the
-        grill with turban shells out front, a signboard of our own, the matted room open behind with the bay in its
-        back), then the low wall over the shore and the bay, the far coast curving back toward Yui and under Fuji; at the
-        right, the rest place before the 40th distance mound, its hackberry spreading over it, the bearers' palanquin set
-        down by it; behind, Mount Satta, dark, the cliff road cut across its face.
+PLACE   We stand ON THE TOKAIDO at the rest village, on the road's inland verge a few steps short of O-Kuni's teahouse,
+        and look along the road the way it goes: west, toward the pass (the act's compass, as at Yui: the bay on the left
+        with Fuji across it, the way west to the right). The road comes in from behind us at the left (from Yui), runs
+        along the teahouse's open front and away to the right; at the rest place it bends right, in front of the 40th
+        distance mound, and starts up the hill (the climb to the pass), out at the right edge. On the bay's side of the
+        road, beyond the teahouse, the trodden rest place out to a low wall over the shore; beyond the wall the bay, its
+        boats, the far shore curving back toward Yui and two capes stepping out from under Mount Satta, the headland at
+        the right; across the bay, Fuji, under its cap of cloud. (Camera and places: edo_kurasawa_view.py.)
+        O-Kuni's teahouse: thatched, its front open to the road under a deep eave on slim posts, a bench under the eave,
+        the matted room open behind on the bay, the door to the earth floor at its far end with the noren, the grill of
+        turban shells out before it, a signboard of our own at the corner (a shell, and brush marks that are not
+        characters). The bearers' palanquin set down at the mound's foot; Soshichi's willow trunks on the verge.
+LIGHT   The act's sun: in the east, behind us and to the left, about 39 degrees up (view.SUN3), low along the road from
+        Yui: the teahouse's near end, the mound's and the trunk's left sides lit; the teahouse's front, along the road,
+        under its eave in shade, the inside in shade, the bay bright through its open back. Shadows fall to the right and
+        away, each a cool glaze over the local colour; a shore pine behind us on the left, out of the picture, lays its
+        long shadow across the road at our feet, dappled, its edge leading in.
+DEPTH   horizon 342, full 562 (persp.Camera, FOCAL 680): the eye 2.4 m above the road; a grown-up 90 to 160 px where
+        people stand. The road and the teahouse turned 45 degrees: two vanishing points, neither in the picture.
+NEAR    (near.png, front.png: edo_kurasawa_near.py) the hackberry's crown and the bough it sends out toward us, over the
+        top right corner; the near end of O-Kuni's eave with a reed blind let down in the first bay, at the top left; the
+        roadside's bank along the bottom (sasa, pampas, a stone), in the shade of the hill behind us. Dark, warm in the
+        darks, lit only along the edges the sun finds.
+MIDDLE  the play, the best lit: the road (packed earth, tracks worn by feet, stones and tufts that shrink with distance),
+        the teahouse's front and its things, the rest place, the mound and the hackberry's trunk, the palanquin, the
+        trunks; every standing thing throws its shadow one way. NOTHING NEW STANDS WHERE SOMEBODY CAN WALK BEHIND IT.
+FAR     (edo_kurasawa_far.py: Yui's recipe at this camera) the bay with boats at three distances; the far shore and
+        Fuji's foothills, two capes, Mount Satta with the cliff road across its face; Fuji, the snow bare paper; one
+        cloud in the whole sky, the cap on Fuji (cloud.png). Each layer paler toward the sky's colour. No line.
+LIGHTS  the lightest light is the paper: Fuji's snow and its cap of cloud; in the play the sunlit road beyond the pine's
+        shade, leading to the bend.
+PAPER   watercolor.wash on the backdrop and wash_cut (the same seed) on every cut-out, just before the palette (finish_all):
+        WET (the `soft` mask) the sky 1, Fuji 0.65, the far shore and the capes 0.5, Satta 0.3, the open water 0.75 at
+        the horizon falling to 0.2 at the wall; 0 on everything that stands in the play.
 
-  python3 edo_kurasawa.py fast     the composition without the brush pass (out/edo-kurasawa-1-under.png, -2-all.png)
-  python3 edo_kurasawa.py          the full passes: out/edo-kurasawa/ (back.png, the cut-outs, layout.json)
+  python3 edo_kurasawa.py fast        the composition without the brush pass (out/edo-kurasawa-1-under.png, -2-all.png)
+  python3 edo_kurasawa.py fast wash   the same with the paper's finish (out/edo-kurasawa-fast-comp.png)
+  python3 edo_kurasawa.py             the full passes: out/edo-kurasawa/ (back.png, the cut-outs, layout.json), -comp.png
+  python3 install.py edo-kurasawa     keys it in the game's paints and installs it; then python3 ../stamp.py
 """
 
 import json
@@ -31,760 +52,492 @@ import time
 import numpy as np
 from PIL import Image
 
-from brush import *
+from brush import (F32, blur, glow, grid, lerp, mask_line, mask_poly, noise, over, ramp, rgb, step, strokes, tint, warp, grain,
+                   palette_of, to_palette, save)
 import land
-from edo_kurasawa_kit import *
+import depth as D
+import watercolor as WC
+from edo_village_kit import (WPAPER, SHADE, SHADE_WARM, SHADE_PINES, Wet, thin, mixp, glaze, hand, NAPLES, CERULEAN, COBALT, ULTRA,
+                             PRUSSIAN, OCHRE, SIENNA, VERONESE, VIRIDIAN)
+from edo_village_far import HORIZON_C
+import edo_kurasawa_view as V
+from edo_kurasawa_view import (HZ, FULL, SHAPE, W, H, P, k, G, U, NL, NR, TEA, GRILL, SIGN, MOUND, HACK, KAGO, TRUNKS, SUN, ROAD_W,
+                               road_mid, road_edge, road_lift, S_CLIMB, add, ground_grid)
+import edo_kurasawa_far as FAR
+import edo_kurasawa_things as T
+import edo_kurasawa_near as NEAR
 
 SEED = 1831
 OUT = "out/edo-kurasawa"
-SHAPE = (H, W)
-HZ, FULL = 300, 590
-V = View(HZ, FULL, sun=(1.15, 0.85))                              # the sun a little more behind us than at Yui (an hour on)
-gp, kz = V.gp, V.kz
-
-# ---------------------------------------------------------------- where things are (cm; see the module's PLACE)
-ROAD = dict(z0=40.0, z1=560.0)                                     # the Tokaido across the picture
-TEA = dict(x0=-1150.0, x1=-250.0, z0=640.0, z1=1140.0, eave=215.0, over=95.0, ridge=545.0, floor=48.0, lintel=180.0,
-           posts=(-1000.0, -720.0, -440.0, -250.0), door=(-440.0, -250.0))
-BENCH = dict(x0=-722.0, x1=-470.0, z0=588.0, z1=632.0, h=44.0)
-LEDGE = [(-1600.0, 860.0), (-300.0, 900.0), (100.0, 950.0), (300.0, 1010.0), (430.0, 1120.0), (520.0, 1350.0), (600.0, 1700.0),
-         (3000.0, 1700.0)]                                         # the ledge's seaward edge (the wall's top), then the mountain's foot
-RAMP_FAR = [(646, 476), (686, 463), (726, 447), (766, 429), (812, 409)]    # the climb: the road's far edge rising to the right edge
-RAMP_NEAR = [(812, 441), (768, 460), (728, 476), (694, 488), (664, 492)]   # and its near edge
-MOUND = dict(x=640.0, z=1420.0, r=230.0, h=230.0)                 # the 40th distance mound
-KAGO = dict(x=180.0, z=880.0, length=96.0, width=84.0, height=104.0, pole=400.0)   # the palanquin, set down (its pole along x)
-TRUNKS = dict(x=-115.0, z=598.0, w=56.0, d=40.0, tier=15.0, n=5)  # Soshichi's willow trunks, set down at the road's edge
-GRILL = dict(x=-330.0, z=548.0, w=112.0, d=46.0, h=56.0)         # O-Kuni's grill, out before the teahouse's door
-SIGN = dict(x=-200.0, z=602.0, w=34.0, h=150.0)                  # the signboard, at the teahouse's corner
-FUJI = Fuji(summit=(262.0, 84.0), foot=302.0, half=410.0, snow=0.40, seed=21)
-FAR_ROW = 302
-ROAD_EARTH = lerp(EARTH, STONE, 0.24)                              # the road: packed earth, a little greyer than Yui's street
-COAST = [(236, 352), (270, 334), (310, 322), (360, 314), (430, 309), (520, 305), (620, 303)]   # the coast back toward Yui (its water's edge)
+EARTH = lerp(thin(OCHRE, 0.45), PRUSSIAN, 0.16)            # the Tokaido: packed earth (Yui's street, a little greyer)
+GRASS = thin(mixp(VERONESE, VIRIDIAN, 0.40), 0.16)
+GRASS_DRY = thin(mixp(OCHRE, VERONESE, 0.40), 0.28)
 
 
-def ledge_z(x):
-    xs = [p[0] for p in LEDGE]
-    zs = [p[1] for p in LEDGE]
-    return float(np.interp(x, xs, zs))
+# ================================================================ where things are on the ground, for every pixel
+def road_field(X, Z):
+    """For every pixel of the ground: how far along the road (s, cm) its nearest point is, and how far to the side of
+    the road's middle (d, cm; positive to the right, inland)."""
+    best = np.full(X.shape, 1e9, dtype=F32)
+    s_of = np.zeros(X.shape, dtype=F32)
+    d_of = np.zeros(X.shape, dtype=F32)
+    for s in np.arange(-500.0, 2400.0, 12.0):
+        mx, mz = road_mid(s)
+        dx, dz = V.road_dir(s)
+        rx, rz = dz, -dx                                       # to the right of the way
+        ex, ez = X - mx, Z - mz
+        dist = ex * ex + ez * ez
+        closer = dist < best
+        best = np.where(closer, dist, best)
+        s_of = np.where(closer, s, s_of)
+        d_of = np.where(closer, ex * rx + ez * rz, d_of)
+    return s_of, d_of
 
 
-def ledge_top(x0=-1600.0, x1=3000.0, n=60):
-    return [gp(x_, ledge_z(x_)) for x_ in np.linspace(x0, x1, n)]
+def tea_field(X, Z):
+    """For every pixel of the ground: the place relative to the teahouse (u along its front, w back from it)."""
+    c0 = TEA.c0
+    ex, ez = X - c0[0], Z - c0[1]
+    return ex * U[0] + ez * U[1], ex * NL[0] + ez * NL[1]
 
 
-# ================================================================ pass 1: broad and flat
-def paint_sky(seed):
-    """Yui's graded band: deep at the top, the paper at the horizon; seven bands (style.md section 3)."""
-    rows = [0, 44, 92, 140, 186, 226, 260, HZ + 2]
-    cols = [shade(COBALT, 0.42), mixp(COBALT, ULTRA, 0.3), COBALT, mixp(COBALT, CERULEAN, 0.55), CERULEAN,
-            tintw(CERULEAN, 0.55), PAPER, PAPER]
-    pic = bands(SHAPE, rows, cols, soft=6.0, wobble=2.5, seed=seed, patch=0.02)
+def ground_region():
+    return mask_poly(SHAPE, V.ground_outline(), soft=0.8, wobble=1.2, seed=29)
+
+
+# ================================================================ pass 1: broad, in washes
+def paint_ground(pic, seed):
+    """The level ground: the road, its verges, the rest place on the bay's side, the inland verge, the climb's foot.
+    Each a graded wash, pale and cool far off, deeper and warmer toward us, never even; measured in the world, so its
+    patches and the road's worn tracks shrink with distance and follow the road round its bend."""
     x, y = grid(SHAPE)
-    glow(pic, tintw(NAPLES, 0.5), (np.clip(1 - x / 420.0, 0, 1) * np.clip(1 - np.abs(y - 272) / 70.0, 0, 1) * 0.10).astype(F32))
-    return pic
+    X, Z, below = ground_grid(SHAPE)
+    gm = ground_region() * below
+    s_, d_ = road_field(X, Z)
+    tu, tw = tea_field(X, Z)
+    wn = FAR.world_noise
+    t = np.clip((y - HZ) / float(H - HZ), 0, 1) ** 0.85
+    hw = ROAD_W / 2
+    wander = (wn(X, Z, 150, seed + 60, 2) - 0.5) * 40
+    road = (1 - step(hw - 12, hw + 12, np.abs(d_ + wander))) * gm
+    # ---- everything off the road: earth with grass coming up in it, greener inland and toward the wall
+    base = ramp(t, [(0.0, lerp(HORIZON_C, EARTH, 0.42)), (0.30, thin(EARTH, 0.36)), (0.70, thin(lerp(EARTH, SIENNA, 0.06), 0.14)), (1.0, lerp(EARTH, SIENNA, 0.20))])
+    base *= (1 + ((wn(X, Z, 160, seed + 30, 3) - 0.5) * 0.12 + (wn(X, Z, 40, seed + 31, 2) - 0.5) * 0.07)[..., None])
+    kk = (wn(X, Z, 420, seed + 32, 2) - 0.5) * 0.04
+    base[..., 0] += kk
+    base[..., 2] -= kk
+    over(pic, np.clip(base, 0, 1), gm)
+    inland = np.clip((d_ - hw - 20) / 120.0, 0, 1) * gm
+    bayside = np.clip((-d_ - hw - 40) / 200.0, 0, 1) * gm
+    tread = 1 - step(0.40, 0.70, wn(X, Z, 230, seed + 33, 3))                   # trodden patches stay bare
+    grass_c = ramp(t, [(0.0, lerp(HORIZON_C, GRASS, 0.5)), (0.4, GRASS), (1.0, lerp(GRASS, mixp(VIRIDIAN, PRUSSIAN, 0.4), 0.25))])
+    grass_c = lerp(grass_c, GRASS_DRY, (wn(X, Z, 120, seed + 34, 2) * 0.55)[..., None])
+    grass_c *= (1 + (wn(X, Z, 34, seed + 39, 2) - 0.5)[..., None] * 0.16)
+    over(pic, grass_c, (np.clip(inland * (0.78 + 0.22 * (1 - tread)), 0, 1) * 0.95).astype(F32))
+    wall_side = np.clip((tw - 380) / 260.0, 0, 1) * (tu > TEA.L - 40) * bayside        # toward the wall, beyond the teahouse
+    over(pic, grass_c, (wall_side * (1 - tread * 0.7) * 0.7).astype(F32))
+    # the rest place: trodden pale where people stop and bearers wait (before the mound, beyond the teahouse)
+    rest = mask_poly(SHAPE, [P(*TEA.xz(TEA.L + 20, -60)), P(*TEA.xz(TEA.L + 40, 300)), P(200, 2050), P(560, 1740), P(700, 1520),
+                             P(560, 1380), P(250, 1330)], soft=8.0, wobble=6.0, seed=seed + 37) * gm
+    over(pic, thin(EARTH, 0.66), (rest * 0.55 * (0.7 + 0.3 * tread)).astype(F32))
+    # ---- the road: packed earth; three tracks worn pale by feet (no wheel ruts: nothing wheeled used this road), its
+    # middle and edges rougher; a little greyer than the verges
+    earth = ramp(t, [(0.0, lerp(HORIZON_C, EARTH, 0.46)), (0.28, thin(lerp(EARTH, PRUSSIAN, 0.05), 0.36)), (0.60, thin(lerp(EARTH, SIENNA, 0.10), 0.12)),
+                     (1.0, lerp(lerp(EARTH, SIENNA, 0.22), PRUSSIAN, 0.06))])
+    across = d_ / hw
+    wob = (wn(X, Z, (70, 900), seed + 35, 2) - 0.5) * 0.30
+    track = sum(np.exp(-((across - c - wob) / 0.17) ** 2) for c in (-0.52, 0.04, 0.56))
+    wuv = FAR.world_noise_uv
+    streak = wuv(d_, s_, Z, (12, 220), seed + 41, 2)                           # the tracks are many short scuffs, along the way
+    earth = lerp(earth, thin(EARTH, 0.78), (np.clip(track, 0, 1) * (0.25 + 0.45 * streak))[..., None])
+    earth *= (1 + ((wuv(d_, s_, Z, (26, 400), seed + 36, 3) - 0.5) * 0.14 + (wn(X, Z, 90, seed + 38, 2) - 0.5) * 0.06)[..., None])
+    scuff = step(0.66, 0.80, wuv(d_, s_, Z, (8, 60), seed + 42, 2))             # small dark scuffs and dents, where feet have dug in
+    earth *= (1 - (scuff * 0.08)[..., None])
+    rough = step(0.78, 1.0, np.abs(across)) * 0.16 + np.exp(-((across - 0.30 - wob) / 0.07) ** 2) * 0.10 + np.exp(-((across + 0.26 - wob) / 0.07) ** 2) * 0.10
+    earth *= (1 - rough[..., None])
+    over(pic, np.clip(earth, 0, 1), road)
+    tint(pic, thin(mixp(OCHRE, PRUSSIAN, 0.5), 0.40), ((1 - step(5.0, 24.0, np.abs(np.abs(d_ + wander) - hw))) * gm * 0.62).astype(F32))   # the road's crumbling edges
+    # ---- the climb: from the bend the road starts up the hill; its surface turns up toward the sun (lighter), the hill
+    # cut back for it on its far side (a bank of earth in shade, grass on its lip)
+    climb = road * np.clip((s_ - S_CLIMB) / 140.0, 0, 1)
+    over(pic, lerp(thin(EARTH, 0.60), NAPLES, 0.10), (climb * 0.45).astype(F32))
+    # the drip line along the teahouse's front, where the rain comes off the thatch: a shallow gutter of darker earth,
+    # with small stones set in it; it runs to the road's vanishing point
+    drip = (1 - step(6.0, 20.0, np.abs(tw + TEA.over - 6))) * (tu > -TEA.over_end) * (tu < TEA.L + TEA.over_end) * gm
+    tint(pic, thin(mixp(SIENNA, PRUSSIAN, 0.45), 0.42), (drip * 0.55).astype(F32))
+    info = dict(ground=gm, road=road, s=s_, d=d_, tu=tu, tw=tw, inland=inland, bayside=bayside, rest=rest)
+    return info
 
 
-def paint_far(pic, seed):
-    """Fuji, the far shore of the head of the bay at its foot, and the coast curving back toward Yui."""
-    fm, snow = FUJI.paint(pic, PAPER, seed)
-    far = mask_poly(SHAPE, [(-10, FAR_ROW - 7), (160, FAR_ROW - 8), (360, FAR_ROW - 6), (520, FAR_ROW - 9), (700, FAR_ROW - 7),
-                            (820, FAR_ROW - 6), (820, HZ + 3), (-10, HZ + 3)], soft=0.8, wobble=1.4, seed=seed + 4)
-    over(pic, tintw(mixp(COBALT, VIRIDIAN, 0.35), 0.62), far)
-    # the coast back toward Yui: low hills behind a thread of sand, nearer and lower at the left, curving out to the far
-    # shore under Fuji (beyond a kilometre: no contour, two flats, pulled toward the paper and toward blue)
-    hills = [(236, 284), (262, 286), (300, 289), (350, 292), (410, 295), (480, 298), (560, 300), (650, 301)]
-    hm = mask_poly(SHAPE, hills + list(reversed(COAST)) + [(236, 360)], soft=0.7, wobble=1.2, seed=seed + 5)
-    over(pic, lerp(mixp(VIRIDIAN, COBALT, 0.45), PAPER, 0.48), hm)
-    # the hills' lit faces (toward the left): a lighter flat in their upper part
-    hl = mask_poly(SHAPE, [(236, 286), (262, 287), (300, 290), (350, 293), (410, 296), (480, 299), (480, 302), (410, 301), (350, 300),
-                           (300, 300), (262, 303), (236, 305)], soft=0.6, wobble=1.0, seed=seed + 7)
-    over(pic, lerp(mixp(VERONESE, COBALT, 0.35), PAPER, 0.42), (hl * hm * 0.8).astype(F32))
-    beach = mask_line(SHAPE, COAST, [3.2, 2.8, 2.3, 1.8, 1.4, 1.1, 0.9], soft=0.4)
-    over(pic, tintw(NAPLES, 0.40), beach.astype(F32))
-    return fm, snow
-
-
-def satta_outline():
-    """Mount Satta at the right: from where its foot meets the bay, up out of the top of the picture."""
-    return [(506, 372), (528, 350), (560, 318), (590, 284), (622, 246), (650, 214), (676, 180), (700, 146), (724, 108), (748, 70),
-            (772, 36), (794, 4), (812, -10)]
-
-
-def satta_mask():
-    pts = satta_outline()
-    return mask_poly(SHAPE, pts + [(820, 640), (600, 640), (560, 430), (530, 404)], soft=0.6, wobble=1.6, seed=31)
-
-
-def paint_satta(pic, seed):
-    """Mount Satta: a dark green mass at the right, close (the road climbs it from here). Flats, not modelling: its spurs
-    run down to the left, each spur's face turned to the morning sun a lit flat, the gullies between viridian toward
-    prussian; crumbly rock showing pale in two scars; no contour inside (style.md sections 5 and 7)."""
-    x, y = grid(SHAPE)
-    m = satta_mask()
-    body = flat(lerp(VIRIDIAN, PRUSSIAN, 0.34), SHAPE, seed + 12, 0.03, 70)
-    over(pic, body, m)
-    # the spurs: bands across the slope (running down to the left), warped; the first part of each a lit flat
-    u = (x * 0.62 + y * 0.78)
-    u = u + (warp(noise(SHAPE, (90, 60), seed + 13, 3), 12.0, 40, seed + 14) - 0.5) * 70
-    ph = (u / 92.0) % 1.0
-    lit_m = (step(0.04, 0.10, ph) * (1 - step(0.40, 0.46, ph))) * m
-    over(pic, mixp(VIRIDIAN, VERONESE, 0.42), (lit_m * 0.9).astype(F32))
-    hi_m = (step(0.08, 0.13, ph) * (1 - step(0.20, 0.26, ph))) * m * step(0.45, 0.6, noise(SHAPE, (40, 90), seed + 16, 2))
-    over(pic, mixp(VERONESE, NAPLES, 0.18), (hi_m * 0.55).astype(F32))
-    gully = (step(0.62, 0.68, ph) * (1 - step(0.86, 0.92, ph))) * m
-    over(pic, lerp(VIRIDIAN, PRUSSIAN, 0.64), (gully * 0.6).astype(F32))
-    # crumbly rock: two pale scars where the face has slipped
-    for (cx_, cy_, w_, h_) in ((722, 296, 16, 40), (774, 182, 10, 28)):     # slip scars: wide where the ground broke away, a tongue below
-        tongue = [(cx_ - w_, cy_), (cx_ - w_ * 0.4, cy_ - 3), (cx_ + w_ * 0.5, cy_ - 2), (cx_ + w_, cy_ + 2), (cx_ + w_ * 0.45, cy_ + h_ * 0.55),
-                  (cx_ + w_ * 0.15, cy_ + h_), (cx_ - w_ * 0.2, cy_ + h_ * 0.7), (cx_ - w_ * 0.6, cy_ + h_ * 0.3)]
-        sc = mask_poly(SHAPE, tongue, soft=0.6, wobble=2.0, seed=seed + int(cx_))
-        over(pic, lerp(tintw(OCHRE, 0.30), PRUSSIAN, 0.22), (sc * m * 0.9).astype(F32))
-        lip = mask_line(SHAPE, [(cx_ - w_, cy_), (cx_ - w_ * 0.4, cy_ - 3), (cx_ + w_ * 0.5, cy_ - 2), (cx_ + w_, cy_ + 2)], 1.6, soft=0.4)
-        over(pic, lerp(VIRIDIAN, PRUSSIAN, 0.65), (lip * m * 0.8).astype(F32))
-    # the headland's foot in the bay: a darker band where the rock meets the water (the old shore begins here)
-    foot = mask_line(SHAPE, [(506, 372), (520, 384), (540, 398), (560, 412)], [6, 7, 7, 6], soft=1.0)
-    over(pic, lerp(SIENNA, PRUSSIAN, 0.55), (foot * m * 0.8).astype(F32))
+def climb_bank(pic, seed):
+    """The bank cut back for the climb on its far side, behind the road at the right edge, under the mound."""
+    pts_top, pts_foot = [], []
+    for s in np.linspace(S_CLIMB - 120, S_CLIMB + 700, 14):
+        e = road_edge(s, -1, 10)
+        lift = road_lift(s)
+        pts_foot.append(P(e[0], e[1], lift))
+        pts_top.append(P(e[0] + NL[0] * 20, e[1] + NL[1] * 20, lift + 30 + 0.16 * max(0, s - S_CLIMB)))
+    m = mask_poly(SHAPE, pts_top + pts_foot[::-1], soft=0.7, wobble=1.2, seed=seed + 40)
+    over(pic, lerp(thin(mixp(OCHRE, SIENNA, 0.25), 0.30), PRUSSIAN, 0.30), (m * 0.85).astype(F32))
+    lip = mask_line(SHAPE, pts_top, 2.4, soft=0.5)
+    over(pic, mixp(VIRIDIAN, PRUSSIAN, 0.30), (lip * 0.8).astype(F32))
     return m
 
 
-def water_mask():
-    pts = ledge_top(-1600, 3000, 60)
-    poly = [(-10, HZ - 1), (W + 10, HZ - 1), (W + 10, pts[-1][1])] + list(reversed(pts)) + [(-10, pts[0][1])]
-    return mask_poly(SHAPE, poly, soft=0.6, wobble=0.6, seed=3)
+def hull(points):
+    pts = sorted(set((round(p[0], 3), round(p[1], 3)) for p in points))
+    if len(pts) < 3:
+        return pts
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lower, upper = [], []
+    for p in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    for p in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    return lower[:-1] + upper[:-1]
 
 
-def paint_bay(pic, seed):
-    """The bay in seven bands (style.md section 3): the paper at the horizon, cerulean, cobalt, toward ultramarine near."""
-    wm = water_mask()
-    rows = [HZ, HZ + 6, HZ + 14, HZ + 27, HZ + 46, HZ + 72, HZ + 108, HZ + 170]
-    cols = [tintw(CERULEAN, 0.62), tintw(CERULEAN, 0.40), tintw(CERULEAN, 0.16), mixp(CERULEAN, COBALT, 0.42), mixp(CERULEAN, COBALT, 0.75),
-            COBALT, mixp(COBALT, ULTRA, 0.3), mixp(COBALT, ULTRA, 0.3)]
-    wb = bands(SHAPE, rows, cols, soft=3.5, wobble=0.0, seed=seed + 20, patch=0.015)
-    over(pic, wb, wm)
-    return wm
+def shadow_poly(foot, tops):
+    """The shadow on the ground of a thing: its foot (ground places X, Z) and its high points (X, Y, Z) laid along the
+    sun. -> picture points of the hull."""
+    pts = list(foot) + [V.shadow_of(X, Z, Y) for X, Y, Z in tops]
+    return [P(px, pz) for px, pz in hull(pts)]
 
 
-def paint_ground(pic, seed):
-    """The ledge (earth and grass; the rest place before the mound), its wall's top over the shore, and the road."""
+def cast_shadows(pic, info, seed):
+    """Every standing thing's shadow, one way (to the right and away), as a glaze over the ground; and the long shadow of
+    a shore pine behind us on the left, out of the picture, lying across the road at our feet, dappled. -> its mask."""
+    gm = info["ground"]
+    X, Z, below = ground_grid(SHAPE)
+    sh = np.zeros(SHAPE, dtype=F32)
+
+    def add(pts, amount=0.9, soft=0.7, wobble=0.8, s=0):
+        if len(pts) >= 3:
+            np.maximum(sh, mask_poly(SHAPE, pts, soft=soft, wobble=wobble, seed=seed + s) * amount, out=sh)
+    Tt = TEA
+    r = Tt.roof_pts()
+    foot = [Tt.xz(0, 0), Tt.xz(Tt.L, 0), Tt.xz(Tt.L, Tt.D), Tt.xz(0, Tt.D)]
+    tops = [(*Tt.xz(*r[k_])[:1], r["e"], Tt.xz(*r[k_])[1]) for k_ in ("A", "B", "C", "D")]
+    tops = [(Tt.xz(*r[k_])[0], r["e"] + Tt.thick, Tt.xz(*r[k_])[1]) for k_ in ("A", "B", "C", "D")] + \
+           [(Tt.xz(*r[k_])[0], r["top"], Tt.xz(*r[k_])[1]) for k_ in ("R0", "R1")]
+    add(shadow_poly(foot + [Tt.xz(*r["A"]), Tt.xz(*r["B"])], tops), 0.92, s=1)
+    for u in T.EAVE_POSTS:                                                  # the eave's posts: thin lines along the light
+        X0, Z0 = Tt.xz(u, T.POST_W)
+        X1, Z1 = V.shadow_of(X0, Z0, Tt.eave)
+        np.maximum(sh, mask_line(SHAPE, [P(X0, Z0), P(X1, Z1)], [max(1.0, 10 * k(Z0)), max(1.0, 10 * k(Z1))], soft=0.5) * 0.85, out=sh)
+    Xs, Zs = Tt.xz(SIGN["u"], SIGN["w"])
+    X1, Z1 = V.shadow_of(Xs, Zs, SIGN["h"])
+    np.maximum(sh, mask_line(SHAPE, [P(Xs, Zs), P(X1, Z1)], [max(1.0, 8 * k(Zs)), max(1.5, 30 * k(Z1))], soft=0.5) * 0.85, out=sh)
+    # the grill, the palanquin, the trunks (cut-outs: their shadows are the backdrop's)
+    g = GRILL
+    gfoot = [Tt.xz(g["u"] - g["len"] / 2, g["w"] - g["wid"] / 2), Tt.xz(g["u"] + g["len"] / 2, g["w"] - g["wid"] / 2),
+             Tt.xz(g["u"] + g["len"] / 2, g["w"] + g["wid"] / 2), Tt.xz(g["u"] - g["len"] / 2, g["w"] + g["wid"] / 2)]
+    add(shadow_poly(gfoot, [(fx, g["h"], fz) for fx, fz in gfoot]), 0.85, s=3)
+    kg = KAGO
+    kc = (kg["X"], kg["Z"])
+    kfoot = [add_(kc, -kg["length"] / 2, -kg["width"] / 2), add_(kc, kg["length"] / 2, -kg["width"] / 2), add_(kc, kg["length"] / 2, kg["width"] / 2),
+             add_(kc, -kg["length"] / 2, kg["width"] / 2)]
+    add(shadow_poly(kfoot, [(fx, kg["height"], fz) for fx, fz in kfoot] + [(*add_(kc, -kg["pole"] / 2, 0)[:1], kg["height"] + 18, add_(kc, -kg["pole"] / 2, 0)[1])]), 0.8, s=4)
+    tk = TRUNKS
+    tc = (tk["X"], tk["Z"])
+    tfoot = [add_(tc, -tk["w"] / 2 - 20, -tk["d"] / 2 - 12), add_(tc, tk["w"] / 2 + 24, -tk["d"] / 2 - 10), add_(tc, tk["w"] / 2 + 20, tk["d"] / 2 + 12),
+             add_(tc, -tk["w"] / 2 - 18, tk["d"] / 2 + 10)]
+    tfoot_b = [add_(tc, -tk["w"] / 2, -tk["d"] / 2), add_(tc, tk["w"] / 2, -tk["d"] / 2), add_(tc, tk["w"] / 2, tk["d"] / 2), add_(tc, -tk["w"] / 2, tk["d"] / 2)]
+    add(shadow_poly(tfoot_b, [(fx, tk["tier"] * tk["n"] + 34, fz) for fx, fz in tfoot_b]), 0.85, s=5)
+    # the mound and the hackberry's trunk (their shadows go behind them, toward Satta's foot)
+    m = MOUND
+    mfoot = [(m["X"] + m["r"] * math.cos(a), m["Z"] + m["r"] * 0.9 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 18)[:-1]]
+    add(shadow_poly(mfoot, [(m["X"], m["h"], m["Z"])]), 0.8, s=6)
+    add(shadow_poly([(m["X"] - HACK["r"], m["Z"]), (m["X"] + HACK["r"], m["Z"])], [(m["X"] - HACK["r"], 560, m["Z"]), (m["X"] + HACK["r"], 560, m["Z"])]), 0.8, s=7)
+    sh = (sh * gm).astype(F32)
+    glaze(pic, sh, SHADE, 1.0)
+    # ---- the shore pine behind us on the left: its trunk's long shadow comes in across the road from the left edge,
+    # and its crown's lies at our feet in the bottom left: a body of shade, its edge scalloped by the pads of needles,
+    # running in along the light; the sun comes through it in flecks
+    x0_, z0_ = -1150.0, -120.0
+    ln_ = math.hypot(*SUN)
+    ux, uz = SUN[0] / ln_, SUN[1] / ln_
+    sl = slice(480, H)
+    trunk = [P(x0_ + SUN[0] * t_ + 10 * math.sin(t_ / 70.0), z0_ + SUN[1] * t_) for t_ in np.linspace(300, 760, 14)]
+    pine = np.zeros(SHAPE, dtype=F32)
+    np.maximum(pine, mask_line(SHAPE, trunk, [max(1.2, 40 * k(z0_ + SUN[1] * t_)) for t_ in np.linspace(300, 760, 14)], soft=0.8) * 0.9, out=pine)
+    rngp = np.random.default_rng(seed + 77)
+    Uw, Vw = X[sl] * ux + Z[sl] * uz, -X[sl] * uz + Z[sl] * ux
+    mm = np.zeros_like(Uw)
+    for i in range(34):                                                   # each pad of needles throws a long oval along the light
+        hgt = rngp.uniform(760.0, 1180.0)
+        side = rngp.normal(0, 120.0)
+        cxw, czw = x0_ + SUN[0] * hgt - uz * side, z0_ + SUN[1] * hgt + ux * side
+        a_, b_ = rngp.uniform(90.0, 170.0), rngp.uniform(40.0, 80.0)
+        e_ = ((Uw - (cxw * ux + czw * uz)) / a_) ** 2 + ((Vw - (-cxw * uz + czw * ux)) / b_) ** 2
+        np.maximum(mm, np.clip((1 - e_) * 30.0, 0, 1), out=mm)
+    for i in range(40):                                                   # smaller pads at its edge: the scallops
+        hgt = rngp.uniform(760.0, 1180.0)
+        side = rngp.normal(-60, 150.0)
+        cxw, czw = x0_ + SUN[0] * hgt - uz * side, z0_ + SUN[1] * hgt + ux * side
+        a_, b_ = rngp.uniform(40.0, 80.0), rngp.uniform(20.0, 36.0)
+        e_ = ((Uw - (cxw * ux + czw * uz)) / a_) ** 2 + ((Vw - (-cxw * uz + czw * ux)) / b_) ** 2
+        np.maximum(mm, np.clip((1 - e_) * 30.0, 0, 1), out=mm)
+    # the body of it: everything on the far side of the crown's middle line is shade (it lies off the frame's left)
+    cxw0, czw0 = x0_ + SUN[0] * 960.0, z0_ + SUN[1] * 960.0
+    body = np.clip(((-(Uw - (cxw0 * ux + czw0 * uz)) / 120.0) * 0 + (-(Vw - (-cxw0 * uz + czw0 * ux)) - 40.0) / 30.0), 0, 1)
+    body = body * np.clip(1 - np.abs(Uw - (cxw0 * ux + czw0 * uz)) / 260.0, 0, 1) ** 0.3
+    mm = np.maximum(mm, body)
+    fleck = step(0.70, 0.74, FAR.world_noise(X, Z, (70, 50), seed + 72, 2))[sl]
+    pine[sl] = np.maximum(pine[sl], mm * (1 - fleck * 0.85))
+    pine = (blur(pine, 0.5) * gm).astype(F32)
+    glaze(pic, pine, SHADE_PINES, 0.52)
+    info["pine_shade"] = pine
+    return np.maximum(sh, pine)
+
+
+def add_(c, a, b):
+    """A place a cm along the road's line and b cm toward the bay's side from c."""
+    return (c[0] + U[0] * a + NL[0] * b, c[1] + U[1] * a + NL[1] * b)
+
+
+def water_region(info):
+    """Where the bay is seen: below the horizon, above the far edge of the ground, not on Satta."""
     x, y = grid(SHAPE)
-    X, Z, below = V.cam.floor_grid(SHAPE)
-    top = ledge_top()
-    gm = mask_poly(SHAPE, [(-10, top[0][1])] + top + [(W + 10, top[-1][1]), (W + 10, H + 10), (-10, H + 10)], soft=0.6, wobble=0.8, seed=seed + 29)
-    t = np.clip((y - HZ) / (H - HZ), 0, 1)
-    earth = flat(EARTH, SHAPE, seed + 30, 0.05, 40)
-    earth = lerp(earth, PAPER, ((1 - t) ** 1.6 * 0.40)[..., None])
-    grassy = flat(lerp(GRASS, EARTH, 0.30), SHAPE, seed + 31, 0.05, 30)
-    grassy = lerp(grassy, PAPER, ((1 - t) ** 1.6 * 0.30)[..., None])
-    ledge_t = np.clip((Z - ROAD["z1"]) / 260.0, 0, 1)
-    gr_n = noise(SHAPE, (40, 12), seed + 32, 3)
-    grass_m = np.clip(ledge_t * 1.4 - 0.25 + (gr_n - 0.5) * 0.9, 0, 1) * (Z > ROAD["z1"])
-    ground = earth.copy()
-    over(ground, grassy, grass_m.astype(F32))
-    # the rest place before the mound: trodden bare where bearers wait
-    worn = mask_poly(SHAPE, [gp(250, 600), gp(560, 600), gp(560, 1250), gp(300, 1150), gp(150, 900)], soft=6.0, wobble=5.0, seed=seed + 37)
-    over(ground, lerp(EARTH, PAPER, 0.12), (worn * 0.75).astype(F32))
-    near_m = np.clip((ROAD["z0"] - Z) / 40.0 + (noise(SHAPE, (50, 10), seed + 33, 3) - 0.5) * 1.2, 0, 1) * below
-    over(ground, flat(lerp(GRASS, EARTH, 0.25), SHAPE, seed + 34, 0.06, 30), near_m.astype(F32))
-    over(pic, ground, gm)
-    # the wall's top: a band of set stones along the ledge's seaward edge (left and middle)
-    edge = [p for p in top if p[0] < 600]
-    over(pic, lerp(STONE, PAPER, 0.20), (mask_line(SHAPE, [(p[0], p[1] + 1.5) for p in edge], 3.4, soft=0.4) * 0.95).astype(F32))
-    over(pic, lerp(STONE_SHADE, PAPER, 0.15), (mask_line(SHAPE, [(p[0], p[1] + 3.6) for p in edge], 1.2, soft=0.3) * 0.8).astype(F32))
-    # the road: packed earth, soft-edged on the grass, two worn tracks along it
-    rpoly = [gp(-4000, ROAD["z0"]), gp(4000, ROAD["z0"]), gp(4000, ROAD["z1"]), gp(-4000, ROAD["z1"])]
-    rm = mask_poly(SHAPE, rpoly, soft=2.0, wobble=3.0, seed=seed + 35)
-    road = flat(ROAD_EARTH, SHAPE, seed + 36, 0.04, 50)
-    road = lerp(road, PAPER, ((1 - t) ** 1.6 * 0.35)[..., None])
-    over(pic, road, (rm * gm).astype(F32))
-    for zc, wd in ((170.0, 80.0), (400.0, 70.0)):
-        tr = mask_poly(SHAPE, [gp(-4000, zc - wd / 2), gp(4000, zc - wd / 2), gp(4000, zc + wd / 2), gp(-4000, zc + wd / 2)], soft=4.0, wobble=4.0, seed=seed + int(zc))
-        over(pic, lerp(ROAD_EARTH, PAPER, 0.20), (tr * 0.5 * gm).astype(F32))
-    # the climb: at the right the road turns up across the mountain's foot: a ramp of road (a lit flat: it faces up to
-    # the sun) rising from the rest place to the right edge, the cut bank above it in shade (the mountain cut back for
-    # it, grass on its lip), the grassy slope of the foot below it
-    slope = mask_poly(SHAPE, [(600, 430), (646, 476), (664, 492), (694, 488), (728, 476), (768, 460), (812, 441), (812, 470), (760, 482),
-                              (700, 496), (640, 492)], soft=0.8, wobble=1.6, seed=seed + 40)
-    over(pic, flat(lerp(GRASS, EARTH, 0.25), SHAPE, seed + 41, 0.05, 30), slope)
-    bank = mask_poly(SHAPE, [(p[0], p[1] - 15 - 0.06 * (p[0] - 646)) for p in RAMP_FAR] + list(reversed(RAMP_FAR)), soft=0.6, wobble=1.2, seed=seed + 38)
-    over(pic, lerp(lerp(tintw(OCHRE, 0.20), SIENNA, 0.18), PRUSSIAN, 0.45), bank)
-    lip = mask_line(SHAPE, [(p[0], p[1] - 15 - 0.06 * (p[0] - 646)) for p in RAMP_FAR], 2.6, soft=0.5)
-    over(pic, GRASS_SHADE, (lip * 0.9).astype(F32))
-    ramp = mask_poly(SHAPE, RAMP_FAR + RAMP_NEAR, soft=0.8, wobble=1.0, seed=seed + 39)
-    over(pic, lerp(lerp(ROAD_EARTH, PAPER, 0.14), NAPLES, 0.12), ramp)
-    over(pic, lerp(ROAD_EARTH, PRUSSIAN, 0.12), (mask_line(SHAPE, RAMP_NEAR, 1.4, soft=0.4) * 0.7).astype(F32))
-    return gm, rm
-
-
-def cast_shadows(pic, ground):
-    """Every standing thing's shadow, flat and blue, laid along the sun (to the right and away)."""
-    sh = Paper(SHAPE)
-    sc = EARTH_SHADE
-    # the teahouse: its right end and its roof's eave, laid flat
-    xR, z0, z1, e = TEA["x1"], TEA["z0"], TEA["z1"], TEA["eave"]
-    eave_z0 = z0 - TEA["over"]
-    pts = [(xR + TEA["over"], e, eave_z0), (xR + TEA["over"], e, z1 + TEA["over"]), (xR - 250, TEA["ridge"], (z0 + z1) / 2)]
-    shp = V.shadow_pts(pts)
-    sh.poly([gp(xR, z0), shp[0], shp[2], shp[1], gp(xR, z1)], sc, 1.0)
-    # the signboard and the trunks
-    sx, sz = SIGN["x"], SIGN["z"]
-    sh.poly(V.shadow_pts([(sx - 15, 0, sz), (sx + 15, 0, sz), (sx + 15, SIGN["h"], sz), (sx - 15, SIGN["h"], sz)]), sc, 0.95)
-    tx, tz = TRUNKS["x"], TRUNKS["z"]
-    th = TRUNKS["tier"] * TRUNKS["n"] + 10
-    sh.poly(V.shadow_pts([(tx - 28, 0, tz - 20), (tx + 28, 0, tz - 20), (tx + 28, th, tz + 20), (tx - 28, th, tz - 20)]) + [gp(tx + 28, tz + 20)], sc, 0.95)
-    # the grill
-    gx, gz = GRILL["x"], GRILL["z"]
-    sh.poly(V.shadow_pts([(gx - 56, 0, gz - 23), (gx + 56, 0, gz - 23), (gx + 56, GRILL["h"], gz - 23), (gx - 56, GRILL["h"], gz - 23)]), sc, 0.95)
-    # the mound and its tree: the mound's shadow to the right, the crown's shadow a big flat patch to the right and back
-    # the palanquin
-    kx, kzz = KAGO["x"], KAGO["z"]
-    L, Wd, Hh = KAGO["length"], KAGO["width"], KAGO["height"]
-    sh.poly(V.shadow_pts([(kx - L / 2, Hh, kzz - Wd / 2), (kx + L / 2, Hh, kzz - Wd / 2), (kx + L / 2, Hh, kzz + Wd / 2), (kx - L / 2, Hh, kzz + Wd / 2)])
-            + [gp(kx - L / 2, kzz + Wd / 2)], sc, 0.85)
-    c, a = sh.done()
-    shade_ground(pic, (a * ground).astype(F32))
-    # the hill behind us (the foot of the mountain the road has come along) throws its morning shadow across the near
-    # verge and the near edge of the road, from the left: a hard edge, wavy where the hill's pines are, no gradient
-    edge = [(-10, 528), (60, 534), (120, 528), (170, 540), (240, 548), (300, 556), (360, 566), (430, 574), (500, 586), (560, 598), (600, 612)]
-    hm = mask_poly(SHAPE, edge + [(-10, 612)], soft=0.7, wobble=2.5, seed=97)
-    shade_ground(pic, (hm * ground).astype(F32))
-    return np.maximum(a, hm)
+    return ((y > HZ - 0.5) * (1 - info["satta"]) * (1 - ground_region())).astype(F32)
 
 
 def under(seed=SEED):
     info = {}
-    pic = paint_sky(seed)
-    info["fuji"], info["snow"] = paint_far(pic, seed)
-    info["water"] = paint_bay(pic, seed)
-    info["satta"] = paint_satta(pic, seed)
-    info["ground"], info["road"] = paint_ground(pic, seed)
-    info["shadow"] = cast_shadows(pic, info["ground"])
-    land.haze(pic, HZ, PAPER, 0.30, 0.10, info["ground"])
-    return np.clip(pic, 0, 1), info
+    pic = FAR.paint_sky(seed)
+    info["sky"] = pic.copy()
+    info["fuji"], info["snow"] = FAR.paint_fuji(pic, seed)
+    info["farland"] = FAR.paint_far_land(pic, seed)
+    info["satta"], info["satta_line"] = FAR.paint_satta(pic, seed)
+    info["water"] = FAR.paint_bay(pic, seed, water_region(info))
+    info.update(paint_ground(pic, seed))
+    info["bank"] = climb_bank(pic, seed)
+    info["shadow"] = cast_shadows(pic, info, seed)
+    land.haze(pic, HZ, HORIZON_C, 0.22, 0.10, info["ground"])
+    return np.clip(pic, 0, 1).astype(F32), info
 
 
-# ================================================================ pass 3: the crisp things (the backdrop's)
-def teahouse(sheet, info):
-    """O-Kuni's teahouse: its open front to the road, a thatched hip roof (the front slope lit, the right hip in shade),
-    the matted room behind the bench (its back open on the bay), the door to the earth floor at the right (the noren is a
-    cut-out), the right end wall in shade. One flat per face, the contour round the silhouette and the posts."""
-    T = TEA
-    x0, x1, z0, z1, e, fl, li = T["x0"], T["x1"], T["z0"], T["z1"], T["eave"], T["floor"], T["lintel"]
-    dx0, dx1 = T["door"]
-    row0 = gp(x1, z0)[1]
-    mat_x0, mat_x1 = x0, dx0
-    # ---- the inside, seen through the open front: the matted room (left) and the earth floor (right)
-    sheet.poly([gp(mat_x0, z0, fl), gp(mat_x1, z0, fl), gp(mat_x1, z1, fl), gp(mat_x0, z1, fl)], TATAMI)
-    # the mats' edges: dark cloth borders running back, and across
-    for xm in np.arange(mat_x0 + 90, mat_x1, 90.0):
-        sheet.line([gp(xm, z0, fl), gp(xm, z1, fl)], lerp(TATAMI, PRUSSIAN, 0.35), max(0.6, 3 * kz(z0)), 0.8)
-    for zm in (z0 + 180, z0 + 360):
-        sheet.line([gp(mat_x0, zm, fl), gp(mat_x1, zm, fl)], lerp(TATAMI, PRUSSIAN, 0.35), max(0.6, 3 * kz(zm)), 0.8)
-    # the back: open on the bay (the bay's own blue through it), its sill and its lintel, two posts
-    bay_c = mixp(COBALT, ULTRA, 0.18)
-    sheet.poly([gp(mat_x0, z1, fl), gp(mat_x1, z1, fl), gp(mat_x1, z1, 190), gp(mat_x0, z1, 190)], bay_c)
-    sheet.poly([gp(mat_x0, z1, fl), gp(mat_x1, z1, fl), gp(mat_x1, z1, fl + 10), gp(mat_x0, z1, fl + 10)], WOOD_SHADE)
-    for xp in (-1000.0, -720.0, mat_x1):
-        sheet.line([gp(xp, z1, fl), gp(xp, z1, 190)], WOOD_DARK, max(1.0, 9 * kz(z1)), 1.0)
-    # the inside's shade: the room under the roof, darker at its top (the ceiling's shadow) and on the left wall
-    sheet.poly([gp(mat_x0, z1, 190), gp(mat_x1, z1, 190), gp(mat_x1, z0, li), gp(mat_x0, z0, li)], lerp(WOOD_DARK, PRUSSIAN, 0.2))
-    # the earth floor (doma) behind the door: dark, a warmer floor, the stove's mouth faintly warm at the back
-    sheet.poly([gp(dx0, z0, 0), gp(dx1, z0, 0), gp(dx1, z0, li), gp(dx0, z0, li)], lerp(WOOD_DARK, PRUSSIAN, 0.25))
-    sheet.poly([gp(dx0, z0, 0), gp(dx1, z0, 0), gp(dx1, z1, 0), gp(dx0, z1, 0)], lerp(EARTH, PRUSSIAN, 0.55))
-    sheet.poly([gp(dx0 + 40, z1 - 10, 0), gp(dx0 + 120, z1 - 10, 0), gp(dx0 + 120, z1 - 10, 70), gp(dx0 + 40, z1 - 10, 70)], lerp(STONE_SHADE, PRUSSIAN, 0.3))
-    sheet.ellipse(*gp(dx0 + 80, z1 - 10, 30), 3.2, 2.0, lerp(VERMILION, SIENNA, 0.5), 0.8)
-    # ---- the front: posts, the sill under the mats, the lintel, the wall strip above it to the eave
-    wall_c = lerp(PLASTER_LIT, COBALT, 0.28)                                      # the wall strip is in the eave's shade
-    sheet.poly([gp(x0, z0, li), gp(x1, z0, li), gp(x1, z0, e + 15), gp(x0, z0, e + 15)], wall_c)
-    sheet.poly([gp(x0, z0, li - 8), gp(x1, z0, li - 8), gp(x1, z0, li + 6), gp(x0, z0, li + 6)], WOOD_SHADE)     # the lintel beam
-    sheet.poly([gp(mat_x0, z0, fl - 10), gp(mat_x1, z0, fl - 10), gp(mat_x1, z0, fl + 3), gp(mat_x0, z0, fl + 3)], WOOD_LIT)  # the sill
-    sheet.poly([gp(mat_x0, z0, 0), gp(mat_x1, z0, 0), gp(mat_x1, z0, fl - 10), gp(mat_x0, z0, fl - 10)], lerp(WOOD_SHADE, PRUSSIAN, 0.25))
-    for xp in T["posts"]:
-        sheet.line([gp(xp, z0, 0), gp(xp, z0, e + 10)], WOOD_SHADE, max(1.2, 13 * kz(z0)), 1.0)
-        sheet.line([gp(xp - 4, z0, 0), gp(xp - 4, z0, e + 10)], WOOD_LIT, max(0.8, 5 * kz(z0)), 1.0)
-    # the reed blind rolled up under the eave over the matted part, tied in two places
-    for xb0, xb1 in ((x0, mat_x1 - 10),):
-        a, b = gp(xb0, z0 - 14, li + 18), gp(xb1, z0 - 14, li + 18)
-        sheet.line([a, b], lerp(tintw(OCHRE, 0.35), SIENNA, 0.2), max(2.0, 13 * kz(z0)), 1.0)
-        sheet.line([(a[0], a[1] + 3), (b[0], b[1] + 3)], lerp(SIENNA, PRUSSIAN, 0.3), 0.7, 0.6)
-    # ---- the right end wall (in shade): plaster between the posts, a little window
-    sheet.poly([gp(x1, z0, 0), gp(x1, z1, 0), gp(x1, z1, e + 15), gp(x1, z0, e + 15)], PLASTER_SHADE)
-    sheet.line([gp(x1, z1, 0), gp(x1, z1, e + 10)], WOOD_DARK, max(1.0, 11 * kz(z1)), 1.0)
-    sheet.poly([gp(x1, z0 + 200, 100), gp(x1, z0 + 330, 100), gp(x1, z0 + 330, 170), gp(x1, z0 + 200, 170)], lerp(WOOD_DARK, PRUSSIAN, 0.3))
-    for zz in np.linspace(z0 + 215, z0 + 315, 5):
-        sheet.line([gp(x1, zz, 100), gp(x1, zz, 170)], WOOD_SHADE, 0.8, 0.9)
-    # ---- the roof: thatch, a hip roof; the front slope (lit) and the right hip (shade), the thick eave
-    ov = T["over"]
-    eF = [(x0 - ov, z0 - ov), (x1 + ov, z0 - ov)]                 # the front eave's ends
-    eB = (x1 + ov, z1 + ov)                                        # the back-right eave corner
-    rz = (z0 + z1) / 2
-    rR = (x1 - 240.0, rz)                                          # the ridge's right end
-    rL = (x0 + 240.0, rz)
-    E_H = e
-    front_slope = [gp(eF[0][0], eF[0][1], E_H), gp(eF[1][0], eF[1][1], E_H), gp(rR[0], rR[1], T["ridge"]), gp(rL[0], rL[1], T["ridge"])]
-    hip = [gp(eF[1][0], eF[1][1], E_H), gp(eB[0], eB[1], E_H), gp(rR[0], rR[1], T["ridge"])]
-    sheet.poly(front_slope, THATCH_LIT)
-    sheet.poly(hip, THATCH_SHADE)
-    # the eave's thickness: thatch is a deep cut edge, a band along the front and down the hip's foot
-    thick = 34.0
-    sheet.poly([gp(eF[0][0], eF[0][1], E_H), gp(eF[1][0], eF[1][1], E_H), gp(eF[1][0], eF[1][1], E_H + thick), gp(eF[0][0], eF[0][1], E_H + thick)],
-               lerp(THATCH_LIT, SIENNA, 0.35))
-    sheet.poly([gp(eF[1][0], eF[1][1], E_H), gp(eB[0], eB[1], E_H), gp(eB[0], eB[1], E_H + thick), gp(eF[1][0], eF[1][1], E_H + thick)],
-               lerp(THATCH_SHADE, PRUSSIAN, 0.25))
-    # thatch texture: rows of short strokes along the eave and up the slope (style.md section 5)
-    rng = np.random.default_rng(77)
-    for v in (0.0, 0.18, 0.40, 0.66):
-        ya = E_H + thick + (T["ridge"] - E_H - thick) * v
-        za = eF[0][1] + (rz - eF[0][1]) * v
-        for xx in np.arange(x0 - ov, x1 + ov - 20, 26.0):
-            if xx < x0 - ov + (rL[0] - (x0 - ov)) * v or xx > x1 + ov - ((x1 + ov) - rR[0]) * v:
-                continue
-            p0 = gp(xx + rng.normal(0, 4), za, ya)
-            p1 = gp(xx + rng.normal(0, 4), za + 30, ya + 26)
-            sheet.line([p0, p1], lerp(THATCH_LIT, SIENNA, 0.45), max(0.6, 2.4 * kz(za)), 0.55)
-    # the ridge: a dark cap of bound straw along the top, with cross pieces
-    sheet.line([gp(rL[0] - 20, rz, T["ridge"] + 8), gp(rR[0] + 20, rz, T["ridge"] + 8)], lerp(SIENNA, PRUSSIAN, 0.5), max(2.0, 18 * kz(rz)), 1.0)
-    for xx in np.arange(rL[0], rR[0] + 1, 70.0):
-        sheet.line([gp(xx, rz - 20, T["ridge"] - 6), gp(xx, rz - 20, T["ridge"] + 26)], lerp(SIENNA, PRUSSIAN, 0.6), max(1.0, 6 * kz(rz)), 1.0)
-    # ---- the contour
-    V.contour(sheet, [front_slope[0], front_slope[1], hip[1]], row0)
-    V.contour(sheet, [front_slope[3], front_slope[2], hip[0]], row0)
-    V.contour(sheet, [hip[2], hip[1]], row0)
-    V.contour(sheet, [gp(x1, z0, 0), gp(x1, z0, e + 10)], row0)
-    V.contour(sheet, [gp(x1, z1, 0), gp(x1, z1, e + 10)], row0, alpha=0.5)
-    V.contour(sheet, [gp(x0, z0, 0), gp(x1, z0, 0), gp(x1, z1, 0)], row0)
-    info["tea_front"] = [gp(x0, z0, 0), gp(x1, z0, 0), gp(x1, z0, e), gp(x0, z0, e)]
-    info["tea_roof"] = front_slope + hip
-    info["tea_box"] = [0, int(min(p[1] for p in front_slope)) - 4, int(gp(eB[0], eB[1], E_H)[0]) + 2, int(row0 - min(p[1] for p in front_slope)) + 6]
-    info["mats_box"] = [int(gp(mat_x0, z0, fl)[0]), int(gp(mat_x0, z1, 190)[1]), int(gp(mat_x1, z0, fl)[0] - max(0, gp(mat_x0, z0, fl)[0])),
-                        int(gp(mat_x0, z0, fl)[1] - gp(mat_x0, z1, 190)[1])]
-
-
-def bench(sheet):
-    """The bench under the eaves: a long low plank on four legs, a tea tray on it (a pot and two cups)."""
-    B = BENCH
-    x0, x1, z0, z1, h = B["x0"], B["x1"], B["z0"], B["z1"], B["h"]
-    sheet.poly([gp(x0, z0, h), gp(x1, z0, h), gp(x1, z1, h), gp(x0, z1, h)], WOOD_LIT)
-    sheet.poly([gp(x0, z0, h - 6), gp(x1, z0, h - 6), gp(x1, z0, h), gp(x0, z0, h)], WOOD_SHADE)
-    for xx in (x0 + 12, x1 - 12):
-        sheet.line([gp(xx, z0 + 4, 0), gp(xx, z0 + 4, h - 6)], WOOD_DARK, max(1.0, 6 * kz(z0)), 1.0)
-    V.contour(sheet, [gp(x0, z0, h - 6), gp(x0, z0, h), gp(x1, z0, h), gp(x1, z0, h - 6)], gp(x0, z0)[1])
-    # the tray, the pot, the cups
-    tx, tz = x0 + 70, (z0 + z1) / 2
-    sheet.poly([gp(tx - 18, tz - 12, h + 1), gp(tx + 18, tz - 12, h + 1), gp(tx + 18, tz + 12, h + 1), gp(tx - 18, tz + 12, h + 1)], lerp(SIENNA, PRUSSIAN, 0.35))
-    p = gp(tx - 6, tz, h + 9)
-    sheet.ellipse(p[0], p[1], 3.4, 3.0, lerp(tintw(PRUSSIAN, 0.45), OCHRE, 0.2))
-    for dx_ in (6.0, 13.0):
-        q = gp(tx + dx_, tz, h + 4)
-        sheet.ellipse(q[0], q[1], 1.6, 1.3, tintw(CERULEAN, 0.7))
-
-
-def sign_board(sheet):
-    """The signboard at the teahouse's corner: a pale board on a post with a little roof, a turban shell painted on it
-    (our own sign: no shop's name), and under it a column of brush marks (pattern, never characters a reader could read)."""
-    S = SIGN
-    x, z, w, h = S["x"], S["z"], S["w"], S["h"]
-    k = kz(z)
-    sheet.line([gp(x, z, 0), gp(x, z, h)], WOOD_DARK, max(1.2, 7 * k), 1.0)
-    board = [gp(x - w / 2, z, 40), gp(x + w / 2, z, 40), gp(x + w / 2, z, h - 6), gp(x - w / 2, z, h - 6)]
-    sheet.poly(board, lerp(tintw(OCHRE, 0.62), NAPLES, 0.2))
-    sheet.poly([gp(x - w / 2 - 6, z, h - 6), gp(x + w / 2 + 6, z, h - 6), gp(x + w / 2 + 2, z, h + 6), gp(x - w / 2 - 2, z, h + 6)], WOOD_DARK)
-    # the shell: a dark knobbed cone, its mouth up
-    c = gp(x, z, h - 34)
-    s = 10 * k
-    sheet.poly([(c[0] - s * 0.9, c[1] - s * 0.6), (c[0] + s * 0.9, c[1] - s * 0.6), (c[0] + s * 0.35, c[1] + s * 1.1), (c[0] - s * 0.35, c[1] + s * 1.1)],
-               lerp(VIRIDIAN, PRUSSIAN, 0.45))
-    sheet.ellipse(c[0], c[1] - s * 0.6, s * 0.9, s * 0.32, lerp(tintw(OCHRE, 0.35), SIENNA, 0.2))
-    for dx_ in (-0.7, -0.2, 0.3, 0.75):
-        sheet.line([(c[0] + dx_ * s, c[1] - s * 0.3), (c[0] + dx_ * s * 1.25, c[1] - s * 0.1)], lerp(VIRIDIAN, PRUSSIAN, 0.6), 0.9, 1.0)
-    # the brush marks: a column of short dark strokes
-    rng = np.random.default_rng(15)
-    yy = h - 60
-    while yy > 50:
-        ln = rng.uniform(7, 13)
-        a, b = gp(x + rng.uniform(-4, 4), z, yy), gp(x + rng.uniform(-4, 4), z, yy - ln)
-        sheet.line([a, b], PRUSSIAN, max(1.0, 3.6 * k), 0.95)
-        if rng.random() < 0.6:
-            sheet.line([gp(x - 7, z, yy - ln * 0.4), gp(x + 7, z, yy - ln * 0.5)], PRUSSIAN, max(0.8, 2.4 * k), 0.9)
-        yy -= ln + rng.uniform(4, 8)
-    V.contour(sheet, board + [board[0]], gp(x, z)[1], alpha=0.75)
-
-
-def mound_and_tree(sheet, seed):
-    """The 40th distance mound: a grassed dome; on it the hackberry planted for shade (two centuries old): a short thick
-    trunk, three limbs, a broad crown of fresh April leaves as flat pads (lit veronese and naples, shade viridian)."""
-    M = MOUND
-    mx, mz, r, h = M["x"], M["z"], M["r"], M["h"]
-    k = kz(mz)
-    base = gp(mx, mz)
-    # the mound: a dome in two flats, the lit one turned to the left and up, the terminator a curve over its crown
-    top = []
-    for a in np.linspace(0, math.pi, 31):
-        u = math.cos(a)
-        top.append(gp(mx + r * u, mz, h * (1 - abs(u) ** 2.2) ** 0.7))
-    sheet.poly(top + [gp(mx + r, mz)], GRASS)                                   # (top runs from the right foot over to the left foot)
-    term = [gp(mx + r * 0.05 + r * 0.45 * math.sin(t_), mz, h * 0.99 * math.cos(t_) ** 0.8) for t_ in np.linspace(0, math.pi / 2, 10)]
-    lit_side = [p for p in top if p[0] <= gp(mx + r * 0.05, mz)[0] + 0.5]
-    sheet.poly(lit_side + list(reversed(term)), GRASS_LIT)
-    rng = np.random.default_rng(seed)
-    for i in range(18):
-        u = rng.uniform(-0.92, 0.92)
-        hh = h * (1 - abs(u) ** 2.2) ** 0.7
-        p = gp(mx + r * u, mz - 30, hh * rng.uniform(0.25, 0.97))
-        tuft(sheet, p[0], p[1], 5.5, seed + i, lean=0.3, colors=(GRASS_SHADE, GRASS) if u > 0.2 else (GRASS, GRASS_SHADE), n=4, width=0.8)
-    V.contour(sheet, top, base[1], alpha=0.5)
-    info = hackberry(sheet, mx, mz, h, seed + 5)
-    info["mound"] = [int(gp(mx - r, mz)[0]), int(gp(mx, mz, h)[1]) - 2, int(2 * r * k) + 2, int(base[1] - gp(mx, mz, h)[1]) + 3]
-    return info
-
-
-def hackberry(sheet, mx, mz, h, seed):
-    """The mound's hackberry's trunk and limbs (an enoki, planted for the travellers' shade two centuries since): short,
-    thick, forking into three; the crown is painted after (hackberry_crown)."""
-    k = kz(mz)
-    trunk = [gp(mx - 8, mz, h - 10), gp(mx - 4, mz, h + 90), gp(mx + 6, mz, h + 175)]
-    sheet.taper(trunk, BARK_SHADE, 44 * k, 34 * k)
-    sheet.taper([(p[0] - 7 * k, p[1]) for p in trunk], lerp(BARK, tintw(PRUSSIAN, 0.5), 0.35), 16 * k, 12 * k)
-    limbs = [[gp(mx + 6, mz, h + 175), gp(mx - 90, mz, h + 260), gp(mx - 230, mz, h + 330)],
-             [gp(mx + 6, mz, h + 175), gp(mx + 100, mz, h + 270), gp(mx + 240, mz, h + 340)],
-             [gp(mx + 6, mz, h + 175), gp(mx + 20, mz, h + 300), gp(mx - 10, mz, h + 420)]]
-    for L in limbs:
-        sheet.taper(L, BARK_SHADE, 22 * k, 10 * k)
-    return {"trunk": [int(gp(mx - 40, mz)[0]), int(gp(mx, mz, h + 260)[1]), int(80 * k) + 2, int(gp(mx, mz, h)[1] - gp(mx, mz, h + 260)[1])]}
-
-
-def hackberry_crown(pic, mx, mz, h, seed):
-    """The crown, as the prints paint a broadleaf tree: one scalloped silhouette of fresh April leaf; inside it five
-    big masses, each with a lit crescent toward the sun (yellow-green) and a shade crescent under it (viridian); the
-    whole underside in shade; a few drawn leaf marks; a breath of contour along the top. Flats with hard edges."""
-    k = kz(mz)
-    rng = np.random.default_rng(seed)
-    leaf_sh, leaf, leaf_lit = lerp(VIRIDIAN, PRUSSIAN, 0.16), mixp(VERONESE, VIRIDIAN, 0.40), lerp(VERONESE, NAPLES, 0.42)
-    masses = [(-250, 380, 210, 150), (230, 390, 220, 150), (-40, 470, 260, 175), (-200, 560, 170, 120), (170, 570, 180, 125), (10, 650, 170, 105)]
-    union = np.zeros(SHAPE, dtype=F32)
-    for (dx_, y_, rx_, ry_) in masses:                                  # the scalloped edge: small clumps round each mass
-        for i in range(14):
-            a = rng.uniform(0, 2 * math.pi)
-            cx_, cy_ = dx_ + math.cos(a) * rx_ * 0.78, y_ + math.sin(a) * ry_ * 0.70
-            r_ = rng.uniform(0.32, 0.46) * rx_
-            c = gp(mx + cx_, mz, h + cy_)
-            union = np.maximum(union, mask_ellipse(SHAPE, c[0], c[1], r_ * k, r_ * k * 0.72))
-        c = gp(mx + dx_, mz, h + y_)
-        union = np.maximum(union, mask_ellipse(SHAPE, c[0], c[1], rx_ * k * 0.92, ry_ * k * 0.92))
-    over(pic, leaf, union)
+def wet_mask(info):
+    """What was laid wet in wet (watercolor.wash's `soft`): the sky, Fuji, the far land, Satta a little, the open water
+    (less toward the wall). Everything standing in the play is wet on dry: crisp."""
     x, y = grid(SHAPE)
-    for (dx_, y_, rx_, ry_) in masses:
-        c = gp(mx + dx_, mz, h + y_)
-        m0 = mask_ellipse(SHAPE, c[0], c[1], rx_ * k, ry_ * k * 0.98, wobble=2.0, seed=seed + int(dx_))
-        up = mask_ellipse(SHAPE, c[0] - rx_ * k * 0.12, c[1] - ry_ * k * 0.22, rx_ * k, ry_ * k * 0.98, wobble=2.0, seed=seed + int(dx_))
-        dn = mask_ellipse(SHAPE, c[0] + rx_ * k * 0.16, c[1] + ry_ * k * 0.26, rx_ * k, ry_ * k * 0.98, wobble=2.0, seed=seed + int(dx_))
-        over(pic, leaf_sh, (m0 * (1 - up) * union).astype(F32))                       # the shade crescent, under it
-        lit_c = (m0 * (1 - dn) * union) * (x < c[0] + rx_ * k * 0.55)
-        over(pic, leaf_lit, lit_c.astype(F32))                                         # the lit crescent, toward the sun
-    # the underside: the crown's lowest band in shade (a hard edge, a little wavy)
-    low = np.zeros(SHAPE, dtype=F32)
-    for (dx_, y_, rx_, ry_) in masses[:3]:
-        c = gp(mx + dx_, mz, h + y_ - ry_ * 0.55)
-        low = np.maximum(low, mask_ellipse(SHAPE, c[0], c[1] + ry_ * k * 0.5, rx_ * k * 1.05, ry_ * k * 0.62, wobble=3.0, seed=seed + 9))
-    over(pic, lerp(leaf_sh, PRUSSIAN, 0.12), (low * union * 0.95).astype(F32))
-    # drawn leaf marks: short arcs in the masses (texture drawn, not shaded)
-    marks = Sheet(SHAPE)
-    for i in range(70):
-        dx_ = rng.uniform(-430, 430)
-        y_ = rng.uniform(300, 720)
-        c = gp(mx + dx_, mz, h + y_)
-        if not (0 <= int(c[1]) < H and 0 <= int(c[0]) < W) or union[int(c[1]), int(c[0])] < 0.9:
+    m = (y < HZ + 1).astype(F32)
+    m = m * (1 - 0.35 * info["fuji"]) * (1 - 0.50 * info["farland"]) * (1 - 0.70 * info["satta"])
+    water = info["water"] * np.clip(1.0 - (y - HZ) / 100.0, 0.25, 1.0) * 0.75
+    return np.clip(np.maximum(m, water), 0, 1).astype(F32)
+
+
+# ================================================================ pass 3: the crisp things of the backdrop, wet on dry
+def pebbles(L, zone, seed, per_m2, size=(5.0, 14.0), bounds=(-1500, 1800, 600, 2600), tones=None):
+    tones = tones or (thin(PRUSSIAN, 0.74), thin(PRUSSIAN, 0.58), thin(lerp(PRUSSIAN, OCHRE, 0.25), 0.50), thin(PRUSSIAN, 0.40))
+    for (px_, py_, kk, r) in D.scatter(lambda X_, Z_: P(X_, Z_), lambda X_, Z_: k(Z_), bounds, per_m2, seed, size=(size[1], size[1] * 0.6), zone=zone, most=2600):
+        s = (size[0] + (size[1] - size[0]) * r * r) * kk * 0.5
+        if s < 0.3:
             continue
-        r_ = rng.uniform(4, 7)
-        marks.line([(c[0] - r_, c[1]), (c[0] - r_ * 0.3, c[1] + r_ * 0.45), (c[0] + r_ * 0.5, c[1] + r_ * 0.2)], lerp(leaf_sh, PRUSSIAN, 0.2), 0.8, 0.55)
-    marks.onto(pic)
-    edge = np.clip(union - np.roll(union, 2, axis=0), 0, 1)
-    over(pic, PRUSSIAN, (blur(edge, 0.5) * 0.30).astype(F32))
-    ys, xs = np.where(union > 0.5)
-    return {"crown": [int(xs.min()), int(ys.min()), int(xs.max() - xs.min()) + 1, int(ys.max() - ys.min()) + 1]}, union
+        ry = s * (0.42 + 0.5 * T.squash(py_))
+        c = tones[int(r * 977) % len(tones)]
+        L.ellipse(px_ + s * 0.9, py_ + ry * 0.2, s * 1.15, max(0.4, ry * 0.7), lerp(thin(EARTH, 0.2), PRUSSIAN, 0.35), alpha=0.40)
+        L.ellipse(px_, py_ - ry * 0.5, s, max(0.45, ry), thin(c, 0.35), lerp(c, PRUSSIAN, 0.25), g=((px_ - s, py_ - ry), (px_ + s, py_ + ry)))
+    return L
 
 
-def cliff_road(sheet):
-    """The road west cut across Mount Satta's face: pale ledges of cut earth with the dark cut above them, climbing in
-    two legs up and round to the right (no figures painted on it)."""
-    legs = [[(652, 262), (696, 256), (738, 246), (780, 234), (812, 226)], [(770, 116), (790, 104), (812, 92)]]
-    for i, L in enumerate(legs):
-        w = 5.0 - i * 1.6
-        sheet.line([(p[0], p[1] - w * 0.9) for p in L], lerp(VIRIDIAN, PRUSSIAN, 0.70), w * 0.9, 0.9)   # the cut face above
-        sheet.line(L, lerp(tintw(OCHRE, 0.42), PRUSSIAN, 0.12), w * 0.75, 1.0)                           # the road's bed
-        sheet.line([(p[0], p[1] + w * 0.5) for p in L], lerp(tintw(OCHRE, 0.2), PRUSSIAN, 0.35), 0.7, 0.7)
-    # pines along the skyline and on the face, small (middle distance: a breath of contour)
-    pass
+def footprints(L, path, seed, stride=68.0, wide=17.0, strength=1.0, scatter_=6.0):
+    """A line of footprints along a way (ground places), left, right, left: small hollows, a shaded lip toward the sun."""
+    rng = np.random.default_rng(seed)
+    pts = []
+    for (x0, z0), (x1, z1) in zip(path[:-1], path[1:]):
+        dd = math.hypot(x1 - x0, z1 - z0)
+        n = max(1, int(dd / stride))
+        for i in range(n):
+            f = (i + rng.uniform(-0.12, 0.12)) / n
+            pts.append((x0 + (x1 - x0) * f, z0 + (z1 - z0) * f, (z1 - z0) / dd, -(x1 - x0) / dd))
+    for i, (wx_, wz_, nx_, nz_) in enumerate(pts):
+        side = 1 if i % 2 else -1
+        fx_, fz_ = wx_ + nx_ * side * wide / 2 + rng.normal(0, scatter_), wz_ + nz_ * side * wide / 2 + rng.normal(0, scatter_)
+        kk = k(fz_)
+        px_, py_ = P(fx_, fz_)
+        rx = 7.0 * kk
+        if rx < 0.45 or not (0 < px_ < W and HZ < py_ < H):
+            continue
+        ry = max(0.4, 10.0 * kk * T.squash(py_) * 1.4)
+        a = strength * min(1.0, 0.35 + kk * 0.7) * rng.uniform(0.6, 1.0)
+        L.ellipse(px_ + rx * 0.45, py_ + ry * 0.3, rx, ry, WPAPER, alpha=0.32 * a)
+        L.ellipse(px_, py_, rx, ry, lerp(thin(EARTH, 0.2), PRUSSIAN, 0.32), alpha=0.50 * a)
+    return L
+
+
+def trample(L, places, seed, n=40, spread=120.0, strength=0.8):
+    rng = np.random.default_rng(seed)
+    for (cx_, cz_) in places:
+        for _ in range(n):
+            fx_, fz_ = cx_ + rng.normal(0, spread), cz_ + rng.normal(0, spread * 0.8)
+            kk = k(fz_)
+            px_, py_ = P(fx_, fz_)
+            rx = 7.0 * kk
+            if rx < 0.45 or not (0 < px_ < W and HZ < py_ < H):
+                continue
+            ry = max(0.4, 10.0 * kk * T.squash(py_) * 1.4)
+            a = strength * min(1.0, 0.35 + kk * 0.7) * rng.uniform(0.5, 1.0)
+            L.ellipse(px_ + rx * 0.45, py_ + ry * 0.3, rx, ry, WPAPER, alpha=0.30 * a)
+            L.ellipse(px_, py_, rx, ry, lerp(thin(EARTH, 0.2), PRUSSIAN, 0.30), alpha=0.48 * a)
+    return L
+
+
+def tuft(L, px_, py_, kk, r, seed, tall=22.0, green=None):
+    """A tuft of coarse grass: a fan of blades, darker at the foot, the tips catching the light on the left."""
+    rng = np.random.default_rng(seed)
+    dark = green or thin(lerp(mixp(VIRIDIAN, OCHRE, 0.45), PRUSSIAN, 0.12), 0.12)
+    lit_c = thin(mixp(VERONESE, OCHRE, 0.45), 0.30)
+    hgt = tall * (0.6 + 0.8 * r) * kk
+    if hgt < 1.0:
+        return
+    L.ellipse(px_ + hgt * 0.55, py_ + 0.4, hgt * 0.7, max(0.5, hgt * 0.16), lerp(thin(EARTH, 0.2), PRUSSIAN, 0.25), alpha=0.32)
+    n = 5 + int(r * 5)
+    for j in range(n):
+        an = math.radians(rng.uniform(-48, 48))
+        ln = hgt * rng.uniform(0.6, 1.0)
+        tip = (px_ + math.sin(an) * ln, py_ - math.cos(an) * ln)
+        mid = (px_ + math.sin(an) * ln * 0.45 - 0.6, py_ - math.cos(an) * ln * 0.55)
+        L.taper([(px_ + rng.normal(0, hgt * 0.08), py_), mid, tip], lit_c if an < -0.1 and j % 2 else dark, max(0.6, hgt * 0.10), 0.3, alpha=0.9)
+
+
+def satta_foot(L, info, seed):
+    """Mount Satta's foot behind the mound and the climb: the slope's shrubs and young pines as dabs, darker and firmer
+    than the far slope above them (it is near), the cut bank of the climb's far side."""
+    rng = np.random.default_rng(seed)
+    sat = info["satta"]
+    thick = noise(SHAPE, (40, 30), seed + 1, 3)
+    for _ in range(1400):
+        px_, py_ = rng.uniform(520, 800), rng.uniform(250, 452)
+        ix, iy = int(px_), int(py_)
+        if sat[iy, ix] < 0.5 or rng.random() > thick[iy, ix] ** 2 * 1.2:
+            continue
+        near = (py_ - 250) / 200.0
+        r_ = 1.6 + 3.0 * near * rng.random()
+        dk = lerp(thin(mixp(VIRIDIAN, PRUSSIAN, 0.40), 0.10), HORIZON_C, 0.18 * (1 - near))
+        lt = lerp(thin(mixp(VERONESE, OCHRE, 0.18), 0.10), HORIZON_C, 0.18 * (1 - near))
+        L.ellipse(px_ + r_ * 0.25, py_ + r_ * 0.2, r_ * 1.3, r_ * 0.7, dk, alpha=0.55)
+        if rng.random() < 0.35:
+            L.ellipse(px_ - r_ * 0.3, py_ - r_ * 0.2, r_ * 0.7, r_ * 0.35, lt, alpha=0.45)
+    return L
 
 
 def details(pic, info, seed=SEED, fast=False):
+    """The crisp things of the backdrop, wet on dry: first the far marks, then what lies ON the ground, then what stands,
+    far to near, then the grass at the foot of things. Every edge a hand's. -> the backdrop."""
     x, y = grid(SHAPE)
-    crisp = pic.copy()
-    paint_far(crisp, seed)
-    pic[...] = lerp(pic, crisp, (0.7 * info["fuji"] * (y < HZ) * (1 - info["satta"]))[..., None])
-    FUJI.contour(pic, info["fuji"] * (1 - info["satta"]))
-    crisp = pic.copy()
-    paint_satta(crisp, seed)
-    pic[...] = lerp(pic, crisp, (0.5 * info["satta"] * (1 - info["ground"]))[..., None])
-    sheet = Paper(SHAPE)
-    rng0 = np.random.default_rng(seed + 69)
-    # far: boats on the bay, Yui's roofs on the curve of the coast
-    for i, (bx, by, s) in enumerate(((410, 331, 0.75), (482, 350, 0.95), (352, 318, 0.55), (300, 326, 0.5))):
-        sail_boat(sheet, bx, by, s, seed + 70 + i, sail=(i != 2))
-    far_roofs(sheet, 276, 336, 324, 8, seed + 71, h=2.8)
-    for i, xx in enumerate(np.linspace(330, 400, 4)):                           # pines along the curve's beach: dabs on the land, no line
-        row = float(np.interp(xx, [p[0] for p in COAST], [p[1] for p in COAST])) - 3.0
-        sheet.ellipse(xx + rng0.normal(0, 2), row, 2.6 - 1.2 * i / 7, 1.5 - 0.6 * i / 7, lerp(tintw(VIRIDIAN, 0.15), COBALT, 0.30))
-    # Mount Satta: the cliff road, pines on the skyline and its face
-    cliff_road(sheet)
-    rng = np.random.default_rng(seed + 72)
-    # pines on the headland: on the skyline, small pines in the prints' manner (a leaning trunk, two or three flat
-    # pads); on the face, clumps of dark green without a trunk (the middle distance: no texture, a breath of line)
-    for (px_, py_, s_) in ((518, 362, 0.42), (556, 324, 0.5), (598, 280, 0.55), (636, 236, 0.6), (690, 166, 0.66), (718, 128, 0.7),
-                           (744, 88, 0.74), (774, 44, 0.78)):
-        hgt = 30 * s_
-        lean = -5 * s_
-        trunk = [(px_, py_ + 2), (px_ + lean * 0.5, py_ - hgt * 0.55), (px_ + lean, py_ - hgt * 0.9)]
-        pads = [(px_ + lean * 0.4 - 7 * s_, py_ - hgt * 0.50, 13 * s_, 4.6 * s_), (px_ + lean * 0.8 + 6 * s_, py_ - hgt * 0.76, 12 * s_, 4.2 * s_),
-                (px_ + lean, py_ - hgt * 1.0, 9 * s_, 3.6 * s_)]
-        pine_pads(sheet, sheet, trunk, pads, int(rng.integers(1e6)), scale=1.0, contour=True, alpha_line=0.3, w_line=0.5, trunk_w=2.2 * s_)
-    for i in range(26):
-        px_, py_ = rng.uniform(560, 800), rng.uniform(150, 420)
-        if not info["satta"][int(min(py_, 599)), int(min(px_, 799))] > 0.9 or py_ > 300 + (px_ - 560) * 0.4 + 100:
+    gm, road = info["ground"], info["road"]
+    # ================ the far plane's marks (no line: the distance)
+    Lf = Wet(SHAPE)
+    FAR.far_marks(Lf, seed + 50)
+    FAR.satta_marks(Lf, info, seed + 51)
+    FAR.far_boats(Lf)
+    satta_foot(Lf, info, seed + 52)
+    c_, a_ = Lf.done()
+    over(pic, c_, a_ * (1 - gm * (y > 452)))
+    # ================ what lies on the ground
+    G_ = Wet(SHAPE)
+    for i, c in enumerate((-0.55, -0.02, 0.5, -0.30, 0.28)):                    # people's feet along the road, and round its bend
+        way = [add(road_mid(s), (-U[1] * 0 + V.road_dir(s)[1] * c * ROAD_W / 2, -V.road_dir(s)[0] * c * ROAD_W / 2)) for s in np.arange(-200 + 37 * i, 1500, 120)]
+        footprints(G_, [q for q in way if q[1] > 1200], seed + 110 + i, stride=70.0, strength=0.30, scatter_=9.0)
+    trample(G_, [TEA.xz(TEA.L + 120, -120), (KAGO["X"] - 120, KAGO["Z"] - 80), (420, 1330)], seed + 116, n=26, spread=90.0, strength=0.4)
+    rng_d = np.random.default_rng(seed + 117)
+    for u_ in np.arange(-TEA.over_end, TEA.L + TEA.over_end, 13.0):                 # the drip line's stones
+        q = TEA.pt(u_ + rng_d.normal(0, 3), -TEA.over + 6 + rng_d.normal(0, 4))
+        kk_ = k(TEA.xz(u_, -TEA.over)[1])
+        r_ = rng_d.uniform(3.0, 6.0) * kk_
+        if r_ < 0.5:
             continue
-        r_ = rng.uniform(5, 9)
-        sheet.ellipse(px_, py_, r_, r_ * 0.55, lerp(VIRIDIAN, PRUSSIAN, 0.62))
-        sheet.ellipse(px_ - r_ * 0.25, py_ - r_ * 0.22, r_ * 0.6, r_ * 0.3, lerp(VIRIDIAN, PRUSSIAN, 0.3))
-    sheet.onto(pic)
-    # the mound and its hackberry: the mound and the trunk, then the crown over them
-    sheet = Paper(SHAPE)
-    info["tree"] = mound_and_tree(sheet, seed + 80)
-    sheet.onto(pic)
-    crown_info, info["crown_mask"] = hackberry_crown(pic, MOUND["x"], MOUND["z"], MOUND["h"], seed + 81)
-    info["tree"].update(crown_info)
-    sheet = Paper(SHAPE)
-    # the teahouse, its bench, its sign
-    teahouse(sheet, info)
-    bench(sheet)
-    sign_board(sheet)
-    # stones along the road's edges, a few on the road
-    stones = Sheet(SHAPE)
-    land.stones(stones, pic, HZ, seed + 90, 46, zone=((info["road"] > 0.4) & (y > 470)), ground=info["ground"], size=(0.6, 2.2),
-                tones=(tintw(PRUSSIAN, 0.78), tintw(PRUSSIAN, 0.6), tintw(PRUSSIAN, 0.42), tintw(PRUSSIAN, 0.24)))
-    sc, sa = stones.done()
-    over(pic, sc, sa)
-    sheet.onto(pic)
-    # grass along the road's near edge and the ledge's edge (drawn, leaning with the wind off the bay: to the right)
-    gs = Sheet(SHAPE)
-    for i in range(60):
-        xx = rng.uniform(0, 800)
-        zz = rng.uniform(-20, ROAD["z0"] + 10)
-        p = gp(V.x_at(xx, gp(0, zz)[1]), zz)
-        tuft(gs, xx, p[1], 9 * kz(zz) / 0.8, seed + 200 + i, lean=0.25, n=6, width=1.1)
-    for i in range(40):
-        xx = rng.uniform(0, 560)
-        row = np.interp(xx, [p[0] for p in ledge_top()], [p[1] for p in ledge_top()])
-        if 0 < xx < 270 and row > 380:
-            continue
-        tuft(gs, xx, row + 1, 5.0, seed + 300 + i, lean=0.25, n=5, width=0.8)
-    gs.onto(pic)
+        G_.ellipse(q[0] + r_ * 0.5, q[1] + r_ * 0.15, r_ * 1.1, r_ * 0.35, lerp(thin(EARTH, 0.2), PRUSSIAN, 0.4), alpha=0.45)
+        G_.ellipse(q[0], q[1] - r_ * 0.15, r_, r_ * 0.45, thin(lerp(PRUSSIAN, OCHRE, 0.25), 0.42), lerp(PRUSSIAN, OCHRE, 0.2), g=((q[0] - r_, q[1] - r_), (q[0] + r_, q[1])))
+    over(pic, G_.c, G_.a * gm)
+    # ================ what stands, far to near
+    L = Wet(SHAPE)
+    T.wall(L, seed + 60)
+    info["mound_shape"] = T.mound(L, seed + 61)
+    info["trunk_shape"], info["fork"] = T.hackberry_trunk(L, seed + 62)
+    info["sign_box"] = T.signboard(L, seed + 63)
+    T.teahouse(L, info, seed + 64)
+    info["bench_pts"] = T.bench(L, seed + 65)
+    built_c, built_a = L.done()
+    built_c, built_a = hand(built_c, built_a, seed + 66, amount=0.8, cell=18)
+    over(pic, built_c, np.clip(built_a, 0, 1))
+    info["built"] = np.clip(built_a, 0, 1)
+    # ================ the grass at the foot of things, along the road's edges, by the wall, on the verges
+    R_ = Wet(SHAPE)
+    free = blur(info["built"], 1.5) < 0.12
+    d_ = info["d"]
+    hw = ROAD_W / 2
+    edge = (np.abs(np.abs(d_) - hw - 30) < 40) & (gm > 0.5)
+    tufts = D.scatter(lambda X_, Z_: P(X_, Z_), lambda X_, Z_: k(Z_), (-1500, 1800, 600, 2600), 0.85, seed + 140, size=(22, 30), zone=free & edge, most=600)
+    tufts += D.scatter(lambda X_, Z_: P(X_, Z_), lambda X_, Z_: k(Z_), (-1500, 1800, 600, 2600), 0.30, seed + 141, size=(22, 30),
+                       zone=free & (info["inland"] > 0.4) & (gm > 0.5), most=300)
+    wall_band = mask_poly(SHAPE, [P(X_, Z_ - 60) for X_, Z_ in V.WALL] + [P(X_, Z_) for X_, Z_ in V.WALL][::-1]) > 0.5
+    tufts += D.scatter(lambda X_, Z_: P(X_, Z_), lambda X_, Z_: k(Z_), (-1500, 900, 1400, 2400), 1.2, seed + 142, size=(20, 26), zone=free & wall_band, most=200)
+    tufts.sort(key=lambda p: p[1])
+    for i, (px_, py_, kk, r) in enumerate(tufts):
+        tuft(R_, px_, py_, kk, r, seed + 150 + i)
+    R_.onto(pic)
     return pic
 
 
-# ================================================================ the cut-outs
-def cloud_cut(back, seed, fast=False):
-    """Fuji's cap of cloud (on / off): the same cloud as on the pass (edo_kurasawa_kit.cloud_cap), at this mountain's size."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    outline = cloud_cap(sheet, lines, FUJI)
-    c, a = sheet.done()
-    lc, la = lines.done()
-    out = brushed(c, a, lc, la, tintw(CERULEAN, 0.85), seed=seed, sizes=(4, 2), keep=0.7, fast=fast)
-    return out[0], out[1], outline
+# ================================================================ the cut-outs, the finish, the numbers
+def under_colour(back, alpha):
+    ys, xs = np.where(alpha > 0.5)
+    return np.median(back[ys, xs], axis=0) if len(ys) else EARTH
 
 
-def grill_cut(back, seed, fast=False):
-    """O-Kuni's grill: a long clay firebox on the ground before her door, a bed of charcoal, turban shells standing in it
-    mouth up, their juice bubbling (the smoke and the embers are the engine's). O-Kuni stands behind it."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    G = GRILL
-    x, z, w, d, h = G["x"], G["z"], G["w"], G["d"], G["h"]
-    k = kz(z)
-    clay_lit, clay_sh = lerp(tintw(OCHRE, 0.38), PRUSSIAN, 0.22), lerp(lerp(OCHRE, SIENNA, 0.5), PRUSSIAN, 0.45)
-    f0, f1 = z - d / 2, z + d / 2
-    sheet.poly([gp(x - w / 2, f0, 0), gp(x + w / 2, f0, 0), gp(x + w / 2, f0, h), gp(x - w / 2, f0, h)], clay_lit)        # its front
-    sheet.poly([gp(x + w / 2, f0, 0), gp(x + w / 2, f1, 0), gp(x + w / 2, f1, h), gp(x + w / 2, f0, h)], clay_sh)          # its right end
-    sheet.poly([gp(x - w / 2, f0, h), gp(x + w / 2, f0, h), gp(x + w / 2, f1, h), gp(x - w / 2, f1, h)], lerp(clay_sh, PRUSSIAN, 0.3))   # the rim
-    sheet.poly([gp(x - w / 2 + 7, f0 + 6, h), gp(x + w / 2 - 7, f0 + 6, h), gp(x + w / 2 - 7, f1 - 6, h), gp(x - w / 2 + 7, f1 - 6, h)],
-               lerp(PRUSSIAN, SIENNA, 0.25))                                                                                      # the charcoal
-    rng = np.random.default_rng(seed)
-    for i in range(14):
-        p = gp(x + rng.uniform(-w / 2 + 12, w / 2 - 12), rng.uniform(f0 + 9, f1 - 9), h + 1)
-        sheet.ellipse(p[0], p[1], 1.4, 0.8, lerp(VERMILION, NAPLES, 0.25), 0.85)
-    # the shells: six knobbed cones in the coals, mouth up, a little foam at each mouth
-    shells = []
-    for i in range(6):
-        sx_ = x - w / 2 + 16 + (w - 32) * (i + 0.5) / 6 + rng.normal(0, 2)
-        sz_ = z + rng.normal(0, 6)
-        b = gp(sx_, sz_, h + 2)
-        s = 7.5 * k * 1.6
-        sheet.poly([(b[0] - s * 0.55, b[1] - s * 0.9), (b[0] + s * 0.55, b[1] - s * 0.9), (b[0] + s * 0.3, b[1]), (b[0] - s * 0.3, b[1])],
-                   lerp(VIRIDIAN, SIENNA, 0.45))
-        sheet.ellipse(b[0], b[1] - s * 0.9, s * 0.55, s * 0.2, lerp(tintw(OCHRE, 0.4), SIENNA, 0.25))
-        sheet.ellipse(b[0], b[1] - s * 0.9, s * 0.3, s * 0.1, tintw(NAPLES, 0.4))
-        for j in (-1, 1):
-            lines.line([(b[0] + j * s * 0.45, b[1] - s * 0.6), (b[0] + j * s * 0.75, b[1] - s * 0.72)], lerp(VIRIDIAN, PRUSSIAN, 0.5), 0.8, 1.0)
-        shells.append(b)
-    V.contour(lines, [gp(x - w / 2, f0, 0), gp(x - w / 2, f0, h), gp(x + w / 2, f0, h), gp(x + w / 2, f1, h)], gp(x, f0)[1])
-    V.contour(lines, [gp(x + w / 2, f0, 0), gp(x + w / 2, f0, h)], gp(x, f0)[1])
-    c, a = sheet.done()
-    lc, la = lines.done()
-    out = brushed(c, a, lc, la, EARTH, seed=seed, sizes=(3, 2), keep=0.6, fast=fast)
-    return out[0], out[1], shells
+def cuts(pic, info, fast=False):
+    planes = {}
+    c, a, info["cloud_outline"] = T.cloud_cut(11, fast)
+    planes["cloud"] = (c, a)
+    c, a, info["kago_base"], info["kago_seat"] = T.kago_cut(12, EARTH, fast)
+    planes["kago"] = (c, a)
+    c, a, info["noren_base"] = T.noren_cut(15, T.INSIDE, fast)
+    planes["noren"] = (c, a)
+    c, a, info["trunks_base"] = T.trunks_cut(13, EARTH, fast)
+    planes["trunks"] = (c, a)
+    c, a, info["shells"], info["grill_base"] = T.grill_cut(14, EARTH, fast)
+    planes["grill"] = (c, a)
+    planes["front"] = NEAR.front_cut(16, fast)
+    planes["near"] = NEAR.near_cut(17, fast)
+    return planes
 
 
-def noren_cut(back, seed, fast=False):
-    """The noren over the teahouse's door: indigo cloth in two panels, a white turban shell on it (our own mark); its hem
-    is free (it stirs: fx noren-sway)."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    dx0, dx1 = TEA["door"]
-    z = TEA["z0"] - 4
-    top, drop = TEA["lintel"] + 4, 58.0
-    for i in range(2):
-        u0, u1 = i / 2 + 0.012, (i + 1) / 2 - 0.012
-        xa, xb = dx0 + 10 + (dx1 - dx0 - 20) * u0, dx0 + 10 + (dx1 - dx0 - 20) * u1
-        q = [gp(xa, z, top), gp(xb, z, top), gp(xb, z, top - drop), gp(xa, z, top - drop)]
-        sheet.poly(q, INDIGO)
-        lines.line([q[3], q[0], q[1], q[2]], PRUSSIAN, 0.8, 0.7)
-    lines.line([gp(dx0 + 4, z, top + 2), gp(dx1 - 4, z, top + 2)], WOOD_SHADE, max(1.0, 5 * kz(z)), 1.0)
-    # the mark, white, across the split: a round crest of a shell seen from above (a spiral), our own
-    c = gp((dx0 + dx1) / 2, z, top - drop * 0.48)
-    s = 10 * kz(z)
-    sheet.ellipse(c[0], c[1], s, s, tintw(CERULEAN, 0.88))
-    spiral = [(c[0] + s * 0.78 * (1 - t / 11) * math.cos(t), c[1] + s * 0.78 * (1 - t / 11) * math.sin(t)) for t in np.linspace(0, 10, 40)]
-    lines.line(spiral, INDIGO, 1.0, 1.0)
-    c_, a_ = sheet.done()
-    lc, la = lines.done()
-    return brushed(c_, a_, lc, la, INDIGO, seed=seed, sizes=(3, 2), keep=0.65, fast=fast)
+ORDER = ["cloud", "kago", "noren", "trunks", "grill", "front", "near"]
+COUNTS = (("cloud", 24), ("kago", 64), ("noren", 32), ("trunks", 48), ("grill", 64), ("front", 64), ("near", 128))
 
 
-def kago_cut(back, seed, fast=False):
-    """The bearers' palanquin, set down by the mound: an open-sided mountain kago. One long pole carries it (the pole is
-    the thing: thick, a little bowed, its far end resting on the mound's foot); under the pole a short hood of matting
-    hugs it; under the hood the seat, a shallow woven basket with a low back, slung from the pole by two bamboo slings
-    at each end; a blue cushion in it. Empty (Little Sister in it is only a wrong try)."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    K = KAGO
-    x, z, L, Wd, Hh, pole = K["x"], K["z"], K["length"], K["width"], K["height"], K["pole"]
-    k = kz(z)
-    bam_lit, bam_sh, bam_dk = lerp(tintw(OCHRE, 0.45), VERONESE, 0.10), lerp(OCHRE, PRUSSIAN, 0.36), lerp(OCHRE, PRUSSIAN, 0.58)
-    mat_lit, mat_sh = lerp(tintw(OCHRE, 0.30), SIENNA, 0.18), lerp(lerp(OCHRE, SIENNA, 0.5), PRUSSIAN, 0.42)
-    pole_c = lerp(SIENNA, PRUSSIAN, 0.40)
-    z0, z1 = z - Wd / 2, z + Wd / 2
-    xa, xb = x - L / 2, x + L / 2
-    seat_h = 26.0
-    # the pole, from its near (left) end held up on a short forked rest to its far end on the mound's foot
-    def pole_y(u):
-        return Hh + 18 - 30 * u + 5 * math.sin(math.pi * u)
-    us = np.linspace(0, 1, 11)
-    pp = [gp(x - pole / 2 + pole * u, z, pole_y(u)) for u in us]
-    # the hood: a short arched roof of matting slung under the pole over the seat (its near face lit, its hem in shade)
-    def py_at(xx):
-        return pole_y((xx - (x - pole / 2)) / pole)
-    hood_top = [gp(xx, z, py_at(xx) - 4) for xx in np.linspace(xa - 10, xb + 10, 9)]
-    hood_hem = [gp(xx, z0 - 6, py_at(xx) - 34 - 6 * math.sin(math.pi * (xx - xa + 10) / (L + 20))) for xx in np.linspace(xa - 10, xb + 10, 9)]
-    sheet.poly(hood_top + list(reversed(hood_hem)), mat_lit)
-    sheet.poly(hood_hem + [(p[0], p[1] + 3.2) for p in reversed(hood_hem)], mat_sh)
-    for i in range(1, 8):
-        lines.line([hood_top[i], hood_hem[i]], lerp(SIENNA, PRUSSIAN, 0.35), 0.6, 0.5)
-    # the slings: at each end of the seat two bamboo slips from the pole down to its corners (a narrow V)
-    for xe in (xa + 6, xb - 6):
-        top_ = gp(xe, z, py_at(xe) - 2)
-        for zz in (z0 + 4, z1 - 4):
-            lines.line([top_, gp(xe, zz, seat_h)], bam_lit if zz < z else bam_sh, max(1.0, 3.4 * k), 1.0)
-    # the seat: a shallow woven basket with a low back at its right end, the cushion in it
-    sheet.poly([gp(xa, z0, seat_h), gp(xb, z0, seat_h), gp(xb, z1, seat_h), gp(xa, z1, seat_h)], lerp(bam_dk, PRUSSIAN, 0.2))
-    sheet.poly([gp(xa + 8, z0 + 8, seat_h + 1), gp(xb - 16, z0 + 8, seat_h + 1), gp(xb - 16, z1 - 8, seat_h + 1), gp(xa + 8, z1 - 8, seat_h + 1)], lerp(INDIGO, WHITE, 0.15))
-    sheet.poly([gp(xb - 8, z0 + 6, seat_h), gp(xb - 8, z1 - 6, seat_h), gp(xb - 8, z1 - 6, seat_h + 34), gp(xb - 8, z0 + 6, seat_h + 34)], bam_sh)
-    sheet.poly([gp(xa, z0, 0), gp(xb, z0, 0), gp(xb, z0, seat_h), gp(xa, z0, seat_h)], bam_lit)
-    sheet.poly([gp(xb, z0, 0), gp(xb, z1, 0), gp(xb, z1, seat_h), gp(xb, z0, seat_h)], bam_sh)
-    for v in (8.0, 16.0):
-        lines.line([gp(xa, z0, v), gp(xb, z0, v)], bam_dk, 0.7, 0.55)
-    for u in np.linspace(0.1, 0.9, 6):
-        lines.line([gp(xa + L * u, z0, 1), gp(xa + L * u, z0, seat_h - 1)], bam_dk, 0.55, 0.45)
-    lines.line([gp(xa, z0, seat_h), gp(xb, z0, seat_h)], bam_lit, max(1.0, 3.4 * k), 1.0)
-    # the pole over everything, and the forked rest under its near end
-    rest = gp(x - pole / 2 + 18, z, 0)
-    lines.line([rest, gp(x - pole / 2 + 18, z, pole_y(18 / pole) - 4)], bam_sh, max(1.0, 3.2 * k), 1.0)
-    lines.line(pp, pole_c, max(2.0, 9.5 * k), 1.0)
-    lines.line([(p[0], p[1] - max(1.0, 2.8 * k)) for p in pp], lerp(tintw(OCHRE, 0.25), SIENNA, 0.25), max(0.9, 3.0 * k), 1.0)
-    for e in (pp[0], pp[-1]):
-        sheet.ellipse(e[0], e[1], max(1.4, 4.5 * k), max(1.4, 4.5 * k), lerp(tintw(OCHRE, 0.3), SIENNA, 0.4))
-    V.contour(lines, [gp(xa, z0, 0), gp(xa, z0, seat_h), gp(xb, z0, seat_h), gp(xb, z1, seat_h)], gp(x, z0)[1], alpha=0.6)
-    V.contour(lines, hood_hem, gp(x, z0)[1], alpha=0.5)
-    V.contour(lines, [gp(xa, z0, 0), gp(xb, z0, 0), gp(xb, z1, 0)], gp(x, z0)[1], alpha=0.5)
-    c, a = sheet.done()
-    lc, la = lines.done()
-    out = brushed(c, a, lc, la, EARTH, seed=seed, sizes=(4, 2), keep=0.55, fast=fast)
-    return out[0], out[1]
+def to_file(picture, name, colors=128, alpha=None, seed=7, speckle=0.010, amount=0.010):
+    """Pigment grain (little: the wash has its own granulation), then a limited palette with speckle: an 8-bit PNG."""
+    g = grain(picture, seed, amount)
+    sample_of = g if alpha is None else g[alpha > 0.5]
+    pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    idx = to_palette(g, pal, speckle=speckle)
+    save(name, idx, pal, alpha)
+    return os.path.getsize(name)
 
 
-def trunks_cut(back, seed, fast=False):
-    """Soshichi's willow trunks, set down at the road's edge: five tiers stacked on their carrying cloth, the top one's lid
-    up (the ledger on it), a strap; the peddler's sprite carries them on the road (PEOPLE-21A): this is the load set down."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    T = TRUNKS
-    x, z, w, d, tier, n = T["x"], T["z"], T["w"], T["d"], T["tier"], T["n"]
-    k = kz(z)
-    willow_lit, willow_sh = lerp(tintw(OCHRE, 0.48), NAPLES, 0.15), lerp(OCHRE, PRUSSIAN, 0.35)
-    z0, z1 = z - d / 2, z + d / 2
-    # the carrying cloth spread under them (indigo, its corners loose)
-    sheet.poly([gp(x - w / 2 - 22, z0 - 14, 1), gp(x + w / 2 + 26, z0 - 10, 1), gp(x + w / 2 + 20, z1 + 14, 1), gp(x - w / 2 - 18, z1 + 10, 1)], lerp(INDIGO, WHITE, 0.08))
-    for i in range(n):
-        y0, y1 = 2 + i * tier, 2 + (i + 1) * tier - 1.5
-        sheet.poly([gp(x - w / 2, z0, y0), gp(x + w / 2, z0, y0), gp(x + w / 2, z0, y1), gp(x - w / 2, z0, y1)], willow_lit)
-        sheet.poly([gp(x + w / 2, z0, y0), gp(x + w / 2, z1, y0), gp(x + w / 2, z1, y1), gp(x + w / 2, z0, y1)], willow_sh)
-        lines.line([gp(x - w / 2, z0, y1), gp(x + w / 2, z0, y1), gp(x + w / 2, z1, y1)], lerp(SIENNA, PRUSSIAN, 0.35), 0.8, 0.8)
-        for u in (0.25, 0.5, 0.75):                                   # the weave: a few vertical lines
-            lines.line([gp(x - w / 2 + w * u, z0, y0 + 2), gp(x - w / 2 + w * u, z0, y1 - 2)], lerp(OCHRE, PRUSSIAN, 0.45), 0.5, 0.5)
-    yt = 2 + n * tier
-    sheet.poly([gp(x - w / 2, z0, yt), gp(x + w / 2, z0, yt), gp(x + w / 2, z1, yt), gp(x - w / 2, z1, yt)], lerp(willow_sh, PRUSSIAN, 0.2))   # open: the inside
-    # the lid propped up behind, and the ledger on the stack's top (a dark-covered book)
-    sheet.poly([gp(x - w / 2, z1, yt), gp(x + w / 2, z1, yt), gp(x + w / 2, z1 + 8, yt + 30), gp(x - w / 2, z1 + 8, yt + 30)], willow_lit)
-    sheet.poly([gp(x - 14, z0 + 8, yt + 1), gp(x + 10, z0 + 8, yt + 1), gp(x + 10, z0 + 24, yt + 1), gp(x - 14, z0 + 24, yt + 1)], lerp(INDIGO, PRUSSIAN, 0.2))
-    # a strap down its side
-    lines.line([gp(x - w / 2 + 8, z0, 2), gp(x - w / 2 + 8, z0, yt)], lerp(SIENNA, PRUSSIAN, 0.5), max(0.8, 3 * k), 1.0)
-    V.contour(lines, [gp(x - w / 2, z0, 2), gp(x - w / 2, z0, yt), gp(x - w / 2, z1 + 8, yt + 30), gp(x + w / 2, z1 + 8, yt + 30), gp(x + w / 2, z0, yt), gp(x + w / 2, z0, 2)],
-              gp(x, z0)[1])
-    c, a = sheet.done()
-    lc, la = lines.done()
-    out = brushed(c, a, lc, la, EARTH, seed=seed, sizes=(3, 2), keep=0.6, fast=fast)
-    return out[0], out[1]
-
-
-def front_cut(back, seed, fast=False):
-    """The front plane: the near verge at the bottom edge, grass and two stones, and a worn-out straw sandal a traveller
-    left there (they were changed every 40 or 50 km)."""
-    sheet, lines = Paper(SHAPE), Paper(SHAPE)
-    rng = np.random.default_rng(seed)
-    for i in range(26):
-        xx = rng.uniform(-10, 250) if i < 15 else rng.uniform(560, 810)
-        tuft(sheet, xx, 600 + rng.uniform(0, 6), rng.uniform(14, 26), seed + i, lean=0.25, n=8, width=1.6)
-    for (cx_, cy_, rx_, ry_) in ((96, 599, 30, 12), (640, 601, 38, 14)):
-        sheet.ellipse(cx_, cy_, rx_, ry_, STONE)
-        sheet.ellipse(cx_ - rx_ * 0.2, cy_ - ry_ * 0.35, rx_ * 0.65, ry_ * 0.45, STONE_LIT)
-        lines.line([(cx_ - rx_, cy_), (cx_ - rx_ * 0.6, cy_ - ry_ * 0.85), (cx_ + rx_ * 0.4, cy_ - ry_ * 0.9), (cx_ + rx_, cy_ - ry_ * 0.2)], PRUSSIAN, 1.0, 0.8)
-    # the sandal: an oval of plaited straw, its cords loose
-    sx_, sy_ = 168.0, 594.0
-    sheet.ellipse(sx_, sy_, 13, 4.2, lerp(tintw(OCHRE, 0.35), SIENNA, 0.2))
-    for j in range(5):
-        lines.line([(sx_ - 11 + j * 5.5, sy_ - 3), (sx_ - 11 + j * 5.5, sy_ + 3)], lerp(OCHRE, PRUSSIAN, 0.45), 0.7, 0.7)
-    lines.line([(sx_ - 9, sy_ - 2), (sx_ - 2, sy_ - 9), (sx_ + 6, sy_ - 4)], lerp(tintw(OCHRE, 0.25), SIENNA, 0.2), 1.0, 1.0)
-    c, a = sheet.done()
-    lc, la = lines.done()
-    out = brushed(c, a, lc, la, GRASS, seed=seed, sizes=(4, 2), keep=0.5, fast=fast)
-    return out[0], out[1]
-
-
-ORDER = ["cloud", "kago", "noren", "trunks", "grill", "front"]
+def finish_all(pic, planes, counts, info, out=OUT):
+    """THE WATERCOLOUR FINISH (DEPTH.md; Yui's finish_all): the backdrop washed (watercolor.wash), every cut-out washed
+    over the unwashed backdrop with the same seed (wash_cut), its own edge kept crisp, so the paper is one sheet; then
+    the palette. soft = wet_mask(info); amount 1.0 (daylight); wander 1.4 (the far shore and the capes are thin layers)."""
+    soft = wet_mask(info)
+    back_washed = WC.wash(pic, seed=SEED, soft=soft, wander=1.4)
+    sizes = {"back": to_file(back_washed, out + "/back.png", 250)}
+    for name, n in counts:
+        c, a = planes[name]
+        hard = np.clip(blur((a > 0.3).astype(F32), 1.2) * 2.0, 0, 1)
+        washed = WC.wash_cut(c, (a > 0.5).astype(F32), pic, seed=SEED, soft=soft * (1 - hard), wander=1.4, fleck=0.0 if name in ("near", "front") else 0.5)
+        planes[name] = (washed, a)
+        sizes[name] = to_file(washed, out + f"/{name}.png", n, a)
+    return back_washed, sizes
 
 
 def comp_all(pic, planes, order=ORDER):
@@ -802,30 +555,35 @@ if __name__ == "__main__":
     base, info = under()
     Image.fromarray((base * 255).astype(np.uint8)).save(OUT + "-1-under.png")
     print("under", round(time.time() - t0, 1))
-    pic = base.copy() if fast else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.26)
+    if fast:
+        pic = base.copy()
+    else:
+        # the brush pass, light: the far plane stays as the wet washes left it, the ground is half brushed
+        brushed_ = strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.02, keep=0.0)
+        keep = np.clip(0.50 + 0.38 * wet_mask(info), 0, 0.92)
+        pic = lerp(brushed_, base, keep[..., None]).astype(F32)
     print("brushed", round(time.time() - t0, 1))
     details(pic, info, fast=fast)
     print("details", round(time.time() - t0, 1))
-    planes = {}
-    c, a, info["cloud_outline"] = cloud_cut(pic, 11, fast)
-    planes["cloud"] = (c, a)
-    planes["kago"] = kago_cut(pic, 12, fast)
-    planes["trunks"] = trunks_cut(pic, 13, fast)
-    c, a, info["shells"] = grill_cut(pic, 14, fast)
-    planes["grill"] = (c, a)
-    planes["noren"] = noren_cut(pic, 15, fast)
-    planes["front"] = front_cut(pic, 16, fast)
+    planes = cuts(pic, info, fast)
     whole = comp_all(pic, planes)
     Image.fromarray((np.clip(whole, 0, 1) * 255).astype(np.uint8)).save(OUT + "-2-all.png")
-    clear = pic.copy()
-    Image.fromarray((np.clip(comp_all(pic, planes, [n for n in ORDER if n != "cloud"]), 0, 1) * 255).astype(np.uint8)).save(OUT + "-3-clear.png")
-    import edo_kurasawa_layout
+    import edo_kurasawa_layout as LAY
+    lay_ = LAY.layout(planes, info)
     with open(OUT + "/layout.json", "w") as f:
-        json.dump(edo_kurasawa_layout.layout(planes, info), f, indent=1)
+        json.dump(lay_, f, indent=1)
+    with open("out/edo-kurasawa-remap.json", "w") as f:
+        json.dump({"points": lay_["remap"]["points"]}, f, indent=1)
+    for b in lay_["problems"]:
+        print("LAYOUT:", b)
     print("painted", round(time.time() - t0, 1))
-    if fast:
-        sys.exit()
-    print("back", finish(pic, OUT + "/back.png", 152))
-    for name, n in (("cloud", 24), ("kago", 48), ("trunks", 40), ("grill", 48), ("noren", 24), ("front", 48)):
-        print(name, finish(planes[name][0], OUT + f"/{name}.png", n, planes[name][1]))
+    if "wash" in sys.argv or not fast:
+        target = OUT if not fast else OUT + "-fast"
+        os.makedirs(target, exist_ok=True)
+        back_washed, sizes = finish_all(pic, planes, COUNTS, info, target)
+        print(sizes)
+        comp = Image.open(target + "/back.png").convert("RGBA")
+        for name in ORDER:
+            comp.alpha_composite(Image.open(f"{target}/{name}.png").convert("RGBA"))
+        comp.convert("RGB").save(OUT + ("-comp.png" if not fast else "-fast-comp.png"))
     print("done", round(time.time() - t0, 1))

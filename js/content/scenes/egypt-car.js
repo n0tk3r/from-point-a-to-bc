@@ -196,6 +196,7 @@ export default {
     { id: "visor", states: { up: art + "visor-up.png", down: art + "visor-down.png" }, state: (g) => (g.flag("egypt.visorDown") ? "down" : "up"), base: 600 },
     // the little cardboard wagon on its string from the mirror's stem, a cut-out of its own so that it can turn and swing
     { id: "freshener", src: art + "freshener.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE: the painter's marks as they are (layout.json "fx"), in the painter's order.

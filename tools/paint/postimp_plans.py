@@ -43,40 +43,40 @@ PLANS = {
     # CAR-13P: inside the wagon (egypt_car.py). Nobody is drawn; with the story at its start the glovebox is shut, the
     # visor up and the freshener on its string; the glovebox dropped open with the map in it replaces the shut one (and
     # emptied, without the map, is a state of it: the same painting with less in it), the visor pulled down the one up.
-    "egypt-car": {"planes": ["glovebox-shut", "visor-up", "freshener"], "alt": {"glovebox-map": ["glovebox-shut"], "visor-down": ["visor-up"]},
+    "egypt-car": {"planes": ["glovebox-shut", "visor-up", "freshener", "near"], "alt": {"glovebox-map": ["glovebox-shut"], "visor-down": ["visor-up"]},
                   "states": {"glovebox-map": ["glovebox-empty"]}, "union": {}, "frames": []},
     "egypt-site": {
-        "planes": ["awning", "sledge", "streamers", "front"],
+        "planes": ["awning", "sledge", "streamers", "front", "near"],
         "alt": {"shade": []},                                       # the windshield shade, once the guard holds it
         "union": {},
         "frames": ["kite-*"],
     },
     "egypt-gallery": {
-        "planes": ["front"],
+        "planes": ["front", "near"],
         "alt": {"mirror-top": [], "mirror-foot": []},              # the mirrors, once they are set
         "union": {},
         "frames": [],
     },
     "egypt-chamber": {
-        "planes": ["bench", "mirror", "front"],                     # the copper mirror on the bench, until it is traded
+        "planes": ["bench", "mirror", "front", "near"],                     # the copper mirror on the bench, until it is traded
         "alt": {},
         "union": {},
         "frames": [],
     },
     "rome-street": {
-        "planes": ["awning", "fountain", "laundry-lines"] + [f"laundry-{i}" for i in range(1, 13)] + ["tunic", "front"],
+        "planes": ["awning", "fountain", "laundry-lines"] + [f"laundry-{i}" for i in range(1, 13)] + ["tunic", "front", "near"],
         "alt": {},
         "union": {"laundry": ["laundry-lines"] + [f"laundry-{i}" for i in range(1, 13)]},
         "frames": ["cat-*", "pigeon-*", "sparrow-*", "swallow-*"],
     },
     "rome-steps": {
-        "planes": ["columns", "altar", "tripod", "stone", "cage-front", "front-base", "laurel"],
+        "planes": ["columns", "altar", "tripod", "stone", "cage-front", "front-base", "laurel", "near"],
         "alt": {},
         "union": {"front": ["front-base", "laurel"]},
         "frames": ["hen-*", "pigeon-*", "swallow-*"],
     },
     "rome-temple": {
-        "planes": ["table", "front"],
+        "planes": ["table", "front", "near"],
         "alt": {},
         "union": {},
         "frames": [],
@@ -92,49 +92,49 @@ PLANS = {
         "frames": ["crane-*"],
     },
     "rome-capitol": {                                               # ROME-13R2: the Capitol (rome_capitol.py): back to front, as the scene lists them
-        "planes": ["altar", "chariot", "world", "parapet", "hut", "pen", "tablets"],
+        "planes": ["altar", "chariot", "world", "parapet", "hut", "pen", "tablets", "near"],
         "alt": {},
         "union": {},
         "frames": ["goose-*"],                                      # ROME-13R2: the sacred geese (goose-<n>, goose-grey-<n>)
     },
     "rome-tiber": {                                                 # ROME-13R3: across the Tiber (rome_tiber.py); the hens are frames
-        "planes": ["well", "window-wall", "washing", "barge", "curb", "fence-corner", "fence", "landing-edge"],
+        "planes": ["well", "window-wall", "washing", "barge", "curb", "fence-corner", "fence", "landing-edge", "near"],
         "alt": {},
         "union": {},
         "frames": ["hen-*"],
     },
     "home-living-room": {
-        "planes": ["piano", "armchair", "pencil", "table"],
+        "planes": ["piano", "armchair", "pencil", "table", "near"],
         "alt": {"piano-open": ["piano"]},                           # the open piano replaces the shut one
         "union": {},
         "frames": [],
     },
     "home-landing": {
-        "planes": ["ladder", "rail"],
+        "planes": ["ladder", "rail", "near"],
         "alt": {"study-open": []},                                  # the study door standing open
         "union": {},
         "frames": [],
     },
     "home-study": {
-        "planes": ["desk", "screen-offline", "note", "tape-out", "front"],
+        "planes": ["desk", "screen-offline", "note", "tape-out", "front", "near"],
         "alt": {"screen-login": ["screen-offline"], "screen-map": ["screen-offline"], "vault-open": []},
         "union": {},
         "frames": [],
     },
     "home-lilsis-room": {
-        "planes": ["fort", "flashlight", "teaparty", "front", "mobile"],
+        "planes": ["fort", "flashlight", "teaparty", "front", "mobile", "near"],
         "alt": {},
         "union": {},
         "frames": [],
     },
     "home-bigsis-room": {
-        "planes": ["desk", "front"],
+        "planes": ["desk", "front", "near"],
         "alt": {},
         "union": {},
         "frames": [],
     },
     "nevada-roadside": {
-        "planes": ["pump", "stand", "car", "front"],
+        "planes": ["pump", "stand", "car", "front", "near"],
         "alt": {"shade-held": []},                                  # NEVADA-12A: the sun shade, once Grandpa Joe holds it up
         "union": {},
         "frames": ["bird-*", "limo-*", "ranger-*-[0-9]"],           # NEVADA-12A: the limousine (PAINT-12A) and Ranger's frames (PAINT-12C; his portraits are the interface's, in art/portraits)
@@ -143,7 +143,7 @@ PLANS = {
     "nevada-store": {                                               # NEVADA-12B: the store's inside (nevada_store.py)
         # back to front: the five hats on their pegs (the scene hides today's), the back door's frame (the hens and Little
         # Sister on the step are behind it), Harold, the counter, the spinner, the rock bins; the front plane last
-        "planes": ["hat-1", "hat-2", "hat-3", "hat-4", "hat-5", "doorframe", "cooler", "counter", "spinner", "rockbins", "front"],
+        "planes": ["hat-1", "hat-2", "hat-3", "hat-4", "hat-5", "doorframe", "cooler", "counter", "spinner", "rockbins", "front", "near"],
         "alt": {"window-shade": [], "mirror-shades": []},           # the sun shade (until it is given), the last mirror shades (until bought)
         "union": {},
         "frames": ["hen-*", "egg-dust", "roller-*", "tv-*"],       # the hens and the egg, the roller turning, the TV's snow
@@ -153,7 +153,7 @@ PLANS = {
     # the ropes (four strands; three, two and one are states of it, the same painting with less of the bow in it), and
     # the bag, the clipboard and the juice box (each goes when taken). The desert strip behind the windows is a frame.
     "nevada-limo": {
-        "planes": ["divider-up", "front"],
+        "planes": ["divider-up", "front", "near"],
         "alt": {"divider-down": ["divider-up"], "ropes-4": [], "bag": [], "clipboard": [], "juice": []},
         "states": {"ropes-4": ["ropes-3", "ropes-2", "ropes-1"]},
         "union": {},
@@ -165,7 +165,7 @@ PLANS = {
     # states replace them: the grille off (and its nuts with it), the lever down, the door open, the can tipped over or
     # under the pipe, the limousine with its door open. The fan turning and the pennant stirring are frames.
     "office-lot": {
-        "planes": ["grille", "nut-1", "nut-2", "nut-3", "nut-4", "switch", "door", "awning", "trash", "flagpole", "limo", "front"],
+        "planes": ["grille", "nut-1", "nut-2", "nut-3", "nut-4", "switch", "door", "awning", "trash", "flagpole", "limo", "front", "near"],
         "alt": {"grille-off": ["grille", "nut-1", "nut-2", "nut-3", "nut-4"], "switch-off": ["switch"], "door-open": ["door"],
                 "trash-tipped": ["trash"], "trash-pipe": ["trash"], "limo-door-open": ["limo"]},
         "union": {},
@@ -177,7 +177,7 @@ PLANS = {
     # through a grille, an RGBA laid by the engine over the room it draws under it) is keyed colour by colour as a frame,
     # its soft alpha kept.
     "office-ducts": {
-        "planes": [],
+        "planes": ["near"],
         "alt": {},
         "union": {},
         "frames": ["fan-*", "grille-view"],
@@ -187,7 +187,7 @@ PLANS = {
     # upright, the wastebasket and the box near us. Each other state replaces its first one: Ranger's eyes at the grille, 77
     # and 81, the button lit, the door open, the plant drooping. The clock's second hand and the cooler's bubble are frames.
     "office-room": {
-        "planes": ["vent", "thermostat-72", "intercom", "door", "doorframe", "chair-corner", "table", "questionnaire", "plant", "front"],
+        "planes": ["vent", "thermostat-72", "intercom", "door", "doorframe", "chair-corner", "table", "questionnaire", "plant", "front", "near"],
         "alt": {"vent-eyes": ["vent"], "thermostat-77": ["thermostat-72"], "thermostat-81": ["thermostat-72"], "intercom-lit": ["intercom"],
                 "door-open": ["door"], "plant-droop": ["plant"]},
         "union": {},
@@ -198,7 +198,7 @@ PLANS = {
     # its bay, the cart and the boxes near us. Ranger's eyes replace the plain grille, the open door the shut one; the receipt
     # on the counter lies over everything (until then it is not shown).
     "office-property": {
-        "planes": ["vent", "door", "wall", "banjo", "front"],
+        "planes": ["vent", "door", "wall", "banjo", "front", "near"],
         "alt": {"vent-eyes": ["vent"], "door-open": ["door"], "receipt": []},
         "union": {},
         "frames": [],
@@ -213,13 +213,13 @@ PLANS = {
     # fish (sways, at the back), the three tubs, the sushi-box stand with the box empty on it, the hearth, the baby's
     # basket, the front plane; the box filled and pressed, and turned out and cut, replace the empty one; the cat's frames.
     "edo-fishshop": {
-        "planes": ["noren", "driedfish", "tub-1", "tub-2", "tub-3", "stand", "sushibox-empty", "hearth", "basket", "front"],
+        "planes": ["noren", "driedfish", "tub-1", "tub-2", "tub-3", "stand", "sushibox-empty", "hearth", "basket", "front", "near"],
         "alt": {"sushibox-filled": ["sushibox-empty"], "sushibox-cut": ["sushibox-empty"]},
         "union": {},
         "frames": ["cat-*"],
     },
     "office-breakroom": {
-        "planes": ["vent", "door", "schedule", "pie", "vending", "chair", "front"],
+        "planes": ["vent", "door", "schedule", "pie", "vending", "chair", "front", "near"],      # (near: PAINT-23B, the near plane, round twenty-three)
         "alt": {"vent-eyes": ["vent"], "door-open": ["door"], "pie-eaten": ["pie"], "pie-gone": ["pie"], "vending-peanuts": ["vending"]},
         "states": {"vending-peanuts": ["vending-taken"]},
         "union": {},
@@ -251,7 +251,7 @@ PLANS = {
     # the lantern lit, the sacks heaped over the mat, the door open, the bar lifted, the mat pulled aside, the trapdoor
     # open; the floorgaps' light lies over the backdrop (under the mat) while the room below is lit.
     "edo-storehouse": {
-        "planes": ["lantern", "sacks", "door", "bar", "trapdoor", "mat"],
+        "planes": ["lantern", "sacks", "door", "bar", "trapdoor", "mat", "near"],
         "alt": {"lantern-lit": ["lantern"], "sacks-heaped": ["sacks"], "door-open": ["door"], "bar-up": ["bar"], "mat-aside": ["mat"],
                 "trapdoor-open": ["trapdoor", "mat"], "floorgaps-on": ["mat"]},
         "union": {},
@@ -260,9 +260,10 @@ PLANS = {
     # PAINT-20D: the castle approach at Himeji (edo_castle.py). Back to front as the scene lays them with nobody there: the
     # ladder (behind everybody), the gate (its opening clear), the scaffold, the tub, the three buckets of lime (each hidden
     # as the crew carries it: no second state), the cherry (the trunk and all its boughs: the front of the picture). The
-    # herons and the egrets are frames.
+    # herons and the egrets are frames. Round twenty-three (DEPTH.md, edo_castle_depth.py): the near plane last (the
+    # cherry's near limb and boughs, a pine's bough tips, the moat's stone edge and its reeds).
     "edo-castle": {
-        "planes": ["ladder", "gate", "scaffold", "tub", "bucket-1", "bucket-2", "bucket-3", "cherry"],
+        "planes": ["ladder", "gate", "scaffold", "tub", "bucket-1", "bucket-2", "bucket-3", "cherry", "near"],
         "alt": {},
         "union": {},
         "frames": ["heron-*", "egret-*"],
@@ -272,7 +273,7 @@ PLANS = {
     # The three beams of sun through the gun ports are LIGHT, not in the backdrop: each is a light picture (RGBA, soft
     # alpha) for the live layer, keyed colour by colour as a frame.
     "edo-keep": {
-        "planes": ["racks", "stairs", "pillar", "tubs", "front"],
+        "planes": ["racks", "stairs", "pillar", "tubs", "front", "near"],
         "alt": {},
         "union": {},
         "frames": ["beam-*"],
@@ -282,9 +283,10 @@ PLANS = {
     # near dark. The west shutters open replace the shut ones. The LIT ROOM is a state: `lit` is a second backdrop (the
     # whole stage) laid over everything when the west shutters are open, with the sun flooding in, and each cut-out has
     # its `-lit` twin for that state (the same painting in the sunset light). The north and east shutters open (dark, and
-    # lit) replace their shut ones.
+    # lit) replace their shut ones. PAINT-23 (round twenty-three): the near plane last (near.png: the tie beam across the top
+    # and the inner post at the right edge, in deep shade; one picture for both lights).
     "edo-keeptop": {
-        "planes": ["rail", "chests", "lantern", "northshutter", "eastshutter", "westshutter", "front"],
+        "planes": ["rail", "chests", "lantern", "northshutter", "eastshutter", "westshutter", "front", "near"],
         "alt": {"westshutter-open": ["westshutter"], "northshutter-open": ["northshutter"], "eastshutter-open": ["eastshutter"],
                 "lit": [], "rail-lit": ["rail"], "chests-lit": ["chests"], "lantern-lit": ["lantern"], "front-lit": ["front"],
                 "northshutter-lit": ["northshutter"], "eastshutter-lit": ["eastshutter"], "westshutter-open-lit": ["westshutter"],
@@ -294,9 +296,11 @@ PLANS = {
     },
     # PAINT-21A: Nishikurasawa at the foot of the Satta Pass (edo_kurasawa.py). Back to front as the scene lays them with
     # nobody there: Fuji's cap of cloud (on; hidden once it has lifted at the top of the pass), the bearers' palanquin, the
-    # noren over the teahouse's door (it sways), Soshichi's trunks set down, O-Kuni's grill, the front plane. No other states.
+    # noren over the teahouse's door (it sways), Soshichi's trunks set down, O-Kuni's grill, the front plane (the bank along
+    # the bottom), and PAINT-23's near plane (the hackberry's bough over the top right and the teahouse's eave corner with its
+    # reed blind at the top left). No other states.
     "edo-kurasawa": {
-        "planes": ["cloud", "kago", "noren", "trunks", "grill", "front"],
+        "planes": ["cloud", "kago", "noren", "trunks", "grill", "front", "near"],
         "alt": {},
         "union": {},
         "frames": [],
@@ -304,8 +308,10 @@ PLANS = {
     # PAINT-21A: the top of the Satta Pass (edo_satta.py). Back to front with nobody there: Fuji's cap of cloud (on; the
     # scene fades it out when it lifts), the bent pine (it sways), the front plane. The folded pass on the Jizo's hat is an
     # alt that lies over the picture while it is there (from the gust to when it is lifted off).
+    # PAINT-23 (round twenty-three): the front plane drawn again (the lip of the cutting along the bottom) and the near
+    # plane after it (near.png: the wind-bent pine across the top right; it sways).
     "edo-satta": {
-        "planes": ["cloud", "pine", "front"],
+        "planes": ["cloud", "pine", "front", "near"],
         "alt": {"pass": []},
         "union": {},
         "frames": [],
@@ -316,7 +322,7 @@ PLANS = {
     # bars on the east wall and the floor, the shafts in the air) is NOT in the backdrop: three RGBA light pictures for the
     # live layer, keyed colour by colour as frames, moved by the scene as the sun goes down (layout.json `bars`).
     "edo-hall": {
-        "planes": ["lattice", "front"],
+        "planes": ["lattice", "front", "near"],
         "alt": {"dusk": [], "lattice-dusk": ["lattice"], "front-dusk": ["front"]},
         "union": {},
         "frames": ["bars-*"],
@@ -326,7 +332,7 @@ PLANS = {
     # them: the trapdoor open on the dark storehouse, and open on the morning (with the sun on the mats, on the back plane); the
     # altar open (the Kannon, the calendar, the bowl); the lamps cold; the ladder in the morning sun.
     "edo-chapel": {
-        "planes": ["trapdoor-shut", "props", "altar-shut", "mirror", "lamps", "ladder", "front"],
+        "planes": ["trapdoor-shut", "props", "altar-shut", "mirror", "lamps", "ladder", "front", "near"],
         "alt": {"trapdoor-lamp": ["trapdoor-shut"], "trapdoor-day": ["trapdoor-shut"], "altar-open": ["altar-shut"],
                 "lamps-out": ["lamps"], "ladder-day": ["ladder"]},
         "union": {},
@@ -338,7 +344,7 @@ PLANS = {
     # propped open replaces the shut one; the pot with its lid lifted, and the pot boiling, each replace the quiet one.
     # The floating cask is frames.
     "edo-deck": {
-        "planes": ["swell", "sail", "rigging", "mast", "windlass", "tiller", "compass-shut", "pot", "front"],
+        "planes": ["swell", "sail", "rigging", "mast", "windlass", "tiller", "compass-shut", "pot", "front", "near"],
         "alt": {"compass-open": ["compass-shut"], "pot-lifted": ["pot"], "pot-steam": ["pot"]},
         "union": {},
         "frames": ["cask-*"],
@@ -347,7 +353,7 @@ PLANS = {
     # Kanbei's thumb lie over the card and the box; the needle a hair to the left and a hair to the right replace the still
     # one (its tremble: three positions in turn).
     "edo-compass": {
-        "planes": ["needle", "thumb"],
+        "planes": ["needle", "thumb", "near"],
         "alt": {"needle-l": ["needle"], "needle-r": ["needle"]},
         "union": {},
         "frames": [],
@@ -358,7 +364,7 @@ PLANS = {
     # emptying and empty replace the full one; the smaller heap of sandals the full one. The lighters on the river, the
     # price runner and the water men's splash are frames.
     "edo-dojima": {
-        "planes": ["lighter", "market", "noren", "sandals", "pot", "stall", "tray", "kettle", "front"],
+        "planes": ["lighter", "market", "noren", "sandals", "pot", "stall", "tray", "kettle", "front", "near"],
         "alt": {"tray-half": ["tray"], "tray-empty": ["tray"], "sandals-few": ["sandals"]},
         "union": {},
         "frames": ["lighter-near", "lighter-far", "runner-*", "splash-*"],
@@ -368,7 +374,7 @@ PLANS = {
     # sheet on its stand (blank), the medicine shop's standing signboard, the road god, the water-seller. The sheet
     # printed ghost-blurred, and printed clean, replace the blank one (#30).
     "edo-street": {
-        "planes": ["prints-1", "prints-2", "noren-kelp", "noren-med", "noren-comb", "bench", "print", "sign", "roadgod", "watervendor"],
+        "planes": ["prints-1", "prints-2", "noren-kelp", "noren-med", "noren-comb", "bench", "print", "sign", "roadgod", "watervendor", "near"],
         "alt": {"print-ghost": ["print"], "print-clean": ["print"]},
         "union": {},
         "frames": [],
@@ -379,7 +385,7 @@ PLANS = {
     # stage in the roof hatch's day, the audience turned to the stage), with the set's two cut-outs lit (their -show twins
     # replace them). The daylight's shafts in the air are light pictures for the live layer (frames, keyed colour by colour).
     "edo-theatre": {
-        "planes": ["robes", "stagerail", "lamp", "boypuppet", "curtain", "gate", "housefront", "front"],
+        "planes": ["robes", "stagerail", "lamp", "boypuppet", "curtain", "gate", "housefront", "front", "near"],
         "alt": {"show": [], "gate-show": ["gate"], "housefront-show": ["housefront"]},
         "union": {},
         "frames": ["shaft-*"],
@@ -389,7 +395,7 @@ PLANS = {
     # tub, the octopus pots, the rocks, the two shore pines (they sway), the grass at the front. The boat's approach is a
     # frame (boat-1).
     "edo-akashi": {
-        "planes": ["floats", "ladle", "pilgrimboat", "heitaboat", "tub", "pots", "rocks", "pine-l", "pine-r", "front"],
+        "planes": ["floats", "ladle", "pilgrimboat", "heitaboat", "tub", "pots", "rocks", "pine-l", "pine-r", "front", "near"],
         "alt": {"pilgrimboat-beached": ["pilgrimboat"]},
         "union": {},
         "frames": ["boat-*"],
@@ -403,7 +409,8 @@ PLANS = {
 # ward gate (open by day). The other states replace their first: the school shut up (for the night), the kitchen door open,
 # the bucket down in the well, the cloth knotted round the rice balls, the gate shut (for the night).
 PLANS["edo-town"] = {
-    "planes": ["noren-cotton", "noren", "desks", "shutters", "kitchendoor", "saltjar", "plumjar", "cloth", "ricepot", "pickletub", "well", "bucket", "gate"],
+    "planes": ["noren-cotton", "noren", "desks", "shutters", "kitchendoor", "saltjar", "plumjar", "cloth", "ricepot", "pickletub", "well", "bucket", "gate",
+               "near", "near-noren"],      # (PAINT-23, round twenty-three: the front plane, last: our eave and its post; the next shop's curtain, which stirs)
     "alt": {"shutters-shut": ["shutters"], "kitchendoor-open": ["kitchendoor"], "bucket-down": ["bucket"], "cloth-bundle": ["cloth"], "gate-shut": ["gate"]},
     "union": {},
     "frames": [],
@@ -417,11 +424,13 @@ PLANS["edo-town"] = {
 # fades it in over back.png, under everybody), and every cut-out has its `-sunset` twin in that light, replacing its
 # first state as the light changes.
 PLANS["edo-shosha"] = {
-    "planes": ["doors", "lock", "stepball", "stone", "bench", "pine"],
+    # PAINT-23 (round twenty-three, RECOMPOSE): the near plane is two files: `pine` (the old pine's trunk and its great bough
+    # across the top: it sways) and `near` (its roots, moss and ferns along the bottom, the bank's lip in the bottom right).
+    "planes": ["doors", "lock", "stepball", "stone", "bench", "pine", "near"],
     "alt": {"doors-half": ["doors"], "doors-open": ["doors"], "lock-open": ["lock"],
             "sunset": [], "doors-sunset": ["doors"], "doors-half-sunset": ["doors"], "doors-open-sunset": ["doors"],
             "lock-sunset": ["lock"], "lock-open-sunset": ["lock"], "stepball-sunset": ["stepball"], "stone-sunset": ["stone"],
-            "bench-sunset": ["bench"], "pine-sunset": ["pine"]},
+            "bench-sunset": ["bench"], "pine-sunset": ["pine"], "near-sunset": ["near"]},
     "union": {},
     "frames": [],
 }
@@ -432,7 +441,7 @@ PLANS["edo-shosha"] = {
 # replace their first or lie over the picture: the ear's hole clean, the wave slid aside (the post in its recess is the
 # backdrop's), the coin on the post, the post and coin turned, the slits open along the rabbit's back, the bolt drawn.
 PLANS["edo-lock"] = {
-    "planes": ["wave", "ear", "bolt"],
+    "planes": ["wave", "ear", "bolt", "near"],
     "alt": {"ear-clean": ["ear"], "wave-slid": ["wave"], "post-coin": [], "post-turned": [], "back-open": [], "bolt-out": ["bolt"]},
     "union": {},
     "frames": [],

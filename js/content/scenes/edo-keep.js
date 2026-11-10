@@ -236,6 +236,7 @@ export default {
     { id: "pillar", src: art + "pillar.png", base: 407 },
     { id: "tubs", src: art + "tubs.png", base: 599 },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // LIGHT: the three beams of sun through the gun ports, round, triangular and square (their shafts and their patches on the
   // floor), laid over the painting with a screen blend; under the people, as the live layer is.

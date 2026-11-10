@@ -193,6 +193,7 @@ export default {
       when: (g) => post(g) || room.coin },
     { id: "back", plane: "back", src: art + "back-open.png", when: post },
     { id: "bolt", plane: "back", states: { in: art + "bolt.png", out: art + "bolt-out.png" }, state: (g) => (is(g, "edo.hallOpen") || room.opening ? "out" : "in") },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // THINGS THAT MOVE BY NATURE: a few motes of dust in the low sun across the lock (layout.json fx)
   fx: [{ id: "dust", type: "shimmer", rect: [180, 140, 520, 320], count: 8, size: 2, flow: [3, -1], life: 3.0, color: "#fff2cc", opacity: 0.35 }],

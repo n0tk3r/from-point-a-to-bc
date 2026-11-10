@@ -413,6 +413,7 @@ export default {
     { id: "laundry-lines", src: art + "laundry-lines.png", plane: "front" },      // the lines, and the three sparrows sitting on the far one
     { id: "tunic", src: art + "tunic.png", plane: "front", when: (g) => !g.flag("rome.hasTunic") },   // the small tunic on the low line, until it is lent
     { id: "front", src: art + "front.png", plane: "front" },      // two wine jars and a handcart wheel at the bottom right corner
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4a-ready.md). Nothing that moves is painted still: the

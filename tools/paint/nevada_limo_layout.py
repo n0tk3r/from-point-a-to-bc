@@ -76,7 +76,7 @@ def write(stA, stB, boxes, wins, cover):
     A, B = stA, stB
     thing("divider", "the divider: smoked glass in a frame (up), or slid down into the seat back with the front of the car seen through it (down): two cut-outs",
           union(rect_xywh(boxes["divider"]), rect_of(B, ["frame"])), "atdivider", plane=["divider-up", "divider-down"])
-    thing("ropes", "the ropes beside Grandpa Joe on the long seat: white regulation rope with a red thread, tied off in a bow, the loose end toward us (states 4, 3, 2, 1)",
+    thing("ropes", "the ropes beside Grandpa Joe on the long seat: white regulation rope with a red thread, tied off in a bow on his far side (behind his lap from our seat), the loose end hanging down the cushion's face under his knees, lower each strand (states 4, 3, 2, 1)",
           union(*[rect_xywh(boxes[f"ropes-{n}"], 2) for n in (4, 3, 2, 1)]), "atropes", plane="ropes")
     thing("bag", "the paper bag on the facing seat: brown, folded over at the top, a grease spot (the cheeseburger)", rect_xywh(boxes["bag-own"], 2), "atbag", plane="bag")
     thing("clipboard", "the clipboard propped on the facing seat: the office's map in pen, three circles (44, 1921, and one under a smudge), a column of empty boxes",
@@ -124,7 +124,7 @@ def write(stA, stB, boxes, wins, cover):
         "ranger": {"at": fl(*rk), "face": "W", "scale": round(scale_at(*rk), 3), "note": "on the carpet between the seats, near us, facing Joe"},
         "ropes": {"at": ro_at, "scale": round(scale_at(*ro), 3), "floor": ro_floor, "face": "W",
                   "note": "where Ranger sits to nibble: ON the long seat's cushion beside the bow. Draw him at `scale` (not the row's), "
-                          "his feet at `at`, sorted as if standing at `floor` (the carpet under him): in front of the ropes and of Joe."},
+                          "his feet at `at`, sorted as if standing at `floor` (the carpet under him): in front of the ropes, behind Joe (LIMO-23: he sits on Joe's far side, Joe's arm in front of him)."},
     }
     for k, (X, Z) in M.ON_FACING_SEAT.items():
         s = scale_at(X, Z)
@@ -151,8 +151,8 @@ def write(stA, stB, boxes, wins, cover):
             {"id": "divider-up", "file": "divider-up.png", "plane": "back", "note": "the glass up: smoked, the headrests dim through it (first state)"},
             {"id": "divider-down", "file": "divider-down.png", "plane": "back", "alt": "divider-up",
              "note": "the glass slid down: the front of the car through the opening; exactly the same pixels as divider-up"},
-            {"id": "ropes", "states": {"4": "ropes-4.png", "3": "ropes-3.png", "2": "ropes-2.png", "1": "ropes-1.png"}, "base": jy + 2,
-             "note": "the bow on the cushion beside Joe; gone at 0. Its base is a row just in front of Joe's ground point: Joe is behind it, Ranger on the carpet or on the seat (sorted by the carpet under him) in front"},
+            {"id": "ropes", "states": {"4": "ropes-4.png", "3": "ropes-3.png", "2": "ropes-2.png", "1": "ropes-1.png"}, "base": ro_floor[1] - 4,
+             "note": "the bow on the cushion on Joe's far side and its loose end hanging down the cushion's face; gone at 0. LIMO-23: its base is a row behind Joe's ground point and behind the carpet under Ranger's perch: Joe in front of it, and Ranger, on the carpet or on the seat (sorted by the carpet under him), in front"},
             {"id": "bag", "file": "bag.png", "base": face_edge, "note": "goes when taken (its shadow with it)"},
             {"id": "juice", "file": "juice.png", "base": face_edge, "note": "goes when taken"},
             {"id": "clipboard", "file": "clipboard.png", "base": face_edge, "note": "goes when taken"},

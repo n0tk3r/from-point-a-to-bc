@@ -413,6 +413,7 @@ export default {
     { id: "fence-corner", src: art + "fence-corner.png", base: 451, solid: [[517, 445], [524, 445], [533, 451], [517, 451]] },      // the yard's side fence and corner: the hens and Mariam behind it
     { id: "fence", src: art + "fence.png", base: 490, solid: [[599, 474], [627, 474], [627, 490], [599, 490]] },                     // the near run of the yard's fence
     { id: "landing-edge", src: art + "landing-edge.png", base: 501, solid: [[130, 501], [130, 498], [123, 496], [112, 496], [102, 498], [95, 501], [94, 505], [101, 507], [112, 507], [123, 505]] },      // the landing's near edge and its bollard
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (the painter's marks, layout.json "fx", as they are). Nothing that moves is painted still.

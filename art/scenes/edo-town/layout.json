@@ -413,9 +413,27 @@
     84,
     453
    ]
+  ],
+  [
+   [
+    6,
+    455
+   ],
+   [
+    34,
+    455
+   ],
+   [
+    34,
+    597
+   ],
+   [
+    6,
+    597
+   ]
   ]
  ],
- "blocked_note": "the well's curb, the pickle tub, the rice pot on its stand, the mortar, the pan against the wall, the bales of cloth",
+ "blocked_note": "the well's curb, the pickle tub, the rice pot on its stand, the mortar, the pan against the wall, the bales of cloth; and (round twenty-three) the street behind the near post at the left edge, where nobody may walk out of sight",
  "planes": [
   {
    "id": "noren-cotton",
@@ -642,6 +660,18 @@
      450
     ]
    ]
+  },
+  {
+   "id": "near",
+   "file": "near.png",
+   "plane": "front",
+   "what": "round twenty-three's front plane: the eave of a house on our own side of the highway (its underside across the top left, its corner where the house ends), its post down the left edge"
+  },
+  {
+   "id": "near-noren",
+   "file": "near-noren.png",
+   "plane": "front",
+   "what": "the hem of the next shop's indigo eave curtain across the top right corner (it stirs: fx sway)"
   }
  ],
  "cutouts": {
@@ -752,37 +782,65 @@
    303,
    104,
    150
+  ],
+  "near": [
+   0,
+   0,
+   413,
+   600
+  ],
+  "near-noren": [
+   672,
+   0,
+   128,
+   150
   ]
  },
  "things": [
   {
    "id": "keep",
-   "what": "the keep, white, roof on roof, far up on its hill above the town's roofs (PAINT-20D's keep, from the town side)",
+   "what": "the keep, white, roof on roof, on its hill above the town's roofs (PAINT-20D's keep, from the town side, turned: its gabled face to the left in the sun, its end to the right)",
    "shape": {
     "poly": [
      [
-      522.0,
-      180.0
+      633,
+      115
      ],
      [
-      610.0,
-      180.0
+      638,
+      171
      ],
      [
-      596.0,
-      136.0
+      633,
+      172
      ],
      [
-      580.0,
-      66.0
+      495,
+      170
      ],
      [
-      552.0,
-      66.0
+      500,
+      114
      ],
      [
-      536.0,
-      136.0
+      530,
+      46
+     ],
+     [
+      538,
+      29
+     ],
+     [
+      555,
+      18
+     ],
+     [
+      577,
+      17
+     ],
+     [
+      595,
+      30
      ]
     ]
    },
@@ -799,11 +857,11 @@
     "poly": [
      [
       236,
-      214
+      189
      ],
      [
       800,
-      206
+      189
      ],
      [
       800,
@@ -2396,6 +2454,15 @@
    "size": 14,
    "depth": true,
    "shy": 120
+  },
+  {
+   "id": "near-noren",
+   "type": "sway",
+   "plane": "near-noren",
+   "anchor": "top",
+   "amount": 1.6,
+   "period": 4.6,
+   "what": "the next shop's curtain across the top right corner stirring in the noon air (round twenty-three)"
   }
  ],
  "fx_note": "Moving: the kitchen's smoke, the two noren stirring, a kite over the castle, sparrows on the street; and the people's own small lives (PEOPLE-21B): O-Tane at her door, O-Kiku fidgeting, the girls writing, O-Shizu at her table, Tobei on his stool. The komuso passes along the street now and then (the design: he is in Himeji too): left to right along row 520 or so.",

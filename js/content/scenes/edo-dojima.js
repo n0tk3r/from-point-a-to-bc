@@ -319,6 +319,7 @@ export default {
   blocked: [
     [[73, 472], [344, 489], [359, 473], [105, 459]], [[120, 441], [178, 444], [155, 455], [94, 451]], [[489, 465], [835, 483], [809, 462], [496, 447]],
     [[491, 475], [528, 477], [530, 467], [495, 465]], [[601, 623], [1012, 660], [934, 589], [596, 563]],
+    [[-10, 424], [42, 425], [42, 610], [-10, 610]],
   ],
 
   party: THREE,
@@ -357,6 +358,7 @@ export default {
     { id: "front", src: art + "front.png", plane: "front" },
     { id: "splash", frames: [1, 2, 3, 4, 5].map((n) => `${art}splash-${n}.png`), fps: 10, at: [559, 424], foot: [5, 26], base: [[489, 465], [835, 483]], when: () => false },
     { id: "runner", frames: [1, 2, 3, 4].map((n) => `${art}runner-${n}.png`), fps: 9, at: RUN.from, foot: [27, 75], base: 464, when: () => false },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // THINGS THAT MOVE BY NATURE (layout.json fx): steam from the pot and the kettle, the hearth's embers, the noren stirring,
   // the moored lighter riding at the steps, the light moving on the river, and lighters poled past on it, both ways (painted

@@ -245,6 +245,7 @@ export default {
     { id: "study-open", src: art + "study-open.png", base: [[695, 301], [778, 316]], when: (g) => !!g.flag("home.studyOpen") },   // the study door standing open, laid over the shut one
     { id: "ladder", src: art + "ladder.png", base: [[586, 307], [688, 328]], solid: [[668, 306], [705, 313], [691, 329], [651, 321]] },   // the attic ladder, let down from its hatch
     { id: "rail", src: art + "rail.png", plane: "front" },   // the railing, the banister of the stairs, the quilt hung over the rail, the hanging light out in the room
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // The ways out across the edges of the picture. The study door at the right end leads on only once it is open.

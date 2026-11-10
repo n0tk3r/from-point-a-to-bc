@@ -78,6 +78,11 @@ Where people walk and things are clicked: the clearest, best lit, most detailed 
 Scenes are of two kinds this round (the lead says which yours is):
 
 **DEEPEN: the camera and every number of the scene file stay.** The picture gains its three planes round them.
+What lies beyond the walked ground (far buildings, hills, the sky) may be drawn again in a better view through the same
+camera: turned in the world so that it is no longer square-on, larger, cut off by the frame. If a far thing that is
+clicked moves, its area's shape is measured again, and only that. Two small things may be added to a deepened scene's
+file, and are said in the report: one `blocked` patch where a near thing at the frame's edge must stand over walked
+ground (no mark, standing place or way out in it), and one `sway` line for a near thing the wind would move.
 
 **RECOMPOSE: a new camera,** because the old view was square-on or from too high. Then:
 
@@ -158,3 +163,53 @@ form), and new front-plane files.
 8. **Check:** `depth_check.py` says PASS; the scene's own `_check.py`, if it has one, is as clean as it was before;
    the game shows it (the "Try it" address in the scene file's header) with the family standing in it, every clickable
    thing in sight, nobody hidden.
+
+## What the pilot taught (four scenes, 9 November)
+
+The author looked at the four pilot scenes (where the wagon came down, the Forum, Yui, the cedar path) and said:
+"yes those look way better, apply the same depth to the rest of the game". They are the standard. Look at them in the
+game before you start, and read the code that made them:
+
+- `egypt1_near.py`, `egypt1_kit.py` (where the wagon came down): a near palm and its fronds, a bank's lip; what lies on
+  the ground through `persp.Camera`: where a shadow falls, the wind's ripples, cracked silt, a tree's shade.
+- `rome_forum_near.py`, `rome_forum_ground.py` (the Forum): a near column, boughs in the top corners, a landing along the
+  bottom; a large shadow from outside the picture with leaf shade and flecks of sun on it; a test for whether a place
+  is in that shade.
+- `edo_village.py` (`finish_all`), `edo_village_near.py`, `edo_village_far.py`, `edo_village_things.py`, and the
+  watercolour tools at the end of `edo_village_kit.py` (`Wet`, `thin`, `keyline`, `glaze`, `world_noise`, `hand`,
+  `grade_cut`: import them, do not change that file): the act's watercolour, exactly. Its recipe: paints thinned
+  toward the paper and every flat graded; shadows as cool glazes; the key line 0.35 to 0.8 px, broken, none on lit
+  edges or in the distance; the brush pass kept but mixed back; then `watercolor.wash(back, seed, soft=WET)` with WET
+  a map (1.0 the sky, 0.5 to 0.65 the far land, the water 0.75 at the horizon falling to 0.2 at the shore, 0 the
+  ground and everything standing) and `wash_cut(..., crisp=True)` on every cut-out with the same seed and the
+  unwashed backdrop; grain 0.010, the palette, speckle 0.010.
+- `edo_cedars_kit.py` (`HillCam`: a camera for ground that climbs, pitched up a little so that trunks tower),
+  `edo_cedars_plan.py` (the skeleton), `edo_cedars_layout.py` (prints every number of the scene file and the remap),
+  `edo_cedars_play.py` (the recomposed scene played in the game): the pattern for a RECOMPOSE.
+
+What they found:
+
+1. **Judge the keyed picture, not the raw painting.** `install.py` moves colours a good deal (warm darks turn violet;
+   the near plane wants a frankly warm note to stay warm). Look at the installed composite at twice its size.
+2. **A speck of light shut in by darks is keyed as a highlight:** sky gaps inside a dark bough come out as white dots.
+   Leave no small holes in near foliage.
+3. **The level camera stands 3 m up and more:** the bottom row of the picture is ground 8 m away, so nothing under a
+   metre high shows within 6 m of the lens. The near plane along the bottom is the lip of a bank with its growth, a
+   raised level we stand on (the Forum's landing), or the feet of tall things; the rest of it is tall or hanging
+   things: trunks, posts, columns, boughs, eaves, awnings, cloth.
+4. **Nothing near the lens may look like something to pick up.** Natural things and architecture, not jars and rope.
+5. **Whatever is painted into the backdrop is behind everybody.** A new standing thing goes beyond the walk's far
+   edge, on a wall, in a `blocked` patch or in a yard nobody enters; never beside the walked ground in front of it.
+6. **Old cut-outs keep their outlines exactly** (so the scene file's shapes and base lines hold): paint them better
+   inside the same outline; where a cut-out was brushed over the old ground colour, pin that colour for it.
+7. **Frames of things that move** (hens, steam, a wheel) stay byte for byte where they can, in their own old palette.
+8. **`wash` with a wet far layer moves it:** thin far layers run together and straight far trunks bend. Use
+   `wander=1.0` to `1.5` there, or feather those layers yourself and leave them out of `soft`. `fleck=0` on mid-tone
+   roofs. `wash_cut(..., crisp=True)` for anything standing in front of a wet passage.
+9. **The game's people are not shaded by painted shade.** Keep the places where people chiefly stand in the light, or
+   let the shade be thin there.
+10. **`depth_check.py` passed the old cedar path too.** The numbers are a floor. What decides is the picture, looked
+    at beside the four pilot scenes.
+11. **A scratch folder of your own.** The session's scratch folder is shared and painters overwrote each other's
+    files: keep every working file inside your own copy (`tools/paint/out/`) or the folder you were given.
+

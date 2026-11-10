@@ -266,6 +266,7 @@ export default {
     [[260, 532], [359, 532], [363, 507], [273, 507]], [[110, 563], [204, 563], [222, 535], [137, 535]], [[426, 558], [502, 558], [498, 546], [425, 546]],
     [[576, 508], [636, 508], [599, 469], [548, 469]], [[642, 547], [670, 547], [661, 537], [633, 537]], [[695, 538], [781, 525], [798, 525], [797, 514], [765, 514], [689, 532]],
     [[2, 598], [80, 598], [99, 582], [2, 582]], [[91, 598], [139, 598], [146, 592], [100, 592]], [[798, 598], [798, 598], [798, 585], [787, 585]],
+    [[716, 598], [798, 598], [798, 576], [724, 584]],
   ],
 
   party: THREE,
@@ -292,6 +293,7 @@ export default {
     // Kōta's pot: boiling, lid on, starch run down under it, until the rice comes right (edo.lidDown); then the lid on, left alone
     { id: "pot", base: 560, states: { lid: art + "pot.png", lifted: art + "pot-lifted.png", steam: art + "pot-steam.png" }, state: (g) => (is(g, "edo.lidDown") ? "lid" : "steam") },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   fx: [
     // the sea's rows running past toward the stern (ENGINE-21's run), over the swell layer and under everything else

@@ -381,6 +381,7 @@ export default {
     { id: "pine-l", src: art + "pine-l.png", base: 537 },
     { id: "pine-r", src: art + "pine-r.png", base: 535 },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json fx): the little waves running in at the water's edge, the sun on the strait, the two

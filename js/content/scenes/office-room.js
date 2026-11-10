@@ -624,6 +624,7 @@ export default {
     { id: "plant-droop", src: art + "plant-droop.png", base: [[647, 484], [677, 482]], when: (g) => heat(g) >= 81,
       solid: [[668, 472], [680, 479], [674, 484], [655, 485], [633, 480], [624, 473], [630, 468], [648, 468]] },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Dale and Merle across the table, side-on (PEOPLE-17's -table kinds; -hot once it is warm: their life mops and loosens)

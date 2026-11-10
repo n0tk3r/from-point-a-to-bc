@@ -138,6 +138,7 @@ export default {
     { id: "teaparty", src: art + "teaparty.png", base: [[392, 445], [513, 440]] },   // the low table, the spotted teapot and the four guests
     { id: "front", src: art + "front.png", plane: "front" },   // her toy box, the crate of picture books, the hen house, the nest, the door
     { id: "mobile", src: art + "mobile.png", plane: "front" },  // and the mobile of felt chickens, a cut-out of its own since round four, so that it can stir
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md): the mobile stirs in the air of the room, each

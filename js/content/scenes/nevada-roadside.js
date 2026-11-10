@@ -1002,7 +1002,8 @@ export default {
   // The dirt lot: from the car, bottom left, to the fence, and back as far as the shack's porch and the foot of the fence.
   walk: { area: [[0, 470], [40, 464], [104, 458], [150, 450], [262, 444], [270, 461], [410, 461], [414, 448], [540, 444], [600, 441], [640, 446], [760, 452], [800, 455], [800, 498], [738, 506], [722, 560], [652, 588], [600, 596], [0, 596]] },
   // The patch of sand that turned to glass. Nobody walks on it: Mom has said so.
-  blocked: [[[580, 534], [600, 522], [640, 518], [690, 521], [714, 536], [690, 549], [640, 553], [602, 549]]],
+  blocked: [[[580, 534], [600, 522], [640, 518], [690, 521], [714, 536], [690, 549], [640, 553], [602, 549]],
+    [[770, 446], [800, 446], [800, 502], [770, 504]]],         // DEPTH-23: and the foot of the lean-to's post, at the right edge (the front plane)
 
   party: ["mom", "bigsis", "lilsis"],
   // They have just got out of the car, and stand looking at the place. (The painter's marks are a little lower and
@@ -1037,6 +1038,7 @@ export default {
     { id: "shade-held", src: art + "shade-held.png", base: 561, when: holding },
     // NEVADA-12SA: and while the wide door is open, nobody stands right in front of it (who stood there would be behind it).
     { id: "door-ground", solid: [[600, 552], [700, 552], [700, 565], [600, 565]], when: (g) => holding(g) && !gone(g) },
+    { id: "near", src: art + "near.png", plane: "front" },        // DEPTH-23: the lean-to we stand under: its awning's edge, its post and brace, the gravel's lip
   ],
 
   // LIGHT, drawn live. All of it starts out of sight: `setup` and the scripts bring it on.

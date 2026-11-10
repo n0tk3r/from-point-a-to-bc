@@ -424,6 +424,7 @@ export default {
     [[702, 300], [738, 299], [709, 297], [674, 298]],
     [[777, 298], [811, 298], [779, 296], [747, 297]],
     [[556, 293], [595, 293], [586, 292], [547, 292]],             // the doorkeeper's bench
+    [[0, 436], [19, 436], [19, 501], [0, 501]],                   // DEPTH-23: the strip at the left edge behind the near column (near.png)
   ],
   spawn: {
     default: [470, 540],                                          // the foot of the steps: where the doorkeeper put him down (STAGE-19R: 32 lower, so no step nosing runs through his head: scene audit S7; feet still above the inventory bar)
@@ -460,6 +461,7 @@ export default {
     // they are front.png, pixel for pixel).
     { id: "front", src: art + "front-base.png", plane: "front" },
     { id: "laurel", src: art + "laurel.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4a-ready.md). Nothing that moves is painted still: the

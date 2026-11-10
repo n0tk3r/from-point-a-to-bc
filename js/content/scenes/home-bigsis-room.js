@@ -163,6 +163,7 @@ export default {
   planes: [
     { id: "desk", src: art + "desk.png", base: [[487, 379], [594, 379]], solid: [[483, 365], [584, 365], [603, 391], [491, 391]] },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (round four: briefs/out/paint-4b-ready.md). The candles are flameless, in glass, as the

@@ -1,8 +1,11 @@
-"""Himeji, about 29 April 1830, midday: Watamachi on the highway (edo-town). PAINT-21E, round twenty-one.
+"""Himeji, about 29 April 1830, midday: Watamachi on the highway (edo-town). PAINT-21E, round twenty-one; PAINT-23 (round
+twenty-three, tools/paint/DEPTH.md): painted again in THREE PLANES, and in WATERCOLOUR. The camera, the placings and every
+number of the scene file are round twenty-one's and have not moved (but for the keep's and the roofs' areas, measured again,
+and the near plane's patch of `blocked` ground).
 
-The design (S/briefs/out/edo2-design.md, sections 4 and 5; S/briefs/PAINT-21E.md): the game's own painting, composed and
-coloured as the woodblock landscape prints are (S/work-20-paintA/style.md): flat masses, a graded sky, one fine prussian
-contour, few colours, the blue leading. Nothing is copied from any print: the composition is our own.
+The design (S/briefs/out/edo2-design.md, sections 4 and 5; S/briefs/PAINT-21E.md): the game's own painting, composed as the
+woodblock landscape prints are (S/work-20-paintA/style.md), now laid as washes on paper. Nothing is copied from any print or
+painting: the composition is our own.
 
 What is in it (edo_town_kit.py has the camera and the plan): the broad highway across the bottom; across it, left to
 right, the domain's paper-note office and cotton office along the bend of the street (two storeys, white; bales of white
@@ -11,11 +14,33 @@ low desks: the girls and the teacher are the game's people), O-Tane's side yard 
 lean-to at its back (the stone-lined well and its pulley and bucket before it; the rice pot, the salt jar, the pickle tub
 and its stone, the plum jar, a cloth, the roasting pan drying, the Bizen mortar), O-Tane's house (a lattice front, an
 indigo noren), Tobei's hut (straw sandals hung, a jar of sweets, the clappers on a peg, his stool), the ward gate across
-the lane north, its doors open by day. Above the roofs, far up on its hill, the keep. Not painted: people (the game's),
-smoke (the kitchen's: fx), the noren's stirring (sway), birds (fx), light.
+the lane north, its doors open by day. Above the roofs, on its hill, the keep. Not painted: people (the game's), smoke
+(the kitchen's: fx), the noren's stirring (sway), birds (fx), light.
 
-  python3 edo_town.py          paints everything into out/edo-town/ (and out/edo-town-comp.png to look at)
-  python3 edo_town.py fast     skips the brush pass and the palette: out/edo-town-2-all.png only"""
+ROUND TWENTY-THREE
+  NEAR    (edo_town_near.py: near.png, near-noren.png, the front plane) we look out from under the eaves of a house on
+          our own side of the highway: its eave's underside across the top left, its corner where the house ends, its
+          post down the left edge; the hem of the next shop's indigo curtain across the top right corner (it stirs). In
+          shade, the warmest darks of the picture, lit only by the sunlit street's light thrown up into them.
+  MIDDLE  the true noon (the sun 68 degrees up, behind us, a little left): every front facing us is in its own eave's
+          shade from the eave down to a hand's breadth above the ground (the pent roofs: 40 cm; the cotton office's
+          deeper eave: 90 cm), the attic walls under the main eaves too: hard-edged cool glazes over the local colour,
+          warmed at their feet by the light thrown up from the street (shade()); the roofs, the street, the side yard, the
+          bales and the step stone in the sun. The street: its worn tracks, footprints of sandals and clogs and straw
+          horseshoes, stones at a true density, the plank-covered drain along the fronts, a sprinkled patch before
+          O-Tane's door, and the dappled shade of a big tree behind us on the left lying across its near left part
+          (street()). The side yard is the lightest light of the play.
+  FAR     (edo_town_far.py) roofs behind roofs climbing toward the castle (a temple's roof, the ward's fire tower, spring
+          trees); the castle's hill, its walls and turrets; the keep, larger and turned; two ridges of hills; the sky.
+  PAPER   watercolor.wash on the backdrop and wash_cut (the same seed) on every cut-out, just before the palette (WET: the
+          sky 1, the haze 0.8, the hills 0.6, the castle's hill 0.4, the far roofs 0.18, the keep 0.08; wander 1.4, fleck
+          0.3: the far roofs and the keep must not run together or glitter). The key line is the scene's own quieter one
+          (edo_town_wc.keyline); every flat is a graded wash (edo_town_wc.WSheet). The cut-outs keep round twenty-one's
+          outlines exactly: the print's drawing gives each one's mask (STYLE["wc"] = False), the washes paint inside it.
+
+  python3 edo_town.py           paints everything into out/edo-town/ (and out/edo-town-comp.png to look at)
+  python3 edo_town.py fast      skips the brush pass and the palette: out/edo-town-2-all.png only
+  python3 edo_town.py fast wash the same with the paper's finish: out/edo-town-fast-comp.png"""
 
 import math
 import os
@@ -25,9 +50,41 @@ import time
 import numpy as np
 from PIL import Image
 
-from brush import F32, Sheet, grid, noise, blur, over, tint, glow, lerp, mask_poly, mask_ellipse, strokes, curve, warp, vary
+from brush import F32, Sheet, grid, noise, blur, over, tint, glow, lerp, mask_poly, mask_ellipse, strokes, curve, warp, vary, ramp, step, grain, palette_of, to_palette, save
 from rome_steps_kit import Canvas
 from edo_town_kit import *
+import edo_town_kit as KIT
+from edo_town_wc import WSheet, wsheet_layer, keyline, thin, deepen, WPAPER, SHADE, SHADE_DEEP, BOUNCE, floor, street_noise, ground_pt, px_per_cm
+import watercolor as WC
+import depth as DPT
+from edo_village_kit import Wet
+
+SEED = 1830
+STYLE = {"wc": True}    # False: the print's drawing exactly as round twenty-one drew it (the cut-outs' outlines are taken from it)
+
+
+def outline(s, pts, width=1.0, alpha=0.6, close=True, color=LINE):
+    """The contour: in watercolour the scene's quieter key line (broken, thin, lost on the lit edges); else the print's."""
+    if STYLE["wc"]:
+        return keyline(s, pts, width, alpha, close, color)
+    return KIT.outline(s, pts, width, alpha, close, color)
+
+
+def sheet_layer(draw, amount=0.6, ss=3, shape=SHAPE):
+    """A thing drawn on its own sheet: in watercolour every flat a graded wash (edo_town_wc.WSheet); else the print's."""
+    if STYLE["wc"]:
+        return wsheet_layer(draw, amount, shape)
+    return KIT.sheet_layer(draw, amount, ss, shape)
+
+
+# the town's colours in watercolour: the kit's paints thinned toward the paper (a step lighter, more transparent), the
+# darks kept deep; plaster in the sun is nearly the paper itself
+_THIN = dict(plaster=0.62, plaster_sh=0.12, wood=0.12, wood_lit=0.18, wood_dark=0.04, wood_old=0.10, tile=0.16, tile_lit=0.22,
+             tile_edge=0.25, tile_deep=0.0, street=0.50, street_lit=0.64, street_sh=0.1, rut=0.15, stone=0.22, stone_lit=0.32,
+             stone_sh=0.10, indigo=0.03, indigo_lit=0.10, inside=0.02, inside_far=0.02, mat=0.22, mat_sh=0.10, straw=0.22,
+             straw_sh=0.10, cloth=0.55, cloth_sh=0.12, bizen=0.06, bizen_lit=0.14, clay=0.12, iron=0.04, red=0.10)
+C = {k: (thin(v, _THIN[k]) if k in _THIN else v) for k, v in KIT.C.items()}
+
 
 # ---------------------------------------------------------------- the plan, in cm (X across, Y up, D from the lens)
 DF = D_row(450)                     # the far row's fronts: 1640.6 cm (row 450)
@@ -52,88 +109,6 @@ def front_poly(x0, x1, y0, y1, d=None):
 
 
 SUN_CAST = (0.10, 0.36)             # a shadow on the ground per cm of height: (across, away): the sun high behind us, a little left
-
-
-# ---------------------------------------------------------------- the sky, the hill, the keep, the far roofs
-def sky_layer():
-    stops = [mix(PAINT["cobalt"], PAINT["prussian"], 0.42), mix(PAINT["cobalt"], PAINT["prussian"], 0.18), PAINT["cobalt"],
-             mix(PAINT["cobalt"], PAINT["cerulean"], 0.5), PAINT["cerulean"], mix(PAINT["cerulean"], PAPER, 0.45), mix(PAINT["cerulean"], PAPER, 0.78), PAPER]
-    pic = bands(stops, 0, 250, seed=31, wobble=2.0, soft=2.6)
-    s = Sheet(SHAPE)
-    for (cx, cy, w, h) in ((150, 70, 240, 13), (250, 92, 130, 8), (700, 46, 170, 10)):
-        top = [(cx - w / 2 + w * i / 10, cy - h * (0.5 + 0.5 * math.sin(i * 1.9 + cx) * 0.6) * (1 - ((i - 5) / 5.5) ** 2)) for i in range(11)]
-        s.poly(top + [(cx + w / 2, cy), (cx - w / 2, cy)], PAPER, 0.96)
-        s.line(top, LINE, 0.9, 0.45)
-    s.onto(pic)
-    return pic
-
-
-KEEP_AT = (566.0, 176.0)            # the foot of the keep's stone base on its hill (picture), and its scale
-KEEP_K = 0.36
-
-
-def keep_layer():
-    """PAINT-20D's keep (edo_castle.keep: the same drawing, so the act has one castle), drawn at full size on its own
-    sheet and laid in small, far up on its hill. Seen from the town it is the same white keep, smaller."""
-    import edo_castle as EC
-    big = Canvas(SHAPE)
-    lay = sheet_layer(EC.keep, 0.3)
-    c, a = lay.c, lay.a                                     # premultiplied
-    x0, y0, x1, y1 = 236, 20, 486, 340
-    crop = np.dstack([c[y0:y1, x0:x1], a[y0:y1, x0:x1]])
-    w, h = int(round((x1 - x0) * KEEP_K)), int(round((y1 - y0) * KEEP_K))
-    small = np.zeros((h, w, 4), F32)
-    for i in range(4):                                       # area-average down (premultiplied, so the edge stays true)
-        im = Image.fromarray(crop[..., i].astype(np.float32), "F").resize((w, h), Image.BOX)
-        small[..., i] = np.asarray(im, F32)
-    # place: the base's foot (row 332 in the castle picture, x 360 its middle) at KEEP_AT
-    fx, fy = (360 - x0) * KEEP_K, (332 - y0) * KEEP_K
-    ox, oy = int(round(KEEP_AT[0] - fx)), int(round(KEEP_AT[1] - fy))
-    out = Canvas(SHAPE)
-    out.c[oy:oy + h, ox:ox + w] = small[..., :3]
-    out.a[oy:oy + h, ox:ox + w] = small[..., 3]
-    # the keep is far: paler and bluer toward the sky's low band, its contour a breath (style.md section 7)
-    st, al = out.straight()
-    st = lerp(st, mix(PAINT["cerulean"], PAPER, 0.55)[None, None, :], 0.16)
-    out.c = st * al[..., None]
-    return out
-
-
-def hill(s):
-    """Himeyama, the keep's hill, behind the roofs: a dark flat with pines standing on it in two depths; on its
-    shoulders the white of the castle's lower walls; the town's far roofs in rows below it (no contour: the far plane)."""
-    rng = np.random.default_rng(32)
-    kx, ky = KEEP_AT
-    crest = curve([(150, 236), (260, 214), (380, 196), (470, 184), (kx - 44, ky - 1), (kx + 44, ky - 1), (660, 184), (740, 198), (830, 212)], 8)
-    s.poly(crest + [(830, 300), (330, 300)], C["hill"])
-    s.poly([(p[0], p[1] + 2) for p in crest if p[0] > kx - 30] + [(830, 300), (kx - 30, 300)], mix(C["hill"], C["hill_lit"], 0.5), 0.6)
-    for (x0, x1, y) in ((kx - 100, kx - 52, 192), (kx + 54, kx + 110, 194)):      # the lower walls, white, with their dark copings
-        s.poly([(x0, y + 8), (x1, y + 8), (x1, y), (x0, y)], mix(PAPER, PAINT["cerulean"], 0.25))
-        s.line([(x0 - 1, y - 1), (x1 + 1, y - 1)], mix(C["tile"], PAINT["cerulean"], 0.4), 1.6)
-    for depth, (yb, step_, hs, tone, lit) in enumerate(((0, 24, (12, 20), mix(C["pine_far"], PAPER, 0.25), mix(C["pine_far"], PAPER, 0.45)),
-                                                        (14, 32, (16, 26), C["pine_far"], mix(C["pine_far"], C["pine_lit"], 0.5)))):
-        for px in np.arange(160 + depth * 11, 800, step_):
-            if rng.random() < 0.3:
-                continue
-            cy = np.interp(px, [p[0] for p in crest], [p[1] for p in crest])
-            if px > kx - 46 and px < kx + 46:
-                continue
-            pine(s, px + rng.uniform(-5, 5), cy + 12 + yb + rng.uniform(-2, 2), rng.uniform(*hs), tone, lit, rng, pads=3)
-
-
-def far_roofs(s):
-    """The town's roofs between us and the hill: rows of tiled roofs, far, flat, pale toward the sky (no contour)."""
-    rng = np.random.default_rng(33)
-    for row, (y, tone, h) in enumerate(((214, mix(C["tile"], PAPER, 0.55), 9), (226, mix(C["tile"], PAPER, 0.48), 11), (240, mix(C["tile"], PAPER, 0.40), 13),
-                                        (256, mix(C["tile"], PAPER, 0.32), 15), (274, mix(C["tile"], PAPER, 0.25), 17))):
-        x = -20 + rng.uniform(0, 30)
-        while x < 820:
-            w = rng.uniform(38, 90)
-            ridge = y - h * rng.uniform(0.7, 1.0)
-            s.poly([(x, y + 6), (x + w, y + 6), (x + w - 6, ridge), (x + 6, ridge)], tone)
-            s.line([(x + 6, ridge), (x + w - 6, ridge)], mix(tone, PAPER, 0.3), 1.0, 0.7)
-            s.poly([(x + 3, y + 6), (x + w - 3, y + 6), (x + w - 3, y + 14), (x + 3, y + 14)], mix(PAPER, PAINT["cerulean"], 0.3 + row * 0.08))
-            x += w + rng.uniform(-6, 10)
 
 
 # ---------------------------------------------------------------- the townhouse fronts
@@ -298,8 +273,15 @@ def bales(s):
         for k in range(n):
             y0 = k * 30
             face = front_poly(X, X + 54, y0, y0 + 29, d)
+            side = [P(X + 54, y0, d), P(X + 54, y0, d + 40), P(X + 54, y0 + 29, d + 40), P(X + 54, y0 + 29, d)]
+            if STYLE["wc"]:                                    # (round twenty-three) its end toward the street, turned from the sun
+                s.poly(side, C["cloth"] * SHADE)
             s.poly(face, mix(C["cloth"], C["straw"], 0.32))
             s.poly([P(X, y0 + 29, d), P(X + 54, y0 + 29, d), P(X + 54, y0 + 29, d + 40), P(X, y0 + 29, d + 40)], mix(C["cloth"], PAPER, 0.45))   # its top, lit
+            if STYLE["wc"]:                                    # the straw mat's weave, and its rope ties
+                for k2 in range(1, 6):
+                    yy = y0 + 29 * k2 / 6
+                    s.line([P(X + 1, yy, d - 0.4), P(X + 53, yy, d - 0.4)], mix(C["straw"], C["cloth"], 0.4), 0.5, 0.35)
             for xr in (X + 16, X + 38):
                 s.line([P(xr, y0, d - 0.5), P(xr, y0 + 29, d - 0.5)], C["straw_sh"], 1.0, 0.8)
             outline(s, face, 0.6, 0.5)
@@ -900,8 +882,19 @@ def lane(s):
         # the side wall: boards below, plaster above, up to the eave at 400, then the gable to the ridge at 560
         mid = (a0 + a1) / 2
         wall = [P(x1, 0, a0), P(x1, 0, a1), P(x1, 400, a1), P(x1, 560, mid), P(x1, 400, a0)]
-        s.poly(wall, wall_c)
+        if STYLE["wc"]:                                  # (round twenty-three) the noon sun grazes these west faces: pale and warm
+            lit_c = lerp(thin(mix(C["plaster"], PAINT["naples"], 0.12), 0.25), wall_c, 0.45)
+            s.poly(wall, lit_c, c1=thin(lerp(lit_c, wall_c, 0.6), 0.05), g=(P(x1, 560, mid), P(x1, 0, mid)))
+            s.poly([P(x1, 400, a0), P(x1, 400, a1), P(x1, 560, mid)], thin(PAINT["cerulean"], 0.62), alpha=0.22)      # the gable sees the sky
+        else:
+            s.poly(wall, wall_c)
         s.poly([P(x1, 0, a0), P(x1, 0, a1), P(x1, 150, a1), P(x1, 150, a0)], board_c)
+        if STYLE["wc"]:
+            s.line([P(x1, 400, a0), P(x1, 400, a1)], mix(C["wood_dark"], PAPER, 0.25 + 0.4 * t), 1.0, 0.55)              # the wall plate at the eave
+            for k_ in range(1, 4):                                                                                    # posts showing in the plaster
+                dd = a0 + (a1 - a0) * k_ / 4
+                s.line([P(x1, 150, dd), P(x1, 400, dd)], mix(C["wood"], PAPER, 0.3 + 0.4 * t), 0.8, 0.35)
+            s.poly([P(x1, 470, mid - 22), P(x1, 470, mid + 22), P(x1, 500, mid + 22), P(x1, 500, mid - 22)], mix(C["inside"], PAPER, 0.25 + 0.4 * t))   # a vent high in the gable
         # the roof's verge along the gable, and the roof itself beyond it (seen over the edge)
         s.line([P(x1 + 8, 396, a0 - 30), P(x1 + 8, 566, mid), P(x1 + 8, 396, a1 + 30)], roof_c, 3.0)
         outline(s, wall, 0.5, 0.35 + 0.2 * (1 - t))
@@ -969,116 +962,385 @@ def right_house(s):
     townhouse_upper(s, x0, x1)
 
 
-# ---------------------------------------------------------------- the street
-def street(pic):
-    """The highway: packed earth, sunlit, flat, a little warmer down the middle where the feet go; the stone gutter
-    along the far fronts with its flat bridging stones; the bend's street running off at the left; a few stones."""
+# ---------------------------------------------------------------- the street (round twenty-three: the ground in depth)
+TRACKS = [(1000.0, 75.0, 0.55), (1185.0, 100.0, 0.80), (1395.0, 85.0, 0.60)]   # a worn track's middle (D), half width, how worn
+TREE = dict(X=-470.0, D=470.0, crown=(900.0, 1400.0))          # the big tree behind us on the left (out of the picture): trunk, crown
+
+
+def street(pic, seed=37):
+    """The highway: packed earth in the sun, paler toward the fronts and deeper and warmer toward us; three tracks worn
+    smooth and pale by feet and hooves running along it, rougher earth and loose stones between them and at its edges;
+    blotches and grit that lie on it in centimetres (so they shrink with distance). -> the street's mask."""
+    X, D, below = floor()
     x, y = grid(SHAPE)
-    rng = np.random.default_rng(37)
-    m = (y >= row_D(GUT) - 1).astype(F32)
-    over(pic, vary(C["street"], SHAPE, 38, amount=0.03, cell=60), m)
-    worn = mask_poly(SHAPE, [(-10, 520), (810, 506), (810, 566), (-10, 584)], soft=10, wobble=6, seed=39)
-    over(pic, C["street_lit"], worn * 0.45 * m)
-    s = Sheet(SHAPE)
-    # the gutter: a narrow stone channel along the fronts, light edge, dark water-line; stones bridging it at doors
-    for (xa, xb) in ((-1400, LANE[0]), (LANE[1], 1300)):
-        g0, g1 = P(xa, 0, GUT), P(xb, 0, GUT)
-        h0, h1 = P(xa, 0, GUT + 22), P(xb, 0, GUT + 22)
-        s.poly([g0, g1, h1, h0], C["stone_sh"])
-        s.line([g0, g1], C["stone_lit"], 1.4)
-        s.line([h0, h1], mix(C["stone_sh"], LINE, 0.4), 1.0, 0.8)
+    m = ((y >= row_D(GUT) - 1) * below).astype(F32)
+    t = np.clip((D - 846.0) / (GUT - 846.0), 0, 1)
+    near_c = thin(mix(PAINT["ochre"], PAINT["sienna"], 0.30), 0.27)
+    mid_c = thin(mix(PAINT["ochre"], PAINT["naples"], 0.10), 0.46)
+    far_c = thin(mix(PAINT["ochre"], PAINT["naples"], 0.20), 0.50)
+    earth = ramp(t ** 0.8, [(0.0, tuple(near_c)), (0.40, tuple(mid_c)), (1.0, tuple(far_c))])
+    earth *= 1 + ((street_noise(X, D, (170, 70), seed) - 0.5) * 0.14 + (street_noise(X, D, (34, 16), seed + 1) - 0.5) * 0.12)[..., None]
+    warm = (street_noise(X, D, (420, 160), seed + 2) - 0.5) * 0.06
+    earth[..., 0] += warm
+    earth[..., 2] -= warm
+    wander = (street_noise(X, D, (900, 300), seed + 3, 2) - 0.5) * 70.0
+    worn = np.clip(sum(w_ * np.exp(-((D + wander - c_) / hw) ** 2) for c_, hw, w_ in TRACKS), 0, 1)
+    smooth_c = thin(mix(PAINT["ochre"], PAINT["naples"], 0.35), 0.74)
+    earth = lerp(earth, lerp(earth, smooth_c[None, None, :], 0.66), (worn * 0.9)[..., None])
+    # dust drawn out along the tracks by the traffic: pale streaks running along the highway
+    streak = step(0.58, 0.80, street_noise(X, D, (260, 9), seed + 6, 3)) * worn
+    earth = lerp(earth, thin(PAINT["naples"], 0.70)[None, None, :], (streak * 0.35)[..., None])
+    rough = (1 - worn) * (street_noise(X, D, (11, 6), seed + 4) - 0.5) * 0.30 + (1 - worn) * (street_noise(X, D, (48, 22), seed + 5) - 0.5) * 0.12
+    earth *= (1 + rough[..., None])
+    # where a track's worn edge meets the rough earth, a low ridge of loose earth: a breath darker
+    for c_, hw, w_ in TRACKS:
+        for sgn in (-1, 1):
+            ridge_ = np.exp(-((D + wander - c_ - sgn * hw * 1.05) / (hw * 0.18)) ** 2) * w_
+            earth *= (1 - (ridge_ * 0.07)[..., None])
+    # where the lane's traffic turns in at the ward gate, the earth is cut up and rougher
+    turn = np.clip(1.0 - np.hypot((X - 560.0) / 260.0, (D - 1480.0) / 120.0), 0, 1)
+    earth *= (1 - (turn * (street_noise(X, D, (14, 8), seed + 7) - 0.35) * 0.22)[..., None])
+    # the near street deeper and warmer still (what is nearest the lens holds the warm darks of the ground)
+    near_b = np.clip((y - 540.0) / 60.0, 0, 1) ** 1.4
+    earth = lerp(earth, earth * thin(mix(PAINT["sienna"], PAINT["prussian"], 0.25), 0.55)[None, None, :] * 1.04, (near_b * 0.30)[..., None])
+    over(pic, np.clip(earth, 0, 1).astype(F32), m)
+    return m, worn
+
+
+def street_marks(pic, worn, seed=38):
+    """What lies on the street, through the camera: stones at a true density (more at the edges, few in the worn tracks),
+    footprints (straw sandals and clogs along the highway, a trail into the side yard's mouth and one to the school's step
+    stone, straw horseshoes along the middle track), each a small hollow: its near wall in its own shade, its far wall lit."""
+    L = Wet(SHAPE)
+    rng = np.random.default_rng(seed)
+    dark = thin(mix(PAINT["sienna"], PAINT["prussian"], 0.45), 0.30)
+    lit = thin(PAINT["naples"], 0.55)
+    zone = np.zeros(SHAPE, F32)
+    zone[456:600, :] = 1.0
+    wn = lambda X_, D_: float(worn[int(np.clip(ground_pt(X_, D_)[1], 0, 599)), int(np.clip(ground_pt(X_, D_)[0], 0, 799))])
+    # ---- stones: big and few near us, small and many far off (depth.scatter), fewer where feet have worn the earth
+    for (per, size, sd) in ((0.9, (3.0, 7.0), 1), (5.0, (1.0, 2.6), 2)):
+        for (px_, py_, k, r) in DPT.scatter(ground_pt, px_per_cm, (-1100.0, 900.0, 860.0, 1600.0), per, seed + sd, size=size, zone=zone):
+            X_ = (px_ - VX) * (EYE * FOC / (py_ - HZ)) / FOC
+            D_ = EYE * FOC / max(py_ - HZ, 1)
+            if rng.random() < wn(X_, D_) * 0.85:
+                continue
+            cm = size[0] + (size[1] - size[0]) * r
+            rx = max(0.5, cm * k * 0.75)
+            ry = max(0.35, rx * (py_ - HZ) / FOC * 1.1)
+            L.ellipse(px_ + rx * 0.25, py_ - ry * 0.8, rx * 1.0, ry * 0.8, dark, alpha=0.26)        # its shadow, away from us
+            L.ellipse(px_, py_, rx, ry, thin(mix(PAINT["prussian"], PAINT["ochre"], 0.35), 0.45 + 0.2 * r), thin(mix(PAINT["prussian"], PAINT["sienna"], 0.3), 0.30))
+            L.ellipse(px_ - rx * 0.25, py_ - ry * 0.35, rx * 0.5, ry * 0.4, lit, alpha=0.7)
+
+    def print_(X_, D_, ang, kind, s_=1.0):
+        """One footprint at a place on the street, the foot pointing `ang` (radians, 0 along +X)."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        if kind == "geta":                                    # two teeth, across the foot
+            for off in (-4.5 * s_, 4.5 * s_):
+                cx_, cz_ = X_ + ca * off, D_ + sa * off
+                pts = [ground_pt(cx_ + (-sa) * w_ + ca * l_, cz_ + ca * w_ + sa * l_) for (w_, l_) in ((-5 * s_, -1.2), (5 * s_, -1.2), (5 * s_, 1.2), (-5 * s_, 1.2))]
+                L.poly(pts, dark, alpha=0.62)
+        else:                                                 # a sole (straw sandal), or a straw horseshoe's round print
+            ln, wd = (12.0 * s_, 4.6 * s_) if kind == "sole" else (6.5, 6.0)
+            ring = [ground_pt(X_ + ca * ln * math.cos(t_) - sa * wd * math.sin(t_), D_ + sa * ln * math.cos(t_) + ca * wd * math.sin(t_)) for t_ in np.linspace(0, 2 * math.pi, 14)[:-1]]
+            L.poly(ring, dark, alpha=0.42 if kind == "sole" else 0.50)
+            near_in = [ground_pt(X_ + ca * ln * 0.9 * math.cos(t_) - sa * wd * 0.6 * math.sin(t_), D_ + sa * ln * 0.9 * math.cos(t_) + ca * wd * 0.6 * math.sin(t_)) for t_ in np.linspace(math.pi * 1.1, math.pi * 1.9, 6)]
+            far_lip = [ground_pt(X_ + ca * ln * math.cos(t_) - sa * wd * math.sin(t_), D_ + sa * ln * math.cos(t_) + ca * wd * math.sin(t_)) for t_ in np.linspace(math.pi * 0.1, math.pi * 0.9, 6)]
+            L.line(near_in, thin(mix(PAINT["prussian"], PAINT["sienna"], 0.4), 0.25), 0.8, 0.5)
+            L.line(far_lip, lit, 0.8, 0.55)
+
+    def trail(p0, p1, kind, stride=62.0, gait=9.0, s_=1.0, keep=1.0):
+        (x0_, d0_), (x1_, d1_) = p0, p1
+        n = int(math.hypot(x1_ - x0_, d1_ - d0_) / stride * 2)
+        ang = math.atan2(d1_ - d0_, x1_ - x0_)
+        for i in range(n):
+            if rng.random() > keep:
+                continue
+            t_ = i / max(n - 1, 1)
+            side = gait * (1 if i % 2 else -1)
+            X_ = x0_ + (x1_ - x0_) * t_ - math.sin(ang) * side + rng.normal(0, 2)
+            D_ = d0_ + (d1_ - d0_) * t_ + math.cos(ang) * side + rng.normal(0, 2)
+            print_(X_, D_, ang + rng.normal(0, 0.12), kind, s_)
+    # the traffic of the highway, along its tracks, both ways; and older prints, half trodden out
+    for (c_, hw, w_) in TRACKS:
+        for j in range(5):
+            dd = c_ + rng.uniform(-hw, hw) * 0.8
+            xa = rng.uniform(-1300, 300)
+            way = 1 if rng.random() < 0.5 else -1
+            trail((xa, dd), (xa + way * rng.uniform(350, 700), dd + rng.normal(0, 30)), "geta" if rng.random() < 0.45 else "sole", keep=0.75)
+    for j in range(26):                                   # near us: odd prints, half trodden out
+        X_, D_ = rng.uniform(-500, 420), rng.uniform(860, 1060)
+        print_(X_, D_, rng.uniform(-0.4, 0.4) + (math.pi if rng.random() < 0.5 else 0.0), "sole" if rng.random() < 0.6 else "geta")
+    trail((-1000.0, 1185.0), (600.0, 1205.0), "hoof", stride=86.0, gait=14.0, keep=0.9)                      # a packhorse, along the middle
+    trail((-90.0, 880.0), (-6.0, 1585.0), "sole", stride=66.0, gait=9.0)                                     # into the side yard's mouth
+    trail((260.0, 940.0), (-205.0, 1570.0), "geta", stride=48.0, gait=7.0, s_=0.72)                          # a child's clogs, to the step stone
+    trail((-900.0, 1430.0), (-560.0, 1580.0), "sole", stride=64.0, gait=9.0, keep=0.8)                      # to the cotton office's door
+    c, a = L.done()
+    lay = Canvas(SHAPE)
+    lay.c, lay.a = (c * a[..., None]).astype(F32), a.astype(F32)
+    lay.onto(pic)
+    return lay
+
+
+def drain(s):
+    """The drain along the fronts, covered with planks (each a hand's span, laid across it, grey with weather, a joint
+    between each two), a stone kerb on the street's side, flat stones over it at the doorways."""
+    plank = thin(mix(PAINT["sienna"], PAINT["prussian"], 0.32), 0.38)
+    joint = thin(mix(PAINT["sienna"], PAINT["prussian"], 0.55), 0.10)
+    for (xa, xb) in ((-1400.0, LANE[0]), (LANE[1], 1300.0)):
+        s.poly([P(xa, 1.5, GUT - 4), P(xb, 1.5, GUT - 4), P(xb, 1.5, GUT + 26), P(xa, 1.5, GUT + 26)], plank)
+        X = xa
+        rng = np.random.default_rng(int(xa) & 0xFFFF)
+        while X < xb:
+            s.line([P(X, 1.6, GUT - 4), P(X + rng.normal(0, 0.8), 1.6, GUT + 26)], joint, 0.6, 0.75)
+            X += rng.uniform(21.0, 29.0)
+        s.poly([P(xa, 0, GUT - 10), P(xb, 0, GUT - 10), P(xb, 2.5, GUT - 4), P(xa, 2.5, GUT - 4)], C["stone_lit"])        # the kerb
+        s.line([P(xa, 0, GUT - 10), P(xb, 0, GUT - 10)], joint, 0.6, 0.5)
     for (xa, xb) in ((ROOM[1] - 76, ROOM[1] - 4), (TANE[0] + 8, TANE[0] + 96), (YARD[0] + 40, YARD[1] - 40), (HUT[0] + 20, HUT[1] - 20),
                      (COTTON_DOOR[0] + 10, COTTON_DOOR[1] - 10), (NOTE_DOOR[0], NOTE_DOOR[1])):
-        st = [P(xa, 2, GUT - 4), P(xb, 2, GUT - 4), P(xb, 2, GUT + 26), P(xa, 2, GUT + 26)]
+        st = [P(xa, 3, GUT - 6), P(xb, 3, GUT - 6), P(xb, 3, GUT + 26), P(xa, 3, GUT + 26)]
         s.poly(st, C["stone_lit"])
         outline(s, st, 0.5, 0.45)
-    # small stones and dry ruts across the street
+
+
+def sprinkled(pic, seed=39, xc=262.0, dc=DF - 105.0, rx=150.0, rz=70.0):
+    """Before O-Tane's door the earth is dark where she has sprinkled water against the dust (and before Tobei's hut,
+    an hour ago, half dried): a cooler, deeper patch, its edge darker where it is drying, drops flung round it."""
+    X, D, below = floor()
+    u, v = (X - xc) / rx, (D - dc) / rz
+    wob = (street_noise(X, D, (40, 20), seed) - 0.5) * 0.9
+    r = np.sqrt(u * u + v * v) + wob
+    m = np.clip((1.0 - r) * 6.0, 0, 1) * below * (D < GUT - 8)
+    rim = np.clip(1.0 - np.abs(r - 0.92) * 9.0, 0, 1) * below * (D < GUT - 8)
+    tint(pic, thin(mix(PAINT["prussian"], PAINT["sienna"], 0.35), 0.62), (m * 0.55).astype(F32))
+    tint(pic, thin(mix(PAINT["prussian"], PAINT["sienna"], 0.4), 0.55), (rim * 0.25).astype(F32))
+    L = Wet(SHAPE)
+    rng = np.random.default_rng(seed)
     for i in range(70):
-        yy = rng.uniform(row_D(GUT) + 8, 598)
-        xx = rng.uniform(0, 800)
-        r = rng.uniform(0.8, 2.4) * scale_at(yy)
-        s.ellipse(xx, yy, r * 1.5, r * 0.8, [C["stone_sh"], C["rut"], C["stone_lit"]][int(rng.integers(3))], 0.8)
-    for k in range(3):
-        yy = 540 + k * 18
-        s.line([(-10, yy + rng.uniform(-2, 2)), (400, yy + rng.uniform(-2, 2)), (810, yy - 6 + rng.uniform(-2, 2))], C["rut"], 1.2, 0.25)
-    # a few bigger flat stones near us, each with its small noon shadow away from us
-    for (xx, yy, r) in ((96, 574, 7.0), (640, 588, 6.0), (318, 536, 4.4), (712, 522, 3.6), (500, 566, 5.0)):
-        s.ellipse(xx + r * 0.3, yy - r * 0.35, r * 1.5, r * 0.55, C["street_sh"], 0.8)
-        s.ellipse(xx, yy, r * 1.4, r * 0.6, C["stone"])
-        s.ellipse(xx - r * 0.3, yy - r * 0.15, r * 0.8, r * 0.3, C["stone_lit"])
-        s.ellipse(xx, yy, r * 1.4, r * 0.6, LINE, 0.0)
-    s.onto(pic)
-    # the printmaker's graded band along the bottom edge of the ground: three flat steps, deepening toward us
-    for (y0, a) in ((566, 0.10), (582, 0.18), (594, 0.26)):
-        band = mask_poly(SHAPE, [(-10, y0), (810, y0 - 4), (810, 610), (-10, 610)], soft=2.0, wobble=1.5, seed=int(y0))
-        over(pic, C["street_sh"], band * a)
-    return pic
+        a_ = rng.uniform(0, 2 * math.pi)
+        rr = rng.uniform(1.0, 1.45)
+        Xd, Dd = xc + rx * rr * math.cos(a_), dc + rz * rr * math.sin(a_)
+        if Dd > GUT - 10:
+            continue
+        px_, py_ = ground_pt(Xd, Dd)
+        k = px_per_cm(Xd, Dd)
+        L.ellipse(px_, py_, max(0.5, 1.6 * k), max(0.4, 0.6 * k), thin(mix(PAINT["prussian"], PAINT["sienna"], 0.35), 0.45), alpha=0.6)
+    c, a = L.done()
+    over(pic, c, a)
 
 
-def shadows(pic):
-    """The midday shade: the hard band of each deep eave across the top of the fronts is painted with the fronts; on
-    the ground, the short shadows of what stands in the street fall away from us (north), a little to the right."""
-    s = Sheet(SHAPE)
-    # under the pent roofs, a narrow band of shade on the street at the fronts' feet (the eaves overhang 70 cm)
-    for (xa, xb) in ((COTTON[0] - 200, NOTE[1]), (SCHOOL[0], SCHOOL[1]), (TANE[0], TANE[1]), (LANE[1], 1300)):
-        s.poly([P(xa + 10, 0, DF - 20), P(xb + 10, 0, DF - 20), P(xb, 0, DF), P(xa, 0, DF)], C["cast"], 0.5)
-    # the hut's and the gate posts' shadows
-    x0, x1 = HUT
-    s.poly([P(x0 + 10, 0, DF - 46), P(x1 + 14, 0, DF - 46), P(x1, 0, DF - 30), P(x0, 0, DF - 30)], C["cast"], 0.55)
+def yard_sun(pic):
+    """The lightest light of the play: the noon sun poured down into O-Tane's side yard, a slot of light between the
+    shaded fronts: its floor (but for the strip in the school wall's shade) and the foot of the kitchen's front."""
+    floor_ = mask_poly(SHAPE, [P(YARD[0] + 44, 0, DF - 2), P(YARD[1] - 2, 0, DF - 2), P(YARD[1] - 2, 0, YARD_BACK), P(YARD[0] + 44, 0, YARD_BACK)], soft=1.2)
+    front = mask_poly(SHAPE, [P(YARD[0], 0, YARD_BACK - 1), P(YARD[1], 0, YARD_BACK - 1), P(YARD[1], 128, YARD_BACK - 1), P(YARD[0], 128, YARD_BACK - 1)], soft=0.8)
+    glow(pic, thin(PAINT["naples"], 0.62), (floor_ * 0.62).astype(F32))
+    glow(pic, thin(mix(PAINT["naples"], PAINT["ochre"], 0.3), 0.5), (front * 0.22).astype(F32))
+
+
+def tree_shade(pic, seed=40):
+    """The shade of a big tree behind us on the left, out of the picture (its crown 9 to 15 m up): it lies across the near
+    left of the street, its edge in big scallops running in along the light, the sun coming through it in flecks.
+    Thin where people walk. -> its mask."""
+    X, D, below = floor()
+    sx, sd = SUN_CAST
+    ln_ = math.hypot(sx, sd)
+    ux, uz = sx / ln_, sd / ln_
+    rng = np.random.default_rng(seed)
+    sl = slice(470, H)
+    m = np.zeros((H - 470, W), F32)
+    Uw, Vw = X[sl] * ux + D[sl] * uz, -X[sl] * uz + D[sl] * ux
+    cx0, cz0 = TREE["X"], TREE["D"]
+    for i in range(70):                                     # each mass of leaves throws an oval, lying along the light
+        hgt = rng.uniform(*TREE["crown"])
+        ox, oz = rng.normal(0, 175.0), rng.normal(0, 62.0)
+        cxw, czw = cx0 + ox + sx * hgt, cz0 + oz + sd * hgt
+        a_, b_ = rng.uniform(70.0, 150.0), rng.uniform(45.0, 95.0)
+        e_ = ((Uw - (cxw * ux + czw * uz)) / a_) ** 2 + ((Vw - (-cxw * uz + czw * ux)) / b_) ** 2
+        np.maximum(m, np.clip((1 - e_) * 3.0, 0, 1), out=m)
+    fleck = step(0.60, 0.67, street_noise(X, D, (46, 34), seed + 2, 2))[sl]
+    shade = np.zeros(SHAPE, F32)
+    shade[sl] = np.clip(m * (1 - fleck * 0.92), 0, 1)
+    shade = (blur(shade, 0.7) * below).astype(F32)
+    return shade
+
+
+def wall_shade(x0, x1, d, y_eave, proj, y_floor=0.0, slant=True):
+    """The shade an eave lays on the wall under it at noon: from the eave down to where the sun gets under it
+    (proj / 0.36 below the eave), across the wall's width. -> a picture polygon."""
+    y_lo = max(y_floor, y_eave - proj / SUN_CAST[1])
+    off = SUN_CAST[0] * (y_eave - y_lo) if slant else 0.0       # (the light from a little left: the shade's end leans right)
+    return [P(x0, y_eave, d), P(x1, y_eave, d), P(x1, y_lo, d), P(x0 + off, y_lo, d)]
+
+
+SHADES = {  # each backdrop layer: the walls under its eaves (x0, x1, the wall's D, the eave's height, how far it projects, how deep)
+    "offices": [(COTTON[0], NOTE[1], DF, OFF_EAVE1 - 4, 75.0, 1.35), (COTTON[0], NOTE[1], DF + 12, OFF_EAVE2, 60.0, 1.0)],
+    "school_upper": [(SCHOOL[0], SCHOOL[1], DF + 10, EAVE2, 50.0, 1.0)],
+    "tane": [(TANE[0], TANE[1], DF, EAVE1 - 4, 70.0, 1.35), (TANE[0], TANE[1], DF + 10, EAVE2, 50.0, 1.0)],
+    "right": [(LANE[1], 1300.0, DF, EAVE1 - 4, 70.0, 1.35), (LANE[1], 1300.0, DF + 10, EAVE2, 50.0, 1.0)],
+    "hut": [(HUT[0], HUT[1], DF - 30, 202.0, 40.0, 1.25)],
+    "yard": [(YARD[0], YARD[1], YARD_BACK, 212.0, 30.0, 1.15)],
+    "kura": [(KURA["x"][0], KURA["x"][1], KURA["D"], KURA["h"] + 4, 40.0, 1.0)],
+}
+
+
+def shade_layer(name, lay):
+    """Glaze the noon shade over a backdrop layer's walls (a cool thin wash, multiplied; warmer toward its foot, where the
+    street's light is thrown up under the eave), in the layer itself, so that what stands in front stays in the sun."""
+    if name not in SHADES:
+        return lay
+    c, a = lay.straight()
+    m = np.zeros(SHAPE, F32)
+    foot = np.zeros(SHAPE, F32)
+    deep = np.zeros(SHAPE, F32)
+    x, y = grid(SHAPE)
+    for (x0, x1, d, ye, pj, dp) in SHADES[name]:
+        poly = wall_shade(x0, x1, d, ye, pj)
+        pm = mask_poly(SHAPE, poly, soft=0.5)
+        np.maximum(m, pm, out=m)
+        np.maximum(deep, pm * (dp - 1.0), out=deep)
+        top, bot = poly[0][1], poly[2][1]
+        np.maximum(foot, pm * np.clip((y - top) / max(bot - top, 1.0), 0, 1) ** 1.5, out=foot)
+    if name == "yard":                                    # the yard's west wall (the school's side) faces east: all in shade
+        m = np.maximum(m, mask_poly(SHAPE, [P(YARD[0], 0, DF), P(YARD[0], 0, YARD_BACK + 40), P(YARD[0], 380, YARD_BACK + 40), P(YARD[0], 380, DF)]))
+        floor_strip = mask_poly(SHAPE, [P(YARD[0], 0, DF), P(YARD[0] + 42, 0, DF), P(YARD[0] + 42, 0, YARD_BACK), P(YARD[0], 0, YARD_BACK)], soft=0.8)
+        m = np.maximum(m, floor_strip * 0.9)
+    shaded = c * SHADE[None, None, :]
+    shaded = lerp(shaded, shaded * SHADE[None, None, :] ** 0.5, np.clip(deep * 2.0, 0, 1)[..., None])        # deeper under a deep eave
+    warmth = np.clip(foot * 0.75, 0, 1)[..., None]
+    shaded = lerp(shaded, np.clip(shaded * 1.22 + np.array([0.07, 0.04, -0.01], F32), 0, 1), warmth)
+    c = lerp(c, shaded, (m * (a > 0.01))[..., None])
+    lay.c = (c * a[..., None]).astype(F32)
+    return lay
+
+
+def ground_shadows():
+    """The short noon shadows of what stands in the street and the yard, each falling away from us and a little right,
+    as picture polygons: (polygon, strength)."""
+    sx, sd = SUN_CAST
+    out = []
+
+    def box(x0, x1, d0, d1, h, k=0.85):
+        foot = [(x0, d0), (x1, d0), (x1, d1), (x0, d1)]
+        top = [(x_ + sx * h, d_ + sd * h) for x_, d_ in foot]
+        pts = foot + top
+        out.append(([P(x_, 0.2, d_) for x_, d_ in convex(pts)], k))
+    def post(x_, d_, w_, h, k=0.8):
+        out.append(([P(x_ - w_ / 2, 0.2, d_), P(x_ + w_ / 2, 0.2, d_), P(x_ + w_ / 2 + sx * h, 0.2, d_ + sd * h), P(x_ - w_ / 2 + sx * h, 0.2, d_ + sd * h)], k))
+    # the bales of cloth (their shadows go in under the cotton office's eave)
+    for (X_, row, n) in BALES:
+        d_ = DF - 30 - row * 46
+        box(X_, X_ + 54, d_, d_ + 40, n * 30)
+    # the hut, its stool's legs, the gate's posts
+    box(HUT[0], HUT[1], DF - 30, DF - 4, 200.0, 0.75)
+    sxs, sds = HUT[1] - 30, DF - 90
+    for xl in (sxs - 10, sxs + 8):
+        post(xl, sds - 8, 3.0, 36.0)
+    box(sxs - 14, sxs + 14, sds - 12, sds + 12, 38.0, 0.6)
     for xp in (GATE[0], GATE[1] - 14):
-        s.poly([P(xp + 4, 0, GATE_D), P(xp + 18, 0, GATE_D), P(xp + 18 + 25, 0, GATE_D + 90), P(xp + 4 + 25, 0, GATE_D + 90)], C["cast"], 0.5)
-    c, a = s.done()
-    tint(pic, C["cast"], blur(a, 0.6) * 0.42)
-    return pic
+        post(xp + 7, GATE_D + 7, 14.0, 252.0, 0.75)
+    # the school's step stone; the well, its frame's posts, the rice pot, the pickle tub, the mortar (in the yard)
+    box(ROOM[1] - 70, ROOM[1] - 6, DF - 52, DF - 42, 16.0, 0.7)
+    W_ = WELL
+    ring = [(W_["X"] + W_["r"] * math.cos(t_), W_["D"] + W_["r"] * math.sin(t_)) for t_ in np.linspace(0, 2 * math.pi, 16)[:-1]]
+    pts = ring + [(x_ + sx * W_["h"], d_ + sd * W_["h"]) for x_, d_ in ring]
+    out.append(([P(x_, 0.2, d_) for x_, d_ in convex(pts)], 0.85))
+    for xp in (W_["X"] - W_["r"] - 1, W_["X"] + W_["r"] + 1):
+        post(xp, W_["D"] + 2, 6.0, FRAME["h"], 0.7)
+    for key in ("ricepot", "pickletub", "mortar"):
+        t_ = THINGS[key]
+        box(t_["X"] - t_["w"] / 2, t_["X"] + t_["w"] / 2, t_["D"] - t_["w"] / 3, t_["D"] + t_["w"] / 3, t_.get("h", 20.0) + (12.0 if key == "ricepot" else 0.0), 0.8)
+    return out
+
+
+def convex(pts):
+    """The convex hull of ground places (x, d)."""
+    pts = sorted(set((round(a, 2), round(b, 2)) for a, b in pts))
+    if len(pts) < 3:
+        return pts
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lower, upper = [], []
+    for p_ in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p_) <= 0:
+            lower.pop()
+        lower.append(p_)
+    for p_ in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p_) <= 0:
+            upper.pop()
+        upper.append(p_)
+    return lower[:-1] + upper[:-1]
+
+
+def shadows(pic, street_m):
+    """The noon shadows on the ground: the short shadows of what stands there (glazes), and the big tree's dappled shade
+    across the near left of the street. -> the shade mask (all of it)."""
+    sh = np.zeros(SHAPE, F32)
+    for i, (poly, k) in enumerate(ground_shadows()):
+        np.maximum(sh, mask_poly(SHAPE, poly, soft=0.6, wobble=0.5, seed=60 + i) * k, out=sh)
+    tint(pic, SHADE, np.clip(sh, 0, 1))
+    x_, y_ = grid(SHAPE)
+    tree = tree_shade(pic) * street_m * np.clip((430.0 - x_) / 90.0, 0, 1)
+    tint(pic, SHADE, np.clip(tree * 0.70, 0, 1))
+    # the foot of every front a little darker where it meets the ground (and the drain's planks' shadow line)
+    x, y = grid(SHAPE)
+    foot = np.exp(-((y - row_D(DF) - 0.5) / 1.4) ** 2) * (y > 300)
+    tint(pic, SHADE, (foot * 0.5).astype(F32))
+    return np.maximum(sh, tree)
 
 
 # ---------------------------------------------------------------- the passes
 def backdrop_sheets():
-    """Everything of the backdrop, far to near, on sheets: a list of (name, draw function)."""
+    """Everything of the near row (the backdrop's middle plane), far to near, on sheets: a list of (name, draw function)."""
     return [
-        ("hill", hill), ("far", far_roofs), ("lane", lane), ("offices", offices), ("bales", bales),
+        ("lane", lane), ("offices", offices), ("bales", bales),
         ("kura", kura), ("yard", yard), ("mortar", mortar), ("pan", pan), ("school_inside", school_inside), ("school_doorway", school_doorway),
-        ("school_upper", school_upper), ("tane", tane_house), ("right", right_house), ("hut", hut),
+        ("school_upper", school_upper), ("tane", tane_house), ("right", right_house), ("hut", hut), ("drain", drain),
     ]
 
 
-def under(seed=31):
-    pic = sky_layer()
+def under(seed=SEED):
+    """Pass one: the far plane (edo_town_far.py), the near row's fronts in washes with their noon shade, the street and
+    its shadows. -> (picture, the crisp layers, info)"""
+    import edo_town_far as FAR
+    pic = FAR.paint_sky(seed)
+    info = FAR.paint_far(pic, seed)
+    info["sky_only"] = (1 - np.clip(info["hills"] + info["hill"] + info["keep"] + info["roofs"], 0, 1)).astype(F32)
     layers = {}
-    for name, fn in backdrop_sheets()[:2]:
-        lay = sheet_layer(fn, 0.0)
-        lay.onto(pic)
-    keep_l = keep_layer()
-    keep_l.onto(pic)
-    layers["keep"] = keep_l
-    for name, fn in backdrop_sheets()[2:4]:
-        lay = sheet_layer(fn, 0.3)
+    near_row = np.zeros(SHAPE, F32)
+    for name, fn in backdrop_sheets()[:1]:
+        lay = shade_layer(name, sheet_layer(fn, 0.3))
         lay.onto(pic)
         layers[name] = lay
-    street(pic)
-    for name, fn in backdrop_sheets()[4:]:
-        lay = sheet_layer(fn, 0.25)
+        np.maximum(near_row, lay.a, out=near_row)
+    street_m, worn = street(pic)
+    for name, fn in backdrop_sheets()[1:]:
+        lay = shade_layer(name, sheet_layer(fn, 0.25 if name != "drain" else 0.15))
         lay.onto(pic)
         layers[name] = lay
-    shadows(pic)
-    # the noon air: the far things a little paler toward the sky's low band
-    x, y = grid(SHAPE)
-    haze = np.clip((300 - y) / 220.0, 0, 1) ** 1.6 * (y < 300)
-    return np.clip(pic, 0, 1), layers
+        np.maximum(near_row, lay.a, out=near_row)
+    sprinkled(pic)
+    sprinkled(pic, 44, xc=520.0, dc=DF - 150.0, rx=105.0, rz=55.0)
+    yard_sun(pic)
+    layers["marks"] = street_marks(pic, worn)
+    info["shade"] = shadows(pic, street_m)
+    info["street"], info["near_row"] = street_m, near_row
+    return np.clip(pic, 0, 1).astype(F32), layers, info
 
 
-def details(pic, layers):
+def details(pic, layers, amount=0.78):
     """Over the brushwork: the built things said again crisply (the brush must not blur a lattice or a tile edge)."""
     crisp = pic.copy()
-    for name in ("keep", "lane", "offices", "bales", "kura", "yard", "school_inside", "school_doorway", "school_upper", "tane", "right", "hut", "mortar", "pan"):
+    for name in ("lane", "offices", "bales", "kura", "yard", "school_inside", "school_doorway", "school_upper", "tane", "right", "hut", "mortar", "pan", "drain", "marks"):
         if name in layers:
             layers[name].onto(crisp)
-    pic[...] = lerp(pic, crisp, 0.80)
+    pic[...] = lerp(pic, crisp, amount)
     return pic
 
 
 CUTS = ["noren-cotton", "noren", "desks", "shutters", "kitchendoor", "saltjar", "plumjar", "cloth", "ricepot", "pickletub", "well", "bucket", "gate"]     # back to front, as the scene lists them (postimp_plans.py)
 ALTS = ["shutters-shut", "kitchendoor-open", "bucket-down", "cloth-bundle", "gate-shut"]
+NEAR = ["near", "near-noren"]                           # the front plane (round twenty-three), last
 
 
 def cut_layers():
@@ -1116,44 +1378,155 @@ def cut_layers():
     return L
 
 
+def old_masks():
+    """Round twenty-one's cut-outs' outlines, exactly (the print's drawing, as installed): {name: hard mask}."""
+    STYLE["wc"] = False
+    try:
+        L = cut_layers()
+    finally:
+        STYLE["wc"] = True
+    return {k: (v.a > 0.5).astype(F32) for k, v in L.items()}
+
+
+def cut_shade(name):
+    """Where the noon shade lies on a cut-out (a mask), and how deep (the rooms inside are dimmer than a shaded wall)."""
+    x, y = grid(SHAPE)
+    if name in ("noren", "noren-cotton"):
+        return np.ones(SHAPE, F32), 1.0
+    if name == "desks":
+        return np.ones(SHAPE, F32), 1.35
+    if name in ("shutters", "shutters-shut"):
+        m = (y < P(0, 41.0, DF)[1]).astype(F32)
+        stack = mask_poly(SHAPE, [(P(SCHOOL[0] - 4, 0, DF - 24)[0] - 14, 600), (P(SCHOOL[0] - 4, 0, DF - 24)[0] + 14, 600),
+                                  (P(SCHOOL[0] - 4, 0, DF - 24)[0] + 14, P(0, 108, DF - 24)[1]), (P(SCHOOL[0] - 4, 0, DF - 24)[0] - 14, P(0, 108, DF - 24)[1])])
+        return np.clip(m - stack, 0, 1).astype(F32), 1.0
+    if name in ("kitchendoor", "kitchendoor-open"):
+        return (y < P(0, 133.0, YARD_BACK)[1]).astype(F32), 1.0
+    if name in ("gate", "gate-shut"):
+        return (y < P(0, 165.0, GATE_D)[1]).astype(F32) * 0.85, 1.0
+    return None, 0.0
+
+
+def fill_out(color, have):
+    """Carry a cut-out's new colours out to the old outline's edge: every pixel takes the colour of the nearest one painted."""
+    from scipy.ndimage import distance_transform_edt
+    if have.all():
+        return color
+    _, (iy, ix) = distance_transform_edt(~have, return_indices=True)
+    return color[iy, ix]
+
+
+def cut_pictures(back, fast=False, seed=SEED):
+    """Every cut-out painted in washes inside its old outline: {name: (colour, hard mask)}."""
+    masks = old_masks()
+    L = cut_layers()
+    out = {}
+    for i, name in enumerate(CUTS + ALTS):
+        c, a = L[name].straight()
+        hard = masks[name]
+        c = fill_out(c, a > 0.35)
+        edge = (hard > 0.5) & ~(a > 0.35)
+        c[edge] = deepen(c[edge], 0.12)                      # (where the print's line was: a soft dark edge)
+        m, deep = cut_shade(name)
+        if m is not None:
+            sh = c * (SHADE if deep <= 1.0 else SHADE_DEEP)[None, None, :]
+            if deep > 1.0:
+                sh = sh * 0.82
+            c = lerp(c, sh, m[..., None])
+        from edo_village_kit import grade_cut, painted
+        c = grade_cut(c, hard, 0.92, lightfrom=(-0.5, -0.8), seed=seed + i, uneven=0.05)
+        if not fast:
+            c, _ = painted(c, hard, np.median(back[hard > 0.5], axis=0) if hard.any() else back[300, 400], seed=40 + i, sizes=(4, 2), keep=0.72)
+        out[name] = (np.clip(c, 0, 1).astype(F32), hard)
+    return out
+
+
+def wet_mask(info):
+    """What was laid wet in wet (watercolor.wash's `soft`): the sky and its clouds 1, the hills 0.6, the castle's hill 0.4,
+    the far roofs 0.18, the keep 0.1 (its edges must hold); 0 for the near row, the street and everything near."""
+    m = info["sky_only"] * 1.0
+    m = np.maximum(m, info["hills"] * 0.6)
+    m = np.where(info["hill"] > 0.5, 0.40, m)
+    m = np.where(info["roofs"] > 0.5, 0.18, m)
+    m = np.where(info["keep"] > 0.3, 0.08, m)
+    m = np.maximum(m, info["haze"] * 0.8 * (1 - info["keep"]))
+    m = m * (1 - info["near_row"])
+    return np.clip(m, 0, 1).astype(F32)
+
+
+def to_file(picture, name, colors=128, alpha=None, seed=7, speckle=0.010, amount=0.010):
+    """Pigment grain (little: the wash has its own granulation), then a limited palette with speckle: an 8-bit PNG."""
+    g = grain(picture, seed, amount)
+    sample_of = g if alpha is None else g[alpha > 0.5]
+    pal = palette_of([sample_of.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((sample_of * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
+    idx = to_palette(g, pal, speckle=speckle)
+    save(name, idx, pal, alpha)
+    return os.path.getsize(name)
+
+
+COUNTS = {"noren-cotton": 48, "noren": 32, "desks": 48, "shutters": 64, "kitchendoor": 48, "saltjar": 32, "plumjar": 32, "cloth": 24, "ricepot": 32,
+          "pickletub": 32, "well": 48, "bucket": 32, "gate": 64, "shutters-shut": 64, "kitchendoor-open": 48, "bucket-down": 24, "cloth-bundle": 24,
+          "gate-shut": 64, "near": 128, "near-noren": 64}
+WASH = dict(wander=1.4, fleck=0.30)
+
+
+def finish_all(pic, cut, info, out=None):
+    """THE WATERCOLOUR FINISH (DEPTH.md; Yui's recipe): the backdrop washed (watercolor.wash, soft = wet_mask), every
+    cut-out washed over the unwashed backdrop with the same seed (wash_cut, crisp: its own edge stays), so the paper is
+    one sheet; then grain and the palette."""
+    out = out or OUT
+    soft = wet_mask(info)
+    back_washed = WC.wash(pic, seed=SEED, soft=soft, **WASH)
+    sizes = {"back": to_file(back_washed, out + "/back.png", 250)}
+    washed = {}
+    for name in CUTS + ALTS + NEAR:
+        c, a = cut[name]
+        w_ = WC.wash_cut(c, (a > 0.5).astype(F32), pic, seed=SEED, soft=soft, crisp=True, **WASH)
+        washed[name] = (w_, a)
+        sizes[name] = to_file(w_, out + f"/{name}.png", COUNTS.get(name, 64), a)
+    return back_washed, washed, sizes
+
+
 if __name__ == "__main__":
+    import edo_town_near as NEARMOD
     t0 = time.time()
     os.makedirs(OUT, exist_ok=True)
     os.makedirs(f"{OUT}-work", exist_ok=True)
-    fast = len(sys.argv) > 1 and sys.argv[1] == "fast"
-    base, layers = under()
+    fast = "fast" in sys.argv
+    base, layers, info = under()
     to_png(base, f"{OUT}-work/1-under.png")
     print("under", round(time.time() - t0, 1))
-    pic = base.copy() if fast else strokes(base, sizes=(10, 5, 3), seed=2, density=1.4, jitter=0.022, keep=0.40)
-    ground_ = pic.copy()
+    if fast:
+        pic = base.copy()
+    else:
+        # the brush pass, light: the far plane stays as the wet washes left it, the near row and the street half brushed
+        brushed_ = strokes(base, sizes=(10, 5, 3), seed=2, density=1.4, jitter=0.02, keep=0.0)
+        keep = np.clip(0.52 + 0.36 * wet_mask(info), 0, 0.92)
+        pic = lerp(brushed_, base, keep[..., None]).astype(F32)
     details(pic, layers)
-    details(ground_, layers)
     print("details", round(time.time() - t0, 1))
-    cuts = cut_layers()
+    cut = cut_pictures(pic, fast)
+    nc, na = NEARMOD.near_cut()
+    cut["near"] = (nc, (na > 0.5).astype(F32))
+    nc, na = NEARMOD.noren_cut()
+    cut["near-noren"] = (nc, (na > 0.5).astype(F32))
     whole = pic.copy()
-    cut = {}
-    for i, name in enumerate(CUTS + ALTS):
-        layer = cuts[name]
-        if fast:
-            c, a = layer.straight()
-            a = (a > 0.5).astype(F32)
-        else:
-            c, a = brushed(layer, ground_, seed=40 + i, sizes=(5, 3, 2), restate=0.9)
-        cut[name] = (c, a)
-        if name in CUTS:
-            over(whole, c, a)
+    for name in CUTS + NEAR:
+        c, a = cut[name]
+        over(whole, c, a)
     to_png(whole, f"{OUT}-2-all.png")
     print("painted", round(time.time() - t0, 1))
-    if fast:
+    if fast and "wash" not in sys.argv:
         sys.exit()
-    size, pal = finish(pic, f"{OUT}/back.png", 160)
-    print("back", size)
-    for name, (c, a) in cut.items():
-        print(name, finish(c, f"{OUT}/{name}.png", 64, a)[0])
-    import edo_town_layout as LY
-    LY.write(f"{OUT}/layout.json")
-    comp = Image.open(f"{OUT}/back.png").convert("RGBA")
-    for name in CUTS:
-        comp.alpha_composite(Image.open(f"{OUT}/{name}.png").convert("RGBA"))
-    comp.convert("RGB").save(f"{OUT}-comp.png")
+    target = OUT if not fast else OUT + "-fast"
+    os.makedirs(target, exist_ok=True)
+    back_washed, washed, sizes = finish_all(pic, cut, info, target)
+    print(sizes)
+    if not fast:
+        import edo_town_layout as LY
+        LY.write(f"{OUT}/layout.json")
+    comp = Image.open(f"{target}/back.png").convert("RGBA")
+    for name in CUTS + NEAR:
+        comp.alpha_composite(Image.open(f"{target}/{name}.png").convert("RGBA"))
+    comp.convert("RGB").save(f"{OUT}-comp.png" if not fast else f"{OUT}-fast-comp.png")
     print("done", round(time.time() - t0, 1))

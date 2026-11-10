@@ -243,6 +243,7 @@ export default {
     [[298, 448], [374, 448], [376, 433], [307, 433]],             // the middle one, broad and low: Titus's
     [[373, 448], [415, 448], [414, 438], [374, 438]],             // the new statue's
     [[415, 448], [457, 448], [454, 438], [414, 438]],
+    [[756, 597], [797, 597], [797, 322], [762, 322]],             // DEPTH-23: behind the near column at the right edge (near.png)
   ],
   spawn: { default: [500, 520], fromSteps: FROM_STEPS },
   facing: "N",                                                    // in at the gate, looking up the precinct
@@ -270,6 +271,7 @@ export default {
     // the four bronze tablets on their posts, running away from us at the front right: people pass behind them (the base
     // runs along the posts' left side)
     { id: "tablets", src: art + "tablets.png", base: [[739, 590], [628, 487]], solid: [[[747, 590], [793, 590], [772, 573], [729, 573]], [[704, 551], [744, 551], [728, 538], [690, 538]], [[670, 520], [706, 520], [693, 510], [659, 510]], [[643, 496], [675, 496], [665, 487], [634, 487]]] },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (the painter's marks, layout.json "fx", as they are), and the geese. A function of the

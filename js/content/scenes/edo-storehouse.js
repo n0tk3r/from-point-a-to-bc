@@ -271,6 +271,7 @@ export default {
     { id: "trapdoor", states: { shut: art + "trapdoor.png", open: art + "trapdoor-open.png" }, state: (g) => (trapOpen(g) ? "open" : "shut"), plane: "back" },
     { id: "floorgaps-on", src: art + "floorgaps-on.png", plane: "back", when: warm },
     { id: "mat", states: { down: art + "mat.png", aside: art + "mat-aside.png" }, state: (g) => (matAside(g) ? "aside" : "down"), plane: "back" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // Her flashlight's light up between the boards (#27): the painter's warm light between the boards, turned pink, on the
   // live layer (over the painting, under every cut-out: the mat, the lid, the heap), while it is on below.

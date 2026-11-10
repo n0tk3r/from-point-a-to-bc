@@ -1,215 +1,277 @@
-"""The foot of Mount Shosha's layout.json: every number the scene file needs, measured from the picture as painted
-(edo_shosha.py's plan through the camera, and the painted layers for the shapes that hug things). PAINT-21E.
-
-  python3 edo_shosha_layout.py      writes out/edo-shosha/layout.json (edo_shosha.py also calls write())"""
+"""PAINT-23: the foot of Mount Shosha's layout.json, measured from the camera, the kit's places and the painted cut-outs
+(edo_shosha.py calls write() at the end of a full run). Every number of js/content/scenes/edo-shosha.js comes from here:
+`python3 edo_shosha_layout.py numbers` prints them as the scene file writes them (out/edo-shosha-work/scene-numbers.txt),
+and write() also writes out/edo-shosha-remap.json (where every old mark, arriving place and standing place of round
+twenty-one's picture is now: js/content/checkpoints.js is the lead's to change, not ours)."""
 
 import json
 import math
 import os
+import sys
 
 import numpy as np
 
 from edo_shosha_kit import *
-from edo_town_kit import hull, box_of
-import edo_shosha as ES
+import edo_shosha_far as FAR
+
+# Round twenty-one's places (PAINT-21E's picture, horizon 280, full 590), for the remap: name -> (x, y)
+OLD = {
+    "road": (735, 548), "stone": (248, 484), "path": (214, 468), "ryokai": (236, 456), "hall": (493, 477), "lock": (485, 473), "step": (514, 470),
+    "ume": (572, 456), "hut": (62, 466), "bench": (642, 508), "tome": (604, 489), "wife": (647, 489), "girl": (690, 489), "view": (690, 455), "combs": (686, 518),
+    "LATTICE": (330, 463), "DOORWAY": (458, 470), "talk.ryokai": (266, 470), "talk.ume": (548, 470), "talk.tome": (612, 512), "talk.wife": (652, 514),
+    "talk.girl": (700, 514), "talk.hall": (493, 480), "arrive.road.0": (700, 560), "arrive.road.1": (764, 566), "arrive.lock.0": (456, 482),
+    "arrive.lock.1": (512, 482), "arrive.hall.0": (456, 486), "arrive.hall.1": (532, 486), "edge.E": (788, 560), "talk.lattice": (356, 480),
+    "homeward.0": (600, 520), "homeward.1": (760, 580), "night.ume": (470, 474),
+}
 
 r = lambda q: [int(round(q[0])), int(round(q[1]))]
 
 
-def foot(X, D):
-    return r(P(X, 0, D))
+def inside(poly, p):
+    x, y = p
+    n = len(poly)
+    ins = False
+    for i in range(n):
+        x0, y0 = poly[i]
+        x1, y1 = poly[(i + 1) % n]
+        if (y0 > y) != (y1 > y):
+            if x0 + (y - y0) * (x1 - x0) / (y1 - y0) > x:
+                ins = not ins
+    return ins
 
 
-def hfoot(a, b):
-    X, D = H_(a, b)
-    return foot(X, D)
+def hull(alpha, pad=2, step_=8):
+    """The outline of a cut-out's painted pixels (a convex hull, padded), as picture points."""
+    ys, xs = np.where(alpha > 0.5)
+    if not len(ys):
+        return []
+    pts = []
+    for yy in range(int(ys.min()), int(ys.max()) + 1, step_):
+        row = xs[(ys >= yy) & (ys < yy + step_)]
+        if len(row):
+            pts += [(int(row.min()) - pad, yy), (int(row.max()) + pad, yy)]
+    pts += [(int(xs[ys == ys.max()].min()) - pad, int(ys.max()) + pad), (int(xs[ys == ys.max()].max()) + pad, int(ys.max()) + pad),
+            (int(xs[ys == ys.min()].min()) - pad, int(ys.min()) - pad), (int(xs[ys == ys.min()].max()) + pad, int(ys.min()) - pad)]
+    pts = sorted(set(pts))
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lo, up = [], []
+    for p in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], p) <= 0:
+            lo.pop()
+        lo.append(p)
+    for p in reversed(pts):
+        while len(up) >= 2 and cross(up[-2], up[-1], p) <= 0:
+            up.pop()
+        up.append(p)
+    return [list(p) for p in lo[:-1] + up[:-1]]
 
 
-MARKS = {
-    "road": [735, 548],                          # from the town: arriving, on the road up at the bottom right
-    "stone": foot(ES.STONE[0], 1330),            # before the stone at the path's foot
-    "path": [214, 468],                          # the foot of the east path (the way up refuses, for every one of them)
-    "ryokai": [236, 456],                        # Ryokai, sitting on the bottom step by the stone
-    "hall": hfoot(180, -150),                    # before the doors, a step back
-    "lock": hfoot(180, -118),                    # at the lock, close before the step: the close-up opens from here
-    "step": hfoot(236, -122),                    # by the step and O-Ume's rice ball on its leaf
-    "ume": hfoot(400, -60),                      # O-Ume, by the hall's front corner, between the hall and the bench
-    "hut": [62, 466],                            # before O-Ume's hut (its lantern on the hook)
-    "bench": foot(360, 1190),                    # before the bench where the women wait
-    "tome": foot(330, 1295),                     # Grandmother Tome, seated on the bench
-    "wife": foot(400, 1295),                     # the young wife with her baby, seated
-    "girl": foot(470, 1295),                     # the girl of eleven with her grandmother's slip, seated
-    "view": [690, 455],                          # at the terrace's edge: the plain far below, the castle
-    "combs": foot(ES.COMBS[0] - 40, ES.COMBS[1] - 70),   # before the heap of failed combs and pins
-}
-FACES = {"road": "W", "stone": "N", "path": "N", "ryokai": "E", "hall": "N", "lock": "N", "step": "N", "ume": "W", "hut": "N",
-         "bench": "N", "tome": "S", "wife": "S", "girl": "S", "view": "E", "combs": "N"}
+def box_of(alpha):
+    ys, xs = np.where(alpha > 0.5)
+    if not len(ys):
+        return None
+    return [int(xs.min()), int(ys.min()), int(xs.max() - xs.min() + 1), int(ys.max() - ys.min() + 1)]
 
 
-def walk_outline():
-    """The terrace: from the bottom up to the hall's step and base, round the stone to the path's foot, along the hut's
-    front; at the right up toward the shrubs on the edge. Never on the hall's base, never up the path, never over the
-    edge."""
-    base_fl = hfoot(-30, -30)
-    base_fr = hfoot(390, -30)
-    step_l = hfoot(66, -100)
-    step_r = hfoot(294, -100)
-    return [[6, 598], [794, 598], [794, 452], [700, 436], [600, 446], [base_fr[0] + 2, base_fr[1] + 3], [step_r[0] + 2, step_r[1] + 2],
-            [step_l[0] - 2, step_l[1] + 2], [base_fl[0] - 2, base_fl[1] + 2], [318, 450], [262, 450], [256, 452], [196, 452], [180, 458],
-            [40, 460], [6, 464]]
+def places():
+    """Every place of the scene file, as picture points."""
+    M = {k: r(foot(*v)) for k, v in MARKS_W.items()}
+    out = dict(M=M)
+    out["LATTICE"] = r(foot(*LATTICE_W))
+    out["DOORWAY"] = r(foot(*DOORWAY_W))
+    out["HOMEWARD"] = [r(foot(*HOMEWARD_W[0])), r(foot(*HOMEWARD_W[1])), [830, 612]]
+    out["TALK_AT"] = {k: r(foot(*v)) for k, v in TALK_W.items()}
+    out["arrive"] = {k: [r(foot(*q)) for q in v] for k, v in ARRIVE_W.items()}
+    out["edgeE"] = [790, 566]
+    out["latticeTalk"] = r(foot(*LATTICE_TALK_W))
+    out["nightUme"] = r(foot(*NIGHT_UME_W))
+    out["walk"] = [r(p) for p in walk_outline()]
+    # the solid ground: the stone, the heap of combs on its cloth (the bench's is its cut-out's solid)
+    X, D = STONE
+    w, h, t = STONE_SIZE
+    out["stone_solid"] = [r(foot(X - w / 2 - 8, D - 8)), r(foot(X + w / 2 + 8, D - 8)), r(foot(X + w / 2 + 8, D + t + 10)), r(foot(X - w / 2 - 8, D + t + 10))]
+    cx, cd = COMBS
+    out["combs_solid"] = [r(foot(cx - 50, cd - 34)), r(foot(cx + 50, cd - 38)), r(foot(cx + 56, cd + 32)), r(foot(cx - 44, cd + 36))]
+    fl, fr, br, bl = bench_pts()
+    out["bench_solid"] = [r(foot(*fl)), r(foot(*fr)), r(foot(*br)), r(foot(*bl))]
+    out["bench_base"] = [r(foot(*fl)), r(foot(*fr))]
+    out["stone_base"] = int(round(foot(X, D)[1]))
+    return out
 
 
-def write(path):
-    ES.set_light("gold")
-    cuts = ES.cut_layers()
-    alpha = {k: v.a > 0.5 for k, v in cuts.items()}
-    out = {"id": "edo-shosha", "horizon": HZ, "full": FULL, "minScale": 0.3,
-           "light": "two states, the same geometry. GOLD (back.png and the plain cut-outs): the late afternoon sun from the left and a little behind us, "
-                    "about 30 degrees up: the hall's west side lit, its front at a slant, shadows to the right and a little away. SUNSET (sunset.png and "
-                    "every cut-out's -sunset twin): the sun low at the left, seen red through the trees of the glade (7 degrees up, a little beyond the "
-                    "hall): the hall's west side red, its front in blue shade, the terrace in the trees' long shadow with streaks of red light across "
-                    "it to the right and toward us; the sky in bands (the act's licence for chrome orange and geranium lake). Key: edo-sunset.",
-           "note": "The land camera (persp.Camera 280/590, focal 800, lens 3.39 m up), its vanishing point at x 400. The hall is turned 22 degrees so its "
-                   "west side (with the lattice window) shows; its front corner 14.5 m off (row 467). Mom before the doors (mark hall) is "
-                   f"{round(168 / 181 * 160 * scale_at(MARKS['hall'][1]), 1)} px. The castle on the plain is drawn about four times larger than "
-                   "the eye would see it 6 km off (the prints' way), and the plain is put at the picture's right though it lies south-east of the hall "
-                   "(the mountain is at the left): a painter's liberty."}
-    out["view"] = {"horizon": HZ, "full": FULL, "focal": FOC, "vanish_x": VX, "eye_cm": round(EYE, 1), "hall_turn_deg": 22}
-    out["walk"] = walk_outline()
-    out["walk_note"] = "one floor: the terrace before the hall, the path's foot, the hut's front, the road up at the bottom right"
-    X, D = ES.STONE
-    blocked = [[foot(X - 24, D - 8), foot(X + 24, D - 8), foot(X + 24, D + 26), foot(X - 24, D + 26)]]
-    cx, cd = ES.COMBS
-    blocked.append([foot(cx - 44, cd - 34), foot(cx + 50, cd - 34), foot(cx + 50, cd + 34), foot(cx - 44, cd + 34)])
-    blocked.append([[0, 598], [52, 598], [50, 556], [0, 556]])                     # the near pine's foot
-    blocked.append([foot(-470, 1590), foot(-400, 1590), foot(-400, 1640), foot(-470, 1640)])   # the hut's firewood
-    out["blocked"] = blocked
-    out["blocked_note"] = "the stone, the heap of combs on its cloth, the near pine's foot, the hut's firewood; the bench gives solid ground of its own"
-    # ---- the cut-outs, back to front, as the scene lists them
-    bx0, bx1 = ES.BENCH_X
-    bench_base = int(round(row_D(ES.BENCH_D + 4)))
-    stone_base = int(round(row_D(ES.STONE[1])))
-    planes = [
-        {"id": "sunset", "file": "sunset.png", "plane": "back", "what": "the whole stage at sunset: a layer the scene fades in over back.png (under everybody and "
-                                                                       "under the cut-outs, which take their -sunset twins as it comes): ENGINE-21's layer fade",
-         "state": "shown (faded in) once the sun goes low: when the lock opens (the design: the scene changes state when the lock is open)"},
-        {"id": "doors", "file": "doors.png", "plane": "back", "what": "the hall's latticed double doors (they part in the middle and swing out toward us)",
-         "states": {"shut": "doors.png", "half": "doors-half.png", "open": "doors-open.png", "shut-sunset": "doors-sunset.png", "half-sunset": "doors-half-sunset.png",
-                    "open-sunset": "doors-open-sunset.png"},
-         "note": "the swing: shut -> half -> open, two or three tenths of a second each; open shows the dim hall inside, its cabinet at the back and the bars "
-                 "of light from the west lattice across the floor (painted in the backdrop behind the doors, so the doorway is never empty)"},
-        {"id": "lock", "file": "lock.png", "plane": "back", "what": "the shipwright's lock on the hasp (small: the close-up edo-lock is where it is seen)",
-         "states": {"shut": "lock.png", "open": "lock-open.png", "shut-sunset": "lock-sunset.png", "open-sunset": "lock-open-sunset.png"},
-         "note": "open: the bolt drawn, the lock hanging from the staple. Hide it once the doors swing (it is on the leaves)"},
-        {"id": "stepball", "file": "stepball.png", "plane": "back", "what": "O-Ume's rice ball on its leaf on the step",
-         "states": {"there": "stepball.png", "there-sunset": "stepball-sunset.png"}, "note": "hidden once it is taken in"},
-        {"id": "stone", "file": "stone.png", "base": stone_base, "what": "the small stone at the path's foot (women may not pass: our own marks cut in it)",
-         "states": {"gold": "stone.png", "sunset": "stone-sunset.png"}, "solid": blocked[0]},
-        {"id": "bench", "file": "bench.png", "base": bench_base, "what": "the bench where the women wait: they sit on it (feet on row 490, in front of it)",
-         "states": {"gold": "bench.png", "sunset": "bench-sunset.png"},
-         "solid": [foot(bx0, ES.BENCH_D), foot(bx1, ES.BENCH_D), foot(bx1, ES.BENCH_D + 34), foot(bx0, ES.BENCH_D + 34)]},
-        {"id": "pine", "file": "pine.png", "plane": "front", "what": "the pine near us at the left edge, its pads over the top-left (it stirs: fx sway)",
-         "states": {"gold": "pine.png", "sunset": "pine-sunset.png"}},
-    ]
-    out["planes"] = planes
-    out["cutouts"] = {k: list(box_of(alpha[k])) for k in ES.CUTS + ES.ALTS}
-    # ---- the things to click
-    things = []
+def things(pl, cuts):
+    """Every clickable area, as the scene file gives it (back to front)."""
+    A = {k: (v[1] > 0.5) for k, v in cuts.items()}
+    M, T = pl["M"], pl["TALK_AT"]
+    th = {}
+    # the sky over the valley: right of the spur, above the far hills (the bough's pads lie over its top left)
+    sx = [int(round(np.interp(y, [p[1] for p in FAR.SPUR], [p[0] for p in FAR.SPUR]))) for y in (0, 80, 160, 240, 300)]
+    th["sky"] = [[sx[0] + 40, 0], [800, 0], [800, 300], [720, 306], [660, 312], [sx[4] + 6, 300], [sx[3] + 4, 240], [sx[2] + 4, 160], [sx[1] + 20, 80]]
+    # the mountain: the woods and the slope above the terrace's back, left of the spur (the trees, the cherry, the hut,
+    # the path and the hall lie over it)
+    th["mountain"] = [[100, 0], [sx[0] + 30, 0], [sx[1] + 10, 80], [sx[2], 160], [sx[3], 240], [sx[4], 300], [616, 334], [470, 300], [300, 250], [100, 240]]
+    th["plain"] = [[618, 330], [800, 322], [800, 446], [740, 446], [680, 440], [618, 436]]
+    cxp, cyp = FAR.CASTLE_AT
+    th["castle"] = [[int(cxp - 30), int(cyp - 34)], [int(cxp + 30), int(cyp - 34)], [int(cxp + 30), int(cyp + 6)], [int(cxp - 30), int(cyp + 6)]]
+    th["trees"] = [[96, 190], [470, 190], [470, 300], [360, 300], [260, 330], [96, 330]]
+    import edo_shosha_things as TH_
+    x0_, y0_, x1_, y1_ = (int(round(v)) for v in TH_.cherry_box())
+    th["cherry"] = [[x0_, y0_], [x1_, y0_], [x1_, y1_], [x0_, y1_]]               # its blossom
+    hw, hd, wall = HUT["w"], HUT["d"], HUT["wall"]
+    Q = lambda a, b, y: r(P(*hut_at(a, b)[:1], y, hut_at(a, b)[1]))
+    e = HUT["eave"]
+    th["hut"] = [Q(0, 0, 0), Q(hw, 0, 0), Q(hw + e, -e, wall - 6), Q(hw - 55, hd / 2, HUT["ridge"]), Q(55, hd / 2, HUT["ridge"]), Q(-e, -e, wall - 6), Q(-e, hd + e, wall - 6), Q(0, hd, 0)]
+    la, lb, ly = HUT_LANTERN_AB
+    lx, lyy = P(*hut_at(la, lb)[:1], ly, hut_at(la, lb)[1])
+    th["lantern"] = [[int(lx) - 10, int(lyy) - 8], [int(lx) + 10, int(lyy) - 8], [int(lx) + 10, int(lyy) + 24], [int(lx) - 10, int(lyy) + 24]]
+    # the east path: its steps from the foot up to where the woods take it
+    import edo_shosha_things as TH
+    st = TH.path_steps()
+    top = st[11]
+    a0, b0 = st[0]["front"]
+    a1, b1 = top["front"]
+    th["pathup"] = [r(P(a0[0] - 10, 0, a0[1])), r(P(b0[0] + 10, 0, b0[1])), r(P(b1[0] + 6, top["y1"], b1[1])), r(P(a1[0] - 6, top["y1"], a1[1]))]
+    th["stone"] = hull(A["stone"], 3, 8)
+    bo = BASE_OUT
+    ev = EAVE_OUT
+    ye = EAVE_Y - EAVE_DROP
+    th["hall"] = [r(HP(-ev, -ev, ye)), r(HP(SIDE / 2, SIDE / 2, APEX_Y + 40)), r(HP(SIDE + ev, -ev, ye)), r(HP(SIDE + bo, -bo, 0)), r(HP(-bo, -bo, 0)), r(HP(-bo, SIDE + bo, 0)),
+                  r(HP(-ev, SIDE + ev, ye))]
+    lb0, lb1 = LATTICE_B
+    ly0, ly1 = LATTICE_Y
+    th["lattice"] = [r(HP(0, lb0 - 8, ly0 - 8)), r(HP(0, lb1 + 8, ly0 - 8)), r(HP(0, lb1 + 8, ly1 + 8)), r(HP(0, lb0 - 8, ly1 + 8))]
+    da, db = DOOR_A
+    th["slips"] = [r(HP(2, -3, 64)), r(HP(da - 2, -3, 64)), r(HP(da - 2, -3, 272)), r(HP(2, -3, 272))]
+    th["slips2"] = [r(HP(db + 2, -3, 64)), r(HP(SIDE - 2, -3, 64)), r(HP(SIDE - 2, -3, 272)), r(HP(db + 2, -3, 272))]
+    th["doors"] = hull(A["doors"], 2, 10)
+    th["doors_open"] = hull(np.maximum(A["doors-open"], A["doors"]), 2, 10)
+    s_ = STEP
+    th["step"] = [r(HP(s_["a0"], -bo - s_["out"], 0)), r(HP(s_["a1"], -bo - s_["out"], 0)), r(HP(s_["a1"], -bo, s_["h"])), r(HP(s_["a0"], -bo, s_["h"]))]
+    th["stepball"] = hull(A["stepball"], 4, 6)
+    lk = LOCK_AT
+    p0, p1 = HP(lk[0] - 24, -6, lk[1] - 16), HP(lk[0] + 24, -6, lk[1] + 16)
+    th["lock"] = [[int(min(p0[0], p1[0])), int(min(p0[1], p1[1]))], [int(max(p0[0], p1[0])), int(min(p0[1], p1[1]))], [int(max(p0[0], p1[0])), int(max(p0[1], p1[1]))], [int(min(p0[0], p1[0])), int(max(p0[1], p1[1]))]]
+    th["bench"] = hull(A["bench"], 3, 8)
+    th["combs"] = pl["combs_solid"]
+    return th
 
-    def thing(id_, what, shape, stand, face="N", **more):
-        d = {"id": id_, "what": what, "shape": {"poly": shape}, "stand": stand, "face": face}
-        d.update(more)
-        things.append(d)
-    M = MARKS
-    thing("mountain", "Mount Shosha going up into the trees (the temple is up there, out of sight: an hour's climb by the east path)",
-          [[0, 0], [180, 0], [300, 52], [400, 124], [480, 190], [560, 244], [620, 288], [420, 200], [270, 200], [0, 190]], M["path"])
-    thing("pathup", "the east path: stone steps climbing steeply into the trees, out of sight", [[188, 458], [262, 458], [256, 380], [236, 320], [196, 316], [190, 380]], M["path"])
-    thing("stone", "a small upright stone at the path's foot, cut with writing (women may not pass)", hull(alpha["stone"], 3, 10), M["stone"])
-    thing("trees", "pines and maples in fresh leaf on the mountain's foot; the glade of trunks at the left", [[0, 186], [270, 200], [266, 352], [0, 356]], M["hut"])
-    thing("cherry", "a late cherry in the shade of the slope, still in flower", [[150, 218], [270, 214], [276, 290], [150, 292]], M["path"])
-    thing("hall", "the women's hall: small, deep-roofed, on a low stone base, a jewel on its roof's peak",
-          [r(ES.HP(-ES.EAVE_OUT, -ES.EAVE_OUT, ES.EAVE_Y)), r(ES.HP(SIDE + ES.EAVE_OUT, -ES.EAVE_OUT, ES.EAVE_Y)), r(ES.HP(SIDE / 2, SIDE / 2, ES.FINIAL_Y)),
-           r(ES.HP(-ES.EAVE_OUT, SIDE + ES.EAVE_OUT, ES.EAVE_Y)), r(ES.HP(-30, SIDE + 30, 0)), r(ES.HP(-30, -30, 0)), r(ES.HP(SIDE + 30, -30, 0))], M["hall"])
-    thing("doors", "the latticed double doors, shut; dark inside", hull(alpha["doors"], 2, 10), M["hall"],
-          open=hull(alpha["doors-open"], 2, 12))
-    la = r(ES.HP(ES.LOCK_AT[0] - 26, -5, ES.LOCK_AT[1] - 16))
-    lb = r(ES.HP(ES.LOCK_AT[0] + 26, -5, ES.LOCK_AT[1] + 16))
-    thing("lock", "on the hasp, a lock: a dark block bound with iron, carved (too small to see from here: Look closer)",
-          [[la[0], lb[1]], [lb[0], lb[1]], [lb[0], la[1]], [la[0], la[1]]], M["lock"], note="the close-up edo-lock opens from here (Look closer / Use)")
-    da, db = ES.DOOR_A
-    thing("slips", "name slips pasted round the doors and up the posts, hundreds: paper and thin wood, old and new",
-          [r(ES.HP(4, -3, 70)), r(ES.HP(da - 4, -3, 70)), r(ES.HP(da - 4, -3, 260)), r(ES.HP(4, -3, 260))], M["hall"],
-          also=[[r(ES.HP(db + 4, -3, 70)), r(ES.HP(SIDE - 4, -3, 70)), r(ES.HP(SIDE - 4, -3, 260)), r(ES.HP(db + 4, -3, 260))]])
-    thing("step", "the step before the doors: one broad dressed stone", [r(ES.HP(66, -100, 0)), r(ES.HP(294, -100, 0)), r(ES.HP(294, -30, 22)), r(ES.HP(66, -30, 22))], M["step"])
-    thing("stepball", "a rice ball on a leaf on the step (O-Ume's, each evening)", hull(alpha["stepball"], 5, 8), M["step"])
-    lb0, lb1 = ES.LATTICE_B
-    ly0, ly1 = ES.LATTICE_Y
-    thing("lattice", "the lattice window in the hall's west side", [r(ES.HP(0, lb0 - 8, ly0 - 8)), r(ES.HP(0, lb1 + 8, ly0 - 8)), r(ES.HP(0, lb1 + 8, ly1 + 8)), r(ES.HP(0, lb0 - 8, ly1 + 8))], M["stone"])
-    x0, x1 = ES.HUTX
-    d0, d1 = ES.HUT_D
-    thing("hut", "O-Ume's hut by the path: a little thatched hut, its straw curtain half rolled up",
-          [foot(x0 - 50, d0 - 60), foot(x1 + 50, d0 - 60), r(P(x1 + 50, 190, d0 - 60)), r(P(x1 - 40, 330, (d0 + d1) / 2)), r(P(x0 + 40, 330, (d0 + d1) / 2)), r(P(x0 - 50, 190, d0 - 60))], M["hut"])
-    lx, ly, ld = ES.HUT_LANTERN
-    lp = P(lx, ly, ld)
-    thing("lantern", "a paper lantern on a hook by the hut's door, unlit", [[int(lp[0]) - 9, int(lp[1]) - 8], [int(lp[0]) + 9, int(lp[1]) - 8], [int(lp[0]) + 9, int(lp[1]) + 20], [int(lp[0]) - 9, int(lp[1]) + 20]], M["hut"])
-    thing("bench", "a long plain bench, worn: the women wait on it", hull(alpha["bench"], 4, 10), M["bench"])
-    thing("combs", "a heap of combs and hairpins on a cloth: boxwood, tortoiseshell, lacquer: the ones that failed",
-          [foot(cx - 46, cd - 36), foot(cx + 52, cd - 36), r(P(cx + 52, 12, cd + 36)), r(P(cx - 46, 12, cd + 36))], M["combs"])
-    thing("plain", "far below, the Harima plain: fields, villages, a river", [[560, 284], [800, 270], [800, 410], [560, 420]], M["view"], "E")
-    cxs, cys = ES.CASTLE_AT
-    thing("castle", "on its hill on the plain, small and white: the castle", [[int(cxs) - 34, int(cys) - 36], [int(cxs) + 30, int(cys) - 36], [int(cxs) + 30, int(cys) + 4], [int(cxs) - 34, int(cys) + 4]], M["view"], "E")
-    thing("sky", "the sky over the plain (gold; then the sunset's bands)", [[300, 0], [800, 0], [800, 262], [640, 262], [470, 160], [300, 40]], M["view"], "E")
 
-    def person(id_, mark, cm, what, seated=False):
-        x, y = MARKS[mark]
-        sc = scale_at(y)
-        h = cm / 181.0 * 160 * sc * (0.72 if seated else 1.0)
-        w = max(14, h * 0.4)
-        thing(id_, what, [[int(x - w / 2), int(y + 2)], [int(x + w / 2), int(y + 2)], [int(x + w / 2), int(y - h)], [int(x - w / 2), int(y - h)]], MARKS[mark], "N", person=True, mark=mark)
-    person("ume", "ume", 136, "O-Ume, the hall's keeper, small and bent")
-    person("ryokai", "ryokai", 150, "Ryokai, the novice, sitting on the bottom step by the stone", seated=True)
-    person("tome", "tome", 138, "Grandmother Tome, on the bench", seated=True)
-    person("wife", "wife", 146, "a young wife with a baby on her back, on the bench", seated=True)
-    person("girl", "girl", 138, "a girl of eleven with her grandmother's slip, on the bench", seated=True)
-    out["things"] = things
-    out["marks"] = dict(MARKS)
-    out["faces"] = FACES
-    out["stands"] = {k: {"at": v, "grownup_px": int(round(160 * scale_at(v[1]))), "floor": "ground"} for k, v in MARKS.items()}
-    out["sizes"] = {"mom_px_at_hall": round(168 / 181 * 160 * scale_at(MARKS["hall"][1]), 1), "lilsis_px_at_lock": round(122 / 181 * 160 * scale_at(MARKS["lock"][1]), 1),
-                    "ume_136cm_px": round(136 / 181 * 160 * scale_at(MARKS["ume"][1]), 1), "ryokai_150cm_px_standing": round(150 / 181 * 160 * scale_at(MARKS["ryokai"][1]), 1),
-                    "mom_px_at_road": round(168 / 181 * 160 * scale_at(MARKS["road"][1]), 1), "doors_px": [round(P(0, ES.DOOR_Y[1], H_(180, 0)[1])[1]), round(P(0, ES.DOOR_Y[0], H_(180, 0)[1])[1])],
-                    "lock_center": r(ES.HP(ES.LOCK_AT[0], -5, ES.LOCK_AT[1]))}
-    out["exits"] = [
-        {"id": "road", "to": None, "name": "the road back to the town", "edge": "right", "walkTo": MARKS["road"], "band": [[690, 560], [800, 470], [800, 598], [690, 598]],
-         "note": "to Himeji by the map ('An hour and a half's walk'), or the cut-scene Mind The Fire after #38"},
-        {"id": "path", "to": None, "name": "the path up the mountain", "walkTo": MARKS["path"], "band": [[188, 452], [262, 452], [262, 300], [188, 300]],
-         "note": "refuses, for every one of them (Ryokai: 'Women may not climb.')"},
-        {"id": "doors", "to": "edo-hall", "spawn": "door", "name": "into the hall", "walkTo": MARKS["hall"], "band": hull(alpha["doors"], 0, 8),
-         "note": "once the lock is open and the doors have swung (edo.hallOpen)"},
-        {"id": "lock", "to": "edo-lock", "name": "the lock (close-up)", "walkTo": MARKS["lock"], "note": "the close-up; 'Step back.' returns here"},
-    ]
-    out["fx"] = [
-        {"id": "pine", "type": "sway", "plane": "pine", "anchor": "bottom", "amount": 1.0, "period": 4.6, "what": "the near pine's pads stirring in the evening air"},
-        {"id": "petals", "type": "petals", "what": "a few petals from the late cherry on the slope, drifting down the slope", "from": [[156, 226], [266, 222], [270, 286], [156, 290]],
-         "floor": 470, "count": 4, "wind": 10, "fall": 18, "size": [2, 3], "color": "#f2c9d4", "color2": "#e2a8bc", "plane": "back"},
-        {"id": "crows", "type": "birds", "what": "a crow or two going home to the mountain across the evening sky",
-         "lanes": [[[830, 150], [260, 40]], [[830, 200], [360, 70]]], "every": [9, 18], "group": [1, 2], "speed": 50, "size": 8, "plane": "back",
-         "note": "engine-drawn dark silhouettes; at sunset most of all (the scene's `when`)"},
-    ]
-    out["fx_note"] = ("Moving: the pine's pads, a few cherry petals, crows going home; the light (the sunset layer fading in over back.png, ENGINE-21); "
-                      "the bell from the mountain is a sound (ENGINE-21). The people's own small lives (PEOPLE-21B): O-Ume's rice ball on its leaf, "
-                      "Ryokai counting his beads, the women on the bench.")
-    out["sunset_note"] = ("The two lights: back.png + the plain cut-outs (gold), sunset.png + the -sunset twins. The engine fades sunset.png in over "
-                          "back.png on the back plane (under everybody), and switches each cut-out to its twin as it does (or cross-fades them too, if "
-                          "it can). The open doors show the dim hall with its bars of light in both lights (gold bars by day, red at sunset).")
+def person_box(mark_xy, cm, seated=False):
+    """A person's clickable box (x, y, w, h) at a place, as the game sizes them."""
+    x, y = mark_xy
+    hp = 160.0 * scale_at(y) * cm / 175.0 * (0.74 if seated else 1.0)
+    w = max(20, hp * 0.38)
+    return [int(round(x - w / 2)), int(round(y - hp - 2)), int(round(w)), int(round(hp + 4))]
+
+
+def write(path, cuts, info):
+    pl = places()
+    th = things(pl, cuts)
+    M = pl["M"]
+    bad = []
+    pts = dict(M)
+    for k in ("LATTICE", "latticeTalk", "nightUme"):                         # (DOORWAY is up on the step at the doors: the women
+        pts[k] = pl[k]                                                      # step up to it by moveTo, which walks straight, as before)
+    for k, v in pl["TALK_AT"].items():
+        pts["talk." + k] = v
+    for k, v in pl["arrive"].items():
+        for i, q in enumerate(v):
+            pts[f"arrive.{k}.{i}"] = q
+    for name, p in pts.items():
+        if not inside(pl["walk"], p):
+            bad.append(f"{name} {p} is outside the walk outline")
+        for b in (pl["stone_solid"], pl["combs_solid"], pl["bench_solid"]):
+            if inside(b, p):
+                bad.append(f"{name} {p} is on solid ground")
+    for b in bad:
+        print("LAYOUT:", b)
+    boxes = {"ume": person_box(M["ume"], 136), "ryokai": person_box(M["ryokai"], 150, True), "ryokaiUp": person_box(M["ryokai"], 150),
+             "lattice": person_box(pl["LATTICE"], 150), "tome": person_box(M["tome"], 138, True), "wife": person_box(M["wife"], 146, True),
+             "girl": person_box(M["girl"], 138, True)}
+    cherry_from = th["cherry"]
+    lay = {
+        "id": ID, "horizon": HZ, "full": FULL, "minScale": 0.3,
+        "camera": {"what": "level, the eye 2.52 m above the terrace, lens 700 px, its axis's vanishing point at x 400; the hall square to the compass and so turned 26 degrees in our view (vanishing points x 59 and x 1835)",
+                   "eye_cm": round(EYE, 1), "focal": F, "vanish_x": CX, "hall_turn_deg": 26},
+        "light": "two states, the same geometry. GOLD (back.png and the plain cut-outs): the late afternoon sun 38 degrees behind the left, 30 up: the hall's west side in full sun, its front at a slant, shadows to the right and away, the old pine's bough and the trees behind us shading the terrace at the left and right. SUNSET (sunset.png and every cut-out's -sunset twin): the sun at the left, 6 up, behind the woods: the west side red, the front in blue shade, the terrace in the woods' long shadow with streaks of red light across it; the eastern sky over the plain in rose and cobalt, its clouds lit from below. Key: edo-sunset.",
+        "walk": pl["walk"], "blocked": [pl["stone_solid"], pl["combs_solid"]],
+        "blocked_note": "the stone at the path's foot, the heap of combs on its cloth; the bench is its cut-out's solid",
+        "planes": [
+            {"id": "sunset", "file": "sunset.png", "plane": "back", "what": "the whole stage at sunset (faded in over back.png, under everybody)"},
+            {"id": "doors", "plane": "back", "states": {"shut": "doors.png", "half": "doors-half.png", "open": "doors-open.png", "shut-sunset": "doors-sunset.png",
+                                                       "half-sunset": "doors-half-sunset.png", "open-sunset": "doors-open-sunset.png"}},
+            {"id": "lock", "plane": "back", "states": {"shut": "lock.png", "open": "lock-open.png", "shut-sunset": "lock-sunset.png", "open-sunset": "lock-open-sunset.png"}},
+            {"id": "stepball", "plane": "back", "states": {"there": "stepball.png", "there-sunset": "stepball-sunset.png"}},
+            {"id": "stone", "base": pl["stone_base"], "states": {"gold": "stone.png", "sunset": "stone-sunset.png"}, "solid": pl["stone_solid"]},
+            {"id": "bench", "base": pl["bench_base"], "states": {"gold": "bench.png", "sunset": "bench-sunset.png"}, "solid": pl["bench_solid"]},
+            {"id": "pine", "plane": "front", "states": {"gold": "pine.png", "sunset": "pine-sunset.png"}, "what": "the old pine's trunk up the left edge and its great bough across the top (it stirs: fx pine)"},
+            {"id": "near", "plane": "front", "states": {"gold": "near.png", "sunset": "near-sunset.png"}, "what": "its roots, moss and ferns along the bottom left; grass and ferns on the bank's lip in the bottom right corner (still)"},
+        ],
+        "cutouts": {k: box_of(v[1]) for k, v in cuts.items()},
+        "marks": M, "faces": FACES, "LATTICE": pl["LATTICE"], "DOORWAY": pl["DOORWAY"], "HOMEWARD": pl["HOMEWARD"], "TALK_AT": pl["TALK_AT"],
+        "arrive": pl["arrive"], "edgeE": pl["edgeE"], "latticeTalk": pl["latticeTalk"], "nightUme": pl["nightUme"], "boxes": boxes,
+        "things": [{"id": k, "shape": {"poly": v}} for k, v in th.items()] +
+                  [{"id": k, "shape": {"poly": [[x, y], [x + w, y], [x + w, y + h], [x, y + h]]}, "person": True} for k, (x, y, w, h) in
+                   (("ume", boxes["ume"]), ("ryokai", boxes["ryokai"]), ("tome", boxes["tome"]), ("wife", boxes["wife"]), ("girl", boxes["girl"]))],
+        "stands": {k: {"at": v, "grownup_px": int(round(160 * scale_at(v[1]))), "floor": "ground"} for k, v in M.items()},
+        "fx": [
+            {"id": "pine", "type": "sway", "plane": "pine", "anchor": "bottom", "amount": 1.0, "period": 4.6},
+            {"id": "petals", "type": "petals", "from": cherry_from, "floor": 380, "count": 4, "wind": 10, "fall": 18, "size": [2, 3], "color": "#f2c9d4", "color2": "#e2a8bc", "plane": "back"},
+            {"id": "crows", "type": "birds", "lanes": [[[830, 196], [520, 70]], [[830, 250], [600, 128]]], "every": [9, 18], "group": [1, 2], "speed": 50, "size": 8, "plane": "back"},
+        ],
+        "problems": bad,
+    }
+    remap = []
+    new_of = dict(pts)
+    for k in ("road", "stone", "path", "ryokai", "hall", "lock", "step", "ume", "hut", "bench", "tome", "wife", "girl", "view", "combs"):
+        new_of[k] = M[k]
+    new_of["edge.E"] = pl["edgeE"]
+    new_of["talk.lattice"] = pl["latticeTalk"]
+    new_of["homeward.0"], new_of["homeward.1"] = pl["HOMEWARD"][0], pl["HOMEWARD"][1]
+    new_of["night.ume"] = pl["nightUme"]
+    new_of["DOORWAY"] = pl["DOORWAY"]
+    for name, old in OLD.items():
+        if name in new_of:
+            remap.append([old[0], old[1], new_of[name][0], new_of[name][1]])
+        else:
+            print("REMAP: no new place for", name)
+    lay["remap"] = {"points": remap, "note": "round twenty-one's marks, arriving places, standing places and the night's place for O-Ume, and where each is in this picture: [old x, old y, new x, new y]"}
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
-        json.dump(out, f, indent=1)
-    return out
+        json.dump(lay, f, indent=1)
+    with open("out/edo-shosha-remap.json", "w") as f:
+        json.dump({"points": remap}, f)
+    os.makedirs("out/edo-shosha-work", exist_ok=True)
+    with open("out/edo-shosha-work/scene-numbers.txt", "w") as f:
+        f.write(scene_numbers(lay) + "\n")
+    return lay
+
+
+def scene_numbers(lay):
+    j = lambda v: json.dumps(v).replace(", ", ", ")
+    M = lay["marks"]
+    th = {t["id"]: t["shape"]["poly"] for t in lay["things"]}
+    out = [f"const HORIZON = {lay['horizon']}, FULL = {lay['full']};", f"const FLOOR = {j(lay['walk'])};",
+           "const M = { " + ", ".join(f"{k}: {j(v)}" for k, v in M.items()) + " };",
+           f"const LATTICE = {j(lay['LATTICE'])};", f"const DOORWAY = {j(lay['DOORWAY'])};", f"const HOMEWARD = {j(lay['HOMEWARD'])};",
+           "const TALK_AT = { " + ", ".join(f"{k}: {j(v)}" for k, v in lay["TALK_AT"].items()) + " };",
+           f"blocked: {j(lay['blocked'])},", "arrive: { " + ", ".join(f"{k}: {j(v)}" for k, v in lay["arrive"].items()) + " },",
+           f"edges E walkTo: {j(lay['edgeE'])}", f"stone base: {lay['planes'][4]['base']}, solid: {j(lay['planes'][4]['solid'])}",
+           f"bench base: {j(lay['planes'][5]['base'])}, solid: {j(lay['planes'][5]['solid'])}",
+           "const BOX = { " + ", ".join(f"{k}: {j(v)}" for k, v in lay["boxes"].items()) + " };",
+           f"lattice talk walkTo: {j(lay['latticeTalk'])}", f"night ume: {j(lay['nightUme'])}"]
+    for k, v in th.items():
+        out.append(f"{k}: {j(v)}")
+    for f in lay["fx"]:
+        out.append(json.dumps(f))
+    return "\n".join(out)
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    o = write(f"{OUT}/layout.json")
-    print(json.dumps(o["marks"]))
-    print(json.dumps(o["sizes"]))
+    pl = places()
+    for k, v in pl["M"].items():
+        print(f"  {k:8s} {v}  {160 * scale_at(v[1]):5.1f} px")
+    print("  LATTICE", pl["LATTICE"], "DOORWAY", pl["DOORWAY"], "TALK", pl["TALK_AT"], "arrive", pl["arrive"])

@@ -570,6 +570,7 @@ export default {
     { id: "mirror-shades", src: art + "mirror-shades.png", base: SPINNER_BASE, when: (g) => !g.flag("nevada.shadesBought") },     // the last pair, until it is bought
     { id: "rockbins", src: art + "rockbins.png", base: [[572, 469], [782, 488]], solid: [[570, 442], [760, 458], [782, 488], [572, 469]] },
     { id: "front", src: art + "front.png", plane: "front" },  // the water flats, the crate of empty bottles, the tyres
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Grandma Jolene, behind the counter, under the hat of the visit (her kind follows the hat: `setup`). Now and then she

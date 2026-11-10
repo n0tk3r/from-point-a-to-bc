@@ -330,6 +330,7 @@ export default {
     { id: "sign", src: art + "sign.png", base: [[636, 441], [667, 438]] },
     { id: "roadgod", src: art + "roadgod.png", base: [[232, 494], [270, 489]] },
     { id: "watervendor", src: art + "watervendor.png", base: [[707, 451], [760, 444]] },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   // THINGS THAT MOVE BY NATURE (layout.json fx): the prints and the noren stirring; two birds wheeling high
   fx: [

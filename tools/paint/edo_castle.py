@@ -17,7 +17,12 @@ The picture is a backdrop and cut-outs: ladder (behind everybody), gate (its ope
 cherry (the trunk and the boughs: people pass under and behind them).
 
   python3 edo_castle.py          paints everything into out/edo-castle/ (and out/edo-castle-comp.png to look at)
-  python3 edo_castle.py fast     skips the brush pass and the palette: out/edo-castle-2-all.png only"""
+  python3 edo_castle.py fast     skips the brush pass: out/edo-castle-fast/ and out/edo-castle-fast-comp.png
+
+DEPTH-23 (round twenty-three, tools/paint/DEPTH.md): the scene is painted by edo_castle_depth.py now, in three planes and
+in the act's watercolour (with edo_castle_model.py, _far.py, _cuts.py, _near.py); running this script runs that one. This
+file's drawing functions stay exactly as round twenty left them: the outlines of the cut-outs are theirs (edo_castle_cuts
+lays them again), and edo_town.py draws Himeji's keep from the town with keep() below."""
 
 import json
 import math
@@ -828,45 +833,7 @@ def cut_layers():
     return layers
 
 
-if __name__ == "__main__":
-    t0 = time.time()
-    os.makedirs(OUT, exist_ok=True)
-    os.makedirs(f"{OUT}-work", exist_ok=True)
-    fast = len(sys.argv) > 1 and sys.argv[1] == "fast"
-    base, info = under()
-    Image.fromarray((np.clip(base, 0, 1) * 255).astype(np.uint8)).save(f"{OUT}-work/1-under.png")
-    print("under", round(time.time() - t0, 1))
-    pic = base.copy() if fast else strokes(base, sizes=(10, 5, 3), seed=2, density=1.4, jitter=0.022, keep=0.42)
-    ground_ = pic.copy()
-    details(pic, info)
-    details(ground_, info)
-    print("details", round(time.time() - t0, 1))
-    cuts = cut_layers()
-    whole = pic.copy()
-    cut = {}
-    for i, name in enumerate(CUTS):
-        layer = cuts[name]
-        if fast:
-            c, a = layer.straight()
-            a = (a > 0.5).astype(F32)
-        else:
-            c, a = brushed(layer, ground_, seed=20 + i, restate=0.92 if name in ("scaffold", "ladder", "tub") else 0.7)
-        cut[name] = (c, a)
-        over(whole, c, a)
-    Image.fromarray((np.clip(whole, 0, 1) * 255).astype(np.uint8)).save(f"{OUT}-2-all.png")
-    print("painted", round(time.time() - t0, 1))
-    if fast:
-        sys.exit()
-    size, pal = finish(pic, f"{OUT}/back.png", 160)
-    print("back", size)
-    for name, (c, a) in cut.items():
-        print(name, finish(c, f"{OUT}/{name}.png", 96 if name in ("cherry", "gate") else 48, a)[0])
-    import edo_castle_herons as HE
-    HE.paint_all(OUT)
-    import edo_castle_layout as LY
-    LY.write(f"{OUT}/layout.json")
-    comp = Image.open(f"{OUT}/back.png").convert("RGBA")
-    for name in CUTS:
-        comp.alpha_composite(Image.open(f"{OUT}/{name}.png").convert("RGBA"))
-    comp.convert("RGB").save(f"{OUT}-comp.png")
-    print("done", round(time.time() - t0, 1))
+if __name__ == "__main__":                                   # DEPTH-23: round twenty-three's painting (edo_castle_depth.py)
+    import edo_castle_depth
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    edo_castle_depth.main(sys.argv[1:])

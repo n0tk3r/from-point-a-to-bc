@@ -348,7 +348,8 @@ export default {
     { name: "roof", area: ROOF, horizon: 140, full: ROOF_FULL,
       away: { ranger: (g) => (canUnder(g) ? climbUp(g) : g.say("office.lot.unit.use.ranger")) } },
   ],
-  blocked: [[[114.5, 437.6], [115.0, 434.6], [110.6, 432.4], [102.5, 431.6], [92.7, 432.4], [83.8, 434.6], [78.1, 437.6], [77.2, 440.7], [81.5, 443.1], [89.9, 443.9], [100.0, 443.1], [109.1, 440.7]]],   // the flagpole's foot
+  blocked: [[[114.5, 437.6], [115.0, 434.6], [110.6, 432.4], [102.5, 431.6], [92.7, 432.4], [83.8, 434.6], [78.1, 437.6], [77.2, 440.7], [81.5, 443.1], [89.9, 443.9], [100.0, 443.1], [109.1, 440.7]],   // the flagpole's foot
+    [[752, 395.5], [800, 395.5], [800, 597], [500, 597], [548, 590], [606, 572], [662, 552], [716, 534], [752, 522]]],   // DEPTH-23: under the near light pole, and the gravel's edge in the corner
 
   spawn: { default: M.fromLimo, ...M },                   // (no mark called `ranger`: g.where names the mark he is on, and his own name would win a tie)
   facing: "W",
@@ -387,6 +388,7 @@ export default {
       solid: [[457.4, 432.9], [453.2, 428.9], [444.0, 426.5], [433.2, 426.5], [424.6, 428.9], [421.5, 432.9], [425.3, 437.1], [434.7, 439.7], [446.0, 439.7], [454.7, 437.1]] },
     { id: "limo-door-open", src: art + "limo-door-open.png", base: 393.1, when: (g) => is(g, "office.arrived"),
       solid: [[507.2, 393.8], [600.8, 393.8], [608.6, 403.7], [637.8, 403.7], [628.9, 393.8], [800.0, 393.8], [778.4, 362.8], [494.1, 362.8]] },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // Wendell on the door, facing the gate, by regulation: his birthday button on his lapel (PEOPLE-17's suit3-birthday).

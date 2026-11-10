@@ -28,14 +28,28 @@ PAPER = rgb("#f6f0e1")                                      # cold-pressed paper
 _LUM = np.array([0.30, 0.55, 0.15], dtype=F32)
 
 
+_FIELDS = {}
+
+
+def _noise(shape, cell, seed, octaves=5, gain=0.5):
+    """`brush.noise`, kept between calls: a scene washes its backdrop and every cut-out on the same paper, and the
+    paper's fields are the same each time."""
+    key = (shape, cell, seed, octaves, gain)
+    if key not in _FIELDS:
+        if len(_FIELDS) > 64:
+            _FIELDS.clear()
+        _FIELDS[key] = noise(shape, cell, seed, octaves, gain)
+    return _FIELDS[key]
+
+
 def lum(picture):
     return picture @ _LUM
 
 
 def paper_grain(shape, seed=11):
     """The paper's tooth: small pits and bumps, 0 to 1 (0.5 is level)."""
-    fine = noise(shape, 3.2, seed, 2, 0.6)
-    broad = noise(shape, 9.0, seed + 1, 2, 0.5)
+    fine = _noise(shape, 3.2, seed, 2, 0.6)
+    broad = _noise(shape, 9.0, seed + 1, 2, 0.5)
     return np.clip(0.65 * fine + 0.35 * broad, 0, 1).astype(F32)
 
 
@@ -54,30 +68,34 @@ def soft_above(shape, row, feather=24.0, below=0.0):
     return np.clip(m + below * (1 - m), 0, 1).astype(F32)
 
 
-def wash(picture, seed=1, amount=1.0, soft=None, keep=None, lift=0.07):
+def wash(picture, seed=1, amount=1.0, soft=None, keep=None, lift=0.07, wander=3.5, fleck=0.5):
     """A finished painting as a watercolour. `amount` scales everything (1.0 is the act's; 0.6 for a lamplit room,
-    where the darks must stay deep). `soft`: a mask of what was laid wet in wet. `keep`: a mask of what must stay as
-    painted (lettering to be read). `lift`: how much of the paper shows through everywhere."""
+    where the darks must stay deep). `soft`: a mask of what was laid wet in wet (0 to 1: how wet). `keep`: a mask of
+    what must stay as painted (lettering to be read). `lift`: how much of the paper shows through everywhere.
+    `wander`: how far wet paint moves, in pixels (3.5 as the pilot painted; 1.0 to 1.5 where thin far layers or
+    straight far trunks must feather without bending or running together; 0 only feathers). `fleck`: the bare flecks
+    of paper in light, rough passages (0.5; 0 for none: on a mid-tone roof they can read as litter)."""
     h, w, _ = picture.shape
     shape = (h, w)
     src = picture.astype(F32)
     out = src.copy()
     # wet in wet: the paint wanders a little and its edges feather
     if soft is not None and float(np.max(soft)) > 0:
-        wet = blur(warp(out, 3.5 * amount, 22, seed + 1), 1.5 * amount)
+        moved = warp(out, wander * amount, 22, seed + 1) if wander > 0 else out
+        wet = blur(moved, 1.5 * amount)
         out = lerp(out, wet, np.clip(soft, 0, 1)[..., None]).astype(F32)
     L = lum(out)
     flat = 1 - np.clip(edges(src, 2.0) * 3, 0, 1)                        # 1 inside a wash, 0 at its edges
     # blooms: a wash is never even
-    low = noise(shape, 110, seed + 2, 3) - 0.5
-    mid = noise(shape, 34, seed + 3, 3) - 0.5
+    low = _noise(shape, 110, seed + 2, 3) - 0.5
+    mid = _noise(shape, 34, seed + 3, 3) - 0.5
     out *= (1 + (0.075 * low + 0.045 * mid)[..., None] * amount)
-    drift = (noise(shape, 150, seed + 4, 2) - 0.5) * 0.035 * amount       # warmer here, cooler there
+    drift = (_noise(shape, 150, seed + 4, 2) - 0.5) * 0.035 * amount       # warmer here, cooler there
     out[..., 0] += drift
     out[..., 2] -= drift
     # back-runs: a thin dark line here and there, where a wet wash ran back into one that was drying
-    b = noise(shape, 70, seed + 5, 4)
-    run = blur(np.exp(-((b - 0.5) / 0.016) ** 2), 1.3) * step(0.38, 0.66, noise(shape, 200, seed + 6, 2))
+    b = _noise(shape, 70, seed + 5, 4)
+    run = blur(np.exp(-((b - 0.5) / 0.016) ** 2), 1.3) * step(0.38, 0.66, _noise(shape, 200, seed + 6, 2))
     out *= (1 - 0.05 * amount * run * flat)[..., None]
     # pooling: a darker rim on the dark side of every edge
     Ls = blur(L, 0.8)
@@ -90,21 +108,26 @@ def wash(picture, seed=1, amount=1.0, soft=None, keep=None, lift=0.07):
     out *= (1 - (g * 0.17 * amount * dark * blue)[..., None])
     # the paper: through everything a little, and bare in flecks where the light passages are rough
     out = lerp(out, PAPER[None, None, :], lift * amount)
-    fleck = step(0.80, 0.95, paper_grain(shape, seed + 8)) * step(0.55, 0.85, L) * 0.5 * amount
-    out = lerp(out, PAPER[None, None, :], fleck[..., None])
+    bare = step(0.80, 0.95, paper_grain(shape, seed + 8)) * step(0.55, 0.85, L) * fleck * amount
+    out = lerp(out, PAPER[None, None, :], bare[..., None])
     out = np.clip(out, 0, 1)
     if keep is not None:
         out = lerp(out, src, np.clip(keep, 0, 1)[..., None])
     return out.astype(F32)
 
 
-def wash_cut(color, alpha, back, seed=1, amount=1.0, soft=None, keep=None, lift=0.07):
+def wash_cut(color, alpha, back, seed=1, amount=1.0, soft=None, keep=None, lift=0.07, wander=3.5, fleck=0.5, crisp=False):
     """A cut-out washed as part of the picture it stands in: `color` and `alpha` are the cut-out as painted, `back` the
     backdrop as painted (before its own wash). Returns the cut-out's colours, washed on the same paper as the backdrop
-    (same seed): lay them through the same `alpha`."""
+    (same seed): lay them through the same `alpha`. `crisp=True` takes `soft` away under the cut-out itself and a
+    little round it, so a thing standing in front of a wet passage (a boat on the bay) keeps its own edge and the
+    backdrop does not bleed into it."""
     a = np.clip(alpha, 0, 1)[..., None]
     whole = back * (1 - a) + color * a
-    return wash(whole, seed, amount, soft, keep, lift)
+    if crisp and soft is not None:
+        hard = np.clip(blur((np.asarray(alpha) > 0.3).astype(F32), 1.2) * 2, 0, 1)
+        soft = soft * (1 - hard)
+    return wash(whole, seed, amount, soft, keep, lift, wander, fleck)
 
 
 def graded(shape, color, to, a, b, seed=0, wander=0.06):

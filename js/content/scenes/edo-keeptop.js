@@ -371,6 +371,7 @@ export default {
     { id: "chests", states: { shut: art + "chests.png", lit: art + "chests-lit.png" }, state: (g) => (lit(g) ? "lit" : "shut"), base: 378 },
     { id: "lantern", states: { shut: art + "lantern.png", lit: art + "lantern-lit.png" }, state: (g) => (lit(g) ? "lit" : "shut"), base: 370 },
     { id: "front", states: { shut: art + "front.png", lit: art + "front-lit.png" }, state: (g) => (lit(g) ? "lit" : "shut"), plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json fx): the hum's own shimmer (a small door barely open: a portal, its rings in the

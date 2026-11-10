@@ -1,12 +1,13 @@
 """PAINT-21A: layout.json for edo-satta, measured through the scene's camera from the same numbers the picture was painted
-with (edo_satta.py's placings), and from the finished cut-outs' pixels."""
+with (edo_satta.py's placings), and from the finished cut-outs' pixels. PAINT-23 (round twenty-three): the near plane
+(near.png, and the front plane drawn again), the patch of road under the near rock (`blocked`), the near pine's sway."""
 
 import math
 
 import numpy as np
 
 import edo_satta as S
-from edo_satta import HZ, FULL, V, gp, kz, ROAD, BANK, JIZO, SEAT, PINE, FUJI, COAST, CLIFF_FOOT, CLIFF_TOP, RIDGE, bank_top, road_far
+from edo_satta import HZ, FULL, V, gp, kz, ROAD, BANK, JIZO, SEAT, PINE, FUJI, COAST, CLIFF_FOOT, CLIFF_TOP, RIDGE, BLOCK, bank_top, road_far
 
 
 def r(p):
@@ -61,13 +62,14 @@ def layout(planes, info):
     walk = top + [[800, 596], [0, 596]]
     sb = [r(gp(SEAT["x"] - SEAT["w"] / 2 - 10, SEAT["z"] - SEAT["d"] / 2 - 4)), r(gp(SEAT["x"] + SEAT["w"] / 2 + 10, SEAT["z"] - SEAT["d"] / 2 - 4)),
           r(gp(SEAT["x"] + SEAT["w"] / 2 + 10, SEAT["z"] + SEAT["d"] / 2)), r(gp(SEAT["x"] - SEAT["w"] / 2 - 10, SEAT["z"] + SEAT["d"] / 2))]
-    blocked = [sb]
+    blocked = [sb, BLOCK]                                                    # (round twenty-three: the road under the near rock, bottom right)
     # ---- the cut-outs, back to front, with their bases and states
     planes_out = [
         {"id": "cloud", "file": "cloud.png", "plane": "back", "state": "on: Fuji's cap of cloud / lifted: the scene fades it out (#24 step 5, Little Sister: \"It CAME OUT.\"); the backdrop under it is the clear summit",
          "what": "the cap of cloud on Fuji's top (the same cloud as at Nishikurasawa)"},
         {"id": "pine", "file": "pine.png", "base": int(round(pfoot[1])), "what": "the bent pine on the bank's edge, leaning toward Fuji (it sways: fx pine-sway); everyone on the road is in front of it"},
-        {"id": "front", "file": "front.png", "plane": "front", "what": "the foot of the cut slope behind us at the bottom edge: grass, stones"},
+        {"id": "front", "file": "front.png", "plane": "front", "what": "the lip of the cutting we stand on, along the bottom edge: rock breaking through the turf, grass flattened to the left by the wind; a shoulder of rock and last year's pampas grass in the bottom right corner (round twenty-three)"},
+        {"id": "near", "file": "near.png", "plane": "front", "what": "the near plane (round twenty-three): a wind-bent black pine on the slope at our right, its trunk in from the right edge above Okitsu, its limbs and pads streaming left across the top (it stirs: fx near-sway)"},
         {"id": "pass", "file": "pass.png", "alt": True, "base": int(round(jy)), "state": "on: O-Shige's pass, folded in oiled paper, caught on the Jizo's hat (from the gust as she reaches the top) / gone: lifted off (edo.passFound)",
          "what": "the folded paper on the Jizo's little hat (an alt: not shown at first)"},
     ]
@@ -108,6 +110,8 @@ def layout(planes, info):
         {"id": "pine-sway", "type": "sway", "plane": "pine", "anchor": "bottom", "at": int(round(pfoot[1])), "amount": 2.2, "period": 3.8, "wave": 40, "lean": -0.4,
          "what": "the bent pine working in the wind off the sea (rooted at its foot; it leans left, toward Fuji, and the wind pushes it that way)"},
         {"id": "cloud-drift", "type": "bob", "plane": "cloud", "amount": 1, "period": 11, "what": "Fuji's cap of cloud breathing on its top; the scene fades the cut-out when it lifts"},
+        {"id": "near-sway", "type": "sway", "plane": "near", "anchor": "right", "amount": 1.6, "period": 4.6, "wave": 260, "lean": 0.2,
+         "what": "the near pine's limbs lifting and falling in the wind (the trunk at the right edge holds; the tips, at the left, move most)"},
         {"id": "oldshore-waves", "type": "waves", "what": "the white water breaking along the foot of the cliffs: the old shore (ENGINE-20's kind, small rows, toward the cliffs)",
          "area": cliff_water, "rows": 3, "per": 10, "size": 3, "speed": 4, "toward": "N", "color": "#f4f8fb", "opacity": 0.7, "plane": "back"},
         {"id": "flank-waves", "type": "waves", "what": "the wash round the near flank's foot, below us", "area": near_water, "rows": 3, "per": 12, "size": 4, "speed": 4,
@@ -137,7 +141,7 @@ def layout(planes, info):
         "exits": [{"to": "edo-kurasawa", "edge": "left", "at": M["below"], "what": "back down the cliff road to Nishikurasawa"},
                   {"to": None, "edge": "right", "at": M["okitsu"], "what": "west to Okitsu: refuses (Mom: \"Not till I know what's at Arai.\" / after: \"Not by road. We said.\")"}],
         "fx": fx,
-        "fx_note": "the pine sways; Fuji's cloud bobs a pixel and the scene fades it out when it lifts (the backdrop is the clear mountain); white water moves along the old shore and round the near flank's foot; the bay glitters and its middle rows move; gulls hang in the wind (engine-drawn); Mosuke's walk is the scene's (mosukeFrom <-> mosukeTo, the whole road)",
+        "fx_note": "the pine sways, and the near pine's limbs; Fuji's cloud bobs a pixel and the scene fades it out when it lifts (the backdrop is the clear mountain); white water moves along the old shore and round the near flank's foot; the bay glitters and its middle rows move; gulls hang in the wind (engine-drawn); Mosuke's walk is the scene's (mosukeFrom <-> mosukeTo, the whole road)",
         "heights": {"mom_cm": 168, "bigsis_cm": 160, "lilsis_cm": 122, "man_1830_cm": 156, "woman_1830_cm": 146, "jizo_cm": JIZO["h"], "grownup_at_full_px": 160},
         "jizo": {"base": r((jx, jy)), "height_px": round(JIZO["h"] * kz(JIZO["z"]), 1), "lilsis_at_jizo_px": round(px(M["jizo"][1], 122), 1),
                  "note": "the Jizo stands 129 cm with its stone, 446 cm back; at its mark Little Sister (1.22 m) is drawn exactly its height"},

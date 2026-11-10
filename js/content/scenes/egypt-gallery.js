@@ -155,6 +155,7 @@ export default {
     { id: "mirror-top", src: art + "mirror-top.png", base: 194, when: (g) => !!g.flag("egypt.topSet") },
     { id: "mirror-foot", src: art + "mirror-foot.png", base: 471, when: (g) => !!g.flag("egypt.footSet") },
     { id: "front", src: art + "front.png", plane: "front" },
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // The light here: the sunbeam, where it spills on the bench, and the doorway at the top when the sun gets there. All of
