@@ -83,8 +83,8 @@ export const lines = {
   "egypt.arrive.1": ["dad", "Well. That's one expressway I won't be taking again."],                                                              // kept (the author's new first line, 10 October: the first line of play answers the movie's shortcut)
   "egypt.arrive.2": ["dad", "Buddy? ... Buddy?"],                                                                                    // kept
   "egypt.arrive.3": ["dad", "He was in the passenger seat a minute ago. Or a thousand years from now. I'm still working out the tenses."],   // kept
-  "egypt.arrive.4": ["dad", "Sneaker prints. Small ones, going up that track."],
-  "egypt.arrive.5": ["dad", "Off to see the biggest thing in sight. I taught him that."],
+  "egypt.arrive.4": ["dad", "Sneaker prints. Small ones, wandering up that track as if they owned it."],
+  "egypt.arrive.5": ["dad", "Off to see the biggest thing in sight. He gets that from me. I can't even be cross about it."],
   "egypt.arrive.pray.1": ["dad", "Lord. I took a shortcut. You know that. You were in the car."],
   "egypt.arrive.pray.2": ["dad", "You know where he is. I don't know when I am. Keep him. In Jesus' name, amen."],
 
@@ -92,39 +92,39 @@ export const lines = {
   "egypt.river.look": ["dad", "Either that's the Nile or a very committed car wash."],                                               // kept
   "egypt.river.look2": ["dad", "No hoses, no brushes. I'm calling it: the Nile."],
   "egypt.river.use": ["dad", "Not in these. They're my good sandals. Also my only sandals."],
-  "egypt.river.bible.1": ["dad", "The Egypt in my Bible. Abraham, Joseph, Moses. Any of them, round that bend."],
-  "egypt.river.bible.4": ["dad", "Or not for a thousand years. I always skip to the maps."],
+  "egypt.river.bible.1": ["dad", "The Egypt of my Bible. Abraham, Joseph, Moses: any one of them could be just round that bend."],
+  "egypt.river.bible.4": ["dad", "Or not for a thousand years. I never could keep the dates straight. I always skipped to the maps."],
   // (once Lot has told him who he is, he knows: Abram is here, and Joseph and Moses are still to come)
-  "egypt.river.after.1": ["dad", "Abram's in Egypt this week. Joseph and Moses are still to come."],
-  "egypt.river.after.3": ["dad", "Turns out I didn't need the dates. I needed his nephew."],
+  "egypt.river.after.1": ["dad", "Abram's in Egypt this very week. Joseph and Moses are still a long way down the road."],
+  "egypt.river.after.3": ["dad", "Turns out I never needed the dates in the margin. I needed his nephew, praying under a palm."],
   "egypt.reeds.look": ["dad", "Reeds. Nature's ballpoint."],                                                                         // kept
   "egypt.reeds.take": ["dad", "One reed. I'll bring it back. That's a lie. I never bring pens back."],                               // kept
   "egypt.reeds.again": ["dad", "One is plenty. I'm not opening a stationery shop."],                                                 // kept
   "egypt.reeds.basket.1": ["dad", "Moses' basket. '...and she laid it in the flags by the river's brink.'"],  // PASS-17E: reference aloud
-  "egypt.reeds.basket.2": ["dad", "Flags are reeds. So I looked. No basket. I'm early, or I'm late."],
-  "egypt.reeds.basket.3": ["dad", "Flags are reeds. So I looked. No basket. I'm early."],                               // (after the news)  PASS-17E: running gag ("I'm early, or I'm late" settled in two words; Little Sister's "Daddy's EARLY" in Act Four)
-  "egypt.boat.look": ["dad", "A boat full of white stone, coming across. Even rocks get a ferry."],
-  "egypt.boat.look2": ["dad", "A quarry across a river, a boatload at a time. And I complain about groceries."],
-  "egypt.palms.look": ["dad", "Palm trees. The only shade for miles, exactly where I'm not."],
+  "egypt.reeds.basket.2": ["dad", "Flags are reeds, so naturally I looked. No basket. Either I'm early, or I'm late."],
+  "egypt.reeds.basket.3": ["dad", "Flags are reeds, so naturally I looked. No basket. I'm early. I'm very early."],                               // (after the news)  PASS-17E: running gag ("I'm early, or I'm late" settled in two words; Little Sister's "Daddy's EARLY" in Act Four)
+  "egypt.boat.look": ["dad", "A boat riding low with white stone, coming across the water. Even the rocks here get a ferry."],
+  "egypt.boat.look2": ["dad", "A whole quarry, ferried across a river one boatload at a time. And I complain about carrying in the groceries."],
+  "egypt.palms.look": ["dad", "Palm trees: the only shade for miles, and every inch of it exactly where I'm not standing."],
   "egypt.pyramids.look": ["dad", "They look brand new. Somebody kept the receipt."],                                                 // kept
-  "egypt.pyramids.look2": ["dad", "It's farther than it looks. I learned that from a shopping mall."],
-  "egypt.pyramids.look3": ["dad", "I wonder who's looked at those from right here. Abraham? Not yet, maybe."],  // PASS-17E: shorter; a wonder, not a lesson ("my Bible" four times in a minute)
-  "egypt.pyramids.look3b": ["dad", "Abram could've stood right here and looked at those. This week."],     // (once Lot has told him)
-  "egypt.footprints.look": ["dad", "Small prints, not one straight line. That's my boy."],
-  "egypt.footprints.use": ["dad", "They go up the track, toward the pyramid. Then so do I."],
-  "egypt.chicken.footprints": ["dad", "She knows those sneakers. She's been stepped on by them."],
+  "egypt.pyramids.look2": ["dad", "It's farther than it looks. Everything is. I learned that crossing a mall parking lot."],
+  "egypt.pyramids.look3": ["dad", "I wonder who else has looked at those from right here. Abraham, maybe. Or maybe not yet."],  // PASS-17E: shorter; a wonder, not a lesson ("my Bible" four times in a minute)
+  "egypt.pyramids.look3b": ["dad", "Abram could've stood right here and looked at those. This week, of all the weeks."],     // (once Lot has told him)
+  "egypt.footprints.look": ["dad", "Small prints, and not two of them in a straight line. That's my boy, all right."],
+  "egypt.footprints.use": ["dad", "Up the track, toward the pyramid. Where he goes, I go. It's in the job description."],
+  "egypt.chicken.footprints": ["dad", "She knows those sneakers. She's been stepped on by them more than once, and she bears no grudge."],
   "egypt.track.look": ["dad", "Straight up to the pyramid. I didn't ask anybody. I want that noted."],
   "egypt.block.look": ["dad", "A broken sledge. Somebody's having a worse day than me. It helps."],
   "egypt.block.use": ["dad", "It's the size of a dishwasher, and it feels the same about moving."],
-  "egypt.donkey.look": ["dad", "A donkey. Low mileage, runs on hay, never needs a jump."],
-  "egypt.donkey.look2": ["dad", "Drinking since I landed. Wherever he's headed, he won't be thirsty."],
-  "egypt.donkey.use": ["dad", "He let me scratch his ears. Friendliest since Nevada."],
-  "egypt.donkey.sunglasses": ["dad", "He gave me a car-salesman look. I put them away."],
+  "egypt.donkey.look": ["dad", "A donkey. Low mileage, runs on hay, and has never once needed a jump."],
+  "egypt.donkey.look2": ["dad", "He's been drinking since I landed. Wherever he's headed, he won't get there thirsty."],
+  "egypt.donkey.use": ["dad", "He let me scratch his ears. Friendliest welcome I've had since Nevada."],
+  "egypt.donkey.sunglasses": ["dad", "He gave me the look a car salesman gives a man in sunglasses. I put them away."],
 
   // ---------- the wagon, and what is still in it ----------
   "egypt.wagon.look": ["dad", "Two hundred thousand miles and she still runs. Not right now. But in general."],                      // kept
   "egypt.hood.look": ["dad", "She's just thinking it over."],
-  "egypt.hood.look2": ["dad", "Steam. Her way of saying 'not now'. The lawnmower says it too."],
+  "egypt.hood.look2": ["dad", "Steam. It's her way of saying 'not now'. The lawnmower says it too, usually on a Saturday."],
   "egypt.hood.use": ["dad", "I don't open the hood. We have an understanding."],
   "egypt.hood.flashlight": ["dad", "Sand. More sand. That's the full report."],
   "egypt.hood.rootbeer": ["dad", "She doesn't take root beer. I'm fairly sure."],
@@ -153,7 +153,7 @@ export const lines = {
   "egypt.trunk.shade": ["dad", "The windshield shade. Ten years keeping sun out. Time it switched sides."],
   "egypt.trunk.after": ["dad", "Lawn chair, jumper cables. Much longer and I'm getting the chair out."],
   "egypt.trunk.cables": ["dad", "Jumper cables. The nearest battery's nearly four thousand years up the road."],
-  "egypt.trunk.chair": ["dad", "A lawn chair. For when I've earned a sit-down. So, not yet."],
+  "egypt.trunk.chair": ["dad", "A lawn chair. For when I've earned a sit-down, and I haven't. Not while he's out there."],
   "egypt.cooler.look": ["dad", "Root beer, ice, and one sandwich I'm not ready to talk about."],
   "egypt.cooler.take": ["dad", "Still cold. The ice held. Something on this trip had to."],
   "egypt.cooler.have": ["dad", "One at a time. It's a cooler, not a bar."],
@@ -163,19 +163,19 @@ export const lines = {
   // Before he has said who he is he is a stranger on the screen ("herdsman"); after it, "Lot". He tells who he is as
   // his own memory, in his own words, from Genesis 11:27 to 13:5 and nothing beyond it (docs/PUZZLES-egypt.md has
   // each statement and its verse). Dad's understanding lands here, the first time Lot has told it.
-  "egypt.lot.look": ["dad", "A man praying in the shade. My car fell from the sky. He kept his place."],
-  "egypt.lot.look2": ["dad", "Lot, Abram's nephew, back at his prayers. One of them was for my boy."],                          // (after he has prayed for the boy)
+  "egypt.lot.look": ["dad", "A man at his prayers in the shade. My car fell out of the sky beside him, and he never lost his place."],
+  "egypt.lot.look2": ["dad", "Lot, Abram's nephew, back at his prayers. One of them was for my boy. I won't forget that."],                          // (after he has prayed for the boy)
   "egypt.lot.hello": ["lot", "You came down out of the sky in a red box. No ox. No donkey. Nothing."],
   "egypt.scribe.hello2": ["dad", "It has a hundred and forty horses. They're resting."],                                             // kept (Lot names the ox and the donkey that were not pulling, so that the horses answer him: round twelve)
   "egypt.lot.hello2": ["lot", "Let them rest. Since the LORD called my uncle, I ask nobody how they got here."],   // FINAL-19: REVIEW-19's patch
   "egypt.ask.boy": ["dad", "Have you seen a boy? About this tall, asks a lot of questions?"],                                        // kept
   "egypt.lot.boy.1": ["lot", "A small one in strange sandals went up the track, asking for the 'wy-fy'."],
   "egypt.lot.boy.2": ["lot", "If the Egyptians have one, it is at their Horizon. They keep everything there."],
-  "egypt.lot.boy.3": ["dad", "That's him. He asks that everywhere. It's how he says hello."],
-  "egypt.lot.ask.horizon": ["dad", "What's this Horizon everybody's at?"],
+  "egypt.lot.boy.3": ["dad", "That's my boy. He asks that in every house we walk into. It's how he says hello."],
+  "egypt.lot.ask.horizon": ["dad", "And this Horizon everybody's so keen on: what is it, exactly?"],
   "egypt.lot.horizon.1": ["lot", "The great white one. Their king's tomb: the Horizon of Khufu."],
-  "egypt.lot.horizon.2": ["dad", "A pyramid called Horizon. Finally, one I can actually reach."],
-  "egypt.lot.ask.news": ["dad", "Anything to know before I go up? This isn't asking for directions."],  // PASS-17E: running gag (he has never asked for directions)
+  "egypt.lot.horizon.2": ["dad", "A pyramid called the Horizon. Finally, a horizon I can actually walk to."],
+  "egypt.lot.ask.news": ["dad", "Anything I should know before I go up? This isn't asking for directions."],  // PASS-17E: running gag (he has never asked for directions)
   "egypt.lot.news.1": ["lot", "Those who come for water say a wall in the Horizon has begun to hum."],
   "egypt.lot.news.2": ["lot", "Their scribe's pen has split. He can write nobody onto his list."],
   "egypt.lot.news.3": ["dad", "A humming wall and a paperwork problem. I've had Mondays like that."],
@@ -184,32 +184,32 @@ export const lines = {
   "egypt.lot.ask.who": ["dad", "Who are you, if you don't mind my asking?"],
   "egypt.lot.who.1": ["lot", "Lot, son of Haran. My father died in Ur of the Chaldees, before his own father."],
   "egypt.lot.who.2": ["lot", "Grandfather Terah took my uncle Abram, Sarai and me out of Ur. He died at Haran."],
-  "egypt.lot.who.3": ["dad", "Ur of the Chaldees. I've only seen that on the maps in my Bible."],
+  "egypt.lot.who.3": ["dad", "Ur of the Chaldees. I've only ever seen that on the maps in the back of my Bible."],
   "egypt.lot.who.4": ["lot", "The LORD called my uncle to a land He would show him. At seventy-five, he went."],  // PASS-17E: shorter; a man telling it, not reading it out
   "egypt.lot.who.8": ["lot", "He built altars to the LORD in Canaan. Then famine brought us down into Egypt."],  // PASS-17E: shorter (the act's longest line)
   // and Dad understands, slowly and then all at once: he is standing in Genesis 12 (an aside, looking out over the river)
   "egypt.abram.1": ["dad", "Abram, not Abraham yet. Egypt. A famine. ...I'm standing in Genesis."],  // PASS-17E: reference aloud (the chapter number); the penny dropping, as it drops
-  "egypt.abram.3": ["dad", "God promised every family on earth a blessing through him. Mine too, please."],  // PASS-17E: reference aloud (the design's own sample); FINAL-19: REVIEW-19's patch
+  "egypt.abram.3": ["dad", "God promised every family on earth a blessing through him. Mine included. I'm counting on it."],  // PASS-17E: reference aloud (the design's own sample); FINAL-19: REVIEW-19's patch
   // this week, told briefly and judging nobody (Genesis 12:14-20)
   "egypt.lot.ask.week": ["dad", "You look like a man waiting for a ride."],
   "egypt.lot.week.1": ["lot", "The king took my uncle's wife into his house, and was good to him for her sake."],
   "egypt.lot.week.4": ["lot", "Then the LORD struck his house with plagues. Today his men send us out of Egypt."],
-  "egypt.lot.week.5": ["dad", "I'd heard something like that."],
+  "egypt.lot.week.5": ["dad", "I'd heard something along those lines. From a long way off."],
   "egypt.lot.week.6": ["lot", "Then the story has gone farther than we have."],
   // parting, the first time after he has told it: two men and two sons, and Lot prays for the boy (his own prayer, not Dad's)
   "egypt.lot.ask.bye": ["dad", "I've got a hill to climb and a boy to ground."],
   "egypt.lot.son.1": ["lot", "My uncle has no son. And the LORD has promised him a great nation."],
-  "egypt.lot.son.2": ["dad", "A nation, and not one son yet. I've got one, and I've mislaid him."],
+  "egypt.lot.son.2": ["dad", "A nation promised, and not one son yet. I've got the one, and I've gone and mislaid him."],
   "egypt.lot.son.3": ["lot", "Then you are both waiting on a son. Yours is already walking."],
   "egypt.abram.4": ["dad", "I'd give a lot to go and shake your uncle's hand."],
   "egypt.abram.5": ["dad", "But I've got a boy to find."],
   "egypt.lot.son.4": ["lot", "Then go and find him. But first, let me ask for him."],
   "egypt.lot.prayer": ["lot", "LORD, the God of my father's brother Abram, keep the boy until his father comes."],
   "egypt.lot.amen": ["dad", "Amen."],
-  "egypt.lot.thanks": ["dad", "Thank you. I asked Him that when I landed. Good to hear someone else ask."],
+  "egypt.lot.thanks": ["dad", "Thank you. I asked Him the same when I landed. It's good to hear another man ask it."],
   "egypt.lot.bye": ["lot", "Go in peace. Everything up there has already gone wrong. You cannot be late."],
   // things offered to him
-  "egypt.lot.rootbeer.1": ["dad", "Something cold? On the house."],
+  "egypt.lot.rootbeer.1": ["dad", "Something cold? On the house. Well, on the car."],
   "egypt.lot.rootbeer.2": ["lot", "It hisses. Where I come from, a man leaves a hissing thing alone."],
   "egypt.lot.map.1": ["lot", "Where is the river on this?"],
   "egypt.lot.map.2": ["dad", "There isn't one. It's Nevada."],
@@ -284,7 +284,7 @@ export const lines = {
 
   // ---------- arrival, and the place ----------
   "egypt.site.arrive.1": ["dad", "That's what they look like before the gift shop."],
-  "egypt.site.arrive.2": ["overseer", "Why is nobody pulling? Why is everybody STANDING?"],
+  "egypt.site.arrive.2": ["overseer", "Why is nobody pulling? Why is every man on this site STANDING?"],
   "egypt.site.arrive.3": ["dad", "And that'll be the manager."],
   "egypt.site.pyramid.look": ["dad", "Smooth white stone, all the way up. Somebody waxed a mountain."],
   "egypt.site.pyramid.look2": ["dad", "Still in scaffolding. Nearly done. I know 'nearly done'. I own a deck."],
@@ -295,7 +295,7 @@ export const lines = {
   "egypt.site.desk.look": ["dad", "Bread and beer for wages. I've had jobs that paid worse and tasted worse."],
   "egypt.site.desk.look2": ["dad", "Papyrus, and tallies on bits of pot. All it needs is a dead plant."],
   "egypt.site.sledge.look": ["dad", "A white block, a wooden sled. The invention of the bad back."],
-  "egypt.site.sledge.look2": ["dad", "Wet sand ahead of the runners, like a ballfield. They know something."],
+  "egypt.site.sledge.look2": ["dad", "Wet sand ahead of the runners, raked like a ballfield before a game. They know something I don't."],
   "egypt.site.sledge.use": ["dad", "I pulled. It didn't. We've agreed to see other people."],
   "egypt.site.blocks.look": ["dad", "Copper chisels, wooden mallets, a plumb line. And it's squarer than my garage."],
   "egypt.site.blocks.use": ["dad", "Another man's chisels? I've lent a ladder. I know how that ends."],
@@ -310,29 +310,29 @@ export const lines = {
   "egypt.site.scaffold.look": ["dad", "Poles and rope, four stories up. I get dizzy cleaning the gutters."],
   "egypt.site.masons.look": ["dad", "Masons on hanging planks. Nothing under them but Egypt."],
   "egypt.site.yard.look": ["dad", "Blocks waiting their turn. The school pickup line, only heavier."],
-  "egypt.site.water.look": ["dad", "Water jars, carried up from the river. I get winded with a cooler."],
-  "egypt.site.bricks.look": ["dad", "Mud bricks, drying. Somebody here invented the ice cube tray."],
+  "egypt.site.water.look": ["dad", "Water jars, every one carried up from the river. I get winded carrying a cooler to the car."],
+  "egypt.site.bricks.look": ["dad", "Mud bricks, drying in rows. Somebody here invented the ice cube tray and never got the credit."],
   "egypt.site.bricks.use.1": ["dad", "Bricks for Pharaoh. I know this one: the Israelites made them."],
   "egypt.site.bricks.use.3": ["dad", "That's stone. The Bible's bricks were for 'treasure cities, Pithom and Raamses.'"],  // PASS-17E: reference aloud; a man working it out, not reading it out
   "egypt.site.bricks.use.4": ["dad", "Not one word about building a pyramid. Wrong since Sunday school."],  // PASS-17E: shorter (the point made once)
 
   // ---------- the scribe: a pen, a sheet, a pass ----------
   "egypt.scribe.look": ["dad", "He's been staring at a blank sheet for a while. I know writer's block when I see it."],              // kept
-  "egypt.scribe.look2": ["dad", "He's writing again. Fast. A man catching up on a whole morning."],
+  "egypt.scribe.look2": ["dad", "He's writing again, fast, like a man catching up on a whole lost morning."],
   "egypt.scribe.meet.1": ["scribe", "Do not tell me your name. Without a pen it is only a noise."],
   "egypt.scribe.meet.2": ["dad", "Pen trouble?"],
   "egypt.scribe.meet.3": ["scribe", "It split at dawn. Since then nothing has happened. Not officially."],
-  "egypt.scribe.boy.1": ["scribe", "No boy on my list. If he is not on the list, he did not go in."],
-  "egypt.scribe.boy.2": ["dad", "He's not on a lot of lists. It's never stopped him going in."],
+  "egypt.scribe.boy.1": ["scribe", "There is no boy on my list. If he is not on the list, then he did not go in. That is what a list is for."],
+  "egypt.scribe.boy.2": ["dad", "He's not on a lot of lists. It's never once stopped him going in."],
   "egypt.scribe.ask.list": ["dad", "How does a man get onto that list of yours?"],
   "egypt.scribe.list.nopen": ["scribe", "I write him onto it. With a pen. You see the difficulty."],
   "egypt.scribe.list.nosheet": ["scribe", "I write him a pass. My last clean sheet is for the grain account."],
-  "egypt.scribe.list.done": ["scribe", "You are on it. The only thing written today. Short, but tidy."],
+  "egypt.scribe.list.done": ["scribe", "You are on it. The only thing written anywhere today. Short, but tidy."],
   "egypt.ask.bye": ["dad", "I'll let you get back to your sheet."],                                                                  // kept
   "egypt.ans.bye": ["scribe", "It is not going anywhere. Neither am I."],                                                            // kept
   "egypt.give.reed": ["dad", "Here. It's a pen. Some assembly required."],                                                           // kept
   "egypt.got.reed": ["scribe", "A good reed. You have the eye of a scribe and the clothes of a market stall."],                      // kept
-  "egypt.got.reed.b": ["dad", "I'll take the first half."],   // PASS-19E: new box, said right after egypt.got.reed (a Dad reaction between the scribe's boxes (the run of four broken))
+  "egypt.got.reed.b": ["dad", "I'll take the first half. The shirt can speak for itself."],   // PASS-19E: new box, said right after egypt.got.reed (a Dad reaction between the scribe's boxes (the run of four broken))
   "egypt.scribe.rush": ["scribe", "A rush is the proper pen. A man without one cannot be particular."],
   "egypt.scribe.supplier": ["scribe", "You supply reeds, so you go on the list. My last sheet is for the grain account."],
   "egypt.give.map": ["dad", "Draw on this. It's a map. It's already wrong, you can't make it worse."],                               // kept
@@ -341,14 +341,14 @@ export const lines = {
   "egypt.scribe.pass.2": ["scribe", "Show the guard my side of the sheet. He knows my hand."],
   "egypt.pass.got": ["dad", "A hall pass. Thirty years out of school, and finally."],
   "egypt.scribe.rootbeer": ["scribe", "Beer made of roots? The brewers would never forgive me."],
-  "egypt.scribe.shade": ["scribe", "I hold a pen. It is all I hold. Ask a man with idle arms."],
+  "egypt.scribe.shade": ["scribe", "I hold a pen. It is all I hold. Ask a man with idle arms. This site is full of them."],
   "egypt.scribe.pass": ["scribe", "I wrote it. I do not need to read it. That is the point of writing."],
   "egypt.scribe.chicken": ["scribe", "There is no sign for that bird. So, officially, she is not here."],
 
   // ---------- the scribe's news: the same week from the Egyptian side (Genesis 12:10-20, told from outside, as gossip) ----------
   // Offered once Lot has told Dad who he is: Dad hears it knowing more than the scribe does.
-  "egypt.scribe.ask.news": ["dad", "Any news? I've been out of touch."],
-  "egypt.scribe.news.1": ["scribe", "Only grain. Famine has sent the desert herdsmen down to eat ours."],
+  "egypt.scribe.ask.news": ["dad", "Any news? I've been out of touch. Badly out of touch."],
+  "egypt.scribe.news.1": ["scribe", "Only grain. The famine has driven the desert herdsmen down to us, and I count every basket they eat."],
   "egypt.scribe.news.2": ["scribe", "One of them is rich. Abram, by name. He brought his sister."],
   "egypt.scribe.news.3": ["dad", "Abram. I've met his nephew."],
   "egypt.scribe.news.4": ["scribe", "She is very fair. She was taken into the Great House."],
@@ -364,17 +364,17 @@ export const lines = {
   "egypt.overseer.look": ["dad", "A big man with a schedule. I can't see the schedule. I can hear it."],
   "egypt.overseer.meet.1": ["overseer", "Nobody dresses like that for no reason. You must be the specialist."],
   "egypt.overseer.meet.2": ["dad", "Close. I'm the generalist nobody sent for."],
-  "egypt.overseer.meet.3": ["overseer", "A wall inside hums. Fix it by inspection. Take all the time you need, today."],
+  "egypt.overseer.meet.3": ["overseer", "A wall inside has begun to hum. Inspect it and make it stop. Take all the time you need, so long as it is today."],
   "egypt.overseer.boy.1": ["overseer", "A boy? I have a whole gang not working. I cannot watch a boy not working too."],
   "egypt.overseer.ask.hum": ["dad", "Tell me about this humming wall."],
-  "egypt.overseer.hum.1": ["overseer", "In the top chamber, since dawn. No man will carry a basket past it."],
+  "egypt.overseer.hum.1": ["overseer", "In the top chamber, since dawn. Not one man will carry so much as a basket past it."],
   "egypt.overseer.hum.2": ["overseer", "I told them a wall cannot hurt them. They said a wall cannot hum either."],
   "egypt.overseer.hum.3": ["dad", "They've got you there. I'd have said it was the wind."],  // PASS-17E: running gag (everything he cannot explain is the wind)
-  "egypt.overseer.hum.4": ["overseer", "Twenty years I have built this. On time. Until a wall began to HUM."],
+  "egypt.overseer.hum.4": ["overseer", "Twenty years I have built this. On time, every day of it. Until a wall began to HUM."],
   "egypt.overseer.ask.schedule": ["dad", "How's the schedule holding up?"],
   "egypt.overseer.sched.0a": ["overseer", "The haulers blame the wall, the scribe his pen. I blame them all. It saves time."],
-  "egypt.overseer.sched.0b": ["overseer", "Get on the scribe's list. The guard turns back anyone who is not."],
-  "egypt.overseer.sched.1": ["overseer", "It still hums. Ask the lamp boy. He saw something. He tells me nothing."],
+  "egypt.overseer.sched.0b": ["overseer", "First get yourself onto the scribe's list. The guard at the stair turns back any man who is not."],
+  "egypt.overseer.sched.1": ["overseer", "It still hums. Ask the lamp boy. He saw something in there, and he tells me nothing at all."],
   "egypt.overseer.sched.2": ["overseer", "A little sun in a hand? Then find a little sun. I have only the big one."],
   "egypt.overseer.sched.3": ["overseer", "The sunlight is out here, the wall in there. I did not plan for them to meet."],
   "egypt.overseer.sched.3b": ["overseer", "Unless you can bend the day around three corners, we are late."],
@@ -399,7 +399,7 @@ export const lines = {
   "egypt.haulers.meet.3": ["hauler3", "Mm."],
   "egypt.haulers.boy.1": ["hauler1", "The small one. He asked to ride the sledge. We said no. He rode it."],
   "egypt.haulers.boy.2": ["hauler2", "He was no weight at all."],
-  "egypt.haulers.boy.3": ["dad", "He's been told about riding things. It won't help."],
+  "egypt.haulers.boy.3": ["dad", "He's been told about riding things. Many times. It has never once helped."],
   "egypt.haulers.ask.break": ["dad", "Long break?"],
   "egypt.haulers.break.1": ["hauler1", "Since the wall began to hum. We do not pull stone toward a noise."],
   "egypt.haulers.break.2": ["hauler2", "Never toward a noise."],
@@ -410,7 +410,7 @@ export const lines = {
   "egypt.haulers.free.4": ["dad", "Bread and beer, every day. I take it back. Are you hiring?"],
   "egypt.haulers.ask.sand": ["dad", "Why's the sand wet in front of the sledge?"],
   "egypt.haulers.sand.1": ["hauler1", "Wet the sand in front of the runners and one man pulls like two."],
-  "egypt.haulers.sand.2": ["dad", "Huh. Next time we move the piano, I'm bringing a bucket."],  // PASS-17E: funnier (Mom's piano, at home)
+  "egypt.haulers.sand.2": ["dad", "Noted. Next time we move the piano, I'm bringing a bucket."],  // PASS-17E: funnier (Mom's piano, at home)
   "egypt.haulers.ask.bye": ["dad", "Keep up the good work."],
   "egypt.haulers.bye.1": ["hauler1", "We are not doing any."],
   "egypt.haulers.bye.2": ["hauler3", "Mm."],
@@ -424,9 +424,9 @@ export const lines = {
   // ---------- the guard: the stair, and then the shade ----------
   "egypt.guard.look": ["dad", "Tall, bored, sweating. Guarding a staircase from a patch of no shade."],
   "egypt.guard.look2": ["dad", "He's holding my shade up to the sun like he's surrendering. It's working."],
-  "egypt.guard.stop": ["guard", "Nobody goes up who is not on the scribe's list."],
+  "egypt.guard.stop": ["guard", "Nobody goes up these stairs who is not on the scribe's list. Nobody."],
   "egypt.guard.stop.2": ["dad", "I'm more of a walk-in."],
-  "egypt.guard.stop.3": ["guard", "Then walk to the scribe. Under the awning."],
+  "egypt.guard.stop.3": ["guard", "Then walk to the scribe, under the awning. He keeps the list. I only keep the stair."],
   "egypt.pass.show": ["dad", "One hall pass. Signed, sealed, slightly folded."],
   "egypt.guard.pass.1": ["guard", "The scribe's hand. I know it. It looks like geese in a quarrel."],
   "egypt.guard.pass.2": ["guard", "You are on the list. Go up. If it hums at you, do not bring it here."],
@@ -434,7 +434,7 @@ export const lines = {
   "egypt.site.pray.2": ["dad", "Go in ahead of me. I'll follow. For once. Amen."],
   "egypt.guard.after": ["guard", "On the list. The stair is behind me. I am hot. That is all my news."],
   "egypt.shade.try.1": ["dad", "Sunlight, straight up into the doorway. Hold your applause."],  // PASS-17E: a wrong foot that pays (the next line: "And it stops when I let go.")
-  "egypt.shade.try.2": ["dad", "It stops when I let go. I need a volunteer."],
+  "egypt.shade.try.2": ["dad", "It stops the moment I let go. I need a volunteer with steady arms and nothing to do."],
   "egypt.shade.ask": ["dad", "Could you hold this up in the sun? That's the whole job."],
   "egypt.guard.nohold": ["guard", "I guard. I do not hold."],
   "egypt.guard.cold": ["guard", "I would hold it for something cold. There is nothing cold. So I guard."],
@@ -471,7 +471,7 @@ export const lines = {
   "egypt.gallery.top.look": ["dad", "A small doorway at the top. The lamps give up before it does."],
   "egypt.gallery.top.look2": ["dad", "The way to the chamber, the hum, and the one man who can't hear it."],
   "egypt.gallery.slot.look": ["dad", "Slots in the bench, all the way up. The builder liked slots."],
-  "egypt.gallery.slot.beam": ["dad", "The sunbeam lands on plain stone. Stone's a poor mirror. I checked."],
+  "egypt.gallery.slot.beam": ["dad", "The sunbeam lands on plain stone and goes no farther. Stone makes a poor mirror. I checked."],
   "egypt.gallery.slot.set": ["dad", "My door mirror, wedged in a pyramid. Never had a view like this."],
   "egypt.gallery.step.look": ["dad", "A step at the top, flat as a table. Good place to stand something."],
   "egypt.gallery.step.set": ["dad", "The goldsmith's mirror, doing the one job he couldn't stand."],
@@ -494,13 +494,13 @@ export const lines = {
   "egypt.lampboy.saw.2": ["lampboy", "A small one came, with a little sun in his hand."],
   "egypt.lampboy.saw.3": ["lampboy", "He pointed it at the wall and the wall opened like an eye and it took him."],
   "egypt.lampboy.saw.4": ["dad", "A little sun in his hand. That's the flashlight off his key ring."],
-  "egypt.lampboy.saw.5a": ["dad", "It opens for a light. I've got a bigger one. It's in the trunk."],  // PASS-17E: clearer (where the flashlight is)
-  "egypt.lampboy.saw.5b": ["dad", "It opens for a light. I've got a bigger one, right here in my pocket."],
+  "egypt.lampboy.saw.5a": ["dad", "It opens for a light, then. I've got a bigger one than his. It's in the trunk."],  // PASS-17E: clearer (where the flashlight is)
+  "egypt.lampboy.saw.5b": ["dad", "It opens for a light, then. I've got a bigger one than his, right here in my pocket."],
   "egypt.lampboy.saw.5c": ["dad", "A light. I found that out the hard way. Those were good batteries."],
   "egypt.ask.door": ["dad", "What is the humming door?"],                                                                            // kept
   "egypt.lampboy.door.1": ["lampboy", "It is not a door. I know every door in the Horizon. I light them."],
   "egypt.lampboy.door.2": ["lampboy", "This opened where the masons put nothing."],
-  "egypt.lampboy.door.3": ["dad", "That's the kind my family finds."],
+  "egypt.lampboy.door.3": ["dad", "That's the kind my family finds. Every time."],
   "egypt.lampboy.ask.lamps": ["dad", "You look after all these lamps yourself?"],
   "egypt.lampboy.lamps.1": ["lampboy", "Every lamp from here to the top. I fill them before they go hungry."],
   "egypt.lampboy.lamps.2": ["lampboy", "Not today. Today the top ones go hungry. I am not going up there."],
@@ -527,8 +527,8 @@ export const lines = {
   "egypt.top.dark": ["dad", "It's reflecting the dark beautifully. The daylight hasn't got this far."],
   "egypt.top.lit": ["dad", "And in it goes. I'd better go and see what it's found."],
   "egypt.top.wrong": ["dad", "It won't stand up on its own. It was built to hang off a door."],
-  "egypt.gallery.shade": ["dad", "No sun in here to bounce. That's the whole problem."],
-  "egypt.beam.in": ["dad", "My sunbeam. In through the passage, onto the bench, and stuck."],
+  "egypt.gallery.shade": ["dad", "No sun in here to bounce. All the sun's outside, standing around by the stairs."],
+  "egypt.beam.in": ["dad", "My sunbeam: in through the passage, onto the bench, and stuck there, waiting for somebody to turn it."],
   "egypt.beam.up": ["dad", "Off my mirror and up the ramp. First right turn it's ever shown me."],  // PASS-17E: funnier (pays off "It's shown me every wrong turn I ever made")
   "egypt.relay.done": ["dad", "Passage, ramp, copper, top. That's the relay."],
 
@@ -568,14 +568,14 @@ export const lines = {
   "egypt.goldsmith.ask.eyes": ["dad", "Are your eyes all right?"],
   "egypt.goldsmith.eyes.1": ["goldsmith", "Fifty years of gold, all of it shining at me. I have sore eyes."],
   "egypt.goldsmith.eyes.2": ["goldsmith", "I am tired of shining things. That mirror shines AND shows me my face."],
-  "egypt.goldsmith.eyes.3": ["dad", "Tired eyes and too much glare. I packed a thing for that."],
+  "egypt.goldsmith.eyes.3": ["dad", "Tired eyes and too much glare. As it happens, I packed a thing for that."],
   "egypt.goldsmith.eyes.after": ["goldsmith", "NIGHT? Yes. I wear the night on my nose now. Nothing shines at me."],
   "egypt.goldsmith.ask.king": ["dad", "All this for one pharaoh?"],
   "egypt.goldsmith.king.1": ["goldsmith", "It is furniture. All of it for the king."],
   "egypt.goldsmith.king.2": ["dad", "The king. Right. One of those."],
   "egypt.goldsmith.ask.bye": ["dad", "Good talking to you."],
   "egypt.goldsmith.bye": ["goldsmith", "WALKING? You stood there the whole time. I saw you."],
-  "egypt.goldsmith.trade.1": ["dad", "Try these. They turn the brightness down."],
+  "egypt.goldsmith.trade.1": ["dad", "Try these. They turn the whole world down a notch."],
   "egypt.goldsmith.trade.3": ["goldsmith", "... That is kind. The whole world has gone the color of good beer."],
   "egypt.goldsmith.trade.4": ["goldsmith", "I never want to see a shining thing again. Take that mirror away."],
   "egypt.goldsmith.trade.5": ["dad", "A copper mirror for drugstore sunglasses. I came out ahead on a trade."],
@@ -590,7 +590,7 @@ export const lines = {
   // ---------- the wall that hums: the flashlight, and the rule ----------
   "egypt.hum.look": ["dad", "Bare wall, empty air. And a hum. Probably the wind."],
   "egypt.hum.look2": ["dad", "It only opens for light. My son found the one door in history with a dimmer."],
-  "egypt.hum.use": ["dad", "I knocked on the air. Like a door from the wrong side. Nobody came."],
+  "egypt.hum.use": ["dad", "I knocked on the air, like a man at a door from the wrong side. Nobody came."],
   "egypt.hum.use2": ["dad", "It wants light. A lot more than I carry in my pockets."],
   "egypt.hum.mirror": ["dad", "I showed the wall its own reflection. Nothing. It's not vain."],
   "egypt.hum.shade": ["dad", "Shading the door from the light is the opposite of the plan."],
@@ -640,15 +640,15 @@ export const lines = {
 
   // ================= hints: one for each puzzle, in Dad's own voice =================
   "hint.egypt.map": ["dad", "I should check what's still in the wagon."],                                                            // kept
-  "hint.egypt.reed": ["dad", "The scribe's pen has split. A new one might grow by the river."],                          // changed: was "The scribe lost his pen."
+  "hint.egypt.reed": ["dad", "The scribe's pen has split, and a pen here is a reed. A new one might be growing down by the river."],                          // changed: was "The scribe lost his pen."
   "hint.egypt.pen": ["dad", "I have a reed, and I know a man who needs a pen."],                                                     // kept
   "hint.egypt.mark": ["dad", "The scribe wants something to draw on. A map is mostly drawing."],                                     // kept (now the hint of "egypt.pass")
-  "hint.egypt.inside": ["dad", "On the list, with the pass to prove it. The guard at the stairs ought to see it."],
-  "hint.egypt.witness": ["dad", "Somebody in there saw what happened. A witness: the boy with the lamps."],
-  "hint.egypt.flash": ["dad", "A little sun in his hand: a flashlight. I packed one. Try the wall that hums."],   // FINAL-19: REVIEW-19's patch
-  "hint.egypt.shade": ["dad", "Somebody has to hold the shade to throw sun in the doorway. The guard's thirsty."],   // FINAL-19: REVIEW-19's patch
-  "hint.egypt.carmirror": ["dad", "Sunbeam has to turn at the gallery's foot. The car has a mirror it isn't using."],
-  "hint.egypt.trade": ["dad", "The goldsmith has a mirror and tired eyes. I packed sunglasses."],
-  "hint.egypt.topmirror": ["dad", "The copper mirror goes on the top step. One more corner, and the light's in."],  // PASS-17E: his own voice (the same clue)
+  "hint.egypt.inside": ["dad", "I'm on the list, with the pass to prove it. The guard at the stairs ought to see it before I go up."],
+  "hint.egypt.witness": ["dad", "Somebody inside the pyramid saw what happened to my boy. A witness: the boy who tends the lamps."],
+  "hint.egypt.flash": ["dad", "A little sun in his hand: that's a flashlight, and I packed one. Shine it on the wall that hums."],   // FINAL-19: REVIEW-19's patch
+  "hint.egypt.shade": ["dad", "The windshield shade can throw sun into the doorway, but somebody has to hold it. The guard's thirsty."],   // FINAL-19: REVIEW-19's patch
+  "hint.egypt.carmirror": ["dad", "The sunbeam has to turn a corner at the gallery's foot. The car has a mirror it isn't using."],
+  "hint.egypt.trade": ["dad", "The goldsmith has a mirror he's sick of, and eyes too tired for it. I packed sunglasses."],
+  "hint.egypt.topmirror": ["dad", "The copper mirror goes on the top step, facing the little door. One more corner, and the light's in."],  // PASS-17E: his own voice (the same clue)
   "hint.egypt.leave": ["dad", "The door is holding still now. Time to go through it."],                                              // kept
 };

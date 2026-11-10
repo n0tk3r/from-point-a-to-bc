@@ -10,7 +10,8 @@ there (rome_tiber_hens.hen, facing left) and turned round. Brown and speckled, f
 
 Painted at the size a hen is where a person is 160 px tall (sizeAt 590): 40 cm, 37 px, on one 50 x 46 canvas with her
 feet at FOOT in every frame. Flat colour, hard edges, pigment grain, then back.png's own palette with its speckle, as
-the Tiber's hens are (so they must be painted after the full run of edo_village.py).
+the Tiber's hens are. Since round twenty-three that palette is kept in edo_village_hens_palette.txt (see back_palette):
+the frames no longer change when the backdrop is painted again, and can be painted at any time.
 
     python3 edo_village_hens.py      paints the frames into out/edo-village/ and the sheet out/edo-village-hens-sheet.png"""
 
@@ -94,7 +95,15 @@ def sheet(out, made, path, zoom=4):
     big.convert("RGB").save(path)
 
 
-def back_palette(path="out/edo-village/back.png"):
+def back_palette(path=None):
+    """The palette the frames are painted in. PAINT-23A (round twenty-three): the hens stay exactly as round twenty
+    painted them (the scene's backdrop was painted again, lighter and with fewer reds: in its new palette the brown hen
+    lost her colour and both lost their combs), so the palette is round twenty's backdrop's, kept beside this script in
+    edo_village_hens_palette.txt (152 colours, as hex); give a path to take a picture's palette instead."""
+    if path is None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        words = open(os.path.join(here, "edo_village_hens_palette.txt")).read().split()
+        return np.array([[int(w[i:i + 2], 16) for i in (0, 2, 4)] for w in words], dtype=F32) / 255.0
     im = Image.open(path)
     n = len(im.getpalette()) // 3
     clear = im.info.get("transparency")

@@ -436,6 +436,9 @@ export default {
     { id: "boat", src: art + "boat.png", base: 451 },
     { id: "fence", src: art + "fence.png", base: 512 },
     { id: "front", src: art + "front.png", plane: "front" },
+    // PAINT-23A (round twenty-three, tools/paint/DEPTH.md): the near plane, in front of everybody: the black pine's trunk up the
+    // left side and its boughs across the top left, a bough of the next pine in the top right, the bank's grasses along the bottom
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
   fx: [
     { id: "bay-shimmer", type: "shimmer", poly: [[0, 303], [540, 303], [660, 322], [740, 318], [700, 332], [793, 312], [762, 317], [721, 322], [666, 330], [596, 340], [508, 352], [399, 367], [270, 385], [123, 406], [-37, 428], [0, 434]],

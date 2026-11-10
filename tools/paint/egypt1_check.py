@@ -1,25 +1,38 @@
 """Checks on the finished pictures of egypt1 (run after egypt1.py): python3 egypt1_check.py
 
-  1. palms.png and front.png are pixel for pixel what they were (out/egypt1-before/); back.png too, except in the
-     two places round three repainted (the reed clump where the donkey now drinks, and Lot's bundle); every other
-     picture but donkey.png is pixel for pixel the round-two delivery (out/egypt1-before/round2/).
-  2. wagon.png with mirror.png laid on it is the old wagon.png wherever that was solid; where the old one was
-     clear inside the car (thin paint) the new one shows exactly the backdrop.
+Round twenty-three (DEPTH.md) painted the backdrop and the papyrus again and added the near plane, the camera and
+every number of the scene as they were. So the first two checks no longer ask for the same pixels: they ask that every
+cut-out is WHERE it was and the SHAPE it was. The reference is the painting as it was before the round, in
+out/egypt1-before/ (run the script at that revision into it); without that folder, the pictures installed in the game
+(whose outlines are the painting's own: the paints keep every edge), which says something only before installing.
+
+  1. Every cut-out that was there before has its outline, pixel for pixel: the palms (whole and split), the donkey,
+     the wagon, its mirror, the three open pieces of luggage and the trunk's two emptier pictures. The steam's frames
+     are the same pixels. The near palm is the same pixels; the two farther palms differ only by the air before them.
+     layout.json's walk, blocked ground, things, exits, marks, Lot and steam are what they were.
+  2. wagon.png with mirror.png laid on it is the old wagon: the same outline, and the car itself the same painting
+     (it is still brushed on the first painting's sand: egypt1.WAGON_SAND), but for the sand heaped at its nose and
+     the thin places, which are made of the ground and show exactly the backdrop.
   3. Each open piece of luggage covers every pixel where the shut piece shows, and no open piece leaves
      a pixel with nothing behind it.
   4. Every combination of states is laid together into out/egypt1-look/states.png, to look at.
   5. The donkey drinks: its muzzle is in the river, its hooves on the sand, its rings on the water, and it is clear
      of the wagon and the boy's prints. Every standing place is open floor even with the margin the game keeps
-     round blocked ground, and the place to talk to Lot is clear of the ground he sits on."""
-import itertools, sys
+     round blocked ground, and the place to talk to Lot is clear of the ground he sits on.
+  6. The near plane (round twenty-three): its three files are there, they cover 12 to 25 per cent of the picture
+     together, nothing of them stands where the luggage pops out and lies, the fronds hang from the top (their sway is
+     anchored there), the papyrus is as tall as it was (so is its sway), and Lot's seat is in the near palm's shade.
+     (What the near plane hides of each clickable thing: `python3 depth_check.py egypt-crash --art out/egypt1`.)"""
+import itertools, json, os, sys
 import numpy as np
 from PIL import Image
 from brush import *
 import wagon
 
-NEW, OLD, R2 = "out/egypt1", "out/egypt1-before", "out/egypt1-before/round2"
+NEW = "out/egypt1"
+PAINTED_BEFORE = os.path.isdir("out/egypt1-before")
+OLD = "out/egypt1-before" if PAINTED_BEFORE else "../../art/scenes/egypt-crash"
 WAGON = (722, 540)
-REPAINTED = {"the reed clump where the donkey drinks": (120, 375, 200, 440), "Lot's bundle": (360, 410, 412, 440)}   # x0, y0, x1, y1
 ok = True
 
 
@@ -33,43 +46,45 @@ def say(good, text):
     print(("ok    " if good else "WRONG ") + text)
 
 
-for name in ("palms", "front"):
-    a, b = rgba(f"{NEW}/{name}.png"), rgba(f"{OLD}/{name}.png")
-    same = a.shape == b.shape and not np.any(a != b)
-    say(same, f"{name}.png is pixel-identical to the approved copy" if same else f"{name}.png differs in {int(np.any(a != b, axis=2).sum())} pixels")
-a, b = rgba(f"{NEW}/back.png"), rgba(f"{OLD}/back.png")
-differ = np.any(a != b, axis=2)
-allowed = np.zeros_like(differ)
-for x0, y0, x1, y1 in REPAINTED.values():
-    allowed[y0:y1, x0:x1] = True
-say(not np.any(differ & ~allowed), f"back.png is pixel-identical to the approved copy except in the places repainted in round three "
-    f"({', '.join(f'{k}: {int(differ[y0:y1, x0:x1].sum())} pixels' for k, (x0, y0, x1, y1) in REPAINTED.items())}; elsewhere {int((differ & ~allowed).sum())})")
-same = []
-for name in sorted(n[:-4] for n in __import__("os").listdir(R2) if n.endswith(".png")):
-    if name in ("back", "donkey"):
-        continue
-    a, b = rgba(f"{NEW}/{name}.png"), rgba(f"{R2}/{name}.png")
-    if a.shape == b.shape and not np.any(a != b):
-        same.append(name)
-    else:
-        say(False, f"{name}.png has changed since round two")
-say(len(same) == 14, f"{len(same)} pictures are pixel-identical to the round-two delivery: {', '.join(same)}")
+print(f"      compared with {OLD}" + ("" if PAINTED_BEFORE else " (the installed pictures: no out/egypt1-before/)"))
+CUTS = ["palms", "palm-1", "palm-2", "palm-3", "donkey", "wagon", "mirror", "suitcase-open", "trunk-open", "trunk-open-1", "trunk-open-2", "cooler-open"]
+moved = [n for n in CUTS if not np.array_equal(rgba(f"{NEW}/{n}.png")[..., 3] > 0, rgba(f"{OLD}/{n}.png")[..., 3] > 0)]
+say(not moved, f"all {len(CUTS)} cut-outs that were there before round twenty-three keep their outline, pixel for pixel: {', '.join(CUTS)}" if not moved
+    else f"these cut-outs have changed their outline: {', '.join(moved)}")
+steam = [i for i in range(4) if not np.array_equal(rgba(f"{NEW}/steam-{i}.png"), rgba(f"{OLD}/steam-{i}.png"))]
+say(not steam, "the steam's four frames are pixel for pixel what they were" if not steam else f"steam frames changed: {steam}")
+if PAINTED_BEFORE:
+    def moved_by(i):
+        a, b = rgba(f"{NEW}/palm-{i}.png"), rgba(f"{OLD}/palm-{i}.png")
+        return float(np.abs(a - b)[a[..., 3] > 0][:, :3].mean())
+    d1, d2, d3 = moved_by(1), moved_by(2), moved_by(3)
+    say(d1 < 4 and d1 < d2 < d3 < 40, f"the near palm is the painting it was (mean difference {d1:.1f} levels: the palette's), and the two farther palms differ only by the air "
+        f"before them, the farthest most ({d2:.1f} and {d3:.1f} levels)")
+    was_doc, now_doc = json.load(open(f"{OLD}/layout.json")), json.load(open(f"{NEW}/layout.json"))
+    kept = [k for k in ("horizon", "full", "walk", "blocked", "things", "exits", "marks", "lot", "steam") if was_doc[k] == now_doc[k]]
+    say(len(kept) == 9, f"layout.json's {', '.join(kept)} are what they were (its planes have gained near.png and near-fronds.png, its fx the fronds' sway)")
+    gained = [p["id"] for p in now_doc["planes"] if p["id"] not in [q["id"] for q in was_doc["planes"]]] + [f["id"] for f in now_doc["fx"] if f["id"] not in [g["id"] for g in was_doc["fx"]]]
+    same_fx = all(f == g for f in was_doc["fx"] for g in now_doc["fx"] if f["id"] == g["id"] and f["id"] != "papyrus")
+    say(sorted(gained) == ["near", "near", "near-fronds", "near-fronds"][1:] or sorted(gained) == ["near", "near-fronds", "near-fronds"], f"what layout.json has gained: {', '.join(gained)}; every fx that was there is as it was: {same_fx}")
 
 old, new, mir, back = rgba(f"{OLD}/wagon.png"), rgba(f"{NEW}/wagon.png"), rgba(f"{NEW}/mirror.png"), rgba(f"{NEW}/back.png")
 both = np.where(mir[..., 3:] > 0, mir, new)
 was = old[..., 3] > 0
 window = np.zeros(was.shape, dtype=bool)                    # CAR-13P: round thirteen rolled the driver's window down: only inside this box
 window[455:493, 618:663] = True
-say(not np.any((both != old).any(axis=2) & was & ~window), f"wagon.png + mirror.png = the approved wagon on all {int(was.sum())} of its pixels, "
-    f"but in the driver's window, rolled down in round thirteen ({int(((both != old).any(axis=2) & was & window).sum())} pixels in x 618..662, y 455..492)")
-extra = (both[..., 3] > 0) & ~was
-say(not np.any(both[extra][:, :3] != back[extra][:, :3]), f"the {int(extra.sum())} pixels now filled in the wagon (thin paint: it was see-through) show exactly the backdrop")
+mult, heap = wagon.drift(was.shape, WAGON)                  # the sand heaped at its nose: made of the ground it lies on
+faint, _ = wagon.thin(was.shape, WAGON)                     # and the thin places, filled with the ground that showed there
+car = was & ~(heap > 0.5) & ~faint
+if PAINTED_BEFORE:
+    diff = np.abs(both - old)[car][:, :3]
+    say(diff.mean() < 5 and (diff.max(axis=1) > 40).mean() < 0.01, f"wagon.png + mirror.png = the approved wagon on the {int(car.sum())} pixels that are the car itself "
+        f"(the same brushing: mean difference {diff.mean():.1f} levels, {(diff.max(axis=1) > 40).mean() * 100:.2f}% of them over 40: its palette now holds the new sand's colours)")
+say(not np.any(new[faint][:, :3] != back[faint][:, :3]), f"the {int(faint.sum())} pixels filled in the wagon (thin paint: it was see-through) show exactly the backdrop")
 gone = (mir[..., 3] > 0)
 ys, xs = np.nonzero(gone)
 print(f"      mirror.png: {int(gone.sum())} pixels, x {xs.min()}..{xs.max()}, y {ys.min()}..{ys.max()}")
 say(not np.any((new[..., 3] == 0) & gone), "wagon.png is solid under the mirror")
-changed = np.any(new != old, axis=2) & was & ~window       # CAR-13P: (and in the window)
-say(not np.any(changed & ~gone), f"wagon.png differs from the approved one only under the mirror ({int(changed.sum())} pixels), in the filled places and in the window")
+say(np.array_equal(new[..., 3] > 0, was) and np.array_equal(mir[..., 3] > 0, rgba(f"{OLD}/mirror.png")[..., 3] > 0), "the wagon and its mirror are where they were: the same outlines")
 
 shape = old.shape[:2]
 ca, aa, lca, laa = wagon.wagon(shape, WAGON)
@@ -198,6 +213,26 @@ have = [t["id"] for t in doc["things"]]
 say(all(w in have for w in wanted) and doc["exits"][0]["id"] == "track", "layout.json names every thing in the brief, and the track as an exit")
 files = [p["file"] for p in doc["planes"] if "file" in p] + [f for p in doc["planes"] for f in p.get("frames", [])] + [p["file"] for p in doc["palms_split"]["planes"]]
 say(all(os.path.exists(f"{NEW}/{f}") for f in files), f"every picture named in layout.json exists ({len(files)} files)")
+
+# the near plane (round twenty-three)
+near_files = ["front", "near", "near-fronds"]
+have = [n for n in near_files if os.path.exists(f"{NEW}/{n}.png") and Image.open(f"{NEW}/{n}.png").size == (800, 600) and Image.open(f"{NEW}/{n}.png").mode == "P"]
+say(have == near_files, f"the near plane's three files are there, each 800 x 600 with a palette and a clear colour: {', '.join(have)}")
+masks = {n: rgba(f"{NEW}/{n}.png")[..., 3] > 0 for n in near_files}
+together = masks["front"] | masks["near"] | masks["near-fronds"]
+share = together.mean()
+say(0.12 <= share <= 0.25, f"together they cover {share * 100:.1f}% of the picture (12 to 25): the papyrus {masks['front'].mean() * 100:.1f}, the trunk and the lip {masks['near'].mean() * 100:.1f}, the fronds {masks['near-fronds'].mean() * 100:.1f}")
+pop = int(together[540:600, 640:800].sum())
+say(pop == 0, f"nothing of the near plane stands where the luggage pops out and lies (x 640.., y 540..: {pop} pixels)")
+rows = np.nonzero(masks["near-fronds"].any(axis=1))[0]
+say(rows.min() == 0 and rows.max() < 150, f"the fronds hang from the top edge: rows {rows.min()} to {rows.max()} (their sway is anchored at the top row)")
+top_now = int(np.nonzero(masks["front"].any(axis=1))[0].min())
+top_was = int(np.nonzero((rgba(f"{OLD}/front.png")[..., 3] > 0).any(axis=1))[0].min())
+say(abs(top_now - top_was) <= 24, f"the papyrus reaches row {top_now} (it was {top_was}): its sway, rooted at the bottom, moves it as it did")
+lum = (back[..., :3] / 255.0) @ np.array([0.30, 0.55, 0.15])
+lx, ly = doc["marks"]["lot"]
+seat, sun = lum[ly - 6:ly + 6, lx - 20:lx + 20].mean(), lum[ly - 6:ly + 6, lx - 110:lx - 80].mean()
+say(seat < sun * 0.86, f"Lot's seat {doc['marks']['lot']} is in the near palm's shade: the sand there is {(1 - seat / sun) * 100:.0f}% darker than the sunlit sand beside it")
 
 # the things to carry
 ITEMS = ["reed", "map", "pass", "flashlight", "rootbeer", "shade", "carmirror", "sunglasses", "coppermirror", "toga", "tunic", "breakfast", "incense", "coin", "note",

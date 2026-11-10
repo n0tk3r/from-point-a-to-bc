@@ -557,6 +557,11 @@ export default {
     { id: "cooler", src: art + "cooler-open.png", base: [[490, 541.8], [790, 537.8]], when: (g) => !!g.flag("egypt.coolerOpen") },
     { id: "steam", frames: [art + "steam-0.png", art + "steam-1.png", art + "steam-2.png", art + "steam-3.png"], fps: 6, at: [472, 498], foot: [30, 104], base: [[490, 542], [790, 538]] },
     { id: "papyrus", src: art + "front.png", plane: "front" },
+    // Round twenty-three (tools/paint/DEPTH.md), the near plane: we stand on the high bank under a young date palm. Its
+    // trunk across the top left corner and the lip of the bank along the bottom (still); its fronds across the top (a
+    // file of their own: they hang, so they stir: fx "near-fronds"). People always pass behind all three.
+    { id: "near", src: art + "near.png", plane: "front" },
+    { id: "near-fronds", src: art + "near-fronds.png", plane: "front" },
   ],
 
   // The live layer: what comes out of the luggage throws a shadow on the sand, and kicks up a puff of dust where it
@@ -592,6 +597,9 @@ export default {
     { id: "palm-2-crown", type: "sway", plane: "palm-2", anchor: "bottom", at: [252, 352], amount: 1.3, period: 4.5, wave: 300, lean: 0.2 },
     { id: "palm-3-crown", type: "sway", plane: "palm-3", anchor: "bottom", at: [300, 318], amount: 0.9, period: 4.5, wave: 300, lean: 0.2 },
     { id: "papyrus", type: "sway", plane: "papyrus", anchor: "bottom", amount: 1, period: 3 },
+    // (round twenty-three) and the near palm's fronds across the top: they hang from above the frame, so the top row is still and the ends stir
+    // most; they lean with the wind, to the right, so the frond that the right edge cuts off is never pulled away from that edge
+    { id: "near-fronds", type: "sway", plane: "near-fronds", anchor: "top", amount: 1.6, period: 5.2, wave: 420, lean: 0.5 },
     // now and then a kite or two crossing high over the river and the plateau, behind the palms (the building site's frames)
     { id: "kites", type: "birds", kind: "flyers", lanes: [[[-20, 46], [820, 22]], [[-20, 120], [820, 64]]], every: [18, 40], group: [1, 2], speed: 40, scale: 0.85,
       frames: { dir: "art/scenes/egypt-site/", glide: "kite-0.png", flap: ["kite-1.png", "kite-0.png", "kite-2.png", "kite-0.png"], bank: "kite-3.png", middle: [6.5, 5] } },

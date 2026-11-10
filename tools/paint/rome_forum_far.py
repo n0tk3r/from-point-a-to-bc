@@ -168,6 +168,10 @@ def tabularium(c, rng):
     for j in range(24):
         xa = lerp(t["x0"] + 80, t["x1"] - 80, j / 23)
         s.line([P(xa, t["h1"] + 40), P(xa, t["h2"] - 50)], deep_c, 1.4, 0.8)
+    in0, in1 = t["x0"] + 30, t["x1"] - 30                                                         # (inside its own outline: the thing to click keeps its shape)
+    s.line([P(in0, t["h2"] - 34), P(in1, t["h2"] - 34)], shade_c, 1.5, 0.62)                     # DEPTH-23: the eaves' shade on the gallery's top
+    s.line([P(in0, t["h0"] - 26), P(in1, t["h0"] - 26)], shade_c, 1.2, 0.5)                      # ...and the string course's on the plain wall
+    s.line([P(in0, t["h0"] + 6), P(in1, t["h0"] + 6)], far("#fff2d2", D, 0.4), 1.0, 0.8)
     s.poly([P(t["x0"] - 60, t["h2"]), P(t["x1"] + 60, t["h2"]), P(t["x1"] + 30, t["h2"] + 100), P(t["x0"] - 30, t["h2"] + 100)], far("#d07e58", D, 0.42))
     sc, sa = s.done()
     c.put(sc, sa)
@@ -225,6 +229,8 @@ def jupiter(c):
         a0, a1 = P(u, 120, hp), P(u, 120, hc)
         g.line([a0, a1], front_c, max(1.1, 160 * kk))
         g.line([(a0[0] + 0.9, a0[1]), (a1[0] + 0.9, a1[1])], shade_c, 0.7, 0.8)
+    g.line([P(W_ - 120, 140, hc - 46), P(W_ - 120, L_ - 240, hc - 46)], shade_c, 1.6, 0.55)      # DEPTH-23: the beam's shade across the tops of the columns
+    g.line([P(300, 120, hc - 46), P(W_ - 300, 120, hc - 46)], shade_c, 1.4, 0.5)
     # the entablature: the beam, a painted band, the cornice
     g.poly([P(0, 0, hc), P(W_, 0, hc), P(W_, 0, he), P(0, 0, he)], front_c)
     g.poly([P(W_, 0, hc), P(W_, L_, hc), P(W_, L_, he), P(W_, 0, he)], lit_c)
@@ -546,7 +552,7 @@ def julia(c, seed=51):
             r = 0.31
             inside = (~pier) & (h > h0) & ((h < spring) | ((((f - cx) * bay) ** 2 + (h - spring) ** 2) < (r * bay) ** 2))
             depth = np.clip((h - h0) / (h1 - h0), 0, 1)
-            room = ramp(depth, [(0.0, "#7a6468"), (0.5, "#56485e"), (1.0, "#40364e")])
+            room = ramp(depth, [(0.0, "#94808a"), (0.5, "#74688a"), (1.0, "#62587e")])     # DEPTH-23: lifted (nothing far is darker than the play's own shade)
             own = np.where(inside[..., None], room, own)
         for hh in (j["h1"] - 34, j["h1"], j["h2"] - 24, j["h2"]):
             own = own * (1 - 0.32 * np.clip(1.5 - np.abs(h - hh) * ppc / 1.2, 0, 1)[..., None])
@@ -606,49 +612,128 @@ def julia(c, seed=51):
 
 def paullus(c, seed=55):
     """The basilica of Paullus down the right side: a long two-storey colonnade, its front facing across the square (to
-    our left) and taking the low sun at a slant; under the lower colonnade the shop fronts, dim and warm, goods out on
-    their counters, an awning or two; the upper colonnade open, its back wall in shade."""
+    our left). The low sun runs almost along it: it lights the columns, the parapet and the edges of the cornices, and
+    reaches no farther in than the columns' own floor; so behind the columns everything is in shade, warm low down with
+    the light thrown up off that floor (the shop fronts, goods out on their counters, an awning or two hung out between
+    the columns into the sun) and cool and dark under the ceiling. Every overhang throws its shadow: each cornice on
+    the beam below it, the eaves on the upper beam and the tops of the upper columns.
+    (DEPTH-23: drawn again with that light; the same outline as before, so the thing to click is where it was.)"""
     p = PAULLUS
-    x = p["x"]
+    x, bay, h1, h2, roof = p["x"], p["bay"], p["h1"], p["h2"], p["roof"]
     s = Canvas(SHAPE)
-    bay = p["bay"]
-    for Wf, m in WORLD.face([(x, p["D0"], 0), (x, p["D1"], 0), (x, p["D1"], p["roof"]), (x, p["D0"], p["roof"])]):
+    lo0, lo1 = 16.0, h1 - 56.0                             # the lower colonnade's opening: its floor to the underside of its beam
+    up0, up1 = h1 + 50.0, h2 - 40.0                        # the upper colonnade's, over its parapet
+    for Wf, m in WORLD.face([(x, p["D0"], 0), (x, p["D1"], 0), (x, p["D1"], roof), (x, p["D0"], roof)]):
         Dv, h, ppc = Wf.on_side(x)
         q = (Dv - p["D0"]) / bay
         i = np.floor(q)
         f = q - i
-        col_ = (f < 0.15)                                            # a column, and the opening beside it
+        lower = (h > lo0) & (h < lo1)
+        upper = (h > up0) & (h < up1)
+        storey = lower | upper
+        top_ = np.where(lower, lo1, up1)
+        bot_ = np.where(lower, lo0, up0)
+        cap = storey & (top_ - h < 26.0)                   # the capital, and the base: a little wider than the shaft
+        foot = storey & (h - bot_ < 15.0)
+        wcol = np.where(cap | foot, 0.20, 0.15)
+        col_ = storey & (f < wcol)
+        opening = storey & ~col_
+        up_frac = np.clip((h - bot_) / np.maximum(top_ - bot_, 1.0), 0, 1)      # how far up its opening a place is
         own = np.empty(Dv.shape + (3,), dtype=F32)
         own[...] = col("#f2e6cc")
         own = own * (0.95 + 0.07 * tex(Dv, h, 150, seed)[..., None])
-        lower = (h > 16) & (h < p["h1"] - 56)
-        upper = (h > p["h1"] + 50) & (h < p["h2"] - 40)
-        # behind the lower columns: the shop fronts, warm and dim; a doorway dark in each; goods on the counter
-        shop = col("#9a7a6a") * (0.80 + 0.35 * hash2(i, 7, seed)[..., None]) * np.ones(Dv.shape + (1,), dtype=F32)
-        door = (f > 0.42) & (f < 0.72) & (h < p["h1"] - 120)
+        # behind the lower columns: the shop fronts, each its own colour; a doorway dark in each; goods on the counter
+        shop = col("#a88670") * (0.80 + 0.35 * hash2(i, 7, seed)[..., None]) * np.ones(Dv.shape + (1,), dtype=F32)
+        door = (f > 0.42) & (f < 0.72) & (h < lo1 - 64)
         shop = np.where(door[..., None], col("#3a2a34"), shop)
         goods = (h < 110) & (f > 0.20) & (f < 0.92) & ~door & (hash2(i, 9, seed) > 0.2)
         gtone = np.where((hash2(i, 11, seed) > 0.5)[..., None], col("#d4924c"), col("#b4bc80"))
         shop = np.where(goods[..., None], gtone * (0.75 + 0.45 * tex(Dv * 4.0, h * 4.0, 30, seed + 4)[..., None]), shop)
-        awn = (h > p["h1"] - 150) & (h < p["h1"] - 110) & (f > 0.17) & (hash2(i, 13, seed) > 0.45)
+        awn = (h > lo1 - 94) & (h < lo1 - 54) & (f > 0.17) & (hash2(i, 13, seed) > 0.45)
         shop = np.where(awn[..., None], np.where(((np.floor(Dv / 18.0) % 2) == 0)[..., None], col("#c8503c"), col("#f2e4c6")), shop)
-        open_low = lower & ~col_
-        open_up = upper & ~col_
-        own = np.where(open_low[..., None], shop, own)
-        gallery = col("#8a7a8e") * (0.9 + 0.2 * np.clip((h - p["h1"]) / 300.0, 0, 1))[..., None] * np.ones(Dv.shape + (1,), dtype=F32)
-        own = np.where(open_up[..., None], gallery, own)
-        for hh in (p["h1"] - 56, p["h1"], p["h2"] - 40, p["h2"]):
-            own = own * (1 - 0.30 * np.clip(1.5 - np.abs(h - hh) * ppc / 1.2, 0, 1)[..., None])
-        # the sun comes in between the columns at a slant: the column's shadow falls on what is behind it, to its right
-        lit_part = (f > 0.15 + 0.22) & (f < 0.98)
-        shadowed = (open_low | open_up) & ~lit_part
-        cut = np.where(open_low | open_up, np.where(shadowed, 0.9, 0.35), 0.0)
-        lit_ = LIT.on(own, FACE_LEFT, cut, deep=np.where(open_low | open_up, 0.25, 0.0), bounce=0.5)
+        own = np.where((opening & lower)[..., None], shop, own)
+        # behind the upper columns: the gallery's back wall, plain, a dado
+        gallery = np.where((up_frac < 0.30)[..., None], col("#8c5a50"), col("#a8947e")) * np.ones(Dv.shape + (1,), dtype=F32)
+        own = np.where((opening & upper)[..., None], gallery, own)
+        # the parapet of the upper colonnade: panels between its posts
+        par = (h > h1) & (h <= up0)
+        panel = par & (f > 0.22) & (f < 0.93) & (h > h1 + 10) & (h < up0 - 10)
+        own = np.where(panel[..., None], own * np.array([0.93, 0.92, 0.94], dtype=F32), own)
+        # the two beams: architrave, frieze, cornice (lines where one meets the next)
+        for (e0, e1) in ((lo1, h1), (up1, h2)):
+            beam = (h >= e0) & (h <= e1)
+            for hh in (e0 + (e1 - e0) * 0.40, e1 - 14.0):
+                own = own * (1 - 0.22 * np.clip(1.5 - np.abs(h - hh) * ppc / 1.2, 0, 1)[..., None] * beam[..., None])
+        own = own * (1 - 0.25 * np.clip(1.5 - np.abs(h - lo0) * ppc / 1.2, 0, 1)[..., None])            # the step it stands on
+        # ---- the light
+        fc = np.clip(f / np.maximum(wcol, 1e-3), 0, 1)
+        facing = np.where(col_, 0.74 * np.clip(1.0 - fc * 1.2, 0, 1), FACE_LEFT)                         # a column turns from the sun across its width
+        cut = np.zeros(Dv.shape, dtype=F32)
+        deep = np.zeros(Dv.shape, dtype=F32)
+        bounce = np.full(Dv.shape, 0.5, dtype=F32)
+        cut = np.where(opening, 1.0, cut)                                                                 # no sun behind the columns...
+        cut = np.where(opening & awn & lower, 0.10, cut)                                                  # ...but on an awning hung out between them
+        deep = np.where(opening, 0.06 + 0.36 * up_frac ** 1.4, deep)                                      # cool and dark under the ceiling
+        bounce = np.where(opening, 1.5 * (1 - up_frac) ** 1.6 + 0.2, bounce)                              # warm low down, off the lit floor
+        deep = np.where(opening & door & lower, 0.50, deep)
+        under = lambda top, drop: (h < top) & (h > top - drop)                                           # the shade an overhang throws below it
+        cut = np.where(under(h1 - 14.0, 44.0) & ~opening, 0.72, cut)                                      # the lower cornice's, on its frieze and beam
+        cut = np.where((h > up1 - 22.0) & ~opening, 0.80, cut)                                            # the eaves', on the upper beam and the capitals
+        cut = np.where(under(up0, 7.0) & par, 0.6, cut)                                                   # the parapet's rail, on its panels
+        cut = np.where(col_ & (top_ - h < 9.0), np.maximum(cut, 0.55), cut)                               # each capital's slab, on its own column
+        lit_ = LIT.on(own, facing, cut, deep=deep, bounce=bounce)
+        edge = (np.clip(1.5 - np.abs(h - (h1 - 3.0)) * ppc / 1.2, 0, 1) + np.clip(1.5 - np.abs(h - (up0 - 2.0)) * ppc / 1.2, 0, 1))[..., None]
+        lit_ = np.clip(lit_ + col("#fff3d6") * 0.30 * edge, 0, 1)                                        # the cornice's and the rail's top edges catch the sun
         s.put(far(lit_, Dv, 0.6), m, Wf)
-    for Wf, m in WORLD.face([(x, p["D0"], p["roof"]), (x, p["D1"], p["roof"]), (x + 700, p["D1"], p["roof"] + 200), (x + 700, p["D0"], p["roof"] + 200)]):
+    # the roof: from so low only a sliver of its slope shows over the eaves, its rows of tiles running up it
+    for Wf, m in WORLD.face([(x, p["D0"], roof), (x, p["D1"], roof), (x + 700, p["D1"], roof + 200), (x + 700, p["D0"], roof + 200)]):
         s.put(far(LIT.on(col(TILE), 0.6, 0.0, up=0.7), p["D0"] + 800, 0.6), m, Wf)
+    inner = Sheet2(SHAPE)                                                                                 # (drawn inside the shape as it was: the thing to click keeps its outline)
+    for j, Dp in enumerate(np.arange(p["D0"] + 22.0, p["D1"], 45.0)):                                    # the cover tiles, a line up the slope for each row
+        a_, b_ = pt(x, roof, Dp), pt(x + 700, roof + 200, Dp)
+        gap = 45.0 * k(Dp) * (1300.0 / Dp)                                                               # how far apart the rows are in the picture
+        if gap < 0.8 and j % 3:
+            continue
+        inner.line([a_, b_], far("#a85a3a" if j % 2 else "#e09a70", Dp, 0.5), 0.8, float(np.clip(gap / 2.2, 0.25, 0.75)))
+    inner.line([pt(x - 6, roof - 9, p["D0"]), pt(x - 6, roof - 9, p["D1"])], far("#6a5a80", p["D0"] + 1500, 0.5), 1.0, 0.75)   # the eaves' underside is dark
+    sc, sa = inner.done()
+    s.put(sc, sa * np.clip(s.a, 0, 1))
     sh = Sheet2(SHAPE)
-    sh.line([pt(x - 10, p["roof"], p["D0"]), pt(x - 10, p["roof"], p["D1"])], far("#fff0d0", p["D0"] + 1500, 0.5), 1.2)        # the eaves catch the sun
+    sh.line([pt(x - 10, roof, p["D0"]), pt(x - 10, roof, p["D1"])], far("#fff0d0", p["D0"] + 1500, 0.5), 1.2)        # the eaves catch the sun
+    sc, sa = sh.done()
+    s.put(sc, sa)
+    c.lay(s)
+
+
+def paullus_end(c, seed=57):
+    """The near end of the basilica of Paullus, which faces us and is full in the sun: a plain wall of pale stone, its
+    two beams carried round the corner, a tall doorway, the gable following the roof. Most of it is behind the site's
+    crane and the column we stand by: what shows is why nothing of the hill may show there. (DEPTH-23; a layer of its
+    own, so that the basilica's shape for the thing to click is the colonnade's, as it was.)"""
+    p = PAULLUS
+    x, h1, h2, roof = p["x"], p["h1"], p["h2"], p["roof"]
+    s = Canvas(SHAPE)
+    top = lambda u: roof + (u - x) * (200.0 / 700.0)
+    for Wf, m in WORLD.face([(x, p["D0"], 0), (x + 1100, p["D0"], 0), (x + 1100, p["D0"], top(x + 1100)), (x, p["D0"], roof)]):
+        u, h, ppc = Wf.on_front(p["D0"])
+        own, _ = travertine(u, h, ppc, seed, base="#f1e5cb", long=150, high=62)
+        door = (np.abs(u - (x + 330)) < 110) & (h < 430)
+        case = (np.abs(u - (x + 330)) < 140) & (h < 462) & ~door
+        own = np.where(case[..., None], col(MARBLE), own)
+        own = np.where(door[..., None], ramp(np.clip(h / 430.0, 0, 1), [(0.0, "#5a4650"), (1.0, "#2e2634")]), own)
+        pil = (u - x) < 56
+        own = np.where(pil[..., None], own * 1.04, own)
+        cut = np.zeros(u.shape, dtype=F32)
+        for (e0, e1) in ((h1 - 56.0, h1), (h2 - 40.0, h2)):
+            for hh in (e0, e0 + (e1 - e0) * 0.45, e1 - 14.0):
+                own = own * (1 - 0.25 * np.clip(1.5 - np.abs(h - hh) * ppc / 1.2, 0, 1)[..., None])
+            cut = np.where((h < e1 - 14.0) & (h > e1 - 44.0), 0.6, cut)                                   # each cornice's shade below it
+        cut = np.where(h > top(u) - 30.0, 0.7, cut)                                                       # the raking eaves'
+        cut = np.where(door, 1.0, cut)
+        s.put(far(LIT.on(own, FACE_US, cut, deep=np.where(door, 0.5, 0.0), bounce=0.5), p["D0"], 0.6), m, Wf)
+    sh = Sheet2(SHAPE)
+    sh.line([pt(x, roof + 4, p["D0"]), pt(x + 1100, top(x + 1100) + 4, p["D0"])], far(TILE, p["D0"], 0.5), 1.6)        # the gable's tiles, edge on
+    sh.line([pt(x + 1.5, 0, p["D0"]), pt(x + 1.5, roof, p["D0"])], far("#fff6e0", p["D0"], 0.5), 1.0, 0.8)            # the corner, catching the light
     sc, sa = sh.done()
     s.put(sc, sa)
     c.lay(s)

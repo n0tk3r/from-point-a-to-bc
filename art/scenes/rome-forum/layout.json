@@ -456,6 +456,12 @@
      482
     ]
    ]
+  },
+  {
+   "id": "near",
+   "file": "near.png",
+   "plane": "front",
+   "what": "the front plane: the landing we stand on across the bottom, the porch's end column up the right edge, the laurel bough over it in the top right corner. Nothing in it is clicked; people always pass behind it."
   }
  ],
  "things": [

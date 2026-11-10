@@ -77,7 +77,7 @@ no puzzle he has played moves, and the old lines are said where they were:
    ids, and one of his is added, the ewe); Titus does, on the Capitol.
    Walnut's tip about the breakfast is re-worded to match.
 4. **#5 Feed The Soothsayer.** One new first line when the breakfast has come down the hill
-   ("Breakfast! It's been up a hill and past some geese."). The rest as before.
+   ("Breakfast! It's been up a whole hill and past some geese, but it's all here. Mostly."). The rest as before.
 5. **#7 Borrow A Wish.** Unchanged, its four kept lines too; then Walnut says whose wish it
    was (two new lines).
 6. **#9 Heads, Tails, Edge.** The toss waits for Phyllis's leave. Without it the boy stops
@@ -570,9 +570,9 @@ Cut-Scene: Not the rest stop        (opens the act)
 ```
 The foot of the temple steps. The doorkeeper, at the top: "And stay out. The treasury
 of the Roman People is not a nursery." The Son looks about him: this is NOT the rest
-stop, everyone is wearing a bedsheet, ten out of ten. Then back at the temple: "The big guy carried me out by my backpack. I'm carry-on." "Okay. Operation Find Dad.
+stop, everyone is wearing a bedsheet, ten out of ten. Then back at the temple: "The big guy carried me out by my backpack, like a suitcase. I'm officially carry-on luggage." "Okay. Operation Find Dad.
 Step one: snacks. Step two: also Dad." And he turns to the left edge of the picture, where the street is:
-"Step one's past that bush. My nose is never wrong."
+"Step one is past that bush. Something over there smells fried and amazing, and my nose is never wrong."
 *Plants:* the door is inside, and shut (#8: the doorkeeper's "I left a door in there" says so, since PASS-19R1). Step one, snacks (#4). Fourteen steps (#5).
 The way to the street, which is behind the laurel and easy to miss (since round three the
 whole left edge of the picture is that way, and his nose has already pointed there).
@@ -611,10 +611,10 @@ Wrong tries:  Take the tunic off the line   -> "Hands off the line, child. Those
               Give the toga back to her     -> "Not to me. To HIM. Up at the temple steps, the color of a plum."
 Solution:     Talk to her. She looks him over ("A hood with no head in it. Whoever dresses you enjoys a joke.": PASS-17R, round seventeen, for he wears no
               cap), asks if he can run, and makes the offer:
-              take the toga to the senator at the temple steps, "I cannot leave the tubs. Take him his toga, and I will lend you a tunic." "Deal. I'll carry it by the corners."
+              take the toga to the senator at the temple steps, "I cannot leave the tubs. Take him his toga, and when you come back I will lend you a tunic." "Deal. I'll carry it by the corners."
 Gives:        The senator's toga.
 Teaches:      That people here pay for errands, and that she is where tunics come from.
-Hints:        Hint button: "The door guy wants a clean tunic. The laundry lady on the street has lots." The street boy: "A clean tunic? The laundry woman has a hundred. And nobody to run errands." The senator: "The
+Hints:        Hint button: "The door guy wants a clean tunic. The laundry lady out on the street has a whole line of them." The street boy: "A clean tunic? The laundry woman across the street has a hundred, and nobody to run her errands." The senator: "The
               washerwoman by the fountain has had my best one for three days. THREE."
 Plants/pays:  Plants the tunic on the line (#3) and "by the corners" (below).
 Notes:        Ask her how she gets them so white, and she tells him: trodden in the tubs with stale
@@ -640,9 +640,9 @@ Changed:      THE TURN (round thirteen; the author's decision 2). The first time
               "Delivery! One bedsheet, folded by a professional." The boy holds it out, and the senator takes it: "At LAST. Three days.
               Give it here." He turns from the boy to shake it out and holds it up at arm's length:
               "...This toga is new. It has never been to the Senate. Or to ANYTHING."
-              "And it reaches the ground. Twice." He turns back: "Maybe it's a growing toga. Mom buys all my clothes big." "The laundress fulled a toga for one of the dictator's new Gauls. He has MINE." He holds the enormous one out
-              to the boy: "He will be in the Forum, lost. They are always lost.", and the boy takes it:
-              "Find the lost Gaul. Swap the bedsheets." He stays,
+              "And it reaches the ground. Twice." He turns back: "Maybe it's a growing toga. Mom buys all my clothes big, so I can grow into them." "The laundress fulled a toga for one of the dictator's new Gauls as well. Which means the Gaul has MINE." He holds the enormous one out
+              to the boy: "He will be somewhere in the Forum, lost. They are always lost, these new men of his.", and the boy takes it:
+              "Find the lost Gaul. Swap the bedsheets. Easy. Probably." He stays,
               pacing. (The toga taken, the Gaul's given: `rome.wrongToga`.) The hand that holds the
               toga up, and out, is empty: the people's rig has no toga to put in it (SCENES-13R1).
               Then #10, in the Forum. When the boy comes back with the right one, the delivery below
@@ -662,8 +662,8 @@ Solution:     Give him the toga: use it with him, or talk to him and say "Delive
 Gives:        A favor owed. "The laundry lady owes me one tunic."
 Teaches:      Handing a thing over: by using it with someone, or by saying so when they talk.
               (Every errand in the act can be finished either way.)
-Hints:        Hint button: "The senator's bedsheet. He's the one in a hurry by the temple steps." (Its words unchanged: since round thirteen it speaks for
-              the first delivery.) For the second: "Right bedsheet now. The senator's at the temple steps. Delivery, take two." The street boy: "That's the senator's toga. He's the angry one at the temple steps. Run." And for the second: "Right toga? Run it to the senator at the temple steps. He's going purple."
+Hints:        Hint button: "This bedsheet belongs to the senator. He's the one in a hurry, back by the temple steps." (Its words unchanged: since round thirteen it speaks for
+              the first delivery.) For the second: "Right bedsheet now. The senator's at the temple steps. Delivery, take two." The street boy: "That's the senator's toga. He's the angry one at the temple steps, the purple one. Run." And for the second: "Right toga? Run it to the senator at the temple steps. He's going purple."
 Plants/pays:  Pays off the washerwoman's errand. His speech is about drains. "It ends when they agree
               with me." Since round thirteen the place of his speech is the answer to the Gaul (#10).
 Notes:        He goes because his figure is already wearing a toga and cannot change it on stage:
@@ -697,24 +697,24 @@ Needs:        #2's turn (he is carrying the Gaul's toga), for the swap. The Gaul
 Setup:        At the hoarding round the hole where the senate house stood, in front of its open
               gateway, a very large man in a toga far too short for him walks along the boards and
               back, asking the way of anybody (nobody passes in this stage: the people without lines
-              wait for a later one, so he asks the air, and shrugs). "A giant guy in a too-short bedsheet. Like Dad in my sleeping bag." The boy talks to him from
-              beside him, a step nearer us, under the crane. Four ways in ("Are you lost? I'm lost. We could be lost together."; "Your bedsheet's
+              wait for a later one, so he asks the air, and shrugs). "A giant of a guy in a bedsheet that stops at his knees. Like Dad trying to fit in my sleeping bag." The boy talks to him from
+              beside him, a step nearer us, under the crane. Four ways in ("You look lost. I'm lost too. Want to be lost together?"; "Your bedsheet's
               too short."; "Whoa. Are you a VIKING?" "I do not know that word. I am a Gaul. For Rome,
               that is usually enough."; "Which way is... anywhere?"), and he tells the boy, before
-              anybody else can: "Gaius Iulius Litumarus, of Nemausus. Lately, a senator of Rome." "A senator! I'm calling you Big Senator." It is his first meeting; he has asked twelve Romans the way to the
-              House, and twelve smiled and walked faster. "A notice says nobody is to show the new senator the way. It is a joke. I am it." "So I ask you: where does the Senate meet today?"
+              anybody else can: "I am Gaius Iulius Litumarus, of Nemausus in the Province. Lately, and to my own surprise, a senator of Rome." "A senator! You're Big Senator, then. I already know a regular-sized one." It is his first meeting; he has asked twelve Romans the way to the
+              House, and twelve smiled and walked faster. "A notice has gone up: nobody is to show the new senator the way to the Senate. It is a joke, and I am it." "So I ask you, child, as I asked them: where does the Senate meet today?"
 Wrong tries:  (the answers to his question are the boy's choices)
-              "In the senate house!"         -> He turns to the site and points at the hole. "There is the
+              "In the senate house, obviously!"         -> He turns to the site and points at the hole. "There is the
                                                 senate house. It is a hole with men in it." "...So it's more of a senate hole." (Again: "It is
                                                 still a hole. I have looked again. Holes are like that.")
-              "Up on the Capitol? With the gold roof?" -> "I have been up. There are geese." "They did
+              "Up on the Capitol? The hill with the gold roof?" -> "I have been up. There are geese." "They did
                                                 not show me the way either. They showed me the way
                                                 down." (Once the boy has been up: "Up on the Capitol?
                                                 Past the attack chickens?" "You have met them. Then you
                                                 know why I came down again.")
-              "At Caesar's house? He's the boss, right?" -> "I have been there. Nine hundred senators
+              "At Caesar's house? He's the boss of everything, right?" -> "I have been there. Nine hundred senators
                                                 and one porter." "...That's a LONG line."
-              "I don't know. Honestly. I'm new here." -> "Then you are a true Roman. Thank you." He bows.
+              "I don't know. Honestly. I'm new here." -> "Then you are a true Roman, child. But you said it to my face, and I thank you." He bows.
               Hold out the Gaul's toga first  -> (it opens his talk, where "Swap?" is on offer while the
                                                 boy carries it) "First the Senate. Then my knees. Where
                                                 does the Senate meet, child?"
@@ -723,32 +723,32 @@ Wrong tries:  (the answers to his question are the boy's choices)
                                                 a large man in a short toga. I knew.").
 Solution:     "In Pompey's hall, by his theater.", on offer once the boy has heard it
               (`rome.knowsSenate`): from the senator (his old line, "The Senate meets today, in the
-              hall beside Pompey's theater. I have a speech."), or from Walnut. "Pompey's theater? The stone one, with a temple on its seats?" If the boy has
-              looked at it from the Capitol (`rome.sawTheater`): "Yes! I saw it from the top of the hill." "From a boy who has seen it. That is more than the Senate gave me." If not: "The senator told me. He's giving a speech there. About drains." "A man does not invent a speech about drains. I
-              believe you." Then: "Pompey's hall. Of course. Even Rome cannot meet in a hole." "The joke is spoiled, child, and I thank you for spoiling it." (`rome.gaulAnswered`.) He will not go yet: "A new man
-              does not arrive first. It looks keen." "I would rather not cross Rome with my knees out. Rome has seen enough." Then the togas, once the boy has the Gaul's toga and the answer is given, in either
-              order: "Big Senator! That toga's my senator's. I've got yours. Swap?" He looks down at his shins: "...I had decided Roman togas were made to be
+              hall beside Pompey's theater. I have a speech."), or from Walnut. "Pompey's theater? The great stone one, with a temple perched on top of its seats?" If the boy has
+              looked at it from the Capitol (`rome.sawTheater`): "Yes! I saw it from the top of the hill." "From a boy who has seen it with his own eyes. That is more than the whole Senate gave me." If not: "My senator told me. He's giving a speech there today. About drains." "A man does not invent a speech about drains. I
+              believe you." Then: "Pompey's hall. Of course it is. Even the Senate of Rome cannot meet in a hole." "The joke is spoiled, child, and I thank you for spoiling it." (`rome.gaulAnswered`.) He will not go yet: "A new man
+              does not arrive first. It looks keen." "And I would rather not cross Rome with my knees out. Rome has seen enough of the knees of Gauls." Then the togas, once the boy has the Gaul's toga and the answer is given, in either
+              order: "Big Senator! That toga's my senator's, and I've got yours. Swap?" He looks down at his shins: "...I had decided Roman togas were made to be
               ridiculous." The boy holds out the enormous toga and he takes it; he goes into the
               hoarding's gateway and behind its near boards, where not a hair of him shows; a while;
               and he comes out in his own, falling properly to his ankles, and holds out the senator's,
               folded, which the boy takes: "There. Now I look like a senator. All that is left is to
-              be one." "Swapped. One bedsheet, senator-sized, for my senator." And his going: "If anyone asks, a Roman showed me the way." "I'm not a Roman."
+              be one." "Swapped. One senator-sized bedsheet, going back to my senator." And his going: "If anyone asks, a Roman showed me the way." "I'm not a Roman."
               "Then nobody will be blamed." He walks off up the square, between the site and the
               colonnade of Paullus, toward the plain, and is gone where the square leaves the picture;
               he is not in the Forum again. (Round nineteen: the player has the square back as he sets
               off; his walk away plays on while the boy does as he likes.)
 Gives:        The senator's own toga, in place of the Gaul's (`rome.swapped`). Then #2's delivery.
 Teaches:      Talk is a tool: something heard at one end of Rome answers a question at the other.
-Hints:        Hint button: "A lost Gaul in the Forum has the toga. My senator knows where the Senate meets." (One line that helps whether he has heard it
+Hints:        Hint button: "The lost Gaul in the Forum has the toga. He needs to know where the Senate meets. My senator knows." (One line that helps whether he has heard it
               yet or not.) The street boy: "Big Gaul, little toga? Tell him they meet in Pompey's hall, by the theater." (Hearing it from Walnut puts the
               answer on offer too.)
 Plants/pays:  Pays the senator's old line about Pompey's theater, and his speech about drains. Pays
               the theater seen from the Capitol ("Biggest bleachers EVER."). Pays the senator's "He
               will be in the Forum, lost. They are always lost."
 Notes:        Never mocked: the joke is Rome's, and he is the one who tells it. He tells the city's
-              song about Gauls in his own words ("Trousers off, broad stripe on. Nine times I have heard it. It does not improve."), and the verses are
+              song about Gauls in his own words ("Trousers off, broad stripe on: that is the whole of it. Nine times I have heard it. It does not improve."), and the verses are
               never quoted. The laughs are the song ("Ten times now. I caught myself humming it this
-              morning. Tell no one.") and his mustache ("Ten out of ten on the mustache." "In Gaul every man of rank wears one. In Rome they shave, and stare."). Nothing he
+              morning. Tell no one.") and his mustache ("Ten out of ten on the mustache." "In Gaul, every man of rank wears one. In Rome, the men shave their faces bare, and stare at mine."). Nothing he
               says looks ahead to what happens in that hall today: he is going to an ordinary meeting.
               His talk is `gaulTree`; the scene's hooks: `point`, `bow`, `swap` (the togas change
               hands there, and `rome.swapped`), `leave`. The order is free: met before the turn, he
@@ -759,7 +759,7 @@ Notes:        Never mocked: the joke is Rome's, and he is the one who tells it. 
 ```
 Puzzle #3: Collect The Tunic        (Rome · the street · the washerwoman, or the low line)        chain A
 Needs:        #2
-Setup:        The tunic still hangs on the low line. She keeps her word: "Toga first, then tunic. Twenty years of laundry, on 'first' and 'then'."
+Setup:        The tunic still hangs on the low line. She keeps her word: "Toga first, then tunic. I have run twenty years of laundry on 'first' and 'then'."
 Wrong tries:  Ask before the toga is delivered -> the line above.
 Solution:     Talk to her, or reach for the tunic. "Delivered! He said Rome thanks you. He was too late to say it himself." "That sounds like him. Here: my sister's boy outgrew it. Bring it back clean."
 Gives:        The small tunic. The painted tunic leaves the line.
@@ -788,9 +788,9 @@ Gives:        A snack: "Bread with cheese in it. Step one: DONE. Needs ketchup."
               (`rome.knowsBoy`): since round thirteen he no longer hands it over. Titus does, on the
               Capitol (#11).
 Teaches:      The same lesson as #1 from the other end: this errand finds him.
-Hints:        Hint button: "The chicken man has incense, and no breakfast. The snack bar has breakfast." (Its words unchanged: the snack bar is still where to ask, and
+Hints:        Hint button: "The chicken man has incense and no breakfast. The snack bar has breakfast. I smell a trade." (Its words unchanged: the snack bar is still where to ask, and
               since round thirteen the beat ends when the keeper has said where his boy is.) The
-              soothsayer: "Nor am I. My bread and sausage come from the cookshop by the fountain." The street boy says both halves (the second re-worded in round thirteen: "The sausage man's boy took his breakfast up at first light. Never came back.").
+              soothsayer: "Nor am I, today. My bread and sausage come from the cookshop by the fountain, and this morning nobody brought them." The street boy says both halves (the second re-worded in round thirteen: "The sausage man's boy took Old Gloom's breakfast up at first light. He never came back down.").
 Plants/pays:  Pays off "Step one: snacks". Plants no tomatoes: "It only needs ketchup." "What is a
               tomato?" "...No tomatoes. Dad's been saving those little packets for years. He KNEW."
               Plants Titus, and the ewe (#11).
@@ -801,7 +801,7 @@ Notes:        The errand as it was before round thirteen: "Never mind, you have 
               won't eat it. I'll just THINK about eating it. That's allowed." (Walnut's old second
               half: "The sausage man sends his breakfast up every morning. Today it's still on the
               counter.")
-              If the boy has met Titus first: "Found him! He's up the hill on a statue. With your breakfast. And geese." "Geese, every Ides the ewe, now geese, go back up, bring him down." If he walks in
+              If the boy has met Titus first: "Found him! He's up the hill on a statue, with your breakfast. And there are geese. A LOT of geese." "Geese, every Ides the ewe, now geese, go back up, bring him down." If he walks in
               carrying the breakfast: "My cloth, the old one's breakfast, where is my boy, where is my Titus?" "On his way home. He was stuck on a statue. There were geese. I did a stomp." "Every Ides something. Up the street with it, quick, before it is a lunch." And once Titus is home: "My boy is home. He says your shoes frightened Juno's geese. Have a sausage." "I won't even ask about the ketchup. I've grown as a person."
 ```
 
@@ -809,7 +809,7 @@ Notes:        The errand as it was before round thirteen: "Never mind, you have 
 Cut-Scene: Would Climb        (the first time he comes up the hill to the Capitol)        new in round thirteen
 ```
 <!-- ROME-13W -->
-"The temple on the hill! Would climb. DID climb." "And a kid on a statue, surrounded by geese. A whole situation." (`rome.capitol.arrive.1` and `.3`;
+"The temple on the hill! Would climb. DID climb." "And a kid on a statue, completely surrounded by geese. That's a whole situation." (`rome.capitol.arrive.1` and `.3`;
 `rome.sawCapitol`.) He comes in at the gate, which is behind us, and takes a step up into the
 precinct; he looks up the paving at the temple for the first line, and up at the kid on his base, with a honk from the geese, for the
 second. <!-- PASS-19R2: the line over the parapet at the city (rome.capitol.arrive.2) is gone --> (A game saved before round thirteen, with the breakfast had from the keeper, finds
@@ -821,29 +821,29 @@ Puzzle #11: Juno's Geese        (Rome · the Capitol · the keeper's boy, the ge
 Needs:        The Capitol open (`rome.knowsBC`). For the hint, #4: the keeper has said where his boy
               is (`rome.knowsBoy`); a boy who comes up the hill first hears it from Titus himself.
 Setup:        On top of the middle statue base among the kings sits a boy hugging a bundle, and round
-              the base's foot stand the sacred geese. "A kid on a statue, pretending he meant to be up there." Titus, the keeper's boy: "Stuck? Me? I'm SITTING, I like sitting, I can see the whole city." He has been sitting since first light. On purpose. Mostly on purpose. "Old Arruns the soothsayer's breakfast, I was taking it, and the ewe went by." "Every Ides I go after her, then the geese came, now I'm sitting." Whenever he puts a foot down, every
+              the base's foot stand the sacred geese. "A kid on top of a statue, pretending he totally meant to be up there." Titus, the keeper's boy: "Stuck? Me? I am SITTING, I like sitting, you can see the whole city from up here." He has been sitting since first light. On purpose. Mostly on purpose. "This is old Arruns the soothsayer's breakfast, I was taking it to him, and then the ewe went by." "Every Ides I go up after her, so I went, and then the geese came, and now I am sitting." Whenever he puts a foot down, every
               goose stretches its neck out low and hisses (asked about the geese, he shows the boy,
               and draws his knees up to his chin). Behind his pen, the goose-keeper will not move
-              them: "Sacred birds. I feed them. I do not argue with them." The boy talks to Titus
+              them: "They are sacred birds, child. I feed them. I do not argue with them." The boy talks to Titus
               from before the base, by its right corner, looking up at him, and to the goose-keeper
               from beside him, behind the pen.
 Wrong tries:  Call the geese         -> "Here, goosey goosey... They hissed at me. In stereo."
-              Shoo them              -> "SHOO. ...They didn't shoo. They're not shooers." (The geese are one
+              Shoo them              -> "SHOO. ...They didn't shoo. Whatever scares a goose, it isn't me yelling at it." (The geese are one
                                         thing to use, "Shoo sacred geese": calling and shooing come in turn,
                                         and at each, as at everything tried on them, every goose
                                         stretches its neck out low and hisses.)
-              The gum                -> "No gum for sacred geese. They'd never get it off their beaks."
-              The quarter            -> "They don't want a bird. They ARE birds."
+              The gum                -> "No gum for sacred geese. They'd never get it off their beaks, and I'd never hear the end of it."
+              The quarter            -> "They don't want a bird. They ARE birds. I need something weirder than a bird."
               The coin               -> "Bribing geese. That's a new low. Even for me."
               The phone              -> "They hissed at the phone. That's more than it's done all day."
               The toga               -> "A toga over sacred geese? They'd honk under it forever."
               The Gaul's toga        -> "A Gaul's toga over them? I'd lose the geese, the toga, and me."
-              The lamp, the tunic    -> a line each ("Not Felix's lamp. Phyllis would know. From across the river.")
-              Ask Titus to jump      -> "Over THEM? They bite like Father's creditors." Again: "You'd catch me, they'd catch you, and we'd both be down there. With THEM."
+              The lamp, the tunic    -> a line each ("Not Felix's lamp. Phyllis would know somehow. Moms always know.")
+              Ask Titus to jump      -> "Over THEM? They bite like Father does when you owe him money." Again: "You would catch me, they would catch you, and we would both be down there. With THEM."
               Ask the goose-keeper to move them -> "Thirty years I have fed them. I have never once won an argument."
-Solution:     Ask the goose-keeper how geese saved a city (Titus: "...Ask old Anser, he feeds them, he talks about them all day."). He tells it as he would tell
+Solution:     Ask the goose-keeper how geese saved a city (Titus: "...You could ask old Anser, he feeds them, he talks about them all day long."). He tells it as he would tell
               it, long ago and with no year: "Long ago, the Gauls took this city. All of it, but this
-              hill." "One night they climbed the rock below that wall. Not even the dogs woke." "But Juno's geese woke. They cried out, and woke Manlius." "Manlius ran to the edge, and the Gauls went down faster than they came up." "They cannot abide anything strange. They shout at it, and
+              hill." "One night they climbed the rock below that wall, so quietly that not even the dogs woke." "But Juno's geese woke. They cried out, all of them at once, and they woke Manlius." "Manlius ran to the edge, and the Gauls went down faster than they came up." "They cannot abide anything strange. They shout at it, and
               then they run." (`rome.knowsGeese`.) "Anything STRANGE. ...I've got my thinking face on." Then, from his talk ("Mister Goose? You might want to hold on to
               your basket.") or with a click on the geese once the tale is told, the boy walks to the
               foot of the base, faces it: "Anything strange? I'm the strangest thing in Rome. Watch my
@@ -852,9 +852,9 @@ Solution:     Ask the goose-keeper how geese saved a city (Titus: "...Ask old An
               open gate leaves in its side, and are in (for less motion they walk in, briskly). A
               honk from the pen. Titus hops down off his base, the bundle clutched to him: "I wasn't
               scared. I was SITTING." He comes over to the boy and holds the breakfast out by its knot:
-              "Take it to old Arruns, I'm going home before Father sends the geese." The
+              "Take it to old Arruns for me, I am going home before Father sends the geese after me." The
               boy takes it: "One kid, one breakfast. Zero geese."
-              "Your shoes are the best thing on this hill, and I've seen the gold roof!" And he runs
+              "Your shoes are the best thing on this hill, and I have seen the gold roof!" And he runs
               off down the hill, out at the gate behind us, and is gone home. The goose-keeper: "That
               is the most noise they have made since the Gauls." From then on the geese are in their
               pen, eating as if nothing had happened ("Every goose back in the pen, eating. Professionals."; "I'm not going near them. We had a moment. It's over."), and
@@ -862,7 +862,7 @@ Solution:     Ask the goose-keeper how geese saved a city (Titus: "...Ask old An
 Gives:        The soothsayer's breakfast (`rome.hasBreakfast`; the geese in their pen,
               `rome.geeseGone`).
 Teaches:      Listen to the old man's story: it is the instructions.
-Hints:        Hint button: "The breakfast's up the hill, with a stuck kid. Somebody there knows about geese." The street boy: "The Capitol geese scream at anything they've never seen. The Gauls found out." <!-- FINAL-19: REVIEW-19 -->
+Hints:        Hint button: "The breakfast is up the hill with a stuck kid. The sad guy with the basket knows all about geese." The street boy: "The Capitol geese scream at anything they've never seen before. Ask the Gauls. They found out." <!-- FINAL-19: REVIEW-19 -->
               Titus: "Ask old Anser."
 Plants/pays:  Pays Walnut's "Stomp when you go. So I can watch.", and the shoes that light up when he
               stomps (the street). Pays the keeper's errand (#4) and the ewe, and the gold roof seen
@@ -872,10 +872,10 @@ Notes:        The geese hiss, and nobody is hurt: it is a standoff, and funny. T
               smoke." The tale is Rome's own history, part legend, told as the goose-keeper tells it
               (Livy 5.47); no year is said. His other talk: the dogs that guard the hill at night
               ("Between you and me, the dogs sleep. The geese never do."), his name ("Anser means
-              goose." "It was my grandfather's name before it was my job. Nobody believes it." "A goose guy called Goose! Mister Goose. Top of my collection.": PASS-17R, round seventeen), and Juno's other
+              goose." "It was my grandfather's name long before it was my work. Nobody ever believes me." "A goose guy called Goose! Mister Goose. Top of my collection.": PASS-17R, round seventeen), and Juno's other
               temple on the hill's other summit, Moneta, where they make the money ("Moneta.
               MONEY-ta. ...I just figured out the word money."). The second time, he tells the tale
-              gladly ("...You were listening. Thirty years, and nobody listens."); the
+              gladly ("...You were listening. Thirty years I have told it, and nobody listens."); the
               third, "Long ago..." "I'm going to stop asking you that. For both of us." After the
               stomp: "Sorry about the noise." "Do not be sorry. Thirty years I have told that story.
               Today somebody USED it." The talks are `titusTree` (hook `feet`) and `anserTree` (hooks
@@ -890,18 +890,18 @@ Notes:        The geese hiss, and nobody is hurt: it is a standoff, and funny. T
 Puzzle #5: Feed The Soothsayer        (Rome · the steps · the soothsayer)        chain B
 Needs:        #11 (since round thirteen the breakfast comes from Titus; before, from #4)
 Changed:      Round thirteen: when the breakfast has come down the hill, the boy's first line as he
-              hands it over is "Breakfast! It's been up a hill and past some geese.", in place of
-              "Breakfast! From the snack guy. He says you owe him for eleven years." (which stays for
+              hands it over is "Breakfast! It's been up a whole hill and past some geese, but it's all here. Mostly.", in place of
+              "Breakfast delivery! Straight from the snack guy. He says you've owed him for eleven years." (which stays for
               a breakfast from the keeper, in a game saved before). The rest as it was.
 Setup:        An old soothsayer sits on the steps beside a cage of sacred chickens. He has incense
               for Saturn that should have gone in at dawn, and bad knees: "There are fourteen steps
               between it and him. My knees have foreseen every one." The boy offers to carry it.
-              "Not today. The birds will not feed, and I have no breakfast to tempt them."
+              "Not today. The birds will not feed, and I have no breakfast to tempt them with. Bring me that, and we shall see."
 Wrong tries:  Call the chickens              -> "Here, chick chick. ...Nothing. They know I've got no snacks."
                                                 And, the first time: they are all facing the temple
                                                 doors (see "The chickens, and the years", below).
               Feed the breakfast to the birds -> "It's the old guy's breakfast. If I feed his chickens, he'll foresee it."
-              Take the breakfast to the doorkeeper -> "I do not eat at the door. ...Is that the sausage from the fountain street?" "It's the chicken
+              Take the breakfast to the doorkeeper -> "I do not eat at the door. ...Is that the sausage from the cookshop on the fountain street?" "It's the chicken
                                                 man's." "Then it is the chicken man's."
 Solution:     Give him his breakfast: use it with him, or say "Breakfast!" when they talk. "I foresaw this sausage. The first good thing I have foreseen all year." He
               crumbles bread for the birds. They feed. "See? Breakfast chickens." "Take this incense in to the god. My knees send their regards."
@@ -909,14 +909,14 @@ Gives:        The incense box.
 Teaches:      An errand can have a reason behind the reason: he is not being stubborn, he is waiting
               for an omen, and the omen eats bread.
 Hints:        Hint button: "The chicken man's breakfast is in my backpack. It's getting cold. So is
-              he." The street boy: "Old Gloom's breakfast is going cold in your bag. The one with the chickens."
+              he." The street boy: "Old Gloom's breakfast is going cold in your bag. Take it to him, the old one with the chickens."
 Plants/pays:  Pays off the keeper's errand, and the fourteen steps the Son counted "on the way down.
               Upside down."
 Notes:        The first time they speak: "Beware the Ides of March." "Which one is Ides?" "Today."
               "Then it's a bit late to be-ware." "I said it in February, too. Nobody listened then,
               either." His gloom is the game's only nod to the day, and the Son does not understand
               it: "Okay. Bye! Happy Ides!" "It is not that kind of day."
-              Asked about the birds before they have fed: "They are sacred. When they feed, the day is good. Today, not one grain." "The worst omen, on the Ides. I sell omens. This one I could not give away."
+              Asked about the birds before they have fed: "They are sacred. When they feed, the day is good. Today they have not touched one grain." "The worst omen, on the Ides. I sell omens. This one I could not give away."
               They will not touch their grain, and they eat the cookshop's bread: whatever they know,
               they are still chickens.
 ```
@@ -925,16 +925,16 @@ Notes:        The first time they speak: "Beware the Ides of March." "Which one 
 Puzzle #6: Three Out Of Three        (Rome · the steps · the doorkeeper)        the gate of chains A and B
 Needs:        #3 and #5
 Setup:        The doors stand wide open and the doorkeeper stands in them. Asked, he says exactly
-              what he lets in: "A boy who serves the rites. In a clean tunic. With something for the god."
-              "You are a boy. That is one out of three." "He gives scores. Out of THREE. Weird system."
+              what he lets in: "A boy who serves at the rites may enter. In a clean tunic. Carrying something for the god. Not otherwise."
+              "You are a boy, I grant you. That is one out of three." "He gives scores. Out of THREE. Weird system. My teacher at least goes all the way up to a hundred."
 Wrong tries:  With neither      -> "One out of three. I am not a difficult man. I am an exact one."
-              The tunic only    -> "A clean tunic. Good. And for the god, two empty hands. Two out of three." "My score went UP. I'm improving!"
-              The incense only  -> "Incense. Good. Carried by a boy in I do not know what. Two out of three." "It's a hoodie. It's from the future.
+              The tunic only    -> "A clean tunic. Good. And for the god you have brought two empty hands. Two out of three." "My score went UP. I'm improving! Somebody tell my teacher."
+              The incense only  -> "Incense. Good. Carried up my steps by a boy wearing I do not know what. Two out of three." "It's a hoodie. It's from the future.
                                    It was on sale."
-              The coin          -> "One coin. For the treasury. It has others."
+              The coin          -> "One coin. For the treasury of the Roman People. It has others, boy. Several."
               The quarter       -> "That is not a coin. Put it away before I have to find out what it is."
               The dead phone    -> "A small black door. It is shut. I approve."
-Solution:     Try the doors, or talk to him, carrying both. "Tunic on. Over the hoodie. And the backpack. I'm a lumpy Roman." "...Three out of three." "YES." "The hair." "It doesn't
+Solution:     Try the doors, or talk to him, carrying both. "Tunic on, over the hoodie and over the backpack. I'm the lumpiest Roman in Rome." "...Three out of three." "YES." "The hair." "It doesn't
               go down. I've tried. Mom's tried. Gravity's tried." "...Go in. Walk. Touch nothing. The
               clerk is counting."
 Gives:        The inside of the temple, for good. After this he is waved through.
@@ -959,14 +959,14 @@ Setup:        A fountain with coins glinting under the water. "People throw coin
 Wrong tries:  Take a second one             -> "One wish is borrowing. Two is a crime spree."
               Pay it back with the quarter  -> "A quarter? Somebody digs that up in two thousand years. SO many questions."
               Throw it back                 -> "Throw it back? I'm saving this wish for something big. Or small."
-Solution:     Reach in. "Operation Borrow-A-Wish is GO. Splish." "So shiny I can see my face, next to the serious man. He's not happy."
+Solution:     Reach in. "Operation Borrow-A-Wish is GO. Splish." "So shiny I can see my own face in it, right next to the serious man's. He's not happy about it."
               Then, after the street boy has had his say (below), his first hard look at it: "It says CAESAR. Like when Jesus asks whose picture is on the coin." Walnut, from his kerb: "Caesar's. Everybody knows that nose." "So Caesar gets his coin, and God gets what's God's. Me included." "But Jesus is grown up in that story. This isn't that Caesar. Not yet."
 Gives:        The silver coin.
 Teaches:      Nothing yet, and that is the point: it is a shiny thing picked up because it was there.
               What it is for comes later (#8).
 Hints:        Hint button (only once he is inside without it): "That fountain is full of other
               people's wishes. I only need to borrow one." The street boy, asked how to put light on
-              a wall: "The shiniest things on this street? New silver, in the fountain."
+              a wall: "The shiniest things on this street? New silver, lying in the fountain."
 Plants/pays:  Plants shiny, twice. He reads the name on it himself, and the keeper, shown it, says
               when it was struck ("this year"): the Son never learns why that matters. Big Sister
               does, in Act Four, where the same story is told again with the verse (Mom's).
@@ -987,8 +987,8 @@ Setup:        The single dark room. A god at the far end with his feet tied in w
 Wrong tries:  Touch the place that hums   -> he works it out: "In the big pointy place I shined my
                                              flashlight at the hum, and POP: door." The flashlight
                                              got left behind. "Phone light!" "Zero percent. It can't
-                                             even be sad about it." "So the door likes light. I need the kind you don't charge."
-              Stand in the sunlight       -> "Warm. Something shiny could bounce it. I do it with my spoon." "Mom has asked me to
+                                             even be sad about it." "So the door likes light. I just need some kind of light that doesn't need charging."
+              Stand in the sunlight       -> "Warm. Something shiny could bounce this onto the wall. I do it with my spoon at breakfast." "Mom has asked me to
                                              stop. Twice a week."
               The coin, held up to the hum -> "Too dark here. A coin's only shiny with sun to be shiny WITH."
               The phone, in the sun       -> "Cracked screen. A hundred tiny lights going everywhere. Pretty. Useless."
@@ -1003,7 +1003,7 @@ Solution:     Use the coin with the sunlight on the floor. "Sun, meet coin. Coin
 Gives:        A door in time, the size of a coin. It stays.
 Teaches:      The rule of the doors, in his words: the door likes light; little light, little door.
               (Dad learns the other half in Egypt: a whole sun, a whole door.)
-Hints:        Hint button: "Sun on the temple floor. A shiny coin in my backpack. Bounce it at the door." The street boy: "Easy. Something shiny, in the sun. I do it to the sausage man."
+Hints:        Hint button: "Sun on the temple floor. A shiny coin in my backpack. Bounce it at the door." The street boy: "Easy. Catch the sun on something shiny and throw it where you like. I do it to the sausage man."
 Plants/pays:  Pays off the coin, and the flashlight from before the act. Plants "Why is the sky DOWN?":
               the other side of this door is high over a desert.
 Notes:        The clerk must not see, and does not: he is the comedy of it and never the obstacle.
@@ -1052,31 +1052,31 @@ Setup:        When the boy borrows the coin, Walnut says (as always) "That's som
               first light for her boy, who is going to Corinth. In the Forum, at the foot of Castor's
               temple, Phyllis sits on her low stool among her baskets, the little lamp wrapped in a
               cloth in her lap; the boy talks to her from a step out on the square, on her right:
-              "Myrtle for your sweetheart. Garlands for Anna Perenna!" It is Anna Perenna's feast: "Child! Anna Perenna's feast. Half the city picnics by the river today." "And every one wants a garland. I can't leave my baskets a moment." (She
+              "Myrtle for your sweetheart, violets fresh this morning, garlands for Anna Perenna!" It is Anna Perenna's feast: "Child, where were you raised? It is Anna Perenna's feast. Half the city picnics by the river today." "And every one of them wants a garland. I cannot leave my baskets for a moment." (She
               gets up then to hang a garland on her pole, and sits again.) Her
               one son, Felix, loads the barges across the river, below the stone bridge, and his name
-              is down for Corinth: "His name is down for Corinth. The dictator builds it for freedmen, like me."
+              is down for Corinth: "His name is down for Corinth. The dictator is building it anew, for freedmen like me."
               "A city that has lain empty a hundred years. Imagine. Not a grandmother in it." Asked, with the coin, knowing whose it was ("Walnut says the fountain wish was yours. I borrowed it. I'm asking now."): "...My wish. Yes. I threw it in
-              at first light, for my boy." "The first new silver I have held in years. The dictator's own head on it." "I wished to give Felix this little lamp before he sails. For Corinth." "And to hear him say goodbye. He can't leave his barge. I can't leave my baskets."
+              at first light, for my boy." "The first new silver I had held in years, with the dictator's own head on it." "I wished to give Felix this little lamp before he sails, so that he has a light in Corinth." "And to hear him say goodbye. But he cannot leave his barge, and I cannot leave my baskets."
 Wrong tries:  Give her back the coin       -> "A wish once thrown is not mine to take back. But it was
                                               for my boy."
               Pay her with the quarter     -> "Or I could pay you! With a quarter. It's got a bird on it." "A bird? For a wish? Child."
-              "Can I think about it?"      -> "Think, then. But Corinth will not wait for you to finish."
+              "Can I think about it?"      -> "Think, then, and walk while you do it. Corinth will not wait for you to finish."
               Hold the lamp up to the hum  -> "It's not lit. And it's not mine. It's a goodbye present."
               Toss the coin before she has said he may -> "This is Phyllis's wish. I'm not throwing it through a door without asking."
                                               (#9; nothing happens)
               The lamp, shown to anybody else -> a line each (the keeper: "For Felix, for Corinth. Everybody eats here, I hear everything.").
 Solution:     "I could take the lamp to him! I'm great at errands."
-              "Would you? Down the Tuscan street, child, and over the stone bridge." "Tell him his mother says come before he sails. He will know the rest."
+              "Would you really? Then go down the Tuscan street, child, and over the stone bridge." "Tell him his mother says to come to her before he sails. He will know the rest."
               She unwraps the lamp and holds it out in both hands, and the boy takes it: "Lamp delivery. I'll carry it like an egg." (The lamp: `rome.hasLamp`; in her hands
               now, a half-made garland.) Across the Tiber, Felix carries bales between the landing
               and the barge's side, a bale on his shoulder; the boy talks to him from a step east of
               him on the landing. "Special delivery! A lamp from your mom. For Corinth." He turns to the pile and sets his bale down.
-              "...From her? She can't leave her baskets. She sent you?" "She threw a wish in the fountain for you too. I sort of borrowed it." "She threw a coin in a
+              "...From her? She cannot leave her baskets. She sent you?" "She threw a wish in the fountain for you. I sort of borrowed it. Long story." "She threw a coin in a
               fountain? For ME?" "...She never throws anything. She keeps string." "She wants to hear
               you say you'll come. Before you go." "Will you come and say goodbye?" The boy holds
-              out the lamp, and Felix takes it: "Tell her I'll come over the bridge at the ninth hour. Before the barge goes." "And tell her I'll
-              light it in Corinth. The first night. In the first window." (`rome.felixWord`.) "Lamp delivered. And I'm taking a promise back. A two-way errand." After
+              out the lamp, and Felix takes it: "Tell her I will come over the bridge at the ninth hour. Before the barge goes." "And tell her I'll
+              light it in Corinth. The first night. In the first window." (`rome.felixWord`.) "Lamp delivered, promise picked up. A two-way errand. I should start charging." After
               the talk he takes up his bale again and goes back to work. Back in the Forum: "He'll come
               at the ninth hour. And he'll light it in Corinth." "...The ninth hour." "Then the wish is
               answered, and it was a good one." "Keep the coin, child. It has done its work, and it was
@@ -1087,18 +1087,18 @@ Solution:     "I could take the lamp to him! I'm great at errands."
 Gives:        Her leave to send the coin through the door (#9). The lamp goes to Felix.
 Teaches:      What the act has said all along: he is borrowing. Here he asks first, and pays it back,
               "with interest".
-Hints:        Hint button: "That's Phyllis's wish. I'll ask her first, in the Forum, by the violets." Then: "Phyllis's lamp is for her boy, Felix. He
-              loads barges across the river." Then: "Felix said yes. Go tell his mom!" The street boy,
-              asked what to do with a door the size of a coin: "Put a coin through. But that's Phyllis's wish: ask her, at Castor's temple."; then "First the lamp. Felix works the barges, over the stone bridge. Big. Sunburnt."; then "Felix said yes? Tell Phyllis before you throw anything. It's her wish."
+Hints:        Hint button: "That coin was Phyllis's wish. I'd better ask her first, in the Forum, by the violets." Then: "Phyllis's lamp is for her boy, Felix. He
+              loads barges across the river." Then: "Felix said yes. Back to the Forum to tell his mom, the flower lady!" The street boy,
+              asked what to do with a door the size of a coin: "Put a coin through. But that one's Phyllis's wish, so ask her first, at Castor's temple."; then "First the lamp. Felix works the barges, over the stone bridge. Big. Sunburnt."; then "Felix said yes? Tell Phyllis before you throw anything. It's her wish."
 Plants/pays:  Pays the act's own "I'll pay it back with interest. Interest is extra wishes." (#7). Plants
               the coin's last journey (Act Four) with a mother's leave. Corinth: "Corinth. That rings
               a bell. A big one. ...It'll come to me." It comes to him across the river (the faith
               thread, below).
-Notes:        The laugh in her talk: "Myrtle for my sweetheart? I don't even have a DOG." "No dog, no sweetheart. Then violets for your mother. Every boy has one." "...Mom would like that. She's a REALLY long way away." In his:
+Notes:        The laugh in her talk: "Myrtle for my sweetheart? I don't even have a DOG." "No dog and no sweetheart. Then violets for your mother. Every boy has one of those." "...Mom would love violets. She's a REALLY long way away, though." In his:
               string ("Every bit of string we ever had. In a jar. Since before I was born." "My
               mom keeps rubber bands. On the doorknob. It's a BALL now."). Felix's other talk: the
-              barge ("A table doesn't go down to Ostia and back."), Ostia ("The port. The big ships wait off the shore."), Corinth ("Nothing yet! That's the beauty. The dictator's building it again." "A house of my own, in a city with a sea on each side."),
-              his mother ("So I wave at the Forum. She can't see me. I wave anyway."). When the
+              barge ("A table doesn't go down to Ostia and back."), Ostia ("The port. The big ships wait off the shore."), Corinth ("Nothing yet! That is the beauty of it. The dictator is building it again." "A house of my own, in a city with a sea on each side."),
+              his mother ("So I wave at the Forum. She cannot see me. I wave anyway."). When the
               colonists sailed is not known, and nobody names a day; nobody says what the city is like
               at the ninth hour today. The talks are `phyllisTree` (hooks `stand`, `lamp`, `grant`) and
               `felixTree` (hooks `setDown`, `lamp`, `aside`).
@@ -1131,7 +1131,7 @@ Notes:        The toss, the card and the change of act are the old scene's own c
 
 Also in the scenes, for character and nothing else. **On the steps:** the temple front
 ("Giant stripy pillars... Would climb."), the steps themselves, the Forum ("It's recess
-for grown-ups"), the altar ("A stone barbecue in a flower necklace. Nothing's cooking."), a bronze
+for grown-ups"), the altar ("A stone barbecue wearing a flower necklace. Nothing's cooking. Saddest barbecue ever."), a bronze
 tripod ("A giant bronze cake stand. No cake."), the stone carved S P Q R ("No vowels.
 You can't even sneeze that."), pigeons, and three things the painter added: the notice
 board on the temple's base ("Rome has terms and conditions."), a handcart of sacks at a
@@ -1162,7 +1162,7 @@ CATVLVS. Rome is STILL out of U's."), the roof ("It's GOLD."), the three doors (
 and gold is sitting very still. I'll let it."), the altar ("A stone barbecue the size of a minivan. Dad would poke it."), the dictator's chariot facing
 the temple ("Valet parking for gods."), the man on the world ("Big Sis would have a
 footnote."), the kings ("A row of old statues, and one guy with a sword out. He looks busy.") and the dictator's new statue among them
-("The new one in the row: the guy from my coin. He's EVERYWHERE today."), the bronze tablets ("Bronze pages on stone posts. Rome LOVES terms and conditions."), the pen, the hut of Romulus ("A round grass-roof hut by Rome's biggest temple. Somebody's grandpa won't sell."), the
+("The new one in the row: the guy from my coin. He's EVERYWHERE today."), the bronze tablets ("Bronze pages on stone posts. Rome LOVES terms and conditions."), the pen, the hut of Romulus ("A round hut with a grass roof, right by Rome's biggest temple. Somebody's grandpa won't sell."), the
 view, the theater ("Biggest bleachers EVER."), the Janiculum ("A long hill across the river. The trees bring their own shade."); a look at Moneta is written ("Like a camel that's really into temples.") and never
 said, because Juno's temple on the hill's other summit is not in the picture (it would stand
 behind the temple's right side, which runs out of it). **Across the Tiber**: the
@@ -1237,16 +1237,16 @@ where none do. His ground is blocked (the engine does it for anyone standing), h
 to click on touches no other, and he is 34 pixels clear of the fountain. The boy talks
 to him from the roadway, at 446, 460, looking up.
 
-Looked at: "A man selling... giant raisins? The only one in Rome not in a hurry." And again: "He keeps looking a long way off. Like he's waiting for somebody."
+Looked at: "A man selling... giant raisins? The only one in Rome not in a hurry." And again: "He keeps looking a long way off, past the roofs. Like he's waiting for somebody, and has been for ages."
 
-The first time: "Dates, young sir. From Jericho. There are none better: I have looked." "Jericho? The Jericho with the WALLS?" "You know of the walls? ...The palms have done better than the walls." That the boy
+The first time: "Dates, young sir. From Jericho. There are none better in Rome: I have looked, and I have tasted." "Jericho? The Jericho with the WALLS?" "You know of the walls? ...The palms of Jericho have done better than its walls, young sir." That the boy
 knows Jericho is why the man talks to him at all. <!-- PASS-17R: "In those shoes" (was "In that hat": he wears no cap) -->
 
 | He asks | What is said | Notes |
 | --- | --- | --- |
-| "Can I try one? I'm between snacks." | "For a boy who knows of Jericho, the first is a gift. Here." He holds one out on his open hand; the boy takes it. "It's candy that GROWS. Nine out of... ow. There's a rock in it!" "The stone. That part is a palm tree not begun. I ought to charge for the tree." | Once: one gift. It is eaten; nothing is carried away. |
+| "Can I try one? I'm between snacks." | "For a boy who knows of Jericho, the first one is a gift. Here. Mind your teeth." He holds one out on his open hand; the boy takes it. "It's candy that GROWS. Nine out of... ow. There's a rock in it!" "The stone. That part is a palm tree not yet begun. By rights I ought to charge you for the tree." | Once: one gift. It is eaten; nothing is carried away. |
 | "Everybody here prays to a statue. Which one's yours?" | "None. We have one God, the God of Abraham, of Isaac and of Jacob." "I know those guys! He's our God too. We pray to Him at my house." <!-- PASS-17R: they pray to Abraham's God, not to Abraham --> "At your house. ...Then the world is larger than Rome has told me." "Rome finds us Jews very funny: a great Temple in Jerusalem, and no statue in it." "Pompey himself went in, nineteen years ago. He found no image. Not one." "How would they carve the One who made the stone? They buy their dates and go." | The joke is his, told on himself. He says nothing about anybody else's gods. |
-| "What do you pray for?" (on offer once the one above has been asked) | "For the promised one, every day, facing Jerusalem. Micah has told us his town:" "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'" The boy turns away, to us: "That was MY line in the Christmas program! ...I know so much about Bethlehem." "I've never wanted to tell anybody so much. It's the angels' job, not mine." <!-- PASS-17R: no "Micah 5:2!" aloud; a boy's words for the angels --> And back to the man: "It's going to be worth the wait, mister. Keep watching that town." A moment. "...That was not a guess. I will not ask you what it was. But I will watch." "And for you, young sir: 'The LORD bless thee, and keep thee:'" The boy's head goes down as it does every Sunday, hands folded, before he knows it has. "That's how church ends. The very same words. ...Thanks, mister." <!-- PASS-17R: no "Numbers 6:24!" aloud --> | The heart of the act. Once: a blessing is not given twice for the asking. |
+| "What do you pray for?" (on offer once the one above has been asked) | "For the promised one, every day, facing Jerusalem. Micah has told us his town:" "'But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah,'" The boy turns away, to us: "That was MY line in the Christmas program! ...I know so much about Bethlehem." "I've never wanted to tell anybody something so much. But telling it is the angels' job, not mine." <!-- PASS-17R: no "Micah 5:2!" aloud; a boy's words for the angels --> And back to the man: "It's going to be worth the wait, mister. Keep watching that town." A moment. "...That was not a guess. I will not ask you what it was. But I will watch." "And for you, young sir: 'The LORD bless thee, and keep thee:'" The boy's head goes down as it does every Sunday, hands folded, before he knows it has. "That's how church ends, back home. The very same words. ...Thanks, mister." <!-- PASS-17R: no "Numbers 6:24!" aloud --> | The heart of the act. Once: a blessing is not given twice for the asking. |
 | "Bye, mister." | "Go well. Come any day but the seventh. I rest, and Rome always wants dates." | No weekday is named anywhere: the game does not say what day of the week the Ides fell on. |
 
 <!-- ROME-13W -->
@@ -1256,7 +1256,7 @@ shown to him: "That toga could shelter a family. Mine, for instance." The lamp: 
 
 Things shown to him. The quarter: "An eagle? Whoever struck this was proud of his bird. ...It is not silver." "A coin should go home. Ours go to the Temple in Jerusalem: the half-shekel." The dead phone: "A black mirror. It shows an old man selling dates. It is not wrong."
 The senator's toga: "A senator's toga. He buys my best dates and remembers them as cheaper." The fountain coin: "Caesar has been a friend to us Jews of Rome. We may meet, and keep our ways." "But that is fountain
-silver, young sir. Somebody's wish. Not a price." The soothsayer's breakfast: "The soothsayer's. He offers my fortune by his hens. Not by hens, thank you." (one line of the chickens' thread, below). The gum, the tunic and the
+silver, young sir. Somebody's wish. Not a price." The soothsayer's breakfast: "The soothsayer's. He keeps offering to read my fortune by his hens. Not by hens, thank you." (one line of the chickens' thread, below). The gum, the tunic and the
 incense get the Son's stock replies.
 
 Two things about how it is staged. The engine picks the gesture for each line from the
@@ -1293,11 +1293,11 @@ corners of his mantle; words of the Law are in a little case on his doorpost. Hi
 | --- | --- | --- |
 | First sight | The arrival across the river (above): "He's praying. With his window open. Like Daniel." "I'll wait till he's done. ...I'm getting good at waiting." Mariam, if he asks her about the window first: "He comes down when he has finished, and he does not hurry for anybody." | He is at his window until the boy has waited |
 | The wait | The first click on him at his window, his house or door, his window, or the bench. The boy stands at the bench's near end facing the house (he cannot sit), and, a few seconds on, to us: "Waiting. I'm doing it. Look at me doing it." The old man steps back from the window, comes out of his door with his scroll (the boy steps aside), walks along the front of the bench and sits. | `rome.eleazarDown`. If the boy leaves by the bridge without waiting, the old man is on his bench when he comes back (since round fifteen, by the map as well) <!-- MAP-15D --> |
-| Greeting | "Peace to you, child." Four ways in: "Peace to you too, mister."; "I waited the WHOLE time. I didn't fidget once. ...I fidgeted once." "Twice. But very politely."; "Is that your church? The one with the bench?" "A house of prayer." (and that is all); and, if he has met the date seller, "Do you know the date seller? Beard, basket, VERY calm?" "Yose. My daughter's husband. Does he say the dates are selling?" "He says Rome always wants dates." "He always says so." Then: "I am Eleazar. And who are you, child, who waits so well?" "My dad's lost. Or I am. One of us is. I'm waiting for him to find me." "He always comes. He's late sometimes. He calls it making good time." "A father who always comes. That is a good thing to wait for." | `rome.metEleazar` |
-| The window | "Toward Jerusalem, where the Temple is. Evening, morning and midday." "Like Daniel! Window open, three times a day. ...No lions, though. Right?" "No lions, child. Only Mariam. ...You have been well taught." <!-- PASS-17R: shorter, and he answers it --> | Daniel 6:10 and Psalm 55:17, told (and the lions' den, 6:16, asked about) |
-| How he came to Rome | "Pompey took Jerusalem nineteen years ago. Many of us were brought here." "I was bought, and I worked, and in time my master set me free." "Now I live where my people live. And I pray toward home." "That's a long way from home. ...Me too." "Then we are neighbors in that, child." | Told without bitterness, and a pause |
+| Greeting | "Peace to you, child." Four ways in: "Peace to you too, mister."; "I waited the WHOLE time. I didn't fidget once. ...I fidgeted once." "Twice. But very politely."; "Is that your church? The one with the bench?" "A house of prayer." (and that is all); and, if he has met the date seller, "Do you know the date seller? Beard, basket, VERY calm?" "That is Yose, my daughter's husband. Tell me, does he say the dates are selling?" "He says Rome always wants dates." "He always says so." Then: "I am Eleazar. And who are you, child, who waits so well?" "My dad's lost. Or I am. One of us is. I'm waiting for him to find me." "He always comes. He's late sometimes. He calls it making good time." "A father who always comes. That is a good thing to wait for." | `rome.metEleazar` |
+| The window | "Praying toward Jerusalem, child, where the Temple is. Evening, and morning, and at midday." "Like Daniel! Window open, three times a day. ...No lions, though. Right?" "No lions, child. Only Mariam. ...You have been well taught." <!-- PASS-17R: shorter, and he answers it --> | Daniel 6:10 and Psalm 55:17, told (and the lions' den, 6:16, asked about) |
+| How he came to Rome | "When Pompey took Jerusalem, nineteen years ago, many of us were brought here." "I was bought, and I worked, and in time my master set me free." "Now I live where my people live. And I pray toward home." "That's a long way from home. ...Me too." "Then we are neighbors in that, child." | Told without bitterness, and a pause |
 | What he prays for | "For Jerusalem's peace. And for the king God has promised, a son of David." "He will rule in righteousness, without end. The nations will come to his light." He looks over the river: "Greeks. Egyptians. Gauls. Romans. All of them, over there." "Even these. Even, perhaps, a boy in strange shoes." The boy turns to us: "There's an old man like him in my Bible. ...I'm SO not saying anything." | Psalm 122:6; Isaiah 9:7 and 32:1; Isaiah 60:3, with 11:10 and 49:6: told. Simeon (Luke 2:25) is thought of, to us, and never named |
-| The tassels | "What are the strings on your blanket? With the blue in them?" "Not a blanket, child. The Law says to wear them, to remember." "Like a string on your finger! But holy." "...Yes. Very like that." | Numbers 15:38-39, told |
+| The tassels | "What are the strings on your blanket? With the blue in them?" "It is not a blanket, child. The Law tells us to wear them, so that we remember." "Like a string on your finger! But holy." "...Yes. Very like that." | Numbers 15:38-39, told |
 | The heart (on offer only after "What do you pray for?") | "What if he doesn't come in time? For you, I mean." "Then my grandchildren will. The promise does not depend on an old man's eyes." "Isaiah says it: 'But they that wait upon the LORD shall renew their strength;'" "That's on our fridge! On a magnet, with an eagle. Mom reads it when Dad's late." <!-- PASS-17R: no "Isaiah 40:31!" aloud --> "Dad's late right now. I don't even know which year he's late in." "Then we are both waiting, child. Shall we wait together a little?" | QUOTED: Isaiah 40:31, to its semicolon |
 | The prayer | "...Yes. Together." (Or "I don't know the words you use." "Use your own, child. He knows them all."; or "Can we do it in a little bit? I should check on... everything." "Whenever you come back. I am not going anywhere, and neither is the promise.", and, when he comes back, "Mister Eleazar? Can we still wait together?" "Come. Stand here, beside me. We face the same way.") They stand side by side facing toward Jerusalem; the boy's head goes down and his hair stays up. "Dear God, please help Dad find me. And be with Mister Eleazar while he waits." "You know what he's waiting for. I know too. I didn't tell. Amen." "Amen." "You pray like one who knows him well." "We talk a lot. Mostly at bedtime." | `rome.prayed`. The boy prays in his own words. The old man gets up from his bench, slowly, and goes to stand by it facing the river, and Jerusalem beyond it; the boy stands beside him, a little nearer us, facing the same way; the old man's head goes down, and then the boy's |
 | The blessing | "Come. Stand still a moment." His hand on the boy's head: "For you: 'The LORD make his face shine upon thee, and be gracious unto thee:'" "Pastor says that one! ...You only did the middle. I know all three." <!-- PASS-17R: the design's own sample (office-hq-design.md, section 1) --> If the date seller has blessed him: "The date seller gave me the first part! You two are doing it in PIECES." "Yose blessed you too? Then the blessing has walked all over Rome today." Then: "Mister Eleazar? Can I give you the last part?" "'The LORD lift up his countenance upon thee, and give thee peace.'" <!-- PASS-17R: "Numbers 6:26." no longer said after it --> "I will remember the day the blessing came back to me." "Go in peace, child. And find your father." | QUOTED: Numbers 6:25 (his), Numbers 6:26 (the boy's). The hand on the head as Jacob blessed Joseph's sons (Genesis 48:14), shown. `rome.blessed`. The old man steps to his left and turns to the boy; the boy stands before him on the same row, his head bowed; the hand is eased down onto his hair for the verse, and away after it |
@@ -1350,9 +1350,9 @@ were kept for omens: if they would not eat, it was a bad sign.
 
 | Where | What happens | The lines |
 | --- | --- | --- |
-| The soothsayer, asked "Why do you keep chickens in a cage?" before they have fed | This morning they will not touch their grain ("They are sacred. When they feed, the day is good. Today, not one grain.", which was there), and he takes it for the worst of omens, as a man who sells omens would on the Ides of March: "The worst omen, on the Ides. I sell omens. This one I could not give away." | `rome.soothsayer.ans.birds.1`, `rome.soothsayer.ans.birds.omen` |
+| The soothsayer, asked "Why do you keep chickens in a cage? Are they in trouble?" before they have fed | This morning they will not touch their grain ("They are sacred. When they feed, the day is good. Today they have not touched one grain.", which was there), and he takes it for the worst of omens, as a man who sells omens would on the Ides of March: "The worst omen, on the Ides. I sell omens. This one I could not give away." | `rome.soothsayer.ans.birds.1`, `rome.soothsayer.ans.birds.omen` |
 | The cage: the first time he calls them, or the second time he looks, fed or not. Once. | He notices it himself, and looks up the steps where they are looking: "...They're all facing the temple doors. Every one. Chickens KNOW." Then he thinks of his little sister: "My little sister says that. Her chicken, General Feathers, outranks me." He does not explain it. | `rome.birdcage.doors.1`, `.2` |
-| The date seller, shown the soothsayer's breakfast | "The soothsayer's. He offers my fortune by his hens. Not by hens, thank you." Courteous; nothing is said about anybody's gods. | `rome.dateseller.breakfast` |
+| The date seller, shown the soothsayer's breakfast | "The soothsayer's. He keeps offering to read my fortune by his hens. Not by hens, thank you." Courteous; nothing is said about anybody's gods. | `rome.dateseller.breakfast` |
 
 Two things that were there already now belong to the thread. When it is calling them
 that shows him, his old line at the cage ("Here, chick chick. ...Nothing. They know I've got no snacks.") comes just before he sees what they do know. And when the breakfast comes
@@ -1373,9 +1373,9 @@ hens get their own words. They face the way the old man prays.
 | Where | What happens | The lines |
 | --- | --- | --- |
 | Across the Tiber, the hens: looked at, called, offered the breakfast | All in a row, facing the city; not one head turns ("Here, chick chick! ...Not one head turned. They've got somewhere to look."); they will not even turn round for the breakfast | `rome.hens.look`, `.look2`, `.use`, `.breakfast` |
-| Mariam, asked about her hens | "They're in a ROW. Since first light, all looking over the river at the city." "They won't eat. They won't lay. Hens are sensible. Something over there is not." "Grandfather says hens don't pray. They only look." The boy, to us: "They're looking at my door. From the other side of a whole river." | `rome.mariam.hens.1` to `.3`, `rome.mariam.hens.son` (`rome.sawHens`) |
-| Mariam, asked to ask one what's wrong | "You don't ASK a hen. You look her in the eye." "...She blinked. That means not sick, just busy." | `rome.mariam.crouch.1`, `.2` |
-| The boy's little sister | "My little sister would LOVE you. You'd be bossy at each other." | `rome.mariam.boss.son` |
+| Mariam, asked about her hens | "They are in a ROW. Since first light, every one of them, looking over the river at the city." "They will not eat. They will not lay. Hens are sensible. Something over there is not." "Grandfather says hens do not pray. They only look." The boy, to us: "They're looking at my door. From the other side of a whole river." | `rome.mariam.hens.1` to `.3`, `rome.mariam.hens.son` (`rome.sawHens`) |
+| Mariam, asked to ask one what's wrong | "You do not ASK a hen. You look her in the eye." "...She blinked. That means not sick, just busy." | `rome.mariam.crouch.1`, `.2` |
+| The boy's little sister | "My little sister would LOVE you. You'd boss each other around all day and have the best time." | `rome.mariam.boss.son` |
 
 **The years.** Every year before Christ in the game is the Bible's own count, as
 Archbishop Ussher counted it (`briefs/DATING.md`). Rome's own date, 44 B.C., is the same in
@@ -1454,7 +1454,7 @@ having been said: the old man's "PIECES" reads it so.
 | Planted | Where | Pays off |
 | --- | --- | --- |
 | "Step one: snacks." | The old arrival line | #4: "Step one: DONE." |
-| "Step one's past that bush. My nose is never wrong." | The arrival: where the street is | The street: "Giant soup jars sunk in the counter, and bread. Step one: FOUND." |
+| "Step one is past that bush. Something over there smells fried and amazing, and my nose is never wrong." | The arrival: where the street is | The street: "Giant soup jars sunk in the counter, and bread. Step one: FOUND." |
 | The door is inside, and shut | The arrival | #8 |
 | Fourteen steps, counted upside down | Looking at the steps | #5: the soothsayer's knees |
 | A score out of three | #6, asked early | #6, at the end: "Three out of three." |
@@ -1480,18 +1480,18 @@ having been said: the old man's "PIECES" reads it so.
 | "Bring it back clean." | #3 | Not yet. He still has the tunic. |
 | A door the size of a coin, left open | #8 | Act Four: his family speaks into the Nevada end of it, and he answers (the letterbox), holding it open, he says, with Dad's keys in the sun; Little Sister posts a penny through it for him. Not yet: his end of it, which this act does not show. |
 | A boy who would like to see the shoes light up again | The street | Not yet. Walnut is owed two nuts. |
-| "He will be in the Forum, lost. They are always lost." | #2, the turn (round thirteen) | #10 |
+| "He will be somewhere in the Forum, lost. They are always lost, these new men of his." | #2, the turn (round thirteen) | #10 |
 | "The Senate meets today, in the hall beside Pompey's theater. I have a speech." | The senator (the old line) | #10: the answer to the Gaul ("He's giving a speech there. About drains.") |
 | Pompey's theater, from the top of the hill | The Capitol's view ("Biggest bleachers EVER.") | #10: "Yes! I saw it from the top of the hill." |
-| The hole where the senate house was | The Forum ("Rome is getting a new tooth.") | #10: "There is the senate house. It is a hole with men in it." |
+| The hole where the senate house was | The Forum ("Rome is getting a new tooth.") | #10: "There is the senate house. At present it is a hole with men in it." |
 | "They light up when I stomp. Watch." and "Stomp when you go. So I can watch." | Walnut, in the street | #11: the stomp, on the Capitol (Walnut is not there to see it) |
 | Every Ides the ewe | #4 (the keeper's errand, round thirteen) | #11: Titus, "She had ribbons. She went up the hill like a senator." |
 | The goose-keeper's one story: "They cannot abide anything strange." | #11 | #11: "I'm the strangest thing in Rome. Watch my feet." |
 | "I'll pay it back with interest. Interest is extra wishes." | #7 (the kept line) | #12: "Borrowed. Paid back. With interest. I TOLD Walnut interest is extra wishes." |
 | "That's somebody's wish, you know." | #7 (the kept line) | #7, since round thirteen: whose (Phyllis's); #12 |
 | "Corinth. That rings a bell. A big one. ...It'll come to me." | Phyllis (#12) | Felix: "Corinth! Paul lives there one day. He makes tents. There are TWO letters..." |
-| Carried like an egg | Phyllis's bundle ("wrapped up like an egg") | "I'll carry it like an egg."; the Gaul: "Carried like an egg. Somebody loves whoever that is for." |
-| "That's how church ends. The very same words. ...Thanks, mister." <!-- PASS-17R: was "Numbers 6:24! Pastor says that at the end of church." --> | The date seller's blessing | The old man's: Numbers 6:25, and the boy gives back 6:26: "You two are doing it in PIECES." |
+| Carried like an egg | Phyllis's bundle ("wrapped up like an egg") | "I'll carry it like an egg."; the Gaul: "You carry it like an egg. Somebody loves whoever that lamp is for." |
+| "That's how church ends, back home. The very same words. ...Thanks, mister." <!-- PASS-17R: was "Numbers 6:24! Pastor says that at the end of church." --> | The date seller's blessing | The old man's: Numbers 6:25, and the boy gives back 6:26: "You two are doing it in PIECES." |
 | "It's going to be worth the wait, mister. Keep watching that town." | The date seller | The old man, who is waiting: "You know what he's waiting for. I know too. I didn't tell." |
 | "I'll wait till he's done. ...I'm getting good at waiting." | The arrival across the river | "Waiting. I'm doing it."; "Then we are both waiting, child." |
 | Dad's ketchup | #4 ("He KNEW.") | The keeper, once Titus is home: "I won't even ask about the ketchup. I've grown as a person." |
@@ -1662,7 +1662,7 @@ facts note for the round (`facts.md`, kept with the round's working papers).
 | Pompey's stone theater on the plain, with a temple at the top of its seats | The Son, `rome.capitol.theater.look`; the Gaul, `rome.gaul.pompey` | **Checked.** P&A, "Theatrum Pompei" |
 | The island and its temple; the bridges | The Son, `rome.capitol.view.look` | **Checked.** Wikipedia, "Tiber Island"; P&A, "Pons Aemilius" (close to the Sublicius) |
 | The Janiculum, a hill across the river | The Son, `rome.capitol.janiculum.look` | **Checked (secondary).** Wikipedia, "Janiculum", read 13 October. Its pines are the picture's |
-| The Senate meets today in Pompey's hall | The boy, the Gaul and Walnut, `rome.gaul.opt.pompey`, `rome.urchin.tip.gaul` | **Checked.** The row above. "Pompey's hall. Of course. Even Rome cannot meet in a hole." is the Gaul's own reasoning (the sources give no reason: Probable as his) |
+| The Senate meets today in Pompey's hall | The boy, the Gaul and Walnut, `rome.gaul.opt.pompey`, `rome.urchin.tip.gaul` | **Checked.** The row above. "Pompey's hall. Of course it is. Even the Senate of Rome cannot meet in a hole." is the Gaul's own reasoning (the sources give no reason: Probable as his) |
 | The dictator has made Gauls senators, and the city sings of Gauls who put off their trousers for the broad stripe | The Gaul, `rome.gaul.who.1`, `.song.2`; the senator, `rome.senator.wrong.6` | **Checked.** Suetonius, *Julius* 76.3, 80.2. The verses are never quoted |
 | A notice was put up that nobody is to show a new senator the way to the House | The Gaul, `rome.gaul.who.3` | **Checked.** Suetonius, *Julius* 80.2 (Rolfe: a placard) |
 | Nine hundred senators | The Gaul, `rome.gaul.caesar.1` | **Checked.** Dio 43.47.3 (Cary) |
@@ -1715,7 +1715,7 @@ Since round thirteen: the Gaul is a Viking; the sacred geese are attack chickens
 of prayer is a church; the basilica of Paullus is a mall; the barge is a table that floats;
 the altar on the Capitol is a barbecue the size of a minivan; the case on the doorpost is a
 doorbell that does not ring; the old man's mantle is a blanket with strings. Nobody of the
-time agrees: "I do not know that word. I am a Gaul."; "The sacred geese of Juno, child. They saved this city once."; "A house of prayer."; "It's a barge."; "Not a blanket, child. The Law says to wear them, to remember."
+time agrees: "I do not know that word. I am a Gaul."; "These are the sacred geese of Juno, child. They saved this city once, long ago."; "A house of prayer."; "It's a barge."; "It is not a blanket, child. The Law tells us to wear them, so that we remember."
 
 **What nobody says.** Nobody on screen knows what will happen to Caesar today, and the
 game neither shows it nor says it. The soothsayer does not know why the day is bad. The

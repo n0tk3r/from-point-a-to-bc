@@ -18,8 +18,20 @@
 // After that the path is the way in and out of the storehouse; in the morning (#27) nobody goes out (Jinsuke keeps the
 // door), and the path is seen only as the storehouse looks out at it (edo-hills.js toPath: the constable's climb).
 //
-// Every place is PAINT-20C's own measurement of the finished picture (art/scenes/edo-cedars/layout.json and its ready.md);
-// where a place was set by eye the comment says so.
+// PAINT-23 (round twenty-three: tools/paint/DEPTH.md, RECOMPOSE, and the act's watercolour): the picture is painted again
+// from a new place, and every number below is measured again from it. We stand at the foot of the path under a great cedar
+// (the front plane: its trunk up the left edge, a bough across the top right corner) and look UP the hill: the steps come in
+// at the bottom left and climb in a curve to the storehouse standing higher up on the right, three-quarters on and seen from
+// below (the door in its left wall, up two steps; the high window in its right wall, the wall Mom stands beside to lift her;
+// the dark under its raised floor along both walls, and the line of lamplight in it); the kiln up to the left of the yard,
+// the cut bank with the pipe at the right behind the storehouse's far end, the stone figure right of the lower steps; a cedar
+// either side that people walk behind (cedar-l on the way to the kiln, cedar-r on the way to the pipe). The ground people
+// walk on is one plane that climbs away from us: `horizon` (340) is that plane's own vanishing line and `full` (600) its
+// full-size row, so the engine's sizes are true on it (edo_cedars_kit.py HillCam; eye level is lower, at row 464). Ids, names,
+// logic, lines and puzzles are as they were.
+//
+// Every place is the painter's own measurement of the finished picture (art/scenes/edo-cedars/layout.json: tools/paint/
+// edo_cedars_layout.py writes it and prints these numbers); where a place was set by eye the comment says so.
 //
 // Try it: index.html?scene=edo-cedars&lead=mom&flags=edo.arrived,edo.when,edo.clothes,edo.dressed,edo.fed,edo.west,edo.sailed,edo.boated   (SCENES-21B: and edo.boated)
 // (dressed by script: the hills always have the travel clothes on, LEG_START.hills in edo-common.js)
@@ -29,13 +41,18 @@ import { THREE, who, each, sunUp, raining, hats, TALK, keepBelow, passing, MATES
 
 const art = "art/scenes/edo-cedars/";
 
-// ---------- the path (layout.json: horizon 250, full 600; the ground climbs, so people halve in size from the foot to the door) ----------
-const WALK = [[301, 600], [322, 560], [345, 520], [361, 488], [372, 462], [334, 452], [326, 438], [420, 436], [500, 434], [556, 430], [606, 436],
-  [640, 448], [640, 462], [604, 470], [560, 466], [520, 462], [496, 458], [499, 462], [502, 488], [502, 520], [501, 560], [501, 600]];
-const BLOCKED = [[[270, 520], [302, 520], [302, 530], [270, 530]], [[558, 410], [684, 410], [684, 426], [558, 426]], [[246, 436], [318, 432], [318, 452], [246, 454]]];
-const M = { enter: [400, 580], figure: [340, 540], pipe: [612, 452], door: [404, 444], window: [536, 444], isukeFrom: [340, 596] };
-const LIFT = [514, 447];               // Mom, a step to the left of the window's place, to lift her daughter up to it (set by eye)
-const SILL = [524, 372];               // the window's sill: where Little Sister goes up to, and through (the window's rect [512, 340, 22, 28])
+// ---------- the path (layout.json: horizon 340, full 600; a grown-up is 153 px at the foot of the steps, 98 at the door, 90 at the pipe) ----------
+const WALK = [[128, 600], [150, 584], [178, 568], [216, 553], [258, 541], [300, 533], [340, 525], [364, 514], [372, 505], [344, 503], [276, 503],
+  [270, 488], [322, 486], [378, 482], [396, 484], [420, 490], [447, 499], [478, 511], [505, 519], [526, 510], [566, 501], [604, 494], [638, 488],
+  [670, 483], [708, 478], [772, 485], [778, 494], [730, 500], [700, 508], [660, 512], [610, 520], [556, 532], [500, 540], [460, 542], [430, 543],
+  [392, 553], [366, 562], [344, 572], [338, 584], [340, 600]];
+const BLOCKED = [[[481, 496], [441, 484], [414, 490], [450, 500]]];      // (the flat stone before the door)
+const M = { enter: [258, 589], figure: [334, 575], pipe: [742, 486], door: [412, 499], window: [626, 495], isukeFrom: [232, 598] };
+const LIFT = [580, 502];               // Mom, a step to the left of the window's place, beside its wall, to lift her daughter up to it
+const SILL = [578, 397];               // the window's sill: where Little Sister goes up to, and through (the window's rect [565, 366, 27, 39])
+/** The storehouse's whole outline and the kiln's (the layout's house_outline, kiln_outline): the drifting mist passes behind them. */
+const HOUSE = [[389, 468], [505, 500], [690, 463], [686, 376], [738, 375], [737, 354], [571, 229], [501, 207], [340, 352], [340, 373], [389, 372]];
+const KILN = [[319, 466], [316, 440], [305, 423], [288, 412], [269, 408], [249, 412], [233, 423], [221, 440], [217, 466], [219, 472], [241, 475], [275, 475], [306, 472]];
 
 // ---------- what the path is doing now that is not saved (made again whenever the scene is built) ----------
 const here = { lit: false, dark: false, tries: 0 };
@@ -82,7 +99,7 @@ async function window(g) {
   lil.hold(true, "climb");
   const [x0, y0] = [lil.x, lil.y], s0 = lil.scale;
   await g.tween(800, (k) => lil.place(x0 + (SILL[0] - x0) * k, y0 + (SILL[1] - y0) * k - 10 * Math.sin(Math.PI * k), s0));
-  lil.base = 446;                                                              // (in front of the wall she climbs: she is at the sill)
+  lil.base = 501;                                                              // (in front of the wall she climbs: she is at the sill)
   await g.say("edo.cedars.window.in.1");
   await g.tween(350, (k) => lil.fade(1 - k));
   lil.hold(false);
@@ -98,12 +115,12 @@ export default {
   name: "The cedar path",
   // (no `music`: the era's own track, `edo`, as ENGINE-20 has it; the room underground has `edo-hidden`)
 
-  horizon: 250, full: 600,
+  horizon: 340, full: 600,
   walk: { area: WALK },
   blocked: BLOCKED,
   spawn: { default: M.enter, ...M },
   // up the path from the river: the other two a step either side of whoever leads; out of the storehouse's door: beside it
-  arrive: { enter: [[452, 586], [352, 588]], door: [[372, 448], [446, 452]] },
+  arrive: { enter: [[318, 586], [200, 592]], door: [[382, 512], [454, 513]] },
   facing: "N",
   party: () => THREE,
   exits: ["edo-storehouse"],
@@ -114,26 +131,30 @@ export default {
   planes: [
     { id: "light-on", src: art + "light-on.png", plane: "back", when: lightBelow },
     { id: "window-lit", src: art + "window-lit.png", plane: "back", when: windowLit },
-    { id: "cedar-l", src: art + "cedar-l.png", base: [[80, 574], [182, 516]] },
-    { id: "cedar-r", src: art + "cedar-r.png", base: [[670, 518], [770, 572]] },
+    { id: "cedar-l", src: art + "cedar-l.png", base: [[299, 515], [363, 515]] },
+    { id: "cedar-r", src: art + "cedar-r.png", base: [[640, 543], [720, 543]] },
     { id: "front", src: art + "front.png", plane: "front" },
   ],
-  // PAINT-20C's moving things (layout.json fx), in ENGINE-20's kinds. The rain's slant: the layout gives "-8" and, in the
-  // same breath, "from upper left; the lines lean right as they fall; the wind from the left": the lines are drawn so
-  // (the kind's slant +8: down and a little to the right). Its density, 0.0011 a square pixel, is about 530 drops at
-  // once: 480 here. Its splashes on the treads (the painter's `splash: steps`): five lines across the steps.
+  // The painter's moving things (layout.json fx), in ENGINE-20's kinds. The rain's slant +8: down and a little to the right,
+  // the wind from the left. 480 drops at once. It is not drawn where the thatch shelters the two walls and the dry ground
+  // under it (`behind`: from the thatch's lower edge down to the drip line, each wall), and it splashes along six treads.
+  // The three drips fall from the thatch's lower edge to the pebbles of the drip line. The mists pass behind the storehouse
+  // (and the kiln): their `behind`.
   fx: [
     { id: "rain", type: "rain", when: raining, plane: "front", area: [[0, 0], [800, 0], [800, 600], [0, 600]], slant: 8, count: 480, length: [10, 22], speed: 520,
-      color: "#dfe6ec", opacity: 0.42, behind: [[[302, 309], [568, 283.64], [568, 410], [302, 440]], [[242, 370], [318, 346], [318, 450], [242, 454]]],
-      floor: [[[300, 592], [508, 592]], [[318, 562], [508, 562]], [[336, 532], [510, 532]], [[350, 502], [509, 502]], [[362, 474], [505, 474]]], splash: 2, sound: "rain", level: 0.5 },
-    { id: "drip-1", type: "stream", when: raining, path: [[306, 327], [306, 434]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 436 },
-    { id: "drip-2", type: "stream", when: raining, path: [[438, 325], [438, 435]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 436 },
-    { id: "drip-3", type: "stream", when: raining, path: [[560, 301.64], [560, 405]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 406 },
-    { id: "puddle-1", type: "ripples", when: raining, at: [392, 585], radius: [1, 14], flat: 0.3, every: [0.4, 1.4], rings: 1, speed: 16, color: "#c8d4dc", opacity: 0.5, clip: [[372, 585], [412, 585], [412, 591], [372, 591]] },
-    { id: "puddle-2", type: "ripples", when: raining, at: [440, 540], radius: [1, 10], flat: 0.3, every: [0.4, 1.4], rings: 1, speed: 14, color: "#c8d4dc", opacity: 0.5, clip: [[425, 540], [455, 540], [455, 545], [425, 545]] },
-    { id: "puddle-3", type: "ripples", when: raining, at: [418, 506], radius: [1, 8], flat: 0.3, every: [0.5, 1.6], rings: 1, speed: 12, color: "#c8d4dc", opacity: 0.45, clip: [[407, 506], [429, 506], [429, 510], [407, 510]] },
-    { id: "mist-l", type: "smoke", at: [120, 400], height: 60, width: [120, 220], lean: [160, -20], rise: 2, rate: 0.5, gust: 0.2, color: "#c3cbd3", opacity: 0.14, plane: "back" },
-    { id: "mist-r", type: "smoke", at: [700, 390], height: 60, width: [120, 220], lean: [-150, -24], rise: 2, rate: 0.5, gust: 0.2, color: "#c3cbd3", opacity: 0.14, plane: "back" },
+      color: "#dfe6ec", opacity: 0.42, behind: [[[502.7, 338.4], [737.9, 375], [741.9, 464.1], [505.2, 517.1]], [[340.1, 373.4], [502.7, 338.4], [505.2, 517.1], [339.4, 466.3]]],
+      floor: [[[121, 596], [347, 593]], [[150, 572], [342, 573]], [[182, 555], [353, 559]], [[231, 540], [393, 547]], [[283, 528], [446, 533]], [[355, 517], [476, 521]]],
+      splash: 2, sound: "rain", level: 0.5 },
+    { id: "drip-1", type: "stream", when: raining, path: [[387.8, 363.1], [387.6, 481.1]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 482 },
+    { id: "drip-2", type: "stream", when: raining, path: [[563.3, 347.8], [566.7, 503.3]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 504 },
+    { id: "drip-3", type: "stream", when: raining, path: [[652.1, 361.6], [656.2, 483.3]], width: 1, color: "#cfd8e0", light: "#eef2f4", opacity: 0.5, speed: 90, splash: 2, base: 484 },
+    { id: "puddle-1", type: "ripples", when: raining, at: [267, 592], radius: [1, 44], flat: 0.18, every: [0.4, 1.4], rings: 1, speed: 16, color: "#c8d4dc", opacity: 0.5, clip: [[212, 587], [322, 587], [322, 597], [212, 597]] },
+    { id: "puddle-2", type: "ripples", when: raining, at: [264, 557], radius: [1, 30], flat: 0.18, every: [0.4, 1.4], rings: 1, speed: 14, color: "#c8d4dc", opacity: 0.5, clip: [[226, 554], [302, 554], [302, 559], [226, 559]] },
+    { id: "puddle-3", type: "ripples", when: raining, at: [372, 546], radius: [1, 26], flat: 0.18, every: [0.5, 1.6], rings: 1, speed: 12, color: "#c8d4dc", opacity: 0.45, clip: [[340, 544], [404, 544], [404, 548], [340, 548]] },
+    { id: "mist-l", type: "smoke", at: [150, 432], height: 64, width: [120, 230], lean: [170, -22], rise: 2, rate: 0.5, gust: 0.2, color: "#c3cbd3", opacity: 0.14, plane: "back",
+      behind: [HOUSE, KILN] },
+    { id: "mist-r", type: "smoke", at: [770, 398], height: 60, width: [110, 210], lean: [-150, -26], rise: 2, rate: 0.5, gust: 0.2, color: "#c3cbd3", opacity: 0.14, plane: "back",
+      behind: [HOUSE] },
   ],
 
   // (The constable on his way up, in the morning, is never a person of this scene: nobody is out on the path then, since
@@ -143,28 +164,31 @@ export default {
   // Back to front: a later area lies over an earlier one (the other two first: edo-hills.js MATES).
   hotspots: [
     ...MATES,
-    { id: "cedars", name: "cedars", poly: [[0, 0], [800, 0], [800, 300], [560, 330], [540, 420], [300, 420], [290, 330], [0, 300]], walkTo: [404, 520], face: "N",
+    // (the storehouse's own areas lie between the two cedars that stand before it: a click on either trunk is a click on the
+    // cedars, whose outline runs down both trunks and along the roof)
+    { id: "cedars", name: "cedars", poly: [[0, 0], [800, 0], [800, 362], [699, 398], [699, 470], [650, 471], [650, 289], [571, 229], [501, 207], [351, 342], [351, 470], [110, 470],
+      [100, 600], [0, 600]], walkTo: [300, 548], face: "N",
       look: each("edo.cedars.cedars"), use: each("edo.cedars.cedars.use") },
-    { id: "mist", name: "mist", poly: [[0, 280], [280, 300], [300, 372], [0, 400]], walkTo: [380, 500], face: "W", look: each("edo.cedars.mist"), use: each("edo.cedars.mist.use") },
-    { id: "rain", name: "rain", poly: [[0, 0], [800, 0], [800, 240], [0, 240]], walkTo: [404, 540], face: "N", look: each("edo.cedars.rain"), use: each("edo.cedars.rain.use") },
+    { id: "mist", name: "mist", poly: [[98, 250], [316, 250], [316, 400], [200, 440], [98, 440]], walkTo: [296, 550], face: "NW", look: each("edo.cedars.mist"), use: each("edo.cedars.mist.use") },
+    { id: "rain", name: "rain", poly: [[0, 0], [800, 0], [800, 150], [0, 150]], walkTo: [304, 546], face: "N", look: each("edo.cedars.rain"), use: each("edo.cedars.rain.use") },
     // (the stone steps are the path the family walks on: only the bottom treads are the thing to click, so that a click
     // anywhere else on them walks there)
-    { id: "steps", name: "stone steps", poly: [[294, 586], [510, 586], [511, 600], [290, 600]], walkTo: [410, 560], face: "N",
+    { id: "steps", name: "stone steps", poly: [[115, 600], [353, 600], [348, 588], [143, 586]], walkTo: [262, 574], face: "N",
       look: each("edo.cedars.steps"), use: each("edo.cedars.steps.use") },
-    { id: "storehouse", name: "storehouse", poly: [[304, 438], [304, 313], [354, 249], [502, 229.18], [566, 287.64], [554, 408], [486, 432]], walkTo: [430, 448], face: "N",
+    { id: "storehouse", name: "storehouse", poly: [[389, 468], [505, 500], [650, 471], [650, 289], [571, 229], [501, 207], [351, 342], [351, 373], [389, 372]], walkTo: [470, 521], face: "N",
       look: each("edo.cedars.storehouse"), use: each("edo.cedars.storehouse.use") },
-    { id: "eaves", name: "eaves", poly: [[304, 327], [566, 301.64], [566, 285.64], [304, 311]], walkTo: [430, 448], face: "N", look: each("edo.cedars.eaves"), use: each("edo.cedars.eaves.use") },
-    { id: "light", name: "light under the floor", poly: [[318, 439], [486, 433], [486, 417], [318, 423]], walkTo: [404, 444], face: "N",
+    { id: "eaves", name: "eaves", poly: [[351, 371], [503, 338], [650, 361], [650, 337], [502, 308], [351, 349]], walkTo: [470, 521], face: "N", look: each("edo.cedars.eaves"), use: each("edo.cedars.eaves.use") },
+    { id: "light", name: "light under the floor", poly: [[389, 468], [505, 500], [650, 471], [650, 453], [504, 451], [389, 454]], walkTo: [470, 521], face: "N",
       look: each("edo.cedars.light"), use: each("edo.cedars.light.use") },
-    { id: "door", name: "door", poly: [[384, 428], [428, 427], [428, 345], [384, 346]], walkTo: M.door, face: "N", when: (g) => !is(g, "edo.unbarred"),
+    { id: "door", name: "door", poly: [[450, 448], [481, 447], [480, 354], [449, 360]], walkTo: M.door, face: "NE", when: (g) => !is(g, "edo.unbarred"),
       look: each("edo.cedars.door"), use: door, verb: "Knock at" },
-    { id: "door-in", name: "storehouse door", poly: [[384, 428], [428, 427], [428, 345], [384, 346]], walkTo: M.door, face: "N", when: (g) => is(g, "edo.unbarred"),
+    { id: "door-in", name: "storehouse door", poly: [[450, 448], [481, 447], [480, 354], [449, 360]], walkTo: M.door, face: "NE", when: (g) => is(g, "edo.unbarred"),
       look: each("edo.cedars.door.open"), use: door, verb: "Go in by" },
-    { id: "window", name: "high window", rect: [512, 340, 22, 28], walkTo: M.window, face: "N", look: each("edo.cedars.window"), use: window },
-    { id: "kiln", name: "charcoal kiln", poly: [[556, 424], [656, 424], [654, 402], [616, 382], [596, 382], [558, 402]], walkTo: [566, 452], face: "E",
-      look: each("edo.cedars.kiln"), use: each("edo.cedars.kiln.use") },
-    { id: "figure", name: "stone figure", rect: [272, 482, 28, 48], walkTo: M.figure, face: "W", look: each("edo.cedars.figure"), use: each("edo.cedars.figure.use") },
-    { id: "pipe", name: "bamboo pipe", rect: [636, 354, 34, 24], walkTo: M.pipe, face: "N", look: each("edo.cedars.pipe"), use: pipe, verb: "Listen at" },
+    { id: "window", name: "high window", rect: [565, 366, 27, 39], walkTo: M.window, face: "NW", look: each("edo.cedars.window"), use: window },
+    { id: "kiln", name: "charcoal kiln", poly: [[313, 436], [305, 423], [288, 412], [269, 408], [249, 412], [233, 423], [221, 440], [217, 466], [219, 472], [241, 475], [275, 475], [306, 472], [313, 469]],
+      walkTo: [292, 494], face: "NW", look: each("edo.cedars.kiln"), use: each("edo.cedars.kiln.use") },
+    { id: "figure", name: "stone figure", rect: [398, 510, 24, 65], walkTo: M.figure, face: "E", look: each("edo.cedars.figure"), use: each("edo.cedars.figure.use") },
+    { id: "pipe", name: "bamboo pipe", rect: [716, 398, 51, 21], walkTo: M.pipe, face: "N", look: each("edo.cedars.pipe"), use: pipe, verb: "Listen at" },
   ],
 
   setup(g) {

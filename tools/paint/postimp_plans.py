@@ -34,7 +34,7 @@ PLANS = {
     },
     "egypt-crash": {
         "folder": "egypt1",                                         # (the painter's working name for it, in out/)
-        "planes": ["palm-3", "palm-2", "palm-1", "donkey", "wagon", "mirror", "front"],
+        "planes": ["palm-3", "palm-2", "palm-1", "donkey", "wagon", "mirror", "front", "near", "near-fronds"],     # (round twenty-three: the near plane is three files: the papyrus, the near palm's trunk with the lip of the bank, its fronds)
         "alt": {"suitcase-open": [], "trunk-open": [], "cooler-open": []},
         "states": {"trunk-open": ["trunk-open-1", "trunk-open-2"]},   # the trunk without the flashlight, then without the shade too
         "union": {"palms": ["palm-3", "palm-2", "palm-1"]},
@@ -85,7 +85,8 @@ PLANS = {
     # can stir (a sway), the hoarding is two (cut at its gateway, each with its own base), and the crane's great wheel
     # turns in painted frames
     "rome-forum": {
-        "planes": ["statue-3", "statue-2", "statue-1", "castor", "puteal", "table", "awning", "hoarding", "hoarding-near", "basin", "front-base"],
+        "planes": ["statue-3", "statue-2", "statue-1", "castor", "puteal", "table", "awning", "hoarding", "hoarding-near", "basin", "front-base",
+                   "near"],                                          # DEPTH-23: the front plane (the landing, the column, the laurel), last
         "alt": {},
         "union": {},
         "frames": ["crane-*"],
@@ -229,14 +230,16 @@ PLANS = {
     # Kihei's noren in the open front (it sways), the big boat on its props, the hen yard's fence, the front plane. No
     # other states. The hens are frames (edo_village_hens.py).
     "edo-village": {
-        "planes": ["ship", "racks", "tender", "board", "noren", "boat", "fence", "front"],
+        "planes": ["ship", "racks", "tender", "board", "noren", "boat", "fence", "front", "near"],      # (near: PAINT-23A, the near plane, round twenty-three)
         "alt": {},
         "union": {},
         "frames": ["hen-*"],
     },
-    # PAINT-20C: the cedar path in rain (edo_cedars.py). With nobody on stage: the two near cedars on each side of the
-    # path's foot (each with a slanted base), the two nearest trunks at the picture's edges (the front plane). The line
-    # of lamplight under the storehouse's floor lies over the backdrop while the lamp below is lit.
+    # PAINT-20C: the cedar path in rain (edo_cedars.py). PAINT-23 (round twenty-three: painted again from a new place, the
+    # same files): with nobody on stage, the cedar on the way to the kiln and the one on the way to the pipe (people walk
+    # behind each: a base line across its foot), then the front plane (the great cedar up the left edge with its roots
+    # and ferns, a bough across the top right corner, ferns in the bottom right corner). The lamp under the storehouse's
+    # floor (its line of light and what that lights, between the posts) lies over the backdrop while the lamp below is lit.
     "edo-cedars": {
         "planes": ["cedar-l", "cedar-r", "front"],
         "alt": {"light-on": [], "window-lit": []},                  # (window-lit: the high window lit from inside, while the lantern is)

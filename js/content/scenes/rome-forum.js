@@ -327,6 +327,7 @@ export default {
     [[108, 500], [148, 500], [156, 492], [118, 492]],
     [[154, 471], [193, 471], [200, 464], [162, 464]],
     [[236, 471], [255, 471], [258, 466], [238, 466]],
+    [[738, 597], [798, 597], [772, 446], [738, 430]],             // PAINT-23: the ground behind the porch's near column (the front plane): nobody walks out of sight there
   ],
   spawn: {
     default: [420, 470],
@@ -363,6 +364,10 @@ export default {
     { id: "hoarding-near", src: art + "hoarding-near.png", base: [[654.7, 386.7], [850.4, 465.1]] },
     { id: "basin", src: art + "basin.png", base: 507.5, solid: [[-175, 507], [112, 507], [142, 479], [-116, 479]] },
     { id: "front-base", src: art + "front-base.png", base: 511.8, solid: [[737, 512], [862, 512], [812, 482], [700, 482]] },   // the empty statue base at the front right: people pass behind it
+    // DEPTH-23 (round twenty-three, tools/paint/DEPTH.md): the front plane, always in front of everybody. The stone landing
+    // we look from, across the bottom; the end column of its porch, up the right edge; the laurel boughs by the door, in
+    // the two top corners (rome_forum_near.py). Nothing in it is clicked, and nothing clicked or stood on is behind it.
+    { id: "near", src: art + "near.png", plane: "front" },
   ],
 
   // THINGS THAT MOVE BY NATURE (layout.json `fx`, as the painter marks them). Nothing that moves is painted.

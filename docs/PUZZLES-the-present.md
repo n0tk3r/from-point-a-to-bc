@@ -276,7 +276,7 @@ directions. Just ONE time. Amen." Big Sister remembers that Dad's phone still re
 to the family computer, "the mainframe", which is upstairs in his study, and that the
 internet has been down since Dad "improved" the wiring. Mom says where the router
 lives (the closet under the stairs, next to the vacuum cleaner), and turns stage
-manager: "Places, girls. We'll find out where that phone was last seen."
+manager: "Places, girls. That phone was last seen somewhere, and we're going to find out where."
 *Plants:* "Daddy's EARLY" (pays off in "Some when", in the middle of Act Four). That Dad never asks for
 directions (#7; and Little Sister has now prayed that he will). The study, the computer
 and the router (#1 to #7). "Places, girls."
@@ -360,7 +360,7 @@ Setup:        The closet under the stairs is too dark to find a plug in (#5), an
               where nobody but she may go: "NO BIG SISTERS" is her sign, and her rule.
 Wrong tries:  Mom or Big Sister at the fort, or at the flashlight -> "Nobody goes into a lady's fort uninvited. I taught her that myself." / "I respect a posted boundary. Also, I would not fit."
               A dead flashlight at the closet -> "A dead flashlight is just a pink stick. It needs batteries."
-              Big Sister at her sound machine, before there is a dead flashlight in the house -> "It stays on. Tonight it is the only one of us that is calm."
+              Big Sister at her sound machine, before there is a dead flashlight in the house -> "It stays on. Tonight it is the only one of us that is calm, and nobody has yet given me a reason to stop it."
               Mom at the sound machine     -> "They're not mine to take, darling. Your sister has to give them."
               Little Sister at the sound machine -> "The batteries are in there. I can't touch it. So YOU have to."
 Solution:     Little Sister fetches her flashlight from the fort. "Click. ...Click?"
@@ -391,9 +391,9 @@ Setup:        Dad "improved" the wiring this morning, and the internet has been 
 Wrong tries:  Mom at the closet           -> "A lady does not squeeze into closets, darling. A lady has
                                              a seven-year-old."
               Big Sister at the closet    -> "I refuse. There are spiders in there, and I am thirteen. Both are final."
-              Little Sister, with no light -> "I FIT!" She goes in. "It's so dark. I can't find the plug. I found the vacuum. With my NOSE." She comes out: "I need my pink flashlight, from my fort. I know the way!" She will not go in again
+              Little Sister, with no light -> "I FIT!" She goes in. "It's so dark. I can't find the plug. I found the vacuum. With my NOSE." She comes out: "I need my pink flashlight. It's in my fort, and I know the way there. It's MY fort." She will not go in again
                                              without it: "I'm not scared. I'm BRAVE-scared. Brave-scared people bring a flashlight."
-              Little Sister, when one of the others is holding it -> "My flashlight, please. I'm the closet person."
+              Little Sister, when one of the others is holding it -> "My flashlight, please. I'm the closet person. It's my whole job."
               The computer upstairs, before this is done -> "No internet."
 Solution:     With her flashlight working (#4), Little Sister goes into the closet. "Hi, vacuum. Hi, spiders. There's a plug that isn't plugged into ANYTHING." Mom
               talks her through the socket. The little light goes from red to green.
@@ -448,9 +448,9 @@ Setup:        Dad will not replace his answering machine. Its little red light i
 Wrong tries:  Little Sister at the machine -> "I'm not allowed to fix it again. Mommy said. With her
                                               whole-name voice."
               Big Sister at the machine    -> "A pencil in the hub winds a cassette. Mine are too slim. Dad's is not." And with the
-                                              pencil in her hand: "That tape is his voice. Mom should do this."
-              Mom, with no pencil          -> "I'll need a pencil to wind it in. An ordinary wooden one."
-                                              "The only pencil anyone can ever find is on his crossword."
+                                              pencil in her hand: "That tape has his voice on it. Mom should be the one to do this."
+              Mom, with no pencil          -> "I'll need a pencil to wind it back in. An ordinary wooden one, with some heft to it."
+                                              "The only pencil anybody in this house can ever find is the one on his crossword."
               Big Sister's own pencils (her desk, in the Retreat) -> the slim kind. Not for this.
 Solution:     Fetch Dad's pencil from his crossword, on the arm of his chair in the living room (any of
               them can take it), get it to Mom, and have Mom use the machine. "I taped whole musicals off the radio on these. Pencil in the hub, gently."
@@ -471,7 +471,7 @@ Plants/pays:  This is the moment the player saw in the opening of the game. Act 
               "The road sign changed its mind."
 Notes:        Little Sister: "Changed its WHAT? Daddy? Changed its what?" Big Sister does the
               arithmetic: with the dot already found, "5:41 on the tape. 5:47 on the map. Whatever happened took six minutes."; without it, she writes down the minute. Mom:
-              "I do not need to hear it twice. He sounded happy." Nobody plays it a second time.
+              "No need to play it twice. He sounded happy, and terribly pleased with his shortcut. Let's hold on to that." Nobody plays it a second time.
 ```
 
 ```
@@ -486,8 +486,8 @@ Wrong tries:  Big Sister reads the label  -> "'The year We the People got it in 
               Mom: "Seventeen seventy-six." -> "No. 1776 is the Declaration, the Fourth of July. 'We
                                                the People' came later."
               Mom: "Seventeen eighty-nine." -> "No. 1789 is the new government, and General Washington's oath. Too late."
-              Mom: "Let me think about it." -> she leaves the dial alone.
-              The study key on the vault  -> "A dial, not a keyhole. Your father does like a dial."
+              Mom: "Let me think about that a moment longer." -> she leaves the dial alone.
+              The study key on the vault  -> "No keyhole, only a dial. Your father does like a dial. It lets him be mysterious on a budget."
 Solution:     Mom: "Seventeen eighty-seven." "1787. Signed in Philadelphia in September. He does listen. Just not at the time." Inside: her spare car key, two ketchup packets,
               and a card: "KNEW YOU'D KNOW. - THE MANAGEMENT."
 Gives:        The spare car key (`home.hasCarKey`).
@@ -513,7 +513,7 @@ Wrong tries:  The door, with no dot on the map: Mom -> "Not until we know where 
               machine. I want it first."
               The door, with both and no key: Big Sister -> "Destination: yes. Message: yes. Car key:
               no. Two of three does not start a car."
-Solution:     Open the door. Mom: "One moment. Nobody in this family leaves without the psalm." Big Sister: "Psalm 121, verse 8. She always does this part." Little Sister, by heart: "The LORD shall
+Solution:     Open the door. Mom: "One moment, girls. Nobody in this family leaves the house without the psalm." Big Sister: "Psalm 121, verse 8. She always does this part." Little Sister, by heart: "The LORD shall
               preserve thy going out and thy coming in from this time forth, and even for evermore."
               Mom: "Amen. Going out, and coming in. All five of us." Then, as before: "Coats, girls.
               We are going to Nevada." "We are going to be perfectly polite, and completely impossible
@@ -550,7 +550,7 @@ for every one of these, and they have things to say to each other in every room.
   about the rug. The darts lie on the runner for the rest of the act (Mom leaves them
   where they fell, for him to count). The door stays shut all act. It is still the one
   place the act is allowed to be sad.
-- **The railing**: the living room, seen from above. "From up here it's a lit set. Two of the cast are late."
+- **The railing**: the living room, seen from above. "From up here it looks like a lit set, waiting. Two of the cast are late for their entrance."
 - **The family Bible**, at the head of the table by Dad's plate, open where he left it
   this morning at the psalm for a journey. Mom has verse 2 of Psalm 121, Big Sister
   verse 1, and Little Sister knows Psalm 23:1 by heart, and adds what she wants: "...I
@@ -559,7 +559,7 @@ for every one of these, and they have things to say to each other in every room.
 - **Mom's bookcase**: the Adams letters, General Washington, Dr. Franklin, a great many
   plays, and the hymnal. Abigail Adams's "Remember the Ladies".
 - **Little Sister's room**, which is all chickens. The flock ("Admiral Doodle on top. Corporal Speckle. Private Peep. I know them all."); the chart, MY CHICKENS, twelve of them, the General with a star
-  ("You go up a rank every time you go in the wash."); the tea party; the hen house that
+  ("You go up a rank every time you go through the wash. That's the rule. The washing machine knows."); the tea party; the hen house that
   was a dollhouse ("Everybody in my hen house is home. I checked. Twice."); the pillow
   with one place kept on it, RESERVED, for General Feathers, who is on the trip in
   Daddy's suitcase ("I'm not worried about the General. Daddy's the one who needs supervising."). It is where **"Chickens KNOW."** is first said, of
@@ -568,7 +568,7 @@ for every one of these, and they have things to say to each other in every room.
   chickens under her wings'..." "Tonight I know just how the hen feels." (Matthew 23:37:
   since round seventeen she says the words and not the reference.)
 - **The Retreat.** Little Sister takes her boots off with great ceremony and whispers
-  at full volume ("THIS IS MY WHISPER."). Mom: "Darling, it is a set. It is a very good set." She can name the key the music
+  at full volume ("THIS IS MY WHISPER."). Mom: "Darling, it's a set. It's a very good set. Let's all try to deserve it." She can name the key the music
   is in (D major). The rules, close up: THE RETREAT. 1. SHOES OFF. 2. VOICES DOWN. 3. NO
   CHICKENS; and under the third, in crayon, AN APPEAL HAS BEEN LODGED. ("Three rules,
   and the third under appeal. You've founded a republic.") The room is perfectly calm and Big Sister
@@ -2251,10 +2251,10 @@ The five things from the house that are not used up (the key, the flashlight, th
 | Sectors 44 and 1921 | #8 | Act Five #15: the office's own map has them, and a third, under Jed's thumb. Not yet: who numbered them, and how many more there are. |
 | A hum where there is nothing to hum | #9, before the coin goes up | #9. It is the door, shut. |
 | A door the size of a coin, with a morning in it | "Some when" | The letterbox: the Son is on the other side of it. #12: more light, a bigger door (nobody told them). #13: they walk through it. |
-| Sausages | "Some when": the second thing Little Sister notices (the first is chickens) | The letterbox, if the player has him tell it: "Sausages, bread, smoke, and one thing I'm choosing not to know." Her brother found Rome's snack bar the same way: "Step one's past that bush. My nose is never wrong." |
+| Sausages | "Some when": the second thing Little Sister notices (the first is chickens) | The letterbox, if the player has him tell it: "Sausages, bread, smoke, and one thing I'm choosing not to know." Her brother found Rome's snack bar the same way: "Step one is past that bush. Something over there smells fried and amazing, and my nose is never wrong." |
 | "Father, You know where they are tonight, and I do not. Keep them." "And bring us to them." | Act Three, the opening prayer | Act Four #9, before the coin goes up: "Father, You know what comes next. Keep us, and keep them. In Jesus' name." |
 | Little Sister's postscript to a prayer | Act Three: "And please make Daddy ask for directions. Just ONE time. Amen." | Act Four #9: "And tell Daddy we're COMING, so he doesn't have to be brave by himself. Amen." Not yet answered, either of them. |
-| "Places, girls." | Act Three, the opening (and the title of Big Sister's next chapter) | Act Four #9: Mom says it, and the three take their marks at the glass; #13: "Places, girls. Hold hands. All the way through." |
+| "Places, girls." | Act Three, the opening (and the title of Big Sister's next chapter) | Act Four #9: Mom says it, and the three take their marks at the glass; #13: "Places, girls. Hold hands, and don't let go until we're all the way through." |
 | George Washington's 110 Rules of Civility | Act Three, a word on the landing | Act Four #7: Mom's second try at the man in gray. "I can neither confirm nor deny General Washington." |
 | "Is Daddy in trouble?" | Act Three, a word in the study | Act Four, a word with her mother: "Mommy, is Daddy STILL in trouble?" "A little, sweetheart. But only with me, and only once he's home." |
 | The tribute money, in a ten-year-old's own words | Rome, Act Two, at the fountain: "So Caesar gets his coin, and God gets what's God's. Me included." | Act Four #6: the same coin, and his mother has the verse (Matthew 22:21) |

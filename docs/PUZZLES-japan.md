@@ -128,7 +128,7 @@ place to go yet, and the voyage is a journey on it, not a way.
 | | What only she can do here | What she will not do |
 | --- | --- | --- |
 | **Mom** | Ask a grown-up the right question: O-Masa (#24). Hold a baby who has not slept in three days, and hum her to sleep (#22). Say thank you properly. | Lie. Not to the clerk, not to anybody: she says true things and leaves things out ("A small true piece is still true. A large false one isn't. Keep them small."). |
-| **Big Sister** | Read a year out of a red hood, a box of coins and a print (#21); know mackerel and Prussian blue; give the act its name ("It means 'thanks to you'. Or 'by your grace'."). | Read anything at all here ("I used to be able to read."): she reads people instead. Touch a god-shelf, or another person's money. |
+| **Big Sister** | Read a year out of a red hood, a box of coins and a print (#21); know mackerel and Prussian blue; give the act its name ("It means 'thanks to you'. Or, more beautifully, 'by your grace'."). | Read anything at all here ("I used to be able to read."): she reads people instead. Touch a god-shelf, or another person's money. |
 | **Little Sister** | Ask a nine-year-old what the board says, and learn "arigatō" from him; see the hens face west (#24); fit under the floor after a cat (#23); keep her yellow boots (#22). | Give up her boots, her egg or her three pennies (handed to her mother or sister, they come straight back: "It's warm. It's MINE to keep warm."). |
 
 **The clothes.** They arrive in their own clothes (the first villager to see them drops her basket). O-Tami's old travel
@@ -231,8 +231,8 @@ the boats the paint ripples into a door in time, tall and narrow as a doorway (E
 it one after another and walk to their places, and it closes behind them with a sound like a breath let go. They count
 off: "Places, girls." "Here." "HERE. ...Where's here?" Little Sister, first, looking at the mountain: "This isn't ROME."
 Big Sister: "That's Mount Fuji." "...Is he here?" Mom, after a moment: "No, sweetheart. Not here." She looks at the closed
-air where the door was: "Then we keep going. That's all we can do, and we can do that." A gull. A rooster somewhere up the
-beach. Little Sister: "A rooster. ...Okay. I can work with a rooster." The village woman with the basket on her back has
+air where the door was: "Then we keep going, girls. It's the one thing asked of us, and we're good at it." A gull. A rooster somewhere up the
+beach. Little Sister: "A rooster. ...All right. I can work with a rooster." The village woman with the basket on her back has
 seen them: her hands go to her face, the basket goes down on the sand (radishes, a cabbage) and she says, with great
 dignity, "...I'll come back for the basket," and goes up the street. Mom: "We've made an impression, girls. Let's make a
 better one." The act's card over the beach: "Act Six: By Your Grace", and nothing under it (when they are is #21: the era's
@@ -248,10 +248,10 @@ Setup:        Japan is plain. When is not: Big Sister cannot read a single chara
               morning of her life.
 Wrong tries:  The notice board                -> "I can't read it. I can't read ANY of it." Asked of Sankichi: "You're
                                                  staring at the board. Can you read?" "...I used to be able to read."
-              The tubs of fish                -> "Saba. That's mackerel. I know mackerel and wasabi, and that's ALL I know."
-              The god-shelf                   -> "That's a shelf for a god. I'm not going to touch it, and I'll tell you why."
-                                                 "Because it isn't mine, and because I can't read what it says."
-              Dad's pencil on the sticky note, -> "I'd write the year down if I had one. I have a pencil and a feeling."
+              The tubs of fish                -> "Saba. That is mackerel. Of my forty words of Japanese, it is the most useful."
+              The god-shelf                   -> "That is a shelf for a god. I am not going to touch it, and I will tell you why."
+                                                 "Because it is not mine, and because I cannot read what it says."
+              Dad's pencil on the sticky note, -> "I would write the year down if I had one. I have a pencil and a feeling."
               before the year
               Sankichi, asked the year        -> "The thirteenth year of Bunsei. Everybody knows that." "...I don't know what
                                                  that is. I'm writing it down anyway. Bunsei thirteen." (true, and no help,
@@ -267,9 +267,9 @@ Clues:        Any order, each Big Sister's fact, said as it comes in:
                          year. In that new blue." Big Sister: "New. He said new. That's Prussian blue. Their printers only just
                          got it." (`edo.clue.blue`; or Kihei asked about it in his talk: "A pedlar...")
 Solution:     The moment the third is in, Big Sister counts on her fingers and works it out aloud: "A metal tiger. They come
-              round every sixty years. The last one was 2010." "Take away sixty. And sixty. And sixty: 1830." "Edo coins: yes.
+              round every sixty years. The last one was 2010." "Subtract sixty. Then sixty. Then sixty again: 1830." "Edo coins: yes.
               The new blue: yes. 1830." Little Sister: "Is 1830 good?" "It's a year. A year is just a year until you know what
-              happens in it." Mom: "Then let's find out politely." The act's card again, with her line under it: "Spring,
+              happens in it." Mom: "Then let's find out, girls. Politely, and one question at a time." The act's card again, with her line under it: "Spring,
               1830. Bunsei thirteen. The year of the metal tiger."
 Gives:        `edo.when`. Dad's pencil on the sticky note now writes the sum down (whoever holds both, item on item:
               ENGINE's new `combine`, a scene's): Big Sister "2010, less sixty, less sixty, less sixty: 1830. On paper now.
@@ -286,51 +286,51 @@ Needs:        the arrival
 Setup:        Three women in strange clothes on a post-town street, the morning after strangers were seen on the beach at
               dawn. The notice board at the village entrance, and Sankichi beside it, who can read.
 Step 1:       The board. Little Sister asks Sankichi what it says, and he reads it, under its close-up (a board of dense
-              columns under a little roof): "That one's the oldest. Older than Grandfather. It says 'Ordinance' at the top."
-              "The Kirishitan sect is forbidden, like always. Tell on one and you get silver." "Five hundred pieces for a
+              columns under a little roof): "That one is the oldest. Older than Grandfather. It says 'Ordinance' at the top."
+              "The Kirishitan sect is forbidden, as always. Tell on one and you get silver." "Five hundred pieces for a
               padre. A hundred for anyone who prays to their god." "Teacher says nobody's seen a padre in nearly two hundred
-              years." "The silver's still up there, though." Mom: "Then we pray quietly here." Little Sister: "That's MEAN."
+              years." "The silver is still up there, though." Mom: "Then we pray quietly here." Little Sister: "That's MEAN."
               Mom: "It is." It is read once (`edo.boardRead`); asked again, "The others are about poison and horses. Horses
               cost more."
 Step 2:       The clerk's first pass: the first time they go into Kihei's shop, O-Tami has them in behind the noren: "In. In,
               in, in. Behind the curtain, all of you, and not a word." "Why are we--" "Because she asked, sweetheart.
               Nicely, and quickly." She stands in the opening and talks weather at Tokuzō, out in the street (he peers in
-              past her): "Clerk. Fine morning. The wind's gone round to the west." ... "Fish and wind. ...I'll write
+              past her): "Good morning, clerk. A fine one. The wind has gone round to the west." ... "Fish and wind. ...I'll write
               'nothing'. It's shorter." His back goes past the opening, and O-Tami turns round: the headman's paper,
               "strangers on the beach at dawn, in strange clothes"; "I don't know any strangers. I know three travellers who
-              need proper clothes." "And I have a baby who hasn't slept in three days. Three. Days." Mom: "Then one thing at
-              a time. Which first?" "...Ask me when I've slept." (`edo.clerkPassed`; Kihei, out front until then, comes in
+              need proper clothes." "And I have a baby who has not slept in three days. Three days, every hour." Mom: "Then one thing at
+              a time. Which first?" "...Ask me again when I have slept." (`edo.clerkPassed`; Kihei, out front until then, comes in
               after them to his board.)
 Step 3:       The baby, on O-Tami's back. Mom asks to try ("May I try with the baby? I've had three. One of them was
               worse."; or uses the baby: "May I? ...Thank you. Come here, little one."). O-Tami: "Take her. Take her with my
               blessing. Take her to Edo if she'll sleep there." "She won't take the hearth side, she won't take the street
               side, she won't--" Mom rocks her and hums (no words), and the baby is asleep in the middle of the sentence. The
-              cat, too. "...What did you DO." "I hummed in the right key. She's a quarter-tone flat herself. So's my husband."
-              "Don't stop humming. Don't ever leave. ...The chest. Come to the chest." Mom lays her in her basket on the mats.
+              cat, too. "...What did you DO." "I only found her key. She's a quarter-tone flat. So is my husband, bless him."
+              "Do not stop humming. Do not ever leave. ...The chest. Come to the chest." Mom lays her in her basket on the mats.
               (`edo.babySleeps`)
-Step 4:       The kimonos (the clothes asked for again: "She's asleep, and I'm a woman of my word. The chest. Quietly."):
+Step 4:       The kimonos (the clothes asked for again: "She is asleep, and I am a woman of my word. The chest. Quietly, now."):
               O-Tami fetches them from the chest, an armful, and hands each over as she names it: "My mother's. She wasn't
               your height. Nobody is. Arms up." (Mom in green) "Green. You've found me my own color in a drawer in another
               century." "Indigo for the reader. It was long on me." (Big Sister) "It ends at my knees." "Travellers hitch
               them up anyway. You're ahead of everybody." "Pink for the small one. And hats, all three. Heads down under
-              them." "Sandals. Fifteen mon a pair and good for a day or two of road. Yours, and yours." "What about ME?"
-              "Nothing small enough for you. ...Off with the yellow ones. We'll wrap your feet." "They're my BOOTS."
-              "...They are. Keep them. Nobody who sees them will believe them anyway." (Little Sister in pink, her boots on)
+              them." "Sandals. Fifteen mon a pair, good for a day or two of road. Yours, and yours." "What about ME?"
+              "Nothing small enough. ...Off with the yellow ones, then. We will wrap your feet." "They're my BOOTS."
+              "...So they are. Keep them. Nobody who sees them will believe their eyes anyway." (Little Sister in pink, her boots on)
               "Thank you. Properly, and not for the last time." "Three travellers. Go and be travellers at the clerk, before I
               change my mind." (`edo.clothes`; the hats down their backs indoors.)
 Step 5:       The clerk, dressed, on his rounds in the street. He peers (very close). Every answer the player can pick is
               true: "Good morning. Forgive me. ...Forgive me. Travellers?" "We are. We're going west." "West. Good. ...From
-              where, if I may?" Big Sister: "From the east." "The east. ...Yes. Most people are. I'll write 'the east'." Mom:
-              "..." "It's true, Mother. Every word of it." "You are very tall." "I am." "...So you are. Well. One can't write
+              where, if I may?" Big Sister: "From the east." "The east. ...Yes. Most people are. I will write 'the east'." Mom:
+              "..." "It is true, Mother. Every word of it." "You are very tall." "I am." "...So you are. Well. One can't write
               'tall'. There's no box for it." "'Travellers. Three. Going west.' Nothing seen. ...Good." He bows, and goes off
               home along the street, pleased. "'From the east.' Mother. That was true." "It was, darling. That's the only
               reason you got away with it." "He didn't look at my boots ONCE. He can't see his own feet."
 Wrong tries:  The clerk before the kimonos   -> O-Tami out of the shop, a hand on Mom's sleeve: "Not like that, dear. Not in
                                                 that." (`edo.tokuzo.notyet`, `.notyet.2`)
-              Little Sister at the clerk,    -> "The boy says everybody's looking at my BOOTS." "Then we'd better give them
+              Little Sister at the clerk,    -> "The boy says everybody's looking at my BOOTS. I think they're just jealous." "Then we'd better give them
               in her own clothes                something duller to look at, sweetheart. Inside."
-              The clothes before the baby    -> "Clothes need two hands. I have a baby in one and this shop in the other."
-                                                "Get her to sleep, and I'll dress the three of you like the lord's own daughters."
+              The clothes before the baby    -> "Dressing you takes two hands. I have a baby in one and this shop in the other."
+                                                "Get her to sleep, and I will dress you three like the lord's own daughters."
               The chest, opened              -> "I lifted the lid ONE inch. The baby lady looked at me. I put it down."
 Gives:        `edo.dressed`; the three in Edo clothes for the rest of the act.
 Notes:        The baby is on O-Tami's back until she sleeps (PEOPLE-20's `tami-baby`), then in her basket (SCENES-20A: two of
@@ -343,14 +343,14 @@ Needs:        the arrival
 Setup:        They have not eaten since Nevada, and Little Sister says so. They have no money: a car key, Dad's pencil, a
               sticky note, three American pennies with no holes in them, an egg. Kihei, the first time, says one word:
               "...Sit." (out in front of his shop in the morning, or at his board).
-Steps:        Mom asks the price of a fish ("For a fish. ...Sit." "We have no money that works here. I'd rather you knew."
+Steps:        Mom asks the price of a fish ("For a fish. ...Sit." "We have no money that's any good here. I'd rather you knew that now."
               "I know. Sit."); Big Sister asks for the record ("The record can sit too."); Little Sister is hungry ("Sit.");
               or Little Sister's pennies (handed to him): "No hole. How do you carry it?" "In my POCKET." "Keep it in your
-              pocket, then." "He gave it BACK. Nobody gives money back. I like him even more." Whichever: "Sit. Watch, if you
+              pocket, then." "He gave it BACK. Grown-ups never give money back. I like him even more now." Whichever: "Sit. Watch, if you
               like. Don't help." "I'm good at not helping. Ask my sister." He presses mackerel sushi in the wooden box,
               behind his stand, and the player watches: the rice and the fish in, the lid, the weight stone, his weight on
               it (a knock of wood on wood), the cut. Big Sister: "Rice into the box. Fish on the rice. Lid on the fish. And
-              now he just... leans." Mom: "He's pressing it. Like a flower in a book, only you can eat it." "Saba. Mackerel.
+              now he just... leans." Mom: "He's pressing it, like a flower in a book. Only this one you're allowed to eat." "Saba. Mackerel.
               I know that one. Pressed in a box, and cut like a cake." "Fun fact: in Edo they've just started making it by
               hand, one piece at a time." Kihei: "Eat first. Money is for after. There is no after for money today." He
               carries the board of cut pieces to the step of the raised room and sets it on the mats; the three sit on the
@@ -365,11 +365,11 @@ Steps:        Mom asks the price of a fish ("For a fish. ...Sit." "We have no mo
               face does something nobody has seen it do; O-Tami: "...Husband. Your face." "It does that."; without it, "Thank
               you, fish man. I'm going to learn how to say it properly. Watch me.") Mom: "Thank you. You've fed three
               strangers who can't pay you, and asked them nothing." Kihei: "Okage-sama de." Big Sister: "It means 'thanks to
-              you'. Or 'by your grace'." "It's what you say when something good happened and it wasn't only you." The cat
+              you'. Or 'by your grace'." "It is said when something good has happened and it was not only one's own doing." The cat
               has got up on the cutting board behind the stand, and comes down with a mackerel in her mouth: "The cat has a
               mackerel." "The cat always has a mackerel." "I FIT." The cat dashes under the raised floor; Little Sister gets
               up off the step and goes in after her on hands and knees, and comes back: "Got it. ...And a cobweb. The
-              cobweb's free." "...Nobody has ever got one back from that cat." "There. We've paid in fish." "In MY fish."
+              cobweb's free." "...Nobody has ever got one back from that cat." "There. We've paid our way, after all. In fish." "In MY fish."
               "After. As you said." O-Tami wraps the rest in a bamboo leaf: "The rest goes with you. Don't argue. I'm holding
               a baby, and I'll win." and puts it in the hands of whoever is played (the `sushibox`); they get up off the
               step. With the word: "Arigatō. ...I said it to her too. It's for EVERYBODY now."
@@ -389,25 +389,25 @@ Setup:        The door they came through is gone ("I knocked on the air. Nobody 
               another?
 Step 1:       Little Sister at the hen yard: the five hens, every one standing at the fence facing west along the coast:
               "They're all looking the same way. Every single one. That way." "Chickens KNOW." Big Sister: "West is a very
-              large direction." Mom: "Then we'll ask someone who knows the roads. The fish man sees everything go by."
+              large direction." Mom: "Then we'll ask someone who knows the roads. Your fish man sees everything go by."
               (`edo.hensWest`)
 Step 2:       Kihei, asked about west: "The road over the pass is the Tōkaidō. Kyoto. Osaka. The Inland Sea past that." "A
               long way on sandals. Shorter by sea." "My sister's husband's ship is in the bay. Osaka, morning tide. Dried
-              bonito." "He won't take you. ...Ask anyway. Ask the right one." (`edo.kiheiWest`)
+              bonito." "He will not take you. ...Ask anyway. Ask the right one." (`edo.kiheiWest`)
 Step 3:       Gonroku, by his boat at the water's edge: "Asked. No." "The Funadama's the ship's own lady. She doesn't care
               for other women aboard." Every argument fails, in weather (Big Sister's hair, Little Sister's luck, Mom's
-              quiet, the men, the stern): "Hens don't sail. ...Wind's freshening. No." The clue: "Ask my wife. She knows what
+              quiet, the men, the stern): "Hens do not sail. ...The wind is freshening. No." The clue: "Ask my wife. She knows what
               everybody likes. At the nets. Mind how you ask." (`edo.gonrokuNo`, `edo.gonrokuWife`)
 Step 4:       O-Masa, at the net racks. A favour is the wrong foot ("That's a favour. Favours I give my brother. Questions
               I'll take from anybody."); a question before they are ready gets her verdict (not dressed: "Not in that."; not
               fed: "You haven't eaten. I can hear it from here."; not past the clerk: "The clerk hasn't seen you go out.
               Him first."). Dressed, fed and written down: "Ask it." Mom: "What would the Funadama make of three women who
-              sit still and have manners?" "..." "That's a question. ...Stay here. All three. Don't follow me." She puts the
+              sit still and have manners?" "..." "That is a question. ...Stay here, all three of you. Do not follow me." She puts the
               net down and goes down the beach to her husband; the family stays where it is, and hears only the end of it:
               "...The Funadama is a lady. A lady likes company with manners." Gonroku, after a long look at the sea:
-              "...They sit in the stern, and they don't whistle." "I can't whistle anyway. I've been TRYING for a year."
-              "The stern is the back. I know one nautical thing, and that was it." "Thank you. Both of you. We'll be no
-              trouble, and very quiet." "Tide's at first light. The tide doesn't wait, and I don't argue with it."
+              "...They sit in the stern, and they do not whistle." "I can't whistle anyway. I've been TRYING for a year."
+              "The stern is the back. I know exactly one nautical term, and I have now used it." "Thank you. Both of you. We'll be no
+              trouble, and very quiet." "The tide turns at first light. It waits for nobody, and I do not argue with it."
 Gives:        `edo.west`.
 Step 5:       The goodbyes, when they go to the ship (Gonroku again, or the ship itself), in the street before the shop:
               Kihei and O-Tami out of it (the baby asleep on her back), Sankichi from the board. "Thank you for the clothes,
@@ -415,7 +415,7 @@ Step 5:       The goodbyes, when they go to the ship (Gonroku again, or the ship
               the baby can talk." "Stern. No whistling. Eat the box before it eats you." "Thank you. I learned one word today
               and lost all the others. A fair trade." Little Sister: "Bye, baby. Stay asleep. Bye, cat. Keep the OTHER
               fish." and at the hen yard, naming them: "Bye, Peck. Bye, Dot. Bye, Other Dot. Bye, Fuji. Bye, Admiral. Bye,
-              Jumpy." "The hens don't have names." "They do NOW. And Jumpy's a fish. He's an honorary chicken." (If she has
+              Jumpy." "The hens do not have names." "They do NOW. And Jumpy's a fish. He's an honorary chicken." (If she has
               not had the word yet, Sankichi gives it to her here.) Sankichi: "Uncle Gonroku's boat? He never takes ANYBODY.
               ...Bring me back a story." "I'll bring you back TWO. Arigatō for the word."
 Notes:        The lever is a person, not an argument (Mom's ability: adults listen to her, and she knows which adult to ask).
@@ -429,13 +429,13 @@ The card "The Uttermost Parts", on black. The ship at night under its one great 
 and its road on the water, the coast a line of low lights, a lantern at the stern; the three of them dark against the
 moonlit sea, the deck riding the swell. (Nobody painted a ship: the night is drawn over the stage as a picture, the three
 in it as shapes.) The box, eaten at the rail, the girls on a coil of rope: "We ate the WHOLE box. On a boat. At night.
-Best Tuesday ever." "It isn't Tuesday. I have no idea what it is. ...It was a very good box." Later: Big Sister asleep on
+Best Tuesday ever." "It is not Tuesday. I have no idea what day it is. ...It was a very good box." Later: Big Sister asleep on
 the rope and Little Sister asleep on Big Sister, and Mom at the stern rail, saying it to the sea, quietly: "'If I take the
 wings of the morning, and dwell in the uttermost parts of the sea;" "Even there shall thy hand lead me, and thy right hand
 shall hold me.'" Big Sister, not asleep: "Psalm 139." "Go to sleep, darling." "We're in the uttermost parts." "I know. So
 is His hand." The card "Twelve days later" / "Osaka". On the act's map the three portraits go along the coast by the sea
 path, through Osaka (now on the map), to the hills, the ship's timbers creaking (`g.journey`). Then, over the dark, Osaka:
-"Everyone has a ladle. Everyone's going east. We're going the other way." "That man in the belt has looked at us twice.
+"Everyone has a ladle, and everyone is going east. We are going the other way." "That man in the belt has looked at us twice.
 Hats down, girls. We walk." Gonroku: "The magistrates have been thick in Osaka since the Kirishitan business." "Go north,
 into the hills, till it's quiet." "North. Thank you, captain. You've carried us further than you meant to." "Twelve days of
 fair wind. Never had twelve in a row. ...Don't tell the Funadama." And the cedar path in the hills (`edo-cedars`, at its
@@ -499,8 +499,8 @@ Still the team of three, all on stage, played in turn (the party in every scene 
 | | What only she can do here | What she will not do |
 | --- | --- | --- |
 | **Mom** | Ask O-Kuni good morning with no money, and be given a shell for the climb; give a pass back to the woman it describes; teach a twelve-year-old not to lift the lid; ask O-Masa properly, after the road | Use somebody else's pass ("No. It says fifty, with a mole by the right eye."); walk past the clerk before he has had his look; open what isn't hers to open ("We don't open what isn't ours to open.") |
-| **Big Sister** | Read a ship's compass whose card runs backwards (#26: "That's backwards genius."), and call the heading in the sailors' word; write the Funadama's list in her note | Touch the stone figure, or take a thing off a holy figure's head; steer, or heave on a windlass ("I've read about what happens when you let go.") |
-| **Little Sister** | Reach the Jizō's hat ("Sorry, sir. ...Got it."); ride in a palanquin she cannot pay for, for a moment; play charades with Kōta; give up a penny for the first time all act | Peek under the lid (she tries: "What did I just say?") |
+| **Big Sister** | Read a ship's compass whose card runs backwards (#26: "That is backwards genius. The very best kind."), and call the heading in the sailors' word; write the Funadama's list in her note | Touch the stone figure, or take a thing off a holy figure's head; steer, or heave on a windlass ("I've read about what happens when you let go.") |
+| **Little Sister** | Reach the Jizō's hat ("Sorry, sir. ...Got it."); ride in a palanquin she cannot pay for, for a moment; play charades with Kōta; give up a penny for the first time all act | Peek under the lid (she tries: "Sweetheart. What did I just say?") |
 
 **The clothes.** O-Tami's kimonos from #22 on (round twenty's), hats on outdoors; and now Big Sister's hair up, held with
 O-Tami's own hairpin (`kanzashi`, an ear-pick at its end), from #22. On deck in the noon sun, the hats on.
@@ -517,7 +517,7 @@ in the close-up.
                     #21, #22, #23 as built (#22 now ends with O-Tami's hairpin in Big Sister's hair)
                                               |
                        #24 West (Little Sister, then all; Yui, Nishikurasawa, the top of the Satta Pass)
-                         the hens face west: "West it is, then. By the road, like everybody else."
+                         the hens face west: "West it is, then, girls. By the road, like everybody else."
                          dressed (#22): out of Yui's west end; O-Kuni's shell, "And your pass?", papers at Arai;
                          the top: the gust; the pass on the Jizō, lifted by Little Sister (or with Mosuke's pole);
                          used on the road (Mom will not); given back: Arai told kindly; the cloud lifts off Fuji;
@@ -553,7 +553,7 @@ cut-scene, `edo.sailed`; needs both). The facts the staged hints read are the sc
 
 Four new places: two paintings of the road (PAINT-21A), the deck and its close-up (PAINT-21B). Nishikurasawa and the top
 are part of Yui on the act's map (leg 1: the map's Yui place holds all four scenes of the leg); the deck and the compass
-are a place that is a point of the sea way ("At sea"), where every place refuses ("Yui. We're at sea. The map can wait.").
+are a place that is a point of the sea way ("At sea"), where every place refuses ("Yui. We're at sea, darling. The map will keep until we land.").
 
 ```
 YUI (edo-village), as built, and now: the WEST END of the street (past the well, behind Kihei's house: the Tōkaidō on
@@ -605,12 +605,12 @@ compass box opens the close-up, and Step back returns everyone where they stood.
 ```
 #22's addition: O-Tami's hairpin        (in #22's step 4, the kimonos)
 ```
-Between "It ends at my knees." / "Travellers hitch them up anyway. You're ahead of everybody." and "Pink for the small one",
-O-Tami: "And not with your hair down. Not on a road. Sit." Big Sister sits on the step facing us; O-Tami stands behind her
-and puts it up: "There. Up, and held with my own pin." Big Sister: "It's an ear-pick." O-Tami: "Of course it is. My
-grandmother said a pin that's only pretty is a sin," "so they put a pick on the end, and now it's a tool." "...That isn't a
-hairpin. That's a loophole." "Keep it. My grandmother would like it on a girl who reads." (`kanzashi` into Big Sister's
-pockets, whoever is played) "Thank you. I'll use the pretty end." The pin is one of the three things #37 needs. (The
+Between "It ends at my knees." / "Travellers tuck them up for the road anyway. You are only ahead of them." and "Pink for the small one",
+O-Tami: "And not with your hair down like that. Not on a road. Sit." Big Sister sits on the step facing us; O-Tami stands behind her
+and puts it up: "There. Up, and held fast with my own pin." Big Sister: "It's an ear-pick." O-Tami: "Of course it is. My
+grandmother said a pin that's only pretty is a sin," "so they put a pick on the end of it, and now it is a tool." "...That isn't a
+hairpin. That's a loophole." "Keep it. My grandmother would have liked it on a girl who reads." (`kanzashi` into Big Sister's
+pockets, whoever is played) "Thank you. I shall use the pretty end." The pin is one of the three things #37 needs. (The
 grandmother's story is a story: "one theory", as the design has it.) SCENES-21A: her hair is drawn up with the kimono itself
 (PEOPLE-21B's `BIGSIS_HAIR_UP`), so she faces us on the step while the pin goes in, where the knot does not show.
 
@@ -623,34 +623,34 @@ Setup:        The door they came through is gone. Little Sister at the hen yard 
               before."). (edo.hensWest)
 Step 1:       Yui's west end, past the well: "The road out of the village, west, toward the pass. Everyone walks it but us."
               Not in their own clothes ("Not in these clothes, darling. We'd be a parade by the first mile."); not before
-              the clerk, once in O-Tami's ("O-Tami sent us to the clerk first, darling. Let him have his look at us."); not
+              the clerk, once in O-Tami's ("O-Tami sent us to the clerk first, darling. Let him have a good look at us."); not
               before the hens ("We're not walking anywhere until we know which way, darling."). Dressed and written down:
               "West, girls. Hats down, and a good morning for everyone we pass." Nishikurasawa: "I smell something.
               Something on fire. Something GOOD on fire." "A teahouse at the foot of the pass. Everyone stops here before
               the climb." "And we've nothing to pay for any of it. Smile, girls. Don't stare at the grill."
-              O-Kuni, at her grill: "Turban shells! Grilled in their own pots, hot from the sea and the fire." "Three of
+              O-Kuni, at her grill: "Turban shells, grilled in their own pots! Hot from the sea and the coals." "Three of
               you, and not a coin between you. I can tell by the walk." Mom's good morning ("Good morning's free. The
               shells aren't. ...Wait there."), or Little Sister's ("Small people eat MORE."), brings one shell on a leaf, to
-              share: "Here. One. Share it, and don't tell the road. For the climb." ... "I want the CURLY end." "Of course
-              you do." "Arigatō, shell lady." (with Sankichi's word; else "Thank you, shell lady. Very MUCH.") "Polite, too.
+              share: "Here. One shell, for the three of you. For the climb. And do not tell the road." ... "I want the CURLY end." "Of course
+              you do." "Arigatō, shell lady." (with Sankichi's word; else "Thank you, shell lady. From me AND my stomach.") "Polite, too.
               Have the curly end." (edo.shellShared). West: "Steep, short, and the best view on the road at the top. West,
-              is it?" "And your pass, dear?" Big Sister: "We're IN a pass." "Not that kind. The paper kind. Your tegata."
-              "Women going west need papers at Arai. Proper ones, with your face on them." "Thirty years I've watched
-              women go up that road without them." "I've watched them come back down. Have a shell, I say. Then go home."
-              "...Thank you for telling us. Truly." (edo.araiWarned)
+              is it?" "And your pass, my dear?" Big Sister: "We're IN a pass." "Not that kind of pass, child. The paper kind. Your tegata."
+              "Women going west must show papers at Arai. Proper ones, with your face in them." "Thirty years I've watched
+              women go up that road without them." "I have watched them come back down, too. Have a shell, I say. Then go home."
+              "...Thank you for telling us. You needn't have, and you did." (edo.araiWarned)
               The bearers bargain before anyone asks ("Palanquin to the top! Cheap. Cheaper than walking, if you count your
-              feet."); Little Sister: "How much is a ride?" "How much have you got?" "Three pennies." "...What's a penny?"
-              "It's like your money, but with no HOLE." "Then it isn't money. It's a button with ideas." Tora: "We'd carry
+              feet."); Little Sister: "How much is a ride?" "That depends. How much have you got?" "Three pennies." "...What's a penny?"
+              "It's like your money, but with no HOLE." "Then it is not money. It is a button that has ideas." Tora: "We'd carry
               the little one for nothing." Sakuji: "We would NOT." She may sit in it ("Sitting's a fare too. ...Fine.
               Sit. Don't bounce." "It's COMFY. I'm bouncing a tiny bit. You can't tell."). Sōshichi, use first, pay later,
-              gives Little Sister a print: "Here. For the child of the house. That's the custom." "We haven't got a house."
-              "...Then for the child." (`toyamaprint`)
-Step 2:       Up the cliff road. The top: "WIND. The wind wants my hat." "Hold your hats, girls. And hold the view. It's
+              gives Little Sister a print: "Here. This is for the child of the house. That is the custom, and I keep it." "We haven't got a house. Not in this year."
+              "...Then it is for the child." (`toyamaprint`)
+Step 2:       Up the cliff road. The top: "WIND. The wind wants my hat. It can't have it." "Hold your hats, girls. And hold the view. It's
               worth it." "The finest view on the Tōkaidō. Allegedly." Fuji is under its cap. Mosuke trudges past with his
               load and does not look. Up the road behind them, O-Shige and Kyūzō: "Kyūzō. Stop. I'm dying. I've died. Put
               the box down." "Yes, mistress." She sits on her stone. A gust: the folded paper flies out of Kyūzō's sash onto
               the Jizō's little hat, and nobody of theirs sees it go (Kyūzō least of all). "Something flew onto the stone
-              man's HAT." "A paper, folded, wrapped in oiled paper. That's somebody's important something." (edo.gust)
+              man's HAT." "A folded paper, wrapped in oiled paper. That is somebody's important something." (edo.gust)
 Step 3:       The pass on the Jizō (the hat's whole area is the paper while it is there). Mom: "I'd have to reach over his
               head. Your sister's his height. It's her place." Big Sister: "I'm not taking things off a holy figure's head.
               Even things that aren't his." Little Sister, at the Jizō, exactly his height: "Sorry, sir. I'm just taking
@@ -661,23 +661,23 @@ Step 3:       The pass on the Jizō (the hat's whole area is the paper while it 
 Step 4:       Used on the road west, or on anyone: Mom will not. "No. It says fifty, with a mole by the right eye." "You
               can't read it." "I can read her face. It's hers." (after: "It's hers, girls. It goes back to her, and nowhere
               else.") Given back, by whoever has it (talking to her, or the pass used on her): "Excuse me. I think this is
-              yours. It was on the little stone figure's hat." "That's my-- that's my PASS." "Kyūzō. Where was my pass?"
+              yours. It was on the little stone figure's hat." "That is my-- that is my PASS." "Kyūzō. Where was my pass?"
               "In my sash, mistress. Then in the wind." She gets up for it, goes white, then pink, and sits down again.
-              "...Without that paper I'd never have got home. You could have kept it." "It isn't ours. It has your face in
+              "...Without that paper I would never have got home. You could have kept it." "It isn't ours. It has your face in
               it, as far as I can tell." "'A woman of fifty, a mole by the right eye.' That's what the clerk wrote."
               (Big Sister, if Mom has said what she thought it said: "...Mom.") "I'm forty-nine. And it isn't a mole. It's a
-              beauty mark. He had no poetry." (edo.passBack) "Sit. You gave it back. Nobody gives anything back on this road."
-Step 5:       Asked about the road west, she tells them, gently: "West? Three women, with no papers?" "With none." "Then
+              beauty mark. He had no poetry." (edo.passBack) "Sit down, sit. You gave it back. Nobody gives anything back on this road."
+Step 5:       Asked about the road west, she tells them, gently: "West? Three women, and no papers among you?" "With none." "Then
               listen, because nobody else will tell you kindly." "At Arai there are two women. One reads your paper. The
               other reads you." "A woman leaving Suruga needs her paper from the town magistrate at Sunpu." "And if one went
               round? There must be another road." "Round the north of the lake there's another barrier. It looks at women
-              too." "And a woman caught slipping round isn't killed. They give her away." "As a servant. To whoever asks."
+              too." "A woman caught slipping round is not killed, mind. They give her away." "As a servant, to whoever asks for her."
               Mom: "...Then not by road." (edo.araiHeard) "There's no barrier on the water between here and Osaka. Find a
               captain." The cloud lifts off Fuji (a cross-fade of the painted cap: the same cloud is gone at Nishikurasawa
               too): "It came OUT." "...Oh, girls." "I take it back. Not allegedly." (edo.fujiClear) "And look down there.
               That was the road once. At low tide, between waves." "Forget your parent, forget your child, they called it.
-              No one could look back." "So they cut this road high up the mountain. In 1655." (or Mosuke tells it first:
-              "The old road. Down there. You went at low tide, between the waves.") Mom: "Nobody's forgetting anybody."
+              No one could look back." "So they cut this road high on the mountain instead. In 1655." (or Mosuke tells it first:
+              "The old road. Down there. You went along it at low tide, between the waves.") Mom: "Nobody's forgetting anybody."
               (edo.noRoad: the beat.) Mosuke goes past the other way with a new load, and does not look.
 Wrong tries:  The palanquin               -> "We can't pay, sweetheart, and they don't carry anyone for love." (and the
                                              bearers' "We would NOT.")
@@ -686,17 +686,17 @@ Wrong tries:  The palanquin               -> "We can't pay, sweetheart, and they
               The road on west, at the top -> before: Mom, "Not till I know what's at Arai." (or, before O-Kuni has said it,
                                              "Not yet. Everybody on this road carries a paper but us. I want to know why.");
                                              after: "Not by road. We said."
-              The shells                  -> "A shell cooked in its own shell. That's efficient."
-              The mound                   -> Sōshichi, the first time: "Forty from Edo, that one. I count them. Somebody has to."
+              The shells                  -> "A sea snail cooked in its own shell, as its own pot. Admirably efficient."
+              The mound                   -> Sōshichi, the first time: "Forty from Edo, that one. I count them all. Somebody has to."
               Fuji under cloud            -> "Fuji, with a little cap of cloud. It's dressed for travelling too."
               O-Masa asked properly first  -> (back in Yui, dressed and fed) "Walk up that road first. He'll say you could
                                              have walked. Then ask me." (SCENES-21A's line: #25 waits for the road)
-Gives:        edo.road (edo.noRoad). Back down: O-Kuni, "Back down. They all come back down. Sit. The smell's free." "You
-              were right about Arai. We're going by sea." "By sea. Good. The sea doesn't read papers."; O-Shige, after her
+Gives:        edo.road (edo.noRoad). Back down: O-Kuni, "Back down. They all come back down. Sit, sit. The smell, at least, is free." "You
+              were right about Arai. We're going by sea." "By sea. Good. The sea has never once asked anybody for papers."; O-Shige, after her
               goodbye, goes on down east to Edo and her grandson, Kyūzō behind her with the box.
 Notes:        The pass is the act's first exactly-true temptation: it describes somebody else. The yakko penalty is said
               once, gently, by a kind woman, and Mom's answer ends it. The view is the painter's own, from our own place on
-              the road. Kihei, asked about west before the road, names the road only: "...Try the road. Everybody does."
+              the road. Kihei, asked about west before the road, names the road only: "...Try the road. Everybody does, first."
               (edo.kiheiRoad). The courier and the komusō are in Yui's street now too (round twenty-one's section 10).
 ```
 
@@ -704,11 +704,11 @@ Notes:        The pass is the act's first exactly-true temptation: it describes 
 Puzzle #25: A Captain Who Says Yes        (Act Six · Lead: Mom · Yui)        [round twenty's #24, second half]
 Needs:        #24 (edo.noRoad) and #23 (edo.fed)
 Steps:        As built, from "Kihei names the ship", which now comes after the road: "We tried the road. It isn't open to
-              us. Is there another way west?" "You tried the road." "Everybody tries the road. ...There's a ship." "My
+              us. Is there another way west?" "You tried the road." "Everybody tries the road. ...There is a ship." "My
               sister's husband's ship is in the bay. Osaka, morning tide. Dried bonito." "He won't take you. ...Ask anyway.
               Ask the right one." (edo.kiheiWest) Then Gonroku's no (every argument fails, in weather) and his wife (as
               built, round twenty's #24 steps 3 and 4): O-Masa asked properly, dressed, fed, past the clerk and after the
-              road; "...They sit in the stern, and they don't whistle." (edo.west)
+              road; "...They sit in the stern, and they do not whistle." (edo.west)
 Gives:        edo.west. The goodbyes and Casting Off follow, with the year worked out (#21: "Not yet. I won't sail out of a
               year I can't name. The year first, then the sea.").
 ```
@@ -721,14 +721,14 @@ card "Casting Off". On the beach by the tender, O-Masa: "My nephew cooks on that
 rice." "We will. Thank you, O-Masa. For the question as much as the answer." "You asked it properly. Go on, before he
 changes his weather." The ship's boat rows them out (a picture over the stage, as the night at sea is: two sailors at the
 oars, the three in its stern, Little Sister waving, Gonroku's ship at anchor ahead, Fuji pink at first light): "A boat to
-get to the BOAT." "The ship's own boat. Big ships carry a little one. Like a pocket." "Wave to Yui, girls. Properly.
+get to the BOAT." "The ship's own boat. Big ships carry a little one about, like a pocket." "Wave to Yui, girls. Properly.
 Somebody's watching." Aboard (a picture: the deck at anchor, the yard on the deck with the sail furled on it, two sailors at
 the windlass): "Heave." "And heave." (the yard going up the mast a heave at a time, four heaves) Denzō: "Up she goes! Mind
 your heads. Mind your HATS." The great sail falls open and fills: "It's BREATHING." "Woven, not sewn. A captain from Harima
-thought of it." "I've never seen anybody proud of cloth before." "You've never seen THIS cloth." Seijirō counts them:
+thought of it." "I have never seen anybody so proud of cloth before." "You have never seen THIS cloth." Seijirō counts them:
 "Three. ...Cargo." "Passengers, I think." "Passengers pay. ...Cargo." Gonroku: "Stern. No whistling. Wind's fair. ...For
 now." The first night (round twenty's ship by night, the girls on the coil of rope, the box between them): "We ate the WHOLE
-box. On a boat. At night. Best Tuesday ever." "It isn't Tuesday. I have no idea what it is. ...It was a very good box." (the
+box. On a boat. At night. Best Tuesday ever." "It is not Tuesday. I have no idea what day it is. ...It was a very good box." (the
 `sushibox` gone from whoever had it). The card "Four days later"; the hats on; on the act's map the portraits go out along
 the sea path from Yui to the ship's place at sea (`g.journey("edo", "yui", "sea")`, the timbers creaking); the deck, on the
 mark `deck`. Skipped, the same: edo.aboard, the box gone, the hats on, the deck.
@@ -736,7 +736,7 @@ mark `deck`. Skipped, the same: edo.aboard, the box gone, the hats on, the deck.
 ```
 Puzzle #26: Etekō        (Act Six · Lead: Big Sister · the deck, the ship's clock)
 Needs:        Casting Off (edo.aboard)
-Setup:        The deck, the first time: "Day five at sea. I've counted every one of them. In fours, mostly." "I LIVE on a
+Setup:        The deck, the first time: "Day five at sea. I have counted every one of them. In fours, mostly." "I LIVE on a
               boat now. I'm a boat person." "Five days, and nobody has been ill over the side. I'm very proud of us." The
               ship's talk: "Daiōzaki. Past it, the Kumano-nada. Wind holds till dark. Maybe." "She hasn't chirped. Not once
               since the women came aboard. Five days." "...Can't see the card. ...Sun's on it." "Rice is burnt again." "And
@@ -746,16 +746,16 @@ Step 1:       Kanbei: "Girl. ...You read?" "Everything. Except Japanese." "...Th
               on the deck as open), the card, the marks, Kōta's little animals. Big Sister's first look at the needle: "The
               needle points north. So north is... the monkey?" Kanbei (beside the box): "The ship's clock tells you where the
               ship goes, girl." "That's all a ship wants to know." "The rat's fixed at the bow. And the marks run the wrong
-              way round. On purpose." "...Go on." "So the needle sits on wherever we're going. That's genius." "That's
+              way round. On purpose." "...Go on." "So the needle always sits on the way we are going. That is genius." "That's
               backwards genius." (edo.compassRead) Step back: the deck, everyone where they stood.
-Step 2:       The call (Kanbei, Big Sister's): "...Well? Call it, girl. ...The helm's waiting." English: "Monkey!" "...Monk-ee?"
-              "Monk-ee." Gonroku: "Say it so the helm can hear it." The rooster: "West. The rooster. Isn't it?" "...Is the
-              needle on the rooster?" "No. One along. We're not going west. We're going west-and-a-bit." "A ship is always
+Step 2:       The call (Kanbei, Big Sister's): "...Call it, girl. ...The helm is waiting on you." English: "Monkey!" "...Monk-ee?"
+              "Monk-ee." Gonroku: "Say it so the helm can hear it." The rooster: "West. That is the rooster. Is it not?" "...Is the
+              needle on the rooster?" "No. One mark along. We are not going west. We are going west-and-a-bit." "A ship is always
               going west-and-a-bit." Saru (once Little Sister has had it from Kōta): "Saru. ...My sister says that's the
               word for it." The crew freezes, Denzō's hand on the mast: "NOT that word." "Not at sea. It means 'go away', and
-              the lady hears it." "...Wind's still with us. Nobody says it twice." "I'm so sorry. I didn't know. I won't say
-              it again." "...You didn't know. She knows you didn't know. Probably." (edo.saruSaid)
-Step 3:       The sea word: Denzō, asked ("...Etekō. At sea, it's etekō. Never the other one." "And a snake's the long thing.
+              the lady hears it." "...The wind is still with us. Nobody says it twice." "I'm so sorry. I didn't know. I won't say
+              it again." "...You did not know it. And she knows you did not know it. Probably." (edo.saruSaid)
+Step 3:       The sea word: Denzō, asked ("...Etekō. At sea it is etekō. Never the other one. Not ever." "And a snake's the long thing.
               And a whale is Ebisu. Remember that one." "A word for everything you mustn't say. That's very well
               organized."), or Kōta, asked by Little Sister ("...Come here." "Etekō. Say it QUIET."). (edo.seaWords)
 Step 4:       "Etekō." Kanbei: "Etekō." Gonroku: "Etekō. Hold her." "...The girl reads the clock." "I read a compass.
@@ -774,38 +774,38 @@ Notes:        The reversed card and the sea words are real; calling a heading by
 Puzzle #27: Don't Lift The Lid        (Act Six · Leads: Little Sister and Mom, with Big Sister · the deck)
 Needs:        Casting Off (edo.aboard)
 Setup:        Kōta at his hearth box, lifting the lid now and then (the painted pot, its lid propped beside it, then boiling
-              again): "Ma'am. ...The rice isn't ready. It's never ready. Then it's burnt."
-Step 1:       Kōta (Little Sister): "You're the small one. The one in the YELLOW boots." "I'm SEVEN. How old are you?"
+              again): "Ma'am. ...The rice is not ready. It is never ready. And then it is burnt."
+Step 1:       Kōta (Little Sister): "You are the small one. The one in the YELLOW boots." "I'm SEVEN. How old are you?"
               "Twelve. I'm the cook. Don't tell anybody about the rice." (edo.kotaMet) Charades: the Grump ("...The
               master!" "He's the GRUMP. That's his name now." "...Grump." "PERFECT."), the cat ("A yokoza!" "A WHAT?" "A cat.
               At sea you say yokoza."), the monkey ("Sa-- saru!" "Don't! Not at SEA. She hears." "...Sorry. I'm putting my
               arms DOWN."); his mother in Yui, her brother ("He's ten. He's somewhere else. We're finding him." "...At sea?"
               "Further.").
-Step 2:       The lid (Mom): "You keep looking." "My mother always did the rice. I don't know when it's done." "Don't lift
-              the lid. Listen to it." "When it crackles and smells like toast, off the fire. Then leave it alone." The pot
-              boils; Little Sister, who has listened to every word: "I'll just PEEK--" "What did I just say?" "Can I look?"
+Step 2:       The lid (Mom): "You keep looking." "My mother always did the rice at home. I never know when it is done." "Don't lift
+              the lid. Listen to it." "When it crackles and smells of toast, take it off the fire. Then leave it alone." The pot
+              boils; Little Sister, who has listened to every word: "I'll just PEEK--" "Sweetheart. What did I just say?" "Can I look?"
               "No." "Can I look NOW?" "Listen." "...It's crackling." "And?" "It smells like TOAST." "Off the fire. Now leave
               it be." The crew eat: "...It's rice." "It's RICE rice." Gonroku: "Hm." Denzō: "That's praise. That's all the
               praise he's got, and he gave it." (edo.lidDown; the pot's lid on, left alone)
 Step 3:       The mast step, knocked on by anyone (or Denzō asked): "What the shipwright sealed in, for her, the day she was
               built." "A pair of dolls. Two dice. Twelve coins, one mon each." "A woman's hair. The five grains. Rouge and
-              powder. A comb and a pin." "I'm writing it down. I write everything down. Dolls, dice, twelve coins..." "She's
+              powder. A comb and a pin." "I am writing it all down. I write everything down. Dolls, dice, twelve coins..." "She's
               got MAKEUP in there." "She's a lady." (edo.funadamaList: Big Sister's note shows the list from then on)
 Step 4:       A penny for a coin (Little Sister shows Kōta her pennies): "A coin with no hole! How do you carry it?" "You
-              don't. You lose it." "...Could I have one? For my mother. From across the sea." (a long look at them) "...Okay.
-              ONE. Pick the shiny one." "Then you have this. My coin. The first coin I ever got at sea." "...She's never
-              let one go before." "She gave away a penny. I'm writing that down." (three pennies become two: `twopennies`;
+              don't. You lose it." "...Could I have one? For my mother. A coin from across the sea." (a long look at them) "...Okay.
+              ONE. Pick the shiny one." "Then this is yours. My coin. The first coin I ever got at sea." "...She's never
+              let one go before." "She gave away a penny. Of her own free will. I am writing that down." (three pennies become two: `twopennies`;
               the one-mon coin: `mon`; edo.coinTraded)
 Step 5:       She chirps, after the last of the four: Kōta laughs (at the man's face on the penny, at the rice coming right,
               or at the lady's makeup) and from the foot of the mast come two small bright notes. "THERE. Did you hear her?"
-              "She chirped. She's in high spirits!" Gonroku: "...She likes the boy laughing." "She LIKES us." Seijirō:
+              "She chirped. She's in high spirits!" Gonroku: "...She likes to hear the boy laugh." "She LIKES us." Seijirō:
               "Three. ...Crew." (edo.chirped)
 Wrong tries:  The mast step, after the list ->  "We don't open what isn't ours to open." "Also, it's nailed." (and after
                                                 that, Denzō says the list again)
               The floating cask (now and then) -> Denzō: "Leave it! That's for Konpira, the sailors' god. Whoever finds it
-                                                takes it on." "A message in a bottle. For a GOD." "Then it's the next ship's
+                                                takes it on." "Like a message in a bottle. Only a barrel. For a GOD." "Then it's the next ship's
                                                 errand, darling. We have ours."
-              Lifting the lid herself        -> "I'll just PEEK--" "What did I just say?" (in the waiting)
+              Lifting the lid herself        -> "I'll just PEEK--" "Sweetheart. What did I just say?" (in the waiting)
               The windlass                   -> (Big Sister) "I'm not strong enough..."
 Gives:        edo.chirp.
 Notes:        The Funadama's things, her chirp and the sea words are documented; Kōta's rice and the hearth box are the
@@ -823,13 +823,13 @@ hand shall hold me.'"), Big Sister: "Psalm 139." "Go to sleep, darling." "We're 
 hand." The card "Eight days later" / "Osaka" (WRITE-21A's: the deck was the fifth day of twelve). On the map the portraits
 go from the ship's place at sea along the sea path to Osaka. The river mouth (a picture: masts crowding the two rivers, the
 city, a castle on the skyline with walls and turrets and no top): "Masts. Hundreds of them, standing in the river mouths
-like reeds." "It's a city made of BOATS." "Their castle hasn't got a top." Gonroku: "Burned before my grandfather. They
-never put it back." The lighter alongside: "Ship stays here. Everything else goes up the river by lighter. So do you." Kōta,
-waving from the rail: "Mother gets the penny first thing. I'll tell her it crossed the sea." "Tell her it's from the girl in
+like reeds." "It's a city made of BOATS." "Their castle has no top. Where the keep should be, there is only sky." Gonroku: "Burned before my grandfather. They
+never put it back." The lighter alongside: "The ship stays here. Everything else goes up the river by lighter. So do you." Kōta,
+waving from the rail: "Mother gets the penny first thing. I will tell her it crossed the sea." "Tell her it's from the girl in
 the yellow boots." Denzō: "Mind the river. Mind EVERYTHING!" Up the river to the Dōjima steps (a picture): Gonroku, in the
 lighter at their foot: "The magistrates have been thick in Osaka since the Kirishitan business." "Go north, into the hills,
 till it's quiet." "North. Thank you, captain. You've carried us further than you meant to." "And don't tell anybody anything
-true." "That's the only kind I've got." (he nearly smiles) "Twelve days of fair wind. Never had twelve in a row. ...Don't
+true." "Captain, that is the only kind I have." (he nearly smiles) "Twelve days of fair wind. Never had twelve in a row. ...Don't
 tell the Funadama." as the lighter goes. The Dōjima shore, on the mark `landing` (SCENES-21B's; its first words are its
 own). Skipped, the same: edo.sailed, the hats on, the landing.
 
@@ -882,7 +882,7 @@ own). Skipped, the same: edo.sailed, the hats on, the landing.
 | What a ship gives its lady: a comb, a pin, twelve one-mon coins | #27, Denzō's list, in Big Sister's note | #37: the pin, the coin and the comb open the women's hall |
 | "Etekō" | #26/#27: Kōta's whisper, or Denzō | The heading called; "I'd like that on a plaque." |
 | Little Sister gives up a penny for the first time | #27 | #35 (a penny for luck to O-Fusa); #38 (the Son has one) |
-| Gonroku: "And don't tell anybody anything true." | The Dōjima steps | "That's the only kind I've got." (the act's rule) |
+| Gonroku: "And do not tell anybody anything true." | The Dōjima steps | "Captain, that is the only kind I have." (the act's rule) |
 
 ## Act Six, the second leg: Osaka (#28 to #31, and "The Kyoto Boat")
 
@@ -1029,21 +1029,21 @@ Puzzle #28: The Dōjima Shore        (Act Six · Leads: all three, Mom first · 
 - **No ladle.** The stall, used before the paddle, by any of them: a kind look and a shake of the head (Little Sister: "I
   held out my hands. The lady smiled and shook her head. NICELY."); the first time, Little Sister's plan and Mom's answer:
   "We could BORROW a ladle." "And then we'd be lying with a spoon." Kyūhachi's offer (Mom asks how many times he has been
-  fed): "I'll lend you my ladle. For a share. Fair's fair." "No, thank you." "Nobody ever says yes." Each of the stall's
+  fed): "I will lend you my ladle, for a share of whatever it brings. Fair is fair." "No, thank you." "Nobody ever says yes." Each of the stall's
   things before the paddle is not theirs to touch (Mom at the pot: "It isn't my kitchen, darling. Not unless I'm asked into
   it."). The way into the town refuses: "Not yet. We've had nothing since the ship, and nobody walks a city hungry."
-- **The paddle.** Mom's question to O-Natsu: "May I help? I've run church suppers for two hundred. This can't be worse."
-  "..." "A supper for two hundred. I believe you. Here." She hands Mom her rice paddle (`paddle`; Mom holds it out). Big
-  Sister: "In Japan the paddle is the key." O-Natsu: "Pot's yours. Rice balls, the tall girl. Pickle, the little one, a slice
+- **The paddle.** Mom's question to O-Natsu: "May I help? I've served church suppers for two hundred. I know a pot."
+  "..." "A supper for two hundred. Yes, I believe you. It is in the way you stand. Here." She hands Mom her rice paddle (`paddle`; Mom holds it out). Big
+  Sister: "In Japan the paddle is the key. Mother, she has just handed you the keys." O-Natsu: "Pot's yours. Rice balls, the tall girl. Pickle, the little one, a slice
   each." (`edo.paddle`.) Now the way into the town says "Not without thanking her, darling."
 - **Serving.** Behind the stall, a job each, by the right one of them (the wrong one: "That's somebody else's job. Mine is
   bales."): Mom at the pot ("One scoop in every ladle, and a smile. Next. ...Next.": `edo.potServed`); Big Sister at the tray,
   O-Natsu showing her ("Wet your hands. Salt. Now press it into a bale. A little bale." "Bale-shaped. The Osaka standard. I'm a
   standard.": the tray half full, `edo.ballsShaped`); Little Sister at the tub ("One pickle. One pickle. One pickle. ONE
   pickle. You get one.": `edo.pickleServed`), and at that Kyūhachi walks up from his place to the front of the line, his ladle
-  out. Her next go at the tub catches him: "You had one. And one. And ONE. And one." "...That's four. This is five." "FIVE is
-  too many." O-Natsu: "Give him the pickle. He'll be back tomorrow either way." (`edo.fifthCaught`; he goes back to his place.)
-  All three done (in any order): O-Natsu: "That's the line. That's the whole line. ...Three of you, and I'm early."
+  out. Her next go at the tub catches him: "You had one. And one. And ONE. And one." "...That is four. This is five." "FIVE is
+  too many." O-Natsu: "Give him the pickle. He will be back tomorrow either way." (`edo.fifthCaught`; he goes back to his place.)
+  All three done (in any order): O-Natsu: "That is the line. That is the whole line. ...Three of you, and I am early."
   (`edo.fedPilgrims`), and the pilgrims go on east with a bow.
 - **"My helpers."** Kurata comes along the shore to the stall, Tatsu at his back. "O-Natsu. ...Who are these three?" "My
   helpers." He takes a rice ball and looks at it. "...There'll be a notice about all this." On he goes; Tatsu stares at the
@@ -1051,9 +1051,9 @@ Puzzle #28: The Dōjima Shore        (Act Six · Leads: all three, Mom first · 
   paddle." (`edo.vouched`: the beat.)
 - **Their supper.** O-Natsu's tree goes straight on: "Sit. The last of the pot is the helpers'. That's my rule, and I've just
   made it." They sit on the coping at the top of the river steps; Little Sister's grace, in her own words ("Thank You for the
-  rice, and the pickle, and for O-Natsu, and for her boy." "Bring him HOME. Amen."); a rice ball each; Mom: "Thank you. You fed
+  rice, and the pickle, and for O-Natsu, and for her boy." "Please bring him HOME. Amen."); a rice ball each; Mom: "Thank you. You fed
   us before we'd done a thing, and then you let us do it." "You did plenty. Eat." "When you've done, I'm going to the
-  crossroads, to ask after my boy." "Come with me. It takes two mothers to stand still that long." "Of course I'll come." The
+  crossroads, to ask after my boy." "Come with me. It takes two mothers to stand still that long." "Of course I'll come. I've had a little practice, lately, at waiting on a boy." The
   paddle goes back, clean (`edo.supped`), and the way into the town is open.
 - **Wrong tries**: the water men (Little Sister close enough to be splashed, the bucket's water over her: "They SPLASHED me.
   I wasn't even shouting."), the rice market (Big Sister: "The rice market. They're not buying rice. They're buying paper that
@@ -1071,21 +1071,21 @@ Puzzle #28: The Dōjima Shore        (Act Six · Leads: all three, Mom first · 
 ```
 Puzzle #29: What The Road God Said        (Act Six · Lead: Mom · Osaka, the merchant street)
 ```
-Up from the shore the first time (`edo.streetSeen`): "SHOPS. A whole street of shops. And curtains. And a drum." "Kelp shops
+Up from the shore the first time (`edo.streetSeen`): "SHOPS. A whole street of shops, curtains on the doors. And a drum, somewhere." "Kelp shops
 and bookshops. This street is famous for both. I'm home." O-Natsu waits at the crossroads by the road god, her comb in her
 hair. Down the cross street the yomiuri pair are chanting to the people there (a sheet tried for: "Four mon a sheet." Little
 Sister: "I've got ONE mon. And it's not for papers. It's a souvenir."). The drum tower's way, before anyone is following them:
 "A theater, darling, and we haven't a reason or a coin."
-- **The comb.** O-Natsu: "Here. This corner. Don't laugh at me, any of you." (Mom: "Nobody's laughing. Tell me what to do,
-  and I'll stand where you put me.") "You stand where the roads cross, holding a boxwood comb, and you ask." "The first words
-  a stranger says as he passes are your answer." Big Sister: "Boxwood is tsuge. It sounds like 'to tell'." "Stand with me.
+- **The comb.** O-Natsu: "Here. This corner. And do not laugh at me, any of you. I know how I look." (Mom: "Nobody's laughing. Tell me what to do,
+  and I'll stand where you put me.") "You stand where the roads cross, holding up a boxwood comb, and you ask." "The first words
+  a stranger says as he passes are your answer." Big Sister: "Boxwood is tsuge. It sounds like 'to tell'. A comb that answers, then." "Stand with me.
   Two mothers. The road god hears two better than one." Mom: "I'll stand with you. I won't ask your road god. I'll ask mine, if
-  I may." "Ask whoever listens. I'll take any answer." Mom beside her, her head bowed, her hands folded: "'And there is hope
+  I may." "Ask whoever listens. Today I will take any answer that comes." Mom beside her, her head bowed, her hands folded: "'And there is hope
   in thine end, saith the LORD, that thy children shall come again to their own border.'" Big Sister: "Jeremiah 31:17."
   (`edo.combAsked`.)
 - **The first words.** The pair come up the cross street to the corner, chanting: "...a boy, alive and well, calling for his
-  mother!" O-Natsu: "That's my answer. He's well! He's well, and he's calling for me." Little Sister: "She's laughing and crying
-  at the SAME time." Mom: "That's what it looks like, darling, when the news is good."
+  mother!" O-Natsu: "That is my answer. He is well! Alive and well, and calling for me." Little Sister: "She's laughing and crying
+  at the SAME time." Mom: "That's what good news looks like, darling, when you've waited three days for it."
 - **The chant**, line and line about: "Yomiuri! We read it, you buy it! A strange story from Harima!" "At the foot of Mount
   Shosha, by Himeji, there's a hall for women." "And every sunset, in that hall, a boy's voice speaks!" "In a tongue nobody on
   earth has ever heard!" "The monks have locked the door, and nobody living can open it!" "Four mon! Four mon, and you'll know
@@ -1096,11 +1096,11 @@ Sister: "I've got ONE mon. And it's not for papers. It's a souvenir."). The drum
   it." (`sheet`: `edo.sheetCaught`). Kurata: "There'll be a notice. There's always a notice." Tatsu: "...Three tall women. In
   hats." (`edo.followed`: from here he follows them; he and Kurata stand at the corner until they go to the theatre.)
 - **The comb, given.** "Here. It told me. Let it tell you." Mom: "It's beautiful. I'll keep it. I'll do my asking the way I do
-  it." "There's a temple at every turn of the road west. Leave a slip for my boy." "I will. I promise." (`comb`, `natsuslip`,
-  Mom's: `edo.combGiven`, the beat.) After: "He's well. He's calling for me. I'll have the house swept before he's home."
+  it." "There is a temple at every turn of the road west. Leave a slip there for my boy." "I will. I promise." (`comb`, `natsuslip`,
+  Mom's: `edo.combGiven`, the beat.) After: "He is well, and calling for me. I shall have the house swept before he is home."
 - **Wrong tries**: buying a sheet (above), the road god (Big Sister: "I'm not touching him. I'm not even pointing at him. I'm
   pointing near him."; Little Sister: "I said good evening. He's busy minding the roads."), the medicine signboard (the first
-  time anyone tries it: "U-ru-yu-su." "That doesn't sound like any word I know." "It's MEDICINE. Medicine never sounds like a
+  time anyone tries it: "U-ru-yu-su." "That does not sound like any word I know, and I know a great many." "It's MEDICINE. Medicine never sounds like a
   word."), the theatre before Tatsu follows.
 - Notes: the crossroads comb is in a book finished in 1830 (a women's custom); the pair chanting in turn, the price and the ban
   are documented; the answer coming from the chant is the game's. Mom's faith and O-Natsu's custom stand side by side.
@@ -1109,35 +1109,35 @@ Sister: "I've got ONE mon. And it's not for papers. It's a souvenir."). The drum
 Puzzle #30: Berlin Blue        (Act Six · Lead: Big Sister · Osaka, the merchant street, the print shop)
 ```
 Senzō at his bench in the open front, alone (his paper boy is on the road to Ise), his blue landing a hair to the left.
-Little Sister may show him Sōshichi's print: "Toyama! They copy Edo's actors, badly. Keep it. It's worth less than the paper."
-"I LIKE it." "Then it's worth exactly what you think. That's printing." Before Big Sister has seen the marks, the bench's three
+Little Sister may show him Sōshichi's print: "Toyama! They copy Edo's actors, badly. Keep it. It is worth less than the paper."
+"I LIKE it." "Then it is worth exactly what you think it is. That is printing." Before Big Sister has seen the marks, the bench's three
 small places are only things on a bench ("His block. I'd only touch it with his paper in my hands and his yes.").
-- **The marks.** Big Sister: "May I watch you print? Closely? I won't touch." "Watch! My paper boy's on the road to Ise, so
+- **The marks.** Big Sister: "May I watch you print? Very closely? I promise I will not touch." "Watch! My paper boy's on the road to Ise, so
   watch closely and pity me." He prints one by eye, and the blue comes up a hair to the left: Little Sister, coming over to
-  the bench: "That's a blurry famous man." "Every first one is." "For the small one. A famous man, with his blue ghost. Don't sell it." (the spoiled sheet
-  to Little Sister: `blueprint`.) Big Sister: "There's a mark cut at the block's corner. And another along its edge." "The paper
+  the bench: "That's a blurry famous man." "Every first one is." "For the small one: a famous man and his ghost. Do not sell it. Nobody would." (the spoiled sheet
+  to Little Sister: `blueprint`.) Big Sister: "A mark cut at the block's corner, and another along its edge. Not decoration." "The paper
   goes into the corner and against the edge, so every color lands true." "That's the idea. I've been doing it by eye. My eye
-  lands a hair to the left." "May I lay the paper? I have very straight hands." "Lay away! Corner first. Then the side. Then I
+  lands a hair to the left." "May I lay the paper? I have very straight hands. It is my one practical gift." "Lay away! Corner first. Then the side. Then I
   rub." (`edo.marksSeen`.)
 - **The laying**: three small places on the bench (generous areas round PAINT-21C's small shapes), Big Sister's: the corner
   mark ("Corner into the corner mark."), the side mark ("Edge against the side mark."), then Senzō's pad ("And I rub. ...And
   lift."). In order: "Look at that. Look at THAT. Every line where it should be." "Berlin blue. It came last year. In Edo they're
-  making whole pictures in it." "An actor at home, in a robe of the new blue. I registered it. That's the word." (the sheet on
+  making whole pictures in it." "An actor at home, in a robe of the new blue. I registered it. That is the word." (the sheet on
   its stand clean: `edo.registered`). Out of order, its own line, and a ghost again ("A ghost again. Corner, side, then me. In
-  that order. Again."): the side first ("Side first? No. Everything depends on the corner. Corner first."); the pad first ("Rub
+  that order. Again."): the side first ("Side first? No. Everything hangs on the corner. The corner goes in first."); the pad first ("Rub
   what? There's no paper on it yet.": he slaps one on by eye); the corner and then the pad, with no side. The laying starts
   again from the corner after any ghost (and after a game is loaded).
 - **The sheet, read.** With the paper laid in order and the sheet caught, Big Sister (or Mom) asks him to read it: "Ha. Ha.
-  ...I've never seen it before in my life. Nice blue, isn't it." "...Draw the curtain a little. Thank you." (He glances up the
+  ...I've never seen it before in my life. Nice blue, isn't it." "...Draw the curtain across a little, would you? Thank you." (He glances up the
   street and down, and holds it close.) "'At the foot of Mount Shosha, by Himeji, there is a hall for women.'" "'Every sunset a
   boy's voice speaks in it, in a tongue unknown to man or fox.'" "'The novice who kept its lamp ran out in fright and locked the
   door behind him.'" "'Nobody living can open that lock.'" "'Every woman in Harima has tried her comb and her pin in it.'" "'The
   abbot says it is not to be broken, and whoever opens it may go in.'" "And there's the lock in the picture: a rabbit running on
-  waves. Lovely water." "A BUNNY lock." "A lock no comb or pin will open, and a boy's voice behind it." "Then that's where
+  waves. Lovely water." "A BUNNY lock." "A lock no comb or pin will open, and a boy's voice behind it, speaking English." "Then that's where
   we're going." (`edo.sheetRead`: the beat; the sheet's look is the reading from now on.) Little Sister, after: "Why is there a
-  hall just for LADIES?" "Women don't go up Mount Shosha. They stop at that hall, and leave their slips."
+  hall just for LADIES?" "Women do not go up Mount Shosha. They stop at that hall, and leave their slips."
 - **Wrong tries**: the actor prints ("All actors. Osaka does actors. Edo does pretty ladies. I read a book."), the toy prints
-  (Little Sister wants all of them), the pot of blue ("The new blue. 1830 is the year the prints went blue. I'm IN it."), the
+  (Little Sister wants all of them), the pot of blue ("The new blue. 1830 is the year the prints went blue, and I am standing IN it."), the
   peddler's print shown to him.
 - Notes: actor prints as Osaka's trade, toy prints, Berlin blue new in 1829-30, registration marks and one block a colour are
   documented; a printer quietly printing the forbidden sheet is the game's. Staging decision: Senzō's demonstration print is
@@ -1149,23 +1149,23 @@ Puzzle #31: Three To A Puppet        (Act Six · Leads: Big Sister and Little Si
 ```
 Tatsu is following three tall women; Mom: "Somewhere dark. Somewhere crowded. Follow the drum, girls." In at the back door
 (`edo.backstage`): "It's DARK. And it smells like dust and glue." "Backstage. ...Oh. Oh, I like it here." Jūbei: "The last
-piece of the day, and a boy with no left hand and no feet." "My left-hand man and my feet man both ran off to Ise yesterday."
+piece of the day, and a boy with no left hand and no feet." "My left-hand man and my feet man both ran off to Ise yesterday. Without a word."
 "Everyone in Osaka has run off to Ise except the magistrates."
 - **Black.** The robes on the peg (Big Sister asks who wears them): "The hands. They wear black, and hoods. The house agrees
   not to see them." Big Sister: "In black, you're not there. It's the rules." Mom: "It's not a lie if everybody knows." The
-  girls offer ("We could be the hands. My sister and I. We're quick, and we can be quiet."; Little Sister: "I'm GOOD at feet.
+  girls offer ("We could be your hands, my sister and I. We are quick, and very quiet."; Little Sister: "I'm GOOD at feet.
   I've got two."); Jūbei looks at them, at the time, at the robes: "..." "The tall one, the left hand. The small one, the feet.
   Robes. Now." (both girls into `edo-kurogo`; the peg empty). Big Sister: "Three to a puppet. They've done it this way since
   1734." (`edo.hooded`.)
 - **Rehearsal**, on the doll on its stand (PEOPLE-21A's `boypuppet-stand` takes the painted puppet's place while it is
-  worked): Big Sister's rule, "Where his eyes go, his left hand goes. Watch his head, not me." (his hand to his ear) "His head
+  worked): Big Sister's rule, "Where his eyes go, his left hand goes. Watch his head. I am not the play." (his hand to his ear) "His head
   turns. His hand goes up. ...Like that?" "Like that, but as if you meant it." Little Sister's, "When he steps, you stamp. When he
-  runs, you run." (stamping) "STAMP. Stamp-stamp-stamp. Run." "...Good. Less joy. He's sad until the end." (`edo.rehearsed`.)
-  Each asking for the other's part: "The feet are the small one's. You have hands. Use them." Mom asking for a part: "You're out
+  runs, you run." (stamping) "STAMP. Stamp-stamp-stamp. Run." "...Good. Less joy, please. He is a sad boy until the very end." (`edo.rehearsed`.)
+  Each asking for the other's part: "The feet are the small one's. You have hands, so be hands." Mom asking for a part: "You're out
   front. Every play needs one person to cry. Go and cry."
 - **Mom out front.** Her use of the audience, once both girls have rehearsed: "Places, girls. I'll be out front, where I can
   watch you not being there." She goes round through the gap at the wing wall's end, along the aisle, to the only space left
-  in the front row (the `house` floor), and sits back on her heels beside Tatsu. "...You're crying. It hasn't started." "I know
+  in the front row (the `house` floor), and sits back on her heels beside Tatsu. "...You are crying already. It has not even started." "I know
   how it ends. A boy runs home to his mother." "...Here. I always need it." (his towel) "Weren't there three of you?" "There
   were. The other two are at work." "Good. Work's good." (`edo.momSeated`.)
 - **The show.** The stage takes the roof hatch's day (PAINT-21D's show state, cross-faded in with the set's lit twins); the doll
@@ -1175,20 +1175,20 @@ piece of the day, and a boy with no left hand and no feet." "My left-hand man an
   Sister's, his feet Little Sister's): "The boy hears his mother calling." (Big Sister: his hand to his ear: `edo.cue1`); "He
   runs. He runs. He runs for home." (Little Sister: a run of stamps: `edo.cue2`); "He kneels down at her door." (both, either
   order: the hand to the ground, the feet folded: `edo.cue3`). A part at the wrong cue: the house laughs at a sad play, Jūbei
-  hisses "Not yet." (then "Watch his head. Wait for the words."), and the cue comes round again. The other girl's reach for a
+  hisses "Not yet." (then "Watch his head, and wait for the chanter's words."), and the cue comes round again. The other girl's reach for a
   part is Jūbei's hiss of the rule; Mom watches. Then: "And she opens it." The house weeps; Tatsu: "...Best one I've ever seen.
   The boy's feet. You could FEEL him running." Mom (into his towel): "...I thought so too." "Keep the towel. I always bring two."
   The stage goes back to the afternoon, the girls come down out of their black, the doll goes back on its stand, Mom comes
   back round.
-- **The troupe.** Jūbei: "You'll do. Both of you. ...Who are you?" Mom: "We have to go west, to Himeji. We'd rather not be asked
-  questions on the way." "Then don't go west from Osaka." "We play at Fushimi tomorrow. Up the river, by the Kyoto boat. I need
+- **The troupe.** Jūbei: "You will do. Both of you. ...Now. Who are you?" Mom: "We have to go west, to Himeji. We'd rather not be asked
+  questions on the way." "Then do not go west from Osaka." "We play at Fushimi tomorrow. Up the river, by the Kyoto boat. I need
   carriers." "Get off at Hirakata, and cross by the ferry to the Takatsuki side." "Take the old Yamazaki road west. It goes round
-  Osaka," "and nobody on it is looking for three tall women." "Thank you. We'll carry anything you like." (`edo.troupeTaken`:
+  Osaka," "and nobody on it is looking for three tall women." "Thank you. We'll carry anything you like, and gladly." (`edo.troupeTaken`:
   the beat.) Little Sister: "Can I be the feet AGAIN? Tomorrow?" "Tomorrow you carry boxes. Feet are for professionals." Big
   Sister: "How long does it take to learn the head and the right hand?" "Thirty years. The first ten, you carry boxes."
 - **Wrong tries**: the puppets on their rail (Little Sister: "They're SLEEPING." "They're hanging." "SLEEPING."), the heads (Big
   Sister will not look twice), the chanter's book ("No. Nobody touches a chanter's book."), the boy's head once the girls are
-  in black (Jūbei's own place: "Mine? My face shows. You'd need thirty years for that one."), the back door while they are in
+  in black (Jūbei's own place: "Mine? My face shows when I work. You would need thirty years for that robe."), the back door while they are in
   black ("Leave a theater before the play? Never. Not even by the back door.").
 - Notes: three operators to a puppet since 1734 and the Inari theatre in Naniwa Shrine's grounds are checked; the black hoods of
   the left-hand and feet operators are the long convention, not checked this round; the play and its cues are the game's own.
@@ -1196,22 +1196,22 @@ piece of the day, and a boy with no left hand and no feet." "My left-hand man an
 ```
 Cut-Scene: The Kyoto Boat        (edo.boat: needs edo.troupeTaken and edo.sheetRead; edo-boat.js)
 ```
-Played when both are done and Jūbei has his word ("Morning. Hachikenya. Don't be late, and don't be noticed."): straight
+Played when both are done and Jūbei has his word ("Morning, at the Hachikenya landing. Do not be late, and do not be noticed."): straight
 after the troupe if the sheet has been read, or when they come back to him from the print shop. Pictures over the stage, as
 round twenty's voyage draws the ship by night (the game's own: flat masses, banded skies, the three as small shapes in their
 borrowed colours). The card "The Kyoto Boat". Morning at Hachikenya, the long passenger boat by the landing: "Boxes in the boat.
 Carriers among the boxes. Nobody sits on the heads." "Twenty-eight passengers, four boatmen and a troupe. I counted. Then I gave
-up." "We're SQUASHED. I'm squashed between a box and a man's elbow." Upriver on a long rope, a gang leaning into it on the bank:
-"We're being pulled up a river by forty men." "Like a KITE." Hirakata, the food boats alongside (the voice `foodboat`): "Won't
-ya stuff some rice? Won't ya swill some sake?" "They're RUDE." "It's the custom. They count the bowls." "Three bowls, for my
+up." "We're SQUASHED. I'm between a box and a man's elbow, and the elbow is winning." Upriver on a long rope, a gang leaning into it on the bank:
+"We are being pulled up a river by forty men. I have never felt so important." "Like a KITE." Hirakata, the food boats alongside (the voice `foodboat`): "Won't
+ya stuff some rice? Won't ya swill some sake?" "They're RUDE." "It is the custom. They are rude to everyone, and they count the bowls." "Three bowls, for my
 carriers. Count them twice. You always do." The ferry to the Takatsuki side, the troupe's boat going on: "Hirakata. You get off
-here. The ferry takes you over to the Takatsuki side." "You were good hands, both of you." "Can we come back and be the feet
-again?" "You may come back when you are thirty." Mom: "Thank you. For the boat, and the road, and for asking so little." The
+here. The ferry takes you over to the Takatsuki side." "You were good hands, both of you. Good feet, too." "Can we come back and be the feet
+again?" "You may come back when you are thirty." Mom: "Thank you, Jūbei. For the boat, and the road, and for asking so little of us." The
 map: the portraits up the river path to Hirakata (its picture fades in at the river's turn: the stop named in the journey's
 first part, PAINT-21F's), then by the road north to the hills (`g.journey("edo", "osaka", "hills", { segments: [{ to:
 "hirakata", sound: "haul", stops: ["hirakata"] }, { to: "hills", sound: "sandals" }] })`). The road north at dusk, the first
-rain: "A drop. On my NOSE. ...Two drops." "Rain, and the dark coming. We'll find a roof up there, girls. Up that path."
-"North, into the hills, till it's quiet. Gonroku's orders, and Jūbei's road." The card "The hills"; `edo.boated`; the hats on;
+rain: "A drop. On my NOSE. ...Two drops." "Rain, and the dark coming on. We'll find a roof up there, girls. Up that path."
+"North, into the hills, until it is quiet. Gonroku's orders, and Jūbei's road." The card "The hills"; `edo.boated`; the hats on;
 the cedar path (`edo-cedars`, `enter`). Skipped, the same.
 
 #### The hints, stage by stage
@@ -1285,7 +1285,7 @@ document stands, its puzzles renumbered: #25 Under The Cedars is now #32, #26 Ou
 - **The card** is "Three days later" / "Akashi" (WRITE-21B's edit of round twenty's second word), with Little Sister's line under
   it as built ("Everybody else was going the OTHER way."); then the map: the portraits down out of the hills by Kōriyama and
   west along the shore road past three small pictures (PAINT-21F's), each with its line said over it as the portraits come to
-  it (WRITE-21B's): Kōriyama, Little Sister: "A camellia as big as a HOUSE."; Suma, Mom: "A stone for a boy who died young.
+  it (WRITE-21B's): Kōriyama, Little Sister: "A camellia as big as a HOUSE. You could keep chickens under it."; Suma, Mom: "A stone for a boy who died young.
   Soba, we can't afford. A prayer, we can." and Big Sister: "A great poet said Suma's flutes weren't worth ten hiki to see. We
   had no hiki." (a stop may say two lines: SCENES-21B's small change to `atlas.js`); Maiko, Big Sister: "Pines, all leaning one
   way. That's the sea wind. I'm NOT saying they know." Then `edo.walked`, and the Akashi shore on `road` (SCENES-21C's
@@ -1423,7 +1423,7 @@ Coming up the path the first time: a temple bell far off, the lamp lit in the st
 "The lamp went out when we came. I saw it go."). A thin line of lamplight under the storehouse's floor.
 
 - **The door** is barred from inside. A use knocks ("I knocked, as nicely as I know how. Whoever's in there knows how to be
-  quiet."); the next calls out ("Hello? ...It's gone quiet. I've frightened somebody. I'm sorry."; Little Sister: "HELLO.
+  quiet."); the next calls out ("Hello? ...It's gone quiet. I've frightened someone, and I'm very sorry for it."; Little Sister: "HELLO.
   ...It stopped praying. Oops."): the line of light under the floor goes out for a moment, and comes back. Turn and turn
   about, as long as anyone tries.
 - **The pipe** in the hillside ("Listen at"): Little Sister: "The ground is PRAYING." (each has her own: Mom's "Someone's
@@ -1432,12 +1432,12 @@ Coming up the path the first time: a temple bell far off, the lamp lit in the st
   and Big Sister refuse it, and point at her. Little Sister: "Mommy, LIFT me. I'll go through and open the door. I fit." Mom
   comes over and lifts her; she climbs onto the sill (PEOPLE-20's `climb`): Mom, "Careful of the lamp, sweetheart. And of
   whoever put it out." Through, and down onto the sacks inside, alone: "I'm IN. I landed on something soft. ...It's bags.
-  Bags of black." (Big Sister, outside: "She's in. She's always in. It's her whole career."). She hops down.
+  Bags of black." (Big Sister, outside: "She is in. She is always in. It is her entire career."). She hops down.
 - **Alone in the storehouse**, everything is hers to look at; the mat she leaves ("A mat. It's got a nightlight UNDER it.").
   The door (or the bar): "I lifted the stick. It's HEAVY. ...Got it. Come in." The bar up, the door open, `edo.unbarred`;
   Mom and Big Sister come in out of the rain. (Outside, the door's look is now "Unbarred, by a seven-year-old, from inside.
   I'm writing that down.")
-- **The mat**, with light at its edge (any of them): "A trapdoor. ...Girls, we're in someone's house." Then: Big Sister, "We
+- **The mat**, with light at its edge (any of them): "A trapdoor. ...Girls, I believe we're standing on someone's roof." Then: Big Sister, "We
   should not open that." Mom, "No. We should knock." Little Sister, "Knock on a FLOOR?" Mom, "It's still a door, sweetheart.
   Manners apply." (`edo.matMoved`; Big Sister's own line says the first of them, so it is not said twice.)
 - **The knock** (the trapdoor's use): three knocks on the boards; the light between them goes out. Little Sister: "It went
@@ -1464,9 +1464,9 @@ A word with any of the three hosts is the room's talk (`roomTree`), and once beg
 openings ("We're strangers, we're wet, and we mean you no harm. All three are true." Sei: "Strangers, yes. Wet, yes. The
 third I will see."), the wrong foot ("What is this room?" Jinsuke: "Charcoal." Mom: "...I shouldn't have asked. I withdraw
 the question."), Big Sister's hinges and Little Sister's hands (the clues), and the lever, one for each lead, always Little
-Sister praying: Mom, "Prayers, girls. Then sleep." Little Sister, "Out loud?" Mom, "...Yes, sweetheart. Out loud." She folds
+Sister praying: Mom, "Prayers, girls, just as we say them at home. Then sleep." Little Sister, "Out loud?" Mom, "...Yes, sweetheart. Out loud, the way we always do." She folds
 her hands: "'...Our Father which art in heaven, Hallowed be thy name.'" A silence; the grandmother, very low: "...Ten ni
-mashimasu..." Big Sister: "Which art in heaven. The same words. It's the same prayer." Mom: "...Yes. It is." Sei: "Jinsuke.
+mashimasu..." Big Sister: "Which art in heaven. Those are the same words. It is the same prayer." Mom: "...Yes. It is." Sei: "Jinsuke.
 The doors." "Mother--" "A child said it out loud in my house. The doors." She gets up and opens the altar herself
 (`edo.prayed`, `edo.altarOpen`). "That's Mary. She has a BABY." Sei: "To anyone who asks, she is Kannon-sama: the one who
 hears. To us, she is Maria." Then every question (the calendar, the water and O-Rin's baptism, no priest since 1644, the six
@@ -1488,7 +1488,7 @@ Puzzle #34: Charcoal, And A Kind Child        (Act Six · Leads: all three · th
 Morning. O-Rin comes down the ladder white: "Father. A man on the path. Alone. The stick with no tassel." Jinsuke: a
 constable's man; he cannot take anyone without an order; he can look; three foreign women from the river mouth, and anyone
 not living where their temple says. Mom: "Then I'm the one he's looking for, and I won't lie to him. So he mustn't see me."
-Big Sister: "Not up here, Mother. He'll look up here. Down, with Grandmother Sei." Little Sister: "I'll do the talking. I'm
+Big Sister: "Not up here, Mother. He will look up here. Down, with Grandmother Sei." Little Sister: "I'll do the talking. I'm
 GOOD at talking to men with sticks." Jinsuke: "The mat. The sacks. And whatever is making the floor pink." (`edo.watch`;
 Mom below, `edo.momBelow`). Jinsuke and O-Rin go up: he keeps the door, she watches by the lantern.
 
@@ -1512,7 +1512,7 @@ for this; and once he is at the door the ladder is refused her: "No. If he asks 
 room is ready** (a look out through the crack at him on his step: Mom, "A man coming up the path, wet to the skin, with a
 stick in his belt. Alone." / "Inside, girls. Places."; then Jinsuke's reason, by what is still wrong: "The mat is off and
 the sacks are not on it. He will see the floor has a door." / "The floor is pink. Charcoal is not pink. Whatever is lit
-below, put it out." / "Your mother is up here. He will ask her, and you say she does not lie. Down."); Jinsuke asked
+below, put it out." / "Your mother is up here. He will ask her, and she does not lie. She must go down."); Jinsuke asked
 before (his reason); **Big Sister answering for Mom** (the tree's wrong foot: "If you're asking about our mother, she's...
 not available." Jinsuke: "Do not help." Isuke: "Was I asking about a mother?").
 
@@ -1521,7 +1521,7 @@ while he is in, the rain in the doorway); Isuke comes in out of the rain to his 
 and the girls. "Three foreign women, seen at the river mouth. Tall. In hats." "And anybody living where the temple register
 doesn't say." "Who are these two?" Jinsuke: "Guests." "Guests. ...Where from?" Big Sister: "The sea." "The sea?" "Most
 things come from the sea, eventually." "...I'm writing that down. It's the best answer I've had all week." (her east, her
-height; once her answers are used up, "He's asking questions. I'm answering them. Truthfully. It's going oddly well.").
+height; once her answers are used up, "He asks questions; I answer them, truthfully. It is going remarkably well.").
 Little Sister (who first sizes him up: "He's hungry. I can TELL. His tummy said so."): the hats, the church, the yawns ("Five.
 I did one on the path. ...Don't tell the magistrate."), the boots, and the egg, in both hands: "You're hungry. Here. It's a
 good egg. I was going to hatch it." "...Nobody's given me anything on duty. Not once. Not a radish." "It's warm. I kept it
@@ -1537,8 +1537,8 @@ There's a mirror on that stand. Not mine."). A word with the grandmother (`mirro
 the wall. Jinsuke, the trapdoor wide." "In the dark we keep it. In the light it speaks." She takes the mirror off its stand,
 stands in the sun and turns its light onto the earth wall (ENGINE-20's `mirror` light, `cross-sei`): in the bright patch, a
 cross (`edo.crossShown`). "There's a CROSS on the wall. Made of light." Big Sister's physics, and the one thing she has no
-physics for. "My mother said: nobody can take a thing off you that is only there in the light." The gift: "Take it where it
-can be held up in the light." "I can't take your mother's mirror." "You are not taking it. I am sending it. It is different,
+physics for. "My mother said: nobody can take from you a thing that lives only in the light." The gift: "Take it where it
+can be held up in the light." "I couldn't possibly take your mother's mirror." "You are not taking it. I am sending it. It is different,
 and I am older." "...Then I'll carry it, and I'll find it some sun." The mirror is Mom's, and she holds it up where the
 grandmother stood: the cross is on the wall again, from her hands (`edo.mirrorUp`, `cross-mom`). Jinsuke's trowel for his
 cousin Tomezō, into her sash. The castle's two stories: a tile with a cross on the gate; a lady at the top of the keep who
@@ -1663,28 +1663,28 @@ the scenes set for it; WRITE-21B's `hintFor`):
 | --- | --- | --- | --- |
 | #35 | O-Fusa not met | `edo.fusaMet` | "That little girl's lost something. Your sister speaks fluent nine-year-old." |
 | #35 | nobody in the water | `edo.waded` | "The ladle's out in the shallows, and only one of us is wearing boots." |
-| #35 | the octopus holding on | `edo.crabClue` | "It's holding on. The old fisherman knows octopus. Ask what it lets go for." |
-| #35 | no crab | `edo.crab` | "A crab, he says. Under the rocks. I'll do that part. I've done bath time." |
-| #35 | the crab not swapped | `edo.ladleFree` | "The crab goes to your sister, and she holds it out to the octopus." |
-| #35 | the ladle not given back | `edo.ladleBack` | "The ladle's free. Back to its owner, before her group goes." |
-| #35 | O-Sato not asked | `edo.riddle` | "The two women on the road come from near Himeji. Ask them about Shosha." |
+| #35 | the octopus holding on | `edo.crabClue` | "It won't let go. The old fisherman knows octopus; ask him what it lets go for." |
+| #35 | no crab | `edo.crab` | "A crab, he says, from under the rocks. I'll do that. I've survived bath time." |
+| #35 | the crab not swapped | `edo.ladleFree` | "I'll give the crab to your sister, and she can hold it out to the octopus." |
+| #35 | the ladle not given back | `edo.ladleBack` | "The ladle's free. Back to its owner, girls, before her group moves on." |
+| #35 | O-Sato not asked | `edo.riddle` | "The two women on the road come from near Himeji. I'll ask them about Shosha." |
 | #35 | done | (the road west) | "West, girls. Himeji's a day on, and the voice comes at sunset." |
-| #36 | O-Kiku outside | `edo.kikuIn` | "That little girl needs someone her own size to go in with. Your sister." |
+| #36 | O-Kiku outside | `edo.kikuIn` | "That little girl needs someone her own size to walk in with. That's your sister." |
 | #36 | the way not known | `edo.knowWay` | "The teacher knows the way to Shosha. Your sister should ask her. They'll get on." |
-| #36 | no kitchen | `edo.kitchenLent` | "Supper for the walk, and one for the voice. O-Tane's kitchen, if I ask nicely." |
+| #36 | no kitchen | `edo.kitchenLent` | "Supper for the walk, and one for the voice. I'll ask O-Tane for her kitchen." |
 | #36 | the kitchen, no rice balls | `edo.riceballs` | "Water first, then salt, then rice. The pickle last, and then the cloth." |
 | #36 | done | (the map to Shosha) | "The way's drawn, and supper's made. Shosha, girls, before the sun's low." |
-| #37 | O-Ume not met | `edo.oumeMet` | "The old woman by the hut keeps the hall. Ask her about the lock." |
-| #37 | the lock not seen | `edo.lockSeen` | "Look at the lock itself, close up. Every part of it." |
-| #37 | the list not read | `edo.listRead` | "What a ship gives its lady. Your sister wrote it down on the ship. Ask her." |
+| #37 | O-Ume not met | `edo.oumeMet` | "The old woman by the hut keeps the hall. I'll ask her, politely, about the lock." |
+| #37 | the lock not seen | `edo.lockSeen` | "The lock itself, girls. Close up, every part of it. Something on it has to move." |
+| #37 | the list not read | `edo.listRead` | "Your sister wrote down what a ship gives its lady. Ask her to read her note." |
 | #37 | the things in the wrong hands | the pin with Little Sister, the coin with Mom, the comb with Big Sister | "The ear wants small fingers, the post a strong wrist, the comb a steady hand." |
 | #37 | in the right hands | `edo.earHeld` (not saved) | "Your sister, the pin, the rabbit's ear. She holds it while we do the rest." |
-| #37 | the ear held | `edo.postHeld` (not saved) | "The coin on the square post, and turn. That's my wrist. I hold it." |
+| #37 | the ear held | `edo.postHeld` (not saved) | "Then the coin on the square post, a quarter turn. That's my wrist. I hold it." |
 | #37 | the ear and the post held | `edo.hallOpen` | "The comb in the slits, steady. That's your sister's hand." |
-| #38 | the voice not heard | `edo.sonHeard` | "Inside, where the sun falls on the wall. We sit, and we listen." |
-| #38 | a door the size of a coin | `edo.doorWide` | "It's the size of a coin. More light, more door. Your sister's light." |
+| #38 | the voice not heard | `edo.sonHeard` | "Inside, where the sun falls on the east wall. We sit there, and we listen." |
+| #38 | a door the size of a coin | `edo.doorWide` | "The door's only the size of a coin. More light, more door. Your sister's light." |
 | #38 | a hand wide, not fed | `edo.sonFed` | "A door the size of my hand, and a rice ball in my sleeve. Supper." |
-| #38 | fed | `edo.holdHands` | "Tell him where we're going tomorrow. Before the sun goes." |
+| #38 | fed | `edo.holdHands` | "I should tell him where we're going tomorrow. Before the sun goes." |
 
 ### Location layout
 
@@ -1752,12 +1752,12 @@ INSIDE THE WOMEN'S HALL (edo-hall): sunset
 Puzzle #35: The Ladle        (Act Six · Lead: Little Sister, with Mom and Big Sister · the Akashi shore)
 Needs:        the walk out of the hills (edo.walked)
 Setup:        They come along the road onto the sand as a pilgrim boat from Awa unloads; two of its pilgrims wade in,
-              ladles held up dry ("Mind the pots! Mind the POTS. That's somebody's supper." "Ladles up! Whoever drops a
+              ladles held up dry ("Mind the pots! Mind the POTS. That is somebody's supper." "Ladles up! Whoever drops a
               ladle walks to Ise hungry."). Little Sister: "The SEA again. And a boat full of spoons." Big Sister:
-              "Pilgrims, wading in from that boat. Every one holding a ladle up, dry." Mom: "All but one. Look, girls.
+              "Ladles, not spoons. Pilgrims wading in from that boat, every ladle held dry." Mom: "All but one. Look, girls.
               That little one's crying." The two come ashore and stand with their leader; O-Fusa, nine, sits on the sand.
-Wrong tries:  The road west (before the ladle)  -> Mom: "Not yet. Not with that little girl crying on the sand." Big Sister:
-                                                   "West is Himeji, and it'll keep. That girl's ladle won't." Little Sister:
+Wrong tries:  The road west (before the ladle)  -> Mom: "Not yet, girls. Not while that little one is crying over her ladle." Big Sister:
+                                                   "West is Himeji, and Himeji will keep. That girl's ladle will not." Little Sister:
                                                    "Not till the girl gets her LADLE back."
               The road east                     -> "Three days of that. NO." (and Mom's, Big Sister's own)
               The ladle, from the sand          -> Mom: "It's past the floats. I'd be in up to my sash, and so would the
@@ -1770,38 +1770,38 @@ Wrong tries:  The road west (before the ladle)  -> Mom: "Not yet. Not with that 
               The rocks (Big Sister; Little     -> "I'm not putting my hand under a rock. I've read about what's under
               Sister; Mom before the clue)         rocks." / "I tried. They go SIDEWAYS. I can't do sideways." / "There's
                                                    something sideways under there. I'll let it be, for now."
-              The castle (Big Sister)           -> "Four turrets and no keep. Japan has a thing about castles with no tops."
+              The castle (Big Sister)           -> "Four turrets, and no keep at all. I am beginning to take it personally."
               The pots (Little Sister)          -> "The octopus goes IN because it likes a cozy hole. Then it's supper."
-              The strait (Big Sister)           -> "Two and a half miles of sea to that island, and a tide like a river."
-Solution:     (1) O-Fusa (a talk, each of them her own way in): Little Sister's "I'll get it. I'm good at water." "You
+              The strait (Big Sister)           -> "Two and a half miles to that island, and the tide pours through like a river."
+Solution:     (1) O-Fusa (a talk, each of them her own way in): Little Sister's "I'll get it for you. I'm very good at water." "You
               can't. You'll get wet. Pilgrims don't get wet." "I won't get wet. I've got BOOTS." "...What are boots?"; Mom's
-              "Are you all right, sweetheart? What can we do?" ("Don't pat me. I'm nine." "I wouldn't dream of it."); Big
-              Sister's "Where have you come from?" (Awa, a writing school); and "Where did it GO, exactly?" "Out by the
+              "What's happened, sweetheart? Tell me, and we'll see what can be done." ("Please do not pat me. I am nine." "I wouldn't dream of it."); Big
+              Sister's "Where have you come from?" (Awa, a writing school); and "Where did it GO, exactly? Point to it." "Out by the
               floats. It's floating. A ladle floats. That's the only good thing." (edo.fusaMet.)
               (2) Little Sister wades in (a click in the shallows; she is in her wading clothes while her feet are in the
-              water): "Boots are for WATER." "She's in. Up to the top of the boots, and not one inch over." "It has a
+              water): "Boots are for WATER." "She is in. Up to the tops of her boots, and not one inch over. Remarkable." "It has a
               PASSENGER." (edo.waded.)
               (3) She pulls at the ladle: "Let GO, octopus. It's not your spoon." Heita, from his tub: "A tako lets go of
               nothing. Except for a crab." (edo.crabClue.) Big Sister: "Tako. Octopus. One of my forty words. Of course it
               is." (Asked, Heita says the same: "A tako lets go of nothing. Except for a crab." then "Crab.")
               (4) Mom at the rocks: "A crab, he says. Stand back, girls." She reaches under, and holds it up: "Got him.
-              I've caught worse in a bathtub." Big Sister: "Mother just put her hand under a rock. I'm writing it down."
+              I've caught worse in a bathtub." Big Sister: "Mother just put her bare hand under a rock. I am writing that down."
               (edo.crab: the crab in Mom's pockets.) Mom hands it to Little Sister (her portrait).
               (5) The crab on the ladle: "Here, octopus. One crab. Swap?" "It let GO. I've got the ladle." "And the crab got
               away. I watched it go. It's fine." Heita gets up, wades out to her and takes the octopus: "And the tako comes
               to me. Supper." He holds it up, goes back to his tub, and sits; she walks out of the water with the ladle
               (edo.ladleFree).
               (6) The ladle back (any of the three: Little Sister's "Here. Your ladle. It's got a bit of SEA in it.", or
-              Mom's, or Big Sister's): "My LADLE. I don't care about the sea. It's mine." "You're going west? Then leave
-              this at the women's hall at Shosha." "It's my name slip. My grandmother went there once. Don't lose it." "I
+              Mom's, or Big Sister's): "My LADLE. I do not care how much sea is in it. It is mine." "You're going west? Then leave
+              this at the women's hall at Shosha." "It is my name slip. My grandmother went there once. Do not lose it." "I
               won't. And here. A penny, for luck. It's got a man on it." "...He looks hungry." "Everybody says that."
               (edo.ladleBack: the slip to Little Sister, two pennies become one.)
 Gives:        `edo.ladle`; the road west: Mom: "West, girls. One more day of road." and the card.
 News:         O-Sato and her sister-in-law, Himeji women slipping away east to Ise (Mom or Big Sister, any time): "Then
               you'll know Shosha. We heard there's a voice there." "Still shut, when we left. And the voice still comes,
-              every sunset." "Old O-Ume keeps it. She leaves the voice a rice ball, every evening." "Her husband made that
+              every sunset." "Old O-Ume keeps the hall. She sets out a rice ball for the voice every evening." "Her husband made that
               lock. A shipwright, from Takasago." "And all he ever told her was that it opens to what a ship gives its
-              lady." "Every woman in Harima has tried her comb in it. Mine twice." Big Sister: "...What a ship gives its
+              lady." "Every woman in Harima has tried her comb in that lock. I have tried mine twice." Big Sister: "...What a ship gives its
               lady. Hold on. I wrote something down on the ship." (edo.riddle: a help, not a gate; O-Ume gives the riddle at
               #37 too.)
 Notes:        The octopus is drawn by the scene (a small pixel figure in the ladle's bowl, on the floor plane at the
@@ -1817,7 +1817,7 @@ Card: The next day        (edo.walk2)
 After "West, girls. One more day of road.": the card "The next day" / "Himeji", the portraits walking the act's map from
 Akashi to Himeji (`g.journey("edo", "akashi", "himeji", { sound: "sandals" })`), and Himeji town at `east`
 (`edo.inHimeji`). Skipped, the same place. Arriving: Little Sister: "There's the CASTLE. The white one, all the way up."
-Big Sister: "And somewhere near here, a hall with a voice in it. At sunset." Mom: "Then we need the way there before the
+Big Sister: "And somewhere near here, a hall with a voice in it, every sunset." Mom: "Then we need the way there before the
 sun goes. First things first, girls."
 
 ```
@@ -1830,16 +1830,16 @@ Wrong tries:  The lane north (the castle)       -> Mom: "Tomorrow. Tonight we go
                                                    tomorrow. Jinsuke's lady can wait one more night." Little Sister: "Not the
                                                    castle YET. The voice first." (Mom, with supper made: "Shosha first,
                                                    girls. The sun won't wait, and neither will he.")
-              The cotton office (Big Sister)    -> "They sell it in Edo, right over Osaka's head. Somebody's very clever."
+              The cotton office (Big Sister)    -> "They sell it straight to Edo, right over Osaka's head. Somebody is very clever."
                                                    Mom: "A matter of record: Gonroku's sail was a Harima captain's idea.
-                                                   Woven cotton." "...You got that from the bosun." "I did. I listen to
+                                                   Woven cotton." "...You had that from the bosun." "I did. I listen to
                                                    bosuns."
               The well (Little Sister)          -> "Is it a WISHING well?" Mom: "It's a well well."
               The map, before supper            -> "Not yet. We don't go to a hungry boy empty-handed."
               The kitchen out of order          -> "Rice on dry hands. It's all over me. Water, then salt, then rice." (each
                                                    step early has its own line; nothing is spoilt); the plum before the rice:
                                                    "A plum goes inside a rice ball. First, a rice ball."
-              The girls in the kitchen          -> "It's Mom's kitchen for the hour. I'm only here to say it looks right." /
+              The girls in the kitchen          -> "It is Mom's kitchen for the hour. I am only here to say that it looks right." /
                                                    "Mommy's cooking. I'm GUARDING the cooking."
               Tōbei's sweets (Little Sister)    -> "For sale. For children. For you, for the walk." "I'm saving it for the
                                                    walk. ...I ate it."
@@ -1851,15 +1851,15 @@ Solution:     (1) First day (Little Sister). "Is it your first day? Mine had a H
               better." Down again, hand in hand, to O-Tane at her door; Little Sister writes it in the dust: "Look. I can
               write one. It's 'mother'. Kiku, look." O-Kiku, smiling: "...Mother." O-Tane: "...That's the first word out of
               her all day." O-Kiku goes back in to her desk by herself (edo.kikuIn).
-              (2) The way (Big Sister). "Your small sister brought O-Kiku in. Thank you." "She does that. She goes first."
+              (2) The way (Big Sister). "Your small sister brought O-Kiku in, where none of us could. Thank you." "She does that. She goes first."
               "Do you know the women's hall at Shosha? Could you tell us the way?" "My mother left her slip there every
               spring. Old O-Ume keeps it." "North-west, through the fields. The wooded mountain. The east path." "The hall is
               at its foot. An hour and a half's walk." "Go now, and you will be there before the sun is low." Big Sister:
-              "She drew it. Pictures, no words. She drew it for somebody who can't read." (edo.knowWay: Shosha on the map.)
+              "She has drawn it. Pictures, no words: drawn for somebody who cannot read." (edo.knowWay: Shosha on the map.)
               (3) Supper (Mom). "May I ask a favor? We've a long walk tonight, and I'd like to take supper." "Supper. For
               the walk?" "For the walk. And one for a voice, in case." "...My kitchen's yours for an hour. The rice is
-              cooked. Salt's in the jar." "Pickle's in the tub. And don't let the fire out." She holds out her paddle and
-              Mom takes it; Big Sister: "Her paddle. Mom's been handed the keys to two kitchens this week."
+              cooked. Salt's in the jar." "The pickle is in the tub. And do not let the fire out." She holds out her paddle and
+              Mom takes it; Big Sister: "Her own rice paddle. Mom has been handed the keys to two kitchens this week."
               (edo.kitchenLent.) In the kitchen, in order: the bucket (or the well): "Water first. Wet hands, or the rice
               will cling to me like a toddler." "If that's my boy, he hasn't eaten. He never eats when he's worried."; the
               salt jar: "A pinch of salt, rubbed into wet hands. Now the rice."; the rice pot: "A handful, and press.
@@ -1878,7 +1878,7 @@ Notes:        O-Kiku and Little Sister walk hand in hand (`edo-hand`, `kiku-hand
 Puzzle #37: What A Ship Gives Its Lady        (Act Six · Leads: all three at once · the foot of Mount Shosha)
 Needs:        supper (edo.supperMade)
 Setup:        Late afternoon. The women on the bench, waiting with their slips: Grandmother Tome: "It's a fox, I tell you.
-              Foxes like a sunset." A wife: "A fox wouldn't call every evening at suppertime." O-Ume: "A boy who calls at
+              Foxes like a sunset." A wife: "A fox would not call every evening at suppertime." O-Ume: "A boy who calls at
               suppertime is a hungry boy." The hall shut, the lock on its hasp, a rice ball on a leaf on the step, Ryōkai
               sitting by the stone at the foot of the path.
 Wrong tries:  The path up (the first try)       -> Ryōkai on his feet: "Forgive me. Women may not climb." "Not since long
@@ -1892,7 +1892,7 @@ Wrong tries:  The path up (the first try)       -> Ryōkai on his feet: "Forgive
               The rice ball on the step         -> Little Sister: "That's HIS." "It's his supper. I'm not even LOOKING at it."
               The bench                         -> Little Sister: "I sat on the END. A grandma moved over. Nicely."
               The road back (east)              -> "Not now, darling. The sun's going down. That's the point of being here."
-              The pin and the coin in the       -> "A pin won't turn a square post. It wants a square hole." / "The pin's busy
+              The pin and the coin in the       -> "A pin cannot turn a square post. That wants a square hole, and a strong wrist." / "The pin's busy
               wrong places                         in the EAR." (each part has its wrong things, each with its line)
               One person at two parts           -> "I've got two hands, and one of them is in a rabbit."
               The wrong hand at a part          -> Big Sister at the ear: "The ear-pick end fits the hole. Forty years of
@@ -1904,16 +1904,16 @@ Wrong tries:  The path up (the first try)       -> Ryōkai on his feet: "Forgive
                                                    isn't it." / "It all sprang back. Forty years of waiting. It can wait one
                                                    more minute." / "It all went BACK. The bunny's sulking."
 The talk:     Ryōkai (optional): what is up there that they will not see (the founder's hall and its strongmen, the bell,
-              and "A stone with a great lady's poem on it. Very old." "She asks the moon at the mountain's edge to light her
+              and "A stone, with a great lady's poem cut into it. Very old." "She asks the moon at the mountain's edge to light her
               road, from far off." Mom: "...I know that one. Not the words. The asking."). O-Ume: the voice, the abbot's
-              word, and the riddle: "It opens to what a ship gives its lady. That's all he ever said." "He liked a riddle
+              word, and the riddle: "'It opens to what a ship gives its lady.' That is all he ever said of it." "He liked a riddle
               better than his supper." The slips from Osaka and Akashi into her hands: "Then I'll hold it till the door
               opens. It will open. Doors do." (edo.oumeMet; edo.natsuGiven, edo.fusaGiven.)
 Solution:     (1) The lock up close (the lock, from any of them): the first time, Tome: "Thirty times. My best comb. It
               looked at me." (edo.lockSeen.)
               (2) Big Sister's note on the rabbit (the riddle known): "Here. What the shipwright seals in the mast, for the
               lady." "Two dolls. Two dice. Twelve one-mon coins. A woman's hair. The five grains." "And?" "Rouge. Powder. A
-              comb. A pin." "Every woman in Harima tried her comb and her pin. Nobody tried a coin." Little Sister: "I've got
+              comb. A pin." "Every woman in Harima tried her comb and her pin. Not one thought of a coin." Little Sister: "I've got
               a COIN. With a hole in it. From Kōta." Mom: "And I have a comb from Osaka. And you have a pin in your hair,
               darling." (edo.listRead.)
               (3) The hand-round, by the portraits (each its own line, and once Little Sister's "Everybody give your thing
@@ -1922,16 +1922,16 @@ Solution:     (1) The lock up close (the lock, from any of them): the first time
               hands, darling. It's O-Natsu's comb.").
               (4) The ear: Little Sister's pin: "In it goes. Click. The wave MOVED. I'm holding it." (edo.earHeld; her hand
               drawn holding it.) (5) The post, under the wave: Mom's coin: "It fits the post. A quarter turn. Stiff.
-              ...Click." "Something opened along its back. I'm holding." (edo.postHeld; her hand drawn, turned.) (6) The
+              ...Click." "Something's opened along its back. I'm holding it, girls. Quickly." (edo.postHeld; her hand drawn, turned.) (6) The
               slits: Big Sister's comb: "Teeth into the slits. Steady. ...Press." "The springs closed. I felt them. The
               bolt's free." "It CHIRPED." "Like the ship. Exactly like the ship." O-Ume: "That's him. That's his joke. The
               lady chirps."
               (7) Back outside, the sun going red: the doors swing open (edo.hallOpen). O-Ume: "In you go. Slips first.
-              Grandmother Tome, you've earned the front." "These two go up first. They came farthest." Mom: "And this is for
-              you. From a kitchen in Watamachi." "...I've left out thirteen of these. Nobody ever left me one." Little
-              Sister: "And this. It's from a boy on a ship. For your rice balls." "...From a ship." "Then it's come home."
+              Grandmother Tome, you've earned the front." "These two go up first. They have come the farthest." Mom: "And this is for
+              you. From a kitchen in Watamachi." "...I have left out thirteen of these. Nobody has ever left one for me." Little
+              Sister: "And this. It's from a boy on a ship. For your rice balls." "...From a ship." "Then it has come home."
               The comb back to Mom, the pin back to Big Sister; the women go in with their slips and come out and go home
-              ("In, and out, and home before dark. Thank you." "Grandmother's slip is in. I'm running home. All the way.");
+              ("In, and out, and home before dark. Thank you, from both of us." "Grandmother's slip is up with the others. I am running home now. All the way.");
               O-Ume takes the rice ball from the step and goes in; Ryōkai goes round to the lattice. Mom: "The sun's going,
               girls. Inside."
 Gives:        `edo.hall`; the hall's doors.
@@ -1945,34 +1945,34 @@ Notes:        The three hands are ENGINE-21's `g.hand` with PEOPLE-21B's `LOCK_H
 ```
 Puzzle #38: A Small Door At Sunset        (Act Six · Leads: Mom, then all · inside the women's hall)
 Needs:        the hall open (edo.hallOpen)
-Setup:        Inside. O-Ume: "Sit where you like. He comes when the light reaches the wall." Grandmother Tome, at the
-              hum, goes home: "Thirty-one tries, and now I go home to my supper. Goodnight, all." (edo.tomeHome.) Bars of
+Setup:        Inside. O-Ume: "Sit wherever you like. He comes when the light reaches the east wall." Grandmother Tome, at the
+              hum, goes home: "Thirty-one tries, and I am in. Now home to my supper. Goodnight, all of you." (edo.tomeHome.) Bars of
               red light lie low on the east wall and climb, slowly, while they look round.
-Wrong tries:  The cabinet                       -> O-Ume: "Kannon-sama is in there. You don't open her." Big Sister: "The one
+Wrong tries:  The cabinet                       -> O-Ume: "Kannon-sama is in there. One does not open her." Big Sister: "The one
                                                    who hears the cries of the world. That's what the name means." O-Ume: "So
                                                    she does." Mom: "So does mine."
               The flashlight, before the sun    -> "Not yet. The SUN has to find it first. Then my light."
-              The rice ball into a coin         -> "It won't fit. Not through a coin."
+              The rice ball into a coin         -> "It won't fit. Not through a door the size of a coin. Not yet."
 Solution:     (1) The voice: when the bars reach the hum, the small door opens, the size of a coin, and Mom is the one
-              played: "Hello? It's me again. Day fourteen." "Is anybody there? Anybody? ...Even you, Closet?" Mom: "It's not
+              played: "Hel-lo? It's me again. Day fourteen of saying hello to a wall." "Is anybody there? Anybody at all? ...Closet? Is that you, Closet?" Mom: "It's not
               a closet. It's a temple." "...MOM?" She kneels by the wall (edo.sonHeard). "You went through. I TOLD you not
-              to." "You did. You were right, and we went anyway, and we're all right." Little Sister: "Is that YOU?" "Is
+              to." "You did, my love. You were right, we came anyway, and we're all right." Little Sister: "Is that YOU?" "Is
               that YOU?" "I asked EARLIER."
               (2) The talk (Mom first; the girls each their own, by the door): where they are, his fortnight, where he
-              sleeps; Big Sister's walnut and her theory ("Mother. I have a theory. I can't footnote it.", after Little
+              sleeps; Big Sister's walnut and her theory ("Mother, I have a theory. I cannot footnote it, which pains me.", after Little
               Sister's penny); Little Sister's penny, the chickens, and whether he is scared; and Mom's "Have you eaten?"
               "...Define eaten." Little Sister: "MOMMY. The rice balls." (edo.eatenAsked.)
               (3) More light, more door: Little Sister's pink flashlight on the door: "More light, more DOOR." "Whoa. The
               door got bigger. And PINK." (edo.doorWide: the size of a hand.)
               (4) Supper: the rice ball into the door (`g.send("riceball", { to: "son" })`): "Here, darling. Supper."
               "It's cold. It's rice. It's the best thing I've ever eaten." "Chew." "I AM chewing." O-Ume, laughing and crying:
-              "I don't know a word of it. I know eating." (edo.sonFed.)
+              "I do not know a word of it. But I know eating." (edo.sonFed.)
               (5) Tomorrow: "Tomorrow there's a door at the top of a castle. We're bringing your coin." "..." "Mom. Dad went
-              through alone." "Don't. Whatever happens, hold hands." "We will." (edo.holdHands.)
-              (6) The sun goes: "Mom? The sun's going. The keys are going dark." The bars fade, the pink light with them:
+              through alone." "Don't do that. Whatever happens, hold hands. Promise." "We will." (edo.holdHands.)
+              (6) The sun goes: "Mom? The sun's going down. The keys are going dark in my hand." The bars fade, the pink light with them:
               "'Can a woman forget her sucking child," "that she should not have compassion on the son of her womb?" "yea,
               they may forget, yet will I not forget thee.'" Big Sister: "Isaiah 49:15." The door shrinks and is gone, and
-              the hall is dusk. O-Ume: "Will he come again tomorrow?" Mom: "I think so. If he does, feed him."
+              the hall is dusk. O-Ume: "Will he come again tomorrow?" Mom: "I think so. And if he does, please feed him."
 Gives:        `edo.son`; the cut-scene.
 Notes:        The bars are the scene's own live layer (blended light, moved by the light's k: low at 0, the hum lit at
               0.563, a coin's door at 0.6, a hand's at 0.68, the sunset 0.78), the door ENGINE-21's portal at the painter's
@@ -1986,14 +1986,14 @@ Notes:        The bars are the scene's own live layer (blended light, moved by t
 Cut-Scene: Mind The Fire        (edo.night)
 ```
 The title: "Mind The Fire". At the hall's step in the dusk, O-Ume with a paper lantern: "Take the lantern. The fields are
-dark, and the frogs are loud." "Thank you, O-Ume." "Keep it till you're done with it. A lantern is a patient thing." The
+dark, and the frogs are loud." "Thank you, O-Ume." "Keep it until you are done with it. A lantern is a patient thing." The
 dark fields, the frogs, the family a small group of shapes with the lantern on the path, the castle a pale shape on its
-hill: "The frogs are SINGING. All of them. Not well." "The castle. Just a pale shape, up there in the dark." "One more
+hill: "The frogs are SINGING. All of them. Not well." "The castle. Nothing but a pale shape, up there in the dark." "One more
 night, darling. Then the castle." Himeji by night, the ward gate shut, Tōbei with his clappers: "Hi no yōjin. Hi no
-yōjin!" "...Late walkers. With O-Ume's lantern. From Shosha, then." "The gates are shut. That's what a gate is for, at
+yōjin!" "...Late walkers, carrying O-Ume's lantern. From Shosha, then." "The gates are shut. That's what a gate is for, at
 night." He strikes his signal, and the gate opens: "There. The next man will let you through, and the next. Gate to gate."
 Big Sister: "We're being POSTED." Little Sister: "Arigatō, clapper man." "Mind the fire." O-Tane's door, a crack of light:
-"In. Quietly. She's asleep, and she's had a day." "So have we. Thank you." The dark: "He ATE it." "He did." "Tomorrow we
+"In you come. Quietly. She is asleep, and she has had a day." "So have we. Thank you." The dark: "He ATE it." "He did." "Tomorrow we
 hold hands." The card "The next day", and the castle approach at `enter` (`edo.nightDone`), the three in O-Tami's clothes,
 hats on. Skipped, the same place and clothes.
 
@@ -2003,7 +2003,7 @@ hats on. Skipped, the same place and clothes.
 The castle approach is reached the morning after "Mind The Fire" (`LEG_START.himeji` holds `edo.nightDone`; #39 needs
 `edo.night`). New at the castle: the road back into the town at the left edge (to its ward gate; the lane north brings
 them up again), and the map, which refuses Shosha: "Shosha's done its part. Today it's the castle." In Hold Hands, Little
-Sister's new line comes first, before Mom's "Places, girls. Hold hands. All the way through.": "My brother SAID."
+Sister's new line comes first, before Mom's "Places, girls. Hold hands, and don't let go until we're all the way through.": "My brother SAID."
 
 ### Ledger rows
 
@@ -2018,7 +2018,7 @@ Sister's new line comes first, before Mom's "Places, girls. Hold hands. All the 
 | The rice balls (`riceball`) | O-Tane's kitchen (#36), Mom's making | Mom | One for O-Ume (#37), one through the door for the Son (#38) |
 | O-Natsu's slip (`natsuslip`) | Osaka (#29) | Mom | Into O-Ume's hands (#37) |
 | O-Tami's hairpin (`kanzashi`) | Big Sister's (#22) | to Little Sister for the lock, and back | #37: the ear (cleaned, and held) |
-| Kōta's one-mon coin (`mon`) | Little Sister's (#27) | to Mom for the lock, and back to Little Sister | #37: the post (turned, and held); then given to O-Ume ("Then it's come home.") |
+| Kōta's one-mon coin (`mon`) | Little Sister's (#27) | to Mom for the lock, and back to Little Sister | #37: the post (turned, and held); then given to O-Ume ("Then it has come home.") |
 | O-Natsu's comb (`comb`) | Mom's (#29) | to Big Sister for the lock, and back | #37: the slits |
 | Big Sister's note (`note`) | the Funadama's list, from the ship (#27) | Big Sister | #37: read against the riddle (a comb, a pin, a coin) |
 | Little Sister's pink flashlight (`lilflash`) | Act Three | Little Sister | #38: more light, more door (and #40, as built) |
@@ -2036,7 +2036,7 @@ Sister's new line comes first, before Mom's "Places, girls. Hold hands. All the 
 | Planted | Where | Pays off |
 | --- | --- | --- |
 | The Funadama's list (Big Sister's note: a comb, a pin, twelve one-mon coins) and the lady's chirp | #27, on the ship | #37: "What a ship gives its lady"; the lock chirps ("Like the ship. Exactly like the ship.") |
-| Kōta's one-mon coin with its hole | #27 | #37: the square post; given to O-Ume ("From a ship." "Then it's come home.") |
+| Kōta's one-mon coin with its hole | #27 | #37: the square post; given to O-Ume ("From a ship." "Then it has come home.") |
 | O-Natsu's comb, O-Tami's hairpin | #29, #22 | #37: the slits, the ear |
 | The slips (O-Natsu's from Osaka, O-Fusa's from Akashi) | #29, #35 | #37: into O-Ume's hands; up first in the hall |
 | "If that's my boy, he hasn't eaten." Mom's Nevada "Have you eaten?" | #36, the well; Nevada | #38: "...Define eaten."; the rice ball through the door |
@@ -2089,18 +2089,18 @@ hint follows how far it has got, for each of the three (the facts the scenes set
 
 | Puzzle | Stage | The fact that moves it on | Mom's hint at that stage |
 | --- | --- | --- | --- |
-| #39 | Tomezo up his ladder | `edo.tomezoDown` | "The man in white up the ladder is Jinsuke's cousin. Your sister can reach him." |
-| #39 | the trowel still carried | `edo.trowelBack` | "His own trowel back in his hand, and Jinsuke's name. He'll understand the rest." |
+| #39 | Tomezo up his ladder | `edo.tomezoDown` | "Jinsuke's cousin is up that ladder. Courtesy won't reach him. Your sister will." |
+| #39 | the trowel still carried | `edo.trowelBack` | "Give back his trowel, with Jinsuke's name and news. He'll understand the rest." |
 | #39 | not yet crew | `edo.crew` | "He's three hands short and we're three. Head-cloths and buckets, and we're crew." (never at rest: see #39's notes) |
-| #39 | crew, at the gate | `edo.inside` | "Eight went out, eight go in. Carry lime, say nothing untrue. The count holds." |
-| #40 | the warden not met | `edo.shinMet` | "The young man at the stairs fears the dark. Your sister has what he needs." |
-| #40 | the light not shown | `edo.lightShown` | "He may carry no fire up. Your sister's flashlight isn't fire. Let her show him." |
-| #40 | the light not lent | `edo.up` | "Lend him the light and we go up to carry it. That's a reason the lime may climb." |
-| #41 | the truth not told | `edo.truth` | "He thinks I'm the lady. The lady asks for the truth. I'll give him mine first." |
-| #41 | the west window shut | `edo.window` | "The west shutters are barred, and the bar is the warden's. Ask him." |
+| #39 | crew, at the gate | `edo.inside` | "Eight out, eight in. We carry lime with his crew and say nothing untrue." |
+| #40 | the warden not met | `edo.shinMet` | "The young man at the stairs dreads the dark. Your sister has just what he needs." |
+| #40 | the light not shown | `edo.lightShown` | "No fire goes up a wooden keep. Your sister's light isn't fire. Let her show him." |
+| #40 | the light not lent | `edo.up` | "Lend him the light and offer to carry it. That gives the lime a reason to climb." |
+| #41 | the truth not told | `edo.truth` | "He thinks I'm the lady, who asks for the truth. I'll give him mine first." |
+| #41 | the west window shut | `edo.window` | "The west shutters are barred, and the bar is the warden's. Ask him to lift it." |
 | #41 | the mirror not in the beam | `edo.letterbox` | "Sun behind me, the mirror in my hands, its light on the hum. Light opens them." |
-| #41 | the letterbox, Mom not at the window | `edo.doorway` | "More light, more door. The farther I stand from the wall, the bigger the patch." |
-| #41 | the doorway, the coin not in Mom's hand | `edo.door` | "The coin steers. Whoever has your brother's coin, I'd like it in my hand first." |
+| #41 | the letterbox, Mom not at the window | `edo.doorway` | "Farther from the wall, bigger the patch. I'll back up all the way to the window." |
+| #41 | the doorway, the coin not in Mom's hand | `edo.door` | "The coin steers. Whoever has your brother's coin, darling: in my hand, please." |
 
 ### Location layout
 
@@ -2155,8 +2155,8 @@ THE TOP OF THE KEEP (edo-keeptop): the top floor, sunset
 Puzzle #39: Eight At The Gate        (Act Six · Lead: all three · the castle approach)
 Needs:        the walk into Himeji (edo.walked)
 Setup:        The gate counts everyone in and out. Tomezo the plasterer, Jinsuke's cousin, is up his ladder against the
-              gate tower shouting at nobody: "Three of you, gone to Ise with ladles, and the lime going off in the tubs!"
-              "Kichi. Yasu. Whoever the third one is. Come back and I'll only shout a LITTLE." His crew of four at work:
+              gate tower shouting at nobody: "Three of you off to Ise with ladles, and the lime going off in the tubs!"
+              "Kichi. Yasu. Whatever-your-name. Come back and I'll only shout a LITTLE." His crew of four at work:
               two on the scaffold's lifts trowelling the wall, one at the tub with the mixing pole, one behind the
               scaffold. Pilgrims pass on the road below now and then, ladles held up ("To Ise! To Ise, before the master
               notices."). The herons in the moat all face the top of the keep.
@@ -2167,35 +2167,35 @@ Wrong tries:  The gate                          -> Mom: "They asked my name, my 
               The guards (asked by Mom)         -> "Name." "House." "Business." Mom: "I'm a traveller, and I'd rather not say
                                                    the rest. That's true, and all of it." "A traveller with no house and no
                                                    business does not come through this gate." "She may stand on the ramp.
-                                                   The ramp is free." (and "I'd like to see the keep. From inside." "So
+                                                   The ramp is free." (and "I should very much like to see the keep. From the inside." "So
                                                    would the town." "The town looks from the moat. With the herons.") Mom
                                                    will not lie, so she cannot answer: "Then we'll leave you to your
                                                    counting." "Three, out. Though you were never in."
               The guards (Big Sister)           -> "What are you counting?" "Everyone." "In. Out. The number must be the same
                                                    by sundown." "...And if it isn't?" "It is always the same. We count."
                                                    (the clue: eight)
-              The guards (Little Sister)        -> "Why do you have TWO swords each? One's plenty." "One is for wearing."
+              The guards (Little Sister)        -> "Why have you got TWO swords each? One sword is plenty." "One is for wearing."
                                                    "The other is also for wearing." "...That's a good answer. I'm going to
                                                    use that." And the tile: "We know." "Nobody knows who put it there. We
                                                    count people. Not tiles."
-              Tomezo, asked politely (Mom)      -> "Excuse me. Sir. ...Excuse me." "And the gate wants eight back by sundown,
+              Tomezo, asked politely (Mom)      -> "I beg your pardon, sir. ...Sir? I do beg your pardon." "And the gate wants eight back by sundown,
                                                    and I've got FIVE--" "He can't hear courtesy from down here. It doesn't
                                                    carry." (and the trowel held up to him: he does not see it)
-              Tomezo, waited out (Big Sister)   -> "We could wait till he runs out of breath." "--and the lord's steward
+              Tomezo, waited out (Big Sister)   -> "We could simply wait until he exhausts his supply of breath." "--and the lord's steward
                                                    coming Thursday, and who's he going to shout at? ME." "He isn't going to
                                                    run out. He's got a system."
-Solution:     Little Sister cups her hands round her mouth: "Hey. Mister Plaster. DOWN here." "...Who said that?" "Me. I'm
-              small. Look DOWN." "...A child. In yellow boots. Hollering at a man up a ladder. I'm coming down." He climbs
-              down the ladder, turns to her: "You're not from here. None of you. What do you want with a plasterer?"
+Solution:     Little Sister cups her hands round her mouth: "Hey. Mister Plaster. Down HERE, by the feet of your ladder." "...Who said that?" "Me. I'm
+              small. Look DOWN." "...A child. In yellow boots. Out-hollering a foreman. I'm coming down." He climbs
+              down the ladder, turns to her: "You're not from Himeji, any of you. What does anybody want with a plasterer?"
               (edo.tomezoDown.) Mom holds out his trowel: "I believe this is yours. Jinsuke sends it back, and says he's
-              well." It goes into his hand; "My trowel. Where did you... You've seen Jinsuke?" "...He's well?" "He's well.
+              well." It goes into his hand; "That's my trowel. I'd know it in the dark. Where did you... You've seen Jinsuke?" "...He's well?" "He's well.
               So are his mother and his daughter." "..." "Right. ...Right. I'm not asking you one thing more, and you're
-              not telling me." Big Sister: "That's how we know he knows." (edo.trowelBack.) "Three short, and three
+              not telling me." Big Sister: "That is how you can tell he knows. People who do not know ask everything." (edo.trowelBack.) "Three short, and three
               standing in front of me. I don't argue with arithmetic." "Head-cloths, white, like mine. Bucket each. Carry
               it from the bottom, tall one." The three of them in the plasterers' white head-cloths, one after another.
-              "I'm a plasterer now. I'm a PLASTERER." "You're a bucket. Everybody starts as a bucket." (edo.crew.) The
+              "I'm a plasterer now. Somebody write it down. I'm a PLASTERER." "You're a bucket. Everybody starts as a bucket." (edo.crew.) The
               gate, or the guards, now: Tomezo to the gate; the two lifts come down, the crew gather; the three take up a
-              bucket each ("Tall one. Bucket from the bottom. ...Like that. Now you're a plasterer."). "Plasterers. Eight
+              bucket each ("Tall one. Bucket from the bottom. ...Like that. Now you look like a plasterer."). "Plasterers. Eight
               out this morning. Eight back. With lime." The crew go in, Tomezo last of them: "One. Two. Three. Four.
               Five." Mom and Big Sister up the ramp with their buckets: "Six. Seven." Little Sister last, at the
               threshold: "...Eight." "Eight went out. Eight come in. The number is right." "We are eight. We are carrying
@@ -2234,20 +2234,20 @@ Wrong tries:  The stairs (he is at them)        -> "No one goes up. Except me. T
               Little Sister, asking to go up    -> "Can we come up with you? I'm good at dark." "No one goes up. Except me.
                                                    Tonight. Alone. With the lady." "You said that already. It's not a better
                                                    rule the second time."
-The talk:     Meeting him: "You're the lime. Good. Lime is on the ground floor." "Everything is on the ground floor. Except
-              me. Tonight." "You seem a little..." "I am making poems. It helps. It does not help." His poems, five, seven
+The talk:     Meeting him: "You are the lime. Good. Lime is wanted on the ground floor, and nowhere higher." "Everything is on the ground floor. Except
+              me. Tonight." "Forgive me, but you seem a little..." "I am making poems. It helps. It does not help." His poems, five, seven
               and five, one for each asking ("Sunset. Stairs. Dark. Me." / "Everyone I know is down." / "I am the top
               part."), Big Sister counting on her fingers each time ("Five. Seven. Five. ...He's doing it on purpose."); the
               lady of the keep ("She comes to anyone who climbs up in the night, and asks them why." "If they tell her the
               truth, she is kind. Everyone says so. Nobody has tested it." Mom: "Then tell her the truth, and she'll be
-              kind. Those are all the instructions."); the dare (Big Sister: "Why are you going up at all?" "A dare."); no
-              fire in the keep (Big Sister: "So it's the dark you're frightened of. Not the lady." "It is both. They are
+              kind. Those are all the instructions."); the dare (Big Sister: "If you are so frightened, why are you going up at all?" "A dare."); no
+              fire in the keep (Big Sister: "So it is the dark you are frightened of, and not the lady at all." "It is both. They are
               friends."); Big Sister's own poem ("...I've run out of five."), and Little Sister's chicken.
-Solution:     Little Sister: "I've got a light with no fire in it. Look. Press the END." The pink light on his face:
+Solution:     Little Sister: "I've got a light with no fire in it. Look. You press the END." The pink light on his face:
               "...!" "It is cold. It is light, and it is cold. There is no fire in it. I have looked." "That is the most
               wonderful thing in Harima. It is pink." "Pink's the best colour of light. Everybody keeps SAYING it isn't."
               (edo.lightShown.) Then: "You can borrow it. For the lady. You have to give it BACK, though." "I could not. It
-              is yours. It is the only one." Mom: "We'll carry it for you. We'll come up with you." "...The lime may come
+              is yours. It is the only one." Mom: "Then we'll carry it for you, all the way up. You needn't hold it alone." "...The lime may come
               up. To carry the light. Nobody said the lime may not." Big Sister: "That's the fastest I've seen anyone
               change a rule. Four seconds." "I have stood here since noon with the words ready. Only the reason was
               missing." The light goes into his hands (he holds it in both, lit, like something holy). Mom: "Up, girls.
@@ -2268,7 +2268,7 @@ Needs:        the climb (edo.up)
 Setup:        The top floor, the shutters closed, the last of the day coming through the cracks of the west ones; the
               hum in the east wall, heard low as they come up and growing, and, looked at long enough, seen: a shimmer in
               the air. Shinnosuke at the top of the stairs with the pink flashlight in both hands.
-Arrival:      Mom: "Six. The top, girls. A door at the top of the stairs, and a hum behind it." She takes the grandmother's
+Arrival:      Mom: "Six. The top, girls. A door at the head of the stairs, and a hum behind it." She takes the grandmother's
               mirror out and holds it up to what light there is: in the half dark, a tall woman in a pale kimono with a
               mirror. He turns with the light, and falls to his knees: "...Lady." "I came up on a dare. I am telling you
               first, before you ask." "Because that is the story, and I am in it." "Are you the lady of the keep?" (The
@@ -2286,11 +2286,11 @@ Wrong tries:  The girls, to him                 -> Big Sister: "She's our mother
                                                    That was brave." "It was the story. In the story, the truth comes first.
                                                    I had no better plan." "There isn't one. We've tried."
               The west shutters                 -> barred: "The bar is the warden's to lift. I'll ask him. Properly."
-              The other shutters                -> "It's not the window we need, darling." (south) "No. Not that one."
+              The other shutters                -> "Not the window we need, darling. Look for the sun in the cracks." (south) "No. Not that one."
                                                    (north) "I'm not opening the east. The sun's gone from there. It's the
                                                    west we want." (Big Sister: "I'm not going to open every shutter in a
                                                    castle. The west one. Focus.")
-              The mirror on the hum, in the dark -> "In the dark it's only bronze. It needs the sun behind me."
+              The mirror on the hum, in the dark -> "In the dark it's only bronze. It needs the sun behind me, and the sun's outside."
               The coin on the hum               -> "Not yet. The coin's for the walk through, not for the wall."
               The lantern                       -> "I'm not lighting anything in a wooden castle, darling."
 Solution:     (1) The truth. Mom: "I'm not a lady of anything. I'm a mother looking for my son." "I think there's a door up
@@ -2301,11 +2301,11 @@ Solution:     (1) The truth. Mom: "I'm not a lady of anything. I'm a mother look
               Tonight." "Stand back from it, small one. It has not been lifted in my lifetime." He goes to the west bay and
               lifts the bar; the shutters swing open: "The SUN. It came in all at once." "Low and orange, straight across
               the floor to the east wall. That's our light." (edo.window.) (3) The mirror. Mom at the hum with the mirror
-              held up in the sun: "Here. The sun on the face of it, and the light of it onto the hum." A hand-sized patch
+              held up in the sun: "Here. The sun on its face, and its light thrown onto the hum." A hand-sized patch
               of light on the wall, and in it the shimmer flares into rings: a small door. "It opened! A little one. A
               LETTERBOX one." "The air through it smells of... not here. Dust and sun and something cooking." "Not big
               enough. Not nearly." Big Sister: "These mirrors are a little convex. The face bulges, barely. The light
-              spreads." "The farther away you stand, the bigger the light. More light, more door." "Back up, Mom. Keep
+              spreads." "So the farther away you stand, the bigger the patch. More light, more door." "Back up, Mom. Keep
               going." (edo.letterbox.) The player backs Mom away from the wall across the floor, step by step (the floor is
               "Back away across" while she holds the light; the west window takes her all the way), the patch and the door
               growing at every step, the size of a plate ("A plate. A lid. A door. Keep GOING, Mommy."), of a door, into
@@ -2316,7 +2316,7 @@ Solution:     (1) The truth. Mom: "I'm not a lady of anything. I'm a mother look
               steers. Whoever has your brother's coin, I'd like it in my hand first." and whoever has it gives it to her
               (handed over, or asked for: a word between them): "The coin, Mom. If it listens to anything, it'll listen
               to that." (or Little Sister: "Here's the coin, Mommy. It's been where we're going. Maybe it remembers the
-              WAY.") "I have it. Your brother's coin, in my hand. Then we steer by it, and we hope." "This is for Tomezo the
+              WAY.") "I have it. Your brother's coin, in my hand. We'll steer by it, and hope." "This is for Tomezo the
               plasterer. He'll know whose it is, and where it goes." "A warden does not take things from the lady of the
               keep." "I'm not the lady of the keep. I'm a mother, asking you to carry a mirror down." "...Then I will
               carry it. Carefully. In both hands. I have had practice tonight." He comes to her in the window, and the
@@ -2335,7 +2335,7 @@ Notes:        The light is the engine's `mirror` kind driving a `portal` (the do
 ```
 Cut-Scene: Hold Hands        (ends the act, and the demo)
 ```
-The title: "Hold Hands". Mom: "Places, girls. Hold hands. All the way through." The three of them in a row before the
+The title: "Hold Hands". Mom: "Places, girls. Hold hands, and don't let go until we're all the way through." The three of them in a row before the
 door, Little Sister in the middle: "I'm in the MIDDLE. I'm always in the middle. It's the safest part of a sandwich." "Left
 hand, right hand. Count of four. ...I'm not counting. I'm holding." Mom, with the coin in her fist, looks once round the
 room, at the warden in the window with the mirror, at the sunset over the Inland Sea behind him, and prays: "Father, You

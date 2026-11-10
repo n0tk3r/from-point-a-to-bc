@@ -1,155 +1,205 @@
 {
  "id": "edo-cedars",
- "horizon": 250,
+ "horizon": 340,
  "full": 600,
- "light": "dusk in fine spring rain under cedars: little light, all of it cool and soft from the sky above; no sun, no cast shadows, only a soft darkening under things; the line of lamplight under the storehouse's floor the one warm thing",
+ "camera": {
+  "what": "HillCam (edo_cedars_kit.py): the walked ground is one plane climbing away from us; `horizon` is that plane's vanishing line and `full` its 160 px row, so the engine's sizes are true on it",
+  "focal": 660.0,
+  "slope": 0.19,
+  "pitch_deg": 5.0,
+  "eye_cm": 288.2,
+  "eye_level_row": 464.3,
+  "lens_row": 406.6,
+  "uprights_meet": [
+   400.0,
+   -7137.3
+  ]
+ },
+ "light": "dusk in fine spring rain under cedars: little light, all of it cool and soft, most from the pale gap up the hill on the left; no sun, only soft shade under things and the great cedar's shade across the foreground; the lamp under the floor and in the window the only warm things",
  "walk": [
   [
-   301,
+   128,
    600
   ],
   [
-   322,
-   560
+   150,
+   584
   ],
   [
-   345,
-   520
+   178,
+   568
   ],
   [
-   361,
-   488
+   216,
+   553
+  ],
+  [
+   258,
+   541
+  ],
+  [
+   300,
+   533
+  ],
+  [
+   340,
+   525
+  ],
+  [
+   364,
+   514
   ],
   [
    372,
-   462
+   505
   ],
   [
-   334,
-   452
+   344,
+   503
   ],
   [
-   326,
-   438
+   276,
+   503
   ],
   [
-   420,
-   436
-  ],
-  [
-   500,
-   434
-  ],
-  [
-   556,
-   430
-  ],
-  [
-   606,
-   436
-  ],
-  [
-   640,
-   448
-  ],
-  [
-   640,
-   462
-  ],
-  [
-   604,
-   470
-  ],
-  [
-   560,
-   466
-  ],
-  [
-   520,
-   462
-  ],
-  [
-   496,
-   458
-  ],
-  [
-   499,
-   462
-  ],
-  [
-   502,
+   270,
    488
   ],
   [
-   502,
+   322,
+   486
+  ],
+  [
+   378,
+   482
+  ],
+  [
+   396,
+   484
+  ],
+  [
+   420,
+   490
+  ],
+  [
+   447,
+   499
+  ],
+  [
+   478,
+   511
+  ],
+  [
+   505,
+   519
+  ],
+  [
+   526,
+   510
+  ],
+  [
+   566,
+   501
+  ],
+  [
+   604,
+   494
+  ],
+  [
+   638,
+   488
+  ],
+  [
+   670,
+   483
+  ],
+  [
+   708,
+   478
+  ],
+  [
+   772,
+   485
+  ],
+  [
+   778,
+   494
+  ],
+  [
+   730,
+   500
+  ],
+  [
+   700,
+   508
+  ],
+  [
+   660,
+   512
+  ],
+  [
+   610,
    520
   ],
   [
-   501,
-   560
+   556,
+   532
   ],
   [
-   501,
+   500,
+   540
+  ],
+  [
+   460,
+   542
+  ],
+  [
+   430,
+   543
+  ],
+  [
+   392,
+   553
+  ],
+  [
+   366,
+   562
+  ],
+  [
+   344,
+   572
+  ],
+  [
+   338,
+   584
+  ],
+  [
+   340,
    600
   ]
  ],
- "walk_note": "the steps from the foot of the picture (enter, isukeFrom at the bottom edge) up to the storehouse's front, and round its right side to under the window and the pipe; the ground climbs, so people shrink as they go up (the scene's horizon and full: stands give grownup_px at each mark)",
+ "walk_note": "the steps from the foot of the picture (bottom left) up to the yard, the yard before the storehouse's two walls, along to the pipe at the right, and a corner toward the kiln at the left (behind cedar-l); one plane, so sizes follow the scene's horizon and full exactly (stands give grownup_px)",
  "blocked": [
   [
    [
-    270,
-    520
+    481,
+    496
    ],
    [
-    302,
-    520
+    441,
+    484
    ],
    [
-    302,
-    530
+    414,
+    490
    ],
    [
-    270,
-    530
-   ]
-  ],
-  [
-   [
-    558,
-    410
-   ],
-   [
-    684,
-    410
-   ],
-   [
-    684,
-    426
-   ],
-   [
-    558,
-    426
-   ]
-  ],
-  [
-   [
-    246,
-    436
-   ],
-   [
-    318,
-    432
-   ],
-   [
-    318,
-    452
-   ],
-   [
-    246,
-    454
+    450,
+    500
    ]
   ]
  ],
+ "blocked_note": "the flat stone before the door",
  "planes": [
   {
    "id": "light-on",
@@ -157,12 +207,12 @@
    "plane": "back",
    "alt": true,
    "box": [
-    322,
-    423,
-    160,
-    10
+    424,
+    457,
+    190,
+    27
    ],
-   "note": "the line of lamplight under the floor: show it while the lamp below is lit (it goes out when they call, and comes back); the backdrop has the dark gap under it"
+   "note": "the line of lamplight under the floor, and what it lights there: show it while the lamp below is lit (it goes out when they call, and comes back); the backdrop has the dark alone"
   },
   {
    "id": "window-lit",
@@ -170,54 +220,54 @@
    "plane": "back",
    "alt": true,
    "box": [
-    514,
-    338,
-    18,
-    24
+    566,
+    371,
+    27,
+    32
    ],
-   "note": "the small high window lit from inside (a lantern behind it): show it while the lantern in the storehouse is lit (#25: Big Sister saw it go out); the backdrop has the window dark"
+   "note": "the small high window lit from inside: show it while the lantern in the storehouse is lit; the backdrop has the window dark"
   },
   {
    "id": "cedar-l",
    "file": "cedar-l.png",
    "base": [
     [
-     80,
-     574
+     299,
+     515
     ],
     [
-     182,
-     516
+     363,
+     515
     ]
    ],
    "box": [
-    63,
+    243,
     0,
-    127,
-    568
+    220,
+    527
    ],
-   "what": "the two near cedars left of the foot of the path"
+   "what": "the cedar between the kiln's corner of the yard and the door: people going to the kiln pass behind it"
   },
   {
    "id": "cedar-r",
    "file": "cedar-r.png",
    "base": [
     [
-     670,
-     518
+     640,
+     543
     ],
     [
-     770,
-     572
+     720,
+     543
     ]
    ],
    "box": [
-    664,
+    559,
     0,
-    119,
-    566
+    196,
+    561
    ],
-   "what": "the two near cedars right of the foot of the path"
+   "what": "the cedar below the far end of the window's wall: people going along to the pipe pass behind it"
   },
   {
    "id": "front",
@@ -229,13 +279,13 @@
     800,
     600
    ],
-   "what": "the two nearest trunks at the picture's edges"
+   "what": "the front plane: the great cedar up the left edge with its roots and ferns, a bough across the top right corner, fern fronds in the bottom right corner"
   }
  ],
  "things": [
   {
    "id": "cedars",
-   "what": "the cedars: towering trunks in a rhythm of verticals on both sides of the path, their crowns lost above the frame, mist between them",
+   "what": "the cedars: the great one we stand under (the front plane), the two beside the path that people walk behind, the backdrop's own round the yard, and rank behind rank going up the hill into the mist",
    "shape": {
     "poly": [
      [
@@ -248,369 +298,441 @@
      ],
      [
       800,
-      300
+      362
      ],
      [
-      560,
-      330
+      699,
+      398
      ],
      [
-      540,
-      420
+      699,
+      470
      ],
      [
-      300,
-      420
+      650,
+      471
      ],
      [
-      290,
-      330
+      650,
+      289
+     ],
+     [
+      571,
+      229
+     ],
+     [
+      501,
+      207
+     ],
+     [
+      351,
+      342
+     ],
+     [
+      351,
+      470
+     ],
+     [
+      110,
+      470
+     ],
+     [
+      100,
+      600
      ],
      [
       0,
-      300
+      600
      ]
     ]
    },
    "stand": [
-    404,
-    520
+    300,
+    548
+   ],
+   "face": "N"
+  },
+  {
+   "id": "mist",
+   "what": "mist in the gap up the hill on the left, between the trunks",
+   "shape": {
+    "poly": [
+     [
+      98,
+      250
+     ],
+     [
+      316,
+      250
+     ],
+     [
+      316,
+      400
+     ],
+     [
+      200,
+      440
+     ],
+     [
+      98,
+      440
+     ]
+    ]
+   },
+   "stand": [
+    296,
+    550
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "rain",
+   "what": "the rain: fine straight slanting lines, steady (the engine's moving thing: fx 'rain')",
+   "shape": {
+    "poly": [
+     [
+      0,
+      0
+     ],
+     [
+      800,
+      0
+     ],
+     [
+      800,
+      150
+     ],
+     [
+      0,
+      150
+     ]
+    ]
+   },
+   "stand": [
+    304,
+    546
    ],
    "face": "N"
   },
   {
    "id": "steps",
-   "what": "the worn stone steps climbing the slope, wet, puddles on the treads that ring when the rain hits them",
+   "what": "the worn stone steps, wet, low and broad, a puddle on four of the treads (only the two bottom treads are the thing to click: a click anywhere else on them walks there)",
    "shape": {
     "poly": [
      [
-      292,
-      598
+      115,
+      600
      ],
      [
-      323,
-      540
+      353,
+      600
      ],
      [
-      350,
-      490
+      348,
+      588
      ],
      [
-      364,
-      450
-     ],
-     [
-      505,
-      450
-     ],
-     [
-      512,
-      490
-     ],
-     [
-      512,
-      540
-     ],
-     [
-      511,
-      598
+      143,
+      586
      ]
     ]
    },
    "stand": [
-    410,
-    540
-   ],
-   "face": "N"
-  },
-  {
-   "id": "figure",
-   "what": "a small stone figure by the path, worn smooth, a scrap of red cloth tied at its neck (scenery: Big Sister will not touch it; Little Sister says good evening)",
-   "shape": {
-    "rect": [
-     272,
-     482,
-     28,
-     48
-    ]
-   },
-   "stand": [
-    340,
-    540
-   ],
-   "face": "W"
-  },
-  {
-   "id": "mist",
-   "what": "mist drifting between the trunks and over the slope",
-   "shape": {
-    "poly": [
-     [
-      0,
-      280
-     ],
-     [
-      280,
-      300
-     ],
-     [
-      300,
-      372
-     ],
-     [
-      0,
-      400
-     ]
-    ]
-   },
-   "stand": [
-    380,
-    500
-   ],
-   "face": "W"
-  },
-  {
-   "id": "pipe",
-   "what": "a bamboo pipe sticking out of the hillside behind the storehouse (air for the room underneath; a murmur comes out of it)",
-   "shape": {
-    "rect": [
-     636,
-     354,
-     34,
-     24
-    ]
-   },
-   "stand": [
-    612,
-    452
+    262,
+    574
    ],
    "face": "N"
   },
   {
    "id": "storehouse",
-   "what": "the charcoal-burner's storehouse: dark boards, a thatched roof heavy with rain, a lean-to of faggots and sacks; the floor on short posts",
+   "what": "the charcoal-burner's storehouse, three-quarters on and seen from below: dark boards, a steep thatch heavy with rain coming down low over the walls, the floor on posts",
    "shape": {
     "poly": [
      [
-      304,
-      438
+      389,
+      468
      ],
      [
-      304,
-      313
+      505,
+      500
      ],
      [
-      354,
-      249
+      650,
+      471
      ],
      [
-      502,
-      229.17999999999998
+      650,
+      289
      ],
      [
-      566,
-      287.64
+      571,
+      229
      ],
      [
-      554,
-      408
+      501,
+      207
      ],
      [
-      486,
-      432
+      351,
+      342
+     ],
+     [
+      351,
+      373
+     ],
+     [
+      389,
+      372
      ]
     ]
    },
    "stand": [
-    404,
-    444
-   ],
-   "face": "N"
-  },
-  {
-   "id": "door",
-   "what": "the storehouse's front door, outside: planks, a lintel; barred on the inside (nobody answers)",
-   "shape": {
-    "poly": [
-     [
-      384,
-      428
-     ],
-     [
-      428,
-      427
-     ],
-     [
-      428,
-      345
-     ],
-     [
-      384,
-      346
-     ]
-    ]
-   },
-   "stand": [
-    404,
-    444
-   ],
-   "face": "N"
-  },
-  {
-   "id": "window",
-   "what": "the small high square window in the storehouse's back (its right end wall, seen from the side): a seven-year-old fits, helped up; lit from inside while the lantern is (window-lit)",
-   "shape": {
-    "rect": [
-     512,
-     340,
-     22,
-     28
-    ]
-   },
-   "stand": [
-    536,
-    444
+    470,
+    521
    ],
    "face": "N"
   },
   {
    "id": "eaves",
-   "what": "the thatch's eaves, dripping",
+   "what": "the thatch's thick cut edge along both walls, dripping",
    "shape": {
     "poly": [
      [
-      304,
-      327
+      351,
+      371
      ],
      [
-      566,
-      301.64
+      503,
+      338
      ],
      [
-      566,
-      285.64
+      650,
+      361
      ],
      [
-      304,
-      311
+      650,
+      337
+     ],
+     [
+      502,
+      308
+     ],
+     [
+      351,
+      349
      ]
     ]
    },
    "stand": [
-    404,
-    444
-   ],
-   "face": "N"
-  },
-  {
-   "id": "rain",
-   "what": "the rain: fine straight slanting lines, steady (ENGINE-20's moving thing: fx 'rain')",
-   "shape": {
-    "poly": [
-     [
-      0,
-      0
-     ],
-     [
-      800,
-      0
-     ],
-     [
-      800,
-      240
-     ],
-     [
-      0,
-      240
-     ]
-    ]
-   },
-   "stand": [
-    404,
-    540
+    470,
+    521
    ],
    "face": "N"
   },
   {
    "id": "light",
-   "what": "a thin line of warm light under the storehouse's floor, between the posts (the cut-out light-on; it goes out and comes back)",
+   "what": "the dark under the raised floor along both walls, and the thin line of lamplight in it (the cut-out light-on; it goes out and comes back)",
    "shape": {
     "poly": [
      [
-      318,
-      439
+      389,
+      468
      ],
      [
-      486,
-      433
+      505,
+      500
      ],
      [
-      486,
-      417
+      650,
+      471
      ],
      [
-      318,
-      423
+      650,
+      453
+     ],
+     [
+      504,
+      451
+     ],
+     [
+      389,
+      454
      ]
     ]
    },
    "stand": [
-    404,
-    444
+    470,
+    521
    ],
    "face": "N"
   },
   {
-   "id": "kiln",
-   "what": "an earth charcoal kiln beside the storehouse, a dome with a low arched mouth, cold",
+   "id": "door",
+   "what": "the storehouse's plank door, up two steps (a flat stone, a wooden step), in the wall that faces down the hill to the left; barred on the inside",
    "shape": {
     "poly": [
      [
-      556,
-      424
+      450,
+      448
      ],
      [
-      656,
-      424
+      481,
+      447
      ],
      [
-      654,
-      402
+      480,
+      354
      ],
      [
-      616,
-      382
-     ],
-     [
-      596,
-      382
-     ],
-     [
-      558,
-      402
+      449,
+      360
      ]
     ]
    },
    "stand": [
-    566,
-    452
+    412,
+    499
+   ],
+   "face": "NE"
+  },
+  {
+   "id": "window",
+   "what": "the small high square window in the storehouse's other wall (inside, the wall with the sacks under it): a seven-year-old fits, lifted; lit from inside while the lantern is (window-lit)",
+   "shape": {
+    "rect": [
+     565,
+     366,
+     27,
+     39
+    ]
+   },
+   "stand": [
+    626,
+    495
+   ],
+   "face": "NW",
+   "lift": [
+    580,
+    502
+   ],
+   "sill": [
+    578,
+    397
+   ]
+  },
+  {
+   "id": "kiln",
+   "what": "the earth charcoal kiln up to the left of the yard: a dome with a low mouth half walled up, cold; cut wood stacked before it",
+   "shape": {
+    "poly": [
+     [
+      313,
+      436
+     ],
+     [
+      305,
+      423
+     ],
+     [
+      288,
+      412
+     ],
+     [
+      269,
+      408
+     ],
+     [
+      249,
+      412
+     ],
+     [
+      233,
+      423
+     ],
+     [
+      221,
+      440
+     ],
+     [
+      217,
+      466
+     ],
+     [
+      219,
+      472
+     ],
+     [
+      241,
+      475
+     ],
+     [
+      275,
+      475
+     ],
+     [
+      306,
+      472
+     ],
+     [
+      313,
+      469
+     ]
+    ]
+   },
+   "stand": [
+    292,
+    494
+   ],
+   "face": "NW"
+  },
+  {
+   "id": "figure",
+   "what": "a small stone figure beside the lower steps: a roadside Jizo, worn smooth, in a red bib, on a flat stone with three pebbles and a coin (scenery)",
+   "shape": {
+    "rect": [
+     398,
+     510,
+     24,
+     65
+    ]
+   },
+   "stand": [
+    334,
+    575
    ],
    "face": "E"
   },
   {
-   "id": "isuke",
-   "what": "Isuke, the constable's man, when he comes up the path (#27; PEOPLE-20 draws him): his place when he talks is marks.door, having come up isukeWay",
+   "id": "pipe",
+   "what": "a bamboo pipe out of the cut bank behind the storehouse's far end, at the height of an ear (air for the room underneath; a murmur comes out of it)",
    "shape": {
     "rect": [
-     380,
-     350,
-     48,
-     96
+     716,
+     398,
+     51,
+     21
     ]
    },
    "stand": [
-    430,
-    470
+    742,
+    486
+   ],
+   "face": "N"
+  },
+  {
+   "id": "isuke",
+   "what": "Isuke, the constable's man, when he comes up the path (#27): seen only in the storehouse's looks out at the path; his way is isukeWay, ending at marks.door",
+   "shape": {
+    "rect": [
+     396,
+     403,
+     32,
+     98
+    ]
+   },
+   "stand": [
+    470,
+    521
    ],
    "face": "W",
    "when": "edo.isukeOnPath"
@@ -618,216 +740,324 @@
  ],
  "marks": {
   "enter": [
-   400,
-   580
+   258,
+   589
   ],
   "figure": [
-   340,
-   540
-  ],
-  "pipe": [
-   612,
-   452
+   334,
+   575
   ],
   "door": [
-   404,
-   444
+   412,
+   499
   ],
   "window": [
-   536,
-   444
+   626,
+   495
+  ],
+  "pipe": [
+   742,
+   486
   ],
   "isukeFrom": [
-   340,
-   596
+   232,
+   598
+  ]
+ },
+ "lift": [
+  580,
+  502
+ ],
+ "sill": [
+  578,
+  397
+ ],
+ "arrive": {
+  "enter": [
+   [
+    318,
+    586
+   ],
+   [
+    200,
+    592
+   ]
+  ],
+  "door": [
+   [
+    382,
+    512
+   ],
+   [
+    454,
+    513
+   ]
   ]
  },
  "stands": {
   "enter": {
    "at": [
-    400,
-    580
+    258,
+    589
    ],
-   "grownup_px": 150.9
+   "grownup_px": 153.2
   },
   "figure": {
    "at": [
-    340,
-    540
+    334,
+    575
    ],
-   "grownup_px": 132.6
-  },
-  "pipe": {
-   "at": [
-    612,
-    452
-   ],
-   "grownup_px": 92.3
+   "grownup_px": 144.6
   },
   "door": {
    "at": [
-    404,
-    444
+    412,
+    499
    ],
-   "grownup_px": 88.7
+   "grownup_px": 97.8
   },
   "window": {
    "at": [
-    536,
-    444
+    626,
+    495
    ],
-   "grownup_px": 88.7
+   "grownup_px": 95.4
+  },
+  "pipe": {
+   "at": [
+    742,
+    486
+   ],
+   "grownup_px": 89.8
   },
   "isukeFrom": {
    "at": [
-    340,
-    596
+    232,
+    598
    ],
-   "grownup_px": 158.2
+   "grownup_px": 158.8
   },
-  "isukeWay": [
-   {
-    "at": [
-     340,
-     596
-    ],
-    "grownup_px": 158.2
-   },
-   {
-    "at": [
-     360,
-     566
-    ],
-    "grownup_px": 144.5
-   },
-   {
-    "at": [
-     388,
-     528
-    ],
-    "grownup_px": 127.1
-   },
-   {
-    "at": [
-     410,
-     492
-    ],
-    "grownup_px": 110.6
-   },
-   {
-    "at": [
-     420,
-     464
-    ],
-    "grownup_px": 97.8
-   },
-   {
-    "at": [
-     410,
-     448
-    ],
-    "grownup_px": 90.5
-   },
-   {
-    "at": [
-     404,
-     444
-    ],
-    "grownup_px": 88.7
-   }
-  ]
+  "lift": {
+   "at": [
+    580,
+    502
+   ],
+   "grownup_px": 99.7
+  },
+  "walkTo.cedars": {
+   "at": [
+    300,
+    548
+   ],
+   "grownup_px": 128.0
+  },
+  "walkTo.mist": {
+   "at": [
+    296,
+    550
+   ],
+   "grownup_px": 129.2
+  },
+  "walkTo.rain": {
+   "at": [
+    304,
+    546
+   ],
+   "grownup_px": 126.8
+  },
+  "walkTo.steps": {
+   "at": [
+    262,
+    574
+   ],
+   "grownup_px": 144.0
+  },
+  "walkTo.storehouse": {
+   "at": [
+    470,
+    521
+   ],
+   "grownup_px": 111.4
+  },
+  "walkTo.eaves": {
+   "at": [
+    470,
+    521
+   ],
+   "grownup_px": 111.4
+  },
+  "walkTo.light": {
+   "at": [
+    470,
+    521
+   ],
+   "grownup_px": 111.4
+  },
+  "walkTo.kiln": {
+   "at": [
+    292,
+    494
+   ],
+   "grownup_px": 94.8
+  },
+  "arrive.enter.0": {
+   "at": [
+    318,
+    586
+   ],
+   "grownup_px": 151.4
+  },
+  "arrive.enter.1": {
+   "at": [
+    200,
+    592
+   ],
+   "grownup_px": 155.1
+  },
+  "arrive.door.0": {
+   "at": [
+    382,
+    512
+   ],
+   "grownup_px": 105.8
+  },
+  "arrive.door.1": {
+   "at": [
+    454,
+    513
+   ],
+   "grownup_px": 106.5
+  },
+  "isukeWay.0": {
+   "at": [
+    232,
+    598
+   ],
+   "grownup_px": 158.8
+  },
+  "isukeWay.1": {
+   "at": [
+    252,
+    580
+   ],
+   "grownup_px": 147.7
+  },
+  "isukeWay.2": {
+   "at": [
+    282,
+    561
+   ],
+   "grownup_px": 136.0
+  },
+  "isukeWay.3": {
+   "at": [
+    330,
+    544
+   ],
+   "grownup_px": 125.5
+  },
+  "isukeWay.4": {
+   "at": [
+    386,
+    529
+   ],
+   "grownup_px": 116.3
+  },
+  "isukeWay.5": {
+   "at": [
+    420,
+    512
+   ],
+   "grownup_px": 105.8
+  },
+  "isukeWay.6": {
+   "at": [
+    412,
+    499
+   ],
+   "grownup_px": 97.8
+  }
  },
  "isukeWay": [
   [
-   340,
-   596
+   232,
+   598
   ],
   [
-   360,
-   566
+   252,
+   580
   ],
   [
-   388,
-   528
+   282,
+   561
   ],
   [
-   410,
-   492
+   330,
+   544
+  ],
+  [
+   386,
+   529
   ],
   [
    420,
-   464
+   512
   ],
   [
-   410,
-   448
-  ],
-  [
-   404,
-   444
+   412,
+   499
   ]
  ],
- "isukeWay_note": "the constable's way up the path in #27, bottom first, ending at marks.door; he starts off the bottom edge at isukeFrom",
+ "isukeWay_note": "the constable's way up the path in #27, bottom first, ending at marks.door (edo-hills.js ISUKE_WAY)",
  "exits": [
   {
    "to": "edo-storehouse",
    "via": "door",
    "name": "the storehouse's door (once it is unbarred from inside)",
    "walkTo": [
-    404,
-    444
+    412,
+    499
    ],
    "spawn": "door"
-  },
-  {
-   "to": "map",
-   "edge": "S",
-   "name": "back down the path",
-   "walkTo": [
-    400,
-    598
-   ],
-   "spawn": "enter",
-   "band": "rows 560 to 600, x 300 to 520"
   }
  ],
  "cutouts": {
+  "cedar-l": [
+   243,
+   0,
+   220,
+   527
+  ],
+  "cedar-r": [
+   559,
+   0,
+   196,
+   561
+  ],
   "front": [
    0,
    0,
    800,
    600
   ],
-  "cedar-l": [
-   63,
-   0,
-   127,
-   568
-  ],
-  "cedar-r": [
-   664,
-   0,
-   119,
-   566
-  ],
   "light-on": [
-   322,
-   423,
-   160,
-   10
+   424,
+   457,
+   190,
+   27
   ],
   "window-lit": [
-   514,
-   338,
-   18,
-   24
+   566,
+   371,
+   27,
+   32
   ]
  },
  "fx": [
   {
    "id": "rain",
    "type": "rain",
-   "what": "fine steady spring rain: straight lines slanting from upper left to lower right, the density of a steady shower, hidden where the eaves cover the walls and the ground under them, and under the lean-to",
+   "what": "fine steady spring rain over the whole stage, in front of everything; not drawn where the thatch shelters the walls and the dry strip of ground under it; splashes along six treads",
    "area": [
     [
      0,
@@ -846,13 +1076,8 @@
      600
     ]
    ],
-   "slant": [
-    -8,
-    1.0
-   ],
-   "slant_is": "dx per dy: 8 px left over 100 px down, about 5 degrees off the vertical (the lines run down and a little to the right, the wind from the left)",
-   "density": 0.0011,
-   "density_is": "drops on the stage at once per px^2: about 530 lines falling at once over the whole stage",
+   "slant": 8,
+   "count": 480,
    "length": [
     10,
     22
@@ -863,59 +1088,118 @@
    "behind": [
     [
      [
-      302,
-      309
+      502.7,
+      338.4
      ],
      [
-      568,
-      283.64
+      737.9,
+      375.0
      ],
      [
-      568,
-      410
+      741.9,
+      464.1
      ],
      [
-      302,
-      440
+      505.2,
+      517.1
      ]
     ],
     [
      [
-      242,
-      370
+      340.1,
+      373.4
      ],
      [
-      318,
-      346
+      502.7,
+      338.4
      ],
      [
-      318,
-      450
+      505.2,
+      517.1
      ],
      [
-      242,
-      454
+      339.4,
+      466.3
      ]
     ]
    ],
-   "splash": {
-    "on": "steps",
-    "size": 2
-   },
+   "floor": [
+    [
+     [
+      121,
+      596
+     ],
+     [
+      347,
+      593
+     ]
+    ],
+    [
+     [
+      150,
+      572
+     ],
+     [
+      342,
+      573
+     ]
+    ],
+    [
+     [
+      182,
+      555
+     ],
+     [
+      353,
+      559
+     ]
+    ],
+    [
+     [
+      231,
+      540
+     ],
+     [
+      393,
+      547
+     ]
+    ],
+    [
+     [
+      283,
+      528
+     ],
+     [
+      446,
+      533
+     ]
+    ],
+    [
+     [
+      355,
+      517
+     ],
+     [
+      476,
+      521
+     ]
+    ]
+   ],
+   "splash": 2,
    "plane": "front"
   },
   {
    "id": "drip-1",
    "type": "stream",
-   "what": "a drip off the eaves at the house's front-left corner",
+   "what": "a drip off the thatch over the bales, on the door wall",
    "path": [
     [
-     306,
-     327
+     387.8,
+     363.1
     ],
     [
-     306,
-     434
+     387.6,
+     481.1
     ]
    ],
    "width": 1,
@@ -924,20 +1208,20 @@
    "opacity": 0.5,
    "speed": 90,
    "splash": 2,
-   "base": 436
+   "base": 482
   },
   {
    "id": "drip-2",
    "type": "stream",
-   "what": "a drip off the eaves over the door",
+   "what": "a drip off the thatch by the near corner",
    "path": [
     [
-     438,
-     325
+     563.3,
+     347.8
     ],
     [
-     438,
-     435
+     566.7,
+     503.3
     ]
    ],
    "width": 1,
@@ -946,20 +1230,20 @@
    "opacity": 0.5,
    "speed": 90,
    "splash": 2,
-   "base": 436
+   "base": 504
   },
   {
    "id": "drip-3",
    "type": "stream",
-   "what": "a drip off the end wall's eaves, by the window",
+   "what": "a drip off the thatch right of the window",
    "path": [
     [
-     560,
-     301.64
+     652.1,
+     361.6
     ],
     [
-     560,
-     405
+     656.2,
+     483.3
     ]
    ],
    "width": 1,
@@ -968,21 +1252,21 @@
    "opacity": 0.5,
    "speed": 90,
    "splash": 2,
-   "base": 406
+   "base": 484
   },
   {
    "id": "puddle-1",
    "type": "ripples",
    "what": "rain ringing a puddle on a tread",
    "at": [
-    392,
-    585
+    267,
+    592
    ],
    "radius": [
     1,
-    14
+    44
    ],
-   "flat": 0.3,
+   "flat": 0.18,
    "every": [
     0.4,
     1.4
@@ -993,20 +1277,20 @@
    "opacity": 0.5,
    "clip": [
     [
-     372,
-     585
+     212,
+     587
     ],
     [
-     412,
-     585
+     322,
+     587
     ],
     [
-     412,
-     591
+     322,
+     597
     ],
     [
-     372,
-     591
+     212,
+     597
     ]
    ]
   },
@@ -1015,14 +1299,14 @@
    "type": "ripples",
    "what": "rain ringing a puddle on a tread",
    "at": [
-    440,
-    540
+    264,
+    557
    ],
    "radius": [
     1,
-    10
+    30
    ],
-   "flat": 0.3,
+   "flat": 0.18,
    "every": [
     0.4,
     1.4
@@ -1033,20 +1317,20 @@
    "opacity": 0.5,
    "clip": [
     [
-     425,
-     540
+     226,
+     554
     ],
     [
-     455,
-     540
+     302,
+     554
     ],
     [
-     455,
-     545
+     302,
+     559
     ],
     [
-     425,
-     545
+     226,
+     559
     ]
    ]
   },
@@ -1055,14 +1339,14 @@
    "type": "ripples",
    "what": "rain ringing a puddle on a tread",
    "at": [
-    418,
-    506
+    372,
+    546
    ],
    "radius": [
     1,
-    8
+    26
    ],
-   "flat": 0.3,
+   "flat": 0.18,
    "every": [
     0.5,
     1.6
@@ -1073,80 +1357,393 @@
    "opacity": 0.45,
    "clip": [
     [
-     407,
-     506
+     340,
+     544
     ],
     [
-     429,
-     506
+     404,
+     544
     ],
     [
-     429,
-     510
+     404,
+     548
     ],
     [
-     407,
-     510
+     340,
+     548
     ]
    ]
   },
   {
    "id": "mist-l",
    "type": "smoke",
-   "what": "mist drifting between the trunks on the left, slow and wide, from the slope toward the path",
+   "what": "mist drifting through the gap up the hill on the left, slow and wide, toward the storehouse (it passes behind the kiln and the storehouse)",
    "at": [
-    120,
-    400
+    150,
+    432
    ],
-   "height": 60,
+   "height": 64,
    "width": [
     120,
-    220
+    230
    ],
    "lean": [
-    160,
-    -20
+    170,
+    -22
    ],
    "rise": 2,
    "rate": 0.5,
    "gust": 0.2,
    "color": "#c3cbd3",
    "opacity": 0.14,
-   "plane": "back"
+   "plane": "back",
+   "behind": [
+    [
+     [
+      389,
+      468
+     ],
+     [
+      505,
+      500
+     ],
+     [
+      690,
+      463
+     ],
+     [
+      686,
+      376
+     ],
+     [
+      738,
+      375
+     ],
+     [
+      737,
+      354
+     ],
+     [
+      571,
+      229
+     ],
+     [
+      501,
+      207
+     ],
+     [
+      340,
+      352
+     ],
+     [
+      340,
+      373
+     ],
+     [
+      389,
+      372
+     ]
+    ],
+    [
+     [
+      319,
+      466
+     ],
+     [
+      316,
+      440
+     ],
+     [
+      305,
+      423
+     ],
+     [
+      288,
+      412
+     ],
+     [
+      269,
+      408
+     ],
+     [
+      249,
+      412
+     ],
+     [
+      233,
+      423
+     ],
+     [
+      221,
+      440
+     ],
+     [
+      217,
+      466
+     ],
+     [
+      219,
+      472
+     ],
+     [
+      241,
+      475
+     ],
+     [
+      275,
+      475
+     ],
+     [
+      306,
+      472
+     ]
+    ]
+   ]
   },
   {
    "id": "mist-r",
    "type": "smoke",
-   "what": "mist drifting between the trunks on the right",
+   "what": "mist drifting down from behind the bank on the right (it passes behind the storehouse)",
    "at": [
-    700,
-    390
+    770,
+    398
    ],
    "height": 60,
    "width": [
-    120,
-    220
+    110,
+    210
    ],
    "lean": [
     -150,
-    -24
+    -26
    ],
    "rise": 2,
    "rate": 0.5,
    "gust": 0.2,
    "color": "#c3cbd3",
    "opacity": 0.14,
-   "plane": "back"
+   "plane": "back",
+   "behind": [
+    [
+     [
+      389,
+      468
+     ],
+     [
+      505,
+      500
+     ],
+     [
+      690,
+      463
+     ],
+     [
+      686,
+      376
+     ],
+     [
+      738,
+      375
+     ],
+     [
+      737,
+      354
+     ],
+     [
+      571,
+      229
+     ],
+     [
+      501,
+      207
+     ],
+     [
+      340,
+      352
+     ],
+     [
+      340,
+      373
+     ],
+     [
+      389,
+      372
+     ]
+    ]
+   ]
   }
  ],
- "fx_note": "Nothing that moves by nature is painted: the rain (ENGINE-20's kind, 'rain': its slant, density and where it is hidden are given), three drips off the eaves (streams), three puddles on the treads that ring when the rain hits them (ripples, each clipped to its puddle), the mist drifting (two wide, slow, faint smokes on the back plane). The painting's own still sheens on four treads stay under the rings.",
- "rain_is": "slant: dx -8 per 100 px down (from upper left; the lines lean right as they fall); density 0.0011 per px^2 (about 530 lines on the stage at once), each 10 to 22 px long, falling 520 px a second; hidden under the eaves (the house's walls and the ground under them) and under the lean-to's roof",
+ "fx_note": "Nothing that moves by nature is painted: the rain, three drips off the thatch (each from the thatch's lower edge to the pebbles of the drip line), three puddles that ring (each clipped to its puddle), the mist drifting (two wide, slow, faint smokes on the back plane, passing behind the storehouse).",
+ "puddles": [
+  [
+   267.0,
+   592.3,
+   54.9,
+   5.1
+  ],
+  [
+   263.7,
+   556.9,
+   38.0,
+   2.5
+  ],
+  [
+   372.1,
+   545.8,
+   32.1,
+   1.8
+  ],
+  [
+   418.9,
+   520.9,
+   25.4,
+   1.0
+  ]
+ ],
  "sizes": {
-  "enter": 150.9,
-  "figure": 132.6,
-  "pipe": 92.3,
-  "door": 88.7,
-  "window": 88.7,
-  "isukeFrom": 158.2
- }
+  "enter": 153.2,
+  "figure": 144.6,
+  "door": 97.8,
+  "window": 95.4,
+  "pipe": 89.8,
+  "isukeFrom": 158.8
+ },
+ "remap": {
+  "points": [
+   [
+    400,
+    580,
+    258,
+    589
+   ],
+   [
+    340,
+    540,
+    334,
+    575
+   ],
+   [
+    612,
+    452,
+    742,
+    486
+   ],
+   [
+    404,
+    444,
+    412,
+    499
+   ],
+   [
+    536,
+    444,
+    626,
+    495
+   ],
+   [
+    340,
+    596,
+    232,
+    598
+   ],
+   [
+    514,
+    447,
+    580,
+    502
+   ],
+   [
+    452,
+    586,
+    318,
+    586
+   ],
+   [
+    352,
+    588,
+    200,
+    592
+   ],
+   [
+    372,
+    448,
+    382,
+    512
+   ],
+   [
+    446,
+    452,
+    454,
+    513
+   ],
+   [
+    404,
+    520,
+    300,
+    548
+   ],
+   [
+    380,
+    500,
+    296,
+    550
+   ],
+   [
+    404,
+    540,
+    304,
+    546
+   ],
+   [
+    410,
+    560,
+    262,
+    574
+   ],
+   [
+    430,
+    448,
+    470,
+    521
+   ],
+   [
+    566,
+    452,
+    292,
+    494
+   ],
+   [
+    360,
+    566,
+    252,
+    580
+   ],
+   [
+    388,
+    528,
+    282,
+    561
+   ],
+   [
+    410,
+    492,
+    330,
+    544
+   ],
+   [
+    420,
+    464,
+    386,
+    529
+   ],
+   [
+    410,
+    448,
+    420,
+    512
+   ]
+  ],
+  "note": "round twenty's marks, arriving places, standing places and the constable's way, and where each is in this picture: [old x, old y, new x, new y]"
+ },
+ "problems": []
 }

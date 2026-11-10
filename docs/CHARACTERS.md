@@ -32,6 +32,14 @@ gray (their pages are under "The Last Stop, and the men in gray").
 
 ## Rules for every line
 
+<!-- PASS-22: round twenty-two. The author, 2 November: "make the way the family talks to each other and interactions
+with historical figures more realistic, right now it's kind of robotic and lacking in character. Make it more like in a
+novel, use better english language, not so simple talk". So the round-nineteen rules below that cut every line short
+("Short", "Eighty characters, one idea", "In late, out early") no longer bind: a box may run to 115 characters where it
+earns them (Act Six's checks still hold its boxes to 80: DESIGN.md, section 14, item 254). The dialogue is written as in a
+good novel: each person sounds like themselves and nobody else, words chosen exactly, warmth, wit and subtext, people
+answering one another. Everything else here holds, and kept lines stay word for word. -->
+
 <!-- PASS-17H: round seventeen. The author, 16 October: "now find ways to make the dialogue more realistic, some of
 the faith-based comments seem forced, make the dialogue fun". The rules below are his answers and the design's
 (briefs/out/office-hq-design.md, section 1, "The dialogue pass"). -->
@@ -293,13 +301,13 @@ smell and hear, warns his mother not to go through, and asks for a snack.
 
 **In Act Six (round twenty-one).** <!-- WRITE-21B --> Two weeks on in Rome he is a voice again, through a small door that
 opens at sunset in the east wall of the women's hall at the foot of Mount Shosha (#38). Every evening he holds Dad's keys
-in the sun to keep his door open, and says hello into it, mostly to nobody ("Hello? It's me again. Day fourteen."); for
+in the sun to keep his door open, and says hello into it, mostly to nobody ("Hel-lo? It's me again. Day fourteen of saying hello to a wall."); for
 thirteen evenings an old lady has answered him in words he does not know ("She sounds kind."). He tells his mother she went
 through when he told her not to; does the Nevada hello with his little sister again; wants a spare month of his own; keeps
 her penny in his left sneaker; sleeps at the flower lady's, who calls him "child" forty times a day; and is not scared, he
 is BRAVE-scared, which is his sister's ("You can have it back when I'm home."). Mom's rice ball comes through a door the
 pink flashlight has made a hand wide ("It's cold. It's rice. It's the best thing I've ever eaten."), and before the sun goes
-he tells her what Dad did wrong: "Mom. Dad went through alone." "Don't. Whatever happens, hold hands." Nothing he says looks
+he tells her what Dad did wrong: "Mom. Dad went through alone." "Don't do that. Whatever happens, hold hands. Promise." Nothing he says looks
 at what happened in Rome on the Ides.
 
 **How he looks and moves.** Blonde hair that sticks up in tufts and has never met a comb,
@@ -395,13 +403,13 @@ an open hand.
 **How she changes (draft).** She learns that there are days when the correct thing to
 do is to make a scene.
 
-> "Voicemail. That is the ninth time. I had decided to stop worrying at eight."
+> "Voicemail. That's the ninth time. I had quite decided to stop worrying at eight."
 > "First things first, girls."
-> "He has hidden a key in MY piano."
+> "He has hidden a key in MY piano. Of all the places in this house."
 > "And I cannot reach it. My arms are a civilized length."
 > "A lady does not squeeze into closets, darling. A lady has a seven-year-old."
 > "He promised never to ask for directions. It's the one promise he's always kept."
-> "I do not need to hear it twice. He sounded happy."
+> "No need to play it twice. He sounded happy, and terribly pleased with his shortcut. Let's hold on to that."
 > "We are going to be perfectly polite, and completely impossible to get rid of."
 > "Your brother has never been scared of anything. That's the part that scares me."
 > "One slow tune, in D major. Sensible girl. D major never panics."
@@ -454,7 +462,7 @@ VOICES DOWN. 3. NO CHICKENS. (Under the third, in crayon: AN APPEAL HAS BEEN LOD
 is the one calm place in a loud house. Tonight the room is perfectly calm and she is not,
 and it annoys her: the fountain sounds like a clock, and she has counted the little
 lights in fours. Her mother admires it exactly and briefly, as one performer admires
-another's stage: "Darling, it is a set. It is a very good set." Her little sister has
+another's stage: "Darling, it's a set. It's a very good set. Let's all try to deserve it." Her little sister has
 visiting hours, takes her boots off with great ceremony, and whispers at full volume.
 
 **In play.** She supplies the fact: the year behind a password, what a coin is, what a
@@ -538,7 +546,7 @@ started before you have finished explaining.
   the flock, to her sister, to the General in her absence ("Keep an eye on Daddy,
   General!") and to her mother when she can get away with it ("Mommy, sit down. I'll do
   the worrying for a while."); she will not be
-  left out ("I need my pink flashlight, from my fort. I know the way!"); and she is ready before anyone has
+  left out ("I need my pink flashlight. It's in my fort, and I know the way there. It's MY fort."); and she is ready before anyone has
   finished explaining ("I'm ALREADY going.").
 - A seven-year-old's logic, stated as law: "'NO GIRLS ALLOWED'? I'm not a girl. I'm a SISTER." She says hi to things and names them (the
   vacuum, the spiders, the dot on the map), counts on her fingers ("THREE fingers past my
@@ -1046,7 +1054,7 @@ Roman togas were made to be ridiculous.
 - Dry, never bitter for long. He tells the Roman joke about himself before anyone else can:
   "It is a joke. I am it." The city's song about Gauls he tells in his own words; the verses
   are never quoted.
-- He says what matters over to himself: "I say it to myself as I walk. It is the Latin I am surest of."
+- He says what matters over to himself: "I say it to myself as I walk the fence. It is the Latin I am surest of."
 - He calls the boy "child", and thanks him properly.
 
 **Running gags.** Twelve Romans smiled, and walked faster. Along the fence, and back ("I am
@@ -1074,9 +1082,9 @@ hand to his heart.
 **How he changes (draft).** From the joke to the man who spoiled it: "The joke is spoiled, child, and I thank you for spoiling it."
 
 > "It is a joke. I am it."
-> "I do not know that word. I am a Gaul. For Rome, that is usually enough."
-> "There is the senate house. It is a hole with men in it."
-> "...I had decided Roman togas were made to be ridiculous."
+> "I do not know that word. I am a Gaul, which in Rome is usually word enough."
+> "There is the senate house. At present it is a hole with men in it."
+> "...So it fits. I had decided that Roman togas were made to be ridiculous."
 > "If anyone asks, a Roman showed me the way." "I'm not a Roman." "Then nobody will be blamed."
 
 ### Phyllis (Fannia Phyllis)
@@ -1099,8 +1107,8 @@ Corinth", and to hear him say he will come and say goodbye before he sails.
 far. It did.
 
 **How she talks.**
-- A seller's patter, fast and warm: "Myrtle for your sweetheart. Garlands for Anna Perenna!"
-- Sharp with fools and with customers who only look; soft about her son ("Felix, Corinth. You're as bad as I am, child. I talk of nothing else.").
+- A seller's patter, fast and warm: "Myrtle for your sweetheart, violets fresh this morning, garlands for Anna Perenna!"
+- Sharp with fools and with customers who only look; soft about her son ("Felix and Corinth, Corinth and Felix. You are as bad as I am, child. I talk of nothing else.").
 - One-word verdicts: "Child."
 - What she has given, she does not take back: "A wish once thrown is not mine to take back."
 
@@ -1123,8 +1131,8 @@ the square. For the boy she unwraps the lamp and holds it out in both hands.
 **How she changes (draft).** From a wish thrown away to a wish answered: "Then the wish is
 answered, and it was a good one."
 
-> "Hands off the merchandise, child. Smell with your nose. That part's free."
-> "No dog, no sweetheart. Then violets for your mother. Every boy has one."
+> "Hands off the garlands, child. Smell all you like with your nose. That part is free."
+> "No dog and no sweetheart. Then violets for your mother. Every boy has one of those."
 > "A bird? For a wish? Child."
 > "Keep the coin, child. It has done its work, and it was borrowed honestly."
 
@@ -1147,8 +1155,8 @@ father talking at him for a WEEK.
 **Gets wrong.** That nobody can tell he is stuck.
 
 **How he talks.**
-- Like his father: in one breath, commas and no stops ("Stuck? Me? I'm SITTING, I like sitting, I can see the whole city.").
-- Boasting, then honest: "I've been sitting since first light. On purpose. Mostly on purpose."
+- Like his father: in one breath, commas and no stops ("Stuck? Me? I am SITTING, I like sitting, you can see the whole city from up here.").
+- Boasting, then honest: "I have been sitting since first light. On purpose. Mostly on purpose."
 - "Father", who knows everything and worries loud.
 
 **Running gags.** "I'm not stuck. I'm sitting." The ewe, every single Ides. Not looking at the
@@ -1156,7 +1164,7 @@ sausage.
 
 **In play.** #11, Juno's Geese: he says whose boy he is and whose breakfast it is, shows the
 boy what the geese do when he puts a foot down, and sends him to old Anser. After the stomp
-he hops down ("I wasn't scared. I was SITTING."), hands over the breakfast, and runs home
+he hops down ("I was not scared. I was SITTING."), hands over the breakfast, and runs home
 down the hill.
 
 **How he looks and moves.** Skinny, dark curls, a big grin, ears that stick out; his
@@ -1171,11 +1179,11 @@ grin hardly.
 
 **How he changes (draft).** From sitting to running.
 
-> "Statues don't have breakfasts. I've got one. ...Not mine. But I've got it."
+> "Statues do not have breakfasts, and I have one. ...It is not mine. But I have got it."
 > "She had ribbons. She went up the hill like a senator."
-> "Over THEM? They bite like Father's creditors."
-> "I wasn't scared. I was SITTING."
-> "Your shoes are the best thing on this hill, and I've seen the gold roof!"
+> "Over THEM? They bite like Father does when you owe him money."
+> "I was not scared. I was SITTING."
+> "Your shoes are the best thing on this hill, and I have seen the gold roof!"
 
 ### The goose-keeper (Titus Rubrius Anser)
 
@@ -1193,7 +1201,7 @@ night the geese saved the city to anybody, at any excuse, and nobody listens. Ov
 
 **How he talks.**
 - Mournful, slow and devoted.
-- Every answer comes round to the night the geese saved the city: "...Mister Goose. These geese saved the city, child."
+- Every answer comes round to the night the geese saved the city: "...Mister Goose. I will bear it. These geese saved the city, child."
 - He tells the tale the way an old man tells it, the same every time, and always "Long ago":
   no year.
 
@@ -1216,9 +1224,9 @@ see DESIGN.md, section 14.
 **How he changes (draft).** From the man nobody listens to, to the man whose story worked:
 "Thirty years I have told that story. Today somebody USED it."
 
-> "Sacred birds. I feed them. I do not argue with them."
+> "They are sacred birds, child. I feed them. I do not argue with them."
 > "...Attack chickens. I will not tell them you said that."
-> "It was my grandfather's name before it was my job. Nobody believes it."
+> "It was my grandfather's name long before it was my work. Nobody ever believes me."
 > "Between you and me, the dogs sleep. The geese never do."
 > "That is the most noise they have made since the Gauls."
 
@@ -1299,7 +1307,7 @@ head: "girl".
 **How she talks.**
 - Certain about everything, especially hens: short declarations, one word in capitals
   ("They're in a ROW.").
-- Bossy and fond, and quick to laugh: "I'm not bossy. I'm in CHARGE. It's different."
+- Bossy and fond, and quick to laugh: "I am not bossy. I am in CHARGE. It is different."
 - Her grandfather's sayings, passed on exactly: "Grandfather says hens don't pray. They only
   look."
 
@@ -1321,10 +1329,10 @@ stand she is about 70 pixels tall: the design reckoned the yard nearer.
 
 **How she changes (draft).** She does not need to.
 
-> "They won't eat. They won't lay. Hens are sensible. Something over there is not."
-> "Grandfather says hens don't pray. They only look."
-> "You don't ASK a hen. You look her in the eye."
-> "That's the stone, silly. It's a tree that hasn't started yet."
+> "They will not eat. They will not lay. Hens are sensible. Something over there is not."
+> "Grandfather says hens do not pray. They only look."
+> "You do not ASK a hen. You look her in the eye."
+> "That is the stone, silly. It is a tree that has not started yet."
 
 ### Felix (Gaius Fannius Felix)
 
@@ -1344,7 +1352,7 @@ a fountain, for him.)
 - Cheerful and impatient; he talks while he walks.
 - Short lists when he is happy: "Ostia. Sea. Ships. Barges. Me. Up and down. That's the whole
   of it." "Corinth. A house. TWO seas! ...Sorry."
-- Soft about his mother: "So I wave at the Forum. She can't see me. I wave anyway."
+- Soft about his mother: "So I wave at the Forum. She cannot see me. I wave anyway."
 
 **Running gags.** Busy. Telling the bales things. The ninth hour ("Tell her again, in case!").
 
@@ -1363,10 +1371,10 @@ and shades his eyes toward the bridge.
 **How he changes (draft).** From a man in a hurry to be gone, to a man who will come and say
 goodbye first.
 
-> "It's a barge. A table doesn't go down to Ostia and back."
+> "It is a barge, friend. A table does not go down to Ostia and back."
 > "...She never throws anything. She keeps string."
-> "Tell her I'll come over the bridge at the ninth hour. Before the barge goes."
-> "And tell her I'll light it in Corinth. The first night. In the first window."
+> "Tell her I will come over the bridge at the ninth hour. Before the barge goes."
+> "And tell her I will light it in Corinth. The first night. In the first window."
 
 ## Japan, spring 1830 (Act Six)
 
@@ -1422,9 +1430,9 @@ the road. **How she looks and moves:** PEOPLE-20 draws her, with the baby on her
 sleeves tied back, a towel on her hair.
 
 > "In. In, in, in. Behind the curtain, all of you, and not a word."
-> "Fish, clerk. Fish and wind. Same as every morning since my grandmother's."
+> "Fish, clerk, and wind. The same as every morning since my grandmother's day."
 > "...What did you DO."
-> "Travellers hitch them up anyway. You're ahead of everybody."
+> "Travellers tuck them up for the road anyway. You are only ahead of them."
 > "Husband. Your face."
 
 **Sankichi, their grandson.** Nine; goes to the temple school and can read; reads the notice boards aloud to anyone who
@@ -1441,7 +1449,7 @@ a boy's short kimono and a shaved pate, beside the board.
 > "Are those your feet? The yellow. Are they feet or are they boots?"
 > "The thirteenth year of Bunsei. Everybody knows that."
 > "Arigatō. It means thank you. Say it to Grandfather and watch his face."
-> "You've said it nine times. It still means thank you."
+> "You have said it nine times. It still means thank you."
 
 **Tokuzō, the headman's clerk.** Making his rounds with the headman's paper (strangers on the beach at dawn, in strange
 clothes); fussy, polite, very short-sighted; he apologizes before he asks and peers while he writes. **Wants:** to write
@@ -1452,10 +1460,10 @@ and the family answers with nothing but true things: "Travellers?" "We are. We'r
 east." "You are very tall." "I am." He writes "travellers, three, going west" and goes home, pleased. **How he looks and
 moves:** PEOPLE-20 draws him: a townsman's kimono, a brush-case, a paper held close to his nose, a squint.
 
-> "Fish and wind. ...I'll write 'nothing'. It's shorter."
-> "The east. ...Yes. Most people are. I'll write 'the east'."
-> "...So you are. Well. One can't write 'tall'. There's no box for it."
-> "Glasses. I've heard of them. They sound expensive. Squinting's free."
+> "Fish and wind. ...I will write 'nothing'. It is shorter."
+> "The east. ...Yes. Most people are. I will write 'the east'."
+> "...So you are. Well. One cannot write 'tall'. There is no box for it."
+> "Glasses. I have heard of them. They sound expensive. Squinting costs nothing."
 
 **Gonroku, the captain.** O-Masa's husband, Kihei's sister's husband; master of the one-masted freighter at anchor in
 the bay, sailing for Osaka on the morning tide with dried bonito; weathered, and superstitious the way sailors were: the
@@ -1464,17 +1472,17 @@ care for other women aboard. **Wants:** a fair wind; no trouble from the Funadam
 be kind. It is, twelve days running. **How he talks:** in weather. Every refusal ends in a forecast ("Clouds building
 over the pass. No."); every argument is weather too ("You don't argue with it. You wait for it to change. ...It won't.").
 **In play:** #24: a tree whose options are mostly funny and none of which work (Big Sister: the hair in the mast means a
-woman is aboard already, technically; Little Sister: "We're not BAD luck. We're GOOD luck. The hens LIKE us."); the clue
+woman is aboard already, technically; Little Sister: "We aren't bad luck. We're GOOD luck. The hens like us. Hens can tell."); the clue
 is his wife ("Mind how you ask."); the lever is O-Masa, and his answer after her is "...They sit in the stern, and they
 don't whistle." In Osaka he gives the act its one line about the arrests ("The magistrates have been thick in Osaka since
 the Kirishitan business.") and sends them north. **How he looks and moves:** PEOPLE-20 draws him by his boat at the
 water's edge, looking at the sky as if it owed him money.
 
-> "Wind's coming round. Rain behind it, two days off. ...You want something."
+> "The wind is coming round. Rain behind it, two days off. ...You want something."
 > "Asked. No."
-> "Hens don't sail. ...Wind's freshening. No."
-> "...They sit in the stern, and they don't whistle."
-> "Twelve days of fair wind. Never had twelve in a row. ...Don't tell the Funadama."
+> "Hens do not sail. ...The wind is freshening. No."
+> "...They sit in the stern, and they do not whistle."
+> "Twelve days' fair wind. Never had twelve in a row. ...Do not tell the Funadama."
 
 **O-Masa, his wife.** Kihei's sister, at the net racks; the one person on the beach everybody looks at before they do a
 thing, and the one person Gonroku obeys. **Wants:** to be asked properly: a question, not a favour. **Gets wrong:**
@@ -1486,8 +1494,8 @@ anybody."); then Mom's question, properly asked, and she goes down the beach, an
 is a lady. A lady likes company with manners." **How she looks and moves:** PEOPLE-20 draws her at the racks, a net
 across her knees, a needle; she does not look up for anybody until she does.
 
-> "You've been to my husband. I saw his shoulders. ...Well?"
-> "That's a favour. Favours I give my brother. Questions I'll take from anybody."
+> "You have been to my husband. I saw his shoulders. ...Well?"
+> "That is a favour. Favours I give my brother. Questions I will take from anybody."
 > "A thousand holes with string round them, and it holds fish. Think about that."
 > "...The Funadama is a lady. A lady likes company with manners."
 
@@ -1525,11 +1533,11 @@ Inari theater; and Kannon is not named until the hills, where Grandmother Sei na
 **Round twenty's people, changed.** **O-Tami** puts up Big Sister's hair with her own hairpin before the road, because a
 girl does not go on the road with her hair down; it has an ear-pick at its end, and her grandmother's story is that a pin
 that is only pretty is a sin, "so they put a pick on the end, and now it's a tool" (a story, told as one). Big Sister:
-"...That isn't a hairpin. That's a loophole." She keeps it. **Kihei** names the road first and lets them try it ("...Try
+"...That is not a hairpin. That is a loophole." She keeps it. **Kihei** names the road first and lets them try it ("...Try
 the road. Everybody does."), and the ship only when they come back down ("You tried the road. Everybody tries the road.
 ...There's a ship."). **O-Masa's** nephew is the ship's cook ("Be kind about the rice."). **Gonroku** is on deck at his
 tiller, in weather, all the way to Osaka; at the Dōjima steps his goodbye gains one line: "And don't tell anybody anything
-true." "That's the only kind I've got." He nearly smiles.
+true." "Captain, that is the only kind I have." He nearly smiles.
 
 #### At the foot of the pass: Nishikurasawa
 
@@ -1538,29 +1546,29 @@ the pass and sells them at the top of her voice; has watched thirty years of wom
 come back down. **Wants:** customers; and for nobody to find out the hard way. **Gets wrong:** that the three of them will
 be like the others: they are, and then they are not. **How she talks:** she sells while she warns, in the same breath;
 "dear"; the true thing plainly, then a shell ("Have a shell, I say. Then go home."). **In play:** #24: one shell, to share,
-"for the climb"; "And your pass, dear?" "We're IN a pass." "Not that kind. The paper kind. Your tegata."; papers at Arai;
+"for the climb"; "And your pass, my dear?" "We're IN a pass." "Not that kind of pass, child. The paper kind. Your tegata."; papers at Arai;
 Fuji clear one morning in three; back down after the top: "They all come back down. Sit. The smell's free."
 
-> "Turban shells! Grilled in their own pots, hot from the sea and the fire."
-> "Three of you, and not a coin between you. I can tell by the walk."
-> "By sea. Good. The sea doesn't read papers."
+> "Turban shells, grilled in their own pots! Hot from the sea and the coals."
+> "Not a coin among the three of you. I can tell. Money walks toward the grill."
+> "By sea. Good. The sea has never once asked anybody for papers."
 
 **Sakuji and Tora, the palanquin bearers.** Squatting on their pole by the distance mound, waiting for a fare: Sakuji
 small and all mouth, Tora huge and gentle and nearly silent. They bargain before anyone has asked, want a fare and drink
 money on top, and would not carry anyone for love. Tora would. **How they talk:** Sakuji in prices and moods; Tora in
-three words. **In play:** #24's wrong try: the ride Little Sister cannot pay for ("How much have you got?" "Three pennies."
-"...What's a penny?" ... "We'd carry the little one for nothing." "We would NOT."); she sits in it anyway, not bouncing.
+three words. **In play:** #24's wrong try: the ride Little Sister cannot pay for ("That depends. How much have you got?" "Three pennies."
+"...What's a penny?" ... "We would carry the little one for nothing." "We would NOT."); she sits in it anyway, not bouncing.
 
-> "Then it isn't money. It's a button with ideas."
-> "He carries. I talk. Between us we're one good bearer." "...He's the talking half."
+> "Then it is not money. It is a button that has ideas."
+> "He carries, and I talk. Between the two of us, we make one very good bearer." "...He is the talking half."
 
 **Sōshichi, the Toyama medicine peddler.** Two months into his round, his willow trunks five tiers high with the ledger
 on top; exact, polite, a man of lists; "use first, pay later". He counts everything (the houses, the mounds, the cups of
 tea), and gives Little Sister a cheap print of an actor, as peddlers did for the child of a house ("We haven't got a
-house." "...Then for the child."). Men like him walk through the barriers with a nod; for women there are papers.
+house." "...Then it is for the child."). Men like him walk through the barriers with a nod; for women there are papers.
 
 > "Since Toyama, two months. Since Edo, forty mounds. Since breakfast, two cups."
-> "You may see it. Can you read it?" "...No." "Then it's perfectly safe. Here."
+> "You may see it, certainly. Can you read it?" "...No." "Then it is perfectly safe with you. Here."
 
 **The komusō, and the courier.** A flute monk under a basket hat that hides his whole head, who never speaks and plays a
 few notes of his own; he is in Yui's street, at Nishikurasawa, in the Osaka street (and, WRITE-21B's, behind the Akashi
@@ -1577,7 +1585,7 @@ where he can't. **In play:** #24: lends his pole for the paper on the Jizō's ha
 parent, forget your child", and the pass's (a holy image a fisherman found in his net, they say); passes back the other way
 with a new load, and still does not look.
 
-> "It's always there. You look at things that go away."
+> "It is always there. You look at the things that go away."
 
 **O-Shige, the widow with a pass.** About fifty ("I'm forty-nine"), a merchant's widow from the west going east to Edo to
 hold her first grandson, with a pass that describes her as "a woman of fifty, a mole by the right eye", which she resents
@@ -1591,8 +1599,8 @@ whoever asks."). Mom: "...Then not by road." O-Shige: "There's no barrier on the
 captain." **Kyūzō**, her old manservant, with her box on a pole: he drops things, never her ("Forty years. He drops
 everything. He's never once dropped me.").
 
-> "Sit. You gave it back. Nobody gives anything back on this road."
-> "Find a captain. And don't let anybody write a mole on you."
+> "Sit down, sit. You gave it back. Nobody gives anything back on this road."
+> "Find a captain. And do not let anybody write a mole on you."
 
 #### On the ship, the fifth day out
 
@@ -1613,7 +1621,7 @@ when she chirps, "She chirped. She's in high spirits!"
 they have fed the men; then crew. A small part.
 
 **Kōta, the cook.** Twelve, the youngest aboard, O-Masa's nephew from Yui on his first voyage; homesick; his rice comes out
-burnt and raw at once because he keeps lifting the lid ("My mother always did the rice. I don't know when it's done."). He
+burnt and raw at once because he keeps lifting the lid ("My mother always did the rice at home. I never know when it is done."). He
 drew the little animals on the ship's clock, because he cannot read either. Little Sister's friend at once: charades (the
 Grump, a cat that is a yokoza at sea, and a monkey that makes him nearly drop the pot: "Sa-- saru! ...Don't! Not at SEA.");
 Mom's lesson ("Don't lift the lid. Listen to it."); and the trade, the first time all act Little Sister gives a penny away
@@ -1634,7 +1642,7 @@ Senba way), thirteen, ran off to Ise with the pilgrims three days ago. Warm, qui
 the line fed before the pot runs dry. **How she talks:** in instructions, kindly ("Pot's yours. Rice balls, the tall girl.
 Pickle, the little one, a slice each."); with the truth plainly when it is hers ("My boy's out there with a ladle.
 Somebody's feeding him. So."). **In play:** #28: she looks at Mom a moment and hands her the rice paddle, which in a
-Japanese house is more than a spoon (Big Sister: "In Japan the paddle is the key."); when the magistrate's man asks who
+Japanese house is more than a spoon (Big Sister: "In Japan the paddle is the key. Mother, she has just handed you the keys."); when the magistrate's man asks who
 the three tall women are: "My helpers." (It is true: she made it true.) #29: at the crossroads, a boxwood comb from Izumi
 held up, asking the road god about her boy, with Mom standing beside her and praying her own way; the first words anyone
 says are her answer, and she laughs and cries at once; then the comb, given ("It told me. Let it tell you.") and a slip
@@ -1858,19 +1866,19 @@ bossing everyone about it. She can write her whole name.
 **How she talks.** Bossy through the tears, in short orders and verdicts, a child's contractions. She asks the one question
 that is the joke ("...What are boots?").
 
-**In play.** #35: Little Sister's way in ("I'll get it. I'm good at water."); where the ladle went; the ladle back. Then her
+**In play.** #35: Little Sister's way in ("I'll get it for you. I'm very good at water."); where the ladle went; the ladle back. Then her
 name slip, for the women's hall at Shosha ("My grandmother went there once. Don't lose it."), and Little Sister's penny for
 luck ("It's got a man on it." "...He looks hungry.").
 
-> "Don't look at me. I'm crying. It's allowed."
-> "I'm a pilgrim with no ladle. That's the worst kind. Nobody fills your hands."
-> "Don't get WET again. And don't lose my slip."
+> "Do not look at me. I am crying. Pilgrims are allowed to cry."
+> "I am a pilgrim with no ladle. That is the worst kind. Nobody fills your hands."
+> "Do not get WET again. And do not lose my slip."
 
 #### Her group's leader
 
 A man with the group's banner, counting heads on the sand and getting thirty-one ("Thirty, and one ladle in the sea. The
 ladle's on the list."). He will wait a little, because Ise will not come to them. Little Sister may not hold the banner:
-"If you hold it, they'll follow you. To wherever you're going." "...That's fair. I'm going the OTHER way."
+"If you hold it, child, they will follow you. Wherever it is you are going." "...That's fair. I'm going the OTHER way."
 
 #### Old Heita
 
@@ -1886,8 +1894,8 @@ They're all food.").
 **In play.** #35's clue: "A tako lets go of nothing. Except for a crab." When Little Sister holds out Mom's crab, the octopus
 lets go of the ladle for it; the crab gets away; Heita has the octopus ("And the tako comes to me. Supper.").
 
-> "Tako. I catch tako. That's all I do."
-> "Every tako on this shore is mine. Some don't know it yet."
+> "Tako. I catch tako. That is all I do, and all I mean to do."
+> "Every tako on this shore is mine. Some of them do not know it yet."
 
 #### O-Sato and her sister-in-law
 
@@ -1895,7 +1903,7 @@ Two Harima women from near Himeji with ladles, slipping away east to Ise without
 big market. It goes all the way to Ise."). They finish each other's sentences, and they bring the news from Shosha: the hall
 still shut, the voice every sunset, old O-Ume's rice ball for it every evening, her husband the shipwright who made the
 lock, and all he ever told her: **it opens to what a ship gives its lady** (#35, the riddle; Big Sister, very quietly, gets
-out her note). "If you see my husband, we're buying salt." "A great deal of salt."
+out her note). "If you should see my husband, we are buying salt." "A great deal of salt."
 
 #### O-Tane
 
@@ -1905,15 +1913,15 @@ about her daughter's first day at the writing school. She has been standing at h
 **Wants.** O-Kiku through the school door. Her house kept from falling down.
 
 **How she talks.** Orders, given kindly, in a hurry; the facts of her street ("Cotton. The whole street's cotton. The lord
-buys it and sends it to Edo."); a dry one back at Big Sister ("Don't say that in Osaka.").
+buys it and sends it to Edo."); a dry one back at Big Sister ("Do not say that in Osaka.").
 
-**In play.** #36: the pointer ("Her own size. ...There's one of those standing next to you."); once O-Kiku is in, Mom asks
+**In play.** #36: the pointer ("Her own size. ...There is one of those standing right next to you."); once O-Kiku is in, Mom asks
 properly, and O-Tane hands her the rice paddle and her kitchen for an hour ("The rice is cooked. Salt's in the jar. Pickle's
 in the tub. And don't let the fire out."); a bed tonight, late or not ("Then be very quiet."). In "Mind The Fire" she lets
 them in in the dark.
 
-> "She's stood there since breakfast, in her best. First day. She won't go in."
-> "...That's the first word out of her all day."
+> "Since breakfast she has stood there in her best. First day. She will not go in."
+> "...That is the first word out of her all day."
 
 #### O-Kiku
 
@@ -1941,7 +1949,7 @@ who cannot read ("Go now, and you will be there before the sun is low.").
 
 #### The pupils
 
-Two girls at the desks, brushes up, watching the door: "Teacher, there's a girl at the window with yellow feet." "They're
+Two girls at the desks, brushes up, watching the door: "Teacher, there is a girl at the window with yellow feet." "They're
 boots. She told me. Boots." (the act's yellow feet, at last named.)
 
 #### Old Tōbei
@@ -1959,32 +1967,32 @@ Every night of my life, the whole street."
 the night (the gate, the clappers). "Mind The Fire": at the shut gate he sees O-Ume's lantern, strikes his clappers, and the
 far gates answer: they are passed on, gate to gate ("We're being POSTED.").
 
-> "I wasn't napping. I was minding the gate. With my eyes shut."
-> "The gates are shut. That's what a gate is for, at night."
+> "I was not napping. I was minding the gate. With my eyes shut."
+> "The gates are shut. That is what a gate is for, at night."
 
 #### O-Ume
 
 **Who she is.** About seventy, small and bent (1.36 m), the keeper of the women's hall at the foot of the east path, and the
 widow of Kichiemon, a shipwright of Takasago, who sealed the ship's lady into sixty masts and made the hall its lock forty
-years ago, "for women who can't climb" ("It hung open on its hasp forty years. Nobody locks a door women need."). Her only
+years ago, "for women who can't climb" ("It hung open on its hasp forty years. Nobody locks a door that women need. Not on purpose."). Her only
 son was a sailor; the sea kept him, thirty years ago. Since the voice began, thirteen evenings ago, she has left a rice ball
 on the step for it every evening, and in the morning eaten it herself ("Rice is rice.").
 
 **Wants.** The door open for the women on the bench. The boy who calls at suppertime fed.
 
-**Gets wrong.** Nothing. She knows the riddle and not its answer ("He liked a riddle better than his supper.").
+**Gets wrong.** Nothing. She knows the riddle and not its answer ("He liked a riddle better than his supper, and his supper he liked very much.").
 
 **How she talks.** Dry, short, funny, and grieving without saying so; she says her son once, plainly, and turns it into a
 joke about Mom's height and her own neck. She settles the women's fox ("A boy who calls at suppertime is a hungry boy.").
 
 **In play.** #37: the voice, the shipwright, the riddle, the step; she takes the slips from Osaka and Akashi; when the lock
-chirps she laughs and cries at once ("That's him. That's his joke. The lady chirps."). Mom gives her a rice ball ("I've left
+chirps she laughs and cries at once ("That is him. That is his joke, after forty years. The lady chirps."). Mom gives her a rice ball ("I've left
 out thirteen of these. Nobody ever left me one."); Little Sister gives her Kōta's coin ("...From a ship." "Then it's come
-home."). #38: she kneels by the door, understands nothing but the eating ("I don't know a word of it. I know eating."), and
-asks "Will he come again tomorrow?" "I think so. If he does, feed him." In "Mind The Fire" she lends them her lantern.
+home."). #38: she kneels by the door, understands nothing but the eating ("I do not know a word of it. But I know eating."), and
+asks "Will he come again tomorrow?" "I think so. And if he does, please feed him." In "Mind The Fire" she lends them her lantern.
 
-> "Come about the door? Everyone has. Sit, if the bench will have you."
-> "So am I. Sit down. You're tall, and I'm old, and my neck's had a long day."
+> "You have come about the door. Everyone has. Sit, if the bench will have you."
+> "So am I. Sit down. You are tall, and I am old, and my neck has had a long day."
 > "Everyone says that. Then they try a comb."
 
 #### Ryōkai
@@ -2002,23 +2010,23 @@ it.").
 **In play.** #37: the path refuses each of them ("Forgive me. Women may not climb." "Not since long before my grandmother's
 grandmother."; to Little Sister's "I'm only SEVEN.": "Girls are women, for this."). He tells them what is up there that they
 will not see: the hall of Kannon built out over the cliff, shown once a year; the founder's hall held up by three carved
-strongmen ("The fourth corner is empty. He could not bear the weight, and ran away." "...Same."); Benkei's stones, the bell,
+strongmen ("The fourth corner is empty. They say he could not bear the weight, and ran away." "...Same."); Benkei's stones, the bell,
 the refectory nearly finished for longer than anyone remembers; and a great lady's poem on a stone, which he describes and
 never says. #38: his face at the lattice, outside; asked what he will tell the abbot: "...That I heard nothing I
 understood." It is true.
 
-> "Forgive me. You cannot go up. I am sorry. I did not make the rule."
+> "Forgive me. You cannot go up. I am sorry. The rule is older than I am."
 > "It is not my mountain. I only apologize for it."
 
 #### Grandmother Tome, the young wife, the girl
 
 The women on the bench, who have waited days to leave their slips. **Grandmother Tome** has tried her best comb in the lock
-thirty times ("Thirty times. My best comb. It looked at me."), thinks the voice is a fox, and goes in at the front when it
-opens ("Thirty times. And it wanted a comb from Osaka. OSAKA."). **The young wife**, a baby on her back, has a slip for him
+thirty times ("Thirty times, with my best comb. And the rabbit only looked at me."), thinks the voice is a fox, and goes in at the front when it
+opens ("Thirty times I tried. And all along it wanted a comb from Osaka. OSAKA."). **The young wife**, a baby on her back, has a slip for him
 ("For his whole life."), and was sent by her mother-in-law ("She tried her comb last week."). **The girl**, eleven, holds her
 grandmother's slip in both hands, her own name small at the bottom: "She can't walk this far now. I'm her feet."
 
-And: **the Awa pilgrims** wading ashore at Akashi, ladles up ("Mind the pots! Mind the POTS. That's somebody's supper."), and
+And: **the Awa pilgrims** wading ashore at Akashi, ladles up ("Mind the pots! Mind the POTS. That is somebody's supper."), and
 **the komusō**, the basket-hat flute-player who has been on every road they have, and is at Himeji before them ("He got here
 first. Now we're following HIM.").
 
@@ -2091,10 +2099,10 @@ say about their own times is in the tables at the end of
 | The copper coins with square holes are Kan'ei Tsūhō, of the Edo period: "sixteen-thirties to eighteen-sixties" (minted 1636 to 1860) | `edo.shop.money.clue` (#21's second clue; she has seen one in a museum case, and quotes its label) | **Checked** (facts-edo, item 22: Kotobank, 寛永通宝, minted 1636-1860 and used into Meiji). https://kotobank.jp/word/寛永通宝-48461 |
 | The deep blue of the print is Prussian blue, which Japan's printmakers had only just got | `edo.shop.print.clue` (#21's third clue: "Their printers only just got it.") | **Checked** (facts-edo, item 27: Prussian blue in demand about 1829-31; the Met on the Fuji series, "ca. 1830-32", its blues its hallmark). https://www.metmuseum.org/articles/great-wave |
 | A metal tiger year comes round every sixty years; the last was 2010; 2010 less sixty, less sixty, less sixty is 1830 | `edo.when.solve.1`, `.2` (#21's solution), `edo.tami.red.big`, `edo.when.sum.bigsis` | **Checked** (facts-edo, item 1: 1830 was 庚寅, kanoe-tora, the metal tiger; facts-edo-2, item 5: kanreki is the return of one's birth sign after sixty years; the design, section 2: "tiger years come round every sixty years (1770, 1830 ... 2010)"). O-Tami says which tiger it is (`edo.tami.red.1`, "the metal one"), and Big Sister needs that: a tiger year alone comes every twelve. |
-| In Edo they have just started making sushi by hand, one piece at a time; elsewhere it is pressed in a box | `edo.shop.meal.6` ("Fun fact: in Edo they've just started making it by hand, one piece at a time."), `item.sushibox.bigsis` | **Checked** (facts-edo, item 21: Hanaya Yohei's nigiri, a stall and then a shop in 1824; Kyoto, Osaka and the provinces kept pressed sushi, typically vinegared mackerel). https://www.nippon.com/ja/japan-topics/g00962/ |
+| In Edo they have just started making sushi by hand, one piece at a time; elsewhere it is pressed in a box | `edo.shop.meal.6` ("In Edo, they have only lately begun to make it by hand, one piece at a time."), `item.sushibox.bigsis` | **Checked** (facts-edo, item 21: Hanaya Yohei's nigiri, a stall and then a shop in 1824; Kyoto, Osaka and the provinces kept pressed sushi, typically vinegared mackerel). https://www.nippon.com/ja/japan-topics/g00962/ |
 | "Okage-sama de" means "thanks to you", or "by your grace": what one says when something good happened and it was not only oneself | `edo.shop.meal.14`, `.15` (the act's name) | **Checked** (facts-edo-2, item 9: okage, "help or benefit received from others, including the protection of gods and buddhas"; the Ise pilgrims' "okage" is the same word). https://kotobank.jp/word/御蔭 |
 | A bronze magic mirror is slightly convex, and the picture on its back shows in the light it throws, if it is made so | `item.mirror.bigsis` (the physics only; WRITE-20B's #27 and #30 have the rest) | **Checked** (facts-edo, item 10: the polished face slightly convex, relief-induced unevenness of about a micron shows the back's picture in reflected sunlight; the design, section 2, Scott on the convexity). https://www.christiantoday.co.jp/articles/6925/20061209/news.htm |
-| The Kirishitan board is "a hundred and nineteen years old, by the look of it": a guess, and she says so | `edo.village.board2.bigsis`, `.bigsis.2` ("...I can't read it, so that is a guess. I'm allowed one.") | Not a fact she states: a guess, marked as one. It happens to be right (facts-edo-2, item 1: the boards re-issued in 1711 hung unchanged to the late Edo period; 1830 is 119 years on), which is the joke. <!-- WRITE-20A: end of round twenty's rows --> |
+| The Kirishitan board is "a hundred and nineteen years old, by the look of it": a guess, and she says so | `edo.village.board2.bigsis`, `.bigsis.2` ("...I cannot read it, so that is a guess. I am allowed one.") | Not a fact she states: a guess, marked as one. It happens to be right (facts-edo-2, item 1: the boards re-issued in 1711 hung unchanged to the late Edo period; 1830 is 119 years on), which is the joke. <!-- WRITE-20A: end of round twenty's rows --> |
 | There has been no priest in Japan since 1644: nearly two hundred years (186, in 1830); the hidden families kept the faith themselves, by heart <!-- WRITE-20B: the rows to the next comment are round twenty's, the second and third legs --> | `edo.chapel.sei.priest.2`, `.3`; and `edo.chapel.altar.open.bigsis` ("nearly two hundred years") | **Checked** (`facts-edo.md` item 10: the last priest martyred in 1644, "leaving the country without any priests", the official Nagasaki World Heritage text) |
 | On the west gable of the castle gate at Himeji is a roof tile with a cross on it, and nobody knows who put it there | `edo.castle.gable.bigsis`, `edo.castle.gable.found.1` | **Checked** (`facts-edo.md` item 16: the tile's "actual provenance remains a mystery"). She footnotes nothing else about it: the Kuroda Kanbei story is not in the game |
 | A double cherry opens a week or two after the single ones | `edo.castle.cherry.bigsis` | **Checked** (`facts-edo-2.md` item 6: yaezakura open "one to two weeks after" Somei-yoshino) |
@@ -2113,7 +2121,7 @@ say about their own times is in the tables at the end of
 | The view from the top of the Satta Pass was called the finest on the Tōkaidō | `edo.satta.arrive.3` ("Allegedly."), `edo.satta.fuji.bigsis`, `edo.village.pass.after.bigsis`; and the reversal, `edo.satta.clears.3` ("I take it back. Not allegedly.") | **Checked** (21a, item 1; facts-edo-2, item 14: 海道一の絶景). https://www.britishmuseum.org/collection/object/A_1906-1220-0-786 |
 | The pass is only about ninety meters (about three hundred feet) above the sea | `edo.satta.bay.bigsis` ("about three hundred feet") | **Checked** (21a, item 1: about 90 m, Sekai Daihyakka; 93 m, ja.wikipedia; Mount Satta above it is 244 m). https://kotobank.jp/word/薩埵峠 |
 | From the pass, the Izu peninsula lies to the east, and Fuji across the head of the bay | `edo.satta.izu.bigsis`, `edo.satta.fuji.bigsis` | **Checked** (21a, item 1: Fuji to the north-east across the head of Suruga Bay, Izu to the east). https://www.city.shizuoka.lg.jp/s5423/s004423.html |
-| The road over the pass was cut high up the mountain in 1655; before that the road went under the cliffs at low tide | `edo.satta.name.3` ("So they cut this road high up the mountain. In 1655.") | **Checked** (21a, item 1: 1655, for the Korean embassy; the shore way "forget your parent, forget your child"; not 1607). https://jameelcentre.ashmolean.org/collection/6980/16168/0/23157 |
+| The road over the pass was cut high up the mountain in 1655; before that the road went under the cliffs at low tide | `edo.satta.name.3` ("So they cut this road high on the mountain instead. In 1655.") | **Checked** (21a, item 1: 1655, for the Korean embassy; the shore way "forget your parent, forget your child"; not 1607). https://jameelcentre.ashmolean.org/collection/6980/16168/0/23157 |
 | Okitsu is the next post town west, about twice the size of Yui | `edo.satta.okitsu.bigsis` ("by the roofs") | **Checked** (21a, item 4: Okitsu 316 houses and 1,668 people in 1843; Yui 160 houses and about seven hundred people). https://kotobank.jp/word/興津宿 |
 | A boy was once sent to the temple at Okitsu as a hostage, far from his mother, and learned to write there | `edo.satta.temple.bigsis`, `.bigsis.2` ("If that big roof is Okitsu's temple": she says she is guessing which roof) | **Checked** (21a, item 5: Seiken-ji, where the boy hostage Takechiyo studied; the temple keeps his writing-practice room). That the temple can be seen from the pass is the design's liberty, and she hedges it. https://seikenji.com/history.html |
 | The ship's sail is heavy cotton, woven in long strips side by side | `edo.deck.sail.bigsis` (Denzō gives the captain from Harima, `edo.castoff.sail.2`) | **Checked** (21a, item 6: the sail measured in bolts sewn side by side; the woven cotton sail devised in 1785 by Kōraku Matsuemon, a captain of Takasago in Harima). https://kotobank.jp/word/松右衛門帆 |
@@ -2132,7 +2140,7 @@ say about their own times is in the tables at the end of
 | At the rice market they trade not rice but paper for rice (rice tickets) | `edo.dojima.market.bigsis` | **Checked** (21b, item 1: spot trading in rice tickets, kome-kitte, and paper futures). https://kotobank.jp/word/%E5%A0%82%E5%B3%B6%E7%B1%B3%E5%B8%82%E5%A0%B4-103668 |
 | After the close, men splash water on the dealers who will not stop | `edo.dojima.watermen.bigsis` | **Checked** (21b, item 1: Japan Exchange Group; British Museum). https://www.jpx.co.jp/dojima/ja/index.html |
 | The price leaves the city by runner: flags are not allowed | `edo.dojima.runner.bigsis` | **Checked** (21b, item 1: the 1775 ban on signalling prices by banners, in force until 1865). https://www.postalmuseum.jp/publication/research/docs/research_02_06.pdf |
-| In Japan the rice paddle, not a key, is the sign that a woman runs the house | `edo.natsu.paddle.3` ("In Japan the paddle is the key.") | **Checked** (21c, item 11; 21d, item 3: the housewife's standing symbolised by the paddle, not the key). She states the symbol only: no Kansai ceremony of 1830 is claimed. https://kotobank.jp/word/鍵 |
+| In Japan the rice paddle, not a key, is the sign that a woman runs the house | `edo.natsu.paddle.3` ("In Japan the paddle is the key. Mother, she has just handed you the keys.") | **Checked** (21c, item 11; 21d, item 3: the housewife's standing symbolised by the paddle, not the key). She states the symbol only: no Kansai ceremony of 1830 is claimed. https://kotobank.jp/word/鍵 |
 | In Kansai a rice ball is bale-shaped, shaped with salted hands | `edo.dojima.balls.2` ("Bale-shaped. The Osaka standard.") | **Checked** (21d, item 9: "in Kansai the standard rice ball is bale-shaped"; salted hands). https://kotobank.jp/word/握り飯 |
 | Shinsaibashi-suji is known for its kelp shops and bookshops | `edo.street.arrive.2` | **Checked** (21b, item 1: the Chūō Ward history sheet). https://www.city.osaka.lg.jp/chuo/cmsfiles/contents/0000508/508145/8ura.pdf |
 | Some 350,000 people live in Osaka | `edo.street.roofs.bigsis` | **Checked** (21b, item 1: about 350,000 in the early 1800s; "some 350,000 to 400,000"). https://www.britishmuseum.org/blog/historical-city-travel-guide-osaka-early-19th-century |
@@ -2147,7 +2155,7 @@ say about their own times is in the tables at the end of
 | Three operators to a puppet, since 1734 | `edo.jubei.three` | **Checked** (21b, item 3: worked out in 1734, Kyōhō 19). That the left hand and the feet wear black hoods is Jūbei's rule for his own troupe (`edo.jubei.rule.1`), the long-standing convention, which this round did not check: she only repeats his rule. https://kotobank.jp/word/%E5%90%89%E7%94%B0%E6%96%87%E4%B8%89%E9%83%8E-876316 |
 | The Kyoto boat carries twenty-eight passengers and four boatmen, and is hauled upriver by men on the bank | `edo.boat.2`, `edo.boat.4` ("forty men" is her count of what she sees) | **Checked** (21b, item 1; 21d, item 7: "four boatmen and twenty-eight passengers was the rule"; towed by gangs of men on the bank). https://kotobank.jp/word/三十石船 <!-- WRITE-21A: end of round twenty-one's rows, column A --> |
 | Akashi's castle has four corner turrets of three storeys, and no keep <!-- WRITE-21B: the rows to the next comment are round twenty-one's (the road on from the hills, Akashi, Himeji town, Shosha, the hall); the sources are the round's four fact-checks, S/work-21-factsA/facts-21a.md to S/work-21-factsD/facts-21d.md ("facts-21a" to "facts-21d"), and round twenty's two, kept with the project's working papers --> | `edo.akashi.castle.bigsis` ("Four turrets and no keep.") | **Checked** (facts-21b, item 9: "No keep was ever built"; four three-storey corner turrets). "Japan has a thing about castles with no tops" is her joke, not a fact |
-| The Akashi strait is about four kilometres (two and a half miles) across to Awaji, with a tide of six or seven knots | `edo.akashi.strait.bigsis` ("Two and a half miles of sea to that island, and a tide like a river.") | **Checked** (facts-21b, item 9) |
+| The Akashi strait is about four kilometres (two and a half miles) across to Awaji, with a tide of six or seven knots | `edo.akashi.strait.bigsis` ("Two and a half miles to that island, and the tide pours through like a river.") | **Checked** (facts-21b, item 9) |
 | The Awa pilgrims came across by sea, round Awaji | `edo.akashi.awaji.bigsis` | **Checked** (facts-21b, items 9 and 10: 300-odd Awa pilgrims landed at Akashi on 18 April 1830) |
 | "Green pines and white sand": travelers' words for this shore for centuries | `edo.akashi.pines.bigsis` | **Checked** (facts-21b, item 9: Kotobank; a Korean envoy of 1655, "for over a hundred li, green pines and white sand") |
 | Octopus are caught in clay pots let down on lines | `edo.akashi.pots.bigsis`, `.potlines.bigsis` | **Checked** (facts-21b, item 9: Akashi octopus; ancient octopus pots; bell-shaped pots dug up at Akashi) |
@@ -2295,7 +2303,7 @@ gives who says it, and where.
 | Psalm 31:15, its first clause | "My times are in thy hand" | `nevada.gate.5b` | Mom, in "Some when", in the middle of Act Four, the second line after "Daddy's EARLY" | Before round seventeen: Mom, in the same line ("Psalm 31, verse 15.") | **Checked** (`kjv.ps31.15`): https://biblehub.com/kjv/psalms/31-15.htm ; https://www.bibleserver.com/KJV/Psalm31 . The clause is followed by a colon in the King James text, so the quotation marks close with no stop inside them. |
 | Psalm 121:8, in two halves <!-- NEVADA-12W --> | "The LORD shall preserve thy going out and thy coming in" and "from this time forth, and even for evermore." | `nevada.through.joe.2` (Grandpa Joe, to "coming in": no stop inside his quotation marks, since the verse runs on) and `nevada.through.mom.2` (Mom finishes it from "from", lower case as the King James text has it) | At the door in time, the goodbyes of Act Four #13: Jolene has it on a plate in the kitchen. The same verse as the house's front door (`home.door.psalm.3`) | Before round seventeen: Mom, after her half ("Psalm 121, verse 8.") | **Checked** (`kjv.ps121.8`, and read again on 12 October): https://biblehub.com/kjv/psalms/121-8.htm . The two halves together are the verse, letter for letter. |
 | Micah 5:2, its first clause <!-- ROME-13W: Rome's five, the first two in the game since 7 October --> | "But thou, Bethlehem Ephratah, though thou be little among the thousands of Judah," | `rome.dateseller.ans.pray.2` | The date seller, in the street in Rome | Before round seventeen: the Son, the next line (`rome.dateseller.ans.pray.3`), with where he knows it from: his line in the Christmas program | **Checked** (`kjv.mic5.2`). The verse runs on: the quotation ends on its comma |
-| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` | The date seller, blessing the boy | No: the Son now answers "That's how church ends. The very same words. ...Thanks, mister." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.dateseller.bless.2`) | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
+| Numbers 6:24 | "The LORD bless thee, and keep thee:" | `rome.dateseller.bless.1` | The date seller, blessing the boy | No: the Son now answers "That's how church ends, back home. The very same words. ...Thanks, mister." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.dateseller.bless.2`) | **Checked** (`kjv.num6.24-26`; read again on 13 October: https://biblehub.com/kjv/numbers/6.htm ; https://www.bibleserver.com/KJV/Numbers6). It ends on its colon |
 | Isaiah 40:31, its first clause | "But they that wait upon the LORD shall renew their strength;" | `rome.eleazar.heart.2` | Eleazar, across the Tiber (round thirteen) | No: the Son now answers "That's on our fridge! On a magnet, with an eagle." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.heart.son.1`), with where he knows it from: "It's on our fridge." | **Checked**: Bible Hub and Bibleserver, King James Version, read 13 October: https://biblehub.com/kjv/isaiah/40.htm ; https://www.bibleserver.com/KJV/Isaiah40 . The verse runs on: the quotation ends on its semicolon |
 | Numbers 6:25 | "The LORD make his face shine upon thee, and be gracious unto thee:" | `rome.eleazar.bless.1` | Eleazar, his hand on the boy's head (round thirteen) | No: the Son now answers "Pastor says that one! ...You only did the middle. I know all three." <!-- PASS-17R -->. Before round seventeen: the Son, the next line (`rome.eleazar.bless.son`) | **Checked** (`kjv.num6.24-26`; read again on 13 October, as above). It ends on its colon |
 | Numbers 6:26 | "The LORD lift up his countenance upon thee, and give thee peace." | `rome.eleazar.last.son` | The Son, giving the old man the last part of the blessing (round thirteen) | Before round seventeen: the Son, in the same line ("Numbers 6:26.") | **Checked** (the same) |
@@ -2318,7 +2326,7 @@ Genesis 11 to 13 in their own words; Dad has said Genesis 12:3, 7:19-20 and 10:6
 One's pass says where it is said now). <!-- PASS-17H -->
 Told and not quoted, in Japan (round twenty, WRITE-20B): nothing; the hidden family's own prayer is never written beyond its first three words. Mom's prayer at the door (`edo.step.pray.1` to `.3`) and Little Sister's goodnight are their own words.
 Told and not quoted, in Japan (round twenty-one, WRITE-21A): nothing. Little Sister's grace on O-Natsu's steps in Osaka (`edo.dojima.supper.2`, `.3`) is her own words; Jeremiah 31:17 is the one verse of this part, quoted (above). <!-- WRITE-21A -->
-Told and not quoted, in Japan (round twenty-one, WRITE-21B): nothing from the Bible. Not Scripture, and not quoted either: the great lady's poem on its stone on Mount Shosha, which Ryōkai describes ("She asks the moon at the mountain's edge to light her road, from far off.", `edo.shosha.ryokai.poem.2`) and nobody says; the temple's pilgrim hymn is not used at all. Mom's prayer at the door is her own words (`edo.step.pray.1`, edited this round).
+Told and not quoted, in Japan (round twenty-one, WRITE-21B): nothing from the Bible. Not Scripture, and not quoted either: the great lady's poem on its stone on Mount Shosha, which Ryōkai describes ("In it she asks the moon at the mountain's edge to light her road, from far off.", `edo.shosha.ryokai.poem.2`) and nobody says; the temple's pilgrim hymn is not used at all. Mom's prayer at the door is her own words (`edo.step.pray.1`, edited this round).
 Told and not quoted, in Rome (round thirteen; PUZZLES-rome.md has each): Daniel 6:10 (and
 the lions' story, 6:16), Psalm 55:17 and 122:6, Isaiah 9:7, 32:1 and 60:3 (with 11:10 and
 49:6), Numbers 15:38-39, Deuteronomy 6:9, Acts 18:1-3 and 18:11, each in the speaker's own

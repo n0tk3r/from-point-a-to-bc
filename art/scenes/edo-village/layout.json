@@ -334,56 +334,68 @@
    "file": "front.png",
    "plane": "front",
    "what": "a coil of rope and three net floats at the very front, bottom left"
+  },
+  {
+   "id": "near",
+   "file": "near.png",
+   "plane": "front",
+   "what": "the near plane (DEPTH.md): the black pine's trunk up the left side and its boughs across the top left, a bough of the next pine in the top right, the bank's lip of grasses along the bottom"
   }
  ],
  "cutouts": {
   "ship": [
-   151,
+   153,
    279,
-   33,
+   31,
    39
   ],
   "racks": [
    142,
-   352,
+   351,
    241,
    85
   ],
   "tender": [
-   179,
+   180,
    369,
-   116,
+   115,
    38
   ],
   "board": [
-   422,
+   420,
    316,
-   67,
+   69,
    101
   ],
   "noren": [
    590,
-   368,
+   369,
    105,
    59
   ],
   "boat": [
    0,
    377,
-   218,
+   219,
    97
   ],
   "fence": [
-   551,
+   550,
    468,
-   249,
+   250,
    112
   ],
   "front": [
-   24,
-   579,
-   158,
-   21
+   0,
+   578,
+   203,
+   22
+  ],
+  "near": [
+   0,
+   0,
+   800,
+   600
   ]
  },
  "things": [
@@ -458,9 +470,9 @@
    "what": "Gonroku's freighter at anchor, its sail furled",
    "shape": {
     "rect": [
-     148,
+     150,
      276,
-     39,
+     37,
      45
     ]
    },
@@ -477,7 +489,7 @@
     "rect": [
      -2,
      375,
-     222,
+     223,
      101
     ]
    },
@@ -510,7 +522,7 @@
    "shape": {
     "rect": [
      140,
-     350,
+     349,
      245,
      89
     ]
@@ -526,9 +538,9 @@
    "what": "the notice-board place: a row of boards under a little roof, dense with writing",
    "shape": {
     "rect": [
-     420,
+     418,
      314,
-     71,
+     73,
      105
     ]
    },
@@ -594,9 +606,9 @@
    "what": "the hen yard's low bamboo fence",
    "shape": {
     "rect": [
-     549,
+     548,
      466,
-     253,
+     254,
      116
     ]
    },

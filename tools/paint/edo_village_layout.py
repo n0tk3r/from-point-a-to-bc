@@ -109,6 +109,8 @@ def layout(planes, info, SHOP, YARD, BOARD, WELL, RACKS, BIGBOAT, TENDER, SHIP_A
         {"id": "boat", "file": "boat.png", "base": int(round(gp(*inland(BIGBOAT["stern"][0], BIGBOAT["stern"][1], 180))[1])), "what": "the big boat on its props, bottom left; the beach between it and the water is behind it"},
         {"id": "fence", "file": "fence.png", "base": int(round(gp(YARD["x0"], YARD["z1"])[1])) + 1, "what": "the hen yard's bamboo fence; the hens (fx hens-*) and anyone at the shop are behind it"},
         {"id": "front", "file": "front.png", "plane": "front", "what": "a coil of rope and three net floats at the very front, bottom left"},
+        # PAINT-23A (round twenty-three): the near plane, in front of everybody
+        {"id": "near", "file": "near.png", "plane": "front", "what": "the near plane (DEPTH.md): the black pine's trunk up the left side and its boughs across the top left, a bough of the next pine in the top right, the bank's lip of grasses along the bottom"},
     ]
     cutouts = {p["id"]: box_of(planes[p["id"]][1]) for p in planes_out}
 

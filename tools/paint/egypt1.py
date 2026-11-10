@@ -1,14 +1,32 @@
 """Egypt, about 2560 B.C.: where the wagon came down. The Nile on the left, the desert on the right,
 and on the plateau beyond, the Great Pyramid, nearly finished. Afternoon; the sun is low on the left.
 
-The picture is made of a backdrop and two cut-out planes that people can walk behind:
-the palms on the bank, and a clump of papyrus right at the front."""
+The picture is made of a backdrop and cut-out planes that people can walk behind: the palms on the bank, the
+donkey, the wagon; and in front of everybody, the near plane.
+
+Round twenty-three (DEPTH.md) staged it in three planes, the camera and every number of the scene file as they were:
+
+  near     we stand on the high bank under a young date palm, the next of the row that runs down the bank to the
+           pyramid: its trunk across the top left corner, its fronds across the top, the lip of the bank with its
+           halfa grass along the bottom, the papyrus in the corner (egypt1_near.py: near.png, near-fronds.png,
+           front.png)
+  middle   the play, in the sun: every shadow laid through the one camera (egypt1_kit.py), wind ripples that run
+           away toward the pyramid's foot and shrink as they go, stones at a true density, the track, the furrow the
+           wagon's wheels ploughed; a cloud's shadow over the lower left
+  far      layer behind layer, each paler and nearer the sky's colour at the horizon: across the river the green
+           bank, the quarry hills, a farther range; on our side the fields and the village, the plateau, the pyramid
+           in its dust, two desert ridges behind it; clouds that shrink and flatten toward the horizon
+
+Nothing that is clicked moved: the pyramids, the river's bank line, the boat, the reed beds, the dropped block, the
+boy's prints, the track, Lot's bundle and the place in the near palm's shade where he sits are where they were."""
 
 import os, sys, time
 import numpy as np
 from PIL import Image
 from brush import *
-import sky, land, flora, build, wagon
+import sky, land, flora, build, wagon, depth
+import egypt1_kit as K
+import egypt1_near as N
 
 W, H = 800, 600
 HZ = 262                                                    # the horizon
@@ -20,7 +38,7 @@ BUILT = 0.90
 QUEENS = [(730, 252, 24, 44), (762, 251, 21, 38), (789, 250, 18, 32)]                                                # middle x, base y, half width, height
 TRACK = [(380, 670), (420, 580), (462, 490), (490, 410), (486, 340), (492, 300), (520, 270)]
 WAGON = (722, 540)                                          # where its rear wheel meets the ground
-SUN_UP = 0.8                                                # a shadow is this many times as long as the thing is tall
+SUN_UP = 0.8                                                # a shadow is this many times as long as the thing is tall (the first painting's measure; the palms' shadows are now laid through the camera: egypt1_kit.SUN)
 REEDS = [(300, 302, 18, 16, 16), (272, 330, 22, 22, 18), (238, 366, 26, 30, 20)]                                     # reeds standing in the shallows
 REEDS_APPROVED = REEDS + [(170, 428, 34, 44, 22)]           # as first approved: round three took out the clump below the near palm, where the donkey drinks
 # Lot (the game draws him) sits on the sand in the near palm's shade: with the sun low on the left its crown's shadow
@@ -29,6 +47,11 @@ LOT = (404, 432)                                            # the ground under h
 LOT_TALK = (448, 444)                                       # where Dad stands to talk with him, facing west (clear of the car's steam)
 BUNDLE = (380, 427)                                         # his bundle on the sand at his left hand, behind him
 VILLAGE_SMOKE = [(392, 286), (446, 288)]                    # the builders' village's two cooking fires (round four: the game draws the smoke)
+AIR = "#f4e4c6"                                             # the sky's colour at the horizon: what every far thing goes toward
+HEAP = [(360, 556), (372, 549), (394, 530), (424, 514), (456, 502), (490, 499), (522, 506), (560, 512), (566, 560)]  # the sand at the wagon's nose (the wagon's cut-out paints it out of this ground)
+SHADE_EDGE = [(-40, 436), (56, 444), (150, 452), (236, 476), (312, 514), (382, 552), (452, 572), (560, 579), (690, 584), (840, 580)]   # the cloud's shadow over the nearest sand: its edge, from the river down and along the bottom
+FURROW = ([(812, 612), (790, 586), (764, 563), (740, 550), (724, 543)],                                              # the near wheels' rut, in from the bottom right corner to the rear wheel
+          [(812, 574), (792, 560), (776, 550), (766, 545)])                                                           # the far wheels' rut, going in behind the car's tail
 
 
 def small(q):
@@ -37,9 +60,83 @@ def small(q):
 
 
 def pyramids(pic, seed):
-    build.pyramid(pic, *GREAT, seed + 20, built=BUILT, lit=("#fff0c4", "#f4cc86"), shade=("#9c9cc6", "#ac9cb0"), haze="#f6e2bc", haze_amount=0.30)
+    """The Great Pyramid and the three small ones. They are a long way off: air lies between (paler toward the foot,
+    where the work's dust stands, and the whole of each a step toward the sky's colour at the horizon)."""
+    build.pyramid(pic, *GREAT, seed + 20, built=BUILT, lit=("#fff4d2", "#f6d08e"), shade=("#9c9cc6", "#ac9cb0"), haze=AIR, haze_amount=0.30)
+    over(pic, AIR, mask_poly(pic.shape[:2], [GREAT[0], GREAT[2], GREAT[3]]) * 0.08)       # (the face in shade; the sunlit face keeps its light: it is the lightest thing in the picture)
     for i, q in enumerate(QUEENS):
-        build.pyramid(pic, *small(q), seed + 23 + i, courses=16, lit=("#fdeec6", "#f2d298"), shade=("#a8a6c8", "#b4a6b6"), haze="#f6e2bc", haze_amount=0.42)
+        build.pyramid(pic, *small(q), seed + 23 + i, courses=16, lit=("#fdeec6", "#f2d298"), shade=("#a8a6c8", "#b4a6b6"), haze=AIR, haze_amount=0.46)
+        over(pic, AIR, mask_poly(pic.shape[:2], list(small(q))) * 0.20)
+
+
+def palm_shadow(px, py, hgt, lean, k, seed=11):
+    """A palm's shadow on the sand, through the camera, worked out on the ground itself: the trunk's, a strip from its
+    foot along the way the shadows run; and the crown's, where the crown's middle falls: a star of fronds, each frond
+    of the crown thrown down as a feather from that middle, long or short as it stands across the sun or along it.
+    -> (mask of the trunk's shadow, mask of the crown's) at the stage's size"""
+    rng = np.random.default_rng(seed + 300 + k)
+    Zf = K.CAM.depth_at(py)
+    kf = K.CAM.scale(Zf)
+    Xf = (px - K.CAM.vx) / kf
+    tall = hgt / kf                                          # cm, to the crown's middle
+    lean_cm = lean * hgt / kf
+    sx, sz = K.SUN
+    cx, cz = Xf + lean_cm + sx * tall, Zf + sz * tall        # where the crown's middle falls
+    n = np.hypot(sx, sz)
+    ax, az = -sz / n, sx / n                                 # across the shadow's run
+    w0, w1 = hgt * 0.052 / kf * 0.5, hgt * 0.034 / kf * 0.5
+    trunk = Sheet((H, W))
+    steps = 10
+    left = [K.pt(Xf + (cx - Xf) * i / steps + ax * lerp(w0, w1, i / steps), Zf + (cz - Zf) * i / steps + az * lerp(w0, w1, i / steps)) for i in range(steps + 1)]
+    right = [K.pt(Xf + (cx - Xf) * i / steps - ax * lerp(w0, w1, i / steps), Zf + (cz - Zf) * i / steps - az * lerp(w0, w1, i / steps)) for i in range(steps + 1)]
+    trunk.poly(left + right[::-1], "#ffffff")
+    crown = Sheet((H, W))
+    L = hgt * 0.40 / kf                                      # a frond's length, cm
+    for i in range(30 if hgt > 200 else 26):
+        phi = 2 * np.pi * (i + rng.random()) / (30 if hgt > 200 else 26)
+        eps = np.radians(rng.uniform(-32, 72))               # from hanging below level to nearly upright
+        ln = L * rng.uniform(0.72, 1.1)
+        pts = []
+        for q, lift in ((0.0, 0.0), (0.5, 0.10), (1.0, -0.22)):      # it arches, then droops
+            dx, dy, dz = ln * q * np.cos(eps) * np.cos(phi), ln * (q * np.sin(eps) + lift), ln * q * np.cos(eps) * np.sin(phi)
+            pts.append((cx + dx + sx * dy, cz + dz + sz * dy))
+        (x0, z0), (x1, z1), (x2, z2) = pts
+        tx, tz = x2 - x0, z2 - z0
+        tn = max(np.hypot(tx, tz), 1e-6)
+        nx, nz = -tz / tn, tx / tn
+        wd = ln * 0.17                                       # half its width: the leaflets either side of the rib
+        feather = [(x0, z0), (x1 + nx * wd, z1 + nz * wd), (x2, z2), (x1 - nx * wd, z1 - nz * wd)]
+        crown.poly([K.pt(X, Z) for X, Z in feather], "#ffffff")
+    heart = [K.pt(cx + np.cos(a) * L * 0.46, cz + np.sin(a) * L * 0.40) for a in np.linspace(0, 2 * np.pi, 16)]      # the thick of the crown
+    crown.poly(heart, "#ffffff")
+    kc = K.CAM.scale(cz)
+    return blur(trunk.done()[1], 0.7), blur(crown.done()[1], max(0.9, 3.0 * kc))
+
+
+def sand_ripples(pic, zone, seed, amount=0.06):
+    """Wind ripples in the sand, laid on the ground through the camera. The wind is off the river, so their crests
+    run away from us, a little to the right: every one of them toward the pyramid's foot. Three sizes (a hand, a
+    stride, a small dune apart), each shown only where the picture has room for it: big and few by the bottom edge,
+    fine by the palms, and far off only the long ones. Lit from the left: each has a light side and a dark."""
+    shape = pic.shape[:2]
+    X, Z, below = K.ground(shape)
+    k = K.CAM.F / (Z + K.CAM.Z0)
+    ca, sa = np.cos(np.radians(15.0)), np.sin(np.radians(15.0))
+    c = X * ca - Z * sa                                       # across the crests, cm
+    a = X * sa + Z * ca                                       # along them
+    total = np.zeros(shape, dtype=F32)
+    for lam, n in ((12.0, 0), (40.0, 5), (135.0, 9)):
+        wander = (K.field(c, a, (lam * 5.0, lam * 22.0), seed + n, 3) - 0.5) * lam * 2.8
+        ph = 2 * np.pi * (c + wander) / lam
+        s = np.sin(ph + 0.6 * np.sin(ph))                     # the side toward the wind is long, the lee side short
+        patch = step(0.34, 0.60, K.field(c, a, (lam * 26.0, lam * 44.0), seed + n + 1, 3))
+        size = lam * k
+        show = step(2.6, 5.0, size) * (1 - step(12.0, 24.0, size))
+        total += (s * patch * show).astype(F32)
+    m = (np.clip(total, -1, 1) * zone * below * (0.75 + 0.85 * np.clip(k / 0.94, 0, 1))).astype(F32)       # (bolder as they come nearer)
+    pic *= (1 + m * amount)[..., None]
+    pic[..., 2] *= 1 - np.clip(-m, 0, 1) * amount * 0.5       # the dark side a touch warmer than grey
+    return pic
 
 
 def under(seed=11):
@@ -49,14 +146,22 @@ def under(seed=11):
     rng = np.random.default_rng(seed + 9)
     info = {}
 
-    # ---- sky: deep blue overhead, pale and warm at the ground, one big heap of cloud coming over the river
+    # ---- sky: deep blue overhead, pale and warm at the ground. Clouds in three sizes, a sky in perspective: one great
+    #      heap high over the river (the near palm's fronds and the palms' crowns stand against it), middle ones lower
+    #      and smaller, and a row of flat ones by the horizon, pale with the air between
     pic = sky.field(shape, HZ, [(0.0, "#2a72c6"), (0.38, "#4a9ae0"), (0.68, "#86c6ec"), (0.86, "#cfe6e0"), (1.0, "#f8e6be")], seed, haze="#fbeacc", patch=0.03)
     sky.wisps(pic, HZ, seed + 3, "#fdf0d8", top=0.55, amount=0.55)
-    sky.paint_clouds(pic, [(250, 200, 390, 132, 36), (64, 240, 200, 34, 9), (742, 196, 150, 44, 10), (486, 238, 150, 22, 6)], seed + 5,
-                     tones=("#86a6da", "#bcd0ea", "#fbf2de", "#fffcf0"), light=LIGHT, ragged=13)
+    sky.paint_clouds(pic, [(250, 190, 400, 150, 40)], seed + 5, tones=("#86a6da", "#bcd0ea", "#f2e8d8", "#f9f2e4"), light=LIGHT, ragged=13)
+    sky.paint_clouds(pic, [(724, 188, 160, 44, 30)], seed + 23, tones=("#94aedc", "#c4d3ea", "#f0e8d8", "#f8f2e6"), light=LIGHT, ragged=4, amount=0.95, reach=20)
+    sky.paint_clouds(pic, [(404, 226, 92, 20, 10)], seed + 17, tones=("#a6badc", "#ccd6e6", "#f0e8d8", "#f6f0e4"), light=LIGHT, ragged=4, amount=0.80, reach=20)
+    sky.paint_clouds(pic, [(486, 240, 150, 16, 6), (64, 242, 190, 24, 9), (330, 244, 110, 12, 5), (648, 238, 120, 13, 5), (776, 241, 86, 10, 4), (206, 239, 90, 11, 4)], seed + 25,
+                     tones=("#b6c2dc", "#d6d8de", "#faf0de", "#fffaf0"), light=LIGHT, ragged=5, amount=0.95)
     above = pic.copy()                                       # kept, to mirror in the river
 
-    # ---- the hills across the river, where the white stone is quarried, and the green bank below them
+    # ---- across the river, three layers: a far range, the hills where the white stone is quarried, the green bank
+    range_, rl = land.ridge(shape, [(0, 233), (52, 228), (112, 234), (176, 236), (244, 244), (304, 251), (352, 258)], HZ + 2, seed + 60, rough=1.5)
+    range_ *= (x < 356)
+    over(pic, lerp(rgb(AIR), rgb("#b4a6cc"), 0.50), range_ * 0.95)
     hills, hl = land.ridge(shape, [(0, 244), (70, 238), (150, 245), (230, 250), (300, 256), (350, 261)], HZ + 2, seed + 6, rough=2.0)
     hills *= (x < 356)
     over(pic, ramp(np.clip((y - hl[None, :]) / 20, 0, 1), [(0.0, "#e2c6b8"), (1.0, "#e9d8c8")]), hills)
@@ -65,6 +170,15 @@ def under(seed=11):
     far *= (x < 356)
     over(pic, vary("#7d9c68", shape, seed + 8, 0.14, 26), far)
     land.haze(pic, HZ - 4, "#e8ead6", 0.38, 0.05, np.maximum(far, hills))
+
+    # ---- behind the plateau, the high desert: two ridges, the farther nearly the sky's own colour
+    ridge2, l2 = land.ridge(shape, [(352, 257), (420, 246), (500, 237), (600, 229), (700, 225), (800, 221)], HZ + 2, seed + 62, rough=1.5)
+    ridge2 *= (x >= 350)
+    over(pic, lerp(rgb(AIR), rgb("#b9a8cc"), 0.46), ridge2 * 0.95)
+    ridge1, l1 = land.ridge(shape, [(356, 259), (430, 251), (520, 245), (620, 240), (710, 237), (800, 233)], HZ + 2, seed + 63, rough=1.8)
+    ridge1 *= (x >= 352)
+    over(pic, ramp(np.clip((y - l1[None, :]) / 14, 0, 1), [(0.0, "#e2c2a8"), (1.0, "#ead2b8")]), ridge1)
+    tint(pic, "#a894bc", (ridge1 * step(0.50, 0.78, noise(shape, (22, 12), seed + 64, 3)) * 0.42).astype(F32))
 
     # ---- the Great Pyramid on its plateau, and the three small ones beside it
     pyramids(pic, seed)
@@ -77,6 +191,9 @@ def under(seed=11):
     over(pic, cliff, plateau)
     tint(pic, "#9d8aa6", (plateau * step(0.54, 0.78, gully) * np.clip(up * 2.6, 0, 1) * np.clip(2.3 - up * 2.4, 0, 1) * 0.66).astype(F32))
     land.haze(pic, 262, "#f6e6c6", 0.16, 0.09, plateau)
+    # the dust of the work, standing in the air round the pyramid's foot and along the plateau's top
+    dust = np.exp(-((y - 244) / 16.0) ** 2) * np.clip(1 - np.abs(x - 566) / 250.0, 0, 1)
+    glow(pic, "#fff0cc", (dust * 0.20 * (0.6 + 0.8 * noise(shape, (120, 14), seed + 16, 3))).astype(F32))
 
     # ---- the river, with the sky and the far bank lying in it
     river = mask_poly(shape, [(0, HZ), (350, HZ)] + BANK[1:] + [(0, 546)], wobble=1.5, seed=seed + 30)
@@ -93,8 +210,20 @@ def under(seed=11):
     foot = np.clip((y - (line[None, :] + 34)) / 12.0, 0, 1)                               # the sand runs up the talus
     walk = (np.clip(y - HZ + 0.5, 0, 1) * (1 - river)).astype(F32)                         # anything that is ground, for shadows to fall on
     ground = (walk * np.where(plateau > 0.5, foot, 1.0)).astype(F32)
-    sand = land.sand(shape, HZ, seed + 40, far="#f3d6a0", mid="#e8b468", near="#c9823c", patch=0.08, ripple=0.0)
+    sand = land.sand(shape, HZ, seed + 40, far="#f3d6a0", mid="#e8b468", near="#c27c38", patch=0.08, ripple=0.0)
     over(pic, sand, ground)
+    # the sand is not a table: low swells, lit from the left (through the camera, so they flatten going away)
+    Xw, Zw, below = K.ground(shape)
+    kk = K.CAM.F / (Zw + K.CAM.Z0)
+    rise = K.field(Xw + 50.0, Zw, (320.0, 560.0), seed + 140, 3) - K.field(Xw - 50.0, Zw, (320.0, 560.0), seed + 140, 3)
+    rise = rise / (np.abs(rise).max() + 1e-6)
+    swell = np.where(rise > 0, rise * 0.09, rise * 0.15) * np.clip((kk * 320.0 - 8.0) / 30.0, 0, 1)
+    pic *= (1 + swell * ground)[..., None]
+
+    # and the wind has sorted it: long streaks of coarse sand and fine, lying the way the wind goes (across the picture)
+    sorted_ = K.field(Xw, Zw, (760.0, 110.0), seed + 141, 4) - 0.5
+    pic *= (1 + sorted_ * 0.13 * ground * np.clip((kk * 110.0 - 3.0) / 10.0, 0, 1))[..., None]
+    pic[..., 2] *= 1 - np.clip(sorted_, 0, 1) * 0.10 * ground
 
     # ---- the fields between the river and the desert: thin strips of green, seen almost edge-on
     fields = mask_poly(shape, [(322, 268), (372, 266), (470, 272), (512, 284), (470, 300), (388, 306), (330, 296), (306, 284)], soft=2.2, wobble=3, seed=seed + 35) * walk
@@ -109,9 +238,22 @@ def under(seed=11):
     lipm = np.clip(blur(river, 1.4) * 2 - 0.6, 0, 1) * np.clip(1.6 - blur(river, 1.4) * 2, 0, 1)
     over(pic, "#eef8ee", (lipm * 0.55 * (noise(shape, (30, 4), seed + 41, 3) > 0.42)).astype(F32))
 
+    # ---- the river's own silt along the bank, dried and cracked into plates: they shrink as the bank goes away
+    bz = [K.place(bx, by)[1] for bx, by in BANK[1:]] + [-60.0]
+    bxw = [K.place(bx, by)[0] for bx, by in BANK[1:]] + [K.place(*BANK[-1])[0]]
+    order = np.argsort(bz)
+    bank_x = np.interp(Zw, np.asarray(bz)[order], np.asarray(bxw)[order])                 # where the water's edge is, at each depth
+    inland = Xw - bank_x                                                                  # cm in from the water
+    mud = (step(6.0, 30.0, inland) * (1 - step(250.0, 330.0, inland + (K.field(Xw, Zw, 160.0, seed + 142, 3) - 0.5) * 150.0)) * walk).astype(F32)
+    line_, plate = K.cracks(Xw, Zw, 23.0, seed + 143)
+    seen = np.clip((kk * 23.0 - 3.0) / 5.0, 0, 1)                                         # plates too small to see are left out
+    tint(pic, "#b79a84", (mud * 0.40).astype(F32))                                        # silt is greyer than sand
+    pic *= (1 + (plate - 0.5) * 0.16 * mud * seen)[..., None]
+    info["mud"] = (mud * seen * line_).astype(F32)
+
     # ---- low dunes on the right, each with its shaded side toward us
-    land.dune(pic, [(430, 342), (520, 326), (620, 316), (720, 318), (800, 326)], [(430, 346), (520, 344), (620, 346), (720, 356), (800, 368)], ground=walk, amount=0.44, shade="#946f86")
-    land.dune(pic, [(600, 390), (680, 372), (760, 366), (800, 368)], [(600, 396), (680, 404), (760, 414), (800, 418)], ground=walk, amount=0.42, shade="#946a80")
+    land.dune(pic, [(430, 342), (520, 326), (620, 316), (720, 318), (800, 326)], [(430, 346), (520, 344), (620, 346), (720, 356), (800, 368)], ground=walk, amount=0.50, shade="#946f86")
+    land.dune(pic, [(600, 390), (680, 372), (760, 366), (800, 368)], [(600, 396), (680, 404), (760, 414), (800, 418)], ground=walk, amount=0.50, shade="#946a80")
     land.dune(pic, [(336, 318), (396, 306), (452, 304)], [(336, 321), (396, 319), (452, 320)], ground=walk, amount=0.3, lip_amount=0.3)
 
     # ---- the track people have worn from the river up to the plateau
@@ -119,34 +261,58 @@ def under(seed=11):
     widths = [lerp(60, 5, (i / (len(path) - 1)) ** 0.6) for i in range(len(path))]
     trod = mask_line(shape, path, widths, soft=3.5) * walk
     worn = trod * (0.55 + 0.6 * noise(shape, (60, 14), seed + 45, 3))
-    over(pic, vary("#f6dca6", shape, seed + 44, 0.05, 26), (worn * 0.34).astype(F32))
-    tint(pic, "#b48c70", (blur(trod, 6) - trod).clip(0, 1) * 0.40)
+    over(pic, vary("#f6dca6", shape, seed + 44, 0.05, 26), (worn * 0.40).astype(F32))
+    tint(pic, "#b48c70", (blur(trod, 6) - trod).clip(0, 1) * 0.44)
     for side in (-0.22, 0.22):                               # the grooves the sledges' runners leave
         rut = [(px + side * wd, py) for (px, py), wd in zip(path, widths)]
         groove = mask_line(shape, rut, [max(0.9, wd * 0.045) for wd in widths], soft=0.9) * walk
         tint(pic, "#a67a5c", (groove * (0.35 + 0.5 * noise(shape, (40, 8), seed + 46, 3)) * 0.6).astype(F32))
 
-    # ---- long shadows: each palm's own shape laid along the ground, and the wagon's
+    # ---- sand thrown out ahead of the wagon's nose, where it dug in: darker sand from underneath, in rays
+    rays = np.zeros(shape, dtype=F32)
+    for ang, ln, wd in ((158, 120, 9), (171, 150, 11), (183, 132, 8), (196, 118, 10), (208, 96, 8), (146, 84, 7), (219, 70, 6)):
+        ex, ey = 452 + np.cos(np.radians(ang)) * ln, 532 - np.sin(np.radians(ang)) * ln * 0.34
+        rays = np.maximum(rays, mask_line(shape, [(452, 532), ((452 + ex) / 2, (532 + ey) / 2 + 2), (ex, ey)], [wd, wd * 0.7, 1.2], soft=2.0))
+    rays *= 0.5 + 0.7 * noise(shape, (26, 7), seed + 49, 3)
+    tint(pic, "#b98564", (rays * walk * 0.46).astype(F32))
+
+    # ---- shadows, every one through the camera: each palm's own shape laid on the sand, and the wagon's
+    cast = np.zeros(shape, dtype=F32)
     for (px, py, hgt, lean, k) in PALMS:
-        one = Sheet(shape)
-        flora.palm(one, px, py, hgt, seed + 50 + k, lean=lean, light=-1, fronds=30 if hgt > 200 else 26)
-        land.cast(pic, one.done()[1], (px, py), sun=SUN_UP, color="#6e5688", amount=0.36, ground=walk, toward=0.10, flat=0.30, soft=1.0 + hgt / 200)
+        trunk_m, crown_m = palm_shadow(px, py, hgt, lean, k, seed)
+        cast = np.maximum(cast, np.maximum(trunk_m, crown_m * 0.92))
+    cast *= walk
+    tint(pic, "#6e5688", np.clip(cast * 0.25, 0, 1))
+    for (rx, ry, rw, rh, n) in REEDS:                        # the reed beds in the shallows throw theirs up the bank
+        fx, fy = rx - 12, ry + 4
+        X0, Z0 = K.place(fx, fy)
+        kr = K.k_at(X0, Z0)
+        tall, half = rh * 0.8 / kr, rw * 0.30 / kr
+        tip = (X0 + K.SUN[0] * tall, Z0 + K.SUN[1] * tall)
+        bed = mask_poly(shape, [K.pt(X0 - half, Z0), K.pt(X0 + half, Z0), K.pt(tip[0] + half, tip[1]), K.pt(tip[0] - half, tip[1])], soft=1.4, wobble=1.5, seed=seed + rx)
+        tint(pic, "#6e5688", (bed * 0.34 * walk).astype(F32))
     _, wa, _, wla = wagon.wagon(shape, WAGON)
     land.cast(pic, np.maximum(wa, wla), WAGON, sun=0.55, color="#5e4a7c", amount=0.55, ground=walk, toward=0.30, soft=2.0, upright=False)
     wx, wy = WAGON
     land.shadow(pic, mask_poly(shape, [(wx - 200, wy - 4), (wx + 60, wy - 8), (wx + 74, wy + 4), (wx - 190, wy + 8)], soft=3) * walk, "#5e4a7c", 0.5, 0)
 
-    # ---- a cloud's shadow lies over the nearest sand; beyond it the plain is in full sun
-    edge_y = 508 + (noise(shape, (220, 60), seed + 48, 3) - 0.5) * 70 - (x - 400) * 0.03
-    cloud = step(0.0, 1.0, (y - edge_y) / 46.0)
-    tint(pic, "#b98a74", (cloud * 0.36 * walk).astype(F32))
+    # ---- a cloud's shadow lies over the nearest sand and water: over the lower left, and on along the bottom under
+    #      the wagon's wheels. Its soft edge runs up from the bottom middle to the bank; beyond it the plain is in
+    #      full sun. Dad climbs out in shade and walks out into the light
+    shade = mask_poly(shape, SHADE_EDGE + [(840, 660), (-40, 660)], soft=11, wobble=10, seed=seed + 48)
+    shade = np.clip(shade * 1.1, 0, 1)
+    tint(pic, "#8f7474", (shade * 0.72 * walk).astype(F32))
+    tint(pic, "#7088a8", (shade * 0.36 * river).astype(F32))
+    # and a second cloud's shadow far out on the plain to the right, pale with distance: sunlit dunes before it, the
+    # sunlit cliff behind it (the dropped block stands just on our side of it, in the light)
+    shade2 = mask_poly(shape, [(506, 303), (640, 296), (810, 290), (810, 330), (742, 322), (660, 330), (590, 322), (524, 316)], soft=9, wobble=7, seed=seed + 148)
+    tint(pic, "#a894b6", (np.clip(shade2 * 1.1, 0, 1) * 0.34 * ground).astype(F32))
     # ---- the corners go deeper and warmer, to hold the eye in the picture
     corner = np.clip(((x - 400) / 400) ** 2 * 0.5 + ((y - 380) / 220).clip(0, 2) ** 2 * 0.5, 0, 1)
-    tint(pic, "#c08a5c", (corner * 0.22 * walk).astype(F32))
+    tint(pic, "#c08a5c", (corner * 0.20 * walk).astype(F32))
     glow(pic, "#fff0c8", (np.clip(1 - np.abs(y - (HZ + 8)) / 30, 0, 1) * 0.08 * walk).astype(F32))     # dust in the air over the plain
 
-    land.ripples(pic, HZ, seed + 47, walk * (1 - np.clip(trod * 2, 0, 1)) * (y > 380), amount=0.15)
-    info.update(walk=walk, river=river, line=line, plateau=plateau, fields=fields)
+    info.update(walk=walk, river=river, line=line, plateau=plateau, fields=fields, trod=trod, cast=cast, shade=shade, ground=ground)
     return np.clip(pic, 0, 1), info
 
 
@@ -177,6 +343,16 @@ def details(pic, info, seed=11, reeds=REEDS, lot=True, smoke=False):
     edge.line([(px + 1.2, py + 0.6) for px, py in bank], "#8a6850", 1.3, 0.45)
     edge.onto(pic)
 
+    # ---- the ground's own texture, through the camera: the palms' shadows said again with a clean edge, then the
+    #      wind's ripples (not on the track, nor where the wagon ploughed, nor under Lot)
+    tint(pic, "#6a5484", np.clip(info["cast"] * 0.21, 0, 1))
+    heap = mask_poly(shape, HEAP, soft=6)
+    calm = np.clip(info["trod"] * 2.2 + heap * 1.5 + mask_ellipse(shape, LOT[0], LOT[1], 46, 14, soft=6), 0, 1)
+    sand_ripples(pic, info["ground"] * (1 - 0.8 * calm) * (y > HZ + 6), seed + 147, amount=0.075)
+    tint(pic, "#5e4438", np.clip(info["mud"] * 0.75, 0, 1))                               # the cracks in the dried silt, crisp
+    lift = np.roll(info["mud"], 1, axis=1)                                                 # and each plate's edge that faces the sun
+    over(pic, "#f2d6a6", np.clip((lift - info["mud"]) * 0.5, 0, 1))
+
     far = Sheet(shape)
     for k in range(30):                                      # palms on the far bank are only dabs
         px = rng.random() * 344
@@ -198,10 +374,35 @@ def details(pic, info, seed=11, reeds=REEDS, lot=True, smoke=False):
         far.line([(px, py), (px + rng.normal(0, 1.5), py - hgt)], "#5a4a38", 1.1, 0.9)
         for a in np.linspace(0.3, 2.84, 6):
             far.line([(px, py - hgt), (px + np.cos(a) * 6, py - hgt - np.sin(a) * 4 + 2.5)], "#3f6a34" if a > 1.4 else "#2f5228", 1.2)
-    far.onto(pic)
+    fc, fa = far.done()                                      # (all of this is far off: its darks a step toward the sky's colour, so none jumps forward)
+    over(pic, lerp(fc, rgb(AIR), 0.20), fa)
     for sx, sy in (VILLAGE_SMOKE if smoke else ()):          # smoke: thin, pale, leaning with the wind
         plume = mask_line(shape, curve([(sx, sy), (sx + 5, sy - 14), (sx + 16, sy - 26), (sx + 34, sy - 34)], 6), [1.5, 2.5, 4, 6, 8, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10][:19], soft=2.2)
         over(pic, "#f4ecdc", plume * 0.38)
+
+    # ---- before the pyramid, on the plateau's edge: the foot of the long ramp, spoil heaps and stone waiting, so
+    #      that it stands behind something; and far out on the river two more boats, small with distance
+    works = Sheet(shape)
+    line = info["line"]
+    for (hx, hw, hh, tone) in [(452, 13, 5, "#ecd3a4"), (486, 9, 4, "#e6c896"), (520, 16, 6, "#f0d8a8"), (640, 12, 5, "#e2c6a0"), (672, 18, 6, "#ead0a6"), (704, 9, 4, "#e4caa2")]:
+        by = float(line[int(hx)]) + 1.5
+        works.poly([(hx - hw, by), (hx - hw * 0.3, by - hh), (hx + hw * 0.4, by - hh * 0.8), (hx + hw, by)], tone)
+        works.poly([(hx + hw * 0.4, by - hh * 0.8), (hx + hw, by), (hx + hw * 0.15, by)], "#b4a2b8", 0.9)       # its side from the sun
+    for k in range(7):                                       # blocks waiting in a row, and the people among them
+        bx = 548 + k * 9 + rng.normal(0, 1.5)
+        by = float(line[int(bx)]) + 1.0
+        works.poly([(bx - 2.4, by), (bx + 2.4, by), (bx + 2.4, by - 3.2), (bx - 2.4, by - 3.2)], "#fff2d0")
+        works.line([(bx + 2.4, by), (bx + 2.4, by - 3.2)], "#a79cc0", 0.8)
+    for k in range(9):
+        px = 440 + rng.random() * 270
+        py = float(line[int(px)]) + 1.0
+        works.line([(px, py - 4.0), (px, py - 1.8)], "#7a4a32", 1.0)
+        works.line([(px, py - 1.8), (px, py)], "#fff8ea", 1.0)
+    works.onto(pic)
+    for (bx, by, bl, sd) in [(104, 269, 22, 3), (262, 266, 13, 4)]:
+        small_boat = Sheet(shape)
+        build.boat(small_boat, bx, by, bl, seed + sd, hull=("#6a6e7c", "#8a8a90", "#b0aca6"), cargo="#f2ead6", sail="#f6ecd6", folk="#7a6a66")
+        small_boat.onto(pic, 0.8)
 
     # ---- the boat bringing white stone across from the quarries, and what the water shows of it
     bx, by, bl = 132, 322, 92
@@ -218,10 +419,32 @@ def details(pic, info, seed=11, reeds=REEDS, lot=True, smoke=False):
     b.line([(bx - bl * 0.5, by + 1.2), (bx + bl * 0.5, by + 1.2)], "#f2fbf6", 1.0, 0.7)       # the wash along her side
     b.onto(pic)
 
+    # ---- the furrow the wagon's wheels ploughed as it came down: two ruts curving in from the bottom right corner,
+    #      the sand pushed up along them
+    for rut, wide in zip(FURROW, (9.0, 6.0)):
+        c = curve(rut, 8)
+        ws = [lerp(wide * 1.25, wide * 0.8, i / (len(c) - 1)) for i in range(len(c))]
+        groove = mask_line(shape, c, ws, soft=1.2) * walk
+        tint(pic, "#8a6258", (groove * 0.62).astype(F32))
+        ridge = mask_line(shape, [(px - wd * 0.62, py - wd * 0.30) for (px, py), wd in zip(c, ws)], [wd * 0.34 for wd in ws], soft=0.8) * walk
+        over(pic, "#f0c080", (ridge * 0.66 * (noise(shape, (14, 5), seed + 52, 2) > 0.3)).astype(F32))
+        tread = mask_line(shape, c, [wd * 0.2 for wd in ws], soft=0.6) * walk * (np.sin((x + y) * 1.15) > 0.1)
+        tint(pic, "#6e4c4a", (tread * 0.5).astype(F32))
+
     # ---- stones, the dropped block and its broken sledge, and tufts of grass
     near = Sheet(shape)
-    zone = (walk > 0.5) & (y > 330) & ~((x > 470) & (y > 400))
-    land.stones(near, pic, HZ, seed + 90, 70, zone=zone, ground=walk)
+    zone = (walk > 0.5) & (y > 300) & ~((x > 356) & (y > 494) & (y < 566)) & (info["trod"] < 0.25) & (noise(shape, 70, seed + 91, 3) > 0.50)
+    zone &= ~((np.abs(x - LOT[0]) < 52) & (np.abs(y - LOT[1]) < 16))
+    tones = [("#f8e6ba", "#dcbc8a", "#a2846e", "#6c5560"), ("#f0d8a8", "#cfa878", "#96745e", "#64505a"), ("#fff0cc", "#e4c898", "#a58c86", "#66545e")]
+    for (sx, sy, k, r) in depth.scatter(K.pt, K.k_at, (-800, 950, -24, 5600), 0.22, seed + 90, size=(7.0, 5.0), zone=zone.astype(F32)):
+        rad = k * (2.0 + 8.5 * r ** 2.8)
+        if rad < 0.7:                                        # too far to be more than a speck and its shadow
+            pic[int(sy), int(sx)] = lerp(pic[int(sy), int(sx)], rgb("#f8e6ba"), 0.6)
+            if sx + 1 < W:
+                pic[int(sy), int(sx) + 1] *= 0.86
+            continue
+        K.stone_shadow(pic, sx, sy, rad * 1.3, rad * 0.8, amount=0.38, ground_mask=walk)
+        land.rock(near, sx, sy, rad * 1.3, rad * 0.8, seed + int(sx * 7 + sy * 3), tones[int(r * 977) % 3])
     for (rx, ry, r) in [(760, 342, 10), (776, 347, 6), (640, 352, 6), (84, 548, 13), (118, 560, 8), (330, 470, 6), (300, 584, 12), (326, 590, 7)]:
         land.rock_shadow(pic, rx, ry, r * 1.25, r * 0.85, ground=walk)
         land.rock(near, rx, ry, r * 1.25, r * 0.85, seed + rx)
@@ -237,8 +460,25 @@ def details(pic, info, seed=11, reeds=REEDS, lot=True, smoke=False):
     # reeds standing in the shallows, small with distance
     for (rx, ry, rw, rh, n) in reeds:
         flora.reeds(near, rx - 12, ry + 4, rw, rh, seed + rx, count=n)
-    # small sneaker prints from the wagon up the track (his son went this way)
+    # the track is trodden: the old prints of bare feet, faint and soft, big by the bottom edge and small up the track
+    # (none on the boy's own line: his are the fresh ones)
     walkway = curve([(470, 562), (472, 520), (486, 474), (496, 430), (494, 388), (487, 350), (486, 322)], 5)
+    path = curve(TRACK, 16)
+    widths = [lerp(60, 5, (i / (len(path) - 1)) ** 0.6) for i in range(len(path))]
+    old_prints = Sheet(shape)
+    for _ in range(150):
+        i = int(rng.random() * (len(path) - 1))
+        (px, py), wd = path[i], widths[i]
+        fx, fy = px + (rng.random() - 0.5) * wd * 0.9, py + rng.normal(0, 3)
+        if not (HZ + 30 < fy < H - 4) or min(np.hypot(fx - wx_, fy - wy_) for wx_, wy_ in walkway) < 9 or (fx > 356 and 494 < fy < 566):
+            continue
+        kp = (fy - HZ) / (590 - HZ) * 160 / 175                 # pixels to a centimetre there
+        if kp < 0.22:
+            continue
+        turn = rng.normal(0, 0.5)
+        old_prints.ellipse(fx, fy, 5.0 * kp + 0.6, 2.2 * kp + 0.5, "#9c6e4c", 0.30)                    # the hollow, its near wall in shade
+        old_prints.ellipse(fx + 2.2 * kp + turn, fy + 0.4, 3.2 * kp + 0.4, 1.4 * kp + 0.4, "#f4d8a2", 0.26)    # and its far wall in the sun
+    old_prints.onto(pic)
     for i, (px, py) in enumerate(walkway):
         k = lerp(1.0, 0.36, i / len(walkway))
         side = 6 * k * (1 if i % 2 else -1)
@@ -281,21 +521,76 @@ def bundle(pic):
     return pic
 
 
+PALM_AIR = (0.0, 0.07, 0.15)                                # how far each palm has gone toward the sky's colour: the near one not at all
+
+
 def palms_plane(seed=11):
-    """The three palms on the bank, alone on a clear sheet."""
+    """The three palms on the bank, alone on a clear sheet. Round twenty-three: the same three, leaf for leaf, with a
+    little air before the farther two (the row runs away from us: 21, 32 and 51 metres off), so they step back."""
     s = Sheet((H, W))
     for (px, py, hgt, lean, k) in PALMS:
         flora.palm(s, px, py, hgt, seed + 50 + k, lean=lean, light=-1, fronds=30 if hgt > 200 else 26)
-    return s.done()
+    color, alpha = s.done()
+    owner = palm_owner(seed)
+    for i, air in enumerate(PALM_AIR):
+        if air:
+            over(color, AIR, ((owner == i) * air).astype(F32))
+    return color, alpha
+
+
+def palm_owner(seed=11):
+    """Which palm each pixel of the palms' sheet belongs to (0 the nearest): a palm painted later lies over the ones
+    before it. (split_palms() cuts palms.png by the same rule.)"""
+    alphas = []
+    for (px, py, hgt, lean, k) in PALMS:
+        one = Sheet((H, W))
+        flora.palm(one, px, py, hgt, seed + 50 + k, lean=lean, light=-1, fronds=30 if hgt > 200 else 26)
+        alphas.append(one.done()[1])
+    seen = [a.copy() for a in alphas]
+    for i in range(len(seen)):
+        for j in range(i + 1, len(seen)):
+            seen[i] *= 1 - alphas[j]
+    return np.argmax(np.stack(seen), axis=0)
 
 
 def front_plane(seed=11):
-    """Papyrus at the very front, bottom left: tall, dark against the bright water, a few heads in the sun."""
-    s = Sheet((H, W))
-    flora.papyrus_stand(s, 38, 604, 120, 250, seed + 3, count=13, greens=("#14261a", "#2c5226", "#6f963a", "#c6cc72"))
-    flora.papyrus_stand(s, 130, 606, 70, 150, seed + 4, count=7, greens=("#182c1c", "#35602a", "#7fa23e", "#d0d27a"))
-    flora.reeds(s, 60, 602, 90, 70, seed + 5, count=40, greens=("#14261a", "#2c5226", "#5f8a36"))
-    return s.done()
+    """front.png: the papyrus at the very front, bottom left (egypt1_near.papyrus)."""
+    return N.papyrus(seed)
+
+
+def near_plane():
+    """near.png (round twenty-three): the near palm's trunk and the lip of the bank (egypt1_near.near). The trunk is
+    brushed, as the wagon is, and its outline kept."""
+    color, alpha = N.near()
+    ys, xs = np.nonzero(alpha > 0.5)
+    canvas = np.empty((H, W, 3), dtype=F32)
+    canvas[...] = rgb("#3a2a22")
+    over(canvas, color, (alpha > 0.5).astype(F32))
+    x1, y1 = 150, 480                                        # the trunk's corner of the picture: the grass and stones stay crisp
+    canvas[:y1, :x1] = strokes(canvas[:y1, :x1], sizes=(5, 3, 2), seed=23, density=1.8, jitter=0.03, keep=0.50)
+    return canvas, alpha
+
+
+def fronds_plane():
+    """near-fronds.png (round twenty-three): the near palm's fronds across the top (egypt1_near.fronds)."""
+    return N.fronds()
+
+
+# The wagon was first brushed standing on the sand of the first painting: wagon._ground takes the middle colour of the
+# ground about its wheels, and the brush works the car's edges into it. Round twenty-three painted that sand again; so
+# that the car itself is, stroke for stroke, the car as approved, it is still brushed on the old sand's colour (the
+# number below: the median of rows 510 to 549 of the backdrop as round twenty-two left it). The heap of sand at its
+# nose, and the few places where the ground shows through its thin paint, are made of the new ground, as they should be.
+WAGON_SAND = (0.7227249145507812, 0.4537621736526489, 0.21562519669532776)
+
+
+def _wagon_ground(shape, origin, back):
+    flat = np.empty(shape + (3,), dtype=F32)
+    flat[...] = rgb("#cf9456") if back is None else np.asarray(WAGON_SAND, dtype=F32)
+    return flat
+
+
+wagon._ground = _wagon_ground
 
 
 def wagon_plane(back, take=(), mirror=True):
@@ -310,39 +605,6 @@ def finish(picture, name, colors=128, alpha=None, seed=7, speckle=0.014, amount=
     idx = to_palette(g, pal, speckle=speckle)
     save(name, idx, pal, alpha)
     return os.path.getsize(name)
-
-
-def finish_keeping(picture, approved, name, colors, extra=8, seed=7, speckle=0.014, amount=0.02, far=0.06, since=None):
-    """finish() for a backdrop changed in a few places since it was approved. The palette is the one the approved
-    picture got (worked out from it again, exactly as finish() did), so every pixel that was not changed comes out
-    exactly as it was. The changed places may also use up to `extra` colours of their own, added at the end of the
-    palette, for colours the approved palette is `far` from. -> (file size, mask of the changed places).
-    `since` (round four) is the backdrop as round three left it: its palette, extra colours and all, is worked out
-    again exactly as it was, and only where `picture` differs from it is anything reduced again, with that palette."""
-    idx, pal, changed = _keeping(since if since is not None else picture, approved, colors, extra, seed, speckle, amount, far)
-    if since is not None:
-        changed = np.abs(picture - since).max(axis=2) > 0.5 / 255
-        idx = np.where(changed, to_palette(grain(picture, seed, amount), pal, speckle=speckle), idx)
-    save(name, idx, pal)
-    return os.path.getsize(name), changed
-
-
-def _keeping(picture, approved, colors, extra, seed, speckle, amount, far):
-    """What finish_keeping() works out before it saves. -> (indexes, palette, changed)"""
-    g0 = grain(approved, seed, amount)
-    pal = palette_of([g0.reshape(-1, 1, 3)], colors=min(colors, max(2, len(np.unique((g0 * 255).astype(np.uint8).reshape(-1, 3), axis=0)))))
-    g = grain(picture, seed, amount)
-    changed = np.abs(picture - approved).max(axis=2) > 0.5 / 255           # (a change too small to show is no change)
-    idx = np.where(changed, to_palette(g, pal, speckle=speckle), to_palette(g0, pal, speckle=speckle))
-    if changed.any() and extra:
-        px = g[changed]
-        gap = np.sqrt(((px[:, None, :] - pal[None, :, :]) ** 2).sum(axis=2).min(axis=1))
-        odd = px[gap > far]
-        if len(odd) >= 2:
-            more = palette_of([odd.reshape(-1, 1, 3)], colors=min(extra, len(odd)))
-            pal = np.concatenate([pal, more])
-            idx = np.where(changed, to_palette(g, pal, speckle=speckle), idx)
-    return idx, pal, changed
 
 
 def finish_keeping_cut(picture, alpha, approved, approved_alpha, name, colors, seed=7, speckle=0.014, amount=0.02):
@@ -460,16 +722,7 @@ def split_palms():
     """palms.png again as three pictures, one palm in each (palm-1.png is the nearest), made from its own
     pixels: laid together in any order they are palms.png exactly. With one base each, somebody standing
     between two palms is sorted rightly with both."""
-    alphas = []
-    for (px, py, hgt, lean, k) in PALMS:
-        one = Sheet((H, W))
-        flora.palm(one, px, py, hgt, 11 + 50 + k, lean=lean, light=-1, fronds=30 if hgt > 200 else 26)
-        alphas.append(one.done()[1])
-    seen = [a.copy() for a in alphas]
-    for i in range(len(seen)):                                       # a palm painted later lies over the ones before
-        for j in range(i + 1, len(seen)):
-            seen[i] *= 1 - alphas[j]
-    owner = np.argmax(np.stack(seen), axis=0)
+    owner = palm_owner()                                             # a palm painted later lies over the ones before
     whole = Image.open("out/egypt1/palms.png")
     pal = whole.getpalette()
     idx = np.asarray(whole)
@@ -562,7 +815,13 @@ def fx_marks():
                 "what": "NEW (no birds were painted here): now and then a kite or two crossing high over the river and the plateau, gliding, a few beats. "
                         "The frames are the building site's kites (egypt-site). No base: they are behind every cut-out, so they pass behind the palms' crowns"})
     out.append({"type": "sway", "id": "papyrus", "plane": "papyrus", "anchor": "bottom", "amount": 1.0, "period": 3.0, "optional": True,
-                "what": "the papyrus and reeds at the very front, bottom left (front.png, the plane the scene calls 'papyrus': nothing but that clump), stirring"})
+                "what": "the papyrus and reeds at the very front, bottom left (front.png, the plane the scene calls 'papyrus': nothing but that clump "
+                        "and, since round twenty-three, the reed blades and the two great umbels that stand closer still), stirring"})
+    out.append({"type": "sway", "id": "near-fronds", "plane": "near-fronds", "anchor": "top", "amount": 1.6, "period": 5.2, "wave": 420, "lean": 0.5, "optional": True, "new": True,
+                "what": "NEW (round twenty-three): the near palm's fronds across the top of the picture (near-fronds.png, a front-plane file of nothing "
+                        "else), hanging from above the frame and stirring as the palms' crowns do: the top row still, the hanging ends most. "
+                        "They lean with the wind (lean 0.5: to the right), so the frond that the right edge cuts off is never pulled away from that edge. "
+                        "near.png (the trunk and the lip of the bank) does not move"})
     return out
 
 
@@ -649,7 +908,9 @@ def layout(steam_foot):
              "states_note": "round twelve: the same cut-out, pixel for pixel, less the flashlight once Dad has taken it, and less the shade too once he has taken that"},
             {"id": "cooler-open", "file": "cooler-open.png", "base": up(0.8), "note": "shown while the cooler is open; must be laid after trunk-open"},
             {"id": "steam", "frames": frames, "fps": 6, "at": list(steam_foot), "foot": [egypt1_steam.W // 2, egypt1_steam.H], "base": up(1.0), "note": "cropped RGBA frames, placed by the middle of the bottom edge"},
-            {"id": "front", "file": "front.png", "plane": "front"},
+            {"id": "front", "file": "front.png", "plane": "front", "note": "the papyrus at the bottom left (the plane the scene calls 'papyrus')"},
+            {"id": "near", "file": "near.png", "plane": "front", "note": "round twenty-three: the near palm's trunk across the top left corner, and the lip of the bank along the bottom (left and middle) with its halfa grass and stones; laid after front.png"},
+            {"id": "near-fronds", "file": "near-fronds.png", "plane": "front", "note": "round twenty-three: the near palm's fronds across the top; laid last (fx 'near-fronds' stirs them)"},
         ],
         "palms_split": {"note": "palms.png cut into its three palms, pixel for pixel (any order): use these three in place of 'palms' so that somebody standing between two palms is sorted rightly with each",
                         "planes": [{"id": f"palm-{i + 1}", "file": f"palm-{i + 1}.png", "base": int(p[1])} for i, p in enumerate(PALMS)]},
@@ -675,7 +936,14 @@ def layout(steam_foot):
                   "the wheel, the far windows' daylight along the top). Only pixels inside x 618..662, y 455..492 changed: in wagon.png, and "
                   f"{mirror_edge()} pixels of mirror.png's edge where it lies over the opening (its shape is the same); the door mirror keeps its "
                   "cut-out over the opening's lower front corner. The thing 'glovebox' is now 'inside', the way into the wagon (the glovebox is "
-                  "inside it: egypt-car); the wagon and the window stand him at his door, (642, 563), and 'fromCar' is where he comes out"],
+                  "inside it: egypt-car); the wagon and the window stand him at his door, (642, 563), and 'fromCar' is where he comes out",
+                  # DEPTH-23
+                  "round twenty-three (tools/paint/DEPTH.md): the picture staged in three planes, the camera and every number as they were. back.png "
+                  "is painted again (sky, far land, ground, every shadow through one camera; each clickable thing where it was) and takes a palette "
+                  "of its own; front.png is the papyrus again, a little thinner over the water, with reed blades and two umbels closer still; "
+                  "near.png (the near palm's trunk, the lip of the bank) and near-fronds.png (its fronds) are new front-plane files, laid after "
+                  "front.png in that order. Every other cut-out keeps its outline pixel for pixel (the two farther palms stand in a little air; "
+                  "the wagon is the same brushing, the sand heaped at its nose made of the new ground); the steam's frames are as they were"],
     }
     one = lambda v: json.dumps(v, separators=(", ", ": "))             # (written so that a person can read it: one thing to a line)
     rows = []
@@ -759,6 +1027,9 @@ def whole_picture(pic, planes, name="out/egypt1-2-all.png"):
     Image.fromarray((np.clip(whole, 0, 1) * 255).astype(np.uint8)).save(name)
 
 
+FRONT = ["front", "near", "near-fronds"]                    # the near plane's three files, as they are laid: the papyrus, the trunk and the lip, the fronds
+
+
 if __name__ == "__main__":
     # python3 egypt1.py          paints everything and writes out/egypt1/
     # python3 egypt1.py fast     skips the brush pass and writes only out/egypt1-2-all.png, to compose by
@@ -774,23 +1045,23 @@ if __name__ == "__main__":
         Image.fromarray((base * 255).astype(np.uint8)).save("out/egypt1-1-under.png")
         print("under", round(time.time() - t0, 1))
         pic = base.copy() if mode == "fast" else strokes(base, sizes=(14, 7, 3), seed=2, density=1.5, jitter=0.03, keep=0.22)
-        approved = pic.copy()
-        details(approved, info, reeds=REEDS_APPROVED, lot=False, smoke=True)    # the backdrop as first approved, for its palette
-        since = pic.copy()
-        details(since, info, smoke=True)                                    # and as round three left it, for its extra colours
         details(pic, info)
         pc, pa = palms_plane()
         fc, fa = front_plane()
+        nc, na = near_plane()
+        rc, ra = fronds_plane()
         if mode == "fast":
             dc, da, notes = donkey_plane(pic, fast=True)
-            whole_picture(pic, [(pc, pa), (dc, da), wagon_plane(pic), (fc, fa)])
+            whole_picture(pic, [(pc, pa), (dc, da), wagon_plane(pic), (fc, fa), (nc, na), (rc, ra)])
             print("painted", round(time.time() - t0, 1))
             sys.exit()
-        size, changed = finish_keeping(pic, approved, "out/egypt1/back.png", 144, since=since)
-        ys, xs = np.nonzero(changed)
-        print("back", size, "repainted since round three", int(changed.sum()), "pixels in x", xs.min(), "..", xs.max(), "y", ys.min(), "..", ys.max())
+        # Round twenty-three painted the backdrop again, whole: it takes a palette of its own (the rounds before kept
+        # the first painting's palette, so that what they had not touched stayed pixel for pixel).
+        print("back", finish(pic, "out/egypt1/back.png", 184))
         print("palms", finish(pc, "out/egypt1/palms.png", 40, pa))
-        print("front", finish(fc, "out/egypt1/front.png", 32, fa))
+        print("front", finish(fc, "out/egypt1/front.png", 40, fa))
+        print("near", finish(nc, "out/egypt1/near.png", 72, na))
+        print("near-fronds", finish(rc, "out/egypt1/near-fronds.png", 32, ra))
         np.save("out/egypt1-look/pic.npy", pic)                      # (kept for `extras`)
     back_rgb = np.asarray(Image.open("out/egypt1/back.png").convert("RGB"))
     sizes, (wc, wa) = wagon_pictures(pic, back_rgb)
@@ -799,14 +1070,14 @@ if __name__ == "__main__":
     dc0, da0, _ = donkey_plane(pic, rings=True)                       # the donkey as approved in round three, for its palette
     print("donkey", finish_keeping_cut(dc, da, dc0, da0, "out/egypt1/donkey.png", 72))
     if mode != "extras":
-        whole_picture(pic, [(pc, pa), (dc, da), (wc, wa), (fc, fa)])
+        whole_picture(pic, [(pc, pa), (dc, da), (wc, wa), (fc, fa), (nc, na), (rc, ra)])
     import egypt1_steam
     egypt1_steam.save("out/egypt1")
     print("palms split, bases", split_palms())
     doc = layout(STEAM)
     window_report()                                                  # CAR-13P
     steam = ("steam-0", STEAM[0] - egypt1_steam.W // 2, STEAM[1] - egypt1_steam.H)
-    lay(["back", "palms", "donkey", "wagon", "mirror", steam, "front"], "out/egypt1-comp.png")
-    lay(["back", "palms", "donkey", "wagon", "suitcase-open", "trunk-open", "cooler-open", steam, "front"], "out/egypt1-open-comp.png")
+    lay(["back", "palms", "donkey", "wagon", "mirror", steam] + FRONT, "out/egypt1-comp.png")
+    lay(["back", "palms", "donkey", "wagon", "suitcase-open", "trunk-open", "cooler-open", steam] + FRONT, "out/egypt1-open-comp.png")
     check_layout(doc, "out/egypt1-comp.png", "out/egypt1-look/layout-check.png")
     print("done", round(time.time() - t0, 1))

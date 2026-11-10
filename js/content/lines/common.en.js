@@ -64,7 +64,7 @@ export const lines = {
   "nope.lilsis.1": ["lilsis", "NO. It doesn't go."],
   "nope.lilsis.2": ["lilsis", "That's silly. And I KNOW silly."],
   "nope.lilsis.3": ["lilsis", "Nope! Do I get a snack for trying?"],
-  "look.dad.1": ["dad", "Nothing to write home about. Not that the mail goes there yet."],
+  "look.dad.1": ["dad", "Nothing to write home about. And I write home about practically everything."],
   "look.son.1": ["son", "It's a thing. I'm looking at it. It's looking back. I win."],
   "look.mom.1": ["mom", "Nothing that needs me. How restful."],
   "look.bigsis.1": ["bigsis", "Unremarkable. I have remarked on it anyway."],

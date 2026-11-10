@@ -72,8 +72,9 @@ export const wrong = (g) => (!is(g, "edo.sacksHid") ? "mat" : !is(g, "edo.pinkOf
 /** How many of the two things done up here are done (the sacks, the pink light): the constable climbs a step for each. */
 export const done = (g) => (is(g, "edo.sacksHid") ? 1 : 0) + (is(g, "edo.pinkOff") ? 1 : 0);
 
-// ---------- the constable's way up the cedar path (PAINT-20C's isukeWay, bottom first; the last point is the door) ----------
-export const ISUKE_WAY = [[340, 596], [360, 566], [388, 528], [410, 492], [420, 464], [410, 448], [404, 444]];
+// ---------- the constable's way up the cedar path (the painter's isukeWay, bottom first; the last point is the door; PAINT-23: measured
+// again from the path's new picture, art/scenes/edo-cedars/layout.json) ----------
+export const ISUKE_WAY = [[232, 598], [252, 580], [282, 561], [330, 544], [386, 529], [420, 512], [412, 499]];
 /** Where on his way he is by the story: at the foot when O-Rin sees him, a step up for each thing done, at the door once
     he has knocked. */
 export const isukeAt = (g) => (is(g, "edo.isukeAtDoor") ? 6 : [1, 3, 4][done(g)]);
@@ -305,7 +306,7 @@ export async function knockAtDoor(g) {
   if (is(g, "edo.isukeAtDoor")) return;
   await toPath(g, async (g, man, there) => {
     await walkOn(g, man, there, [ISUKE_WAY[5], ISUKE_WAY[6]]);
-    if (man) man.face("N");
+    if (man) man.face("NE");                                                    // (PAINT-23: the door is up to his right in the path's new picture; it was straight ahead, "N")
     await g.wait(300);
     g.sfx("knock");
     await g.wait(1100);

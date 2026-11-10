@@ -5,11 +5,18 @@
 Checks: every file 800x600 and in the plan; every mark of ROUND-20's list present and inside the walk outline; every
 cut-out state file there; every thing of ROUND-20's list with a shape; then writes pictures with stand-in people at
 the marks (grown-up 160 px at `full`, the children at their heights; a man of 1.56 m where asked) on the painting as
-painted (out/) and as keyed (art/), with a stand-in of rain lines over the cedar path."""
+painted (out/) and as keyed (art/), with a stand-in of rain lines over the cedar path.
+
+PAINT-23 (round twenty-three: the cedar path painted again from a new place): and that the cedar path's scene file says
+what its layout.json says (the two numbers, the walk outline, the blocked patch, every mark, every area's shape and
+standing place, the walk-behind cut-outs' base lines, LIFT and SILL, the constable's way in edo-hills.js), through
+scene_dump.mjs (needs node: NODE=/opt/node22/bin/node)."""
 
 import json
 import math
 import os
+import re
+import subprocess
 import sys
 
 import numpy as np
@@ -116,8 +123,8 @@ def rain(im, lay, seed=1):
     rng = np.random.default_rng(seed)
     d = ImageDraw.Draw(im, "RGBA")
     r = [f for f in lay["fx"] if f["type"] == "rain"][0]
-    n = int(800 * 600 * r["density"])
-    dx = r["slant"][0] / 100.0
+    n = int(r["count"]) if "count" in r else int(800 * 600 * r["density"])         # (PAINT-23: the engine's own fields; round twenty's: a density and [dx, dy])
+    dx = (r["slant"][0] if isinstance(r["slant"], list) else -r["slant"]) / 100.0
     hide = [[tuple(p) for p in poly] for poly in r.get("behind", [])]
     for i in range(n):
         x, y = rng.uniform(0, 800), rng.uniform(0, 600)
@@ -173,6 +180,75 @@ def shots(scene, lay, label):
             compose(src, scene).convert("RGB").save(os.path.join(SHOTS, f"store-{tag}-first.png"))
 
 
+def scene_agrees(scene="edo-cedars"):
+    """PAINT-23: the scene file against the installed layout.json: every number the painter measured is the number the game uses."""
+    root = os.path.join(HERE, "..", "..")
+    lay = json.load(open(os.path.join(ART, scene, "layout.json")))
+    bad = []
+    d = None
+    for node in (os.environ.get("NODE", "node"), "/opt/node22/bin/node"):
+        try:
+            out = subprocess.run([node, os.path.join(HERE, "scene_dump.mjs"), scene], capture_output=True, text=True, cwd=root, timeout=60)
+            if out.returncode == 0:
+                d = json.loads(out.stdout.strip().splitlines()[-1])
+                break
+        except FileNotFoundError:
+            continue
+    if d is None:
+        print(scene, "scene file against layout.json: not checked (node, or scene_dump.mjs, would not run)")
+        return True
+    same = lambda a, b: json.dumps(a) == json.dumps(b) or (len(a) == len(b) and all(abs(float(x) - float(y)) < 0.06 for p, q in zip(a, b) for x, y in zip(p, q)))
+    if (d["horizon"], d["full"]) != (lay["horizon"], lay["full"]):
+        bad.append(f"horizon and full: the scene file {d['horizon']}, {d['full']}; the layout {lay['horizon']}, {lay['full']}")
+    if not same(d["floors"][0]["area"], lay["walk"]):
+        bad.append("the walk outline differs")
+    if len(d["blocked"]) != len(lay["blocked"]) or not all(same(a, b) for a, b in zip(d["blocked"], lay["blocked"])):
+        bad.append("the blocked patches differ")
+    for k, v in lay["marks"].items():
+        if d["marks"].get(k) != v:
+            bad.append(f"mark {k}: the scene file {d['marks'].get(k)}, the layout {v}")
+    areas = {a["id"]: a for a in d["areas"]}
+    for t in lay["things"]:
+        a = areas.get(t["id"])
+        if a is None:
+            if t["id"] != "isuke":
+                bad.append(f"area {t['id']}: not in the scene file")
+            continue
+        if a["walkTo"] != t["stand"]:
+            bad.append(f"area {t['id']}: walkTo {a['walkTo']}, the layout's stand {t['stand']}")
+        shape = t["shape"].get("poly")
+        if shape is None:
+            x, y, w, h = t["shape"]["rect"]
+            shape = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]]
+        if not same(a["shape"], shape):
+            bad.append(f"area {t['id']}: its shape differs")
+    planes = {p["id"]: p for p in d["planes"]}
+    for p in lay["planes"]:
+        if p["id"] not in planes:
+            bad.append(f"plane {p['id']}: not in the scene file")
+        elif "base" in p and planes[p["id"]]["base"] != p["base"]:
+            bad.append(f"plane {p['id']}: base {planes[p['id']]['base']}, the layout {p['base']}")
+    src = open(os.path.join(root, "js", "content", "scenes", scene + ".js")).read()
+    for name, want in (("LIFT", lay["lift"]), ("SILL", lay["sill"])):
+        m = re.search(r"const %s = \[(\d+), (\d+)\]" % name, src)
+        if not m or [int(m.group(1)), int(m.group(2))] != want:
+            bad.append(f"{name}: the scene file {m.groups() if m else None}, the layout {want}")
+    m = re.search(r"arrive: \{ enter: (\[\[.*?\]\]), door: (\[\[.*?\]\]) \}", src)
+    if not m or json.loads(m.group(1)) != lay["arrive"]["enter"] or json.loads(m.group(2)) != lay["arrive"]["door"]:
+        bad.append(f"arrive: the scene file {m.groups() if m else None}, the layout {lay['arrive']}")
+    m = re.search(r"lil\.base = (\d+);", src)
+    if not m or int(m.group(1)) != lay["lift"][1] - 1:
+        bad.append(f"lil.base (her depth at the sill): the scene file {m.group(1) if m else None}, the row above LIFT's {lay['lift'][1] - 1}")
+    hills = open(os.path.join(root, "js", "content", "scenes", "edo-hills.js")).read()
+    m = re.search(r"export const ISUKE_WAY = (\[\[.*?\]\]);", hills)
+    if not m or json.loads(m.group(1)) != lay["isukeWay"]:
+        bad.append("edo-hills.js ISUKE_WAY differs from the layout's isukeWay")
+    print(scene, "scene file against layout.json:", "OK" if not bad else "PROBLEMS")
+    for b in bad:
+        print("  -", b)
+    return not bad
+
+
 def beside():
     """The two keyed scenes beside a Rome and a Nevada scene at the same size: a print among paintings, not another game."""
     tiles = []
@@ -200,4 +276,5 @@ if __name__ == "__main__":
                 ok = ok and good
         if os.path.exists(os.path.join(HERE, "out", scene, "layout.json")):
             shots(scene, json.load(open(os.path.join(HERE, "out", scene, "layout.json"))), scene)
+    ok = scene_agrees("edo-cedars") and ok
     print("ALL OK" if ok else "PROBLEMS")

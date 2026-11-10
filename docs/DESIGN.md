@@ -5092,6 +5092,61 @@ fourteen); the rest are the builders' (WRITE-21A, 21B; PEOPLE-21A, 21B; SCENES-2
 252. **Left as they are, for the author to say**: Big Sister's hair up (245); "Eight days later" (246); the Son's facts
      about Rome (247); someone talking to Little Sister at the top of the pass can stand in front of O-Shige until they
      move; the theatre's inside, the deck's arrangement, Kōta's hearth box and the lock are inventions, said in their notes.
+253. **The quality pass (round twenty-two, 2 November): fuller, more natural dialogue.** The author: "make the way the
+     family talks to each other and interactions with historical figures more realistic, right now it's kind of robotic
+     and lacking in character. Make it more like in a novel, use better english language, not so simple talk". Round
+     nineteen's short-box rules are lifted (CHARACTERS.md, "Rules for every line", PASS-22): in Egypt, Rome and the
+     present a box may run to 115 characters (their checks allow 130). 2,271 lines were rewritten in Egypt, Rome, the
+     present and Japan; every id, speaker, box, fact, clue word, Scripture quotation and kept line is as it was; Grandpa
+     Joe, Ranger, Nevada, the limousine and the office are untouched. The puzzle documents and CHARACTERS.md quote the new
+     words.
+254. **Act Six still holds eighty characters a box**: its own checks (tests act6/check-edo-a, -b and -c, and
+     tools/check-edo-d.mjs) keep round twenty's eighty, so its writers kept within it. Left for the author: lift it to
+     115, as in the other acts, and the Japan lines can be let out further.
+255. **The people of the past speak in whole words**: Egypt and Rome as before (their checks hold it), now the people of
+     Japan wherever their lines were rewritten, and Big Sister nearly everywhere. Walnut, the Roman street boy, keeps his
+     street contractions.
+256. **Small changes of meaning, for the author to check**: Big Sister on Jinsuke's plan ("One family in a crowd, all
+     going the same way", where "Everybody else is going the other way" crossed his going east among the pilgrims); Mom
+     to Sankichi ("Only the mothers, dear" was not true: now "Not everybody, dear. But it does help my children find me in
+     a crowd."); Big Sister's mackerel (now one of her forty words); Titus's creditors ("They bite like Father does when
+     you owe him money"); the Son on Phyllis ("Moms always know", for "From across the river"); look.dad.1 no longer says
+     the mail does not go there yet (it is said in the present too). Left as it was: Sei's "Tuesday", which answers Big
+     Sister's running joke, though a week of seven days is odd for her.
+257. **Ideas for the puzzles themselves, from the writers' notes (none built)**: #26, a wrong call swings the bow one
+     mark on the compass card, so "one along" is seen; #30, the ghost print shows which step was skipped; #31, on a wrong
+     cue the chanter's line comes again with its verb first; #37, each trick of the lock makes its own small sound; #35,
+     the leader recounts aloud after each failed pull; at home, the flashlight flickers out in the closet itself, so the
+     dead battery is seen, and the sound machine hums when someone stands by it; in Rome, the geese hiss at the sneakers
+     before the tale, and Felix stops whistling at Phyllis's name.
+258. **The depth repaint (round twenty-three, 9 November), piloted on four scenes.** The author: "You have to redo the
+     scenes and make the perspectives not look so amateur and flat. Study the Broken Sword scenes and how they have
+     dimension (foreground objects, middle ground and background objects add dimension to the scenes). Also make the
+     Japanese scenes look a little more watercolored." What was studied is how such pictures are staged, and nothing of
+     anyone's is copied. Measured, our scenes had almost nothing near the lens (the front plane under 5 per cent of
+     the picture), a camera 3 to 5 m up, ground of one tone, and one far thing behind the play. The art direction is
+     `tools/paint/DEPTH.md`: every picture in three planes (near things cut off by the frame that people pass behind;
+     the lit middle with shadows across its ground and a texture that shrinks with distance; the far in layers toward
+     the sky's colour). A scene is either deepened (its camera and every number kept) or recomposed (a new, lower,
+     turned camera, and every number measured again). The pilot: where the wagon came down, the Forum and Yui
+     deepened; the cedar path recomposed. The other forty-one scenes wait for the author's word on these four.
+259. **Act Six in watercolour** (`tools/paint/watercolor.py`): the same drawing laid in washes on paper: graded
+     washes for flats, sky and far land wet in wet, pigment pooled at edges, granulation, the white of the paper for
+     snow and plaster, shadows as glazes, the key line thinner and lost in the light. Yui and the cedar path are the
+     first two; the other eighteen follow them.
+260. **The Forum's near column takes a little ground** (`blocked`, right of x 738): nobody may walk out of sight
+     behind the front plane. The one number changed in a deepened scene.
+261. **The near palm's fronds sway** (where the wagon came down: one `fx` line, `near-fronds`): the scene's rule is that
+     nothing which moves is painted still. Deleting the line stills them.
+262. **The cedar path is a new picture**: seen from the foot of the path looking up the hill (the eye 2.8 m above the
+     sloping ground), the storehouse three-quarters on at the right, the kiln now on the left and the pipe on the
+     right, seven steps curving up. Every number of its scene file was measured again, the constable's way in
+     `edo-hills.js` with them, and the one checkpoint that stands people there; a saved game from before puts its
+     people on the nearest walkable ground. Played in the game: every standing place reached, the door, the pipe, the
+     lift to the window, the look out in the morning.
+263. **Left for the author:** whether the three planes and the watercolour are what he meant, before the rest are
+     painted; and how many more scenes should be recomposed and not only deepened (the Forum's far temples still stand
+     whole against the sky: a lower eye would do more there than deepening can).
 
 ---
 

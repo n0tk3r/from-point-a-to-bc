@@ -319,6 +319,10 @@ def layout(cut, layers, crane_wheel=None, crane_plane=None):
         planes.append(p)
     if crane_plane:
         planes.insert(3, crane_plane)
+    # DEPTH-23: the front plane (rome_forum_near.py): always in front, wherever anyone stands; no base, no patch of ground
+    planes.append({"id": "near", "file": "near.png", "plane": "front",
+                   "what": "the front plane: the landing we stand on across the bottom, the porch's end column up the right edge, the laurel bough over it "
+                           "in the top right corner. Nothing in it is clicked; people always pass behind it."})
     mk = marks()
     out = {
         "id": "rome-forum", "horizon": HZ, "full": FULL, "minScale": MIN_SCALE,

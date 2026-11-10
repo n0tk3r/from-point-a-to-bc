@@ -399,6 +399,7 @@ def hoarding(seed=93):
     """The hoarding round the building site: a fence of upright boards a little over two metres high, weathered, its posts
     showing, its face toward the square taking the low sun at a slant; an open gateway in it, its two gateposts and the
     gate itself swung back inside. Its foot is the cut-out's base. -> Canvas"""
+    from rome_forum_ground import porch_shade
     fr, L = hoard_frame()
     g0, g1 = hoard_gate()
     hh = HOARD["h"]
@@ -417,7 +418,9 @@ def hoarding(seed=93):
             mud = np.clip(1 - h / 30.0, 0, 1) * (0.5 + tex(u, h, 40, seed + 3))
             own = own * (1 - 0.25 * np.clip(mud, 0, 1)[..., None] * np.array([0.6, 0.7, 0.8], dtype=F32))
             mm = m * (h < ragged)
-            cv.put(LIT.on(own, FACE, 0.0, bounce=0.6 * np.clip(1 - h / 150.0, 0, 1) + 0.15), mm, Wf)
+            xw, Dw = fr.ground(u, np.zeros_like(u))                                    # DEPTH-23: the porch's shade climbs the foot of the near boards
+            cut = porch_shade(xw, h, Dw)
+            cv.put(LIT.on(own, FACE, cut, bounce=0.6 * np.clip(1 - h / 150.0, 0, 1) + 0.15 + 0.5 * cut), mm, Wf)
     s = Sheet2(SHAPE)
     # the gateposts, heavy, a little taller than the boards; the gate swung back into the site
     for gu in (g0, g1):
@@ -509,7 +512,12 @@ def statue(i, seed=95):
     top = hb + hc + 8
     s = Sheet2(SHAPE)
     a0, a1 = pt(x - 48, top, D_ - 48), pt(x + 48, top + 12, D_ - 48)
+    fx0 = pt(x, top, D_)[0]
     s.poly([(a0[0], a0[1]), (a1[0], a0[1]), (a1[0], a1[1]), (a0[0], a1[1])], "#f6eee0")
+    kk_ = k(D_)                                                                             # DEPTH-23: the slab's shade on the top of its own shaft, and its
+    hw = max(0.5, 24 * kk_ - 1.2)                                                            # own lower edge (both inside the old outline: the shape to click is as it was)
+    s.line([(fx0 - hw, a0[1] + 1.2 + 4 * kk_), (fx0 + hw, a0[1] + 1.2 + 4 * kk_)], "#a59cb8", max(1.0, 7 * kk_), 0.7, round_ends=False)
+    s.line([(a0[0] + 1.4, a0[1] - 0.8), (a1[0] - 1.4, a0[1] - 0.8)], "#8f86a4", 0.8, 0.6, round_ends=False)
     fx_, fy_ = pt(x, top + 12, D_)
     kk = k(D_)
     body, lite, dark = "#46604f", "#8fb08a", "#2a3a34"
@@ -538,22 +546,28 @@ def front_base(seed=97):
     x, D_, w, d, hh = f["x"], f["D"], f["w"], f["d"], f["h"]
     x0, x1, D0, D1 = x - w / 2, x + w / 2, D_ - d / 2, D_ + d / 2
     cv = Canvas(SHAPE)
+    # DEPTH-23: it stands in the shade of the porch we look from (rome_forum_ground.porch_shade): its faces toward us in
+    # shade, warm with the light thrown up off the sunlit paving beyond it; the back of its top out in the sun again
+    from rome_forum_ground import porch_shade
     for (e, h0, h1, tone) in ((8, 0, 16, "#e6dcc8"), (0, 16, hh - 16, "#f2eadb"), (8, hh - 16, hh, "#f7f0e2")):
         for Wf, m in WORLD.face([(x0 - e, D0 - e, h0), (x1 + e, D0 - e, h0), (x1 + e, D0 - e, h1), (x0 - e, D0 - e, h1)]):
             u, h, ppc = Wf.on_front(D0 - e)
             own = col(tone) * (0.92 + 0.10 * tex(u, h, 40, seed + int(h0))[..., None])
             lichen = step(0.6, 0.75, tex(u, h, 26, seed + 11)) * step(0.5, 0.8, tex(u, h, 120, seed + 12))
             own = own * (1 - 0.25 * lichen[..., None] * np.array([0.5, 0.4, 0.9], dtype=F32))
-            cv.put(LIT.on(own, FACE_US, 0.0, bounce=0.5), m, Wf)
+            cut = porch_shade(u, h, np.full_like(u, D0 - e))
+            cv.put(LIT.on(own, FACE_US, cut, bounce=0.5 + 0.5 * cut), m, Wf)
         for Wf, m in WORLD.face([(x0 - e, D0 - e, h0), (x0 - e, D1 + e, h0), (x0 - e, D1 + e, h1), (x0 - e, D0 - e, h1)]):
             v, h, ppc = Wf.on_side(x0 - e)
-            cv.put(LIT.on(col(tone) * 0.97, FACE_LEFT, 0.0, bounce=0.5), m, Wf)
+            cut = porch_shade(np.full_like(v, x0 - e), h, v)
+            cv.put(LIT.on(col(tone) * 0.97, FACE_LEFT, cut, bounce=0.5 + 0.9 * cut), m, Wf)
     for Wf, m in WORLD.face([(x0 - 8, D0 - 8, hh), (x1 + 8, D0 - 8, hh), (x1 + 8, D1 + 8, hh), (x0 - 8, D1 + 8, hh)]):
         u, v, ppc = Wf.on_floor(hh)
         own = col("#f6efe2") * (0.93 + 0.1 * tex(u, v, 30, seed + 3)[..., None])
         holes_ = (np.hypot(u - (x - 30), v - D_) < 6) | (np.hypot(u - (x + 34), v - (D_ + 8)) < 6)
         own = np.where(holes_[..., None], col("#6a6470"), own)
-        cv.put(LIT.on(own, 0.62, 0.0, up=1), m, Wf)
+        cut = porch_shade(u, np.full_like(u, hh), v)
+        cv.put(LIT.on(own, 0.62, cut, up=1), m, Wf)
     s = Sheet2(SHAPE)
     for (p0, p1, tone, wd, al) in (((x0 - 8, hh, D0 - 8), (x1 + 8, hh, D0 - 8), "#fffaf0", 1.3, 0.9), ((x0, 16, D0), (x1, 16, D0), "#a8a0b4", 1.1, 0.7),
                                    ((x0, hh - 16, D0), (x1, hh - 16, D0), "#a8a0b4", 1.1, 0.7)):

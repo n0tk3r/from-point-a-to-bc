@@ -220,3 +220,267 @@ def lit(normal):
 def face_color(base_lit, base_shade, normal):
     """A flat's colour by its facing: the lit flat, the shade flat, nothing between (two flats, a hard edge)."""
     return base_lit if lit(normal) > 0.25 else base_shade
+
+
+# ================================================================ round twenty-three: depth, and watercolour (DEPTH.md)
+# The act's flats laid as washes on paper: every area graded, shadows glazed over the local colour, the key line thinner,
+# broken, and lost in the light and the distance. What follows is this scene's own; the library's part is watercolor.py
+# (the finish: wash, wash_cut) and depth.py (scatter, air, rim).
+from PIL import Image as _Image, ImageDraw as _ImageDraw
+
+import watercolor as WC
+from brush import blur, sample, step, warp
+
+WPAPER = WC.PAPER                                          # the bare sheet: snow, plaster in the sun, foam, the lightest road
+SHADE = lerp(rgb("#ffffff"), lerp(COBALT, ULTRA, 0.30), 0.56)        # a cast shadow: a thin cool wash to multiply over the local colour
+SHADE_WARM = lerp(rgb("#ffffff"), lerp(ULTRA, SIENNA, 0.35), 0.46)   # the same under an overhang, a little warmer (light bounced off the ground)
+SHADE_PINES = lerp(rgb("#ffffff"), lerp(COBALT, ULTRA, 0.42), 0.66)  # the deep shade of the pines over the near ground
+N_IN, U_ST = (0.857, -0.514), (0.514, 0.857)               # inland (square to the street), and along the street away from us
+
+
+def thin(c, t):
+    """A paint thinned with water: `t` of the paper shows through it (a transparent wash, where tintw is body colour)."""
+    c = P(c) if isinstance(c, str) else c
+    return lerp(c, WPAPER, t)
+
+
+def squash(row):
+    """How flat a circle lying on the ground looks at a picture row (its height over its width)."""
+    return max(float(row) - HZ, 1.0) / CAM.F
+
+
+def resample(pts, stepsize=3.0):
+    """Points every `stepsize` px along a line through `pts`."""
+    out = [tuple(map(float, pts[0]))]
+    for (x0, y0), (x1, y1) in zip(pts[:-1], pts[1:]):
+        d = math.hypot(x1 - x0, y1 - y0)
+        n = max(1, int(d / stepsize))
+        for i in range(1, n + 1):
+            out.append((x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n))
+    return out
+
+
+class Wet:
+    """A layer of washes: shapes with hard edges, each a graded wash and not a flat. Colour and cover are float
+    pictures; a shape is drawn in its own box at three times the size, so many small ones are cheap. Later shapes lie
+    over earlier ones, as paint does. -> done(): (colour, cover), to brush, wash and cut out."""
+
+    def __init__(self, shape=(H, W), ss=3):
+        self.shape, self.ss = shape, ss
+        self.c = np.zeros(shape + (3,), dtype=F32)
+        self.a = np.zeros(shape, dtype=F32)
+
+    def _box(self, xs, ys, pad=2.0):
+        h, w = self.shape
+        x0, y0 = max(int(math.floor(min(xs) - pad)), 0), max(int(math.floor(min(ys) - pad)), 0)
+        x1, y1 = min(int(math.ceil(max(xs) + pad)) + 1, w), min(int(math.ceil(max(ys) + pad)) + 1, h)
+        return (x0, y0, x1, y1) if x1 > x0 and y1 > y0 else None
+
+    def _mask(self, box, draw):
+        x0, y0, x1, y1 = box
+        s = self.ss
+        im = _Image.new("L", ((x1 - x0) * s, (y1 - y0) * s), 0)
+        draw(_ImageDraw.Draw(im), x0, y0, s)
+        return np.asarray(im.resize((x1 - x0, y1 - y0), _Image.BOX), dtype=F32) / 255
+
+    def _colour(self, box, c0, c1, g):
+        c0 = np.asarray(c0, dtype=F32)
+        if c1 is None:
+            return c0[None, None, :]
+        x0, y0, x1, y1 = box
+        c1 = np.asarray(c1, dtype=F32)
+        (ax, ay), (bx, by) = g if g is not None else ((x0, y0), (x0, y1))
+        yy, xx = np.mgrid[y0:y1, x0:x1].astype(F32)
+        d = max((bx - ax) ** 2 + (by - ay) ** 2, 1e-6)
+        t = np.clip(((xx - ax) * (bx - ax) + (yy - ay) * (by - ay)) / d, 0, 1)
+        return c0[None, None, :] + (c1 - c0)[None, None, :] * t[..., None]
+
+    def _lay(self, box, m, col):
+        x0, y0, x1, y1 = box
+        a0 = self.a[y0:y1, x0:x1]
+        out = m + a0 * (1 - m)
+        c0 = self.c[y0:y1, x0:x1]
+        self.c[y0:y1, x0:x1] = (col * m[..., None] + c0 * (a0 * (1 - m))[..., None]) / np.maximum(out, 1e-6)[..., None]
+        self.a[y0:y1, x0:x1] = out
+        return self
+
+    def poly(self, pts, c0, c1=None, g=None, alpha=1.0):
+        """A filled shape: `c0` alone, or a wash graded from `c0` to `c1` along g = (from, to) (picture points; top to
+        bottom of the shape if not said)."""
+        box = self._box([p[0] for p in pts], [p[1] for p in pts])
+        if box is None or len(pts) < 3:
+            return self
+        m = self._mask(box, lambda d, ox, oy, s: d.polygon([((px - ox) * s, (py - oy) * s) for px, py in pts], fill=255)) * alpha
+        return self._lay(box, m, self._colour(box, c0, c1, g))
+
+    def ellipse(self, cx, cy, rx, ry, c0, c1=None, g=None, alpha=1.0):
+        box = self._box([cx - rx, cx + rx], [cy - ry, cy + ry])
+        if box is None:
+            return self
+        m = self._mask(box, lambda d, ox, oy, s: d.ellipse([(cx - rx - ox) * s, (cy - ry - oy) * s, (cx + rx - ox) * s, (cy + ry - oy) * s], fill=255)) * alpha
+        return self._lay(box, m, self._colour(box, c0, c1, g))
+
+    def line(self, pts, color, width=1.0, alpha=1.0):
+        if len(pts) < 2:
+            return self
+        box = self._box([p[0] for p in pts], [p[1] for p in pts], pad=width / 2 + 2)
+        if box is None:
+            return self
+        s = self.ss
+        wd = width * s
+        if wd < 1.0:                                           # thinner than the sheet can draw: a hair of less paint
+            alpha, wd = alpha * wd, 1.0
+        wd = max(1, int(round(wd)))
+
+        def draw(d, ox, oy, s_):
+            q = [((px - ox) * s_, (py - oy) * s_) for px, py in pts]
+            d.line(q, fill=255, width=wd, joint="curve")
+            if wd > 2:
+                for px, py in (q[0], q[-1]):
+                    d.ellipse([px - wd / 2, py - wd / 2, px + wd / 2, py + wd / 2], fill=255)
+        return self._lay(box, self._mask(box, draw) * alpha, np.asarray(color, dtype=F32)[None, None, :])
+
+    def taper(self, pts, c0, w0, w1, c1=None, g=None, alpha=1.0):
+        """A stroke that changes width along its length (a trunk, a bough, a blade), as one shape."""
+        n = len(pts)
+        if n < 2:
+            return self
+        left, right = [], []
+        for i, (px, py) in enumerate(pts):
+            ax, ay = pts[max(i - 1, 0)]
+            bx, by = pts[min(i + 1, n - 1)]
+            dx, dy = bx - ax, by - ay
+            d = math.hypot(dx, dy) or 1.0
+            hw = (w0 + (w1 - w0) * i / (n - 1)) / 2
+            left.append((px - dy / d * hw, py + dx / d * hw))
+            right.append((px + dy / d * hw, py - dx / d * hw))
+        return self.poly(left + right[::-1], c0, c1, g, alpha)
+
+    def glaze(self, pts, color, amount=1.0):
+        """A wash over what is already on the layer inside a shape (multiply): a shadow, a darker passage."""
+        box = self._box([p[0] for p in pts], [p[1] for p in pts])
+        if box is None:
+            return self
+        x0, y0, x1, y1 = box
+        m = (self._mask(box, lambda d, ox, oy, s: d.polygon([((px - ox) * s, (py - oy) * s) for px, py in pts], fill=255)) * amount)[..., None]
+        c = self.c[y0:y1, x0:x1]
+        self.c[y0:y1, x0:x1] = c * (1 - m) + c * np.asarray(color, dtype=F32)[None, None, :] * m
+        return self
+
+    def clear(self, pts):
+        box = self._box([p[0] for p in pts], [p[1] for p in pts])
+        if box is None:
+            return self
+        x0, y0, x1, y1 = box
+        m = self._mask(box, lambda d, ox, oy, s: d.polygon([((px - ox) * s, (py - oy) * s) for px, py in pts], fill=255))
+        self.a[y0:y1, x0:x1] *= (1 - m)
+        return self
+
+    def add(self, color, alpha):
+        """Lay a whole painted layer (colour, cover) over this one."""
+        return self._lay((0, 0, self.shape[1], self.shape[0]), np.clip(alpha, 0, 1).astype(F32), np.asarray(color, dtype=F32))
+
+    def done(self):
+        return self.c.copy(), np.clip(self.a, 0, 1).copy()
+
+    def onto(self, picture, amount=1.0):
+        return over(picture, self.c, np.clip(self.a, 0, 1) * amount)
+
+
+def keyline(layer, pts, row=None, lit=False, seed=0, weight=1.0, color=None, alpha=None):
+    """The key line, quieter (DEPTH.md, "Japan in watercolour"): thinner than the print's, a little broken, lost
+    altogether on the lit side of a thing (`lit`) and in the distance (above the row HZ + 30: no line at all)."""
+    if lit or len(pts) < 2:
+        return layer
+    r = row if row is not None else max(p[1] for p in pts)
+    if r < HZ + 30:
+        return layer
+    t = float(np.clip((r - HZ) / (FULL - HZ), 0, 1))
+    w = (0.35 + 0.45 * t) * weight
+    a = alpha if alpha is not None else 0.24 + 0.34 * t
+    col = PRUSSIAN if color is None else color
+    rng = np.random.default_rng(int(seed * 7919 + pts[0][0] * 13 + pts[0][1] * 31) & 0x7FFFFFFF)
+    q = resample(pts, 3.0)
+    i = 0
+    while i < len(q) - 1:
+        n = int(rng.uniform(4, 13))                            # a stroke of the pen, 12 to 40 px
+        layer.line(q[i:i + n + 1], col, w * rng.uniform(0.8, 1.15), a * rng.uniform(0.55, 1.0))
+        i += n + (int(rng.uniform(1, 3)) if rng.random() < 0.55 else 0)      # and, more often than not, a gap
+    return layer
+
+
+def glaze(picture, mask, color=None, amount=1.0):
+    """A shadow as a glaze: the picture multiplied toward a thin cool wash through a mask (never a flat of other colour)."""
+    return tint(picture, SHADE if color is None else color, np.clip(mask * amount, 0, 1).astype(F32))
+
+
+_TILES = {}
+
+
+def world_noise(X, Z, cell, seed, octaves=3, street=False):
+    """Noise that lies on the ground, measured in centimetres: `cell` is the size of its blotches (cm), or (across,
+    along) for stretched noise; with `street` the two run across and along the street, so streaks run to its vanishing
+    point. X, Z: the ground's place at every pixel (floor(SHAPE)). -> 0 to 1, fading to 0.5 where a blotch would be
+    smaller than a pixel (far off it would only glitter)."""
+    size = 1024
+    tile = _TILES.get((seed, octaves))
+    if tile is None:
+        tile = _TILES[(seed, octaves)] = noise((size, size), 64, seed, octaves)
+    cu, cv = (cell, cell) if np.isscalar(cell) else cell
+    if street:
+        u, v = X * N_IN[0] + Z * N_IN[1], X * U_ST[0] + Z * U_ST[1]
+    else:
+        u, v = X, Z
+
+    def fold(t):                                               # the tile mirrored end to end: no seam
+        m = np.mod(t, 2 * (size - 2))
+        return np.where(m > size - 2, 2 * (size - 2) - m, m)
+    n = sample(tile, fold(u / cu * 64 + 300), fold(v / cv * 64 + 300))
+    k = CAM.F / (CAM.Z0 + np.maximum(Z, -CAM.Z0 + 50))         # px per cm
+    small = np.minimum(cu * k, cv * k * k * CAM.eye / CAM.F)   # the blotch's size in the picture: across, and down (foreshortened)
+    fade = np.clip((small - 1.0) / 2.5, 0, 1)
+    return (0.5 + (n - 0.5) * fade).astype(F32)
+
+
+def grade_cut(color, alpha, low=0.90, lightfrom=(-1.0, -0.6), seed=0, uneven=0.05):
+    """A cut-out's flats turned into washes: a little deeper toward its foot and away from the light, and never even."""
+    ys, xs = np.where(alpha > 0.05)
+    if len(ys) == 0:
+        return color
+    h, w = alpha.shape
+    y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+    yy, xx = np.mgrid[0:h, 0:w].astype(F32)
+    u, v = (xx - x0) / max(x1 - x0, 1), (yy - y0) / max(y1 - y0, 1)
+    lx, ly = lightfrom
+    n = math.hypot(lx, ly)
+    t = np.clip(0.5 + 0.5 * ((u - 0.5) * lx + (v - 0.5) * ly) / n * 2, 0, 1)      # 1 on the side the light comes from
+    mult = low + (1 - low) * t
+    mult = mult * (1 + (noise((h, w), 26, seed + 5, 3) - 0.5) * 2 * uneven)
+    return np.clip(color * mult[..., None], 0, 1).astype(F32)
+
+
+def painted(color, alpha, under_c, seed=4, sizes=(5, 3, 2), keep=0.62, fast=False):
+    """A cut-out, painted: its washes brushed a little over the colour it stands in front of (so its edge is a hand's)."""
+    from brush import strokes
+    ys, xs = np.where(alpha > 0.02)
+    if len(ys) == 0 or fast:
+        return color, np.clip(alpha, 0, 1)
+    y0, y1, x0, x1 = max(ys.min() - 12, 0), min(ys.max() + 13, H), max(xs.min() - 12, 0), min(xs.max() + 13, W)
+    flat_ = np.empty((y1 - y0, x1 - x0, 3), dtype=F32)
+    flat_[...] = np.asarray(under_c, dtype=F32)
+    over(flat_, color[y0:y1, x0:x1], alpha[y0:y1, x0:x1])
+    out = color.copy()
+    out[y0:y1, x0:x1] = strokes(flat_, sizes=sizes, seed=seed, density=1.8, jitter=0.02, keep=keep)
+    return out, np.clip(alpha, 0, 1)
+
+
+def under_of(back, alpha):
+    """The colour a cut-out stands in front of (the middle colour of the backdrop under it)."""
+    ys, xs = np.where(alpha > 0.5)
+    return np.median(back[ys, xs], axis=0) if len(ys) else SAND
+
+
+def hand(color, alpha, seed, amount=0.7, cell=16):
+    """A drawn cut-out's edges made a hand's (DEPTH.md: nothing ruled for long): colour and cover pushed about together
+    by under a pixel. Its place and its base line stay."""
+    return warp(color, amount, cell, seed + 900), np.clip(warp(alpha, amount, cell, seed + 900), 0, 1)

@@ -296,7 +296,7 @@ Cut-Scene: Crash landing by the Nile        (opens the act)
 The wagon, nose-down in the sand, steaming. "Well. That's one expressway I won't be taking again."
 "Buddy? ... Buddy?" He was in the passenger seat a minute ago, or a thousand years from
 now. Then Dad sees them: small sneaker prints, going up the track toward the pyramid.
-"Off to see the biggest thing in sight. I taught him that."
+"Off to see the biggest thing in sight. He gets that from me. I can't even be cross about it."
 And then, where he stands, he bows his head: "Lord. I took a shortcut. You know that. You
 were in the car." "You know where he is. I don't even know when I am. Keep him till I get
 there. In Jesus' name. Amen." (The first of his three prayers.)
@@ -367,11 +367,11 @@ Gives:        The reed.
 Teaches:      That things in the landscape can be taken, not only things in the car.
 Hints:        Said in the world: Lot, asked for news, says the scribe's pen has split (he has it from
               the men who come down for water); the scribe says so himself.
-              Hint button: "The scribe's pen has split. A new one might grow by the river."
+              Hint button: "The scribe's pen has split, and a pen here is a reed. A new one might be growing down by the river."
 Notes:        It can be cut before he has met anybody, as in the old act.
               With the reed in his pocket he parts the reeds and has a look: "Moses' mother put him
               in a basket. '...and she laid it in the flags by the river's brink.'" <!-- PASS-17E -->
-              "Flags are reeds. So I looked. No basket. I'm early, or I'm late."
+              "Flags are reeds, so naturally I looked. No basket. Either I'm early, or I'm late."
               Nobody finishes the act without hearing it: it is where the player learns that Dad
               knows whose Egypt this is.
 ```
@@ -391,7 +391,7 @@ Solution:     Give him the reed. "Here. It's a pen. Some assembly required." "A 
               makes you a supplier. Suppliers go on the list."
 Gives:        A scribe who can write. A reason to be on the list.
 Teaches:      Using a carried thing with a person.
-Hints:        Said in the world: the guard ("Then walk to the scribe. Under the awning."), the
+Hints:        Said in the world: the guard ("Then walk to the scribe, under the awning. He keeps the list. I only keep the stair."), the
               overseer ("Get onto the scribe's list."), the scribe ("I write him onto it. With a pen.
               You see the difficulty.").
               Hint button: "I have a reed, and I know a man who needs a pen."
@@ -484,7 +484,7 @@ Gives:        The rule ("egypt.knowsLight"). From now on Dad will take the winds
 Teaches:      The rule of every door in the game.
 Hints:        Said in the world: the lamp boy (#6); the overseer, once Dad has heard the boy ("Then find
               a little sun. I have only the big one.").
-              Hint button: "A little sun in his hand: a flashlight. I packed one. Try the wall that hums."
+              Hint button: "A little sun in his hand: that's a flashlight, and I packed one. Shine it on the wall that hums."
               <!-- FINAL-19: REVIEW-19 -->
 Plants/pays:  Pays off #6, and the flashlight he packed "in case of a flat". Keeps the old act's two
               best lines exactly.
@@ -506,7 +506,7 @@ Wrong tries:  The shade, held up there by Dad -> the beam leaps up into the door
               Ask the haulers         -> "We pull. Holding is another trade." "A lesser trade."
               Ask the overseer        -> "I oversee. If I stand there holding that, who oversees me
                                          holding it?"
-              Ask the scribe          -> "I hold a pen. It is all I hold. Ask a man with idle arms."
+              Ask the scribe          -> "I hold a pen. It is all I hold. Ask a man with idle arms. This site is full of them."
 Solution:     Bring the guard a root beer from the cooler. "It bites the tongue. Like a small friendly
               snake." He takes the shade to the sunny spot. "For how long?" "Not long." "The overseer
               says 'not long'. He has said it for twenty years." And the sunbeam goes "up the stairs and
@@ -515,7 +515,7 @@ Gives:        The first stretch of the beam: from the site into the gallery, as 
 Teaches:      That a job can be somebody else's, at a price, and that the price is in another place.
 Hints:        Said in the world: Dad at the sunny spot ("I need a volunteer."); the guard ("I would hold it for
               something cold."); Dad, looking back down the track ("...the only cold drinks in Egypt.").
-              Hint button: "Somebody has to hold the shade to throw sun in the doorway. The guard's thirsty." <!-- FINAL-19: REVIEW-19 -->
+              Hint button: "The windshield shade can throw sun into the doorway, but somebody has to hold it. The guard's thirsty." <!-- FINAL-19: REVIEW-19 -->
 Plants/pays:  Pays off the cooler. The guard complains of his arms for the rest of the act.
 Notes:        No dead end: a guard who is given a root beer before there is a shade to hold says "I owe
               you one holding. Of anything. Not heavy.", and pays it later. The cooler always has one more.
@@ -530,7 +530,7 @@ Setup:        Once the shade is up, the sunbeam comes in at the passage and land
               bench at the foot of the ramp. "Stone's a poor mirror. I checked."
 Wrong tries:  The copper mirror in the slot -> "It won't wedge. It wants a flat place to stand, like the
                                          rest of us."
-              The shade in the gallery -> "No sun in here to bounce. That's the whole problem."
+              The shade in the gallery -> "No sun in here to bounce. All the sun's outside, standing around by the stairs."
 Solution:     Twist the door mirror off the wagon ("It's been one twist from off since March") and wedge
               it in the slot. "Wedged. That's not coming out. Nothing I wedge ever does."
 Gives:        The second stretch of the beam: up the ramp to the top step.
@@ -673,14 +673,14 @@ The arrival, after "I'd be annoyed if I hadn't taught him that":
 
 The reeds, after "I never bring pens back":
 > "Moses' basket. '...and she laid it in the flags by the river's brink.'" <!-- PASS-17E -->
-> "Flags are reeds. So I looked. No basket. I'm early, or I'm late."
+> "Flags are reeds, so naturally I looked. No basket. Either I'm early, or I'm late."
 
 The river, after "I'm calling it: the Nile":
-> "The Egypt in my Bible. Abraham, Joseph, Moses. Any of them, round that bend."
-> "Or not for a thousand years. I always skip to the maps."
+> "The Egypt of my Bible. Abraham, Joseph, Moses: any one of them could be just round that bend."
+> "Or not for a thousand years. I never could keep the dates straight. I always skipped to the maps."
 
 The pyramids, the third time he looks:
-> "I wonder who's looked at those from right here. Abraham? Not yet, maybe." <!-- PASS-17E -->
+> "I wonder who else has looked at those from right here. Abraham, maybe. Or maybe not yet." <!-- PASS-17E -->
 
 The mud bricks. He lifts one, and half remembers; then he looks up at the pyramid:
 > "Bricks for Pharaoh. I know this one: the Israelites made them."
@@ -778,12 +778,12 @@ the heart of it to the river, to Lot; what follows is the second pass as it now 
 account is short: there is famine across the desert, and its herdsmen have come down to
 eat. In the second pass his gossip was where Dad found out when he was. Since round
 three Dad has heard the story first, by the river, from Lot, and the scribe's question
-("Any news? I've been out of touch.") is offered only after that, once. So Dad hears the
+("Any news? I've been out of touch. Badly out of touch.") is offered only after that, once. So Dad hears the
 week from the Egyptian side (the Great House, the sickness, the hurry), told as an
 Egyptian would, from outside, by a man with no idea whom he is talking about; and Dad,
 who has met the man's nephew, knows more than he does:
 
-> SCRIBE: "Only grain. Famine has sent the desert herdsmen down to eat ours."
+> SCRIBE: "Only grain. The famine has driven the desert herdsmen down to us, and I count every basket they eat."
 > SCRIBE: "One of them is rich. Abram, by name. He brought his sister."
 > DAD: "Abram. I've met his nephew."
 > SCRIBE: "She is very fair. She was taken into the Great House."
@@ -832,9 +832,9 @@ the reeds, the pyramids and the open door stands as it was. After it:
 
 | Where | Before Lot tells him | After it |
 | --- | --- | --- |
-| The river, looked at a second time | `egypt.river.bible.1` to `.4` (he wonders) | `egypt.river.after.1` to `.3`, once, even if he wondered before: "Abram's in Egypt this week. Joseph and Moses are still to come." "Joseph's still to come, and Moses. Most of the book hasn't happened." <!-- PASS-17E --> "I didn't need the dates in the back of my Bible. I needed his nephew." |
-| The reeds, when he takes his reed | `egypt.reeds.basket.2`: "...No basket. I'm early, or I'm late." | `egypt.reeds.basket.3`: "Flags are reeds. So I looked. No basket. I'm early." <!-- PASS-17E --> |
-| The pyramids from the bank, the third look | `egypt.pyramids.look3`: "I wonder who's looked at those from right here. Abraham? Not yet, maybe." <!-- PASS-17E --> | `egypt.pyramids.look3b`: "Abram could've stood right here and looked at those. This week." |
+| The river, looked at a second time | `egypt.river.bible.1` to `.4` (he wonders) | `egypt.river.after.1` to `.3`, once, even if he wondered before: "Abram's in Egypt this very week. Joseph and Moses are still a long way down the road." "Joseph's still to come, and Moses. Most of the book hasn't happened." <!-- PASS-17E --> "I didn't need the dates in the back of my Bible. I needed his nephew." |
+| The reeds, when he takes his reed | `egypt.reeds.basket.2`: "...No basket. I'm early, or I'm late." | `egypt.reeds.basket.3`: "Flags are reeds, so naturally I looked. No basket. I'm early. I'm very early." <!-- PASS-17E --> |
+| The pyramids from the bank, the third look | `egypt.pyramids.look3`: "I wonder who else has looked at those from right here. Abraham, maybe. Or maybe not yet." <!-- PASS-17E --> | `egypt.pyramids.look3b`: "Abram could've stood right here and looked at those. This week, of all the weeks." |
 | The open door, after Psalm 90:4 and its heading | `egypt.gate.psalm.4`: "Either way, a thousand years is yesterday to Him. He knows where my boy is." (`egypt.gate.psalm.3`, the tenses again, went in round nineteen <!-- PASS-19E -->) | `egypt.gate.psalm.3b`, `.4b`: "And he isn't even born yet. I've got the tenses worked out." <!-- PASS-17E --> "A thousand years is yesterday to Him. He knows right where my boy is." |
 
 **General Feathers.** Little Sister's favourite: a white hen, well worn, one blue button
@@ -927,9 +927,9 @@ Then Dad's questions, as the choices come:
 
 | Dad asks | Offered | Lot |
 | --- | --- | --- |
-| "Have you seen a boy? About this tall, asks a lot of questions?" | always | "A small one in strange sandals went up the track, asking for the 'wy-fy'." "If the Egyptians have one, it is at their Horizon. They keep everything there." DAD: "That's him. He asks that everywhere. It's how he says hello." |
-| "What's this Horizon everybody's at?" | once he has heard the word | "The great white one. Their king's tomb: the Horizon of Khufu." DAD: "A pyramid called Horizon. Finally, one I can actually reach." |
-| "Anything to know before I go up? This isn't asking for directions." <!-- PASS-17E --> | always | "Those who come for water say a wall in the Horizon has begun to hum." "Their scribe's pen has split. He can write nobody onto his list." DAD: "A humming wall and a paperwork problem. I've had Mondays like that." LOT: "Since the hum began, the geese on the bank all face the Horizon." |
+| "Have you seen a boy? About this tall, asks a lot of questions?" | always | "A small one in strange sandals went up the track, asking for the 'wy-fy'." "If the Egyptians have one, it is at their Horizon. They keep everything there." DAD: "That's my boy. He asks that in every house we walk into. It's how he says hello." |
+| "And this Horizon everybody's so keen on: what is it, exactly?" | once he has heard the word | "The great white one. Their king's tomb: the Horizon of Khufu." DAD: "A pyramid called the Horizon. Finally, a horizon I can actually walk to." |
+| "Anything I should know before I go up? This isn't asking for directions." <!-- PASS-17E --> | always | "Those who come for water say a wall in the Horizon has begun to hum." "Their scribe's pen has split. He can write nobody onto his list." DAD: "A humming wall and a paperwork problem. I've had Mondays like that." LOT: "Since the hum began, the geese on the bank all face the Horizon." |
 | "Who are you, if you don't mind my asking?" | until he has said | his story, below |
 | "What brings you to the river? You look like a man waiting for a ride." | once he has said who he is; once | the week, below |
 | "I've got a hill to climb and a boy to ground." | always | the first time after his story: the parting, below. Any other time: "Go in peace. Everything up there has already gone wrong. You cannot be late." |
@@ -938,7 +938,7 @@ Then Dad's questions, as the choices come:
 
 > LOT: "Lot, son of Haran. My father died in Ur of the Chaldees, before his own father."
 > LOT: "Grandfather Terah took my uncle Abram, Sarai and me out of Ur. He died at Haran."
-> DAD: "Ur of the Chaldees. I've only seen that on the maps in my Bible."
+> DAD: "Ur of the Chaldees. I've only ever seen that on the maps in the back of my Bible."
 > LOT: "The LORD called my uncle to a land He would show him. At seventy-five, he went." <!-- PASS-17E -->
 > LOT: "He built altars to the LORD in Canaan. Then famine brought us down into Egypt." <!-- PASS-17E -->
 
@@ -946,13 +946,13 @@ And Dad understands: he looks out over the river and says it to himself
 (`egypt.heardAbram` is set here now):
 
 > "Abram, not Abraham yet. Egypt. A famine. ...I'm standing in Genesis." <!-- PASS-17E -->
-> "God promised every family on earth a blessing through him. Mine too, please." <!-- PASS-17E --> <!-- FINAL-19: REVIEW-19 -->
+> "God promised every family on earth a blessing through him. Mine included. I'm counting on it." <!-- PASS-17E --> <!-- FINAL-19: REVIEW-19 -->
 
 **The week.** Briefly, as a man tells what has happened to his family, judging nobody:
 
 > LOT: "The king took my uncle's wife into his house, and was good to him for her sake."
 > LOT: "Then the LORD struck his house with plagues. Today his men send us out of Egypt."
-> DAD: "I'd heard something like that."
+> DAD: "I'd heard something along those lines. From a long way off."
 > LOT: "Then the story has gone farther than we have."
 
 **The parting** (the first time after his story): a father who has lost his boy, and a
@@ -960,7 +960,7 @@ man whose uncle has no son yet and has been promised a nation.
 
 > DAD: "I've got a hill to climb and a boy to ground."
 > LOT: "My uncle has no son. And the LORD has promised him a great nation."
-> DAD: "A nation, and not one son yet. I've got one, and I've mislaid him."
+> DAD: "A nation promised, and not one son yet. I've got the one, and I've gone and mislaid him."
 > LOT: "Then you are both waiting on a son. Yours is already walking."
 > DAD: "I'd give a lot to go and shake your uncle's hand."
 > DAD: "But I've got a boy to find."
@@ -973,12 +973,12 @@ He lifts his hands, and Dad bows his head beside him:
 
 Both are themselves again, and then:
 
-> DAD: "Thank you. I asked Him that when I landed. Good to hear someone else ask."
+> DAD: "Thank you. I asked Him the same when I landed. It's good to hear another man ask it."
 
 **The rest.** Looked at, before his prayer for the boy: "A man sitting in the shade,
 praying. My car fell out of the sky in front of him, and he didn't lose his place." After
-it: "Lot, Abram's nephew, back at his prayers. One of them was for my boy." Offered a root
-beer: DAD "Something cold? On the house." LOT "It hisses. Where I come from, a man leaves
+it: "Lot, Abram's nephew, back at his prayers. One of them was for my boy. I won't forget that." Offered a root
+beer: DAD "Something cold? On the house. Well, on the car." LOT "It hisses. Where I come from, a man leaves
 a hissing thing alone." Shown the map: LOT "Where is the river on this?" DAD "There isn't
 one. It's Nevada." LOT "A land with no river. Then I will pray that it has wells." Shown
 General Feathers: "I keep flocks and herds, and I would not know whether to shear her,
@@ -1114,10 +1114,10 @@ scribe's news (`egypt.scribe.news.11`). Dropped: all twenty-nine of the carrier'
 | Line | Was | Is |
 | --- | --- | --- |
 | `egypt.river.after.3` | "...I needed a scribe." | "I didn't need the dates in the back of my Bible. I needed his nephew." |
-| `egypt.donkey.look` | "A donkey with three water jars. Low mileage, runs on hay, never needs a jump." | "A donkey. Low mileage, runs on hay, never needs a jump." (the painter took the third jar away) |
-| `egypt.donkey.look2` | "Donkey the donkey. These are my kind of people." | "Drinking since I landed. Wherever he's headed, he won't be thirsty." |
+| `egypt.donkey.look` | "A donkey with three water jars. Low mileage, runs on hay, never needs a jump." | "A donkey. Low mileage, runs on hay, and has never once needed a jump." (the painter took the third jar away) |
+| `egypt.donkey.look2` | "Donkey the donkey. These are my kind of people." | "He's been drinking since I landed. Wherever he's headed, he won't get there thirsty." |
 | `egypt.abram.4` | "I'd give a lot to go and shake that man's hand." | "I'd give a lot to go and shake your uncle's hand." (said to Lot) |
-| `egypt.site.water.look` | "...The old man's delivery. He's the only one here on schedule." | "Water jars, carried up from the river. I get winded with a cooler." |
+| `egypt.site.water.look` | "...The old man's delivery. He's the only one here on schedule." | "Water jars, every one carried up from the river. I get winded carrying a cooler to the car." |
 | `egypt.scribe.news.3` | "Abram. That rings a bell." | "Abram. I've met his nephew." |
 | `egypt.scribe.news.6` | "...Sheep, oxen, asses, servants. All out of my stores." | "Sheep, oxen, asses, camels. The king's gifts, all through my accounts." |
 | `egypt.scribe.news.9` | "This morning, in a hurry, ..." | "Today, with the king's men. How do you know? It is written nowhere." |
@@ -1405,7 +1405,7 @@ right one; Mom's piano at home; where the flashlight is; and the last hint in hi
 | Line | Who | Was | Is | Why |
 | --- | --- | --- | --- | --- |
 | `egypt.reeds.basket.1` | Dad | "Moses' mother put him in a basket. '...and she laid it in the flags by the river's brink.' Exodus 2:3." | "Moses' mother put him in a basket. '...and she laid it in the flags by the river's brink.'" | reference aloud |
-| `egypt.reeds.basket.3` | Dad | "Flags are reeds. So I looked. No basket. Moses isn't born yet." | "Flags are reeds. So I looked. No basket. I'm early." | running gag ("I'm early, or I'm late" settled in two words; Little Sister's "Daddy's EARLY" in Act Four) |
+| `egypt.reeds.basket.3` | Dad | "Flags are reeds. So I looked. No basket. Moses isn't born yet." | "Flags are reeds, so naturally I looked. No basket. I'm early. I'm very early." | running gag ("I'm early, or I'm late" settled in two words; Little Sister's "Daddy's EARLY" in Act Four) |
 | `egypt.river.after.2` | Dad | "Joseph's still to come. Sold here, and ends up running it. Then Moses." | "Joseph's still to come, and Moses after him. Most of the book hasn't happened yet." | a list of Bible facts made his own (and a joke) |
 | `egypt.pyramids.look3` | Dad | "I wonder who in my Bible stood right here and looked at those. And whether he's been by yet." | "I wonder who's stood right here and looked at those. Abraham, maybe. Or not yet." | shorter; a wonder, not a lesson ("my Bible" four times in a minute) |
 | `egypt.abram.1` | Dad | "I'm standing in Genesis 12. Now I know when I am." | "Abram. Egypt. A famine. ...I'm standing in Genesis. Now I know when I am." | reference aloud (the chapter number); the penny dropping, as it drops |
@@ -1422,7 +1422,7 @@ right one; Mom's piano at home; where the flashlight is; and the last hint in hi
 | `egypt.gate.psalm.3b` | Dad | "And Moses isn't even born yet. I've finally got the tenses worked out." | "And he isn't even born yet. I've finally got the tenses worked out." | shorter (Moses is named in the line before it now) |
 | `egypt.lot.ask.news` | Dad | "Anything I should know before I go up?" | "Anything I should know before I go up? And this isn't me asking for directions." | running gag (he has never asked for directions) |
 | `egypt.overseer.hum.3` | Dad | "They've got you there." | "They've got you there. I'd have said it was the wind." | running gag (everything he cannot explain is the wind) |
-| `egypt.haulers.sand.2` | Dad | "That's good. I'm trying that on the driveway." | "Huh. Next time we move the piano, I'm bringing a bucket." | funnier (Mom's piano, at home) |
+| `egypt.haulers.sand.2` | Dad | "That's good. I'm trying that on the driveway." | "Noted. Next time we move the piano, I'm bringing a bucket." | funnier (Mom's piano, at home) |
 | `egypt.shade.try.1` | Dad | "There. Sunlight, straight up into the doorway." | "There. Sunlight, straight up into the doorway. Hold your applause." | a wrong foot that pays (the next line: "And it stops when I let go.") |
 | `egypt.trunk.rest` | Dad | "A lawn chair, jumper cables and the windshield shade. All fine where they are." | "A lawn chair, jumper cables and the windshield shade. Nothing I need. Yet." | funnier (and the shade is planted) |
 | `egypt.site.entrance.look2` | Dad | "The way in. Up there a wall is humming a tune only my family knows." | "The way in. Up there a wall is humming. If I know my son, he went to say hello." | truer (the old line was a puzzle of its own; "It's how he says hello" comes round once more) |
@@ -1518,7 +1518,7 @@ the gum under his seat, the drawing in the visor and the owner's manual.
 | "Not yet." | The scribe's news ("It is written nowhere.") | The Son's tag in Rome |
 | "The sky is doing the thing my slushie does." "Weather. Probably." <!-- CAR-13W --> | The opening (`intro.3`, `.4`), in the car on the road | The car's inside, the slushie in its holder: "I said weather. I stand by weather." |
 | Half a pack of gum under the Son's seat: "That's a problem for later." <!-- CAR-13W --> | The car's inside | Act Two: the Son's half of the pack ("Half a pack. The rest is under the car seat. A problem for later. Or earlier.") |
-| Little Sister's drawing in the visor: the five of them, the wagon, the General on the roof, "She drew me the biggest." <!-- CAR-13W --> | The car's inside, behind the sun visor | Act Three: the first drawing, on her wall at home ("She drew your father the biggest. He was so pleased.") |
+| Little Sister's drawing in the visor: the five of them, the wagon, the General on the roof, "She drew me the biggest." <!-- CAR-13W --> | The car's inside, behind the sun visor | Act Three: the first drawing, on her wall at home ("She drew your father the biggest of any of us. He was more pleased than a grown man has any right to be.") |
 | "A musical my wife taped off the radio" <!-- CAR-13W --> | The car's inside, the tape in the deck | Act Three: Mom winds a cassette with a pencil ("I taped whole musicals off the radio on these.") |
 
 ## Where the scripts differ from the design, and why
