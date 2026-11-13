@@ -957,4 +957,9 @@ export const lines = {
   // ---- SCENES-21A: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
   // SCENES-21A: O-Masa asked properly, dressed and fed, before they have tried the road west (round twenty-one: #25 after #24)
   "edo.masa.notroad": ["masa", "Walk up that road first. He will say you could have walked. Then ask me."],
+  // ---- TALK-24 (10 November: "way too many dialogue choices in Japan"): the topics a talk's questions are gathered under ----
+  "edo.gonroku.topic.case": ["bigsis", "We have more arguments. I have numbered them."],
+  "edo.masa.topic.husband": ["mom", "May I ask about your husband, and his boat?"],
+  "edo.masa.topic.chat": ["lilsis", "Can I ask about your net? And other things?"],
+  "edo.tami.topic.asks.lil": ["lilsis", "I have three questions. They're IMPORTANT."],
 };

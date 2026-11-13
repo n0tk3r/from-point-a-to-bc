@@ -69,6 +69,8 @@
 // wrong), CLIMB (the stairs, floor by floor), the cards' and the step's line lists for SCENES-20, and `trees`, every tree by
 // name, for the tests. S/work-20-writeB/ids.md says when each line is said.
 
+import { topic, back } from "./topics.js";      // TALK-24: topics, and the way back out of one
+
 const who = (g) => g.store.data.active;
 const is = (g, fact) => !!g.flag(fact);
 const run = async (g, hook) => { if (typeof hook === "function") await hook(g); };
@@ -111,16 +113,30 @@ export const roomTree = (h = {}) => {
       prayed: { say: ["edo.chapel.pray.lilsis", "edo.chapel.pray.sei", "edo.chapel.pray.bigsis", "edo.chapel.pray.mom", "edo.chapel.pray.open", "edo.chapel.pray.open.2", "edo.chapel.pray.open.3"], then: opened },
       altar: { say: ["edo.chapel.open.1", "edo.chapel.open.2", "edo.chapel.open.3"], then: "asked" },
       // the altar open: what each thing is, and the one line about Osaka; then the verse, which ends the evening
+      // TALK-24: the things they keep (the calendar, the water, the words, O-Rin's prayers) are one topic, how they came to be
+      // under a storehouse another; the verse stays on the menu by itself
       asked: {
+        options: [
+          topic("keep", "edo.chapel.sei.topic.keep", "keep"),
+          topic("why", "edo.chapel.sei.topic.why", "why"),
+          { id: "verse", line: "edo.chapel.sei.opt.verse", say: ["edo.chapel.verse.ask", "edo.chapel.verse.mom", "edo.chapel.verse.again", "edo.chapel.verse.mom", "edo.chapel.verse.sei", "edo.chapel.verse.after.1", "edo.chapel.verse.after.2"],
+            set: "edo.verse", then: "laugh" },
+        ],
+      },
+      keep: {
         options: [
           { id: "calendar", line: "edo.chapel.sei.opt.calendar", once: true, say: ["edo.chapel.sei.calendar.1", "edo.chapel.sei.calendar.2"] },
           { id: "water", line: "edo.chapel.sei.opt.water", once: true, say: ["edo.chapel.sei.water.1", "edo.chapel.sei.water.2", "edo.chapel.sei.water.3"] },
           { id: "priest", line: "edo.chapel.sei.opt.priest", once: true, say: ["edo.chapel.sei.priest.1", "edo.chapel.sei.priest.2", "edo.chapel.sei.priest.3", "edo.chapel.sei.priest.4"] },
+          { id: "orin", line: "edo.chapel.sei.opt.orin", once: true, say: ["edo.chapel.sei.orin.1", "edo.chapel.sei.orin.2", "edo.chapel.sei.orin.3"] },
+          back("keep"),
+        ],
+      },
+      why: {
+        options: [
           { id: "osaka", line: "edo.chapel.sei.opt.osaka", once: true, say: ["edo.chapel.sei.osaka.1", "edo.chapel.sei.osaka.2", "edo.chapel.sei.osaka.3"] },
           { id: "plan", line: "edo.chapel.sei.opt.plan", once: true, say: ["edo.chapel.sei.plan.1", "edo.chapel.sei.plan.2", "edo.chapel.sei.plan.3"] },
-          { id: "orin", line: "edo.chapel.sei.opt.orin", once: true, say: ["edo.chapel.sei.orin.1", "edo.chapel.sei.orin.2", "edo.chapel.sei.orin.3"] },
-          { id: "verse", line: "edo.chapel.sei.opt.verse", say: ["edo.chapel.verse.ask", "edo.chapel.verse.mom", "edo.chapel.verse.again", "edo.chapel.verse.mom", "edo.chapel.verse.sei", "edo.chapel.verse.after.1", "edo.chapel.verse.after.2"],
-            set: "edo.verse", then: "laugh" },
+          back("why"),
         ],
       },
       // the first laugh in the room: O-Rin, out loud, once, and her hand over her mouth; then the night

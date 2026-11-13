@@ -39,7 +39,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # The pages that load game files.
-PAGES = ["index.html", "tools/storyboard.html", "tools/sprites.html"]
+PAGES = ["index.html", "tools/storyboard.html", "tools/sprites.html", "tools/music.html"]      # (MUSIC-24: the music page)
 
 OPEN = "<!-- files: written by tools/stamp.py. Each address changes when its file changes, so a browser cannot mix old files with new. -->"
 CLOSE = "<!-- /files -->"

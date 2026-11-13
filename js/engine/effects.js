@@ -3771,7 +3771,9 @@ class Slide extends Effect {
  * or the names of the scene's marks: ["courierFrom", "courierTo"]; from off the picture to off it, or from mark to mark),
  * every `every` seconds ([20, 40]), back the other way the next time (`both`: true), at `pace` px a second at full size (the
  * kind's own walk; `run: true`, half as fast again), sized and sorted by his feet as anyone is (behind a cut-out whose base is
- * nearer). `behind`: shapes he is not drawn in (the teahouse's eaves); `area`: the id of one of the scene's clickable areas,
+ * nearer). PEOPLE-24 (the author, 10 November: "the villagers walking past the girls are animated too quickly"): his speed on
+ * the picture goes with his size, as anyone's walk does (far off, fewer pixels a second), and his legs keep one rate all the
+ * way: they had gone the same pixels a second near and far, so far up Yui's street his legs went round three times as fast. `behind`: shapes he is not drawn in (the teahouse's eaves); `area`: the id of one of the scene's clickable areas,
  * which goes with him while he is seen (so a scene can let him be looked at) and is not there while he is not. `on` says
  * whether he is passing now. The game clock, seeded, hushed under a line as a bird is; for less motion at half the pace.
  */
@@ -3794,6 +3796,18 @@ class Passer extends Effect {
     this.fig.hidden = true;
     const pace = num(s.pace, (this.fig.spec.pace || 155) * (s.run ? 1.6 : 1));
     this.pace = pace;
+    // PEOPLE-24: the way in steps of 4 px, each with the time it takes at his speed there (his pace times his size: never below
+    // a quarter, or a far stretch would crawl) and the turns of his legs it takes (a stride, sized): `at` is how far, `tAt` how
+    // long, `cAt` how many turns, from the path's start; a trip the other way reads them from its end
+    this.at = [0]; this.tAt = [0]; this.cAt = [0];
+    const step = 4, speed = Math.max(1, pace * 0.75), stride = Math.max(1, this.fig.stride || 80);
+    for (let d = step; d < this.len + step; d += step) {
+      const e = Math.min(d, this.len), ds = e - this.at[this.at.length - 1], y = this.along((this.at[this.at.length - 1] + e) / 2)[1];
+      const k = scaleAt(sc, y);
+      this.at.push(e); this.tAt.push(this.tAt[this.tAt.length - 1] + ds / (speed * Math.max(0.25, k))); this.cAt.push(this.cAt[this.cAt.length - 1] + ds / (stride * Math.max(0.05, k)));
+      if (e >= this.len) break;
+    }
+    this.dur = this.tAt[this.tAt.length - 1];
     this.sprites.push(this.fig);
     this.slow = 0.5;
     this.behindPolys = polysOf(s.behind);
@@ -3820,7 +3834,7 @@ class Passer extends Effect {
       const c = this.trips.length, prev = c ? this.trips[c - 1] : null;
       const start = (prev ? prev.start + prev.dur : 0) + Math.max(1, within(this.every, rnd(this.seed, c, 1)));
       const back = this.both && (prev ? !prev.back : rnd(this.seed, c, 2) < 0.5);
-      this.trips.push({ start, back, dur: this.len / Math.max(1, this.pace * 0.75) });
+      this.trips.push({ start, back, dur: this.dur });                // (PEOPLE-24: the time the way takes at his speed, near and far)
     }
   }
   /** The point at s along the path, and which way it runs there. */
@@ -3840,14 +3854,28 @@ class Passer extends Effect {
     this.on = !!trip;
     if (!trip) { fig.hidden = true; fig.walking = false; this.follow(); return; }
     fig.hidden = false; fig.walking = true;
-    // along the path at his pace, sized by the depth where his feet are (faster near, slower far, as a walk is)
-    const d = clamp((t - trip.start) / trip.dur) * this.len, s = trip.back ? this.len - d : d;
-    const [x, y, dx, dy] = this.along(s), scale = scaleAt(sc, y);
+    // along the path at his pace, sized by the depth where his feet are (faster near, slower far, as a walk is: PEOPLE-24)
+    const u = clamp((t - trip.start) / trip.dur) * this.dur, s = this.where(trip.back ? this.dur - u : u);
+    const [x, y, dx, dy] = this.along(s), scale = scaleAt(sc, y), turns = this.turnsAt(s);
     fig.place(x, y, scale);
     fig.head(trip.back ? -dx : dx, trip.back ? -dy : dy, true);
-    fig.phase = ((d / Math.max(1, fig.stride * Math.max(0.3, scale))) % 1 + 1) % 1;
+    fig.phase = (((trip.back ? this.cAt[this.cAt.length - 1] - turns : turns) % 1) + 1) % 1;
     this.drawn = 1;
     if (was !== this.on || this.on) this.follow();
+  }
+  /** PEOPLE-24: how far along the path he is (px from its start) when `time` seconds of his walk from its start have gone. */
+  where(time) {
+    const T = this.tAt, A = this.at;
+    let lo = 0, hi = T.length - 1;
+    if (time <= 0) return 0;
+    if (time >= T[hi]) return A[hi];
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (T[mid] <= time) lo = mid; else hi = mid; }
+    return A[lo] + (A[hi] - A[lo]) * ((time - T[lo]) / Math.max(1e-9, T[hi] - T[lo]));
+  }
+  /** PEOPLE-24: the turns of his legs from the path's start to `s` px along it. */
+  turnsAt(s) {
+    const A = this.at, C = this.cAt, i = Math.min(A.length - 1, Math.max(1, Math.ceil(s / 4)));
+    return C[i - 1] + (C[i] - C[i - 1]) * clamp((s - A[i - 1]) / Math.max(1e-9, A[i] - A[i - 1]));
   }
   reveal(on) { if (!on) { this.fig.hidden = true; this.on = false; this.follow(); } }
   restart() { this.trips = []; }

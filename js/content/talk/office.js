@@ -52,6 +52,8 @@
 // nowAndThen (what each place says by itself, by scene id) and paNowAndThen (Houston, now and then). S/work-17-write/ids.md
 // says when each line is said.
 
+import { topic, back } from "./topics.js";      // TALK-24: topics, and the way back out of one
+
 const is = (g, fact) => !!g.flag(fact);
 const heat = (g) => Number(g.flag("office.heat")) || 72;
 const cool = (g) => heat(g) < 77;
@@ -79,16 +81,20 @@ const RECEIPT = ["office.iv.q6.receipt.1", "office.iv.q6.receipt.2", "office.iv.
 const ROUND = ["office.iv.m5.a", "office.iv.m5.next.1", "office.iv.m5.next.2"];
 
 export const interviewTree = (h = {}) => {
-  // what he can say at any question: the lever (hot), its warning (warm), the green page, going home, and a minute's rest
-  const common = [
+  // what he can say at any question: the lever (hot), its warning (warm), the green page, going home, and a minute's rest.
+  // TALK-24: all but the minute's rest are a topic of their own, his aside ("Before I answer that, fellas..."), so that a
+  // question shows its answers, the aside and the rest; Merle and Dale wait, and he answers when he comes back.
+  const remarks = [
     { id: "hot", line: "office.iv.opt.hot", when: hot, say: SUSPEND, set: "office.alone", do: h.suspend, then: "exit" },
     { id: "warm", clue: true, line: "office.iv.opt.warm", when: warm, do: h.mop,
       say: { 1: ["office.room.thermostat.77.suits.1", "office.room.thermostat.77.suits.2", "office.room.thermostat.77.suits.3"], more: ["office.iv.warm.again"] } },
     { id: "greenpage", line: "office.iv.opt.greenpage", once: true, when: (g) => is(g, "office.lamplighter"), say: ["office.iv.green.1", "office.iv.green.2"] },
     { id: "leave", line: "office.iv.opt.leave", say: { 1: ["office.iv.leave.1", "office.iv.leave.2", "office.iv.leave.3"], more: ["office.iv.leave.again.1", "office.iv.leave.again.2"] } },
-    { id: "pause", line: "office.iv.opt.pause", say: ["office.iv.pause"], then: "exit" },
   ];
-  const ask = (say, options) => ({ say, options: [...options, ...common] });
+  const pause = { id: "pause", line: "office.iv.opt.pause", say: ["office.iv.pause"], then: "exit" };
+  const aside = topic("aside", "office.iv.topic.aside", "aside");
+  const common = [aside, pause];
+  const ask = (say, options, more = common) => ({ say, options: [...options, ...more] });
   return {
     id: "interview",
     start: (g) => (is(g, "office.alone") ? "gone" : is(g, "office.ivBegun") ? "again" : "open"),
@@ -122,8 +128,13 @@ export const interviewTree = (h = {}) => {
         { id: "wagon", keep: true, line: "office.iv.opt.wagon", say: ["office.iv.q3.wagon.1", "office.iv.q3.wagon.2", "office.iv.q3.wagon.3", "office.iv.q3.wagon.4"], then: to(3) },
         { id: "sector", keep: true, line: "office.iv.opt.sector", say: ["office.iv.q3.sector.1", "office.iv.q3.sector.2", "office.iv.q3.sector.3", "office.iv.q3.sector.4"], then: to(3) },
         { id: "opal", keep: true, line: "office.iv.opt.opal", say: ["office.iv.q3.opal.1", "office.iv.q3.opal.2", "office.iv.q3.opal.3"], then: to(3) },
+      ], [topic("asideQ3", "office.iv.topic.aside", "asideQ3"), pause]),
+      // TALK-24: his aside, at any question (and at the third, the minute it happened, too)
+      aside: { options: [...remarks, back("aside", "office.iv.back")] },
+      asideQ3: { options: [
         { id: "minute", line: "office.iv.opt.minute", once: true, say: ["office.iv.q3.minute.1", "office.iv.q3.minute.2", "office.iv.q3.minute.3"] },
-      ]),
+        ...remarks, back("asideQ3", "office.iv.back"),
+      ] },
 
       // page two: the raccoon, who is not on the form, except on this one
       q4: ask(["office.iv.q4.page", "office.iv.sorry", "office.iv.q4"], [
@@ -187,6 +198,17 @@ export const ventTree = (h = {}) => {
     nodes: {
       meet: { say: ["office.vent.meet.1", "office.vent.meet.ranger", "office.vent.meet.joe"], then: (g) => { g.flag("office.metAtVent", true); return "talk"; } },
       talk: {
+        // TALK-24: three topics, the banjo (#18), food (#19) and the two of them; the way down (#20) and goodbye on their own
+        options: [
+          topic("banjoTalk", "office.vent.topic.banjo", "banjoTalk"),
+          topic("food", "office.vent.topic.food", "food"),
+          // #20: the way down, once the schedule is read
+          { id: "down", clue: true, line: "office.vent.opt.down", when: (g) => is(g, "office.schedule"), say: ["office.vent.down.ranger", "office.vent.down.joe.1", "office.vent.down.joe.2"] },
+          topic("partners", "office.vent.topic.partners", "partners"),
+          { id: "bye", line: "office.vent.opt.bye", say: ["office.vent.bye.ranger"], then: "exit" },
+        ],
+      },
+      banjoTalk: {
         options: [
           // #18: the banjo, and why; then the receipt, up through the slats
           { id: "banjo", clue: true, line: "office.vent.opt.banjo", when: (g) => !is(g, "office.banjoBack") && !is(g, "office.receiptUp"),
@@ -195,20 +217,28 @@ export const ventTree = (h = {}) => {
             then: (g) => (is(g, "office.sawProperty") ? "receiptKnown" : "receiptTell") },
           { id: "seenbanjo", clue: true, line: "office.vent.opt.seenbanjo", when: (g) => is(g, "office.sawProperty") && !is(g, "office.banjoBack"),
             say: ["office.vent.seenbanjo.ranger", "office.vent.seenbanjo.joe"] },
+          { id: "head", clue: true, line: "office.vent.opt.head", when: (g) => is(g, "office.banjoBack") && !is(g, "office.tinClean") && !g.has("pietin"),
+            say: ["office.vent.head.1"], then: (g) => (is(g, "office.sawBreak") ? "headKnown" : "headLook") },
+          back("banjoTalk", "talk.back.grandpajoe"),
+        ],
+      },
+      food: {
+        options: [
           // #19: a pie, and who is watching it
           { id: "eat", clue: true, line: "office.vent.opt.eat", when: (g) => is(g, "office.sawBreak") && !is(g, "office.pieEaten"),
             say: ["office.vent.eat.ranger", "office.vent.eat.joe"], then: (g) => (is(g, "office.jedGone") ? null : "jed") },
-          { id: "head", clue: true, line: "office.vent.opt.head", when: (g) => is(g, "office.banjoBack") && !is(g, "office.tinClean") && !g.has("pietin"),
-            say: ["office.vent.head.1"], then: (g) => (is(g, "office.sawBreak") ? "headKnown" : "headLook") },
           { id: "jed", clue: true, line: "office.vent.opt.jed", when: (g) => is(g, "office.jedTold") && !is(g, "office.jedGone"),
             say: ["office.vent.jedplan.ranger", "office.vent.jedplan.joe.1", "office.vent.jedplan.joe.2"] },
           { id: "trade", line: "office.vent.opt.trade", once: true, when: (g) => is(g, "office.pieEaten"), say: ["office.vent.trade.ranger", "office.vent.trade.joe"] },
-          // #20: the way down, once the schedule is read
-          { id: "down", clue: true, line: "office.vent.opt.down", when: (g) => is(g, "office.schedule"), say: ["office.vent.down.ranger", "office.vent.down.joe.1", "office.vent.down.joe.2"] },
+          back("food", "talk.back.grandpajoe"),
+        ],
+      },
+      partners: {
+        options: [
           // and the two of them
           { id: "promise", line: "office.vent.opt.promise", once: true, say: ["office.vent.promise.ranger", "office.vent.promise.joe"] },
           { id: "jolene", line: "office.vent.opt.jolene", say: { 1: ["office.vent.jolene.ranger", "office.vent.jolene.joe"], more: ["office.vent.jolene.2.ranger", "office.vent.jolene.2.joe"] } },
-          { id: "bye", line: "office.vent.opt.bye", say: ["office.vent.bye.ranger"], then: "exit" },
+          back("partners", "talk.back.grandpajoe"),
         ],
       },
       receiptTell: { say: ["office.vent.receipt.1", "office.vent.receipt.ranger", "office.vent.receipt.joe", "office.vent.receipt.up"], then: up },
@@ -260,11 +290,17 @@ export const opalTree = (h = {}) => ({
     chat: {
       options: [
         { id: "damage", line: "office.opal.opt.damage", once: true, say: ["office.opal.damage.1", "office.opal.damage.2"] },
+        topic("office", "office.opal.topic.office", "office"),      // TALK-24: Jed, the sandal, Lamplighter
+        { id: "door", line: "office.opal.opt.door", once: true, say: ["office.opal.door.1", "office.opal.door.2", "office.opal.door.3"] },
+        { id: "thanks", line: "office.opal.opt.thanks", say: ["office.opal.thanks"], then: async (g) => { if (h.leave) await h.leave(g); return "gone"; } },
+      ],
+    },
+    office: {
+      options: [
         { id: "jed", line: "office.opal.opt.jed", once: true, say: ["office.opal.jed.1", "office.opal.jed.2"] },
         { id: "sandal", line: "office.opal.opt.sandal", once: true, say: ["office.opal.sandal.1", "office.opal.sandal.2", "office.opal.sandal.3"] },
         { id: "lamp", line: "office.opal.opt.lamp", once: true, when: (g) => is(g, "office.lamplighter"), say: ["office.opal.lamp.1", "office.opal.lamp.2"] },
-        { id: "door", line: "office.opal.opt.door", once: true, say: ["office.opal.door.1", "office.opal.door.2", "office.opal.door.3"] },
-        { id: "thanks", line: "office.opal.opt.thanks", say: ["office.opal.thanks"], then: async (g) => { if (h.leave) await h.leave(g); return "gone"; } },
+        back("office", "talk.back.grandpajoe"),
       ],
     },
     gone: { say: ["office.opal.lock"], then: async (g) => { if (h.gone) await h.gone(g); return "exit"; } },
@@ -286,17 +322,23 @@ export const intercomTree = (h = {}) => ({
     talk: {
       options: [
         { id: "joe", line: "office.intercom.opt.joe", say: { 1: ["office.intercom.joe.1"], 2: ["office.intercom.joe.2"], more: ["office.intercom.joe.3"] } },
-        { id: "name", line: "office.intercom.opt.name", once: true, when: (g) => g.asked("intercom/joe") > 0, say: ["office.intercom.name.1", "office.intercom.name.2"] },
-        { id: "out", line: "office.intercom.opt.out", say: ["office.intercom.out"] },
-        { id: "air", clue: true, line: "office.intercom.opt.air", when: (g) => is(g, "office.acOff"), say: ["office.intercom.air.1", "office.intercom.air.2"] },
         { id: "burger", clue: true, line: "office.intercom.opt.burger", say: { 1: ["office.intercom.burger.1"], more: ["office.intercom.burger.2"] } },
         // the lever: on Jed's behalf, and true (Jed said so himself, in the limousine)
         { id: "behalf", line: "office.intercom.opt.behalf", when: (g) => is(g, "office.banjoBack") && is(g, "office.jedTold") && !is(g, "office.jedGone"),
           say: ["office.intercom.behalf.1", "office.intercom.behalf.2"], do: h.burger, then: (g) => { g.flag("office.jedGone", true); return "behalf"; } },
         { id: "howjed", line: "office.intercom.opt.howjed", once: true, when: (g) => is(g, "office.jedGone"), say: ["office.intercom.howjed"] },
+        topic("more", "office.intercom.topic.more", "more"),      // TALK-24: his name, the door, the air, Lamplighter, B-7
+        { id: "bye", line: "office.intercom.opt.bye", say: ["office.intercom.bye"], do: h.release, then: "exit" },
+      ],
+    },
+    more: {
+      options: [
+        { id: "name", line: "office.intercom.opt.name", once: true, when: (g) => g.asked("intercom/joe") > 0, say: ["office.intercom.name.1", "office.intercom.name.2"] },
+        { id: "out", line: "office.intercom.opt.out", say: ["office.intercom.out"] },
+        { id: "air", clue: true, line: "office.intercom.opt.air", when: (g) => is(g, "office.acOff"), say: ["office.intercom.air.1", "office.intercom.air.2"] },
         { id: "lamp", line: "office.intercom.opt.lamp", when: (g) => is(g, "office.lamplighter"), say: ["office.intercom.lamp"] },
         { id: "b7", line: "office.intercom.opt.b7", when: (g) => is(g, "office.schedule"), say: ["office.intercom.b7.1", "office.intercom.b7.2", "office.intercom.b7.3"] },
-        { id: "bye", line: "office.intercom.opt.bye", say: ["office.intercom.bye"], do: h.release, then: "exit" },
+        back("more", "talk.back.grandpajoe"),
       ],
     },
     behalf: { say: ["office.intercom.behalf.3", "office.intercom.behalf.4"], then: "talk" },
@@ -322,7 +364,9 @@ export const ragTree = (h = {}) => {
     nodes: {
       door: { say: ["office.rag.door.1", "office.rag.door.2", "office.rag.door.3"], then: (g) => (is(g, "office.schedule") ? "know" : "early") },
       early: { options: [medical, twice, home, stop] },
-      know: { options: [medical, twice, lamp, somewhere, home, stop] },
+      // TALK-24: once he has read the schedule, the Rag twice, Lamplighter and home are a topic ("Let me tell you boys somethin'.")
+      know: { options: [medical, somewhere, topic("tell", "office.rag.topic.tell", "tell"), stop] },
+      tell: { options: [twice, lamp, home, back("tell", "talk.back.grandpajoe")] },
       birthday: { say: ["office.rag.lever.3", "office.rag.lever.4"], then: async (g) => { g.flag("office.down", true); if (h.down) await h.down(g); return "exit"; } },
     },
   };

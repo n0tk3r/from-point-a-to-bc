@@ -5,6 +5,10 @@ reference/
 # Previews the Claude app saves into this folder. They are not part of the game.
 Claude outputs/
 
+# MUSIC-24: the music's masters (WAVs and their text files): big, and not served by the game.
+# tools/music/add_music.py makes audio/music/ and js/content/music-files.js from them; keep them backed up.
+music-src/
+
 # What Python leaves beside the tools when they run
 __pycache__/
 *.pyc

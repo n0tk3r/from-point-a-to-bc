@@ -1,22 +1,36 @@
 // The sound list: every piece of music, every effect and every recorded line.
 //
-// MUSIC. Each era has a theme. Right now each theme is a short pattern that the
-// engine plays on a synthesizer, so the game has sound before any music is written.
-// To use a real recording, add a `src` to the track:
+// MUSIC. Each era has a theme, and some places have their own. Each theme below is a short
+// pattern that the engine plays on a synthesizer, so the game has music before any is recorded.
 //
-//     egypt: { src: "audio/music/egypt.{ext}", volume: 0.8 },
+// MUSIC-24: RECORDED MUSIC. A recording is not written here. Its master (a WAV from any music
+// program) and a small text file saying where it loops go in music-src/ (kept out of git), and
 //
-// {ext} becomes the first type in `formats` that the player's browser can play.
-// MP3 plays everywhere, so that is the only type listed. Opus files are smaller: if
-// you export EVERY track and voice line as .opus as well, change this to
-// ["opus", "mp3"]. A listed type with a missing file is a silent track.
+//     python3 tools/music/add_music.py
+//
+// makes audio/music/<name>.webm and .m4a and the list js/content/music-files.js, which is read
+// below (audio/README.md says it all). A recording named after a theme here (egypt.wav) takes its
+// place in every scene that plays it; one with `scenes:` in its text file plays in those scenes.
+// A theme with no recording keeps its pattern, so the two can be mixed while music is written.
+// (The old way, a `src` on a track here, still works: the file is streamed and loops whole.)
 //
 // VOICES. To make a line "talkie", record it, save it as
 // audio/voice/en/<line id>.mp3 (for example audio/voice/en/egypt.river.look.mp3)
 // and add the line ID to `voices` below. Lines without a recording keep showing as text.
+// MP3 plays everywhere, so `formats` (for voices) lists only it.
+
+import { MUSIC_FILES, MUSIC_SCENES } from "./music-files.js";
 
 export const sound = {
   formats: ["mp3"],
+  // MUSIC-24: recorded music (tools/music/add_music.py writes the list): the copies a browser is offered, in order (Opus in
+  // WebM, then AAC for the browsers that cannot decode it); and how loud a recording plays. The tool sets every master to
+  // the same loudness (-18 LUFS); 0.45 (about -7 dB) puts it beside the synthesized themes and the effects (-23 to -25 LUFS
+  // on the music slider at full, as measured on 10 November 2026). A track's own `volume` (its text file) is on top of this.
+  musicFormats: ["webm", "m4a"],
+  recordedLevel: 0.45,
+  files: MUSIC_FILES,           // name -> the recording: its files, length, loop points, volume, fade
+  sceneMusic: MUSIC_SCENES,     // scene id -> the recording made for it
   voicePath: "audio/voice/en/",
   voices: new Set([
     // "intro.1", "intro.2", ...

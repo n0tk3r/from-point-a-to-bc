@@ -1379,4 +1379,7 @@ export const lines = {
   "hint.edo.mirror.lilsis.6": ["lilsis", "We're going to the CASTLE. Up the ladder first, then lots and lots of walking."],
   // ---- SCENES-21B: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
   // ---- SCENES-21C: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
+  // ---- TALK-24 (10 November: "way too many dialogue choices in Japan"): the topics a talk's questions are gathered under ----
+  "edo.chapel.sei.topic.keep": ["mom", "May I ask about the things you keep down here?"],
+  "edo.chapel.sei.topic.why": ["mom", "May I ask how you came to live under a storehouse?"],
 };

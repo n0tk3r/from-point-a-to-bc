@@ -61,6 +61,8 @@
 // (Little Sister has seen the hens face west), edo.when (#21). And g.has("pennies") (the one talking has them),
 // g.asked("<tree>/<option>"). S/work-20-writeA/ids.md says when each line is said.
 
+import { topic, back } from "./topics.js";      // TALK-24: topics, and the way back out of one
+
 const who = (g) => g.store.data.active;
 const is = (g, fact) => !!g.flag(fact);
 const lead = (g) => (["mom", "bigsis", "lilsis"].includes(who(g)) ? who(g) : "mom");
@@ -108,16 +110,23 @@ export const tamiTree = (h = {}) => {
           { id: "byeBig", line: "edo.tami.opt.bye.big", say: ["edo.tami.bye.big"], then: "exit" },
         ],
       },
+      // TALK-24: Little Sister's three questions (the red, the clerk, the sushi) are a topic of her own
       lil: {
         options: [
           clothesNo("clothesLil", "edo.tami.opt.clothes.lil", ["edo.tami.clothes.no.lil", "edo.tami.clothes.no.2"]),
           clothesYes("dressLil", "edo.tami.opt.clothes.lil"),
           clothesDone("dressedLil", "edo.tami.opt.clothes.lil"),
           { id: "babyLil", line: "edo.tami.opt.baby.lil", once: true, when: (g) => !is(g, "edo.babySleeps"), say: ["edo.tami.baby.lil", "edo.tami.baby.lil.2"] },
+          topic("asksLil", "edo.tami.topic.asks.lil", "asksLil"),
+          { id: "byeLil", line: "edo.tami.opt.bye.lil", say: ["edo.tami.bye.lil"], then: "exit" },
+        ],
+      },
+      asksLil: {
+        options: [
           red("redLil", "edo.tami.opt.red.lil"),
           clerk("clerkLil", "edo.tami.opt.clerk.lil", ["edo.tami.clerk.1", "edo.tami.clerk.lil"]),
           { id: "sushiLil", line: "edo.tami.opt.sushi.lil", clue: true, when: (g) => !is(g, "edo.fed"), say: ["edo.tami.sushi.lil"] },
-          { id: "byeLil", line: "edo.tami.opt.bye.lil", say: ["edo.tami.bye.lil"], then: "exit" },
+          back("asksLil"),
         ],
       },
       // asleep, in the middle of a sentence; O-Tami looks at Mom as at a sorceress, and remembers the chest
@@ -317,20 +326,27 @@ export const gonrokuTree = (h = {}) => ({
   start: (g) => (is(g, "edo.west") ? "after" : is(g, "edo.gonrokuMet") ? "talk" : "greet"),
   nodes: {
     greet: { say: ["edo.gonroku.open"], then: (g) => { g.flag("edo.gonrokuMet", true); return "talk"; } },
+    // TALK-24: the five arguments are a topic of their own (Big Sister has numbered them); the goodbye is the one being played's
     talk: {
       options: [
         { id: "passage", line: "edo.gonroku.opt.passage.mom", clue: true, say: ["edo.gonroku.no.1", "edo.gonroku.no.2", "edo.gonroku.no.3"], set: "edo.gonrokuNo" },
+        { id: "where", line: "edo.gonroku.opt.where.mom", clue: true, say: ["edo.gonroku.where"] },
+        topic("case", "edo.gonroku.topic.case", "case"),
+        // the clue: his wife, at the nets, and how to ask her
+        { id: "wife", line: "edo.gonroku.opt.wife.mom", clue: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.wife"], set: "edo.gonrokuWife" },
+        { id: "byeMom", line: "edo.gonroku.opt.bye.mom", when: (g) => who(g) !== "bigsis" && who(g) !== "lilsis", say: ["edo.gonroku.bye.mom"], then: "exit" },
+        { id: "byeBig", line: "edo.gonroku.opt.bye.big", when: (g) => who(g) === "bigsis", say: ["edo.gonroku.bye.big"], then: "exit" },
+        { id: "byeLil", line: "edo.gonroku.opt.bye.lil", when: (g) => who(g) === "lilsis", say: ["edo.gonroku.bye.lil"], then: "exit" },
+      ],
+    },
+    case: {
+      options: [
         { id: "hair", line: "edo.gonroku.opt.hair.big", once: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.hair"] },
         { id: "luck", line: "edo.gonroku.opt.luck.lil", once: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.luck"] },
         { id: "quiet", line: "edo.gonroku.opt.quiet.mom", once: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.quiet"] },
         { id: "men", line: "edo.gonroku.opt.men.big", once: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.men"] },
         { id: "stern", line: "edo.gonroku.opt.stern.lil", once: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.stern"] },
-        { id: "where", line: "edo.gonroku.opt.where.mom", clue: true, say: ["edo.gonroku.where"] },
-        // the clue: his wife, at the nets, and how to ask her
-        { id: "wife", line: "edo.gonroku.opt.wife.mom", clue: true, when: (g) => g.asked("gonroku/passage") > 0, say: ["edo.gonroku.wife"], set: "edo.gonrokuWife" },
-        { id: "byeMom", line: "edo.gonroku.opt.bye.mom", say: ["edo.gonroku.bye.mom"], then: "exit" },
-        { id: "byeBig", line: "edo.gonroku.opt.bye.big", say: ["edo.gonroku.bye.big"], then: "exit" },
-        { id: "byeLil", line: "edo.gonroku.opt.bye.lil", say: ["edo.gonroku.bye.lil"], then: "exit" },
+        back("case"),
       ],
     },
     // after O-Masa has spoken: the terms, said once more
@@ -354,15 +370,12 @@ export const masaTree = (h = {}) => ({
   start: (g) => (is(g, "edo.west") ? "after" : is(g, "edo.masaMet") ? "talk" : "greet"),
   nodes: {
     greet: { say: ["edo.masa.open"], then: (g) => { g.flag("edo.masaMet", true); return "talk"; } },
+    // TALK-24: the question properly at the top; her husband and his boat a topic (the favour there, the wrong foot that is
+    // the hint), her net and her brother another; the goodbye is the one being played's
     talk: {
       options: [
-        // the wrong foot that is the hint: a favour
-        { id: "favour", line: "edo.masa.opt.favour.mom", clue: true, say: ["edo.masa.favour"] },
-        { id: "unfair", line: "edo.masa.opt.unfair.big", once: true, say: ["edo.masa.unfair"] },
-        { id: "boss", line: "edo.masa.opt.boss.lil", once: true, say: ["edo.masa.boss"] },
-        { id: "nets", line: "edo.masa.opt.nets.lil", once: true, say: ["edo.masa.nets", "edo.masa.nets.2"] },
-        { id: "brother", line: "edo.masa.opt.brother.mom", once: true, when: (g) => is(g, "edo.fed"), say: ["edo.masa.brother"] },
-        { id: "lady", line: "edo.masa.opt.lady.big", once: true, say: ["edo.masa.lady"] },
+        topic("husband", "edo.masa.topic.husband", "husband"),
+        topic("chat", "edo.masa.topic.chat", "chat"),
         // the question, properly: her verdicts until they are ready (#22 and #23), and then the lever
         { id: "askNotDressed", line: "edo.masa.opt.ask.mom", clue: true, when: (g) => !is(g, "edo.clothes"), say: ["edo.masa.notdressed"] },
         { id: "askNotFed", line: "edo.masa.opt.ask.mom", clue: true, when: (g) => is(g, "edo.clothes") && !is(g, "edo.fed"), say: ["edo.masa.notfed"] },
@@ -370,9 +383,26 @@ export const masaTree = (h = {}) => ({
         { id: "ask", line: "edo.masa.opt.ask.mom", when: (g) => is(g, "edo.dressed") && is(g, "edo.fed"),
           say: ["edo.masa.ask.1", "edo.masa.ask.2", "edo.masa.ask.3", "edo.masa.ask.4"], set: "edo.masaAsked",
           then: async (g) => { if (h.toGonroku) await h.toGonroku(g); return "verdict"; } },
-        { id: "byeMom", line: "edo.masa.opt.bye.mom", say: ["edo.masa.bye.mom"], then: "exit" },
-        { id: "byeBig", line: "edo.masa.opt.bye.big", say: ["edo.masa.bye.big"], then: "exit" },
-        { id: "byeLil", line: "edo.masa.opt.bye.lil", say: ["edo.masa.bye.lil"], then: "exit" },
+        { id: "byeMom", line: "edo.masa.opt.bye.mom", when: (g) => who(g) !== "bigsis" && who(g) !== "lilsis", say: ["edo.masa.bye.mom"], then: "exit" },
+        { id: "byeBig", line: "edo.masa.opt.bye.big", when: (g) => who(g) === "bigsis", say: ["edo.masa.bye.big"], then: "exit" },
+        { id: "byeLil", line: "edo.masa.opt.bye.lil", when: (g) => who(g) === "lilsis", say: ["edo.masa.bye.lil"], then: "exit" },
+      ],
+    },
+    husband: {
+      options: [
+        // the wrong foot that is the hint: a favour
+        { id: "favour", line: "edo.masa.opt.favour.mom", clue: true, say: ["edo.masa.favour"] },
+        { id: "unfair", line: "edo.masa.opt.unfair.big", once: true, say: ["edo.masa.unfair"] },
+        { id: "boss", line: "edo.masa.opt.boss.lil", once: true, say: ["edo.masa.boss"] },
+        { id: "lady", line: "edo.masa.opt.lady.big", once: true, say: ["edo.masa.lady"] },
+        back("husband"),
+      ],
+    },
+    chat: {
+      options: [
+        { id: "nets", line: "edo.masa.opt.nets.lil", once: true, say: ["edo.masa.nets", "edo.masa.nets.2"] },
+        { id: "brother", line: "edo.masa.opt.brother.mom", once: true, when: (g) => is(g, "edo.fed"), say: ["edo.masa.brother"] },
+        back("chat"),
       ],
     },
     // down the beach: what the player hears the end of; Gonroku, after a long look at the sea; the terms

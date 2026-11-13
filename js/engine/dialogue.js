@@ -343,7 +343,7 @@ export class Dialogue {
   choose(options, { through = null, talk = false } = {}) {
     const g = this.g;
     let open = options.filter((o) => !o.when || o.when(g));
-    if (talk) open = open.filter((o) => o.asked != null || this.stays(o)).map((o) => (o.asked != null ? o : { ...o, asked: this.heard(o) }));      // TALK-18
+    if (talk) open = open.filter((o) => o.asked != null || this.stays(o)).map((o) => (o.asked != null ? o : { ...o, asked: Array.isArray(o.under) ? (this.news(o.under) ? 0 : 1) : this.heard(o) }));      // TALK-18 (TALK-24: a topic is new while anything in it is)
     if (g.clock.skipping || open.length === 0) return Promise.resolve(open.length ? open[open.length - 1].id : null);
     return new Promise((resolve) => {
       const list = document.createElement("ul");
@@ -388,12 +388,19 @@ export class Dialogue {
 
   /** TALK-18: how many times a scripted menu's option has been asked: its `heard` line(s), else its `line`, as said. */
   heard(o) { const seen = this.g.store.data.seenLines || {}; return Math.max(0, ...[].concat(o.heard || o.line).map((l) => seen[l] || 0)); }
+  /** TALK-24: whether a scripted topic's options (`under`) hold one that shows and was never asked (its mark, "new"). */
+  news(under, seen = new Set()) {
+    if (seen.has(under)) return false;
+    seen.add(under);
+    return under.some((u) => !u.exit && (!u.when || u.when(this.g)) && (Array.isArray(u.under) ? this.news(u.under, seen) : !this.heard(u)));
+  }
   /** TALK-18: whether a scripted menu's option still shows (choose, { talk: true }): the way out, a clue, a keep, one never asked,
       or one that opens another menu (`under`) with something left in it that would show (no endless loop on menus that circle). */
   stays(o, seen = new Set()) {
-    if (o.exit || o.clue || o.keep || !this.heard(o)) return true;
-    if (!Array.isArray(o.under) || seen.has(o.under)) return false;
-    seen.add(o.under);
+    if (o.exit || o.clue || o.keep) return true;
+    if (!Array.isArray(o.under)) return !this.heard(o);
+    if (seen.has(o.under)) return false;                                              // TALK-24: a topic shows while anything under it would,
+    seen.add(o.under);                                                                // asked or not (never an empty one)
     return o.under.some((u) => !u.exit && (!u.when || u.when(this.g)) && this.stays(u, seen));
   }
 
@@ -413,6 +420,12 @@ export class Dialogue {
    * out through the nodes it leads to (each node looked at once, so a tree that circles back ends); `once` as before. An
    * option whose `then` is a function is a plain line by this rule (it is not called to see where it goes: some set facts).
    * It is read from `asked` in the save, so an old save follows it as it is.
+   * TALK-24 (the author, 10 November: "There are way too many dialogue choices in Japan. Usually in point and click adventure
+   * games, dialogues have trees so if you choose to talk about a topic it takes them down a certain tree"): a menu shows four
+   * topics and a goodbye at most. A topic is an option with `topic: true` and `then` a node of the tree: it shows only while
+   * something under it would show (picked or not: an empty topic is never offered), and is marked new while anything under
+   * it is new. Its node ends with a way back (`then` "back"). An option's `line` may be a function of the game (the way back
+   * is said by whoever is being played: js/content/talk/topics.js).
    */
   async talk(tree, { through = null, id = null } = {}) {
     const g = this.g, nodes = (tree && tree.nodes) || {}, memory = g.store.data.asked || (g.store.data.asked = {});
@@ -420,6 +433,7 @@ export class Dialogue {
     const keyOf = (node, option) => (treeId || `${g.scene ? g.scene.id : "talk"}/${node}`) + "/" + option.id;
     const count = (node, option) => memory[keyOf(node, option)] || 0;
     const resolve = async (to) => (typeof to === "function" ? await to(g) : to);          // a node id, "exit", "back", "root", or nothing: stay
+    const lineOf = (o) => (typeof o.line === "function" ? o.line(g) : o.line);          // TALK-24: a line may be a function of the game
     const root = async () => (await resolve(tree && tree.start)) || Object.keys(nodes)[0];   // (`start` is asked again for "root", so a start that depends on the story gives today's answer)
     // Lines, as g.say says them; in a talk through a door, the words of the one at the other end go through it.
     const speak = async (ids) => { for (const lid of [].concat(ids || [])) { const entry = g.lines[lid]; if (through && entry && entry[0] === through) await g.through(through, lid); else await g.say(lid); } };
@@ -434,12 +448,20 @@ export class Dialogue {
     // something is left under it (`left`: a node with an option that is not a way out and would still show).
     // (A "back" or "root" with a reply or a script of its own is a line like any other: only the bare way back always stays.)
     const wayOut = (o) => o.then === "exit" || ((o.then === "back" || o.then === "root") && o.say == null && !o.do && o.set == null);
+    const wayBack = (o) => o.then === "back" && wayOut(o);                             // TALK-24: the bare way back (out of a topic)
     const shows = (node, o, seen = null) => {
       if (o.when && !o.when(g)) return false;
       const n = count(node, o);
       if (o.once && n) return false;
+      if (o.topic) return typeof o.then === "string" && !!nodes[o.then] && left(o.then, seen || new Set([node]));      // TALK-24: never an empty topic
       if (wayOut(o) || o.clue || o.keep || !n) return true;
       return typeof o.then === "string" && !!nodes[o.then] && left(o.then, seen || new Set([node]));
+    };
+    // TALK-24: whether a node holds an option that shows and was never picked (a topic's mark, "new"), its topics looked into
+    const fresh = (name, seen = new Set()) => {
+      if (!nodes[name] || seen.has(name)) return false;
+      seen.add(name);
+      return (nodes[name].options || []).some((o) => !wayOut(o) && shows(name, o) && (o.topic ? fresh(o.then, seen) : !count(name, o)));
     };
     const left = (name, seen) => {
       for (let at = name; at != null && nodes[at] && !seen.has(at); at = typeof nodes[at].then === "string" ? nodes[at].then : null) {
@@ -449,24 +471,26 @@ export class Dialogue {
       return false;
     };
     const trail = [await root()];                       // the nodes on the way here, for "back"
-    let node = trail[0];
+    let node = trail[0], cameBack = false;
     for (;;) {
       const spec = nodes[node];
       if (!spec) { if (node != null) console.warn(`g.talk: there is no node called "${node}".`); break; }
-      await speak(spec.say);                            // on arriving: once, however many picks are made here
+      if (!cameBack) await speak(spec.say);             // on arriving: once, however many picks are made here (TALK-24: and not again on coming back from a topic)
+      cameBack = false;
       let next = spec.then == null ? null : await resolve(spec.then);
       while (next == null) {                            // the node's choices, again after a pick that stays, until one leads away
         const open = (spec.options || []).filter((o) => shows(node, o));       // TALK-18: by the rule (above)
         if (!open.length) { next = "exit"; break; }     // nothing to ask: the talk is over
+        if (trail.length > 1 && open.every(wayBack)) { next = "back"; break; }      // TALK-24: a topic with nothing left in it but the way back goes back by itself
         let pick = null;
         if (g.clock.skipping) pick = open.find((o) => o.then === "exit") || open[open.length - 1];     // a cutscene being skipped: the way out, else the last
         else {
-          const picked = await this.choose(open.map((o) => ({ id: o.id, line: o.line, asked: count(node, o), exit: o.then === "exit" })), { through, talk: true });
+          const picked = await this.choose(open.map((o) => ({ id: o.id, line: lineOf(o), asked: wayBack(o) ? 1 : o.topic ? (fresh(o.then) ? 0 : 1) : count(node, o), exit: wayBack(o) || (o.then === "exit" && !open.some(wayBack)) })), { through, talk: true });      // (TALK-24: a way back is written as asked, and Esc takes it before any way out)
           pick = open.find((o) => o.id === picked) || null;
         }
         if (!pick) { next = "exit"; break; }
         const key = keyOf(node, pick), n = (memory[key] = (memory[key] || 0) + 1);
-        if (through) await g.through(through, pick.line); else await g.say(pick.line);
+        if (through) await g.through(through, lineOf(pick)); else await g.say(lineOf(pick));
         await speak(replyFor(pick.say, n));
         for (const fact of [].concat(pick.set || [])) g.flag(fact, true);
         if (pick.do) await pick.do(g);
@@ -474,7 +498,7 @@ export class Dialogue {
         if (g.clock.skipping) { next = "exit"; break; } // while skipping, one node is all a talk gets (its lines, facts and scripts still count)
       }
       if (next === "exit") break;
-      if (next === "back") { if (trail.length > 1) trail.pop(); node = trail[trail.length - 1]; continue; }
+      if (next === "back") { if (trail.length > 1) trail.pop(); node = trail[trail.length - 1]; cameBack = true; continue; }
       if (next === "root") { trail.length = 0; trail.push(await root()); node = trail[0]; continue; }
       if (next !== node) trail.push(next);
       node = next;

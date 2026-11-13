@@ -2324,4 +2324,7 @@ export const lines = {
   "edo.village.west.clerk.bigsis": ["bigsis", "The clerk first. Those were O-Tami's orders, and O-Tami is very seldom wrong."],
   "edo.village.west.clerk.lilsis": ["lilsis", "O-Tami said be travellers at the CLERK. Then the road."],
   // ---- SCENES-21B: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
+  // ---- TALK-24 (10 November: "way too many dialogue choices in Japan"): the topics a talk's questions are gathered under ----
+  "edo.denzo.topic.lore.big": ["bigsis", "May I ask about the ship's customs? For my notes."],
+  "edo.deck.gonroku.topic.voyage": ["mom", "About the voyage, captain, if you have a moment."],
 };

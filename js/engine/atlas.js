@@ -602,7 +602,7 @@ export class Atlas {
     this.wasMusic = undefined;
     if (era !== there.map.era && g.audio.ready) {
       const scene = await g.getScene(at.scene).catch(() => null), m = scene && g.musicOf(scene), now = g.audio.current ? g.audio.current.id : null;
-      if (m && m !== now && g.audio.sound.music[m]) { this.wasMusic = now; g.music(m); }
+      if (m && m !== now && g.audio.has(m)) { this.wasMusic = now; g.music(m); }                   // (MUSIC-24: a recording, or a pattern)
     }
     if (era !== there.map.era && Number.isInteger(from) && Number.isInteger(to) && from !== to) await this.timer(from, to, there.id);
     else {                                                    // the same time, or two times on one notch (home and Nevada): no turn, a fade

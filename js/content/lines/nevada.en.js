@@ -1188,4 +1188,16 @@ export const lines = {
   "item.storeshade.mom": ["mom", "Mrs. Jolene's sun shade: a mirror the size of a windshield."],
   "item.storeshade.bigsis": ["bigsis", "The biggest shine for a hundred miles, folded up. It is heavier than it looks."],
   "item.storeshade.lilsis": ["lilsis", "Grandma Jolene's window. I can see ME in it."],
+  // ---- TALK-24 (10 November: dialogue trees with topics, every act): the topics a talk's questions are gathered under ----
+  "nevada.joe.topic.chat": ["mom", "Forgive me, I'm rushing you."],
+  "nevada.joe.topic.week": ["mom", "May I ask more about what's been happening here?"],
+  "nevada.joe.topic.household": ["mom", "May I ask about your household? Ranger included."],
+  "nevada.jolene.topic.chat.mom": ["mom", "I'd love to hear more about you, Mrs. Jolene."],
+  "nevada.jolene.topic.chat.big": ["bigsis", "I have a few questions. None of them about the case."],
+  "nevada.jolene.topic.chat.lil": ["lilsis", "I have other questions. LOTS of them."],
+  "nevada.ranger.topic.raccoon.lil": ["lilsis", "Ranger. I have some raccoon questions."],
+  "nevada.letterbox.topic.like": ["son", "It's hard to explain. Here's what it's LIKE in here."],
+  "nevada.letterbox.topic.me": ["son", "I'm okay, Mom. Mostly. Let me tell you."],
+  "nevada.letterbox.topic.you": ["son", "Your turn, Mom. I have questions."],
+  "nevada.letterbox.back": ["son", "Anyway. Other stuff."],
 };

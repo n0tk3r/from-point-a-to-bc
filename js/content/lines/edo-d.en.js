@@ -1628,4 +1628,7 @@ export const lines = {
   // ---- SCENES-21C: lines added on the stage in phase B go below this line, and nowhere else in this file (MERGE-21) ----
   // SCENES-21C: Little Sister's flashlight on the hum before the sun's bars have reached it (the door is not open yet)
   "edo.hall.hum.with.lilflash.lilsis": ["lilsis", "Not yet. The SUN has to find it first. Then my light."],
+  // ---- TALK-24 (10 November: "way too many dialogue choices in Japan"): the topics a talk's questions are gathered under ----
+  "edo.shosha.ume.topic.hall": ["mom", "May I ask about the hall, and the voice in it?"],
+  "edo.shosha.ume.topic.lock": ["mom", "May I ask about the lock? And about you?"],
 };

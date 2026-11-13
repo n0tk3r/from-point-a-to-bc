@@ -10,15 +10,25 @@
 // Until real recordings exist, every track is a short synthesized placeholder
 // described in js/content/sound.js. Give a track a `src` there and the engine
 // streams that file instead. Nothing else in the game has to change.
+//
+// MUSIC-24: recorded music. A track with a recording (sound.files, the list js/content/music-files.js that
+// tools/music/add_music.py makes from the masters in music-src/; audio/README.md) is fetched, decoded and played with the
+// Web Audio API's own loop: its intro once, then round and round between its loop points, to the sample. The browser takes
+// the first copy it can decode (`musicFormats`: Opus in WebM, then AAC), and a track it cannot have at all falls back to
+// its synthesized pattern, if it has one. While a recording loads, the track before it goes on; then the two cross-fade.
 
 const NOTE = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
 
 export class AudioEngine {
   constructor(settings, sound) {
     this.settings = settings;
-    this.sound = sound;          // { music: {...}, sfx: {...}, voices: Set, voicePath, formats }
+    this.sound = sound;          // { music: {...}, sfx: {...}, voices: Set, voicePath, formats } (MUSIC-24: files, sceneMusic, musicFormats, recordedLevel)
     this.ctx = null;
-    this.current = null;         // { id, gain, stop }
+    this.current = null;         // { id, gain, stop } (MUSIC-24: the track asked for; it may still be loading)
+    this.live = [];              // MUSIC-24: every track that is sounding (the current one, and those fading out)
+    this.bytes = new Map();      // MUSIC-24: recordings fetched, "<id>.<format>" -> Promise of the file's bytes (a few, newest last)
+    this.decoded = new Map();    // MUSIC-24: recordings decoded, id -> Promise of { buffer, format, shift } (two kept, besides those sounding)
+    this.badFormats = new Set(); // MUSIC-24: copies this browser turned out not to decode (it is asked for the next one from then on)
     this.voiceEl = null;
     this.wanted = null;          // music asked for before sound was unlocked
   }
@@ -65,27 +75,173 @@ export class AudioEngine {
   }
 
   // ---------- music ----------
-  /** Cross-fade to a track. Asking for the track that is already playing does nothing. */
-  music(id, fade = 1.2) {
+  /** MUSIC-24: whether a track of that name exists (a recording, or a synthesized pattern). */
+  has(id) { return !!this.recording(id) || !!(id && this.sound.music && this.sound.music[id]); }
+  /** MUSIC-24: a track's recording (its entry in js/content/music-files.js), or null. */
+  recording(id) { return (id && this.sound.files && this.sound.files[id]) || null; }
+
+  /** Cross-fade to a track. Asking for the track that is already playing does nothing.
+      MUSIC-24: `fade` defaults to the recording's own (else 1.2 s). A recording is fetched and decoded first, and the track
+      that was playing goes on until it is ready (so a scene's music never drops out while its file loads); if it cannot be
+      had, its synthesized pattern plays instead, or nothing. `at` (seconds into the recording): start there, even if it is
+      the track playing (the music page's "hear the seam"). */
+  music(id, fade = null, at = null) {
     if (!this.ctx) { this.wanted = id; return; }
-    if (this.current && this.current.id === id) return;
-    const t = this.ctx.currentTime;
-    if (this.current) {
-      const old = this.current;
+    if (this.current && this.current.id === id && at == null) return;
+    const rec = this.recording(id), track = id ? this.sound.music[id] : null;
+    const cur = { id, gain: null, stop: null, fade: fade ?? (rec && rec.fade) ?? 1.2 };
+    if (!rec && !track) { this.current = null; this.release(cur.fade); return; }      // silence (or a name no track has)
+    this.current = cur;
+    const gain = cur.gain = this.ctx.createGain();
+    gain.gain.value = 0;
+    gain.connect(this.duck);
+    const begin = (stop, when = this.ctx.currentTime, recorded = false) => {           // it sounds: it comes up, every other track goes down
+      cur.stop = stop;
+      const level = recorded ? (this.sound.recordedLevel ?? 1) * (rec.volume ?? 1) : (track.volume ?? 1);
+      gain.gain.setValueAtTime(0, when);
+      gain.gain.linearRampToValueAtTime(level, when + cur.fade);
+      this.release(cur.fade, when);
+      this.live.push(cur);
+    };
+    const instead = () => {                                                            // no recording to be had: the pattern, or nothing
+      if (this.current !== cur || cur.stop) return;
+      if (track) begin(track.src ? this.playFile(track, gain) : this.playPattern(track, gain));
+      else { gain.disconnect(); this.current = null; this.release(cur.fade); }
+    };
+    if (rec && !rec.stream) {
+      const late = setTimeout(() => { console.warn(`Music "${id}": its recording is taking long to load.`); instead(); }, 12000);
+      this.decodeMusic(id).then((d) => {
+        clearTimeout(late);
+        if (this.current !== cur || cur.stop) { if (!cur.stop) gain.disconnect(); return; }     // (something else was asked for meanwhile)
+        const when = this.ctx.currentTime + 0.05;
+        begin(this.playRecording(rec, d, gain, when, at ?? 0, cur), when, true);
+      }).catch((err) => { clearTimeout(late); console.warn(`Music "${id}" would not play from its recording:`, err && err.message); instead(); });
+      return;
+    }
+    if (rec) {                                                                         // a long piece, streamed (`stream: yes`): it loops whole, or plays once
+      const format = this.musicFormats().find((f) => rec.files[f]);
+      if (!format) { instead(); return; }
+      begin(this.playFile({ src: this.musicUrl(rec.files[format]), loop: !!rec.loop }, gain), this.ctx.currentTime, true);
+      return;
+    }
+    begin(track.src ? this.playFile(track, gain) : this.playPattern(track, gain));
+  }
+
+  /** MUSIC-24: fade out every track that is sounding, over `fade` seconds from `when` (now), and stop it after. */
+  release(fade = 1.2, when = null) {
+    const t = when ?? this.ctx.currentTime;
+    for (const old of this.live.splice(0)) {
       old.gain.gain.cancelScheduledValues(t);
       old.gain.gain.setValueAtTime(old.gain.gain.value, t);
       old.gain.gain.linearRampToValueAtTime(0, t + fade);
-      setTimeout(() => old.stop(), fade * 1000 + 100);
+      setTimeout(() => old.stop(), Math.max(0, t - this.ctx.currentTime + fade) * 1000 + 100);
     }
-    this.current = null;
-    const track = id && this.sound.music[id];
-    if (!track) return;
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(track.volume ?? 1, t + fade);
-    gain.connect(this.duck);
-    const stop = track.src ? this.playFile(track, gain) : this.playPattern(track, gain);
-    this.current = { id, gain, stop };
+  }
+
+  /** MUSIC-24: the copies this browser can play, in the order sound.js prefers them (`musicFormats`), less any it failed to decode. */
+  musicFormats() {
+    if (!this._musicFormats) {
+      const probe = document.createElement("audio");
+      const types = { webm: 'audio/webm; codecs="opus"', ogg: 'audio/ogg; codecs="opus"', m4a: 'audio/mp4; codecs="mp4a.40.2"', mp3: "audio/mpeg" };
+      this._musicFormats = (this.sound.musicFormats || ["webm", "m4a"]).filter((f) => !types[f] || probe.canPlayType(types[f]) !== "");
+    }
+    return this._musicFormats.filter((f) => !this.badFormats.has(f));
+  }
+  /** MUSIC-24: a recording's address, from the top of the site (the list names them so), whichever page the game runs in. */
+  musicUrl(path) { return new URL(`../../${path}`, import.meta.url).href; }
+
+  /** MUSIC-24: a recording's bytes, fetched once (and kept: a few hundred KB a minute). */
+  fetchMusic(id, format) {
+    const key = `${id}.${format}`;
+    let got = this.bytes.get(key);
+    if (got) { this.bytes.delete(key); this.bytes.set(key, got); return got; }     // (the newest last)
+    const rec = this.recording(id);
+    got = fetch(this.musicUrl(rec.files[format])).then((r) => {
+      if (!r.ok) throw Object.assign(new Error(`${rec.files[format]}: ${r.status}`), { fetching: true });
+      return r.arrayBuffer();
+    }, (err) => { throw Object.assign(err, { fetching: true }); });
+    this.bytes.set(key, got);
+    got.catch(() => { if (this.bytes.get(key) === got) this.bytes.delete(key); });
+    while (this.bytes.size > 8) this.bytes.delete(this.bytes.keys().next().value);
+    return got;
+  }
+
+  /** MUSIC-24: fetch a scene's recording ahead (the bytes only: decoded, a minute is some 22 MB), for a place next door. */
+  prefetch(id) {
+    const rec = this.recording(id);
+    if (!rec || rec.stream) return;
+    const format = this.musicFormats().find((f) => rec.files[f]);
+    if (format) this.fetchMusic(id, format).catch(() => {});
+  }
+
+  /** MUSIC-24: a recording decoded: { buffer, format, shift }. The first copy this browser decodes is used; a copy it cannot
+      decode is not asked for again. `shift`: where the sound first rises above -50 dBFS, against where the list says it does
+      (`onset`, measured by the tool): a browser that leaves a codec's start-up silence in has the music start a little later
+      (by 2 to 60 ms), and the loop points move with it. (Earlier is a codec's pre-echo, and is left alone.) */
+  decodeMusic(id) {
+    const had = this.decoded.get(id);
+    if (had) { this.decoded.delete(id); this.decoded.set(id, had); return had; }
+    const rec = this.recording(id);
+    const job = (async () => {
+      let why = null;
+      for (const format of this.musicFormats()) {
+        if (!rec.files[format]) continue;
+        try {
+          const bytes = await this.fetchMusic(id, format);
+          const buffer = await this.ctx.decodeAudioData(bytes.slice(0));            // (a copy: decoding takes the bytes it is given)
+          const late = this.onsetOf(buffer, (rec.onset || 0) + 0.1) - (rec.onset || 0);
+          return { buffer, format, shift: late > 0.002 && late < 0.06 ? late : 0 };
+        } catch (err) {
+          why = err;
+          if (!(err && err.fetching)) this.badFormats.add(format);                   // (it fetched, and would not decode)
+        }
+      }
+      throw why || new Error("no copy this browser can play");
+    })();
+    this.decoded.set(id, job);
+    job.catch(() => { if (this.decoded.get(id) === job) this.decoded.delete(id); });
+    for (const key of [...this.decoded.keys()]) {                                    // two kept, besides those sounding
+      if (this.decoded.size <= 2) break;
+      if (key !== id && !this.live.some((c) => c.id === key) && !(this.current && this.current.id === key)) this.decoded.delete(key);
+    }
+    return job;
+  }
+
+  /** MUSIC-24: the time of the first sample of a decoded recording above -50 dBFS (in any channel), looking no further than `upTo` seconds. */
+  onsetOf(buffer, upTo) {
+    const n = Math.min(buffer.length, Math.ceil(upTo * buffer.sampleRate));
+    let first = n;
+    for (let c = 0; c < buffer.numberOfChannels; c++) {
+      const d = buffer.getChannelData(c);
+      for (let i = 0; i < first; i++) if (d[i] >= 0.00316 || d[i] <= -0.00316) { first = i; break; }
+    }
+    return first / buffer.sampleRate;
+  }
+
+  /** MUSIC-24: a decoded recording, from `at` seconds into it: its intro once, then its loop for ever (or once through, with no loop). */
+  playRecording(rec, d, out, when, at = 0, cur = null) {
+    const src = this.ctx.createBufferSource();
+    src.buffer = d.buffer;
+    const loop = rec.loop || null;
+    let from = Math.max(0, at);
+    if (loop) {
+      src.loop = true; src.loopStart = loop[0] + d.shift; src.loopEnd = loop[1] + d.shift;
+      if (from >= loop[1]) from = loop[0] + ((from - loop[0]) % (loop[1] - loop[0]));
+    }
+    src.connect(out);
+    src.start(when, from + d.shift);
+    if (cur) cur.clock = { started: when, from, loop };
+    return () => { try { src.stop(); } catch { /* stopped */ } src.disconnect(); out.disconnect(); };
+  }
+
+  /** MUSIC-24: how far into its recording the track playing is, in seconds (null for a synthesized track, or none). */
+  position() {
+    const c = this.current;
+    if (!c || !c.clock || !this.ctx) return null;
+    const { started, from, loop } = c.clock;
+    let p = from + Math.max(0, this.ctx.currentTime - started);
+    if (loop && p >= loop[1]) p = loop[0] + ((p - loop[0]) % (loop[1] - loop[0]));
+    return p;
   }
 
   /** A recorded track: streamed, so a long file starts at once and is never held whole in memory. */
@@ -186,9 +342,13 @@ export class AudioEngine {
     if (!spec) return false;
     this.loops = this.loops || {};
     const ctx = this.ctx, t = ctx.currentTime, want = (spec.level ?? 0.05) * level;
-    let L = this.loops[id];
+    let L = this.loops[id], fresh = false;
     if (!L) {
-      const gain = ctx.createGain(); gain.gain.setValueAtTime(0, t); gain.connect(this.sfxBus);
+      // LOOPS-24 (the author, 10 November: going in and out of Kihei's shop "sounds like a gunshot because of the loud wave
+      // crash"): a new gain reads 1 until the sound thread has run, so the ramp below began from full and fell from there, a
+      // burst of the loop at some twenty times its level on every scene with a loop. It starts from silence now.
+      const gain = ctx.createGain(); gain.gain.value = 0; gain.gain.setValueAtTime(0, t); gain.connect(this.sfxBus);
+      fresh = true;
       const nodes = [];
       if (spec.noise) {
         const src = ctx.createBufferSource(), f = ctx.createBiquadFilter();
@@ -217,7 +377,7 @@ export class AudioEngine {
       L = this.loops[id] = { gain, nodes, level: want };
     }
     L.level = want; L.stopping = false;
-    L.gain.gain.cancelScheduledValues(t); L.gain.gain.setValueAtTime(L.gain.gain.value, t); L.gain.gain.linearRampToValueAtTime(want, t + fade);
+    L.gain.gain.cancelScheduledValues(t); L.gain.gain.setValueAtTime(fresh ? 0 : L.gain.gain.value, t); L.gain.gain.linearRampToValueAtTime(want, t + fade);
     return true;
   }
   /** The loop's loudness, as a share of what it was started at (the hush: 0.7 under a line). */

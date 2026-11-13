@@ -915,4 +915,13 @@ export const lines = {
   "office.map.rooms.ranger": ["ranger", "...", ["door", "no"]],                                                     // a room: not by its door
   "office.map.b7.grandpajoe": ["grandpajoe", "B-7. RESTRICTED. Ain't nobody invited me."],
   "office.map.b7.ranger": ["ranger", "...", ["down", "no"]],
+  // ---- TALK-24 (10 November: dialogue trees with topics, every act): the topics a talk's questions are gathered under ----
+  "office.iv.topic.aside": ["grandpajoe", "Before I answer that, fellas..."],
+  "office.iv.back": ["grandpajoe", "Go on, son. Ask your question."],
+  "office.vent.topic.banjo": ["grandpajoe", "Partner, about my banjo."],
+  "office.vent.topic.food": ["grandpajoe", "Partner, let's talk vittles."],
+  "office.vent.topic.partners": ["grandpajoe", "Partner, let's just jaw a minute."],
+  "office.opal.topic.office": ["grandpajoe", "While you're here, Opal. Couple of questions."],
+  "office.intercom.topic.more": ["grandpajoe", "Ma'am, while I got you..."],
+  "office.rag.topic.tell": ["grandpajoe", "Let me tell you boys somethin'."],
 };

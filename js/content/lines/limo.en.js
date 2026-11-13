@@ -195,4 +195,7 @@ export const lines = {
   "item.receipt.mom": ["mom", "A receipt for a banjo, from the government. One does like a paper trail."],
   "item.receipt.bigsis": ["bigsis", "'One raccoon (unconfirmed).' Ranger has never been more confirmed."],
   "item.receipt.lilsis": ["lilsis", "A banjo receipt! You get the banjo BACK with it. That's how receipts work."],
+  // ---- TALK-24 (10 November: dialogue trees with topics, every act): the topics a talk's questions are gathered under ----
+  "limo.divider.topic.ride": ["grandpajoe", "Got some questions 'bout this ride of ours."],
+  "limo.divider.topic.outfit": ["grandpajoe", "Let's talk about you boys a spell."],
 };

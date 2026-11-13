@@ -90,6 +90,8 @@
 // Besides the trees, the sequences the cut-scenes and the scenes' scripted moments say, in order (as round twenty's WALK and
 // STEP): CASTOFF, SAIL_EDIT, BOAT, LIST, VOUCH, FIFTH, SHOW, SEAT, AFTER_SHOW, LAY, CHIRP.
 
+import { topic, back } from "./topics.js";      // TALK-24: topics, and the way back out of one
+
 const who = (g) => g.store.data.active;
 const is = (g, fact) => !!g.flag(fact);
 const lead = (g) => (["mom", "bigsis", "lilsis"].includes(who(g)) ? who(g) : "mom");
@@ -473,14 +475,21 @@ export const denzoTree = (h = {}) => {
           bye("byeMom", "edo.denzo.opt.bye.mom", ["edo.denzo.bye"]),
         ],
       },
+      // TALK-24: Big Sister's questions about the lady at the mast and the cask in the sea are a topic of their own
       big: {
+        options: [
+          list("listBig", "edo.denzo.opt.list.big"),
+          words("wordsBig", "edo.denzo.opt.words.big", afterCall),
+          topic("loreBig", "edo.denzo.topic.lore.big", "loreBig"),
+          bye("byeBig", "edo.denzo.opt.bye.big", ["edo.denzo.bye"]),
+        ],
+      },
+      loreBig: {
         options: [
           { id: "worryBig", line: "edo.denzo.opt.worry.big", once: true, say: ["edo.denzo.worry.1", "edo.denzo.worry.2"] },
           { id: "chirpBig", line: "edo.denzo.opt.chirp.big", once: true, when: (g) => g.asked("denzo/worryBig") + g.asked("denzo/worryMom") > 0, say: ["edo.denzo.chirp.big"] },
-          list("listBig", "edo.denzo.opt.list.big"),
-          words("wordsBig", "edo.denzo.opt.words.big", afterCall),
           { id: "caskBig", line: "edo.denzo.opt.cask.big", once: true, say: ["edo.denzo.cask.big"] },
-          bye("byeBig", "edo.denzo.opt.bye.big", ["edo.denzo.bye"]),
+          back("loreBig"),
         ],
       },
       lil: {
@@ -602,15 +611,22 @@ export const gonrokuDeckTree = (h = {}) => ({
   nodes: {
     open: {
       say: ["edo.deck.gonroku.open"],
+      // TALK-24: the sea, the days to Osaka and the steering are a topic (the voyage); one goodbye, the one being played's
       options: [
-        { id: "seaMom", line: "edo.deck.gonroku.opt.sea.mom", once: true, say: ["edo.deck.gonroku.sea.1", "edo.deck.gonroku.sea.2", "edo.deck.gonroku.sea.3"] },
         { id: "clockBig", line: "edo.deck.gonroku.opt.clock.big", clue: true, when: (g) => !is(g, "edo.compassRead"), say: ["edo.deck.gonroku.clock.big"] },
-        { id: "steerLil", line: "edo.deck.gonroku.opt.steer.lil", once: true, say: ["edo.deck.gonroku.steer.1", "edo.deck.gonroku.steer.2", "edo.deck.gonroku.steer.3"] },
+        topic("voyage", "edo.deck.gonroku.topic.voyage", "voyage"),
         { id: "thanksMom", line: "edo.deck.gonroku.opt.thanks.mom", once: true, when: (g) => !is(g, "edo.lidDown"), say: ["edo.deck.gonroku.thanks.1"] },
         { id: "thanksRiceMom", line: "edo.deck.gonroku.opt.thanks.mom", once: true, when: (g) => is(g, "edo.lidDown"), say: ["edo.deck.gonroku.thanks.2"] },
+        { ...bye("byeMom", "edo.deck.gonroku.opt.bye.mom", ["edo.deck.gonroku.bye.mom"]), when: (g) => who(g) !== "lilsis" },
+        { ...bye("byeLil", "edo.deck.gonroku.opt.bye.lil", ["edo.deck.gonroku.bye.lil"]), when: (g) => who(g) === "lilsis" },
+      ],
+    },
+    voyage: {
+      options: [
+        { id: "seaMom", line: "edo.deck.gonroku.opt.sea.mom", once: true, say: ["edo.deck.gonroku.sea.1", "edo.deck.gonroku.sea.2", "edo.deck.gonroku.sea.3"] },
         { id: "osakaBig", line: "edo.deck.gonroku.opt.osaka.big", once: true, say: ["edo.deck.gonroku.osaka.big"] },
-        bye("byeMom", "edo.deck.gonroku.opt.bye.mom", ["edo.deck.gonroku.bye.mom"]),
-        bye("byeLil", "edo.deck.gonroku.opt.bye.lil", ["edo.deck.gonroku.bye.lil"]),
+        { id: "steerLil", line: "edo.deck.gonroku.opt.steer.lil", once: true, say: ["edo.deck.gonroku.steer.1", "edo.deck.gonroku.steer.2", "edo.deck.gonroku.steer.3"] },
+        back("voyage"),
       ],
     },
     after: {

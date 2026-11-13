@@ -16,7 +16,7 @@ In development. What is here now:
 - **Depth**: people walk behind things and in front of them, round obstacles, and get smaller as they walk away.
 - **An intro movie** that runs into the title screen: the camera follows the family's wagon down a desert highway at dusk, the road and the desert streaming past, stops by the POINT B sign while the wagon drives on into a hole in time, and the sign warps to POINT B.C. <!-- ROAD-18M -->
 - **Saved games**: autosave, three slots, and a save file you can download and load on any device.
-- **Sound**: music, effects and voices on separate sliders. The music is synthesized placeholder until real tracks are written. Dialogue is ready for recorded voices.
+- **Sound**: music, effects and voices on separate sliders. Every theme is synthesized until a recording replaces it: drop a WAV and a note of where it loops in `music-src/` and run `python3 tools/music/add_music.py` ([audio/README.md](audio/README.md)). Dialogue is ready for recorded voices.
 - **The story so far**: a prologue and six acts. Each leads into the next, from the intro to the end of the demo:
   - **Prologue: The Shortcut.** The intro movie: Dad takes a shortcut, and the wagon drives into a hole in time.
   - **Act One: Scattered** (Egypt, five scenes). Dad, alone by the Nile, gets into his wagon for the road map in the glovebox, gets into the pyramid, and brings a sunbeam round three corners to open the humming wall.
@@ -46,6 +46,7 @@ Useful addresses while building:
 - `http://localhost:8000/?scene=engine-proof` is the worked example of a painted scene.
 - `http://localhost:8000/tools/storyboard.html` shows the storyboard.
 - `http://localhost:8000/tools/sprites.html` shows every character and prop, in every direction, moving.
+- `http://localhost:8000/tools/music.html` plays every recorded track (and its loop's seam) and lists every scene's music.
 
 In the game: click to walk, use and talk. Right-click (or press and hold on a touch screen) looks at things. What the person you are playing carries is along the bottom left; click a thing there, then click what to use it with. Click a portrait at the top left (or press **1**, **2**, **3**) to play as someone else. Click one of the others to talk to them; to hand them something, click the thing and then click them, or their portrait. **Esc** opens the menu, in a cutscene too, where its first row is **Skip this scene** (the **Skip** button skips at once). <!-- ENGINE-19A --> Options has the music and sound volumes, **Text speed** (Slow, Normal, Fast; at Slow a long line waits for a click), **Text size** (Normal, Large) and **A soft backing behind the words** (on at first). Hold **H** to see everything you can click. **Map** (or **M**) opens the map: click a place you have been to go there, or someone's portrait to play as them, or a map's name at the top (or the **Left** and **Right** keys) for another time's map; **M** or **Esc** puts it away. <!-- MAP-15D -->
 
@@ -77,6 +78,8 @@ js/content/       the game: cast and items (world.js), the lines (one file to an
                   the story (one file to an act, in acts/), the talks written as dialogue
                   trees (talk/), the sound list, cutscenes, the scenes (one file each), and the
                   maps: each time's places and the ways between them (maps.js)
+audio/            the recorded music (music/: made by tools/music/add_music.py from the masters in
+                  music-src/, which stays out of git) and how to add sound (README.md)
 art/              the painted pictures: a folder for each scene (scenes/), the things
                   that can be carried (items/), the painted portraits (portraits/), the
                   engine's own pictures for its proof scene (proof/), the game's emblem,
@@ -84,7 +87,8 @@ art/              the painted pictures: a folder for each scene (scenes/), the t
                   map (emblem/), and a folder for each map (maps/)
 fonts/            Koine Road, the game's typeface
 tools/            the storyboard page (the story, a map of each act's ways, every scene),
-                  the sprite viewer, the local server (serve.py),
+                  the sprite viewer, the music page and the music tool (music/),
+                  the local server (serve.py),
                   the stamping tool (stamp.py), the painter (paint/: the scripts that
                   paint every picture) and the typeface's source
 docs/             how it is built (DESIGN.md), who the people are (CHARACTERS.md),

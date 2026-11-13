@@ -61,6 +61,8 @@
 // SHOSHA, HALL), the kitchen's order (COOK), the lock's table (LOCK), the map's far lines (farLine), the hints (HINTS and
 // hintFor), and `trees`, every tree by name, for the tests. S/work-21-writeB/ids.md says when each line is said.
 
+import { topic, back as backOut } from "./topics.js";   // TALK-24: topics, and the way back out of one ("back" is a local name below)
+
 const who = (g) => g.store.data.active;
 const is = (g, fact) => !!g.flag(fact);
 const run = async (g, hook) => { if (typeof hook === "function") await hook(g); };
@@ -503,17 +505,13 @@ export const umeTree = (h = {}) => {
       meet: { say: ["edo.shosha.ume.meet"], then: (g) => { g.flag("edo.umeGreeted", true); return "talk"; } },
       talk: {
         options: [
-          { id: "voice", line: "edo.shosha.ume.opt.voice", once: true, when: (g) => who(g) === "mom",
-            say: ["edo.shosha.ume.voice.1", "edo.shosha.ume.voice.2", "edo.shosha.ume.voice.3", "edo.shosha.ume.voice.4"] },
-          { id: "maker", line: "edo.shosha.ume.opt.maker", once: true, when: (g) => who(g) === "mom",
-            say: ["edo.shosha.ume.maker.1", "edo.shosha.ume.maker.2", "edo.shosha.ume.maker.3", "edo.shosha.ume.maker.4", "edo.shosha.ume.maker.5"] },
+          // TALK-24: Mom's questions go under two topics, the hall (the voice, the rice ball) and the lock (its maker, her son)
+          topic("hallMom", "edo.shosha.ume.topic.hall", "hallMom", { when: (g) => who(g) === "mom" }),
+          topic("lockMom", "edo.shosha.ume.topic.lock", "lockMom", { when: (g) => who(g) === "mom" }),
           { id: "riddle", clue: true, line: "edo.shosha.ume.opt.riddle", when: (g) => who(g) === "mom", ...riddle },
           { id: "riddleBig", clue: true, line: "edo.shosha.ume.opt.riddle.bigsis", when: (g) => who(g) === "bigsis", ...riddle },
           { id: "note", clue: true, line: "edo.shosha.ume.opt.note", when: (g) => who(g) === "bigsis" && is(g, "edo.riddle") && g.has("note"),
             say: { 1: SHOSHA.list, more: [SHOSHA.listAgain] }, set: "edo.listRead" },
-          { id: "son", line: "edo.shosha.ume.opt.son", once: true, when: (g) => who(g) === "mom" && g.asked("ume/maker") > 0,
-            say: ["edo.shosha.ume.son.1", "edo.shosha.ume.son.2", "edo.shosha.ume.son.3"] },
-          { id: "step", line: "edo.shosha.ume.opt.step", once: true, when: (g) => who(g) === "mom", say: ["edo.shosha.ume.step.1", "edo.shosha.ume.step.2"] },
           { id: "natsuslip", line: "edo.shosha.ume.opt.natsuslip", when: (g) => who(g) === "mom" && g.has("natsuslip"),
             say: ["edo.shosha.ume.natsuslip.1"], set: "edo.natsuGiven", do: h.slipNatsu },
           { id: "keys", line: "edo.shosha.ume.opt.keys", once: true, when: (g) => who(g) === "bigsis", say: ["edo.shosha.ume.keys.1"] },
@@ -524,6 +522,23 @@ export const umeTree = (h = {}) => {
             say: ["edo.shosha.ume.fusaslip.1"], set: "edo.fusaGiven", do: h.slipFusa },
           { id: "byeLil", line: "edo.shosha.ume.bye.lilsis", when: (g) => who(g) === "lilsis", say: ["edo.shosha.ume.bye.lilsis.2"], then: "exit" },
           { id: "bye", line: "edo.shosha.ume.bye.mom", when: (g) => who(g) !== "lilsis", say: ["edo.shosha.ume.bye"], then: "exit" },
+        ],
+      },
+      hallMom: {
+        options: [
+          { id: "voice", line: "edo.shosha.ume.opt.voice", once: true, when: (g) => who(g) === "mom",
+            say: ["edo.shosha.ume.voice.1", "edo.shosha.ume.voice.2", "edo.shosha.ume.voice.3", "edo.shosha.ume.voice.4"] },
+          { id: "step", line: "edo.shosha.ume.opt.step", once: true, when: (g) => who(g) === "mom", say: ["edo.shosha.ume.step.1", "edo.shosha.ume.step.2"] },
+          backOut("hallMom"),
+        ],
+      },
+      lockMom: {
+        options: [
+          { id: "maker", line: "edo.shosha.ume.opt.maker", once: true, when: (g) => who(g) === "mom",
+            say: ["edo.shosha.ume.maker.1", "edo.shosha.ume.maker.2", "edo.shosha.ume.maker.3", "edo.shosha.ume.maker.4", "edo.shosha.ume.maker.5"] },
+          { id: "son", line: "edo.shosha.ume.opt.son", once: true, when: (g) => who(g) === "mom" && g.asked("ume/maker") > 0,
+            say: ["edo.shosha.ume.son.1", "edo.shosha.ume.son.2", "edo.shosha.ume.son.3"] },
+          backOut("lockMom"),
         ],
       },
       open: {},                                  // (the hall open: she is inside: hallUmeTree)

@@ -2412,10 +2412,47 @@ washerwoman, Walnut, the date seller, the temple's clerk) follow the same rule t
 `g.choose(options, { talk: true })` (dialogue.js `choose`). An option counts as asked once its line has been said
 (`seenLines`), or, where the asking line is said to more than one person ("Have you seen a boy?"), once the first line of
 its own reply has (`heard: "egypt.scribe.boy.1"`); the goodbye is marked `exit: true` (it always stays, and Escape takes
-it, as in a tree); `clue` and `keep` as in a tree; one that opens another menu would carry `under: [its options]` and
-stay while anything under it shows (none does yet). They now show a tree's marks (asked lighter, new marked). The menus
+it, as in a tree); `clue` and `keep` as in a tree; one that opens another menu carries `under: [its options]` and
+stays while anything under it shows (the temple's clerk and the senator, since TALK-24: below). They now show a tree's marks (asked lighter, new marked). The menus
 that are not talk stay as they were: Mom's choice of words at Dad's computer and of a year at his vault (a puzzle's own
 input), and the proof's door menu (the engine test's plain menu).
+
+<!-- TALK-24 -->
+**Topics: four and a goodbye** (TALK-24; the author, 10 November: "There are way too many dialogue choices in Japan.
+Usually in point and click adventure games, dialogues have trees so if you choose to talk about a topic it takes them
+down a certain tree/option"). His answers: up to four topics and a goodbye; regroup only, every line kept word for word;
+every act. So a talk's menu shows five things at most, and the questions on one subject are gathered under a topic:
+
+- **A topic** is an option that opens a node of its own (`topic(id, line, node)` in `js/content/talk/topics.js`: the
+  option has `topic: true`). Its line is said by whoever asks it ("May I ask about the lock? And about you?"), and it is
+  answered by the menu under it, not by a reply. It shows only while something in it would (never an empty topic), and
+  it carries the new mark while anything in it is new.
+- **The way back** (`back(node)`) is the last thing in a topic: "Let me ask about something else." in the words of
+  whoever is being played (`talk.back.mom`, `.bigsis`, `.lilsis`, `.son`, `.dad`, `.grandpajoe`, in `common.en.js`), or
+  a line of its own where the talk wants one (the Son through the letterbox, "Anyway. Other stuff."; Grandpa Joe at the
+  questionnaire, "Go on, son. Ask your question."). It is written as asked (lighter, no new mark), and Escape takes it
+  before any goodbye: in a topic, Escape goes back up.
+- **A topic used up goes back by itself**: when nothing is left in it but the way back, the talk returns to the menu
+  before without being asked, and the topic is gone from it.
+- **Coming back is quiet**: a node's own lines (`say`) are said on arriving, and not again on coming back to it from a
+  topic (a question of the questionnaire is not read out twice).
+- **Every option is the one it was**, under the same id, with the same line, reply, facts and conditions; only where it
+  sits has changed. So what a save remembers of a talk (`asked`) is unchanged, and an old save opens every talk as the
+  rule says. The only other change: in the team's talks in Japan where all three goodbyes showed at once (Gonroku, Masa,
+  Gonroku again on deck), only the goodbye of the one being played shows.
+- **A scripted menu** (a scene's own loop of `g.choose`) has its topic as `{ id, line, under: [its options] }`; picked,
+  the script says the topic's line and calls `askAbout(g, options, answer)` (topics.js), which asks them, with the way
+  back, until it is picked or nothing is left (the temple's clerk: the temple; the senator: himself).
+
+Which talks have topics (round twenty-four): in Japan, Gonroku (the case), Masa (her husband; the nets), O-Tami with
+Little Sister (her three questions), Grandma Sei (what she keeps; how she came there), Denzo with Big Sister (the ship's
+customs), Gonroku on deck (the voyage), O-Ume with Mom (the hall; the lock); in Nevada, Grandpa Joe (small talk;
+what has been happening; his household), Grandma Jolene with each of the three (a chat), Ranger with Little Sister
+(raccoon questions), the Son through the letterbox (what it is like there; how he is; how they are), the divider (the
+ride; the outfit); in the Office, the questionnaire (Grandpa Joe's aside: the heat, the green page, going home), the
+vent (the banjo; food; the two of them), Opal, the intercom, the Rag; in Rome, the Gaul (the guess), Phyllis (today),
+Titus, the goose-keeper, Mariam, the temple's clerk, the senator. Eleazar's talk is as it was: it never shows more than
+five.
 
 <!-- ENGINE-17 -->
 ### Thought pictures
@@ -5171,6 +5208,54 @@ fourteen); the rest are the builders' (WRITE-21A, 21B; PEOPLE-21A, 21B; SCENES-2
      down the cushion's face beside his shins, a little lower each time a strand goes: the count the player can see.
      Ranger's three places by Joe, the walkable carpet's near edge, the ropes' and the belt's areas, and the five saved
      places in the limousine's checkpoints were measured again; puzzles, lines and ids are as they were.
+267. **Recorded music, stage one (MUSIC-24, round twenty-four, 10 November).** Ilya asked how each scene could have its own
+     music and how to add it easily; the research and the design are the project's `music-design.md`, and his answers were:
+     he makes the music himself in a DAW; Opus with an AAC copy; build stage one now. Built:
+     - **the engine** (`js/engine/audio.js`): a track with a recording is fetched, decoded and played with the Web Audio
+       API's own loop, its intro once and then round between its loop points to the sample; the Opus copy (`.webm`) first,
+       the AAC copy (`.m4a`) where it will not decode; the track before plays on until the new one is ready, then they
+       cross-fade; recordings of the places next door are fetched ahead; two decoded at most besides those sounding; a
+       recording that cannot be had falls back to its synthesized pattern; a browser that leaves a codec's start-up
+       silence in has the loop points moved by it (measured against the onset the tool records);
+     - **which scene plays what** (`game.js` `musicOf`): the story, where a scene's music is a function of it; else a
+       recording made for the scene (its text file's `scenes:`); else the scene's own line; else its era's theme. A
+       recording named after a theme replaces the theme wherever it plays;
+     - **the tool** (`tools/music/add_music.py`, Python 3 and ffmpeg): masters and their text files in `music-src/`
+       (in `.gitignore`); loops in bars, times, or as the file stores them (a WAV's `smpl` loop; `LOOPSTART`/`LOOPLENGTH`);
+       the tail past the loop's end folded onto its start; the loop's first 0.1 s copied after its end (so no codec frame
+       edge falls on the seam); one gain to -18 LUFS with true peaks under -1 dB; Opus 96 kbps and AAC 128 kbps; both
+       copies checked; the list `js/content/music-files.js` written;
+     - **the music page** (`tools/music.html`, stamped with the others): every track (play, hear the seam, check every
+       copy in this browser) and every scene's music; `audio/README.md` rewritten as the how-to;
+     - **the level:** recorded music plays at `recordedLevel` 0.45 (`sound.js`), which puts a -18 LUFS master beside the
+       synthesized themes (measured: -23 to -25 LUFS for the main ones, at the music slider's full).
+     Tested in Chromium with test tracks in a copy of the game: every copy decodes to its exact length; the seam's error
+     is at the codec's own noise; the game plays a theme's recording, a scene's own, and the synthesized ones beside
+     them; the fallback; silence. The game ships with no recording: it sounds as it did until the first track is added.
+268. **Left for the author:** the first tracks, and with them the level (`recordedLevel`) by ear; then stage two if he
+     wants it (changes on the bar line, cues for the moments that matter, resuming a theme where it left off) and three
+     (layers that fade in and out with the story).
+269. **Talks have topics: four and a goodbye (TALK-24, round twenty-four, 10 November).** Ilya: "There are way too many
+     dialogue choices in Japan. Usually in point and click adventure games, dialogues have trees so if you choose to talk
+     about a topic it takes them down a certain tree/option." His answers: up to four topics and a goodbye; regroup only,
+     every line kept; every act. Section 7, "Topics: four and a goodbye", has the rule and the list. Every menu of every
+     talk now shows five things at most (a topic's own menu, six with its way back); 70 topics and ways back were added
+     and 45 short lines (a topic's line, the ways back); nothing else was changed but the goodbyes of three team talks in
+     Japan (only the one being played's). Checked: every option of every tree before and after, the same in every field
+     (`structdiff`); 600 random walks of every tree with the engine itself, before and after: every option reached before
+     is reached now (787 of them), no walk stuck; every line named is written; the new lines by the line rules and
+     `check-edo-d`; in the game, Gonroku's talk, the questionnaire's aside, the clerk's and the senator's topics, by
+     click and by Escape.
+270. **Going in and out of a door in Japan no longer goes off like a shot (LOOPS-24).** Ilya: "when they enter and exit the
+     hut in Japan it sounds like a gunshot because of the loud wave crash every time they change scenes". The sea's loop
+     (and every ambient loop) was started at full volume for an instant: a new gain node reads 1 until the audio thread
+     has run, and the fade in began from that. It now starts from silence (`audio.js` `loop`). Measured on the hut's
+     door: the first 50 ms peaked at 0.91 before and 0.17 after, the sea fading in as it does in every other scene.
+271. **Villagers far off walk at their size (PEOPLE-24).** Ilya: "the villagers walking past the girls are animated too
+     quickly". A passer (`effects.js` `Passer`) moved at one speed in screen pixels and turned its legs at one rate, so
+     one far up the road, drawn small, crossed the picture at a near one's pace and stepped three to five times too fast
+     for its size. Now its speed is in step with its size where it is (its scale, a quarter at the least) and its legs
+     turn with the ground it covers, worked out along its path: the far ones walk slowly, the near ones as before.
 
 ---
 

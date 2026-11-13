@@ -675,7 +675,13 @@ export class Game {
   music(id) { this.audio.music(id); }
   /** The track a scene plays: its own `music` (a track id, or a function of the game that returns one, so that the
       story can change it), or else its era's. A script that has just changed the story calls g.music(g.musicOf(g.scene)). */
-  musicOf(scene) { const m = typeof scene.music === "function" ? scene.music(this) : scene.music; return m || this.eras[scene.era].music; }
+  musicOf(scene) {
+    // MUSIC-24: a recording made for this scene (its master's text file in music-src/ names it under `scenes:`; the list is
+    // js/content/music-files.js) comes before the scene's own fixed line, but never before a scene whose story decides
+    const made = this.audio && this.audio.sound && this.audio.sound.sceneMusic;
+    const m = typeof scene.music === "function" ? scene.music(this) : (made && made[scene.id]) || scene.music;
+    return m || this.eras[scene.era].music;
+  }
   sfx(id) { if (!this.clock.skipping) this.audio.sfx(id); }
   /** ENGINE-20: a loop of sound (sound.js `loops`: waves, the hum) on until stopped; every loop stops as a scene is left. */
   loop(id, options) { return this.audio.loop ? this.audio.loop(id, options) : false; }
@@ -1067,7 +1073,7 @@ export class Game {
       const soundFirst = (scene) => {
         if (lead.at != null || !from || !scene || this.clock.skipping || !this.audio.ready) return false;
         const m = this.musicOf(scene), now = this.audio.current ? this.audio.current.id : null;
-        if (!m || m === now || !(this.audio.sound && this.audio.sound.music && this.audio.sound.music[m])) return false;
+        if (!m || m === now || !this.audio.has(m)) return false;                         // (MUSIC-24: a recording, or a pattern)
         this.music(m); lead.at = this.clock.now;
         return true;
       };
@@ -1223,7 +1229,7 @@ export class Game {
     // scenes its grilles look down into and its climbs go up to, so that looking down does not wait for them either.)
     const hops = (scene.hotspots || []).flatMap((h) => [h && h.grille && h.grille.scene, h && h.climb && h.climb.scene]);
     const next = new Set([...(scene.exits || []), ...Object.values(scene.edges || {}).map((way) => way && way.to), ...hops].filter((id) => this.sceneIds.includes(id)));
-    for (const id of next) this.getScene(id).then((there) => this.view.warm(there)).catch(() => {});
+    for (const id of next) this.getScene(id).then((there) => { this.view.warm(there); this.audio.prefetch(this.musicOf(there)); }).catch(() => {});      // (MUSIC-24: and its recording, if it has one)
     this.gather();                               // (already under way, unless the game was opened straight into a scene)
   }
 

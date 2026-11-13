@@ -35,6 +35,8 @@
 // handed over by the people in rome-street, so start there to carry them).
 // ROME-13S1: the new ways open with &flags=rome.arrived,rome.knowsBC; the senator's turn: rome.hasToga, and game.give("toga").
 
+import { askAbout } from "../talk/topics.js";       // TALK-24: a topic in a scene's own menu (the senator's)
+
 const art = "art/scenes/rome-steps/";
 
 // The painter's frames for the birds (layout.json, "frames"), by number: with `set`, 4 is "<set>-4.png" (briefs/out/fx-4-ready.md).
@@ -364,24 +366,33 @@ async function talkToSenator(g) {
   for (;;) {
     const pick = await g.choose([
       { id: "give", line: g.flag("rome.swapped") ? "rome.senator.toga.1" : "rome.senator.wrong.1", keep: true, when: (g) => g.has("toga") },      // ROME-13S1
-      { id: "late", line: "rome.senator.ask.late", clue: true },
-      { id: "toga", line: "rome.senator.ask.toga", clue: true },
-      // Once he has heard whose nose is on the new money (the keeper cries it, the first time he walks into the street),
-      // he can ask about Caesar. The senator's gossip is of a great-nephew nobody thinks about: the Caesar Augustus of
-      // Luke 2:1, as the boy does not know and nobody in Rome could. It gives nothing and changes nothing.
-      { id: "caesar", line: "rome.senator.ask.caesar", when: (g) => g.flag("rome.knowsBC") },
+      { id: "him", line: "rome.senator.topic.him", under: SENATOR_HIM },      // TALK-24: why he is late, his toga, Caesar: a topic
       { id: "dad", line: "rome.senator.ask.dad" },
       { id: "bye", line: "rome.senator.ask.bye", exit: true },
     ], { talk: true });        // TALK-18: a conversation, by the rule (dialogue.js choose)
     if (pick === "give") return giveToga(g);                     // ROME-13S1
-    if (pick === "late") {
-      await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");
-      g.flag("rome.knowsSenate", true);                           // ROME-13S1: where the Senate meets today (the Gaul's question)
-    } else if (pick === "toga") await g.say("rome.senator.ask.toga", "rome.senator.ans.toga.1", "rome.senator.ans.toga.2", "rome.senator.ans.toga.3", "rome.senator.ans.toga.4");
-    else if (pick === "caesar") await g.say("rome.senator.ask.caesar", "rome.senator.ans.caesar.1", "rome.senator.ans.caesar.2", "rome.senator.ans.caesar.3", "rome.senator.ans.caesar.4", "rome.senator.ans.caesar.5");
+    if (pick === "him") { await g.say("rome.senator.topic.him"); await askAbout(g, SENATOR_HIM, (id) => senatorAnswers(g, id)); }
     else if (pick === "dad") await g.say("rome.senator.ask.dad", "rome.senator.ans.dad.1", "rome.senator.ans.dad.2");
     else return g.say("rome.senator.ask.bye", "rome.senator.ans.bye");
   }
+}
+
+/** TALK-24: the senator's topic, himself: what he is late for, the toga, and (once the boy knows whose nose is on the money)
+    Caesar. */
+const SENATOR_HIM = [
+  { id: "late", line: "rome.senator.ask.late", clue: true },
+  { id: "toga", line: "rome.senator.ask.toga", clue: true },
+  // Once he has heard whose nose is on the new money (the keeper cries it, the first time he walks into the street),
+  // he can ask about Caesar. The senator's gossip is of a great-nephew nobody thinks about: the Caesar Augustus of
+  // Luke 2:1, as the boy does not know and nobody in Rome could. It gives nothing and changes nothing.
+  { id: "caesar", line: "rome.senator.ask.caesar", when: (g) => g.flag("rome.knowsBC") },
+];
+async function senatorAnswers(g, pick) {
+  if (pick === "late") {
+    await g.say("rome.senator.ask.late", "rome.senator.ans.late.1", "rome.senator.ans.late.2", "rome.senator.ans.late.3", "rome.senator.ans.late.4");
+    g.flag("rome.knowsSenate", true);                             // ROME-13S1: where the Senate meets today (the Gaul's question)
+  } else if (pick === "toga") await g.say("rome.senator.ask.toga", "rome.senator.ans.toga.1", "rome.senator.ans.toga.2", "rome.senator.ans.toga.3", "rome.senator.ans.toga.4");
+  else if (pick === "caesar") await g.say("rome.senator.ask.caesar", "rome.senator.ans.caesar.1", "rome.senator.ans.caesar.2", "rome.senator.ans.caesar.3", "rome.senator.ans.caesar.4", "rome.senator.ans.caesar.5");
 }
 
 export default {

@@ -1382,4 +1382,12 @@ export const lines = {
   "hint.rome.wish": ["son", "That coin was Phyllis's wish. I'd better ask her first, in the Forum, by the violets."],
   "hint.rome.felix": ["son", "Phyllis's lamp is for her boy, Felix. He loads barges across the river, below the stone bridge."],
   "hint.rome.granted": ["son", "Felix said yes. Back to the Forum to tell his mom, the flower lady!"],
+  // ---- TALK-24 (10 November: dialogue trees with topics, every act): the topics a talk's questions are gathered under ----
+  "rome.gaul.topic.guess": ["son", "Let me guess where the Senate meets."],
+  "rome.phyllis.topic.today": ["son", "Questions about today. Everybody's got garlands."],
+  "rome.titus.topic.him": ["son", "Questions about you. Since you're not going anywhere."],
+  "rome.anser.topic.more": ["son", "Random questions, though. I have a few."],
+  "rome.mariam.topic.home": ["son", "Can I ask some nosy questions? Nice nosy."],
+  "rome.clerk.topic.temple": ["son", "Questions about this place. It's so shiny."],
+  "rome.senator.topic.him": ["son", "You look important. Can I ask about you?"],
 };

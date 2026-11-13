@@ -78,6 +78,8 @@
 // Son; everything else from the Bible is told in the speaker's own words. (PASS-17R: since the author's rule of 16 October
 // no reference is said aloud: the Son says where he knows the words from; the references are in docs/CHARACTERS.md.)
 
+import { topic, back } from "./topics.js";      // TALK-24: topics, and the way back out of one
+
 const is = (g, fact) => !!g.flag(fact);
 /** The engine's count of the lines it has said (kept in the save), as the street's own script reads it. */
 const heard = (g, id) => !!(g.store && g.store.data && g.store.data.seenLines && g.store.data.seenLines[id]);
@@ -108,7 +110,19 @@ export const gaulTree = (h = {}) => ({
     who: { say: ["rome.gaul.who.1", "rome.gaul.who.son", "rome.gaul.who.2", "rome.gaul.who.3", "rome.gaul.who.4", "rome.gaul.who.6"], then: "ask" },     // PASS-19R2: rome.gaul.who.5 removed (the hole is the senate-house answer's joke)
     again: { say: ["rome.gaul.again"], then: "ask" },
     // ---- his question: where does the Senate meet today? The answers, and the rest.
+    // TALK-24: the answers to his question are a topic of their own (the guess); the rest stays on the menu
     ask: {
+      options: [
+        topic("guess", "rome.gaul.topic.guess", "guess"),
+        // the laugh: Rome's song about Gauls, told by the Gaul, wryly (the verses are never quoted)
+        { id: "song", line: "rome.gaul.opt.song", say: { 1: ["rome.gaul.song.1", "rome.gaul.song.2", "rome.gaul.song.son", "rome.gaul.song.3"], more: ["rome.gaul.song.4"] } },
+        { id: "mustache", line: "rome.gaul.opt.mustache", once: true, say: ["rome.gaul.mustache.1", "rome.gaul.mustache.son", "rome.gaul.mustache.2"] },
+        // the toga held out before he has his answer: first the Senate, then his knees
+        { id: "togaFirst", clue: true, line: "rome.gaul.opt.swap", when: (g) => g.has("gaultoga"), say: { 1: ["rome.gaul.swap.first"], more: ["rome.gaul.swap.first.2"] } },
+        { id: "bye", line: "rome.gaul.opt.bye", say: { 1: ["rome.gaul.bye.1"], more: ["rome.gaul.bye.2"] }, then: "exit" },
+      ],
+    },
+    guess: {
       options: [
         { id: "house", line: "rome.gaul.opt.house", do: h.point, then: (g) => (g.asked("gaul/house") === 1 ? "hole" : "hole2") },
         { id: "capitol", line: "rome.gaul.opt.capitol", when: (g) => !is(g, "rome.sawCapitol"), say: { 1: ["rome.gaul.capitol.1", "rome.gaul.capitol.2"], more: ["rome.gaul.capitol.3"] } },
@@ -118,12 +132,7 @@ export const gaulTree = (h = {}) => ({
         // the answer, heard from the senator (his speech) or from Walnut
         { id: "pompey", line: "rome.gaul.opt.pompey", when: (g) => is(g, "rome.knowsSenate"), say: ["rome.gaul.pompey"], set: "rome.gaulAnswered",
           then: (g) => (is(g, "rome.sawTheater") ? "saw" : "heard") },
-        // the laugh: Rome's song about Gauls, told by the Gaul, wryly (the verses are never quoted)
-        { id: "song", line: "rome.gaul.opt.song", say: { 1: ["rome.gaul.song.1", "rome.gaul.song.2", "rome.gaul.song.son", "rome.gaul.song.3"], more: ["rome.gaul.song.4"] } },
-        { id: "mustache", line: "rome.gaul.opt.mustache", once: true, say: ["rome.gaul.mustache.1", "rome.gaul.mustache.son", "rome.gaul.mustache.2"] },
-        // the toga held out before he has his answer: first the Senate, then his knees
-        { id: "togaFirst", clue: true, line: "rome.gaul.opt.swap", when: (g) => g.has("gaultoga"), say: { 1: ["rome.gaul.swap.first"], more: ["rome.gaul.swap.first.2"] } },
-        { id: "bye", line: "rome.gaul.opt.bye", say: { 1: ["rome.gaul.bye.1"], more: ["rome.gaul.bye.2"] }, then: "exit" },
+        back("guess"),
       ],
     },
     hole: { say: ["rome.gaul.house.1", "rome.gaul.house.son"], then: "back" },
@@ -169,16 +178,22 @@ export const phyllisTree = (h = {}) => ({
     again: { say: ["rome.phyllis.again"], then: "open" },
     open: {
       options: [
-        { id: "anna", line: "rome.phyllis.opt.anna", say: { 1: ["rome.phyllis.anna.1", "rome.phyllis.anna.2"], more: ["rome.phyllis.anna.3"] }, do: h.stand },     // the clue: she cannot leave
-        { id: "sweetheart", line: "rome.phyllis.opt.sweetheart", once: true, say: ["rome.phyllis.sweetheart.1", "rome.phyllis.sweetheart.son", "rome.phyllis.sweetheart.2"] },    // the laugh
+        topic("today", "rome.phyllis.topic.today", "today"),      // TALK-24: the feast, her myrtle, the Twins' temple
         { id: "son", clue: true, line: "rome.phyllis.opt.son", say: { 1: ["rome.phyllis.son.1", "rome.phyllis.son.2", "rome.phyllis.son.2.b", "rome.phyllis.son.3", "rome.phyllis.son.son"], more: ["rome.phyllis.son.4"] } },
-        { id: "twins", line: "rome.phyllis.opt.twins", once: true, say: ["rome.phyllis.twins.1", "rome.phyllis.twins.2", "rome.phyllis.twins.son"] },
         // the lever: the coin, and whose it was (Walnut has said so)
         { id: "wish", clue: true, line: "rome.phyllis.opt.wish", when: (g) => g.has("coin") && is(g, "rome.knowsWish") && !is(g, "rome.hasLamp"),
           // PASS-19R2: the author's complaints of 25 October ("Too long"): no more than two boxes by one speaker before someone
           // else speaks, so the Son's new lines (<id>.b) break the runs: her wish, his tale, Titus, Eleazar, the Gaul, Mariam
           say: { 1: ["rome.phyllis.wish.1", "rome.phyllis.wish.2", "rome.phyllis.wish.2.b", "rome.phyllis.wish.3", "rome.phyllis.wish.4"], more: ["rome.phyllis.wish.again"] }, then: "wish" },
         { id: "bye", line: "rome.phyllis.opt.bye", say: { 1: ["rome.phyllis.bye.1"], more: ["rome.phyllis.bye.2"] }, then: "exit" },
+      ],
+    },
+    today: {
+      options: [
+        { id: "anna", line: "rome.phyllis.opt.anna", say: { 1: ["rome.phyllis.anna.1", "rome.phyllis.anna.2"], more: ["rome.phyllis.anna.3"] }, do: h.stand },     // the clue: she cannot leave
+        { id: "sweetheart", line: "rome.phyllis.opt.sweetheart", once: true, say: ["rome.phyllis.sweetheart.1", "rome.phyllis.sweetheart.son", "rome.phyllis.sweetheart.2"] },    // the laugh
+        { id: "twins", line: "rome.phyllis.opt.twins", once: true, say: ["rome.phyllis.twins.1", "rome.phyllis.twins.2", "rome.phyllis.twins.son"] },
+        back("today"),
       ],
     },
     // the wish told: give it back (no), pay for it (no), or take the lamp to her son
@@ -238,11 +253,17 @@ export const titusTree = (h = {}) => ({
         // what the geese do whenever he puts a foot down (hook feet), and the second time, what he will say about it
         { id: "geese", clue: true, line: "rome.titus.opt.geese", say: { 1: ["rome.titus.geese.1"], more: ["rome.titus.geese.again"] }, do: h.feet,
           then: (g) => (g.asked("titus/geese") === 1 ? "feet" : null) },
+        { id: "help", clue: true, line: "rome.titus.opt.help", say: { 1: ["rome.titus.help.1", "rome.titus.help.2"], more: ["rome.titus.help.3"] } },     // the clue: ask old Anser
+        topic("him", "rome.titus.topic.him", "him"),      // TALK-24: the ewe, his father, jumping
+        { id: "bye", line: "rome.titus.opt.bye", say: { 1: ["rome.titus.bye.1"], more: ["rome.titus.bye.2"] }, then: "exit" },
+      ],
+    },
+    him: {
+      options: [
         { id: "ewe", line: "rome.titus.opt.ewe", once: true, say: ["rome.titus.ewe.1", "rome.titus.ewe.2"] },     // PASS-19R2: rome.titus.ewe.son removed: his own line is the button
         { id: "father", line: "rome.titus.opt.father", say: { 1: ["rome.titus.father.1", "rome.titus.father.2"], more: ["rome.titus.father.3"] } },
         { id: "jump2", line: "rome.titus.opt.jump2", say: { 1: ["rome.titus.jump.2"], more: ["rome.titus.jump.3"] } },
-        { id: "help", clue: true, line: "rome.titus.opt.help", say: { 1: ["rome.titus.help.1", "rome.titus.help.2"], more: ["rome.titus.help.3"] } },     // the clue: ask old Anser
-        { id: "bye", line: "rome.titus.opt.bye", say: { 1: ["rome.titus.bye.1"], more: ["rome.titus.bye.2"] }, then: "exit" },
+        back("him"),
       ],
     },
     feet: { say: ["rome.titus.geese.2"], then: "back" },
@@ -279,10 +300,16 @@ export const anserTree = (h = {}) => ({
         // the lever: once he has told it, the boy puts it to the test (the hook says the lines of the stomp)
         { id: "test", line: "rome.anser.opt.test", when: (g) => is(g, "rome.knowsGeese") && !is(g, "rome.geeseGone"), do: h.stomp, then: "exit" },
         { id: "moveAsk", line: "rome.anser.opt.move2", say: { 1: ["rome.anser.move.3"], 2: ["rome.anser.move.4"], more: ["rome.anser.move.5"] }, do: h.shake },
+        topic("more", "rome.anser.topic.more", "more"),      // TALK-24: the dogs, Moneta, his name
+        { id: "bye", line: "rome.anser.opt.bye", say: { 1: ["rome.anser.bye.1"], more: ["rome.anser.bye.2"] }, then: "exit" },
+      ],
+    },
+    more: {
+      options: [
         { id: "dogs", line: "rome.anser.opt.dogs", say: { 1: ["rome.anser.dogs.1", "rome.anser.dogs.2"], more: ["rome.anser.dogs.3"] } },
         { id: "moneta", line: "rome.anser.opt.moneta", say: { 1: ["rome.anser.moneta.1", "rome.anser.moneta.son", "rome.anser.moneta.2"], more: ["rome.anser.moneta.3"] } },
         { id: "nameAsk", line: "rome.anser.opt.name", when: (g) => !g.asked("anser/name"), once: true, say: ["rome.anser.name.1", "rome.anser.name.2", "rome.anser.name.son", "rome.anser.name.3"] },
-        { id: "bye", line: "rome.anser.opt.bye", say: { 1: ["rome.anser.bye.1"], more: ["rome.anser.bye.2"] }, then: "exit" },
+        back("more"),
       ],
     },
     // ---- after the stomp: the geese in their pen, and the goose-keeper not quite recovered
@@ -409,11 +436,17 @@ export const mariamTree = (h = {}) => ({
         { id: "hensAsk", line: "rome.mariam.opt.hens2", when: (g) => !is(g, "rome.sawHens"), say: ["rome.mariam.hens.1"], then: "hens" },
         { id: "crouch", clue: true, line: "rome.mariam.opt.crouch", say: { 1: ["rome.mariam.crouch.1"], more: ["rome.mariam.crouch.3"] }, do: h.crouch,
           then: (g) => (g.asked("mariam/crouch") === 1 ? "crouched" : null) },
+        topic("home", "rome.mariam.topic.home", "home"),      // TALK-24: her family, the doorpost, the yard's boss
+        { id: "bye", line: "rome.mariam.opt.bye", say: { 1: ["rome.mariam.bye.1"], more: ["rome.mariam.bye.2"] }, then: "exit" },
+      ],
+    },
+    home: {
+      options: [
         { id: "family", line: "rome.mariam.opt.family", say: ["rome.mariam.family.1", "rome.mariam.family.2"],
           then: (g) => (is(g, "rome.metDateSeller") && g.asked("mariam/family") === 1 ? "dates" : null) },
         { id: "doorpost", line: "rome.mariam.opt.doorpost", say: { 1: ["rome.mariam.doorpost.1", "rome.mariam.doorpost.son", "rome.mariam.doorpost.2", "rome.mariam.doorpost.son2"], more: ["rome.mariam.doorpost.3"] } },
         { id: "bossAsk", line: "rome.mariam.opt.boss", when: (g) => !g.asked("mariam/boss"), once: true, say: ["rome.mariam.boss.1", "rome.mariam.boss.son", "rome.mariam.boss.2"] },
-        { id: "bye", line: "rome.mariam.opt.bye", say: { 1: ["rome.mariam.bye.1"], more: ["rome.mariam.bye.2"] }, then: "exit" },
+        back("home"),
       ],
     },
     crouched: { say: ["rome.mariam.crouch.2"], then: "back" },
