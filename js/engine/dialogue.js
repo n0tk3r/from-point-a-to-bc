@@ -85,7 +85,10 @@ export class Dialogue {
     // LETTERBOX-11: a line through a door comes from someone in another century: their portrait stands beside the words,
     // in their colour, top centre as for anyone not on the stage, and nobody here moves their mouth for it.
     const person = g.cast[through || who] || {};
-    const actor = through ? null : g.view.cast.get(who);
+    // NARRATOR-25 (docs/WRITING.md): the narrator is nobody on the stage. Its words are a caption along the bottom of the
+    // picture, in a book face, wherever the scene and whatever the close-up; nobody's mouth moves for them.
+    const narrator = who === "narrator" && !through;
+    const actor = through || narrator ? null : g.view.cast.get(who);
     // CAR-13E: in a scene seen through the lead's own eyes (game.js, `unseen`) whoever is not drawn (the lead himself, or anyone
     // hidden or faded to nothing) is placed as one off the stage, not over an invisible head (his mouth and hands may move: nobody
     // sees them). Off the stage is the scene's `wordsAt` ([x, y]: the middle of the words' bottom edge, x kept 210 pixels from
@@ -107,6 +110,7 @@ export class Dialogue {
       const actor = seen;                                  // CAR-13E: the words go by the speaker as seen (above)
       p = document.createElement("p");
       p.className = "say";
+      if (narrator) p.classList.add("narrator");          // NARRATOR-25
       if (clickOnly && !voiced) p.classList.add("wait");   // ENGINE-19A: it waits for a click (the mark after the words: css)
       p.hidden = !showText;
       p.style.color = person.color || "#fff";
@@ -116,7 +120,7 @@ export class Dialogue {
       // While a close-up is showing, along the bottom, clear of whatever is being looked at.
       // (x, y) is where the middle of the bottom edge of the words goes, in picture pixels.
       const near = g.near;
-      const x = near ? W / 2 : actor ? Math.min(Math.max(actor.x, 210), W - 210) : off[0];          // (CAR-13E: off, above)
+      const x = near || narrator ? W / 2 : actor ? Math.min(Math.max(actor.x, 210), W - 210) : off[0];          // (CAR-13E: off, above; NARRATOR-25: the middle)
       let top = actor ? actor.y - actor.h * actor.scale : 0;
       if (actor && !near) {
         // Someone taller standing close by, level with the speaker or nearer: lift the words clear of that head too,
@@ -131,8 +135,8 @@ export class Dialogue {
           if (Math.abs(other.x - x) < (clear ? 210 : 150) && (other.y > actor.y - 60 || clear) && head < top) top = Math.max(head, top - most, actor.y - actor.h * actor.scale - most);
         }
       }
-      const y = near ? H - 12 : actor ? Math.max(top - 10, 60) : off[1];                            // (CAR-13E: off, above)
-      if (near) p.classList.add("under");
+      const y = narrator ? H - 36 : near ? H - 12 : actor ? Math.max(top - 10, 60) : off[1];                   // (CAR-13E: off, above; NARRATOR-25: the bottom, clear of the pockets and "Step back")
+      if (near && !narrator) p.classList.add("under");
       p.style.left = `${(x / W) * 100}%`;
       p.style.top = `${(y / H) * 100}%`;
       this.el.appendChild(p);

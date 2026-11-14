@@ -7,15 +7,22 @@
 //
 // Mom, Big Sister and Little Sister are here together (`party`); Casting Off (cutscenes/edo-castoff.js) brings them, on the
 // mark `deck`, and nobody leaves the ship (no ways out; the map at sea refuses). What happens here, in either order:
-//   #26 Etekō      (Big Sister) Kanbei cannot see his card in the glare: "Girl. You read?"; the compass box opens the
-//                  close-up (edo-compass.js: the ship's clock runs backwards, edo.compassRead); the call: English (the crew
-//                  stare), the rooster (west-and-a-bit), saru (the crew freezes: edo.saruSaid), the sea word from Kōta or
-//                  Denzō (edo.seaWords), "Etekō." (edo.headingCalled)
+//   #26 Etekō      (Big Sister) Kanbei cannot see his card in the glare; the compass box opens the close-up (edo-compass.js:
+//                  the lid tilted over the card, edo.cardShaded; the backwards clock worked out, edo.compassRead); the call at
+//                  once, back on deck: "Monkey!" (the deck freezes: edo.saruSaid); the sailors' word from Kōta, to Little
+//                  Sister (edo.seaWords); "Etekō!" (edo.headingCalled)
 //   #27 Don't Lift The Lid (Little Sister, Mom) Kōta met (edo.kotaMet: Little Sister's charades); Mom's lesson with the lid
 //                  (edo.lidDown); what the lady in the mast was given (Denzō; the first knock on the mast step: edo.funadamaList,
 //                  in Big Sister's note); a penny for his coin (edo.coinTraded: `mon`, `twopennies`); she chirps (edo.chirped)
 //   both done      "The Uttermost Parts" (cutscenes/edo-sail.js): the night, Psalm 139, Osaka
 // and a look and a use for each of the three at every thing.
+//
+// WRITE-25 and PUZZLE-25 (round twenty-five, docs/WRITING.md): the looks and tries are the narrator's now (one line for all
+// three, or one each where who tries changes it), every line of the ship is rewritten, and both puzzles are rebuilt fair and
+// richer: #26 has the glare to shade (the lid, in the close-up), the call straight after the reading, "Monkey!" frozen, the
+// sailors' word from Kōta through Little Sister, and a caller of whoever knows both; #27 is set by Denzō at the first talk
+// (a happy ship: the rice, the boy, nobody asking after her), each of the four answered by the bosun listening at the mast;
+// a thing that should work does (the pennies shown to Kōta, Big Sister's note held out to Denzō or the mast step).
 //
 // Every place is the painter's (art/scenes/edo-deck/layout.json, PAINT-21B's ready.md), but the sea's outline (the
 // painter's 402 points, kept to 29 within two pixels: tools/simplify.py in SCENES-21A's folder) and the hold's.
@@ -25,7 +32,7 @@
 import { STOCK_DRESSED } from "./edo-common.js";
 import { kanbeiTree, denzoTree, seijiroTree, kotaTree, gonrokuDeckTree } from "../talk/edo-c.js";
 import { dressFor } from "./edo-yui.js";
-import { THREE, who, is, heard, each, lookUse, walkOf, look, faceLead, once, nthOf, lookBy, uttermost, TALK_DECK } from "./edo-sea.js";
+import { THREE, who, is, heard, each, look, faceLead, once, nthOf, uttermost, TALK_DECK } from "./edo-sea.js";
 
 const art = "art/scenes/edo-deck/";
 
@@ -74,20 +81,29 @@ const KANBEI = kanbeiTree({
     await g.wait(500);
   },
 });
-async function kanbeiTalk(g) {
+async function kanbeiTalk(g, tree = KANBEI) {
   faceLead(g, "kanbei");
   deck.openAfter = false;
-  await g.talk(KANBEI);
+  await g.talk(tree);
   const d = g.actor("denzo");
   if (d && d.hold) d.hold(false);
   atRest(g);
   if (deck.openAfter) { deck.openAfter = false; return openClock(g); }
   await uttermost(g);
 }
+/** PUZZLE-25: #26, the call, begun at once: straight after Big Sister's reading (`fresh`: the close-up's needle steps back to
+    the deck and calls this, Kanbei's "Then call it, girl" just said), or from the monkey's mark once the heading is known (his
+    lead-in first: the call again, or "Found a better word for it yet?"). Kanbei's tree at its node `call`. */
+export const callHeading = (g, fresh = false) => {
+  g.flag("edo.kanbeiMet", true);
+  const stuck = (q) => is(q, "edo.saruSaid") && !is(q, "edo.seaWords");
+  return kanbeiTalk(g, { ...KANBEI, start: (q) => (is(q, "edo.headingCalled") ? "after" : fresh ? "call" : stuck(q) ? "callWord" : "callAgain") });
+};
 /** The compass box: its lid propped (the card's white shows), and the close-up of the ship's clock. */
 async function openClock(g) {
   const box = g.plane("compass");
   if (box) box.set("open");
+  g.flag("edo.boxSeen", true);                                                        // PUZZLE-25: the hints' second rung (the glare)
   g.sfx("click");
   await g.wait(350);
   await g.openCloseup("edo-compass");
@@ -96,6 +112,21 @@ const compassUse = Object.assign(async (g) => {
   await once(g, `edo.deck.compassbox.use.${who(g)}`);
   await openClock(g);
 }, { lines: THREE.map((w) => `edo.deck.compassbox.use.${w}`) });
+
+/** WRITE-25: the deck's own stock replies: the narrator's (docs/WRITING.md), as every look and try here is (the close-up's
+    too: edo-compass.js). */
+const nope = (w) => [`edo.deck.nope.${w}`, "edo.deck.nope.any"];
+export const STOCK_DECK = {
+  ...STOCK_DRESSED,
+  nope: { mom: nope("mom"), bigsis: nope("bigsis"), lilsis: nope("lilsis") },
+  look: { any: ["edo.deck.look.any"] },
+  give: { any: ["edo.deck.give.any"] },
+  see: {
+    mom: { bigsis: "edo.deck.see.mom.bigsis", lilsis: "edo.deck.see.mom.lilsis" },
+    bigsis: { mom: "edo.deck.see.bigsis.mom", lilsis: "edo.deck.see.bigsis.lilsis" },
+    lilsis: { mom: "edo.deck.see.lilsis.mom", bigsis: "edo.deck.see.lilsis.bigsis" },
+  },
+};
 
 // #27: Denzō, the lady in the mast
 const DENZO = denzoTree({
@@ -116,14 +147,19 @@ async function denzoTalk(g, tree = DENZO) {
   await uttermost(g);
 }
 /** The first knock on the mast step, by anyone: Denzō, at once, with what she was given (the tree's own list node); a knock
-    after it is the wrong try (open it: "Also, it's nailed."), and after that Denzō says the list again. */
+    after it, the narrator (it is nailed shut, and hers), and after that Denzō says the list again. */
 const maststepUse = Object.assign(async (g) => {
-  if (is(g, "edo.funadamaList") && !heard(g, "edo.deck.maststep.open.1")) { look(g, "bigsis", MASTSTEP); return g.say("edo.deck.maststep.open.1", "edo.deck.maststep.open.2"); }
+  if (is(g, "edo.funadamaList") && !heard(g, "edo.deck.maststep.open.1")) { look(g, "bigsis", MASTSTEP); return g.say("edo.deck.maststep.open.1"); }
   if (is(g, "edo.funadamaList")) { faceLead(g, "denzo"); return g.say("edo.denzo.list.again"); }        // (knocked on again: Denzō says it all over)
   await g.say(`edo.deck.maststep.use.${who(g)}`);
   g.sfx("knock");
-  await denzoTalk(g, { ...DENZO, start: (q) => (is(q, "edo.funadamaList") ? DENZO.start(q) : "list") });
-}, { lines: [...THREE.map((w) => `edo.deck.maststep.use.${w}`), "edo.deck.maststep.open.1", "edo.deck.maststep.open.2", "edo.denzo.list.again"] });
+  await denzoTalk(g, { ...DENZO, start: (q) => (is(q, "edo.funadamaList") ? DENZO.start(q) : is(q, "edo.denzoMet") ? "list" : "firstList") });
+}, { lines: [...THREE.map((w) => `edo.deck.maststep.use.${w}`), "edo.deck.maststep.open.1", "edo.denzo.list.again"] });
+/** PUZZLE-25 (reward intent): Big Sister's note held out to Denzō, or to the mast step: the list asked for, as at the first knock. */
+const noteToList = async (g) => {
+  if (is(g, "edo.funadamaList")) { faceLead(g, "denzo"); return g.say("edo.denzo.list.again"); }
+  await denzoTalk(g, { ...DENZO, start: (q) => (is(q, "edo.denzoMet") ? "list" : "firstList") });
+};
 
 /** She chirps: Kōta laughs for the first time on the voyage, and from the foot of the mast two small bright notes. */
 async function chirp(g) {
@@ -192,13 +228,20 @@ const KOTA = kotaTree({
   },
   chirp: (g) => chirp(g),
 });
-async function kotaTalk(g) {
+async function kotaTalk(g, tree = KOTA) {
   faceLead(g, "kota");
-  await g.talk(KOTA);
+  await g.talk(tree);
   for (const id of THREE) { const f = g.actor(id); if (f && f.hold) f.hold(false); }
   atRest(g);
   await uttermost(g);
 }
+
+/** PUZZLE-25 (reward intent): the pennies shown to Kōta start the trade, as asking does (and Kōta met, if he was not). */
+const penniesToKota = async (g) => {
+  if (is(g, "edo.coinTraded")) return g.say("edo.deck.nope.any");
+  if (!is(g, "edo.kotaMet")) g.flag("edo.kotaMet", true);
+  await kotaTalk(g, { ...KOTA, start: "coin" });
+};
 
 const GONROKU = gonrokuDeckTree({});
 async function gonrokuTalk(g) { faceLead(g, "gonroku"); await g.talk(GONROKU); look(g, "gonroku", CAPE); }
@@ -206,13 +249,16 @@ const SEIJIRO = seijiroTree({});
 async function seijiroTalk(g) { faceLead(g, "seijiro"); await g.talk(SEIJIRO); }
 
 // ---------- the looks and uses that change with the story ----------
-const maststepLook = lookBy("edo.deck.maststep", "after", (g) => is(g, "edo.funadamaList"));
-const potLook = lookBy("edo.deck.pot", "after", (g) => is(g, "edo.lidDown"));
+const maststepLook = Object.assign((g) => g.say(is(g, "edo.funadamaList") ? "edo.deck.maststep.after" : "edo.deck.maststep"), { lines: ["edo.deck.maststep", "edo.deck.maststep.after"] });
+const potLook = Object.assign((g) => g.say(is(g, "edo.lidDown") ? "edo.deck.pot.after" : "edo.deck.pot"), { lines: ["edo.deck.pot", "edo.deck.pot.after"] });
+const potUse = Object.assign((g) => g.say(is(g, "edo.lidDown") ? "edo.deck.pot.use.after" : `edo.deck.pot.use.${who(g)}`), { lines: ["edo.deck.pot.use.after", ...THREE.map((w) => `edo.deck.pot.use.${w}`)] });
+/** WRITE-25: a thing's look and try, the narrator's: one look; one try for all three, or (`each`) one each. */
+const said = (thing, eachTry = false) => ({ look: `edo.deck.${thing}`, use: eachTry ? each(`edo.deck.${thing}.use`) : `edo.deck.${thing}.use` });
 /** The floating cask: the first use, by any of the three, is the wrong try (Denzō: "That's for Konpira."). */
 const caskUse = Object.assign(async (g) => {
-  if (!heard(g, "edo.deck.cask.1")) { look(g, "denzo", "lilsis"); return g.say("edo.deck.cask.1", "edo.deck.cask.2", "edo.deck.cask.3"); }
-  await g.say(`edo.deck.cask.use.${who(g)}`);
-}, { lines: [...THREE.map((w) => `edo.deck.cask.use.${w}`), "edo.deck.cask.1", "edo.deck.cask.2", "edo.deck.cask.3"] });
+  if (!heard(g, "edo.deck.cask.1")) { look(g, "denzo", "lilsis"); return g.say("edo.deck.cask.1", "edo.deck.cask.1b", "edo.deck.cask.2", "edo.deck.cask.3"); }
+  await g.say("edo.deck.cask.use");
+}, { lines: ["edo.deck.cask.use", "edo.deck.cask.1", "edo.deck.cask.1b", "edo.deck.cask.2", "edo.deck.cask.3"] });
 
 // ---------- now and then: a gull; Kōta lifting his lid (until he has learned not to); the cask's area going with it ----------
 function tick(g, dt) {
@@ -276,7 +322,7 @@ export default {
   arrive: { deck: [M.deck_bigsis, LIL_ON_DECK], compass: [[680, 584], [640, 588]] },
   facing: "N",
   exits: ["edo-compass"],
-  stock: STOCK_DRESSED,
+  stock: STOCK_DECK,      // WRITE-25: the narrator's
   talk: TALK_DECK,
   tick,
 
@@ -323,39 +369,39 @@ export default {
 
   // Back to front: a later area lies over an earlier one.
   hotspots: [
-    { id: "sea", name: "the sea", poly: SEA, walkTo: M.deck, face: "N", ...lookUse("edo.deck", "sea") },
-    { id: "cape", name: "Daiōzaki", poly: [[2, 240], [120, 240], [240, 252], [268, 265], [2, 265]], walkTo: M.bow, face: "N", ...lookUse("edo.deck", "cape") },
-    { id: "gulls", name: "gulls", rect: [2, 120, 330, 110], walkTo: M.deck, face: "N", ...lookUse("edo.deck", "gulls") },
-    { id: "sail", name: "sail", poly: SAIL, walkTo: M.deck, face: "N", ...lookUse("edo.deck", "sail") },
-    { id: "yard", name: "yard", poly: [[452, 2], [560, 3], [660, 22], [752, 38], [752, 56], [660, 40], [560, 21]], walkTo: M.windlass, face: "N", ...lookUse("edo.deck", "yard") },
-    { id: "spray", name: "spray", rect: [2, 300, 70, 80], walkTo: M.bow, face: "W", ...lookUse("edo.deck", "spray") },
+    { id: "sea", name: "the sea", poly: SEA, walkTo: M.deck, face: "N", ...said("sea") },
+    { id: "cape", name: "Daiōzaki", poly: [[2, 240], [120, 240], [240, 252], [268, 265], [2, 265]], walkTo: M.bow, face: "N", ...said("cape") },
+    { id: "gulls", name: "gulls", rect: [2, 120, 330, 110], walkTo: M.deck, face: "N", ...said("gulls") },
+    { id: "sail", name: "sail", poly: SAIL, walkTo: M.deck, face: "N", ...said("sail") },
+    { id: "yard", name: "yard", poly: [[452, 2], [560, 3], [660, 22], [752, 38], [752, 56], [660, 40], [560, 21]], walkTo: M.windlass, face: "N", ...said("yard") },
+    { id: "spray", name: "spray", rect: [2, 300, 70, 80], walkTo: M.bow, face: "W", ...said("spray", true) },
     // the floating cask: its area goes with it while it bobs past, and is not there while it is not (tick: followCask)
-    { id: "cask", name: "floating cask", rect: [2, 338, 52, 24], walkTo: M.deck, face: "N", look: each("edo.deck.cask"), use: caskUse },
-    { id: "bow", name: "the bow", rect: [0, 359, 64, 195], walkTo: M.bow, face: "W", ...lookUse("edo.deck", "bow") },
-    { id: "boat", name: "the ship's boat", rect: [84, 324, 183, 50], walkTo: M.hearth, face: "N", ...lookUse("edo.deck", "boat") },
-    { id: "hold", name: "the hold", poly: [[375, 403], [386, 365], [396, 357], [488, 356], [498, 363], [537, 542], [369, 542]], walkTo: M.deck, face: "N", ...lookUse("edo.deck", "hold") },
-    { id: "bales", name: "bales", poly: [[244, 515], [245, 483], [245, 450], [247, 429], [253, 415], [264, 402], [276, 388], [282, 386], [283, 472], [244, 542]], walkTo: M.mast, face: "W", ...lookUse("edo.deck", "bales") },
-    { id: "casks", name: "casks", rect: [254, 429, 26, 71], walkTo: M.mast, face: "W", ...lookUse("edo.deck", "casks") },
-    { id: "mast", name: "mast", rect: [292, 2, 48, 290], walkTo: M.mast, face: "N", ...lookUse("edo.deck", "mast") },
-    { id: "rings", name: "iron rings", rect: [292, 292, 48, 183], walkTo: M.mast, face: "N", ...lookUse("edo.deck", "rings") },
-    { id: "maststep", name: "mast step", verb: "Knock on", poly: [[267, 530], [354, 530], [357, 508], [357, 475], [278, 475], [267, 494]], walkTo: M.mast, face: "N", look: maststepLook, use: maststepUse },
-    { id: "windlass", name: "windlass", rect: [501, 328, 126, 181], walkTo: M.windlass, face: "N", ...lookUse("edo.deck", "windlass") },
-    { id: "deckhouse", name: "deckhouse", poly: [[686, 465], [744, 506], [798, 506], [798, 320], [671, 320], [734, 357]], walkTo: M.rail, face: "E", ...lookUse("edo.deck", "deckhouse") },
-    { id: "rudder", name: "rudder", rect: [779, 394, 19, 130], walkTo: [740, 566], face: "E", ...lookUse("edo.deck", "rudder") },
-    { id: "tiller", name: "tiller", rect: [696, 389, 83, 135], walkTo: [740, 566], face: "N", ...lookUse("edo.deck", "tiller") },
-    { id: "hearth", name: "hearth box", poly: [[119, 560], [199, 560], [211, 541], [212, 459], [145, 459], [119, 525]], walkTo: M.hearth, face: "W", ...lookUse("edo.deck", "hearth") },
-    { id: "pot", name: "rice pot", rect: [147, 492, 45, 35], walkTo: M.hearth, face: "W", look: potLook, use: each("edo.deck.pot.use") },
+    { id: "cask", name: "floating cask", rect: [2, 338, 52, 24], walkTo: M.deck, face: "N", look: "edo.deck.cask", use: caskUse },
+    { id: "bow", name: "the bow", rect: [0, 359, 64, 195], walkTo: M.bow, face: "W", ...said("bow", true) },
+    { id: "boat", name: "the ship's boat", rect: [84, 324, 183, 50], walkTo: M.hearth, face: "N", ...said("boat") },
+    { id: "hold", name: "the hold", poly: [[375, 403], [386, 365], [396, 357], [488, 356], [498, 363], [537, 542], [369, 542]], walkTo: M.deck, face: "N", ...said("hold") },
+    { id: "bales", name: "bales", poly: [[244, 515], [245, 483], [245, 450], [247, 429], [253, 415], [264, 402], [276, 388], [282, 386], [283, 472], [244, 542]], walkTo: M.mast, face: "W", ...said("bales") },
+    { id: "casks", name: "casks", rect: [254, 429, 26, 71], walkTo: M.mast, face: "W", ...said("casks") },
+    { id: "mast", name: "mast", rect: [292, 2, 48, 290], walkTo: M.mast, face: "N", ...said("mast", true) },
+    { id: "rings", name: "iron rings", rect: [292, 292, 48, 183], walkTo: M.mast, face: "N", ...said("rings") },
+    { id: "maststep", name: "mast step", verb: "Knock on", poly: [[267, 530], [354, 530], [357, 508], [357, 475], [278, 475], [267, 494]], walkTo: M.mast, face: "N", look: maststepLook, use: maststepUse, useWith: { note: noteToList } },
+    { id: "windlass", name: "windlass", rect: [501, 328, 126, 181], walkTo: M.windlass, face: "N", ...said("windlass", true) },
+    { id: "deckhouse", name: "deckhouse", poly: [[686, 465], [744, 506], [798, 506], [798, 320], [671, 320], [734, 357]], walkTo: M.rail, face: "E", ...said("deckhouse") },
+    { id: "rudder", name: "rudder", rect: [779, 394, 19, 130], walkTo: [740, 566], face: "E", ...said("rudder") },
+    { id: "tiller", name: "tiller", rect: [696, 389, 83, 135], walkTo: [740, 566], face: "N", ...said("tiller") },
+    { id: "hearth", name: "hearth box", poly: [[119, 560], [199, 560], [211, 541], [212, 459], [145, 459], [119, 525]], walkTo: M.hearth, face: "W", ...said("hearth") },
+    { id: "pot", name: "rice pot", rect: [147, 492, 45, 35], walkTo: M.hearth, face: "W", look: potLook, use: potUse },
     // the crew (the game draws them; their areas go with them)
-    { id: "kota", name: "Kōta", verb: "Talk to", rect: [78, 441, 38, 112], walkTo: [150, 582], face: "W", look: each("edo.deck.kota"), use: kotaTalk },
-    { id: "denzo", name: "Denzō", verb: "Talk to", rect: [341, 413, 41, 122], walkTo: [400, 572], face: "W", look: each("edo.deck.denzo"), use: (g) => denzoTalk(g) },
-    { id: "seijiro", name: "Seijirō", verb: "Talk to", rect: [443, 432, 44, 130], walkTo: [420, 586], face: "E", look: each("edo.deck.seijiro"), use: seijiroTalk },
-    { id: "kako1", name: "sailor", verb: "Talk to", rect: [517, 400, 36, 106], walkTo: [520, 560], face: "N", look: each("edo.deck.kako1"), use: nthOf("edo.kako", ["kako1", "kako2"]) },
+    { id: "kota", name: "Kōta", verb: "Talk to", rect: [78, 441, 38, 112], walkTo: [150, 582], face: "W", look: "edo.deck.kota", use: (g) => kotaTalk(g), useWith: { pennies: penniesToKota } },
+    { id: "denzo", name: "Denzō", verb: "Talk to", rect: [341, 413, 41, 122], walkTo: [400, 572], face: "W", look: "edo.deck.denzo", use: (g) => denzoTalk(g), useWith: { note: noteToList } },
+    { id: "seijiro", name: "Seijirō", verb: "Talk to", rect: [443, 432, 44, 130], walkTo: [420, 586], face: "E", look: "edo.deck.seijiro", use: seijiroTalk },
+    { id: "kako1", name: "sailor", verb: "Talk to", rect: [517, 400, 36, 106], walkTo: [520, 560], face: "N", look: "edo.deck.kako1", use: nthOf("edo.kako", ["kako1", "kako2"]) },
     // (the sailor up on the windlass is talked to from its left: not from [600, 540], right behind Kanbei, who hid whoever stood there)
-    { id: "kako2", name: "sailor", verb: "Talk to", rect: [590, 380, 31, 91], walkTo: [562, 532], face: "N", look: each("edo.deck.kako2"), use: nthOf("edo.kako", ["kako1", "kako2"]) },
-    { id: "kanbei", name: "Kanbei", verb: "Talk to", rect: [590, 426, 43, 127], walkTo: [570, 574], face: "E", look: each("edo.deck.kanbei"), use: kanbeiTalk },
+    { id: "kako2", name: "sailor", verb: "Talk to", rect: [590, 380, 31, 91], walkTo: [562, 532], face: "N", look: "edo.deck.kako2", use: nthOf("edo.kako", ["kako1", "kako2"]) },
+    { id: "kanbei", name: "Kanbei", verb: "Talk to", rect: [590, 426, 43, 127], walkTo: [570, 574], face: "E", look: "edo.deck.kanbei", use: (g) => kanbeiTalk(g) },
     // the compass box, over the old man's shoulder: the ship's clock (opens the close-up)
-    { id: "compassbox", name: "compass box", verb: "Look in", rect: [622, 430, 60, 120], walkTo: M.compass, face: "W", look: each("edo.deck.compassbox"), use: compassUse },
-    { id: "gonroku", name: "Gonroku", verb: "Talk to", rect: [732, 419, 42, 123], walkTo: [716, 576], face: "E", look: each("edo.deck.gonroku"), use: gonrokuTalk },
+    { id: "compassbox", name: "compass box", verb: "Look in", rect: [622, 430, 60, 120], walkTo: M.compass, face: "W", look: "edo.deck.compassbox", use: compassUse },
+    { id: "gonroku", name: "Gonroku", verb: "Talk to", rect: [732, 419, 42, 123], walkTo: [716, 576], face: "E", look: "edo.deck.gonroku", use: gonrokuTalk },
   ],
 
   // Make the picture match the story. Runs on arrival, after loading a save, and whenever the scene is built.

@@ -566,8 +566,8 @@ export const lines = {
   // ======================================================================================================
   "edo.card.sail.title": ["narrator", "The Uttermost Parts"],
   // the box of sushi, earlier, at the rail, before the girls sleep (the thing eaten on the ship)
-  "edo.sail.box.1": ["lilsis", "We ate the WHOLE box. On a boat. At night. Best Tuesday ever."],
-  "edo.sail.box.2": ["bigsis", "It is not Tuesday. I have no idea what day it is. ...It was a very good box."],
+  "edo.sail.box.1": ["lilsis", "We ate the whole box of sushi, on a boat, at night. Best Tuesday ever."],
+  "edo.sail.box.2": ["bigsis", "It isn't Tuesday. Nobody here even has Tuesdays, but it was a very good box."],
   // Mom, quietly, to the sea: Psalm 139:9-10, King James Version, word for word; the semicolon ends the first box
   "edo.sail.1": ["mom", "'If I take the wings of the morning, and dwell in the uttermost parts of the sea;"],
   "edo.sail.2": ["mom", "Even there shall thy hand lead me, and thy right hand shall hold me.'"],
@@ -583,10 +583,10 @@ export const lines = {
   // twice at three tall women in hats; and Gonroku (the arrests are his one line, as the brief has it)
   "edo.sail.osaka.1": ["bigsis", "Everyone has a ladle, and everyone is going east. We are going the other way."],
   "edo.sail.osaka.2": ["mom", "That man in the belt has looked at us twice. Hats down, girls. And we walk."],
-  "edo.sail.osaka.3": ["gonroku", "The magistrates have been thick in Osaka since the Kirishitan business."],
-  "edo.sail.osaka.3b": ["gonroku", "Go north, into the hills, until it is quiet."],
-  "edo.sail.osaka.4": ["mom", "North. Thank you, captain. You've carried us further than you meant to."],
-  "edo.sail.osaka.5": ["gonroku", "Twelve days' fair wind. Never had twelve in a row. ...Do not tell the Funadama."],
+  "edo.sail.osaka.3": ["gonroku", "The magistrates have been everywhere in Osaka since the Kirishitan trouble."],
+  "edo.sail.osaka.3b": ["gonroku", "Go north, into the hills, until it's quiet."],
+  "edo.sail.osaka.4": ["mom", "North, then. Thank you, Captain, for carrying us farther than you meant to."],
+  "edo.sail.osaka.5": ["gonroku", "Twelve days of fair wind. I've never had twelve in a row. Don't tell the lady."],
 
   // ======================================================================================================
   // THE TALKS (js/content/talk/edo-a.js): O-Tami, Kihei, Sankichi, Tokuzō, Gonroku, O-Masa. An option is a line here,

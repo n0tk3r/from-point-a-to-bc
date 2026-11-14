@@ -5256,6 +5256,36 @@ fourteen); the rest are the builders' (WRITE-21A, 21B; PEOPLE-21A, 21B; SCENES-2
      one far up the road, drawn small, crossed the picture at a near one's pace and stepped three to five times too fast
      for its size. Now its speed is in step with its size where it is (its scale, a quarter at the least) and its legs
      turn with the ground it covers, worked out along its path: the far ones walk slowly, the near ones as before.
+272. **How the game talks, piloted on the ship (WRITE-25 and NARRATOR-25, round twenty-five, 13 November).** Ilya: "The
+     dialogue that has been produced is very strange. I need you to study what dialogues in LucasArts games, Sierra games
+     (especially King's Quest 6 and Gabriel Knight, Jane Jensen written dialogue) looks like and do better with generating
+     character dialogue." What felt strange, in his answers: every line a quip, choppy stiff sentences, how the crew talk,
+     and repeated tics. The study and the rules are `docs/WRITING.md` (what the classics do, what was wrong with ours,
+     measured; who says what; the numbers a stretch is checked against). Its answer, his choice: **a narrator for looks**,
+     as Sierra's games have: a new speaker, `narrator`, whose lines are a caption along the bottom of the picture in a book
+     face, leaning (`dialogue.js` say, `game.css` `.say.narrator`), and who answers Look at and Use and the stock replies;
+     the family speak in talks, to each other, in hints and at the story's moments; everyone else speaks fluently. His
+     choice of scope: **the ship first**, as a pilot: every line of the deck, the compass, the ship's people, Casting Off
+     and the Uttermost Parts rewritten (448 lines, 147 of them the narrator's; the numbers before and after are in
+     WRITING.md, section 6). The ship's boxes may run to 115 characters spoken and 150 narrated, as the other acts' do;
+     the rest of Act Six keeps item 254's eighty until it is rewritten.
+273. **The ship's two puzzles, fair and richer (PUZZLE-25).** Ilya: "on the ship the dial was impossible to solve, the
+     characters kept saying they needed to sound something but there was no way of knowing how to say it out loud for the
+     person steering the ship". Rebuilt to WRITING.md's nine rules (section 5); the cards are `docs/PUZZLES-japan.md` #26
+     and #27. #26: the noon glare on the card (a new effect kind, `glare`), shaded with the box's lid; the working-out, and
+     the call at once, back on deck; "Monkey!" freezes the deck, because at sea the word sounds like "go away" (true); the
+     sailors' word, etekō, from Kōta, who whispers it to Little Sister only; the one who read the clock calls it, and Kanbei
+     sends Mom and Little Sister to her with whatever is still missing. #27: Denzō says what is wrong at the first talk (the
+     rice, the boy, nobody asking after her), each wrong put right by a different one of the family, and after each the
+     narrator says the bosun is listening. A thing that should work does: the monkey's mark calls the heading; the pennies
+     held out to Kōta start the trade; Big Sister's note held out to Denzō or the mast step asks for the list. The hints
+     climb a rung a stage: six for #26, four for #27. New facts `edo.boxSeen` and `edo.cardShaded`; `edo.englishTried`
+     and `edo.saruHeard` are no longer set.
+274. **Left for the author:** play the ship (the part "Casting Off", or `index.html?scene=edo-deck`) and say whether the
+     voice and the puzzles are right; then the rest of the game is rewritten act by act to WRITING.md, each measured with
+     its numbers. Until then the narrator is heard on the ship only, the things carried elsewhere are still looked at in
+     the family's own words, and the parts' saved games (`checkpoints.js`, not remade) remember a few of the ship's old
+     lines as heard, which changes nothing.
 
 ---
 

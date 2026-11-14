@@ -124,9 +124,9 @@ export const BOAT = ["edo.card.boat.title", "edo.boat.1", "edo.boat.2", "edo.boa
   "edo.boat.7", "edo.boat.8", "edo.boat.9", "edo.boat.10", "edo.boat.11", "edo.boat.12", "edo.boat.13", "edo.boat.14",
   "edo.boat.15", "edo.boat.16", "edo.boat.17", "edo.card.boat.hills"];
 /** What the Funadama was given (Denzō's, at the first knock on the mast step or asked in his tree; edo.funadamaList). */
-export const LIST = ["edo.denzo.list.0", "edo.denzo.list.1", "edo.denzo.list.2", "edo.denzo.list.3", "edo.denzo.list.4", "edo.denzo.list.5"];
+export const LIST = ["edo.denzo.list.1", "edo.denzo.list.2", "edo.denzo.list.3", "edo.denzo.list.4", "edo.denzo.list.5", "edo.denzo.list.6"];      // (WRITE-25)
 /** The chirp (after the laugh's lead-in line: edo.deck.chirp.coin, .lid or .list). */
-export const CHIRP = ["edo.deck.chirp.1", "edo.deck.chirp.2", "edo.deck.chirp.3", "edo.deck.chirp.4", "edo.deck.chirp.5"];
+export const CHIRP = ["edo.deck.chirp.0", "edo.deck.chirp.1", "edo.deck.chirp.2", "edo.deck.chirp.3", "edo.deck.chirp.4", "edo.deck.chirp.5"];      // (WRITE-25: the narrator first, for the sound)
 /** #28: the line fed (edo.fedPilgrims), then Kurata along it ("My helpers.": edo.vouched). */
 export const VOUCH = ["edo.dojima.fed.1", "edo.dojima.vouch.1", "edo.dojima.vouch.2", "edo.dojima.vouch.3", "edo.dojima.vouch.4", "edo.dojima.vouch.5"];
 /** #28: Kyūhachi at Little Sister's tub, the fifth time. */
@@ -385,101 +385,146 @@ export const mosukeTree = (h = {}) => {
 };
 
 // ======================================================================================================
-// THE SHIP (#26 Etekō, #27 Don't Lift The Lid): the deck, the fifth day out
+// THE SHIP (#26 Etekō, #27 Don't Lift The Lid): the deck, the fifth day out. WRITE-25 and PUZZLE-25 (round twenty-five,
+// docs/WRITING.md): every line rewritten, and both puzzles rebuilt fair and richer (docs/PUZZLES-japan.md, #26 and #27).
+//   #26  Kanbei cannot see his card for the noon sun. Big Sister reads it for him in the close-up (the lid tilted to shade
+//        it: edo.cardShaded; the backwards card worked out: edo.compassRead), and calls the heading at once. Kanbei cannot see
+//        which mark the needle is on, so the call is the first time the animal is named: "Monkey!", the word a ship never
+//        hears (the deck freezes: edo.saruSaid). Kōta whispers the sailors' word to Little Sister, in charades or asked
+//        (edo.seaWords), and she tells her sister; "Etekō!" (edo.headingCalled). The one who read the clock calls it, so Mom
+//        and Little Sister, at Kanbei, are sent to Big Sister with whatever is still missing.
+//   #27  Denzō says what is wrong: a quiet lady, an unhappy ship (the rice burnt, the boy homesick, nobody asking after her).
+//        Mom's lesson with the lid (edo.lidDown); Little Sister's penny for Kōta's mother (edo.kotaMet, edo.coinTraded); the
+//        lady's things, into Big Sister's note (edo.funadamaList). After each, the bosun listens at the mast; after the last,
+//        Kōta laughs and she chirps (edo.chirped).
 // ======================================================================================================
-/** Is #27 done but for the chirp? The chirp follows the last of the four (Kōta met, the lid, the list, the coin). */
+/** #27: is it done but for the chirp? The chirp follows the last of the four (Kōta met, the lid, the list, the coin). */
 const chirpReady = (g) => is(g, "edo.kotaMet") && is(g, "edo.lidDown") && is(g, "edo.funadamaList") && is(g, "edo.coinTraded") && !is(g, "edo.chirped");
-/** The chirp's nodes, for a tree whose last action may be the last of the four: `chirpX` says the lead-in, the hook, CHIRP. */
+/** The chirp's nodes, for a tree whose last action may be the last of the four: `chirpIn` says the lead-in, the hook, CHIRP. */
 const chirpNodes = (h, leadIn) => ({
   chirpIn: { say: [leadIn], then: async (g) => { await run(h, "chirp", g); return "chirped"; } },
   chirped: { say: CHIRP, then: (g) => { g.flag("edo.chirped", true); return "exit"; } },
 });
+/** #27, one of the four just done: the chirp if it was the last; else the narrator's word that the bosun is listening, and on. */
+const afterOne = (fact, listen, next, chirp = "chirpIn") => async (g) => {
+  g.flag(fact, true);
+  if (chirpReady(g)) return chirp;
+  await g.say(listen);
+  return next;
+};
+/** A goodbye for each of the three, each shown only to her (a team's menu holds one way out). */
+const byes = (base, sayMom, sayBig, sayLil) => [
+  { ...bye(`${base}Mom`, `edo.${base}.opt.bye.mom`, [sayMom]), when: (g) => lead(g) === "mom" },
+  { ...bye(`${base}Big`, `edo.${base}.opt.bye.big`, [sayBig]), when: (g) => lead(g) === "bigsis" },
+  { ...bye(`${base}Lil`, `edo.${base}.opt.bye.lil`, [sayLil]), when: (g) => lead(g) === "lilsis" },
+];
 
-/** kanbeiTree: Kanbei, the helmsman, at the compass box. "Girl. You read?" The call is Big Sister's. */
-export const kanbeiTree = (h = {}) => ({
-  id: "kanbei",
-  start: (g) => {
-    if (is(g, "edo.headingCalled")) return "after";
-    if (!is(g, "edo.kanbeiMet")) return { mom: "openMom", big: "openBig", lil: "openLil" }[node(g)];
-    if (node(g) === "big" && is(g, "edo.compassRead")) return "call";
-    return node(g);
-  },
-  nodes: {
-    openBig: { say: ["edo.kanbei.big.1", "edo.kanbei.big.2", "edo.kanbei.big.3"], then: (g) => { g.flag("edo.kanbeiMet", true); return is(g, "edo.compassRead") ? "call" : "big"; } },
-    openMom: { say: ["edo.kanbei.mom.1", "edo.kanbei.mom.2"], then: (g) => { g.flag("edo.kanbeiMet", true); return "mom"; } },
-    openLil: { say: ["edo.kanbei.lil.1", "edo.kanbei.lil.2", "edo.kanbei.lil.3"], then: (g) => { g.flag("edo.kanbeiMet", true); return "lil"; } },
-    big: {
-      options: [
-        // the clock, looked at: the close-up opens (the working-out is the scene's, at the needle: edo.compassRead)
-        { id: "lookBig", line: "edo.kanbei.opt.look.big", clue: true, when: (g) => !is(g, "edo.compassRead"), then: async (g) => { await run(h, "closeup", g); return "exit"; } },
-        bye("byeBig", "edo.kanbei.opt.bye.big", ["edo.kanbei.bye"]),
-      ],
-    },
-    // the call: what she knows decides what she can say (English; the rooster; saru, if her sister has heard it; etekō)
-    call: {
-      say: ["edo.kanbei.call"],
-      options: [
-        { id: "english", line: "edo.kanbei.call.opt.english", once: true, say: ["edo.deck.monkey.1", "edo.deck.monkey.2", "edo.deck.monkey.3"], set: "edo.englishTried" },
-        { id: "rooster", line: "edo.kanbei.call.opt.rooster", once: true, say: ["edo.deck.rooster.1", "edo.deck.rooster.2", "edo.deck.rooster.3"] },
-        { id: "saru", line: "edo.kanbei.call.opt.saru", when: (g) => is(g, "edo.saruHeard") && !is(g, "edo.saruSaid"),
-          then: async (g) => { await run(h, "freeze", g); return "freeze"; } },
-        { id: "eteko", line: "edo.kanbei.call.opt.eteko", when: (g) => is(g, "edo.seaWords"), then: "called" },
-        { id: "wait", line: "edo.kanbei.call.opt.wait", say: ["edo.kanbei.call.wait"], then: "exit" },
-      ],
-    },
-    freeze: { say: ["edo.deck.freeze.1", "edo.deck.freeze.2", "edo.deck.freeze.3", "edo.deck.freeze.4", "edo.deck.freeze.5"],
-      then: (g) => { g.flag("edo.saruSaid", true); return "exit"; } },
-    called: { say: ["edo.deck.call.1", "edo.deck.call.2"], then: async (g) => { await run(h, "hold", g); return "held"; } },
-    held: { say: ["edo.deck.call.3", "edo.deck.call.4"], then: (g) => { g.flag("edo.headingCalled", true); return "exit"; } },
-    mom: {
-      options: [
-        { id: "eyesMom", line: "edo.kanbei.opt.eyes.mom", once: true, say: ["edo.kanbei.eyes.mom"] },
-        { id: "callMom", line: "edo.kanbei.opt.call.mom", once: true, when: (g) => is(g, "edo.compassRead"), say: ["edo.kanbei.call.mom"] },
-        bye("byeMom", "edo.kanbei.opt.bye.mom", ["edo.kanbei.bye"]),
-      ],
-    },
-    lil: {
-      options: [
-        { id: "clockLil", line: "edo.kanbei.opt.clock.lil", once: true, say: ["edo.kanbei.clock.lil"] },
-        { id: "callLil", line: "edo.kanbei.opt.call.lil", once: true, when: (g) => is(g, "edo.compassRead"), say: ["edo.kanbei.call.lil"] },
-        bye("byeLil", "edo.kanbei.opt.bye.lil", ["edo.kanbei.bye"]),
-      ],
-    },
-    after: {
-      say: ["edo.kanbei.after"],
-      options: [
-        bye("afterByeMom", "edo.kanbei.opt.bye.mom", ["edo.kanbei.bye"]),
-        bye("afterByeBig", "edo.kanbei.opt.bye.big", ["edo.kanbei.bye"]),
-        bye("afterByeLil", "edo.kanbei.opt.bye.lil", ["edo.kanbei.bye"]),
-      ],
-    },
-  },
-});
+/** #26: "Monkey!", and the deck goes still (edo.saruSaid). */
+export const FREEZE = ["edo.deck.freeze.1", "edo.deck.freeze.2", "edo.deck.freeze.3", "edo.deck.freeze.4", "edo.deck.freeze.5",
+  "edo.deck.freeze.6", "edo.deck.freeze.7", "edo.deck.freeze.8", "edo.deck.freeze.9", "edo.deck.freeze.10", "edo.deck.freeze.11",
+  "edo.deck.freeze.12"];
+/** #26: Big Sister's first look at the needle in the shade: the working-out (edo.compassRead), ending on Kanbei's "Call it". */
+export const WORKING = ["edo.compass.first.1", "edo.compass.first.2", "edo.compass.first.3", "edo.compass.first.4", "edo.compass.first.5",
+  "edo.compass.first.6"];
 
-/** denzoTree: Denzō, the bosun. The lady has not chirped; what she was given (the list, into Big Sister's note); the sea
-    word (etekō); the cask for Konpira. */
+/** kanbeiTree: Kanbei, the old helmsman, at the compass box (the ship's clock). He cannot see the card in the noon glare, and
+    will not say so. The close-up is opened by his tree (`closeup`); the call is the tree's node `call`, Big Sister's (the one
+    who read the clock calls it), begun straight after the reading (the close-up's needle, edo-compass.js, steps back to the
+    deck and starts it there), or when she comes back to him. */
+export const kanbeiTree = (h = {}) => {
+  const read = (g) => is(g, "edo.compassRead");
+  const stuck = (g) => is(g, "edo.saruSaid") && !is(g, "edo.seaWords");          // "Monkey!" said, and no other word for it yet
+  return {
+    id: "kanbei",
+    start: (g) => {
+      if (is(g, "edo.headingCalled")) return "after";
+      if (!is(g, "edo.kanbeiMet")) return { mom: "openMom", big: "openBig", lil: "openLil" }[node(g)];
+      if (read(g) && lead(g) === "bigsis") return stuck(g) ? "callWord" : "callAgain";
+      return node(g);
+    },
+    nodes: {
+      openBig: { say: ["edo.kanbei.big.1", "edo.kanbei.big.2", "edo.kanbei.big.3"], then: (g) => { g.flag("edo.kanbeiMet", true); return read(g) ? (stuck(g) ? "callWord" : "callAgain") : "big"; } },
+      openMom: { say: ["edo.kanbei.mom.1", "edo.kanbei.mom.2"], then: (g) => { g.flag("edo.kanbeiMet", true); return "mom"; } },
+      openLil: { say: ["edo.kanbei.lil.1", "edo.kanbei.lil.2", "edo.kanbei.lil.3"], then: (g) => { g.flag("edo.kanbeiMet", true); return "lil"; } },
+      big: {
+        options: [
+          // the card, looked at: the close-up opens when the talk is over (the reading is the close-up's)
+          { id: "lookBig", line: "edo.kanbei.opt.look.big", clue: true, when: (g) => !is(g, "edo.compassRead"), then: async (g) => { await run(h, "closeup", g); return "exit"; } },
+          bye("byeBig", "edo.kanbei.opt.bye.big", ["edo.kanbei.bye"]),
+        ],
+      },
+      // the call (Big Sister's): what is known decides what can be called (the monkey, until it is known that it is not said;
+      // the sea word, once Little Sister has it from Kōta)
+      callAgain: { say: ["edo.kanbei.call"], then: "call" },
+      callWord: { say: ["edo.kanbei.call.again"], then: "call" },
+      call: {
+        options: [
+          { id: "monkey", line: "edo.kanbei.call.opt.monkey", when: (g) => !is(g, "edo.saruSaid") && !is(g, "edo.seaWords"),
+            then: async (g) => { await run(h, "freeze", g); return "freeze"; } },
+          { id: "eteko", line: "edo.kanbei.call.opt.eteko", when: (g) => is(g, "edo.seaWords"), then: "called" },
+          { id: "what", line: "edo.kanbei.call.opt.what", clue: true, when: stuck, say: ["edo.kanbei.call.what"] },
+          { id: "wait", line: "edo.kanbei.call.opt.wait", say: ["edo.kanbei.call.wait"], then: "exit" },
+        ],
+      },
+      freeze: { say: FREEZE, then: (g) => { g.flag("edo.saruSaid", true); return "exit"; } },
+      called: { say: ["edo.deck.call.1", "edo.deck.call.2"], then: async (g) => { await run(h, "hold", g); return "held"; } },
+      held: { say: ["edo.deck.call.3", "edo.deck.call.4", "edo.deck.call.5"], then: (g) => { g.flag("edo.headingCalled", true); return "exit"; } },
+      // Mom and Little Sister offer to call it; he sends them to Big Sister, with whatever is still missing
+      mom: {
+        options: [
+          { id: "eyesMom", line: "edo.kanbei.opt.eyes.mom", once: true, say: ["edo.kanbei.eyes.mom"] },
+          ...callFor("Mom", "edo.kanbei.opt.call.mom", "edo.kanbei.call.mom"),
+          bye("byeMom", "edo.kanbei.opt.bye.mom", ["edo.kanbei.bye"]),
+        ],
+      },
+      lil: {
+        options: [
+          { id: "clockLil", line: "edo.kanbei.opt.clock.lil", once: true, say: ["edo.kanbei.clock.lil"] },
+          ...callFor("Lil", "edo.kanbei.opt.call.lil", "edo.kanbei.call.lil"),
+          bye("byeLil", "edo.kanbei.opt.bye.lil", ["edo.kanbei.bye"]),
+        ],
+      },
+      after: { say: ["edo.kanbei.after"], options: byes("kanbei", "edo.kanbei.bye", "edo.kanbei.bye", "edo.kanbei.bye").map((o) => ({ ...o, id: `after${o.id}` })) },
+    },
+  };
+  /** Mom's or Little Sister's offer to call the heading, once the clock is read: one answer for each state of #26 (before
+      the word that is not said; after it; the sailors' word found), each once. */
+  function callFor(who, line, base) {
+    return [
+      { id: `call${who}`, line, once: true, when: (g) => read(g) && !is(g, "edo.saruSaid") && !is(g, "edo.seaWords"), say: [base] },
+      { id: `call${who}Word`, line, once: true, when: stuck, say: [`${base}.word`] },
+      { id: `call${who}Ready`, line, once: true, when: (g) => read(g) && is(g, "edo.seaWords"), say: [`${base}.ready`] },
+    ];
+  }
+};
+
+/** denzoTree: Denzō, the bosun. The first time, the goal of #27: she has not chirped; a happy ship is a happy lady, and this
+    one is not (the rice, the boy, nobody asking after her). What she was given (the list, into Big Sister's note); the cask
+    for Konpira; and, once the word has been said that is not said at sea, he will not say what is said instead. */
+const OPEN_DENZO = ["edo.denzo.open.1", "edo.denzo.open.2", "edo.denzo.open.3", "edo.denzo.open.4"];
 export const denzoTree = (h = {}) => {
   const list = (id, line) => ({ id, line, clue: true, when: (g) => !is(g, "edo.funadamaList"), then: "list" });
-  const words = (id, line, when) => ({ id, line, clue: true, when: (g) => !is(g, "edo.seaWords") && when(g), then: "words" });
-  const afterCall = (g) => is(g, "edo.compassRead") || is(g, "edo.saruSaid");
+  const notNow = (id, line, say) => ({ id, line, clue: true, when: (g) => is(g, "edo.saruSaid") && !is(g, "edo.seaWords"), say: [say] });
   return {
     id: "denzo",
     start: (g) => (is(g, "edo.chirped") ? "after" : is(g, "edo.denzoMet") ? node(g) : "first"),
     nodes: {
-      first: { say: ["edo.denzo.open"], then: (g) => { g.flag("edo.denzoMet", true); return node(g); } },
+      first: { say: OPEN_DENZO, then: (g) => { g.flag("edo.denzoMet", true); return node(g); } },
+      // the first knock on the mast step, or Big Sister's note held out, before he has said what is wrong: that, then her list
+      firstList: { say: OPEN_DENZO, then: (g) => { g.flag("edo.denzoMet", true); return "list"; } },
       mom: {
         options: [
           { id: "worryMom", line: "edo.denzo.opt.worry.mom", once: true, say: ["edo.denzo.worry.1", "edo.denzo.worry.2"] },
           list("listMom", "edo.denzo.opt.list.mom"),
-          words("wordsMom", "edo.denzo.opt.words.mom", (g) => is(g, "edo.saruSaid")),
+          notNow("notNowMom", "edo.denzo.opt.notnow.mom", "edo.denzo.notnow.mom"),
           bye("byeMom", "edo.denzo.opt.bye.mom", ["edo.denzo.bye"]),
         ],
       },
-      // TALK-24: Big Sister's questions about the lady at the mast and the cask in the sea are a topic of their own
+      // TALK-24: Big Sister's questions about the lady and the cask in the sea are a topic of their own
       big: {
         options: [
           list("listBig", "edo.denzo.opt.list.big"),
-          words("wordsBig", "edo.denzo.opt.words.big", afterCall),
+          notNow("notNowBig", "edo.denzo.opt.notnow.big", "edo.denzo.notnow.big"),
           topic("loreBig", "edo.denzo.topic.lore.big", "loreBig"),
           bye("byeBig", "edo.denzo.opt.bye.big", ["edo.denzo.bye"]),
         ],
@@ -487,7 +532,7 @@ export const denzoTree = (h = {}) => {
       loreBig: {
         options: [
           { id: "worryBig", line: "edo.denzo.opt.worry.big", once: true, say: ["edo.denzo.worry.1", "edo.denzo.worry.2"] },
-          { id: "chirpBig", line: "edo.denzo.opt.chirp.big", once: true, when: (g) => g.asked("denzo/worryBig") + g.asked("denzo/worryMom") > 0, say: ["edo.denzo.chirp.big"] },
+          { id: "chirpBig", line: "edo.denzo.opt.chirp.big", once: true, say: ["edo.denzo.chirp.big"] },
           { id: "caskBig", line: "edo.denzo.opt.cask.big", once: true, say: ["edo.denzo.cask.big"] },
           back("loreBig"),
         ],
@@ -495,29 +540,20 @@ export const denzoTree = (h = {}) => {
       lil: {
         options: [
           list("listLil", "edo.denzo.opt.list.lil"),
-          words("wordsLil", "edo.denzo.opt.words.lil", (g) => is(g, "edo.saruHeard")),
+          notNow("notNowLil", "edo.denzo.opt.notnow.lil", "edo.denzo.notnow.lil"),
           { id: "patLil", line: "edo.denzo.opt.pat.lil", once: true, say: ["edo.denzo.pat.lil"] },
           bye("byeLil", "edo.denzo.opt.bye.lil", ["edo.denzo.bye.lil"]),
         ],
       },
       // what the lady was given; Big Sister writes it in her note (edo.funadamaList)
-      list: { say: LIST, then: async (g) => { await run(h, "write", g); g.flag("edo.funadamaList", true); return chirpReady(g) ? "chirpIn" : "root"; } },
-      // the sea word, and two more (edo.seaWords)
-      words: { say: ["edo.denzo.words.1", "edo.denzo.words.2", "edo.denzo.words.3"], then: (g) => { g.flag("edo.seaWords", true); return "root"; } },
+      list: { say: LIST, then: async (g) => { await run(h, "write", g); return afterOne("edo.funadamaList", "edo.deck.listen.list", "root")(g); } },
       ...chirpNodes(h, "edo.deck.chirp.list"),
-      after: {
-        say: ["edo.denzo.after"],
-        options: [
-          bye("afterByeMom", "edo.denzo.opt.bye.mom", ["edo.denzo.bye"]),
-          bye("afterByeBig", "edo.denzo.opt.bye.big", ["edo.denzo.bye"]),
-          bye("afterByeLil", "edo.denzo.opt.bye.lil", ["edo.denzo.bye.lil"]),
-        ],
-      },
+      after: { say: ["edo.denzo.after"], options: byes("denzo", "edo.denzo.bye", "edo.denzo.bye", "edo.denzo.bye.lil").map((o) => ({ ...o, id: `after${o.id}` })) },
     },
   };
 };
 
-/** seijiroTree: Seijirō, the purser. Cargo, then passengers, then crew. */
+/** seijiroTree: Seijirō, the purser. Cargo, then passengers (the crew fed), then crew (the lady chirped). */
 export const seijiroTree = (h = {}) => ({
   id: "seijiro",
   start: "open",
@@ -529,7 +565,7 @@ export const seijiroTree = (h = {}) => ({
           then: (g) => (is(g, "edo.chirped") ? "crew" : is(g, "edo.lidDown") ? "passengers" : "cargo") },
         { id: "cargoMom", line: "edo.seijiro.opt.cargo.mom", once: true, say: ["edo.seijiro.cargo.mom"] },
         { id: "countLil", line: "edo.seijiro.opt.count.lil", once: true, say: ["edo.seijiro.count.lil.1", "edo.seijiro.count.lil.2", "edo.seijiro.count.lil.3"] },
-        bye("byeMom", "edo.seijiro.opt.bye.mom", ["edo.seijiro.bye"]),
+        ...byes("seijiro", "edo.seijiro.bye", "edo.seijiro.bye", "edo.seijiro.bye"),
       ],
     },
     cargo: { say: ["edo.seijiro.what.1"], then: "exit" },
@@ -538,8 +574,9 @@ export const seijiroTree = (h = {}) => ({
   },
 });
 
-/** kotaTree: Kōta, the cook, twelve. Little Sister's game (charades: the Grump, a cat, a monkey: saru, and then etekō); his
-    mother and her brother; the penny for his coin; Mom's lesson with the lid; and the chirp, if his was the last of the four. */
+/** kotaTree: Kōta, the cook, twelve, on his first voyage. Little Sister's guessing game (the Grump; a cat, a word a ship never
+    hears; a monkey, and the sailors' word for it, etekō); his mother in Yui, and something from far away for her (the penny,
+    for his coin); Mom's lesson with the lid; and the chirp, if his was the last of the four. Shy of Big Sister. */
 export const kotaTree = (h = {}) => ({
   id: "kota",
   start: (g) => (is(g, "edo.chirped") ? "after" : is(g, "edo.kotaMet") ? node(g) : { mom: "openMom", big: "openBig", lil: "openLil" }[node(g)]),
@@ -551,31 +588,34 @@ export const kotaTree = (h = {}) => ({
       options: [
         { id: "gameLil", line: "edo.kota.opt.game.lil", keep: true,
           when: (g) => !(g.asked("kota/grump") && g.asked("kota/cat") && g.asked("kota/monkey")), say: ["edo.kota.game"], then: "game" },
-        { id: "seawordLil", line: "edo.kota.opt.seaword.lil", clue: true, when: (g) => is(g, "edo.saruHeard") && !is(g, "edo.seaWords"),
-          say: ["edo.kota.seaword.1", "edo.kota.seaword.2", "edo.kota.seaword.3"], set: "edo.seaWords" },
         { id: "homeLil", line: "edo.kota.opt.home.lil", once: true, say: ["edo.kota.home.1", "edo.kota.home.2", "edo.kota.home.3", "edo.kota.home.4", "edo.kota.home.5"] },
+        // after the word was said on deck: he whispers the sailors' one to her (or she had it in the game: edo.seaWords)
+        { id: "wordLil", line: "edo.kota.opt.word.lil", clue: true, when: (g) => is(g, "edo.saruSaid") && !is(g, "edo.seaWords"),
+          say: ["edo.kota.word.lil.1", "edo.kota.word.lil.2", "edo.kota.word.lil.3"], set: "edo.seaWords" },
         { id: "penniesLil", line: "edo.kota.opt.pennies.lil", clue: true, when: (g) => g.has("pennies") && !is(g, "edo.coinTraded"), then: "coin" },
         bye("byeLil", "edo.kota.opt.bye.lil", ["edo.kota.bye.lil"]),
       ],
     },
-    // charades: she acts, he guesses
+    // the guessing game: she acts, he guesses
     game: {
       options: [
-        { id: "grump", line: "edo.kota.opt.grump.lil", once: true, say: ["edo.kota.grump.1", "edo.kota.grump.2", "edo.kota.grump.3", "edo.kota.grump.4"] },
-        { id: "cat", line: "edo.kota.opt.cat.lil", once: true, say: ["edo.kota.cat.1", "edo.kota.cat.2", "edo.kota.cat.3"] },
-        { id: "monkey", line: "edo.kota.opt.monkey.lil", once: true, say: ["edo.kota.monkey.1", "edo.kota.monkey.2", "edo.kota.monkey.3", "edo.kota.monkey.4"], set: "edo.saruHeard" },
+        { id: "grump", line: "edo.kota.opt.grump.lil", once: true, say: ["edo.kota.grump.0", "edo.kota.grump.1", "edo.kota.grump.2", "edo.kota.grump.3", "edo.kota.grump.4"] },
+        { id: "cat", line: "edo.kota.opt.cat.lil", once: true, say: ["edo.kota.cat.0", "edo.kota.cat.1", "edo.kota.cat.2", "edo.kota.cat.3"] },
+        { id: "monkey", line: "edo.kota.opt.monkey.lil", once: true, then: (g) => (is(g, "edo.saruSaid") ? "monkeyAfter" : "monkeyFirst") },
         { id: "stop", line: "edo.kota.opt.stop.lil", then: "lil" },
       ],
     },
-    // the penny for a coin
+    monkeyFirst: { say: ["edo.kota.monkey.0", "edo.kota.monkey.1", "edo.kota.monkey.2", "edo.kota.monkey.3"], then: (g) => { g.flag("edo.seaWords", true); return "back"; } },
+    monkeyAfter: { say: ["edo.kota.monkey.0", "edo.kota.monkey.after", "edo.kota.monkey.3"], then: (g) => { g.flag("edo.seaWords", true); return "back"; } },
+    // the penny for a coin (for his mother, who has never seen anything from so far away)
     coin: { say: ["edo.deck.coin.1", "edo.deck.coin.2", "edo.deck.coin.3"], then: async (g) => { await run(h, "look", g); return "trade"; } },
-    trade: { say: ["edo.deck.coin.4"], then: async (g) => { await run(h, "trade", g); return "traded"; } },
-    traded: { say: ["edo.deck.coin.5", "edo.deck.coin.mom", "edo.deck.coin.bigsis"],
-      then: (g) => { g.flag("edo.coinTraded", true); return chirpReady(g) ? "chirpCoin" : "lil"; } },
+    trade: { say: ["edo.deck.coin.4", "edo.deck.coin.4b"], then: async (g) => { await run(h, "trade", g); return "traded"; } },
+    traded: { say: ["edo.deck.coin.5", "edo.deck.coin.mom", "edo.deck.coin.bigsis"], then: afterOne("edo.coinTraded", "edo.deck.listen.coin", "lil", "chirpCoin") },
     chirpCoin: { say: ["edo.deck.chirp.coin"], then: async (g) => { await run(h, "chirp", g); return "chirped"; } },
     mom: {
       options: [
         { id: "lidMom", line: "edo.kota.opt.lid.mom", clue: true, when: (g) => !is(g, "edo.lidDown"), then: "lid" },
+        { id: "homeMom", line: "edo.kota.opt.home.mom", once: true, say: ["edo.kota.home.mom"] },
         bye("byeMom", "edo.kota.opt.bye.mom", ["edo.kota.bye.mom"]),
       ],
     },
@@ -583,42 +623,36 @@ export const kotaTree = (h = {}) => ({
     lid: { say: ["edo.deck.lid.1", "edo.deck.lid.2", "edo.deck.lid.3", "edo.deck.lid.4"], then: async (g) => { await run(h, "wait", g); return "waiting"; } },
     waiting: { say: ["edo.deck.wait.1", "edo.deck.wait.2", "edo.deck.wait.3", "edo.deck.wait.4", "edo.deck.wait.5", "edo.deck.wait.6", "edo.deck.wait.7", "edo.deck.wait.8"],
       then: async (g) => { await run(h, "serve", g); return "eaten"; } },
-    eaten: { say: ["edo.deck.eat.1", "edo.deck.eat.2", "edo.deck.eat.3", "edo.deck.eat.4"],
-      then: (g) => { g.flag("edo.lidDown", true); return chirpReady(g) ? "chirpLid" : "mom"; } },
+    eaten: { say: ["edo.deck.eat.1", "edo.deck.eat.2", "edo.deck.eat.3", "edo.deck.eat.4"], then: afterOne("edo.lidDown", "edo.deck.listen.lid", "mom", "chirpLid") },
     chirpLid: { say: ["edo.deck.chirp.lid"], then: async (g) => { await run(h, "chirp", g); return "chirped"; } },
     chirped: { say: CHIRP, then: (g) => { g.flag("edo.chirped", true); return "exit"; } },
     big: {
       options: [
-        { id: "lidBig", line: "edo.kota.opt.lid.big", once: true, when: (g) => !is(g, "edo.lidDown"), say: ["edo.kota.lid.big"] },
+        { id: "lidBig", line: "edo.kota.opt.lid.big", once: true, when: (g) => !is(g, "edo.lidDown"), say: ["edo.kota.lid.big", "edo.kota.lid.big.2"] },
+        { id: "wordBig", line: "edo.kota.opt.word.big", clue: true, when: (g) => is(g, "edo.saruSaid") && !is(g, "edo.seaWords"), say: ["edo.kota.word.big", "edo.kota.word.big.2"] },
         bye("byeBig", "edo.kota.opt.bye.big", ["edo.kota.bye.big"]),
       ],
     },
-    after: {
-      say: ["edo.kota.after"],
-      options: [
-        bye("afterByeMom", "edo.kota.opt.bye.mom", ["edo.kota.bye.mom"]),
-        bye("afterByeBig", "edo.kota.opt.bye.big", ["edo.kota.bye.big"]),
-        bye("afterByeLil", "edo.kota.opt.bye.lil", ["edo.kota.bye.lil"]),
-      ],
-    },
+    after: { say: ["edo.kota.after"], options: byes("kota", "edo.kota.bye.mom", "edo.kota.bye.big", "edo.kota.bye.lil").map((o) => ({ ...o, id: `after${o.id}` })) },
   },
 });
 
-/** gonrokuDeckTree: Gonroku, at the tiller, on the fifth day. He speaks in weather. */
+/** gonrokuDeckTree: Gonroku, at the tiller, on the fifth day. He talks about the weather. Once the heading is called he says so
+    first, and the rest is as before (the voyage, his thanks, the one goodbye). */
 export const gonrokuDeckTree = (h = {}) => ({
   id: "gonrokuDeck",
-  start: (g) => (is(g, "edo.headingCalled") ? "after" : "open"),
+  start: (g) => (is(g, "edo.headingCalled") ? "late" : "open"),
   nodes: {
-    open: {
-      say: ["edo.deck.gonroku.open"],
+    open: { say: ["edo.deck.gonroku.open"], then: "menu" },
+    late: { say: ["edo.deck.gonroku.after"], then: "menu" },
+    menu: {
       // TALK-24: the sea, the days to Osaka and the steering are a topic (the voyage); one goodbye, the one being played's
       options: [
         { id: "clockBig", line: "edo.deck.gonroku.opt.clock.big", clue: true, when: (g) => !is(g, "edo.compassRead"), say: ["edo.deck.gonroku.clock.big"] },
         topic("voyage", "edo.deck.gonroku.topic.voyage", "voyage"),
         { id: "thanksMom", line: "edo.deck.gonroku.opt.thanks.mom", once: true, when: (g) => !is(g, "edo.lidDown"), say: ["edo.deck.gonroku.thanks.1"] },
         { id: "thanksRiceMom", line: "edo.deck.gonroku.opt.thanks.mom", once: true, when: (g) => is(g, "edo.lidDown"), say: ["edo.deck.gonroku.thanks.2"] },
-        { ...bye("byeMom", "edo.deck.gonroku.opt.bye.mom", ["edo.deck.gonroku.bye.mom"]), when: (g) => who(g) !== "lilsis" },
-        { ...bye("byeLil", "edo.deck.gonroku.opt.bye.lil", ["edo.deck.gonroku.bye.lil"]), when: (g) => who(g) === "lilsis" },
+        ...byes("deck.gonroku", "edo.deck.gonroku.bye.mom", "edo.deck.gonroku.bye.big", "edo.deck.gonroku.bye.lil").map((o, i) => ({ ...o, id: ["byeMom", "byeBig", "byeLil"][i] })),
       ],
     },
     voyage: {
@@ -627,13 +661,6 @@ export const gonrokuDeckTree = (h = {}) => ({
         { id: "osakaBig", line: "edo.deck.gonroku.opt.osaka.big", once: true, say: ["edo.deck.gonroku.osaka.big"] },
         { id: "steerLil", line: "edo.deck.gonroku.opt.steer.lil", once: true, say: ["edo.deck.gonroku.steer.1", "edo.deck.gonroku.steer.2", "edo.deck.gonroku.steer.3"] },
         back("voyage"),
-      ],
-    },
-    after: {
-      say: ["edo.deck.gonroku.after"],
-      options: [
-        bye("afterByeMom", "edo.deck.gonroku.opt.bye.mom", ["edo.deck.gonroku.bye.mom"]),
-        bye("afterByeLil", "edo.deck.gonroku.opt.bye.lil", ["edo.deck.gonroku.bye.lil"]),
       ],
     },
   },

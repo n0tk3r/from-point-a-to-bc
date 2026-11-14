@@ -137,15 +137,20 @@ export const act = {
     // Big Sister will not sail out of a year she cannot name (#21 first).
     { id: "edo.castoff", kind: "cutscene", title: "Casting Off", lead: "family", scene: "edo-village", needs: ["edo.west", "edo.when"], sets: "edo.aboard",
       hint: { mom: "hint.edo.castoff.mom", bigsis: "hint.edo.castoff.bigsis", lilsis: "hint.edo.castoff.lilsis" } },
-    // #26 and #27, the deck by day, in either order
+    // #26 and #27, the deck by day, in either order. PUZZLE-25 (docs/PUZZLES-japan.md): each stage's hint is the next step,
+    // a rung at a time: #26 the goal; the glare (the box seen); the needle (the card shaded); the call (the clock read); the
+    // sailors' word (after "Monkey!"); the call again (the word known). #27 the goal (Denzō's, until something is done); the
+    // lid; the coin; the list.
     { id: "edo.heading", kind: "puzzle", chain: "A", title: "Etekō: the ship's clock runs backwards, and the word you don't say at sea", lead: "bigsis", scene: "edo-deck",
       needs: ["edo.aboard"], sets: "edo.headingCalled",
-      hint: stagedAll("hint.edo.heading", ["", ".2", ".3", ".4"],
-        (g) => (!is(g, "edo.compassRead") ? "" : is(g, "edo.seaWords") ? ".4" : is(g, "edo.saruSaid") ? ".3" : ".2")) },
+      hint: stagedAll("hint.edo.heading", ["", ".2", ".3", ".4", ".5", ".6"],
+        (g) => (!is(g, "edo.compassRead") ? (is(g, "edo.cardShaded") ? ".3" : is(g, "edo.boxSeen") ? ".2" : "")
+          : is(g, "edo.seaWords") ? ".6" : is(g, "edo.saruSaid") ? ".5" : ".4")) },
     { id: "edo.chirp", kind: "puzzle", chain: "B", title: "Don't Lift The Lid: Kōta's rice, the Funadama's list, a penny for a coin, and she chirps", lead: ["lilsis", "mom"], scene: "edo-deck",
       needs: ["edo.aboard"], sets: "edo.chirped",
       hint: stagedAll("hint.edo.chirp", ["", ".2", ".3", ".4"],
-        (g) => (!is(g, "edo.kotaMet") ? "" : !is(g, "edo.lidDown") ? ".2" : !is(g, "edo.funadamaList") ? ".3" : ".4")) },
+        (g) => (!is(g, "edo.denzoMet") && !is(g, "edo.lidDown") && !is(g, "edo.coinTraded") && !is(g, "edo.funadamaList") ? ""
+          : !is(g, "edo.lidDown") ? ".2" : !is(g, "edo.coinTraded") ? ".3" : ".4")) },
     // The night at sea, Psalm 139, "Eight days later", Osaka: the river mouth, the lighter, the Dōjima shore
     { id: "edo.sail", kind: "cutscene", title: "The Uttermost Parts (the night at sea; Osaka)", lead: "family", scene: "edo-deck", needs: ["edo.headingCalled", "edo.chirped"], sets: "edo.sailed" },
 

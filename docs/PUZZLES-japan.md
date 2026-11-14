@@ -499,7 +499,7 @@ Still the team of three, all on stage, played in turn (the party in every scene 
 | | What only she can do here | What she will not do |
 | --- | --- | --- |
 | **Mom** | Ask O-Kuni good morning with no money, and be given a shell for the climb; give a pass back to the woman it describes; teach a twelve-year-old not to lift the lid; ask O-Masa properly, after the road | Use somebody else's pass ("No. It says fifty, with a mole by the right eye."); walk past the clerk before he has had his look; open what isn't hers to open ("We don't open what isn't ours to open.") |
-| **Big Sister** | Read a ship's compass whose card runs backwards (#26: "That is backwards genius. The very best kind."), and call the heading in the sailors' word; write the Funadama's list in her note | Touch the stone figure, or take a thing off a holy figure's head; steer, or heave on a windlass ("I've read about what happens when you let go.") |
+| **Big Sister** | Read a ship's compass whose card runs backwards, once the glare is off it (#26: "So whichever way we turn, the needle lands on the mark we're heading for. It's brilliant."), and call the heading in the sailors' word; write the Funadama's list in her note | Touch the stone figure, or take a thing off a holy figure's head; steer, or heave on a windlass ("I've read about what happens when you let go.") |
 | **Little Sister** | Reach the Jizō's hat ("Sorry, sir. ...Got it."); ride in a palanquin she cannot pay for, for a moment; play charades with Kōta; give up a penny for the first time all act | Peek under the lid (she tries: "Sweetheart. What did I just say?") |
 
 **The clothes.** O-Tami's kimonos from #22 on (round twenty's), hats on outdoors; and now Big Sister's hair up, held with
@@ -531,9 +531,9 @@ in the close-up.
                                               |
                   +---------------------------+---------------------------+
           #26 Etekō (Big Sister)                              #27 Don't Lift The Lid (Little Sister, Mom, with Big Sister)
-          the ship's clock (the close-up): the card runs      Kōta met (charades); the lid (Mom); the Funadama's
-          backwards; English, the rooster, saru (the crew     list (Denzō, the first knock on the mast step); a
-          freezes), the sea word, "Etekō."                    penny for a coin; she chirps
+          the ship's clock (the close-up): the glare, the     Denzō says what is wrong: the rice (Mom's lid), the
+          lid; the card runs backwards; "Monkey!" (the deck   boy (a penny for his coin), nobody asking after her
+          freezes); Kōta's word, to Little Sister; "Etekō!"   (the Funadama's list); she chirps     [PUZZLE-25]
                   +---------------------------+---------------------------+
                     Cut-scene: The Uttermost Parts (the night, Psalm 139; "Eight days later" / "Osaka"; the
                                river mouth; the lighter; Gonroku's goodbye at the Dōjima steps)  (edo.sailed)
@@ -546,8 +546,9 @@ with its fact: `edo.road` (#24, `edo.noRoad`; needs `edo.dressed`), `edo.west` (
 `edo.fed`), `edo.castoff` (the cut-scene, `edo.aboard`; needs `edo.west` and `edo.when`), `edo.heading` (#26,
 `edo.headingCalled`) and `edo.chirp` (#27, `edo.chirped`), both needing `edo.aboard`, in either order, and `edo.sail` (the
 cut-scene, `edo.sailed`; needs both). The facts the staged hints read are the scenes': `edo.hensWest`, `edo.gust`,
-`edo.passFound`, `edo.passBack` (#24); `edo.kiheiWest`, `edo.gonrokuNo`, `edo.gonrokuWife` (#25); `edo.compassRead`,
-`edo.saruSaid`, `edo.seaWords` (#26); `edo.kotaMet`, `edo.lidDown`, `edo.funadamaList`, `edo.coinTraded` (#27).
+`edo.passFound`, `edo.passBack` (#24); `edo.kiheiWest`, `edo.gonrokuNo`, `edo.gonrokuWife` (#25); `edo.boxSeen`,
+`edo.cardShaded`, `edo.compassRead`, `edo.saruSaid`, `edo.seaWords` (#26); `edo.denzoMet`, `edo.lidDown`, `edo.coinTraded`,
+`edo.funadamaList` (#27; and `edo.kotaMet`, which the coin needs).
 
 ### Location layout
 
@@ -717,100 +718,140 @@ Gives:        edo.west. The goodbyes and Casting Off follow, with the year worke
 Cut-Scene: Casting Off        (new; the beat edo.castoff: edo.aboard)
 ```
 Played by the village after the goodbyes (round twenty's, unchanged, in the street before the shop at first light). The
-card "Casting Off". On the beach by the tender, O-Masa: "My nephew cooks on that ship. Kōta. Twelve. Be kind about the
-rice." "We will. Thank you, O-Masa. For the question as much as the answer." "You asked it properly. Go on, before he
-changes his weather." The ship's boat rows them out (a picture over the stage, as the night at sea is: two sailors at the
-oars, the three in its stern, Little Sister waving, Gonroku's ship at anchor ahead, Fuji pink at first light): "A boat to
-get to the BOAT." "The ship's own boat. Big ships carry a little one about, like a pocket." "Wave to Yui, girls. Properly.
-Somebody's watching." Aboard (a picture: the deck at anchor, the yard on the deck with the sail furled on it, two sailors at
-the windlass): "Heave." "And heave." (the yard going up the mast a heave at a time, four heaves) Denzō: "Up she goes! Mind
-your heads. Mind your HATS." The great sail falls open and fills: "It's BREATHING." "Woven, not sewn. A captain from Harima
-thought of it." "I have never seen anybody so proud of cloth before." "You have never seen THIS cloth." Seijirō counts them:
-"Three. ...Cargo." "Passengers, I think." "Passengers pay. ...Cargo." Gonroku: "Stern. No whistling. Wind's fair. ...For
-now." The first night (round twenty's ship by night, the girls on the coil of rope, the box between them): "We ate the WHOLE
-box. On a boat. At night. Best Tuesday ever." "It is not Tuesday. I have no idea what day it is. ...It was a very good box." (the
+card "Casting Off". (WRITE-25: the lines as round twenty-five rewrote them.) On the beach by the tender, O-Masa: "My nephew
+cooks on that ship. Kōta, he's twelve. Be kind to him about the rice." "We will, O-Masa. You asked him far better than we
+could have." "You asked properly first. Now go, before the weather changes his mind." The ship's boat rows them out (a picture
+over the stage, as the night at sea is: two sailors at the oars, the three in its stern, Little Sister waving, Gonroku's ship
+at anchor ahead, Fuji pink at first light): "We need a boat to get to the boat." "That's the ship's own little boat. Big ships
+carry one around, like a spare." "Wave goodbye to Yui, girls. Somebody on that beach is watching us go." Aboard (a picture: the
+deck at anchor, the yard on the deck with the sail furled on it, two sailors at the windlass): "Heave!" "And heave!" (the yard
+going up the mast a heave at a time, four heaves) Denzō: "Up she goes. Mind your heads, and mind your hats." The great sail
+falls open and fills: "The sail's breathing." "Woven thick, not stitched from scraps. A man from Takasago thought of that." "I've
+never seen anyone so proud of a piece of cloth." "You've never seen a piece of cloth like this one." Seijirō counts them:
+"Three. Cargo." "Passengers, surely." "Passengers pay. Cargo." Gonroku: "Women in the stern. No whistling. The wind's fair, for
+now." The first night (round twenty's ship by night, the girls on the coil of rope, the box between them): "We ate the whole
+box of sushi, on a boat, at night. Best Tuesday ever." "It isn't Tuesday. Nobody here even has Tuesdays, but it was a very
+good box." (the
 `sushibox` gone from whoever had it). The card "Four days later"; the hats on; on the act's map the portraits go out along
 the sea path from Yui to the ship's place at sea (`g.journey("edo", "yui", "sea")`, the timbers creaking); the deck, on the
 mark `deck`. Skipped, the same: edo.aboard, the box gone, the hats on, the deck.
 
 ```
 Puzzle #26: Etekō        (Act Six · Lead: Big Sister · the deck, the ship's clock)
+Rebuilt:      PUZZLE-25, round twenty-five (docs/WRITING.md, section 5). The author: "on the ship the dial was impossible to
+              solve, the characters kept saying they needed to sound something but there was no way of knowing how to say it
+              out loud for the person steering the ship". Now each step is seen before it is needed, and said once, plainly.
 Needs:        Casting Off (edo.aboard)
-Setup:        The deck, the first time: "Day five at sea. I have counted every one of them. In fours, mostly." "I LIVE on a
-              boat now. I'm a boat person." "Five days, and nobody has been ill over the side. I'm very proud of us." The
-              ship's talk: "Daiōzaki. Past it, the Kumano-nada. Wind holds till dark. Maybe." "She hasn't chirped. Not once
-              since the women came aboard. Five days." "...Can't see the card. ...Sun's on it." "Rice is burnt again." "And
-              raw. Both at once. It's a gift, that boy."
-Step 1:       Kanbei: "Girl. ...You read?" "Everything. Except Japanese." "...This isn't Japanese. It's animals." "Show me the
-              card. I'll read it out to you." The compass box (or Kanbei) opens the close-up: the box's lid propped (it shows
-              on the deck as open), the card, the marks, Kōta's little animals. Big Sister's first look at the needle: "The
-              needle points north. So north is... the monkey?" Kanbei (beside the box): "The ship's clock tells you where the
-              ship goes, girl." "That's all a ship wants to know." "The rat's fixed at the bow. And the marks run the wrong
-              way round. On purpose." "...Go on." "So the needle always sits on the way we are going. That is genius." "That's
-              backwards genius." (edo.compassRead) Step back: the deck, everyone where they stood.
-Step 2:       The call (Kanbei, Big Sister's): "...Call it, girl. ...The helm is waiting on you." English: "Monkey!" "...Monk-ee?"
-              "Monk-ee." Gonroku: "Say it so the helm can hear it." The rooster: "West. That is the rooster. Is it not?" "...Is the
-              needle on the rooster?" "No. One mark along. We are not going west. We are going west-and-a-bit." "A ship is always
-              going west-and-a-bit." Saru (once Little Sister has had it from Kōta): "Saru. ...My sister says that's the
-              word for it." The crew freezes, Denzō's hand on the mast: "NOT that word." "Not at sea. It means 'go away', and
-              the lady hears it." "...The wind is still with us. Nobody says it twice." "I'm so sorry. I didn't know. I won't say
-              it again." "...You did not know it. And she knows you did not know it. Probably." (edo.saruSaid)
-Step 3:       The sea word: Denzō, asked ("...Etekō. At sea it is etekō. Never the other one. Not ever." "And a snake's the long thing.
-              And a whale is Ebisu. Remember that one." "A word for everything you mustn't say. That's very well
-              organized."), or Kōta, asked by Little Sister ("...Come here." "Etekō. Say it QUIET."). (edo.seaWords)
-Step 4:       "Etekō." Kanbei: "Etekō." Gonroku: "Etekō. Hold her." "...The girl reads the clock." "I read a compass.
-              Backwards. In animals. I'd like that on a plaque." (edo.headingCalled)
-Wrong tries:  Reading it as a map (the first look, above); the rooster; the monkey's mark, used ("That's our heading. Now I
-              have to say it so the helm can hear it."); any mark, used ("Touching the marks steers nothing. Calling the
-              heading does."); the cape ("Daiōzaki, where one sea ends and the next begins."); the windlass ("I'm not strong
-              enough, and I've read about what happens when you let go.")
+The goal:     The deck, the first time: "Day five at sea. I've been keeping count." "I LIVE on a boat now. I'm a boat person."
+              "Five days, and not one of us has been seasick. I'm proud of us." Gonroku: "Kanbei, the heading! We'll be off
+              Daiōzaki within the hour." Kanbei: "Give me a moment, Captain. The sun's sitting right on the card." (Denzō and
+              the two at the windlass say #27's.)
+Step 1:       The glare. Kanbei, to Big Sister: "You there, girl. Can you read?" "Most things. Not Japanese." "It isn't writing,
+              it's animals. The boy drew them for me." ("Can I look? I'm a good reader.") Kanbei, or the compass box, opens the
+              close-up: the noon sun lies on the card, a white glare (the engine's `glare`) over the marks and the needle. The
+              narrator: "The card is a white blaze in the noon sun. Nobody could read it like this."; the needle "trembles
+              somewhere in the glare"; a mark is "lost in the glare"; the lid is "propped wide open, letting in the whole of the
+              noon sun." (edo.boxSeen)
+Step 2:       The lid, tilted down (by any of the three): "Big Sister tilts the lid down until its shadow falls across the card.
+              The marks come up clear." Kanbei: "Huh. Forty years, and I always had that lid wide open." (edo.cardShaded; a
+              shade falls from the lid's side.) The marks are Kōta's drawings ("The ox. Kōta drew it with great care and one leg
+              too many."); the rooster crows "on the right-hand mark, which on this card means west"; on the monkey "the needle
+              is trembling right on its mark".
+Step 3:       The working-out: Big Sister's look at the needle in the shade (Mom's: "What that means for the ship, Big Sister
+              would know."; Little Sister's: "Little Sister approves of the monkey."). "The needle's on this one. But a compass
+              points north, so is north over here?" "Not on a ship. On a ship, the clock tells you which way you're going." "The
+              rat's fixed at the bow, and the marks run backwards. That's on purpose, isn't it?" "Go on." "So whichever way we
+              turn, the needle lands on the mark we're heading for. It's brilliant." "Then call it, girl. Loud, so the captain
+              hears." (edo.compassRead) Kanbei cannot see which mark it is, so the animal has not been named yet; the game steps
+              back to the deck, and the call comes at once, in front of everyone.
+Step 4:       The obvious call: "Monkey!" The narrator: "The whole deck goes still. Even the windlass stops turning." Denzō:
+              "Don't say that word! Not on a ship." "Which word? Monkey?" "Stop saying it! Our word for that animal sounds just
+              like "go away."" "Say it out here and the lady in the mast thinks you want her gone." Gonroku: "The wind's still
+              holding. Nobody says it again." "I'm so sorry. I didn't know." "No, you didn't. And she knows you didn't, I hope."
+              "Then what do sailors call it?" "Not from me, miss. I'm not saying any animal words today, good or bad." "Ask the
+              boy. The captain's had him learning every sea word there is." "Kōta hardly says a word to me. He only really talks
+              to my sister." (edo.saruSaid)
+Step 5:       The sailors' word, from Kōta, to Little Sister: asked ("Kōta, what do sailors call the animal my sister said?" The
+              narrator: "Kōta checks that nobody's looking, then leans down and whispers it." "Etekō. At sea it's only ever
+              etekō." "Etekō. I'm telling my sister."), or in her guessing game, before anybody has said it (the monkey: "Sa...
+              no, no, no. Not that one either." "At sea that one is etekō. Only ever etekō. The other word makes the lady
+              leave."; the cat before it, which a ship does not name either). He will not say it to Big Sister ("Me, miss? I'd
+              only get it wrong, the way I get all the sea words wrong." The narrator: "It seems he'd tell her, just not anyone
+              taller."); Denzō sends Mom and Little Sister to him. (edo.seaWords)
+Step 6:       Big Sister calls it: "Etekō!" Kanbei: "Etekō!" Gonroku: "Etekō. Holding her there." The narrator: "The tiller moves
+              a hair, the sail settles, and the ship leans into her course for the open sea." Kanbei: "Good. The girl reads the
+              clock." "I read a backwards compass in animals and called it in sailor. Somebody should put that on a plaque."
+              (edo.headingCalled)
+Two roads:    The word first (the guessing game), then the reading: the call is "Etekō!" at once, and nothing freezes.
+Intent:       The monkey's mark, used by Big Sister once the clock is read, calls the heading (Kanbei first: "You've read it,
+              girl. Now call it out, loud, so the captain hears." or "Found a better word for it yet, girl?"). Mom and Little
+              Sister, offering to call it, are sent to her with what is still missing ("Your daughter read it, so she calls it.
+              That's how a clock is kept, ma'am." / "She'll call it, ma'am, as soon as somebody finds her a word the lady won't
+              mind." / "Not that word, little one. Ask the boy what sailors say instead." / "Then tell your sister the word.").
+Wrong tries:  The card, the needle and the marks in the glare (above); a mark used before the reading ("Touching the marks
+              won't do anything. The needle has to be read first."), and after it ("The needle isn't on that one. It's on the
+              monkey."); the needle poked ("Poking the needle would only upset it, and it's upset enough."); "Monkey!" (Step 4);
+              Kanbei asked what sailors say ("Don't ask me, girl, I just steer. Ask the boy; he's the one learning words.").
 Gives:        edo.heading.
-Notes:        The reversed card and the sea words are real; calling a heading by the sea word for monkey is the game's joke.
-              The needle trembles on its pin (the painter's three states, stepped by the close-up itself; still for less
-              motion). Kōta drew the animals.
+Notes:        True: a Japanese ship's compass was marked with the twelve animals running backwards, the rat at the bow, so that
+              the needle sat on the heading; at sea "saru", monkey, was not said (it sounds like 去る, to leave), and etekō was
+              said instead; the Funadama dislikes the word, among others, as recorded village by village (WRITING.md's
+              sources). The noon glare and the lid are the game's. The needle trembles on its pin (the painter's three states).
 ```
 
 ```
 Puzzle #27: Don't Lift The Lid        (Act Six · Leads: Little Sister and Mom, with Big Sister · the deck)
+Rebuilt:      PUZZLE-25, round twenty-five: the goal said by Denzō at the first talk, three wrongs to put right, each a
+              different one of the family's, and a word after each that the bosun is listening.
 Needs:        Casting Off (edo.aboard)
-Setup:        Kōta at his hearth box, lifting the lid now and then (the painted pot, its lid propped beside it, then boiling
-              again): "Ma'am. ...The rice is not ready. It is never ready. And then it is burnt."
-Step 1:       Kōta (Little Sister): "You are the small one. The one in the YELLOW boots." "I'm SEVEN. How old are you?"
-              "Twelve. I'm the cook. Don't tell anybody about the rice." (edo.kotaMet) Charades: the Grump ("...The
-              master!" "He's the GRUMP. That's his name now." "...Grump." "PERFECT."), the cat ("A yokoza!" "A WHAT?" "A cat.
-              At sea you say yokoza."), the monkey ("Sa-- saru!" "Don't! Not at SEA. She hears." "...Sorry. I'm putting my
-              arms DOWN."); his mother in Yui, her brother ("He's ten. He's somewhere else. We're finding him." "...At sea?"
-              "Further.").
-Step 2:       The lid (Mom): "You keep looking." "My mother always did the rice at home. I never know when it is done." "Don't lift
-              the lid. Listen to it." "When it crackles and smells of toast, take it off the fire. Then leave it alone." The pot
-              boils; Little Sister, who has listened to every word: "I'll just PEEK--" "Sweetheart. What did I just say?" "Can I look?"
-              "No." "Can I look NOW?" "Listen." "...It's crackling." "And?" "It smells like TOAST." "Off the fire. Now leave
-              it be." The crew eat: "...It's rice." "It's RICE rice." Gonroku: "Hm." Denzō: "That's praise. That's all the
-              praise he's got, and he gave it." (edo.lidDown; the pot's lid on, left alone)
-Step 3:       The mast step, knocked on by anyone (or Denzō asked): "What the shipwright sealed in, for her, the day she was
-              built." "A pair of dolls. Two dice. Twelve coins, one mon each." "A woman's hair. The five grains. Rouge and
-              powder. A comb and a pin." "I am writing it all down. I write everything down. Dolls, dice, twelve coins..." "She's
-              got MAKEUP in there." "She's a lady." (edo.funadamaList: Big Sister's note shows the list from then on)
-Step 4:       A penny for a coin (Little Sister shows Kōta her pennies): "A coin with no hole! How do you carry it?" "You
-              don't. You lose it." "...Could I have one? For my mother. A coin from across the sea." (a long look at them) "...Okay.
-              ONE. Pick the shiny one." "Then this is yours. My coin. The first coin I ever got at sea." "...She's never
-              let one go before." "She gave away a penny. Of her own free will. I am writing that down." (three pennies become two: `twopennies`;
-              the one-mon coin: `mon`; edo.coinTraded)
-Step 5:       She chirps, after the last of the four: Kōta laughs (at the man's face on the penny, at the rice coming right,
-              or at the lady's makeup) and from the foot of the mast come two small bright notes. "THERE. Did you hear her?"
-              "She chirped. She's in high spirits!" Gonroku: "...She likes to hear the boy laugh." "She LIKES us." Seijirō:
-              "Three. ...Crew." (edo.chirped)
-Wrong tries:  The mast step, after the list ->  "We don't open what isn't ours to open." "Also, it's nailed." (and after
-                                                that, Denzō says the list again)
-              The floating cask (now and then) -> Denzō: "Leave it! That's for Konpira, the sailors' god. Whoever finds it
-                                                takes it on." "Like a message in a bottle. Only a barrel. For a GOD." "Then it's the next ship's
-                                                errand, darling. We have ours."
-              Lifting the lid herself        -> "I'll just PEEK--" "Sweetheart. What did I just say?" (in the waiting)
-              The windlass                   -> (Big Sister) "I'm not strong enough..."
+The goal:     As the deck comes to life, Denzō: "Five days, and she hasn't made a sound. Not since the women came aboard." The two
+              at the windlass: "Rice is burnt again." "And raw in the middle. The boy has a gift." Denzō, talked to (or at the first
+              knock on the mast step, or with Big Sister's note held out to him): "She hasn't chirped in five days. Not once since
+              you three came aboard." "The lady in the mast. When she's happy, she chirps, like a little bell." "And this is not a
+              happy ship." "The rice is burnt, the boy is homesick, and nobody's asked after her all week." (edo.denzoMet)
+The rice:     Mom. The pot, looked at: "He lifts the lid to check it every minute, and every time, out rushes the steam."; tried
+              by Mom, "She does have opinions about that lid." Kōta: "You keep lifting the lid." "I have to check it. My mother
+              always made the rice at home. I never know when it's done." "Every time you lift the lid, the steam gets out. That's
+              what's spoiling it." "Don't lift it. Listen to it instead." "When it crackles and smells like toast, take it off the
+              fire. Then leave it alone." Little Sister, who has listened to every word: "I'll just take one little peek..."
+              "Sweetheart. What did I just say?" The waiting ("Can I look?" "No." "Can I look now?" "Listen." "It's crackling.
+              Like rain on a roof." "And?" "It smells like toast!" "Then off the fire. And now the hard part: leave it alone."),
+              and the crew eat ("It's rice." "It's real rice." Gonroku: "Hm." "That was praise, boy. That's all the praise he
+              owns, and he spent it on you."). (edo.lidDown; the pot's lid on, left alone)
+The boy:      Little Sister. Kōta: "You're the small one. The one in the yellow boots." "I'm seven. How old are you?" "Twelve.
+              I'm the cook, so please don't tell anyone about the rice." (edo.kotaMet) Her guessing game (the Grump; a cat; a
+              monkey: #26's word), and home ("Every day. My mother's back in Yui, and this is my first voyage." ... "I'd like to
+              bring my mother something from far away. Something nobody in Yui has ever seen."). Her pennies, shown to him or
+              asked about: "A coin with no hole in it? How do you carry it?" "In your pocket. Mostly you lose it." "Could I have
+              one for my mother? A coin from across the sea." (a long look at them) "You can have one. Not the shiny one."
+              "Fine. The shiny one." "Then this one's for you. My coin, the first one I ever earned at sea." Mom: "She's never
+              given away a penny in her life. Not even to me." Big Sister: "Of her own free will. I'm writing that down." (three
+              pennies become two: `twopennies`; the one-mon coin: `mon`; edo.coinTraded)
+The lady:     Anyone, asking after her ("Tell me about the lady in the mast. What does she like?" / "... Everything." / "Does
+              the lady in the mast have any toys?"), or the first knock on the mast step: "When a ship is built, the shipwright
+              seals the lady's things in at the foot of the mast." "A pair of paper dolls. Two dice. Twelve coins, one mon each."
+              "A woman's hair. The five grains. Her rouge and powder, and a comb and a pin." Big Sister: "Slowly, please. Dolls,
+              dice, twelve coins..." "She has MAKEUP in there?" "She's a lady. Of course she does." (Big Sister writes it in
+              Dad's note; edo.funadamaList)
+After each:   but the last, the narrator: the bosun listening at the mast ("Over by the mast, Denzō tilts his head, listening.
+              Nothing yet, but he's grinning.").
+She chirps:   after the last of the three. Kōta laughs ("There's a man's face on your money! He looks just like the purser." /
+              "It's right, it's really right. I can't wait to tell my mother." / Little Sister: "Kōta, guess what? The lady in
+              the mast wears makeup!"). The narrator: "Kōta laughs out loud, and from the foot of the mast comes a tiny, bright
+              sound, like a little bell." "There! Did you hear her?" "She chirped. She's in high spirits again." Gonroku: "She
+              likes to hear the boy laugh." "She likes us." Seijirō: "Three. Crew." (edo.chirped)
+Intent:       The pennies held out to Kōta start the trade; Big Sister's note held out to Denzō, or to the mast step, asks for
+              the list.
+Wrong tries:  The mast step after the list (the narrator: "The mast step is nailed shut, and whatever is inside belongs to the
+              lady."; after that Denzō says the list again); the floating cask (Denzō: "Leave that one! It's an offering for
+              Konpira, the sailors' god." "Whoever's sailing his way picks it up and carries it to his shrine." "Like a message
+              in a bottle, but for a god." "Then it's on somebody else's errand. We have our own."); the pot, tried by Big Sister
+              or Little Sister (both point at Mom); lifting the lid in the waiting (above).
 Gives:        edo.chirp.
-Notes:        The Funadama's things, her chirp and the sea words are documented; Kōta's rice and the hearth box are the
-              game's. The list is #37's clue: Big Sister's note, looked at, reads it ("The lady's things, in Dad's pencil: two
-              dolls, two dice, twelve one-mon coins," / "a woman's hair, the five grains, rouge, powder, a comb and a pin.").
+Notes:        The Funadama's things, her chirp ("Funadama-sama ga isamu") and the words she dislikes are recorded; Kōta's rice
+              and the hearth box are the game's. The list is #37's clue: Big Sister's note, looked at, reads it (the narrator:
+              "Dad's note, and the lady's list under it: two dolls, two dice, twelve one-mon coins," / "a woman's hair, the five
+              grains, rouge, powder, a comb and a pin.").
 ```
 
 ```
@@ -822,15 +863,15 @@ the wings of the morning, and dwell in the uttermost parts of the sea;" / "Even 
 hand shall hold me.'"), Big Sister: "Psalm 139." "Go to sleep, darling." "We're in the uttermost parts." "I know. So is His
 hand." The card "Eight days later" / "Osaka" (WRITE-21A's: the deck was the fifth day of twelve). On the map the portraits
 go from the ship's place at sea along the sea path to Osaka. The river mouth (a picture: masts crowding the two rivers, the
-city, a castle on the skyline with walls and turrets and no top): "Masts. Hundreds of them, standing in the river mouths
-like reeds." "It's a city made of BOATS." "Their castle has no top. Where the keep should be, there is only sky." Gonroku: "Burned before my grandfather. They
-never put it back." The lighter alongside: "The ship stays here. Everything else goes up the river by lighter. So do you." Kōta,
-waving from the rail: "Mother gets the penny first thing. I will tell her it crossed the sea." "Tell her it's from the girl in
-the yellow boots." Denzō: "Mind the river. Mind EVERYTHING!" Up the river to the Dōjima steps (a picture): Gonroku, in the
-lighter at their foot: "The magistrates have been thick in Osaka since the Kirishitan business." "Go north, into the hills,
-till it's quiet." "North. Thank you, captain. You've carried us further than you meant to." "And don't tell anybody anything
-true." "Captain, that is the only kind I have." (he nearly smiles) "Twelve days of fair wind. Never had twelve in a row. ...Don't
-tell the Funadama." as the lighter goes. The Dōjima shore, on the mark `landing` (SCENES-21B's; its first words are its
+city, a castle on the skyline with walls and turrets and no top; WRITE-25's lines): "Masts. Hundreds of them, standing in
+the river mouth like reeds." "It's a whole city made of boats." "The castle has no top. Where the keep should be, there's only
+sky." Gonroku: "It burned before my grandfather was born. They never built it back." The lighter alongside: "The ship stays
+here. Everything else goes up the river by barge, and so do you." Kōta, waving from the rail: "My mother gets the penny first
+thing. I'll tell her it came across the sea." "Tell her it's from the girl in the yellow boots." Denzō: "Mind the river. Mind
+everything." Up the river to the Dōjima steps (a picture): Gonroku, in the lighter at their foot: "The magistrates have been
+everywhere in Osaka since the Kirishitan trouble." "Go north, into the hills, until it's quiet." "North, then. Thank you,
+Captain, for carrying us farther than you meant to." "And don't tell anyone anything true." "Captain, that's the only kind I
+have." (he nearly smiles) "Twelve days of fair wind. I've never had twelve in a row. Don't tell the lady." as the lighter goes. The Dōjima shore, on the mark `landing` (SCENES-21B's; its first words are its
 own). Skipped, the same: edo.sailed, the hats on, the landing.
 
 #### The hints, stage by stage
@@ -846,14 +887,16 @@ own). Skipped, the same: edo.sailed, the hats on, the landing.
 | | the ship named, Gonroku not asked (`edo.gonrokuNo`) | `.ship.mom.2` | `.ship.bigsis.2` | `.ship.lilsis.2` |
 | | then round twenty's | `hint.edo.west.mom.2` | `hint.edo.west.bigsis`, `.bigsis.2` | `hint.edo.west.lilsis.3` |
 | Casting Off | (one) | `hint.edo.castoff.mom` | `.bigsis` | `.lilsis` |
-| #26 `edo.heading` | the clock not read (`edo.compassRead`) | `hint.edo.heading.mom` | `.bigsis` | `.lilsis` |
-| | read, nothing wrong yet | `.mom.2` | `.bigsis.2` | `.lilsis.2` |
-| | saru said (`edo.saruSaid`), no sea word | `.mom.3` | `.bigsis.3` | `.lilsis.3` |
-| | the sea word known (`edo.seaWords`), not called | `.mom.4` | `.bigsis.4` | `.lilsis.4` |
-| #27 `edo.chirp` | Kōta not met (`edo.kotaMet`) | `hint.edo.chirp.mom` | `.bigsis` | `.lilsis` |
+| #26 `edo.heading` (PUZZLE-25) | the box not looked into (`edo.boxSeen`): the goal | `hint.edo.heading.mom` | `.bigsis` | `.lilsis` |
+| | the glare on the card (`edo.cardShaded`): shade it | `.mom.2` | `.bigsis.2` | `.lilsis.2` |
+| | the card shaded, not read (`edo.compassRead`): the needle | `.mom.3` | `.bigsis.3` | `.lilsis.3` |
+| | read, not called, nothing wrong yet: call it to Kanbei | `.mom.4` | `.bigsis.4` | `.lilsis.4` |
+| | "Monkey!" said (`edo.saruSaid`), no sailors' word: Kōta, to Little Sister | `.mom.5` | `.bigsis.5` | `.lilsis.5` |
+| | the sailors' word known (`edo.seaWords`): Big Sister calls it | `.mom.6` | `.bigsis.6` | `.lilsis.6` |
+| #27 `edo.chirp` (PUZZLE-25) | nothing done, Denzō not met (`edo.denzoMet`): ask him what's wrong | `hint.edo.chirp.mom` | `.bigsis` | `.lilsis` |
 | | the lid not right (`edo.lidDown`) | `.mom.2` | `.bigsis.2` | `.lilsis.2` |
-| | the list not heard (`edo.funadamaList`) | `.mom.3` | `.bigsis.3` | `.lilsis.3` |
-| | the coin not traded (`edo.coinTraded`) | `.mom.4` | `.bigsis.4` | `.lilsis.4` |
+| | the coin not traded (`edo.coinTraded`) | `.mom.3` | `.bigsis.3` | `.lilsis.3` |
+| | the list not asked for (`edo.funadamaList`) | `.mom.4` | `.bigsis.4` | `.lilsis.4` |
 
 ### Ledger rows for this stretch
 
@@ -865,7 +908,7 @@ own). Skipped, the same: edo.sailed, the hats on, the landing.
 | Peddler's print (`toyamaprint`) | #24: Sōshichi, "for the child of the house" | Little Sister | A keepsake (shown to Senzō in Osaka: "That's one of ours, copied badly in Toyama.") |
 | O-Shige's pass (`shigepass`) | #24: lifted off the Jizō's hat | Whoever lifted it | Given back to O-Shige (the wrong try: used on the road west, or on anyone) |
 | Three pennies, then two (`twopennies`) | Act Four's take-a-penny dish | Little Sister | #24: "Three pennies." "...What's a penny?"; #27: one to Kōta for his mother; #35: one to O-Fusa |
-| One-mon coin (`mon`) | #27: Kōta's, "the first coin I ever got at sea" | Little Sister | #37: the square post under the rabbit's waves (Mom's wrist); then to O-Ume "for your rice balls" |
+| One-mon coin (`mon`) | #27: Kōta's, "the first one I ever earned at sea" | Little Sister | #37: the square post under the rabbit's waves (Mom's wrist); then to O-Ume "for your rice balls" |
 | Dad's sticky note, with the list | #27: Big Sister writes the Funadama's things in it | Big Sister | #37: what a ship gives its lady (a comb, a pin, twelve one-mon coins) |
 | Box of sushi (`sushibox`) | #23 (as built) | whoever was fed it | Eaten on the first night (Casting Off) |
 
@@ -880,7 +923,7 @@ own). Skipped, the same: edo.sailed, the hats on, the landing.
 | O-Masa's nephew, Kōta, twelve | Casting Off: "Be kind about the rice." | #27: the lid; the penny for the coin; the chirp |
 | The Funadama hasn't chirped since the women came aboard | The deck's first words (Denzō) | #27: she chirps when the boy laughs; and #37's lock chirps the same |
 | What a ship gives its lady: a comb, a pin, twelve one-mon coins | #27, Denzō's list, in Big Sister's note | #37: the pin, the coin and the comb open the women's hall |
-| "Etekō" | #26/#27: Kōta's whisper, or Denzō | The heading called; "I'd like that on a plaque." |
+| "Etekō" | #26/#27: Kōta, to Little Sister (in her guessing game, or whispered after "Monkey!") | The heading called; "Somebody should put that on a plaque." |
 | Little Sister gives up a penny for the first time | #27 | #35 (a penny for luck to O-Fusa); #38 (the Son has one) |
 | Gonroku: "And do not tell anybody anything true." | The Dōjima steps | "Captain, that is the only kind I have." (the act's rule) |
 

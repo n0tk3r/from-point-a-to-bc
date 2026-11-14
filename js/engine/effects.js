@@ -3898,6 +3898,42 @@ class Passer extends Effect {
 // limousine: still alive, no longer pulling at the words (smoke and water keep 0.7: the scenes' smoke is faint already, and the half pace does the quieting). Things that are a painted object (a sway's washing, a boat on the
 // swell) only slow, never fade; birds fade only a little. A drive only at a car's side windows (the limousine's desert),
 // never straight ahead (the opening's road); the portal never (not listed).
+// ---------------------------------------------------------------- PUZZLE-25: light lying on a thing, or shade
+/**
+ * PUZZLE-25 (the ship's clock, #26; docs/WRITING.md, section 5): a soft round of light lying on something, so bright that what
+ * is under it cannot be read (`at`, `radius`; `color`, `opacity`), breathing a little as the swell moves the light (`breath`,
+ * seconds; still for less motion), with a few short bright streaks off its middle (`streaks`). In a dark `color` it is a soft
+ * shade instead. Shown while its `when` says (the compass card in the noon sun, until the lid is tilted over it).
+ */
+class Glare extends Drawn {
+  constructor(host, spec, n) {
+    super(host, spec, n);
+    const s = spec, at = isPoint(s.at) ? s.at : null;
+    if (!at) throw new Error("a glare needs `at`");
+    this.r = num(s.radius, 80); this.rgb = rgbOf(s.color, [255, 251, 238]); this.a = num(s.opacity, 0.8);
+    this.core = Math.min(0.95, Math.max(0.05, num(s.core, 0.5)));      // how far out (of the radius) it stays nearly full, before it fades
+    this.breath = num(s.breath, 3.2); this.streaks = Math.max(0, Math.round(num(s.streaks, 0)));
+    this.fps = 12; this.calmFps = 1; this.slow = 0.5;
+    const R = Math.ceil(this.r * this.k * 1.2) + 2;
+    this.setup(R * 2, R * 2, R, R, at);
+  }
+  draw(ctx, t, calm) {
+    const cx = this.ox, cy = this.oy, R = this.r * this.k;
+    const swell = calm ? 1 : 1 + 0.035 * Math.sin((t / this.breath) * TAU) + 0.015 * wobble(this.seed, t * 0.9);
+    const a = this.a * (calm ? 1 : 0.93 + 0.07 * Math.sin((t / (this.breath * 0.77)) * TAU + 1.3));
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * swell);
+    grad.addColorStop(0, rgba(this.rgb, a)); grad.addColorStop(this.core, rgba(this.rgb, a * 0.86)); grad.addColorStop(1, rgba(this.rgb, 0));
+    ctx.fillStyle = grad; ctx.fillRect(cx - R * 1.2, cy - R * 1.2, R * 2.4, R * 2.4);
+    for (let i = 0; i < this.streaks; i++) {          // short streaks of light off the middle, turning slowly
+      const ang = (i / this.streaks) * TAU + (calm ? 0 : t * 0.05) + rnd(this.seed, i, 1) * 0.6, len = R * (0.55 + 0.35 * rnd(this.seed, i, 2));
+      const sg = ctx.createLinearGradient(cx, cy, cx + Math.cos(ang) * len, cy + Math.sin(ang) * len);
+      sg.addColorStop(0, rgba(this.rgb, a * 0.7)); sg.addColorStop(1, rgba(this.rgb, 0));
+      ctx.strokeStyle = sg; ctx.lineWidth = Math.max(1, 2.2 * this.k); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(ang) * len, cy + Math.sin(ang) * len); ctx.stroke();
+    }
+    this.drawn = 1 + this.streaks;
+  }
+}
+
 const HUSH = {
   smoke: { speed: 0.5, opacity: 0.7 }, shimmer: { speed: 0.5, opacity: 0.65 }, ripples: { speed: 0.5, opacity: 0.7 },
   stream: { speed: 0.6, opacity: 0.7 }, flame: { speed: 0.45, opacity: 0.85 }, embers: { speed: 0.5, opacity: 0.8 },
@@ -3913,6 +3949,7 @@ KINDS.bob = Bob;                                 // ROME-13E: a cut-out that rid
 KINDS.drive = Drive;                             // DRIVE-16E: the world going by a car's side windows
 KINDS.rain = Rain; KINDS.petals = Petals; KINDS.waves = Waves; KINDS.mirror = MirrorLight;      // ENGINE-20: rain, falling petals, waves in rows, the mirror's light
 KINDS.spray = Spray; KINDS.slide = Slide; KINDS.passer = Passer;      // ENGINE-21: spray and a thrown bucket's splash, a cut-out sliding and fading (the bars of sunset light), someone passing now and then
+KINDS.glare = Glare;                             // PUZZLE-25: light lying on a thing (the compass card at noon), or shade
 
 // ---------------------------------------------------------------- the scene's moving things, together
 /**

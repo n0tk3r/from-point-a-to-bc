@@ -87,8 +87,8 @@ export const lines = {
   "hint.ranger.none": ["ranger", "..."],
   // ---- TALK-24: the way back out of a topic in a talk (js/content/talk/topics.js), said by whoever is being played ----
   "talk.back.mom": ["mom", "Let me ask about something else."],
-  "talk.back.bigsis": ["bigsis", "Next topic, if I may."],
-  "talk.back.lilsis": ["lilsis", "Something ELSE now."],
+  "talk.back.bigsis": ["bigsis", "Can I ask about something else?"],          // WRITE-25: as she talks now (docs/WRITING.md)
+  "talk.back.lilsis": ["lilsis", "I want to ask a different thing."],          // WRITE-25: no capital word on the way back
   "talk.back.son": ["son", "Wait, different question."],
   "talk.back.dad": ["dad", "Different question."],
   "talk.back.grandpajoe": ["grandpajoe", "Let's jaw about somethin' else."],

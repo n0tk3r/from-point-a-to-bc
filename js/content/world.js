@@ -154,6 +154,8 @@ export const cast = {
   girl:     { name: "Girl", color: "#d890d8", sprite: "girl" },
   // NEVADA-12E: the engine's own painted creature, for the proof scene only (js/content/scenes/engine-proof.js)
   critter:  { name: "Critter", color: "#d6ef8a", sprite: "critter", lead: true, keeps: "stash" },
+  // (the cards' speaker; and since NARRATOR-25, WRITE-25, docs/WRITING.md, the storyteller who answers Look at and Use, as
+  // Sierra's games have one: no figure, no portrait; its words a caption along the bottom of the picture: dialogue.js, say)
   narrator: { name: "Narrator", color: "#f6e3b8" },
   foodboat: { name: "Food boat", color: "#a0f860" },      // MERGE-21: the Hirakata food boats' call (WRITE-21A, edo.boat.6): a voice off, no sprite (CIE Lab 50 from the family, 14.6 from anyone)
 };

@@ -32,6 +32,13 @@ gray (their pages are under "The Last Stop, and the men in gray").
 
 ## Rules for every line
 
+> **Round twenty-five (WRITE-25): `docs/WRITING.md` is the guide now.** The author found the lines "very strange", and the
+> rules below are part of why: "the punch is the last word", "in late, out early" and "fun first" made nearly every line a
+> quip in the same clipped three-beat shape. From round twenty-five a narrator answers looks and tries (Sierra's way), about
+> half of every stretch is plain talk, tics are rationed by number, everyone of another country speaks fluently, and the
+> puzzles follow the fairness rules there. Where this section and `WRITING.md` disagree, `WRITING.md` wins; the ship is
+> written to it first, and the rest of the game follows.
+
 <!-- PASS-22: round twenty-two. The author, 2 November: "make the way the family talks to each other and interactions
 with historical figures more realistic, right now it's kind of robotic and lacking in character. Make it more like in a
 novel, use better english language, not so simple talk". So the round-nineteen rules below that cut every line short
@@ -1525,8 +1532,8 @@ they open the women's hall at Shosha (#37, WRITE-21B's).
 The rules hold as round twenty set them: nobody in the family lies, and the comedy is in exactly true answers ("We're IN a
 pass." "My helpers." "The other two are at work."); the family never answers a magistrate's man, and someone who has made
 it true answers for them. The Japanese words of this part are few, glossed once by whoever says them first: *tegata* (a
-woman's pass: O-Kuni), *saru* and *etekō* (a monkey, and the word sailors say instead: Kōta, and Denzō), *yokoza* (a
-cat, at sea: Kōta), *tsuge* (boxwood, which sounds like "to tell": Big Sister), *yomiuri* (the sheet-sellers' own word:
+woman's pass: O-Kuni), *saru* and *etekō* (a monkey, which sounds like "go away" at sea, and the word sailors say instead:
+Denzō, and Kōta; WRITE-25), *tsuge* (boxwood, which sounds like "to tell": Big Sister), *yomiuri* (the sheet-sellers' own word:
 "We read it, you buy it!"). Nobody says "kawaraban", "Bunraku" or "itadakimasu"; the puppet show is "the puppets" and the
 Inari theater; and Kannon is not named until the hills, where Grandmother Sei names her.
 
@@ -1535,9 +1542,10 @@ girl does not go on the road with her hair down; it has an ear-pick at its end, 
 that is only pretty is a sin, "so they put a pick on the end, and now it's a tool" (a story, told as one). Big Sister:
 "...That is not a hairpin. That is a loophole." She keeps it. **Kihei** names the road first and lets them try it ("...Try
 the road. Everybody does."), and the ship only when they come back down ("You tried the road. Everybody tries the road.
-...There's a ship."). **O-Masa's** nephew is the ship's cook ("Be kind about the rice."). **Gonroku** is on deck at his
-tiller, in weather, all the way to Osaka; at the Dōjima steps his goodbye gains one line: "And don't tell anybody anything
-true." "Captain, that is the only kind I have." He nearly smiles.
+...There's a ship."). **O-Masa's** nephew is the ship's cook ("Be kind to him about the rice."). **Gonroku** is on deck at
+his tiller, in weather, all the way to Osaka; he talks about the weather ("Wind's fair. For now." "Past the cape is the
+Kumano-nada. The sea there has opinions."), and at the Dōjima steps his goodbye gains one line: "And don't tell anyone
+anything true." "Captain, that's the only kind I have." He nearly smiles.
 
 #### At the foot of the pass: Nishikurasawa
 
@@ -1604,35 +1612,49 @@ everything. He's never once dropped me.").
 
 #### On the ship, the fifth day out
 
+<!-- WRITE-25: round twenty-five rewrote every line of the ship to docs/WRITING.md (the narrator for looks and tries; the crew
+fluent, nobody opening on "..."; half the lines plain; the tics rationed) and rebuilt both its puzzles (PUZZLE-25,
+docs/PUZZLES-japan.md #26 and #27). Who each of them is did not change; how they talk did. -->
+
 **Kanbei, the helmsman.** About seventy; reads the ship's clock, the compass by the tiller, and calls the heading to the
-helm; his eyes are bad in the noon glare, and he will not say so. A voice like a slow door. **In play:** #26: "Girl.
-...You read?" "Everything. Except Japanese." "...This isn't Japanese. It's animals."; "The ship's clock tells you where the
-ship goes, girl. That's all a ship wants to know."; the call is Big Sister's, and he relays it: "Etekō." "Etekō. Hold her."
+captain. The noon sun lies right on the card and his eyes are not what they were, and he will not say so: "My eyes are
+fine. It's the sun that's in the wrong place." Proud, gruff, few words, and never unkind. **In play:** #26: the goal ("Give
+me a moment, Captain. The sun's sitting right on the card."); Big Sister ("You there, girl. Can you read?" "Most things. Not
+Japanese." "It isn't writing, it's animals. The boy drew them for me."); the lid, tilted over the card ("Huh. Forty years,
+and I always had that lid wide open."); the working-out ("Not on a ship. On a ship, the clock tells you which way you're
+going." "Go on." "Then call it, girl. Loud, so the captain hears."). The one who read the clock calls it: he sends Mom and
+Little Sister to Big Sister ("Your daughter read it, so she calls it. That's how a clock is kept, ma'am."), and relays her
+call: "Etekō!" "Good. The girl reads the clock."
 
-**Denzō, the bosun.** Huge, loud, kind, superstitious about everything (some of it, he admits, "just me"); he knows every
-sea word and every thing sealed in the Funadama, and he is uneasy, because she has not chirped since the women came aboard
-("She's a lady. Ladies are touchy about ladies."). **In play:** #27: what the lady was given, told for Big Sister's note
-("A pair of dolls. Two dice. Twelve coins, one mon each." "A woman's hair. The five grains. Rouge and powder. A comb and a
-pin."), which is the clue of #37; #26: the freeze at the word not said at sea ("NOT that word. Not at sea. It means 'go
-away', and the lady hears it."), and the sea word, etekō, with the long thing and Ebisu; the floating cask for Konpira; and,
-when she chirps, "She chirped. She's in high spirits!"
+**Denzō, the bosun.** Huge, warm, superstitious about everything, and the most talkative man aboard ("Some of that is the
+old sailors' talk. Some of it is just me."). He pats the mast every time he passes it, "so she knows I'm still here. A lady
+likes to be noticed." **In play:** #27's goal, at the first talk ("She hasn't chirped in five days." ... "The rice is
+burnt, the boy is homesick, and nobody's asked after her all week."); what the lady was given, for Big Sister's note ("A
+pair of paper dolls. Two dice. Twelve coins, one mon each." "A woman's hair. The five grains. Her rouge and powder, and a
+comb and a pin."), the clue of #37; the cask for Konpira; and after each thing put right, his head tilted at the mast,
+listening. #26: the freeze at the word not said at sea ("Don't say that word! Not on a ship." "Our word for that animal
+sounds just like "go away.""), after which he will not say any animal word at all, good or bad, and sends everyone to the
+boy. When she chirps: "There! Did you hear her?"
 
-**Seijirō, the purser.** An abacus, a list of every cask, and the family on it: "Three. ...Cargo." Then passengers, once
-they have fed the men; then crew. A small part.
+**Seijirō, the purser.** An abacus, a list of every cask, and the family on it: "Three. Cargo." Then passengers, once they
+have fed the crew; then crew, once the lady approves. "No need to give me your names. I have you down already." A small
+part, in very few words.
 
-**Kōta, the cook.** Twelve, the youngest aboard, O-Masa's nephew from Yui on his first voyage; homesick; his rice comes out
-burnt and raw at once because he keeps lifting the lid ("My mother always did the rice at home. I never know when it is done."). He
-drew the little animals on the ship's clock, because he cannot read either. Little Sister's friend at once: charades (the
-Grump, a cat that is a yokoza at sea, and a monkey that makes him nearly drop the pot: "Sa-- saru! ...Don't! Not at SEA.");
-Mom's lesson ("Don't lift the lid. Listen to it."); and the trade, the first time all act Little Sister gives a penny away
-("A coin with no hole! How do you carry it?" "You don't. You lose it."): his one-mon coin, "the first coin I ever got at
-sea", for one of her pennies, for his mother. When he laughs, the lady chirps. He copies Little Sister's emphasis, as
-Sankichi copied her questions.
+**Kōta, the cook.** Twelve, the youngest aboard, O-Masa's nephew (so the captain is his uncle), from Yui, on his first
+voyage; homesick; his rice comes out burnt and raw at once because he keeps lifting the lid ("I have to check it. My mother
+always made the rice at home. I never know when it's done."). He drew the little animals on the ship's clock. Polite to Mom
+("Yes, ma'am."), shy of Big Sister ("Miss."), and at ease at once with Little Sister: her guessing game (the Grump; a cat,
+which a ship never names; a monkey, which he very nearly does: "Sa... no, no, no. Not that one either." "At sea that one is
+etekō."); the sailors' word, whispered to her and to nobody taller; Mom's lesson with the lid; and the trade, the first
+time all act Little Sister gives a penny away ("A coin with no hole in it? How do you carry it?" "In your pocket. Mostly you
+lose it."): his one-mon coin, "the first one I ever earned at sea", for one of her pennies, for his mother. When he laughs,
+the lady chirps.
 
-> "Twelve. I'm the cook. Don't tell anybody about the rice."
-> "She chirped. For ME. Nobody in Yui is going to believe it."
+> "Twelve. I'm the cook, so please don't tell anyone about the rice."
+> "She chirped for me. Nobody in Yui is ever going to believe it."
 
-**The two sailors** at the windlass: "Heave." "And heave." A chorus with opinions about the rice.
+**The two sailors** at the windlass: "Heave!" "And heave!" A chorus with opinions about the rice ("Boil the sail long enough
+and we'd eat that too."), the first resting harder than he works, the second agreeing with everything the first one says.
 
 #### Osaka
 

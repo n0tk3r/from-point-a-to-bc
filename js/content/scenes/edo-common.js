@@ -52,7 +52,7 @@ const YUI = ["office.done", "edo.arrived", "edo.arigato", "edo.babySleeps", "edo
   "edo.gust", "edo.mosukeMet", "edo.shigeMet", "edo.passFound", "edo.passBack", "edo.araiHeard", "edo.fujiClear", "edo.oldShoreHeard", "edo.noRoad",
   "edo.mosukeBack", "edo.shigeGone", "edo.kuniBack"];                                                       // (#24, West: the road; round twenty-one)
 const CASTOFF = ["edo.aboard"];                                                                             // Casting Off
-const DECK = ["edo.kanbeiMet", "edo.compassRead", "edo.englishTried", "edo.saruSaid", "edo.seaWords", "edo.headingCalled",      // #26 Etekō (SCENES-21A: as play-edo-deck.py plays it)
+const DECK = ["edo.kanbeiMet", "edo.boxSeen", "edo.cardShaded", "edo.compassRead", "edo.englishTried", "edo.saruSaid", "edo.seaWords", "edo.headingCalled",      // #26 Etekō (SCENES-21A: as play-edo-deck.py plays it)
   "edo.kotaMet", "edo.saruHeard", "edo.denzoMet", "edo.lidDown", "edo.coinTraded", "edo.funadamaList", "edo.chirped",      // #27 Don't Lift The Lid
   "edo.sailed"];                                                                                            // The Uttermost Parts
 // SCENES-21B: Osaka's and the hills' lists made whole: every fact the leg's scenes and talks set on the way, in the order they are

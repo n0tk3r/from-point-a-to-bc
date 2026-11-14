@@ -147,6 +147,10 @@ h1 {
   animation: line-in 0.2s ease-out;
 }
 .say.under { max-width: 92cqw; }      /* while a close-up is showing, lines run along the bottom */
+/* NARRATOR-25 (docs/WRITING.md): the narrator, who answers Look at and Use. A storyteller's caption along the bottom of the
+   picture (in a close-up too), in a book face, leaning, not bold, in the interface's cream (world.js: its colour). */
+.say.narrator { max-width: 72cqw; font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; font-size: max(2.75cqw, 12.5px); line-height: 1.28; }
+.stage.large-text .say.narrator { font-size: max(3.4cqw, 15px); }
 /* ENGINE-21: a line kept up as a caption (g.caption: the chanter's cue while it waits for the player): smaller, lighter, leaning */
 .say.caption { font-size: max(2.1cqw, 11px); font-weight: 400; font-style: italic; opacity: 0.92; max-width: 60cqw; animation: none; }
 body:has(#skip:not([hidden])) .say.under { max-width: 76cqw; }      /* MERGE-20 (SCENES-20A's note): and stop short of Skip while it shows (it sits at about 88 to 98cqw) */
