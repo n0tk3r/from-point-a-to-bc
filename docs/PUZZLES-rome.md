@@ -1,5 +1,9 @@
 # Rome: puzzle document (first draft)
 
+<!-- WRITE-25: round twenty-five (13 November) rewrote every line of Act Two to docs/WRITING.md: looks and tries are
+the narrator's now, and the lines quoted below are mostly as they were before it; the game's lines files are
+the words. The puzzles play as written here. Steps a player may stick on are flagged in DESIGN.md item 277, not changed. -->
+
 Act Two, the Son's act. Rome, the morning of the Ides of March, 44 B.C. A ten-year-old
 has been put out of a temple with the door in time shut inside it. He gets back in, opens
 the door exactly as far as a coin, and, once the coin's owner has said he may, tosses the

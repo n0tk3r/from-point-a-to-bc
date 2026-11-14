@@ -203,6 +203,30 @@ Uttermost Parts' lines, the ship's hints and things):
 | The crew's lines that open with "..." | 24% | none |
 | The family reporting what they just did ("I knocked...") | 17 | none |
 
+### The whole game (round twenty-five, the same night)
+
+The rest of the game was rewritten after the ship, act by act, by nine writers to this guide, and measured the same way
+(every line of the game but the title cards: 9,172; "before" is the game as the ship pilot left it):
+
+| | Before | After |
+| --- | --- | --- |
+| The narrator's lines | 151 (the ship's) | 3,895 (looks, tries, things carried, stock replies, Ranger's pictures) |
+| Lines rewritten | | 6,502 of 9,198 (the rest were right as they were, or are Scripture, cards or Ranger's "...") |
+| Words in a line, all speakers (the narrator's run longer) | 10.7 | 13.0 |
+| Words in a family member's line | 11.3 | 10.7 |
+| Little Sister's lines with a word in capitals | 78% | 6% |
+| The Son's lines with a word in capitals | 20% | 2% |
+| Three or more clipped sentences, all speakers | 23% | 3% |
+| Lines that open with "...", Ranger's own "..." aside | 307 | none |
+
+| Before | After |
+| --- | --- |
+| Dad: "The little door. We've met. I led with my forehead." | Narrator: "The little door back to the gallery. Dad has met it already, forehead first." |
+| Little Sister: "Money with HOLES in it! Like cereal. Can you eat it? ...No. I checked." | Narrator: "Money with holes in it, like breakfast cereal. Little Sister has already checked whether it can be eaten." |
+| The Son: "My score went UP. I'm improving! Somebody tell my teacher." | The Son: "My score went up! Somebody tell my teacher." |
+| Grandpa Joe: "A table. Two of them on that side, one of me on this. Seems fair." | Narrator: "A gray table, with two men in suits on one side and one old man on the other. That seems fair to Grandpa Joe." |
+| Big Sister: "Rice into the box. Fish on the rice. Lid on the fish. And now he just... leans." | Big Sister: "Rice goes into the box, fish on the rice, the lid on the fish. And now he just leans on it." |
+
 ## 7. Sources
 
 - Hardcore Gaming 101, "King's Quest VI: Heir Today, Gone Tomorrow" (Kurt Kalata, 2019):

@@ -1,5 +1,10 @@
 # Act Six: By Your Grace (Japan, spring 1830): the puzzles
 
+<!-- WRITE-25: round twenty-five (13 November) rewrote every line of Act Six to docs/WRITING.md: looks and tries are
+the narrator's now, and the lines quoted below are mostly as they were before it (but the ship's, #26 and #27, written
+for it); the game's lines files are the words. The puzzles play as written here. Steps a player may stick on are flagged
+in DESIGN.md item 277, not changed. -->
+
 <!-- MERGE-20: new in round twenty. The design is briefs/out/edo-design.md; the act is js/content/acts/edo.js (act 7); its
 three legs were built by SCENES-20A, 20B and 20C, and each wrote its part below. -->
 

@@ -1,5 +1,9 @@
 # The present: puzzle document
 
+<!-- WRITE-25: round twenty-five (13 November) rewrote every line of home, Nevada, the limousine and the Office to docs/WRITING.md: looks and tries are
+the narrator's now, and the lines quoted below are mostly as they were before it; the game's lines files are
+the words. The puzzles play as written here. Steps a player may stick on are flagged in DESIGN.md item 277, not changed. -->
+
 The part of the game that starts in the present, with the rest of the family: Mom,
 Big Sister (13) and Little Sister (7). At home, that evening, they pray, go through the
 house, and find out where Dad's phone was last seen and what he last said. Then they

@@ -2054,6 +2054,73 @@ first. Now we're following HIM.").
 
 ---
 
+## How they talk now (round twenty-five)
+
+<!-- WRITE-25: round twenty-five rewrote every line of the game to docs/WRITING.md (the ship as the pilot on 13 November, then
+the rest the same night, nine writers, one act each). The pages above say who each person is, and still hold; the lines they
+quote are mostly as they were before this round. This section says how each person talks now, with a line of theirs as the
+game has it. Where a page above and this section disagree about how someone talks, this section and WRITING.md win. -->
+
+**The narrator** (every act): answers Look and Use, the stock replies and the things carried; a plain thing first, then
+one remark, often in the way the one being played sees it; warm, never smug; a near miss says what is missing. In the
+Office it also says what Ranger's pictures mean, while his bubble is up. "Dad pulls. The sledge doesn't. They agree to see
+other people." "A gray door with a keypad beside it and a man in gray in front of it. Ranger wonders how a raccoon gets
+through."
+
+**The family**
+- **Dad**: whole contracted sentences, no capitals, no "!"; the pun in one line in five at most; the father looking for his
+  boy underneath. "He's gone to see the biggest thing in sight. He gets that from me."
+- **The Son**: whole sentences, kid logic, scores out of ten, capitals rationed (the hello with his sister keeps its two:
+  "Is that YOU?" "I asked EARLIER."); missing Dad stays under the jokes. "He's not lost. He's making good time, somewhere."
+- **Mom**: contracted, dry, exact, never a lie; "darling" or "sweetheart" once a conversation at most. "Then we keep looking.
+  You don't stop the show for a missing cast member. You go and fetch him."
+- **Big Sister**: contracted throughout; "Mom" most of the time, "Mother" when it is serious; the fact only where it is the
+  answer; "I'm writing that down" once an act. "Somebody in this family has to. Years don't remember themselves."
+- **Little Sister**: seven-year-old law in whole sentences; a word in capitals in one line in five at most ("Chickens
+  KNOW."). "Give them to me. I've got two hands and a pocket, and that's three places to put things."
+
+**Act One, Egypt** (whole words, flowing): **Lot** grave and dry ("Then you are both waiting on a son. Yours, at least, is
+already walking."); **the scribe**, nothing exists until written ("I write him onto it, with a pen. You see the
+difficulty."); **the overseer**, loud by what he says ("I blame them all, which saves time."); **the haulers**, one speaks,
+one agrees, one eats; **the guard**, hot, bored, literal; **the lamp boy**, solemn about lamps; **the goldsmith**, still
+mishearing ("Night? Yes, I wear the night on my nose now, and nothing shines at me.").
+
+**Act Two, Rome** (whole words; Walnut alone contracts): **the doorkeeper**, exact, scores out of three; **the
+soothsayer**, foresees everything, helped by none of it; **the senator**, pompous and late ("I do not eat in the street. I
+am seen in the street."); **the keeper**, one breath, all commas; **the washerwoman**, first this, then that; **the
+clerk**, counts and loses count; **the date seller**, courteous, unhurried; **the Gaul**, a man on ice; **Phyllis**,
+patter and "Child."; **Titus**, the denial kept ("I was not scared. I was sitting."); **the goose-keeper**, mournful;
+**Eleazar**, slow and grave; **Mariam**, certain ("I am not bossy, I am in charge. It is different."); **Felix**, busy, in
+lists.
+
+**Act Four, the Last Stop, and Act Five** (Grandpa Joe and Ranger): **Grandpa Joe**, slow, dry, kind, never lies;
+"ain't" and at most one dropped g a box, no "y'all", "them boys" or spelled-out dialect; "ma'am", "miss", "son", and
+"partner" for Ranger alone; his "He says..." readings of Ranger stay where they are together ("He says it wants a key.
+Opal's got every key in the building, partner."). **Ranger** says "..." and his pictures; the narrator does his looks
+and tries. **Grandma Jolene**, "sugar", sure of everything ("He came in for gas in '74. Just passing through, he said,
+and he still is."). **Jed and the men in gray**, official whole words and no contractions ("Sir? I am requesting a
+transfer to a quieter desert."); **Dale** reads, **Merle** writes and apologizes, **Wendell** faces the gate even on his
+birthday, **Floyd** talks regulations in his sleep. **Houston**, brisk, exact, fond of Jed only ("Eaten, Mr. Grandpa, in
+four bites. I timed it."). **Opal**, precise and fond, her inventories kept.
+
+**Act Six, Japan** (fluent, in the words of their trade; a few words of their own, glossed once): in Yui, **Kihei**, as few
+words as a man can manage ("Eat first. Money is for after, and there's no after for money today."); **O-Tami**, fast, in
+lists and orders, the baby in everything; **Sankichi**, a boy who can read and knows it; **Tokuzō**, apologizes, asks, notes
+the answer; **Gonroku**, every refusal a forecast ("Hens don't sail, and the wind is freshening. No."); **O-Masa**, verdicts,
+the joke in the last word. On the road, **O-Kuni** sells and warns in one breath; **Sakuji and Tora**, one all mouth, one
+three words; **Sōshichi**, exact and formal, a counter; **Mosuke**, one word where he can; **O-Shige**, sharp, tired, formal;
+**Kyūzō**, flustered and loyal. On the ship (the pilot), **Kanbei** proud and gruff, **Denzō** warm and superstitious,
+**Kōta** shy, homesick and eager, **Seijirō** counting. In Osaka, **O-Natsu**, instructions, kindly; **Rihei**, cheerful and
+wet; **Kyūhachi**, a professional, pleased with his system; **Kurata** tired, **Tatsu** nosy and soft; **Senzō**, delighted
+with his blue; **Jūbei**, stern and exact, kind under it ("Good, but a little less joy, please. He's a sad boy until the very
+end."). In the hills, **Grandmother Sei**, short verdicts, asks once; **Jinsuke**, true and sparing ("A lie needs remembering.
+I have enough to remember."); **O-Rin**, a whisper in how little she says; **Isuke**, tired and polite; **Tomezō**, a
+foreman's rules; **Shinnosuke**, staccato only when frightened. At Akashi and Himeji, **O-Fusa**, nine, bossy through tears;
+**Heita**, all octopus; **O-Sato and her sister-in-law**, finishing each other; **O-Tane**, brisk kind orders; **O-Kiku**,
+silent but for one word; **O-Shizu**, quiet and exact; **Tōbei**, slow ("I wasn't napping. I was minding the gate, with my
+eyes shut."); **O-Ume**, dry; **Ryōkai**, formal and sorry ("It is not my mountain. I only apologize for it."); **Grandmother
+Tome**, contracted and cross ("My comb is furious. So am I.").
+
 ## For whoever draws them
 
 Each character is a page of settings in `js/art/people.js`. Three of those settings

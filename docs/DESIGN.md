@@ -5287,6 +5287,60 @@ fourteen); the rest are the builders' (WRITE-21A, 21B; PEOPLE-21A, 21B; SCENES-2
      the family's own words, and the parts' saved games (`checkpoints.js`, not remade) remember a few of the ship's old
      lines as heard, which changes nothing.
 
+275. **The whole game rewritten to WRITING.md (WRITE-25B, round twenty-five, 13 November).** Ilya, after playing the ship:
+     "now rewrite all the dialogue of the entire game"; his choices: nine writers at once, one act or leg each; each act into
+     his folder once it is checked and played; and **words only**: a puzzle that plays unfairly is flagged for him (item
+     277), not changed. Every line but the title cards and the Scripture was read against the guide and its role in the code
+     (`tools/roles.mjs` in the round's working folder: a look, a try, a thing carried, a stock reply, talk, a hint, a
+     cut-scene); 6,502 of the game's 9,198 lines are new; 3,895 are the narrator's, in every act (Prologue and Egypt 231,
+     Rome 251, home 354, Nevada and the limousine 216, the Office 57 and Ranger's captions, Yui and the road 574, Osaka 476,
+     the hills 589, Akashi and Himeji 805, the ship 147). The numbers before and after are in WRITING.md, section 6; how each
+     person talks now is CHARACTERS.md, "How they talk now". Every id is kept, with its speaker but where a look or a try
+     became the narrator's; no code was changed for it but the box's limit in the Act Six checks (115 spoken, 150 narrated,
+     as the other acts have had) and Ranger's captions (276). The Scripture is letter for letter, checked line by line.
+276. **Ranger's pictures are captioned (WRITE-25).** A line of Ranger's with pictures and words (`["ranger", "words",
+     pictures]`) now shows his thought bubble over him while the narrator's caption says the words (`dialogue.js` say);
+     a line of only "..." is his bubble alone, as before. In the Office the narrator says what his pictures mean where nobody
+     else does (#16 was pictures alone); where Grandpa Joe reads them ("He says..."), Ranger's line stays "...", so nothing
+     is said twice.
+277. **Puzzles a player may stick on, flagged by the writers (not changed; the fix each proposes):**
+     - Egypt #8, the shade: nothing sends Dad back to the trunk once he knows what light does (a line from Dad when the rule
+       is learned, naming the shade in the trunk). The guard wants "something cold" only once offered the shade (let his
+       `after` line say it). Egypt's and Rome's hints are one line each, not a ladder (two stages each, as the ship has).
+     - Rome #11, the geese: after the keeper's tale the hint still sends the Son to the keeper (a second hint once
+       `rome.knowsGeese` is set: his shoes, and the geese). #10: the Gaul's right answer appears only after the senator's
+       "Late for what?", a level down in his talk (let `rome.sawTheater` open it too, or the Gaul's wrong answers say "ask
+       a senator").
+     - Home: two steps finish only by giving (the note to Big Sister; the batteries to Little Sister): let using the thing
+       on the companion do the same as giving.
+     - Nevada #9: the coin's flash is refused until Big Sister has read the coin and the notice, for no reason the scene
+       gives (let it work once the story is heard, or Mom says so outright). #12: the shade before the letterbox is
+       answered with the letterbox hint (one line of reason from Mom). #14, Ranger's ropes: being caught doesn't point at
+       the humming (a suit's line, "Sir, we look back whenever it is quiet.").
+     - The Office #17: the room warms to 81 in two minutes of real time whatever is done (let each "Gettin' warm in here"
+       push the heat a step). #19: "on behalf of Jed" appears only after Joe and Ranger talk of Jed at the vent (Houston's
+       second refusal says what would work).
+     - Yui #25: only Mom's asking moves Gonroku; as a girl the talk goes round for ever (the girls' hints now say so; a
+       line of his sending for her mother). #24: only Little Sister's use of the hens opens the west (the narrator's lines
+       now point there; Mom's or Big Sister's use could call her over).
+     - Osaka #30: shown the broadsheet before the clean print, Senzō says nothing of it (one line: paper first, reading
+       after); the laying's progress isn't drawn until the corner is in. #31, the puppet: the three cues ask for a switch
+       of girls with nothing on screen but the hints (Jūbei whispers whose cue it is, or the portrait pulses).
+     - The hills #34: anyone but Big Sister at the sacks gets the night's line (its own near miss in the morning: "It wants
+       Big Sister"); the constable's hunger is said only in Little Sister's line (let him or his stomach say it where all
+       three hear); the ladder's one refusal covers two states (two ids).
+     - Akashi #36: nothing in the scene says Shosha is reached by the map (a line after the cloth is tied). #35, the crab:
+       the writers' new pointers ("a job for somebody's mother") may be more clue than wanted. #37: stepping back drops
+       every hold, said only after (O-Ume or Ryōkai says "all at once, and nobody let go" beforehand).
+278. **Small choices of the writers, for the author to check:** a few clues have a pointer they lacked (Little Sister on
+     Dad's notice: "Somebody big should read this."; the hens and the Jizō's hat in Yui; the crab; the constable); Kyūhachi's
+     count no longer contradicts itself (four, then five, #28); Big Sister calls her mother "Mom", and "Mother" only when it
+     is serious; Grandpa Joe keeps "ain't" and the odd dropped g, and no longer says "them boys" or "y'all"; a few "..."
+     beats became words ("Well, now.", "Hm.", "Oh.") or the narrator's; the sister's hello through the coin keeps its
+     capitals ("Is that YOU?" "I asked EARLIER."). The puzzle documents and CHARACTERS.md quote many lines as they were;
+     the lines files are the words.
+279. **Left for the author:** play each act as it arrives and say whether the voice is right; and say which of item 277's
+     fixes to build (each is small: a line, a fact, or an option opened sooner).
 ---
 
 ## Sources

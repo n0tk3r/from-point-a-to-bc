@@ -1,5 +1,9 @@
 # Act One: Egypt, about 1920 B.C.: puzzle document
 
+<!-- WRITE-25: round twenty-five (13 November) rewrote every line of Act One to docs/WRITING.md: looks and tries are
+the narrator's now, and the lines quoted below are mostly as they were before it; the game's lines files are
+the words. The puzzles play as written here. Steps a player may stick on are flagged in DESIGN.md item 277, not changed. -->
+
 The first act of the game, played as Dad. The wagon has come down by the Nile while the
 Great Pyramid is being finished. His son got here first, went inside to look, and was
 taken by a door in the air. Dad follows the sneaker prints, talks his way in, works out
