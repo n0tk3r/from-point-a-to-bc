@@ -122,6 +122,22 @@ They speak in conversations, to each other, in the hints, and at the story's mom
   "I'm writing that down" once an act.
 - **No reports.** Nobody narrates what they just did; the narrator does.
 
+### The other leads, and the people of the past
+
+Round twenty-five's second half (the whole game, 13 November) adds the leads the ship does not have. The narrator names
+them as it names the girls: "Dad", "the Son", "Grandpa Joe", "Ranger".
+
+- **Dad**: cheerful, stubborn, certain, a little wrong. His joke is the pun and the confident mistake, in at most one line
+  in five; the rest is a father looking for his boy, which he never says outright. Whole sentences, contracted.
+- **The Son**: ten, loud, thrilled by everything, and missing his dad under the noise. Kid logic and enthusiasm, not
+  slogans; a word in capitals in at most one line in ten.
+- **Grandpa Joe**: an old man of the desert road, slow, dry and kind, a storyteller. His way of talking ("ain't", a dropped
+  "g", "partner") is seasoning, a word or two a line at most, never spelled out phonetically.
+- **Ranger** never speaks: his line stays "..." (or "...!") with his pictures. The narrator does his looks and tries
+  ("Ranger sniffs the button and decides it is not food.").
+- **The people of Egypt and Rome** speak in whole words, without contractions, which sets them in their own time; but in
+  natural, flowing sentences, never broken and never opening on "...". Everyone else follows "Everyone else", below.
+
 ### Everyone else
 
 - **They speak their own language, so they sound fluent**: complete sentences, the words of their trade and their place,
@@ -140,7 +156,9 @@ They speak in conversations, to each other, in the hints, and at the story's mom
 | A box | 115 characters spoken (as the other acts since round twenty-two), 150 the narrator's |
 | Lines with no joke in them | at least two in five |
 | Little Sister's lines with a word in capitals | at most one in five |
-| Anyone else's | at most one in fifty |
+| The Son's | at most one in ten |
+| Anyone else's | at most one in fifty (a sign or a label as written aside) |
+| Dad's puns | at most one line in five |
 | Lines opening with "..." | none |
 | Exclamation marks | the children one line in ten at most; grown-ups rarely |
 | Lines of three or more clipped sentences under 16 words | one in ten at most |

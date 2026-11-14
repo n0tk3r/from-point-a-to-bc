@@ -40,12 +40,14 @@ for (const [id, entry] of Object.entries(D)) {
 }
 const notYet = [...speakers].filter((w) => !cast[w]).sort();
 
-// ---- 3. boxes: 80 characters (Scripture aside), one word in capitals, one exclamation mark ----
+// ---- 3. boxes: 115 characters, the narrator's 150 (WRITE-25: docs/WRITING.md; Scripture aside), one word in capitals,
+// one exclamation mark ----
 const SCRIPTURE = { "Psalm 61:1-2": ["edo.shosha.psalm.1", "edo.shosha.psalm.2", "edo.shosha.psalm.3"], "Isaiah 49:15": ["edo.hall.sunset.1", "edo.hall.sunset.2", "edo.hall.sunset.3"] };
 const scriptureIds = new Set(Object.values(SCRIPTURE).flat());
 const CAPS_OK = new Set(["I", "A", "O", "LORD"]);
 for (const [id, [who, text]] of Object.entries(D)) {
-  if (text.length > 80 && !scriptureIds.has(id)) bad(`over 80 (${text.length}): ${id}`);
+  const most = who === "narrator" ? 150 : 115;                                     // WRITE-25 (was 80: DESIGN.md 254)
+  if (text.length > most && !scriptureIds.has(id)) bad(`over ${most} (${text.length}): ${id}`);
   const caps = (text.match(/\b[A-Z]{2,}\b/g) || []).filter((w) => !CAPS_OK.has(w));
   if (caps.length > 1) bad(`more than one word in capitals (${caps.join(", ")}): ${id}`);
   if ((text.match(/!/g) || []).length > 1) bad(`more than one exclamation mark: ${id}`);
@@ -54,7 +56,7 @@ for (const [id, [who, text]] of Object.entries(D)) {
 // the round-twenty edits too: lengths
 for (const [file, L] of [["edo-a", A], ["edo-b", B]]) {
   const s = readFileSync(join(root, `js/content/lines/${file}.en.js`), "utf8");
-  for (const m of s.matchAll(/^\s*"([^"]+)":.*\/\/ WRITE-21B:/gm)) { const t = L[m[1]] && L[m[1]][1]; if (!t) bad(`edited id missing: ${m[1]}`); else if (t.length > 80) bad(`edited line over 80: ${m[1]}`); }
+  for (const m of s.matchAll(/^\s*"([^"]+)":.*\/\/ WRITE-21B:/gm)) { const t = L[m[1]] && L[m[1]][1]; if (!t) bad(`edited id missing: ${m[1]}`); else if (t.length > 115) bad(`edited line over 115: ${m[1]}`); }
 }
 
 // ---- 4. words the act never says; Scripture exactly ----

@@ -9,10 +9,10 @@
 
 export const lines = {
   // ---------- intro movie ----------
-  "intro.1": ["son", "This road ends on the map. There's just a little drawing of a shrug."],
+  "intro.1": ["son", "Dad, the road stops on the map. There's just a little drawing of a shrug."],
   "intro.2": ["dad", "Maps don't know about shortcuts."],
-  "intro.3": ["son", "Dad. DAD. The sky is doing the thing my slushie does."],
-  "intro.4": ["dad", "Weather. Probably."],
+  "intro.3": ["son", "Dad. Dad! The sky's doing the thing my slushie does."],
+  "intro.4": ["dad", "That's weather. Probably."],
   "intro.5": ["son", "Are we when yet?"],
   "intro.6": ["dad", "No, but we're making good time."],
 
@@ -25,72 +25,72 @@ export const lines = {
 
 
   // ---------- looking at each other ----------
-  "see.mom.bigsis": ["mom", "My eldest. Thirteen, and she can read anything in the world except a room."],
-  "see.mom.lilsis": ["mom", "My youngest. Seven years old, and entirely without brakes."],
-  "see.bigsis.mom": ["bigsis", "Mom. She has not raised her voice once. That is how I know it is serious."],  // PASS-17E: continuity (it is said in the morning in Nevada too)
-  "see.bigsis.lilsis": ["bigsis", "My sister. Small, loud, and occasionally useful. Do not tell her I said useful."],
-  "see.lilsis.mom": ["lilsis", "Mommy. She smells like the good soap."],
-  "see.lilsis.bigsis": ["lilsis", "My sister. She knows EVERYTHING. It's so annoying."],
+  "see.mom.bigsis": ["narrator", "Big Sister, thirteen, with a fact ready for every occasion. Mom trusts that head of hers more than most maps."],
+  "see.mom.lilsis": ["narrator", "Little Sister, seven years old and built without brakes. Mom wouldn't change a thing."],
+  "see.bigsis.mom": ["narrator", "Mom hasn't raised her voice once since Dad went missing. That's how Big Sister knows it's serious."],  // PASS-17E: continuity (it is said in the morning in Nevada too)
+  "see.bigsis.lilsis": ["narrator", "Little Sister: small, loud and occasionally useful. Big Sister would rather she didn't hear the last part."],
+  "see.lilsis.mom": ["narrator", "Mom, who smells like the good soap. Little Sister likes to keep her where she can see her."],
+  "see.lilsis.bigsis": ["narrator", "Big Sister knows everything, which Little Sister finds very annoying and very handy."],
   // NEVADA-12W: Grandpa Joe and Ranger, the team of two in Act Five
-  "see.grandpajoe.ranger": ["grandpajoe", "My partner. Don't say much, and ain't never once been wrong."],
-  "see.ranger.grandpajoe": ["ranger", "..."],
+  "see.grandpajoe.ranger": ["narrator", "Ranger, Grandpa Joe's partner. He doesn't say much, and Joe can't recall him ever being wrong."],
+  "see.ranger.grandpajoe": ["narrator", "Grandpa Joe, seen from knee height. As far as Ranger is concerned, he's the best thing in the desert."],
 
 
   // ---------- handing something over ----------
-  "give.dad.1": ["dad", "Here, buddy. Don't say I never gave you anything."],
-  "give.son.1": ["son", "Here. Hot potato! It's not a potato."],
-  "give.mom.1": ["mom", "Would you take this for me, darling?"],
-  "give.bigsis.1": ["bigsis", "Here. It is yours now. I will expect a full report."],
-  "give.lilsis.1": ["lilsis", "Hold this. It's IMPORTANT!"],
-  "give.grandpajoe.1": ["grandpajoe", "Here, partner. Hold on to that for me."],                      // NEVADA-12W
+  "give.dad.1": ["dad", "Here you go, buddy. Don't lose it before I do."],
+  "give.son.1": ["son", "Here, catch. It's a hot potato, except it isn't a potato."],
+  "give.mom.1": ["mom", "Would you hold on to this for me?"],
+  "give.bigsis.1": ["bigsis", "Here, you take it. Tell me what you find out."],
+  "give.lilsis.1": ["lilsis", "Can you hold this? It's very important."],
+  "give.grandpajoe.1": ["grandpajoe", "Here, partner. Keep hold of that for me."],                      // NEVADA-12W
   "give.ranger.1": ["ranger", "..."],                                                            // NEVADA-12W
 
 
   // ---------- nothing to suggest ----------
 
   // ---------- stock replies ----------
-  "nope.dad.1": ["dad", "That's not how I'd do it. And I'd do almost anything."],
-  "nope.dad.2": ["dad", "No. But I respect the idea."],
-  "nope.dad.3": ["dad", "That won't work. Trust me, I've read half a manual."],
-  "nope.son.1": ["son", "That doesn't work. I checked. In my head. Twice."],
-  "nope.son.2": ["son", "Nope. Nopity nope. Zero out of ten."],
-  "nope.son.3": ["son", "Bad plan. I only do GOOD bad plans."],
-  "nope.mom.1": ["mom", "No, darling. That won't do at all."],  // PASS-17E: Mom's formality
-  "nope.mom.2": ["mom", "I think not. Let's try something your father wouldn't."],  // PASS-17E: Mom's formality; funnier ("your father", with fond exasperation)
-  "nope.mom.3": ["mom", "A creative idea. We will not be using it."],
-  "nope.bigsis.1": ["bigsis", "That will not work. I can give you three reasons, in order."],
-  "nope.bigsis.2": ["bigsis", "No. Historically, that has never once worked."],
-  "nope.bigsis.3": ["bigsis", "'It was,' she noted, 'a terrible idea.'"],
-  "nope.lilsis.1": ["lilsis", "NO. It doesn't go."],
-  "nope.lilsis.2": ["lilsis", "That's silly. And I KNOW silly."],
-  "nope.lilsis.3": ["lilsis", "Nope! Do I get a snack for trying?"],
-  "look.dad.1": ["dad", "Nothing to write home about. And I write home about practically everything."],
-  "look.son.1": ["son", "It's a thing. I'm looking at it. It's looking back. I win."],
-  "look.mom.1": ["mom", "Nothing that needs me. How restful."],
-  "look.bigsis.1": ["bigsis", "Unremarkable. I have remarked on it anyway."],
-  "look.lilsis.1": ["lilsis", "It's just a thing. BORING. Next!"],
-  "hint.dad.none": ["dad", "I've got nothing. I'll look around and act like it was the plan."],  // PASS-17E: funnier
-  "hint.son.none": ["son", "No idea. I'll poke things until something happens. That's called science."],
-  "hint.mom.none": ["mom", "I haven't the faintest idea, my love. Let's look around properly."],  // PASS-17E: Mom's formality
-  "hint.bigsis.none": ["bigsis", "I don't know. ...I am writing that down. It doesn't happen often."],
-  "hint.lilsis.none": ["lilsis", "I dunno. Let's ask somebody tall."],
+  "nope.dad.1": ["narrator", "Dad considers it, and decides that isn't how he'd do it."],
+  "nope.dad.2": ["narrator", "It doesn't work. Dad respects the idea all the same."],
+  "nope.dad.3": ["narrator", "That gets Dad nowhere, and he has read half a manual."],
+  "nope.son.1": ["narrator", "The Son tries it in his head first. It doesn't work in there either."],
+  "nope.son.2": ["narrator", "Nothing happens. The Son gives the idea zero out of ten."],
+  "nope.son.3": ["narrator", "It's a bad plan, and not one of the Son's good bad plans."],
+  "nope.mom.1": ["narrator", "Mom thinks it over and decides that won't do."],  // PASS-17E: Mom's formality
+  "nope.mom.2": ["narrator", "That won't work. Mom would rather try something Dad wouldn't."],  // PASS-17E: Mom's formality; funnier ("your father", with fond exasperation)
+  "nope.mom.3": ["narrator", "It's a creative idea. Mom sets it gently to one side."],
+  "nope.bigsis.1": ["narrator", "Big Sister can think of three reasons that won't work, in order."],
+  "nope.bigsis.2": ["narrator", "Nothing comes of it. Big Sister isn't surprised: historically, nothing ever has."],
+  "nope.bigsis.3": ["narrator", "Big Sister decides against it. Some ideas are better left as footnotes."],
+  "nope.lilsis.1": ["narrator", "Little Sister gives it a good try, and it doesn't go."],
+  "nope.lilsis.2": ["narrator", "Little Sister thinks that's silly, and she knows silly when she sees it."],
+  "nope.lilsis.3": ["narrator", "That doesn't work. Little Sister wonders whether trying earns a snack."],
+  "look.dad.1": ["narrator", "There's nothing here to write home about, and Dad writes home about nearly everything."],
+  "look.son.1": ["narrator", "It's just a thing. The Son stares at it until he's sure he has won."],
+  "look.mom.1": ["narrator", "Nothing here needs Mom's attention, which makes a restful change."],
+  "look.bigsis.1": ["narrator", "There's nothing remarkable about it. Big Sister takes note of it anyway."],
+  "look.lilsis.1": ["narrator", "It's only a thing, and Little Sister has more interesting things to look at."],
+  "hint.dad.none": ["dad", "I'm out of ideas. I'll look around and call that the plan."],  // PASS-17E: funnier
+  "hint.son.none": ["son", "No idea. I'll poke things until something happens, like a scientist."],
+  "hint.mom.none": ["mom", "I haven't the faintest idea. Let's have a proper look around."],  // PASS-17E: Mom's formality
+  "hint.bigsis.none": ["bigsis", "I don't know yet. That doesn't happen often, so let's look around."],
+  "hint.lilsis.none": ["lilsis", "I don't know. Let's ask somebody tall."],
   // NEVADA-12W: Grandpa Joe's stock lines, and Ranger's (his are dots, and nobody translates a stock line)
-  "nope.grandpajoe.1": ["grandpajoe", "That ain't gonna work. I been around long enough to know a thing that ain't."],
-  "nope.grandpajoe.2": ["grandpajoe", "Nope. And I say that kindly."],
-  "nope.grandpajoe.3": ["grandpajoe", "I'll think on it. ...No."],
-  "nope.ranger.1": ["ranger", "..."],
-  "nope.ranger.2": ["ranger", "......"],
-  "nope.ranger.3": ["ranger", "...!"],
-  "look.grandpajoe.1": ["grandpajoe", "Well. There it is. Ain't much, but it's there."],
-  "look.ranger.1": ["ranger", "..."],
-  "hint.grandpajoe.none": ["grandpajoe", "I ain't got a notion. Let's look around, slow and proper."],
+  "nope.grandpajoe.1": ["narrator", "Grandpa Joe has been around long enough to know a thing that won't work. This is one."],
+  "nope.grandpajoe.2": ["narrator", "Grandpa Joe shakes his head, kindly. That one's a no."],
+  "nope.grandpajoe.3": ["narrator", "Grandpa Joe thinks on it for a good while, and then decides against it."],
+  "nope.ranger.1": ["narrator", "Ranger sniffs at the idea and decides it isn't food."],
+  "nope.ranger.2": ["narrator", "Ranger gives it a long, careful look and leaves it alone."],
+  "nope.ranger.3": ["narrator", "Ranger tries it with both paws. Nothing happens, and he looks offended."],
+  "look.grandpajoe.1": ["narrator", "It isn't much, but it's there. Grandpa Joe has made do with less."],
+  "look.ranger.1": ["narrator", "Ranger looks it over and finds nothing worth washing."],
+  "hint.grandpajoe.none": ["grandpajoe", "I ain't got a notion yet. Let's look around, slow and proper."],
   "hint.ranger.none": ["ranger", "..."],
   // ---- TALK-24: the way back out of a topic in a talk (js/content/talk/topics.js), said by whoever is being played ----
   "talk.back.mom": ["mom", "Let me ask about something else."],
   "talk.back.bigsis": ["bigsis", "Can I ask about something else?"],          // WRITE-25: as she talks now (docs/WRITING.md)
   "talk.back.lilsis": ["lilsis", "I want to ask a different thing."],          // WRITE-25: no capital word on the way back
-  "talk.back.son": ["son", "Wait, different question."],
-  "talk.back.dad": ["dad", "Different question."],
-  "talk.back.grandpajoe": ["grandpajoe", "Let's jaw about somethin' else."],
+  "talk.back.son": ["son", "Wait, I've got a different question."],
+  "talk.back.dad": ["dad", "Let me ask you something else."],
+  "talk.back.grandpajoe": ["grandpajoe", "Let's talk about something else, partner."],
   "talk.back.ranger": ["ranger", "..."],
 };

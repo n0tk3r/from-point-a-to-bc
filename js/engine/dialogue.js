@@ -71,10 +71,18 @@ export class Dialogue {
     const g = this.g;
     const entry = g.lines[id];
     if (!entry) { console.warn("Missing line:", id); return; }
-    const [who, text, pictures] = entry;                  // ENGINE-17: a third element is the pictures he thinks
+    let [who, text, pictures] = entry;                    // ENGINE-17: a third element is the pictures he thinks
     g.store.data.seenLines[id] = (g.store.data.seenLines[id] || 0) + 1;
     if (g.clock.skipping) return;
-    if (pictures != null) return this.thought(who, pictures, { line: id, through });      // ENGINE-17: a bubble, not words
+    // ENGINE-17: a bubble, not words. WRITE-25 (docs/WRITING.md): unless the line has words besides ("..." and "...!" are
+    // none): then the bubble stays up over the thinker while the narrator says what he is thinking (Ranger's looks and tries).
+    let thinking = null;
+    if (pictures != null) {
+      if (/^\s*\.{3,}!?\s*$/.test(text || "")) return this.thought(who, pictures, { line: id, through });
+      thinking = { el: this.bubbleFor(who, picturesOf(pictures, `the line "${id}"`), { through }), who, looping: this.loops.get(who) };
+      if (thinking.looping) { thinking.looping.hidden++; this.follow(); }
+      who = "narrator"; through = null;
+    }
     {                                                       // ENGINE-19A: the same speaker again at once: a quarter second of nothing first
       const gap = g.clock.now - this._endAt;
       if (this._endWho === who && gap >= 0 && gap < SAME_GAP && g.cutsceneId !== "intro") { await g.clock.wait(SAME_GAP - gap); if (g.clock.skipping) return; }
@@ -167,6 +175,7 @@ export class Dialogue {
     g.audio.stopVoice();
     if (actor && actor.talk) actor.talk(false);
     if (p) p.remove();
+    if (thinking) { thinking.el.remove(); if (thinking.looping) { thinking.looping.hidden = Math.max(0, thinking.looping.hidden - 1); this.follow(); } }      // (WRITE-25)
     this.active = false;
     this._endWho = who; this._endAt = g.clock.now;       // ENGINE-19A: who spoke last, and when the box went (the same speaker's next box waits)
     if (looping) { looping.hidden = Math.max(0, looping.hidden - 1); this.follow(); }      // (ENGINE-17: and back)
